@@ -15,9 +15,8 @@ function tryInitProgress() {
 }
 export default function initProgress(router) {
   router.beforeEach((to, from, next) => {
-    console.log(JSON.stringify(to.meta));
-    if (to.meta.auth && !auth.user.authenticated) {
-      return next('Login');
+    if (to.meta.auth == null && !auth.user.authenticated) {
+      return next('login');
     } else {
       tryInitProgress();
       return next();

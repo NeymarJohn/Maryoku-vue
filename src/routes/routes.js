@@ -84,7 +84,7 @@ let componentsMenu = {
       component: Typography
     }
 
-  ], meta: {auth: true}
+  ]
 }
 let formsMenu = {
   path: '/forms',
@@ -111,7 +111,7 @@ let formsMenu = {
       name: 'Wizard',
       component: Wizard
     }
-  ], meta: {auth: true}
+  ]
 }
 
 let tablesMenu = {
@@ -133,7 +133,7 @@ let tablesMenu = {
       path: 'paginated',
       name: 'Paginated Tables',
       component: PaginatedTables
-    }], meta: {auth: true}
+    }]
 }
 
 let mapsMenu = {
@@ -156,7 +156,7 @@ let mapsMenu = {
       name: 'Vector Map',
       component: VectorMaps
     }
-  ], meta: {auth: true}
+  ]
 }
 
 let pagesMenu = {
@@ -174,25 +174,28 @@ let pagesMenu = {
       name: 'Timeline Page',
       component: TimeLine
     }
-  ], meta: {auth: true}
+  ]
 }
 
 let loginPage = {
   path: '/login',
   name: 'Login',
-  component: Login
+  component: Login,
+  meta: {auth: false}
 }
 
 let registerPage = {
   path: '/register',
   name: 'Register',
-  component: Register
+  component: Register,
+  meta: {auth: false}
 }
 
 let lockPage = {
   path: '/lock',
   name: 'Lock',
-  component: Lock
+  component: Lock,
+  meta: {auth: false}
 }
 
 const routes = [
@@ -211,7 +214,7 @@ const routes = [
         name: 'Charts',
         component: Charts
       }
-    ], meta: {auth: true}
+    ]
   },
   componentsMenu,
   formsMenu,
@@ -236,9 +239,9 @@ const routes = [
         name: 'Widgets',
         component: Widgets
       }
-    ], meta: {auth: true}
+    ]
   },
-  {path: '*', component: NotFound, meta: {auth: true}}
+  {path: '*', component: NotFound}
 ];
 
 export default routes
