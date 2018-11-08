@@ -10,7 +10,7 @@
                 <card type="login">
                   <h3 slot="header" class="header text-center">Login</h3>
 
-                  <fg-input v-model="form.username" addon-left-icon="nc-icon nc-single-02" placeholder="First Name..."></fg-input>
+                  <fg-input v-model="form.username" addon-left-icon="nc-icon nc-single-02" placeholder="First Name..." v-focus></fg-input>
 
                   <fg-input v-model="form.password" addon-left-icon="nc-icon nc-key-25" placeholder="Password" type="password"></fg-input>
 
@@ -26,7 +26,7 @@
           </div>
         </div>
         <app-footer></app-footer>
-        <div class="full-page-background" style="background-image: url(static/img/background/background-2.jpg) "></div>
+        <div class="full-page-background" style="background-image: url(static/img/background/shutterstock_495639391.jpg) "></div>
       </div>
     </div>
   </div>

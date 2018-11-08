@@ -43,6 +43,12 @@ const router = new VueRouter({
 
 initProgress(router);
 
+Vue.directive('focus', {
+  inserted(el) {
+    el.focus();
+  },
+});
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

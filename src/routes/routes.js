@@ -214,7 +214,7 @@ const routes = [
         name: 'Charts',
         component: Charts
       }
-    ]
+    ], meta: { auth: false }
   },
   componentsMenu,
   formsMenu,
