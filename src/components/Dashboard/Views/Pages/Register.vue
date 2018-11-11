@@ -62,7 +62,7 @@
         </div>
         <app-footer></app-footer>
         <div class="full-page-background"
-             style="background-image: url(static/img/background/jan-sendereks.jpg) "></div>
+             style="background-image: url(static/img/background/shutterstock_740167702.jpg) "></div>
       </div>
     </div>
   </div>

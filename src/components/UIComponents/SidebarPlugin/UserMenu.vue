@@ -6,7 +6,7 @@
     <div class="info">
       <a data-toggle="collapse" :aria-expanded="!isClosed" @click="toggleMenu" href="#">
          <span>
-           Chet Faker
+           {{this.auth.user}}
            <b class="caret"></b>
         </span>
       </a>
@@ -16,20 +16,20 @@
           <ul class="nav nav-menu" v-show="!isClosed">
             <li>
               <a href="#">
-                <span class="sidebar-mini-icon">Mp</span>
-                <span class="sidebar-normal">My Profile</span>
+                <span class="sidebar-mini-icon">P</span>
+                <span class="sidebar-normal">Profile</span>
               </a>
             </li>
             <li>
               <a href="#">
-                <span class="sidebar-mini-icon">Ep</span>
-                <span class="sidebar-normal">Edit Profile</span>
+                <span class="sidebar-mini-icon">A</span>
+                <span class="sidebar-normal">Account</span>
               </a>
             </li>
             <li>
-              <a href="#">
-                <span class="sidebar-mini-icon">S</span>
-                <span class="sidebar-normal">Settings</span>
+              <a href="#" @click="signout">
+                <span class="sidebar-mini-icon">SO</span>
+                <span class="sidebar-normal">Sign Out</span>
               </a>
             </li>
           </ul>
@@ -39,7 +39,8 @@
   </div>
 </template>
 <script>
-  import { CollapseTransition } from 'vue2-transitions'
+  import { CollapseTransition } from 'vue2-transitions';
+  import auth from 'src/auth';
 
   export default {
     components: {
@@ -47,12 +48,16 @@
     },
     data() {
       return {
+        auth,
         isClosed: true
       }
     },
     methods: {
       toggleMenu() {
         this.isClosed = !this.isClosed
+      },
+      signout: function(e) {
+        this.auth.logout(this);
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
 
-    <side-bar type="sidebar" :sidebar-links="$sidebar.sidebarLinks">
+    <side-bar type="sidebar" :sidebar-links="$sidebar.sidebarLinks" title="262 Days" background-color="white" :auto-close="true">
       <user-menu></user-menu>
     </side-bar>
 
@@ -31,6 +31,9 @@
       ContentFooter,
       DashboardContent,
       UserMenu,
+    },
+    mounted(){
+      this.$sidebar.toggleMinimize();
     },
     methods: {
       toggleSidebar () {

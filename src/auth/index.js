@@ -3,7 +3,7 @@
     ? {SCHEME: 'https', HOSTNAME: 'api.262days.com'}
     : {SCHEME: 'http', HOSTNAME: process.env.SERVER_URL} */
 
-const { HOSTNAME } = { HOSTNAME: process.env.SERVER_URL };
+const { HOSTNAME } = { HOSTNAME: 'https://api-dev.262days.com'};
 
 const API_URL = `${HOSTNAME}`;
 const REGISTRATION_URL = `${API_URL}/1/register`;
@@ -86,7 +86,7 @@ export default {
     window.localStorage.removeItem('id_token');
     this.user.authenticated = false;
     context.$http.defaults.headers.Authorization = null;
-    context.$router.push({ path: '/signin' });
+    context.$router.push({ path: '/login' });
   },
 
   checkAuth() {
