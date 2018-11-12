@@ -77,6 +77,7 @@
     data() {
       return {
         error: '',
+        errors: [],
         serverURL: process.env.SERVER_URL,
         auth,
         form: {
