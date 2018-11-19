@@ -1,9 +1,20 @@
 import DashboardLayout from "@/pages/Dashboard/Layout/DashboardLayout.vue";
 import AuthLayout from "@/pages/Dashboard/Pages/AuthLayout.vue";
 
+import Home from "@/pages/app/Home.vue";
+import Me from "@/pages/app/Me.vue";
+import Profile from "@/pages/app/Profile.vue";
+import MyCompany from "@/pages/app/MyCompany.vue";
+import Team from "@/pages/app/Team.vue";
+import Community from "@/pages/app/Community.vue";
+import Events from "@/pages/app/Events.vue";
+import Notes from "@/pages/app/Notes.vue";
+import Proposals from "@/pages/app/Proposals.vue";
+import Vendors from "@/pages/app/Vendors.vue";
+import YearlyPlan from "@/pages/app/YearlyPlan.vue";
+
 // Dashboard pages
 import Dashboard from "@/pages/Dashboard/Dashboard.vue";
-import Home from "@/pages/Dashboard/Home.vue";
 
 // Pages
 const User = () => import("@/pages/Dashboard/Pages/UserProfile.vue");
@@ -237,19 +248,78 @@ let authPages = {
   ]
 };
 
+let appPages = {
+  path: "/",
+  component: DashboardLayout,
+  name: "App",
+  children: [
+    {
+      path: "/me",
+      name: "Me",
+      component: Me
+    },
+    {
+      path: "/profile",
+      name: "Profile",
+      component: Profile
+    },
+    {
+      path: "/my-company",
+      name: "MyCompany",
+      component: MyCompany
+    },
+    {
+      path: "/team",
+      name: "Team",
+      component: Team
+    },
+    {
+      path: "/community",
+      name: "Community",
+      component: Community
+    },
+    {
+      path: "/events",
+      name: "Events",
+      component: Events
+    },
+    {
+      path: "/yearly-plan",
+      name: "YearlyPlan",
+      component: YearlyPlan
+    },
+    {
+      path: "/vendors",
+      name: "Vendors",
+      component: Vendors
+    },
+    {
+      path: "/proposals",
+      name: "Proposals",
+      component: Proposals
+    },
+    {
+      path: "/notes",
+      name: "Notes",
+      component: Notes
+    }
+  ]
+};
+
 const routes = [
   {
     path: "/",
     redirect: "/me",
     name: "Home"
   },
-  componentsMenu,
+  /*componentsMenu,
   formsMenu,
   tablesMenu,
   mapsMenu,
-  pagesMenu,
+  pagesMenu,*/
   authPages,
-  {
+  appPages,
+  /*{
     path: "/",
     component: DashboardLayout,
     children: [
@@ -257,6 +327,11 @@ const routes = [
         path: "me",
         name: "Home",
         components: { default: Home }
+      },
+      {
+        path: "my-company",
+        name: "MyCompany",
+        components: { default: MyCompany }
       },
       {
         path: "calendar",
@@ -274,7 +349,7 @@ const routes = [
         components: { default: Widgets }
       }
     ]
-  }
+  }*/
 ];
 
 export default routes;
