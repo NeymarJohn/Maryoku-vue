@@ -221,7 +221,8 @@ let authPages = {
     {
       path: "/signin",
       name: "SignIn",
-      component: SignInSignUp
+      component: SignInSignUp,
+      meta: {auth: false}
     },
     {
       path: "/pricing",

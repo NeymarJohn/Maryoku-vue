@@ -118,7 +118,7 @@ export default {
         Pricing: "static/img/bg-pricing.jpg",
         Login: "static/img/shutterstock_495639391.png",
         Register: "static/img/shutterstock_495639391.png",
-        SignIn: "static/img/shutterstock_495639391.png",
+        SignIn: "static/img/shutterstock_732491308.png",
         Lock: "static/img/lock.jpg"
       };
       return {

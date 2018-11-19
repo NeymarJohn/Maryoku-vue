@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import DashboardPlugin from "./material-dashboard";
+import auth from './auth';
 
 // Plugins
 import App from "./App.vue";
@@ -18,7 +19,18 @@ Vue.use(DashboardPlugin);
 // configure router
 const router = new VueRouter({
   routes, // short for routes: routes
-  linkExactActiveClass: "nav-item active"
+  linkExactActiveClass: "nav-item active",
+  scrollBehavior (to, from, savedPosition) {
+  return { x: 0, y: 0 }
+}
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.auth == null && !auth.user.authenticated){
+    next('signin');
+  } else {
+    next();
+  }
 });
 
 // global library setup
