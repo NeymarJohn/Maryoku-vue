@@ -88,7 +88,7 @@ export default {
     window.localStorage.removeItem(TOKEN_KEY);
     this.user.authenticated = false;
     context.$http.defaults.headers.Authorization = null;
-    context.$router.push({ path: '/login' });
+    context.$router.push({ path: '/signin' });
   },
 
   checkAuth() {

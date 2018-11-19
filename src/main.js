@@ -1,5 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import axios from 'axios';
+import VueAxios from 'vue-axios';
 import DashboardPlugin from "./material-dashboard";
 
 // Plugins
@@ -25,6 +27,8 @@ Object.defineProperty(Vue.prototype, "$Chartist", {
     return this.$root.Chartist;
   }
 });
+
+Vue.use(VueAxios, axios);
 
 /* eslint-disable no-new */
 new Vue({

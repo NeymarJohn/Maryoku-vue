@@ -24,12 +24,12 @@
                       <span class="sidebar-mini">مع</span>
                       <span class="sidebar-normal">ملف</span>
                     </a>
-                    <a v-else href="#vue">
-                      <span class="sidebar-mini">MP</span>
+                    <a v-else @click="gotoMyProfile">
+                      <span class="sidebar-mini"><md-icon>assignment_ind</md-icon></span>
                       <span class="sidebar-normal">My Profile</span>
                     </a>
                   </li>
-                  <li>
+                  <!--<li>
                     <a v-if="$route.meta.rtlActive" href="#vue">
                       <span class="sidebar-mini">هوع</span>
                       <span class="sidebar-normal">تعديل الملف الشخصي</span>
@@ -38,15 +38,15 @@
                       <span class="sidebar-mini">EP</span>
                       <span class="sidebar-normal">Edit Profile</span>
                     </a>
-                  </li>
+                  </li>-->
                   <li>
                     <a v-if="$route.meta.rtlActive" href="#vue">
                       <span class="sidebar-mini">و</span>
                       <span class="sidebar-normal">إعدادات</span>
                     </a>
-                    <a v-else href="#vue">
-                      <span class="sidebar-mini">S</span>
-                      <span class="sidebar-normal">Settings</span>
+                    <a v-else @click="signout">
+                      <span class="sidebar-mini"><md-icon>exit_to_app</md-icon></span>
+                      <span class="sidebar-normal">Sign Out</span>
                     </a>
                   </li>
                 </slot>
@@ -58,6 +58,7 @@
 </template>
 <script>
 import { CollapseTransition } from "vue2-transitions";
+import auth from 'src/auth';
 
 export default {
   components: {
@@ -79,7 +80,8 @@ export default {
   },
   data() {
     return {
-      isClosed: true
+      isClosed: true,
+      auth
     };
   },
   methods: {
@@ -88,6 +90,12 @@ export default {
     },
     toggleMenu: function() {
       this.isClosed = !this.isClosed;
+    },
+    signout(e){
+      this.auth.logout(this);
+    },
+    gotoMyProfile() {
+      this.$router.push('/pages/user');
     }
   }
 };

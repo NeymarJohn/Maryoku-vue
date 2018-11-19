@@ -3,6 +3,7 @@ import AuthLayout from "@/pages/Dashboard/Pages/AuthLayout.vue";
 
 // Dashboard pages
 import Dashboard from "@/pages/Dashboard/Dashboard.vue";
+import Home from "@/pages/Dashboard/Home.vue";
 
 // Pages
 const User = () => import("@/pages/Dashboard/Pages/UserProfile.vue");
@@ -11,6 +12,7 @@ const TimeLine = () => import("@/pages/Dashboard/Pages/TimeLinePage.vue");
 const RtlSupport = () => import("@/pages/Dashboard/Pages/RtlSupport.vue");
 const Login = () => import("@/pages/Dashboard/Pages/Login.vue");
 const Register = () => import("@/pages/Dashboard/Pages/Register.vue");
+const SignInSignUp = () => import("@/pages/Dashboard/Pages/SignInSignUp.vue");
 const Lock = () => import("@/pages/Dashboard/Pages/Lock.vue");
 
 // Components pages
@@ -217,6 +219,11 @@ let authPages = {
       component: Register
     },
     {
+      path: "/signin",
+      name: "SignIn",
+      component: SignInSignUp
+    },
+    {
       path: "/pricing",
       name: "Pricing",
       component: Pricing
@@ -232,7 +239,7 @@ let authPages = {
 const routes = [
   {
     path: "/",
-    redirect: "/dashboard",
+    redirect: "/me",
     name: "Home"
   },
   componentsMenu,
@@ -246,9 +253,9 @@ const routes = [
     component: DashboardLayout,
     children: [
       {
-        path: "dashboard",
-        name: "Dashboard",
-        components: { default: Dashboard }
+        path: "me",
+        name: "Home",
+        components: { default: Home }
       },
       {
         path: "calendar",

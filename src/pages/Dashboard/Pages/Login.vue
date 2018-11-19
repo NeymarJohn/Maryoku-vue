@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout text-center">
     <div class="md-layout-item md-size-33 md-medium-size-50 md-small-size-70 md-xsmall-size-100">
-      <login-card header-color="green">
+      <login-card header-color="rose">
         <h4 slot="title" class="title">Log in</h4>
         <md-button slot="buttons" to="#facebook" class="md-just-icon md-simple md-white">
           <i class="fab fa-facebook-square"></i>

@@ -165,20 +165,21 @@
     &.md-fab,
     &.md-just-icon{
       font-size: 24px;
-      height: 41px;
-      min-width: 41px;
-      width: 41px;
+      height: 81px;
+      min-width: 81px;
+      width: 81px;
       padding: 0;
       overflow: hidden;
       position: relative;
-      line-height: 41px;
+      line-height: 81px;
     }
 
     .md-button-content{
       display: flex;
       align-items: center;
       i{
-        font-size: 20px !important;
+        font-size: 42px !important;
+        width: 81px !important;
       }
     }
 }

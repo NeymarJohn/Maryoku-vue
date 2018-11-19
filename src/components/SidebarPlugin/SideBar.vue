@@ -46,11 +46,11 @@ export default {
   props: {
     title: {
       type: String,
-      default: "Vue MD PRO"
+      default: "262 Days"
     },
     rtlTitle: {
       type: String,
-      default: "توقيت الإبداعية"
+      default: "262 Days"
     },
     activeColor: {
       type: String,

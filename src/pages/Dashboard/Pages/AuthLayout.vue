@@ -3,7 +3,8 @@
     <md-toolbar md-elevation="0" class="md-transparent md-toolbar-absolute">
       <div class="md-toolbar-row md-offset">
         <div class="md-toolbar-section-start">
-          <h3 class="md-title">{{$route.name}}</h3>
+          <!--<h3 class="md-title">{{$route.name}}</h3>-->
+          <h3 class="md-title"><img src="static/img/262Logo2.png"/> </h3>
         </div>
         <div class="md-toolbar-section-end">
           <md-button class="md-just-icon md-simple md-round md-toolbar-toggle" :class="{toggled: $sidebar.showSidebar}" @click="toggleSidebar">
@@ -12,7 +13,7 @@
             <span class="icon-bar"></span>
           </md-button>
 
-          <div class="md-collapse" :class="{'off-canvas-sidebar': responsive}">
+          <!--<div class="md-collapse" :class="{'off-canvas-sidebar': responsive}">
             <md-list>
               <md-list-item to="/">
                   <md-icon>dashboard</md-icon>
@@ -35,7 +36,7 @@
                 lock
               </md-list-item>
             </md-list>
-          </div>
+          </div>-->
         </div>
       </div>
     </md-toolbar>
@@ -50,28 +51,33 @@
           <div class="container md-offset">
               <nav>
                   <ul>
-                    <li>
+                    <!--<li>
                       <router-link :to="{path:'/dashboard'}">Home</router-link>
+                    </li>-->
+                    <li>
+                      <a href="https://www.262days.com/terms">
+                        Terms of Use
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://www.262days.com/privacy">
+                        Privacy
+                      </a>
                     </li>
                       <li>
-                          <a href="#">
-                              Company
+                          <a href="https://www.262days.com/about">
+                              About
                           </a>
                       </li>
                       <li>
-                          <a href="#">
-                              Portfolio
-                          </a>
-                      </li>
-                      <li>
-                          <a href="#">
+                          <a href="https://www.262days.com/blog">
                               Blog
                           </a>
                       </li>
                   </ul>
               </nav>
               <div class="copyright text-center">
-                &copy; {{ new Date().getFullYear() }} <a href="https://www.creative-tim.com/?ref=mdf-vuejs" target="_blank">Creative Tim</a>, made with <i class="fa fa-heart heart"></i> for a better web
+                &copy; {{ new Date().getFullYear() }}, <a href="https://www.262days.com" target="_blank">262 Days Ltd</a>
               </div>
           </div>
         </footer>
@@ -110,8 +116,9 @@ export default {
     setBgImage() {
       let images = {
         Pricing: "static/img/bg-pricing.jpg",
-        Login: "static/img/login.jpg",
-        Register: "static/img/register.jpg",
+        Login: "static/img/shutterstock_495639391.png",
+        Register: "static/img/shutterstock_495639391.png",
+        SignIn: "static/img/shutterstock_495639391.png",
         Lock: "static/img/lock.jpg"
       };
       return {
