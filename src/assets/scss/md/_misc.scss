@@ -31,7 +31,7 @@ html *{
   position: relative;
   top: 0;
   height: 100vh;
-  
+
     &.wrapper-full-page{
         height: auto;
         min-height: 100vh;
@@ -137,6 +137,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 }
 .text-right{
   justify-content: flex-end;
+  text-align: right;
 }
 
 .places-buttons{

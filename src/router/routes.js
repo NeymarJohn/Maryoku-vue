@@ -266,7 +266,8 @@ let appPages = {
     {
       path: "/my-company",
       name: "MyCompany",
-      component: MyCompany
+      component: MyCompany,
+      meta: {title: "My Company"}
     },
     {
       path: "/team",
@@ -286,7 +287,8 @@ let appPages = {
     {
       path: "/yearly-plan",
       name: "YearlyPlan",
-      component: YearlyPlan
+      component: YearlyPlan,
+      meta: {title: "Yearly Plan"}
     },
     {
       path: "/vendors",
@@ -310,7 +312,7 @@ const routes = [
   {
     path: "/",
     redirect: "/me",
-    name: "Home"
+    name: "Root"
   },
   /*componentsMenu,
   formsMenu,

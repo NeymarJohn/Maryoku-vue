@@ -2,10 +2,10 @@
   <div class="wrapper" :class="[{'nav-open': $sidebar.showSidebar}, {'rtl': $route.meta.rtlActive}]">
     <notifications></notifications>
     <side-bar>
-      <user-menu></user-menu>
+      <!--<user-menu></user-menu>-->
       <mobile-menu></mobile-menu>
       <template slot="links">
-        <sidebar-item :link="{name: 'Home', icon: 'home', path: '/me'}">
+        <sidebar-item :link="{name: 'Me', icon: 'person_pin', path: '/me'}">
         </sidebar-item>
 
         <sidebar-item :link="{name: 'My Company', icon: 'fingerprint', path: '/my-company'}">
@@ -21,6 +21,8 @@
 
         <sidebar-item :link="{name: 'Community', icon: 'people', path: '/community'}">
         </sidebar-item>
+
+        <li class="divider"></li>
 
         <sidebar-item :link="{name: 'Our Events', icon: 'flag', path: '/events'}">
         </sidebar-item>
@@ -138,7 +140,7 @@
           <router-view></router-view>
         </zoom-center-transition>
       </div>
-      <content-footer v-if="!$route.meta.hideFooter"></content-footer>
+      <!--<content-footer v-if="!$route.meta.hideFooter"></content-footer>-->
     </div>
   </div>
 </template>
