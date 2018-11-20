@@ -22,7 +22,7 @@
         <sidebar-item :link="{name: 'Community', icon: 'people', path: '/community'}">
         </sidebar-item>
 
-        <li class="divider"></li>
+        <li class="menu-divider"></li>
 
         <sidebar-item :link="{name: 'Our Events', icon: 'flag', path: '/events'}">
         </sidebar-item>
@@ -32,6 +32,8 @@
 
         <sidebar-item :link="{name: 'My Vendors', icon: 'contacts', path: '/vendors'}">
         </sidebar-item>
+
+        <li class="menu-divider"></li>
 
         <sidebar-item :link="{name: 'Proposals', icon: 'local_offer', path: '/proposals'}">
         </sidebar-item>
@@ -202,6 +204,11 @@ export default {
 };
 </script>
 <style lang="scss">
+  .menu-divider {
+    height: 1px;
+    margin-top: 10px;
+    background-color: rgba(0,0,0,.12);
+  }
 $scaleSize: 0.95;
 @keyframes zoomIn95 {
   from {
