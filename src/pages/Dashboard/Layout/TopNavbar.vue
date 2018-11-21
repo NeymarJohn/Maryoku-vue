@@ -35,6 +35,7 @@
                       <md-icon>email</md-icon>
                       <span class="notification">5</span>
                       <p class="hidden-lg hidden-md">Notifications</p>
+                      <md-tooltip>5 unread messages</md-tooltip>
                     </md-button>
                     <ul class="dropdown-menu dropdown-menu-right">
                       <li><a href="#">Mike John responded to your email</a></li>
@@ -63,7 +64,7 @@
                     <ul class="dropdown-menu dropdown-menu-right">
                       <li><a href="#">My Profile</a></li>
                       <li class="divider"></li>
-                      <li><a href="#" @click="signout">Sign Out</a></li>
+                      <li><router-link :to="{path: '/signout'}">Sign Out</router-link></li>
                     </ul>
                   </drop-down>
                 </div>
@@ -110,10 +111,7 @@
         if (this.$sidebar) {
           this.$sidebar.toggleMinimize();
         }
-      },
-      signout(e){
-        this.auth.logout(this);
-      },
+      }
     }
   };
 </script>

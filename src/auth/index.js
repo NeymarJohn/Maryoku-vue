@@ -55,8 +55,8 @@ export default {
         this.unsetToken();
         if (required) {
           context.$router.push({
-            path: '/signin',
-            query: { redirect: context.$route.fullPath },
+            path: '/signin'/*,
+            query: { redirect: context.$route.fullPath },*/
           });
         }
       });

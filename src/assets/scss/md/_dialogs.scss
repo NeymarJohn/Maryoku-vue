@@ -47,6 +47,19 @@
   border: none;
 }
 
+.modal-container-wizard {
+  max-width: 80%;
+  margin: 0 auto;
+  padding: 0;
+  left: 2.5%;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0);
+  transition: all .3s ease;
+  // box-shadow: 0 27px 24px 0 rgba(0,0,0,.2), 0 40px 77px 0 rgba(0,0,0,.22);
+  // border-radius: 6px;
+  border: none;
+}
+
 .modal-header{
   display: flex;
   align-items: center;

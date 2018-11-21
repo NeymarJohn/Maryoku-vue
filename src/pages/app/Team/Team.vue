@@ -11,7 +11,7 @@
         <md-card-content>
           <div class="table table-stats text-right">
             <div class="text-right">
-              <md-button class="md-rose text-rose md-sm">
+              <md-button class="md-rose text-rose md-sm" @click="openInviteModal">
                 <md-icon>person_add</md-icon>
                 Invite
               </md-button>
@@ -32,13 +32,16 @@
         </md-card-content>
       </md-card>
     </div>
+    <invite-modal ref="inviteModal"></invite-modal>
   </div>
 </template>
 
 <script>
+  import InviteModal from './InviteModal';
 
   export default {
     components: {
+      InviteModal
     },
     data() {
       return {
@@ -51,6 +54,11 @@
             permissions: "View, Vote"
           },
         ]
+      }
+    },
+    methods: {
+      openInviteModal(){
+        this.$refs.inviteModal.toggleModal(true);
       }
     }
   };

@@ -33,6 +33,10 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+router.afterEach((to, from) => {
+  window.document.title = `${to.meta.title ? to.meta.title : to.name} @ 262 Days`;
+});
+
 // global library setup
 Object.defineProperty(Vue.prototype, "$Chartist", {
   get() {

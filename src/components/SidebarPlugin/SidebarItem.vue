@@ -35,7 +35,8 @@
         :target="link.target"
         :href="link.path">
         <template v-if="addLink">
-          <span class="sidebar-mini">{{linkPrefix}}</span>
+          <md-icon v-if="link.icon">{{link.icon}}</md-icon>
+          <span class="sidebar-mini" v-else>{{linkPrefix}}</span>
           <span class="sidebar-normal">{{link.name}}</span>
         </template>
         <template v-else>

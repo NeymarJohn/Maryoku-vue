@@ -119,6 +119,9 @@ export default {
         Login: "static/img/shutterstock_495639391.png",
         Register: "static/img/shutterstock_495639391.png",
         SignIn: "static/img/shutterstock_732491308.png",
+        SignOut: "static/img/shutterstock_732491308.png",
+        GetStarted: "static/img/shutterstock_732491308.png",
+        SignedIn: "static/img/shutterstock_732491308.png",
         Lock: "static/img/lock.jpg"
       };
       return {

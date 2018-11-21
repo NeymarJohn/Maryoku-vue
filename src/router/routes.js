@@ -4,8 +4,13 @@ import AuthLayout from "@/pages/Dashboard/Pages/AuthLayout.vue";
 import Home from "@/pages/app/Home.vue";
 import Me from "@/pages/app/Me.vue";
 import Profile from "@/pages/app/Profile.vue";
-import MyCompany from "@/pages/app/MyCompany.vue";
-import Team from "@/pages/app/Team.vue";
+import MyCompany from "@/pages/app/MyCompany/MyCompany.vue";
+import MyCompanyDashboard from "@/pages/app/MyCompany/MyCompanyDashboard.vue";
+import MyCompanyBilling from "@/pages/app/MyCompany/MyCompanyBilling.vue";
+import MyCompanyApprovals from "@/pages/app/MyCompany/MyCompanyApprovals.vue";
+import MyCompanyProfile from "@/pages/app/MyCompany/MyCompanyProfile.vue";
+import MyCompanySettings from "@/pages/app/MyCompany/MyCompanySettings.vue";
+import Team from "@/pages/app/Team/Team.vue";
 import Community from "@/pages/app/Community.vue";
 import Events from "@/pages/app/Events.vue";
 import Notes from "@/pages/app/Notes.vue";
@@ -24,6 +29,9 @@ const RtlSupport = () => import("@/pages/Dashboard/Pages/RtlSupport.vue");
 const Login = () => import("@/pages/Dashboard/Pages/Login.vue");
 const Register = () => import("@/pages/Dashboard/Pages/Register.vue");
 const SignInSignUp = () => import("@/pages/Dashboard/Pages/SignInSignUp.vue");
+const SignOut = () => import("@/pages/Dashboard/Pages/SignOut.vue");
+const Onboarding = () => import("@/pages/Dashboard/Pages/Onboarding.vue");
+const SignedIn = () => import("@/pages/Dashboard/Pages/SignedIn.vue");
 const Lock = () => import("@/pages/Dashboard/Pages/Lock.vue");
 
 // Components pages
@@ -220,30 +228,28 @@ let authPages = {
   name: "Authentication",
   children: [
     {
-      path: "/login",
-      name: "Login",
-      component: Login
-    },
-    {
-      path: "/register",
-      name: "Register",
-      component: Register
-    },
-    {
       path: "/signin",
       name: "SignIn",
       component: SignInSignUp,
       meta: {auth: false}
     },
     {
-      path: "/pricing",
-      name: "Pricing",
-      component: Pricing
+      path: "/signout",
+      name: "SignOut",
+      component: SignOut,
+      meta: {auth: false, title: 'Sign Out'}
     },
     {
-      path: "/lock",
-      name: "Lock",
-      component: Lock
+      path: "/get-started",
+      name: "GetStarted",
+      component: Onboarding,
+      meta: {auth: false, title: 'Get Started'}
+    },
+    {
+      path: "/signedin",
+      name: "SignedIn",
+      component: SignedIn,
+      meta: {auth: false, title: 'Signed In'}
     }
   ]
 };
@@ -267,7 +273,38 @@ let appPages = {
       path: "/my-company",
       name: "MyCompany",
       component: MyCompany,
-      meta: {title: "My Company"}
+      redirect: "/my-company/dashboard",
+      meta: {title: "My Company"},
+    },
+    {
+      path: '/my-company/dashboard',
+      name: 'MyCompanyDashboard',
+      component: MyCompanyDashboard,
+      meta: {title: 'My Company / Dashboard'}
+    },
+    {
+      path: '/my-company/company-profile',
+      name: 'MyCompanyProfile',
+      component: MyCompanyProfile,
+      meta: {title: 'My Company / Company Profile'}
+    },
+    {
+      path: '/my-company/approvals',
+      name: 'MyCompanyApprovals',
+      component: MyCompanyApprovals,
+      meta: {title: 'My Company / Approvals Sign-Off'}
+    },
+    {
+      path: '/my-company/billing',
+      name: 'MyCompanyBilling',
+      component: MyCompanyBilling,
+      meta: {title: 'My Company / Billing'}
+    },
+    {
+      path: '/my-company/company-settings',
+      name: 'MyCompanySettings',
+      component: MyCompanySettings,
+      meta: {title: 'My Company / Settings'}
     },
     {
       path: "/team",
@@ -282,7 +319,8 @@ let appPages = {
     {
       path: "/events",
       name: "Events",
-      component: Events
+      component: Events,
+      meta: {title: 'Our Events'}
     },
     {
       path: "/yearly-plan",

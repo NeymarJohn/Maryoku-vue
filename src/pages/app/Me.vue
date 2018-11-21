@@ -2,7 +2,7 @@
   <div class="md-layout">
     <div class="md-layout-item md-size-100">
       <md-card>
-        <md-card-header class="md-card-header-icon md-card-header-rose">
+        <md-card-header class="md-card-header-icon md-card-header-green">
           <div class="card-icon">
             <md-icon>assignment</md-icon>
           </div>
@@ -32,7 +32,7 @@
 
     <div class="md-layout-item md-size-100">
       <md-card>
-        <md-card-header class="md-card-header-icon md-card-header-rose">
+        <md-card-header class="md-card-header-icon md-card-header-warning">
           <div class="card-icon">
             <md-icon>assignment</md-icon>
           </div>
