@@ -36,7 +36,7 @@ export default {
   },
   data() {
     return {
-      isActive: 1
+      isActive: 0
     };
   },
   methods: {

@@ -1,26 +1,22 @@
 <template>
   <div class="md-layout">
     <div class="md-layout-item md-size-100 md-medium-size-100">
-      <md-card style="margin-top: 0;">
-        <md-card-content>
-          <tabs
-            :tab-name="['Dashboard', 'Company Profile', 'Approvals & Sign-Off', 'Billing', 'Settings']"
-            plain
-            color-button="rose">
+      <tabs
+        :tab-name="['Dashboard', 'Company Profile', 'Approvals & Sign-Off', 'Billing', 'Settings']"
+        plain
+        color-button="rose">
 
-            <!-- here you can add your content for tab-content -->
-            <my-company-dashboard slot="tab-pane-1"></my-company-dashboard>
+        <!-- here you can add your content for tab-content -->
+        <my-company-dashboard slot="tab-pane-1"></my-company-dashboard>
 
-            <my-company-profile slot="tab-pane-2"></my-company-profile>
+        <my-company-profile slot="tab-pane-2"></my-company-profile>
 
-            <my-company-approvals slot="tab-pane-3"></my-company-approvals>
+        <my-company-approvals slot="tab-pane-3"></my-company-approvals>
 
-            <my-company-billing slot="tab-pane-4"></my-company-billing>
+        <my-company-billing slot="tab-pane-4"></my-company-billing>
 
-            <my-company-settings slot="tab-pane-5"></my-company-settings>
-          </tabs>
-        </md-card-content>
-      </md-card>
+        <my-company-settings slot="tab-pane-5"></my-company-settings>
+      </tabs>
     </div>
   </div>
 </template>
