@@ -2,13 +2,13 @@
   <div class="md-layout ">
     <div class="md-layout-item md-size-100">
       <md-card>
-        <md-card-header class="md-card-header-icon md-card-header-green">
+        <md-card-header class="md-card-header-icon md-card-header-rose">
           <div class="card-icon">
             <md-icon>assignment</md-icon>
           </div>
           <h4 class="title">Upcoming Events
             <div class="pull-right">
-              <md-button class="md-success text-info md-sm">
+              <md-button class="md-rose text-info md-sm">
                 <md-icon>add_circle</md-icon>
                 Create New Event
               </md-button>
@@ -24,7 +24,7 @@
               </md-button>
             </div>
           </div>-->
-          <md-table v-model="eventsRecords" table-header-color="green" class="table-striped table-hover">
+          <md-table v-model="eventsRecords" table-header-color="rose" class="table-striped table-hover">
             <md-table-row slot="md-table-row" slot-scope="{ item }">
               <md-table-cell md-label="Event Name">{{ item.name }}</md-table-cell>
               <md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>

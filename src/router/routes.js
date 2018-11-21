@@ -273,38 +273,40 @@ let appPages = {
       path: "/my-company",
       name: "MyCompany",
       component: MyCompany,
-      redirect: "/my-company/dashboard",
+      /*redirect: "/my-company/dashboard",*/
       meta: {title: "My Company"},
-    },
-    {
-      path: '/my-company/dashboard',
-      name: 'MyCompanyDashboard',
-      component: MyCompanyDashboard,
-      meta: {title: 'My Company / Dashboard'}
-    },
-    {
-      path: '/my-company/company-profile',
-      name: 'MyCompanyProfile',
-      component: MyCompanyProfile,
-      meta: {title: 'My Company / Company Profile'}
-    },
-    {
-      path: '/my-company/approvals',
-      name: 'MyCompanyApprovals',
-      component: MyCompanyApprovals,
-      meta: {title: 'My Company / Approvals Sign-Off'}
-    },
-    {
-      path: '/my-company/billing',
-      name: 'MyCompanyBilling',
-      component: MyCompanyBilling,
-      meta: {title: 'My Company / Billing'}
-    },
-    {
-      path: '/my-company/company-settings',
-      name: 'MyCompanySettings',
-      component: MyCompanySettings,
-      meta: {title: 'My Company / Settings'}
+      /*children: [
+        {
+          path: 'dashboard',
+          name: 'MyCompanyDashboard',
+          component: MyCompanyDashboard,
+          meta: {title: 'My Company / Dashboard'}
+        },
+        {
+          path: 'company-profile',
+          name: 'MyCompanyProfile',
+          component: MyCompanyProfile,
+          meta: {title: 'My Company / Company Profile'}
+        },
+        {
+          path: 'approvals',
+          name: 'MyCompanyApprovals',
+          component: MyCompanyApprovals,
+          meta: {title: 'My Company / Approvals Sign-Off'}
+        },
+        {
+          path: 'billing',
+          name: 'MyCompanyBilling',
+          component: MyCompanyBilling,
+          meta: {title: 'My Company / Billing'}
+        },
+        {
+          path: 'company-settings',
+          name: 'MyCompanySettings',
+          component: MyCompanySettings,
+          meta: {title: 'My Company / Settings'}
+        },
+      ]*/
     },
     {
       path: "/team",
@@ -352,8 +354,8 @@ const routes = [
     redirect: "/me",
     name: "Root"
   },
-  /*componentsMenu,
-  formsMenu,
+  componentsMenu,
+  /*formsMenu,
   tablesMenu,
   mapsMenu,
   pagesMenu,*/

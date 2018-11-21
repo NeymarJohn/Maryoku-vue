@@ -5,9 +5,9 @@
       {'nav-pills-icons': navPillsIcons},
       {'md-card-plain': plain}
     ]">
-    <md-card-header>
+    <!--<md-card-header>
       <slot name="header-title"></slot>
-    </md-card-header>
+    </md-card-header>-->
     <md-card-content>
       <md-list class="nav-tabs">
         <md-list-item
@@ -24,15 +24,14 @@
 
       <transition name="fade" mode="out-in">
         <div class="tab-content">
-          <template v-if="isActivePanel(tabName[index])">
-            <div
-              :class="getTabContent(index + 1)"
-              v-for="(item, index) in tabName"
-              :key="item">
-              <slot :name="getTabContent(index + 1)">
-                This is the default text!
-              </slot>
-            </div>
+          <template v-for="(item, index) in tabName">
+            <template v-if="isActivePanel(tabName[index])">
+              <div :class="getTabContent(index + 1)" :key="item">
+                <slot :name="getTabContent(index + 1)">
+                  This is the default text!
+                </slot>
+              </div>
+            </template>
           </template>
         </div>
       </transition>
@@ -58,12 +57,13 @@ export default {
       activePanel: this.tabName[0]
     };
   },
+  computed: {},
   methods: {
     switchPanel(panel) {
       this.activePanel = panel;
     },
     isActivePanel(panel) {
-      return this.activePanel == panel;
+      return this.activePanel === panel;
     },
     getColorButton: function(colorButton) {
       return "md-" + colorButton + "";

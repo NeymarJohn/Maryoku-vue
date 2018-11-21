@@ -9,11 +9,11 @@
         </sidebar-item>
 
         <sidebar-item :link="{name: 'My Company', icon: 'fingerprint', path: '/my-company'}">
-          <sidebar-item :link="{name: 'Dashboard', icon: 'dashboard', path: '/my-company/dashboard'}"></sidebar-item>
+          <!--<sidebar-item :link="{name: 'Dashboard', icon: 'dashboard', path: '/my-company/dashboard'}"></sidebar-item>
           <sidebar-item :link="{name: 'Edit Company Profile', icon: 'dashboard', path: '/my-company/company-profile'}"></sidebar-item>
           <sidebar-item :link="{name: 'Approvals & Sign Off', icon: 'dashboard', path: '/my-company/approvals'}"></sidebar-item>
           <sidebar-item :link="{name: 'Billing', icon: 'dashboard', path: '/my-company/billing'}"></sidebar-item>
-          <sidebar-item :link="{name: 'Settings', icon: 'settings', path: '/my-company/company-settings'}"></sidebar-item>
+          <sidebar-item :link="{name: 'Settings', icon: 'settings', path: '/my-company/company-settings'}"></sidebar-item>-->
         </sidebar-item>
 
         <sidebar-item :link="{name: 'Team', icon: 'group_add', path: '/team'}">

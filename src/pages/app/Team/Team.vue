@@ -11,11 +11,11 @@
         <md-card-content>
           <div class="table table-stats text-right">
             <div class="text-right">
-              <md-button class="md-rose text-rose md-sm" @click="openInviteModal">
+              <md-button class="md-rose text-rose" @click="openInviteModal">
                 <md-icon>person_add</md-icon>
                 Invite
               </md-button>
-              <md-button class="md-rose md-sm">
+              <md-button class="md-rose">
                 <md-icon>share</md-icon>
                 Share
               </md-button>

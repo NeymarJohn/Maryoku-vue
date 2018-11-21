@@ -9,7 +9,7 @@
       </template>-->
 
       <template slot="body">
-        <simple-wizard>
+        <simple-wizard data-color="rose">
           <template slot="header">
             <h3 class="title">Build your profile</h3>
             <h5 class="category">This information will let us know more about you.</h5>

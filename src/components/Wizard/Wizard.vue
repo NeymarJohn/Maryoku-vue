@@ -2,7 +2,7 @@
   <div class="wizard-container">
     <form @submit.prevent>
       <!--        You can switch " data-color="primary" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
-      <md-card class="md-card-wizard active" data-color="green">
+      <md-card class="md-card-wizard active" data-color="rose">
         <md-card-header>
           <slot name="header">
             <h3 class="card-title">{{title}}</h3>
@@ -62,12 +62,12 @@
             <div>
               <md-button v-if="activeTabIndex < tabCount -1"
                         @click.native="nextTab"
-                        class="btn-next md-success">
+                        class="btn-next md-rose">
                 {{nextButtonText}}
               </md-button>
               <md-button
                 v-else
-                class="md-success"
+                class="md-rose"
                 @click.native="nextTab">{{finishButtonText}}</md-button>
             </div>
           </slot>
