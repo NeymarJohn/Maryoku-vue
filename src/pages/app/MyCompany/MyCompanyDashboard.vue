@@ -8,12 +8,12 @@
             <h4 class="title">Important Dates</h4>
           </div>
         </md-card-header>
-        <md-card-content>
+        <md-card-content style="text-align: left;">
           <collapse
             :collapse="[
-              'Collapsible Group Item #1',
-              'Collapsible Group Item #2',
-              'Collapsible Group Item #3']"
+              'Oct 19th : Happy Birthday - Alan Gur',
+              'Oct 22nd : Happy Hour',
+              'Nov 7th : Baby Shower - Jane Smith',]"
             icon="keyboard_arrow_down"
             color-collapse="success">
             <template slot="md-collapse-pane-1">
