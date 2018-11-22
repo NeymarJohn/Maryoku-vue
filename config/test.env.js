@@ -4,5 +4,5 @@ const devEnv = require('./dev.env')
 
 module.exports = merge(devEnv, {
   NODE_ENV: '"testing"',
-  SERVER_URL: '"http://localhost:8080"'
+  SERVER_URL: '"https://api-dev.262days.com"'
 })
