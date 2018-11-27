@@ -3,7 +3,7 @@
     ? {SCHEME: 'https', HOSTNAME: 'api.262days.com'}
     : {SCHEME: 'http', HOSTNAME: process.env.SERVER_URL} */
 
-const { HOSTNAME } = { HOSTNAME: 'https://api-dev.262days.com'};
+const { HOSTNAME } = { HOSTNAME: process.env.SERVER_URL};
 
 const API_URL = `${HOSTNAME}`;
 const REGISTRATION_URL = `${API_URL}/1/register`;
