@@ -12,6 +12,7 @@ import MyCompanyProfile from "@/pages/app/MyCompany/MyCompanyProfile.vue";
 import MyCompanySettings from "@/pages/app/MyCompany/MyCompanySettings.vue";
 import Team from "@/pages/app/Team/Team.vue";
 import Community from "@/pages/app/Community.vue";
+import CommunityNew from "@/pages/app/Community/Community-new.vue";
 import Events from "@/pages/app/Events.vue";
 import Notes from "@/pages/app/Notes.vue";
 import Proposals from "@/pages/app/Proposals.vue";
@@ -318,6 +319,11 @@ let appPages = {
       name: "Community",
       component: Community
     },
+      {
+          path: "/community-new",
+          name: "Community-new",
+          component: CommunityNew
+      },
     {
       path: "/events",
       name: "Events",
