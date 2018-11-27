@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import Vuex from "vuex";
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import DashboardPlugin from "./material-dashboard";
@@ -11,6 +12,9 @@ import Chartist from "chartist";
 
 // router setup
 import routes from "./router/routes";
+
+// store setup
+import store from "./store";
 
 // plugin setup
 Vue.use(VueRouter);
@@ -51,6 +55,7 @@ new Vue({
   el: "#app",
   render: h => h(App),
   router,
+  store,
   data: {
     Chartist: Chartist
   }
