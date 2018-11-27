@@ -21,6 +21,7 @@ export default {
     setTimeout(() => {
       const givenToken = that.$route.query.token;
       that.auth.setToken(givenToken);
+      that.auth.setHeaders(this);
       that.auth.currentUser(that, true);
     },2500)
   },

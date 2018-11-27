@@ -22,8 +22,7 @@ export default {
       .then((resp) => {
         this.setToken(resp.data.access_token);
 
-        this.user.authenticated = true;
-        context.$http.defaults.headers.common.Authorization = this.getAuthHeader().Authorization;
+        this.setHeaders(context);
 
         if (redirect) {
           context.$router.push({ path: redirect });
@@ -35,6 +34,11 @@ export default {
 
   setToken(token) {
     window.localStorage.setItem(TOKEN_KEY, token);
+  },
+
+  setHeaders(context){
+    this.user.authenticated = true;
+    context.$http.defaults.headers.common.Authorization = this.getAuthHeader().Authorization;
   },
 
   unsetToken() {
