@@ -21,7 +21,14 @@
               </md-button>
             </div>
           </div>
-          <team-table :teamRecords="teamRecords"></team-table>
+          <md-table v-model="teamRecords" table-header-color="rose" class="table-striped table-hover">
+            <md-table-row slot="md-table-row" slot-scope="{ item }">
+              <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
+              <md-table-cell md-label="Email">{{ item.email }}</md-table-cell>
+              <md-table-cell md-label="Role">{{ item.role }}</md-table-cell>
+              <md-table-cell md-label="Permissions">{{ item.permissions }}</md-table-cell>
+            </md-table-row>
+          </md-table>
         </md-card-content>
       </md-card>
     </div>
@@ -31,12 +38,10 @@
 
 <script>
   import InviteModal from './InviteModal';
-  import TeamTable from './Table';
 
   export default {
     components: {
-      InviteModal,
-      'team-table': TeamTable
+      InviteModal
     },
     data() {
       return {

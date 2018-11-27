@@ -70,7 +70,10 @@ import MyCompanyProfile from "src/pages/app/MyCompany/MyCompanyProfile.vue";
         }
     };
 </script>
-<style >
+<style>
+    .tab-pane-1, .tab-pane-2, .tab-pane-3{
+        width: 100%!important;
+    }
     .md-table-head-label {
         font-weight: 500;
     }
