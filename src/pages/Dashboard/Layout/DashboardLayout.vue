@@ -171,6 +171,7 @@ import ContentFooter from "./ContentFooter.vue";
 import MobileMenu from "./Extra/MobileMenu.vue";
 import UserMenu from "./Extra/UserMenu.vue";
 import { ZoomCenterTransition } from "vue2-transitions";
+import auth from "src/auth";
 
 export default {
   components: {
@@ -179,6 +180,11 @@ export default {
     MobileMenu,
     UserMenu,
     ZoomCenterTransition
+  },
+  data() {
+    return {
+      auth: auth
+    }
   },
   methods: {
     toggleSidebar() {
@@ -200,6 +206,8 @@ export default {
     } else {
       docClasses.add("perfect-scrollbar-off");
     }
+
+    this.auth.currentUser(this, true);
   }
 };
 </script>
