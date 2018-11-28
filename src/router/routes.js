@@ -50,7 +50,6 @@ const RegularForms = () => import("@/pages/Dashboard/Forms/RegularForms.vue");
 const ExtendedForms = () => import("@/pages/Dashboard/Forms/ExtendedForms.vue");
 const ValidationForms = () =>
   import("@/pages/Dashboard/Forms/ValidationForms.vue");
-const Wizard = () => import("@/pages/Dashboard/Forms/Wizard.vue");
 
 // TableList pages
 const RegularTables = () =>
@@ -134,11 +133,6 @@ let formsMenu = {
       path: "validation",
       name: "Validation Forms",
       components: { default: ValidationForms }
-    },
-    {
-      path: "wizard",
-      name: "Wizard",
-      components: { default: Wizard }
     }
   ]
 };

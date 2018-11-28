@@ -30,7 +30,7 @@
 </template>
 
 <script>
-  import InviteModal from './InviteModal';
+  import InviteModal from './InviteModal/';
   import TeamTable from './Table';
 
   export default {

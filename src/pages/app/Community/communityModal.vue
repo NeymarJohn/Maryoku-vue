@@ -15,26 +15,20 @@
             <h5 class="category">This information will let us know more about you.</h5>
           </template>
 
-          <wizard-tab>
             <template slot="label" data-color="red">
               About
             </template>
 
-          </wizard-tab>
 
-          <wizard-tab >
             <template slot="label" >
               Account
             </template>
 
-          </wizard-tab>
 
-          <wizard-tab >
             <template slot="label">
               Address
             </template>
 
-          </wizard-tab>
         </simple-wizard>
       </template>
 
@@ -46,47 +40,36 @@
 </template>
 
 <script>
-    import { Modal, SimpleWizard, WizardTab } from "@/components";
-    import FirstStep from "src/pages/Dashboard/Forms/Wizard/FirstStep.vue";
-    import SecondStep from "src/pages/Dashboard/Forms/Wizard/SecondStep.vue";
-    import ThirdStep from "src/pages/Dashboard/Forms/Wizard/ThirdStep.vue";
-    import swal from "sweetalert2";
+  import { Modal, SimpleWizard, WizardTab } from "@/components";
 
-    export default {
-        components: {
-            Modal,
-            FirstStep,
-            SecondStep,
-            ThirdStep,
-            SimpleWizard,
-            WizardTab
-        },
-        props: {
+  import swal from "sweetalert2";
 
-        },
-        data() {
-            return {
-                inviteModalOpen: false
-            }
-        },
-        methods: {
-            noticeModalHide: function() {
-                this.inviteModalOpen = false;
-            },
-            toggleModal: function(show) {
-                this.inviteModalOpen = show;
-            },
-            validateStep(ref) {
-                return this.$refs[ref].validate();
-            },
-            onStepValidated(validated, model) {
-                this.wizardModel = { ...this.wizardModel, ...model };
-            },
-            wizardComplete() {
-                swal("Good job!", "You clicked the finish button!", "success");
-            }
-        }
-    };
+  export default {
+    components: {
+      Modal,
+      SimpleWizard,
+      WizardTab
+    },
+    props: {
+
+    },
+    data() {
+      return {
+        inviteModalOpen: false
+      }
+    },
+    methods: {
+      noticeModalHide: function() {
+        this.inviteModalOpen = false;
+      },
+      toggleModal: function(show) {
+        this.inviteModalOpen = show;
+      },
+      wizardComplete() {
+        swal("Good job!", "You clicked the finish button!", "success");
+      }
+    }
+  };
 </script>
 <style >
 
