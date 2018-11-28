@@ -8,7 +8,7 @@
                             <md-field class="no-margin">
                                 <label for="select">Select one</label>
                                 <md-select v-model="select" name="select">
-                                    <md-option :v-for="option in options"  :key="option"  :value="option">{{ option }}</md-option>
+                                    <md-option v-for="(option, index) in options"  :key="index"  :value="option">{{ option }}</md-option>
                                 </md-select>
                             </md-field>
                         </div>
@@ -19,7 +19,7 @@
                         <md-field class="no-margin">
                             <label for="select">Select one</label>
                             <md-select v-model="select" name="select">
-                                <md-option :v-for="option in options"  :key="option"  :value="option">{{ option }}</md-option>
+                                <md-option  v-for="(option, index) in options"  :key="index" :value="option">{{ option }}</md-option>
                             </md-select>
                         </md-field>
                     </div>
@@ -29,7 +29,7 @@
                     <md-field class="no-margin">
                         <label for="select">Select one</label>
                         <md-select v-model="select" name="select">
-                            <md-option :v-for="option in options"  :key="option"  :value="option">{{ option }}</md-option>
+                            <md-option  v-for="(option, index) in options"  :key="index"  :value="option">{{ option }}</md-option>
                         </md-select>
                     </md-field>
                 </div>
@@ -40,7 +40,7 @@
                         <md-field class="no-margin">
                             <label for="select">Select one</label>
                             <md-select v-model="select" name="select">
-                                <md-option :v-for="option in options"  :key="option"  :value="option">{{ option }}</md-option>
+                                <md-option  v-for="(option, index) in options"  :key="index"  :value="option">{{ option }}</md-option>
                             </md-select>
                         </md-field>
                     </div>
@@ -59,8 +59,12 @@
                     'test11',
                     'test12',
                     'test13',
-                    'test14']
+                    'test14'
+                ]
             };
+        },
+        created() {
+          console.log(this.options)
         },
         methods: {
 
