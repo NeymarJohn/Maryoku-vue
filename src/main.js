@@ -3,7 +3,6 @@ import VueRouter from "vue-router";
 import Vuex from "vuex";
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-import { Model } from 'vue-api-query'
 import DashboardPlugin from "./material-dashboard";
 import auth from './auth';
 
@@ -50,8 +49,6 @@ Object.defineProperty(Vue.prototype, "$Chartist", {
 });
 
 Vue.use(VueAxios, axios);
-
-Model.$http = axios;
 
 /* eslint-disable no-new */
 new Vue({

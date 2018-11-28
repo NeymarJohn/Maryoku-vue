@@ -79,7 +79,10 @@
   justify-content: space-between;
   margin: auto !important;
 }
-
+.grid-col{
+  display: grid;
+  grid-template-columns: 2fr 2fr;
+}
 @media (min-width: 576px) {
   .md-offset {
       max-width: 540px;

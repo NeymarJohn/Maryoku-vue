@@ -19,7 +19,7 @@
         <sidebar-item :link="{name: 'Team', icon: 'group_add', path: '/team'}">
         </sidebar-item>
 
-        <sidebar-item :link="{name: 'Community', icon: 'people', path: '/community'}">
+        <sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
         </sidebar-item>
 
         <li class="menu-divider"></li>

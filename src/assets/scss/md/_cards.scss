@@ -7,9 +7,90 @@
     overflow: unset;
     font-size: .875rem;
     box-shadow: 0 1px 4px 0 rgba(0,0,0,0.14);
-    border-radius: $border-radius-base + 3;
+    border-radius: $border-radius-none;
     color: $mdb-card-body-text;
     background: $mdb-card-body-background;
+
+    &_comment {
+        &_title{
+            font-size: $font-size-large;
+            font-weight:bold;
+            text-align: left;
+            color: #5A5A5A;
+        }
+        &_person{
+            display: block;
+            text-align: left;
+        }
+        &_person_photo{
+            width: 40px;
+            -webkit-border-radius: 50px;
+            -moz-border-radius: 50px;
+            border-radius:50px;
+            height:40px;
+            display: inline-block;
+            background: gray;
+        }
+
+        &_person_info{
+            display: inline-block;
+
+            &_name{
+                display: block;
+            }
+
+            &_time{
+                display: block;
+                text-align: left;
+                position: relative;
+                top: -5px;
+                color: $light-gray-1;
+            }
+        }
+        &_tags{
+            display: block;
+            text-align: left;
+            color: $light-gray-1;
+            margin-top: 20px;
+            font-weight: 400;
+
+            &_dott{
+                position: relative;
+                top: -3px;
+            }
+
+        }
+        &_links{
+            display: block;
+            text-align: left;
+            color: $black-color;
+            margin-top: 20px;
+            font-weight: 400;
+
+            & span a{
+
+                    color: $black-color!important;
+            }
+            &_dott{
+                position: relative;
+                top: -3px;
+            }
+
+        }
+        &_input{
+            display: grid;
+            grid-template-columns: 2fr 2fr;
+        }
+        &_btn{
+            margin-top: 0px;
+            border-radius: 0px;
+            float: left;
+            font-size: $btn-font-size;
+            text-transform: unset!important;
+        }
+
+
+    }
 
     .card-height-indicator {
         margin-top: 100%;

@@ -47,9 +47,9 @@
 
 <script>
   import { Modal, SimpleWizard, WizardTab } from "@/components";
-  import FirstStep from "src/pages/Dashboard/Forms/Wizard/FirstStep.vue";
-  import SecondStep from "src/pages/Dashboard/Forms/Wizard/SecondStep.vue";
-  import ThirdStep from "src/pages/Dashboard/Forms/Wizard/ThirdStep.vue";
+  import FirstStep from "./Wizard/FirstStep.vue";
+  import SecondStep from "./Wizard/SecondStep.vue";
+  import ThirdStep from "./Wizard/ThirdStep.vue";
   import swal from "sweetalert2";
 
   export default {
