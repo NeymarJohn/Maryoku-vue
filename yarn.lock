@@ -10447,6 +10447,11 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-api-query@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/vue-api-query/-/vue-api-query-1.2.0.tgz#149ad25954964e4752475bd08927d83e9cd03269"
+  integrity sha512-+69XaF0iLMGFuNoUkMhXzCjO5oT8RaLNJV6h9BGk1EEfAUwC3HydpcXhExMHUj4roNlrNBzwxrCcFAssxcancQ==
+
 vue-axios@^2.1.4:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/vue-axios/-/vue-axios-2.1.4.tgz#a9d298f7e876f9a87feb336b37adcbce34ff9f9f"
