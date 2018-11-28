@@ -25,10 +25,10 @@
                     </div>
 
                 </div>
-                <div class="md-card_comment_links md-layout-item md-medium-size-100 md-size-100">
+                <div v-if="vendorsClicked" class="md-card_comment_links md-layout-item md-medium-size-100 md-size-100">
                     <span><a href="#">5 Recommendations</a></span>
                     <span class="md-card_comment_links_dott"> . </span>
-                    <span><a href="#">3 vendors suggested</a></span>
+                    <span><a href="#" @click="goToVendor">3 vendors suggested</a></span>
                     <span class="md-card_comment_links_dott"> . </span>
                     <span><a href="#">22 comments</a></span>
                 </div>
@@ -51,6 +51,12 @@
 <script>
     import { InputText } from "@/components";
     export default {
+        props: {
+            vendorsClicked: {
+                type: Boolean,
+                default: true
+            }
+        },
         components: {
             InputText
         },
@@ -60,7 +66,9 @@
             }
         },
         methods: {
-
+            goToVendor() {
+                this.$router.push('/vendors-suggested');
+            }
         }
     };
 </script>

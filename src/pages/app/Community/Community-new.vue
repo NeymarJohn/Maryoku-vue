@@ -41,7 +41,7 @@
 <script>
 import CommunityModal from './communityModal';
 import { Tabs, NavTabsCard } from "@/components";
-import NewAsks from "src/pages/app/Community/new-asks.vue";
+import NewAsks from "src/pages/app/Community/widgets/single-ask.vue";
 import MyCompanyApprovals from "src/pages/app/MyCompany/MyCompanyApprovals.vue";
 import MyCompanyProfile from "src/pages/app/MyCompany/MyCompanyProfile.vue";
 
