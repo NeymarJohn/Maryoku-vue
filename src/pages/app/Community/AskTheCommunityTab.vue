@@ -1,7 +1,5 @@
 <template>
-    <div class="md-layout-item md-size-100">
-        <md-card class="bg-rose">
-            <md-card-content>
+    <div class="md-layout-item md-size-100 m-top">
                 <div class="grid-col">
                     <span class="custom-label">Let the community know what you are looking for</span>
                         <div class="md-layout-item md-medium-size-100 md-size-100">
@@ -23,7 +21,8 @@
                             </md-select>
                         </md-field>
                     </div>
-                </div> <div class="grid-col">
+                </div>
+        <div class="grid-col">
                 <span class="custom-label">The occasion you are celebrating</span>
                 <div class="md-layout-item md-medium-size-100 md-size-100">
                     <md-field class="no-margin">
@@ -45,6 +44,15 @@
                         </md-field>
                     </div>
                 </div>
+        <md-card class="bg-gray">
+            <md-card-content>
+                <h5 class="tags-title">Tag your event</h5>
+                <span class="tags-label">Tag Event Budget</span>
+                <span class="tags-inline"><md-chips v-model="budget" class="md-primary no-padding"></md-chips></span>
+                <span class="tags-label">Tag Event Vibe</span>
+                <span class="tags-inline"><md-chips v-model="budget" class="md-primary no-padding"></md-chips></span>
+                <span class="tags-label">Tag Event Location</span>
+                <span class="tags-inline"><md-chips v-model="budget" class="md-primary no-padding"></md-chips></span>
             </md-card-content>
         </md-card>
     </div>
@@ -58,6 +66,7 @@
                 select2: '',
                 select3: '',
                 select4: '',
+                budget: ["Amsterdam", "Washington", "Sydney", "Beijing"],
                 options: [
                     'test11',
                     'test12',
@@ -78,8 +87,14 @@
     .no-margin{
         margin-top: 0px;
     }
-    .custom-label{
-        margin-top: 10px;
-        text-align: left;
+    .m-top{
+        margin-top: 15px;
+    }
+    .bg-gray{
+        background-color: #F2F2F2!important;
+    }
+    .no-padding{
+        padding-top: 0px!important;
+        padding-bottom: 0px!important;
     }
 </style>
