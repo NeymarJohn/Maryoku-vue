@@ -45,7 +45,7 @@
 </template>
 <script>
 import { SignupCard } from "@/components";
-import Vendor from '@/models/Vendor';
+import Vendors from 'src/models/Vendors';
 import auth from "@/auth";
 
 export default {
@@ -59,7 +59,7 @@ export default {
   },
   async mounted()
   {
-    this.vendors = await Vendor.get();
+    this.vendors = await Vendors.get();
   },
   created() {
     const givenToken = this.$route.query.token;

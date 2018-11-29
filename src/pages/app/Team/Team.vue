@@ -32,6 +32,7 @@
 <script>
   import InviteModal from './InviteModal/';
   import TeamTable from './Table';
+  import Teams from 'src/models/Teams';
 
   export default {
     components: {
@@ -40,21 +41,19 @@
     },
     data() {
       return {
-        teamRecords: [
-          {
-            id: 1,
-            name: "First Name Last Name",
-            email: "contact@somecompany.com",
-            role: "Event Participant",
-            permissions: "View, Vote"
-          },
-        ]
+        teamRecords: []
       }
     },
     methods: {
       openInviteModal(){
         this.$refs.inviteModal.toggleModal(true);
       }
+    },
+    async mounted()
+    {
+      let teams = await Teams.get();
+      this.teamRecords = await teams[0].members().get();
+
     }
   };
 </script>

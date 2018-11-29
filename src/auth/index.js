@@ -2,6 +2,7 @@
   process.env.NODE_ENV === 'production'
     ? {SCHEME: 'https', HOSTNAME: 'api.262days.com'}
     : {SCHEME: 'http', HOSTNAME: process.env.SERVER_URL} */
+import { Model } from 'vue-api-query';
 
 const { HOSTNAME } = { HOSTNAME: process.env.SERVER_URL};
 
@@ -39,6 +40,7 @@ export default {
   setHeaders(context){
     this.user.authenticated = true;
     context.$http.defaults.headers.common.Authorization = this.getAuthHeader().Authorization;
+    Model.$http.defaults.headers.common.Authorization = this.getAuthHeader().Authorization;
   },
 
   unsetToken() {
@@ -50,6 +52,7 @@ export default {
     context.$http.get(CURRENT_USER_URL, { headers: this.getAuthHeader() })
       .then((resp) => {
         context.user = { username: resp.data.username };
+        this.setHeaders(context);
         if (required){
           context.$router.push({
             path: '/'
