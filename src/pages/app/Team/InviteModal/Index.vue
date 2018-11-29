@@ -46,11 +46,14 @@
 </template>
 
 <script>
+  import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+  import teamVuexModule from './'
   import { Modal, SimpleWizard, WizardTab } from "@/components";
   import FirstStep from "./Wizard/FirstStep.vue";
   import SecondStep from "./Wizard/SecondStep.vue";
   import ThirdStep from "./Wizard/ThirdStep.vue";
   import swal from "sweetalert2";
+  import Team from "../../../../models/Teams"
 
   export default {
     components: {
@@ -70,6 +73,7 @@
       }
     },
     methods: {
+        ...mapActions('team', ['fetchInviteProfilePerson']),
       noticeModalHide: function() {
         this.inviteModalOpen = false;
       },
@@ -83,9 +87,16 @@
         this.wizardModel = { ...this.wizardModel, ...model };
       },
       wizardComplete() {
+
         swal("Good job!", "You clicked the finish button!", "success");
       }
-    }
+    },
+      created () {
+              this.fetchInviteProfilePerson();
+      },
+      computed: {
+          ...mapState('team', ['steps'])
+      },
   };
 </script>
 <style >
