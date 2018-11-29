@@ -21,7 +21,7 @@
               </md-button>
             </div>
           </div>
-          <team-table :teamRecords="teamRecords"></team-table>
+          <team-table :teamMembers="teamMembers"></team-table>
         </md-card-content>
       </md-card>
     </div>
@@ -32,6 +32,8 @@
 <script>
   import InviteModal from './InviteModal/';
   import TeamTable from './Table';
+  import Team from "@/models/Teams";
+
 
   export default {
     components: {
@@ -40,7 +42,7 @@
     },
     data() {
       return {
-        teamRecords: [
+          teamMembers: [
           {
             id: 1,
             name: "First Name Last Name",
@@ -51,8 +53,18 @@
         ]
       }
     },
-    methods: {
-      openInviteModal(){
+      created() {
+         Team.find(1).then(response => {
+             this.teamMembers = response.members;
+             console.log(response);
+         }, (error) => {
+             console.log(error)
+         });
+
+
+      },
+      methods: {
+          openInviteModal(){
         this.$refs.inviteModal.toggleModal(true);
       }
     }
