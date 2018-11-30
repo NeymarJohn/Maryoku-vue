@@ -9,13 +9,13 @@
                 <div class="option-title">
                     3 Vendors Suggested
                 </div>
-                <div class="detailes-options">
-                    <span><a href="#">5 Recommendations</a></span>
-                    <span class="md-card_comment_links_dott"> . </span>
-                    <span><a href="#" class="active">3 vendors suggested</a></span>
-                    <span class="md-card_comment_links_dott"> . </span>
-                    <span><a href="#">22 comments</a></span>
-                </div>
+                <!--<div class="detailes-options">-->
+                    <!--<span><a href="#">5 Recommendations</a></span>-->
+                    <!--<span class="md-card_comment_links_dott"> . </span>-->
+                    <!--<span><a href="#" class="active">3 vendors suggested</a></span>-->
+                    <!--<span class="md-card_comment_links_dott"> . </span>-->
+                    <!--<span><a href="#">22 comments</a></span>-->
+                <!--</div>-->
             </div>
             </div>
         </div>

@@ -12,7 +12,7 @@
                     <span>Out doors</span>
                 </div>
                 <h1 class="md-card_comment_title">Looking for recommendation on space for Thanks Giving in San Francisco</h1>
-                <div class="md-card_comment_person md-layout-item md-medium-size-100 md-size-100">
+                <div v-if="vendorsClicked" class="md-card_comment_person md-layout-item md-medium-size-100 md-size-100">
                     <div class="md-card_comment_person_photo">
                     </div>
                     <div class="md-card_comment_person_info">
