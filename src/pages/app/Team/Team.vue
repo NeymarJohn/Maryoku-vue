@@ -32,7 +32,7 @@
 <script>
   import InviteModal from './InviteModal/';
   import TeamTable from './Table';
-  import Team from "@/models/Teams";
+  import Teams from "@/models/Teams";
 
 
   export default {
@@ -54,9 +54,12 @@
       }
     },
       created() {
-         Team.find(1).then(response => {
-             this.teamMembers = response.members;
-             console.log(response);
+         Teams.get().then(teams => {
+           console.log(teams);
+           teams[0].members().get().then(members => {
+             console.log(members);
+             this.teamMembers = members;
+           });
          }, (error) => {
              console.log(error)
          });
