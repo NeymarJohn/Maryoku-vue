@@ -99,11 +99,12 @@
                 this.wizardModel = {...this.wizardModel, ...model};
             },
             async wizardComplete() {
+              swal("Good job!", "You clicked the finish button!", "success");
                 let team = await Teams.first();
 
                 console.log('Team: ', team);
                 team.members().attach(this.teamMemberData).then(response => {
-                    swal("Good job!", "You clicked the finish button!", "success");
+
 
                 })
 
@@ -113,5 +114,7 @@
     };
 </script>
 <style>
-
+    .swal2-container{
+        z-index: 999999;
+    }
 </style>
