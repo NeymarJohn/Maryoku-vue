@@ -1,32 +1,35 @@
 <template>
     <div>
-        <h5 class="info-text"> What are you doing? (checkboxes) </h5>
+        <h5 class="info-text"> What are you doing?</h5>
         <div class="md-layout">
             <div class="md-layout-item">
                 <div class="md-layout">
                     <div class="md-layout-item md-size-33 md-small-size-100">
                         <icon-radio v-model="role"
                                        icon="fas fa-pencil-alt"
-                                    label="Design"
+                                    label="design"
                                     :value="selectedValue"
-                                    @change="updateValue"
+                                    :checked="radioButtons.design"
+                                    @input="updateValue"
                                     title="Design">
                         </icon-radio>
                     </div>
                     <div class="md-layout-item md-size-33 md-small-size-100">
                         <icon-radio v-model="role"
                                     :value="selectedValue"
-                                    label="Code"
-                                       icon="fas fa-terminal"
-                                    @change="updateValue"
+                                    label="code"
+                                    :checked="radioButtons.code"
+                                    icon="fas fa-terminal"
+                                    @input="updateValue"
                                        title="Code">
                         </icon-radio>
                     </div>
                     <div class="md-layout-item md-size-33 md-small-size-100">
                         <icon-radio v-model="role"
-                                    label="Develop"
+                                    label="develop"
+                                    :checked="radioButtons.develop"
                                     :value="selectedValue"
-                                    @change="updateValue"
+                                    @input="updateValue"
                                        icon="fas fa-laptop"
                                        title="Develop">
                         </icon-radio>
@@ -49,7 +52,13 @@
     },
     data() {
       return {
-        selectedValue: 'Design'
+        selectedValue: 'Design',
+          radioButtons: {
+              design:  false,
+              develop: false,
+              code:    false
+          }
+
       };
     },
     computed: {
@@ -66,15 +75,26 @@
     },
     created () {
       this.$store.registerModule('teamVuex', teamVuexModule);
-
     },
     methods: {
       ...mapMutations('teamVuex', [
         'setMemberProperty',
       ]),
-      updateValue(newValue) {
-        console.log('Radio Evenet', newValue);
-        this.selectedValue = newValue;
+      updateValue(dataObject) {
+          for (var property in this.radioButtons) {
+              console.log(this.radioButtons[property])
+
+              if (this.radioButtons.hasOwnProperty(property)) {
+                  if (property === dataObject.label) {
+                      this.radioButtons[property] = true;
+                  } else {
+                      this.radioButtons[property] = false;
+
+                  }
+              }false
+          }
+          this.setMemberProperty({key: 'role', actualValue: dataObject.label})
+
       },
       validate() {
         this.$emit("on-validated", true, this.model);
