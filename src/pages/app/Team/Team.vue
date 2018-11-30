@@ -25,7 +25,7 @@
         </md-card-content>
       </md-card>
     </div>
-    <invite-modal ref="inviteModal"></invite-modal>
+    <invite-modal :team="team" ref="inviteModal"></invite-modal>
   </div>
 </template>
 
@@ -42,20 +42,13 @@
     },
     data() {
       return {
-          teamMembers: [
-          {
-            id: 1,
-            name: "First Name Last Name",
-            email: "contact@somecompany.com",
-            role: "Event Participant",
-            permissions: "View, Vote"
-          },
-        ]
+          team: {},
+          teamMembers: []
       }
     },
       created() {
          Teams.get().then(teams => {
-           console.log(teams);
+           this.team = teams[0];
            teams[0].members().get().then(members => {
              console.log(members);
              this.teamMembers = members;
@@ -63,7 +56,6 @@
          }, (error) => {
              console.log(error)
          });
-
 
       },
       methods: {

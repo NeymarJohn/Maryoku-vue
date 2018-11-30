@@ -24,7 +24,7 @@
                     <md-icon>face</md-icon>
                     <label>First Name</label>
                     <md-input
-                        v-model="teamMemberData.firstName"
+                        v-model="firstName"
                         data-vv-name="firstName"
                         type="text"
                         name="firstName"
@@ -36,6 +36,50 @@
                     </slide-y-down-transition>
                     <slide-y-down-transition>
                         <md-icon class="success" v-show="!errors.has('firstName') && touched.firstName">done</md-icon>
+                    </slide-y-down-transition>
+                </md-field>
+
+                <md-field :class="[
+          {'md-valid': !errors.has('userName') && touched.userName},
+          {'md-form-group': true},
+          {'md-error': errors.has('userName')}]">
+                    <md-icon>face</md-icon>
+                    <label>User Name</label>
+                    <md-input
+                        v-model="userName"
+                        data-vv-name="firstName"
+                        type="text"
+                        name="userName"
+                        required
+                        v-validate="modelValidations.userName">
+                    </md-input>
+                    <slide-y-down-transition>
+                        <md-icon class="error" v-show="errors.has('userName')">close</md-icon>
+                    </slide-y-down-transition>
+                    <slide-y-down-transition>
+                        <md-icon class="success" v-show="!errors.has('userName') && touched.firstName">done</md-icon>
+                    </slide-y-down-transition>
+                </md-field>
+
+                <md-field :class="[
+          {'md-valid': !errors.has('password') && touched.password},
+          {'md-form-group': true},
+          {'md-error': errors.has('password')}]">
+                    <md-icon>face</md-icon>
+                    <label>Password</label>
+                    <md-input
+                        v-model="password"
+                        data-vv-name="password"
+                        type="password"
+                        name="password"
+                        required
+                        v-validate="modelValidations.password">
+                    </md-input>
+                    <slide-y-down-transition>
+                        <md-icon class="error" v-show="errors.has('password')">close</md-icon>
+                    </slide-y-down-transition>
+                    <slide-y-down-transition>
+                        <md-icon class="success" v-show="!errors.has('password') && touched.firstName">done</md-icon>
                     </slide-y-down-transition>
                 </md-field>
 
@@ -122,68 +166,97 @@
                         required: true,
                         min: 5
                     },
-                  emailAddress: {
+                    emailAddress: {
                         required: true,
                         email: true
+                    },
+                    username: {
+                        required: true,
+                        min: 5
+                    },
+                    password: {
+                        required: true,
+                        min: 5
                     }
                 }
             }
         },
         computed: {
-          ...mapState('teamVuex', ['teamMemberData']),
-          firstName: {
-            get() {
-              return this.teamMemberData.firstName
-            },
-            set(value) {
-              this.setMemberProperty({key: 'firstName', actualValue: value})
+            ...mapState('teamVuex', ['teamMemberData']),
+            firstName: {
+                get() {
+                    return this.teamMemberData.firstName
+                },
+                set(value) {
+                    this.setMemberProperty({key: 'firstName', actualValue: value})
+                },
+
             },
 
-          },
+            lastName: {
+                get() {
+                    return this.teamMemberData.lastName
+                },
+                set(value) {
+                    this.setMemberProperty({key: 'lastName', actualValue: value})
+                },
 
-          lastName: {
-            get() {
-              return this.teamMemberData.lastName
             },
-            set(value) {
-              this.setMemberProperty({key: 'lastName', actualValue: value})
+            emailAddress: {
+                get() {
+                    return this.teamMemberData.emailAddress
+                },
+                set(value) {
+                    this.setMemberProperty({key: 'emailAddress', actualValue: value})
+                }
             },
-
-          },
-          emailAddress: {
-            get() {
-              return this.teamMemberData.emailAddress
+            userName: {
+                get() {
+                    return this.teamMemberData.userName
+                },
+                set(value) {
+                    this.setMemberProperty({key: 'username', actualValue: value})
+                }
             },
-            set(value) {
-              this.setMemberProperty({key: 'emailAddress', actualValue: value})
+            password: {
+                get() {
+                    return this.teamMemberData.password
+                },
+                set(value) {
+                    this.setMemberProperty({key: 'password', actualValue: value})
+                }
             }
-          }
         },
-        created () {
+        created() {
             this.$store.registerModule('teamVuex', teamVuexModule);
 
         },
         methods: {
-            ...mapMutations('teamVuex', [
-                'setMemberProperty',
-            ]),
+            ...
+                mapMutations('teamVuex', [
+                    'setMemberProperty',
+                ]),
             handlePreview(file) {
                 this.model.imageUrl = URL.createObjectURL(file.raw);
-            },
+            }
+            ,
             getError(fieldName) {
                 return this.errors.first(fieldName);
-            },
+            }
+            ,
             validate() {
                 return this.$validator.validateAll().then(res => {
                     this.$emit("on-validated", res);
                     return res;
                 });
-            },
+            }
+            ,
             onFileChange(e) {
                 var files = e.target.files || e.dataTransfer.files;
                 if (!files.length) return;
                 this.createImage(files[0]);
-            },
+            }
+            ,
             createImage(file) {
                 var reader = new FileReader();
                 var vm = this;
@@ -193,19 +266,27 @@
                 };
                 reader.readAsDataURL(file);
             }
-        },
+        }
+        ,
         watch: {
             firstName() {
                 this.touched.firstName = true;
-            },
+            }
+            ,
             lastName() {
                 this.touched.lastName = true;
             },
             email() {
                 this.touched.email = true;
+            },
+            username() {
+                this.touched.username = true;
+            },
+            password() {
+                this.touched.password = true;
             }
         }
-    };
+    }
 </script>
 <style>
 </style>

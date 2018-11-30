@@ -54,7 +54,7 @@
     import SecondStep from "./Wizard/SecondStep.vue";
     import ThirdStep from "./Wizard/ThirdStep.vue";
     import swal from "sweetalert2";
-    import Team from "@/models/Teams";
+    import Teams from "@/models/Teams";
     import TeamMember from "@/models/TeamMembers";
 
 
@@ -67,11 +67,15 @@
             SimpleWizard,
             WizardTab
         },
-        props: {},
+        props: {
+            team: {
+                type: Object,
+                required: true
+            }
+        },
         data() {
             return {
                 inviteModalOpen: false,
-                team: {}
             }
         },
         created() {
@@ -95,18 +99,15 @@
                 this.wizardModel = {...this.wizardModel, ...model};
             },
             async wizardComplete() {
-                let team;
-                // Until API is ready
-//               Team.find(1).then(response => {
-//                   team = response
-//                   console.log(response);
-//               }, (error) => {
-//                   console.log(error)
-//               });
+                let team = await Teams.first();
 
-                let teamMember = new TeamMember(this.teamMemberData);
-                await teamMember.save();
-                swal("Good job!", "You clicked the finish button!", "success");
+                console.log('Team: ', team);
+                team.members().attach(this.teamMemberData).then(response => {
+                    swal("Good job!", "You clicked the finish button!", "success");
+
+                })
+
+
             }
         }
     };

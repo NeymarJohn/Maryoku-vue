@@ -6,13 +6,16 @@ export default {
           teamMemberData: {
             id: null,
             firstName: null,
+            username: null,
+            password: '123456789',
             lastName: null,
             emailAddress: null,
             role: null,
             permissions: null,
-            design: false,
-            code: true,
-            develop: false
+            street: null,
+            streetNo: null,
+            country: null,
+            city: null
           }
         };
     },
