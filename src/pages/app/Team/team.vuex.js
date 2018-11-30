@@ -3,36 +3,25 @@ export default {
 
     state() {
         return {
-            teamMemberData: {
-                id: null,
-                firstName: null,
-                lastName: null,
-                emailAddress: null,
-                role: null,
-                permissions: null,
-            }
+          teamMemberData: {
+            id: null,
+            firstName: null,
+            lastName: null,
+            emailAddress: null,
+            role: null,
+            permissions: null,
+            design: false,
+            code: true,
+            develop: false
+          }
         };
     },
 
     mutations: {
-        setMemberId(state, value) {
-            state.teamMemberData.id = value;
+        setMemberProperty(state, {key, actualValue}) {
+            state.teamMemberData[key] = actualValue;
         },
-        setFirstName(state, value) {
-            state.teamMemberData.firstName = value;
-        },
-        setLastName(state, value) {
-            state.teamMemberData.lastName = value;
-        },
-        setEmailAddress(state, value) {
-            state.teamMemberData.emailAddress = value;
-        },
-        setRole(state, value) {
-            state.teamMemberData.role = value;
-        },
-        setPermissions(state, value) {
-            state.teamMemberData.permissions = value;
-        }
+
     },
 
     actions: {}

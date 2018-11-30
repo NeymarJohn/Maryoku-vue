@@ -24,7 +24,7 @@
                     <md-icon>face</md-icon>
                     <label>First Name</label>
                     <md-input
-                        v-model="firstName"
+                        v-model="teamMemberData.firstName"
                         data-vv-name="firstName"
                         type="text"
                         name="firstName"
@@ -70,12 +70,12 @@
                     <md-icon>email</md-icon>
                     <label>Email</label>
                     <md-input
-                        v-model="email"
-                        data-vv-name="email"
+                        v-model="emailAddress"
+                        data-vv-name="emailAddress"
                         type="text"
                         name="email"
                         required
-                        v-validate="modelValidations.email">
+                        v-validate="modelValidations.emailAddress">
                     </md-input>
                     <slide-y-down-transition>
                         <md-icon class="error" v-show="errors.has('email')">close</md-icon>
@@ -108,7 +108,6 @@
             return {
                 image: "",
                 single: null,
-                lastName: "",
                 email: "",
                 touched: {
                     firstName: false,
@@ -123,33 +122,50 @@
                         required: true,
                         min: 5
                     },
-                    email: {
+                  emailAddress: {
                         required: true,
                         email: true
                     }
                 }
-            };
-        },
-        computed: {
-            ...mapState('teamVuex', ['teamMemberData']),
-            firstName: {
-                get() {
-                    return this.teamMemberData.firstName
-                },
-                set(value) {
-                    this.setFirstName(value)
-                }
             }
         },
-        created() {
+        computed: {
+          ...mapState('teamVuex', ['teamMemberData']),
+          firstName: {
+            get() {
+              return this.teamMemberData.firstName
+            },
+            set(value) {
+              this.setMemberProperty({key: 'firstName', actualValue: value})
+            },
+
+          },
+
+          lastName: {
+            get() {
+              return this.teamMemberData.lastName
+            },
+            set(value) {
+              this.setMemberProperty({key: 'lastName', actualValue: value})
+            },
+
+          },
+          emailAddress: {
+            get() {
+              return this.teamMemberData.emailAddress
+            },
+            set(value) {
+              this.setMemberProperty({key: 'emailAddress', actualValue: value})
+            }
+          }
+        },
+        created () {
             this.$store.registerModule('teamVuex', teamVuexModule);
 
         },
         methods: {
             ...mapMutations('teamVuex', [
-                'setFirstName',
-                'setLastName',
-                'setEmailAddress'
+                'setMemberProperty',
             ]),
             handlePreview(file) {
                 this.model.imageUrl = URL.createObjectURL(file.raw);

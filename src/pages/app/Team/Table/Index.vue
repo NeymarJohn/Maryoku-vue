@@ -1,8 +1,8 @@
 <template>
     <md-table v-model="teamMembers" table-header-color="rose" class="table-striped table-hover">
         <md-table-row slot="md-table-row" slot-scope="{ item }">
-            <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
-            <md-table-cell md-label="Email">{{ item.email }}</md-table-cell>
+            <md-table-cell md-label="Name">{{ item.displayName }}</md-table-cell>
+            <md-table-cell md-label="Email">{{ item.emailAddress }}</md-table-cell>
             <md-table-cell md-label="Role">{{ item.role }}</md-table-cell>
             <md-table-cell md-label="Permissions">{{ item.permissions }}</md-table-cell>
         </md-table-row>
