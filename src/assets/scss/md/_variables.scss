@@ -22,6 +22,7 @@ $white-color: #FFFFFF !default;
 $white-transparent: rgba($white-color, .8);
 
 $gray-color:  #999999 !default;
+$dark-gray: #5A5A5A !default;
 
 $brand-primary: $pink !default;
 $brand-success: $green !default;
@@ -32,6 +33,7 @@ $brand-rose: $pink !default;
 
 $border-radius-base: 3px !default;
 $border-radius-small: 2px !default;
+$border-radius-none: 0px !default;
 $border-radius-large: 6px !default;
 $border-radius-huge: 10px !default;
 $border-radius-label: 12px !default;
@@ -238,6 +240,9 @@ $btn-font-weight:                normal !default;
 $btn-default-color:              #333 !default;
 $btn-default-bg:                 #fff !default;
 $btn-default-border:             #ccc !default;
+
+$light-gray-1:                   #a9afbb !default;
+
 
 $btn-primary-color:              #fff !default;
 $btn-primary-bg:                 $brand-primary !default;
@@ -1072,7 +1077,7 @@ $mdb-btn-font-size-base: 12px !default;
 $mdb-btn-font-size-lg: 14px !default;
 $mdb-btn-font-size-sm: 11px !default;
 $mdb-btn-font-size-xs: 10px !default;
-
+$btn-font-size: 17px !default;
 
 $mdb-btn-background-color: $body-bg; //transparent !default;
 $mdb-btn-background-color-text: $mdb-text-color-primary !default;

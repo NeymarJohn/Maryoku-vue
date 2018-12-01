@@ -1,4 +1,5 @@
 import IconCheckbox from "./Inputs/IconCheckbox.vue";
+import InputText from "./Inputs/input-text.vue";
 import Badge from "./Badge";
 
 import DropDown from "./Dropdown.vue";
@@ -37,6 +38,7 @@ import AnimatedNumber from "./AnimatedNumber";
 
 export {
   IconCheckbox,
+  InputText,
   Badge,
   Modal,
   Pagination,
