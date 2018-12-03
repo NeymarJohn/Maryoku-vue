@@ -4,7 +4,7 @@
       <tabs
         :tab-name="['Dashboard', 'Company Profile', 'Approvals & Sign-Off', 'Billing', 'Settings']"
         plain
-        color-button="rose">
+        color-button="success">
 
         <!-- here you can add your content for tab-content -->
         <my-company-dashboard slot="tab-pane-1"></my-company-dashboard>

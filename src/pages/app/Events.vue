@@ -8,12 +8,10 @@
           </div>
           <h4 class="title">Upcoming Events
             <div class="pull-right">
-              <router-link to="/events/modify">
-                <md-button class="md-rose text-info md-sm" >
-                  <md-icon>add_circle</md-icon>
-                  Create New Event
-                </md-button>
-              </router-link>
+              <md-button class="md-rose text-info md-sm">
+                <md-icon>add_circle</md-icon>
+                Create New Event
+              </md-button>
             </div>
           </h4>
         </md-card-header>
@@ -26,16 +24,14 @@
               </md-button>
             </div>
           </div>-->
-          <router-link to="/events/modify">
-            <md-table v-model="eventsRecords" table-header-color="rose" class="table-striped table-hover">
-              <md-table-row slot="md-table-row" slot-scope="{ item }">
-                <md-table-cell md-label="Event Name">{{ item.name }}</md-table-cell>
-                <md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>
-                <md-table-cell md-label="Date">{{ item.date }}</md-table-cell>
-                <md-table-cell md-label="Status">{{ item.status }}</md-table-cell>
-              </md-table-row>
-            </md-table>
-          </router-link>
+          <md-table v-model="eventsRecords" table-header-color="rose" class="table-striped table-hover">
+            <md-table-row slot="md-table-row" slot-scope="{ item }">
+              <md-table-cell md-label="Event Name">{{ item.name }}</md-table-cell>
+              <md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>
+              <md-table-cell md-label="Date">{{ item.date }}</md-table-cell>
+              <md-table-cell md-label="Status">{{ item.status }}</md-table-cell>
+            </md-table-row>
+          </md-table>
         </md-card-content>
       </md-card>
     </div>
@@ -167,7 +163,7 @@
   export default {
     components: {
       Tabs,
-      ProductCard,
+      ProductCard
     },
     data() {
       return {
