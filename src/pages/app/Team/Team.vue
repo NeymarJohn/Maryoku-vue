@@ -21,45 +21,43 @@
               </md-button>
             </div>
           </div>
-          <team-table :teamMembers="teamMembers"></team-table>
+          <md-table v-model="teamRecords" table-header-color="rose" class="table-striped table-hover">
+            <md-table-row slot="md-table-row" slot-scope="{ item }">
+              <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
+              <md-table-cell md-label="Email">{{ item.email }}</md-table-cell>
+              <md-table-cell md-label="Role">{{ item.role }}</md-table-cell>
+              <md-table-cell md-label="Permissions">{{ item.permissions }}</md-table-cell>
+            </md-table-row>
+          </md-table>
         </md-card-content>
       </md-card>
     </div>
-    <invite-modal :team="team" ref="inviteModal"></invite-modal>
+    <invite-modal ref="inviteModal"></invite-modal>
   </div>
 </template>
 
 <script>
-  import InviteModal from './InviteModal/';
-  import TeamTable from './Table';
-  import Teams from "@/models/Teams";
-
+  import InviteModal from './InviteModal';
 
   export default {
     components: {
-      InviteModal,
-      'team-table': TeamTable
+      InviteModal
     },
     data() {
       return {
-          team: {},
-          teamMembers: []
+        teamRecords: [
+          {
+            id: 1,
+            name: "First Name Last Name",
+            email: "contact@somecompany.com",
+            role: "Event Participant",
+            permissions: "View, Vote"
+          },
+        ]
       }
     },
-      created() {
-         Teams.get().then(teams => {
-           this.team = teams[0];
-           teams[0].members().get().then(members => {
-             console.log(members);
-             this.teamMembers = members;
-           });
-         }, (error) => {
-             console.log(error)
-         });
-
-      },
-      methods: {
-          openInviteModal(){
+    methods: {
+      openInviteModal(){
         this.$refs.inviteModal.toggleModal(true);
       }
     }
