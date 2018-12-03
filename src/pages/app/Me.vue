@@ -65,84 +65,95 @@
 
 <script>
 
-export default {
-  components: {
-  },
-  data() {
-    return {
-      todoToday: [
-        {
-          id: 1,
-          what: "Do something great",
-          event: "4th July",
-          when: "9:00",
-          icon1: "add_alert"
-        },
-        {
-          id: 2,
-          what: "Something even better",
-          event: "Happy Hour",
-          when: "10:00",
-          icon1: "add_alert"
-        }
+  import CalendarColor from "src/models/CalendarColor";
+  import CalendarIcon from "src/models/CalendarIcon";
+  import Currency from "src/models/Currency";
 
-      ],
-      todoTomorrow: [
-        {
-          id: 1,
-          what: "Do something great",
-          event: "Women's day",
-          when: "9:00",
-          icon1: "add_alert"
-        },
-        {
-          id: 2,
-          what: "Something even better",
-          event: "Off-Site",
-          when: "10:00",
-          icon1: "add_alert"
-        }
-
-      ],
-    };
-  },
-  methods: {
-    getClass: function(item, id) {
-      let classes = "";
-      switch (item) {
-        case "person": {
-          classes = "md-info";
-          break;
-        }
-        case "edit": {
-          classes = "md-success";
-          break;
-        }
-        case "close": {
-          classes = "md-danger";
-          break;
-        }
-      }
-      switch (id) {
-        case 1:
-        case 5: {
-          break;
-        }
-        case 2:
-        case 4: {
-          classes = `${classes} md-round`;
-          break;
-        }
-        case 3: {
-          classes = `${classes} md-simple`;
-          break;
-        }
-      }
-      return classes;
+  export default {
+    components: {
     },
-    getAlignClasses: ({ id }) => ({
-      "text-right": id
-    }),
-  }
-};
+    mounted() {
+      Currency.get().then(icons => {
+        console.log(icons);
+      }, (error) => {
+        console.log(error);
+      });
+    },
+    data() {
+      return {
+        todoToday: [
+          {
+            id: 1,
+            what: "Do something great",
+            event: "4th July",
+            when: "9:00",
+            icon1: "add_alert"
+          },
+          {
+            id: 2,
+            what: "Something even better",
+            event: "Happy Hour",
+            when: "10:00",
+            icon1: "add_alert"
+          }
+
+        ],
+        todoTomorrow: [
+          {
+            id: 1,
+            what: "Do something great",
+            event: "Women's day",
+            when: "9:00",
+            icon1: "add_alert"
+          },
+          {
+            id: 2,
+            what: "Something even better",
+            event: "Off-Site",
+            when: "10:00",
+            icon1: "add_alert"
+          }
+
+        ],
+      };
+    },
+    methods: {
+      getClass: function(item, id) {
+        let classes = "";
+        switch (item) {
+          case "person": {
+            classes = "md-info";
+            break;
+          }
+          case "edit": {
+            classes = "md-success";
+            break;
+          }
+          case "close": {
+            classes = "md-danger";
+            break;
+          }
+        }
+        switch (id) {
+          case 1:
+          case 5: {
+            break;
+          }
+          case 2:
+          case 4: {
+            classes = `${classes} md-round`;
+            break;
+          }
+          case 3: {
+            classes = `${classes} md-simple`;
+            break;
+          }
+        }
+        return classes;
+      },
+      getAlignClasses: ({ id }) => ({
+        "text-right": id
+      }),
+    }
+  };
 </script>
