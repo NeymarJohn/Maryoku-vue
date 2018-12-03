@@ -10469,13 +10469,6 @@ vue-clickaway@2.2.2:
   dependencies:
     loose-envify "^1.2.0"
 
-vue-element-loading@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/vue-element-loading/-/vue-element-loading-1.0.5.tgz#6c7a6904875de3026572f76dc660075b805a782e"
-  integrity sha512-lL+lvvI1sZ2nPsDIWXdhXujNjqX4Vlzy4nDQzZE0y39hmtbvA7qaw5at/ru+AKGGalAeBTbmwoU8WCbDbbNHbA==
-  dependencies:
-    vue "^2.5.11"
-
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1"
@@ -10597,7 +10590,7 @@ vue2-transitions@^0.2.3:
   resolved "https://registry.yarnpkg.com/vue2-transitions/-/vue2-transitions-0.2.3.tgz#69c9d75b1db05f231b80980c03459d68490ba27d"
   integrity sha512-Ou5x74AOQbM8JjZV8pIssFFqavvj53QzrEEUr5QnElUYb1ZizPwaUJo0ZqmLPqjwPae7ON4SG8U2cSTI4tHKLg==
 
-vue@2.5.17, vue@^2.5.11:
+vue@2.5.17:
   version "2.5.17"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.17.tgz#0f8789ad718be68ca1872629832ed533589c6ada"
   integrity sha512-mFbcWoDIJi0w0Za4emyLiW72Jae0yjANHbCVquMKijcavBGypqlF7zHRgMa5k4sesdv7hv2rB4JPdZfR+TPfhQ==

@@ -15,7 +15,8 @@ import Community from "@/pages/app/Community.vue";
 import CommunityNew from "@/pages/app/Community/Community-new.vue";
 import VendorsSuggested from "@/pages/app/Community/vendors-suggested/index.vue";
 
-import Events from "@/pages/app/Events.vue";
+import Events from "@/pages/app/Events/Events.vue";
+import EventDetails from "@/pages/app/Events/EventDetails.vue";
 import Notes from "@/pages/app/Notes.vue";
 import Proposals from "@/pages/app/Proposals.vue";
 import Vendors from "@/pages/app/Vendors.vue";
@@ -329,7 +330,12 @@ let appPages = {
       path: "/events",
       name: "Events",
       component: Events,
-      meta: {title: 'Our Events'}
+      meta: {title: 'Our Events'},
+    },
+    {
+      path: '/events/modify',
+      name: 'Event Details',
+      component: EventDetails,
     },
     {
       path: "/yearly-plan",

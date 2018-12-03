@@ -68,8 +68,6 @@
   import CalendarColor from "src/models/CalendarColor";
   import CalendarIcon from "src/models/CalendarIcon";
   import Currency from "src/models/Currency";
-  import Calendar from "src/models/Calendar";
-  import CalendarEventQuery from "src/models/CalendarEventQuery";
 
   export default {
     components: {
@@ -80,11 +78,6 @@
       }, (error) => {
         console.log(error);
       });
-
-      let calendar = new Calendar({id: "123"});
-      let eventQuery = new CalendarEventQuery().for(calendar);
-      console.log(eventQuery.attach({filters: { year: 2018 }}));
-
     },
     data() {
       return {
