@@ -3,7 +3,7 @@
 
     <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50">
       <md-card>
-        <md-card-header class="md-card-header-text md-card-header-blue md-card-header-flex">
+        <md-card-header class="md-card-header-text md-card-header-rose md-card-header-flex">
           <div class="card-text">
             <h4 class="title">Important Dates</h4>
           </div>
@@ -40,7 +40,7 @@
 
     <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
       <md-card>
-        <md-card-header class="md-card-header-text md-card-header-blue md-card-header-flex">
+        <md-card-header class="md-card-header-text md-card-header-rose md-card-header-flex">
           <div class="card-text">
             <h4 class="title">Our Story</h4>
           </div>
