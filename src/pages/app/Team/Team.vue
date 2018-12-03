@@ -9,13 +9,14 @@
           <h4 class="title">To Do Today</h4>-->
         </md-card-header>
         <md-card-content>
+          <vue-element-loading :active="teamMembersLoading" spinner="ring" color="#FF547C"/>
           <div class="table table-stats text-right">
             <div class="text-right">
-              <md-button class="md-rose text-rose" @click="openInviteModal">
+              <md-button class="md-success" @click="openInviteModal">
                 <md-icon>person_add</md-icon>
                 Invite
               </md-button>
-              <md-button class="md-rose">
+              <md-button class="md-success">
                 <md-icon>share</md-icon>
                 Share
               </md-button>
@@ -33,33 +34,37 @@
   import InviteModal from './InviteModal/';
   import TeamTable from './Table';
   import Teams from "@/models/Teams";
+  import VueElementLoading from 'vue-element-loading';
 
 
   export default {
     components: {
       InviteModal,
-      'team-table': TeamTable
+      'team-table': TeamTable,
+      VueElementLoading
     },
     data() {
       return {
-          team: {},
-          teamMembers: []
+        team: {},
+        teamMembers: [],
+        teamMembersLoading: true,
       }
     },
-      created() {
-         Teams.get().then(teams => {
-           this.team = teams[0];
-           teams[0].members().get().then(members => {
-             console.log(members);
-             this.teamMembers = members;
-           });
-         }, (error) => {
-             console.log(error)
-         });
+    created() {
+      Teams.get().then(teams => {
+        this.team = teams[0];
+        teams[0].members().get().then(members => {
+          console.log(members);
+          this.teamMembers = members;
+          this.teamMembersLoading = false;
+        });
+      }, (error) => {
+        console.log(error)
+      });
 
-      },
-      methods: {
-          openInviteModal(){
+    },
+    methods: {
+      openInviteModal(){
         this.$refs.inviteModal.toggleModal(true);
       }
     }

@@ -45,7 +45,7 @@
 </template>
 <script>
 import { SignupCard } from "@/components";
-import Vendor from 'src/models/Vendors';
+import Vendors from 'src/models/Vendors';
 import auth from "@/auth";
 
 export default {
