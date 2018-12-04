@@ -19,6 +19,7 @@ import Events from "@/pages/app/Events.vue";
 import Notes from "@/pages/app/Notes.vue";
 import Proposals from "@/pages/app/Proposals.vue";
 import Vendors from "@/pages/app/Vendors/Vendors.vue";
+import ImportVendors from "@/pages/app/Vendors/ImportVendors.vue";
 import YearlyPlan from "@/pages/app/YearlyPlan.vue";
 
 // Dashboard pages
@@ -341,6 +342,11 @@ let appPages = {
       path: "/vendors",
       name: "Vendors",
       component: Vendors
+    },
+    {
+      path: "/import-vendors",
+      name: "ImportVendors",
+      component: ImportVendors
     },
     {
       path: "/proposals",

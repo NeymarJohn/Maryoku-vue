@@ -7,7 +7,7 @@ export default {
             id: null,
             firstName: null,
             username: null,
-            password: '123456789',
+            password: '',
             lastName: null,
             emailAddress: null,
             pictureUrl: '',

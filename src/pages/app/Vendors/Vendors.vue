@@ -16,7 +16,7 @@
                 <md-icon>add</md-icon>
                 Create New
               </md-button>
-              <md-button @click="$router.push({ path: '/vendors/import' });" class="md-rose">
+              <md-button @click="$router.push({ path: 'import-vendors' });" class="md-rose">
                 <md-icon>cloud_upload</md-icon>
                 Upload Vendors
               </md-button>
