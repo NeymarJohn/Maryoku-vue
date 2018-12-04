@@ -9,14 +9,14 @@
           <h4 class="title">To Do Today</h4>-->
         </md-card-header>
         <md-card-content>
-          <vue-element-loading :active="teamMembersLoading" spinner="bar-fade-scale" color="#FF547C"/>
+          <vue-element-loading :active="teamMembersLoading" spinner="ring" color="#FF547C"/>
           <div class="table table-stats text-right">
             <div class="text-right">
-              <md-button class="md-rose text-rose" @click="openInviteModal">
+              <md-button class="md-success" @click="openInviteModal">
                 <md-icon>person_add</md-icon>
                 Invite
               </md-button>
-              <md-button class="md-rose">
+              <md-button class="md-success">
                 <md-icon>share</md-icon>
                 Share
               </md-button>
@@ -35,6 +35,8 @@
   import TeamTable from './Table';
   import Teams from "@/models/Teams";
   import VueElementLoading from 'vue-element-loading';
+
+
   export default {
     components: {
       InviteModal,
@@ -59,6 +61,7 @@
       }, (error) => {
         console.log(error)
       });
+
     },
     methods: {
       openInviteModal(){

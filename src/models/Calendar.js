@@ -2,7 +2,10 @@ import Model from './Model';
 import CalendarIcon from './CalendarIcon';
 import CalendarColor from './CalendarColor';
 import CalendarStatistics from './CalendarStatistics';
-import { CalendarYear, CalendarEventType, CalendarCountry, CalendarHoliday } from './';
+import CalendarYear from './CalendarYear';
+import CalendarEventType from './CalendarEventType';
+import CalendarCountry from './CalendarCountry';
+import CalendarHoliday from './CalendarHoliday';
 
 export default class Calendar extends Model {
   resource() {
