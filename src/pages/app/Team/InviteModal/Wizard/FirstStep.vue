@@ -9,7 +9,7 @@
                             <img :src="avatar" class="picture-src" title="">
                         </div>
                         <div v-else>
-                            <img v-model="image" :src="image"/>
+                            <img :src="image"/>
                         </div>
                         <input type="file" @change="onFileChange">
                     </div>
@@ -150,6 +150,7 @@
         },
         data() {
             return {
+                image: "",
                 single: null,
                 email: "",
                 touched: {
@@ -224,15 +225,7 @@
                 set(value) {
                     this.setMemberProperty({key: 'password', actualValue: value})
                 }
-            },
-          image: {
-            get() {
-              return this.teamMemberData.pictureUrl
-            },
-            set(value) {
-              this.setMemberProperty({key: 'pictureUrl', actualValue: value})
             }
-          }
         },
         created() {
             this.$store.registerModule('teamVuex', teamVuexModule);
