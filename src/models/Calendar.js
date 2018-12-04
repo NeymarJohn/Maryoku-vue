@@ -6,8 +6,6 @@ import CalendarYear from './CalendarYear';
 import CalendarEventType from './CalendarEventType';
 import CalendarCountry from './CalendarCountry';
 import CalendarHoliday from './CalendarHoliday';
-import CalendarEvent from './CalendarEvent';
-import CalendarEventQuery from './CalendarEventQuery';
 
 export default class Calendar extends Model {
   resource() {
@@ -16,10 +14,6 @@ export default class Calendar extends Model {
 
   calendarEvents() {
     return this.hasMany(CalendarEvent)
-  }
-
-  queryEvents() {
-    return new CalendarEventQuery().for(this);
   }
 
   icons() {

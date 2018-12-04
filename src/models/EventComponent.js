@@ -1,5 +1,5 @@
 import Model from './Model';
-import EventComponentProperty from './EventComponentProperty';
+import CalendarEventInspiration from './CalendarEventInspiration';
 
 export default class EventComponent extends Model {
   resource() {
