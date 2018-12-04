@@ -35,6 +35,8 @@
   import TeamTable from './Table';
   import Teams from "@/models/Teams";
   import VueElementLoading from 'vue-element-loading';
+
+
   export default {
     components: {
       InviteModal,
@@ -59,6 +61,7 @@
       }, (error) => {
         console.log(error)
       });
+
     },
     methods: {
       openInviteModal(){
