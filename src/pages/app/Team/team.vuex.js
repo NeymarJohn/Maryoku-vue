@@ -7,16 +7,16 @@ export default {
             id: null,
             firstName: null,
             username: null,
-            password: '',
+            password: 'none',
             lastName: null,
             emailAddress: null,
-            pictureUrl: '',
+            pictureUrl: 'none',
             role: null,
-            permissions: null,
-            street: null,
-            streetNo: null,
-            country: null,
-            city: null
+            permissions: [],
+            street: 'none',
+            streetNo: 'none',
+            country: 'none',
+            city: 'none'
           }
         };
     },
