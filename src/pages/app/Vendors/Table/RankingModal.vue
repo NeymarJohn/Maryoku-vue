@@ -5,75 +5,18 @@
                 <h3 class="title">Ranking</h3>
                 <div class="md-layout">
                     <div class="md-layout-item md-size-95 mt-4 md-small-size-100">
-                        <md-toolbar class="space-between">
-                            <h3 class="md-title">Overal Experience</h3>
+                        <md-toolbar v-for="(item, index) in rankingParameters" class="space-between">
+                            <h3 class="md-title"> {{ item.name }} </h3>
                             <div class="pull-right">
 
                                 <div class="star-rating">
                                     <label class="star-rating__star"
                                            v-for="rating in ratings"
-                                           :class="{'is-selected' : ((value >= rating) && value != null)}"
-                                           v-on:click="set(rating)"
-                                           v-on:mouseover="star_over(rating)"
-                                           v-on:mouseout="star_out">
+                                           :class="{'is-selected' : ((item.value >= rating) && item.value != null)}"
+                                           v-on:click="setRanking(rating, index)">
                                         <input class="star-rating star-rating__checkbox" type="radio" :value="rating" :name="name"
-                                               v-model="value1">★</label>
+                                               v-model="item.value">★</label>
                                 </div>
-                            </div>
-                        </md-toolbar>
-
-                        <md-toolbar class="space-between">
-                            <h3 class="md-title">Cleanliness and Maintenance</h3>
-                            <div class="pull-right">
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                            </div>
-                        </md-toolbar>
-
-                        <md-toolbar class="space-between">
-                            <h3 class="md-title">Accuracy</h3>
-                            <div class="pull-right">
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                            </div>
-                        </md-toolbar>
-
-                        <md-toolbar class="space-between">
-                            <h3 class="md-title">Value for money</h3>
-                            <div class="pull-right">
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                            </div>
-                        </md-toolbar>
-
-                        <md-toolbar class="space-between">
-                            <h3 class="md-title">Service</h3>
-                            <div class="pull-right">
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                            </div>
-                        </md-toolbar>
-
-                        <md-toolbar class="space-between">
-                            <h3 class="md-title">Location & Parking</h3>
-                            <div class="pull-right">
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
-                                <span><md-icon class="white">star</md-icon></span>
                             </div>
                         </md-toolbar>
 
@@ -111,6 +54,44 @@
     },
     data() {
       return {
+        rankingParameters: [
+            {
+                name: 'Overal Experience',
+                parameterName: 'overal_experience',
+                value: ''
+            },
+            {
+                name: 'Cleanliness and Maintenance',
+                parameterName: 'cleanliness_and_maintenance',
+                value: ''
+
+            },
+            {
+                name: 'Accuracy',
+                parameterName: 'accuracy',
+                value: ''
+
+            },
+            {
+                name: 'Value for money',
+                parameterName: 'value_for_money',
+                value: ''
+
+            }, {
+                name: 'Service',
+                parameterName: 'service',
+                value: ''
+
+            },
+            {
+                name: 'Location & Parking',
+                parameterName: 'location_parking',
+                value: ''
+
+            },
+
+
+        ],
         temp_value: null,
         name: 'md-transparent',
         value1: null,
@@ -277,13 +258,11 @@
           return this.value = this.temp_value;
         }
       },
-      set: function(value) {
-        var self = this;
-
+      setRanking: function(value, index) {
         if (!this.disabled) {
           this.temp_value = value;
           console.log(value, 'temp_value');
-          return this.value = value;
+          return this.rankingParameters[index].value = value;
         }
       }
     },

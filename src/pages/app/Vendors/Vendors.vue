@@ -48,7 +48,6 @@
     },
     created() {
       Vendors.get().then(vendors => {
-        console.log(vendors)
         this.vendorsList = vendors;
         this.teamMembersLoading = false;
       }, (error) => {
