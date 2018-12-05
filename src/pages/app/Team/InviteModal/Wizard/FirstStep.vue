@@ -39,27 +39,27 @@
                     </slide-y-down-transition>
                 </md-field>
 
-                <md-field :class="[
-          {'md-valid': !errors.has('userName') && touched.userName},
-          {'md-form-group': true},
-          {'md-error': errors.has('userName')}]">
-                    <md-icon>face</md-icon>
-                    <label>User Name</label>
-                    <md-input
-                        v-model="userName"
-                        data-vv-name="firstName"
-                        type="text"
-                        name="userName"
-                        required
-                        v-validate="modelValidations.userName">
-                    </md-input>
-                    <slide-y-down-transition>
-                        <md-icon class="error" v-show="errors.has('userName')">close</md-icon>
-                    </slide-y-down-transition>
-                    <slide-y-down-transition>
-                        <md-icon class="success" v-show="!errors.has('userName') && touched.firstName">done</md-icon>
-                    </slide-y-down-transition>
-                </md-field>
+                <!--<md-field :class="[-->
+          <!--{'md-valid': !errors.has('userName') && touched.userName},-->
+          <!--{'md-form-group': true},-->
+          <!--{'md-error': errors.has('userName')}]">-->
+                    <!--<md-icon>face</md-icon>-->
+                    <!--<label>User Name</label>-->
+                    <!--<md-input-->
+                        <!--v-model="userName"-->
+                        <!--data-vv-name="firstName"-->
+                        <!--type="text"-->
+                        <!--name="userName"-->
+                        <!--required-->
+                        <!--v-validate="modelValidations.userName">-->
+                    <!--</md-input>-->
+                    <!--<slide-y-down-transition>-->
+                        <!--<md-icon class="error" v-show="errors.has('userName')">close</md-icon>-->
+                    <!--</slide-y-down-transition>-->
+                    <!--<slide-y-down-transition>-->
+                        <!--<md-icon class="success" v-show="!errors.has('userName') && touched.firstName">done</md-icon>-->
+                    <!--</slide-y-down-transition>-->
+                <!--</md-field>-->
 
                 <!--<md-field :class="[-->
           <!--{'md-valid': !errors.has('password') && touched.password},-->
@@ -190,10 +190,10 @@
                         required: true,
                         email: true
                     },
-                    username: {
-                        required: true,
-                        min: 5
-                    },
+//                    username: {
+//                        required: true,
+//                        min: 5
+//                    },
 //                    password: {
 //                        required: true,
 //                        min: 5
@@ -226,7 +226,8 @@
                     return this.teamMemberData.emailAddress
                 },
                 set(value) {
-                    this.setMemberProperty({key: 'emailAddress', actualValue: value})
+                  this.setMemberProperty({key: 'emailAddress', actualValue: value});
+                  this.setMemberProperty({key: 'username', actualValue: value});
                 }
             },
               role: {
@@ -245,14 +246,14 @@
                   this.setMemberProperty({key: 'permissions', actualValue: value})
                 }
               },
-                userName: {
-                    get() {
-                        return this.teamMemberData.userName
-                    },
-                    set(value) {
-                        this.setMemberProperty({key: 'username', actualValue: value})
-                    }
-                },
+//                userName: {
+//                    get() {
+//                        return this.teamMemberData.userName
+//                    },
+//                    set(value) {
+//                        this.setMemberProperty({key: 'username', actualValue: value})
+//                    }
+//                },
 //            password: {
 //                get() {
 //                    return this.teamMemberData.password
@@ -320,9 +321,9 @@
             email() {
                 this.touched.email = true;
             },
-            username() {
-                this.touched.username = true;
-            },
+//            username() {
+//                this.touched.username = true;
+//            },
 //            password() {
 //                this.touched.password = true;
 //            }
