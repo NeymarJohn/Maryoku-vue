@@ -10,6 +10,7 @@
         </md-card-header>
         <md-card-content>
           <vue-element-loading :active="teamMembersLoading" spinner="ring" color="#FF547C"/>
+
           <div class="table table-stats text-right">
             <div class="text-right">
               <md-button class="md-success" @click="openInviteModal">
@@ -35,8 +36,6 @@
   import TeamTable from './Table';
   import Teams from "@/models/Teams";
   import VueElementLoading from 'vue-element-loading';
-
-
   export default {
     components: {
       InviteModal,
@@ -61,7 +60,6 @@
       }, (error) => {
         console.log(error)
       });
-
     },
     methods: {
       openInviteModal(){
