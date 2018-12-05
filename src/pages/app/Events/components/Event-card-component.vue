@@ -21,28 +21,6 @@
       </md-card-header>
 
       <md-card-content>
-
-        <md-field class="md-layout-item md-size-25">
-          <label>Value</label>
-          <md-select>
-            <md-option value="new year">Some option 1</md-option>
-
-            <md-optgroup label="Group name 1">
-              <md-option value="birthday">Some option 2</md-option>
-              <md-option value="new year">Some option 3</md-option>
-              <md-option value="other">Some option 4</md-option>
-            </md-optgroup>
-
-            <md-optgroup label="Group name 2">
-              <md-option value="birthday">Some option 5</md-option>
-            </md-optgroup>
-          </md-select>
-        </md-field>
-        <md-field class="md-layout-item md-size-50">
-          <label>Special requests, constraints, needs</label>
-          <md-textarea md-autogrow></md-textarea>
-        </md-field>
-
         <nav-tabs-card>
           <template slot="content">
             <md-tabs md-sync-route class="md-success" md-alignment="left">

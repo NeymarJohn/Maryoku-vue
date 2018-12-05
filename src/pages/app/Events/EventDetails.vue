@@ -1,8 +1,7 @@
 <template>
   <div class="md-layout ">
 
-
-    <event-header-form></event-header-form>
+    <event-header-form :occasionOptions="occasionsArray"></event-header-form>
 
     <div class="md-layout-item md-size-100">
       <md-toolbar class="md-primary">
@@ -61,6 +60,8 @@
 
   import EventHeaderForm from './components/Event-header-form.vue';
   import EventCardComponent from './components/Event-card-component.vue';
+  import Calendar from '@/models/Calendar';
+  import Occasion from '@/models/Occasion';
 
   export default {
     components: {
@@ -71,6 +72,8 @@
       responsive: false,
       multiLevel: false,
       multiLevel2: false,
+      calendarId: null,
+      occasionsArray: null,
     }),
 
     methods: {
@@ -95,7 +98,15 @@
     },
     beforeDestroy() {
       window.removeEventListener("resize", this.onResponsiveInverted);
-    }
+    },
+    created() {
+      Calendar.get().then((calendars) => {
+        this.calendarId = calendars[0].id;
+      });
+      Occasion.get().then((occasions) => {
+        this.occasionsArray = occasions;
+      });
+    },
   };
 </script>
 

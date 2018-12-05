@@ -46,10 +46,11 @@
       </div>
     </div>
 
-    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
+    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33"
+      v-for="event of recentEvents"
+      :key="event.id"
+    >
       <product-card
-        v-for="event of recentEvents"
-        :key="event.id"
         header-animation="true">
         <img class="img" slot="imageHeader" :src="product3">
         <md-icon slot="fixed-button">build</md-icon>
@@ -78,7 +79,7 @@
           <div class="stats">
             <p class="category">
               <md-icon>place</md-icon>
-              Gordon Beach, Tel Aviv
+              {{ event.location }}
             </p>
           </div>
         </template>
