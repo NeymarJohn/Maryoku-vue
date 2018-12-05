@@ -1,6 +1,9 @@
 <template>
       <div class="md-layout-item md-size-100 wizard-pos">
             <simple-wizard v-if="openWizard" :removeHeader="false" data-color="rose">
+              <!--<md-card-header :removeHeader="false" slot="header">-->
+
+              <!--</md-card-header>-->
               <wizard-tab>
                 <section ref="step1">
                   <div class="panel-body">
@@ -16,6 +19,14 @@
                           <input type="file" id="csv_file" name="csv_file" class="form-control" @change="loadCSV($event)">
                         </div>
                       </div>
+                      <!--<div class="col-sm-offset-3 col-sm-9">-->
+                      <!--<div class="checkbox-inline">-->
+                      <!--</div>-->
+                      <!--</div>-->
+
+                      <!--<div class="col-sm-offset-3 col-sm-9">-->
+                      <!--<a href="#" class="btn btn-primary">Parse CSV</a>-->
+                      <!--</div>-->
 
                     </div>
                   </div>
@@ -52,6 +63,16 @@
                     </md-button>
                 </section>
               </wizard-tab>
+
+              <!--<wizard-tab>-->
+                <!--<template slot="label">-->
+                  <!--Address-->
+                <!--</template>-->
+                <!--<third-step @md-end="wizardComplete"-->
+                            <!--ref="step3">-->
+
+                <!--</third-step>-->
+              <!--</wizard-tab>-->
             </simple-wizard>
     </div>
 </template>
@@ -61,158 +82,148 @@
   import Vendors from "@/models/Vendors";
   import {SimpleWizard, WizardTab} from "@/components";
   import swal from "sweetalert2";
-    import VueElementLoading from 'vue-element-loading';
+  //  import VueElementLoading from 'vue-element-loading';
   export default {
     components:{
       SimpleWizard,
       WizardTab,
     },
-      data() {
-          return {
-              openWizard: true,
-              channel_name: '',
-              type: '',
-              models: [],
-              listOfTypes: [
-                  {
-                      displayName: 'Vendor Information',
-                      name: 'vendorDisplayName',
-                      value: ''
-                  },
-                  {
-                      displayName: 'Category',
-                      name: 'productsCategory',
-                      value: ''
+    data() {
+      return {
+        openWizard: true,
+        channel_name: '',
+        type: '',
+        models: [],
+        listOfTypes: [
+            {
+                displayName: 'Vendor Information',
+                name: 'vendorDisplayName',
+                value: ''
+            },
+            {
+                displayName: 'Category',
+                name: 'productCategory',
+                value: ''
 
-                  },
-                  {
-                      displayName: 'Website',
-                      name: 'vendorWebsite',
-                      value: ''
+            },
+            {
+                displayName: 'Website',
+                name: 'vendorWebsite',
+                value: ''
 
-                  },
-                  {
-                      displayName: 'Address',
-                      name: 'vendorAddressLine1',
-                      value: ''
+            },
+            {
+                displayName: 'Address',
+                name: 'vendorAddressLine1',
+                value: ''
 
-                  },
-                  {
-                      displayName: 'Email',
-                      name: 'vendorMainEmail',
-                      value: ''
+            },
+            {
+                displayName: 'Email',
+                name: 'vendorMainEmail',
+                value: ''
 
-                  },
-                  {
-                      displayName: 'Phone Number',
-                      name: 'vendorMainPhonenumber',
-                      value: ''
+            },
+            {
+                displayName: 'Phone Number',
+                name: 'vendorMainPhonenumber',
+                value: ''
 
-                  }
-              ],
-              channel_fields: [],
-              channel_entries: [],
-              parse_header: [],
-              parse_csv: [],
-              sortOrders: {},
-              sortKey: ''
-          };
-      },
-      filters: {
-          capitalize: function (str) {
-              return str.charAt(0).toUpperCase() + str.slice(1)
-          }
-      },
-      methods: {
-          sortBy: function (key) {
-              let vm = this
-              vm.sortKey = key
-              vm.sortOrders[key] = vm.sortOrders[key] * -1
-          },
-          setCSV(event, id) {
-          },
-          csvJSON(csv) {
-              let vm = this
-              let lines = csv.split("\n")
-              let result = []
-              let headers = lines[0].split(",")
-
-              vm.parse_header = lines[0].split(",")
-              vm.parse_header.forEach((value, index) => {
-                  vm.models.push({value: vm.listOfTypes[0].name})
-              });
-              lines[0].split(",").forEach(function (key) {
-                  vm.sortOrders[key] = 1
-              });
-
-              lines.map(function (line, indexLine) {
-                  let obj = {}
-                  let currentLine = line.split(",")
-                  result.push(currentLine)
-              })
-              result.pop() // remove the last item because undefined values
-              return result // JavaScript object
-          },
-          loadCSV(e) {
-              let vm = this
-              if (window.FileReader) {
-                  let reader = new FileReader();
-                  reader.readAsText(e.target.files[0]);
-                  // Handle errors load
-                  reader.onload = function (event) {
-                      let csv = event.target.result;
-                      vm.parse_csv = vm.csvJSON(csv)
-                  };
-                  reader.onerror = function (evt) {
-                      if (evt.target.error.name == "NotReadableError") {
-                          alert("Canno't read file !");
-                      }
-                  };
-              } else {
-                  alert('FileReader are not supported in this browser.');
-              }
-          },
-          async sendCSVFile() {
-              let finalData = [];
-              let vm = this;
-
-              this.parse_csv.forEach((csvValue, csvIndex) => {
-                  let tempVendorObject = {
-                      vendorDisplayName: null,
-                      productsCategory: 'test',
-                      vendorWebsite: null,
-                      vendorAddressLine1: null,
-                      vendorMainEmail: null,
-                      vendorMainPhoneNumber: null,
-                      vendorCategory: 'test',
-                      vendorAvailabilityOptions: 'test',
-                      vendorCancellationPolicy: 'test',
-                      vendorCity: 'test',
-                      vendorRefundPolicy: 'test'
-                  }
-
-                  csvValue.forEach((value, index) => {
-                      tempVendorObject[this.models[index].value] = value;
-                  });
-                  finalData.push(tempVendorObject);
-
-
-              })
-
-              finalData.forEach((value, index) => {
-                  let vendor = new Vendors({});
-                  vendor.attach(value);
-              });
-
-
-              swal("Good job!", "You clicked the finish button!", "success");
-              this.openWizard = false;
-
-              this.$router.push('/vendors');
-
-
-          }
+            }
+        ] ,
+        channel_fields: [],
+        channel_entries: [],
+        parse_header: [],
+        parse_csv: [],
+        sortOrders:{},
+        sortKey: ''
+      };
+    },
+    filters: {
+      capitalize: function (str) {
+        return str.charAt(0).toUpperCase() + str.slice(1)
       }
+    },
+    methods: {
+      sortBy: function (key) {
+        let vm = this
+        vm.sortKey = key
+        vm.sortOrders[key] = vm.sortOrders[key] * -1
+      },
+        setCSV(event, id) {
+          console.log(event)
+            console.log(id)
+        },
+      csvJSON(csv){
+        let vm = this
+        let lines = csv.split("\n")
+        let result = []
+        let headers = lines[0].split(",")
+        console.log(csv);
+        vm.parse_header = lines[0].split(",")
+          console.log(vm.parse_header)
+          vm.parse_header.forEach((value, index) => {
+            vm.models.push({value: vm.listOfTypes[0].name})
+          });
+        lines[0].split(",").forEach(function (key) {
+          vm.sortOrders[key] = 1
+        });
+          console.log(lines)
+        lines.map(function(line, indexLine){
+//          if (indexLine < 1) return // Jump header line
+          let obj = {}
+          let currentLine = line.split(",")
+            console.log('current line', currentLine)
+//          headers.map(function(header, indexHeader){
+//            obj[header] = currentline[indexHeader]
+//          })
+//          result.push(obj)
+          result.push(currentLine)
+        })
+        result.pop() // remove the last item because undefined values
+        return result // JavaScript object
+      },
+      loadCSV(e) {
+        let vm = this
+        if (window.FileReader) {
+          let reader = new FileReader();
+          reader.readAsText(e.target.files[0]);
+          // Handle errors load
+          reader.onload = function(event) {
+            let csv = event.target.result;
+            vm.parse_csv = vm.csvJSON(csv)
+          };
+          reader.onerror = function(evt) {
+            if(evt.target.error.name == "NotReadableError") {
+              alert("Canno't read file !");
+            }
+          };
+        } else {
+          alert('FileReader are not supported in this browser.');
+        }
+      },
+      sendCSVFile() {
+          let finalData = [];
+          let vm = this;
+
+          this.parse_csv.forEach((csvValue, csvIndex) => {
+              let tempVendorObject = {}
+              csvValue.forEach((value, index) => {
+
+                  tempVendorObject[this.models[index].value] = value;
+                  finalData.push(tempVendorObject);
+              });
+
+          })
+         swal("Good job!", "You clicked the finish button!", "success");
+         this.openWizard = false;
+
+         this.$router.push('/vendors');
+          console.log(finalData)
+
+
+      }
+    }
   };
 </script>
 <style lang="scss">
