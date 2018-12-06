@@ -16,7 +16,7 @@
                 <md-field :class="[{'md-error': errors.has('title')}]" class="mb16">
                   <md-icon class="md-accent">help_outline</md-icon>
                   <label>What</label>
-                  <md-input v-model="form.title"
+                  <md-input :value="form.title"
                             data-vv-name="title"
                             v-validate= "modelValidations.title"
                             required />
@@ -26,7 +26,7 @@
               </div>
 
               <div class="md-layout-item md-small-size-100">
-                <md-datepicker v-model="form.dueDateMillis" name="todo-date" md-immediately class="mb16">
+                <md-datepicker :value="form.dueDateMillis" name="todo-date" md-immediately class="mb16">
                   <label>Due Date</label>
                 </md-datepicker>
               </div>
@@ -37,7 +37,7 @@
                 <md-field :class="[{'md-error': errors.has('assignee')}]" class="mb16">
                   <md-icon class="md-accent">person_add</md-icon>
                   <label>Assign To</label>
-                  <md-input v-model="form.assignee"
+                  <md-input :value="form.assignee"
                             data-vv-name="assignee"
                             v-validate= "modelValidations.assignee"
                             required />
@@ -50,7 +50,7 @@
                 <md-field :class="[{'md-error': errors.has('status')}]" class="mb16">
                   <md-icon class="md-accent">check</md-icon>
                   <label>Status</label>
-                  <md-input v-model="form.status"
+                  <md-input :value="form.status"
                             data-vv-name="status"
                             v-validate= "modelValidations.status"
                             required />

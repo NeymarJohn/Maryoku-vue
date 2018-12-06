@@ -94,6 +94,7 @@
     },
     computed: {
       components() {
+        console.log('vxvx');
         return this.$store.state.eventData.components;
       }
     },
