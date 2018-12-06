@@ -73,7 +73,7 @@
 
               <md-tab id="tab-todo" md-label="ToDo" md-icon="check_circle">
                 <md-table table-header-color="green" v-if="componentObject.todos.length">
-                  <event-todo-row v-for="item of componentObject.todos"  :showModalTodo="showModalTodo" :showSwal="showSwal" :todoItem="item" :key="item.id"></event-todo-row>
+                  <event-todo-row v-for="item of componentObject.todos"  :showModalTodo="showModalTodo" :showSwal="showSwal" :todoItem="item" :key="'todo-'+item.id"></event-todo-row>
                 </md-table>
                 <p class="text-danger text-center" v-if="!componentObject.todos.length">
                   No records were added yet.
@@ -129,6 +129,9 @@
       componentObject() {
         console.log(this.$store.state.eventData.components[0]);
         return this.$store.state.eventData.components[0];
+      },
+      todos() {
+        return this.$store.todos;
       }
     },
     mounted() {
@@ -146,6 +149,8 @@
         this.$refs.componentsModal.toggleModal(true);
       },
       showModalTodo(todo) {
+        // debugger
+        console.log(todo);
         this.todoItem = todo;
         this.$refs.todoModal.toggleModal(true);
       },

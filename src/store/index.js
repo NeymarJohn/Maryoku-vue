@@ -20,11 +20,11 @@ export default new Vuex.Store({
     },
     componentsList: null,
     vendorsList: null,
+    todos: []
   },
   mutations: {
-    updateEventData(state) {
-      console.log(state);
-      // state.eventData = state;
+    updateEventData(state, newChanges) {
+      state.eventData.components[0] = newChanges;
     }
   }
 });

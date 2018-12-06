@@ -99,7 +99,6 @@
     },
     watch: {
       components(newVal) {
-        console.log(newVal);
       }
     },
     mounted() {

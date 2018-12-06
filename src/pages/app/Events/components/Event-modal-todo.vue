@@ -73,6 +73,7 @@
 </template>
 <script>
   import { Modal } from "@/components";
+  import Vue from 'vue';
 
   export default {
     name: 'event-modal-todo',
@@ -117,24 +118,34 @@
     },
     methods: {
       noticeModalHide() {
+        this.clearForm();
         this.modalOpen = false;
       },
       toggleModal(show) {
         this.modalOpen = show;
       },
+      clearForm() {
+        this.form = {
+          id: null,
+          title: null,
+          dueDateMillis: null,
+          assignee:  null,
+          status: null,
+        };
+      },
       validateModalForm() {
-        console.log('validating');
         this.$validator.validateAll().then(isValid => {
           if (isValid) {
             this.form.dueDateMillis = new Date(this.form.dueDateMillis).getTime();
             let store = this.$store.state.eventData.components[0];
             const todo = store.todos.find((item) => item.id == this.form.id);
             if (store.todos.indexOf(todo) >= -1) {
-              store.todos[store.todos.indexOf(todo)] = this.form;
+              Vue.set(store.todos, store.todos.indexOf(todo), this.form);
             } else {
               store.todos.push(this.form);
             }
             this.$store.commit('updateEventData', store)
+            this.clearForm();
             this.modalOpen = false;
           }
         });
