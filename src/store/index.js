@@ -18,10 +18,11 @@ export default new Vuex.Store({
       status: null,
       components: null,
     },
-    componentsList: null,
   },
   mutations: {
-
+    updateEventData(state) {
+      console.log(state);
+      // state.eventData = state;
+    }
   }
 });
-

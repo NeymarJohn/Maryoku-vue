@@ -16,7 +16,7 @@
                 <md-field :class="[{'md-error': errors.has('title')}]" class="mb16">
                   <md-icon class="md-accent">help_outline</md-icon>
                   <label>What</label>
-                  <md-input :value="form.title"
+                  <md-input v-model="form.title"
                             data-vv-name="title"
                             v-validate= "modelValidations.title"
                             required />
@@ -26,7 +26,7 @@
               </div>
 
               <div class="md-layout-item md-small-size-100">
-                <md-datepicker :value="form.dueDateMillis" name="todo-date" md-immediately class="mb16">
+                <md-datepicker v-model="form.dueDateMillis" name="todo-date" md-immediately class="mb16">
                   <label>Due Date</label>
                 </md-datepicker>
               </div>
@@ -37,7 +37,7 @@
                 <md-field :class="[{'md-error': errors.has('assignee')}]" class="mb16">
                   <md-icon class="md-accent">person_add</md-icon>
                   <label>Assign To</label>
-                  <md-input :value="form.assignee"
+                  <md-input v-model="form.assignee"
                             data-vv-name="assignee"
                             v-validate= "modelValidations.assignee"
                             required />
@@ -50,7 +50,7 @@
                 <md-field :class="[{'md-error': errors.has('status')}]" class="mb16">
                   <md-icon class="md-accent">check</md-icon>
                   <label>Status</label>
-                  <md-input :value="form.status"
+                  <md-input v-model="form.status"
                             data-vv-name="status"
                             v-validate= "modelValidations.status"
                             required />
@@ -123,19 +123,18 @@
         this.modalOpen = show;
       },
       validateModalForm() {
+        console.log('validating');
         this.$validator.validateAll().then(isValid => {
           if (isValid) {
-            let parentComponentArray = this.$store.state.eventData.components
-            let editedComponentIndex = parentComponentArray.indexOf(parentComponentArray.find((val) => val.id === this.componentId));
-            let editedItemIndex = parentComponentArray[editedComponentIndex].todos.indexOf(parentComponentArray[editedComponentIndex].todos.find((val) => val.id === this.form.id));
-            // convert to timestamp
             this.form.dueDateMillis = new Date(this.form.dueDateMillis).getTime();
-
-            if (editedItemIndex > -1) { // if found edited item
-              parentComponentArray[editedComponentIndex].todos[editedItemIndex] = this.form;
-            } else { // add new
-              parentComponentArray[editedComponentIndex].push(this.form);
+            let store = this.$store.state.eventData.components[0];
+            const todo = store.todos.find((item) => item.id == this.form.id);
+            if (store.todos.indexOf(todo) >= -1) {
+              store.todos[store.todos.indexOf(todo)] = this.form;
+            } else {
+              store.todos.push(this.form);
             }
+            this.$store.commit('updateEventData', store)
             this.modalOpen = false;
           }
         });

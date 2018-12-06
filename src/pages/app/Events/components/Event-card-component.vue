@@ -6,7 +6,7 @@
           <div class="card-icon">
             <md-icon>assignment</md-icon>
           </div>
-          <h4 class="title">{{compo}}</h4>
+          <h4 class="title">SPACE</h4>
         </div>
 
         <div class="md-layout-item" style="text-align: right;">
@@ -28,7 +28,7 @@
               <!-- if it will some time left, could be replaced with one table component -->
               <md-tab id="tab-components" md-label="Component Properties" md-icon="settings">
                 <md-table v-model="componentObject.values" table-header-color="green" v-if="componentObject.values.length">
-                  <md-table-row slot="md-table-row" slot-scope="{ item }" @click.native="showModalComponent({item})">
+                  <md-table-row slot="md-table-row" slot-scope="{ item }">
                     <md-table-cell md-label="Vendor name">{{ item.name }}</md-table-cell>
                     <md-table-cell md-label="Value">{{ item.value }}</md-table-cell>
                     <md-table-cell md-label="Comment">{{ item.comment }}</md-table-cell>
@@ -72,18 +72,8 @@
               </md-tab>
 
               <md-tab id="tab-todo" md-label="ToDo" md-icon="check_circle">
-                <md-table v-model="componentObject.todos" table-header-color="green" v-if="componentObject.todos.length">
-                  <md-table-row slot="md-table-row" slot-scope="{ item }" @click.native="showModalTodo({item})">
-                    <md-table-cell md-label="What">{{ item.title }}</md-table-cell>
-                    <md-table-cell md-label="Due Date">{{ item.dueDateMillis | moment }}</md-table-cell>
-                    <md-table-cell md-label="Assign To">{{ item.assignee }}</md-table-cell>
-                    <md-table-cell md-label="Status">{{ item.status }}</md-table-cell>
-                    <md-table-cell class="visible-on-hover">
-                      <md-button class="md-just-icon md-simple md-danger" @click.native="showSwal()">
-                        <md-icon>delete</md-icon>
-                      </md-button>
-                    </md-table-cell>
-                  </md-table-row>
+                <md-table table-header-color="green" v-if="componentObject.todos.length">
+                  <event-todo-row v-for="item of componentObject.todos"  :showModalTodo="showModalTodo" :showSwal="showSwal" :todoItem="item" :key="item.id"></event-todo-row>
                 </md-table>
                 <p class="text-danger text-center" v-if="!componentObject.todos.length">
                   No records were added yet.
@@ -112,8 +102,9 @@
   } from "@/components";
   import EventModalInspirations from './Event-modal-inspirations';
   import EventModalTodo from './Event-modal-todo';
-  import EventModalVendor from './Event-modal-vendor'
-  import EventModalComponents from './Event-modal-components'
+  import EventModalVendor from './Event-modal-vendor';
+  import EventModalComponents from './Event-modal-components';
+  import EventTodoRow from './EventTodoRow.vue';
   import swal from "sweetalert2";
   import moment from 'moment';
 
@@ -124,32 +115,23 @@
       EventModalTodo,
       EventModalVendor,
       EventModalComponents,
+      EventTodoRow
     },
     name: 'event-card-component',
-    props: {
-      componentObject: {
-        id: String,
-        componentId: String,
-        todos: Array,
-        values: Array,
-        vendors: Array,
-      },
+    data: function() {
+      return {
+        vendorItem: null,
+        componentItem: null,
+        todoItem: null,
+      }
     },
-    data: () => ({
-      vendorItem: null,
-      componentItem: null,
-      todoItem: null,
-    }),
-    watch: {
-      componentObject:{
-        handler(newVal) {
-          console.log('property updated', newVal);
-        },
-        deep: true
+    computed: {
+      componentObject() {
+        console.log(this.$store.state.eventData.components[0]);
+        return this.$store.state.eventData.components[0];
       }
     },
     mounted() {
-      console.log(this.componentObject);
     },
     methods: {
       showInspirations() {
@@ -163,8 +145,8 @@
         this.componentItem = item;
         this.$refs.componentsModal.toggleModal(true);
       },
-      showModalTodo(item) {
-        this.todoItem = item.item;
+      showModalTodo(todo) {
+        this.todoItem = todo;
         this.$refs.todoModal.toggleModal(true);
       },
       showSwal() {

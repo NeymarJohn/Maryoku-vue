@@ -2,11 +2,7 @@
   <div class="md-layout">
     <modal v-if="modalOpen" @close="noticeModalHide">
       <template slot="header">
-        <h4 class="modal-title">
-          <span v-if="!form.id">Add new</span>
-          <span v-if="form.id">Edit</span>
-          component
-        </h4>
+        <h4 class="modal-title">Add new vendor</h4>
         <md-button class="md-simple md-just-icon md-round modal-default-button" @click="noticeModalHide">
           <md-icon>clear</md-icon>
         </md-button>
@@ -21,7 +17,7 @@
                                  data-vv-name="name"
                                  v-validate= "modelValidations.name"
                                  required
-                                 :md-options="propertyValues"
+                                 :md-options="values"
                                  class="change-icon-order select-with-icon mb16"
                                  :class="[{'md-error': errors.has('name')}]">
                   <md-icon class="md-accent">person</md-icon>
@@ -66,10 +62,7 @@
 
       <template slot="footer">
         <md-button class="md-simple" @click="noticeModalHide">Cancel</md-button>
-        <md-button class="md-primary" @click="validateModalForm">
-          <span v-if="!form.id">Create</span>
-          <span v-if="form.id">Save</span>
-        </md-button>
+        <md-button class="md-primary">Create</md-button>
       </template>
     </modal>
   </div>
@@ -80,8 +73,7 @@
   export default {
     name: 'event-modal-components',
     props: {
-      componentItem: Object,
-      componentId: String,
+      todoItem: Object,
     },
     components: {
       Modal,
@@ -108,7 +100,11 @@
             required: true,
           }
         },
-        propertyValues: [],
+        values: [
+          'value1',
+          'value2',
+          'value3',
+        ]
       }
     },
     methods: {
@@ -123,19 +119,6 @@
           console.log(isValid);
         });
       },
-    },
-    watch: {
-      componentId(newVal) {
-        console.log(newVal);
-        let propertyObj = this.$store.state.componentsList.find((val) => val.id === newVal);
-        let valuesObjectsArray = 'childComponents' in propertyObj ? propertyObj.childComponents : [];
-        this.propertyValues = valuesObjectsArray.length ? valuesObjectsArray.map((val) => val.title) : [];
-      }
-    },
-    created() {
-      let propertyObj = this.$store.state.componentsList.find((val) => val.id === this.componentId);
-      let valuesObjectsArray = 'childComponents' in propertyObj ? propertyObj.childComponents : [];
-      this.propertyValues = valuesObjectsArray.length ? valuesObjectsArray.map((val) => val.title) : [];
     }
   }
 </script>

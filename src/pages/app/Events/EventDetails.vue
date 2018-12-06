@@ -7,12 +7,27 @@
       <md-toolbar class="md-primary">
         <div class="md-toolbar-row">
           <div class="md-toolbar-section-start">
-            <drop-down direction="down">
+            <drop-down direction="down" multiLevel>
               <md-button slot="title" class="md-button md-block dropdown-toggle" data-toggle="dropdown">
                 <i class="material-icons">add</i> Add Component
               </md-button>
               <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
-                <li v-for="item in componentsList" :key="item.id" @click="createNewComponent(item)"><a>{{ item.value }}</a></li>
+                <li><a href="#">Component name </a></li>
+                <li><a href="#">Another component</a></li>
+                <li>
+                  <a class="dropdown-toggle" :class="{'open': multiLevel}" @click="toggleMultiLevel">Group of components</a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Some subcomponent</a></li>
+                    <li><a href="#">Something else</a></li>
+                    <li>
+                      <a class="dropdown-toggle" :class="{'open': multiLevel2}" @click="toggleMultiLevel2()">SubSubComponent</a>
+                      <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
+                        <li><a href="#">Subsubmenu action 1</a></li>
+                        <li><a href="#">Subsubmenu action 2</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
               </ul>
             </drop-down>
           </div>
@@ -47,8 +62,6 @@
   import EventCardComponent from './components/Event-card-component.vue';
   import Calendar from '@/models/Calendar';
   import Occasion from '@/models/Occasion';
-  import EventComponent from '@/models/EventComponent';
-  import { mapGetters } from 'vuex'
 
   export default {
     components: {
@@ -61,7 +74,6 @@
       multiLevel2: false,
       calendarId: null,
       occasionsArray: null,
-      componentsList: null,
     }),
 
     methods: {
@@ -79,26 +91,11 @@
         this.multiLevel2 = !this.multiLevel2;
         this.multiLevel3 = false;
       },
-      createNewComponent(item) {
-        this.$store.state.eventData.components.push({
-          componentId: item.id,
-          todos: [],
-          values: [],
-          vendors: [],
-        })
-      }
     },
     computed: {
-      ...mapGetters({
-        myState: 'getMyState'
-      }),
       components() {
+        console.log('vxvx');
         return this.$store.state.eventData.components;
-      }
-    },
-    watch: {
-      components(newVal) {
-        console.log(newVal);
       }
     },
     mounted() {
@@ -114,8 +111,8 @@
         // get data from ID and then
         this.$store.state.eventData.components =  [
           {
-            id: 'services',
-            componentId: 'Services',
+            id: '1',
+            componentId: '1',
             vendors: [
               {
                 id: 1,
@@ -172,11 +169,7 @@
       Occasion.get().then((occasions) => {
         this.occasionsArray = occasions;
       });
-      EventComponent.get().then((componentsList) => {
-        console.log(componentsList);
-        this.$store.state.componentsList = componentsList;
-        this.componentsList = componentsList;
-      })
+
     },
   };
 </script>
