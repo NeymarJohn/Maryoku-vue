@@ -149,8 +149,6 @@
         this.$refs.componentsModal.toggleModal(true);
       },
       showModalTodo(todo) {
-        // debugger
-        console.log(todo);
         this.todoItem = todo;
         this.$refs.todoModal.toggleModal(true);
       },
