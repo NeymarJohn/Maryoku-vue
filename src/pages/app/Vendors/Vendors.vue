@@ -30,6 +30,7 @@
   import VendorsTable from './Table';
   import ImportVendors from './ImportVendors';
   import Vendors from "@/models/Vendors";
+  import VendorCategories from "@/models/VendorCategories";
   import VueElementLoading from 'vue-element-loading';
   export default {
     components: {

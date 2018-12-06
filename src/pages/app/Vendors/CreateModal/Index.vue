@@ -39,34 +39,46 @@
                                     <!--</md-select>-->
                                 <!--</md-field>-->
 
-                                <md-field>
-                                    <label for="food">Category</label>
-                                    <md-select v-model="category" name="food" id="food">
-                                        <md-option value="space/venue ">Space / Venue </md-option>
-                                        <md-option value="catering">Catering </md-option>
-                                        <md-optgroup label="Content">
-                                            <md-option value="lecture">Lecture</md-option>
-                                            <md-option value="Show">Show</md-option>
-                                            <md-option value="activity">Activity</md-option>
-                                            <md-option value="games">Games</md-option>
-                                            <md-option value="sports">Sports</md-option>
-                                            <md-option value="art">Art</md-option>
-                                            <md-option value="trip">Trip</md-option>
-                                        </md-optgroup>
 
-                                        <md-optgroup label="Services">
-                                            <md-option value="d.j">D.J</md-option>
-                                            <md-option value="photography">Photography</md-option>
-                                            <md-option value="cleaning_services">Cleaning Services</md-option>
-                                        </md-optgroup>
+                                <drop-down>
+                                    <a slot="title" class="dropdown-toggle" data-toggle="dropdown">
+                                        <p>Category</p>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li v-for="item in vendorCategory">{{item.name}}</li>
+                                    </ul>
+                                </drop-down>
 
-                                        <md-optgroup label="Products Rental / Purchase">
-                                            <md-option value="electronic_devices ">Electronic Devices </md-option>
-                                            <md-option value="give_away">Give away</md-option>
-                                            <md-option value="furniture">Furniture</md-option>
-                                        </md-optgroup>
-                                    </md-select>
-                                </md-field>
+
+
+                                <!--<md-field>-->
+                                    <!--<label for="food">Category</label>-->
+                                    <!--<md-select v-model="category" name="food" id="food">-->
+                                        <!--<md-option value="space/venue ">Space / Venue </md-option>-->
+                                        <!--<md-option value="catering">Catering </md-option>-->
+                                        <!--<md-optgroup label="Content">-->
+                                            <!--<md-option value="lecture">Lecture</md-option>-->
+                                            <!--<md-option value="Show">Show</md-option>-->
+                                            <!--<md-option value="activity">Activity</md-option>-->
+                                            <!--<md-option value="games">Games</md-option>-->
+                                            <!--<md-option value="sports">Sports</md-option>-->
+                                            <!--<md-option value="art">Art</md-option>-->
+                                            <!--<md-option value="trip">Trip</md-option>-->
+                                        <!--</md-optgroup>-->
+
+                                        <!--<md-optgroup label="Services">-->
+                                            <!--<md-option value="d.j">D.J</md-option>-->
+                                            <!--<md-option value="photography">Photography</md-option>-->
+                                            <!--<md-option value="cleaning_services">Cleaning Services</md-option>-->
+                                        <!--</md-optgroup>-->
+
+                                        <!--<md-optgroup label="Products Rental / Purchase">-->
+                                            <!--<md-option value="electronic_devices ">Electronic Devices </md-option>-->
+                                            <!--<md-option value="give_away">Give away</md-option>-->
+                                            <!--<md-option value="furniture">Furniture</md-option>-->
+                                        <!--</md-optgroup>-->
+                                    <!--</md-select>-->
+                                <!--</md-field>-->
 
                             </div>
                         </div>
@@ -176,6 +188,7 @@
     import { Modal } from "@/components";
     import swal from "sweetalert2";
     import Vendors from "@/models/Vendors";
+    import VendorCategories from "@/models/VendorCategories";
     import {SlideYDownTransition} from "vue2-transitions";
 
 
@@ -189,6 +202,7 @@
             return {
               inviteModalOpen: false,
               single: null,
+              'vendorCategory': [],
               categories: [
                 'Space / Venue ',
                 'Catering',
@@ -234,6 +248,17 @@
         created() {
             console.log(this.$store);
             this.$store.registerModule('vendors', vendorsVuex);
+
+            Vendors.get().then(vendors => {
+            this.vendorCategory = vendors;
+            console.log(vendors, 'VENDORS');
+            vendors.categories().get().then(categories => {
+              console.log(categories, "CATEGORIE");
+              this.vendorCategory = categories;
+            });
+          }, (error) => {
+            console.log(error)
+          });
         },
       destroyed() {
         console.log(this.$store);
@@ -322,6 +347,7 @@
             onStepValidated(validated, model) {
                 this.wizardModel = {...this.wizardModel, ...model};
             },
+
             async addVendor() {
 
               let vendor = new Vendors({});

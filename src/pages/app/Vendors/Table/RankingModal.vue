@@ -106,40 +106,6 @@
           'Services ',
           'Products Rental / Purchase'
         ],
-        touched: {
-          displayName: false,
-          vendorAddress: false,
-          vendorEmail: false,
-          vendorCategory: false,
-          webSite: false,
-          vendorPhoneNumber: false
-        },
-        modelValidations: {
-          displayName: {
-            required: true,
-            min: 5
-          },
-          vendorAddress: {
-            required: true,
-            min: 5
-          },
-          vendorEmail: {
-            required: true,
-            email: true
-          },
-          vendorCategory: {
-            required: true,
-            min: 5
-          },
-          webSite: {
-            required: true,
-            min: 5
-          },
-          vendorPhoneNumber: {
-            required: true,
-            min: 5
-          }
-        }
       }
     },
     created() {
@@ -155,83 +121,68 @@
     computed: {
       ...mapState('vendors', ['vendorsMemberData']),
 
-      name: {
-        get() {
-          return this.vendorsMemberData.vendorDisplayName
-        },
-        set(value) {
-          this.setMemberProperty({key: 'vendorDisplayName', actualValue: value})
-        },
-
-      },
-
-      address: {
-        get() {
-          return this.vendorsMemberData.vendorAddressLine1
-        },
-        set(value) {
-          this.setMemberProperty({key: 'vendorAddressLine1', actualValue: value})
-        },
-
-      },
-      email: {
-        get() {
-          return this.vendorsMemberData.vendorMainEmail
-        },
-        set(value) {
-          this.setMemberProperty({key: 'vendorMainEmail', actualValue: value})
-        }
-      },
-      category: {
-        get() {
-          return this.vendorsMemberData.productsCategory
-        },
-        set(value) {
-          this.setMemberProperty({key: 'productsCategory', actualValue: value})
-        }
-      },
-      web: {
-        get() {
-          return this.vendorsMemberData.vendorWebsite
-        },
-        set(value) {
-          this.setMemberProperty({key: 'vendorWebsite', actualValue: value})
-        }
-      },
-      phoneNumber: {
-        get() {
-          return this.vendorsMemberData.vendorMainPhoneNumber
-        },
-        set(value) {
-          this.setMemberProperty({key: 'vendorMainPhoneNumber', actualValue: value})
-        }
-      }
+//      name: {
+//        get() {
+//          return this.vendorsMemberData.vendorDisplayName
+//        },
+//        set(value) {
+//          this.setMemberProperty({key: 'vendorDisplayName', actualValue: value})
+//        },
+//
+//      },
+//
+//      address: {
+//        get() {
+//          return this.vendorsMemberData.vendorAddressLine1
+//        },
+//        set(value) {
+//          this.setMemberProperty({key: 'vendorAddressLine1', actualValue: value})
+//        },
+//
+//      },
+//      email: {
+//        get() {
+//          return this.vendorsMemberData.vendorMainEmail
+//        },
+//        set(value) {
+//          this.setMemberProperty({key: 'vendorMainEmail', actualValue: value})
+//        }
+//      },
+//      category: {
+//        get() {
+//          return this.vendorsMemberData.productsCategory
+//        },
+//        set(value) {
+//          this.setMemberProperty({key: 'productsCategory', actualValue: value})
+//        }
+//      },
+//      web: {
+//        get() {
+//          return this.vendorsMemberData.vendorWebsite
+//        },
+//        set(value) {
+//          this.setMemberProperty({key: 'vendorWebsite', actualValue: value})
+//        }
+//      },
+//      phoneNumber: {
+//        get() {
+//          return this.vendorsMemberData.vendorMainPhoneNumber
+//        },
+//        set(value) {
+//          this.setMemberProperty({key: 'vendorMainPhoneNumber', actualValue: value})
+//        }
+//      }
 
     },
     methods: {
       ...mapMutations('vendors', [
         'setMemberProperty'
       ]),
-      getError(fieldName) {
-        return this.errors.first(fieldName);
-      },
-      validate() {
-        return this.$validator.validateAll().then(res => {
-          this.$emit("on-validated", res);
-          return res;
-        });
-      },
       noticeModalHide: function () {
         this.inviteModalOpen = false;
       },
       toggleModal: function (show) {
         this.inviteModalOpen = show;
-      },
-      validateStep(ref) {
-        return this.$refs[ref].validate();
-      },
-      onStepValidated(validated, model) {
-        this.wizardModel = {...this.wizardModel, ...model};
       },
       async addVendor() {
 
@@ -267,24 +218,24 @@
       }
     },
     watch: {
-      displayName() {
-        this.touched.displayName = true;
-      },
-      vendorAddress() {
-        this.touched.vendorAddress = true;
-      },
-      vendorEmail() {
-        this.touched.vendorEmail = true;
-      },
-      vendorCategory() {
-        this.touched.username = true;
-      },
-      webSite() {
-        this.touched.webSite = true;
-      },
-      vendorPhoneNumber() {
-        this.touched.vendorPhoneNumber = true;
-      }
+//      displayName() {
+//        this.touched.displayName = true;
+//      },
+//      vendorAddress() {
+//        this.touched.vendorAddress = true;
+//      },
+//      vendorEmail() {
+//        this.touched.vendorEmail = true;
+//      },
+//      vendorCategory() {
+//        this.touched.username = true;
+//      },
+//      webSite() {
+//        this.touched.webSite = true;
+//      },
+//      vendorPhoneNumber() {
+//        this.touched.vendorPhoneNumber = true;
+//      }
     }
   };
 </script>

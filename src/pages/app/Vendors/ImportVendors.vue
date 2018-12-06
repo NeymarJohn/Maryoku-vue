@@ -26,12 +26,12 @@
                 <section class="table-section"  ref="step2">
                   <table class="border-table" v-if="parse_csv">
                     <thead>
-                    <tr>
+                    <tr style="border-top: none;">
                       <th v-for="(key, index) in parse_header"
                           @click="sortBy(key)"
                           :class="{ active: sortKey == key }">
                           <md-field>
-                              <md-select @input="setCSV($event, index)"  v-model="models[index].value" name="select">
+                              <md-select id="remove-border" @input="setCSV($event, index)"  v-model="models[index].value" name="select">
                                   <md-option v-for="(item, index) in listOfTypes" :value="item.name" :key="index">{{ item.displayName }}</md-option>
 
                               </md-select>
@@ -241,8 +241,12 @@
     border-collapse: collapse;
   }
 
-  .border-table, .border-table th, .border-table td {
-    border: 1px solid black;
+ .border-table tr {
+    border-top: 1px solid #a9afbb;
+  }
+  .border-table tr td{
+    padding: 15px;
+    white-space: nowrap;
   }
   .table-section{
     width: 100%;
@@ -261,5 +265,10 @@
     &:hover{
       background-color: #FF547C!important;
     }
+  }
+   #\32 > section > table > thead > tr > th > div > div{
+    z-index: 9999;
+    border: 1px solid white!important;
+     padding: 0px 15px;
   }
 </style>
