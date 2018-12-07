@@ -17,16 +17,16 @@
           <md-card>
             <div class="md-layout">
               <div class="md-layout-item">
-                <md-autocomplete v-model="form.name"
-                                 data-vv-name="name"
-                                 v-validate= "modelValidations.name"
+                <md-autocomplete v-model="form.title"
+                                 data-vv-name="title"
+                                 v-validate= "modelValidations.title"
                                  required
                                  :md-options="propertyValues"
                                  class="change-icon-order select-with-icon mb16"
-                                 :class="[{'md-error': errors.has('name')}]">
+                                 :class="[{'md-error': errors.has('title')}]">
                   <md-icon class="md-accent">person</md-icon>
                   <label>Property Name</label>
-                  <span class="md-error" v-if="errors.has('name')">This field is required</span>
+                  <span class="md-error" v-if="errors.has('title')">This field is required</span>
                 </md-autocomplete>
               </div>
             </div>
@@ -76,6 +76,9 @@
 </template>
 <script>
   import { Modal } from "@/components";
+  import EventComponent from '@/models/EventComponent';
+  import EventComponentProperty from '@/models/EventComponentProperty';
+  import Vue from 'vue';
 
   export default {
     name: 'event-modal-components',
@@ -93,12 +96,12 @@
         modalOpen: false,
         form: {
           id: null,
-          name: "",
+          title: "",
           value: null,
           comment: null,
         },
         modelValidations: {
-          name: {
+          title: {
             required: true,
           },
           value: {
@@ -122,16 +125,59 @@
       },
       validateModalForm() {
         this.$validator.validateAll().then(isValid => {
+          if (isValid) {
+            let store = this.$store.state.eventData.components[this.componentIndex];
 
+            if (this.componentItemIndex !== null) {
+              Vue.set(store.values, this.componentItemIndex, this.form);
+            } else {
+              delete this.form.id; // remove id key
+              store.values.push(this.form);
+            }
+
+            this.$store.commit('updateEventData', store)
+            this.clearForm();
+            this.modalOpen = false;
+          }
         });
       },
+      clearForm() {
+        this.form = {
+          id: null,
+          title: null,
+          value: null,
+          comment:  null,
+        };
+      },
+    },
+    mounted() {
+      EventComponent.get().then((componentsList) => {
+        let propertiesList = new EventComponentProperty().for(componentsList[0]);
+
+          propertiesList.get().then(response => {
+            this.propertyValues = response.length ? response.map((val) => val.title) : [];
+            console.log(response);
+          });
+      });
     },
     watch: {
       componentId(newVal) {
-        let propertyObj = this.$store.state.componentsList.find((val) => val.id === newVal);
-        let valuesObjectsArray = 'childComponents' in propertyObj ? propertyObj.childComponents : [];
-        this.propertyValues = valuesObjectsArray.length ? valuesObjectsArray.map((val) => val.title) : [];
-      }
+        EventComponent.get().then((componentsList) => {
+          let propertiesList = new EventComponentProperty().for(componentsList[0]);
+
+          propertiesList.get().then(response => {
+            this.propertyValues = response.length ? response.map((val) => val.title) : [];
+            console.log(response);
+          });
+        });
+      },
+      componentItem: function(val) {
+        console.log(val.id);
+        this.form.id = 'id' in val ? val.id : null;
+        this.form.title = 'title' in val ? val.title : '';
+        this.form.value = 'value' in val ? val.value : '';
+        this.form.comment = 'comment' in val ? val.comment : '';
+      },
     },
   }
 </script>

@@ -6,7 +6,7 @@
           <div class="card-icon">
             <md-icon>assignment</md-icon>
           </div>
-          <h4 class="title">Space</h4>
+          <h4 class="title">{{componentObject.value}}</h4>
         </div>
 
         <div class="md-layout-item" style="text-align: right;">
@@ -31,8 +31,8 @@
                   <md-table-row slot="md-table-row"
                                 v-for="(item, index) in componentObject.values"
                                 :key="'component-' + index"
-                                @click.native="showModalComponent({item}, index)">
-                    <md-table-cell md-label="Vendor name">{{ item.name }}</md-table-cell>
+                                @click.native="showModalComponent(item, index)">
+                    <md-table-cell md-label="Vendor name">{{ item.title }}</md-table-cell>
                     <md-table-cell md-label="Value">{{ item.value }}</md-table-cell>
                     <md-table-cell md-label="Comment">{{ item.comment }}</md-table-cell>
                     <md-table-cell class="visible-on-hover">
@@ -163,6 +163,11 @@
     mounted() {
       if (this.$store.state.vendorsList) {
         this.getVendorObjectsArray();
+      } else {
+        let _this = this;
+        setTimeout(function () { // wait until vendors list will finish loading from server
+          _this.getVendorObjectsArray();
+        }, 1000);
       }
     },
     watch: {

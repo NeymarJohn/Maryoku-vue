@@ -179,7 +179,7 @@
             </chart-card>
           </div>
           <md-card-actions class="text-center">
-            <md-button native-type="submit" @click.native.prevent="validateEvent" class="md-success">Validate Inputs</md-button>
+            <md-button native-type="submit" @click.native.prevent="validateEvent" class="md-success">Send form with components</md-button>
           </md-card-actions>
         </form>
       </md-card>
@@ -277,7 +277,8 @@
                 totalBudget: this.form.budget,
                 status: this.form.status,
                 currency: 'USD', // HARDCODED, REMOVE AFTER BACK WILL FIX API
-                participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API
+                participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+                components: this.$store.state.eventData.components,
               }).for(calendars[0]);
 
               newEvent.save().then(response => {

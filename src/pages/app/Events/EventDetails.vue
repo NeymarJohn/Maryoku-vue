@@ -136,14 +136,14 @@
             values: [
               {
                 id: 1,
-                name: 'Property name 1',
-                value: 'Some value 1',
+                title: 'Property name 1',
+                value: 2262,
                 comment: 'Some commentary'
               },
               {
                 id: 2,
-                name: 'Property name 2',
-                value: 'Some value 2',
+                title: 'Property name 2',
+                value: 4444,
                 comment: 'Another commentary'
               }
             ],
