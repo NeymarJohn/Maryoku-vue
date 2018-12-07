@@ -83,13 +83,13 @@
         console.error(error);
       });*/
 
-      Calendar.get().then(calendars => {
-        let newEvent = new CalendarEvent({ /* ... */}).for(calendars[0]);
-        newEvent.save();
+      // Calendar.get().then(calendars => {
+      //   let newEvent = new CalendarEvent({ /* ... */}).for(calendars[0]);
+      //   newEvent.save();
 
-      }, (error) => {
-        console.error(error);
-      });
+      // }, (error) => {
+      //   console.error(error);
+      // });
     },
     data() {
       return {

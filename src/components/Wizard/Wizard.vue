@@ -3,13 +3,13 @@
     <form @submit.prevent>
       <!--        You can switch " data-color="primary" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
       <md-card class="md-card-wizard active" data-color="rose">
-        <md-card-header v-if="removeHeader">
-          <slot  name="header">
+        <md-card-header>
+          <slot name="header">
             <h3 class="card-title">{{title}}</h3>
             <h3 class="description">{{subTitle}}</h3>
           </slot>
         </md-card-header>
-        <div  class="wizard-navigation">
+        <div class="wizard-navigation">
           <ul class="nav nav-pills" role="tablist">
             <li v-for="(tab, index) in tabs"
                 :key="tab.title"
@@ -85,9 +85,6 @@ export default {
     startIndex: {
       type: Number,
       default: 0
-    },
-    removeHeader: {
-      default: true
     },
     title: {
       type: String,
@@ -301,5 +298,4 @@ export default {
 .disabled-wizard-link {
   cursor: not-allowed;
 }
-
 </style>
