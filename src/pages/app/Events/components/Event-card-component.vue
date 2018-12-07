@@ -6,14 +6,14 @@
           <div class="card-icon">
             <md-icon>assignment</md-icon>
           </div>
-          <h4 class="title">{{componentObject.value}}</h4>
+          <h4 class="title">{{componentObject.componentId}}</h4>
         </div>
 
         <div class="md-layout-item" style="text-align: right;">
           <md-button class="md-just-icon md-simple" @click.native='showInspirations()'>
             <md-icon>reorder</md-icon>
           </md-button>
-          <md-button class="md-just-icon md-simple md-danger" @click.native="showSwal()">
+          <md-button class="md-just-icon md-simple md-danger" @click.native="showSwalComponent()">
             <md-icon>delete</md-icon>
           </md-button>
         </div>
@@ -36,7 +36,7 @@
                     <md-table-cell md-label="Value">{{ item.value }}</md-table-cell>
                     <md-table-cell md-label="Comment">{{ item.comment }}</md-table-cell>
                     <md-table-cell class="visible-on-hover">
-                      <md-button class="md-just-icon md-simple md-danger" @click="showSwal($event)">
+                      <md-button class="md-just-icon md-simple md-danger" @click="showSwalItems($event, index, 'values')">
                         <md-icon>delete</md-icon>
                       </md-button>
                     </md-table-cell>
@@ -72,7 +72,7 @@
                     <md-table-cell md-label="Phone">{{ item.vendorMainPhoneNumber }}</md-table-cell>
                     <md-table-cell md-label="Cost / Budget">{{ item.cost }}</md-table-cell>
                     <md-table-cell class="visible-on-hover">
-                      <md-button class="md-just-icon md-simple md-danger" @click="showSwal($event)">
+                      <md-button class="md-just-icon md-simple md-danger" @click="showSwalItems($event, index, 'vendors')">
                         <md-icon>delete</md-icon>
                       </md-button>
                     </md-table-cell>
@@ -90,7 +90,7 @@
                 <md-table table-header-color="green" v-if="componentObject.todos.length">
                   <event-todo-row v-for="(item, index) in componentObject.todos"
                                   :showModalTodo="showModalTodo"
-                                  :showSwal="showSwal"
+                                  :showSwal="showSwalItems"
                                   :todoItem="item"
                                   :todoIndex="index"
                                   :key="'todo-' + index"></event-todo-row>
@@ -210,7 +210,7 @@
         this.todoIndex = index;
         this.$refs.todoModal.toggleModal(true);
       },
-      showSwal(e) {
+      showSwalItems(e, itemIndex, arrayTitle) {
         e.stopPropagation();
         swal({
           title: "Are you sure?",
@@ -223,6 +223,8 @@
           buttonsStyling: false
         }).then(result => {
           if (result.value) {
+            let store = this.$store.state.eventData.components[this.componentIndex];
+            store[arrayTitle].splice(itemIndex, 1);
             swal({
               title: "Deleted!",
               text: "This item has been deleted.",
@@ -230,6 +232,30 @@
               confirmButtonClass: "md-button md-success",
               buttonsStyling: false
             });
+          }
+        });
+      },
+      showSwalComponent() {
+        swal({
+          title: "Are you sure?",
+          text: `You won't be able to revert this!`,
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonClass: "md-button md-success",
+          cancelButtonClass: "md-button md-danger",
+          confirmButtonText: "Yes, delete it!",
+          buttonsStyling: false
+        }).then(result => {
+          if (result.value) {
+            this.$store.state.eventData.components.splice(this.componentIndex, 1);
+            swal({
+              title: "Deleted!",
+              text: "This item has been deleted.",
+              type: "success",
+              confirmButtonClass: "md-button md-success",
+              buttonsStyling: false
+            });
+            console.log(this.$store.state.eventData);
           }
         });
       }

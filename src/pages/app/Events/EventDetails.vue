@@ -137,13 +137,13 @@
               {
                 id: 1,
                 title: 'Property name 1',
-                value: 2262,
+                value: 'fs2262',
                 comment: 'Some commentary'
               },
               {
                 id: 2,
                 title: 'Property name 2',
-                value: 4444,
+                value: 'rff4444',
                 comment: 'Another commentary'
               }
             ],

@@ -5,7 +5,7 @@
     <md-table-cell md-label="Assign To">{{ todoItem.assignee }}</md-table-cell>
     <md-table-cell md-label="Status">{{ todoItem.status }}</md-table-cell>
     <md-table-cell class="visible-on-hover">
-      <md-button class="md-just-icon md-simple md-danger" @click="showSwal($event)">
+      <md-button class="md-just-icon md-simple md-danger" @click="showSwal($event, todoIndex, 'todos')">
         <md-icon>delete</md-icon>
       </md-button>
     </md-table-cell>
