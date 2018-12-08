@@ -73,10 +73,7 @@
                 swal("Good job!", "You clicked the finish button!", "success");
                 let team = await Teams.first();
 
-                team.members().attach(this.teamMemberData).then(response => {
-
-
-                })
+                team.members().attach(this.teamMemberData);
 
 
             }
