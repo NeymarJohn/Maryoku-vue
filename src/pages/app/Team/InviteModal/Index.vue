@@ -172,6 +172,7 @@
                 },
                 emailAddress: {
                   required: true,
+                  email: true
                 },
                 role: {
                   required: true
@@ -234,7 +235,7 @@
         methods: {
           ...
             mapMutations('teamVuex', [
-              'setMemberProperty',
+              'setMemberProperty','resetForm'
             ]),
             noticeModalHide: function () {
                 this.inviteModalOpen = false;
@@ -264,6 +265,7 @@
                   this.inviteModalOpen = false;
                   Teams.first().then((team) => {
                     team.members().attach(this.teamMemberData);
+                    this.resetForm();
                     swal("Good job!", "You clicked the finish button!", "success");
                   });
                 }else {
