@@ -3,7 +3,7 @@
         <modal v-if="inviteModalOpen" @close="noticeModalHide" container-class="modal-container">
             <template slot="header" class="header-position">
                 <h3 class="title">Invite Your Team</h3>
-                <md-button class="btn-position" @click="closeModal">X</md-button>
+                <button class="btn-position" @click="closeModal">X</button>
             </template>
             <template slot="body">
                 <div class="md-layout">
@@ -51,29 +51,30 @@
 
                         <div class="md-layout-item md-size-95 md-small-size-100">
                             <md-field :class="[
-                          {'md-valid': !errors.has('emailAddress') && touched.emailAddress},
-                          {'md-error': errors.has('emailAddress')}]">
+                          {'md-valid': !errors.has('email') && touched.email},
+                          {'md-error': errors.has('email')}]">
                                 <label>Email</label>
                                 <md-input
                                         v-model="emailAddress"
-                                        data-vv-name="emailAddress"
-                                        type="text"
-                                        name="emailAddress"
+                                        data-vv-name="email"
+                                        type="email"
+                                        name="email"
                                         required
-                                        v-validate="modelValidations.emailAddress">
+                                        v-validate="modelValidations.email">
                                 </md-input>
                                 <slide-y-down-transition>
-                                    <md-icon class="error" v-show="errors.has('emailAddress')">close</md-icon>
+                                    <md-icon class="error" v-show="errors.has('email')">close</md-icon>
                                 </slide-y-down-transition>
                                 <slide-y-down-transition>
-                                    <md-icon class="success" v-show="!errors.has('emailAddress') && touched.emailAddress">done</md-icon>
+                                    <md-icon class="success" v-show="!errors.has('email') && touched.email">done</md-icon>
                                 </slide-y-down-transition>
                             </md-field>
                         </div>
+
                         <div class="md-layout-item md-size-95 md-small-size-100">
                             <md-field :class="[
-          {'md-valid': !errors.has('role') && touched.role},
-          {'md-error': errors.has('role')}]">
+                          {'md-valid': !errors.has('role') && touched.role},
+                          {'md-error': errors.has('role')}]">
                                 <label for="select">Role</label>
                                 <md-select
                                         required
@@ -94,16 +95,16 @@
                         </div>
                         <div class="md-layout-item md-size-95 md-small-size-100">
                             <md-field :class="[
-          {'md-valid': !errors.has('permissions') && touched.permissions},
-          {'md-error': errors.has('permissions')}]">
-                                <label for="permissions">Permissions</label>
+                          {'md-valid': !errors.has('permissions') && touched.permissions},
+                          {'md-error': errors.has('permissions')}]">
+                                <label for="select">Permissions</label>
                                 <md-select
                                         required
-                                        v-model="permissions"
+                                        v-model="permission"
                                         data-vv-name="permissions"
                                         v-validate="modelValidations.permissions"
-                                        name="permissions"
                                         id="permissions"
+                                        name="select"
                                         multiple>
                                     <md-option value="View">View</md-option>
                                     <md-option value="Manage">Manage</md-option>
@@ -157,7 +158,7 @@
               touched: {
                 firstName: false,
                 lastName: false,
-                emailAddress: false,
+                email: false,
                 permissions: false,
                 role: false,
               },
@@ -170,7 +171,7 @@
                   required: true,
                   min: 5
                 },
-                emailAddress: {
+                email: {
                   required: true,
                   email: true
                 },
@@ -223,7 +224,7 @@
               this.setMemberProperty({key: 'role', actualValue: value})
             }
           },
-          permissions: {
+          permission: {
             get() {
               return this.teamMemberData.permissions
             },
@@ -287,7 +288,7 @@
           this.touched.lastName = true;
         },
         email() {
-          this.touched.emailAddress = true;
+          this.touched.email = true;
         },
         role() {
           this.touched.role = true;
@@ -301,15 +302,17 @@
 <style lang="scss">
     .btn-position{
         position: absolute;
-        right: 20px;
+        right: 15px;
         font-weight: bold;
-        top: 15px;
+        top: 20px;
         font-size: 17px;
         background-color: transparent!important;
         box-shadow: none!important;
         color: gray!important;
+        border-color: transparent;
+        cursor: pointer;
 
-        &:hover{
+        &:hover, &:visited, &:focus, &:active{
             background-color: transparent!important;
             box-shadow: none!important;
             color: gray!important;
