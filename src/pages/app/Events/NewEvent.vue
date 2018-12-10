@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout" :class="[{'read-only': readOnly}]">
+  <div class="md-layout">
 
     <event-header-form :occasionOptions="occasionsArray" :formData="formData"></event-header-form>
 

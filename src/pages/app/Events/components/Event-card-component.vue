@@ -10,10 +10,10 @@
         </div>
 
         <div class="md-layout-item" style="text-align: right;">
-          <md-button class="md-just-icon md-simple" @click.native='showInspirations()'>
+          <md-button class="md-just-icon md-simple" @click.native='showInspirations()' v-if="!readonly">
             <md-icon>reorder</md-icon>
           </md-button>
-          <md-button class="md-just-icon md-simple md-danger" @click.native="showSwalComponent()">
+          <md-button class="md-just-icon md-simple md-danger" @click.native="showSwalComponent()" v-if="!readonly">
             <md-icon>delete</md-icon>
           </md-button>
         </div>
@@ -36,7 +36,7 @@
                     <md-table-cell md-label="Value">{{ item.value }}</md-table-cell>
                     <md-table-cell md-label="Comment">{{ item.comment }}</md-table-cell>
                     <md-table-cell class="visible-on-hover">
-                      <md-button class="md-just-icon md-simple md-danger" @click="showSwalItems($event, index, 'values')">
+                      <md-button class="md-just-icon md-simple md-danger" @click="showSwalItems($event, index, 'values')" v-if="!readonly">
                         <md-icon>delete</md-icon>
                       </md-button>
                     </md-table-cell>
@@ -45,23 +45,13 @@
                 <p class="text-danger text-center" v-if="!componentObject.values.length">
                   No records were added yet.
                 </p>
-                <md-button class="md-button md-block md-primary md-size-5 md-layout-item center-icon" @click.native='showModalComponent({}, null)'>
+                <md-button class="md-button md-block md-primary md-size-5 md-layout-item center-icon" @click.native='showModalComponent({}, null)' v-if="!readonly">
                   <i class="material-icons">add</i> Add
                 </md-button>
               </md-tab>
 
               <md-tab id="tab-vendors" md-label="Vendors" md-icon="rv_hookup">
                 <md-table v-model="vendorsObjectsArray" table-header-color="green" v-if="vendorsObjectsArray.length">
-                  <!--<thead>
-                    <tr>
-                      <th class="md-table-head"><div class="md-table-head-container md-ripple md-disabled"><div class="md-table-head-label">Vendor Name</div></div></th>
-                      <th class="md-table-head"><div class="md-table-head-container md-ripple md-disabled"><div class="md-table-head-label">Contact Person</div></div></th>
-                      <th class="md-table-head"><div class="md-table-head-container md-ripple md-disabled"><div class="md-table-head-label">Email</div></div></th>
-                      <th class="md-table-head"><div class="md-table-head-container md-ripple md-disabled"><div class="md-table-head-label">Phone</div></div></th>
-                      <th class="md-table-head"><div class="md-table-head-container md-ripple md-disabled"><div class="md-table-head-label">Cost / Budget</div></div></th>
-                      <th class="md-table-head"><div class="md-table-head-container md-ripple md-disabled"><div class="md-table-head-label"></div></div></th>
-                    </tr>
-                  </thead>-->
                   <md-table-row slot="md-table-row"
                                 v-for="(item, index) in vendorsObjectsArray"
                                 :key="'vendor-' + index"
@@ -72,7 +62,7 @@
                     <md-table-cell md-label="Phone">{{ item.vendorMainPhoneNumber }}</md-table-cell>
                     <md-table-cell md-label="Cost / Budget">{{ item.cost }}</md-table-cell>
                     <md-table-cell class="visible-on-hover">
-                      <md-button class="md-just-icon md-simple md-danger" @click="showSwalItems($event, index, 'vendors')">
+                      <md-button class="md-just-icon md-simple md-danger" @click="showSwalItems($event, index, 'vendors')" v-if="!readonly">
                         <md-icon>delete</md-icon>
                       </md-button>
                     </md-table-cell>
@@ -81,7 +71,7 @@
                 <p class="text-danger text-center" v-if="!componentObject.vendors.length">
                   No records were added yet.
                 </p>
-                <md-button class="md-button md-block md-primary md-size-5 md-layout-item center-icon" @click.native='showModalVendors({}, null)'>
+                <md-button class="md-button md-block md-primary md-size-5 md-layout-item center-icon" @click.native='showModalVendors({}, null)' v-if="!readonly">
                   <i class="material-icons">add</i> Add
                 </md-button>
               </md-tab>
@@ -98,7 +88,7 @@
                 <p class="text-danger text-center" v-if="!componentObject.todos.length">
                   No records were added yet.
                 </p>
-                <md-button class="md-button md-block md-primary md-size-5 md-layout-item center-icon" @click="showModalTodo({}, null)">
+                <md-button class="md-button md-block md-primary md-size-5 md-layout-item center-icon" @click="showModalTodo({}, null)" v-if="!readonly">
                   <i class="material-icons">add</i> Add
                 </md-button>
               </md-tab>
@@ -147,6 +137,7 @@
     props: {
       componentIndex: Number,
       componentObject: Object,
+      readonly: Boolean
     },
     name: 'event-card-component',
     data: function() {
@@ -157,7 +148,7 @@
         componentItem: null,
         componentItemIndex: null,
         todoItem: null,
-        todoIndex: null,
+        todoIndex: null
       }
     },
     mounted() {
@@ -275,7 +266,6 @@
   .md-tabs-navigation {
     overflow: auto;
     padding-left: 15px;
-    pointer-events: all;
   }
   .center-icon.md-button {
     padding-left: 6px;
@@ -301,5 +291,4 @@
       }
     }
   }
-
 </style>

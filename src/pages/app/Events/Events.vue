@@ -31,7 +31,7 @@
             <md-table-row slot="md-table-row" slot-scope="{ item }" @click="routeToEvent(item.id)">
               <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
               <md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>
-              <md-table-cell md-label="Date">{{ item.date }}</md-table-cell>
+              <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
               <md-table-cell md-label="Status">{{ item.status }}</md-table-cell>
             </md-table-row>
           </md-table>
@@ -70,11 +70,11 @@
           <a href="#pablo">{{ event.title }}</a>
         </h4>
         <div slot="description" class="card-description">
-          July 1st, 2018
+          {{ event.eventStartMillis | moment }}
         </div>
         <template slot="footer">
           <div class="price">
-            <h4>{{event.numberOfParticipants}} Guests &middot; 7 hours</h4>
+            <h4>{{event.numberOfParticipants}} Guests &middot; {{duration(event)}} hours</h4>
           </div>
           <div class="stats">
             <p class="category">
@@ -96,6 +96,7 @@
   } from "@/components";
 
   import Calendar from '../../../models/Calendar';
+  import moment from 'moment';
 
   export default {
     components: {
@@ -133,8 +134,16 @@
       };
     },
     methods: {
+      duration(event) { 
+        return (event.eventEndMillis - event.eventStartMillis) / 3600000
+      },
       routeToEvent(eventId) {
         this.$router.push({ path: `/events/${eventId}` });
+      }
+    },
+    filters: {
+      moment: function (date) {
+        return moment(date).format('MMMM Do, GGGG');
       }
     }
   };

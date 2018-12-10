@@ -1,20 +1,12 @@
 <template>
-  <div class="md-layout" :class="[{'read-only': readOnly}]">
+  <div class="md-layout">
 
-    <event-header-form :occasionOptions="occasionsArray" :formData="formData"></event-header-form>
+    <event-info :occasionOptions="occasionsArray" :event="event" v-bind:readonly="true"></event-info>
 
     <div class="md-layout-item md-size-100">
       <md-toolbar class="md-primary">
         <div class="md-toolbar-row">
           <div class="md-toolbar-section-start">
-            <drop-down direction="down">
-              <md-button slot="title" class="md-button md-block dropdown-toggle" data-toggle="dropdown">
-                <i class="material-icons">add</i> Add Component
-              </md-button>
-              <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
-                <li v-for="item in componentsList" :key="item.id" @click="createNewComponent(item)"><a>{{ item.value }}</a></li>
-              </ul>
-            </drop-down>
           </div>
           <div class="md-toolbar-section-end">
             <md-button class="md-just-icon md-simple md-toolbar-toggle">
@@ -36,9 +28,10 @@
       </md-toolbar>
     </div>
 
-    <event-card-component v-for="(component, index) in components"
+    <event-card-component v-for="(component, index) in event.components"
                           :componentObject="component"
                           :componentIndex="index"
+                          v-bind:readonly="true"
                           :key="'event-card-component-' + index">
 
     </event-card-component>
@@ -49,6 +42,7 @@
 <script>
 
   import EventHeaderForm from './components/Event-header-form.vue';
+  import EventInfo from './components/EventInfo.vue';
   import EventCardComponent from './components/Event-card-component.vue';
   import Calendar from '@/models/Calendar';
   import CalendarEvent from '@/models/CalendarEvent';
@@ -61,6 +55,7 @@
   export default {
     components: {
       EventHeaderForm,
+      EventInfo,
       EventCardComponent,
     },
     data: () => ({
@@ -70,7 +65,7 @@
       calendarId: null,
       occasionsArray: null,
       componentsList: null,
-      formData: null,
+      event: {},
       readOnly: true,
     }),
 
@@ -106,54 +101,22 @@
         return this.$store.state.eventData.components;
       }
     },
-    watch: {
-      '$route' (to, from) {
-        this.readOnly = ['EventEdit', 'EventNew'].indexOf(this.$route.name) === -1;
-      }
-    },
     mounted() {
       this.onResponsiveInverted();
-      this.readOnly = ['EventEdit', 'EventNew'].indexOf(this.$route.name) === -1;
       window.addEventListener("resize", this.onResponsiveInverted);
     },
     beforeDestroy() {
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
     created() {
-      Calendar.get().then((calendars) => {
-        this.calendarId = calendars[0].id;
-
-        let newEvent = new CalendarEvent().for(calendars[0]);
-        newEvent.get().then((eventsItem) => {
-          let editedItem = eventsItem.find((val) => val.id === this.$route.params.id);
-          if (editedItem) {
-            this.$store.state.eventData.components = editedItem.components;
-            this.formData = {
-              eventName: editedItem.title,
-              occasion: editedItem.occasion,
-              date: new Date(editedItem.eventStartMillis),
-              time: moment(editedItem.eventStartMillis).format('HH:00'),
-              duration: moment(editedItem.eventEndMillis).diff(editedItem.eventStartMillis, 'hours'),
-              participants: editedItem.numberOfParticipants,
-              status: editedItem.status,
-              budget: editedItem.totalBudget,
-              location: editedItem.location
-            }
-          }
+      Calendar.get().then(calendars => {
+        if(calendars.length === 0 ) {
+          return;
+        }
+        calendars[0].calendarEvents().find(this.$route.params.id).then(event => {
+          this.event = event;
         })
-
-      });
-      Occasion.get().then((occasions) => {
-        this.occasionsArray = occasions;
-      });
-      EventComponent.get().then((componentsList) => {
-        this.$store.state.componentsList = componentsList;
-        this.componentsList = componentsList;
-      });
-
-      Vendors.get().then((vendorsList) => {
-        this.$store.state.vendorsList = vendorsList;
-      });
+      })
     },
   };
 </script>

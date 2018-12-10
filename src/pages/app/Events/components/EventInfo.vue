@@ -1,0 +1,189 @@
+<template>
+  <div class="md-layout">
+    <div class="md-layout-item md-size-100">
+      <md-toolbar class="md-primary">
+        <div class="md-toolbar-row">
+          <div class="md-toolbar-section-start">
+            <h3 class="md-title">Invite co-producers to help you with this event</h3>
+          </div>
+          <div class="md-toolbar-section-end">
+            <md-button class="md-just-icon md-simple md-toolbar-toggle">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </md-button>
+
+            <div class="md-collapse">
+              <md-list>
+                <md-list-item>
+                  <md-button @click="editEvent()" class="md-success clickable-button">Edit</md-button>
+                </md-list-item>
+              </md-list>
+            </div>
+          </div>
+        </div>
+      </md-toolbar>
+    </div>
+
+    <div class="md-layout-item md-size-100">
+      <md-card class="md-layout-item md-size-100 event-form-padding">
+        <form class="md-layout">
+          <md-card class="md-layout-item md-size-50 md-small-size-100">
+
+            <md-field>
+              <md-icon class="md-accent">home</md-icon>
+              <label>Event Name: {{ event.title }}</label>
+            </md-field>
+
+            <md-field class="select-with-icon">
+              <md-icon class="md-accent">local_bar</md-icon>
+              <label>Occasion: {{ event.occasion }}</label>
+            </md-field>
+
+            <div style="display: flex;"> <!-- md-layout brokes the design -->
+              <div class="md-layout-item md-small-size-100" style="padding-left: 0;">
+                <label>Date: {{ event.eventStartMillis | formatDate }}</label>
+              </div>
+
+              <div class="md-layout-item md-small-size-100">
+                <md-field class="select-with-icon">
+                  <md-icon class="md-accent">query_builder</md-icon>
+                  <label>Time: {{ event.eventStartMillis | formatTime }}</label>
+                </md-field>
+              </div>
+
+              <div class="md-layout-item md-small-size-100" style="padding-right: 0;">
+                <md-field class="select-with-icon">
+                  <md-icon class="md-accent">hourglass_empty</md-icon>
+                  <label>Event duration in hours: {{ convertMillisToHours(event.eventEndMillis - event.eventStartMillis) }}</label>
+                </md-field>
+              </div>
+            </div>
+
+            <md-field>
+              <md-icon class="md-accent">person</md-icon>
+              <label>Number of Participants: {{ event.numberOfParticipants }}</label>
+            </md-field>
+
+            <md-field>
+              <md-icon class="md-accent">location_on</md-icon>
+              <label>Location: {{ event.location }}</label>
+            </md-field>
+
+          </md-card>
+
+
+          <div class="md-layout-item md-size-50 md-small-size-100">
+            <div class="event-status-field">
+              <div class="md-layout">
+                <label class="md-layout-item md-size-20 md-form-label">
+                  Status: {{ event.status }}
+                </label>
+              </div>
+            </div>
+
+            <chart-card
+                :chart-data="pieChart.data"
+                :chart-options="pieChart.options"
+                chart-type="Pie"
+                header-icon
+                chart-inside-content>
+              <template slot="footer">
+                <div class="md-layout">
+                  <div class="md-layout-item">
+                    <i class="fa fa-circle text-info"></i> Remaining Budget 23% ($3100)
+                  </div>
+                  <div class="md-layout-item">
+                    <i class="fa fa-circle text-danger"></i> Spent Budget 77% ($10395)
+                  </div>
+
+                  <md-field style="margin: 20px 0 10px;">
+                    <md-icon class="md-accent">attach_money</md-icon>
+                    <label>Total Budget: ${{ event.totalBudget }}</label>
+                  </md-field>
+                </div>
+              </template>
+            </chart-card>
+          </div>
+        </form>
+      </md-card>
+    </div>
+  </div>
+</template>
+<script>
+
+  import {
+    ChartCard,
+  } from "@/components";
+  import CalendarEvent from '@/models/CalendarEvent';
+  import Calendar from '@/models/Calendar';
+  import moment from 'moment';
+
+  export default {
+    name: 'event-info',
+    components: {
+      ChartCard,
+    },
+    props: {
+      occasionOptions: Array,
+      event: Object
+    },
+
+    data: () => ({
+      pieChart: {
+        data: {
+          labels: [" ", " "], // should be empty to remove text from chart
+          series: [23, 77]
+        },
+        options: {
+          height: "230px"
+        }
+      },
+    }),
+    methods: {
+      convertHoursToMillis(hours) {
+        return hours * 60 * 60 * 1000;
+      },
+      convertMillisToHours(millis) {
+        return millis / 3600000
+      },
+      editEvent() {
+        this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
+      }
+    },
+  filters: {
+      formatDate: function (date) {
+        return moment(date).format('YYYY-MM-DD');
+      },
+      formatTime: function(date) {
+        return moment(date).format('HH:mm');
+      }
+    }
+  }
+</script>
+
+<style lang="scss">
+  .event-status-field {
+    position: absolute;
+    right: 31px;
+    top: -10px;
+
+    label {
+      font-weight: 400;
+      position: relative;
+      top: 2px;
+    }
+    .md-layout {
+      align-items: center;
+    }
+  }
+  .event-form-padding {
+    padding-top: 20px;
+  }
+  .md-datepicker .md-icon.md-theme-default.md-icon-image svg {
+    fill: #ff5252;
+  }
+  .clickable-button {
+    pointer-events: all;
+  }
+</style>

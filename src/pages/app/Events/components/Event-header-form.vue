@@ -298,7 +298,7 @@
               }).for(calendars[0]);
 
               newEvent.save().then(response => {
-                console.log(response);
+                this.$router.push({ path: '/events' });
               })
             });
           }
