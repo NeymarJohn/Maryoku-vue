@@ -90,61 +90,61 @@
         },
         computed: {
             ...mapState('teamVuex', ['teamMemberData']),
-//            street: {
-//                get() {
-//                    return this.teamMemberData.street
-//                },
-//                set(value) {
-//                    this.setMemberProperty({key: 'street', actualValue: value})
-//                }
-//            },
-//            streetNo: {
-//                get() {
-//                    return this.teamMemberData.streetNo
-//                },
-//                set(value) {
-//                    this.setMemberProperty({key: 'streetNo', actualValue: value})
-//                }
-//            },
-//            city: {
-//                get() {
-//                    return this.teamMemberData.city
-//                },
-//                set(value) {
-//                    this.setMemberProperty({key: 'city', actualValue: value})
-//                }
-//            },
-//            country: {
-//                get() {
-//                    return this.teamMemberData.country
-//                },
-//                set(value) {
-//                    this.setMemberProperty({key: 'country', actualValue: value})
-//                }
-//            }
+            street: {
+                get() {
+                    return this.teamMemberData.street
+                },
+                set(value) {
+                    this.setMemberProperty({key: 'street', actualValue: value})
+                }
+            },
+            streetNo: {
+                get() {
+                    return this.teamMemberData.streetNo
+                },
+                set(value) {
+                    this.setMemberProperty({key: 'streetNo', actualValue: value})
+                }
+            },
+            city: {
+                get() {
+                    return this.teamMemberData.city
+                },
+                set(value) {
+                    this.setMemberProperty({key: 'city', actualValue: value})
+                }
+            },
+            country: {
+                get() {
+                    return this.teamMemberData.country
+                },
+                set(value) {
+                    this.setMemberProperty({key: 'country', actualValue: value})
+                }
+            }
         },
         data() {
             return {
                 touched: {
                     street: false
                 },
-//                countryOptions: ["One", "Two", "Three", "Four", "Five", "Six"],
-//                modelValidations: {
-//                    street: {
-//                        required: true,
-//                        min: 5
-//                    },
-//                    streetNo: {
-//                        required: true,
-//                        min: 5
-//                    },
-//                    city: {
-//                        required: true
-//                    },
-//                    country: {
-//                        required: true
-//                    }
-//                }
+                countryOptions: ["One", "Two", "Three", "Four", "Five", "Six"],
+                modelValidations: {
+                    street: {
+                        required: true,
+                        min: 5
+                    },
+                    streetNo: {
+                        required: true,
+                        min: 5
+                    },
+                    city: {
+                        required: true
+                    },
+                    country: {
+                        required: true
+                    }
+                }
             };
         },
         methods: {
@@ -162,12 +162,12 @@
             }
         },
         watch: {
-//            street() {
-//                this.touched.street = true;
-//            },
-//            streetNo() {
-//                this.touched.streetNo = true;
-//            }
+            street() {
+                this.touched.street = true;
+            },
+            streetNo() {
+                this.touched.streetNo = true;
+            }
         }
     };
 </script>

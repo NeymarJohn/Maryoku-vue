@@ -1,25 +1,27 @@
 <template>
     <div>
+        <h5 class="info-text"> Let's start with the basic information (with validation)</h5>
         <div class="md-layout">
-            <div class="md-layout-item md-small-size-100">
-                <!--<div class="picture-container">-->
-                    <!--<div class="picture">-->
-                        <!--<div v-if="!image">-->
-                            <!--<img :src="avatar" class="picture-src" title="">-->
-                        <!--</div>-->
-                        <!--<div v-else>-->
-                            <!--<img v-model="image" :src="image"/>-->
-                        <!--</div>-->
-                        <!--<input type="file" @change="onFileChange">-->
-                    <!--</div>-->
-                    <!--<h6 class="description">Choose Picture</h6>-->
-                <!--</div>-->
-            <!--</div>-->
-            <div class="md-layout-item md-size-95 md-small-size-100">
+            <div class="md-layout-item md-size-40 md-small-size-100">
+                <div class="picture-container">
+                    <div class="picture">
+                        <div v-if="!image">
+                            <img :src="avatar" class="picture-src" title="">
+                        </div>
+                        <div v-else>
+                            <img :src="image"/>
+                        </div>
+                        <input type="file" @change="onFileChange">
+                    </div>
+                    <h6 class="description">Choose Picture</h6>
+                </div>
+            </div>
+            <div class="md-layout-item md-size-60 mt-4 md-small-size-100">
                 <md-field :class="[
           {'md-valid': !errors.has('firstName') && touched.firstName},
           {'md-form-group': true},
           {'md-error': errors.has('firstName')}]">
+                    <md-icon>face</md-icon>
                     <label>First Name</label>
                     <md-input
                         v-model="firstName"
@@ -37,54 +39,55 @@
                     </slide-y-down-transition>
                 </md-field>
 
-                <!--<md-field :class="[-->
-          <!--{'md-valid': !errors.has('userName') && touched.userName},-->
-          <!--{'md-form-group': true},-->
-          <!--{'md-error': errors.has('userName')}]">-->
-                    <!--<md-icon>face</md-icon>-->
-                    <!--<label>User Name</label>-->
-                    <!--<md-input-->
-                        <!--v-model="userName"-->
-                        <!--data-vv-name="firstName"-->
-                        <!--type="text"-->
-                        <!--name="userName"-->
-                        <!--required-->
-                        <!--v-validate="modelValidations.userName">-->
-                    <!--</md-input>-->
-                    <!--<slide-y-down-transition>-->
-                        <!--<md-icon class="error" v-show="errors.has('userName')">close</md-icon>-->
-                    <!--</slide-y-down-transition>-->
-                    <!--<slide-y-down-transition>-->
-                        <!--<md-icon class="success" v-show="!errors.has('userName') && touched.firstName">done</md-icon>-->
-                    <!--</slide-y-down-transition>-->
-                <!--</md-field>-->
+                <md-field :class="[
+          {'md-valid': !errors.has('userName') && touched.userName},
+          {'md-form-group': true},
+          {'md-error': errors.has('userName')}]">
+                    <md-icon>face</md-icon>
+                    <label>User Name</label>
+                    <md-input
+                        v-model="userName"
+                        data-vv-name="firstName"
+                        type="text"
+                        name="userName"
+                        required
+                        v-validate="modelValidations.userName">
+                    </md-input>
+                    <slide-y-down-transition>
+                        <md-icon class="error" v-show="errors.has('userName')">close</md-icon>
+                    </slide-y-down-transition>
+                    <slide-y-down-transition>
+                        <md-icon class="success" v-show="!errors.has('userName') && touched.firstName">done</md-icon>
+                    </slide-y-down-transition>
+                </md-field>
 
-                <!--<md-field :class="[-->
-          <!--{'md-valid': !errors.has('password') && touched.password},-->
-          <!--{'md-form-group': true},-->
-          <!--{'md-error': errors.has('password')}]">-->
-                    <!--<md-icon>face</md-icon>-->
-                    <!--<label>Password</label>-->
-                    <!--<md-input-->
-                        <!--v-model="password"-->
-                        <!--data-vv-name="password"-->
-                        <!--type="password"-->
-                        <!--name="password"-->
-                        <!--required-->
-                        <!--v-validate="modelValidations.password">-->
-                    <!--</md-input>-->
-                    <!--<slide-y-down-transition>-->
-                        <!--<md-icon class="error" v-show="errors.has('password')">close</md-icon>-->
-                    <!--</slide-y-down-transition>-->
-                    <!--<slide-y-down-transition>-->
-                        <!--<md-icon class="success" v-show="!errors.has('password') && touched.firstName">done</md-icon>-->
-                    <!--</slide-y-down-transition>-->
-                <!--</md-field>-->
+                <md-field :class="[
+          {'md-valid': !errors.has('password') && touched.password},
+          {'md-form-group': true},
+          {'md-error': errors.has('password')}]">
+                    <md-icon>face</md-icon>
+                    <label>Password</label>
+                    <md-input
+                        v-model="password"
+                        data-vv-name="password"
+                        type="password"
+                        name="password"
+                        required
+                        v-validate="modelValidations.password">
+                    </md-input>
+                    <slide-y-down-transition>
+                        <md-icon class="error" v-show="errors.has('password')">close</md-icon>
+                    </slide-y-down-transition>
+                    <slide-y-down-transition>
+                        <md-icon class="success" v-show="!errors.has('password') && touched.firstName">done</md-icon>
+                    </slide-y-down-transition>
+                </md-field>
 
                 <md-field :class="[
           {'md-valid': !errors.has('lastName') && touched.lastName},
           {'md-form-group': true},
           {'md-error': errors.has('lastName')}]">
+                    <md-icon>record_voice_over</md-icon>
                     <label>Last Name</label>
                     <md-input
                         v-model="lastName"
@@ -103,11 +106,12 @@
                 </md-field>
             </div>
 
-            <div class="md-layout-item md-size-95 md-small-size-100">
+            <div class="md-layout-item md-size-95 ml-auto mt-4 md-small-size-100">
                 <md-field :class="[
           {'md-valid': !errors.has('email') && touched.email},
           {'md-form-group': true},
           {'md-error': errors.has('email')}]">
+                    <md-icon>email</md-icon>
                     <label>Email</label>
                     <md-input
                         v-model="emailAddress"
@@ -125,26 +129,6 @@
                     </slide-y-down-transition>
                 </md-field>
             </div>
-                <div class="md-layout-item md-size-95 md-small-size-100">
-                <md-field>
-                    <label for="select">Single Select</label>
-                    <md-select v-model="role" name="select">
-                        <md-option value="guest">Guest</md-option>
-                        <md-option value="collaborator">Collaborator</md-option>
-                    </md-select>
-                </md-field>
-                </div>
-                <div class="md-layout-item md-size-95 md-small-size-100">
-                <md-field>
-                    <label for="movies">Permission</label>
-                    <md-select v-model="permissions" name="permissions" id="permissions" multiple>
-                        <md-option value="View">View</md-option>
-                        <md-option value="Manage">Manage</md-option>
-                        <md-option value="Vote">Vote</md-option>
-                    </md-select>
-                </md-field>
-                </div>
-        </div>
         </div>
     </div>
 </template>
@@ -166,7 +150,7 @@
         },
         data() {
             return {
-                name: 'MultipleSelect',
+                image: "",
                 single: null,
                 email: "",
                 touched: {
@@ -186,14 +170,14 @@
                         required: true,
                         email: true
                     },
-//                    username: {
-//                        required: true,
-//                        min: 5
-//                    },
-//                    password: {
-//                        required: true,
-//                        min: 5
-//                    }
+                    username: {
+                        required: true,
+                        min: 5
+                    },
+                    password: {
+                        required: true,
+                        min: 5
+                    }
                 }
             }
         },
@@ -208,6 +192,7 @@
                 },
 
             },
+
             lastName: {
                 get() {
                     return this.teamMemberData.lastName
@@ -222,50 +207,25 @@
                     return this.teamMemberData.emailAddress
                 },
                 set(value) {
-                  this.setMemberProperty({key: 'emailAddress', actualValue: value});
-                  this.setMemberProperty({key: 'username', actualValue: value});
+                    this.setMemberProperty({key: 'emailAddress', actualValue: value})
                 }
             },
-              role: {
+            userName: {
                 get() {
-                  return this.teamMemberData.role
+                    return this.teamMemberData.userName
                 },
                 set(value) {
-                  this.setMemberProperty({key: 'role', actualValue: value})
+                    this.setMemberProperty({key: 'username', actualValue: value})
                 }
-              },
-              permissions: {
+            },
+            password: {
                 get() {
-                  return this.teamMemberData.permissions
+                    return this.teamMemberData.password
                 },
                 set(value) {
-                  this.setMemberProperty({key: 'permissions', actualValue: value})
+                    this.setMemberProperty({key: 'password', actualValue: value})
                 }
-              },
-//                userName: {
-//                    get() {
-//                        return this.teamMemberData.userName
-//                    },
-//                    set(value) {
-//                        this.setMemberProperty({key: 'username', actualValue: value})
-//                    }
-//                },
-//            password: {
-//                get() {
-//                    return this.teamMemberData.password
-//                },
-//                set(value) {
-//                    this.setMemberProperty({key: 'password', actualValue: value})
-//                }
-//            },
-//          image: {
-//            get() {
-//              return this.teamMemberData.pictureUrl
-//            },
-//            set(value) {
-//              this.setMemberProperty({key: 'pictureUrl', actualValue: value})
-//            }
-//          }
+            }
         },
         created() {
             this.$store.registerModule('teamVuex', teamVuexModule);
@@ -280,30 +240,32 @@
                 this.model.imageUrl = URL.createObjectURL(file.raw);
             }
             ,
-              getError(fieldName) {
+            getError(fieldName) {
                 return this.errors.first(fieldName);
-              },
-              validate() {
+            }
+            ,
+            validate() {
                 return this.$validator.validateAll().then(res => {
-                  this.$emit("on-validated", res);
-                  return res;
+                    this.$emit("on-validated", res);
+                    return res;
                 });
-              },
-//                onFileChange(e) {
-//                var files = e.target.files || e.dataTransfer.files;
-//                if (!files.length) return;
-//                this.createImage(files[0]);
-//            }
-//            ,
-//            createImage(file) {
-//                var reader = new FileReader();
-//                var vm = this;
-//
-//                reader.onload = e => {
-//                    vm.image = e.target.result;
-//                };
-//                reader.readAsDataURL(file);
-//            }
+            }
+            ,
+            onFileChange(e) {
+                var files = e.target.files || e.dataTransfer.files;
+                if (!files.length) return;
+                this.createImage(files[0]);
+            }
+            ,
+            createImage(file) {
+                var reader = new FileReader();
+                var vm = this;
+
+                reader.onload = e => {
+                    vm.image = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
         }
         ,
         watch: {
@@ -317,12 +279,12 @@
             email() {
                 this.touched.email = true;
             },
-//            username() {
-//                this.touched.username = true;
-//            },
-//            password() {
-//                this.touched.password = true;
-//            }
+            username() {
+                this.touched.username = true;
+            },
+            password() {
+                this.touched.password = true;
+            }
         }
     }
 </script>
