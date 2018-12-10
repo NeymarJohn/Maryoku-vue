@@ -334,13 +334,15 @@ let appPages = {
     },
     {
       path: '/events/new',
-      name: 'Create New Event',
-      component: EventDetails
+      name: 'EventNew',
+      component: EventDetails,
+      meta: {title: 'Create New Event'},
     },
     {
       path: "/events/:id",
-      name: "Event Details",
-      component: EventDetails
+      name: "EventDetails",
+      component: EventDetails,
+      meta: {title: 'Event Details'},
     },
     {
       path: "/events/:id/edit",

@@ -15,7 +15,7 @@
 
             <div class="md-collapse">
               <md-list>
-                <md-list-item v-if="'EventEdit'.indexOf(this.$route.name) === -1">
+                <md-list-item v-if="['EventEdit', 'EventNew'].indexOf(this.$route.name) === -1">
                   <md-button @click="editEvent()" class="md-success clickable-button">Edit</md-button>
                 </md-list-item>
                 <md-list-item>

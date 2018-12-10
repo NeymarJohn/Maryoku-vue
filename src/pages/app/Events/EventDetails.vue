@@ -108,12 +108,12 @@
     },
     watch: {
       '$route' (to, from) {
-        this.readOnly = 'EventEdit'.indexOf(this.$route.name) === -1;
+        this.readOnly = ['EventEdit', 'EventNew'].indexOf(this.$route.name) === -1;
       }
     },
     mounted() {
       this.onResponsiveInverted();
-      this.readOnly = 'EventEdit'.indexOf(this.$route.name) === -1;
+      this.readOnly = ['EventEdit', 'EventNew'].indexOf(this.$route.name) === -1;
       window.addEventListener("resize", this.onResponsiveInverted);
     },
     beforeDestroy() {
