@@ -275,6 +275,7 @@
   .md-tabs-navigation {
     overflow: auto;
     padding-left: 15px;
+    pointer-events: all;
   }
   .center-icon.md-button {
     padding-left: 6px;
@@ -300,4 +301,5 @@
       }
     }
   }
+
 </style>
