@@ -17,7 +17,7 @@
 
             <div class="md-collapse">
               <md-list>
-                <md-list-item @click="sentProposalRequest()">
+                <md-list-item>
                   <i class="material-icons" style="margin-right: 10px;">visibility</i> Request Proposal
                   <p class="hidden-lg hidden-md">Invite</p>
                 </md-list-item>
@@ -91,10 +91,6 @@
           values: [],
           vendors: [],
         })
-      },
-      sentProposalRequest() {
-        let routeData = this.$router.resolve({ path: "/events/proposal" });
-        window.open(routeData.href, '_blank');
       }
     },
     computed: {

@@ -15,9 +15,6 @@
 
             <div class="md-collapse">
               <md-list>
-                <md-list-item v-if="['EventEdit', 'EventNew'].indexOf(this.$route.name) === -1">
-                  <md-button @click="editEvent()" class="md-success clickable-button">Edit</md-button>
-                </md-list-item>
                 <md-list-item>
                   <i class="material-icons">add</i>
                   <p class="hidden-lg hidden-md">Invite</p>
@@ -205,6 +202,8 @@
     props: {
       occasionOptions: Array,
       formData: Object,
+      shouldUpdate: Boolean,
+      event: Object
     },
 
     data: () => ({
@@ -278,10 +277,35 @@
       }
     },
     methods: {
-      validateEvent () {
-        this.$validator.validateAll().then(isValid => {
-          if (isValid) {
-            Calendar.get().then((calendars) => {
+      updateEvent() {
+        Calendar.get().then(calendars => {
+          if(calendars.length === 0 ) {
+            return;
+          }
+          calendars[0].calendarEvents().get().then(editedEvents => {
+            let editedEvent = editedEvents.find(e => { return e.id = this.$route.params.id; })
+            editedEvent.title = this.form.eventName;
+            editedEvent.eventStartMillis =this.getEventStartInMillis();
+            editedEvent.eventEndMillis = this.getEventEndInMillis();
+            editedEvent.location = this.form.location;
+            editedEvent.occasion = this.form.occasion;
+            editedEvent.numberOfParticipants = this.form.participants;
+            editedEvent.totalBudget = this.form.budget
+            editedEvent.status = this.form.status;
+            editedEvent.currency = 'USD'; // HARDCODED, REMOVE AFTER BACK WILL FIX API
+            editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+            editedEvent.components = this.$store.state.eventData.components;
+            editedEvent.save().then(response => {
+              this.$router.push({ path: '/events' });
+            });
+          });
+
+        })
+        
+        
+      },
+      createEvent() {
+        Calendar.get().then((calendars) => {
               let newEvent = new CalendarEvent({
                 calendar: {id: calendars[0].id},
                 title: this.form.eventName,
@@ -301,6 +325,11 @@
                 this.$router.push({ path: '/events' });
               })
             });
+      },
+      validateEvent () {
+        this.$validator.validateAll().then(isValid => {
+          if (isValid) {
+            this.$props.shouldUpdate ? this.updateEvent() : this.createEvent();
           }
         });
       },

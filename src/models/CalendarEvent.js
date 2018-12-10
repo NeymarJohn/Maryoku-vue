@@ -1,4 +1,5 @@
 import Model from './Model';
+import Calendar from './Calendar';
 import CalendarEventInspiration from './CalendarEventInspiration';
 
 export default class CalendarEvent extends Model {
@@ -8,6 +9,10 @@ export default class CalendarEvent extends Model {
 
   components() {
     return this.components;
+  }
+
+  calendar() {
+    return this.belongsTo(Calendar)
   }
 
   inspirations() {

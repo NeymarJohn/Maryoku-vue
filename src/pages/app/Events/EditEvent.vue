@@ -1,7 +1,7 @@
 <template>
-  <div class="md-layout" :class="[{'read-only': readOnly}]">
+  <div class="md-layout">
 
-    <event-header-form :occasionOptions="occasionsArray" :formData="formData"></event-header-form>
+    <event-header-form :occasionOptions="occasionsArray" :formData="formData" v-bind:shouldUpdate="true" :event="event"></event-header-form>
 
     <div class="md-layout-item md-size-100">
       <md-toolbar class="md-primary">
@@ -70,6 +70,7 @@
       calendarId: null,
       occasionsArray: null,
       componentsList: null,
+      event: {},
       formData: null,
       readOnly: true,
     }),
@@ -103,46 +104,36 @@
         myState: 'getMyState'
       }),
       components() {
-        console.log(this.$store.state.eventData.components);
         return this.$store.state.eventData.components;
-      }
-    },
-    watch: {
-      '$route' (to, from) {
-        this.readOnly = ['EventEdit', 'EventNew'].indexOf(this.$route.name) === -1;
       }
     },
     mounted() {
       this.onResponsiveInverted();
-      this.readOnly = ['EventEdit', 'EventNew'].indexOf(this.$route.name) === -1;
       window.addEventListener("resize", this.onResponsiveInverted);
     },
     beforeDestroy() {
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
     created() {
-      Calendar.get().then((calendars) => {
-        this.calendarId = calendars[0].id;
-
-        let newEvent = new CalendarEvent().for(calendars[0]);
-        newEvent.get().then((eventsItem) => {
-          let editedItem = eventsItem.find((val) => val.id === this.$route.params.id);
-          if (editedItem) {
-            this.$store.state.eventData.components = editedItem.components;
-            this.formData = {
-              eventName: editedItem.title,
-              occasion: editedItem.occasion,
-              date: new Date(editedItem.eventStartMillis),
-              time: moment(editedItem.eventStartMillis).format('HH:00'),
-              duration: moment(editedItem.eventEndMillis).diff(editedItem.eventStartMillis, 'hours'),
-              participants: editedItem.numberOfParticipants,
-              status: editedItem.status,
-              budget: editedItem.totalBudget,
-              location: editedItem.location
-            }
+      Calendar.get().then(calendars => {
+        if(calendars.length === 0 ) {
+          return;
+        }
+        calendars[0].calendarEvents().find(this.$route.params.id).then(event => {
+          this.$store.state.eventData.components = event.components;
+          this.event = event;
+          this.formData = {
+            eventName: event.title,
+            occasion: event.occasion,
+            date: new Date(event.eventStartMillis),
+            time: moment(event.eventStartMillis).format('HH:00'),
+            duration: moment(event.eventEndMillis).diff(event.eventStartMillis, 'hours'),
+            participants: event.numberOfParticipants,
+            status: event.status,
+            budget: event.totalBudget,
+            location: event.location
           }
         })
-
       });
       Occasion.get().then((occasions) => {
         this.occasionsArray = occasions;

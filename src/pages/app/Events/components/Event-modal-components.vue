@@ -125,13 +125,11 @@
         this.$validator.validateAll().then(isValid => {
           if (isValid) {
             let store = this.$store.state.eventData.components[this.componentIndex];
-            this.form.propertyId = 'custom';
 
             if (this.componentItemIndex !== null) {
               Vue.set(store.values, this.componentItemIndex, this.form);
             } else {
               delete this.form.id; // remove id key
-              this.form.propertyId = 'custom';
               store.values.push(this.form);
             }
 
@@ -156,6 +154,7 @@
 
           propertiesList.get().then(response => {
             this.propertyValues = response.length ? response.map((val) => val.title) : [];
+            console.log(response);
           });
       });
     },
