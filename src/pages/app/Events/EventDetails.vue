@@ -25,7 +25,7 @@
 
             <div class="md-collapse">
               <md-list>
-                <md-list-item>
+                <md-list-item @click="sentProposalRequest()">
                   <i class="material-icons" style="margin-right: 10px;">visibility</i> Request Proposal
                   <p class="hidden-lg hidden-md">Invite</p>
                 </md-list-item>
@@ -37,6 +37,7 @@
     </div>
 
     <event-card-component v-for="(component, index) in components"
+                          v-if="$store.state.vendorsList"
                           :componentObject="component"
                           :componentIndex="index"
                           :key="'event-card-component-' + index">
@@ -90,12 +91,19 @@
         this.multiLevel3 = false;
       },
       createNewComponent(item) {
+        if (!this.$store.state.eventData.components) {
+          this.$store.state.eventData.components = [];
+        }
         this.$store.state.eventData.components.push({
           componentId: item.id,
           todos: [],
           values: [],
           vendors: [],
         })
+      },
+      sentProposalRequest() {
+        let routeData = this.$router.resolve({ path: "/events/proposal" });
+        window.open(routeData.href, '_blank');
       }
     },
     computed: {

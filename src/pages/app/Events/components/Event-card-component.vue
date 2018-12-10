@@ -152,14 +152,8 @@
       }
     },
     mounted() {
-      if (this.$store.state.vendorsList) {
-        this.getVendorObjectsArray();
-      } else {
-        let _this = this;
-        setTimeout(function () { // wait until vendors list will finish loading from server
-          _this.getVendorObjectsArray();
-        }, 1000);
-      }
+      this.getVendorObjectsArray();
+      console.log(this.componentObject)
     },
     watch: {
       componentObject: {
@@ -173,6 +167,7 @@
       getVendorObjectsArray() {
         let _this = this;
         this.vendorsObjectsArray = [];
+        console.log(this.$store.state.vendorsList);
         this.componentObject.vendors.forEach(function(vendorItem) {
           let vendorObj = _this.$store.state.vendorsList.find((val) => val.id === vendorItem.vendorId);
           vendorObj.cost = vendorItem.cost;
@@ -180,7 +175,6 @@
 
           _this.vendorsObjectsArray.push(vendorObj); // TODO: fix object reference
         });
-        console.log(this.vendorsObjectsArray);
       },
 
       showInspirations() {
@@ -266,6 +260,7 @@
   .md-tabs-navigation {
     overflow: auto;
     padding-left: 15px;
+    pointer-events: all;
   }
   .center-icon.md-button {
     padding-left: 6px;
@@ -291,4 +286,5 @@
       }
     }
   }
+
 </style>
