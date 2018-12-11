@@ -43,6 +43,9 @@
 </template>
 <script>
   import { Modal, ProductCard } from "@/components";
+  import CalendarEventInspiration from '@/models/CalendarEventInspiration';
+  import CalendarEvent from '@/models/CalendarEvent';
+  import Calendar from '@/models/Calendar';
 
   export default {
     name: 'event-modal-inspirations',
@@ -97,7 +100,22 @@
       openNewTab(link) {
         window.open(link, true);
       }
-    }
+    },
+    created() {
+      Calendar.get().then(calendars => {
+        if (calendars.length === 0) {
+          return;
+        }
+        calendars[0].calendarEvents().get().then(events => {
+          let event = events.find(e => { return e.id = this.$route.params.id; })
+          let inspirations = new CalendarEventInspiration({}).for(calendars[0], event);
+
+          inspirations.get().then(response => {
+            console.log(response);
+          })
+        });
+      });
+    },
   }
 </script>
 <style lang="scss">
