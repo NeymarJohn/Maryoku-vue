@@ -144,7 +144,6 @@
             if (this.todoIndex !== null) {
               Vue.set(store.todos, this.todoIndex, this.form);
             } else {
-              delete this.form.id; // remove id for new item
               store.todos.push(this.form);
             }
 

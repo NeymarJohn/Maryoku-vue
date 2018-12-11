@@ -29,7 +29,6 @@
     </div>
 
     <event-card-component v-for="(component, index) in event.components"
-                          v-if="$store.state.vendorsList"
                           :componentObject="component"
                           :componentIndex="index"
                           v-bind:readonly="true"
@@ -103,7 +102,7 @@
         myState: 'getMyState'
       }),
       components() {
-        return this.event.components;
+        return this.$store.state.eventData.components;
       }
     },
     mounted() {
@@ -121,11 +120,7 @@
         calendars[0].calendarEvents().find(this.$route.params.id).then(event => {
           this.event = event;
         })
-      });
-
-      Vendors.get().then((vendorsList) => {
-        this.$store.state.vendorsList = vendorsList;
-      });
+      })
     },
   };
 </script>
