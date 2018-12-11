@@ -153,7 +153,7 @@
     }),
     computed: {
       galleryImages() {
-        return this.event.images.map((val) => { return {'src': val, 'thumb': val}}) || [];
+        return this.event.images ? this.event.images.map((val) => { return {'src': val, 'thumb': val}}) : [];
       },
       spentBudget() {
         let totalSpent = 0;
