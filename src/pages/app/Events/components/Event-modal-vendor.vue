@@ -171,7 +171,7 @@
 
             // TODO: optimize
             // if editing existing
-            if (this.vendorIndex > -1) {
+            if (this.vendorIndex !== null && this.vendorIndex > -1) {
               // and DOESN'T CREATE vendor
               if (this.selectedFromVendors) {
                 vendorId = this.changedVendorItem ? this.changedVendorItem.id : this.vendorItem.id;

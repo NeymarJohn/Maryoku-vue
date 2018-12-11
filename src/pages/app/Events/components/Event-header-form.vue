@@ -128,7 +128,7 @@
               <span class="md-error" v-if="errors.has('location')">The location is required</span>
             </md-field>
 
-            <div class="md-layout-item md-size-100">
+            <div class="header-image-wrapper">
               <h4 class="card-title">Choose Event Image</h4>
               <div class="file-input">
                 <div v-if="!imageRegular">
@@ -173,7 +173,7 @@
             </div>
 
             <chart-card
-                v-if="form.budget && spentBudget"
+                v-if="form.budget && spentBudget > -1"
                 :chart-data="pieChart.data"
                 :chart-options="pieChart.options"
                 chart-type="Pie"
@@ -182,10 +182,10 @@
               <template slot="footer">
                 <div class="md-layout">
                   <div class="md-layout-item">
-                    <i class="fa fa-circle text-info"></i> Remaining Budget 23% ($3100)
+                    <i class="fa fa-circle text-info"></i> Remaining Budget (${{ form.budget - spentBudget }})
                   </div>
                   <div class="md-layout-item">
-                    <i class="fa fa-circle text-danger"></i> Spent Budget 77% ($10395)
+                    <i class="fa fa-circle text-danger"></i> Spent Budget (${{ spentBudget }})
                   </div>
 
                   <md-field :class="[{'md-error': errors.has('budget')}]" style="margin: 20px 0 10px;">
@@ -465,5 +465,8 @@
   }
   .clickable-button {
     pointer-events: all;
+  }
+  .header-image-wrapper {
+    margin-bottom: 20px;
   }
 </style>

@@ -85,6 +85,7 @@
             </div>
 
             <chart-card
+                v-if="event.totalBudget && spentBudget > -1"
                 :chart-data="pieChart.data"
                 :chart-options="pieChart.options"
                 chart-type="Pie"
@@ -93,10 +94,10 @@
               <template slot="footer">
                 <div class="md-layout">
                   <div class="md-layout-item">
-                    <i class="fa fa-circle text-info"></i> Remaining Budget 23% ($3100)
+                    <i class="fa fa-circle text-info"></i> Remaining Budget (${{ event.budget - spentBudget }})
                   </div>
                   <div class="md-layout-item">
-                    <i class="fa fa-circle text-danger"></i> Spent Budget 77% ($10395)
+                    <i class="fa fa-circle text-danger"></i> Spent Budget (${{ spentBudget }})
                   </div>
 
                   <md-field style="margin: 20px 0 10px;">
@@ -127,21 +128,39 @@
       ChartCard,
     },
     props: {
-      occasionOptions: Array,
       event: Object
     },
 
     data: () => ({
-      pieChart: {
-        data: {
-          labels: [" ", " "], // should be empty to remove text from chart
-          series: [23, 77]
-        },
-        options: {
-          height: "230px"
+
+    }),
+    computed: {
+      spentBudget() {
+        let totalSpent = 0;
+
+        if (this.event.components) {
+          this.event.components.forEach(function(component) {
+            if (component.vendors) {
+              component.vendors.forEach(function (val) {
+                totalSpent += val.cost;
+              });
+            }
+          })
+        }
+        return totalSpent;
+      },
+      pieChart() {
+        return {
+          data: {
+            labels: [" ", " "], // should be empty to remove text from chart
+            series: [(this.event.totalBudget - this.spentBudget) / this.event.totalBudget, this.spentBudget / this.event.totalBudget]
+          },
+          options: {
+            height: "230px"
+          }
         }
       },
-    }),
+    },
     methods: {
       convertHoursToMillis(hours) {
         return hours * 60 * 60 * 1000;
