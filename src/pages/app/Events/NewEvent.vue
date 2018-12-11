@@ -37,6 +37,7 @@
     </div>
 
     <event-card-component v-for="(component, index) in components"
+                          v-if="$store.state.vendorsList"
                           :componentObject="component"
                           :componentIndex="index"
                           :key="'event-card-component-' + index">
@@ -90,7 +91,7 @@
         this.multiLevel3 = false;
       },
       createNewComponent(item) {
-        if (!this.$store.state.eventData.components) {
+        if (!this.$store.state.eventData.components.length) {
           this.$store.state.eventData.components = [];
         }
         this.$store.state.eventData.components.push({
@@ -127,29 +128,6 @@
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
     created() {
-      Calendar.get().then((calendars) => {
-        this.calendarId = calendars[0].id;
-
-        let newEvent = new CalendarEvent().for(calendars[0]);
-        newEvent.get().then((eventsItem) => {
-          let editedItem = eventsItem.find((val) => val.id === this.$route.params.id);
-          if (editedItem) {
-            this.$store.state.eventData.components = editedItem.components;
-            this.formData = {
-              eventName: editedItem.title,
-              occasion: editedItem.occasion,
-              date: new Date(editedItem.eventStartMillis),
-              time: moment(editedItem.eventStartMillis).format('HH:00'),
-              duration: moment(editedItem.eventEndMillis).diff(editedItem.eventStartMillis, 'hours'),
-              participants: editedItem.numberOfParticipants,
-              status: editedItem.status,
-              budget: editedItem.totalBudget,
-              location: editedItem.location
-            }
-          }
-        })
-
-      });
       Occasion.get().then((occasions) => {
         this.occasionsArray = occasions;
       });

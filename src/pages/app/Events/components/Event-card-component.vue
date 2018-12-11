@@ -153,7 +153,9 @@
     },
     mounted() {
       this.getVendorObjectsArray();
-      console.log(this.componentObject)
+    },
+    created() {
+
     },
     watch: {
       componentObject: {
@@ -167,7 +169,6 @@
       getVendorObjectsArray() {
         let _this = this;
         this.vendorsObjectsArray = [];
-        console.log(this.$store.state.vendorsList);
         this.componentObject.vendors.forEach(function(vendorItem) {
           let vendorObj = _this.$store.state.vendorsList.find((val) => val.id === vendorItem.vendorId);
           vendorObj.cost = vendorItem.cost;
@@ -181,19 +182,25 @@
         this.$refs.inspirationsModal.toggleModal(true);
       },
       showModalVendors(item, index) {
-        this.vendorItem = item;
-        this.vendorIndex = index;
-        this.$refs.vendorsModal.toggleModal(true);
+        if (!this.readonly) {
+          this.vendorItem = item;
+          this.vendorIndex = index;
+          this.$refs.vendorsModal.toggleModal(true);
+        }
       },
       showModalComponent(item, index) {
-        this.componentItem = item;
-        this.componentItemIndex = index;
-        this.$refs.componentsModal.toggleModal(true);
+        if (!this.readonly) {
+          this.componentItem = item;
+          this.componentItemIndex = index;
+          this.$refs.componentsModal.toggleModal(true);
+        }
       },
       showModalTodo(todo, index) {
-        this.todoItem = todo;
-        this.todoIndex = index;
-        this.$refs.todoModal.toggleModal(true);
+        if (!this.readonly) {
+          this.todoItem = todo;
+          this.todoIndex = index;
+          this.$refs.todoModal.toggleModal(true);
+        }
       },
       showSwalItems(e, itemIndex, arrayTitle) {
         e.stopPropagation();
