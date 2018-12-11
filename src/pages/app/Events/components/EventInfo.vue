@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout">
+  <div class="md-layout show-page">
     <div class="md-layout-item md-size-100">
       <md-toolbar class="md-primary">
         <div class="md-toolbar-row">
@@ -41,8 +41,10 @@
             </md-field>
 
             <div style="display: flex;"> <!-- md-layout brokes the design -->
-              <div class="md-layout-item md-small-size-100" style="padding-left: 0;">
-                <label>Date: {{ event.eventStartMillis | formatDate }}</label>
+              <div class="md-layout-item md-small-size-100 disabled-datepicker" style="padding-left: 0;">
+                <md-datepicker>
+                  <label>Date: {{ event.eventStartMillis | formatDate }}</label>
+                </md-datepicker>
               </div>
 
               <div class="md-layout-item md-small-size-100">
@@ -76,7 +78,7 @@
           <div class="md-layout-item md-size-50 md-small-size-100">
             <div class="event-status-field">
               <div class="md-layout">
-                <label class="md-layout-item md-size-20 md-form-label">
+                <label class="md-layout-item md-size-100 md-form-label">
                   Status: {{ event.status }}
                 </label>
               </div>
@@ -166,7 +168,7 @@
   .event-status-field {
     position: absolute;
     right: 31px;
-    top: -10px;
+    top: 10px;
 
     label {
       font-weight: 400;
@@ -185,5 +187,21 @@
   }
   .clickable-button {
     pointer-events: all;
+  }
+  .show-page {
+    .md-field .md-icon {
+      margin-left: 0;
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+  .disabled-datepicker {
+    pointer-events: none;
+
+    .md-button {
+      display: none;
+    }
   }
 </style>

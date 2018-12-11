@@ -104,6 +104,7 @@
         myState: 'getMyState'
       }),
       components() {
+        console.log(this.$store.state.eventData.components);
         return this.$store.state.eventData.components;
       }
     },

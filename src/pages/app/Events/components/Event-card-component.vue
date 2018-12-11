@@ -152,14 +152,8 @@
       }
     },
     mounted() {
-      if (this.$store.state.vendorsList) {
-        this.getVendorObjectsArray();
-      } else {
-        let _this = this;
-        setTimeout(function () { // wait until vendors list will finish loading from server
-          _this.getVendorObjectsArray();
-        }, 1000);
-      }
+      this.getVendorObjectsArray();
+      console.log(this.componentObject)
     },
     watch: {
       componentObject: {
@@ -173,6 +167,7 @@
       getVendorObjectsArray() {
         let _this = this;
         this.vendorsObjectsArray = [];
+        console.log(this.$store.state.vendorsList);
         this.componentObject.vendors.forEach(function(vendorItem) {
           let vendorObj = _this.$store.state.vendorsList.find((val) => val.id === vendorItem.vendorId);
           vendorObj.cost = vendorItem.cost;
