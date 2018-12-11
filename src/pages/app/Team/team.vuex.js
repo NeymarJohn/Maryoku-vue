@@ -7,15 +7,16 @@ export default {
             id: null,
             firstName: null,
             username: null,
-            password: '123456789',
+            password: 'none',
             lastName: null,
             emailAddress: null,
+            pictureUrl: 'none',
             role: null,
-            permissions: null,
-            street: null,
-            streetNo: null,
-            country: null,
-            city: null
+            permissions: [],
+            street: 'none',
+            streetNo: 'none',
+            country: 'none',
+            city: 'none'
           }
         };
     },
@@ -24,6 +25,13 @@ export default {
         setMemberProperty(state, {key, actualValue}) {
             state.teamMemberData[key] = actualValue;
         },
+      resetForm(state){
+          state.teamMemberData.firstName = null;
+          state.teamMemberData.lastName = null;
+          state.teamMemberData.emailAddress = null;
+          state.teamMemberData.permissions = [];
+          state.teamMemberData.role = null;
+      }
 
     },
 

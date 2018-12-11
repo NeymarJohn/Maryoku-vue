@@ -1,12 +1,8 @@
 import Model from './Model';
-import CalendarEvent from './CalendarEvent';
+import TeamMembers from './TeamMembers';
 
 export default class CalendarEventInspiration extends Model {
     resource() {
-        return 'inspirations'
+        return 'calendars'
     }
-
-  event() {
-    return this.belongsTo(CalendarEvent)
-  }
 }

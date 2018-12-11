@@ -1,47 +1,130 @@
 <template>
     <div class="md-layout">
-        <modal v-if="inviteModalOpen" @close="noticeModalHide" container-class="modal-container-wizard">
-            <!--<template slot="header">
-              <h4 class="modal-title">How Do You Become An Affiliate?</h4>
-              <md-button class="md-simple md-just-icon md-round modal-default-button" @click="noticeModalHide">
-                <md-icon>clear</md-icon>
-              </md-button>
-            </template>-->
-
-            <template slot="body">
-                <simple-wizard data-color="rose">
-                    <template slot="header">
-                        <h3 class="title">Build your profile</h3>
-                        <h5 class="category">This information will let us know more about you.</h5>
-                    </template>
-
-                    <wizard-tab :before-change="() => validateStep('step1')">
-                        <template slot="label" data-color="red">
-                            About
-                        </template>
-                        <first-step ref="step1" @on-validated="onStepValidated"></first-step>
-                    </wizard-tab>
-
-                    <wizard-tab :before-change="() => validateStep('step2')">
-                        <template slot="label">
-                            Account
-                        </template>
-                        <second-step ref="step2" @on-validated="onStepValidated"></second-step>
-                    </wizard-tab>
-
-                    <wizard-tab :before-change="() => validateStep('step3')">
-                        <template slot="label">
-                            Address
-                        </template>
-                        <third-step @md-end="wizardComplete" @on-validated="wizardComplete" :md-end="wizardComplete"
-                                    :on-validated="wizardComplete" ref="step3"></third-step>
-                    </wizard-tab>
-                </simple-wizard>
+        <modal v-if="inviteModalOpen" @close="noticeModalHide" container-class="modal-container">
+            <template slot="header" class="header-position">
+                <h3 class="title">Invite Your Team</h3>
+                <button class="btn-position" @click="closeModal">X</button>
             </template>
+            <template slot="body">
+                <div class="md-layout">
+                    <div class="md-layout-item md-small-size-100">
+                        <div class="md-layout-item md-size-95 md-small-size-100">
+                            <md-field :class="[
+          {'md-valid': !errors.has('firstName') && touched.firstName},
+          {'md-error': errors.has('firstName')}]">
+                                <label>First Name</label>
+                                <md-input
+                                        v-model="first_name"
+                                        data-vv-name="firstName"
+                                        type="text"
+                                        name="firstName"
+                                        required
+                                        v-validate="modelValidations.firstName">
+                                </md-input>
+                                <slide-y-down-transition>
+                                    <md-icon class="error" v-show="errors.has('firstName')">close</md-icon>
+                                </slide-y-down-transition>
+                                <slide-y-down-transition>
+                                    <md-icon class="success" v-show="!errors.has('firstName') && touched.firstName">done</md-icon>
+                                </slide-y-down-transition>
+                            </md-field>
+                            <md-field :class="[
+          {'md-valid': !errors.has('lastName') && touched.lastName},
+          {'md-error': errors.has('lastName')}]">
+                                <label>Last Name</label>
+                                <md-input
+                                        v-model="last_name"
+                                        data-vv-name="lastName"
+                                        type="text"
+                                        name="lastName"
+                                        required
+                                        v-validate="modelValidations.lastName">
+                                </md-input>
+                                <slide-y-down-transition>
+                                    <md-icon class="error" v-show="errors.has('lastName')">close</md-icon>
+                                </slide-y-down-transition>
+                                <slide-y-down-transition>
+                                    <md-icon class="success" v-show="!errors.has('lastName') && touched.lastName">done</md-icon>
+                                </slide-y-down-transition>
+                            </md-field>
+                        </div>
 
-            <!--<template slot="footer">
-              <md-button class="md-info md-round" @click="noticeModalHide">Sound Good</md-button>
-            </template>-->
+                        <div class="md-layout-item md-size-95 md-small-size-100">
+                            <md-field :class="[
+                          {'md-valid': !errors.has('email') && touched.email},
+                          {'md-error': errors.has('email')}]">
+                                <label>Email</label>
+                                <md-input
+                                        v-model="emailAddress"
+                                        data-vv-name="email"
+                                        type="email"
+                                        name="email"
+                                        required
+                                        v-validate="modelValidations.email">
+                                </md-input>
+                                <slide-y-down-transition>
+                                    <md-icon class="error" v-show="errors.has('email')">close</md-icon>
+                                </slide-y-down-transition>
+                                <slide-y-down-transition>
+                                    <md-icon class="success" v-show="!errors.has('email') && touched.email">done</md-icon>
+                                </slide-y-down-transition>
+                            </md-field>
+                        </div>
+
+                        <div class="md-layout-item md-size-95 md-small-size-100">
+                            <md-field :class="[
+                          {'md-valid': !errors.has('role') && touched.role},
+                          {'md-error': errors.has('role')}]">
+                                <label for="select">Role</label>
+                                <md-select
+                                        required
+                                        v-model="member_role"
+                                        name="select"
+                                        data-vv-name="role"
+                                        v-validate="modelValidations.role">
+                                    <md-option value="guest">Guest</md-option>
+                                    <md-option value="collaborator">Collaborator</md-option>
+                                </md-select>
+                                <slide-y-down-transition>
+                                    <md-icon class="error" v-show="errors.has('role')">close</md-icon>
+                                </slide-y-down-transition>
+                                <slide-y-down-transition>
+                                    <md-icon class="success" v-show="!errors.has('role') && touched.role">done</md-icon>
+                                </slide-y-down-transition>
+                            </md-field>
+                        </div>
+                        <div class="md-layout-item md-size-95 md-small-size-100">
+                            <md-field :class="[
+                          {'md-valid': !errors.has('permissions') && touched.permissions},
+                          {'md-error': errors.has('permissions')}]">
+                                <label for="select">Permissions</label>
+                                <md-select
+                                        required
+                                        v-model="permission"
+                                        data-vv-name="permissions"
+                                        v-validate="modelValidations.permissions"
+                                        id="permissions"
+                                        name="select"
+                                        multiple>
+                                    <md-option value="View">View</md-option>
+                                    <md-option value="Manage">Manage</md-option>
+                                    <md-option value="Vote">Vote</md-option>
+                                </md-select>
+                                <slide-y-down-transition>
+                                    <md-icon class="error" v-show="errors.has('permissions')">close</md-icon>
+                                </slide-y-down-transition>
+                                <slide-y-down-transition>
+                                    <md-icon class="success" v-show="!errors.has('permissions') && touched.permissions">done</md-icon>
+                                </slide-y-down-transition>
+                            </md-field>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <template slot="footer">
+                <md-button class="move-left md-rose" @click="closeModal">Close</md-button>
+                <md-button class="md-rose" @click="wizardComplete">Send Invitation</md-button>
+            </template>
         </modal>
     </div>
 </template>
@@ -50,20 +133,16 @@
     import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
     import teamVuexModule from '../team.vuex'
     import {Modal, SimpleWizard, WizardTab} from "@/components";
-    import FirstStep from "./Wizard/FirstStep.vue";
-    import SecondStep from "./Wizard/SecondStep.vue";
-    import ThirdStep from "./Wizard/ThirdStep.vue";
     import swal from "sweetalert2";
     import Teams from "@/models/Teams";
     import TeamMember from "@/models/TeamMembers";
+    import {SlideYDownTransition} from "vue2-transitions";
 
 
     export default {
         components: {
             Modal,
-            FirstStep,
-            SecondStep,
-            ThirdStep,
+            SlideYDownTransition,
             SimpleWizard,
             WizardTab
         },
@@ -71,50 +150,180 @@
             team: {
                 type: Object,
                 required: true
-            }
+            },
         },
         data() {
             return {
                 inviteModalOpen: false,
+              touched: {
+                firstName: false,
+                lastName: false,
+                email: false,
+                permissions: false,
+                role: false,
+              },
+              modelValidations: {
+                firstName: {
+                  required: true,
+                  min: 5
+                },
+                lastName: {
+                  required: true,
+                  min: 5
+                },
+                email: {
+                  required: true,
+                  email: true
+                },
+                role: {
+                  required: true
+                },
+                permissions: {
+                  required: true
+                }
+              }
             }
         },
         created() {
-            console.log(this.$store);
             this.$store.registerModule('teamVuex', teamVuexModule);
         },
         computed: {
-            ...mapState('teamVuex', ['teamMemberData'])
+            ...mapState('teamVuex', ['teamMemberData']),
+          first_name: {
+            get() {
+              return this.teamMemberData.firstName
+            },
+            set(value) {
+              this.setMemberProperty({key: 'firstName', actualValue: value})
+            },
+
+          },
+          last_name: {
+            get() {
+              return this.teamMemberData.lastName
+            },
+            set(value) {
+              this.setMemberProperty({key: 'lastName', actualValue: value})
+            },
+
+          },
+          emailAddress: {
+            get() {
+              return this.teamMemberData.emailAddress
+            },
+            set(value) {
+              this.setMemberProperty({key: 'emailAddress', actualValue: value});
+              this.setMemberProperty({key: 'username', actualValue: value});
+            }
+          },
+          member_role: {
+            get() {
+              return this.teamMemberData.role
+            },
+            set(value) {
+              this.setMemberProperty({key: 'role', actualValue: value})
+            }
+          },
+          permission: {
+            get() {
+              return this.teamMemberData.permissions
+            },
+            set(value) {
+              this.setMemberProperty({key: 'permissions', actualValue: value})
+            }
+          },
         },
         methods: {
+          ...
+            mapMutations('teamVuex', [
+              'setMemberProperty','resetForm'
+            ]),
             noticeModalHide: function () {
                 this.inviteModalOpen = false;
+            },
+            closeModal(){
+              this.inviteModalOpen = false;
             },
             toggleModal: function (show) {
                 this.inviteModalOpen = show;
             },
-            validateStep(ref) {
-                return this.$refs[ref].validate();
-            },
             onStepValidated(validated, model) {
                 this.wizardModel = {...this.wizardModel, ...model};
             },
-            async wizardComplete() {
-              swal("Good job!", "You clicked the finish button!", "success");
-                let team = await Teams.first();
+          getError(fieldName) {
+            return this.errors.first(fieldName);
+          },
+          validate() {
+            return this.$validator.validateAll().then(res => {
+              this.$emit("on-validated", res);
+              return res;
+            });
+          },
+           wizardComplete() {
 
-                console.log('Team: ', team);
-                team.members().attach(this.teamMemberData).then(response => {
+            this.$validator.validateAll().then(res => {
+                if(res){
+                  this.inviteModalOpen = false;
+                  Teams.first().then((team) => {
+                    team.members().attach(this.teamMemberData);
+                    this.$emit('memberCreated');
+                    swal("Good job!", "You clicked the finish button!", "success");
+                  });
+                }else {
+                  this.$emit("on-validated", res);
+                  return res;
+                }
 
-
-                })
-
-
+              });
             }
+        },
+      watch: {
+        firstName() {
+          this.touched.firstName = true;
         }
+        ,
+        lastName() {
+          this.touched.lastName = true;
+        },
+        email() {
+          this.touched.email = true;
+        },
+        role() {
+          this.touched.role = true;
+        },
+        permissions() {
+          this.touched.permissions = true;
+        }
+      }
     };
 </script>
-<style>
-    .swal2-container{
+<style lang="scss">
+    .btn-position{
+        position: absolute;
+        right: 15px;
+        font-weight: bold;
+        top: 20px;
+        font-size: 17px;
+        background-color: transparent!important;
+        box-shadow: none!important;
+        color: gray!important;
+        border-color: transparent;
+        cursor: pointer;
+
+        &:hover, &:visited, &:focus, &:active{
+            background-color: transparent!important;
+            box-shadow: none!important;
+            color: gray!important;
+        }
+    }
+    .swal2-container {
         z-index: 999999;
     }
+    .header-position {
+        position: relative;
+    }
+    .move-left{
+        margin-right: 15px!important;
+    }
+
 </style>
