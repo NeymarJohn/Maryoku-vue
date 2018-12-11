@@ -94,10 +94,13 @@
               <template slot="footer">
                 <div class="md-layout">
                   <div class="md-layout-item">
-                    <i class="fa fa-circle text-info"></i> Remaining Budget (${{ event.budget - spentBudget }})
+                    <i class="fa fa-circle text-info"></i> Remaining Budget (${{ event.totalBudget - spentBudget }})
                   </div>
                   <div class="md-layout-item">
                     <i class="fa fa-circle text-danger"></i> Spent Budget (${{ spentBudget }})
+                  </div>
+                  <div class="md-layout-item md-size-100" v-if="spentBudget > event.totalBudget">
+                    <div class="warning text-warning">Budget is exceeded. You should either increase total budget or update costs</div>
                   </div>
 
                   <md-field style="margin: 20px 0 10px;">

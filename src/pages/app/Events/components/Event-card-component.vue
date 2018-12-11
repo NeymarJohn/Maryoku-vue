@@ -100,15 +100,21 @@
 
     <event-modal-inspirations ref="inspirationsModal"></event-modal-inspirations>
     <event-modal-vendor ref="vendorsModal"
+                        :v-bind:readonly="$props.readonly"
                         :vendorItem="vendorItem"
                         :vendorIndex="vendorIndex"
                         :componentIndex="componentIndex"></event-modal-vendor>
     <event-modal-components ref="componentsModal"
+                            :v-bind:readonly="$props.readonly"
                             :componentItem="componentItem"
                             :componentItemIndex="componentItemIndex"
                             :componentId="componentObject.id"
                             :componentIndex="componentIndex"></event-modal-components>
-    <event-modal-todo ref="todoModal" :todoItem="todoItem" :todoIndex="todoIndex" :componentIndex="componentIndex"></event-modal-todo>
+    <event-modal-todo ref="todoModal" 
+                      :todoItem="todoItem"
+                      :todoIndex="todoIndex"
+                      :v-bind:readonly="$props.readonly"
+                      :componentIndex="componentIndex"></event-modal-todo>
   </div>
 </template>
 

@@ -187,6 +187,9 @@
                   <div class="md-layout-item">
                     <i class="fa fa-circle text-danger"></i> Spent Budget (${{ spentBudget }})
                   </div>
+                  <div class="md-layout-item md-size-100" v-if="spentBudget > form.budget">
+                    <div class="warning text-warning">Budget is exceeded. You should either increase total budget or update costs</div>
+                  </div>
 
                   <md-field :class="[{'md-error': errors.has('budget')}]" style="margin: 20px 0 10px;">
                     <md-icon class="md-accent">attach_money</md-icon>
