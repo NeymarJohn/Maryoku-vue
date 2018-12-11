@@ -128,6 +128,28 @@
               <span class="md-error" v-if="errors.has('location')">The location is required</span>
             </md-field>
 
+            <div class="md-layout-item md-size-100">
+              <h4 class="card-title">Choose Event Image</h4>
+              <div class="file-input">
+                <div v-if="!imageRegular">
+                  <div class="image-container">
+                    <img :src="regularImg" title="">
+                  </div>
+                </div>
+                <div class="image-container" v-else>
+                  <img :src="imageRegular" />
+                </div>
+                <div class="button-container">
+                  <md-button class="md-danger md-round" @click="removeImage" v-if="imageRegular"><i class="fa fa-times"></i>Remove</md-button>
+                  <md-button class="md-success md-round md-fileinput">
+                    <template v-if="!imageRegular">Select image</template>
+                    <template v-else>Change</template>
+                    <input type="file" @change="onFileChange">
+                  </md-button>
+                </div>
+              </div>
+            </div>
+
           </md-card>
 
 
@@ -151,6 +173,7 @@
             </div>
 
             <chart-card
+                v-if="form.budget && spentBudget"
                 :chart-data="pieChart.data"
                 :chart-options="pieChart.options"
                 chart-type="Pie"
@@ -192,6 +215,7 @@
     ChartCard,
   } from "@/components";
   import CalendarEvent from '@/models/CalendarEvent';
+  import CalendarEventImage from '@/models/CalendarEventImage';
   import Calendar from '@/models/Calendar';
 
   export default {
@@ -203,7 +227,8 @@
       occasionOptions: Array,
       formData: Object,
       shouldUpdate: Boolean,
-      event: Object
+      event: Object,
+      componentIndex: Number,
     },
 
     data: () => ({
@@ -221,6 +246,8 @@
         budget: "",
         location: "",
       },
+      imageRegular: "",
+      regularImg: "static/img/image_placeholder.jpg",
 
       modelValidations: {
         eventName: {
@@ -254,15 +281,6 @@
           min_value: 1,
           max_value: 1000000,
         },
-      },
-      pieChart: {
-        data: {
-          labels: [" ", " "], // should be empty to remove text from chart
-          series: [23, 77]
-        },
-        options: {
-          height: "230px"
-        }
       },
     }),
     watch: {
@@ -322,7 +340,22 @@
               }).for(calendars[0]);
 
               newEvent.save().then(response => {
-                this.$router.push({ path: '/events' });
+                Calendar.get().then(calendars => {
+                  if (calendars.length === 0) {
+                    return;
+                  }
+                  calendars[0].calendarEvents().get().then(editedEvents => {
+                    let editedEvent = editedEvents.find(e => { return e.id = response.id; })
+
+                    let newImage = new CalendarEventImage({}).for(editedEvent);
+
+                    newImage.save().then(imageResponse => {
+                      console.log(imageResponse);
+                      this.$router.push({ path: '/events' });
+                    });
+                  })
+                });
+
               })
             });
       },
@@ -351,10 +384,60 @@
       editEvent() {
         this.$parent.readOnly = false;
         this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
-      }
+      },
+      onFileChange(e) {
+        let files = e.target.files || e.dataTransfer.files;
+
+        if (!files.length) return;
+        if (e.target.name) {
+          this.createImage(files[0], "circle");
+        } else {
+          this.createImage(files[0]);
+        }
+      },
+      createImage(file) {
+        let reader = new FileReader();
+        let vm = this;
+
+        reader.onload = e => {
+          vm.imageRegular = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      },
+      removeImage: function(type) {
+        if (type === "circle") {
+          this.imageCircle = "";
+        } else {
+          this.imageRegular = "";
+        }
+      },
     },
     computed: {
-
+      spentBudget() {
+        let totalSpent = 0;
+        if (this.$store.state.eventData.components) {
+          this.$store.state.eventData.components.forEach(function(component) {
+            if (component.vendors) {
+              component.vendors.forEach(function (val) {
+                totalSpent += val.cost;
+              });
+            }
+          })
+        }
+        console.log(totalSpent);
+        return totalSpent;
+      },
+      pieChart() {
+        return {
+          data: {
+            labels: [" ", " "], // should be empty to remove text from chart
+            series: [(this.form.budget - this.spentBudget) / this.form.budget, this.spentBudget / this.form.budget]
+          },
+          options: {
+            height: "230px"
+          }
+        }
+      },
     }
   }
 </script>

@@ -1,7 +1,10 @@
 <template>
   <div class="md-layout">
 
-    <event-header-form :occasionOptions="occasionsArray" :formData="formData" v-bind:shouldUpdate="true" :event="event"></event-header-form>
+    <event-header-form :occasionOptions="occasionsArray"
+                       :formData="formData"
+                       v-bind:shouldUpdate="true"
+                       :event="event"></event-header-form>
 
     <div class="md-layout-item md-size-100">
       <md-toolbar class="md-primary">
@@ -37,6 +40,7 @@
     </div>
 
     <event-card-component v-for="(component, index) in components"
+                          v-if="$store.state.vendorsList"
                           :componentObject="component"
                           :componentIndex="index"
                           :key="'event-card-component-' + index">
@@ -91,6 +95,9 @@
         this.multiLevel3 = false;
       },
       createNewComponent(item) {
+        if (!this.$store.state.eventData.components.length) {
+          this.$store.state.eventData.components = [];
+        }
         this.$store.state.eventData.components.push({
           componentId: item.id,
           todos: [],
