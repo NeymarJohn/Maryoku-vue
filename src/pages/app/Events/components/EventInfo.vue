@@ -72,6 +72,17 @@
               <label>Location: {{ event.location }}</label>
             </md-field>
 
+            <div class="file-input" v-for="(imageItem, index) in galleryImages">
+              <div class="image-container" @click="openGallery(index)">
+                <img :src="imageItem" />
+              </div>
+            </div>
+
+            <LightBox :images="galleryImages"
+                      ref="lightbox"
+                      :show-light-box="false">
+            </LightBox>
+
           </md-card>
 
 
@@ -94,10 +105,13 @@
               <template slot="footer">
                 <div class="md-layout">
                   <div class="md-layout-item">
-                    <i class="fa fa-circle text-info"></i> Remaining Budget (${{ event.budget - spentBudget }})
+                    <i class="fa fa-circle text-info"></i> Remaining Budget (${{ event.totalBudget - spentBudget }})
                   </div>
                   <div class="md-layout-item">
                     <i class="fa fa-circle text-danger"></i> Spent Budget (${{ spentBudget }})
+                  </div>
+                  <div class="md-layout-item md-size-100" v-if="spentBudget > event.totalBudget">
+                    <div class="warning text-warning">Budget is exceeded. You should either increase total budget or update costs</div>
                   </div>
 
                   <md-field style="margin: 20px 0 10px;">
@@ -121,11 +135,14 @@
   import CalendarEvent from '@/models/CalendarEvent';
   import Calendar from '@/models/Calendar';
   import moment from 'moment';
+  import Vue from 'vue';
+  import LightBox from 'vue-image-lightbox'
 
   export default {
     name: 'event-info',
     components: {
       ChartCard,
+      LightBox,
     },
     props: {
       event: Object
@@ -135,6 +152,9 @@
 
     }),
     computed: {
+      galleryImages() {
+        return this.event.images.map((val) => { return {'src': val, 'thumb': val}}) || [];
+      },
       spentBudget() {
         let totalSpent = 0;
 
@@ -170,7 +190,10 @@
       },
       editEvent() {
         this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
-      }
+      },
+      openGallery(index) {
+        this.$refs.lightbox.showImage(index)
+      },
     },
   filters: {
       formatDate: function (date) {

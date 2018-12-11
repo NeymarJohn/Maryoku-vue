@@ -91,7 +91,7 @@
         this.multiLevel3 = false;
       },
       createNewComponent(item) {
-        if (!this.$store.state.eventData.components) {
+        if (this.$store.state.eventData.components === null || !this.$store.state.eventData.components.length) {
           this.$store.state.eventData.components = [];
         }
         this.$store.state.eventData.components.push({

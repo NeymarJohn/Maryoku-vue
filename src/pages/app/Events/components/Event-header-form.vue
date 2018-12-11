@@ -26,10 +26,10 @@
       </md-toolbar>
     </div>
 
-    <div class="md-layout-item md-size-100">
+    <div class="md-layout-item md-size-100 gallery-z-index">
       <md-card class="md-layout-item md-size-100 event-form-padding">
         <form class="md-layout">
-          <md-card class="md-layout-item md-size-50 md-small-size-100">
+          <md-card class="md-layout-item md-size-50 md-small-size-100 gallery-z-index">
 
             <md-field :class="[{'md-error': errors.has('eventName')}]">
               <md-icon class="md-accent">home</md-icon>
@@ -130,25 +130,37 @@
 
             <div class="header-image-wrapper">
               <h4 class="card-title">Choose Event Image</h4>
-              <div class="file-input">
-                <div v-if="!imageRegular">
-                  <div class="image-container">
-                    <img :src="regularImg" title="">
-                  </div>
-                </div>
-                <div class="image-container" v-else>
-                  <img :src="imageRegular" />
+
+              <div class="file-input" v-for="(imageItem, index) in uploadedImages">
+                <div class="image-container" @click="openGallery(index)">
+                  <img :src="imageItem" />
                 </div>
                 <div class="button-container">
-                  <md-button class="md-danger md-round" @click="removeImage" v-if="imageRegular"><i class="fa fa-times"></i>Remove</md-button>
+                  <md-button class="md-danger md-round" @click="removeImage(index)"><i class="fa fa-times"></i>Remove</md-button>
+                  <!--<md-button class="md-success md-round md-fileinput">
+                    <template>Change</template>
+                    <input type="file" @change="onFileChange($event, index)">
+                  </md-button>-->
+                </div>
+              </div>
+
+              <div class="file-input">
+                <div class="image-container">
+                  <img :src="regularImg" title="">
+                </div>
+
+                <div class="button-container">
                   <md-button class="md-success md-round md-fileinput">
-                    <template v-if="!imageRegular">Select image</template>
-                    <template v-else>Change</template>
-                    <input type="file" @change="onFileChange">
+                    <template>Add image</template>
+                    <input type="file" @change="onFileChange($event)">
                   </md-button>
                 </div>
               </div>
             </div>
+            <LightBox :images="galleryImages"
+                      ref="lightbox"
+                      :show-light-box="false">
+            </LightBox>
 
           </md-card>
 
@@ -173,6 +185,7 @@
             </div>
 
             <chart-card
+                v-if="(formData === null) || (event.id && form.budget && spentBudget > -1)"
                 :chart-data="pieChart.data"
                 :chart-options="pieChart.options"
                 chart-type="Pie"
@@ -185,6 +198,9 @@
                   </div>
                   <div class="md-layout-item">
                     <i class="fa fa-circle text-danger"></i> Spent Budget (${{ spentBudget }})
+                  </div>
+                  <div class="md-layout-item md-size-100" v-if="spentBudget > form.budget">
+                    <div class="warning text-warning">Budget is exceeded. You should either increase total budget or update costs</div>
                   </div>
 
                   <md-field :class="[{'md-error': errors.has('budget')}]" style="margin: 20px 0 10px;">
@@ -216,10 +232,13 @@
   import CalendarEvent from '@/models/CalendarEvent';
   import CalendarEventImage from '@/models/CalendarEventImage';
   import Calendar from '@/models/Calendar';
+  import Vue from 'vue';
+  import LightBox from 'vue-image-lightbox'
 
   export default {
     name: 'event-header-form',
     components: {
+      LightBox,
       ChartCard,
     },
     props: {
@@ -245,7 +264,7 @@
         budget: "",
         location: "",
       },
-      imageRegular: "",
+      uploadedImages: [],
       regularImg: "static/img/image_placeholder.jpg",
 
       modelValidations: {
@@ -372,31 +391,31 @@
         this.$parent.readOnly = false;
         this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
       },
-      onFileChange(e) {
+      onFileChange(e, index) {
         let files = e.target.files || e.dataTransfer.files;
 
         if (!files.length) return;
-        if (e.target.name) {
-          this.createImage(files[0], "circle");
-        } else {
-          this.createImage(files[0]);
-        }
+        this.createImage(files[0], index);
       },
-      createImage(file) {
+      createImage(file, index) {
         let reader = new FileReader();
-        let vm = this;
+        let _this = this;
 
         reader.onload = e => {
-          vm.imageRegular = e.target.result;
+          if (index === undefined) {
+            _this.uploadedImages.push(e.target.result);
+          } else {
+            Vue.set(_this.uploadedImages, index, e.target.result);
+          }
         };
         reader.readAsDataURL(file);
       },
-      removeImage: function(type) {
-        if (type === "circle") {
-          this.imageCircle = "";
-        } else {
-          this.imageRegular = "";
-        }
+      removeImage: function(index) {
+        this.uploadedImages.splice(index, 1);
+        console.log(this.uploadedImages);
+      },
+      openGallery(index) {
+        this.$refs.lightbox.showImage(index)
       },
     },
     computed: {
@@ -425,11 +444,16 @@
           }
         }
       },
+      galleryImages() {
+        return this.uploadedImages.map((val) => { return {'src': val, 'thumb': val}})
+      },
     }
   }
 </script>
 
 <style lang="scss">
+  @import 'vue-image-lightbox/dist/vue-image-lightbox.min.css';
+
   .event-status-field {
     position: absolute;
     right: 31px;
@@ -455,5 +479,19 @@
   }
   .header-image-wrapper {
     margin-bottom: 20px;
+  }
+  .file-input {
+    margin-bottom: 15px;
+  }
+  .image-container {
+    text-align: center;
+
+    img {
+      width: auto;
+      max-height: 150px;
+    }
+  }
+  .gallery-z-index {
+    z-index: 500;
   }
 </style>
