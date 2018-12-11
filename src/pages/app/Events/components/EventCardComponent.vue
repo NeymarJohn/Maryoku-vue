@@ -104,8 +104,8 @@
                         :vendorItem="vendorItem"
                         :vendorIndex="vendorIndex"
                         v-bind:shouldUpdate="$props.shouldUpdate"
-                        :createSubComponent="$props.createSubComponent"
-                        :updateSubComponent="$props.updateSubComponent"
+                        :createVendor="$props.createVendor"
+                        :updateVendor="$props.updateVendor"
                         :componentIndex="componentIndex"></event-modal-vendor>
     <event-modal-components ref="componentsModal"
                             :v-bind:readonly="$props.readonly"
@@ -149,8 +149,8 @@
       componentObject: Object,
       readonly: Boolean,
       shouldUpdate: Boolean,
-      createSubComponent: Function,
-      updateSubComponent: Function
+      createVendor: Function,
+      updateVendor: Function
     },
     name: 'event-card-component',
     data: function() {

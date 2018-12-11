@@ -109,8 +109,8 @@
       componentIndex: Number,
       vendorIndex: Number,
       shouldUpdate: Boolean,
-      createSubComponent: Function,
-      updateSubComponent: Function
+      createVendor: Function,
+      updateVendor: Function
     },
     data() {
       return {
@@ -173,8 +173,8 @@
 
             // TODO: optimize
             // if editing existing
+            debugger
             if (this.vendorIndex !== null && this.vendorIndex > -1) {
-              // and DOESN'T CREATE vendor
               if (this.selectedFromVendors) {
                 vendorId = this.changedVendorItem ? this.changedVendorItem.id : this.vendorItem.id;
 
@@ -183,8 +183,7 @@
                   vendorId: vendorId,
                   cost: +this.form.cost
                 });
-
-                let vendor = new Vendors({id: this.form.id, vendorId: vendorId, cost: +this.form.cost})
+                this.$props.updateVendor(store, {id: this.form.id, vendorId: vendorId, cost: +this.form.cost})
 
                 this.$store.commit('updateEventData', store);
                 this.clearForm();

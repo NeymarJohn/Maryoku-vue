@@ -26,10 +26,10 @@
       </md-toolbar>
     </div>
 
-    <div class="md-layout-item md-size-100 gallery-z-index">
+    <div class="md-layout-item md-size-100">
       <md-card class="md-layout-item md-size-100 event-form-padding">
         <form class="md-layout">
-          <md-card class="md-layout-item md-size-50 md-small-size-100 gallery-z-index">
+          <md-card class="md-layout-item md-size-50 md-small-size-100">
 
             <md-field :class="[{'md-error': errors.has('eventName')}]">
               <md-icon class="md-accent">home</md-icon>
@@ -130,37 +130,25 @@
 
             <div class="header-image-wrapper">
               <h4 class="card-title">Choose Event Image</h4>
-
-              <div class="file-input" v-for="(imageItem, index) in uploadedImages">
-                <div class="image-container" @click="openGallery(index)">
-                  <img :src="imageItem" />
-                </div>
-                <div class="button-container">
-                  <md-button class="md-danger md-round" @click="removeImage(index)"><i class="fa fa-times"></i>Remove</md-button>
-                  <!--<md-button class="md-success md-round md-fileinput">
-                    <template>Change</template>
-                    <input type="file" @change="onFileChange($event, index)">
-                  </md-button>-->
-                </div>
-              </div>
-
               <div class="file-input">
-                <div class="image-container">
-                  <img :src="regularImg" title="">
+                <div v-if="!imageRegular">
+                  <div class="image-container">
+                    <img :src="regularImg" title="">
+                  </div>
                 </div>
-
+                <div class="image-container" v-else>
+                  <img :src="imageRegular" />
+                </div>
                 <div class="button-container">
+                  <md-button class="md-danger md-round" @click="removeImage" v-if="imageRegular"><i class="fa fa-times"></i>Remove</md-button>
                   <md-button class="md-success md-round md-fileinput">
-                    <template>Add image</template>
-                    <input type="file" @change="onFileChange($event)">
+                    <template v-if="!imageRegular">Select image</template>
+                    <template v-else>Change</template>
+                    <input type="file" @change="onFileChange">
                   </md-button>
                 </div>
               </div>
             </div>
-            <LightBox :images="galleryImages"
-                      ref="lightbox"
-                      :show-light-box="false">
-            </LightBox>
 
           </md-card>
 
@@ -185,7 +173,6 @@
             </div>
 
             <chart-card
-                v-if="(formData === null) || (event.id && form.budget && spentBudget > -1)"
                 :chart-data="pieChart.data"
                 :chart-options="pieChart.options"
                 chart-type="Pie"
@@ -232,13 +219,10 @@
   import CalendarEvent from '@/models/CalendarEvent';
   import CalendarEventImage from '@/models/CalendarEventImage';
   import Calendar from '@/models/Calendar';
-  import Vue from 'vue';
-  import LightBox from 'vue-image-lightbox'
 
   export default {
     name: 'event-header-form',
     components: {
-      LightBox,
       ChartCard,
     },
     props: {
@@ -264,7 +248,7 @@
         budget: "",
         location: "",
       },
-      uploadedImages: [],
+      imageRegular: "",
       regularImg: "static/img/image_placeholder.jpg",
 
       modelValidations: {
@@ -391,31 +375,31 @@
         this.$parent.readOnly = false;
         this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
       },
-      onFileChange(e, index) {
+      onFileChange(e) {
         let files = e.target.files || e.dataTransfer.files;
 
         if (!files.length) return;
-        this.createImage(files[0], index);
+        if (e.target.name) {
+          this.createImage(files[0], "circle");
+        } else {
+          this.createImage(files[0]);
+        }
       },
-      createImage(file, index) {
+      createImage(file) {
         let reader = new FileReader();
-        let _this = this;
+        let vm = this;
 
         reader.onload = e => {
-          if (index === undefined) {
-            _this.uploadedImages.push(e.target.result);
-          } else {
-            Vue.set(_this.uploadedImages, index, e.target.result);
-          }
+          vm.imageRegular = e.target.result;
         };
         reader.readAsDataURL(file);
       },
-      removeImage: function(index) {
-        this.uploadedImages.splice(index, 1);
-        console.log(this.uploadedImages);
-      },
-      openGallery(index) {
-        this.$refs.lightbox.showImage(index)
+      removeImage: function(type) {
+        if (type === "circle") {
+          this.imageCircle = "";
+        } else {
+          this.imageRegular = "";
+        }
       },
     },
     computed: {
@@ -444,16 +428,11 @@
           }
         }
       },
-      galleryImages() {
-        return this.uploadedImages.map((val) => { return {'src': val, 'thumb': val}})
-      },
     }
   }
 </script>
 
 <style lang="scss">
-  @import 'vue-image-lightbox/dist/vue-image-lightbox.min.css';
-
   .event-status-field {
     position: absolute;
     right: 31px;
@@ -479,19 +458,5 @@
   }
   .header-image-wrapper {
     margin-bottom: 20px;
-  }
-  .file-input {
-    margin-bottom: 15px;
-  }
-  .image-container {
-    text-align: center;
-
-    img {
-      width: auto;
-      max-height: 150px;
-    }
-  }
-  .gallery-z-index {
-    z-index: 500;
   }
 </style>

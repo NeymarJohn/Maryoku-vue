@@ -44,8 +44,8 @@
                           v-bind:shouldUpdate="true"
                           :componentObject="component"
                           :componentIndex="index"
-                          :createSubComponent="createSubComponent"
-                          :updateSubComponent="updateSubComponent"
+                          :createVendor="createVendor"
+                          :updateVendor="updateVendor"
                           :key="'event-card-component-' + index">
 
     </event-card-component>
@@ -57,6 +57,7 @@
 
   import EventHeaderForm from './components/Event-header-form.vue';
   import EventCardComponent from './components/EventCardComponent.vue';
+  import EventComponentVendor from '@/models/EventComponentVendor';
   import Calendar from '@/models/Calendar';
   import CalendarEvent from '@/models/CalendarEvent';
   import Occasion from '@/models/Occasion';
@@ -111,11 +112,15 @@
           vendors: [],
         })
       },
-      createSubComponent(component, subComponent) {
+      createVendor(component, subComponent) {
 
       },
-      updateSubComponent(component, subComponent) {
-
+      updateVendor(component, subComponent) {
+        debugger
+        let vendor = new EventComponentVendor(subComponent).for(this.calendar, this.event, new EventComponent(component));
+        vendor.save().then(result => {
+          debugger;
+        })
       }
     },
     computed: {
