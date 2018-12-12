@@ -1,5 +1,6 @@
 <template>
   <div class="md-layout ">
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
     <div class="md-layout-item md-size-100">
       <md-card>
         <md-card-header class="md-card-header-icon md-card-header-rose">
@@ -9,7 +10,7 @@
           <h4 class="title">Upcoming Events
             <div class="pull-right">
               <router-link to="/events/new">
-                <md-button class="md-rose text-info md-sm" >
+                <md-button class="md-rose text-info md-sm" @click="routeToNewEvent()">
                   <md-icon>add_circle</md-icon>
                   Create New Event
                 </md-button>
@@ -97,11 +98,13 @@
 
   import Calendar from '../../../models/Calendar';
   import moment from 'moment';
+  import VueElementLoading from 'vue-element-loading';
 
   export default {
     components: {
       Tabs,
       ProductCard,
+      VueElementLoading
     },
     mounted() {
       Calendar.get().then(calendars => {
@@ -122,6 +125,8 @@
             }
             return result;
           }, []);
+
+          this.isLoading = false;
         })
       })
       return true;
@@ -130,7 +135,8 @@
       return {
         product3: "static/img/shutterstock_289440710.png",
         recentEvents: [],
-        upcomingEvents: []
+        upcomingEvents: [],
+        isLoading: true,
       };
     },
     methods: {
@@ -139,6 +145,21 @@
       },
       routeToEvent(eventId) {
         this.$router.push({ path: `/events/${eventId}` });
+      },
+      routeToNewEvent() {
+        this.$store.state.eventData = {
+          id: null,
+          calendar: {id: null},
+          title: null,
+          eventStartMillis: null,
+          eventEndMillis: null,
+          eventType: null,
+          numberOfParticipants: null,
+          totalBudget: null,
+          status: null,
+          components: null,
+        },
+        this.$router.push({ path: `/events/new` });
       }
     },
     filters: {
