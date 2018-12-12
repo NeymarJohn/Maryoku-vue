@@ -72,7 +72,7 @@
               <label>Location: {{ event.location }}</label>
             </md-field>
 
-            <div class="file-input" v-for="(imageItem, index) in galleryImages">
+            <div class="file-input" v-for="(imageItem, index) in galleryImages" :key="'image-file-input-'+index">
               <div class="image-container" @click="openGallery(index)">
                 <img :src="imageItem" />
               </div>
@@ -160,17 +160,15 @@
             Calendar.get().then((calendars) => {
               calendars[0].calendarEvents().get().then(editedEvents => {
                 let editedEvent = editedEvents.find(e => { return e.id = _this.$route.params.id; })
-                let images = editedEvent.images().for(calendars[0]).get().then(v => {
+
+                let images = editedEvent.images().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${editedEvent.id}/images/${imgId.id}`).get().then(v => {
                   console.log(v);
                 });
-               /* CalendarEventImage.for(calendars[0], editedEvent).get().then(images => {
-                  console.log(images);
-                })*/
-
               });
             });
           });
         }
+
         return this.event.images ? this.event.images.map((val) => { return {'src': val, 'thumb': val}}) : [];
       },
       spentBudget() {
