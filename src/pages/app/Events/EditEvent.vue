@@ -69,7 +69,7 @@
 
 <script>
 
-  import EventHeaderForm from './components/Event-header-form.vue';
+  import EventHeaderForm from './components/EventHeaderForm.vue';
   import EventCardComponent from './components/EventCardComponent.vue';
   import EventComponentVendor from '@/models/EventComponentVendor';
   import EventComponentTodo from '@/models/EventComponentTodo';
@@ -174,6 +174,8 @@
         this.isLoading = true;
         let vendor = new EventComponentValue(subComponent).for(this.calendar, this.event, new EventComponent(component));
         vendor.delete().then(result => {
+          this.isLoading = false;
+        }).catch(() => {
           this.isLoading = false;
         })
       },

@@ -155,10 +155,10 @@
   import {
     NavTabsCard
   } from "@/components";
-  import EventModalInspirations from './Event-modal-inspirations';
-  import EventModalTodo from './Event-modal-todo';
-  import EventModalVendor from './Event-modal-vendor';
-  import EventModalComponents from './Event-modal-components';
+  import EventModalInspirations from './EventInspirationsModal';
+  import EventModalTodo from './EventTodoModal';
+  import EventModalVendor from './EventVendorModal';
+  import EventModalComponents from './EventComponentsModal';
   import EventTodoRow from './EventTodoRow.vue';
   import swal from "sweetalert2";
   import moment from 'moment';
@@ -261,7 +261,6 @@
           if (result.value) {
             let store = this.$store.state.eventData.components[this.componentIndex];
 
-
             if (this.shouldUpdate) {
               switch(arrayTitle) {
                 case 'vendors':
@@ -277,7 +276,6 @@
                   break;
               }
             }
-
             this.$store.commit('removeSubComponent', {component: this.componentIndex, type: arrayTitle, item: itemIndex});
 
             swal({
@@ -310,7 +308,6 @@
               confirmButtonClass: "md-button md-success",
               buttonsStyling: false
             });
-            console.log(this.$store.state.eventData);
           }
         });
       }

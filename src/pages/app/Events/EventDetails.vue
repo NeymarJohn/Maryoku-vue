@@ -49,7 +49,7 @@
 
 <script>
 
-  import EventHeaderForm from './components/Event-header-form.vue';
+  import EventHeaderForm from './components/EventHeaderForm.vue';
   import EventCardComponent from './components/EventCardComponent.vue';
   import Calendar from '@/models/Calendar';
   import CalendarEvent from '@/models/CalendarEvent';

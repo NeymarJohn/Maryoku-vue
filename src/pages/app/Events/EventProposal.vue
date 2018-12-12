@@ -16,6 +16,7 @@
         </div>
         <ul class="gallery-list-wrapper">
           <li v-for="(image, index) in images"
+              :key="'gallery-images-'+index"
               :class="{'active': index === currentIndex }"
               class="gallery-item"
               style="display: inline-block">
@@ -52,7 +53,7 @@
           <hr/>
           <div class="md-layout-item md-size-100">
             <h3>Included in Price</h3>
-            <div class="md-layout-item md-size-100" v-for="item in proposalData.included">
+            <div class="md-layout-item md-size-100" v-for="(item, index) in proposalData.included" :key="'proposalData-'+index">
               <md-checkbox v-model="checked" class="readonly" :key="item">{{ item }}</md-checkbox>
             </div>
           </div>
