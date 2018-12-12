@@ -160,9 +160,9 @@
             Calendar.get().then((calendars) => {
               calendars[0].calendarEvents().get().then(editedEvents => {
                 let editedEvent = editedEvents.find(e => { return e.id = _this.$route.params.id; })
-               /* let images = editedEvent.images().for(calendars[0]).get().then(v => {
+                let images = editedEvent.images().for(calendars[0]).get().then(v => {
                   console.log(v);
-                });*/
+                });
                /* CalendarEventImage.for(calendars[0], editedEvent).get().then(images => {
                   console.log(images);
                 })*/

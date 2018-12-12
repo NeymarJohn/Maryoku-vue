@@ -108,10 +108,8 @@
         }
         calendars[0].calendarEvents().get().then(events => {
           let event = events.find(e => { return e.id = this.$route.params.id; })
-          let inspirations = new CalendarEventInspiration({}).for(calendars[0], event);
-
-          inspirations.get().then(response => {
-            console.log(response);
+          let inspirations = event.inspirations().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${event.id}/inspirations`).get().then(response => {
+            debugger
           })
         });
       });
