@@ -172,7 +172,7 @@
       },
       deleteVendor(component, subComponent) {
         this.isLoading = true;
-        let vendor = new EventComponentValue(subComponent).for(this.calendar, this.event, new EventComponent(component));
+        let vendor = new EventComponentVendor(subComponent).for(this.calendar, this.event, new EventComponent(component));
         vendor.delete().then(result => {
           this.isLoading = false;
         }).catch(() => {
