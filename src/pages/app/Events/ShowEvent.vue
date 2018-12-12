@@ -1,5 +1,6 @@
 <template>
   <div class="md-layout">
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
     <event-info :occasionOptions="occasionsArray" :event="event" v-bind:readonly="true"></event-info>
 
@@ -52,12 +53,14 @@
   import Vendors from '@/models/Vendors';
   import { mapGetters } from 'vuex'
   import moment from 'moment';
+  import VueElementLoading from 'vue-element-loading';
 
   export default {
     components: {
       EventHeaderForm,
       EventInfo,
       EventCardComponent,
+      VueElementLoading
     },
     data: () => ({
       responsive: false,
@@ -68,6 +71,7 @@
       componentsList: null,
       event: {},
       readOnly: true,
+      isLoading: true,
     }),
 
     methods: {
@@ -114,7 +118,7 @@
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
     created() {
-      Calendar.get().then(calendars => {
+      let calendar = Calendar.get().then(calendars => {
         if(calendars.length === 0 ) {
           return;
         }
@@ -124,8 +128,12 @@
         })
       });
 
-      Vendors.get().then((vendorsList) => {
+      let vendorsList = Vendors.get().then((vendorsList) => {
         this.$store.state.vendorsList = vendorsList;
+      });
+
+      Promise.all([vendorsList, calendar]).then(() => {
+        this.isLoading = false;
       });
     },
   };

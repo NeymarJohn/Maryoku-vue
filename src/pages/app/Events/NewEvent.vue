@@ -1,5 +1,6 @@
 <template>
   <div class="md-layout">
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
     <event-header-form :occasionOptions="occasionsArray" :formData="formData"></event-header-form>
 
@@ -12,7 +13,15 @@
                 <i class="material-icons">add</i> Add Component
               </md-button>
               <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
-                <li v-for="item in componentsList" :key="item.id" @click="createNewComponent(item)"><a>{{ item.value }}</a></li>
+                <li v-for="item in componentsList" :key="item.id" @click="createNewComponent($event, item)">
+                  <a :class="item.childComponents ? 'dropdown-toggle' : ''">
+                    {{ item.value }}
+                    <ul class="dropdown-menu" v-if="item.childComponents">
+                      <li v-for="subItem in item.childComponents" :key="subItem.id" @click="createNewComponent($event, subItem)">
+                        <a>{{ subItem.title }}</a></li>
+                    </ul>
+                  </a>
+                </li>
               </ul>
             </drop-down>
           </div>
@@ -58,21 +67,22 @@
   import Vendors from '@/models/Vendors';
   import { mapGetters } from 'vuex'
   import moment from 'moment';
+  import VueElementLoading from 'vue-element-loading';
 
   export default {
     components: {
       EventHeaderForm,
       EventCardComponent,
+      VueElementLoading
     },
     data: () => ({
       responsive: false,
-      multiLevel: false,
-      multiLevel2: false,
       calendarId: null,
       occasionsArray: null,
       componentsList: null,
       formData: null,
       readOnly: true,
+      isLoading: true,
     }),
 
     methods: {
@@ -83,14 +93,8 @@
           this.responsive = false;
         }
       },
-      toggleMultiLevel() {
-        this.multiLevel = !this.multiLevel;
-      },
-      toggleMultiLevel2() {
-        this.multiLevel2 = !this.multiLevel2;
-        this.multiLevel3 = false;
-      },
-      createNewComponent(item) {
+      createNewComponent(e, item) {
+        e.stopPropagation();
         if (this.$store.state.eventData.components === null || !this.$store.state.eventData.components.length) {
           this.$store.state.eventData.components = [];
         }
@@ -99,7 +103,7 @@
           todos: [],
           values: [],
           vendors: [],
-        })
+        });
       },
       sentProposalRequest() {
         let routeData = this.$router.resolve({ path: "/events/proposal" });
@@ -128,29 +132,46 @@
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
     created() {
-      Occasion.get().then((occasions) => {
+      let occasions = Occasion.get().then((occasions) => {
         this.occasionsArray = occasions;
       });
-      EventComponent.get().then((componentsList) => {
+      let components = EventComponent.get().then((componentsList) => {
         this.$store.state.componentsList = componentsList;
         this.componentsList = componentsList;
+        console.log(componentsList);
       });
 
-      Vendors.get().then((vendorsList) => {
+      let vendors = Vendors.get().then((vendorsList) => {
         this.$store.state.vendorsList = vendorsList;
       });
+
+      Promise.all([occasions, components, vendors]).then(() => {
+        this.isLoading = false;
+      })
     },
   };
 </script>
 
 <style lang="scss">
   .dropdown .dropdown-menu .dropdown-menu {
-    left: 102%;
+    left: 97%;
+    margin-top: -5px;
   }
-  .dropdown-menu .open + .dropdown-menu {
+  .dropdown-menu .dropdown-menu {
     min-width: 182px;
   }
   .read-only {
     pointer-events: none;
+  }
+  .dropdown .dropdown-menu .dropdown-toggle:hover .dropdown-menu {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .dropdown .dropdown-menu .dropdown-toggle:after {
+    font-family: 'Material Icons';
+    content: 'chevron_right';
+    border: 0 none;
+    width: auto;
+    height: auto;
   }
 </style>

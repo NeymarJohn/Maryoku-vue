@@ -1,5 +1,6 @@
 <template>
   <div class="md-layout">
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
     <event-header-form :occasionOptions="occasionsArray"
                        :formData="formData"
@@ -15,7 +16,15 @@
                 <i class="material-icons">add</i> Add Component
               </md-button>
               <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
-                <li v-for="item in componentsList" :key="item.id" @click="createNewComponent(item)"><a>{{ item.value }}</a></li>
+                <li v-for="item in componentsList" :key="item.id" @click="createNewComponent($event, item)">
+                  <a :class="item.childComponents ? 'dropdown-toggle' : ''">
+                    {{ item.value }}
+                    <ul class="dropdown-menu" v-if="item.childComponents">
+                      <li v-for="subItem in item.childComponents" :key="subItem.id" @click="createNewComponent($event, subItem)">
+                        <a>{{ subItem.title }}</a></li>
+                    </ul>
+                  </a>
+                </li>
               </ul>
             </drop-down>
           </div>
@@ -28,7 +37,7 @@
 
             <div class="md-collapse">
               <md-list>
-                <md-list-item>
+                <md-list-item @click="sentProposalRequest()">
                   <i class="material-icons" style="margin-right: 10px;">visibility</i> Request Proposal
                   <p class="hidden-lg hidden-md">Invite</p>
                 </md-list-item>
@@ -72,22 +81,23 @@
   import Vendors from '@/models/Vendors';
   import { mapGetters } from 'vuex'
   import moment from 'moment';
+  import VueElementLoading from 'vue-element-loading';
 
   export default {
     components: {
       EventHeaderForm,
       EventCardComponent,
+      VueElementLoading,
     },
     data: () => ({
       responsive: false,
-      multiLevel: false,
-      multiLevel2: false,
       calendarId: null,
       occasionsArray: null,
       componentsList: null,
       event: {},
       formData: null,
       readOnly: true,
+      isLoading: true,
     }),
 
     methods: {
@@ -101,14 +111,8 @@
       createTodo() {
 
       },
-      toggleMultiLevel() {
-        this.multiLevel = !this.multiLevel;
-      },
-      toggleMultiLevel2() {
-        this.multiLevel2 = !this.multiLevel2;
-        this.multiLevel3 = false;
-      },
-      createNewComponent(item) {
+      createNewComponent(e, item) {
+        e.stopPropagation();
         if (this.$store.state.eventData.components === null || !this.$store.state.eventData.components.length) {
           this.$store.state.eventData.components = [];
         }
@@ -117,45 +121,55 @@
           todos: [],
           values: [],
           vendors: [],
-        })
+        });
+      },
+      sentProposalRequest() {
+        let routeData = this.$router.resolve({ path: "/events/proposal" });
+        window.open(routeData.href, '_blank');
       },
       createVendor(component, subComponent) {
 
       },
       updateVendor(component, subComponent) {
+        this.isLoading = true;
         let vendor = new EventComponentVendor(subComponent).for(this.calendar, this.event, new EventComponent(component));
         vendor.save().then(result => {
-
+          this.isLoading = false;
         })
       },
       updateTodo(component, subComponent) {
-        let todo = new EventComponentTodo(subComponent).for(this.calendar, this.event, new EventComponent(component));
-        todo.save().then(result => {
-          debugger
+        this.isLoading = true;
+        let vendor = new EventComponentTodo(subComponent).for(this.calendar, this.event, new EventComponent(component));
+        vendor.save().then(result => {
+          this.isLoading = false;
         })
       },
       updateComponent(component, subComponent) {
+        this.isLoading = true;
         let vendor = new EventComponentValue(subComponent).for(this.calendar, this.event, new EventComponent(component));
         vendor.save().then(result => {
-
+          this.isLoading = false;
         })
       },
       deleteVendor(component, subComponent) {
+        this.isLoading = true;
         let vendor = new EventComponentValue(subComponent).for(this.calendar, this.event, new EventComponent(component));
         vendor.delete().then(result => {
-
+          this.isLoading = false;
         })
       },
       deleteTodo(component, subComponent) {
+        this.isLoading = true;
         let vendor = new EventComponentTodo(subComponent).for(this.calendar, this.event, new EventComponent(component));
         vendor.delete().then(result => {
-
+          this.isLoading = false;
         })
       },
       deleteComponent(component, subComponent) {
+        this.isLoading = true;
         let vendor = new EventComponentValue(subComponent).for(this.calendar, this.event, new EventComponent(component));
         vendor.delete().then(result => {
-
+          this.isLoading = false;
         })
       },
     },
@@ -176,7 +190,7 @@
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
     created() {
-      Calendar.get().then(calendars => {
+      let calendar = Calendar.get().then(calendars => {
         if(calendars.length === 0 ) {
           return;
         }
@@ -197,16 +211,20 @@
           }
         })
       });
-      Occasion.get().then((occasions) => {
+      let occasions = Occasion.get().then((occasions) => {
         this.occasionsArray = occasions;
       });
-      EventComponent.get().then((componentsList) => {
+      let components = EventComponent.get().then((componentsList) => {
         this.$store.state.componentsList = componentsList;
         this.componentsList = componentsList;
       });
 
-      Vendors.get().then((vendorsList) => {
+      let vendors = Vendors.get().then((vendorsList) => {
         this.$store.state.vendorsList = vendorsList;
+      });
+
+      Promise.all([vendors, components, occasions, calendar]).then(() => {
+        this.isLoading = false;
       });
     },
   };
@@ -214,12 +232,24 @@
 
 <style lang="scss">
   .dropdown .dropdown-menu .dropdown-menu {
-    left: 102%;
+    left: 97%;
+    margin-top: -5px;
   }
-  .dropdown-menu .open + .dropdown-menu {
+  .dropdown-menu .dropdown-menu {
     min-width: 182px;
   }
   .read-only {
     pointer-events: none;
+  }
+  .dropdown .dropdown-menu .dropdown-toggle:hover .dropdown-menu {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .dropdown .dropdown-menu .dropdown-toggle:after {
+    font-family: 'Material Icons';
+    content: 'chevron_right';
+    border: 0 none;
+    width: auto;
+    height: auto;
   }
 </style>

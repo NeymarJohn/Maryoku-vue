@@ -152,10 +152,11 @@
               store.todos.push(this.form);
             }
 
-            this.$props.updateTodo(store, this.form)
+            if (this.shouldUpdate) {
+              this.$props.updateTodo(store, this.form)
+            }
 
-
-            this.$store.commit('updateEventData', {index: this.componentIndex, data: store})
+            this.$store.commit('updateEventData', store)
             this.clearForm();
             this.modalOpen = false;
           }

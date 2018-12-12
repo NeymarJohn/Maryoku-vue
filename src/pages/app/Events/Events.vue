@@ -1,5 +1,6 @@
 <template>
   <div class="md-layout ">
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
     <div class="md-layout-item md-size-100">
       <md-card>
         <md-card-header class="md-card-header-icon md-card-header-rose">
@@ -97,11 +98,13 @@
 
   import Calendar from '../../../models/Calendar';
   import moment from 'moment';
+  import VueElementLoading from 'vue-element-loading';
 
   export default {
     components: {
       Tabs,
       ProductCard,
+      VueElementLoading
     },
     mounted() {
       Calendar.get().then(calendars => {
@@ -122,6 +125,8 @@
             }
             return result;
           }, []);
+
+          this.isLoading = false;
         })
       })
       return true;
@@ -130,7 +135,8 @@
       return {
         product3: "static/img/shutterstock_289440710.png",
         recentEvents: [],
-        upcomingEvents: []
+        upcomingEvents: [],
+        isLoading: true,
       };
     },
     methods: {

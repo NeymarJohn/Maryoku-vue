@@ -1,5 +1,6 @@
 <template>
   <div class="md-layout-item md-size-100">
+
     <md-card>
       <md-card-header class="md-card-header-icon md-card-header-green md-layout md-gutter">
         <div class="md-layout-item">
@@ -10,7 +11,7 @@
         </div>
 
         <div class="md-layout-item" style="text-align: right;">
-          <md-button class="md-just-icon md-simple" @click.native='showInspirations()' v-if="!readonly">
+          <md-button class="md-just-icon md-simple" @click.native='showInspirations()' v-if="!readonly && componentObject.id">
             <md-icon>reorder</md-icon>
           </md-button>
           <md-button class="md-just-icon md-simple md-danger" @click.native="showSwalComponent()" v-if="!readonly">
@@ -27,15 +28,21 @@
 
               <!-- if it will some time left, could be replaced with one table component -->
               <md-tab id="tab-components" md-label="Component Properties" md-icon="settings">
-                <md-table v-model="componentObject.values" table-header-color="green" v-if="componentObject.values.length">
+                <md-table v-model="componentObject.values" table-header-color="green" v-if="componentObject.values.length" :class="readonly ? 'readonly': ''">
+                  <md-table-row>
+                    <md-table-head>Vendor name</md-table-head>
+                    <md-table-head>Value</md-table-head>
+                    <md-table-head>Comment</md-table-head>
+                    <md-table-head></md-table-head>
+                  </md-table-row>
                   <md-table-row slot="md-table-row"
                                 v-for="(item, index) in componentObject.values"
                                 v-if="item !== null"
                                 :key="'component-' + index"
                                 @click.native="showModalComponent(item, index)">
-                    <md-table-cell md-label="Vendor name">{{ item.title }}</md-table-cell>
-                    <md-table-cell md-label="Value">{{ item.value }}</md-table-cell>
-                    <md-table-cell md-label="Comment">{{ item.comment }}</md-table-cell>
+                    <md-table-cell>{{ item.title }}</md-table-cell>
+                    <md-table-cell>{{ item.value }}</md-table-cell>
+                    <md-table-cell>{{ item.comment }}</md-table-cell>
                     <md-table-cell class="visible-on-hover">
                       <md-button class="md-just-icon md-simple md-danger" @click="showSwalItems($event, index, 'values')" v-if="!readonly">
                         <md-icon>delete</md-icon>
@@ -52,16 +59,25 @@
               </md-tab>
 
               <md-tab id="tab-vendors" md-label="Vendors" md-icon="rv_hookup">
-                <md-table v-model="vendorsObjectsArray" table-header-color="green" v-if="vendorsObjectsArray.length">
+                <md-table v-model="vendorsObjectsArray" table-header-color="green" v-if="vendorsObjectsArray.length" :class="readonly ? 'readonly': ''">
+                  <md-table-row>
+                    <md-table-head>Vendor Name</md-table-head>
+                    <md-table-head>Contact Person</md-table-head>
+                    <md-table-head>Email</md-table-head>
+                    <md-table-head>Phone</md-table-head>
+                    <md-table-head>Cost / Budget</md-table-head>
+                    <md-table-head></md-table-head>
+                  </md-table-row>
                   <md-table-row slot="md-table-row"
                                 v-for="(item, index) in vendorsObjectsArray"
+                                v-if="item !== null"
                                 :key="'vendor-' + index"
                                 @click.native="showModalVendors(item, index)">
-                    <md-table-cell md-label="Vendor Name">{{ item.vendorDisplayName }}</md-table-cell>
-                    <md-table-cell md-label="Contact Person">{{ item.contactPerson }}</md-table-cell>
-                    <md-table-cell md-label="Email">{{ item.vendorMainEmail }}</md-table-cell>
-                    <md-table-cell md-label="Phone">{{ item.vendorMainPhoneNumber }}</md-table-cell>
-                    <md-table-cell md-label="Cost / Budget">{{ item.cost }}</md-table-cell>
+                    <md-table-cell>{{ item.vendorDisplayName }}</md-table-cell>
+                    <md-table-cell>{{ item.contactPerson }}</md-table-cell>
+                    <md-table-cell>{{ item.vendorMainEmail }}</md-table-cell>
+                    <md-table-cell>{{ item.vendorMainPhoneNumber }}</md-table-cell>
+                    <md-table-cell>{{ item.cost }}</md-table-cell>
                     <md-table-cell class="visible-on-hover">
                       <md-button class="md-just-icon md-simple md-danger" @click="showSwalItems($event, index, 'vendors')" v-if="!readonly">
                         <md-icon>delete</md-icon>
@@ -78,8 +94,16 @@
               </md-tab>
 
               <md-tab id="tab-todo" md-label="ToDo" md-icon="check_circle">
-                <md-table table-header-color="green" v-if="componentObject.todos.length">
+                <md-table table-header-color="green" v-if="componentObject.todos.length" :class="readonly ? 'readonly': ''">
+                  <md-table-row>
+                    <md-table-head>What</md-table-head>
+                    <md-table-head>Due Date</md-table-head>
+                    <md-table-head>Assign To</md-table-head>
+                    <md-table-head>Status</md-table-head>
+                    <md-table-head></md-table-head>
+                  </md-table-row>
                   <event-todo-row v-for="(item, index) in componentObject.todos"
+                                  v-if="item !== null"
                                   :showModalTodo="showModalTodo"
                                   :showSwal="showSwalItems"
                                   :todoItem="item"
@@ -121,6 +145,7 @@
                       :todoIndex="todoIndex"
                       v-bind:shouldUpdate="$props.shouldUpdate"
                       :v-bind:readonly="$props.readonly"
+                      :shouldUpdate="$props.shouldUpdate"
                       :updateTodo="$props.updateTodo"
                       :componentIndex="componentIndex"></event-modal-todo>
   </div>
@@ -253,8 +278,8 @@
                 default:
                   break;
               }
-            this.$store.commit('removeSubComponent', {component: this.componentIndex, type: arrayTitle, item: itemIndex});
             }
+            store[arrayTitle].splice(itemIndex, 1);
 
             swal({
               title: "Deleted!",
@@ -311,10 +336,13 @@
   .center-icon.md-button {
     padding-left: 6px;
   }
+  .md-table.readonly {
+    pointer-events: none;
+  }
   .text-center {
     text-align: center;
   }
-  .md-table-row {
+  .md-table .md-table-row {
     .visible-on-hover .md-table-cell-container {
       text-align: right;
       opacity: 0;
@@ -323,9 +351,10 @@
     }
 
     &:hover {
-      cursor: pointer;
-      background: #eee;
-
+      .md-table-cell {
+        cursor: pointer;
+        background: #eee !important;
+      }
       .visible-on-hover .md-table-cell-container {
         opacity: 1;
         pointer-events: all;

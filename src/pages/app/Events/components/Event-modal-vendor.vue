@@ -185,7 +185,7 @@
                   this.$props.updateVendor(store, {id: this.form.id, vendorId: vendorId, cost: +this.form.cost})
                 }
 
-                this.$store.commit('updateEventData', {index: this.componentIndex, data: store});
+                this.$store.commit('updateEventData', store);
                 this.clearForm();
                 this.modalOpen = false;
               }  else if (!this.selectedFromVendors) { // and CREATE NEW vendor
@@ -215,7 +215,7 @@
                       this.$props.updateVendor(store, {id: this.form.id, vendorId: vendorId, cost: +this.form.cost})
                     }
 
-                    this.$store.commit('updateEventData', {index: this.componentIndex, data: store});
+                    this.$store.commit('updateEventData', store);
                     this.clearForm();
                     this.modalOpen = false;
                   }
@@ -234,7 +234,7 @@
                   this.$props.updateVendor(store, {vendorId: vendorId, cost: +this.form.cost})
                 }
 
-                this.$store.commit('updateEventData', {index: this.componentIndex, data: store});
+                this.$store.commit('updateEventData', store);
                 this.clearForm();
                 this.modalOpen = false;
 
@@ -264,7 +264,7 @@
                       this.$props.updateVendor(store, {vendorId: vendorId, cost: +this.form.cost})
                     }
 
-                    this.$store.commit('updateEventData', {index: this.componentIndex, data: store});
+                    this.$store.commit('updateEventData', store);
                     this.clearForm();
                     this.modalOpen = false;
                   }
