@@ -9,8 +9,7 @@
           <h4 class="title">To Do Today</h4>-->
         </md-card-header>
         <md-card-content>
-          <!--<vue-element-loading :active="teamMembersLoading" spinner="ring" color="#FF547C"/>-->
-
+          <vue-element-loading :active="teamMembersLoading" spinner="ring" color="#FF547C"/>
           <div class="table table-stats text-right">
             <div class="text-right">
               <md-button class="md-success" @click="openInviteModal">
@@ -27,21 +26,22 @@
         </md-card-content>
       </md-card>
     </div>
-    <invite-modal @memberCreated="fetchTeam" :team="team" ref="inviteModal"></invite-modal>
+    <invite-modal :team="team" ref="inviteModal"></invite-modal>
   </div>
 </template>
 
 <script>
   import InviteModal from './InviteModal/';
-  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import TeamTable from './Table';
   import Teams from "@/models/Teams";
-//  import VueElementLoading from 'vue-element-loading';
+  import VueElementLoading from 'vue-element-loading';
+
+
   export default {
     components: {
       InviteModal,
       'team-table': TeamTable,
-//      VueElementLoading
+      VueElementLoading
     },
     data() {
       return {
@@ -51,25 +51,21 @@
       }
     },
     created() {
-      this.fetchTeam();
+      Teams.get().then(teams => {
+        this.team = teams[0];
+        teams[0].members().get().then(members => {
+          console.log(members);
+          this.teamMembers = members;
+          this.teamMembersLoading = false;
+        });
+      }, (error) => {
+        console.log(error)
+      });
+
     },
     methods: {
-      ...mapMutations('teamVuex', ['resetForm']),
-      fetchTeam(){
-        Teams.get().then(teams => {
-          this.team = teams[0];
-          teams[0].members().get().then(members => {
-            console.log(members);
-            this.teamMembers = members;
-            this.teamMembersLoading = false;
-          });
-        }, (error) => {
-          console.log(error)
-        });
-      },
       openInviteModal(){
         this.$refs.inviteModal.toggleModal(true);
-        this.resetForm();
       }
     }
   };
