@@ -145,7 +145,6 @@
                       :todoIndex="todoIndex"
                       v-bind:shouldUpdate="$props.shouldUpdate"
                       :v-bind:readonly="$props.readonly"
-                      :shouldUpdate="$props.shouldUpdate"
                       :updateTodo="$props.updateTodo"
                       :componentIndex="componentIndex"></event-modal-todo>
   </div>
@@ -205,7 +204,6 @@
     watch: {
       componentObject: {
         handler: function(before, after) {
-          console.log(after);
           this.getVendorObjectsArray();
         },
         deep: true,
@@ -278,8 +276,8 @@
                 default:
                   break;
               }
+            this.$store.commit('removeSubComponent', {component: this.componentIndex, type: arrayTitle, item: itemIndex});
             }
-            store[arrayTitle].splice(itemIndex, 1);
 
             swal({
               title: "Deleted!",

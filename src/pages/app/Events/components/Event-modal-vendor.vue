@@ -182,10 +182,10 @@
                   cost: +this.form.cost
                 });
                 if (this.shouldUpdate) {
-                  this.$props.updateVendor(store, {id: this.form.id, vendorId: vendorId, cost: +this.form.cost})
+                  this.$props.updateVendor(store, {id: this.form.id, vendorId: vendorId, cost: +this.form.cost}, this.vendorIndex)
                 }
 
-                this.$store.commit('updateEventData', store);
+                this.$store.commit('updateEventData', {index: this.componentIndex, data: store});
                 this.clearForm();
                 this.modalOpen = false;
               }  else if (!this.selectedFromVendors) { // and CREATE NEW vendor
@@ -212,10 +212,10 @@
                       cost: +this.form.cost
                     });
                     if (this.shouldUpdate) {
-                      this.$props.updateVendor(store, {id: this.form.id, vendorId: vendorId, cost: +this.form.cost})
+                      this.$props.updateVendor(store, {id: this.form.id, vendorId: vendorId, cost: +this.form.cost}, this.vendorIndex)
                     }
 
-                    this.$store.commit('updateEventData', store);
+                    this.$store.commit('updateEventData', {index: this.componentIndex, data: store});
                     this.clearForm();
                     this.modalOpen = false;
                   }
@@ -231,10 +231,10 @@
                   cost: +this.form.cost
                 });
                 if (this.shouldUpdate) {
-                  this.$props.updateVendor(store, {vendorId: vendorId, cost: +this.form.cost})
+                  this.$props.updateVendor(store, {vendorId: vendorId, cost: +this.form.cost}, this.vendorIndex)
                 }
 
-                this.$store.commit('updateEventData', store);
+                this.$store.commit('updateEventData', {index: this.componentIndex, data: store});
                 this.clearForm();
                 this.modalOpen = false;
 
@@ -261,10 +261,10 @@
                       cost: +this.form.cost
                     });
                     if (this.shouldUpdate) {
-                      this.$props.updateVendor(store, {vendorId: vendorId, cost: +this.form.cost})
+                      this.$props.updateVendor(store, {vendorId: vendorId, cost: +this.form.cost}, this.vendorIndex)
                     }
 
-                    this.$store.commit('updateEventData', store);
+                    this.$store.commit('updateEventData', {index: this.componentIndex, data: store});
                     this.clearForm();
                     this.modalOpen = false;
                   }

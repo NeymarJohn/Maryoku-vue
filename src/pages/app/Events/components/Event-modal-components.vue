@@ -135,10 +135,10 @@
             }
 
             if (this.shouldUpdate) {
-              this.$props.updateComponent(store, this.form);
+              this.$props.updateComponent(store, this.form, this.componentItemIndex);
             }
 
-            this.$store.commit('updateEventData', store)
+            this.$store.commit('updateEventData', {index: this.componentIndex, data: store})
             this.clearForm();
             this.modalOpen = false;
           }

@@ -82,6 +82,7 @@
   import { mapGetters } from 'vuex'
   import moment from 'moment';
   import VueElementLoading from 'vue-element-loading';
+  import Vue from 'vue';
 
   export default {
     components: {
@@ -130,25 +131,43 @@
       createVendor(component, subComponent) {
 
       },
-      updateVendor(component, subComponent) {
+      updateVendor(component, subComponent, updatedItemIndex) {
         this.isLoading = true;
+        let componentIndex = this.$store.state.eventData.components.indexOf(component);
         let vendor = new EventComponentVendor(subComponent).for(this.calendar, this.event, new EventComponent(component));
+        let vendorsArray = this.$store.state.eventData.components[componentIndex].vendors;
+        let vendorItemIndex = updatedItemIndex ? updatedItemIndex : vendorsArray.length - 1;
+
         vendor.save().then(result => {
           this.isLoading = false;
+          Vue.set(vendorsArray, vendorItemIndex, result);
+          this.$store.commit('updateEventData', {index: componentIndex, data: this.$store.state.eventData.components[componentIndex]});
         })
       },
-      updateTodo(component, subComponent) {
+      updateTodo(component, subComponent, updatedItemIndex) {
         this.isLoading = true;
-        let vendor = new EventComponentTodo(subComponent).for(this.calendar, this.event, new EventComponent(component));
-        vendor.save().then(result => {
+        let componentIndex = this.$store.state.eventData.components.indexOf(component);
+        let todo = new EventComponentTodo(subComponent).for(this.calendar, this.event, new EventComponent(component));
+        let todosArray = this.$store.state.eventData.components[componentIndex].todos;
+        let todoItemIndex = updatedItemIndex ? updatedItemIndex : todosArray.length - 1;
+
+        todo.save().then(result => {
           this.isLoading = false;
+          Vue.set(todosArray, todoItemIndex, result);
+          this.$store.commit('updateEventData', {index: componentIndex, data: this.$store.state.eventData.components[componentIndex]});
         })
       },
-      updateComponent(component, subComponent) {
+      updateComponent(component, subComponent, updatedItemIndex) {
         this.isLoading = true;
-        let vendor = new EventComponentValue(subComponent).for(this.calendar, this.event, new EventComponent(component));
-        vendor.save().then(result => {
+        let componentIndex = this.$store.state.eventData.components.indexOf(component);
+        let value = new EventComponentValue(subComponent).for(this.calendar, this.event, new EventComponent(component));
+        let componentsArray = this.$store.state.eventData.components[componentIndex].values;
+        let componentItemIndex = updatedItemIndex ? updatedItemIndex : componentsArray.length - 1;
+
+        value.save().then(result => {
           this.isLoading = false;
+          Vue.set(componentsArray, componentItemIndex, result);
+          this.$store.commit('updateEventData', {index: componentIndex, data: this.$store.state.eventData.components[componentIndex]});
         })
       },
       deleteVendor(component, subComponent) {
@@ -160,15 +179,15 @@
       },
       deleteTodo(component, subComponent) {
         this.isLoading = true;
-        let vendor = new EventComponentTodo(subComponent).for(this.calendar, this.event, new EventComponent(component));
-        vendor.delete().then(result => {
+        let todo = new EventComponentTodo(subComponent).for(this.calendar, this.event, new EventComponent(component));
+        todo.delete().then(result => {
           this.isLoading = false;
         })
       },
       deleteComponent(component, subComponent) {
         this.isLoading = true;
-        let vendor = new EventComponentValue(subComponent).for(this.calendar, this.event, new EventComponent(component));
-        vendor.delete().then(result => {
+        let value = new EventComponentValue(subComponent).for(this.calendar, this.event, new EventComponent(component));
+        value.delete().then(result => {
           this.isLoading = false;
         })
       },
@@ -178,7 +197,6 @@
         myState: 'getMyState'
       }),
       components() {
-        console.log(this.$store.state.eventData.components);
         return this.$store.state.eventData.components;
       }
     },
