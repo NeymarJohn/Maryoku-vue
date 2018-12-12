@@ -30,6 +30,7 @@
                 <md-table v-model="componentObject.values" table-header-color="green" v-if="componentObject.values.length">
                   <md-table-row slot="md-table-row"
                                 v-for="(item, index) in componentObject.values"
+                                v-if="item !== null"
                                 :key="'component-' + index"
                                 @click.native="showModalComponent(item, index)">
                     <md-table-cell md-label="Vendor name">{{ item.title }}</md-table-cell>
@@ -98,7 +99,7 @@
       </md-card-content>
     </md-card>
 
-    <event-modal-inspirations ref="inspirationsModal"></event-modal-inspirations>
+    <event-modal-inspirations ref="inspirationsModal" v-if="componentObject.id"></event-modal-inspirations>
     <event-modal-vendor ref="vendorsModal"
                         :v-bind:readonly="$props.readonly"
                         :vendorItem="vendorItem"
@@ -157,6 +158,9 @@
       updateVendor: Function,
       updateComponent: Function,
       updateTodo: Function,
+      deleteVendor: Function,
+      deleteTodo: Function,
+      deleteComponent: Function,
     },
     name: 'event-card-component',
     data: function() {
@@ -172,10 +176,12 @@
     },
     mounted() {
       this.getVendorObjectsArray();
+      console.log(this.componentObject);
     },
     watch: {
       componentObject: {
         handler: function(before, after) {
+          console.log(after);
           this.getVendorObjectsArray();
         },
         deep: true,
@@ -232,7 +238,25 @@
         }).then(result => {
           if (result.value) {
             let store = this.$store.state.eventData.components[this.componentIndex];
+
+
+            if (this.shouldUpdate) {
+              switch(arrayTitle) {
+                case 'vendors':
+                  this.$props.deleteVendor(store, {id: store.vendors[itemIndex].id})
+                  break;
+                case 'todos':
+                  this.$props.deleteTodo(store, {id: store.todos[itemIndex].id})
+                  break;
+                case 'values':
+                  this.$props.deleteComponent(store, {id: store.values[itemIndex].id})
+                  break;
+                default:
+                  break;
+              }
+            }
             store[arrayTitle].splice(itemIndex, 1);
+
             swal({
               title: "Deleted!",
               text: "This item has been deleted.",

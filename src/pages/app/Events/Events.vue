@@ -9,7 +9,7 @@
           <h4 class="title">Upcoming Events
             <div class="pull-right">
               <router-link to="/events/new">
-                <md-button class="md-rose text-info md-sm" >
+                <md-button class="md-rose text-info md-sm" @click="routeToNewEvent()">
                   <md-icon>add_circle</md-icon>
                   Create New Event
                 </md-button>
@@ -139,6 +139,21 @@
       },
       routeToEvent(eventId) {
         this.$router.push({ path: `/events/${eventId}` });
+      },
+      routeToNewEvent() {
+        this.$store.state.eventData = {
+          id: null,
+          calendar: {id: null},
+          title: null,
+          eventStartMillis: null,
+          eventEndMillis: null,
+          eventType: null,
+          numberOfParticipants: null,
+          totalBudget: null,
+          status: null,
+          components: null,
+        },
+        this.$router.push({ path: `/events/new` });
       }
     },
     filters: {

@@ -150,6 +150,12 @@ export default {
   mounted() {
     this.updateChartId();
     this.$nextTick(this.initChart);
+  },
+  watch: {
+    chartData() {
+      this.updateChartId();
+      this.$nextTick(this.initChart);
+    }
   }
 };
 </script>

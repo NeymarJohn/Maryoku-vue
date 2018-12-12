@@ -48,6 +48,9 @@
                           :updateVendor="updateVendor"
                           :updateTodo="updateTodo"
                           :updateComponent="updateComponent"
+                          :deleteVendor="deleteVendor"
+                          :deleteTodo="deleteTodo"
+                          :deleteComponent="deleteComponent"
                           :key="'event-card-component-' + index">
 
     </event-card-component>
@@ -136,7 +139,25 @@
         vendor.save().then(result => {
 
         })
-      }
+      },
+      deleteVendor(component, subComponent) {
+        let vendor = new EventComponentValue(subComponent).for(this.calendar, this.event, new EventComponent(component));
+        vendor.delete().then(result => {
+
+        })
+      },
+      deleteTodo(component, subComponent) {
+        let vendor = new EventComponentTodo(subComponent).for(this.calendar, this.event, new EventComponent(component));
+        vendor.delete().then(result => {
+
+        })
+      },
+      deleteComponent(component, subComponent) {
+        let vendor = new EventComponentValue(subComponent).for(this.calendar, this.event, new EventComponent(component));
+        vendor.delete().then(result => {
+
+        })
+      },
     },
     computed: {
       ...mapGetters({
