@@ -185,6 +185,7 @@
             </div>
 
             <chart-card
+                v-if="(formData === null) || (event.id && form.budget && spentBudget > -1)"
                 :chart-data="pieChart.data"
                 :chart-options="pieChart.options"
                 chart-type="Pie"
