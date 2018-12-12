@@ -276,8 +276,9 @@
                 default:
                   break;
               }
-            this.$store.commit('removeSubComponent', {component: this.componentIndex, type: arrayTitle, item: itemIndex});
             }
+
+            this.$store.commit('removeSubComponent', {component: this.componentIndex, type: arrayTitle, item: itemIndex});
 
             swal({
               title: "Deleted!",
