@@ -84,6 +84,8 @@
       componentIndex: Number,
       componentItemIndex: Number,
       componentId: String,
+      shouldUpdate: Boolean,
+      updateComponent: Function,
     },
     components: {
       Modal,
@@ -130,6 +132,10 @@
               delete this.form.id; // remove id key
               this.form.propertyId = 'custom';
               store.values.push(this.form);
+            }
+
+            if (this.shouldUpdate) {
+              this.$props.updateComponent(store, this.form);
             }
 
             this.$store.commit('updateEventData', store)

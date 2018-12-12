@@ -83,6 +83,8 @@
       todoItem: Object,
       todoIndex: Number,
       componentIndex: Number,
+      shouldUpdate: Boolean,
+      updateTodo: Function,
     },
     components: {
       Modal,
@@ -150,8 +152,8 @@
               store.todos.push(this.form);
             }
 
-            if (this.$props.shouldUpdate) {
-              this.form.id ? this.update() : this.create();
+            if (this.shouldUpdate) {
+              this.$props.updateTodo(store, this.form)
             }
 
             this.$store.commit('updateEventData', store)

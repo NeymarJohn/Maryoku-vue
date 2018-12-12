@@ -112,12 +112,16 @@
                             :componentItem="componentItem"
                             :componentItemIndex="componentItemIndex"
                             :componentId="componentObject.id"
+                            :shouldUpdate="$props.shouldUpdate"
+                            :updateComponent="$props.updateComponent"
                             :componentIndex="componentIndex"></event-modal-components>
     <event-modal-todo ref="todoModal" 
                       :todoItem="todoItem"
                       :todoIndex="todoIndex"
                       v-bind:shouldUpdate="$props.shouldUpdate"
                       :v-bind:readonly="$props.readonly"
+                      :shouldUpdate="$props.shouldUpdate"
+                      :updateTodo="$props.updateTodo"
                       :componentIndex="componentIndex"></event-modal-todo>
   </div>
 </template>
@@ -150,7 +154,9 @@
       readonly: Boolean,
       shouldUpdate: Boolean,
       createVendor: Function,
-      updateVendor: Function
+      updateVendor: Function,
+      updateComponent: Function,
+      updateTodo: Function,
     },
     name: 'event-card-component',
     data: function() {

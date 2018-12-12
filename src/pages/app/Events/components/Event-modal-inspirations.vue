@@ -11,7 +11,7 @@
         <div class="inspiration-block">
           <div class="card-wrapper" v-for="item in inspirations" :key="item.id" @click="openNewTab(item.link)">
             <product-card header-animation="false">
-              <img class="img" slot="imageHeader" :src="item.img">
+              <img class="img" slot="imageHeader" :src="item.image">
 
               <h4 slot="title" class="title">
                 <a href="#">{{ item.title }}</a>
@@ -25,7 +25,7 @@
 
               <template slot="footer">
                 <div class="price">
-                  <h4>{{ item.rating }}/5 <md-icon>star</md-icon></h4>
+                  <h4>{{ item.score }}/5 <md-icon>star</md-icon></h4>
                 </div>
                 <div class="stats">
                   <p class="category">
@@ -56,38 +56,7 @@
     data() {
       return {
         modalOpen: false,
-        inspirations: [
-          {
-            id: 1,
-            img: "static/img/shutterstock_289440710.png",
-            title: 'Healthy & Tasty',
-            author: 'Joan Lee',
-            company: 'Wix',
-            rating: '3.5',
-            category: 'Catering',
-            link: '/',
-          },
-          {
-            id: 2,
-            img: "static/img/shutterstock_289440710.png",
-            title: 'Happy New Year',
-            author: 'Tina Turner',
-            company: 'PeopleBuzz',
-            rating: '4',
-            category: 'Space',
-            link: '/',
-          },
-          {
-            id: 3,
-            img: "static/img/shutterstock_289440710.png",
-            title: 'Happy New Year',
-            author: 'Tina Turner',
-            company: 'PeopleBuzz',
-            rating: '4',
-            category: 'Space',
-            link: '/',
-          }
-        ]
+        inspirations: []
       }
     },
     methods: {
@@ -109,6 +78,7 @@
         calendars[0].calendarEvents().get().then(events => {
           let event = events.find(e => { return e.id = this.$route.params.id; })
           let inspirations = event.inspirations().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${event.id}/inspirations`).get().then(response => {
+            this.inspirations = response;
           })
         });
       });
