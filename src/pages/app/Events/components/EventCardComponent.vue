@@ -1,6 +1,5 @@
 <template>
   <div class="md-layout-item md-size-100">
-
     <md-card>
       <md-card-header class="md-card-header-icon md-card-header-green md-layout md-gutter">
         <div class="md-layout-item">
@@ -11,7 +10,7 @@
         </div>
 
         <div class="md-layout-item" style="text-align: right;">
-          <md-button class="md-just-icon md-simple" @click.native='showInspirations()' v-if="!readonly && componentObject.id">
+          <md-button class="md-just-icon md-simple" @click.native='showInspirations()' v-if="!readonly">
             <md-icon>reorder</md-icon>
           </md-button>
           <md-button class="md-just-icon md-simple md-danger" @click.native="showSwalComponent()" v-if="!readonly">
@@ -56,7 +55,6 @@
                 <md-table v-model="vendorsObjectsArray" table-header-color="green" v-if="vendorsObjectsArray.length">
                   <md-table-row slot="md-table-row"
                                 v-for="(item, index) in vendorsObjectsArray"
-                                v-if="item !== null"
                                 :key="'vendor-' + index"
                                 @click.native="showModalVendors(item, index)">
                     <md-table-cell md-label="Vendor Name">{{ item.vendorDisplayName }}</md-table-cell>
@@ -82,7 +80,6 @@
               <md-tab id="tab-todo" md-label="ToDo" md-icon="check_circle">
                 <md-table table-header-color="green" v-if="componentObject.todos.length">
                   <event-todo-row v-for="(item, index) in componentObject.todos"
-                                  v-if="item !== null"
                                   :showModalTodo="showModalTodo"
                                   :showSwal="showSwalItems"
                                   :todoItem="item"
@@ -124,7 +121,6 @@
                       :todoIndex="todoIndex"
                       v-bind:shouldUpdate="$props.shouldUpdate"
                       :v-bind:readonly="$props.readonly"
-                      :shouldUpdate="$props.shouldUpdate"
                       :updateTodo="$props.updateTodo"
                       :componentIndex="componentIndex"></event-modal-todo>
   </div>
@@ -257,8 +253,8 @@
                 default:
                   break;
               }
+            this.$store.commit('removeSubComponent', {component: this.componentIndex, type: arrayTitle, item: itemIndex});
             }
-            store[arrayTitle].splice(itemIndex, 1);
 
             swal({
               title: "Deleted!",

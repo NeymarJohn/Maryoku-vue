@@ -1,6 +1,5 @@
 <template>
   <div class="md-layout">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
     <event-header-form :occasionOptions="occasionsArray"
                        :formData="formData"
@@ -29,7 +28,7 @@
 
             <div class="md-collapse">
               <md-list>
-                <md-list-item @click="sentProposalRequest()">
+                <md-list-item>
                   <i class="material-icons" style="margin-right: 10px;">visibility</i> Request Proposal
                   <p class="hidden-lg hidden-md">Invite</p>
                 </md-list-item>
@@ -73,13 +72,11 @@
   import Vendors from '@/models/Vendors';
   import { mapGetters } from 'vuex'
   import moment from 'moment';
-  import VueElementLoading from 'vue-element-loading';
 
   export default {
     components: {
       EventHeaderForm,
       EventCardComponent,
-      VueElementLoading,
     },
     data: () => ({
       responsive: false,
@@ -91,7 +88,6 @@
       event: {},
       formData: null,
       readOnly: true,
-      isLoading: true,
     }),
 
     methods: {
@@ -123,53 +119,43 @@
           vendors: [],
         })
       },
-      sentProposalRequest() {
-        let routeData = this.$router.resolve({ path: "/events/proposal" });
-        window.open(routeData.href, '_blank');
-      },
       createVendor(component, subComponent) {
 
       },
       updateVendor(component, subComponent) {
-        this.isLoading = true;
         let vendor = new EventComponentVendor(subComponent).for(this.calendar, this.event, new EventComponent(component));
         vendor.save().then(result => {
-          this.isLoading = false;
+
         })
       },
       updateTodo(component, subComponent) {
-        this.isLoading = true;
-        let vendor = new EventComponentTodo(subComponent).for(this.calendar, this.event, new EventComponent(component));
-        vendor.save().then(result => {
-          this.isLoading = false;
+        let todo = new EventComponentTodo(subComponent).for(this.calendar, this.event, new EventComponent(component));
+        todo.save().then(result => {
+          debugger
         })
       },
       updateComponent(component, subComponent) {
-        this.isLoading = true;
         let vendor = new EventComponentValue(subComponent).for(this.calendar, this.event, new EventComponent(component));
         vendor.save().then(result => {
-          this.isLoading = false;
+
         })
       },
       deleteVendor(component, subComponent) {
-        this.isLoading = true;
         let vendor = new EventComponentValue(subComponent).for(this.calendar, this.event, new EventComponent(component));
         vendor.delete().then(result => {
-          this.isLoading = false;
+
         })
       },
       deleteTodo(component, subComponent) {
-        this.isLoading = true;
         let vendor = new EventComponentTodo(subComponent).for(this.calendar, this.event, new EventComponent(component));
         vendor.delete().then(result => {
-          this.isLoading = false;
+
         })
       },
       deleteComponent(component, subComponent) {
-        this.isLoading = true;
         let vendor = new EventComponentValue(subComponent).for(this.calendar, this.event, new EventComponent(component));
         vendor.delete().then(result => {
-          this.isLoading = false;
+
         })
       },
     },
@@ -190,7 +176,7 @@
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
     created() {
-      let calendar = Calendar.get().then(calendars => {
+      Calendar.get().then(calendars => {
         if(calendars.length === 0 ) {
           return;
         }
@@ -211,20 +197,16 @@
           }
         })
       });
-      let occasions = Occasion.get().then((occasions) => {
+      Occasion.get().then((occasions) => {
         this.occasionsArray = occasions;
       });
-      let components = EventComponent.get().then((componentsList) => {
+      EventComponent.get().then((componentsList) => {
         this.$store.state.componentsList = componentsList;
         this.componentsList = componentsList;
       });
 
-      let vendors = Vendors.get().then((vendorsList) => {
+      Vendors.get().then((vendorsList) => {
         this.$store.state.vendorsList = vendorsList;
-      });
-
-      Promise.all([vendors, components, occasions, calendar]).then(() => {
-        this.isLoading = false;
       });
     },
   };

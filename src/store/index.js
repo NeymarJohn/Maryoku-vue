@@ -22,8 +22,11 @@ export default new Vuex.Store({
     vendorsList: null,
   },
   mutations: {
-    updateEventData(state, newChanges) {
-      state.eventData.components[0] = newChanges;
+    updateEventData(state, params) {
+      state.eventData.components[params.index] = params.data;
+    },
+    removeSubComponent(state, params) {
+      state.eventData.components[params.component][params.type].splice(params.item, 1);
     }
   }
 });

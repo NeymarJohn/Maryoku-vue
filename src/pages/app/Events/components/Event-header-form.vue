@@ -166,7 +166,7 @@
 
 
           <div class="md-layout-item md-size-50 md-small-size-100">
-            <div class="event-status-field dynamic">
+            <div class="event-status-field">
               <div class="md-layout">
                 <label class="md-layout-item md-size-20 md-form-label">
                   Status:
@@ -216,9 +216,7 @@
             </chart-card>
           </div>
           <md-card-actions class="text-center">
-            <md-button native-type="submit" @click.native.prevent="validateEvent" class="md-success">
-              {{ formData !== null ? 'Edit': 'Create' }} event
-            </md-button>
+            <md-button native-type="submit" @click.native.prevent="validateEvent" class="md-success">Send form with components</md-button>
           </md-card-actions>
         </form>
       </md-card>
@@ -247,6 +245,7 @@
       formData: Object,
       shouldUpdate: Boolean,
       event: Object,
+      componentIndex: Number,
     },
 
     data: () => ({
@@ -332,7 +331,6 @@
             editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
             editedEvent.components = this.$store.state.eventData.components;
             editedEvent.save().then(response => {
-              this.$parent.isLoading = false;
               this.$router.push({ path: '/events' });
             });
           });
@@ -360,9 +358,7 @@
                   return new CalendarEventImage({featuredImageFile: image}).for(calendars[0], ev).save();
                 })
                 Promise.all(images).then(values => {
-                  this.$parent.isLoading = false;
                   this.$router.push({ path: '/events' });
-
                 });
               })
             });
@@ -370,7 +366,6 @@
       validateEvent () {
         this.$validator.validateAll().then(isValid => {
           if (isValid) {
-            this.$parent.isLoading = true;
             this.$props.shouldUpdate ? this.updateEvent() : this.createEvent();
           }
         });
@@ -461,10 +456,6 @@
     position: absolute;
     right: 31px;
     top: -10px;
-
-    &.dynamic {
-      top: -10px;
-    }
 
     label {
       font-weight: 400;
