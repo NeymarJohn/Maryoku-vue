@@ -29,7 +29,7 @@
           </div>-->
 
           <md-table v-model="upcomingEvents" table-header-color="rose" class="table-striped table-hover">
-            <md-table-row slot="md-table-row" slot-scope="{ item }" @click="routeToEvent(item.id)">
+            <md-table-row slot="md-table-row" slot-scope="{ item }" @click="routeToEvent(item.id)" class="hover-row">
               <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
               <md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>
               <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
@@ -47,13 +47,13 @@
       </div>
     </div>
 
-    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33"
+    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33 card-link"
       v-for="event in recentEvents"
       :key="event.id"
-    >
-      <product-card
-        header-animation="true">
-        <img class="img" slot="imageHeader" :src="product3">
+      @click="routeToEvent(event.id)">
+
+      <product-card header-animation="true">
+        <img class="img" slot="imageHeader" :src="event.coverImage ? event.coverImage.href : product3">
         <md-icon slot="fixed-button">build</md-icon>
         <template slot="first-button">
           <md-icon>photo_library</md-icon>
@@ -68,7 +68,7 @@
           <md-tooltip md-direction="bottom">Tour the Event</md-tooltip>
         </template>
         <h4 slot="title" class="title">
-          <a href="#pablo">{{ event.title }}</a>
+          <a href="#">{{ event.title }}</a>
         </h4>
         <div slot="description" class="card-description">
           {{ event.eventStartMillis | moment }}
@@ -114,7 +114,6 @@
         calendars[0].calendarEvents().get().then(events => {
           this.upcomingEvents = events.reduce(function(result, element) {
             if (element.status.toLowerCase() !== 'done') {
-              console.log(element);
               result.push(element);
             }
             return result;
@@ -173,3 +172,12 @@
     }
   };
 </script>
+
+<style lang="scss">
+  .card-link .md-card {
+    cursor: pointer;
+  }
+  .hover-row:hover {
+    cursor: pointer;
+  }
+</style>

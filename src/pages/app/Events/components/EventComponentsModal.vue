@@ -11,6 +11,7 @@
       </template>
 
       <template slot="body">
+        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
         <form>
           <md-card>
             <div class="md-layout">
@@ -75,6 +76,7 @@
   import { Modal } from "@/components";
   import EventComponent from '@/models/EventComponent';
   import EventComponentProperty from '@/models/EventComponentProperty';
+  import VueElementLoading from 'vue-element-loading';
   import Vue from 'vue';
 
   export default {
@@ -89,9 +91,11 @@
     },
     components: {
       Modal,
+      VueElementLoading,
     },
     data() {
       return {
+        isLoading: true,
         modalOpen: false,
         form: {
           id: null,
@@ -159,7 +163,11 @@
 
         propertiesList.get().then(response => {
           this.propertyValues = response.length ? response.map((val) => val.title) : [];
-          console.log(response);
+          this.isLoading = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isLoading = false;
         });
       });
     },
@@ -169,7 +177,13 @@
 
           propertiesList.get().then(response => {
             this.propertyValues = response.length ? response.map((val) => val.title) : [];
+            this.isLoading = false;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.isLoading = false;
           });
+
       });
     },
     watch: {

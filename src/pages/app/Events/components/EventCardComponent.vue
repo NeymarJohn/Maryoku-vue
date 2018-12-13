@@ -200,7 +200,6 @@
     },
     mounted() {
       this.getVendorObjectsArray();
-      console.log(this.componentObject);
     },
     watch: {
       componentObject: {

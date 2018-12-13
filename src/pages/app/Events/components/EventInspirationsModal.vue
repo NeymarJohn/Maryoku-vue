@@ -8,6 +8,7 @@
         </md-button>
       </template>
       <template slot="body">
+        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
         <div class="inspiration-block">
           <div class="card-wrapper" v-for="item in inspirations" :key="item.id" @click="openNewTab(item.link)">
             <product-card header-animation="false">
@@ -46,17 +47,20 @@
   import CalendarEventInspiration from '@/models/CalendarEventInspiration';
   import CalendarEvent from '@/models/CalendarEvent';
   import Calendar from '@/models/Calendar';
+  import VueElementLoading from 'vue-element-loading';
 
   export default {
     name: 'event-modal-inspirations',
     components: {
       Modal,
-      ProductCard
+      ProductCard,
+      VueElementLoading,
     },
     data() {
       return {
         modalOpen: false,
-        inspirations: []
+        inspirations: [],
+        isLoading: true,
       }
     },
     methods: {
@@ -79,7 +83,12 @@
           let event = events.find(e => { return e.id = this.$route.params.id; })
           let inspirations = event.inspirations().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${event.id}/inspirations`).get().then(response => {
             this.inspirations = response;
+            this.isLoading = false;
           })
+          .catch((error) => {
+            console.log(error);
+            this.isLoading = false;
+          });
         });
       });
     },

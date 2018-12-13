@@ -96,6 +96,8 @@
       }
     },
     mounted() {
+      // hack to always scroll top
+      document.getElementsByClassName('main-panel')[0].scrollTop = 0;
       this.onResponsiveInverted();
       window.addEventListener("resize", this.onResponsiveInverted);
     },
@@ -109,7 +111,6 @@
         }
         calendars[0].calendarEvents().find(this.$route.params.id).then(event => {
           this.event = event;
-          console.log(event);
         })
       });
 

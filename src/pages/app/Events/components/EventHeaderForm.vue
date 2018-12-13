@@ -307,7 +307,6 @@
       }
     },
     mounted() {
-      console.log(this.$route.name);
       if (this.formData) {
         this.form = this.formData;
       }

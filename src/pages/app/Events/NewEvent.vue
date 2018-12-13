@@ -98,7 +98,7 @@
         if (this.$store.state.eventData.components === null || !this.$store.state.eventData.components.length) {
           this.$store.state.eventData.components = [];
         }
-        console.log(this.$store.state.eventData);
+
         this.$store.commit('updateComponent', {
           componentId: item.id,
           todos: [],
@@ -139,7 +139,6 @@
       let components = EventComponent.get().then((componentsList) => {
         this.$store.state.componentsList = componentsList;
         this.componentsList = componentsList;
-        console.log(componentsList);
       });
 
       let vendors = Vendors.get().then((vendorsList) => {
