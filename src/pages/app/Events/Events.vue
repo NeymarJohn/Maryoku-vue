@@ -121,6 +121,10 @@
           this.isLoading = false;
         });
       })
+      .catch((error) => {
+        console.log(error);
+        this.isLoading = false;
+      });
       return true;
     },
     data() {

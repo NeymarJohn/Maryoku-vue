@@ -184,10 +184,14 @@
     },
     created() {
       let _this = this;
+
       Calendar.get().then((calendars) => {
           calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
-            _this.galleryImages = images.map((image) => { return {src: `${process.env.SERVER_URL}/${image.href}`}});
+            _this.galleryImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`}});
           });
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
     methods: {

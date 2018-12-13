@@ -133,7 +133,7 @@
 
               <div class="file-input" v-for="(imageItem, index) in uploadedImages" :key="'image-'+index">
                 <div class="image-container" @click="openGallery(index)">
-                  <img :src="imageItem.href" />
+                  <img :src="imageItem.src" />
                 </div>
                 <div class="button-container">
                   <md-button class="md-danger md-round" @click="removeImage(index, imageItem.id)"><i class="fa fa-times"></i>Remove</md-button>
@@ -315,14 +315,11 @@
         let _this = this;
         console.log(this.event.images)
 
-        if (this.event.images) {
-          let imgs = [];
-          Calendar.get().then((calendars) => {
-            calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
-              imgs = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`, 'id': image.id}});
-            });
+        Calendar.get().then((calendars) => {
+          calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
+            _this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`, 'id': image.id}});
           });
-        }
+        });
       }
     },
     methods: {
@@ -348,37 +345,53 @@
               this.$parent.isLoading = false;
               this.$router.push({ path: '/events' });
             });
+          })
+          .catch((error) => {
+            console.log(error);
+            this.$parent.isLoading = false;
           });
         })
+        .catch((error) => {
+          console.log(error);
+          this.$parent.isLoading = false;
+        });
       },
       createEvent() {
         Calendar.get().then((calendars) => {
-              let newEvent = new CalendarEvent({
-                calendar: {id: calendars[0].id},
-                title: this.form.eventName,
-                eventStartMillis: this.getEventStartInMillis(),
-                eventEndMillis: this.getEventEndInMillis(),
-                location: this.form.location,
-                occasion: this.form.occasion,
-                numberOfParticipants: this.form.participants,
-                totalBudget: this.form.budget,
-                status: this.form.status,
-                currency: 'USD', // HARDCODED, REMOVE AFTER BACK WILL FIX API
-                participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
-                components: this.$store.state.eventData.components,
-              }).for(calendars[0]);
+          let newEvent = new CalendarEvent({
+            calendar: {id: calendars[0].id},
+            title: this.form.eventName,
+            eventStartMillis: this.getEventStartInMillis(),
+            eventEndMillis: this.getEventEndInMillis(),
+            location: this.form.location,
+            occasion: this.form.occasion,
+            numberOfParticipants: this.form.participants,
+            totalBudget: this.form.budget,
+            status: this.form.status,
+            currency: 'USD', // HARDCODED, REMOVE AFTER BACK WILL FIX API
+            participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+            components: this.$store.state.eventData.components,
+          }).for(calendars[0]);
 
-              newEvent.save().then(ev => {
-                let images = this.uploadedImages.map((image) => {
-                  return new CalendarEventImage({featuredImageFile: image}).for(calendars[0], ev).save();
-                })
-                Promise.all(images).then(values => {
-                  this.$parent.isLoading = false;
-                  this.$router.push({ path: '/events' });
+          newEvent.save().then(ev => {
+            let images = this.uploadedImages.map((image) => {
+              return new CalendarEventImage({featuredImageFile: image}).for(calendars[0], ev).save();
+            })
+            Promise.all(images).then(values => {
+              this.$parent.isLoading = false;
+              this.$router.push({ path: '/events' });
 
-                });
-              })
             });
+          })
+          .catch((error) => {
+            console.log(error);
+            this.$parent.isLoading = false;
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$parent.isLoading = false;
+        });
       },
       validateEvent () {
         this.$validator.validateAll().then(isValid => {
@@ -420,6 +433,33 @@
         reader.onload = e => {
           if (this.$props.shouldUpdate) {
 
+            this.$parent.isLoading = true;
+
+            Calendar.get().then(calendars => {
+              if (calendars.length === 0) {
+                return;
+              }
+              calendars[0].calendarEvents().get().then(editedEvents => {
+                let editedEvent = editedEvents.find(e => { return e.id = this.$route.params.id; });
+
+                return new CalendarEventImage({featuredImageFile: e.target.result}).for(calendars[0], editedEvent).save().then(result => {
+                  console.log(result);
+                  _this.uploadedImages.push({src: e.target.result, thumb: e.target.result, id: '123fdsfsd'});
+                })
+                .catch((error) => {
+                  console.log(error);
+                  this.$parent.isLoading = false;
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+                this.$parent.isLoading = false;
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              this.$parent.isLoading = false;
+            });
           } else {
             _this.uploadedImages.push(e.target.result);
           }
@@ -428,15 +468,34 @@
       },
       removeImage: function(index, imgId) {
         if (this.$props.shouldUpdate) {
-          let _this = this;
-          Calendar.get().then((calendars) => {
+
+          this.$parent.isLoading = true;
+
+          Calendar.get().then(calendars => {
+            if (calendars.length === 0) {
+              return;
+            }
             calendars[0].calendarEvents().get().then(editedEvents => {
-              let editedEvent = editedEvents.find(e => { return e.id = _this.$route.params.id; })
-              let images = editedEvent.eventImages().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${editedEvent.id}/images/${imgId}`).delete().then(v => {
-                console.log(v);
+              let editedEvent = editedEvents.find(e => { return e.id = this.$route.params.id; });
+
+              return new CalendarEventImage({id: imgId}).for(calendars[0], editedEvent).delete().then(result => {
+                console.log(result);
                 this.uploadedImages.splice(index, 1);
-              });
+                this.$parent.isLoading = false;
+              })
+              .catch((error) => {
+                console.log(error);
+                this.$parent.isLoading = false;
+              })
+            })
+            .catch((error) => {
+              console.log(error);
+              this.$parent.isLoading = false;
             });
+          })
+          .catch((error) => {
+            console.log(error);
+            this.$parent.isLoading = false;
           });
         } else {
           this.uploadedImages.splice(index, 1);
@@ -474,7 +533,7 @@
         }
       },
       galleryImages() {
-        return this.uploadedImages.map((val) => { return {'src': val, 'thumb': val}})
+        return this.uploadedImages;
       },
     }
   }
@@ -526,5 +585,8 @@
   }
   .gallery-z-index {
     z-index: 500;
+  }
+  .header-image-wrapper .file-input {
+    margin-right: 10px;
   }
 </style>
