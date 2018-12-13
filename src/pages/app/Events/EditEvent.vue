@@ -120,7 +120,7 @@
         }
 
         this.isLoading = true;
-        let value = new EventComponent({ componentId: item.id, todos: [], values: [], vendors: [] }).for(this.calendar, this.event);
+        let value = new EventComponent({ componentId: item.id, todos: [], values: [], vendors: [], calendarEvent: this.event.id }).for(this.calendar, this.event);
         value.save().then(result => {
           this.isLoading = false;
           this.$store.commit('updateComponent', result);
@@ -129,10 +129,6 @@
           console.log(error);
           this.isLoading = false;
         })
-
-
-
-
       },
       sentProposalRequest() {
         let routeData = this.$router.resolve({ path: "/events/proposal" });
