@@ -11,6 +11,7 @@
       </template>
 
       <template slot="body">
+        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
         <form @submit.prevent="validateModalForm" class="md-layout">
           <md-card>
             <div class="md-layout">
@@ -97,11 +98,13 @@
   import { Modal } from "@/components";
   import Vue from 'vue';
   import Vendors from '@/models/Vendors';
+  import VueElementLoading from 'vue-element-loading';
 
   export default {
     name: 'event-modal-vendor',
     components: {
       Modal,
+      VueElementLoading,
     },
     props: {
       vendorItem: Object,
@@ -113,6 +116,7 @@
     },
     data() {
       return {
+        isLoading: false,
         modalOpen: false,
         form: {
           id: null,
@@ -189,6 +193,7 @@
                 this.clearForm();
                 this.modalOpen = false;
               }  else if (!this.selectedFromVendors) { // and CREATE NEW vendor
+                this.isLoading = true;
                 let newVendor = new Vendors({
                   vendorDisplayName: this.form.name,
                   vendorMainEmail: this.form.email,
@@ -203,6 +208,7 @@
                 });
                 newVendor.save().then((response) => {
                   if (response) {
+                    this.isLoading = false;
                     vendorId = response.id;
                     this.$store.state.vendorsList.push(response);
 
@@ -219,6 +225,10 @@
                     this.clearForm();
                     this.modalOpen = false;
                   }
+                })
+                .catch((error) => {
+                  console.log(error);
+                  this.isLoading = false;
                 });
               }
             } else { // if create new
@@ -239,6 +249,7 @@
                 this.modalOpen = false;
 
               } else { // and create new vendor
+                this.isLoading = true;
                 let newVendor = new Vendors({
                   vendorDisplayName: this.form.name,
                   vendorMainEmail: this.form.email,
@@ -253,6 +264,7 @@
                 });
                 newVendor.save().then((response) => {
                   if (response) {
+                    this.isLoading = false;
                     vendorId = response.id;
                     this.$store.state.vendorsList.push(response);
 
@@ -268,6 +280,10 @@
                     this.clearForm();
                     this.modalOpen = false;
                   }
+                })
+                .catch((error) => {
+                  console.log(error);
+                  this.isLoading = false;
                 });
               }
             }

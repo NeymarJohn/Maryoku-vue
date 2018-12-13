@@ -137,7 +137,7 @@
   import Calendar from '@/models/Calendar';
   import moment from 'moment';
   import Vue from 'vue';
-  import LightBox from 'vue-image-lightbox'
+  import LightBox from 'vue-image-lightbox';
 
   export default {
     name: 'event-info',
