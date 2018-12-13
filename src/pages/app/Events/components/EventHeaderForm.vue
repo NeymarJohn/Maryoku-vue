@@ -63,10 +63,14 @@
                 <md-datepicker
                     v-model="form.date"
                     data-vv-name="date"
+                    ref="datePicker"
                     v-validate= "modelValidations.date"
                     required>
-                  <label>Date</label>
+                  <label :class="[{'md-error': ($refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value') )}]">Date</label>
                 </md-datepicker>
+                
+                <div class="md-custom-error" v-if="($refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value'))">The event date is required</div>
+                
               </div>
 
               <div class="md-layout-item md-small-size-100">
@@ -234,6 +238,7 @@
   import CalendarEventImage from '@/models/CalendarEventImage';
   import Calendar from '@/models/Calendar';
   import Vue from 'vue';
+  import $ from 'jquery';
   import LightBox from 'vue-image-lightbox'
 
   export default {
@@ -252,11 +257,11 @@
     data: () => ({
       hoursArray: [...Array(24).keys()].map(x =>  x < 10 ? `0${x}:00`: `${x}:00`),
       durationArray: [...Array(12).keys()].map(x =>  ++x),
-
+      dateValid: true,
       form: {
         eventName: "",
         occasion: "",
-        date: "",
+        date: new Date(),
         time: "",
         duration: "",
         participants: "",
@@ -303,18 +308,22 @@
     }),
     watch: {
       formData() {
+        this.validateDate();
         this.form = this.formData;
-      }
+      },
+     '$refs.datePicker.$el.classList': function (newVal, oldVal){
+         debugger
+     },
     },
     mounted() {
       if (this.formData) {
         this.form = this.formData;
+        this.form.date = moment()
+        this.formData.date = new Date();
       }
       // get images from server
       if (this.$props.shouldUpdate) {
         let _this = this;
-        console.log(this.event.images)
-
         Calendar.get().then((calendars) => {
           calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
             _this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`, 'id': image.id}});
@@ -396,9 +405,12 @@
           this.$parent.isLoading = false;
         });
       },
+      validateDate() {
+        return this.$refs.datePicker.$el.classList.contains('md-has-value')
+      },
       validateEvent () {
         this.$validator.validateAll().then(isValid => {
-          if (isValid) {
+          if ((this.dateValid = this.validateDate()) && isValid) {
             this.$parent.isLoading = true;
             this.$props.shouldUpdate ? this.updateEvent() : this.createEvent();
           }
@@ -509,6 +521,9 @@
     },
 
     computed: {
+      isDateValid() {
+        this.form.date && this.validateDate();
+      },
       spentBudget() {
         let totalSpent = 0;
         if (this.$store.state.eventData.components) {
@@ -562,6 +577,16 @@
       align-items: center;
     }
   }
+
+  .md-custom-error {
+    opacity: 1;
+    margin-bottom: 6px;
+    color: red;
+    margin-top: -11px;
+    font-size: 12px;
+  }
+
+
   .event-form-padding {
     padding-top: 20px;
   }
