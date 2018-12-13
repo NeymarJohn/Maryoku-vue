@@ -16,7 +16,7 @@ export default class CalendarEvent extends Model {
     return this.belongsTo(Calendar)
   }
 
-  images() {
+  eventImages() {
     return this.hasMany(CalendarEventImage)
   }
 

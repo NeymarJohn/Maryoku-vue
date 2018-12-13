@@ -160,15 +160,13 @@
             Calendar.get().then((calendars) => {
               calendars[0].calendarEvents().get().then(editedEvents => {
                 let editedEvent = editedEvents.find(e => { return e.id = _this.$route.params.id; })
-
-                let images = editedEvent.images().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${editedEvent.id}/images/${imgId.id}`).get().then(v => {
+                let images = editedEvent.eventImages().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${editedEvent.id}/images/${imgId.id}`).get().then(v => {
                   console.log(v);
                 });
               });
             });
           });
         }
-
         return this.event.images ? this.event.images.map((val) => { return {'src': val, 'thumb': val}}) : [];
       },
       spentBudget() {

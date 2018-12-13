@@ -7,7 +7,7 @@
           <div class="card-icon">
             <md-icon>assignment</md-icon>
           </div>
-          <h4 class="title">{{ componentTitle }}</h4>
+          <h4 class="title">{{componentObject.componentId}}</h4>
         </div>
 
         <div class="md-layout-item" style="text-align: right;">
@@ -200,22 +200,6 @@
     },
     mounted() {
       this.getVendorObjectsArray();
-    },
-    computed: {
-      componentTitle() {
-        let componentId = this.componentObject.componentId;
-        let o = {};
-
-        this.$store.state.componentsList.some(function(val) {
-          if (val.id === componentId) {
-            return o = val;
-          } else if (val.childComponents) {
-            return o = val.childComponents.find(x => x.id === componentId);
-          }
-        });
-
-        return o ? o.value || o.title : '';
-      }
     },
     watch: {
       componentObject: {
