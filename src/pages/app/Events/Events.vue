@@ -28,18 +28,12 @@
             </div>
           </div>-->
 
-          <md-table v-model="upcomingEvents" table-header-color="rose" class="table-striped table-hover right-align-actions">
+          <md-table v-model="upcomingEvents" table-header-color="rose" class="table-striped table-hover">
             <md-table-row slot="md-table-row" slot-scope="{ item }" @click="routeToEvent(item.id)" class="hover-row">
               <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
               <md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>
               <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
               <md-table-cell md-label="Status">{{ item.status }}</md-table-cell>
-              <md-table-cell md-label="Actions">
-                <md-icon @click="">share</md-icon>
-                <md-icon @click="">visibility</md-icon>
-                <md-icon @click="">edit</md-icon>
-                <md-icon @click="">delete</md-icon>
-              </md-table-cell>
             </md-table-row>
           </md-table>
 
@@ -59,7 +53,7 @@
       @click="routeToEvent(event.id)">
 
       <product-card header-animation="true">
-        <img class="img" slot="imageHeader" :src="event.coverImage ? event.coverImage.href : product3">
+        <img class="img" slot="imageHeader" :src="imageHref(event.coverImage)">
 
 
         <h4 slot="title" class="title">
@@ -142,6 +136,9 @@
       };
     },
     methods: {
+      imageHref(image) {
+        return image && image.href ? `${process.env.SERVER_URL}/${image.href}` : this.product3;
+      },
       duration(event) { 
         return (event.eventEndMillis - event.eventStartMillis) / 3600000
       },
@@ -178,16 +175,5 @@
   }
   .hover-row:hover {
     cursor: pointer;
-  }
-  .right-align-actions {
-    .md-table-cell:last-child, .md-table-head:last-child {
-      text-align: right;
-    }
-    .md-icon {
-      margin-right: 5px;
-      &:hover {
-        color: #FF547C;
-      }
-    }
   }
 </style>
