@@ -81,7 +81,6 @@
         }
       },
 
-
       sentProposalRequest() {
         let routeData = this.$router.resolve({ path: "/events/proposal" });
         window.open(routeData.href, '_blank');
@@ -118,11 +117,7 @@
         this.$store.state.vendorsList = vendorsList;
       });
 
-      let components = EventComponent.get().then((componentsList) => {
-        this.$store.state.componentsList = componentsList;
-      });
-
-      Promise.all([vendorsList, calendar, components]).then(() => {
+      Promise.all([vendorsList, calendar]).then(() => {
         this.isLoading = false;
       })
       .catch((error) => {

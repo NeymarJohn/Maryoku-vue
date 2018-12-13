@@ -155,19 +155,13 @@
     computed: {
       galleryImages() {
         let _this = this;
-        if (this.event.images) {
-          this.event.images.forEach(function (imgId) {
-            Calendar.get().then((calendars) => {
-              calendars[0].calendarEvents().get().then(editedEvents => {
-                let editedEvent = editedEvents.find(e => { return e.id = _this.$route.params.id; })
-                let images = editedEvent.eventImages().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${editedEvent.id}/images/${imgId.id}`).get().then(v => {
-                  console.log(v);
-                });
-              });
-            });
+        let imgs = [];
+        Calendar.get().then((calendars) => {
+          calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
+            imgs = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`}});
           });
-        }
-        return this.event.images ? this.event.images.map((val) => { return {'src': val, 'thumb': val}}) : [];
+        });
+        return imgs;
       },
       spentBudget() {
         let totalSpent = 0;
