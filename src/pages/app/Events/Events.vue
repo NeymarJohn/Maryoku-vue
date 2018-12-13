@@ -28,17 +28,17 @@
             </div>
           </div>-->
 
-          <md-table v-model="upcomingEvents" table-header-color="rose" class="table-striped table-hover right-align-actions">
-            <md-table-row slot="md-table-row" slot-scope="{ item }" @click="routeToEvent(item.id)" class="hover-row">
+          <md-table v-model="upcomingEvents" table-header-color="rose" class="table-striped table-hover right-align-actions" v-if="upcomingEvents.length">
+            <md-table-row slot="md-table-row" slot-scope="{ item }" @click="routeToEvent(item.id, $event)" class="hover-row">
               <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
               <md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>
               <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
               <md-table-cell md-label="Status">{{ item.status }}</md-table-cell>
               <md-table-cell md-label="Actions">
-                <md-icon @click="">share</md-icon>
-                <md-icon @click="">visibility</md-icon>
-                <md-icon @click="">edit</md-icon>
-                <md-icon @click="">delete</md-icon>
+                <div class="float-right" @click="showDeleteAlert($event, item)"><md-icon>delete</md-icon></div>
+                <div class="float-right" @click="editEvent(item)"><md-icon >edit</md-icon></div>
+                <div class="float-right" @click="viewEvent(item)"><md-icon>visibility</md-icon></div>
+                <div class="float-right"><md-icon>share</md-icon></div>
               </md-table-cell>
             </md-table-row>
           </md-table>
@@ -94,6 +94,7 @@
   import Calendar from '../../../models/Calendar';
   import moment from 'moment';
   import VueElementLoading from 'vue-element-loading';
+  import swal from "sweetalert2";
 
   export default {
     components: {
@@ -141,14 +142,50 @@
         isLoading: true,
       };
     },
+    
     methods: {
+      showDeleteAlert(e, ev) {
+        const _this = this;
+        e.stopPropagation();
+        swal({
+          title: "Are you sure?",
+          text: `You won't be able to revert this!`,
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonClass: "md-button md-success",
+          cancelButtonClass: "md-button md-danger",
+          confirmButtonText: "Yes, delete it!",
+          buttonsStyling: false
+        }).then(result => {
+          if (result.value) {
+            _this.isLoading = true;
+            let event = _this.upcomingEvents.find((e) => { return e.id === ev.id })
+            ev.delete().then(result => {
+              _this.upcomingEvents.splice(this.upcomingEvents.indexOf(event), 1)
+              _this.isLoading = false;
+            }).catch(() => {
+              _this.isLoading = false;
+            })
+          }
+        });
+      },
+      editEvent(event) {
+        this.$router.push(`/events/${event.id}/edit`)
+      },
+      viewEvent(event) {
+        this.$router.push(`/events/${event.id}`)
+      },
       imageHref(image) {
         return image && image.href ? `${process.env.SERVER_URL}/${image.href}` : this.product3;
       },
       duration(event) { 
         return (event.eventEndMillis - event.eventStartMillis) / 3600000
       },
-      routeToEvent(eventId) {
+      routeToEvent(eventId, ev) {
+        if (ev.target.tagName === 'I') {
+          ev.stopPropagation();
+          return false;
+        }
         this.$router.push({ path: `/events/${eventId}` });
       },
       routeToNewEvent() {
@@ -179,6 +216,11 @@
   .card-link .md-card {
     cursor: pointer;
   }
+
+  .float-right {
+    float: right;
+  }
+
   .hover-row:hover {
     cursor: pointer;
   }

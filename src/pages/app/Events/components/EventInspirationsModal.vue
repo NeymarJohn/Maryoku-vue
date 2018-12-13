@@ -10,7 +10,7 @@
       <template slot="body">
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
         <div class="inspiration-block">
-          <div class="card-wrapper" v-for="item in inspirations" v-if="inspirations.length" :key="item.id" @click="openNewTab(item.link)">
+          <div class="card-wrapper" v-for="item in inspirations" :key="item.id" @click="openNewTab(item.link)">
             <product-card header-animation="false">
               <img class="img" slot="imageHeader" :src="item.image">
 
@@ -36,9 +36,6 @@
                 </div>
               </template>
             </product-card>
-          </div>
-          <div v-else>
-            <div class="text-empty">No inspirations available</div>
           </div>
         </div>
       </template>
@@ -127,10 +124,6 @@
     }
     .card-wrapper {
       cursor: pointer;
-    }
-    .text-empty {
-      margin-top: 30px;
-      font-size: 24px;
     }
   }
 
