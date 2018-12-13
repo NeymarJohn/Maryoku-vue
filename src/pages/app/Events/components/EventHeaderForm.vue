@@ -133,10 +133,10 @@
 
               <div class="file-input" v-for="(imageItem, index) in uploadedImages" :key="'image-'+index">
                 <div class="image-container" @click="openGallery(index)">
-                  <img :src="imageItem" />
+                  <img :src="imageItem.href" />
                 </div>
                 <div class="button-container">
-                  <md-button class="md-danger md-round" @click="removeImage(index)"><i class="fa fa-times"></i>Remove</md-button>
+                  <md-button class="md-danger md-round" @click="removeImage(index, imageItem.id)"><i class="fa fa-times"></i>Remove</md-button>
                   <!--<md-button class="md-success md-round md-fileinput">
                     <template>Change</template>
                     <input type="file" @change="onFileChange($event, index)">
@@ -310,6 +310,20 @@
       if (this.formData) {
         this.form = this.formData;
       }
+      // get images from server
+      if (this.$props.shouldUpdate) {
+        let _this = this;
+        console.log(this.event.images)
+
+        if (this.event.images) {
+          let imgs = [];
+          Calendar.get().then((calendars) => {
+            calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
+              imgs = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`, 'id': image.id}});
+            });
+          });
+        }
+      }
     },
     methods: {
       updateEvent() {
@@ -393,33 +407,46 @@
         this.$parent.readOnly = false;
         this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
       },
-      onFileChange(e, index) {
+      onFileChange(e) {
         let files = e.target.files || e.dataTransfer.files;
 
         if (!files.length) return;
-        this.createImage(files[0], index);
+        this.createImage(files[0]);
       },
-      createImage(file, index) {
+      createImage(file) {
         let reader = new FileReader();
         let _this = this;
 
         reader.onload = e => {
-          if (index === undefined) {
-            _this.uploadedImages.push(e.target.result);
+          if (this.$props.shouldUpdate) {
+
           } else {
-            Vue.set(_this.uploadedImages, index, e.target.result);
+            _this.uploadedImages.push(e.target.result);
           }
-        };
+        }
         reader.readAsDataURL(file);
       },
-      removeImage: function(index) {
-        this.uploadedImages.splice(index, 1);
-        console.log(this.uploadedImages);
+      removeImage: function(index, imgId) {
+        if (this.$props.shouldUpdate) {
+          let _this = this;
+          Calendar.get().then((calendars) => {
+            calendars[0].calendarEvents().get().then(editedEvents => {
+              let editedEvent = editedEvents.find(e => { return e.id = _this.$route.params.id; })
+              let images = editedEvent.eventImages().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${editedEvent.id}/images/${imgId}`).delete().then(v => {
+                console.log(v);
+                this.uploadedImages.splice(index, 1);
+              });
+            });
+          });
+        } else {
+          this.uploadedImages.splice(index, 1);
+        }
       },
       openGallery(index) {
         this.$refs.lightbox.showImage(index)
       },
     },
+
     computed: {
       spentBudget() {
         let totalSpent = 0;

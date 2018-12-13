@@ -72,11 +72,14 @@
               <label>Location: {{ event.location }}</label>
             </md-field>
 
-            <div class="file-input" v-for="(imageItem, index) in galleryImages" :key="'image-file-input-'+index">
-              <div class="image-container" @click="openGallery(index)">
-                <img :src="imageItem" />
+            <div class="header-image-wrapper">
+              <div class="file-input" v-for="(imageItem, index) in galleryImages" :key="'image-file-input-'+index">
+                <div class="image-container" @click="openGallery(index)">
+                  <img :src="imageItem.src" />
+                </div>
               </div>
             </div>
+
 
             <LightBox :images="galleryImages"
                       ref="lightbox"
@@ -150,19 +153,20 @@
     },
 
     data: () => ({
-
+      galleryImages: [],
     }),
-    computed: {
-      galleryImages() {
-        let _this = this;
-        let imgs = [];
-        Calendar.get().then((calendars) => {
-          calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
-            imgs = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`}});
-          });
+
+    mounted() {
+      let _this = this;
+
+      return Calendar.get().then((calendars) => {
+        calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
+          _this.galleryImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`, 'id': image.id}});
         });
-        return imgs;
-      },
+      });
+    },
+    computed: {
+
       spentBudget() {
         let totalSpent = 0;
 
@@ -262,5 +266,8 @@
   }
   .gallery-z-index {
     z-index: 500;
+  }
+  .file-input {
+    margin-right: 10px;
   }
 </style>
