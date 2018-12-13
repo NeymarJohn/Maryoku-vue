@@ -316,13 +316,10 @@
         console.log(this.event.images)
 
         if (this.event.images) {
+          let imgs = [];
           Calendar.get().then((calendars) => {
-            calendars[0].calendarEvents().get().then(editedEvents => {
-              let editedEvent = editedEvents.find(e => { return e.id = _this.$route.params.id; })
-              let images = editedEvent.eventImages().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${editedEvent.id}/images/`).get().then(v => {
-                console.log(v);
-                _this.uploadedImages = v;
-              });
+            calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
+              imgs = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`, 'id': image.id}});
             });
           });
         }
