@@ -426,14 +426,14 @@
         let totalSpent = 0;
         if (this.$store.state.eventData.components) {
           this.$store.state.eventData.components.forEach(function(component) {
-            if (component.vendors) {
+            if (component && component.vendors) {
               component.vendors.forEach(function (val) {
                 totalSpent += val.cost;
               });
             }
           })
         }
-        console.log(totalSpent);
+
         return totalSpent;
       },
       pieChart() {

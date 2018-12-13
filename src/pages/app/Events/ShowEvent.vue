@@ -30,7 +30,7 @@
     </div>
 
     <event-card-component v-for="(component, index) in event.components"
-                          v-if="$store.state.vendorsList"
+                          v-if="$store.state.vendorsList && component"
                           :componentObject="component"
                           :componentIndex="index"
                           v-bind:readonly="true"
@@ -64,8 +64,6 @@
     },
     data: () => ({
       responsive: false,
-      multiLevel: false,
-      multiLevel2: false,
       calendarId: null,
       occasionsArray: null,
       componentsList: null,
@@ -82,21 +80,8 @@
           this.responsive = false;
         }
       },
-      toggleMultiLevel() {
-        this.multiLevel = !this.multiLevel;
-      },
-      toggleMultiLevel2() {
-        this.multiLevel2 = !this.multiLevel2;
-        this.multiLevel3 = false;
-      },
-      createNewComponent(item) {
-        this.$store.state.eventData.components.push({
-          componentId: item.id,
-          todos: [],
-          values: [],
-          vendors: [],
-        })
-      },
+
+
       sentProposalRequest() {
         let routeData = this.$router.resolve({ path: "/events/proposal" });
         window.open(routeData.href, '_blank');
@@ -134,18 +119,16 @@
 
       Promise.all([vendorsList, calendar]).then(() => {
         this.isLoading = false;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.isLoading = false;
       });
     },
   };
 </script>
 
 <style lang="scss">
-  .dropdown .dropdown-menu .dropdown-menu {
-    left: 102%;
-  }
-  .dropdown-menu .open + .dropdown-menu {
-    min-width: 182px;
-  }
   .read-only {
     pointer-events: none;
   }

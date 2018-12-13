@@ -98,7 +98,8 @@
         if (this.$store.state.eventData.components === null || !this.$store.state.eventData.components.length) {
           this.$store.state.eventData.components = [];
         }
-        this.$store.state.eventData.components.push({
+        console.log(this.$store.state.eventData);
+        this.$store.commit('updateComponent', {
           componentId: item.id,
           todos: [],
           values: [],
@@ -148,6 +149,10 @@
       Promise.all([occasions, components, vendors]).then(() => {
         this.isLoading = false;
       })
+      .catch((error) => {
+        console.log(error);
+        this.isLoading = false;
+      });
     },
   };
 </script>

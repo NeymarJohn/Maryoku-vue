@@ -16,7 +16,6 @@ import CommunityNew from "@/pages/app/Community/Community-new.vue";
 import VendorsSuggested from "@/pages/app/Community/vendors-suggested/index.vue";
 
 import Events from "@/pages/app/Events/Events.vue";
-import EventDetails from "@/pages/app/Events/EventDetails.vue";
 import NewEvent from "@/pages/app/Events/NewEvent.vue";
 import EditEvent from "@/pages/app/Events/EditEvent.vue";
 import ShowEvent from "@/pages/app/Events/ShowEvent.vue";

@@ -49,7 +49,7 @@
     </div>
 
     <event-card-component v-for="(component, index) in components"
-                          v-if="$store.state.vendorsList"
+                          v-if="component && $store.state.vendorsList"
                           v-bind:shouldUpdate="true"
                           :componentObject="component"
                           :componentIndex="index"
@@ -59,6 +59,7 @@
                           :updateComponent="updateComponent"
                           :deleteVendor="deleteVendor"
                           :deleteTodo="deleteTodo"
+                          :deleteComponentItem="deleteComponentItem"
                           :deleteComponent="deleteComponent"
                           :key="'event-card-component-' + index">
 
@@ -117,12 +118,21 @@
         if (this.$store.state.eventData.components === null || !this.$store.state.eventData.components.length) {
           this.$store.state.eventData.components = [];
         }
-        this.$store.state.eventData.components.push({
-          componentId: item.id,
-          todos: [],
-          values: [],
-          vendors: [],
-        });
+
+        this.isLoading = true;
+        let value = new EventComponent({ componentId: item.id, todos: [], values: [], vendors: [] }).for(this.calendar, this.event);
+        value.save().then(result => {
+          this.isLoading = false;
+          this.$store.commit('updateComponent', result);
+        })
+        .catch(error => {
+          console.log(error);
+          this.isLoading = false;
+        })
+
+
+
+
       },
       sentProposalRequest() {
         let routeData = this.$router.resolve({ path: "/events/proposal" });
@@ -143,6 +153,10 @@
           Vue.set(vendorsArray, vendorItemIndex, result);
           this.$store.commit('updateEventData', {index: componentIndex, data: this.$store.state.eventData.components[componentIndex]});
         })
+        .catch(error => {
+          console.log(error);
+          this.isLoading = false;
+        })
       },
       updateTodo(component, subComponent, updatedItemIndex) {
         this.isLoading = true;
@@ -156,6 +170,10 @@
           Vue.set(todosArray, todoItemIndex, result);
           this.$store.commit('updateEventData', {index: componentIndex, data: this.$store.state.eventData.components[componentIndex]});
         })
+        .catch(error => {
+          console.log(error);
+          this.isLoading = false;
+        })
       },
       updateComponent(component, subComponent, updatedItemIndex) {
         this.isLoading = true;
@@ -168,6 +186,10 @@
           this.isLoading = false;
           Vue.set(componentsArray, componentItemIndex, result);
           this.$store.commit('updateEventData', {index: componentIndex, data: this.$store.state.eventData.components[componentIndex]});
+        })
+        .catch(error => {
+          console.log(error);
+          this.isLoading = false;
         })
       },
       deleteVendor(component, subComponent) {
@@ -185,14 +207,33 @@
         todo.delete().then(result => {
           this.isLoading = false;
         })
+        .catch(error => {
+          console.log(error);
+          this.isLoading = false;
+        })
       },
-      deleteComponent(component, subComponent) {
+      deleteComponentItem(component, subComponent) {
         this.isLoading = true;
         let value = new EventComponentValue(subComponent).for(this.calendar, this.event, new EventComponent(component));
         value.delete().then(result => {
           this.isLoading = false;
         })
+        .catch(error => {
+          console.log(error);
+          this.isLoading = false;
+        })
       },
+      deleteComponent(component) {
+        this.isLoading = true;
+        let value = new EventComponent(component).for(this.calendar, this.event);
+        value.delete().then(result => {
+          this.isLoading = false;
+        })
+        .catch(error => {
+          console.log(error);
+          this.isLoading = false;
+        })
+      }
     },
     computed: {
       ...mapGetters({
@@ -244,6 +285,10 @@
       });
 
       Promise.all([vendors, components, occasions, calendar]).then(() => {
+        this.isLoading = false;
+      })
+      .catch((error) => {
+        console.log(error);
         this.isLoading = false;
       });
     },

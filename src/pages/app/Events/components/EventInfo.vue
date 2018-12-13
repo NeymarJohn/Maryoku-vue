@@ -176,7 +176,7 @@
 
         if (this.event.components) {
           this.event.components.forEach(function(component) {
-            if (component.vendors) {
+            if (component && component.vendors) {
               component.vendors.forEach(function (val) {
                 totalSpent += val.cost;
               });

@@ -27,6 +27,12 @@ export default new Vuex.Store({
     },
     removeSubComponent(state, params) {
       state.eventData.components[params.component][params.type].splice(params.item, 1);
-    }
+    },
+    updateComponent(state, params) {
+      state.eventData.components.push(params);
+    },
+    removeComponent(state, params) {
+      state.eventData.components.splice(params.index, 1);
+    },
   }
 });

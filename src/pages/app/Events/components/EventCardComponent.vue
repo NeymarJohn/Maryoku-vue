@@ -183,6 +183,7 @@
       updateTodo: Function,
       deleteVendor: Function,
       deleteTodo: Function,
+      deleteComponentItem: Function,
       deleteComponent: Function,
     },
     name: 'event-card-component',
@@ -213,13 +214,15 @@
       getVendorObjectsArray() {
         let _this = this;
         this.vendorsObjectsArray = [];
-        this.componentObject.vendors.forEach(function(vendorItem) {
-          let vendorObj = Object.assign({},_this.$store.state.vendorsList.find((val) => val.id === vendorItem.vendorId));
-          vendorObj.cost = vendorItem.cost;
-          vendorObj.vendorItemId = vendorItem.id;
+        if (this.componentObject) {
+          this.componentObject.vendors.forEach(function (vendorItem) {
+            let vendorObj = Object.assign({}, _this.$store.state.vendorsList.find((val) => val.id === vendorItem.vendorId));
+            vendorObj.cost = vendorItem.cost;
+            vendorObj.vendorItemId = vendorItem.id;
 
-          _this.vendorsObjectsArray.push(vendorObj);
-        });
+            _this.vendorsObjectsArray.push(vendorObj);
+          });
+        }
       },
 
       showInspirations() {
@@ -270,7 +273,7 @@
                   this.$props.deleteTodo(store, {id: store.todos[itemIndex].id})
                   break;
                 case 'values':
-                  this.$props.deleteComponent(store, {id: store.values[itemIndex].id})
+                  this.$props.deleteComponentItem(store, {id: store.values[itemIndex].id})
                   break;
                 default:
                   break;
@@ -300,7 +303,12 @@
           buttonsStyling: false
         }).then(result => {
           if (result.value) {
-            this.$store.state.eventData.components.splice(this.componentIndex, 1);
+
+            if (this.shouldUpdate) {
+              this.$props.deleteComponent(this.componentObject);
+            }
+            this.$store.commit('removeComponent', {index: this.componentIndex});
+
             swal({
               title: "Deleted!",
               text: "This item has been deleted.",
