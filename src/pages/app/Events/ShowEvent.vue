@@ -118,7 +118,11 @@
         this.$store.state.vendorsList = vendorsList;
       });
 
-      Promise.all([vendorsList, calendar]).then(() => {
+      let components = EventComponent.get().then((componentsList) => {
+        this.$store.state.componentsList = componentsList;
+      });
+
+      Promise.all([vendorsList, calendar, components]).then(() => {
         this.isLoading = false;
       })
       .catch((error) => {
