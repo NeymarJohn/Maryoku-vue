@@ -375,12 +375,15 @@
 
           newEvent.save().then(ev => {
             let images = this.uploadedImages.map((image) => {
-              return new CalendarEventImage({featuredImageFile: image}).for(calendars[0], ev).save();
+              return new CalendarEventImage({featuredImageFile: image.src}).for(calendars[0], ev).save();
             })
             Promise.all(images).then(values => {
               this.$parent.isLoading = false;
               this.$router.push({ path: '/events' });
-
+            })
+            .catch((error) => {
+              console.log(error);
+              this.$parent.isLoading = false;
             });
           })
           .catch((error) => {
@@ -443,8 +446,8 @@
                 let editedEvent = editedEvents.find(e => { return e.id = this.$route.params.id; });
 
                 return new CalendarEventImage({featuredImageFile: e.target.result}).for(calendars[0], editedEvent).save().then(result => {
-                  console.log(result);
-                  _this.uploadedImages.push({src: e.target.result, thumb: e.target.result, id: '123fdsfsd'});
+                  _this.uploadedImages.push({src: e.target.result, thumb: e.target.result, id: result.id});
+                  this.$parent.isLoading = false;
                 })
                 .catch((error) => {
                   console.log(error);
@@ -461,7 +464,7 @@
               this.$parent.isLoading = false;
             });
           } else {
-            _this.uploadedImages.push(e.target.result);
+            _this.uploadedImages.push({ src: e.target.result, thumb: e.target.result });
           }
         }
         reader.readAsDataURL(file);
@@ -479,7 +482,6 @@
               let editedEvent = editedEvents.find(e => { return e.id = this.$route.params.id; });
 
               return new CalendarEventImage({id: imgId}).for(calendars[0], editedEvent).delete().then(result => {
-                console.log(result);
                 this.uploadedImages.splice(index, 1);
                 this.$parent.isLoading = false;
               })
