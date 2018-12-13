@@ -21,6 +21,7 @@
                                  v-validate= "modelValidations.title"
                                  required
                                  :md-options="propertyValues"
+                                 @md-changed="setValue"
                                  class="change-icon-order select-with-icon mb16"
                                  :class="[{'md-error': errors.has('title')}]">
                   <md-icon class="md-accent">person</md-icon>
@@ -32,15 +33,17 @@
 
             <div class="md-layout">
               <div class="md-layout-item">
-                <md-field :class="[{'md-error': errors.has('value')}]" class="mb16">
-                  <md-icon class="md-accent">attach_money</md-icon>
+                <md-autocomplete v-model="form.value"
+                                 data-vv-name="value"
+                                 v-validate= "modelValidations.value"
+                                 required
+                                 :md-options="propertyValuesArray"
+                                 class="change-icon-order select-with-icon mb16"
+                                 :class="[{'md-error': errors.has('value')}]">
+                  <md-icon class="md-accent">person</md-icon>
                   <label>Value</label>
-                  <md-input v-model="form.value"
-                            data-vv-name="value"
-                            v-validate= "modelValidations.value"
-                            required/>
-                  <span class="md-error" v-if="errors.has('value')">This field is required and should be in range of 0 - 100 000</span>
-                </md-field>
+                  <span class="md-error" v-if="errors.has('value')">This field is required</span>
+                </md-autocomplete>
               </div>
             </div>
 
@@ -114,7 +117,9 @@
             required: true,
           }
         },
+        propertyValuesObjects: [],
         propertyValues: [],
+        propertyValuesArray: [],
       }
     },
     methods: {
@@ -156,12 +161,22 @@
           comment:  null,
         };
       },
+      setValue(selectedProperty) {
+        let changedPropertyItem = this.propertyValuesObjects.find((val) => val.title === selectedProperty);
+
+        if (changedPropertyItem) {
+          this.propertyValuesArray = 'possibleValues' in changedPropertyItem ? changedPropertyItem.possibleValues.map((val) => val.title) : [];
+        } else {
+          this.propertyValuesArray = [];
+        }
+      },
     },
     created() {
       EventComponent.get().then((componentsList) => {
         let propertiesList = new EventComponentProperty().for(componentsList[0]);
 
         propertiesList.get().then(response => {
+          this.propertyValuesObjects = response;
           this.propertyValues = response.length ? response.map((val) => val.title) : [];
           this.isLoading = false;
         })

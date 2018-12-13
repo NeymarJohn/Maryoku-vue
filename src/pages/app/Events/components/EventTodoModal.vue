@@ -152,8 +152,9 @@
               store.todos.push(this.form);
             }
 
-            this.$props.updateTodo(store, this.form, this.todoIndex)
-
+            if (this.shouldUpdate) {
+              this.$props.updateTodo(store, this.form, this.todoIndex)
+            }
 
             this.$store.commit('updateEventData', {index: this.componentIndex, data: store})
             this.clearForm();

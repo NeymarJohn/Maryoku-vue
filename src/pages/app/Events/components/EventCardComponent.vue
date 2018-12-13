@@ -279,14 +279,6 @@
               }
             }
             this.$store.commit('removeSubComponent', {component: this.componentIndex, type: arrayTitle, item: itemIndex});
-
-            swal({
-              title: "Deleted!",
-              text: "This item has been deleted.",
-              type: "success",
-              confirmButtonClass: "md-button md-success",
-              buttonsStyling: false
-            });
           }
         });
       },
@@ -307,14 +299,6 @@
               this.$props.deleteComponent(this.componentObject);
             }
             this.$store.commit('removeComponent', {index: this.componentIndex});
-
-            swal({
-              title: "Deleted!",
-              text: "This item has been deleted.",
-              type: "success",
-              confirmButtonClass: "md-button md-success",
-              buttonsStyling: false
-            });
           }
         });
       }

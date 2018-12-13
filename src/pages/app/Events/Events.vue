@@ -54,19 +54,8 @@
 
       <product-card header-animation="true">
         <img class="img" slot="imageHeader" :src="event.coverImage ? event.coverImage.href : product3">
-        <md-icon slot="fixed-button">build</md-icon>
-        <template slot="first-button">
-          <md-icon>photo_library</md-icon>
-          <md-tooltip md-direction="bottom">Browse Gallery (45 Photos)</md-tooltip>
-        </template>
-        <template slot="second-button">
-          <md-icon >share</md-icon>
-          <md-tooltip md-direction="bottom">Share to Inspire</md-tooltip>
-        </template>
-        <template slot="third-button">
-          <md-icon >folder_open</md-icon>
-          <md-tooltip md-direction="bottom">Tour the Event</md-tooltip>
-        </template>
+
+
         <h4 slot="title" class="title">
           <a href="#">{{ event.title }}</a>
         </h4>
