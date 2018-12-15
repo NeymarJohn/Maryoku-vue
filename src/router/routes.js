@@ -22,7 +22,8 @@ import ShowEvent from "@/pages/app/Events/ShowEvent.vue";
 import EventProposal from "@/pages/app/Events/EventProposal.vue";
 import Notes from "@/pages/app/Notes.vue";
 import Proposals from "@/pages/app/Proposals.vue";
-import Vendors from "@/pages/app/Vendors.vue";
+import Vendors from "@/pages/app/Vendors/Vendors.vue";
+import ImportVendors from "@/pages/app/Vendors/ImportVendors.vue";
 import YearlyPlan from "@/pages/app/YearlyPlan.vue";
 
 // Dashboard pages
@@ -373,6 +374,11 @@ let appPages = {
       component: Vendors
     },
     {
+      path: "/import-vendors",
+      name: "ImportVendors",
+      component: ImportVendors
+    },
+    {
       path: "/proposals",
       name: "Proposals",
       component: Proposals
@@ -391,8 +397,8 @@ const routes = [
     redirect: "/me",
     name: "Root"
   },
-  componentsMenu,
-  /*formsMenu,
+  /*componentsMenu,
+  formsMenu,
   tablesMenu,
   mapsMenu,
   pagesMenu,*/
