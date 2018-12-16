@@ -257,7 +257,7 @@ let authPages = {
 };
 
 let appPages = {
-  path: "/",
+  path: "/app",
   component: DashboardLayout,
   name: "App",
   children: [

@@ -122,8 +122,8 @@
                 </div>
             </template>
             <template slot="footer">
-                <md-button class="move-left md-rose" @click="closeModal">Close</md-button>
-                <md-button class="md-rose" @click="wizardComplete">Send Invitation</md-button>
+                <md-button class="move-left md-rose md-simple" @click="closeModal">Close</md-button>
+                <md-button class="md-success" @click="wizardComplete">Send Invitation</md-button>
             </template>
         </modal>
     </div>

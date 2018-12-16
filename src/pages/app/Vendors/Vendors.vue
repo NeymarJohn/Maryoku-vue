@@ -14,8 +14,8 @@
         </div>
       </div>
       <md-card>
-        <md-card-content>
-          <vue-element-loading :active="teamMembersLoading" spinner="bar-fade-scale" color="#FF547C"/>
+        <md-card-content style="min-height: 60px;">
+          <vue-element-loading :active="teamMembersLoading" spinner="ring" color="#FF547C"/>
 
           <vendors-table :vendorsList="vendorsList"></vendors-table>
         </md-card-content>
