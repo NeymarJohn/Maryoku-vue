@@ -11,7 +11,7 @@
       <md-toolbar class="md-primary">
         <div class="md-toolbar-row">
           <div class="md-toolbar-section-start">
-            <drop-down direction="down" ref="dropdown">
+            <drop-down direction="down">
               <md-button slot="title" class="md-button md-block dropdown-toggle" data-toggle="dropdown">
                 <i class="material-icons">add</i> Add Component
               </md-button>
@@ -114,7 +114,6 @@
 
       },
       createNewComponent(e, item) {
-        this.$refs.dropdown.closeDropDown();
         e.stopPropagation();
         if (this.$store.state.eventData.components === null || !this.$store.state.eventData.components.length) {
           this.$store.state.eventData.components = [];

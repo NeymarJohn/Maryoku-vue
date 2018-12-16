@@ -1,23 +1,25 @@
 <template>
     <div class="md-layout">
         <modal v-if="inviteModalOpen" @close="noticeModalHide" container-class="modal-container">
-
+            <template slot="header" class="header-position">
+                <h3 class="title">Create new Vendor</h3>
+                <button class="btn-position" @click="closeModal">X</button>
+            </template>
             <template slot="body">
-                        <h3 class="title">Create new Vendor</h3>
                 <div class="md-layout">
-                    <div class="md-layout-item md-size-95 mt-4 md-small-size-100">
+                    <div class="md-layout-item md-medium-size-95 md-size-95">
+                        <div class="grid-col">
                         <md-field :class="[
                           {'md-valid': !errors.has('displayName') && touched.displayName},
-                          {'md-form-group': true},
                           {'md-error': errors.has('displayName')}]">
-                            <md-icon>face</md-icon>
-                            <label>Vendor</label>
+                            <label>Vendor name</label>
                             <md-input
                                     v-model="name"
                                     data-vv-name="displayName"
                                     type="text"
                                     name="displayName"
                                     required
+                                    autofocus
                                     v-validate="modelValidations.displayName">
                             </md-input>
                             <slide-y-down-transition>
@@ -28,48 +30,38 @@
                             </slide-y-down-transition>
                         </md-field>
 
-
-                        <div class="">
-                            <div class="md-layout-item md-medium-size-100 md-size-100">
                                 <md-field class="no-margin">
-                                    <md-icon>face</md-icon>
                                     <label for="select">Category</label>
                                     <md-select v-model="category" name="select">
                                         <md-option v-for="(option, index) in vendorCategory"  :key="index"  :value="option.id">{{ option.value }}</md-option>
                                     </md-select>
                                 </md-field>
 
-                            </div>
                         </div>
-
                         <md-field :class="[
-                          {'md-valid': !errors.has('webSite') && touched.webSite},
-                          {'md-form-group': true},
-                          {'md-error': errors.has('webSite')}]">
-                            <md-icon>face</md-icon>
-                            <label>Web site</label>
+                      {'md-valid': !errors.has('vendorEmail') && touched.vendorEmail},
+                      {'md-error': errors.has('vendorEmail')}]">
+                            <label>Email Address</label>
                             <md-input
-                                    v-model="web"
-                                    data-vv-name="webSite"
-                                    type="email"
-                                    name="webSite"
+                                    v-model="email"
+                                    data-vv-name="vendorEmail"
+                                    type="text"
+                                    name="email"
                                     required
-                                    v-validate="modelValidations.webSite">
+                                    v-validate="modelValidations.vendorEmail">
                             </md-input>
                             <slide-y-down-transition>
-                                <md-icon class="error" v-show="errors.has('webSite')">close</md-icon>
+                                <md-icon class="error" v-show="errors.has('vendorEmail')">close</md-icon>
                             </slide-y-down-transition>
                             <slide-y-down-transition>
-                                <md-icon class="success" v-show="!errors.has('webSite') && touched.webSite">done</md-icon>
+                                <md-icon class="success" v-show="!errors.has('vendorEmail') && touched.vendorEmail">done</md-icon>
                             </slide-y-down-transition>
                         </md-field>
 
                         <md-field :class="[
                       {'md-valid': !errors.has('vendorAddress') && touched.vendorAddress},
-                      {'md-form-group': true},
                       {'md-error': errors.has('vendorAddress')}]">
-                            <md-icon>record_voice_over</md-icon>
-                            <label>Address</label>
+                            <label>Business Address</label>
                             <md-input
                                     v-model="address"
                                     data-vv-name="vendorAddress"
@@ -89,31 +81,8 @@
 
                     <div class="md-layout-item md-size-95 md-small-size-100">
                         <md-field :class="[
-                      {'md-valid': !errors.has('vendorEmail') && touched.vendorEmail},
-                      {'md-form-group': true},
-                      {'md-error': errors.has('vendorEmail')}]">
-                            <md-icon>email</md-icon>
-                            <label>Email</label>
-                            <md-input
-                                    v-model="email"
-                                    data-vv-name="vendorEmail"
-                                    type="text"
-                                    name="email"
-                                    required
-                                    v-validate="modelValidations.vendorEmail">
-                            </md-input>
-                            <slide-y-down-transition>
-                                <md-icon class="error" v-show="errors.has('vendorEmail')">close</md-icon>
-                            </slide-y-down-transition>
-                            <slide-y-down-transition>
-                                <md-icon class="success" v-show="!errors.has('vendorEmail') && touched.vendorEmail">done</md-icon>
-                            </slide-y-down-transition>
-                        </md-field>
-                        <md-field :class="[
                           {'md-valid': !errors.has('vendorPhoneNumber') && touched.vendorPhoneNumber},
-                          {'md-form-group': true},
                           {'md-error': errors.has('vendorPhoneNumber')}]">
-                            <md-icon>phone</md-icon>
                             <label>Phone Number</label>
                             <md-input
                                     v-model="phoneNumber"
@@ -130,13 +99,33 @@
                                 <md-icon class="success" v-show="!errors.has('vendorPhoneNumber') && touched.vendorPhoneNumber">done</md-icon>
                             </slide-y-down-transition>
                         </md-field>
-                        <md-button class="md-rose text-rose pull-right" @click="addVendor">
-                            Create
-                        </md-button>
+                        <md-field :class="[
+                          {'md-valid': !errors.has('webSite') && touched.webSite},
+                          {'md-error': errors.has('webSite')}]">
+                            <label>Web site address</label>
+                            <md-input
+                                    v-model="web"
+                                    data-vv-name="webSite"
+                                    type="email"
+                                    name="webSite"
+                                    required
+                                    v-validate="modelValidations.webSite">
+                            </md-input>
+                            <slide-y-down-transition>
+                                <md-icon class="error" v-show="errors.has('webSite')">close</md-icon>
+                            </slide-y-down-transition>
+                            <slide-y-down-transition>
+                                <md-icon class="success" v-show="!errors.has('webSite') && touched.webSite">done</md-icon>
+                            </slide-y-down-transition>
+                        </md-field>
+
                     </div>
                 </div>
             </template>
-
+            <template slot="footer">
+                <md-button class="move-left md-rose md-simple" @click="closeModal">Close</md-button>
+                <md-button class="md-rose text-rose pull-right" @click="addVendor">Create</md-button>
+            </template>
         </modal>
     </div>
 </template>
@@ -291,6 +280,9 @@
             toggleModal: function (show) {
                 this.inviteModalOpen = show;
             },
+          closeModal(){
+            this.inviteModalOpen = false;
+          },
             validateStep(ref) {
                 return this.$refs[ref].validate();
             },

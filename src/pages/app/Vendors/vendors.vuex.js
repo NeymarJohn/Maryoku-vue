@@ -22,6 +22,14 @@ export default {
     setMemberProperty(state, {key, actualValue}) {
       state.vendorsMemberData[key] = actualValue;
     },
+    resetForm(state){
+      state.vendorsMemberData.vendorDisplayName = null;
+      state.vendorsMemberData.productsCategory = null;
+      state.vendorsMemberData.vendorWebsite = null;
+      state.vendorsMemberData.vendorAddressLine1 = null;
+      state.vendorsMemberData.vendorMainEmail = null;
+      state.vendorsMemberData.vendorMainPhoneNumber = null;
+    }
 
   },
 
