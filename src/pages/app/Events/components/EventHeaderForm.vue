@@ -378,8 +378,10 @@
           if ((this.dateValid = this.validateDate()) && isValid) {
             this.$parent.isLoading = true;
             this.$props.shouldUpdate ? this.updateEvent() : this.createEvent();
+          } else {
+            this.showNotify();
           }
-        });
+        })
       },
       getEventStartInMillis() {
         if (this.form.date && this.form.time) {
@@ -485,6 +487,16 @@
       },
       openGallery(index) {
         this.$refs.lightbox.showImage(index)
+      },
+
+      showNotify() {
+        this.$notify({
+          message: 'Please, check all required fields',
+          icon: "warning",
+          horizontalAlign: 'center',
+          verticalAlign: 'top',
+          type: 'danger',
+        });
       },
     },
 

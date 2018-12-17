@@ -362,8 +362,8 @@
     }
   }
   .delete-button--small {
-    margin-right: 15px;
-    margin-top: 10px;
+    margin-right: 15px !important;
+    margin-top: 6px !important;
     width: 27px;
     height: 27px;
     min-width: 27px;
