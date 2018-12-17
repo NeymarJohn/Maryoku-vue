@@ -287,8 +287,6 @@
                 });
               }
             }
-          } else {
-            this.showNotify();
           }
         });
       },
@@ -302,6 +300,9 @@
           phone: null,
           cost: null,
         };
+      },
+      test() {
+        this.selectedFromVendors = !this.selectedFromVendors;
       },
       setVendor(selectedName) {
         this.changedVendorItem = this.$store.state.vendorsList.find((val) => val.vendorDisplayName === selectedName);
@@ -318,16 +319,7 @@
           this.form.contactPerson = '';
           this.form.phone = '';
         }
-      },
-      showNotify() {
-        this.$notify({
-          message: 'Please, check all required fields',
-          icon: "warning",
-          horizontalAlign: 'center',
-          verticalAlign: 'top',
-          type: 'danger',
-        });
-      },
+      }
     },
     computed: {
       vendorsList() {
