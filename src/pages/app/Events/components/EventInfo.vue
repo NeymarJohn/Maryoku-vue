@@ -24,9 +24,9 @@
         </md-button>
       </div>
 
-      <md-card class="md-layout-item md-size-100 event-form-padding">
+      <div class="event-form-padding">
         <form class="md-layout">
-          <md-card class="md-layout-item md-size-100 gallery-z-index">
+          <md-card class="md-layout-item md-size-100 gallery-z-index padding-card">
 
             <md-field>
               <md-icon class="md-accent">home</md-icon>
@@ -102,7 +102,7 @@
           </chart-card>
 
         </form>
-      </md-card>
+      </div>
     </div>
 
     <event-gallery-modal ref="galleryModal"
@@ -283,6 +283,11 @@
 
   .event-form-padding {
     margin-top: 0;
+
+    .padding-card {
+      padding-top: 15px;
+      padding-bottom: 30px;
+    }
   }
   .md-datepicker .md-icon.md-theme-default.md-icon-image svg {
     fill: #ff5252;

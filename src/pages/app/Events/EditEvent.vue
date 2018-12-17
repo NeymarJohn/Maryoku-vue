@@ -10,7 +10,7 @@
     </div>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
-      <div class="md-layout-item md-size-100">
+      <div class="md-layout-item md-size-100" style="margin-bottom: 40px;">
         <md-toolbar class="md-transparent left-offset">
           <div class="md-toolbar-row">
             <div class="md-toolbar-section-end">
@@ -89,7 +89,6 @@
       readOnly: true,
       isLoading: true,
     }),
-
     methods: {
       onResponsiveInverted() {
         if (window.innerWidth < 768) {

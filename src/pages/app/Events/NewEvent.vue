@@ -7,7 +7,7 @@
     </div>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
-      <div class="md-layout-item md-size-100">
+      <div class="md-layout-item md-size-100" style="margin-bottom: 40px;">
         <md-toolbar class="md-transparent left-offset">
           <div class="md-toolbar-row">
             <div class="md-toolbar-section-end">
@@ -174,6 +174,10 @@
     height: calc(100vh - 72px);
     overflow: auto;
     padding-top: 1px;
+
+    .md-card {
+      margin: 10px 0;
+    }
   }
   @media (max-width: 960px) {
     .mt-small-20 {
