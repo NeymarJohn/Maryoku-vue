@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout">
+  <div class="md-layout margin-footer">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
@@ -294,6 +294,9 @@
   }
   .dropdown-menu .dropdown-menu {
     min-width: 182px;
+  }
+  .margin-footer {
+    margin-bottom: 50px;
   }
   .read-only {
     pointer-events: none;
