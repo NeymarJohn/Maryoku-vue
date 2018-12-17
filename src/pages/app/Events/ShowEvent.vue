@@ -75,6 +75,7 @@
       occasionsArray: null,
       componentsList: null,
       event: {},
+      calendar: {},
       readOnly: true,
       isLoading: true,
     }),
@@ -111,6 +112,13 @@
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
     methods: {
+      onResponsiveInverted() {
+        if (window.innerWidth < 768) {
+          this.responsive = true;
+        } else {
+          this.responsive = false;
+        }
+      },
       editEvent() {
         this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
       },
@@ -120,6 +128,7 @@
         if(calendars.length === 0 ) {
           return;
         }
+        this.calendar = calendars[0];
         calendars[0].calendarEvents().find(this.$route.params.id).then(event => {
           this.event = event;
         })
