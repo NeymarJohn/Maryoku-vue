@@ -15,12 +15,12 @@
             <div class="image-container" @click="openGallery(index)">
               <img :src="imageItem.src" />
             </div>
-            <div class="button-container">
+            <div class="button-container" v-if="removeImage">
               <md-button class="md-danger md-round" @click="removeImage(index, imageItem.id)"><i class="fa fa-times"></i>Remove</md-button>
             </div>
           </div>
 
-          <div class="file-input">
+          <div class="file-input" v-if="removeImage">
             <div class="image-container">
               <img :src="regularImg" title="">
             </div>

@@ -13,9 +13,19 @@
               </md-button>
 
               <div class="md-layout">
-                <label class="md-layout-item md-size-100 md-form-label">
-                  Status: {{ event.status }}
+                <label class="md-layout-item md-size-20 md-form-label">
+                  Status:
                 </label>
+                <div class="md-layout-item">
+                  <md-field>
+                    <md-select v-model="event.status" name="event-status">
+                      <md-option value="draft">Draft</md-option>
+                      <md-option value="approved">Approved</md-option>
+                      <md-option value="execution">Execution</md-option>
+                      <md-option value="done">Done</md-option>
+                    </md-select>
+                  </md-field>
+                </div>
               </div>
             </div>
 
@@ -123,7 +133,15 @@
     props: {
       event: Object
     },
-
+    watch: {
+      'event.status': {
+        handler: function(val, newVal) {
+          if (newVal != '' && newVal != undefined) {
+          this.updateEvent(newVal);
+        }
+        }
+      }
+    },
     data: () => ({
       uploadedImages: [],
       isModalLoading: false,
@@ -175,6 +193,26 @@
         });
     },
     methods: {
+      updateEvent(status) {
+        Calendar.get().then(calendars => {
+          if(calendars.length === 0 ) {
+            return;
+          }
+          calendars[0].calendarEvents().get().then(editedEvents => {
+            let editedEvent = editedEvents.find(e => { return e.id = this.$route.params.id; })
+            editedEvent.status = status;
+            editedEvent.save().then(response => {
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      },
+
       convertHoursToMillis(hours) {
         return hours * 60 * 60 * 1000;
       },

@@ -11,6 +11,9 @@
         <md-toolbar class="md-primary">
           <div class="md-toolbar-row">
             <div class="md-toolbar-section-start">
+              <div class="md-layout-item md-size-100 text-left">
+                        <md-button @click="editEvent()" class="md-success clickable-button">Edit</md-button>
+                    </div>
             </div>
             <div class="md-toolbar-section-end">
               <md-button class="md-just-icon md-simple md-toolbar-toggle">
@@ -72,6 +75,7 @@
       occasionsArray: null,
       componentsList: null,
       event: {},
+      calendar: {},
       readOnly: true,
       isLoading: true,
     }),
@@ -107,11 +111,24 @@
     beforeDestroy() {
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
+    methods: {
+      onResponsiveInverted() {
+        if (window.innerWidth < 768) {
+          this.responsive = true;
+        } else {
+          this.responsive = false;
+        }
+      },
+      editEvent() {
+        this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
+      },
+    },
     created() {
       let calendar = Calendar.get().then(calendars => {
         if(calendars.length === 0 ) {
           return;
         }
+        this.calendar = calendars[0];
         calendars[0].calendarEvents().find(this.$route.params.id).then(event => {
           this.event = event;
         })
