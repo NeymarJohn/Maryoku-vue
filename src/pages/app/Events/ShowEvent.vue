@@ -94,16 +94,19 @@
       },
     },
     created() {
-      let calendar = Calendar.get().then(calendars => {
-        if(calendars.length === 0 ) {
-          return;
-        }
-        this.calendar = calendars[0];
-        calendars[0].calendarEvents().find(this.$route.params.id).then(event => {
-          this.event = event;
-        })
-      });
-
+      let _this = this;
+      let calendar;
+      setTimeout(() => {
+        calendar = Calendar.get().then(calendars => {
+          if(calendars.length === 0 ) {
+            return;
+          }
+        _this.calendar = calendars[0];
+          calendars[0].calendarEvents().find(_this.$route.params.id).then(event => {
+            _this.event = event;
+          })
+        })}, 500);
+      
       let vendorsList = Vendors.get().then((vendorsList) => {
         this.$store.state.vendorsList = vendorsList;
       });

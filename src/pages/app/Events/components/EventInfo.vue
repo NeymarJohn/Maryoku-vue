@@ -143,9 +143,9 @@
     },
     watch: {
       'event.status': {
-        handler: function(val, newVal) {
+        handler: function(newVal) {
           if (newVal != '' && newVal != undefined) {
-          this.updateEvent(newVal);
+          return this.updateEvent(newVal);
         }
         }
       }
@@ -184,8 +184,9 @@
     created() {
       let _this = this;
       this.isModalLoading = true;
+      
 
-      Calendar.get().then((calendars) => {
+        Calendar.get().then((calendars) => {
           calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
             _this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`}});
             this.isModalLoading = false;
@@ -198,7 +199,7 @@
         .catch((error) => {
           this.isModalLoading = false;
           console.log(error);
-        });
+        })
     },
     methods: {
       updateEvent(status) {
@@ -228,13 +229,13 @@
         return this.spentBudget;
       },
       calculateRemain() {
-        if (this.event.budget === 0 || this.event.budget === NaN || this.event.budget === '' || this.event.budget === undefined) {
+        if (this.event.totalBudget === 0 || this.event.totalBudget === NaN || this.event.totalBudget === '' || this.event.totalBudget === undefined) {
           return this.calculateSpent() > 0 ? 0 : 1;
         }
-        if (this.spentBudget > this.event.budget) {
+        if (this.spentBudget > this.event.totalBudget) {
           return 0;
         }
-        return this.event.budget - this.spentBudget;
+        return this.event.totalBudget - this.spentBudget;
       },
 
       convertHoursToMillis(hours) {
