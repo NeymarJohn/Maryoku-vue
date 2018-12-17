@@ -23,6 +23,7 @@ export default {
       that.auth.setToken(givenToken);
       that.auth.setHeaders(this);
       that.auth.currentUser(that, true);
+        this.$router.push({ path: '/' });
     },2500)
   },
   data() {
