@@ -53,11 +53,11 @@ export default {
       .then((resp) => {
         context.user = { username: resp.data.username };
         this.setHeaders(context);
-        if (required){
-          context.$router.push({
-            path: '/'
-          });
-        }
+        // if (required){
+        //   context.$router.push({
+        //     path: '/'
+        //   });
+        // }
       }, (_) => {
         this.unsetToken();
         if (required) {
