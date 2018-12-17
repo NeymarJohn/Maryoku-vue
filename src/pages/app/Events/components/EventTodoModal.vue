@@ -159,7 +159,18 @@
             this.$store.commit('updateEventData', {index: this.componentIndex, data: store})
             this.clearForm();
             this.modalOpen = false;
+          } else {
+            this.showNotify();
           }
+        });
+      },
+      showNotify() {
+        this.$notify({
+          message: 'Please, check all required fields',
+          icon: "warning",
+          horizontalAlign: 'center',
+          verticalAlign: 'top',
+          type: 'danger',
         });
       },
     }

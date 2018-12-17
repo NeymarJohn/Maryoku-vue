@@ -3,11 +3,11 @@
     <div class="md-layout-item md-size-100">
       <div class="table table-stats text-right">
         <div class="text-right">
-          <md-button class="md-success text-rose" @click="openInviteModal">
+          <md-button class="md-rose text-rose" @click="openInviteModal">
             <md-icon>add</md-icon>
             Create New
           </md-button>
-          <md-button @click="$router.push({ path: 'import-vendors' });" class="md-success">
+          <md-button @click="$router.push({ path: 'import-vendors' });" class="md-rose">
             <md-icon>cloud_upload</md-icon>
             Upload Vendors
           </md-button>
@@ -27,7 +27,6 @@
 
 <script>
   import CreateModal from './CreateModal';
-  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import VendorsTable from './Table';
   import ImportVendors from './ImportVendors';
   import Vendors from "@/models/Vendors";
@@ -53,7 +52,6 @@
 
     },
     methods: {
-      ...mapMutations('vendors', ['resetForm']),
       fetch() {
         Vendors.get().then(vendors => {
           this.vendorsList = vendors;
@@ -64,7 +62,6 @@
       },
       openInviteModal(){
         this.$refs.inviteModal.toggleModal(true);
-        this.resetForm();
       }
       }
   };
