@@ -7,6 +7,11 @@
           <md-card class="md-layout-item md-size-100 gallery-z-index">
 
             <div class="event-status-field static">
+              <md-button native-type="submit" @click="openImageGallery" class="md-success">
+                Image Gallery
+                <span class="badge md-round md-info" v-if="uploadedImages.length">{{ uploadedImages.length }}</span>
+              </md-button>
+
               <div class="md-layout">
                 <label class="md-layout-item md-size-20 md-form-label">
                   Status:
@@ -66,20 +71,6 @@
               <label>Location: {{ event.location }}</label>
             </md-field>
 
-            <div class="header-image-wrapper">
-              <div class="file-input" v-for="(imageItem, index) in galleryImages" :key="'image-file-input-'+index">
-                <div class="image-container" @click="openGallery(index)">
-                  <img :src="imageItem.src" />
-                </div>
-              </div>
-            </div>
-
-
-            <LightBox :images="galleryImages"
-                      ref="lightbox"
-                      :show-light-box="false">
-            </LightBox>
-
           </md-card>
 
 
@@ -114,6 +105,11 @@
         </form>
       </md-card>
     </div>
+
+    <event-gallery-modal ref="galleryModal"
+                         :isModalLoading="isModalLoading"
+                         :uploadedImages="uploadedImages">
+    </event-gallery-modal>
   </div>
 </template>
 <script>
@@ -126,19 +122,19 @@
   import Calendar from '@/models/Calendar';
   import moment from 'moment';
   import Vue from 'vue';
-  import LightBox from 'vue-image-lightbox';
+  import EventGalleryModal from './EventGalleryModal';
 
   export default {
     name: 'event-info',
     components: {
       ChartCard,
-      LightBox,
+      EventGalleryModal,
     },
     props: {
       event: Object
     },
     watch: {
-      'event.status': { 
+      'event.status': {
         handler: function(val, newVal) {
           if (newVal != '' && newVal != undefined) {
           this.updateEvent(newVal);
@@ -147,7 +143,8 @@
       }
     },
     data: () => ({
-      galleryImages: []
+      uploadedImages: [],
+      isModalLoading: false,
     }),
     computed: {
       spentBudget() {
@@ -178,13 +175,20 @@
     },
     created() {
       let _this = this;
+      this.isModalLoading = true;
+
       Calendar.get().then((calendars) => {
           calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
-            console.log(images);
-            _this.galleryImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`}});
+            _this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`}});
+            this.isModalLoading = false;
+          })
+          .catch((error) => {
+            this.isModalLoading = false;
+            console.log(error);
           });
         })
         .catch((error) => {
+          this.isModalLoading = false;
           console.log(error);
         });
     },
@@ -218,8 +222,8 @@
       editEvent() {
         this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
       },
-      openGallery(index) {
-        this.$refs.lightbox.showImage(index)
+      openImageGallery() {
+        this.$refs.galleryModal.toggleModal(true);
       },
     },
   filters: {
@@ -240,9 +244,14 @@
     position: absolute;
     right: -14px;
     top: 10px;
+    display: flex;
 
     &.static {
-      top: -60px;
+      top: -58px;
+
+      .badge {
+        top: -1px;
+      }
     }
 
     label {
@@ -255,8 +264,20 @@
     }
   }
   .event-form-padding {
-    padding-top: 20px;
+    padding-top: 30px;
     margin-top: 0;
+
+    .badge {
+      margin-left: 4px;
+      position: relative;
+      background: #FF547C;
+      border-radius: 50%;
+      padding: 0;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+    }
   }
   .md-datepicker .md-icon.md-theme-default.md-icon-image svg {
     fill: #ff5252;

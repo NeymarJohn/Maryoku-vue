@@ -65,7 +65,7 @@
 
 
         <h4 slot="title" class="title">
-          <a href="#">{{ event.title }}</a>
+          <a @click="routeToEvent(event.id)">{{ event.title }}</a>
         </h4>
         <div slot="description" class="card-description">
           {{ event.eventStartMillis | moment }}
@@ -183,11 +183,7 @@
       duration(event) { 
         return (event.eventEndMillis - event.eventStartMillis) / 3600000
       },
-      routeToEvent(eventId, ev) {
-        if (ev.target.tagName === 'I') {
-          ev.stopPropagation();
-          return false;
-        }
+      routeToEvent(eventId) {
         this.$router.push({ path: `/events/${eventId}` });
       },
       routeToNewEvent() {

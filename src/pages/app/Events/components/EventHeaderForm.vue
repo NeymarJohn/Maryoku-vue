@@ -7,6 +7,11 @@
           <md-card class="md-layout-item md-size-100 gallery-z-index">
 
             <div class="event-status-field dynamic">
+              <md-button native-type="submit" @click="openImageGallery" class="md-success">
+                Image Gallery
+                <span class="badge md-round md-info" v-if="uploadedImages.length">{{ uploadedImages.length }}</span>
+              </md-button>
+
               <div class="md-layout">
                 <label class="md-layout-item md-size-20 md-form-label">
                   Status:
@@ -125,40 +130,6 @@
               <span class="md-error" v-if="errors.has('location')">The location is required</span>
             </md-field>
 
-            <div class="header-image-wrapper">
-              <h4 class="card-title">Choose Event Image</h4>
-
-              <div class="file-input" v-for="(imageItem, index) in uploadedImages" :key="'image-'+index">
-                <div class="image-container" @click="openGallery(index)">
-                  <img :src="imageItem.src" />
-                </div>
-                <div class="button-container">
-                  <md-button class="md-danger md-round" @click="removeImage(index, imageItem.id)"><i class="fa fa-times"></i>Remove</md-button>
-                  <!--<md-button class="md-success md-round md-fileinput">
-                    <template>Change</template>
-                    <input type="file" @change="onFileChange($event, index)">
-                  </md-button>-->
-                </div>
-              </div>
-
-              <div class="file-input">
-                <div class="image-container">
-                  <img :src="regularImg" title="">
-                </div>
-
-                <div class="button-container">
-                  <md-button class="md-success md-round md-fileinput">
-                    <template>Add image</template>
-                    <input type="file" @change="onFileChange($event)">
-                  </md-button>
-                </div>
-              </div>
-            </div>
-            <LightBox :images="galleryImages"
-                      ref="lightbox"
-                      :show-light-box="false">
-            </LightBox>
-
           </md-card>
 
 
@@ -202,6 +173,12 @@
         </form>
       </md-card>
     </div>
+
+    <event-gallery-modal ref="galleryModal"
+                         :isModalLoading="isModalLoading"
+                         :uploadedImages="uploadedImages"
+                         :onFileChange="onFileChange"
+                         :removeImage="removeImage"></event-gallery-modal>
   </div>
 </template>
 <script>
@@ -214,12 +191,12 @@
   import Calendar from '@/models/Calendar';
   import Vue from 'vue';
   import $ from 'jquery';
-  import LightBox from 'vue-image-lightbox'
+  import EventGalleryModal from './EventGalleryModal';
 
   export default {
     name: 'event-header-form',
     components: {
-      LightBox,
+      EventGalleryModal,
       ChartCard,
     },
     props: {
@@ -233,6 +210,7 @@
       hoursArray: [...Array(24).keys()].map(x =>  x < 10 ? `0${x}:00`: `${x}:00`),
       durationArray: [...Array(12).keys()].map(x =>  ++x),
       dateValid: true,
+      isModalLoading: false,
       form: {
         eventName: "",
         occasion: "",
@@ -245,7 +223,6 @@
         location: "",
       },
       uploadedImages: [],
-      regularImg: "static/img/image_placeholder.jpg",
 
       modelValidations: {
         eventName: {
@@ -296,10 +273,21 @@
       // get images from server
       if (this.$props.shouldUpdate) {
         let _this = this;
+        this.isModalLoading = true;
+
         Calendar.get().then((calendars) => {
           calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
             _this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`, 'id': image.id}});
+            this.isModalLoading = false;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.isModalLoading = false;
           });
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isModalLoading = false;
         });
       }
     },
@@ -325,6 +313,10 @@
             editedEvent.save().then(response => {
               this.$parent.isLoading = false;
               this.$router.push({ path: '/events' });
+            })
+            .catch((error) => {
+              console.log(error);
+              this.$parent.isLoading = false;
             });
           })
           .catch((error) => {
@@ -403,6 +395,9 @@
       convertHoursToMillis(hours) {
         return hours * 60 * 60 * 1000;
       },
+      openImageGallery() {
+        this.$refs.galleryModal.toggleModal(true);
+      },
       editEvent() {
         this.$parent.readOnly = false;
         this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
@@ -420,7 +415,7 @@
         reader.onload = e => {
           if (this.$props.shouldUpdate) {
 
-            this.$parent.isLoading = true;
+            this.isModalLoading = true;
 
             Calendar.get().then(calendars => {
               if (calendars.length === 0) {
@@ -431,21 +426,21 @@
 
                 return new CalendarEventImage({featuredImageFile: e.target.result}).for(calendars[0], editedEvent).save().then(result => {
                   _this.uploadedImages.push({src: e.target.result, thumb: e.target.result, id: result.id});
-                  this.$parent.isLoading = false;
+                  this.isModalLoading = false;
                 })
                 .catch((error) => {
                   console.log(error);
-                  this.$parent.isLoading = false;
+                  this.isModalLoading = false;
                 });
               })
               .catch((error) => {
                 console.log(error);
-                this.$parent.isLoading = false;
+                this.isModalLoading = false;
               });
             })
             .catch((error) => {
               console.log(error);
-              this.$parent.isLoading = false;
+              this.isModalLoading = false;
             });
           } else {
             _this.uploadedImages.push({ src: e.target.result, thumb: e.target.result });
@@ -456,7 +451,7 @@
       removeImage: function(index, imgId) {
         if (this.$props.shouldUpdate) {
 
-          this.$parent.isLoading = true;
+          this.isModalLoading = true;
 
           Calendar.get().then(calendars => {
             if (calendars.length === 0) {
@@ -467,21 +462,21 @@
 
               return new CalendarEventImage({id: imgId}).for(calendars[0], editedEvent).delete().then(result => {
                 this.uploadedImages.splice(index, 1);
-                this.$parent.isLoading = false;
+                this.isModalLoading = false;
               })
               .catch((error) => {
                 console.log(error);
-                this.$parent.isLoading = false;
+                this.isModalLoading = false;
               })
             })
             .catch((error) => {
               console.log(error);
-              this.$parent.isLoading = false;
+              this.isModalLoading = false;
             });
           })
           .catch((error) => {
             console.log(error);
-            this.$parent.isLoading = false;
+            this.isModalLoading = false;
           });
         } else {
           this.uploadedImages.splice(index, 1);
@@ -521,20 +516,16 @@
           }
         }
       },
-      galleryImages() {
-        return this.uploadedImages;
-      },
     }
   }
 </script>
 
 <style lang="scss">
-  @import 'vue-image-lightbox/dist/vue-image-lightbox.min.css';
-
   .event-status-field {
     position: absolute;
     right: -14px;
     top: -10px;
+    display: flex;
 
     &.dynamic {
       top: -61px;
@@ -560,17 +551,27 @@
 
 
   .event-form-padding {
-    padding-top: 20px;
+    padding-top: 30px;
     margin-top: 0;
+
+    .badge {
+      top: -2px;
+      margin-left: 4px;
+      position: relative;
+      background: #FF547C;
+      border-radius: 50%;
+      padding: 0;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+    }
   }
   .md-datepicker .md-icon.md-theme-default.md-icon-image svg {
     fill: #ff5252;
   }
   .clickable-button {
     pointer-events: all;
-  }
-  .header-image-wrapper {
-    margin-bottom: 20px;
   }
   .file-input {
     margin-bottom: 15px;

@@ -192,6 +192,7 @@
     }
     .scrollable-container {
       height: auto;
+
     }
   }
 </style>
