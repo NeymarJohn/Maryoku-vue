@@ -285,10 +285,7 @@
       formData() {
         this.validateDate();
         this.form = this.formData;
-      },
-     '$refs.datePicker.$el.classList': function (newVal, oldVal){
-         debugger
-     },
+      }
     },
     mounted() {
       if (this.formData) {
