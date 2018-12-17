@@ -36,20 +36,20 @@
             </div>
 
             <div class="md-layout">
-              <div class="md-layout-item md-small-size-100 disabled-datepicker">
+              <div class="md-layout-item md-size-33 md-small-size-100 disabled-datepicker">
                 <md-datepicker>
                   <label>Date: {{ event.eventStartMillis | formatDate }}</label>
                 </md-datepicker>
               </div>
 
-              <div class="md-layout-item md-small-size-100">
+              <div class="md-layout-item md-size-33 md-small-size-100">
                 <md-field class="select-with-icon">
                   <md-icon class="md-accent">query_builder</md-icon>
                   <label>Time: {{ event.eventStartMillis | formatTime }}</label>
                 </md-field>
               </div>
 
-              <div class="md-layout-item md-small-size-100">
+              <div class="md-layout-item md-size-33 md-small-size-100">
                 <md-field class="select-with-icon">
                   <md-icon class="md-accent">hourglass_empty</md-icon>
                   <label>Event duration in hours: {{ convertMillisToHours(event.eventEndMillis - event.eventStartMillis) }}</label>
@@ -58,21 +58,21 @@
             </div>
 
             <div class="md-layout">
-              <div class="md-layout-item md-small-size-100">
+              <div class="md-layout-item md-size-33 md-small-size-100">
                 <md-field class="select-with-icon">
                   <md-icon class="md-accent">local_bar</md-icon>
                   <label>Occasion: {{ event.occasion }}</label>
                 </md-field>
               </div>
 
-              <div class="md-layout-item md-small-size-100">
+              <div class="md-layout-item md-size-33 md-small-size-100">
                 <md-field>
                   <md-icon class="md-accent">person</md-icon>
                   <label>Number of Participants: {{ event.numberOfParticipants }}</label>
                 </md-field>
               </div>
 
-              <div class="md-layout-item md-small-size-100">
+              <div class="md-layout-item md-size-33 md-small-size-100">
                 <md-field>
                   <md-icon class="md-accent">location_on</md-icon>
                   <label>Location: {{ event.location }}</label>
