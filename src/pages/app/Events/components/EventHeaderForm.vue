@@ -39,6 +39,23 @@
               <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
             </md-field>
 
+            <md-field :class="[{'md-error': errors.has('occasion')}]" class="select-with-icon">
+              <md-icon class="md-accent">local_bar</md-icon>
+              <label>Occasion</label>
+              <md-select v-model="form.occasion"
+
+                         data-vv-name="occasion"
+                         v-validate= "modelValidations.occasion"
+                         required>
+                <md-option v-for="option in occasionOptions"
+                           :key="option.id"
+                           :value="option.value">
+                  {{ option.value }}
+                </md-option>
+              </md-select>
+              <span class="md-error" v-if="errors.has('occasion')">The event occasion is required</span>
+            </md-field>
+
             <div class="md-layout">
               <div class="md-layout-item md-small-size-100" style="padding-left: 0;">
                 <md-datepicker
@@ -91,50 +108,28 @@
               </div>
             </div>
 
-            <div class="md-layout">
-              <div class="md-layout-item">
-                 <md-field :class="[{'md-error': errors.has('occasion')}]" class="select-with-icon">
-                  <md-icon class="md-accent">local_bar</md-icon>
-                  <label>Occasion</label>
-                  <md-select v-model="form.occasion"
+            <md-field :class="[{'md-error': errors.has('participants')}]">
+              <md-icon class="md-accent">person</md-icon>
+              <label>Number of Participants</label>
+              <md-input type="text"
+                        v-model="form.participants"
+                        data-vv-name="participants"
+                        v-validate= "modelValidations.participants"
+                        required/>
+              <span class="md-error" v-if="errors.has('participants')">The event participants is required and should be in range of 1 - 10 000</span>
+            </md-field>
 
-                            data-vv-name="occasion"
-                            v-validate= "modelValidations.occasion"
-                            required>
-                    <md-option v-for="option in occasionOptions"
-                              :key="option.id"
-                              :value="option.value">
-                      {{ option.value }}
-                    </md-option>
-                  </md-select>
-                  <span class="md-error" v-if="errors.has('occasion')">The event occasion is required</span>
-                </md-field>
-              </div>
-              <div class="md-layout-item">
-                <md-field :class="[{'md-error': errors.has('participants')}]">
-                  <md-icon class="md-accent">person</md-icon>
-                  <label>Number of Participants</label>
-                  <md-input type="text"
-                            v-model="form.participants"
-                            data-vv-name="participants"
-                            v-validate= "modelValidations.participants"
-                            required/>
-                  <span class="md-error" v-if="errors.has('participants')">The event participants is required and should be in range of 1 - 10 000</span>
-                </md-field>
-              </div>
-              <div class="md-layout-item">
-                <md-field :class="[{'md-error': errors.has('location')}]">
-                  <md-icon class="md-accent">location_on</md-icon>
-                  <label>Location</label>
-                  <md-input type="text"
-                            v-model="form.location"
-                            data-vv-name="location"
-                            v-validate= "modelValidations.location"
-                            required/>
-                  <span class="md-error" v-if="errors.has('location')">The location is required</span>
-                </md-field>
-              </div>
-            </div>
+            <md-field :class="[{'md-error': errors.has('location')}]">
+              <md-icon class="md-accent">location_on</md-icon>
+              <label>Location</label>
+              <md-input type="text"
+                        v-model="form.location"
+                        data-vv-name="location"
+                        v-validate= "modelValidations.location"
+                        required/>
+              <span class="md-error" v-if="errors.has('location')">The location is required</span>
+            </md-field>
+
           </md-card>
 
 
@@ -382,8 +377,10 @@
           if ((this.dateValid = this.validateDate()) && isValid) {
             this.$parent.isLoading = true;
             this.$props.shouldUpdate ? this.updateEvent() : this.createEvent();
+          } else {
+            this.showNotify();
           }
-        });
+        })
       },
       getEventStartInMillis() {
         if (this.form.date && this.form.time) {
@@ -489,6 +486,16 @@
       },
       openGallery(index) {
         this.$refs.lightbox.showImage(index)
+      },
+
+      showNotify() {
+        this.$notify({
+          message: 'Please, check all required fields',
+          icon: "warning",
+          horizontalAlign: 'center',
+          verticalAlign: 'top',
+          type: 'danger',
+        });
       },
     },
 

@@ -185,6 +185,7 @@
   .scrollable-container {
     height: calc(100vh - 72px);
     overflow: auto;
+    padding-top: 1px;
   }
   @media (max-width: 960px) {
     .mt-small-20 {
