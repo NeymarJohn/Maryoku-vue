@@ -2,34 +2,40 @@
   <div class="md-layout">
 
     <div class="md-layout-item md-size-100 gallery-z-index">
+
+      <div class="event-status-field dynamic">
+        <div class="md-layout">
+          <div class="md-layout md-layout-item md-size-40">
+            <label class="md-layout-item md-size-20 md-small-size-20 md-form-label">
+              Status:
+            </label>
+            <div class="md-layout-item">
+              <md-field>
+                <md-select v-model="form.status" name="event-status">
+                  <md-option value="draft">Draft</md-option>
+                  <md-option value="approved">Approved</md-option>
+                  <md-option value="execution">Execution</md-option>
+                  <md-option value="done">Done</md-option>
+                </md-select>
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout-item ml-auto md-size-50 text-right">
+            <md-button native-type="submit" @click="openImageGallery" class="md-success">
+              Image Gallery
+              <span class="badge md-round md-info" v-if="uploadedImages.length">{{ uploadedImages.length }}</span>
+            </md-button>
+            <md-button native-type="submit" @click.native.prevent="validateEvent" class="md-success">
+              {{ formData !== null ? 'Edit': 'Create' }} event
+            </md-button>
+          </div>
+
+        </div>
+      </div>
+
       <md-card class="md-layout-item md-size-100 event-form-padding">
         <form class="md-layout">
           <md-card class="md-layout-item md-size-100 gallery-z-index">
-
-            <div class="event-status-field dynamic">
-              <div class="md-layout">
-                <label class="md-layout-item md-size-20 md-form-label">
-                  Status:
-                </label>
-                <div class="md-layout-item">
-                  <md-field>
-                    <md-select v-model="form.status" name="event-status">
-                      <md-option value="draft">Draft</md-option>
-                      <md-option value="approved">Approved</md-option>
-                      <md-option value="execution">Execution</md-option>
-                      <md-option value="done">Done</md-option>
-                    </md-select>
-                  </md-field>
-                </div>
-                <md-button native-type="submit" @click="openImageGallery" class="md-success">
-                  Image Gallery
-                <span class="badge md-round md-info" v-if="uploadedImages.length">{{ uploadedImages.length }}</span>
-                </md-button>
-                <md-button native-type="submit" @click.native.prevent="validateEvent" class="md-success">
-                  {{ formData !== null ? 'Edit': 'Create' }} event
-                </md-button>
-              </div>
-            </div>
 
             <md-field :class="[{'md-error': errors.has('eventName')}]">
               <md-icon class="md-accent">home</md-icon>
@@ -535,9 +541,7 @@
 
 <style lang="scss">
   .event-status-field {
-    position: absolute;
-    right: -14px;
-    top: -10px;
+
     display: flex;
 
     &.dynamic {
