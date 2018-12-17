@@ -49,6 +49,15 @@ Object.defineProperty(Vue.prototype, "$Chartist", {
   }
 });
 
+axios.interceptors.response.use(function (response) {
+  return response;
+}, function (error) {
+  if (error.status === 401) {
+    router.push({ path: '/events' })
+  }
+  return Promise.reject(error);
+});
+
 Vue.use(VueAxios, axios);
 
 Model.$http = axios;
