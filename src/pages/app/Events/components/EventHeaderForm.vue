@@ -28,20 +28,18 @@
         <form class="md-layout">
           <md-card class="md-layout-item md-size-100 gallery-z-index padding-card">
 
-            <div class="md-layout-item">
-              <md-field :class="[{'md-error': errors.has('eventName')}]">
-                <md-icon class="md-accent">home</md-icon>
-                <label>Event Title</label>
-                <md-input v-model="form.eventName"
-                          data-vv-name="eventName"
-                          v-validate= "modelValidations.eventName"
-                          required/>
-                <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
-              </md-field>
-            </div>
+            <md-field :class="[{'md-error': errors.has('eventName')}]">
+              <md-icon class="md-accent">home</md-icon>
+              <label>Event Title</label>
+              <md-input v-model="form.eventName"
+                        data-vv-name="eventName"
+                        v-validate= "modelValidations.eventName"
+                        required/>
+              <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
+            </md-field>
 
             <div class="md-layout">
-              <div class="md-layout-item md-size-33 md-small-size-100">
+              <div class="md-layout-item md-small-size-100" style="padding-left: 0;">
                 <md-datepicker
                     v-model="form.date"
                     data-vv-name="date"
@@ -55,7 +53,7 @@
                 
               </div>
 
-              <div class="md-layout-item md-size-33 md-small-size-100">
+              <div class="md-layout-item md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('time')}]" class="select-with-icon">
                   <md-icon class="md-accent">query_builder</md-icon>
                   <label>Time</label>
@@ -73,10 +71,10 @@
                 </md-field>
               </div>
 
-              <div class="md-layout-item md-size-33 md-small-size-100">
+              <div class="md-layout-item md-small-size-100" style="padding-right: 0;">
                 <md-field :class="[{'md-error': errors.has('duration')}]" class="select-with-icon">
                   <md-icon class="md-accent">hourglass_empty</md-icon>
-                  <label>Duration in hr.</label>
+                  <label>Event duration in hours</label>
                   <md-select v-model="form.duration"
                              data-vv-name="duration"
                              v-validate= "modelValidations.duration"
@@ -93,7 +91,7 @@
             </div>
 
             <div class="md-layout">
-              <div class="md-layout-item md-size-33 md-small-size-100">
+              <div class="md-layout-item">
                  <md-field :class="[{'md-error': errors.has('occasion')}]" class="select-with-icon">
                   <md-icon class="md-accent">local_bar</md-icon>
                   <label>Occasion</label>
@@ -111,10 +109,10 @@
                   <span class="md-error" v-if="errors.has('occasion')">The event occasion is required</span>
                 </md-field>
               </div>
-              <div class="md-layout-item md-size-33 md-small-size-100">
+              <div class="md-layout-item">
                 <md-field :class="[{'md-error': errors.has('participants')}]">
                   <md-icon class="md-accent">person</md-icon>
-                  <label># of Participants</label>
+                  <label>Number of Participants</label>
                   <md-input type="text"
                             v-model="form.participants"
                             data-vv-name="participants"
@@ -123,7 +121,7 @@
                   <span class="md-error" v-if="errors.has('participants')">The event participants is required and should be in range of 1 - 10 000</span>
                 </md-field>
               </div>
-              <div class="md-layout-item md-size-33 md-small-size-100">
+              <div class="md-layout-item">
                 <md-field :class="[{'md-error': errors.has('location')}]">
                   <md-icon class="md-accent">location_on</md-icon>
                   <label>Location</label>
@@ -593,14 +591,8 @@
       padding-bottom: 30px;
     }
   }
-  .md-datepicker {
-    .md-icon.md-theme-default.md-icon-image svg {
-      fill: #ff5252;
-    }
-
-    &.md-field::after {
-      width: 100%;
-    }
+  .md-datepicker .md-icon.md-theme-default.md-icon-image svg {
+    fill: #ff5252;
   }
   .clickable-button {
     pointer-events: all;
