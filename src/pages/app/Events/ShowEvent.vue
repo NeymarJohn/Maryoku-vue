@@ -7,28 +7,6 @@
     </div>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
-      <div class="md-layout-item md-size-100" style="margin-bottom: 40px;">
-        <md-toolbar class="md-primary">
-          <div class="md-toolbar-row">
-            <div class="md-toolbar-section-end">
-              <md-button class="md-just-icon md-simple md-toolbar-toggle">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </md-button>
-
-              <div class="md-collapse">
-                <md-list>
-                  <md-list-item @click="sentProposalRequest()">
-                    <i class="material-icons" style="margin-right: 10px;">visibility</i> Request Proposal
-                    <p class="hidden-lg hidden-md">Invite</p>
-                  </md-list-item>
-                </md-list>
-              </div>
-            </div>
-          </div>
-        </md-toolbar>
-      </div>
 
       <event-card-component v-for="(component, index) in event.components"
                             v-if="$store.state.vendorsList && component"
