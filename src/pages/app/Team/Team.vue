@@ -48,6 +48,7 @@
         Teams.get().then(teams => {
           this.team = teams[0];
           teams[0].members().get().then(members => {
+            console.log(members);
             this.teamMembers = members;
             this.teamMembersLoading = false;
           });

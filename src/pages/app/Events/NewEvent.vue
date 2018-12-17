@@ -2,57 +2,44 @@
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
-    <event-header-form :occasionOptions="occasionsArray" :formData="formData"></event-header-form>
-
-    <div class="md-layout-item md-size-100">
-      <md-toolbar class="md-primary">
-        <div class="md-toolbar-row">
-          <div class="md-toolbar-section-start">
-            <drop-down direction="down">
-              <md-button slot="title" class="md-button md-block dropdown-toggle" data-toggle="dropdown">
-                <i class="material-icons">add</i> Add Component
-              </md-button>
-              <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
-                <li v-for="item in componentsList" :key="item.id" @click="createNewComponent($event, item)">
-                  <a :class="item.childComponents ? 'dropdown-toggle' : ''">
-                    {{ item.value }}
-                    <ul class="dropdown-menu" v-if="item.childComponents">
-                      <li v-for="subItem in item.childComponents" :key="subItem.id" @click="createNewComponent($event, subItem)">
-                        <a>{{ subItem.title }}</a></li>
-                    </ul>
-                  </a>
-                </li>
-              </ul>
-            </drop-down>
-          </div>
-          <div class="md-toolbar-section-end">
-            <md-button class="md-just-icon md-simple md-toolbar-toggle">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </md-button>
-
-            <div class="md-collapse">
-              <md-list>
-                <md-list-item @click="sentProposalRequest()">
-                  <i class="material-icons" style="margin-right: 10px;">visibility</i> Request Proposal
-                  <p class="hidden-lg hidden-md">Invite</p>
-                </md-list-item>
-              </md-list>
-            </div>
-          </div>
-        </div>
-      </md-toolbar>
+    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
+      <event-header-form :occasionOptions="occasionsArray" :formData="formData"></event-header-form>
     </div>
 
-    <event-card-component v-for="(component, index) in components"
-                          v-if="$store.state.vendorsList"
-                          :componentObject="component"
-                          :componentIndex="index"
-                          :key="'event-card-component-' + index">
+    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
+      <div class="md-layout-item md-size-100">
+        <md-toolbar class="md-transparent left-offset">
+          <div class="md-toolbar-row">
+            <div class="md-toolbar-section-end">
+              <drop-down direction="down" ref="dropdown">
+                <md-button slot="title" class="md-button md-block md-primary dropdown-toggle" data-toggle="dropdown">
+                  <i class="material-icons">add</i> Add Component
+                </md-button>
+                <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
+                  <li v-for="item in componentsList" :key="item.id" @click="createNewComponent($event, item)">
+                    <a :class="item.childComponents ? 'dropdown-toggle' : ''">
+                      {{ item.value }}
+                      <ul class="dropdown-menu" v-if="item.childComponents">
+                        <li v-for="subItem in item.childComponents" :key="subItem.id" @click="createNewComponent($event, subItem)">
+                          <a>{{ subItem.title }}</a></li>
+                      </ul>
+                    </a>
+                  </li>
+                </ul>
+              </drop-down>
+            </div>
+          </div>
+        </md-toolbar>
+      </div>
 
-    </event-card-component>
+      <event-card-component v-for="(component, index) in components"
+                            v-if="$store.state.vendorsList"
+                            :componentObject="component"
+                            :componentIndex="index"
+                            :key="'event-card-component-' + index">
 
+      </event-card-component>
+    </div>
   </div>
 </template>
 
@@ -94,6 +81,7 @@
         }
       },
       createNewComponent(e, item) {
+        this.$refs.dropdown.closeDropDown();
         e.stopPropagation();
         if (this.$store.state.eventData.components === null || !this.$store.state.eventData.components.length) {
           this.$store.state.eventData.components = [];
@@ -171,11 +159,29 @@
     opacity: 1;
     transform: scale(1);
   }
+   .left-offset {
+    margin-left: 30px;
+    margin-bottom: -23px;
+  }
   .dropdown .dropdown-menu .dropdown-toggle:after {
     font-family: 'Material Icons';
     content: 'chevron_right';
     border: 0 none;
     width: auto;
     height: auto;
+  }
+  .scrollable-container {
+    height: calc(100vh - 72px);
+    overflow: auto;
+    padding-top: 1px;
+  }
+  @media (max-width: 960px) {
+    .mt-small-20 {
+      margin-top: 20px;
+    }
+    .scrollable-container {
+      height: auto;
+
+    }
   }
 </style>

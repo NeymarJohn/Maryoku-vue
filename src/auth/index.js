@@ -3,7 +3,7 @@
     ? {SCHEME: 'https', HOSTNAME: 'api.262days.com'}
     : {SCHEME: 'http', HOSTNAME: process.env.SERVER_URL} */
 import { Model } from 'vue-api-query';
-import indexStore from '../store/index.js';
+
 const { HOSTNAME } = { HOSTNAME: process.env.SERVER_URL};
 
 const API_URL = `${HOSTNAME}`;
@@ -27,7 +27,7 @@ export default {
 
         if (redirect) {
           context.$router.push({ path: redirect });
-        }a
+        }
       }, (resp) => {
         context.error = resp.body;
       });
@@ -51,10 +51,7 @@ export default {
   currentUser(context, required) {
     context.$http.get(CURRENT_USER_URL, { headers: this.getAuthHeader() })
       .then((resp) => {
-      console.log(resp, 'response');
         context.user = { username: resp.data.username };
-
-        indexStore.commit('setCurrentUserData', resp.data)
         this.setHeaders(context);
         if (required){
           context.$router.push({
@@ -115,5 +112,4 @@ export default {
     }
     return {};
   },
-
 };
