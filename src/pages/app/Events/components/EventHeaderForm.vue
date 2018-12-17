@@ -26,12 +26,12 @@
 
             <md-field :class="[{'md-error': errors.has('eventName')}]">
               <md-icon class="md-accent">home</md-icon>
-              <label>Event Name</label>
+              <label>Event Title</label>
               <md-input v-model="form.eventName"
                         data-vv-name="eventName"
                         v-validate= "modelValidations.eventName"
                         required/>
-              <span class="md-error" v-if="errors.has('eventName')">The event name is required</span>
+              <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
             </md-field>
 
             <md-field :class="[{'md-error': errors.has('occasion')}]" class="select-with-icon">

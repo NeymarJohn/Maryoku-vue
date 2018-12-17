@@ -14,7 +14,7 @@
           <md-button class="md-just-icon md-simple" @click.native='showInspirations()' v-if="!readonly && componentObject.id">
             <md-icon>reorder</md-icon>
           </md-button>
-          <md-button class="md-raised md-primary md-icon-button delete-button--small" @click.native="showSwalComponent()" v-if="!readonly">
+          <md-button class="md-just-icon md-simple md-danger" @click.native="showSwalComponent()" v-if="!readonly">
             <md-icon>delete</md-icon>
           </md-button>
         </div>
@@ -44,7 +44,7 @@
                     <md-table-cell>{{ item.value }}</md-table-cell>
                     <md-table-cell>{{ item.comment }}</md-table-cell>
                     <md-table-cell class="visible-on-hover">
-                      <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'values')" v-if="!readonly">
+                      <md-button class="md-just-icon md-simple md-danger" @click="showSwalItems($event, index, 'values')" v-if="!readonly">
                         <md-icon>delete</md-icon>
                       </md-button>
                     </md-table-cell>
@@ -79,7 +79,7 @@
                     <md-table-cell>{{ item.vendorMainPhoneNumber }}</md-table-cell>
                     <md-table-cell>{{ item.cost }}</md-table-cell>
                     <md-table-cell class="visible-on-hover">
-                      <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'vendors')" v-if="!readonly">
+                      <md-button class="md-just-icon md-simple md-danger" @click="showSwalItems($event, index, 'vendors')" v-if="!readonly">
                         <md-icon>delete</md-icon>
                       </md-button>
                     </md-table-cell>
@@ -363,13 +363,6 @@
         pointer-events: all;
       }
     }
-  }
-  .delete-button--small {
-    margin-right: 15px;
-    margin-top: 10px;
-    width: 27px;
-    height: 27px;
-    min-width: 27px;
   }
 
 </style>

@@ -11,6 +11,9 @@
         <md-toolbar class="md-primary">
           <div class="md-toolbar-row">
             <div class="md-toolbar-section-start">
+              <div class="md-layout-item md-size-100 text-left">
+                        <md-button @click="editEvent()" class="md-success clickable-button">Edit</md-button>
+                    </div>
             </div>
             <div class="md-toolbar-section-end">
               <md-button class="md-just-icon md-simple md-toolbar-toggle">
