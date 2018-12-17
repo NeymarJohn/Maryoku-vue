@@ -52,7 +52,7 @@ Object.defineProperty(Vue.prototype, "$Chartist", {
 axios.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
-  if (error.response.status === 401 && router.currentRoute.path != "/signin") {
+  if (error.status === 401) {
     router.push({ path: '/events' })
   }
   return Promise.reject(error);

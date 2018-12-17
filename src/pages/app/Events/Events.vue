@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout">
+  <div class="md-layout ">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
     <div class="md-layout-item md-size-100 text-right">

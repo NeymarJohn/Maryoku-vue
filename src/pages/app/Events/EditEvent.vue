@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout margin-footer">
+  <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
@@ -117,10 +117,6 @@
           console.log(error);
           this.isLoading = false;
         })
-      },
-      sentProposalRequest() {
-        let routeData = this.$router.resolve({ path: "/events/proposal" });
-        window.open(routeData.href, '_blank');
       },
       createVendor(component, subComponent) {
 
@@ -294,9 +290,6 @@
   }
   .dropdown-menu .dropdown-menu {
     min-width: 182px;
-  }
-  .margin-footer {
-    margin-bottom: 50px;
   }
   .read-only {
     pointer-events: none;

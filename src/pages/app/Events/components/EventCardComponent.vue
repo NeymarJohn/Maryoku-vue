@@ -62,7 +62,7 @@
                     <md-table-head>Contact Person</md-table-head>
                     <md-table-head>Email</md-table-head>
                     <md-table-head>Phone</md-table-head>
-                    <md-table-head>Cost / Budget</md-table-head>
+                    <md-table-head>Cost</md-table-head>
                     <md-table-head></md-table-head>
                   </md-table-row>
                   <md-table-row slot="md-table-row"
@@ -75,10 +75,16 @@
                     <md-table-cell>{{ item.vendorMainEmail }}</md-table-cell>
                     <md-table-cell>{{ item.vendorMainPhoneNumber }}</md-table-cell>
                     <md-table-cell>{{ item.cost }}</md-table-cell>
-                    <md-table-cell class="visible-on-hover">
-                      <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'vendors')" v-if="!readonly">
-                        <md-icon>delete</md-icon>
-                      </md-button>
+                    <md-table-cell class="visible-on-hover min-actions">
+                      <div class="actions-flex">
+                        <md-button class="md-raised md-primary md-icon-button" @click="sentProposalRequest($event)" v-if="!readonly && shouldUpdate">
+                          <md-icon>visibility</md-icon>
+                          <md-tooltip md-direction="top">Request Proposal</md-tooltip>
+                        </md-button>
+                        <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'vendors')" v-if="!readonly">
+                          <md-icon>delete</md-icon>
+                        </md-button>
+                      </div>
                     </md-table-cell>
                   </md-table-row>
                 </md-table>
@@ -314,7 +320,12 @@
             this.$store.commit('removeComponent', {index: this.componentIndex});
           }
         });
-      }
+      },
+      sentProposalRequest(event) {
+        event.stopPropagation();
+        let routeData = this.$router.resolve({ path: "/events/proposal" });
+        window.open(routeData.href, '_blank');
+      },
     },
 
     filters: {
@@ -341,6 +352,16 @@
   }
   .text-center {
     text-align: center;
+  }
+  .min-actions {
+    min-width: 70px;
+  }
+  .actions-flex {
+    display: flex;
+
+    .md-button {
+      margin-right: 5px;
+    }
   }
   .md-table .md-table-row {
     .visible-on-hover .md-table-cell-container {

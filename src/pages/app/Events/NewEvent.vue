@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout margin-footer">
+  <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
@@ -162,9 +162,6 @@
    .left-offset {
     margin-left: 30px;
     margin-bottom: -23px;
-  }
-  .margin-footer {
-    margin-bottom: 50px;
   }
   .dropdown .dropdown-menu .dropdown-toggle:after {
     font-family: 'Material Icons';
