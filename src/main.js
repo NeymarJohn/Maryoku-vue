@@ -49,15 +49,6 @@ Object.defineProperty(Vue.prototype, "$Chartist", {
   }
 });
 
-axios.interceptors.response.use(function (response) {
-  return response;
-}, function (error) {
-  if (error.response.status === 401 && router.currentRoute.path != "/signin") {
-    router.push({ path: '/events' })
-  }
-  return Promise.reject(error);
-});
-
 Vue.use(VueAxios, axios);
 
 Model.$http = axios;

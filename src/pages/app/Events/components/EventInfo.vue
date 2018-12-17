@@ -1,32 +1,34 @@
 <template>
   <div class="md-layout show-page">
+    <div class="md-layout-item md-size-100">
+      <md-toolbar class="md-primary">
+        <div class="md-toolbar-row">
+          <div class="md-toolbar-section-start">
+            <h3 class="md-title">Invite co-producers to help you with this event</h3>
+          </div>
+          <div class="md-toolbar-section-end">
+            <md-button class="md-just-icon md-simple md-toolbar-toggle">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </md-button>
+
+            <div class="md-collapse">
+              <md-list>
+                <md-list-item>
+                  <md-button @click="editEvent()" class="md-success clickable-button">Edit</md-button>
+                </md-list-item>
+              </md-list>
+            </div>
+          </div>
+        </div>
+      </md-toolbar>
+    </div>
 
     <div class="md-layout-item md-size-100 gallery-z-index">
-
-      <div class="event-status-field">
-        <label>Status: </label>
-        <md-field class="status-select">
-          <md-select v-model="event.status" name="event-status">
-            <md-option value="draft">Draft</md-option>
-            <md-option value="approved">Approved</md-option>
-            <md-option value="execution">Execution</md-option>
-            <md-option value="done">Done</md-option>
-          </md-select>
-        </md-field>
-
-
-        <md-button native-type="submit" @click="openImageGallery" class="md-success">
-          Image Gallery
-          <span class="badge md-round md-info" v-if="uploadedImages.length">{{ uploadedImages.length }}</span>
-        </md-button>
-        <md-button @click="editEvent()" class="md-success">
-          Edit event
-        </md-button>
-      </div>
-
-      <div class="event-form-padding">
+      <md-card class="md-layout-item md-size-100 event-form-padding">
         <form class="md-layout">
-          <md-card class="md-layout-item md-size-100 gallery-z-index padding-card">
+          <md-card class="md-layout-item md-size-50 md-small-size-100 gallery-z-index">
 
             <md-field>
               <md-icon class="md-accent">home</md-icon>
@@ -38,7 +40,7 @@
               <label>Occasion: {{ event.occasion }}</label>
             </md-field>
 
-            <div class="md-layout">
+            <div style="display: flex;"> <!-- md-layout brokes the design -->
               <div class="md-layout-item md-small-size-100 disabled-datepicker" style="padding-left: 0;">
                 <md-datepicker>
                   <label>Date: {{ event.eventStartMillis | formatDate }}</label>
@@ -70,45 +72,62 @@
               <label>Location: {{ event.location }}</label>
             </md-field>
 
+            <div class="header-image-wrapper">
+              <div class="file-input" v-for="(imageItem, index) in galleryImages" :key="'image-file-input-'+index">
+                <div class="image-container" @click="openGallery(index)">
+                  <img :src="imageItem.src" />
+                </div>
+              </div>
+            </div>
+
+
+            <LightBox :images="galleryImages"
+                      ref="lightbox"
+                      :show-light-box="false">
+            </LightBox>
+
           </md-card>
 
 
-          <chart-card
-              class="md-size-100 md-layout-item"
-              v-if="event.totalBudget && spentBudget > -1"
-              :chart-data="pieChart.data"
-              :chart-options="pieChart.options"
-              chart-type="Pie"
-              header-icon
-              chart-inside-content>
-            <template slot="footer">
+          <div class="md-layout-item md-size-50 md-small-size-100">
+            <div class="event-status-field static">
               <div class="md-layout">
-                <div class="md-layout-item">
-                  <i class="fa fa-circle text-info"></i> Remaining Budget (${{ event.totalBudget - spentBudget }})
-                </div>
-                <div class="md-layout-item">
-                  <i class="fa fa-circle text-danger"></i> Spent Budget (${{ spentBudget }})
-                </div>
-                <div class="md-layout-item md-size-100" v-if="spentBudget > event.totalBudget">
-                  <div class="warning text-warning">Budget is exceeded. You should either increase total budget or update costs</div>
-                </div>
-
-                <md-field style="margin: 20px 0 10px;">
-                  <md-icon class="md-accent">attach_money</md-icon>
-                  <label>Total Budget: ${{ event.totalBudget }}</label>
-                </md-field>
+                <label class="md-layout-item md-size-100 md-form-label">
+                  Status: {{ event.status }}
+                </label>
               </div>
-            </template>
-          </chart-card>
+            </div>
 
+            <chart-card
+                v-if="event.totalBudget && spentBudget > -1"
+                :chart-data="pieChart.data"
+                :chart-options="pieChart.options"
+                chart-type="Pie"
+                header-icon
+                chart-inside-content>
+              <template slot="footer">
+                <div class="md-layout">
+                  <div class="md-layout-item">
+                    <i class="fa fa-circle text-info"></i> Remaining Budget (${{ event.totalBudget - spentBudget }})
+                  </div>
+                  <div class="md-layout-item">
+                    <i class="fa fa-circle text-danger"></i> Spent Budget (${{ spentBudget }})
+                  </div>
+                  <div class="md-layout-item md-size-100" v-if="spentBudget > event.totalBudget">
+                    <div class="warning text-warning">Budget is exceeded. You should either increase total budget or update costs</div>
+                  </div>
+
+                  <md-field style="margin: 20px 0 10px;">
+                    <md-icon class="md-accent">attach_money</md-icon>
+                    <label>Total Budget: ${{ event.totalBudget }}</label>
+                  </md-field>
+                </div>
+              </template>
+            </chart-card>
+          </div>
         </form>
-      </div>
+      </md-card>
     </div>
-
-    <event-gallery-modal ref="galleryModal"
-                         :isModalLoading="isModalLoading"
-                         :uploadedImages="uploadedImages">
-    </event-gallery-modal>
   </div>
 </template>
 <script>
@@ -121,29 +140,20 @@
   import Calendar from '@/models/Calendar';
   import moment from 'moment';
   import Vue from 'vue';
-  import EventGalleryModal from './EventGalleryModal';
+  import LightBox from 'vue-image-lightbox';
 
   export default {
     name: 'event-info',
     components: {
       ChartCard,
-      EventGalleryModal,
+      LightBox,
     },
     props: {
       event: Object
     },
-    watch: {
-      'event.status': {
-        handler: function(val, newVal) {
-          if (newVal != '' && newVal != undefined) {
-          this.updateEvent(newVal);
-        }
-        }
-      }
-    },
+
     data: () => ({
-      uploadedImages: [],
-      isModalLoading: false,
+      galleryImages: []
     }),
     computed: {
       spentBudget() {
@@ -174,44 +184,18 @@
     },
     created() {
       let _this = this;
-      this.isModalLoading = true;
 
       Calendar.get().then((calendars) => {
           calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
-            _this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`}});
-            this.isModalLoading = false;
-          })
-          .catch((error) => {
-            this.isModalLoading = false;
-            console.log(error);
+            console.log(images);
+            _this.galleryImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`}});
           });
         })
         .catch((error) => {
-          this.isModalLoading = false;
           console.log(error);
         });
     },
     methods: {
-      updateEvent(status) {
-        Calendar.get().then(calendars => {
-          if(calendars.length === 0 ) {
-            return;
-          }
-          calendars[0].calendarEvents().get().then(editedEvents => {
-            let editedEvent = editedEvents.find(e => { return e.id = this.$route.params.id; })
-            editedEvent.status = status;
-            editedEvent.save().then(response => {
-            });
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      },
-
       convertHoursToMillis(hours) {
         return hours * 60 * 60 * 1000;
       },
@@ -221,8 +205,8 @@
       editEvent() {
         this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
       },
-      openImageGallery() {
-        this.$refs.galleryModal.toggleModal(true);
+      openGallery(index) {
+        this.$refs.lightbox.showImage(index)
       },
     },
   filters: {
@@ -240,12 +224,13 @@
   @import 'vue-image-lightbox/dist/vue-image-lightbox.min.css';
 
   .event-status-field {
-    display: flex;
-    align-items: center;
-    text-align: right;
-    justify-content: flex-end;
-    margin-top: 1px;
-    margin-bottom: 8px;
+    position: absolute;
+    right: 31px;
+    top: 10px;
+
+    &.static {
+      top: 10px;
+    }
 
     label {
       font-weight: 400;
@@ -255,39 +240,9 @@
     .md-layout {
       align-items: center;
     }
-    .status-select {
-      max-width: 150px;
-      margin-left: 10px;
-      margin-right: 20px;
-    }
-    .md-button {
-      margin: 0 5px;
-
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-    .badge {
-      top: -2px;
-      margin-left: 4px;
-      position: relative;
-      background: #FF547C;
-      border-radius: 50%;
-      padding: 0;
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-      text-align: center;
-    }
   }
-
   .event-form-padding {
-    margin-top: 0;
-
-    .padding-card {
-      padding-top: 15px;
-      padding-bottom: 30px;
-    }
+    padding-top: 20px;
   }
   .md-datepicker .md-icon.md-theme-default.md-icon-image svg {
     fill: #ff5252;

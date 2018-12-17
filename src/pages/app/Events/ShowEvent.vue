@@ -1,22 +1,42 @@
 <template>
-  <div class="md-layout margin-footer">
+  <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
-    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
-      <event-info :occasionOptions="occasionsArray" :event="event" v-bind:readonly="true"></event-info>
+    <event-info :occasionOptions="occasionsArray" :event="event" v-bind:readonly="true"></event-info>
+
+    <div class="md-layout-item md-size-100">
+      <md-toolbar class="md-primary">
+        <div class="md-toolbar-row">
+          <div class="md-toolbar-section-start">
+          </div>
+          <div class="md-toolbar-section-end">
+            <md-button class="md-just-icon md-simple md-toolbar-toggle">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </md-button>
+
+            <div class="md-collapse">
+              <md-list>
+                <md-list-item @click="sentProposalRequest()">
+                  <i class="material-icons" style="margin-right: 10px;">visibility</i> Request Proposal
+                  <p class="hidden-lg hidden-md">Invite</p>
+                </md-list-item>
+              </md-list>
+            </div>
+          </div>
+        </div>
+      </md-toolbar>
     </div>
 
-    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
+    <event-card-component v-for="(component, index) in event.components"
+                          v-if="$store.state.vendorsList && component"
+                          :componentObject="component"
+                          :componentIndex="index"
+                          v-bind:readonly="true"
+                          :key="'event-card-component-' + index">
 
-      <event-card-component v-for="(component, index) in event.components"
-                            v-if="$store.state.vendorsList && component"
-                            :componentObject="component"
-                            :componentIndex="index"
-                            v-bind:readonly="true"
-                            :key="'event-card-component-' + index">
-
-      </event-card-component>
-    </div>
+    </event-card-component>
 
   </div>
 </template>
@@ -48,7 +68,6 @@
       occasionsArray: null,
       componentsList: null,
       event: {},
-      calendar: {},
       readOnly: true,
       isLoading: true,
     }),
@@ -84,21 +103,11 @@
     beforeDestroy() {
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
-    methods: {
-      onResponsiveInverted() {
-        if (window.innerWidth < 768) {
-          this.responsive = true;
-        } else {
-          this.responsive = false;
-        }
-      },
-    },
     created() {
       let calendar = Calendar.get().then(calendars => {
         if(calendars.length === 0 ) {
           return;
         }
-        this.calendar = calendars[0];
         calendars[0].calendarEvents().find(this.$route.params.id).then(event => {
           this.event = event;
         })
@@ -126,25 +135,5 @@
 <style lang="scss">
   .read-only {
     pointer-events: none;
-  }
-  .margin-footer {
-    margin-bottom: 50px;
-  }
-  .scrollable-container {
-    height: calc(100vh - 72px);
-    overflow: auto;
-    padding-top: 1px;
-
-    .md-card {
-      margin: 10px 0;
-    }
-  }
-  @media (max-width: 960px) {
-    .mt-small-20 {
-      margin-top: 20px;
-    }
-    .scrollable-container {
-      height: auto;
-    }
   }
 </style>

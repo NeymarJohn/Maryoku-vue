@@ -4,6 +4,9 @@
     <md-card>
       <md-card-header class="md-card-header-icon md-card-header-green md-layout md-gutter">
         <div class="md-layout-item">
+          <div class="card-icon">
+            <md-icon>assignment</md-icon>
+          </div>
           <h4 class="title">{{ componentTitle }}</h4>
         </div>
 
@@ -11,7 +14,7 @@
           <md-button class="md-just-icon md-simple" @click.native='showInspirations()' v-if="!readonly && componentObject.id">
             <md-icon>reorder</md-icon>
           </md-button>
-          <md-button class="md-raised md-primary md-icon-button delete-button--small" @click.native="showSwalComponent()" v-if="!readonly">
+          <md-button class="md-just-icon md-simple md-danger" @click.native="showSwalComponent()" v-if="!readonly">
             <md-icon>delete</md-icon>
           </md-button>
         </div>
@@ -41,7 +44,7 @@
                     <md-table-cell>{{ item.value }}</md-table-cell>
                     <md-table-cell>{{ item.comment }}</md-table-cell>
                     <md-table-cell class="visible-on-hover">
-                      <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'values')" v-if="!readonly">
+                      <md-button class="md-just-icon md-simple md-danger" @click="showSwalItems($event, index, 'values')" v-if="!readonly">
                         <md-icon>delete</md-icon>
                       </md-button>
                     </md-table-cell>
@@ -49,9 +52,8 @@
                 </md-table>
                 <p class="text-danger text-center" v-if="!componentObject.values.length">
                   No records were added yet.
-                  <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalComponent({}, null)'>Go ahead and add one!</a>
                 </p>
-                <md-button class="md-button md-block md-primary md-size-10 md-layout-item center-icon" @click.native='showModalComponent({}, null)' v-if="!readonly && componentObject.values.length">
+                <md-button class="md-button md-block md-primary md-size-5 md-layout-item center-icon" @click.native='showModalComponent({}, null)' v-if="!readonly">
                   <i class="material-icons">add</i> Add
                 </md-button>
               </md-tab>
@@ -77,7 +79,7 @@
                     <md-table-cell>{{ item.vendorMainPhoneNumber }}</md-table-cell>
                     <md-table-cell>{{ item.cost }}</md-table-cell>
                     <md-table-cell class="visible-on-hover">
-                      <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'vendors')" v-if="!readonly">
+                      <md-button class="md-just-icon md-simple md-danger" @click="showSwalItems($event, index, 'vendors')" v-if="!readonly">
                         <md-icon>delete</md-icon>
                       </md-button>
                     </md-table-cell>
@@ -85,9 +87,8 @@
                 </md-table>
                 <p class="text-danger text-center" v-if="!componentObject.vendors.length">
                   No records were added yet.
-                  <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalVendors({}, null)'>Go ahead and add one!</a>
                 </p>
-                <md-button class="md-button md-block md-primary md-size-10 md-layout-item center-icon" @click.native='showModalVendors({}, null)' v-if="!readonly && vendorsObjectsArray.length">
+                <md-button class="md-button md-block md-primary md-size-5 md-layout-item center-icon" @click.native='showModalVendors({}, null)' v-if="!readonly">
                   <i class="material-icons">add</i> Add
                 </md-button>
               </md-tab>
@@ -111,9 +112,8 @@
                 </md-table>
                 <p class="text-danger text-center" v-if="!componentObject.todos.length">
                   No records were added yet.
-                  <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalTodo({}, null)'>Go ahead and add one!</a>
                 </p>
-                <md-button class="md-button md-block md-primary md-size-10 md-layout-item center-icon" @click="showModalTodo({}, null)" v-if="!readonly && componentObject.todos.length">
+                <md-button class="md-button md-block md-primary md-size-5 md-layout-item center-icon" @click="showModalTodo({}, null)" v-if="!readonly">
                   <i class="material-icons">add</i> Add
                 </md-button>
               </md-tab>
@@ -339,14 +339,6 @@
   .center-icon.md-button {
     padding-left: 6px;
   }
-  .link-underscored {
-    text-decoration: underline!important;
-    cursor: pointer;
-    &hover {
-      text-decoration: underline!important;
-      cursor: pointer;
-    }
-  }
   .md-table.readonly {
     pointer-events: none;
   }
@@ -371,13 +363,6 @@
         pointer-events: all;
       }
     }
-  }
-  .delete-button--small {
-    margin-right: 15px !important;
-    margin-top: 6px !important;
-    width: 27px;
-    height: 27px;
-    min-width: 27px;
   }
 
 </style>

@@ -5,7 +5,7 @@
     <md-table-cell>{{ todoItem.assignee }}</md-table-cell>
     <md-table-cell>{{ todoItem.status }}</md-table-cell>
     <md-table-cell class="visible-on-hover" v-if="!readonly">
-      <md-button class="md-raised md-primary md-icon-button" @click="showSwal($event, todoIndex, 'todos')">
+      <md-button class="md-just-icon md-simple md-danger" @click="showSwal($event, todoIndex, 'todos')">
         <md-icon>delete</md-icon>
       </md-button>
     </md-table-cell>
