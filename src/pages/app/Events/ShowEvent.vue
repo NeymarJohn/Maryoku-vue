@@ -110,6 +110,11 @@
     beforeDestroy() {
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
+    methods: {
+      editEvent() {
+        this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
+      },
+    },
     created() {
       let calendar = Calendar.get().then(calendars => {
         if(calendars.length === 0 ) {
