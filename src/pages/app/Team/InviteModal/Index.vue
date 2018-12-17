@@ -1,5 +1,4 @@
 <template>
-    <div>
     <div class="md-layout">
         <modal v-if="inviteModalOpen" @close="noticeModalHide" container-class="modal-container">
             <template slot="header" class="header-position">
@@ -10,7 +9,6 @@
                 <div class="md-layout">
                     <div class="md-layout-item md-small-size-100">
                         <div class="md-layout-item md-size-95 md-small-size-100">
-                            <div class="grid-col">
                             <md-field :class="[
           {'md-valid': !errors.has('firstName') && touched.firstName},
           {'md-error': errors.has('firstName')}]">
@@ -19,7 +17,6 @@
                                         v-model="first_name"
                                         data-vv-name="firstName"
                                         type="text"
-                                        autofocus
                                         name="firstName"
                                         required
                                         v-validate="modelValidations.firstName">
@@ -51,7 +48,7 @@
                                 </slide-y-down-transition>
                             </md-field>
                         </div>
-                        </div>
+
                         <div class="md-layout-item md-size-95 md-small-size-100">
                             <md-field :class="[
                           {'md-valid': !errors.has('email') && touched.email},
@@ -130,7 +127,6 @@
             </template>
         </modal>
     </div>
-    </div>
 </template>
 
 <script>
@@ -159,7 +155,6 @@
         data() {
             return {
                 inviteModalOpen: false,
-              greenSuccess: false,
               touched: {
                 firstName: false,
                 lastName: false,
@@ -272,19 +267,7 @@
                   Teams.first().then((team) => {
                     team.members().attach(this.teamMemberData);
                     this.$emit('memberCreated');
-
-                    const toast = swal.mixin({
-                      toast: true,
-                      position: 'top',
-                      showConfirmButton: false,
-                      timer: 3000
-                    });
-
-                    toast({
-                      background: '#00c782',
-                      title: 'Team member invited successfully!'
-                    })
-
+                    swal("Good job!", "You clicked the finish button!", "success");
                   });
                 }else {
                   this.$emit("on-validated", res);
@@ -342,18 +325,5 @@
     .move-left{
         margin-right: 15px!important;
     }
-    .success-box{
-        position: absolute;
-        top: 45px;
-        width: 25%;
-        height: 50px;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-    .fade-enter-active, .fade-leave-active {
-        transition: opacity .5s;
-    }
-    .fade-enter, .fade-leave-to {
-        opacity: 0;
-    }
+
 </style>

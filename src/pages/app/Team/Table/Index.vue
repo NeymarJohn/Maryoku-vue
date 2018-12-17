@@ -1,12 +1,12 @@
 <template>
   <md-table v-model="teamMembers" table-header-color="rose" class="table-striped table-hover">
     <md-table-row slot="md-table-row" slot-scope="{ item }">
-      <md-table-cell md-label="Name">{{ item.firstName }} {{item.lastName}}</md-table-cell>
+      <md-table-cell md-label="Name">{{ item.displayName }}</md-table-cell>
       <md-table-cell md-label="Email">{{ item.emailAddress }}</md-table-cell>
       <md-table-cell md-label="Role">{{ item.role }}</md-table-cell>
       <md-table-cell md-label="Permissions">{{ item.permissions }}</md-table-cell>
       <md-table-cell md-label="Actions">
-        <md-button v-if="currentUserId !== item.id" class="md-raised md-primary md-icon-button" @click.native="deleteTeamMember(item)">
+        <md-button class="md-raised md-primary md-icon-button" @click.native="deleteTeamMember(item)">
           <md-icon>delete</md-icon>
           <md-tooltip md-direction="top">Delete</md-tooltip>
         </md-button>
@@ -17,11 +17,9 @@
 
 <script>
   import {Modal, SimpleWizard, WizardTab} from "@/components";
-  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import swal from "sweetalert2";
   import Teams from "@/models/Teams";
   import TeamMembers from "@/models/TeamMembers";
-  import indexVuexModule from "@/store/index";
 
   export default {
     components: {
@@ -48,9 +46,7 @@
     },
     data() {
       return {
-        inviteModalOpen: false,
-        hideBtn: false,
-        currentUserId: indexVuexModule.state.currentUser.id,
+        inviteModalOpen: false
       }
     },
     methods: {
@@ -71,48 +67,21 @@
       },
       async deleteTeam(id){
         let team = await Teams.first(id);
+        console.log('team');
         team.delete();
+        console.log(team, 'team');
         let teamIndex = this.teamMembers.findIndex(obj => obj.id === id)
 
         this.teamMembers.splice(teamIndex, 1)
 
       },
       async deleteTeamMember(teamMember){
-        swal({
-          title: 'Are you sure?',
-          text: "You won't be able to revert this!",
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!'
-        }).then(async (result) => {
-          if (result.value) {
+        console.log('teamMember');
+        teamMember.delete();
+        console.log(teamMember, 'teamMember');
+        let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === id)
 
-            teamMember.delete();
-            let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
-            this.teamMembers.splice(teamMemberIndex, 1)
-
-            const toast = swal.mixin({
-              toast: true,
-              position: 'top',
-              showConfirmButton: false,
-              timer: 3000
-            });
-
-            toast({
-              background: '#00c782',
-              title: 'Team member has been deleted.'
-            })
-//            swal({
-//              position: 'top',
-//              title: 'Team member has been deleted.',
-//              showConfirmButton: false,
-//              timer: 1500,
-//              background: '#00c782',
-//            })
-          }
-        })
+        this.teamMembers.splice(teamMemberIndex, 1)
 
       }
     }
