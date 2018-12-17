@@ -4,9 +4,6 @@
     <md-card>
       <md-card-header class="md-card-header-icon md-card-header-green md-layout md-gutter">
         <div class="md-layout-item">
-          <div class="card-icon">
-            <md-icon>assignment</md-icon>
-          </div>
           <h4 class="title">{{ componentTitle }}</h4>
         </div>
 
@@ -365,8 +362,8 @@
     }
   }
   .delete-button--small {
-    margin-right: 15px !important;
-    margin-top: 6px !important;
+    margin-right: 15px;
+    margin-top: 10px;
     width: 27px;
     height: 27px;
     min-width: 27px;

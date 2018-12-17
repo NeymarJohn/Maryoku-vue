@@ -27,7 +27,7 @@
                 <md-button @click="viewEvent(item)" class="md-raised md-info md-icon-button">
                   <md-icon>visibility</md-icon>
                 </md-button>
-                <md-button @click="editEvent(item)" class="md-raised md-info md-icon-button">
+                <md-button @click="editEvent($event, item)" class="md-raised md-info md-icon-button">
                   <md-icon>edit</md-icon>
                 </md-button>
                 <md-button @click="showDeleteAlert($event, item)" class="md-raised md-primary md-icon-button">
@@ -65,7 +65,7 @@
 
 
         <h4 slot="title" class="title">
-          <a href="#">{{ event.title }}</a>
+          <a @click="routeToEvent(event.id)">{{ event.title }}</a>
         </h4>
         <div slot="description" class="card-description">
           {{ event.eventStartMillis | moment }}
@@ -171,8 +171,11 @@
           }
         });
       },
-      editEvent(event) {
-        this.$router.push(`/events/${event.id}/edit`)
+      editEvent(ev, event) {
+        if (ev.target.tagName === 'I') {
+          ev.stopPropagation();
+          this.$router.push(`/events/${event.id}/edit`)
+        }
       },
       viewEvent(event) {
         this.$router.push(`/events/${event.id}`)
@@ -183,11 +186,7 @@
       duration(event) { 
         return (event.eventEndMillis - event.eventStartMillis) / 3600000
       },
-      routeToEvent(eventId, ev) {
-        if (ev.target.tagName === 'I') {
-          ev.stopPropagation();
-          return false;
-        }
+      routeToEvent(eventId) {
         this.$router.push({ path: `/events/${eventId}` });
       },
       routeToNewEvent() {
