@@ -1,35 +1,28 @@
 <template>
   <div class="md-layout">
-    <div class="md-layout-item md-size-100">
-      <md-toolbar class="md-primary">
-        <div class="md-toolbar-row">
-          <div class="md-toolbar-section-start">
-            <h3 class="md-title">Invite co-producers to help you with this event</h3>
-          </div>
-          <div class="md-toolbar-section-end">
-            <md-button class="md-just-icon md-simple md-toolbar-toggle">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </md-button>
-
-            <div class="md-collapse">
-              <md-list>
-                <md-list-item>
-                  <i class="material-icons">add</i>
-                  <p class="hidden-lg hidden-md">Invite</p>
-                </md-list-item>
-              </md-list>
-            </div>
-          </div>
-        </div>
-      </md-toolbar>
-    </div>
 
     <div class="md-layout-item md-size-100 gallery-z-index">
       <md-card class="md-layout-item md-size-100 event-form-padding">
         <form class="md-layout">
-          <md-card class="md-layout-item md-size-50 md-small-size-100 gallery-z-index">
+          <md-card class="md-layout-item md-size-100 gallery-z-index">
+
+            <div class="event-status-field dynamic">
+              <div class="md-layout">
+                <label class="md-layout-item md-size-20 md-form-label">
+                  Status:
+                </label>
+                <div class="md-layout-item">
+                  <md-field>
+                    <md-select v-model="form.status" name="event-status">
+                      <md-option value="draft">Draft</md-option>
+                      <md-option value="approved">Approved</md-option>
+                      <md-option value="execution">Execution</md-option>
+                      <md-option value="done">Done</md-option>
+                    </md-select>
+                  </md-field>
+                </div>
+              </div>
+            </div>
 
             <md-field :class="[{'md-error': errors.has('eventName')}]">
               <md-icon class="md-accent">home</md-icon>
@@ -58,7 +51,7 @@
               <span class="md-error" v-if="errors.has('occasion')">The event occasion is required</span>
             </md-field>
 
-            <div style="display: flex;"> <!-- md-layout brokes the design -->
+            <div class="md-layout">
               <div class="md-layout-item md-small-size-100" style="padding-left: 0;">
                 <md-datepicker
                     v-model="form.date"
@@ -169,56 +162,38 @@
           </md-card>
 
 
-          <div class="md-layout-item md-size-50 md-small-size-100">
-            <div class="event-status-field dynamic">
+          <chart-card
+              class="md-size-100 md-layout-item"
+              :chart-data="pieChart.data"
+              :chart-options="pieChart.options"
+              chart-type="Pie"
+              header-icon
+              chart-inside-content>
+            <template slot="footer">
               <div class="md-layout">
-                <label class="md-layout-item md-size-20 md-form-label">
-                  Status:
-                </label>
                 <div class="md-layout-item">
-                  <md-field>
-                    <md-select v-model="form.status" name="event-status">
-                      <md-option value="draft">Draft</md-option>
-                      <md-option value="approved">Approved</md-option>
-                      <md-option value="execution">Execution</md-option>
-                      <md-option value="done">Done</md-option>
-                    </md-select>
-                  </md-field>
+                  <i class="fa fa-circle text-info"></i> Remaining Budget (${{ form.budget - spentBudget }})
                 </div>
+                <div class="md-layout-item">
+                  <i class="fa fa-circle text-danger"></i> Spent Budget (${{ spentBudget }})
+                </div>
+                <div class="md-layout-item md-size-100" v-if="spentBudget > form.budget">
+                  <div class="warning text-warning">Budget is exceeded. You should either increase total budget or update costs</div>
+                </div>
+
+                <md-field :class="[{'md-error': errors.has('budget')}]" style="margin: 20px 0 10px;">
+                  <md-icon class="md-accent">attach_money</md-icon>
+                  <label>Total Budget</label>
+                  <md-input v-model="form.budget"
+                            data-vv-name="budget"
+                            v-validate= "modelValidations.budget"
+                            required/>
+                  <span class="md-error" v-if="errors.has('budget')">The event budget is required and should be in range of 1 - 1 000 000</span>
+                </md-field>
               </div>
-            </div>
+            </template>
+          </chart-card>
 
-            <chart-card
-                :chart-data="pieChart.data"
-                :chart-options="pieChart.options"
-                chart-type="Pie"
-                header-icon
-                chart-inside-content>
-              <template slot="footer">
-                <div class="md-layout">
-                  <div class="md-layout-item">
-                    <i class="fa fa-circle text-info"></i> Remaining Budget (${{ form.budget - spentBudget }})
-                  </div>
-                  <div class="md-layout-item">
-                    <i class="fa fa-circle text-danger"></i> Spent Budget (${{ spentBudget }})
-                  </div>
-                  <div class="md-layout-item md-size-100" v-if="spentBudget > form.budget">
-                    <div class="warning text-warning">Budget is exceeded. You should either increase total budget or update costs</div>
-                  </div>
-
-                  <md-field :class="[{'md-error': errors.has('budget')}]" style="margin: 20px 0 10px;">
-                    <md-icon class="md-accent">attach_money</md-icon>
-                    <label>Total Budget</label>
-                    <md-input v-model="form.budget"
-                              data-vv-name="budget"
-                              v-validate= "modelValidations.budget"
-                              required/>
-                    <span class="md-error" v-if="errors.has('budget')">The event budget is required and should be in range of 1 - 1 000 000</span>
-                  </md-field>
-                </div>
-              </template>
-            </chart-card>
-          </div>
           <md-card-actions class="text-center">
             <md-button native-type="submit" @click.native.prevent="validateEvent" class="md-success">
               {{ formData !== null ? 'Edit': 'Create' }} event
@@ -561,11 +536,11 @@
 
   .event-status-field {
     position: absolute;
-    right: 31px;
+    right: -14px;
     top: -10px;
 
     &.dynamic {
-      top: -10px;
+      top: -61px;
     }
 
     label {
@@ -589,6 +564,7 @@
 
   .event-form-padding {
     padding-top: 20px;
+    margin-top: 0;
   }
   .md-datepicker .md-icon.md-theme-default.md-icon-image svg {
     fill: #ff5252;

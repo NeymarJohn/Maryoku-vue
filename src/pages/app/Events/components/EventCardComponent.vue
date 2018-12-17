@@ -53,7 +53,7 @@
                 <p class="text-danger text-center" v-if="!componentObject.values.length">
                   No records were added yet.
                 </p>
-                <md-button class="md-button md-block md-primary md-size-5 md-layout-item center-icon" @click.native='showModalComponent({}, null)' v-if="!readonly">
+                <md-button class="md-button md-block md-primary md-size-10 md-layout-item center-icon" @click.native='showModalComponent({}, null)' v-if="!readonly">
                   <i class="material-icons">add</i> Add
                 </md-button>
               </md-tab>
@@ -88,7 +88,7 @@
                 <p class="text-danger text-center" v-if="!componentObject.vendors.length">
                   No records were added yet.
                 </p>
-                <md-button class="md-button md-block md-primary md-size-5 md-layout-item center-icon" @click.native='showModalVendors({}, null)' v-if="!readonly">
+                <md-button class="md-button md-block md-primary md-size-10 md-layout-item center-icon" @click.native='showModalVendors({}, null)' v-if="!readonly">
                   <i class="material-icons">add</i> Add
                 </md-button>
               </md-tab>
@@ -113,7 +113,7 @@
                 <p class="text-danger text-center" v-if="!componentObject.todos.length">
                   No records were added yet.
                 </p>
-                <md-button class="md-button md-block md-primary md-size-5 md-layout-item center-icon" @click="showModalTodo({}, null)" v-if="!readonly">
+                <md-button class="md-button md-block md-primary md-size-10 md-layout-item center-icon" @click="showModalTodo({}, null)" v-if="!readonly">
                   <i class="material-icons">add</i> Add
                 </md-button>
               </md-tab>

@@ -8,7 +8,7 @@
       <md-table-cell md-label="Actions">
         <md-button class="md-raised md-primary md-icon-button" @click.native="deleteTeamMember(item)">
           <md-icon>delete</md-icon>
-          <md-tooltip md-direction="left">Delete</md-tooltip>
+          <md-tooltip md-direction="top">Delete</md-tooltip>
         </md-button>
       </md-table-cell>
     </md-table-row>

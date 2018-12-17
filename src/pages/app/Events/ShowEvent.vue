@@ -2,41 +2,45 @@
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
-    <event-info :occasionOptions="occasionsArray" :event="event" v-bind:readonly="true"></event-info>
-
-    <div class="md-layout-item md-size-100">
-      <md-toolbar class="md-primary">
-        <div class="md-toolbar-row">
-          <div class="md-toolbar-section-start">
-          </div>
-          <div class="md-toolbar-section-end">
-            <md-button class="md-just-icon md-simple md-toolbar-toggle">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </md-button>
-
-            <div class="md-collapse">
-              <md-list>
-                <md-list-item @click="sentProposalRequest()">
-                  <i class="material-icons" style="margin-right: 10px;">visibility</i> Request Proposal
-                  <p class="hidden-lg hidden-md">Invite</p>
-                </md-list-item>
-              </md-list>
-            </div>
-          </div>
-        </div>
-      </md-toolbar>
+    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
+      <event-info :occasionOptions="occasionsArray" :event="event" v-bind:readonly="true"></event-info>
     </div>
 
-    <event-card-component v-for="(component, index) in event.components"
-                          v-if="$store.state.vendorsList && component"
-                          :componentObject="component"
-                          :componentIndex="index"
-                          v-bind:readonly="true"
-                          :key="'event-card-component-' + index">
+    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
+      <div class="md-layout-item md-size-100">
+        <md-toolbar class="md-primary">
+          <div class="md-toolbar-row">
+            <div class="md-toolbar-section-start">
+            </div>
+            <div class="md-toolbar-section-end">
+              <md-button class="md-just-icon md-simple md-toolbar-toggle">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </md-button>
 
-    </event-card-component>
+              <div class="md-collapse">
+                <md-list>
+                  <md-list-item @click="sentProposalRequest()">
+                    <i class="material-icons" style="margin-right: 10px;">visibility</i> Request Proposal
+                    <p class="hidden-lg hidden-md">Invite</p>
+                  </md-list-item>
+                </md-list>
+              </div>
+            </div>
+          </div>
+        </md-toolbar>
+      </div>
+
+      <event-card-component v-for="(component, index) in event.components"
+                            v-if="$store.state.vendorsList && component"
+                            :componentObject="component"
+                            :componentIndex="index"
+                            v-bind:readonly="true"
+                            :key="'event-card-component-' + index">
+
+      </event-card-component>
+    </div>
 
   </div>
 </template>
@@ -135,5 +139,17 @@
 <style lang="scss">
   .read-only {
     pointer-events: none;
+  }
+  .scrollable-container {
+    height: calc(100vh - 72px);
+    overflow: auto;
+  }
+  @media (max-width: 960px) {
+    .mt-small-20 {
+      margin-top: 20px;
+    }
+    .scrollable-container {
+      height: auto;
+    }
   }
 </style>
