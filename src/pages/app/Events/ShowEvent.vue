@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout">
+  <div class="md-layout margin-footer">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
@@ -126,6 +126,9 @@
 <style lang="scss">
   .read-only {
     pointer-events: none;
+  }
+  .margin-footer {
+    margin-bottom: 50px;
   }
   .scrollable-container {
     height: calc(100vh - 72px);
