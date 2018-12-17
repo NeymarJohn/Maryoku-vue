@@ -28,18 +28,15 @@
         <form class="md-layout">
           <md-card class="md-layout-item md-size-100 gallery-z-index padding-card">
 
-            <md-field>
-              <md-icon class="md-accent">home</md-icon>
-              <label>Event Name: {{ event.title }}</label>
-            </md-field>
-
-            <md-field class="select-with-icon">
-              <md-icon class="md-accent">local_bar</md-icon>
-              <label>Occasion: {{ event.occasion }}</label>
-            </md-field>
+            <div class="md-layout-item md-small-size-100">
+              <md-field>
+                <md-icon class="md-accent">home</md-icon>
+                <label>Event Name: {{ event.title }}</label>
+              </md-field>
+            </div>
 
             <div class="md-layout">
-              <div class="md-layout-item md-small-size-100 disabled-datepicker" style="padding-left: 0;">
+              <div class="md-layout-item md-small-size-100 disabled-datepicker">
                 <md-datepicker>
                   <label>Date: {{ event.eventStartMillis | formatDate }}</label>
                 </md-datepicker>
@@ -52,7 +49,7 @@
                 </md-field>
               </div>
 
-              <div class="md-layout-item md-small-size-100" style="padding-right: 0;">
+              <div class="md-layout-item md-small-size-100">
                 <md-field class="select-with-icon">
                   <md-icon class="md-accent">hourglass_empty</md-icon>
                   <label>Event duration in hours: {{ convertMillisToHours(event.eventEndMillis - event.eventStartMillis) }}</label>
@@ -60,16 +57,28 @@
               </div>
             </div>
 
-            <md-field>
-              <md-icon class="md-accent">person</md-icon>
-              <label>Number of Participants: {{ event.numberOfParticipants }}</label>
-            </md-field>
+            <div class="md-layout">
+              <div class="md-layout-item md-small-size-100">
+                <md-field class="select-with-icon">
+                  <md-icon class="md-accent">local_bar</md-icon>
+                  <label>Occasion: {{ event.occasion }}</label>
+                </md-field>
+              </div>
 
-            <md-field>
-              <md-icon class="md-accent">location_on</md-icon>
-              <label>Location: {{ event.location }}</label>
-            </md-field>
+              <div class="md-layout-item md-small-size-100">
+                <md-field>
+                  <md-icon class="md-accent">person</md-icon>
+                  <label>Number of Participants: {{ event.numberOfParticipants }}</label>
+                </md-field>
+              </div>
 
+              <div class="md-layout-item md-small-size-100">
+                <md-field>
+                  <md-icon class="md-accent">location_on</md-icon>
+                  <label>Location: {{ event.location }}</label>
+                </md-field>
+              </div>
+            </div>
           </md-card>
 
 
@@ -300,6 +309,12 @@
       margin-left: 0;
 
       &::after {
+        display: none;
+      }
+    }
+
+    .padding-card {
+      .md-field::after {
         display: none;
       }
     }

@@ -516,11 +516,10 @@
         return totalSpent;
       },
       pieChart() {
-        console.log((this.form.budget - this.spentBudget) / this.form.budget);
         return {
           data: {
             labels: [" ", " "], // should be empty to remove text from chart
-            series: [((this.form.budget - this.spentBudget) / this.form.budget) || 1 , this.spentBudget / this.form.budget || 0]
+            series: [(this.form.budget - this.spentBudget) / this.form.budget, this.spentBudget / this.form.budget]
           },
           options: {
             height: "230px"
