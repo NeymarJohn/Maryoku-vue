@@ -56,6 +56,7 @@
           console.log(error)
         });
       },
+
       openInviteModal(){
         this.$refs.inviteModal.toggleModal(true);
         this.resetForm();
