@@ -1,5 +1,4 @@
 <template>
-    <div>
     <div class="md-layout">
         <modal v-if="inviteModalOpen" @close="noticeModalHide" container-class="modal-container">
             <template slot="header" class="header-position">
@@ -10,8 +9,7 @@
                 <div class="md-layout">
                     <div class="md-layout-item md-small-size-100">
                         <div class="md-layout-item md-size-95 md-small-size-100">
-                            <div class="grid-col">
-                            <md-field style="margin-right: 10px; width: 97%;" :class="[
+                            <md-field :class="[
           {'md-valid': !errors.has('firstName') && touched.firstName},
           {'md-error': errors.has('firstName')}]">
                                 <label>First Name</label>
@@ -19,7 +17,6 @@
                                         v-model="first_name"
                                         data-vv-name="firstName"
                                         type="text"
-                                        autofocus
                                         name="firstName"
                                         required
                                         v-validate="modelValidations.firstName">
@@ -51,7 +48,7 @@
                                 </slide-y-down-transition>
                             </md-field>
                         </div>
-                        </div>
+
                         <div class="md-layout-item md-size-95 md-small-size-100">
                             <md-field :class="[
                           {'md-valid': !errors.has('email') && touched.email},
@@ -85,10 +82,8 @@
                                         name="select"
                                         data-vv-name="role"
                                         v-validate="modelValidations.role">
-                                    <md-option value="co_producer">Co-Producer</md-option>
-                                    <md-option value="manager">Manager</md-option>
-                                    <md-option value="team_leader">Team Leader</md-option>
-                                    <md-option value="employee">Employee</md-option>
+                                    <md-option value="guest">Guest</md-option>
+                                    <md-option value="collaborator">Collaborator</md-option>
                                 </md-select>
                                 <slide-y-down-transition>
                                     <md-icon class="error" v-show="errors.has('role')">close</md-icon>
@@ -111,10 +106,9 @@
                                         id="permissions"
                                         name="select"
                                         multiple>
-                                    <md-option value="sign_off">Sign-Off</md-option>
-                                    <md-option value="edit">Edit</md-option>
-                                    <md-option value="create">Create</md-option>
-                                    <md-option value="request_budget">Request Budget</md-option>
+                                    <md-option value="View">View</md-option>
+                                    <md-option value="Manage">Manage</md-option>
+                                    <md-option value="Vote">Vote</md-option>
                                 </md-select>
                                 <slide-y-down-transition>
                                     <md-icon class="error" v-show="errors.has('permissions')">close</md-icon>
@@ -132,7 +126,6 @@
                 <md-button class="md-success" @click="wizardComplete">Send Invitation</md-button>
             </template>
         </modal>
-    </div>
     </div>
 </template>
 
@@ -162,7 +155,6 @@
         data() {
             return {
                 inviteModalOpen: false,
-              greenSuccess: false,
               touched: {
                 firstName: false,
                 lastName: false,
@@ -254,8 +246,6 @@
             },
             toggleModal: function (show) {
                 this.inviteModalOpen = show;
-              document.getElementById('md-input-35r1526ue').focus();
-              console.log(document.getElementsByTagName('input').focus());
             },
             onStepValidated(validated, model) {
                 this.wizardModel = {...this.wizardModel, ...model};
@@ -277,15 +267,7 @@
                   Teams.first().then((team) => {
                     team.members().attach(this.teamMemberData);
                     this.$emit('memberCreated');
-
-                    this.$notify(
-                      {
-                        message: 'Team member invited successfully!',
-                        horizontalAlign: 'center',
-                        verticalAlign: 'top',
-                        type: 'success'
-                      })
-
+                    swal("Good job!", "You clicked the finish button!", "success");
                   });
                 }else {
                   this.$emit("on-validated", res);
@@ -343,18 +325,5 @@
     .move-left{
         margin-right: 15px!important;
     }
-    .success-box{
-        position: absolute;
-        top: 45px;
-        width: 25%;
-        height: 50px;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-    .fade-enter-active, .fade-leave-active {
-        transition: opacity .5s;
-    }
-    .fade-enter, .fade-leave-to {
-        opacity: 0;
-    }
+
 </style>
