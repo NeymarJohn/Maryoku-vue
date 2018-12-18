@@ -2,14 +2,14 @@
   <div class="md-layout margin-footer">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
-    <div class="md-layout-item md-size-35 md-small-size-100 scrollable-container">
+    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
       <event-header-form :occasionOptions="occasionsArray"
                          :formData="formData"
                          v-bind:shouldUpdate="true"
                          :event="event"></event-header-form>
     </div>
 
-    <div class="md-layout-item md-size-65 md-small-size-100 scrollable-container mt-small-20">
+    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
       <time-line plain :type="'simple'">
         <time-line-item inverted badge-type="danger" badge-icon="card_travel" class="empty-timeline">
           <div slot="header">
