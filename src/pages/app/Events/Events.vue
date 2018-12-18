@@ -105,36 +105,22 @@
       VueElementLoading
     },
     mounted() {
-      Calendar.get().then(calendars => {
-        if (calendars.length === 0) {
-          return;
-        }
-        calendars[0].calendarEvents().get().then(events => {
-          this.upcomingEvents = events.reduce(function(result, element) {
-            if (element.status.toLowerCase() !== 'done') {
-              result.push(element);
-            }
-            return result;
-          }, []);
-          this.recentEvents = events.reduce(function(result, element) {
-            if (element.status.toLowerCase() === 'done') {
-              result.push(element);
-            }
-            return result;
-          }, []);
+      if (this.$store.state.calendarId === null) {
+        Calendar.get().then(calendars => {
+          if (calendars.length === 0) {
+            return;
+          }
+          this.$store.state.calendarId = calendars[0].id;
 
-          this.isLoading = false;
+          this.getCalendarEvents();
         })
         .catch((error) => {
           console.log(error);
           this.isLoading = false;
         });
-      })
-      .catch((error) => {
-        console.log(error);
-        this.isLoading = false;
-      });
-      return true;
+      } else {
+        this.getCalendarEvents();
+      }
     },
     data() {
       return {
@@ -146,6 +132,30 @@
     },
     
     methods: {
+      getCalendarEvents() {
+        let _calendar = new Calendar({id: this.$store.state.calendarId});
+
+        _calendar.calendarEvents().get().then(events => {
+          this.upcomingEvents = events.reduce(function (result, element) {
+            if (element.status.toLowerCase() !== 'done') {
+              result.push(element);
+            }
+            return result;
+          }, []);
+          this.recentEvents = events.reduce(function (result, element) {
+            if (element.status.toLowerCase() === 'done') {
+              result.push(element);
+            }
+            return result;
+          }, []);
+
+          this.isLoading = false;
+        })
+          .catch((error) => {
+            console.log(error);
+            this.isLoading = false;
+          });
+      },
       showDeleteAlert(e, ev) {
         const _this = this;
         e.stopPropagation();
