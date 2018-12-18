@@ -23,6 +23,7 @@
           Edit event
         </md-button>
       </div>
+
       <div class="event-form-padding">
         <form class="md-layout">
           <md-card class="md-layout-item md-size-100 padding-card">
@@ -183,46 +184,38 @@
     created() {
       let _this = this;
       this.isModalLoading = true;
+      
 
-      if (this.$store.state.calendarId === null) {
         Calendar.get().then((calendars) => {
-          this.$store.state.calendarId = calendars[0].id;
-          this.getEventImages();
-        })
-          .catch((error) => {
-            console.log(error);
+          calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
+            _this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`}});
             this.isModalLoading = false;
+          })
+          .catch((error) => {
+            this.isModalLoading = false;
+            console.log(error);
           });
-      } else {
-        this.getEventImages();
-      }
+        })
+        .catch((error) => {
+          this.isModalLoading = false;
+          console.log(error);
+        })
     },
     methods: {
-      getEventImages() {
-        CalendarEvent.custom(`${process.env.SERVER_URL}/1/calendars/${this.$store.state.calendarId}/events/${this.$route.params.id}/images/`).get().then(images => {
-          this.uploadedImages = images.map((image) => {
-            return {
-              'src': `${process.env.SERVER_URL}/${image.href}`,
-              'thumb': `${process.env.SERVER_URL}/${image.href}`,
-              'id': image.id
-            }
-          });
-          this.isModalLoading = false;
-        })
+      updateEvent(status) {
+        Calendar.get().then(calendars => {
+          if(calendars.length === 0 ) {
+            return;
+          }
+          calendars[0].calendarEvents().get().then(editedEvents => {
+            let editedEvent = editedEvents.find(e => { return e.id = this.$route.params.id; })
+            editedEvent.status = status;
+            editedEvent.save().then(response => {
+            });
+          })
           .catch((error) => {
             console.log(error);
-            this.isModalLoading = false;
           });
-      },
-      editEvent() {
-        this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
-      },
-      updateEvent(status) {
-        let _calendar = new Calendar({id: this.$store.state.calendarId});
-        let editedEvent = new CalendarEvent({id: this.event.id});
-
-        editedEvent.status = status;
-        editedEvent.for(_calendar).save().then(response => {
         })
         .catch((error) => {
           console.log(error);
@@ -250,6 +243,9 @@
       },
       convertMillisToHours(millis) {
         return millis / 3600000
+      },
+      editEvent() {
+        this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
       },
       openImageGallery() {
         this.$refs.galleryModal.toggleModal(true);

@@ -19,7 +19,7 @@
               <md-table-cell md-label="Actions" :class="getAlignClasses(item)">
                 <md-button class="md-just-icon md-centered" :class="getClass(item.icon1, item.id)">
                   <md-icon class="md-rose">{{ item.icon1 }}</md-icon>
-                  <md-tooltip md-direction="right">Set Reminder</md-tooltip>
+                  <md-tooltip md-direction="left">Set Reminder</md-tooltip>
                 </md-button>
                 <!--<md-button class="md-just-icon" :class="getClass(item.icon2, item.id)"><md-icon>{{ item.icon2 }}</md-icon></md-button>
                 <md-button class="md-just-icon" :class="getClass(item.icon3, item.id)"><md-icon>{{ item.icon3 }}</md-icon></md-button>-->
@@ -49,7 +49,7 @@
               <md-table-cell md-label="Actions" :class="getAlignClasses(item)">
                 <md-button class="md-just-icon" :class="getClass(item.icon1, item.id)">
                   <md-icon class="md-rose">{{ item.icon1 }}</md-icon>
-                  <md-tooltip md-direction="right">Set Reminder</md-tooltip>
+                  <md-tooltip md-direction="left">Set Reminder</md-tooltip>
                 </md-button>
                 <!--<md-button class="md-just-icon" :class="getClass(item.icon2, item.id)"><md-icon>{{ item.icon2 }}</md-icon></md-button>
                 <md-button class="md-just-icon" :class="getClass(item.icon3, item.id)"><md-icon>{{ item.icon3 }}</md-icon></md-button>-->
