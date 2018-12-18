@@ -333,4 +333,17 @@
     .swal2-container{
         z-index: 999999;
     }
+    .btn-position{
+        position: absolute;
+        right: 15px;
+        font-weight: bold;
+        top: 20px;
+        font-size: 17px;
+        background-color: transparent !important;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+        color: gray !important;
+        border-color: transparent;
+        cursor: pointer;
+    }
 </style>
