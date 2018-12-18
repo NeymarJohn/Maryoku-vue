@@ -184,11 +184,11 @@
     created() {
       let _this = this;
       this.isModalLoading = true;
-      
+
 
         Calendar.get().then((calendars) => {
           calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
-            _this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`}});
+            _this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`}});
             this.isModalLoading = false;
           })
           .catch((error) => {

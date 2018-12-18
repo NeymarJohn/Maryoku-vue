@@ -130,7 +130,7 @@
         isLoading: true,
       };
     },
-    
+
     methods: {
       getCalendarEvents() {
         let _calendar = new Calendar({id: this.$store.state.calendarId});
@@ -191,9 +191,9 @@
         this.$router.push(`/events/${event.id}`)
       },
       imageHref(image) {
-        return image && image.href ? `${process.env.SERVER_URL}/${image.href}` : this.product3;
+        return image && image.href ? `${process.env.SERVER_URL}${image.href}` : this.product3;
       },
-      duration(event) { 
+      duration(event) {
         return (event.eventEndMillis - event.eventStartMillis) / 3600000
       },
       routeToEvent(eventId) {

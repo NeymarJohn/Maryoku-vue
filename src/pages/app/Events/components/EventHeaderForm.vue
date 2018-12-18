@@ -50,9 +50,9 @@
                     required>
                   <label :class="[{'md-error': ($refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value') )}]">Date</label>
                 </md-datepicker>
-                
+
                 <div class="md-custom-error" v-if="($refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value'))">The event date is required</div>
-                
+
               </div>
 
               <div class="md-layout-item md-size-33 md-small-size-100">
@@ -278,7 +278,7 @@
 
         Calendar.get().then((calendars) => {
           calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
-            _this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`, 'id': image.id}});
+            _this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`, 'id': image.id}});
             this.isModalLoading = false;
           })
           .catch((error) => {
