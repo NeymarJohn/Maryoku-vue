@@ -36,7 +36,6 @@
                               v-bind:shouldUpdate="true"
                               :componentObject="component"
                               :componentIndex="index"
-                              :createVendor="createVendor"
                               :updateVendor="updateVendor"
                               :updateTodo="updateTodo"
                               :updateComponent="updateComponent"
@@ -118,9 +117,6 @@
           console.log(error);
           this.isLoading = false;
         })
-      },
-      createVendor(component, subComponent) {
-
       },
       updateVendor(component, subComponent, updatedItemIndex) {
         this.isLoading = true;
@@ -214,6 +210,27 @@
           console.log(error);
           this.isLoading = false;
         })
+      },
+      getEventData() {
+        CalendarEvent.custom(`${process.env.SERVER_URL}/1/calendars/${this.$store.state.calendarId}/events/${this.$route.params.id}`).get().then(event => {
+          this.$store.state.eventData.components = event[0].components;
+          this.event = event[0];
+          this.formData = {
+            eventName: event[0].title,
+            occasion: event[0].occasion,
+            date: new Date(event[0].eventStartMillis),
+            time: moment(event[0].eventStartMillis).format('HH:00'),
+            duration: moment(event[0].eventEndMillis).diff(event[0].eventStartMillis, 'hours'),
+            participants: event[0].numberOfParticipants,
+            status: event[0].status,
+            budget: event[0].totalBudget,
+            location: event[0].location
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isLoading = false;
+        });
       }
     },
     computed: {
@@ -241,39 +258,43 @@
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
     created() {
-      let calendar = Calendar.get().then(calendars => {
-        if(calendars.length === 0 ) {
-          return;
-        }
-        this.calendar = calendars[0];
-        calendars[0].calendarEvents().find(this.$route.params.id).then(event => {
-          this.$store.state.eventData.components = event.components;
-          this.event = event;
-          this.formData = {
-            eventName: event.title,
-            occasion: event.occasion,
-            date: new Date(event.eventStartMillis),
-            time: moment(event.eventStartMillis).format('HH:00'),
-            duration: moment(event.eventEndMillis).diff(event.eventStartMillis, 'hours'),
-            participants: event.numberOfParticipants,
-            status: event.status,
-            budget: event.totalBudget,
-            location: event.location
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isLoading = false;
-        });
-      });
-      let occasions = Occasion.get().then((occasions) => {
-        this.occasionsArray = occasions;
-      });
-      let components = EventComponent.get().then((componentsList) => {
-        this.$store.state.componentsList = componentsList;
-        this.componentsList = componentsList;
-      });
+      let calendar = '';
 
+      if (this.$store.state.calendarId === null) {
+        calendar = Calendar.get().then(calendars => {
+          if (calendars.length === 0) {
+            return;
+          }
+          this.$store.state.calendarId = calendars[0].id;
+          this.calendar = new Calendar({id: this.$store.state.calendarId});
+          this.getEventData();
+        });
+      } else {
+        this.calendar = new Calendar({id: this.$store.state.calendarId});
+        this.getEventData();
+      }
+
+      let occasions = '';
+      if (this.$store.state.occasionsArray === null) {
+        occasions = Occasion.get().then((occasions) => {
+          this.$store.state.occasionsArray = occasions;
+          this.occasionsArray = occasions;
+        });
+      } else {
+        this.occasionsArray = this.$store.state.occasionsArray;
+      }
+
+      let components = '';
+      if (this.$store.state.componentsList === null) {
+        components = EventComponent.get().then((componentsList) => {
+          this.$store.state.componentsList = componentsList;
+          this.componentsList = componentsList;
+        });
+      } else {
+        this.componentsList = this.$store.state.componentsList;
+      }
+
+      // vendors are dynamically changed, so always get them
       let vendors = Vendors.get().then((vendorsList) => {
         this.$store.state.vendorsList = vendorsList;
       });

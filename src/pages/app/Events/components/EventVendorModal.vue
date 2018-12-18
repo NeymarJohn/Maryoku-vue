@@ -112,7 +112,6 @@
       componentIndex: Number,
       vendorIndex: Number,
       shouldUpdate: Boolean,
-      createVendor: Function,
       updateVendor: Function
     },
     data() {

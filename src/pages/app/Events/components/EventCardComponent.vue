@@ -119,7 +119,6 @@
                           :vendorItem="vendorItem"
                           :vendorIndex="vendorIndex"
                           v-bind:shouldUpdate="$props.shouldUpdate"
-                          :createVendor="$props.createVendor"
                           :updateVendor="$props.updateVendor"
                           :componentIndex="componentIndex"></event-modal-vendor>
       <event-modal-components ref="componentsModal"
@@ -172,7 +171,6 @@
       componentObject: Object,
       readonly: Boolean,
       shouldUpdate: Boolean,
-      createVendor: Function,
       updateVendor: Function,
       updateComponent: Function,
       updateTodo: Function,
@@ -229,7 +227,7 @@
           });
           obj = child.flat().find(e => { return e.id === object.componentId })
         }
-        return obj.icon
+        return obj ? obj.icon : 'card_travel'
       },
       getVendorObjectsArray() {
         let _this = this;

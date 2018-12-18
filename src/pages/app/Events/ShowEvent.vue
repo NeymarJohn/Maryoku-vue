@@ -1,29 +1,6 @@
 <template>
   <div class="md-layout margin-footer">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
-    <div class="md-layout-item md-size-100">
-
-      <div class="event-status-field">
-        <label>Status: </label>
-        <md-field class="status-select">
-          <md-select v-model="event.status" name="event-status">
-            <md-option value="draft">Draft</md-option>
-            <md-option value="approved">Approved</md-option>
-            <md-option value="execution">Execution</md-option>
-            <md-option value="done">Done</md-option>
-          </md-select>
-        </md-field>
-
-
-        <md-button native-type="submit" @click="openImageGallery()" class="md-success">
-          Image Gallery
-          <span class="badge md-round md-info" v-if="uploadedImages.length">{{ uploadedImages.length }}</span>
-        </md-button>
-        <md-button @click="editEvent()" class="md-success">
-          Edit event
-        </md-button>
-      </div>
-    </div>
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
       <event-info :occasionOptions="occasionsArray" :event="event" v-bind:readonly="true"></event-info>
     </div>
@@ -111,6 +88,15 @@
       sentProposalRequest() {
         let routeData = this.$router.resolve({ path: "/events/proposal" });
         window.open(routeData.href, '_blank');
+      },
+      getEventData() {
+        CalendarEvent.custom(`${process.env.SERVER_URL}/1/calendars/${this.$store.state.calendarId}/events/${this.$route.params.id}`).get().then(event => {
+          this.event = event[0];
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isLoading = false;
+        });
       }
     },
     computed: {
@@ -156,26 +142,36 @@
       }
     },
     created() {
-      let _this = this;
-      let calendar;
-      setTimeout(() => {
+      let calendar = '';
+
+      if (this.$store.state.calendarId === null) {
         calendar = Calendar.get().then(calendars => {
-          if(calendars.length === 0 ) {
+          if (calendars.length === 0) {
             return;
           }
-        _this.calendar = calendars[0];
-          calendars[0].calendarEvents().find(_this.$route.params.id).then(event => {
-            _this.event = event;
-          })
-        })}, 500);
-      
+          this.$store.state.calendarId = calendars[0].id;
+          this.getEventData();
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isLoading = false;
+        });
+      } else {
+        this.getEventData()
+      }
+
+
       let vendorsList = Vendors.get().then((vendorsList) => {
         this.$store.state.vendorsList = vendorsList;
       });
 
-      let components = EventComponent.get().then((componentsList) => {
-        this.$store.state.componentsList = componentsList;
-      });
+      let components = '';
+
+      if (this.$store.state.componentsList === null) {
+        components = EventComponent.get().then((componentsList) => {
+          this.$store.state.componentsList = componentsList;
+        });
+      }
 
       Promise.all([vendorsList, calendar, components]).then(() => {
         this.isLoading = false;

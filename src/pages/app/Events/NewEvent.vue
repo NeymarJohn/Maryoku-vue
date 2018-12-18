@@ -83,7 +83,6 @@
         }
       },
       createNewComponent(e, item) {
-        console.log(item);
         this.$refs.dropdown.closeDropDown();
         e.stopPropagation();
         if (this.$store.state.eventData.components === null || !this.$store.state.eventData.components.length) {

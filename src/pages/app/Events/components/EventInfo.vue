@@ -2,6 +2,27 @@
   <div class="md-layout show-page">
 
     <div class="md-layout-item md-size-100">
+
+      <div class="event-status-field">
+        <label>Status: </label>
+        <md-field class="status-select">
+          <md-select v-model="event.status" name="event-status">
+            <md-option value="draft">Draft</md-option>
+            <md-option value="approved">Approved</md-option>
+            <md-option value="execution">Execution</md-option>
+            <md-option value="done">Done</md-option>
+          </md-select>
+        </md-field>
+
+
+        <md-button native-type="submit" @click="openImageGallery" class="md-success">
+          Image Gallery
+          <span class="badge md-round md-info" v-if="uploadedImages.length">{{ uploadedImages.length }}</span>
+        </md-button>
+        <md-button @click="editEvent()" class="md-success">
+          Edit event
+        </md-button>
+      </div>
       <div class="event-form-padding">
         <form class="md-layout">
           <md-card class="md-layout-item md-size-100 padding-card">
