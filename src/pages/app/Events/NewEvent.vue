@@ -91,6 +91,8 @@
 
         this.$store.commit('updateComponent', {
           componentId: item.id,
+          icon: item.icon,
+          color: item.color,
           todos: [],
           values: [],
           vendors: [],
