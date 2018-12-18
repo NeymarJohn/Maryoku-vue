@@ -191,25 +191,32 @@
         this.form.value += " ";
         this.form.value = this.form.value.substring(0, this.form.value.length - 1)
       },
-    },
-    created() {
-      EventComponent.get().then((componentsList) => {
-        let propertiesList = new EventComponentProperty().for(componentsList[0]);
-
-        propertiesList.get().then(response => {
+      getEventComponentProperty() {
+        let eventProperty = new EventComponentProperty().for(this.$store.state.componentsList[0]);
+        eventProperty.get().then(response => {
           this.propertyValuesObjects = response;
           this.propertyValues = response.length ? response.map((val) => val.title) : [];
           this.isLoading = false;
+        })
+          .catch((error) => {
+            console.log(error);
+            this.isLoading = false;
+          });
+      },
+    },
+    created() {
+      if (this.$store.state.componentsList === null) {
+        EventComponent.get().then((componentsList) => {
+          this.$store.state.componentsList = componentsList;
+          this.getEventComponentProperty();
         })
         .catch((error) => {
           console.log(error);
           this.isLoading = false;
         });
-      })
-      .catch((error) => {
-        console.log(error);
-        this.isLoading = false;
-      });
+      } else {
+        this.getEventComponentProperty();
+      }
     },
     mounted() {
       EventComponent.get().then((componentsList) => {
