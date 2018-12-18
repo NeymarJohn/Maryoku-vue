@@ -77,12 +77,12 @@
       },
       async deleteTeamMember(teamMember){
         console.log('teamMember');
-        teamMember.delete();
+        teamMember.delete().then(teamMember =>{
+          this.$emit("memberDeleted");
+        }, (error) => {
+          console.log(error)
+        });
         console.log(teamMember, 'teamMember');
-        let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === id)
-
-        this.teamMembers.splice(teamMemberIndex, 1)
-
       }
     }
   };

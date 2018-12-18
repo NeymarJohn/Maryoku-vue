@@ -12,7 +12,7 @@
       <md-card>
         <md-card-content style="min-height: 60px;">
           <vue-element-loading :active="teamMembersLoading" spinner="ring" color="#FF547C"/>
-          <team-table :team-id="team.id" :teamMembers="teamMembers"></team-table>
+          <team-table @memberDeleted="fetchTeam" :team-id="team.id" :teamMembers="teamMembers"></team-table>
         </md-card-content>
       </md-card>
     </div>
@@ -45,6 +45,7 @@
     methods: {
       ...mapMutations('teamVuex', ['resetForm']),
       fetchTeam(){
+        this.teamMembersLoading = true;
         Teams.get().then(teams => {
           this.team = teams[0];
           teams[0].members().get().then(members => {
