@@ -7,7 +7,7 @@
     </div>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
-      <div class="md-layout-item md-size-100" style="margin-bottom: 10px;">
+      <div class="md-layout-item md-size-100" style="margin-bottom: 10px;" :class="buttonRowClass">
         <md-toolbar class="md-transparent left-offset">
           <div class="md-toolbar-row">
             <div class="md-toolbar-section-center">
@@ -32,7 +32,7 @@
         </md-toolbar>
       </div>
 
-      <time-line plain :type="'simple'">
+      <time-line plain :type="'simple'" class="modal-z-index">
         <time-line-item inverted badge-type="danger" badge-icon="card_travel" class="empty-timeline"> </time-line-item>
         <event-card-component v-for="(component, index) in components"
                               :key="'event-card-component-' + index"
@@ -76,6 +76,7 @@
       formData: null,
       readOnly: true,
       isLoading: true,
+      buttonRowClass: '',
     }),
 
     methods: {
@@ -111,7 +112,7 @@
       }),
       components() {
         return this.$store.state.eventData.components;
-      }
+      },
     },
     watch: {
       '$route' (to, from) {
@@ -122,6 +123,15 @@
       this.onResponsiveInverted();
       this.readOnly = ['EventEdit', 'EventNew'].indexOf(this.$route.name) === -1;
       window.addEventListener("resize", this.onResponsiveInverted);
+
+      this.$watch(
+        () => {
+          return this.$refs.dropdown.isOpen;
+        },
+        (val) => {
+          this.buttonRowClass = val ? 'large-z-index' : '';
+        }
+      )
     },
     beforeDestroy() {
       window.removeEventListener("resize", this.onResponsiveInverted);
@@ -196,6 +206,10 @@
   }
   .modal-z-index {
     z-index: 5;
+  }
+  .large-z-index {
+    z-index: 6;
+    position: relative;
   }
   .empty-timeline {
 

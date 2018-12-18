@@ -10,7 +10,7 @@
     </div>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
-      <div class="md-layout-item md-size-100" style="margin-bottom: 10px;">
+      <div class="md-layout-item md-size-100" style="margin-bottom: 10px;" :class="buttonRowClass">
         <md-toolbar class="md-transparent left-offset">
           <div class="md-toolbar-row">
             <div class="md-toolbar-section-center">
@@ -35,7 +35,7 @@
         </md-toolbar>
       </div>
 
-      <time-line plain :type="'simple'">
+      <time-line plain :type="'simple'" class="modal-z-index">
         <event-card-component v-for="(component, index) in components"
                               v-if="component && $store.state.vendorsList"
                               v-bind:shouldUpdate="true"
@@ -92,6 +92,7 @@
       formData: null,
       readOnly: true,
       isLoading: true,
+      buttonRowClass: '',
     }),
     methods: {
       onResponsiveInverted() {
@@ -230,6 +231,15 @@
     mounted() {
       this.onResponsiveInverted();
       window.addEventListener("resize", this.onResponsiveInverted);
+
+      this.$watch(
+        () => {
+          return this.$refs.dropdown.isOpen;
+        },
+        (val) => {
+          this.buttonRowClass = val ? 'large-z-index' : '';
+        }
+      )
     },
     beforeDestroy() {
       window.removeEventListener("resize", this.onResponsiveInverted);
@@ -322,6 +332,13 @@
     display: flex;
     align-items: center;
     flex: 1;
+  }
+  .modal-z-index {
+    z-index: 5;
+  }
+  .large-z-index {
+    z-index: 6;
+    position: relative;
   }
   @media (max-width: 960px) {
     .mt-small-20 {
