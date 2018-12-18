@@ -132,27 +132,14 @@
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
     created() {
-      let occasions = '';
-      if (this.$store.state.occasionsArray === null) {
-        occasions = Occasion.get().then((occasions) => {
-          this.$store.state.occasionsArray = occasions;
-          this.occasionsArray = occasions;
-        });
-      } else {
-        this.occasionsArray = this.$store.state.occasionsArray;
-      }
+      let occasions = Occasion.get().then((occasions) => {
+        this.occasionsArray = occasions;
+      });
+      let components = EventComponent.get().then((componentsList) => {
+        this.$store.state.componentsList = componentsList;
+        this.componentsList = componentsList;
+      });
 
-      let components = '';
-      if (this.$store.state.componentsList === null) {
-        components = EventComponent.get().then((componentsList) => {
-          this.$store.state.componentsList = componentsList;
-          this.componentsList = componentsList;
-        });
-      } else {
-        this.componentsList = this.$store.state.componentsList;
-      }
-
-      // vendors are dynamically changed, so always get them
       let vendors = Vendors.get().then((vendorsList) => {
         this.$store.state.vendorsList = vendorsList;
       });

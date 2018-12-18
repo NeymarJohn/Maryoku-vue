@@ -20,8 +20,6 @@ export default new Vuex.Store({
     },
     componentsList: null,
     vendorsList: null,
-    occasionsArray: null,
-    calendarId: null,
   },
   mutations: {
     updateEventData(state, params) {

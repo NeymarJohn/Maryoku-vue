@@ -50,9 +50,9 @@
                     required>
                   <label :class="[{'md-error': ($refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value') )}]">Date</label>
                 </md-datepicker>
-
+                
                 <div class="md-custom-error" v-if="($refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value'))">The event date is required</div>
-
+                
               </div>
 
               <div class="md-layout-item md-size-33 md-small-size-100">
@@ -278,7 +278,7 @@
 
         Calendar.get().then((calendars) => {
           calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
-            _this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`, 'id': image.id}});
+            _this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`, 'id': image.id}});
             this.isModalLoading = false;
           })
           .catch((error) => {
@@ -298,30 +298,33 @@
           if(calendars.length === 0 ) {
             return;
           }
-
-          let _calendar = new Calendar({id: calendars[0].id});
-          let editedEvent = new CalendarEvent({id: this.event.id});
-
-          editedEvent.title = this.form.eventName;
-          editedEvent.eventStartMillis =this.getEventStartInMillis();
-          editedEvent.eventEndMillis = this.getEventEndInMillis();
-          editedEvent.location = this.form.location;
-          editedEvent.occasion = this.form.occasion;
-          editedEvent.numberOfParticipants = this.form.participants;
-          editedEvent.totalBudget = this.form.budget
-          editedEvent.status = this.form.status;
-          editedEvent.currency = 'USD'; // HARDCODED, REMOVE AFTER BACK WILL FIX API
-          editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
-          editedEvent.components = this.$store.state.eventData.components;
-          editedEvent.for(_calendar).save().then(response => {
-            this.$parent.isLoading = false;
-            this.$router.push({ path: '/events' });
+          calendars[0].calendarEvents().get().then(editedEvents => {
+            let editedEvent = editedEvents.find(e => { return e.id = this.$route.params.id; })
+            editedEvent.title = this.form.eventName;
+            editedEvent.eventStartMillis =this.getEventStartInMillis();
+            editedEvent.eventEndMillis = this.getEventEndInMillis();
+            editedEvent.location = this.form.location;
+            editedEvent.occasion = this.form.occasion;
+            editedEvent.numberOfParticipants = this.form.participants;
+            editedEvent.totalBudget = this.form.budget
+            editedEvent.status = this.form.status;
+            editedEvent.currency = 'USD'; // HARDCODED, REMOVE AFTER BACK WILL FIX API
+            editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+            editedEvent.components = this.$store.state.eventData.components;
+            editedEvent.save().then(response => {
+              this.$parent.isLoading = false;
+              this.$router.push({ path: '/events' });
+            })
+            .catch((error) => {
+              console.log(error);
+              this.$parent.isLoading = false;
+            });
           })
           .catch((error) => {
             console.log(error);
             this.$parent.isLoading = false;
           });
-          })
+        })
         .catch((error) => {
           console.log(error);
           this.$parent.isLoading = false;

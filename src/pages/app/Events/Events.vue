@@ -105,22 +105,36 @@
       VueElementLoading
     },
     mounted() {
-      if (this.$store.state.calendarId === null) {
-        Calendar.get().then(calendars => {
-          if (calendars.length === 0) {
-            return;
-          }
-          this.$store.state.calendarId = calendars[0].id;
+      Calendar.get().then(calendars => {
+        if (calendars.length === 0) {
+          return;
+        }
+        calendars[0].calendarEvents().get().then(events => {
+          this.upcomingEvents = events.reduce(function(result, element) {
+            if (element.status.toLowerCase() !== 'done') {
+              result.push(element);
+            }
+            return result;
+          }, []);
+          this.recentEvents = events.reduce(function(result, element) {
+            if (element.status.toLowerCase() === 'done') {
+              result.push(element);
+            }
+            return result;
+          }, []);
 
-          this.getCalendarEvents();
+          this.isLoading = false;
         })
         .catch((error) => {
           console.log(error);
           this.isLoading = false;
         });
-      } else {
-        this.getCalendarEvents();
-      }
+      })
+      .catch((error) => {
+        console.log(error);
+        this.isLoading = false;
+      });
+      return true;
     },
     data() {
       return {
@@ -130,32 +144,8 @@
         isLoading: true,
       };
     },
-
+    
     methods: {
-      getCalendarEvents() {
-        let _calendar = new Calendar({id: this.$store.state.calendarId});
-
-        _calendar.calendarEvents().get().then(events => {
-          this.upcomingEvents = events.reduce(function (result, element) {
-            if (element.status.toLowerCase() !== 'done') {
-              result.push(element);
-            }
-            return result;
-          }, []);
-          this.recentEvents = events.reduce(function (result, element) {
-            if (element.status.toLowerCase() === 'done') {
-              result.push(element);
-            }
-            return result;
-          }, []);
-
-          this.isLoading = false;
-        })
-          .catch((error) => {
-            console.log(error);
-            this.isLoading = false;
-          });
-      },
       showDeleteAlert(e, ev) {
         const _this = this;
         e.stopPropagation();
@@ -191,9 +181,9 @@
         this.$router.push(`/events/${event.id}`)
       },
       imageHref(image) {
-        return image && image.href ? `${process.env.SERVER_URL}${image.href}` : this.product3;
+        return image && image.href ? `${process.env.SERVER_URL}/${image.href}` : this.product3;
       },
-      duration(event) {
+      duration(event) { 
         return (event.eventEndMillis - event.eventStartMillis) / 3600000
       },
       routeToEvent(eventId) {
