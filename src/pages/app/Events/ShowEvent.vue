@@ -166,25 +166,23 @@
       }
     },
     created() {
-      let calendar;
+      let calendar = '';
 
-      setTimeout(() => {
-        if (this.$store.state.calendarId === null) {
-          calendar = Calendar.get().then(calendars => {
-            if (calendars.length === 0) {
-              return;
-            }
-            this.$store.state.calendarId = calendars[0].id;
-            this.getEventData();
-          })
-          .catch((error) => {
-            console.log(error);
-            this.isLoading = false;
-          });
-        } else {
-          this.getEventData()
-        }
-      }, 500);
+      if (this.$store.state.calendarId === null) {
+        calendar = Calendar.get().then(calendars => {
+          if (calendars.length === 0) {
+            return;
+          }
+          this.$store.state.calendarId = calendars[0].id;
+          this.getEventData();
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isLoading = false;
+        });
+      } else {
+        this.getEventData()
+      }
 
 
       let vendorsList = Vendors.get().then((vendorsList) => {
@@ -192,6 +190,7 @@
       });
 
       let components = '';
+
       if (this.$store.state.componentsList === null) {
         components = EventComponent.get().then((componentsList) => {
           this.$store.state.componentsList = componentsList;

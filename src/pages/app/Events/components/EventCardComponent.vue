@@ -118,7 +118,6 @@
                           :vendorItem="vendorItem"
                           :vendorIndex="vendorIndex"
                           v-bind:shouldUpdate="$props.shouldUpdate"
-                          :createVendor="$props.createVendor"
                           :updateVendor="$props.updateVendor"
                           :componentIndex="componentIndex"></event-modal-vendor>
       <event-modal-components ref="componentsModal"
@@ -171,7 +170,6 @@
       componentObject: Object,
       readonly: Boolean,
       shouldUpdate: Boolean,
-      createVendor: Function,
       updateVendor: Function,
       updateComponent: Function,
       updateTodo: Function,
