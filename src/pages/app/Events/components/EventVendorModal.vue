@@ -22,6 +22,7 @@
                                  required
                                  :md-options="vendorsList"
                                  @md-changed="setVendor"
+                                 @md-opened="mdOpened"
                                  class="change-icon-order select-with-icon mb16"
                                  :class="[{'md-error': errors.has('name')}]">
                   <md-icon class="md-accent">person</md-icon>
@@ -328,6 +329,10 @@
           type: 'danger',
         });
       },
+      mdOpened:function() {
+        this.form.name += " ";
+        this.form.name = this.form.name.substring(0, this.form.name.length - 1)
+      }
     },
     computed: {
       vendorsList() {

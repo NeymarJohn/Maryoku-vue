@@ -58,7 +58,7 @@
                       <span class="notification">5</span>
                       <p class="hidden-lg hidden-md">Notifications</p>-->
                       <div class="photo">
-                        <img src="static/img/faces/avatar.jpg" alt="avatar"/>
+                        <img :src="avatar" alt="avatar"/>
                       </div>
                     </md-button>
                     <ul class="dropdown-menu dropdown-menu-right">
@@ -90,6 +90,7 @@
     data() {
       return {
         auth,
+        avatar: auth.user.avatar ? auth.user.avatar : "static/img/faces/avatar.jpg",
         selectedEmployee: "",
         employees: [
           "Jim Halpert",
@@ -102,6 +103,9 @@
           "Kevin Malone"
         ]
       };
+    },
+    mounted() {
+      console.log(auth.user);
     },
     methods: {
       toggleSidebar() {

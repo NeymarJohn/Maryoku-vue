@@ -38,6 +38,7 @@
   import moment from 'moment';
   import VueElementLoading from 'vue-element-loading';
   import { TimeLine } from "@/components";
+  import { TimeLineItem } from "@/components";
 
   export default {
     components: {
@@ -46,6 +47,7 @@
       EventCardComponent,
       VueElementLoading,
       TimeLine,
+      TimeLineItem
     },
     data: () => ({
       responsive: false,

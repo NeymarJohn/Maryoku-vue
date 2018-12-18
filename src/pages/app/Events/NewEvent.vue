@@ -7,11 +7,11 @@
     </div>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
-      <div class="md-layout-item md-size-100" style="margin-bottom: 10px;" :class="buttonRowClass">
-        <md-toolbar class="md-transparent left-offset">
-          <div class="md-toolbar-row">
-            <div class="md-toolbar-section-center">
-              <drop-down direction="down" ref="dropdown">
+
+      <time-line plain :type="'simple'">
+        <time-line-item inverted badge-type="danger" badge-icon="card_travel" class="empty-timeline">
+          <div slot="header">
+          <drop-down direction="down" ref="dropdown" class="dropdown-component-button">
                 <md-button slot="title" class="md-button md-block md-primary dropdown-toggle" data-toggle="dropdown">
                   <i class="material-icons">add</i> Add Component
                 </md-button>
@@ -27,13 +27,8 @@
                   </li>
                 </ul>
               </drop-down>
-            </div>
-          </div>
-        </md-toolbar>
-      </div>
-
-      <time-line plain :type="'simple'" class="modal-z-index">
-        <time-line-item inverted badge-type="danger" badge-icon="card_travel" class="empty-timeline"> </time-line-item>
+              </div>
+        </time-line-item>
         <event-card-component v-for="(component, index) in components"
                               :key="'event-card-component-' + index"
                               v-if="$store.state.vendorsList"
@@ -76,7 +71,6 @@
       formData: null,
       readOnly: true,
       isLoading: true,
-      buttonRowClass: '',
     }),
 
     methods: {
@@ -112,7 +106,7 @@
       }),
       components() {
         return this.$store.state.eventData.components;
-      },
+      }
     },
     watch: {
       '$route' (to, from) {
@@ -123,15 +117,6 @@
       this.onResponsiveInverted();
       this.readOnly = ['EventEdit', 'EventNew'].indexOf(this.$route.name) === -1;
       window.addEventListener("resize", this.onResponsiveInverted);
-
-      this.$watch(
-        () => {
-          return this.$refs.dropdown.isOpen;
-        },
-        (val) => {
-          this.buttonRowClass = val ? 'large-z-index' : '';
-        }
-      )
     },
     beforeDestroy() {
       window.removeEventListener("resize", this.onResponsiveInverted);
@@ -161,6 +146,12 @@
 </script>
 
 <style lang="scss">
+  .dropdown-component-button {
+    width: 40%;
+    margin: 0 auto;
+    margin-bottom: -30px;
+    margin-top: -15px;
+  }
   .dropdown .dropdown-menu .dropdown-menu {
     left: 97%;
     margin-top: -5px;
@@ -206,13 +197,6 @@
   }
   .modal-z-index {
     z-index: 5;
-  }
-  .large-z-index {
-    z-index: 6;
-    position: relative;
-  }
-  .empty-timeline {
-
   }
   @media (max-width: 960px) {
     .mt-small-20 {
