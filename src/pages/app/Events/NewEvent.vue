@@ -71,6 +71,7 @@
       formData: null,
       readOnly: true,
       isLoading: true,
+      buttonRowClass: '',
     }),
 
     methods: {
@@ -106,7 +107,7 @@
       }),
       components() {
         return this.$store.state.eventData.components;
-      }
+      },
     },
     watch: {
       '$route' (to, from) {
@@ -117,6 +118,15 @@
       this.onResponsiveInverted();
       this.readOnly = ['EventEdit', 'EventNew'].indexOf(this.$route.name) === -1;
       window.addEventListener("resize", this.onResponsiveInverted);
+
+      this.$watch(
+        () => {
+          return this.$refs.dropdown.isOpen;
+        },
+        (val) => {
+          this.buttonRowClass = val ? 'large-z-index' : '';
+        }
+      )
     },
     beforeDestroy() {
       window.removeEventListener("resize", this.onResponsiveInverted);
@@ -197,6 +207,10 @@
   }
   .modal-z-index {
     z-index: 5;
+  }
+  .large-z-index {
+    z-index: 6;
+    position: relative;
   }
   @media (max-width: 960px) {
     .mt-small-20 {

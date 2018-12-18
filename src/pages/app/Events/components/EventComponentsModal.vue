@@ -53,7 +53,7 @@
               <div class="md-layout-item">
                 <md-field :class="[{'md-error': errors.has('comment')}]" class="mb16">
                   <md-icon class="md-accent">create</md-icon>
-                  <label>Comments</label>
+                  <label>Comment</label>
                   <md-textarea md-autogrow
                                v-model="form.comment"
                                data-vv-name="comment"

@@ -88,6 +88,7 @@
       formData: null,
       readOnly: true,
       isLoading: true,
+      buttonRowClass: '',
     }),
     methods: {
       onResponsiveInverted() {
@@ -226,6 +227,15 @@
     mounted() {
       this.onResponsiveInverted();
       window.addEventListener("resize", this.onResponsiveInverted);
+
+      this.$watch(
+        () => {
+          return this.$refs.dropdown.isOpen;
+        },
+        (val) => {
+          this.buttonRowClass = val ? 'large-z-index' : '';
+        }
+      )
     },
     beforeDestroy() {
       window.removeEventListener("resize", this.onResponsiveInverted);
@@ -324,6 +334,13 @@
     display: flex;
     align-items: center;
     flex: 1;
+  }
+  .modal-z-index {
+    z-index: 5;
+  }
+  .large-z-index {
+    z-index: 6;
+    position: relative;
   }
   @media (max-width: 960px) {
     .mt-small-20 {
