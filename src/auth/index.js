@@ -51,10 +51,7 @@ export default {
   currentUser(context, required) {
     context.$http.get(CURRENT_USER_URL, { headers: this.getAuthHeader() })
       .then((resp) => {
-        this.user.username = resp.data.username;
-        this.user.avatar =  resp.data.pictureUrl;
-        this.user.displayName = resp.data.displayName;
-
+        context.user = { username: resp.data.username };
         this.setHeaders(context);
         // if (required){
         //   context.$router.push({

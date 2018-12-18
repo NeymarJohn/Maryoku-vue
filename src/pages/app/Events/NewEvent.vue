@@ -7,10 +7,10 @@
     </div>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
-      <div class="md-layout-item md-size-100" style="margin-bottom: 40px;">
+      <div class="md-layout-item md-size-100" style="margin-bottom: 10px;">
         <md-toolbar class="md-transparent left-offset">
           <div class="md-toolbar-row">
-            <div class="md-toolbar-section-end">
+            <div class="md-toolbar-section-center">
               <drop-down direction="down" ref="dropdown">
                 <md-button slot="title" class="md-button md-block md-primary dropdown-toggle" data-toggle="dropdown">
                   <i class="material-icons">add</i> Add Component
@@ -32,13 +32,16 @@
         </md-toolbar>
       </div>
 
-      <event-card-component v-for="(component, index) in components"
-                            v-if="$store.state.vendorsList"
-                            :componentObject="component"
-                            :componentIndex="index"
-                            :key="'event-card-component-' + index">
+      <time-line plain :type="'simple'">
+        <time-line-item inverted badge-type="danger" badge-icon="card_travel" class="empty-timeline"> </time-line-item>
+        <event-card-component v-for="(component, index) in components"
+                              :key="'event-card-component-' + index"
+                              v-if="$store.state.vendorsList"
+                              :componentObject="component"
+                              :componentIndex="index">
+        </event-card-component>
 
-      </event-card-component>
+      </time-line>
     </div>
   </div>
 </template>
@@ -55,12 +58,15 @@
   import { mapGetters } from 'vuex'
   import moment from 'moment';
   import VueElementLoading from 'vue-element-loading';
+  import { TimeLine, TimeLineItem } from "@/components";
 
   export default {
     components: {
       EventHeaderForm,
       EventCardComponent,
-      VueElementLoading
+      VueElementLoading,
+      TimeLine,
+      TimeLineItem,
     },
     data: () => ({
       responsive: false,
@@ -181,6 +187,18 @@
     .md-card {
       margin: 10px 0;
     }
+  }
+  .md-toolbar-section-center {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex: 1;
+  }
+  .modal-z-index {
+    z-index: 5;
+  }
+  .empty-timeline {
+
   }
   @media (max-width: 960px) {
     .mt-small-20 {

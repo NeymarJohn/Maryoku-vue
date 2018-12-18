@@ -87,7 +87,6 @@
           let inspirations = event.inspirations().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${event.id}/inspirations`).get().then(response => {
             this.inspirations = response;
             this.isLoading = false;
-            console.log(response);
           })
           .catch((error) => {
             console.log(error);

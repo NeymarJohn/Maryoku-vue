@@ -1,159 +1,143 @@
 <template>
-  <div class="md-layout-item md-size-100">
+  <time-line-item inverted badge-type="danger" badge-icon="card_travel" class="components-timeline">
+    <event-tabs slot="content"
+                color-button="info"
+                :tab-name="['Component Properties', 'Vendors', 'Todo']"
+                :componentTitle="componentTitle"
+                :readonly="readonly"
+                :showInspirations="showInspirations"
+                :componentObjectId="componentObject.id"
+                :showSwalComponent="showSwalComponent">
 
-    <md-card>
-      <md-card-header class="md-card-header-icon md-card-header-green md-layout md-gutter">
-        <div class="md-layout-item">
-          <h4 class="title">{{ componentTitle }}</h4>
-        </div>
+      <template slot="tab-pane-1">
+        <md-table v-model="componentObject.values" table-header-color="green" v-if="componentObject.values.length" class="components-table" :class="readonly ? 'readonly': ''">
+          <md-table-row>
+            <md-table-head>Vendor name</md-table-head>
+            <md-table-head>Value</md-table-head>
+            <md-table-head>Comment</md-table-head>
+            <md-table-head></md-table-head>
+          </md-table-row>
+          <md-table-row slot="md-table-row"
+                        v-for="(item, index) in componentObject.values"
+                        v-if="item !== null"
+                        :key="'component-' + index"
+                        @click.native="showModalComponent(item, index)">
+            <md-table-cell>{{ item.title }}</md-table-cell>
+            <md-table-cell>{{ item.value }}</md-table-cell>
+            <md-table-cell>{{ item.comment }}</md-table-cell>
+            <md-table-cell class="visible-on-hover">
+              <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'values')" v-if="!readonly">
+                <md-icon>delete</md-icon>
+              </md-button>
+            </md-table-cell>
+          </md-table-row>
+        </md-table>
+        <p class="text-danger text-center" v-if="!componentObject.values.length">
+          No records were added yet.
+          <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalComponent({}, null)'>Go ahead and add one!</a>
+        </p>
+        <md-button class="md-button md-block md-primary md-size-15 md-layout-item center-icon" @click.native='showModalComponent({}, null)' v-if="!readonly && componentObject.values.length">
+          <i class="material-icons">add</i> Add
+        </md-button>
+      </template>
 
-        <div class="md-layout-item" style="text-align: right;">
-          <md-button class="md-just-icon md-simple" @click.native='showInspirations()' v-if="!readonly && componentObject.id">
-            <md-icon>reorder</md-icon>
-          </md-button>
-          <md-button class="md-raised md-primary md-icon-button delete-button--small" @click.native="showSwalComponent()" v-if="!readonly">
-            <md-icon>delete</md-icon>
-          </md-button>
-        </div>
-
-      </md-card-header>
-
-      <md-card-content>
-        <nav-tabs-card>
-          <template slot="content">
-            <md-tabs md-sync-route class="md-success" md-alignment="left">
-
-              <!-- if it will some time left, could be replaced with one table component -->
-              <md-tab id="tab-components" md-label="Component Properties" md-icon="settings">
-                <md-table v-model="componentObject.values" table-header-color="green" v-if="componentObject.values.length" :class="readonly ? 'readonly': ''">
-                  <md-table-row>
-                    <md-table-head>Vendor name</md-table-head>
-                    <md-table-head>Value</md-table-head>
-                    <md-table-head>Comment</md-table-head>
-                    <md-table-head></md-table-head>
-                  </md-table-row>
-                  <md-table-row slot="md-table-row"
-                                v-for="(item, index) in componentObject.values"
-                                v-if="item !== null"
-                                :key="'component-' + index"
-                                @click.native="showModalComponent(item, index)">
-                    <md-table-cell>{{ item.title }}</md-table-cell>
-                    <md-table-cell>{{ item.value }}</md-table-cell>
-                    <md-table-cell>{{ item.comment }}</md-table-cell>
-                    <md-table-cell class="visible-on-hover">
-                      <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'values')" v-if="!readonly">
-                        <md-icon>delete</md-icon>
-                      </md-button>
-                    </md-table-cell>
-                  </md-table-row>
-                </md-table>
-                <p class="text-danger text-center" v-if="!componentObject.values.length">
-                  No records were added yet.
-                  <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalComponent({}, null)'>Go ahead and add one!</a>
-                </p>
-                <md-button class="md-button md-block md-primary md-size-15 md-layout-item center-icon" @click.native='showModalComponent({}, null)' v-if="!readonly && componentObject.values.length">
-                  <i class="material-icons">add</i> Add
+      <template slot="tab-pane-2">
+        <md-table v-model="vendorsObjectsArray" table-header-color="green" class="components-table" v-if="vendorsObjectsArray.length" :class="readonly ? 'readonly': ''">
+          <md-table-row>
+            <md-table-head>Vendor Name</md-table-head>
+            <md-table-head>Contact Person</md-table-head>
+            <md-table-head>Email</md-table-head>
+            <md-table-head>Phone</md-table-head>
+            <md-table-head>Cost</md-table-head>
+            <md-table-head></md-table-head>
+          </md-table-row>
+          <md-table-row slot="md-table-row"
+                        v-for="(item, index) in vendorsObjectsArray"
+                        v-if="item !== null"
+                        :key="'vendor-' + index"
+                        @click.native="showModalVendors(item, index)">
+            <md-table-cell>{{ item.vendorDisplayName }}</md-table-cell>
+            <md-table-cell>{{ item.contactPerson }}</md-table-cell>
+            <md-table-cell>{{ item.vendorMainEmail }}</md-table-cell>
+            <md-table-cell>{{ item.vendorMainPhoneNumber }}</md-table-cell>
+            <md-table-cell>{{ item.cost }}</md-table-cell>
+            <md-table-cell class="visible-on-hover min-actions">
+              <div class="actions-flex">
+                <md-button class="md-raised md-primary md-icon-button" @click="sentProposalRequest($event)" v-if="!readonly && shouldUpdate">
+                  <md-icon>visibility</md-icon>
+                  <md-tooltip md-direction="top">Request Proposal</md-tooltip>
                 </md-button>
-              </md-tab>
-
-              <md-tab id="tab-vendors" md-label="Vendors" md-icon="rv_hookup">
-                <md-table v-model="vendorsObjectsArray" table-header-color="green" v-if="vendorsObjectsArray.length" :class="readonly ? 'readonly': ''">
-                  <md-table-row>
-                    <md-table-head>Vendor Name</md-table-head>
-                    <md-table-head>Contact Person</md-table-head>
-                    <md-table-head>Email</md-table-head>
-                    <md-table-head>Phone</md-table-head>
-                    <md-table-head>Cost</md-table-head>
-                    <md-table-head></md-table-head>
-                  </md-table-row>
-                  <md-table-row slot="md-table-row"
-                                v-for="(item, index) in vendorsObjectsArray"
-                                v-if="item !== null"
-                                :key="'vendor-' + index"
-                                @click.native="showModalVendors(item, index)">
-                    <md-table-cell>{{ item.vendorDisplayName }}</md-table-cell>
-                    <md-table-cell>{{ item.contactPerson }}</md-table-cell>
-                    <md-table-cell>{{ item.vendorMainEmail }}</md-table-cell>
-                    <md-table-cell>{{ item.vendorMainPhoneNumber }}</md-table-cell>
-                    <md-table-cell>{{ item.cost }}</md-table-cell>
-                    <md-table-cell class="visible-on-hover min-actions">
-                      <div class="actions-flex">
-                        <md-button class="md-raised md-primary md-icon-button" @click="sentProposalRequest($event)" v-if="!readonly && shouldUpdate">
-                          <md-icon>visibility</md-icon>
-                          <md-tooltip md-direction="top">Request Proposal</md-tooltip>
-                        </md-button>
-                        <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'vendors')" v-if="!readonly">
-                          <md-icon>delete</md-icon>
-                        </md-button>
-                      </div>
-                    </md-table-cell>
-                  </md-table-row>
-                </md-table>
-                <p class="text-danger text-center" v-if="!componentObject.vendors.length">
-                  No records were added yet.
-                  <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalVendors({}, null)'>Go ahead and add one!</a>
-                </p>
-                <md-button class="md-button md-block md-primary md-size-15 md-layout-item center-icon" @click.native='showModalVendors({}, null)' v-if="!readonly && vendorsObjectsArray.length">
-                  <i class="material-icons">add</i> Add
+                <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'vendors')" v-if="!readonly">
+                  <md-icon>delete</md-icon>
                 </md-button>
-              </md-tab>
+              </div>
+            </md-table-cell>
+          </md-table-row>
+        </md-table>
+        <p class="text-danger text-center" v-if="!componentObject.vendors.length">
+          No records were added yet.
+          <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalVendors({}, null)'>Go ahead and add one!</a>
+        </p>
+        <md-button class="md-button md-block md-primary md-size-15 md-layout-item center-icon" @click.native='showModalVendors({}, null)' v-if="!readonly && vendorsObjectsArray.length">
+          <i class="material-icons">add</i> Add
+        </md-button>
+      </template>
 
-              <md-tab id="tab-todo" md-label="ToDo" md-icon="check_circle">
-                <md-table table-header-color="green" v-if="componentObject.todos.length" :class="readonly ? 'readonly': ''">
-                  <md-table-row>
-                    <md-table-head>What</md-table-head>
-                    <md-table-head>Due Date</md-table-head>
-                    <md-table-head>Assign To</md-table-head>
-                    <md-table-head>Status</md-table-head>
-                    <md-table-head></md-table-head>
-                  </md-table-row>
-                  <event-todo-row v-for="(item, index) in componentObject.todos"
-                                  v-if="item !== null"
-                                  :showModalTodo="showModalTodo"
-                                  :showSwal="showSwalItems"
-                                  :todoItem="item"
-                                  :todoIndex="index"
-                                  :key="'todo-' + index"></event-todo-row>
-                </md-table>
-                <p class="text-danger text-center" v-if="!componentObject.todos.length">
-                  No records were added yet.
-                  <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalTodo({}, null)'>Go ahead and add one!</a>
-                </p>
-                <md-button class="md-button md-block md-primary md-size-15 md-layout-item center-icon" @click="showModalTodo({}, null)" v-if="!readonly && componentObject.todos.length">
-                  <i class="material-icons">add</i> Add
-                </md-button>
-              </md-tab>
-            </md-tabs>
-          </template>
-        </nav-tabs-card>
-      </md-card-content>
-    </md-card>
+      <template slot="tab-pane-3">
+        <md-table table-header-color="green" class="components-table" v-if="componentObject.todos.length" :class="readonly ? 'readonly': ''">
+          <md-table-row>
+            <md-table-head>What</md-table-head>
+            <md-table-head>Due Date</md-table-head>
+            <md-table-head>Assign To</md-table-head>
+            <md-table-head>Status</md-table-head>
+            <md-table-head></md-table-head>
+          </md-table-row>
+          <event-todo-row v-for="(item, index) in componentObject.todos"
+                          v-if="item !== null"
+                          :showModalTodo="showModalTodo"
+                          :showSwal="showSwalItems"
+                          :todoItem="item"
+                          :todoIndex="index"
+                          :key="'todo-' + index"></event-todo-row>
+        </md-table>
+        <p class="text-danger text-center" v-if="!componentObject.todos.length">
+          No records were added yet.
+          <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalTodo({}, null)'>Go ahead and add one!</a>
+        </p>
+        <md-button class="md-button md-block md-primary md-size-15 md-layout-item center-icon" @click="showModalTodo({}, null)" v-if="!readonly && componentObject.todos.length">
+          <i class="material-icons">add</i> Add
+        </md-button>
+      </template>
+    </event-tabs>
 
-    <event-modal-inspirations ref="inspirationsModal" v-if="componentObject.id"></event-modal-inspirations>
-    <event-modal-vendor ref="vendorsModal"
-                        :v-bind:readonly="$props.readonly"
-                        :vendorItem="vendorItem"
-                        :vendorIndex="vendorIndex"
+    <!-- should be inside of 'slot="content"' for rendering -->
+    <div class="tabs-timeline-content" slot="content">
+      <event-modal-inspirations ref="inspirationsModal" v-if="componentObject.id"></event-modal-inspirations>
+      <event-modal-vendor ref="vendorsModal"
+                          :v-bind:readonly="$props.readonly"
+                          :vendorItem="vendorItem"
+                          :vendorIndex="vendorIndex"
+                          v-bind:shouldUpdate="$props.shouldUpdate"
+                          :createVendor="$props.createVendor"
+                          :updateVendor="$props.updateVendor"
+                          :componentIndex="componentIndex"></event-modal-vendor>
+      <event-modal-components ref="componentsModal"
+                              :v-bind:readonly="$props.readonly"
+                              :componentItem="componentItem"
+                              :componentItemIndex="componentItemIndex"
+                              :componentId="componentObject.id"
+                              :shouldUpdate="$props.shouldUpdate"
+                              :updateComponent="$props.updateComponent"
+                              :componentIndex="componentIndex"></event-modal-components>
+      <event-modal-todo ref="todoModal"
+                        :todoItem="todoItem"
+                        :todoIndex="todoIndex"
                         v-bind:shouldUpdate="$props.shouldUpdate"
-                        :createVendor="$props.createVendor"
-                        :updateVendor="$props.updateVendor"
-                        :componentIndex="componentIndex"></event-modal-vendor>
-    <event-modal-components ref="componentsModal"
-                            :v-bind:readonly="$props.readonly"
-                            :componentItem="componentItem"
-                            :componentItemIndex="componentItemIndex"
-                            :componentId="componentObject.id"
-                            :shouldUpdate="$props.shouldUpdate"
-                            :updateComponent="$props.updateComponent"
-                            :componentIndex="componentIndex"></event-modal-components>
-    <event-modal-todo ref="todoModal" 
-                      :todoItem="todoItem"
-                      :todoIndex="todoIndex"
-                      v-bind:shouldUpdate="$props.shouldUpdate"
-                      :v-bind:readonly="$props.readonly"
-                      :updateTodo="$props.updateTodo"
-                      :componentIndex="componentIndex"></event-modal-todo>
-  </div>
+                        :v-bind:readonly="$props.readonly"
+                        :updateTodo="$props.updateTodo"
+                        :componentIndex="componentIndex"></event-modal-todo>
+    </div>
+  </time-line-item>
 </template>
 
 <script>
@@ -166,8 +150,10 @@
   import EventModalVendor from './EventVendorModal';
   import EventModalComponents from './EventComponentsModal';
   import EventTodoRow from './EventTodoRow.vue';
+  import EventTabs from './EventTabs.vue';
   import swal from "sweetalert2";
   import moment from 'moment';
+  import { TimeLineItem } from "@/components";
 
   export default {
     components: {
@@ -176,7 +162,9 @@
       EventModalTodo,
       EventModalVendor,
       EventModalComponents,
-      EventTodoRow
+      EventTodoRow,
+      TimeLineItem,
+      EventTabs,
     },
     props: {
       componentIndex: Number,
@@ -400,5 +388,9 @@
     height: 27px;
     min-width: 27px;
   }
-
+  .components-timeline {
+    .timeline-heading {
+      margin: 0;
+    }
+  }
 </style>

@@ -22,7 +22,6 @@
                                  required
                                  :md-options="propertyValues"
                                  @md-changed="setValue"
-                                 @md-opened="mdOpenedTitle"
                                  class="change-icon-order select-with-icon mb16"
                                  :class="[{'md-error': errors.has('title')}]">
                   <md-icon class="md-accent">person</md-icon>
@@ -39,7 +38,6 @@
                                  v-validate= "modelValidations.value"
                                  required
                                  :md-options="propertyValuesArray"
-                                 @md-opened="mdOpenedValue"
                                  class="change-icon-order select-with-icon mb16"
                                  :class="[{'md-error': errors.has('value')}]">
                   <md-icon class="md-accent">person</md-icon>
@@ -182,14 +180,6 @@
           verticalAlign: 'top',
           type: 'danger',
         });
-      },
-      mdOpenedTitle:function() {
-        this.form.title += " ";
-        this.form.title = this.form.title.substring(0, this.form.title.length - 1)
-      },
-      mdOpenedValue:function() {
-        this.form.value += " ";
-        this.form.value = this.form.value.substring(0, this.form.value.length - 1)
       },
     },
     created() {

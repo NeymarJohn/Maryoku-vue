@@ -7,15 +7,18 @@
     </div>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
+      <time-line plain :type="'simple'">
 
-      <event-card-component v-for="(component, index) in event.components"
-                            v-if="$store.state.vendorsList && component"
-                            :componentObject="component"
-                            :componentIndex="index"
-                            v-bind:readonly="true"
-                            :key="'event-card-component-' + index">
+          <event-card-component v-for="(component, index) in event.components"
+                                :key="'event-card-component-' + index"
+                                v-if="$store.state.vendorsList && component"
+                                :componentObject="component"
+                                :componentIndex="index"
+                                :readonly="true">
+          </event-card-component>
 
-      </event-card-component>
+      </time-line>
+
     </div>
 
   </div>
@@ -34,13 +37,15 @@
   import { mapGetters } from 'vuex'
   import moment from 'moment';
   import VueElementLoading from 'vue-element-loading';
+  import { TimeLine } from "@/components";
 
   export default {
     components: {
       EventHeaderForm,
       EventInfo,
       EventCardComponent,
-      VueElementLoading
+      VueElementLoading,
+      TimeLine,
     },
     data: () => ({
       responsive: false,

@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout show-page">
 
-    <div class="md-layout-item md-size-100 gallery-z-index">
+    <div class="md-layout-item md-size-100">
 
       <div class="event-status-field">
         <label>Status: </label>
@@ -26,7 +26,7 @@
 
       <div class="event-form-padding">
         <form class="md-layout">
-          <md-card class="md-layout-item md-size-100 gallery-z-index padding-card">
+          <md-card class="md-layout-item md-size-100 padding-card">
 
             <div class="md-layout-item md-small-size-100">
               <md-field>
@@ -342,9 +342,6 @@
     .md-button {
       display: none;
     }
-  }
-  .gallery-z-index {
-    z-index: 500;
   }
   .file-input {
     margin-right: 10px;

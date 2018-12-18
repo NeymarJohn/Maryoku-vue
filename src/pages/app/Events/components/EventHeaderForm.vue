@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout">
 
-    <div class="md-layout-item md-size-100 gallery-z-index">
+    <div class="md-layout-item md-size-100">
 
       <div class="event-status-field">
         <label>Status: </label>
@@ -26,7 +26,7 @@
 
       <div class="event-form-padding">
         <form class="md-layout">
-          <md-card class="md-layout-item md-size-100 gallery-z-index padding-card">
+          <md-card class="md-layout-item md-size-100 padding-card">
 
             <div class="md-layout-item">
               <md-field :class="[{'md-error': errors.has('eventName')}]">
@@ -633,9 +633,7 @@
       max-height: 150px;
     }
   }
-  .gallery-z-index {
-    z-index: 500;
-  }
+
   .header-image-wrapper .file-input {
     margin-right: 10px;
   }

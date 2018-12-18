@@ -10,10 +10,10 @@
     </div>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
-      <div class="md-layout-item md-size-100" style="margin-bottom: 40px;">
+      <div class="md-layout-item md-size-100" style="margin-bottom: 10px;">
         <md-toolbar class="md-transparent left-offset">
           <div class="md-toolbar-row">
-            <div class="md-toolbar-section-end">
+            <div class="md-toolbar-section-center">
               <drop-down direction="down" ref="dropdown">
                 <md-button slot="title" class="md-button md-block md-primary dropdown-toggle" data-toggle="dropdown">
                   <i class="material-icons">add</i> Add Component
@@ -35,22 +35,24 @@
         </md-toolbar>
       </div>
 
-      <event-card-component v-for="(component, index) in components"
-                          v-if="component && $store.state.vendorsList"
-                          v-bind:shouldUpdate="true"
-                          :componentObject="component"
-                          :componentIndex="index"
-                          :createVendor="createVendor"
-                          :updateVendor="updateVendor"
-                          :updateTodo="updateTodo"
-                          :updateComponent="updateComponent"
-                          :deleteVendor="deleteVendor"
-                          :deleteTodo="deleteTodo"
-                          :deleteComponentItem="deleteComponentItem"
-                          :deleteComponent="deleteComponent"
-                          :key="'event-card-component-' + index">
+      <time-line plain :type="'simple'">
+        <event-card-component v-for="(component, index) in components"
+                              v-if="component && $store.state.vendorsList"
+                              v-bind:shouldUpdate="true"
+                              :componentObject="component"
+                              :componentIndex="index"
+                              :createVendor="createVendor"
+                              :updateVendor="updateVendor"
+                              :updateTodo="updateTodo"
+                              :updateComponent="updateComponent"
+                              :deleteVendor="deleteVendor"
+                              :deleteTodo="deleteTodo"
+                              :deleteComponentItem="deleteComponentItem"
+                              :deleteComponent="deleteComponent"
+                              :key="'event-card-component-' + index">
 
-    </event-card-component>
+        </event-card-component>
+      </time-line>
     </div>
 
   </div>
@@ -72,12 +74,14 @@
   import moment from 'moment';
   import VueElementLoading from 'vue-element-loading';
   import Vue from 'vue';
+  import { TimeLine } from "@/components";
 
   export default {
     components: {
       EventHeaderForm,
       EventCardComponent,
       VueElementLoading,
+      TimeLine,
     },
     data: () => ({
       responsive: false,
@@ -312,6 +316,12 @@
     height: calc(100vh - 72px);
     overflow: auto;
     padding-top: 1px;
+  }
+  .md-toolbar-section-center {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex: 1;
   }
   @media (max-width: 960px) {
     .mt-small-20 {
