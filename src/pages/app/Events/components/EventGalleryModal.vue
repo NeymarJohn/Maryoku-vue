@@ -11,7 +11,7 @@
         <vue-element-loading :active="isModalLoading" spinner="ring" color="#FF547C"/>
 
         <div class="header-image-wrapper">
-          <div class="file-input" v-for="(imageItem, index) in uploadedImages" :key="'image-'+index">
+          <div class="file-input order-2" v-for="(imageItem, index) in uploadedImages" :key="'image-'+index">
             <div class="image-container" @click="openGallery(index)">
               <img :src="imageItem.src" />
             </div>
@@ -20,7 +20,7 @@
             </div>
           </div>
 
-          <div class="file-input" v-if="removeImage">
+          <div class="file-input order-1" v-if="removeImage">
             <div class="image-container">
               <img :src="regularImg" title="">
             </div>
@@ -89,6 +89,18 @@
   .gallery-modal {
     .header-image-wrapper {
       text-align: left;
+      display: flex;
+      align-items: flex-end;
+      flex-flow: row wrap;
+      max-height: 85vh;
+      overflow: auto;
+
+      .order-1 {
+        order: 1;
+      }
+      .order-2 {
+        order: 2;
+      }
     }
   }
 </style>

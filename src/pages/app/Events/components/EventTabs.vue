@@ -117,6 +117,10 @@ export default {
     text-align: left;
   }
   .md-card-tabs.components-card .md-list .md-list-item .md-list-item-button {
-    min-width: 70px;
+    min-width: 60px;
+
+    .md-list-item-content {
+      padding: 8px;
+    }
   }
 </style>
