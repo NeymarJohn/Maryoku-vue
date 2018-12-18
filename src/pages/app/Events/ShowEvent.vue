@@ -62,10 +62,9 @@
   import Vendors from '@/models/Vendors';
   import { mapGetters } from 'vuex'
   import moment from 'moment';
-  import EventGalleryModal from './Components/EventGalleryModal';
+  import EventGalleryModal from './components/EventGalleryModal';
   import VueElementLoading from 'vue-element-loading';
-  import { TimeLine } from "@/components";
-  import { TimeLineItem } from "@/components";
+  import { TimeLine, TimeLineItem } from "@/components";
 
   export default {
     components: {
@@ -112,15 +111,6 @@
       sentProposalRequest() {
         let routeData = this.$router.resolve({ path: "/events/proposal" });
         window.open(routeData.href, '_blank');
-      },
-      getEventData() {
-        CalendarEvent.custom(`${process.env.SERVER_URL}/1/calendars/${this.$store.state.calendarId}/events/${this.$route.params.id}`).get().then(event => {
-          this.event = event[0];
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isLoading = false;
-        });
       }
     },
     computed: {
@@ -166,36 +156,26 @@
       }
     },
     created() {
-      let calendar = '';
-
-      if (this.$store.state.calendarId === null) {
+      let _this = this;
+      let calendar;
+      setTimeout(() => {
         calendar = Calendar.get().then(calendars => {
-          if (calendars.length === 0) {
+          if(calendars.length === 0 ) {
             return;
           }
-          this.$store.state.calendarId = calendars[0].id;
-          this.getEventData();
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isLoading = false;
-        });
-      } else {
-        this.getEventData()
-      }
-
-
+        _this.calendar = calendars[0];
+          calendars[0].calendarEvents().find(_this.$route.params.id).then(event => {
+            _this.event = event;
+          })
+        })}, 500);
+      
       let vendorsList = Vendors.get().then((vendorsList) => {
         this.$store.state.vendorsList = vendorsList;
       });
 
-      let components = '';
-
-      if (this.$store.state.componentsList === null) {
-        components = EventComponent.get().then((componentsList) => {
-          this.$store.state.componentsList = componentsList;
-        });
-      }
+      let components = EventComponent.get().then((componentsList) => {
+        this.$store.state.componentsList = componentsList;
+      });
 
       Promise.all([vendorsList, calendar, components]).then(() => {
         this.isLoading = false;

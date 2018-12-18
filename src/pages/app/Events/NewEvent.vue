@@ -83,6 +83,7 @@
         }
       },
       createNewComponent(e, item) {
+        console.log(item);
         this.$refs.dropdown.closeDropDown();
         e.stopPropagation();
         if (this.$store.state.eventData.components === null || !this.$store.state.eventData.components.length) {
@@ -91,6 +92,8 @@
 
         this.$store.commit('updateComponent', {
           componentId: item.id,
+          icon: item.icon,
+          color: item.color,
           todos: [],
           values: [],
           vendors: [],

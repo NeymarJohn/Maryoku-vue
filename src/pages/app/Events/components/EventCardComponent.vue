@@ -1,5 +1,5 @@
 <template>
-  <time-line-item inverted badge-type="danger" badge-icon="card_travel" class="components-timeline">
+  <time-line-item inverted badge-type="danger" :badge-icon="findIcon(componentObject)" class="components-timeline">
     <event-tabs slot="content"
                 color-button="info"
                 :tab-name="['Component Properties', 'Vendors', 'Todo']"
@@ -8,7 +8,7 @@
                 :showInspirations="showInspirations"
                 :componentObjectId="componentObject.id"
                 :showSwalComponent="showSwalComponent">
-
+      
       <template slot="tab-pane-1">
         <md-table v-model="componentObject.values" table-header-color="green" v-if="componentObject.values.length" class="components-table" :class="readonly ? 'readonly': ''">
           <md-table-row>
@@ -17,6 +17,7 @@
             <md-table-head>Comment</md-table-head>
             <md-table-head></md-table-head>
           </md-table-row>
+          
           <md-table-row slot="md-table-row"
                         v-for="(item, index) in componentObject.values"
                         v-if="item !== null"
@@ -118,6 +119,7 @@
                           :vendorItem="vendorItem"
                           :vendorIndex="vendorIndex"
                           v-bind:shouldUpdate="$props.shouldUpdate"
+                          :createVendor="$props.createVendor"
                           :updateVendor="$props.updateVendor"
                           :componentIndex="componentIndex"></event-modal-vendor>
       <event-modal-components ref="componentsModal"
@@ -170,6 +172,7 @@
       componentObject: Object,
       readonly: Boolean,
       shouldUpdate: Boolean,
+      createVendor: Function,
       updateVendor: Function,
       updateComponent: Function,
       updateTodo: Function,
@@ -218,6 +221,16 @@
       }
     },
     methods: {
+      findIcon(object) {
+        let obj = this.$store.state.componentsList.find(e => { return e.id === object.componentId })
+        if (!obj) {
+          let child = this.$store.state.componentsList.map(e => {
+            return e.childComponents ? e.childComponents : {}
+          });
+          obj = child.flat().find(e => { return e.id === object.componentId })
+        }
+        return obj.icon
+      },
       getVendorObjectsArray() {
         let _this = this;
         this.vendorsObjectsArray = [];
