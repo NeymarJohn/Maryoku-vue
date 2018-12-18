@@ -220,12 +220,15 @@
     },
     methods: {
       findIcon(object) {
-        let obj = this.$store.state.componentsList.find(e => { return e.id === object.componentId })
-        if (!obj) {
-          let child = this.$store.state.componentsList.map(e => {
-            return e.childComponents ? e.childComponents : {}
-          });
-          obj = child.flat().find(e => { return e.id === object.componentId })
+        let obj = '';
+        if (this.$store.state.componentsList) {
+          obj = this.$store.state.componentsList.find(e => { return e.id === object.componentId })
+          if (!obj) {
+            let child = this.$store.state.componentsList.map(e => {
+              return e.childComponents ? e.childComponents : {}
+            });
+            obj = child.flat().find(e => { return e.id === object.componentId })
+          }
         }
         return obj ? obj.icon : 'card_travel'
       },
