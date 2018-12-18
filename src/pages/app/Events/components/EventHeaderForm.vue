@@ -298,33 +298,30 @@
           if(calendars.length === 0 ) {
             return;
           }
-          calendars[0].calendarEvents().get().then(editedEvents => {
-            let editedEvent = editedEvents.find(e => { return e.id = this.$route.params.id; })
-            editedEvent.title = this.form.eventName;
-            editedEvent.eventStartMillis =this.getEventStartInMillis();
-            editedEvent.eventEndMillis = this.getEventEndInMillis();
-            editedEvent.location = this.form.location;
-            editedEvent.occasion = this.form.occasion;
-            editedEvent.numberOfParticipants = this.form.participants;
-            editedEvent.totalBudget = this.form.budget
-            editedEvent.status = this.form.status;
-            editedEvent.currency = 'USD'; // HARDCODED, REMOVE AFTER BACK WILL FIX API
-            editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
-            editedEvent.components = this.$store.state.eventData.components;
-            editedEvent.save().then(response => {
-              this.$parent.isLoading = false;
-              this.$router.push({ path: '/events' });
-            })
-            .catch((error) => {
-              console.log(error);
-              this.$parent.isLoading = false;
-            });
+
+          let _calendar = new Calendar({id: calendars[0].id});
+          let editedEvent = new CalendarEvent({id: this.event.id});
+
+          editedEvent.title = this.form.eventName;
+          editedEvent.eventStartMillis =this.getEventStartInMillis();
+          editedEvent.eventEndMillis = this.getEventEndInMillis();
+          editedEvent.location = this.form.location;
+          editedEvent.occasion = this.form.occasion;
+          editedEvent.numberOfParticipants = this.form.participants;
+          editedEvent.totalBudget = this.form.budget
+          editedEvent.status = this.form.status;
+          editedEvent.currency = 'USD'; // HARDCODED, REMOVE AFTER BACK WILL FIX API
+          editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+          editedEvent.components = this.$store.state.eventData.components;
+          editedEvent.for(_calendar).save().then(response => {
+            this.$parent.isLoading = false;
+            this.$router.push({ path: '/events' });
           })
           .catch((error) => {
             console.log(error);
             this.$parent.isLoading = false;
           });
-        })
+          })
         .catch((error) => {
           console.log(error);
           this.$parent.isLoading = false;
