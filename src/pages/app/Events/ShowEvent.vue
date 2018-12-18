@@ -1,6 +1,29 @@
 <template>
   <div class="md-layout margin-footer">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
+    <div class="md-layout-item md-size-100">
+
+      <div class="event-status-field">
+        <label>Status: </label>
+        <md-field class="status-select">
+          <md-select v-model="event.status" name="event-status">
+            <md-option value="draft">Draft</md-option>
+            <md-option value="approved">Approved</md-option>
+            <md-option value="execution">Execution</md-option>
+            <md-option value="done">Done</md-option>
+          </md-select>
+        </md-field>
+
+
+        <md-button native-type="submit" @click="openImageGallery()" class="md-success">
+          Image Gallery
+          <span class="badge md-round md-info" v-if="uploadedImages.length">{{ uploadedImages.length }}</span>
+        </md-button>
+        <md-button @click="editEvent()" class="md-success">
+          Edit event
+        </md-button>
+      </div>
+    </div>
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
       <event-info :occasionOptions="occasionsArray" :event="event" v-bind:readonly="true"></event-info>
     </div>
@@ -39,9 +62,10 @@
   import Vendors from '@/models/Vendors';
   import { mapGetters } from 'vuex'
   import moment from 'moment';
-  import EventGalleryModal from './components/EventGalleryModal';
+  import EventGalleryModal from './Components/EventGalleryModal';
   import VueElementLoading from 'vue-element-loading';
-  import { TimeLine, TimeLineItem } from "@/components";
+  import { TimeLine } from "@/components";
+  import { TimeLineItem } from "@/components";
 
   export default {
     components: {
