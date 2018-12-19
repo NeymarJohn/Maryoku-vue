@@ -17,7 +17,7 @@
         <span class="badge md-round md-info" v-if="uploadedImages.length">{{ uploadedImages.length }}</span>
       </md-button>
       <md-button @click="editEvent()" class="md-success">
-        Edit event
+        Edit
       </md-button>
     </div>
 

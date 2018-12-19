@@ -3,27 +3,6 @@
 
     <div class="md-layout-item md-size-100">
 
-      <div class="event-status-field">
-        <label>Status: </label>
-        <md-field class="status-select">
-          <md-select v-model="form.status" name="event-status">
-            <md-option value="draft">Draft</md-option>
-            <md-option value="approved">Approved</md-option>
-            <md-option value="execution">Execution</md-option>
-            <md-option value="done">Done</md-option>
-          </md-select>
-        </md-field>
-
-
-        <md-button native-type="submit" @click="openImageGallery" class="md-success">
-          Image Gallery
-          <span class="badge md-round md-info" v-if="uploadedImages.length">{{ uploadedImages.length }}</span>
-        </md-button>
-        <md-button native-type="submit" @click.native.prevent="validateEvent" class="md-success">
-          {{ formData !== null ? 'Edit': 'Create' }} event
-        </md-button>
-      </div>
-
       <div class="event-form-padding">
         <form class="md-layout">
           <md-card class="md-layout-item md-size-100 padding-card">
@@ -173,12 +152,6 @@
         </form>
       </div>
     </div>
-
-    <event-gallery-modal ref="galleryModal"
-                         :isModalLoading="isModalLoading"
-                         :uploadedImages="uploadedImages"
-                         :onFileChange="onFileChange"
-                         :removeImage="removeImage"></event-gallery-modal>
   </div>
 </template>
 <script>
@@ -192,12 +165,10 @@
   import Vue from 'vue';
   import $ from 'jquery';
   import moment from 'moment';
-  import EventGalleryModal from './EventGalleryModal';
 
   export default {
     name: 'event-header-form',
     components: {
-      EventGalleryModal,
       ChartCard,
     },
     props: {
@@ -271,41 +242,17 @@
         this.form.date = moment()
         this.formData.date = new Date();
       }
-      // get images from server
-      if (this.$props.shouldUpdate) {
-        this.isModalLoading = true;
 
-        if (this.$store.state.calendarId === null) {
-          Calendar.get().then((calendars) => {
-            this.$store.state.calendarId = calendars[0].id;
-            this.getEventImages();
-          })
-            .catch((error) => {
-              console.log(error);
-              this.isModalLoading = false;
-            });
-        } else {
-          this.getEventImages();
-        }
-      }
+      this.$root.$on('statusChange', (newStatus) => {
+        this.form.status = newStatus;
+      });
+
+      this.$root.$on('submitForm', (images) => {
+        this.validateEvent();
+        this.uploadedImages = images;
+      });
     },
     methods: {
-      getEventImages() {
-        CalendarEvent.custom(`${process.env.SERVER_URL}/1/calendars/${this.$store.state.calendarId}/events/${this.$route.params.id}/images/`).get().then(images => {
-          this.uploadedImages = images.map((image) => {
-            return {
-              'src': `${process.env.SERVER_URL}/${image.href}`,
-              'thumb': `${process.env.SERVER_URL}/${image.href}`,
-              'id': image.id
-            }
-          });
-          this.isModalLoading = false;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isModalLoading = false;
-        });
-      },
       updateEvent() {
         let _calendar = new Calendar({id: this.$store.state.calendarId});
         let editedEvent = new CalendarEvent({id: this.event.id});
@@ -410,68 +357,6 @@
       convertHoursToMillis(hours) {
         return hours * 60 * 60 * 1000;
       },
-      openImageGallery() {
-        this.$refs.galleryModal.toggleModal(true);
-      },
-      editEvent() {
-        this.$parent.readOnly = false;
-        this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
-      },
-      onFileChange(e) {
-        let files = e.target.files || e.dataTransfer.files;
-
-        if (!files.length) return;
-        this.createImage(files[0]);
-      },
-      createImage(file) {
-        let reader = new FileReader();
-        let _this = this;
-
-        reader.onload = e => {
-          if (this.$props.shouldUpdate) {
-
-            this.isModalLoading = true;
-            let _calendar = new Calendar({id: this.$store.state.calendarId});
-            let editedEvent = new CalendarEvent({id: this.event.id});
-
-            return new CalendarEventImage({featuredImageFile: e.target.result}).for(_calendar, editedEvent).save().then(result => {
-              _this.uploadedImages.push({src: e.target.result, thumb: e.target.result, id: result.id});
-              this.isModalLoading = false;
-            })
-            .catch((error) => {
-              console.log(error);
-              this.isModalLoading = false;
-            });
-
-          } else {
-            _this.uploadedImages.push({ src: e.target.result, thumb: e.target.result });
-          }
-        }
-        reader.readAsDataURL(file);
-      },
-      removeImage: function(index, imgId) {
-        if (this.$props.shouldUpdate) {
-
-          this.isModalLoading = true;
-
-          let _calendar = new Calendar({id: this.$store.state.calendarId});
-          let editedEvent = new CalendarEvent({id: this.event.id});
-
-          return new CalendarEventImage({id: imgId}).for(_calendar, editedEvent).delete().then(result => {
-            this.uploadedImages.splice(index, 1);
-            this.isModalLoading = false;
-          })
-          .catch((error) => {
-            console.log(error);
-            this.isModalLoading = false;
-          })
-        } else {
-          this.uploadedImages.splice(index, 1);
-        }
-      },
-      openGallery(index) {
-        this.$refs.lightbox.showImage(index)
-      },
       showNotify() {
         this.$notify({
           message: 'Please, check all required fields',
@@ -495,7 +380,7 @@
           return 0;
         }
         return this.form.budget - this.spentBudget;
-      }
+      },
     },
 
     computed: {
@@ -532,48 +417,6 @@
 </script>
 
 <style lang="scss">
-  .event-status-field {
-    display: flex;
-    align-items: center;
-    text-align: right;
-    justify-content: flex-end;
-    margin-top: 1px;
-    margin-bottom: 8px;
-
-    label {
-      font-weight: 400;
-      position: relative;
-      top: 2px;
-    }
-    .md-layout {
-      align-items: center;
-    }
-    .status-select {
-      max-width: 150px;
-      margin-left: 10px;
-      margin-right: 20px;
-    }
-    .md-button {
-      margin: 0 5px;
-
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-    .badge {
-      top: -2px;
-      margin-left: 4px;
-      position: relative;
-      background: #FF547C;
-      border-radius: 50%;
-      padding: 0;
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-      text-align: center;
-    }
-  }
-
   .md-custom-error {
     opacity: 1;
     margin-bottom: 6px;

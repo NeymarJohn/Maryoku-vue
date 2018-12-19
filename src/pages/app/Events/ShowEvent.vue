@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout margin-footer">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
-    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
+    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container event-data-block">
       <event-info :occasionOptions="occasionsArray" :event="event" v-bind:readonly="true"></event-info>
     </div>
 
@@ -186,6 +186,9 @@
     .md-card {
       margin: 10px 0;
     }
+  }
+  .event-data-block {
+    margin-top: 90px;
   }
   @media (max-width: 960px) {
     .mt-small-20 {

@@ -184,7 +184,7 @@
 <style lang="scss">
 
   .event-form-padding {
-    margin-top: 90px;
+    margin-top: 0;
 
     .padding-card {
       padding-top: 15px;
