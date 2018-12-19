@@ -12,7 +12,7 @@
       <template slot="tab-pane-1">
         <md-table v-model="componentObject.values" table-header-color="green" v-if="componentObject.values.length" class="components-table" :class="readonly ? 'readonly': ''">
           <md-table-row>
-            <md-table-head>Vendor name</md-table-head>
+            <md-table-head>Property Name</md-table-head>
             <md-table-head>Value</md-table-head>
             <md-table-head>Comment</md-table-head>
             <md-table-head></md-table-head>

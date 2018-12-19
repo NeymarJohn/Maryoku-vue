@@ -2,7 +2,13 @@
   <div class="md-layout margin-footer">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
-    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
+    <div class="md-layout-item md-size-100">
+      <event-actions-edit :formData="formData"
+                          :shouldUpdate="true"
+                          :event="event"></event-actions-edit>
+    </div>
+
+    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container event-data-block">
       <event-header-form :occasionOptions="occasionsArray"
                          :formData="formData"
                          v-bind:shouldUpdate="true"
@@ -10,27 +16,9 @@
     </div>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
+
       <time-line plain :type="'simple'">
-        <time-line-item inverted badge-type="danger" badge-icon="card_travel" class="empty-timeline">
-          <div slot="header">
-          <drop-down direction="down" ref="dropdown" class="dropdown-component-button">
-                <md-button slot="title" class="md-button md-block md-primary dropdown-toggle" data-toggle="dropdown">
-                  <i class="material-icons">add</i> Add Component
-                </md-button>
-                <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
-                  <li v-for="item in componentsList" :key="item.id" @click="createNewComponent($event, item)">
-                    <a :class="item.childComponents ? 'dropdown-toggle' : ''">
-                      {{ item.value }}
-                      <ul class="dropdown-menu" v-if="item.childComponents">
-                        <li v-for="subItem in item.childComponents" :key="subItem.id" @click="createNewComponent($event, subItem)">
-                          <a>{{ subItem.title }}</a></li>
-                      </ul>
-                    </a>
-                  </li>
-                </ul>
-              </drop-down>
-              </div>
-        </time-line-item>
+
         <event-card-component v-for="(component, index) in components"
                               v-if="component && $store.state.vendorsList"
                               v-bind:shouldUpdate="true"
@@ -46,6 +34,27 @@
                               :key="'event-card-component-' + index">
 
         </event-card-component>
+
+        <time-line-item inverted badge-type="danger" badge-icon="card_travel" class="empty-timeline">
+          <div slot="header">
+            <drop-down direction="down" ref="dropdown" class="dropdown-component-button">
+              <md-button slot="title" class="md-button md-block md-primary dropdown-toggle" data-toggle="dropdown">
+                <i class="material-icons">add</i> Add Component
+              </md-button>
+              <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
+                <li v-for="item in componentsList" :key="item.id" @click="createNewComponent($event, item)">
+                  <a :class="item.childComponents ? 'dropdown-toggle' : ''">
+                    {{ item.value }}
+                    <ul class="dropdown-menu" v-if="item.childComponents">
+                      <li v-for="subItem in item.childComponents" :key="subItem.id" @click="createNewComponent($event, subItem)">
+                        <a>{{ subItem.title }}</a></li>
+                    </ul>
+                  </a>
+                </li>
+              </ul>
+            </drop-down>
+          </div>
+        </time-line-item>
       </time-line>
     </div>
 
@@ -69,6 +78,7 @@
   import VueElementLoading from 'vue-element-loading';
   import Vue from 'vue';
   import { TimeLine, TimeLineItem } from "@/components";
+  import EventActionsEdit from './components/EventActionsEdit';
 
   export default {
     components: {
@@ -76,7 +86,8 @@
       EventCardComponent,
       VueElementLoading,
       TimeLine,
-      TimeLineItem
+      TimeLineItem,
+      EventActionsEdit,
     },
     data: () => ({
       responsive: false,
@@ -96,9 +107,6 @@
         } else {
           this.responsive = false;
         }
-      },
-      createTodo() {
-
       },
       createNewComponent(e, item) {
         this.$refs.dropdown.closeDropDown();
@@ -362,6 +370,9 @@
   .large-z-index {
     z-index: 6;
     position: relative;
+  }
+  .event-data-block {
+    margin-top: 30px;
   }
   @media (max-width: 960px) {
     .mt-small-20 {
