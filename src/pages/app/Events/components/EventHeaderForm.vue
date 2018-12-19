@@ -273,47 +273,88 @@
       }
       // get images from server
       if (this.$props.shouldUpdate) {
-        let _this = this;
         this.isModalLoading = true;
 
-        Calendar.get().then((calendars) => {
-          calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
-            _this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`, 'id': image.id}});
-            this.isModalLoading = false;
+        if (this.$store.state.calendarId === null) {
+          Calendar.get().then((calendars) => {
+            this.$store.state.calendarId = calendars[0].id;
+            this.getEventImages();
           })
-          .catch((error) => {
-            console.log(error);
-            this.isModalLoading = false;
+            .catch((error) => {
+              console.log(error);
+              this.isModalLoading = false;
+            });
+        } else {
+          this.getEventImages();
+        }
+      }
+    },
+    methods: {
+      getEventImages() {
+        CalendarEvent.custom(`${process.env.SERVER_URL}/1/calendars/${this.$store.state.calendarId}/events/${this.$route.params.id}/images/`).get().then(images => {
+          this.uploadedImages = images.map((image) => {
+            return {
+              'src': `${process.env.SERVER_URL}/${image.href}`,
+              'thumb': `${process.env.SERVER_URL}/${image.href}`,
+              'id': image.id
+            }
           });
+          this.isModalLoading = false;
         })
         .catch((error) => {
           console.log(error);
           this.isModalLoading = false;
         });
-      }
-    },
-    methods: {
+      },
       updateEvent() {
-        Calendar.get().then(calendars => {
-          if(calendars.length === 0 ) {
-            return;
-          }
+        let _calendar = new Calendar({id: this.$store.state.calendarId});
+        let editedEvent = new CalendarEvent({id: this.event.id});
 
-          let _calendar = new Calendar({id: calendars[0].id});
-          let editedEvent = new CalendarEvent({id: this.event.id});
+        editedEvent.title = this.form.eventName;
+        editedEvent.eventStartMillis = this.getEventStartInMillis();
+        editedEvent.eventEndMillis = this.getEventEndInMillis();
+        editedEvent.location = this.form.location;
+        editedEvent.occasion = this.form.occasion;
+        editedEvent.numberOfParticipants = this.form.participants;
+        editedEvent.totalBudget = this.form.budget
+        editedEvent.status = this.form.status;
+        editedEvent.currency = 'USD'; // HARDCODED, REMOVE AFTER BACK WILL FIX API
+        editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+        editedEvent.components = this.$store.state.eventData.components;
 
-          editedEvent.title = this.form.eventName;
-          editedEvent.eventStartMillis =this.getEventStartInMillis();
-          editedEvent.eventEndMillis = this.getEventEndInMillis();
-          editedEvent.location = this.form.location;
-          editedEvent.occasion = this.form.occasion;
-          editedEvent.numberOfParticipants = this.form.participants;
-          editedEvent.totalBudget = this.form.budget
-          editedEvent.status = this.form.status;
-          editedEvent.currency = 'USD'; // HARDCODED, REMOVE AFTER BACK WILL FIX API
-          editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
-          editedEvent.components = this.$store.state.eventData.components;
-          editedEvent.for(_calendar).save().then(response => {
+        editedEvent.for(_calendar).save().then(response => {
+          this.$parent.isLoading = false;
+          this.$router.push({path: '/events'});
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$parent.isLoading = false;
+        });
+
+      },
+      saveEvent() {
+        let _calendar = new Calendar({ id: this.$store.state.calendarId });
+
+        let newEvent = new CalendarEvent({
+          calendar: {id: this.$store.state.calendarId},
+          title: this.form.eventName,
+          eventStartMillis: this.getEventStartInMillis(),
+          eventEndMillis: this.getEventEndInMillis(),
+          location: this.form.location,
+          occasion: this.form.occasion,
+          numberOfParticipants: this.form.participants,
+          totalBudget: this.form.budget,
+          status: this.form.status,
+          currency: 'USD', // HARDCODED, REMOVE AFTER BACK WILL FIX API
+          participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+          components: this.$store.state.eventData.components,
+        }).for(_calendar);
+
+        newEvent.save().then(ev => {
+          let images = this.uploadedImages.map((image) => {
+            return new CalendarEventImage({featuredImageFile: image.src}).for(_calendar, ev).save();
+          })
+          Promise.all(images).then(values => {
             this.$parent.isLoading = false;
             this.$router.push({ path: '/events' });
           })
@@ -321,51 +362,25 @@
             console.log(error);
             this.$parent.isLoading = false;
           });
-          })
+        })
         .catch((error) => {
           console.log(error);
           this.$parent.isLoading = false;
         });
       },
       createEvent() {
-        Calendar.get().then((calendars) => {
-          let newEvent = new CalendarEvent({
-            calendar: {id: calendars[0].id},
-            title: this.form.eventName,
-            eventStartMillis: this.getEventStartInMillis(),
-            eventEndMillis: this.getEventEndInMillis(),
-            location: this.form.location,
-            occasion: this.form.occasion,
-            numberOfParticipants: this.form.participants,
-            totalBudget: this.form.budget,
-            status: this.form.status,
-            currency: 'USD', // HARDCODED, REMOVE AFTER BACK WILL FIX API
-            participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
-            components: this.$store.state.eventData.components,
-          }).for(calendars[0]);
-
-          newEvent.save().then(ev => {
-            let images = this.uploadedImages.map((image) => {
-              return new CalendarEventImage({featuredImageFile: image.src}).for(calendars[0], ev).save();
-            })
-            Promise.all(images).then(values => {
-              this.$parent.isLoading = false;
-              this.$router.push({ path: '/events' });
-            })
-            .catch((error) => {
-              console.log(error);
-              this.$parent.isLoading = false;
-            });
+        if (this.$store.state.calendarId === null) {
+          Calendar.get().then((calendars) => {
+            this.$store.state.calendarId = calendars[0].id;
+            this.saveEvent();
           })
           .catch((error) => {
             console.log(error);
             this.$parent.isLoading = false;
           });
-        })
-        .catch((error) => {
-          console.log(error);
-          this.$parent.isLoading = false;
-        });
+        } else {
+          this.saveEvent();
+        }
       },
       validateDate() {
         return this.$refs.datePicker.$el.classList.contains('md-has-value')
@@ -416,32 +431,18 @@
           if (this.$props.shouldUpdate) {
 
             this.isModalLoading = true;
+            let _calendar = new Calendar({id: this.$store.state.calendarId});
+            let editedEvent = new CalendarEvent({id: this.event.id});
 
-            Calendar.get().then(calendars => {
-              if (calendars.length === 0) {
-                return;
-              }
-              calendars[0].calendarEvents().get().then(editedEvents => {
-                let editedEvent = editedEvents.find(e => { return e.id = this.$route.params.id; });
-
-                return new CalendarEventImage({featuredImageFile: e.target.result}).for(calendars[0], editedEvent).save().then(result => {
-                  _this.uploadedImages.push({src: e.target.result, thumb: e.target.result, id: result.id});
-                  this.isModalLoading = false;
-                })
-                .catch((error) => {
-                  console.log(error);
-                  this.isModalLoading = false;
-                });
-              })
-              .catch((error) => {
-                console.log(error);
-                this.isModalLoading = false;
-              });
+            return new CalendarEventImage({featuredImageFile: e.target.result}).for(_calendar, editedEvent).save().then(result => {
+              _this.uploadedImages.push({src: e.target.result, thumb: e.target.result, id: result.id});
+              this.isModalLoading = false;
             })
             .catch((error) => {
               console.log(error);
               this.isModalLoading = false;
             });
+
           } else {
             _this.uploadedImages.push({ src: e.target.result, thumb: e.target.result });
           }
@@ -453,31 +454,17 @@
 
           this.isModalLoading = true;
 
-          Calendar.get().then(calendars => {
-            if (calendars.length === 0) {
-              return;
-            }
-            calendars[0].calendarEvents().get().then(editedEvents => {
-              let editedEvent = editedEvents.find(e => { return e.id = this.$route.params.id; });
+          let _calendar = new Calendar({id: this.$store.state.calendarId});
+          let editedEvent = new CalendarEvent({id: this.event.id});
 
-              return new CalendarEventImage({id: imgId}).for(calendars[0], editedEvent).delete().then(result => {
-                this.uploadedImages.splice(index, 1);
-                this.isModalLoading = false;
-              })
-              .catch((error) => {
-                console.log(error);
-                this.isModalLoading = false;
-              })
-            })
-            .catch((error) => {
-              console.log(error);
-              this.isModalLoading = false;
-            });
+          return new CalendarEventImage({id: imgId}).for(_calendar, editedEvent).delete().then(result => {
+            this.uploadedImages.splice(index, 1);
+            this.isModalLoading = false;
           })
           .catch((error) => {
             console.log(error);
             this.isModalLoading = false;
-          });
+          })
         } else {
           this.uploadedImages.splice(index, 1);
         }
