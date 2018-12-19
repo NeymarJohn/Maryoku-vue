@@ -1,13 +1,11 @@
 <template>
   <div class="md-layout margin-footer">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
-    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container event-data-block">
+    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
       <event-info :occasionOptions="occasionsArray" :event="event" v-bind:readonly="true"></event-info>
     </div>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
-      <event-actions-show :event="event"></event-actions-show>
-
       <time-line plain :type="'simple'">
 
           <event-card-component v-for="(component, index) in event.components"
@@ -21,6 +19,10 @@
       </time-line>
 
     </div>
+  <event-gallery-modal ref="galleryModal"
+                         :isModalLoading="isModalLoading"
+                         :uploadedImages="uploadedImages">
+    </event-gallery-modal>
   </div>
 </template>
 
@@ -37,7 +39,7 @@
   import Vendors from '@/models/Vendors';
   import { mapGetters } from 'vuex'
   import moment from 'moment';
-  import EventActionsShow from './components/EventActionsShow';
+  import EventGalleryModal from './components/EventGalleryModal';
   import VueElementLoading from 'vue-element-loading';
   import { TimeLine, TimeLineItem } from "@/components";
 
@@ -49,7 +51,7 @@
       VueElementLoading,
       TimeLine,
       TimeLineItem,
-      EventActionsShow
+      EventGalleryModal
     },
     data: () => ({
       uploadedImages: [],
@@ -186,9 +188,6 @@
     .md-card {
       margin: 10px 0;
     }
-  }
-  .event-data-block {
-    margin-top: 90px;
   }
   @media (max-width: 960px) {
     .mt-small-20 {
