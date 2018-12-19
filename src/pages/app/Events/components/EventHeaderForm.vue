@@ -3,12 +3,34 @@
 
     <div class="md-layout-item md-size-100">
 
+      <div class="event-status-field">
+        <label>Status: </label>
+        <md-field class="status-select">
+          <md-select v-model="form.status" name="event-status">
+            <md-option value="draft">Draft</md-option>
+            <md-option value="approved">Approved</md-option>
+            <md-option value="execution">Execution</md-option>
+            <md-option value="done">Done</md-option>
+          </md-select>
+        </md-field>
+
+
+        <md-button native-type="submit" @click="openImageGallery" class="md-success">
+          Image Gallery
+          <span class="badge md-round md-info" v-if="uploadedImages.length">{{ uploadedImages.length }}</span>
+        </md-button>
+        <md-button native-type="submit" @click.native.prevent="validateEvent" class="md-success">
+          {{ formData !== null ? 'Edit': 'Create' }} event
+        </md-button>
+      </div>
+
       <div class="event-form-padding">
         <form class="md-layout">
           <md-card class="md-layout-item md-size-100 padding-card">
 
             <div class="md-layout-item">
               <md-field :class="[{'md-error': errors.has('eventName')}]">
+                <md-icon class="md-accent">home</md-icon>
                 <label>Event Title</label>
                 <md-input v-model="form.eventName"
                           data-vv-name="eventName"
@@ -35,6 +57,7 @@
 
               <div class="md-layout-item md-size-33 md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('time')}]" class="select-with-icon">
+                  <md-icon class="md-accent">query_builder</md-icon>
                   <label>Time</label>
                   <md-select v-model="form.time"
                              data-vv-name="time"
@@ -52,6 +75,7 @@
 
               <div class="md-layout-item md-size-33 md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('duration')}]" class="select-with-icon">
+                  <md-icon class="md-accent">hourglass_empty</md-icon>
                   <label>Duration in hr.</label>
                   <md-select v-model="form.duration"
                              data-vv-name="duration"
@@ -71,6 +95,7 @@
             <div class="md-layout">
               <div class="md-layout-item md-size-33 md-small-size-100">
                  <md-field :class="[{'md-error': errors.has('occasion')}]" class="select-with-icon">
+                  <md-icon class="md-accent">local_bar</md-icon>
                   <label>Occasion</label>
                   <md-select v-model="form.occasion"
 
@@ -88,6 +113,7 @@
               </div>
               <div class="md-layout-item md-size-33 md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('participants')}]">
+                  <md-icon class="md-accent">person</md-icon>
                   <label># of Participants</label>
                   <md-input type="text"
                             v-model="form.participants"
@@ -99,6 +125,7 @@
               </div>
               <div class="md-layout-item md-size-33 md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('location')}]">
+                  <md-icon class="md-accent">location_on</md-icon>
                   <label>Location</label>
                   <md-input type="text"
                             v-model="form.location"
@@ -132,6 +159,7 @@
                 </div>
 
                 <md-field :class="[{'md-error': errors.has('budget')}]" style="margin: 20px 0 10px;">
+                  <md-icon class="md-accent">attach_money</md-icon>
                   <label>Total Budget</label>
                   <md-input v-model="form.budget"
                             data-vv-name="budget"
@@ -145,6 +173,12 @@
         </form>
       </div>
     </div>
+
+    <event-gallery-modal ref="galleryModal"
+                         :isModalLoading="isModalLoading"
+                         :uploadedImages="uploadedImages"
+                         :onFileChange="onFileChange"
+                         :removeImage="removeImage"></event-gallery-modal>
   </div>
 </template>
 <script>
@@ -158,10 +192,12 @@
   import Vue from 'vue';
   import $ from 'jquery';
   import moment from 'moment';
+  import EventGalleryModal from './EventGalleryModal';
 
   export default {
     name: 'event-header-form',
     components: {
+      EventGalleryModal,
       ChartCard,
     },
     props: {
@@ -235,66 +271,49 @@
         this.form.date = moment()
         this.formData.date = new Date();
       }
+      // get images from server
+      if (this.$props.shouldUpdate) {
+        let _this = this;
+        this.isModalLoading = true;
 
-      this.$root.$on('statusChange', (newStatus) => {
-        this.form.status = newStatus;
-      });
-
-      this.$root.$on('submitForm', (images) => {
-        this.validateEvent();
-        this.uploadedImages = images;
-      });
-    },
-    methods: {
-      updateEvent() {
-        let _calendar = new Calendar({id: this.$store.state.calendarId});
-        let editedEvent = new CalendarEvent({id: this.event.id});
-
-        editedEvent.title = this.form.eventName;
-        editedEvent.eventStartMillis = this.getEventStartInMillis();
-        editedEvent.eventEndMillis = this.getEventEndInMillis();
-        editedEvent.location = this.form.location;
-        editedEvent.occasion = this.form.occasion;
-        editedEvent.numberOfParticipants = this.form.participants;
-        editedEvent.totalBudget = this.form.budget
-        editedEvent.status = this.form.status;
-        editedEvent.currency = 'USD'; // HARDCODED, REMOVE AFTER BACK WILL FIX API
-        editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
-        editedEvent.components = this.$store.state.eventData.components;
-
-        editedEvent.for(_calendar).save().then(response => {
-          this.$parent.isLoading = false;
-          this.$router.push({path: '/events'});
+        Calendar.get().then((calendars) => {
+          calendars[0].calendarEvents().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${_this.$route.params.id}/images/`).get().then(images => {
+            _this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}/${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`, 'id': image.id}});
+            this.isModalLoading = false;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.isModalLoading = false;
+          });
         })
         .catch((error) => {
           console.log(error);
-          this.$parent.isLoading = false;
+          this.isModalLoading = false;
         });
+      }
+    },
+    methods: {
+      updateEvent() {
+        Calendar.get().then(calendars => {
+          if(calendars.length === 0 ) {
+            return;
+          }
 
-      },
-      saveEvent() {
-        let _calendar = new Calendar({ id: this.$store.state.calendarId });
+          let _calendar = new Calendar({id: calendars[0].id});
+          let editedEvent = new CalendarEvent({id: this.event.id});
 
-        let newEvent = new CalendarEvent({
-          calendar: {id: this.$store.state.calendarId},
-          title: this.form.eventName,
-          eventStartMillis: this.getEventStartInMillis(),
-          eventEndMillis: this.getEventEndInMillis(),
-          location: this.form.location,
-          occasion: this.form.occasion,
-          numberOfParticipants: this.form.participants,
-          totalBudget: this.form.budget,
-          status: this.form.status,
-          currency: 'USD', // HARDCODED, REMOVE AFTER BACK WILL FIX API
-          participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
-          components: this.$store.state.eventData.components,
-        }).for(_calendar);
-
-        newEvent.save().then(ev => {
-          let images = this.uploadedImages.map((image) => {
-            return new CalendarEventImage({featuredImageFile: image.src}).for(_calendar, ev).save();
-          })
-          Promise.all(images).then(values => {
+          editedEvent.title = this.form.eventName;
+          editedEvent.eventStartMillis =this.getEventStartInMillis();
+          editedEvent.eventEndMillis = this.getEventEndInMillis();
+          editedEvent.location = this.form.location;
+          editedEvent.occasion = this.form.occasion;
+          editedEvent.numberOfParticipants = this.form.participants;
+          editedEvent.totalBudget = this.form.budget
+          editedEvent.status = this.form.status;
+          editedEvent.currency = 'USD'; // HARDCODED, REMOVE AFTER BACK WILL FIX API
+          editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+          editedEvent.components = this.$store.state.eventData.components;
+          editedEvent.for(_calendar).save().then(response => {
             this.$parent.isLoading = false;
             this.$router.push({ path: '/events' });
           })
@@ -302,25 +321,51 @@
             console.log(error);
             this.$parent.isLoading = false;
           });
-        })
+          })
         .catch((error) => {
           console.log(error);
           this.$parent.isLoading = false;
         });
       },
       createEvent() {
-        if (this.$store.state.calendarId === null) {
-          Calendar.get().then((calendars) => {
-            this.$store.state.calendarId = calendars[0].id;
-            this.saveEvent();
+        Calendar.get().then((calendars) => {
+          let newEvent = new CalendarEvent({
+            calendar: {id: calendars[0].id},
+            title: this.form.eventName,
+            eventStartMillis: this.getEventStartInMillis(),
+            eventEndMillis: this.getEventEndInMillis(),
+            location: this.form.location,
+            occasion: this.form.occasion,
+            numberOfParticipants: this.form.participants,
+            totalBudget: this.form.budget,
+            status: this.form.status,
+            currency: 'USD', // HARDCODED, REMOVE AFTER BACK WILL FIX API
+            participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+            components: this.$store.state.eventData.components,
+          }).for(calendars[0]);
+
+          newEvent.save().then(ev => {
+            let images = this.uploadedImages.map((image) => {
+              return new CalendarEventImage({featuredImageFile: image.src}).for(calendars[0], ev).save();
+            })
+            Promise.all(images).then(values => {
+              this.$parent.isLoading = false;
+              this.$router.push({ path: '/events' });
+            })
+            .catch((error) => {
+              console.log(error);
+              this.$parent.isLoading = false;
+            });
           })
           .catch((error) => {
             console.log(error);
             this.$parent.isLoading = false;
           });
-        } else {
-          this.saveEvent();
-        }
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$parent.isLoading = false;
+        });
       },
       validateDate() {
         return this.$refs.datePicker.$el.classList.contains('md-has-value')
@@ -350,6 +395,96 @@
       convertHoursToMillis(hours) {
         return hours * 60 * 60 * 1000;
       },
+      openImageGallery() {
+        this.$refs.galleryModal.toggleModal(true);
+      },
+      editEvent() {
+        this.$parent.readOnly = false;
+        this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
+      },
+      onFileChange(e) {
+        let files = e.target.files || e.dataTransfer.files;
+
+        if (!files.length) return;
+        this.createImage(files[0]);
+      },
+      createImage(file) {
+        let reader = new FileReader();
+        let _this = this;
+
+        reader.onload = e => {
+          if (this.$props.shouldUpdate) {
+
+            this.isModalLoading = true;
+
+            Calendar.get().then(calendars => {
+              if (calendars.length === 0) {
+                return;
+              }
+              calendars[0].calendarEvents().get().then(editedEvents => {
+                let editedEvent = editedEvents.find(e => { return e.id = this.$route.params.id; });
+
+                return new CalendarEventImage({featuredImageFile: e.target.result}).for(calendars[0], editedEvent).save().then(result => {
+                  _this.uploadedImages.push({src: e.target.result, thumb: e.target.result, id: result.id});
+                  this.isModalLoading = false;
+                })
+                .catch((error) => {
+                  console.log(error);
+                  this.isModalLoading = false;
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+                this.isModalLoading = false;
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              this.isModalLoading = false;
+            });
+          } else {
+            _this.uploadedImages.push({ src: e.target.result, thumb: e.target.result });
+          }
+        }
+        reader.readAsDataURL(file);
+      },
+      removeImage: function(index, imgId) {
+        if (this.$props.shouldUpdate) {
+
+          this.isModalLoading = true;
+
+          Calendar.get().then(calendars => {
+            if (calendars.length === 0) {
+              return;
+            }
+            calendars[0].calendarEvents().get().then(editedEvents => {
+              let editedEvent = editedEvents.find(e => { return e.id = this.$route.params.id; });
+
+              return new CalendarEventImage({id: imgId}).for(calendars[0], editedEvent).delete().then(result => {
+                this.uploadedImages.splice(index, 1);
+                this.isModalLoading = false;
+              })
+              .catch((error) => {
+                console.log(error);
+                this.isModalLoading = false;
+              })
+            })
+            .catch((error) => {
+              console.log(error);
+              this.isModalLoading = false;
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            this.isModalLoading = false;
+          });
+        } else {
+          this.uploadedImages.splice(index, 1);
+        }
+      },
+      openGallery(index) {
+        this.$refs.lightbox.showImage(index)
+      },
       showNotify() {
         this.$notify({
           message: 'Please, check all required fields',
@@ -373,7 +508,7 @@
           return 0;
         }
         return this.form.budget - this.spentBudget;
-      },
+      }
     },
 
     computed: {
@@ -410,6 +545,48 @@
 </script>
 
 <style lang="scss">
+  .event-status-field {
+    display: flex;
+    align-items: center;
+    text-align: right;
+    justify-content: flex-end;
+    margin-top: 1px;
+    margin-bottom: 8px;
+
+    label {
+      font-weight: 400;
+      position: relative;
+      top: 2px;
+    }
+    .md-layout {
+      align-items: center;
+    }
+    .status-select {
+      max-width: 150px;
+      margin-left: 10px;
+      margin-right: 20px;
+    }
+    .md-button {
+      margin: 0 5px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    .badge {
+      top: -2px;
+      margin-left: 4px;
+      position: relative;
+      background: #FF547C;
+      border-radius: 50%;
+      padding: 0;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+    }
+  }
+
   .md-custom-error {
     opacity: 1;
     margin-bottom: 6px;
@@ -431,15 +608,8 @@
     height: 330px;
   }
   .md-datepicker {
-    .md-icon.md-date-icon {
-      display: none;
-
-      &~label {
-        left: 0;
-      }
-    }
-    input {
-      margin-left: 0 !important;
+    .md-icon.md-theme-default.md-icon-image svg {
+      fill: #ff5252;
     }
 
     &.md-field::after {

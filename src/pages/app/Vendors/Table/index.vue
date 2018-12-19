@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="position:relative;">
     <md-table v-model="vendorsList" table-header-color="rose" class="table-striped table-hover">
         <md-table-row slot="md-table-row" slot-scope="{ item }">
             <md-table-cell md-label="Vendor">{{ item.vendorDisplayName }}</md-table-cell>
@@ -9,28 +9,28 @@
             <md-table-cell md-label="Email">{{ item.vendorMainEmail }}</md-table-cell>
             <md-table-cell md-label="Phone">{{ item.vendorMainPhoneNumber }}</md-table-cell>
             <md-table-cell md-label="Actions">
-                <md-button @click.native="openInviteModal" class="md-raised md-primary md-icon-button">
+                <md-button  @click.native="openInviteModal" class="md-raised md-info md-icon-button">
                     <md-icon>thumb_up</md-icon>
-                    <md-tooltip md-direction="top">Ranking</md-tooltip>
+                    <md-tooltip md-direction="left">Ranking</md-tooltip>
                 </md-button>
-                <md-button class="md-raised md-primary md-icon-button" @click.native="deleteVendor(item.id)">
+                    <md-button class="md-raised md-primary md-icon-button" @click.native="deleteVendor(item.id)">
                     <md-icon>delete</md-icon>
-                    <md-tooltip md-direction="top">Delete</md-tooltip>
+                    <md-tooltip md-direction="left">Delete</md-tooltip>
                 </md-button>
-                <md-button class="md-raised md-primary md-icon-button" @click.native="test">
-                    <md-icon>share</md-icon>
-                    <md-tooltip md-direction="top">Share</md-tooltip>
-                </md-button>
+                <!--<md-button class="md-raised md-primary md-icon-button" @click.native="test">-->
+                    <!--<md-icon>share</md-icon>-->
+                    <!--<md-tooltip md-direction="left">Share</md-tooltip>-->
+                <!--</md-button>-->
                 <md-button class="md-raised md-primary md-icon-button" @click.native="openTagsModal">
                     <md-icon>local_offer</md-icon>
-                    <md-tooltip md-direction="top">Tags</md-tooltip>
+                    <md-tooltip md-direction="left">Tags</md-tooltip>
                 </md-button>
             </md-table-cell>
 
         </md-table-row>
     </md-table>
-    <ranking-modal  ref="inviteModal"></ranking-modal>
         <tags-modal  ref="tagsModal"></tags-modal>
+        <ranking-modal class="connected"  ref="inviteModal"></ranking-modal>
 </div>
 </template>
 
@@ -97,18 +97,50 @@
             wizardComplete() {
                 swal("Good job!", "You clicked the finish button!", "success");
             },
-          async deleteVendor(id){
-            let vendor = await Vendors.find(id);
-            vendor.delete();
+           deleteVendor(id){
+            swal({
+              title: 'Are you sure?',
+              text: "You won't be able to revert this!",
+              type: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, delete it!'
+            }).then(async (result) => {
+              if (result.value) {
+                let vendor = await Vendors.find(id);
+                vendor.delete();
 
-            let vendorIndex = this.vendorsList.findIndex(obj => obj.id === id)
+                let vendorIndex = this.vendorsList.findIndex(obj => obj.id === id);
 
-             this.vendorsList.splice(vendorIndex, 1)
+                this.vendorsList.splice(vendorIndex, 1);
+                this.$notify(
+                  {
+                    message: 'Vendor deleted successfully!',
+                    horizontalAlign: 'center',
+                    verticalAlign: 'top',
+                    type: 'success'
+                  })
+              }
+            })
 
           }
         }
     };
 </script>
-<style>
+<style lang="scss">
+.md-table-cell-container{
+    position: relative;
+}
+    #target{
 
+        position: relative;
+
+    }
+    .connected{
+        right: 133px;
+        z-index: 9999999999999;
+        top: -300px;
+        position: absolute;
+    }
 </style>
