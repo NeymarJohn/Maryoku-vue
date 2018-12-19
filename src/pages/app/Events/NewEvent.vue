@@ -7,13 +7,13 @@
     </div>
 
 
-    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container event-data-block">
+    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
       <event-header-form :occasionOptions="occasionsArray" :formData="formData"></event-header-form>
     </div>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
 
-      <time-line plain :type="'simple'">
+      <time-line plain :type="'simple'" class="mt-0">
         <event-card-component v-for="(component, index) in components"
                               :key="'event-card-component-' + index"
                               v-if="$store.state.vendorsList"
@@ -217,6 +217,7 @@
     height: calc(100vh - 72px);
     overflow: auto;
     padding-top: 1px;
+    margin-top: 20px;
 
     .md-card {
       margin: 10px 0;
@@ -235,8 +236,10 @@
     z-index: 6;
     position: relative;
   }
-  .event-data-block {
-    margin-top: 30px;
+  .mt-0 {
+    .timeline.timeline-simple {
+      margin-top: 0;
+    }
   }
   @media (max-width: 960px) {
     .mt-small-20 {
