@@ -125,6 +125,7 @@
                               :v-bind:readonly="$props.readonly"
                               :componentItem="componentItem"
                               :componentItemIndex="componentItemIndex"
+                              :component="componentObject"
                               :componentId="componentObject.id"
                               :shouldUpdate="$props.shouldUpdate"
                               :updateComponent="$props.updateComponent"

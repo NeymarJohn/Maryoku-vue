@@ -25,12 +25,14 @@
                                  @md-opened="mdOpened"
                                  class="change-icon-order select-with-icon mb16"
                                  :class="[{'md-error': errors.has('name')}]">
+                  <md-icon class="md-accent">person</md-icon>
                   <label>Vendor Name</label>
                   <span class="md-error" v-if="errors.has('name')">This field is required</span>
                 </md-autocomplete>
               </div>
               <div class="md-layout-item md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('email')}]" class="mb16">
+                  <md-icon class="md-accent">email</md-icon>
                   <label>Email</label>
                   <md-input v-model="form.email"
                             data-vv-name="email"
@@ -44,6 +46,7 @@
             <div class="md-layout">
               <div class="md-layout-item md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('contactPerson')}]" class="mb16">
+                  <md-icon class="md-accent">person</md-icon>
                   <label>Contact Person</label>
                   <md-input v-model="form.contactPerson"
                             data-vv-name="contactPerson"
@@ -54,6 +57,7 @@
               </div>
               <div class="md-layout-item md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('phone')}]" class="mb16">
+                  <md-icon class="md-accent">phone</md-icon>
                   <label>Phone</label>
                   <md-input v-model="form.phone"
                             data-vv-name="phone"
@@ -68,6 +72,7 @@
             <div class="md-layout">
               <div class="md-layout-item md-size-50">
                 <md-field  :class="[{'md-error': errors.has('cost')}]" class="mb16">
+                  <md-icon class="md-accent">attach_money</md-icon>
                   <label>Cost/Budget</label>
                   <md-input v-model="form.cost"
                             data-vv-name="cost"

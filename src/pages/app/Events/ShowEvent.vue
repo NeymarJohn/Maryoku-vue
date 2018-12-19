@@ -6,14 +6,14 @@
       <event-actions-show :event="event"></event-actions-show>
     </div>
 
-    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
+    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container event-data-block">
       <event-info :occasionOptions="occasionsArray" :event="event" v-bind:readonly="true"></event-info>
     </div>
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
 
 
-      <time-line plain :type="'simple'" class="mt-0">
+      <time-line plain :type="'simple'">
 
           <event-card-component v-for="(component, index) in event.components"
                                 :key="'event-card-component-' + index"
@@ -187,16 +187,13 @@
     height: calc(100vh - 72px);
     overflow: auto;
     padding-top: 1px;
-    margin-top: 20px;
 
     .md-card {
       margin: 10px 0;
     }
   }
-  .mt-0 {
-    .timeline.timeline-simple {
-      margin-top: 0;
-    }
+  .event-data-block {
+    margin-top: 30px;
   }
   @media (max-width: 960px) {
     .mt-small-20 {
