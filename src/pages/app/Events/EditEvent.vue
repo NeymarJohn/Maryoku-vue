@@ -1,42 +1,44 @@
 <template>
-  <div class="md-layout margin-footer">
+  <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
-    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
+    <div class="md-layout-item md-size-100">
+      <event-actions-edit :formData="formData"
+                          :shouldUpdate="true"
+                          :event="event"></event-actions-edit>
+    </div>
+
+    <!--<md-card class="md-layout-item md-size-30 md-small-size-100 scrollable-container">
       <event-header-form :occasionOptions="occasionsArray"
                          :formData="formData"
                          v-bind:shouldUpdate="true"
                          :event="event"></event-header-form>
+    </md-card>-->
+    <div class="md-layout-item md-small-size-100 md-size-30 scrollable-container">
+      <md-card>
+        <md-card-header class="md-card-header-text md-card-header-rose">
+          <div class="card-text">
+            <h4 class="title2">Event Details</h4>
+          </div>
+        </md-card-header>
+        <md-card-content>
+          <event-header-form :occasionOptions="occasionsArray"
+                             :formData="formData"
+                             v-bind:shouldUpdate="true"
+                             :event="event"></event-header-form>
+        </md-card-content>
+      </md-card>
     </div>
 
-    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
-      <time-line plain :type="'simple'">
-        <time-line-item inverted badge-type="danger" badge-icon="card_travel" class="empty-timeline">
-          <div slot="header">
-          <drop-down direction="down" ref="dropdown" class="dropdown-component-button">
-                <md-button slot="title" class="md-button md-block md-primary dropdown-toggle" data-toggle="dropdown">
-                  <i class="material-icons">add</i> Add Component
-                </md-button>
-                <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
-                  <li v-for="item in componentsList" :key="item.id" @click="createNewComponent($event, item)">
-                    <a :class="item.childComponents ? 'dropdown-toggle' : ''">
-                      {{ item.value }}
-                      <ul class="dropdown-menu" v-if="item.childComponents">
-                        <li v-for="subItem in item.childComponents" :key="subItem.id" @click="createNewComponent($event, subItem)">
-                          <a>{{ subItem.title }}</a></li>
-                      </ul>
-                    </a>
-                  </li>
-                </ul>
-              </drop-down>
-              </div>
-        </time-line-item>
+    <div class="md-layout-item md-size-70 md-small-size-100 scrollable-container">
+
+      <time-line plain :type="'simple'" class="mt-0">
+
         <event-card-component v-for="(component, index) in components"
                               v-if="component && $store.state.vendorsList"
                               v-bind:shouldUpdate="true"
                               :componentObject="component"
                               :componentIndex="index"
-                              :createVendor="createVendor"
                               :updateVendor="updateVendor"
                               :updateTodo="updateTodo"
                               :updateComponent="updateComponent"
@@ -47,6 +49,27 @@
                               :key="'event-card-component-' + index">
 
         </event-card-component>
+
+        <time-line-item inverted badge-type="danger" badge-icon="card_travel" class="empty-timeline">
+          <div slot="content">
+            <drop-down direction="down" ref="dropdown" class="dropdown-component-button md-centered">
+              <a href="#" slot="title" class="md-primary" data-toggle="dropdown">
+                <i class="material-icons">add</i> Add Component
+              </a>
+              <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
+                <li v-for="item in componentsList" :key="item.id" @click="createNewComponent($event, item)">
+                  <a :class="item.childComponents ? 'dropdown-toggle' : ''">
+                    {{ item.value }}
+                    <ul class="dropdown-menu" v-if="item.childComponents">
+                      <li v-for="subItem in item.childComponents" :key="subItem.id" @click="createNewComponent($event, subItem)">
+                        <a>{{ subItem.title }}</a></li>
+                    </ul>
+                  </a>
+                </li>
+              </ul>
+            </drop-down>
+          </div>
+        </time-line-item>
       </time-line>
     </div>
 
@@ -70,6 +93,7 @@
   import VueElementLoading from 'vue-element-loading';
   import Vue from 'vue';
   import { TimeLine, TimeLineItem } from "@/components";
+  import EventActionsEdit from './components/EventActionsEdit';
 
   export default {
     components: {
@@ -77,7 +101,8 @@
       EventCardComponent,
       VueElementLoading,
       TimeLine,
-      TimeLineItem
+      TimeLineItem,
+      EventActionsEdit,
     },
     data: () => ({
       responsive: false,
@@ -98,9 +123,6 @@
           this.responsive = false;
         }
       },
-      createTodo() {
-
-      },
       createNewComponent(e, item) {
         this.$refs.dropdown.closeDropDown();
         e.stopPropagation();
@@ -118,9 +140,6 @@
           console.log(error);
           this.isLoading = false;
         })
-      },
-      createVendor(component, subComponent) {
-
       },
       updateVendor(component, subComponent, updatedItemIndex) {
         this.isLoading = true;
@@ -214,6 +233,27 @@
           console.log(error);
           this.isLoading = false;
         })
+      },
+      getEventData() {
+        CalendarEvent.custom(`${process.env.SERVER_URL}/1/calendars/${this.$store.state.calendarId}/events/${this.$route.params.id}`).get().then(event => {
+          this.$store.state.eventData.components = event[0].components;
+          this.event = event[0];
+          this.formData = {
+            eventName: event[0].title,
+            occasion: event[0].occasion,
+            date: new Date(event[0].eventStartMillis),
+            time: moment(event[0].eventStartMillis).format('HH:00'),
+            duration: moment(event[0].eventEndMillis).diff(event[0].eventStartMillis, 'hours'),
+            participants: event[0].numberOfParticipants,
+            status: event[0].status,
+            budget: event[0].totalBudget,
+            location: event[0].location
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isLoading = false;
+        });
       }
     },
     computed: {
@@ -241,39 +281,43 @@
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
     created() {
-      let calendar = Calendar.get().then(calendars => {
-        if(calendars.length === 0 ) {
-          return;
-        }
-        this.calendar = calendars[0];
-        calendars[0].calendarEvents().find(this.$route.params.id).then(event => {
-          this.$store.state.eventData.components = event.components;
-          this.event = event;
-          this.formData = {
-            eventName: event.title,
-            occasion: event.occasion,
-            date: new Date(event.eventStartMillis),
-            time: moment(event.eventStartMillis).format('HH:00'),
-            duration: moment(event.eventEndMillis).diff(event.eventStartMillis, 'hours'),
-            participants: event.numberOfParticipants,
-            status: event.status,
-            budget: event.totalBudget,
-            location: event.location
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isLoading = false;
-        });
-      });
-      let occasions = Occasion.get().then((occasions) => {
-        this.occasionsArray = occasions;
-      });
-      let components = EventComponent.get().then((componentsList) => {
-        this.$store.state.componentsList = componentsList;
-        this.componentsList = componentsList;
-      });
+      let calendar = '';
 
+      if (this.$store.state.calendarId === null) {
+        calendar = Calendar.get().then(calendars => {
+          if (calendars.length === 0) {
+            return;
+          }
+          this.$store.state.calendarId = calendars[0].id;
+          this.calendar = new Calendar({id: this.$store.state.calendarId});
+          this.getEventData();
+        });
+      } else {
+        this.calendar = new Calendar({id: this.$store.state.calendarId});
+        this.getEventData();
+      }
+
+      let occasions = '';
+      if (this.$store.state.occasionsArray === null) {
+        occasions = Occasion.get().then((occasions) => {
+          this.$store.state.occasionsArray = occasions;
+          this.occasionsArray = occasions;
+        });
+      } else {
+        this.occasionsArray = this.$store.state.occasionsArray;
+      }
+
+      let components = '';
+      if (this.$store.state.componentsList === null) {
+        components = EventComponent.get().then((componentsList) => {
+          this.$store.state.componentsList = componentsList;
+          this.componentsList = componentsList;
+        });
+      } else {
+        this.componentsList = this.$store.state.componentsList;
+      }
+
+      // vendors are dynamically changed, so always get them
       let vendors = Vendors.get().then((vendorsList) => {
         this.$store.state.vendorsList = vendorsList;
       });
@@ -308,7 +352,7 @@
     min-width: 182px;
   }
   .margin-footer {
-    margin-bottom: 50px;
+    //margin-bottom: 50px;
   }
   .read-only {
     pointer-events: none;
@@ -325,9 +369,12 @@
     height: auto;
   }
   .scrollable-container {
-    height: calc(100vh - 72px);
+    // Commented because it causes constant scroll event if not needed
+    //height: calc(100vh - 92px);
     overflow: auto;
     padding-top: 1px;
+    // Commented because it add too much space
+    //margin-top: 20px;
   }
   .md-toolbar-section-center {
     justify-content: center;
@@ -341,6 +388,11 @@
   .large-z-index {
     z-index: 6;
     position: relative;
+  }
+  .mt-0 {
+    .timeline.timeline-simple {
+      margin-top: 0;
+    }
   }
   @media (max-width: 960px) {
     .mt-small-20 {

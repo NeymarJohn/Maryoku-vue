@@ -10,11 +10,10 @@
 
       <template slot="body">
         <form>
-          <md-card>
+
             <div class="md-layout">
               <div class="md-layout-item md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('title')}]" class="mb16">
-                  <md-icon class="md-accent">help_outline</md-icon>
                   <label>What</label>
                   <md-input v-model="form.title"
                             data-vv-name="title"
@@ -35,7 +34,6 @@
             <div class="md-layout">
               <div class="md-layout-item md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('assignee')}]" class="mb16">
-                  <md-icon class="md-accent">person_add</md-icon>
                   <label>Assign To</label>
                   <md-input v-model="form.assignee"
                             data-vv-name="assignee"
@@ -48,7 +46,6 @@
 
               <div class="md-layout-item md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('status')}]" class="mb16">
-                  <md-icon class="md-accent">check</md-icon>
                   <label>Status</label>
                   <md-input v-model="form.status"
                             data-vv-name="status"
@@ -60,7 +57,6 @@
               </div>
             </div>
 
-          </md-card>
         </form>
       </template>
 

@@ -23,6 +23,7 @@ import ProductCard from "./Cards/ProductCard.vue";
 
 import TimeLine from "./Timeline/TimeLine.vue";
 import TimeLineItem from "./Timeline/TimeLineItem.vue";
+import ButtonTimeLineItem from "./Timeline/ButtonTimeLineItem.vue";
 import Tabs from "./Tabs.vue";
 import Collapse from "./Collapse.vue";
 import Slider from "./Slider.vue";
@@ -57,6 +58,7 @@ export {
   SidebarPlugin,
   TimeLine,
   TimeLineItem,
+  ButtonTimeLineItem,
   Tabs,
   Slider,
   SimpleWizard,

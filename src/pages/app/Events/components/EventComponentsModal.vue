@@ -13,7 +13,7 @@
       <template slot="body">
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
         <form>
-          <md-card>
+
             <div class="md-layout">
               <div class="md-layout-item">
                 <md-autocomplete v-model="form.title"
@@ -25,7 +25,6 @@
                                  @md-opened="mdOpenedTitle"
                                  class="change-icon-order select-with-icon mb16"
                                  :class="[{'md-error': errors.has('title')}]">
-                  <md-icon class="md-accent">person</md-icon>
                   <label>Property Name</label>
                   <span class="md-error" v-if="errors.has('title')">This field is required</span>
                 </md-autocomplete>
@@ -42,7 +41,6 @@
                                  @md-opened="mdOpenedValue"
                                  class="change-icon-order select-with-icon mb16"
                                  :class="[{'md-error': errors.has('value')}]">
-                  <md-icon class="md-accent">person</md-icon>
                   <label>Value</label>
                   <span class="md-error" v-if="errors.has('value')">This field is required</span>
                 </md-autocomplete>
@@ -52,19 +50,16 @@
             <div class="md-layout">
               <div class="md-layout-item">
                 <md-field :class="[{'md-error': errors.has('comment')}]" class="mb16">
-                  <md-icon class="md-accent">create</md-icon>
                   <label>Comment</label>
                   <md-textarea md-autogrow
                                v-model="form.comment"
                                data-vv-name="comment"
-                               v-validate= "modelValidations.comment"
-                               required
                                style="min-height: 36px;"></md-textarea>
                   <span class="md-error" v-if="errors.has('comment')">This field is required</span>
                 </md-field>
               </div>
             </div>
-          </md-card>
+
         </form>
       </template>
 
@@ -88,6 +83,7 @@
     name: 'event-modal-components',
     props: {
       componentItem: Object,
+      component: Object,
       componentIndex: Number,
       componentItemIndex: Number,
       componentId: String,
@@ -192,7 +188,8 @@
         this.form.value = this.form.value.substring(0, this.form.value.length - 1)
       },
       getEventComponentProperty() {
-        let eventProperty = new EventComponentProperty().for(this.$store.state.componentsList[0]);
+        let eventProperty = new EventComponentProperty().for(new EventComponent({id: this.component.componentId}));
+
         eventProperty.get().then(response => {
           this.propertyValuesObjects = response;
           this.propertyValues = response.length ? response.map((val) => val.title) : [];
@@ -204,37 +201,19 @@
           });
       },
     },
-    created() {
+    mounted() {
       if (this.$store.state.componentsList === null) {
         EventComponent.get().then((componentsList) => {
           this.$store.state.componentsList = componentsList;
           this.getEventComponentProperty();
         })
-        .catch((error) => {
-          console.log(error);
-          this.isLoading = false;
-        });
-      } else {
-        this.getEventComponentProperty();
-      }
-    },
-    mounted() {
-      EventComponent.get().then((componentsList) => {
-        let propertiesList = new EventComponentProperty().for(componentsList[0]);
-
-          propertiesList.get().then(response => {
-            this.propertyValues = response.length ? response.map((val) => val.title) : [];
-            this.isLoading = false;
-          })
           .catch((error) => {
             console.log(error);
             this.isLoading = false;
           });
-      })
-      .catch((error) => {
-        console.log(error);
-        this.isLoading = false;
-      });
+      } else {
+        this.getEventComponentProperty();
+      }
     },
     watch: {
       componentItem: function(val) {

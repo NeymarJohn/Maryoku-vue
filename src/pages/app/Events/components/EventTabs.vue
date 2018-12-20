@@ -10,10 +10,10 @@
     </md-card-header>-->
 
     <md-card-content>
-      <div class="component-header">
-        <h3 class="title">{{ componentTitle }}</h3>
+      <div class="component-header" >
+        <h3 class="title" style="font-weight: bold;">{{ componentTitle }}</h3>
 
-        <md-list class="nav-tabs">
+        <md-list class="nav-tabs" >
           <md-list-item
             v-for="(item, index) in tabName"
             @click="switchPanel(tabName[index])"
@@ -22,15 +22,15 @@
               {active: isActivePanel(tabName[index])},
               {[getColorButton(colorButton)]: isActivePanel(tabName[index])}]">
               {{tabName[index]}}
-              <md-icon v-if="navPillsIcons">{{tabIcon[index]}}</md-icon>
+            <md-icon v-if="navPillsIcons">{{tabIcon[index]}}</md-icon>
           </md-list-item>
         </md-list>
         <div class="actions-wrapper">
           <md-button class="md-just-icon md-simple" @click.native='showInspirations()' v-if="!readonly && componentObjectId">
             <md-icon>reorder</md-icon>
           </md-button>
-          <md-button class="md-raised md-primary md-icon-button delete-button--small" @click.native="showSwalComponent()" v-if="!readonly">
-            <md-icon>delete</md-icon>
+          <md-button class="md-just-icon md-simple" @click.native="showSwalComponent()" v-if="!readonly">
+            <md-icon>close</md-icon>
           </md-button>
         </div>
       </div>
@@ -120,7 +120,7 @@ export default {
     min-width: 60px;
 
     .md-list-item-content {
-      padding: 8px;
+      padding: 2px 8px;
     }
   }
 </style>

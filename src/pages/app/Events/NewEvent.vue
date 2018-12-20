@@ -1,6 +1,11 @@
 <template>
-  <div class="md-layout margin-footer">
+  <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
+
+    <div class="md-layout-item md-size-100">
+      <event-actions-edit :formData="formData"></event-actions-edit>
+    </div>
+
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
       <event-header-form :occasionOptions="occasionsArray" :formData="formData"></event-header-form>
@@ -8,33 +13,34 @@
 
     <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
 
-      <time-line plain :type="'simple'">
-        <time-line-item inverted badge-type="danger" badge-icon="card_travel" class="empty-timeline">
-          <div slot="header">
-          <drop-down direction="down" ref="dropdown" class="dropdown-component-button">
-                <md-button slot="title" class="md-button md-block md-primary dropdown-toggle" data-toggle="dropdown">
-                  <i class="material-icons">add</i> Add Component
-                </md-button>
-                <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
-                  <li v-for="item in componentsList" :key="item.id" @click="createNewComponent($event, item)">
-                    <a :class="item.childComponents ? 'dropdown-toggle' : ''">
-                      {{ item.value }}
-                      <ul class="dropdown-menu" v-if="item.childComponents">
-                        <li v-for="subItem in item.childComponents" :key="subItem.id" @click="createNewComponent($event, subItem)">
-                          <a>{{ subItem.title }}</a></li>
-                      </ul>
-                    </a>
-                  </li>
-                </ul>
-              </drop-down>
-              </div>
-        </time-line-item>
+      <time-line plain :type="'simple'" class="mt-0">
         <event-card-component v-for="(component, index) in components"
                               :key="'event-card-component-' + index"
                               v-if="$store.state.vendorsList"
                               :componentObject="component"
                               :componentIndex="index">
         </event-card-component>
+
+        <time-line-item inverted badge-type="danger" badge-icon="card_travel" class="empty-timeline">
+          <div slot="header">
+            <drop-down direction="down" ref="dropdown" class="dropdown-component-button">
+              <md-button slot="title" class="md-button md-block md-primary dropdown-toggle" data-toggle="dropdown">
+                <i class="material-icons">add</i> Add Component
+              </md-button>
+              <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
+                <li v-for="item in componentsList" :key="item.id" @click="createNewComponent($event, item)">
+                  <a :class="item.childComponents ? 'dropdown-toggle' : ''">
+                    {{ item.value }}
+                    <ul class="dropdown-menu" v-if="item.childComponents">
+                      <li v-for="subItem in item.childComponents" :key="subItem.id" @click="createNewComponent($event, subItem)">
+                        <a>{{ subItem.title }}</a></li>
+                    </ul>
+                  </a>
+                </li>
+              </ul>
+            </drop-down>
+          </div>
+        </time-line-item>
 
       </time-line>
     </div>
@@ -54,6 +60,7 @@
   import moment from 'moment';
   import VueElementLoading from 'vue-element-loading';
   import { TimeLine, TimeLineItem } from "@/components";
+  import EventActionsEdit from './components/EventActionsEdit';
 
   export default {
     components: {
@@ -62,6 +69,7 @@
       VueElementLoading,
       TimeLine,
       TimeLineItem,
+      EventActionsEdit,
     },
     data: () => ({
       responsive: false,
@@ -91,6 +99,8 @@
 
         this.$store.commit('updateComponent', {
           componentId: item.id,
+          icon: item.icon,
+          color: item.color,
           todos: [],
           values: [],
           vendors: [],
@@ -194,7 +204,7 @@
     margin-bottom: -23px;
   }
   .margin-footer {
-    margin-bottom: 50px;
+    //margin-bottom: 50px;
   }
   .dropdown .dropdown-menu .dropdown-toggle:after {
     font-family: 'Material Icons';
@@ -204,9 +214,10 @@
     height: auto;
   }
   .scrollable-container {
-    height: calc(100vh - 72px);
+    height: calc(100vh - 92px);
     overflow: auto;
     padding-top: 1px;
+    margin-top: 20px;
 
     .md-card {
       margin: 10px 0;
@@ -224,6 +235,11 @@
   .large-z-index {
     z-index: 6;
     position: relative;
+  }
+  .mt-0 {
+    .timeline.timeline-simple {
+      margin-top: 0;
+    }
   }
   @media (max-width: 960px) {
     .mt-small-20 {

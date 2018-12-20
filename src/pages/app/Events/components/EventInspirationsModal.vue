@@ -78,25 +78,10 @@
       }
     },
     created() {
-      Calendar.get().then(calendars => {
-        if (calendars.length === 0) {
-          return;
-        }
-        calendars[0].calendarEvents().get().then(events => {
-          let event = events.find(e => { return e.id = this.$route.params.id; })
-          let inspirations = event.inspirations().custom(`${process.env.SERVER_URL}/1/calendars/${calendars[0].id}/events/${event.id}/inspirations`).get().then(response => {
-            this.inspirations = response;
-            this.isLoading = false;
-          })
-          .catch((error) => {
-            console.log(error);
-            this.isLoading = false;
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isLoading = false;
-        });
+    let inspirations = new CalendarEvent({id: this.$route.params.id}).inspirations()
+      .custom(`${process.env.SERVER_URL}/1/calendars/${this.$store.state.calendarId}/events/${this.$route.params.id}/inspirations`).get().then(response => {
+        this.inspirations = response;
+        this.isLoading = false;
       })
       .catch((error) => {
         console.log(error);

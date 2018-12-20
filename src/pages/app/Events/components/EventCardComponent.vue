@@ -1,8 +1,21 @@
 <template>
-  <time-line-item inverted badge-type="danger" badge-icon="card_travel" class="components-timeline">
-    <event-tabs slot="content"
+  <time-line-item inverted badge-type="danger" :badge-icon="findIcon(componentObject)" class="components-timeline">
+    <!--<div slot="header">
+      <div class="component-header">
+        <h3 class="title" style="font-weight: bold;">{{ componentTitle }}</h3>
+        <div class="actions-wrapper">
+          <md-button class="md-just-icon md-simple" @click.native='showInspirations()' v-if="!readonly && componentObject.id">
+            <md-icon>reorder</md-icon>
+          </md-button>
+          <md-button class="md-just-icon md-simple" @click.native="showSwalComponent()" v-if="!readonly">
+            <md-icon>close</md-icon>
+          </md-button>
+        </div>
+      </div>
+    </div>-->
+    <event-tabs slot="header"
                 color-button="info"
-                :tab-name="['Component Properties', 'Vendors', 'Todo']"
+                :tab-name="['Requirements', 'Vendors', 'Todo']"
                 :componentTitle="componentTitle"
                 :readonly="readonly"
                 :showInspirations="showInspirations"
@@ -11,12 +24,13 @@
 
       <template slot="tab-pane-1">
         <md-table v-model="componentObject.values" table-header-color="green" v-if="componentObject.values.length" class="components-table" :class="readonly ? 'readonly': ''">
-          <md-table-row>
-            <md-table-head>Vendor name</md-table-head>
+          <!--<md-table-row>
+            <md-table-head>Property Name</md-table-head>
             <md-table-head>Value</md-table-head>
             <md-table-head>Comment</md-table-head>
             <md-table-head></md-table-head>
-          </md-table-row>
+          </md-table-row>-->
+
           <md-table-row slot="md-table-row"
                         v-for="(item, index) in componentObject.values"
                         v-if="item !== null"
@@ -24,12 +38,13 @@
                         @click.native="showModalComponent(item, index)">
             <md-table-cell>{{ item.title }}</md-table-cell>
             <md-table-cell>{{ item.value }}</md-table-cell>
-            <md-table-cell>{{ item.comment }}</md-table-cell>
+            <!--<md-table-cell>{{ item.comment }}</md-table-cell>-->
             <md-table-cell class="visible-on-hover">
               <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'values')" v-if="!readonly">
                 <md-icon>delete</md-icon>
               </md-button>
             </md-table-cell>
+            <md-tooltip v-if="item.comment">{{item.comment}}</md-tooltip>
           </md-table-row>
         </md-table>
         <p class="text-danger text-center" v-if="!componentObject.values.length">
@@ -43,30 +58,30 @@
 
       <template slot="tab-pane-2">
         <md-table v-model="vendorsObjectsArray" table-header-color="green" class="components-table" v-if="vendorsObjectsArray.length" :class="readonly ? 'readonly': ''">
-          <md-table-row>
+          <!--<md-table-row>
             <md-table-head>Vendor Name</md-table-head>
             <md-table-head>Contact Person</md-table-head>
             <md-table-head>Email</md-table-head>
             <md-table-head>Phone</md-table-head>
             <md-table-head>Cost</md-table-head>
             <md-table-head></md-table-head>
-          </md-table-row>
+          </md-table-row>-->
           <md-table-row slot="md-table-row"
                         v-for="(item, index) in vendorsObjectsArray"
                         v-if="item !== null"
                         :key="'vendor-' + index"
                         @click.native="showModalVendors(item, index)">
             <md-table-cell>{{ item.vendorDisplayName }}</md-table-cell>
-            <md-table-cell>{{ item.contactPerson }}</md-table-cell>
+            <!--<md-table-cell>{{ item.contactPerson }}</md-table-cell>
             <md-table-cell>{{ item.vendorMainEmail }}</md-table-cell>
-            <md-table-cell>{{ item.vendorMainPhoneNumber }}</md-table-cell>
-            <md-table-cell>{{ item.cost }}</md-table-cell>
+            <md-table-cell>{{ item.vendorMainPhoneNumber }}</md-table-cell>-->
+            <md-table-cell>${{ item.cost }}</md-table-cell>
             <md-table-cell class="visible-on-hover min-actions">
               <div class="actions-flex">
-                <md-button class="md-raised md-primary md-icon-button" @click="sentProposalRequest($event)" v-if="!readonly && shouldUpdate">
+                <!--<md-button class="md-raised md-primary md-icon-button" @click="sentProposalRequest($event)" v-if="!readonly && shouldUpdate">
                   <md-icon>visibility</md-icon>
                   <md-tooltip md-direction="top">Request Proposal</md-tooltip>
-                </md-button>
+                </md-button>-->
                 <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'vendors')" v-if="!readonly">
                   <md-icon>delete</md-icon>
                 </md-button>
@@ -85,20 +100,21 @@
 
       <template slot="tab-pane-3">
         <md-table table-header-color="green" class="components-table" v-if="componentObject.todos.length" :class="readonly ? 'readonly': ''">
-          <md-table-row>
+          <!--<md-table-row>
             <md-table-head>What</md-table-head>
             <md-table-head>Due Date</md-table-head>
             <md-table-head>Assign To</md-table-head>
             <md-table-head>Status</md-table-head>
             <md-table-head></md-table-head>
-          </md-table-row>
+          </md-table-row>-->
           <event-todo-row v-for="(item, index) in componentObject.todos"
                           v-if="item !== null"
                           :showModalTodo="showModalTodo"
                           :showSwal="showSwalItems"
                           :todoItem="item"
                           :todoIndex="index"
-                          :key="'todo-' + index"></event-todo-row>
+                          :key="'todo-' + index">
+          </event-todo-row>
         </md-table>
         <p class="text-danger text-center" v-if="!componentObject.todos.length">
           No records were added yet.
@@ -111,20 +127,32 @@
     </event-tabs>
 
     <!-- should be inside of 'slot="content"' for rendering -->
-    <div class="tabs-timeline-content" slot="content">
+    <div class="tabs-timeline-content" slot="footer">
+      <md-list class="nav-tabs">
+        <md-list-item
+          v-for="(item, index) in tabName"
+          @click="switchPanel(tabName[index])"
+          :key="item"
+          :class="[
+              {active: isActivePanel(tabName[index])},
+              {[getColorButton(colorButton)]: isActivePanel(tabName[index])}]">
+          {{tabName[index]}}
+          <md-icon v-if="navPillsIcons">{{tabIcon[index]}}</md-icon>
+        </md-list-item>
+      </md-list>
       <event-modal-inspirations ref="inspirationsModal" v-if="componentObject.id"></event-modal-inspirations>
       <event-modal-vendor ref="vendorsModal"
                           :v-bind:readonly="$props.readonly"
                           :vendorItem="vendorItem"
                           :vendorIndex="vendorIndex"
                           v-bind:shouldUpdate="$props.shouldUpdate"
-                          :createVendor="$props.createVendor"
                           :updateVendor="$props.updateVendor"
                           :componentIndex="componentIndex"></event-modal-vendor>
       <event-modal-components ref="componentsModal"
                               :v-bind:readonly="$props.readonly"
                               :componentItem="componentItem"
                               :componentItemIndex="componentItemIndex"
+                              :component="componentObject"
                               :componentId="componentObject.id"
                               :shouldUpdate="$props.shouldUpdate"
                               :updateComponent="$props.updateComponent"
@@ -171,7 +199,6 @@
       componentObject: Object,
       readonly: Boolean,
       shouldUpdate: Boolean,
-      createVendor: Function,
       updateVendor: Function,
       updateComponent: Function,
       updateTodo: Function,
@@ -220,6 +247,19 @@
       }
     },
     methods: {
+      findIcon(object) {
+        let obj = '';
+        if (this.$store.state.componentsList) {
+          obj = this.$store.state.componentsList.find(e => { return e.id === object.componentId })
+          if (!obj) {
+            let child = this.$store.state.componentsList.map(e => {
+              return e.childComponents ? e.childComponents : {}
+            });
+            obj = child.flat().find(e => { return e.id === object.componentId })
+          }
+        }
+        return obj ? obj.icon : 'card_travel'
+      },
       getVendorObjectsArray() {
         let _this = this;
         this.vendorsObjectsArray = [];
@@ -360,6 +400,7 @@
 
     .md-button {
       margin-right: 5px;
+      margin-left: auto;
     }
   }
   .md-table .md-table-row {
@@ -382,8 +423,8 @@
     }
   }
   .delete-button--small {
-    margin-right: 15px !important;
-    margin-top: 6px !important;
+    /*margin-right: 15px !important;
+    margin-top: 6px !important;*/
     width: 27px;
     height: 27px;
     min-width: 27px;
@@ -391,6 +432,21 @@
   .components-timeline {
     .timeline-heading {
       margin: 0;
+    }
+  }
+
+  .component-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .title {
+      text-align: left;
+    }
+    .actions-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
     }
   }
 </style>

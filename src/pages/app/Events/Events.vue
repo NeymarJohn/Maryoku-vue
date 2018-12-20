@@ -1,9 +1,9 @@
 <template>
   <div class="md-layout">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
 
     <div class="md-layout-item md-size-100 text-right">
-      <md-button class="md-rose text-info" @click="routeToNewEvent()">
+      <md-button class="md-rose text-success" @click="routeToNewEvent()">
         <md-icon>add_circle</md-icon>
         Create New Event
       </md-button>
@@ -24,9 +24,9 @@
               <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
               <md-table-cell md-label="Status">{{ item.status }}</md-table-cell>
               <md-table-cell md-label="Actions">
-                <md-button @click="viewEvent(item)" class="md-raised md-info md-icon-button">
+                <!--<md-button @click="viewEvent(item)" class="md-raised md-info md-icon-button">
                   <md-icon>visibility</md-icon>
-                </md-button>
+                </md-button>-->
                 <md-button @click="editEvent($event, item)" class="md-raised md-info md-icon-button">
                   <md-icon>edit</md-icon>
                 </md-button>
@@ -130,7 +130,7 @@
         isLoading: true,
       };
     },
-    
+
     methods: {
       getCalendarEvents() {
         let _calendar = new Calendar({id: this.$store.state.calendarId});
@@ -191,13 +191,13 @@
         this.$router.push(`/events/${event.id}`)
       },
       imageHref(image) {
-        return image && image.href ? `${process.env.SERVER_URL}/${image.href}` : this.product3;
+        return image && image.href ? `${process.env.SERVER_URL}${image.href}` : this.product3;
       },
-      duration(event) { 
+      duration(event) {
         return (event.eventEndMillis - event.eventStartMillis) / 3600000
       },
       routeToEvent(eventId) {
-        this.$router.push({ path: `/events/${eventId}` });
+        this.$router.push({ path: `/events/${eventId}/edit` });
       },
       routeToNewEvent() {
         this.$store.state.eventData = {

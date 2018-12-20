@@ -2,7 +2,7 @@
   <md-card
     @mouseleave.native="onMouseLeave"
     :data-count="hoverCount"
-    class="md-card-chart">
+    class="md-card-chart" style="box-shadow: none;">
     <md-card-header
       @mouseenter.native="onMouseOver"
       :data-header-animation="headerAnimation"
@@ -132,7 +132,7 @@ export default {
         chartIdQuery,
         this.chartData,
         this.chartOptions,
-        this.chartAnimation
+        this.chartResponsiveOptions
       );
     },
     /***
