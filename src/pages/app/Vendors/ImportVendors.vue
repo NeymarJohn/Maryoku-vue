@@ -2,9 +2,6 @@
       <div class="md-layout-item md-size-100 wizard-pos">
             <simple-wizard v-if="openWizard" :removeHeader="false" data-color="rose">
               <wizard-tab>
-                <template slot="label">
-                  Upload file
-                </template>
                 <section ref="step1">
                   <div class="panel-body">
                     <div class="upload-option">
@@ -26,54 +23,19 @@
               </wizard-tab>
 
               <wizard-tab>
-              <template slot="label">
-                Assign Columns
-              </template>
-              <section class="table-section"  ref="step2">
-                <table class="border-table" v-if="parse_csv">
-                  <thead>
-                  <tr style="border-top: none;">
-                    <th v-for="(key, index) in parse_header"
-                        @click="sortBy(key)"
-                        :class="{ active: sortKey == key }">
-                      <md-field>
-                        <md-select id="remove-border" @input="setCSV($event, index)"  v-model="models[index].value" name="select">
-                          <md-option v-for="(item, index) in listOfTypes" :value="item.name" :key="index">{{ item.displayName }}</md-option>
-
-                        </md-select>
-                      </md-field>
-
-                    </th>
-                  </tr>
-                  </thead>
-                  <tr v-for="(csv) in parse_csv">
-                    <td v-for="(value) in csv">
-                      {{ value }}
-                    </td>
-                  </tr>
-
-                </table>
-
-              </section>
-            </wizard-tab>
-
-              <wizard-tab>
-                <template slot="label">
-                  View results
-                </template>
-                <section class="table-section"  ref="step3">
+                <section class="table-section"  ref="step2">
                   <table class="border-table" v-if="parse_csv">
                     <thead>
                     <tr style="border-top: none;">
                       <th v-for="(key, index) in parse_header"
                           @click="sortBy(key)"
                           :class="{ active: sortKey == key }">
-                        <md-field>
-                          <!--<md-select id="remove-border" @input="setCSV($event, index)"  v-model="models[index].value" name="select">-->
-                            <!--<md-option v-for="(item, index) in listOfTypes" :value="item.name" :key="index">{{ item.displayName }}</md-option>-->
+                          <md-field>
+                              <md-select id="remove-border" @input="setCSV($event, index)"  v-model="models[index].value" name="select">
+                                  <md-option v-for="(item, index) in listOfTypes" :value="item.name" :key="index">{{ item.displayName }}</md-option>
 
-                          <!--</md-select>-->
-                        </md-field>
+                              </md-select>
+                          </md-field>
 
                       </th>
                     </tr>
@@ -85,9 +47,9 @@
                     </tr>
 
                   </table>
-                  <md-button class="finish-btn" @click="sendCSVFile">
-                    FINISH
-                  </md-button>
+                    <md-button class="finish-btn" @click="sendCSVFile">
+                      FINISH
+                    </md-button>
                 </section>
               </wizard-tab>
             </simple-wizard>

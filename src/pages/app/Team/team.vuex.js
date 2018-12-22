@@ -5,10 +5,10 @@ export default {
         return {
           teamMemberData: {
             id: null,
-            firstName: '',
+            firstName: null,
             username: null,
             password: 'none',
-            lastName: '',
+            lastName: null,
             emailAddress: null,
             pictureUrl: 'none',
             role: null,

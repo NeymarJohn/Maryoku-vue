@@ -14,7 +14,7 @@
                          v-bind:shouldUpdate="true"
                          :event="event"></event-header-form>
     </md-card>-->
-    <div class="md-layout-item md-small-size-100 md-size-30 scrollable-container">
+    <div class="md-layout-item md-small-size-100 md-size-30 scrollable-container" style="margin-top: -72px;">
       <md-card>
         <md-card-header class="md-card-header-text md-card-header-rose">
           <div class="card-text">
