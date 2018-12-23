@@ -10,6 +10,7 @@ const API_URL = `${HOSTNAME}`;
 const REGISTRATION_URL = `${API_URL}/1/register`;
 const SESSION_URL = `${API_URL}/api/login`;
 const CURRENT_USER_URL = `${API_URL}/1/me`;
+const LOGOUT_USER_URL = `${API_URL}/1/logout`;
 
 const TOKEN_KEY = "manage_id_token";
 
@@ -87,18 +88,19 @@ export default {
   },
 
   logout(context, options) {
-    /* context.$http.delete(SESSION_URL, options)
+    context.$http.get(LOGOUT_USER_URL, options)
       .then(data => {
-        window.localStorage.removeItem(TOKEN_KEY)
-        this.user.authenticated = false
-        context.$router.push({path: '/signin'})
+        window.localStorage.removeItem(TOKEN_KEY);
+        this.user.authenticated = false;
+        context.$http.defaults.headers.Authorization = null;
+        context.$router.push({ path: '/signin' });
       }, error => {
-
-      }) */
-    window.localStorage.removeItem(TOKEN_KEY);
-    this.user.authenticated = false;
-    context.$http.defaults.headers.Authorization = null;
-    context.$router.push({ path: '/signin' });
+        console.log(error);
+        window.localStorage.removeItem(TOKEN_KEY);
+        this.user.authenticated = false;
+        context.$http.defaults.headers.Authorization = null;
+        context.$router.push({ path: '/signin' });
+      });
   },
 
   checkAuth() {
