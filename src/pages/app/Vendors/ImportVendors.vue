@@ -94,18 +94,19 @@
     </div>
 </template>
 <script>
-  import CreateModal from './CreateModal/';
-  import VendorsTable from './Table';
   import Vendors from "@/models/Vendors";
+  import VendorsFile from "@/models/VendorsFile";
+  import vendorsModule from "./vendors.vuex"
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import {SimpleWizard, WizardTab} from "@/components";
   import swal from "sweetalert2";
-    import VueElementLoading from 'vue-element-loading';
+  import VueElementLoading from 'vue-element-loading';
   export default {
     components:{
       SimpleWizard,
       WizardTab,
     },
-      data() {
+      data () {
           return {
               openWizard: true,
               channel_name: '',
@@ -153,8 +154,12 @@
               parse_header: [],
               parse_csv: [],
               sortOrders: {},
-              sortKey: ''
+              sortKey: '',
+              rawCSVFile: null,
           };
+      },
+      created () {
+        this.$store.registerModule('vendorsVuex', vendorsModule);
       },
       filters: {
           capitalize: function (str) {
@@ -162,6 +167,7 @@
           }
       },
       methods: {
+          ...mapMutations('vendorsVuex', ['setFileToState']),
           sortBy: function (key) {
               let vm = this
               vm.sortKey = key
@@ -194,8 +200,12 @@
           loadCSV(e) {
               let vm = this
               if (window.FileReader) {
+                  let rawCSVFile = e.target.files[0];
                   let reader = new FileReader();
-                  reader.readAsText(e.target.files[0]);
+                  console.log('CSV file is: ', rawCSVFile);
+                  this.setFileToState(rawCSVFile);
+                  this.rawCSVFile = rawCSVFile;
+                  reader.readAsText(rawCSVFile);
                   // Handle errors load
                   reader.onload = function (event) {
                       let csv = event.target.result;
@@ -213,35 +223,19 @@
           async sendCSVFile() {
               let finalData = [];
               let vm = this;
+              console.log(this.rawCSVFile)
+              let formData = new FormData();
 
-              this.parse_csv.forEach((csvValue, csvIndex) => {
-                  let tempVendorObject = {
-                      vendorDisplayName: null,
-                      productsCategory: 'test',
-                      vendorWebsite: null,
-                      vendorAddressLine1: null,
-                      vendorMainEmail: null,
-                      vendorMainPhoneNumber: null,
-                      vendorCategory: 'test',
-                      vendorAvailabilityOptions: 'test',
-                      vendorCancellationPolicy: 'test',
-                      vendorCity: 'test',
-                      vendorRefundPolicy: 'test'
-                  }
+              formData.append('vendorsFile', document.getElementById('csv_file').files[0], this.rawCSVFile.name);
 
-                  csvValue.forEach((value, index) => {
-                      tempVendorObject[this.models[index].value] = value;
-                  });
-                  finalData.push(tempVendorObject);
+              for (let [key, value] of formData.entries()) {
+                  console.log(key, value);
+              }
+              let vendorsFile = new VendorsFile(formData);
+              vendorsFile.setHeader();
+              vendorsFile.save();
 
-
-              })
-
-              finalData.forEach((value, index) => {
-                  let vendor = new Vendors({});
-                  vendor.attach(value);
-              });
-
+              return;
 
               swal("Good job!", "You clicked the finish button!", "success");
               this.openWizard = false;

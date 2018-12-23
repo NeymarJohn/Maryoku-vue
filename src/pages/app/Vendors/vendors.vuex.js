@@ -14,13 +14,17 @@ export default {
         vendorCancellationPolicy: 'test',
         vendorCity: 'test',
         vendorRefundPolicy: 'test'
-      }
+      },
+        csvFile: null,
     };
   },
 
   mutations: {
     setMemberProperty(state, {key, actualValue}) {
       state.vendorsMemberData[key] = actualValue;
+    },
+    setFileToState(state, file) {
+      state.csvFile = file;
     },
     resetForm(state){
       state.vendorsMemberData.vendorDisplayName = null;
