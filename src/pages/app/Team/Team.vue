@@ -21,6 +21,7 @@
 </template>
 
 <script>
+  import auth from '@/auth';
   import InviteModal from './InviteModal/';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import TeamTable from './Table';
@@ -34,6 +35,7 @@
     },
     data() {
       return {
+        auth:auth,
         team: {},
         teamMembers: [],
         teamMembersLoading: true,
@@ -46,15 +48,16 @@
       ...mapMutations('teamVuex', ['resetForm']),
       fetchTeam(){
         this.teamMembersLoading = true;
-        Teams.get().then(teams => {
+        /*Teams.get().then(teams => {
           this.team = teams[0];
-          teams[0].members().get().then(members => {
-            console.log(members);
-            this.teamMembers = members;
-            this.teamMembersLoading = false;
-          });
+
         }, (error) => {
           console.log(error)
+        });*/
+        new Teams({id: this.auth.user.defaultGroupId}).members().get().then(members => {
+          console.log(members);
+          this.teamMembers = members;
+          this.teamMembersLoading = false;
         });
       },
       openInviteModal(){

@@ -87,7 +87,7 @@
 </template>
 
 <script>
-
+  import auth from '@/auth';
   import {
     Tabs,
     ProductCard
@@ -105,25 +105,12 @@
       VueElementLoading
     },
     mounted() {
-      if (this.$store.state.calendarId === null) {
-        Calendar.get().then(calendars => {
-          if (calendars.length === 0) {
-            return;
-          }
-          this.$store.state.calendarId = calendars[0].id;
-
-          this.getCalendarEvents();
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isLoading = false;
-        });
-      } else {
-        this.getCalendarEvents();
-      }
+      this.$store.state.calendarId = this.auth.user.defaultCalendarId;
+      this.getCalendarEvents();
     },
     data() {
       return {
+        auth: auth,
         product3: "static/img/shutterstock_289440710.png",
         recentEvents: [],
         upcomingEvents: [],

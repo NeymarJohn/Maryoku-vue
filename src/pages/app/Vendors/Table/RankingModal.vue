@@ -5,7 +5,7 @@
                 <h3 class="title">Ranking</h3>
                 <div class="md-layout">
                     <div class="md-layout-item md-size-95 mt-4 md-small-size-100">
-                        <md-toolbar v-for="(item, index) in rankingParameters" class="space-between">
+                        <md-toolbar v-for="(item, index) in rankingParameters" class="space-between" :key="item.id">
                             <h3 class="md-title"> {{ item.name }} </h3>
                             <div class="pull-right">
 

@@ -46,7 +46,9 @@ export default {
 
   unsetToken() {
     window.localStorage.removeItem(TOKEN_KEY);
-    this.user.authenticated = false;
+    this.user = {
+      authenticated: false
+    }
   },
 
   currentUser(context, required) {
@@ -55,6 +57,8 @@ export default {
         this.user.username = resp.data.username;
         this.user.avatar =  resp.data.pictureUrl;
         this.user.displayName = resp.data.displayName;
+        this.user.defaultGroupId = resp.data.defaultGroupId;
+        this.user.defaultCalendarId = resp.data.defaultCalendarId;
 
         this.setHeaders(context);
         // if (required){
@@ -91,13 +95,17 @@ export default {
     context.$http.get(LOGOUT_USER_URL, options)
       .then(data => {
         window.localStorage.removeItem(TOKEN_KEY);
-        this.user.authenticated = false;
+        this.user = {
+          authenticated: false
+        }
         context.$http.defaults.headers.Authorization = null;
         context.$router.push({ path: '/signin' });
       }, error => {
         console.log(error);
         window.localStorage.removeItem(TOKEN_KEY);
-        this.user.authenticated = false;
+        this.user = {
+          authenticated: false
+        }
         context.$http.defaults.headers.Authorization = null;
         context.$router.push({ path: '/signin' });
       });
