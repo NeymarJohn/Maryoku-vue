@@ -106,6 +106,7 @@
     },
     mounted() {
       console.log(auth.user);
+      this.avatar = auth.user.avatar ? auth.user.avatar : "static/img/faces/avatar.jpg";
     },
     methods: {
       toggleSidebar() {
