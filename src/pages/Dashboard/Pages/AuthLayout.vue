@@ -4,7 +4,7 @@
       <div class="md-toolbar-row md-offset">
         <div class="md-toolbar-section-start">
           <!--<h3 class="md-title">{{$route.name}}</h3>-->
-          <h3 class="md-title"><a href="https://www.262days.com"><img src="static/img/262Logo2.png"/></a> </h3>
+          <h3 class="md-title"><img src="static/img/262Logo2.png"/> </h3>
         </div>
         <div class="md-toolbar-section-end">
           <md-button class="md-just-icon md-simple md-round md-toolbar-toggle" :class="{toggled: $sidebar.showSidebar}" @click="toggleSidebar">
@@ -49,37 +49,36 @@
         </div>
         <footer class="footer">
           <div class="container md-offset">
-            <nav>
-              <ul>
-                <!--<li>
-                  <router-link :to="{path:'/dashboard'}">Home</router-link>
-                </li>-->
-                <li>
-                  <a href="https://www.262days.com/our-story">
-                    Our Story
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.262days.com/terms">
-                    Terms of Use
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.262days.com/privacy">
-                    Privacy
-                  </a>
-                </li>
-
-                <!--<li>
-                    <a href="https://www.262days.com/blog">
-                        Blog
-                    </a>
-                </li>-->
-              </ul>
-            </nav>
-            <div class="copyright text-center">
-              &copy; <a href="https://www.262days.com" target="_blank">262 Days Ltd</a> &middot; All rights reserved
-            </div>
+              <nav>
+                  <ul>
+                    <!--<li>
+                      <router-link :to="{path:'/dashboard'}">Home</router-link>
+                    </li>-->
+                    <li>
+                      <a href="https://www.262days.com/terms">
+                        Terms of Use
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://www.262days.com/privacy">
+                        Privacy
+                      </a>
+                    </li>
+                      <li>
+                          <a href="https://www.262days.com/about">
+                              About
+                          </a>
+                      </li>
+                      <li>
+                          <a href="https://www.262days.com/blog">
+                              Blog
+                          </a>
+                      </li>
+                  </ul>
+              </nav>
+              <div class="copyright text-center">
+                &copy; {{ new Date().getFullYear() }}, <a href="https://www.262days.com" target="_blank">262 Days Ltd</a>
+              </div>
           </div>
         </footer>
       </div>
@@ -87,134 +86,134 @@
   </div>
 </template>
 <script>
-  import { ZoomCenterTransition } from "vue2-transitions";
+import { ZoomCenterTransition } from "vue2-transitions";
 
-  export default {
-    components: {
-      ZoomCenterTransition
-    },
-    props: {
-      backgroundColor: {
-        type: String,
-        default: "black"
-      }
-    },
-    inject: {
-      autoClose: {
-        default: true
-      }
-    },
-    data() {
+export default {
+  components: {
+    ZoomCenterTransition
+  },
+  props: {
+    backgroundColor: {
+      type: String,
+      default: "black"
+    }
+  },
+  inject: {
+    autoClose: {
+      default: true
+    }
+  },
+  data() {
+    return {
+      responsive: false,
+      showMenu: false,
+      menuTransitionDuration: 250,
+      pageTransitionDuration: 300,
+      year: new Date().getFullYear()
+    };
+  },
+  computed: {
+    setBgImage() {
+      let images = {
+        Pricing: "static/img/bg-pricing.jpg",
+        Login: "static/img/shutterstock_495639391.png",
+        Register: "static/img/shutterstock_495639391.png",
+        SignIn: "static/img/shutterstock_732491308.png",
+        SignOut: "static/img/shutterstock_732491308.png",
+        GetStarted: "static/img/shutterstock_732491308.png",
+        SignedIn: "static/img/shutterstock_732491308.png",
+        Lock: "static/img/lock.jpg"
+      };
       return {
-        responsive: false,
-        showMenu: false,
-        menuTransitionDuration: 250,
-        pageTransitionDuration: 300,
-        year: new Date().getFullYear()
+        backgroundImage: `url(${images[this.$route.name]})`
       };
     },
-    computed: {
-      setBgImage() {
-        let images = {
-          Pricing: "static/img/bg-pricing.jpg",
-          Login: "static/img/shutterstock_495639391.png",
-          Register: "static/img/shutterstock_495639391.png",
-          SignIn: "static/img/shutterstock_732491308.png",
-          SignOut: "static/img/shutterstock_732491308.png",
-          GetStarted: "static/img/shutterstock_732491308.png",
-          SignedIn: "static/img/shutterstock_732491308.png",
-          Lock: "static/img/lock.jpg"
-        };
-        return {
-          backgroundImage: `url(${images[this.$route.name]})`
-        };
-      },
-      setPageClass() {
-        return `${this.$route.name}-page`.toLowerCase();
+    setPageClass() {
+      return `${this.$route.name}-page`.toLowerCase();
+    }
+  },
+  methods: {
+    toggleSidebarPage() {
+      if (this.$sidebar.showSidebar) {
+        this.$sidebar.displaySidebar(false);
       }
     },
-    methods: {
-      toggleSidebarPage() {
-        if (this.$sidebar.showSidebar) {
-          this.$sidebar.displaySidebar(false);
-        }
-      },
-      linkClick() {
-        if (
-          this.autoClose &&
-          this.$sidebar &&
-          this.$sidebar.showSidebar === true
-        ) {
-          this.$sidebar.displaySidebar(false);
-        }
-      },
-      toggleSidebar() {
-        this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
-      },
-      toggleNavbar() {
-        document.body.classList.toggle("nav-open");
-        this.showMenu = !this.showMenu;
-      },
-      closeMenu() {
-        document.body.classList.remove("nav-open");
-        this.showMenu = false;
-      },
-      onResponsiveInverted() {
-        if (window.innerWidth < 991) {
-          this.responsive = true;
-        } else {
-          this.responsive = false;
-        }
+    linkClick() {
+      if (
+        this.autoClose &&
+        this.$sidebar &&
+        this.$sidebar.showSidebar === true
+      ) {
+        this.$sidebar.displaySidebar(false);
       }
     },
-    mounted() {
-      this.onResponsiveInverted();
-      window.addEventListener("resize", this.onResponsiveInverted);
+    toggleSidebar() {
+      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
     },
-    beforeDestroy() {
-      this.closeMenu();
-      window.removeEventListener("resize", this.onResponsiveInverted);
+    toggleNavbar() {
+      document.body.classList.toggle("nav-open");
+      this.showMenu = !this.showMenu;
     },
-    beforeRouteUpdate(to, from, next) {
-      // Close the mobile menu first then transition to next page
-      if (this.showMenu) {
-        this.closeMenu();
-        setTimeout(() => {
-          next();
-        }, this.menuTransitionDuration);
+    closeMenu() {
+      document.body.classList.remove("nav-open");
+      this.showMenu = false;
+    },
+    onResponsiveInverted() {
+      if (window.innerWidth < 991) {
+        this.responsive = true;
       } else {
-        next();
+        this.responsive = false;
       }
     }
-  };
+  },
+  mounted() {
+    this.onResponsiveInverted();
+    window.addEventListener("resize", this.onResponsiveInverted);
+  },
+  beforeDestroy() {
+    this.closeMenu();
+    window.removeEventListener("resize", this.onResponsiveInverted);
+  },
+  beforeRouteUpdate(to, from, next) {
+    // Close the mobile menu first then transition to next page
+    if (this.showMenu) {
+      this.closeMenu();
+      setTimeout(() => {
+        next();
+      }, this.menuTransitionDuration);
+    } else {
+      next();
+    }
+  }
+};
 </script>
 <style lang="scss" scoped>
-  $scaleSize: 0.1;
-  $zoomOutStart: 0.7;
-  $zoomOutEnd: 0.46;
-  @keyframes zoomIn8 {
-    from {
-      opacity: 0;
-      transform: scale3d($scaleSize, $scaleSize, $scaleSize);
-    }
-    100% {
-      opacity: 1;
-    }
+$scaleSize: 0.1;
+$zoomOutStart: 0.7;
+$zoomOutEnd: 0.46;
+@keyframes zoomIn8 {
+  from {
+    opacity: 0;
+    transform: scale3d($scaleSize, $scaleSize, $scaleSize);
   }
-  .wrapper-full-page .zoomIn {
-    animation-name: zoomIn8;
+  100% {
+    opacity: 1;
   }
-  @keyframes zoomOut8 {
-    from {
-      opacity: 1;
-      transform: scale3d($zoomOutStart, $zoomOutStart, $zoomOutStart);
-    }
-    to {
-      opacity: 0;
-      transform: scale3d($zoomOutEnd, $zoomOutEnd, $zoomOutEnd);
-    }
+}
+.wrapper-full-page .zoomIn {
+  animation-name: zoomIn8;
+}
+@keyframes zoomOut8 {
+  from {
+    opacity: 1;
+    transform: scale3d($zoomOutStart, $zoomOutStart, $zoomOutStart);
   }
-  .wrapper-full-page .zoomOut {
-    animation-name: zoomOut8;
+  to {
+    opacity: 0;
+    transform: scale3d($zoomOutEnd, $zoomOutEnd, $zoomOutEnd);
   }
+}
+.wrapper-full-page .zoomOut {
+  animation-name: zoomOut8;
+}
 </style>

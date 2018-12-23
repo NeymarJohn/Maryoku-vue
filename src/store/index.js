@@ -4,7 +4,11 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  namespaced: true,
   state: {
+    currentUser: {
+
+    },
     param1: "test param",
     eventData: {
       id: null,
@@ -36,5 +40,8 @@ export default new Vuex.Store({
     removeComponent(state, params) {
       state.eventData.components.splice(params.index, 1);
     },
+    setCurrentUserData(state, data){
+      state.currentUser = data;
+    }
   }
 });

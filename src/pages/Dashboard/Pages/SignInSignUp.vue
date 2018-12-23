@@ -126,13 +126,5 @@ export default {
   }
 };
 </script>
-<style scoped>
-  p.description {
-    font-size: 16px;
-  }
-
-  h4.info-title {
-    font-size: 18px;
-    font-weight: 400;
-  }
+<style>
 </style>

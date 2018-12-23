@@ -160,15 +160,15 @@
 
               <div class="md-layout-item md-size-40 md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('duration')}]" class="select-with-icon">
-                  <label>Duration2</label>
+                  <label>Duration</label>
                   <md-select v-model="form.duration"
                              data-vv-name="duration"
                              v-validate= "modelValidations.duration"
                              required>
                     <md-option v-for="hour in durationArray"
                                :key="hour"
-                               :value="hour">
-                      {{ hour }} hours
+                               :value="hour + ' hours'">
+                      {{ hour }}
                     </md-option>
                   </md-select>
                   <span class="md-error" v-if="errors.has('duration')">The event duration time is required</span>
