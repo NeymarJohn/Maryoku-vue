@@ -9,10 +9,11 @@
       <slot name="header-title"></slot>
     </md-card-header>-->
 
-    <md-card-content style="padding: 0;">
+    <md-card-content>
       <div class="component-header" >
-        <h3 class="title" style="font-weight: bold;">{{ componentTitle }} <small class="md-small text-gray" style="margin: 0 4px;"><i class="fa fa-chevron-right"></i></small></h3>
-        <md-list class="nav-tabs" style="margin-right: auto; margin-left: 0; padding:0;" >
+        <h3 class="title" style="font-weight: bold;">{{ componentTitle }}</h3>
+
+        <md-list class="nav-tabs" >
           <md-list-item
             v-for="(item, index) in tabName"
             @click="switchPanel(tabName[index])"
@@ -25,9 +26,9 @@
           </md-list-item>
         </md-list>
         <div class="actions-wrapper">
-          <!--<md-button class="md-just-icon md-simple" @click.native='showInspirations()' v-if="!readonly && componentObjectId">
+          <md-button class="md-just-icon md-simple" @click.native='showInspirations()' v-if="!readonly && componentObjectId">
             <md-icon>reorder</md-icon>
-          </md-button>-->
+          </md-button>
           <md-button class="md-just-icon md-simple" @click.native="showSwalComponent()" v-if="!readonly">
             <md-icon>close</md-icon>
           </md-button>

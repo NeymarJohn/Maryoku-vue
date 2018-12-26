@@ -48,7 +48,8 @@
           </md-table-row>
         </md-table>
         <p class="text-danger text-center" v-if="!componentObject.values.length">
-          <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalComponent({}, null)'>Add requirements for <strong>{{componentObject.componentId}}</strong></a>
+          No records were added yet.
+          <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalComponent({}, null)'>Go ahead and add one!</a>
         </p>
         <md-button class="md-button md-block md-primary md-size-15 md-layout-item center-icon" @click.native='showModalComponent({}, null)' v-if="!readonly && componentObject.values.length">
           <i class="material-icons">add</i> Add
@@ -139,7 +140,7 @@
           <md-icon v-if="navPillsIcons">{{tabIcon[index]}}</md-icon>
         </md-list-item>
       </md-list>
-      <!--<event-modal-inspirations ref="inspirationsModal" v-if="componentObject.id"></event-modal-inspirations>-->
+      <event-modal-inspirations ref="inspirationsModal" v-if="componentObject.id"></event-modal-inspirations>
       <event-modal-vendor ref="vendorsModal"
                           :v-bind:readonly="$props.readonly"
                           :vendorItem="vendorItem"

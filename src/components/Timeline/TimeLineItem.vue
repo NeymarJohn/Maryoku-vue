@@ -5,7 +5,7 @@
         <md-icon>{{ badgeIcon }}</md-icon>
       </div>
     </slot>
-    <div :class="[{'timeline-panel': !transparent}, {'transparent-timeline-panel': transparent}]">
+    <div class="timeline-panel">
       <div class="timeline-heading">
         <slot name="header"></slot>
       </div>
@@ -23,10 +23,6 @@ export default {
   name: "time-line-item",
   props: {
     inverted: Boolean,
-    transparent: {
-      type: Boolean,
-      default: false
-    },
     badgeType: {
       type: String,
       default: "success"

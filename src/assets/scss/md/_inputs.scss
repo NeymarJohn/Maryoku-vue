@@ -394,8 +394,6 @@ select.form-control {
     font-size: 14px !important;
     -webkit-text-fill-color: $black-color !important;
     appearance: none;
-    font-weight: 400;
-    color: $blue-500 !important;
   }
 
   &.md-has-textarea:not(.md-autogrow).md-focused .md-textarea, &.md-has-textarea:not(.md-autogrow).md-has-value .md-textarea{
@@ -550,7 +548,6 @@ select.form-control {
   &.md-focused label,
   &.md-field.md-has-value label{
     top: -.8rem;
-    font-size: .7875rem;
   }
 
   .success.md-icon,
