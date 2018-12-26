@@ -15,10 +15,16 @@
                          :event="event"></event-header-form>
     </md-card>-->
     <div class="md-layout-item md-small-size-100 md-size-30 scrollable-container" style="margin-top: -72px;">
-      <md-card>
+
+          <event-header-form :occasionOptions="occasionsArray"
+                             :formData="formData"
+                             v-bind:shouldUpdate="true"
+                             :event="event"/>
+
+      <!--<md-card>
         <md-card-header class="md-card-header-text md-card-header-rose">
           <div class="card-text">
-            <h4 class="title2">Event Details</h4>
+            <h4 class="title2">Budget Control</h4>
           </div>
         </md-card-header>
         <md-card-content>
@@ -27,7 +33,7 @@
                              v-bind:shouldUpdate="true"
                              :event="event"></event-header-form>
         </md-card-content>
-      </md-card>
+      </md-card>-->
     </div>
 
     <div class="md-layout-item md-size-70 md-small-size-100 scrollable-container">
@@ -50,12 +56,12 @@
 
         </event-card-component>
 
-        <time-line-item inverted badge-type="danger" badge-icon="card_travel" class="empty-timeline">
+        <time-line-item inverted transparent badge-type="success" badge-icon="add" class="empty-timeline">
           <div slot="content">
-            <drop-down direction="down" ref="dropdown" class="dropdown-component-button md-centered">
-              <a href="#" slot="title" class="md-primary" data-toggle="dropdown">
-                <i class="material-icons">add</i> Add Component
-              </a>
+            <drop-down direction="down" ref="dropdown" class="dropdown-component-button">
+              <md-button slot="title" class="md-success" data-toggle="dropdown">
+                Add
+              </md-button>
               <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
                 <li v-for="item in componentsList" :key="item.id" @click="createNewComponent($event, item)">
                   <a :class="item.childComponents ? 'dropdown-toggle' : ''">

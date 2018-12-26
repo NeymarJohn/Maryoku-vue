@@ -140,7 +140,7 @@
           <md-icon v-if="navPillsIcons">{{tabIcon[index]}}</md-icon>
         </md-list-item>
       </md-list>
-      <event-modal-inspirations ref="inspirationsModal" v-if="componentObject.id"></event-modal-inspirations>
+      <!--<event-modal-inspirations ref="inspirationsModal" v-if="componentObject.id"></event-modal-inspirations>-->
       <event-modal-vendor ref="vendorsModal"
                           :v-bind:readonly="$props.readonly"
                           :vendorItem="vendorItem"
