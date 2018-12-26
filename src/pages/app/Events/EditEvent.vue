@@ -56,11 +56,11 @@
 
         </event-card-component>
 
-        <time-line-item inverted transparent badge-type="success" badge-icon="add" class="empty-timeline">
+        <time-line-item inverted transparent badge-type="success" badge-icon="add" class="empty-timeline" style="text-align: center;">
           <div slot="content">
             <drop-down direction="down" ref="dropdown" class="dropdown-component-button">
-              <md-button slot="title" class="md-success" data-toggle="dropdown">
-                Add
+              <md-button slot="title" class="md-success md-block" data-toggle="dropdown">
+                Add Event Component <i class="fa fa-chevron-right"></i>
               </md-button>
               <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
                 <li v-for="item in componentsList" :key="item.id" @click="createNewComponent($event, item)">

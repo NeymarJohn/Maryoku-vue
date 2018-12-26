@@ -48,8 +48,7 @@
           </md-table-row>
         </md-table>
         <p class="text-danger text-center" v-if="!componentObject.values.length">
-          No records were added yet.
-          <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalComponent({}, null)'>Go ahead and add one!</a>
+          <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalComponent({}, null)'>Add requirements for <strong>{{componentObject.componentId}}</strong></a>
         </p>
         <md-button class="md-button md-block md-primary md-size-15 md-layout-item center-icon" @click.native='showModalComponent({}, null)' v-if="!readonly && componentObject.values.length">
           <i class="material-icons">add</i> Add

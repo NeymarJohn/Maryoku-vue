@@ -25,9 +25,9 @@
           </md-list-item>
         </md-list>
         <div class="actions-wrapper">
-          <md-button class="md-just-icon md-simple" @click.native='showInspirations()' v-if="!readonly && componentObjectId">
+          <!--<md-button class="md-just-icon md-simple" @click.native='showInspirations()' v-if="!readonly && componentObjectId">
             <md-icon>reorder</md-icon>
-          </md-button>
+          </md-button>-->
           <md-button class="md-just-icon md-simple" @click.native="showSwalComponent()" v-if="!readonly">
             <md-icon>close</md-icon>
           </md-button>
