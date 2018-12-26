@@ -221,7 +221,7 @@
               }
           },
           async sendCSVFile() {
-              let finalData = [];
+              /*let finalData = [];
               let vm = this;
               console.log(this.rawCSVFile)
               let formData = new FormData();
@@ -232,7 +232,6 @@
                   console.log(key, value);
               }
               let vendorsFile = new VendorsFile(formData);
-              vendorsFile.setHeader();
               vendorsFile.save();
 
               return;
@@ -240,9 +239,21 @@
               swal("Good job!", "You clicked the finish button!", "success");
               this.openWizard = false;
 
-              this.$router.push('/vendors');
+              this.$router.push('/vendors');*/
 
+            let reader = new FileReader();
+            let _this = this;
 
+            reader.onload = e => {
+              let vendorsFile = new VendorsFile({vendorsFile: e.target.result});
+              vendorsFile.save().then(result => {
+                console.log(result);
+              })
+                .catch((error) => {
+                  console.log(error);
+                });
+            };
+            reader.readAsDataURL(document.getElementById('csv_file').files[0]);
           }
       }
   };
