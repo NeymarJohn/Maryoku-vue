@@ -6,7 +6,7 @@
 export default {
 
   mounted(){
-    const before = new Date();
+    let before = new Date();
     if (window.focusEventListener != null){
       window.removeEventListener('focus', window.focusEventListener);
       window.focusEventListener = null;
@@ -15,6 +15,8 @@ export default {
       const now = new Date();
       if ((now.getTime() - before.getTime()) >= 300000) {
         document.location.reload(true);
+      } else {
+        before = new Date();
       }
     });
   }

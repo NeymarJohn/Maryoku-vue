@@ -90,7 +90,7 @@
     data() {
       return {
         auth,
-        avatar: auth.user.avatar ? auth.user.avatar : "static/img/faces/avatar.jpg",
+        avatar: "",
         selectedEmployee: "",
         employees: [
           "Jim Halpert",
@@ -106,6 +106,8 @@
     },
     mounted() {
       console.log(auth.user);
+      this.avatar = auth.user.avatar != null ? auth.user.avatar : "static/img/faces/avatar.jpg";
+      console.log("Avatar was set to: " + this.avatar);
     },
     methods: {
       toggleSidebar() {

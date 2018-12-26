@@ -358,7 +358,7 @@ let appPages = {
       path: "/events/:id/edit",
       name: "EditEvent",
       component: EditEvent,
-      meta: {title: 'Event Edit'},
+      meta: {title: 'Edit Event'},
     },
 
 

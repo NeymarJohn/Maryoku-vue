@@ -12,7 +12,7 @@
       <md-card>
         <md-card-content style="min-height: 60px;">
           <vue-element-loading :active="teamMembersLoading" spinner="ring" color="#FF547C"/>
-          <team-table :team-id="team.id" :teamMembers="teamMembers"></team-table>
+          <team-table @memberDeleted="fetchTeam" :team-id="team.id" :teamMembers="teamMembers"></team-table>
         </md-card-content>
       </md-card>
     </div>
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+  import auth from '@/auth';
   import InviteModal from './InviteModal/';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import TeamTable from './Table';
@@ -34,6 +35,7 @@
     },
     data() {
       return {
+        auth:auth,
         team: {},
         teamMembers: [],
         teamMembersLoading: true,
@@ -46,17 +48,18 @@
       ...mapMutations('teamVuex', ['resetForm']),
       fetchTeam(){
         this.teamMembersLoading = true;
-        Teams.get().then(teams => {
+        /*Teams.get().then(teams => {
           this.team = teams[0];
-          teams[0].members().get().then(members => {
-            this.teamMembers = members;
-            this.teamMembersLoading = false;
-          });
+
         }, (error) => {
           console.log(error)
+        });*/
+        new Teams({id: this.auth.user.defaultGroupId}).members().get().then(members => {
+          console.log(members);
+          this.teamMembers = members;
+          this.teamMembersLoading = false;
         });
       },
-
       openInviteModal(){
         this.$refs.inviteModal.toggleModal(true);
         this.resetForm();

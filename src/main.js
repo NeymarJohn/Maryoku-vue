@@ -1,6 +1,4 @@
 import Vue from "vue";
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
 import VueRouter from "vue-router";
 import Vuex from "vuex";
 import axios from 'axios';
@@ -61,7 +59,6 @@ axios.interceptors.response.use(function (response) {
 });
 
 Vue.use(VueAxios, axios);
-Vue.use(Vuetify);
 
 Model.$http = axios;
 

@@ -1,15 +1,12 @@
 <template>
     <div class="md-layout">
-        <popover v-if="inviteModalOpen" @close="noticeModalHide" container-class="modal-container">
-            <template slot="header" class="header-position">
-                <h3 class="title">Ranking</h3>
-                <button class="btn-position" @click="closeModal">X</button>
-            </template>
+        <modal v-if="inviteModalOpen" @close="noticeModalHide" container-class="modal-container">
             <template slot="body">
+                <h3 class="title">Ranking</h3>
                 <div class="md-layout">
-                    <div class="md-layout-item md-size-95 md-small-size-100">
-                        <div v-for="(item, index) in rankingParameters" class="space-between box-rate">
-                            <h3 class=""> {{ item.name }} </h3>
+                    <div class="md-layout-item md-size-95 mt-4 md-small-size-100">
+                        <md-toolbar v-for="(item, index) in rankingParameters" class="space-between" :key="item.id">
+                            <h3 class="md-title"> {{ item.name }} </h3>
                             <div class="pull-right">
 
                                 <div class="star-rating">
@@ -21,27 +18,23 @@
                                                v-model="item.value">★</label>
                                 </div>
                             </div>
-                        </div>
+                        </md-toolbar>
 
                         <md-field class="border-field">
-                            <label class="label-right">Your review</label>
+                            <label class="label-right">Textarea</label>
                             <md-textarea v-model="textarea" md-counter="80"></md-textarea>
                         </md-field>
                     </div>
                 </div>
             </template>
-            <template slot="footer">
-                <md-button class="move-left md-rose md-simple" @click="closeModal">Close</md-button>
-                <md-button class="md-success">Submit</md-button>
-            </template>
-        </popover>
+        </modal>
     </div>
 </template>
 
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import vendorsVuex from '../vendors.vuex';
-  import Popover from "@/components/Popover";
+  import { Modal } from "@/components";
   import swal from "sweetalert2";
   import Vendors from "@/models/Vendors";
   import {SlideYDownTransition} from "vue2-transitions";
@@ -49,7 +42,7 @@
 
   export default {
     components: {
-      'popover': Popover,
+      Modal,
       SlideYDownTransition
 
     },
@@ -191,9 +184,6 @@
       toggleModal: function (show) {
         this.inviteModalOpen = show;
       },
-      closeModal(){
-        this.inviteModalOpen = false;
-      },
       async addVendor() {
 
         let vendor = new Vendors({});
@@ -202,7 +192,23 @@
 
 
       },
+      star_over: function(index) {
+        var self = this;
 
+        if (!this.disabled) {
+          this.temp_value = this.value;
+          return this.value = index;
+    }
+
+  },
+      star_out: function() {
+        var self = this;
+
+        if (!this.disabled) {
+
+          return this.value = this.temp_value;
+        }
+      },
       setRanking: function(value, index) {
         if (!this.disabled) {
           this.temp_value = value;
@@ -249,11 +255,10 @@
     }
     .border-field{
         box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 12px -5px rgba(153, 153, 153, 0.46);
-        font-size: 13px;
     }
     .label-right{
         left: 16px!important;
-        font-size: 13px!important;
+        font-size: 18px!important;
     }
     .space-between{
         justify-content: space-between;
@@ -303,36 +308,5 @@
      @extend %visually-hidden;
      }
     }
-    .header-position {
-        position: relative;
-    }
-    .btn-position{
-        position: absolute;
-        right: 15px;
-        font-weight: bold;
-        top: 20px;
-        font-size: 17px;
-        background-color: transparent!important;
-        box-shadow: none!important;
-        color: gray!important;
-        border-color: transparent;
-        cursor: pointer;
 
-        &:hover, &:visited, &:focus, &:active{
-            background-color: transparent!important;
-            box-shadow: none!important;
-            color: gray!important;
-        }
-    }
-    .box-rate{
-        border-bottom: 1px solid #ddd ;
-
-        & h3{
-            font-size: 13px;
-            display: inline-block;
-            margin-top: 5px;
-        }
-
-
-    }
 </style>

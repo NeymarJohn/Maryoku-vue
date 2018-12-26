@@ -61,8 +61,8 @@
                      required>
             <md-option v-for="hour in durationArray"
                        :key="hour"
-                       :value="hour + ' hours'">
-              {{ hour }}
+                       :value="hour">
+              {{ hour + ' hours' }}
             </md-option>
           </md-select>
           <span class="md-error" v-if="errors.has('duration')">The event duration time is required</span>
@@ -168,7 +168,7 @@
                     <md-option v-for="hour in durationArray"
                                :key="hour"
                                :value="hour + ' hours'">
-                      {{ hour }}
+                      {{ hour + ' hours' }}
                     </md-option>
                   </md-select>
                   <span class="md-error" v-if="errors.has('duration')">The event duration time is required</span>
@@ -348,7 +348,7 @@
         editedEvent.location = this.form.location;
         editedEvent.occasion = this.form.occasion;
         editedEvent.numberOfParticipants = this.form.participants;
-        editedEvent.totalBudget = this.form.budget
+        editedEvent.totalBudget = 2000;//this.form.budget;
         editedEvent.status = this.form.status;
         editedEvent.currency = 'USD'; // HARDCODED, REMOVE AFTER BACK WILL FIX API
         editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
@@ -375,7 +375,7 @@
           location: this.form.location,
           occasion: this.form.occasion,
           numberOfParticipants: this.form.participants,
-          totalBudget: this.form.budget,
+          totalBudget: 2000,//this.form.budget,
           status: this.form.status,
           currency: 'USD', // HARDCODED, REMOVE AFTER BACK WILL FIX API
           participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
@@ -438,6 +438,7 @@
           let eventEndTime = this.getEventStartInMillis() + this.convertHoursToMillis(this.form.duration);
           return eventEndTime;
         }
+        return 0;
       },
       convertHoursToMillis(hours) {
         return hours * 60 * 60 * 1000;

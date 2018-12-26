@@ -3,7 +3,7 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
 
     <div class="md-layout-item md-size-100 text-right">
-      <md-button class="md-rose text-success" @click="routeToNewEvent()">
+      <md-button class="md-success text-success" @click="routeToNewEvent()">
         <md-icon>add_circle</md-icon>
         Create New Event
       </md-button>
@@ -31,7 +31,7 @@
                   <md-icon>edit</md-icon>
                 </md-button>
                 <md-button @click="showDeleteAlert($event, item)" class="md-raised md-primary md-icon-button">
-                  <md-icon>delete</md-icon>
+                  <md-icon>close</md-icon>
                 </md-button>
 
                <!-- <div class="float-right"><md-icon>share</md-icon></div>-->
@@ -87,7 +87,7 @@
 </template>
 
 <script>
-
+  import auth from '@/auth';
   import {
     Tabs,
     ProductCard
@@ -105,25 +105,12 @@
       VueElementLoading
     },
     mounted() {
-      if (this.$store.state.calendarId === null) {
-        Calendar.get().then(calendars => {
-          if (calendars.length === 0) {
-            return;
-          }
-          this.$store.state.calendarId = calendars[0].id;
-
-          this.getCalendarEvents();
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isLoading = false;
-        });
-      } else {
-        this.getCalendarEvents();
-      }
+      this.$store.state.calendarId = this.auth.user.defaultCalendarId;
+      this.getCalendarEvents();
     },
     data() {
       return {
+        auth: auth,
         product3: "static/img/shutterstock_289440710.png",
         recentEvents: [],
         upcomingEvents: [],

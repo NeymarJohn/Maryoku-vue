@@ -10,6 +10,7 @@ const API_URL = `${HOSTNAME}`;
 const REGISTRATION_URL = `${API_URL}/1/register`;
 const SESSION_URL = `${API_URL}/api/login`;
 const CURRENT_USER_URL = `${API_URL}/1/me`;
+const LOGOUT_USER_URL = `${API_URL}/api/logout`;
 
 const TOKEN_KEY = "manage_id_token";
 
@@ -27,7 +28,7 @@ export default {
 
         if (redirect) {
           context.$router.push({ path: redirect });
-        }a
+        }
       }, (resp) => {
         context.error = resp.body;
       });
@@ -45,7 +46,9 @@ export default {
 
   unsetToken() {
     window.localStorage.removeItem(TOKEN_KEY);
-    this.user.authenticated = false;
+    this.user = {
+      authenticated: false
+    }
   },
 
   currentUser(context, required) {
@@ -57,6 +60,9 @@ export default {
         this.user.username = resp.data.username;
         this.user.avatar =  resp.data.pictureUrl;
         this.user.displayName = resp.data.displayName;
+        this.user.defaultGroupId = resp.data.defaultGroupId;
+        this.user.defaultCalendarId = resp.data.defaultCalendarId;
+
         this.setHeaders(context);
         // if (required){
         //   context.$router.push({
@@ -89,18 +95,23 @@ export default {
   },
 
   logout(context, options) {
-    /* context.$http.delete(SESSION_URL, options)
+    context.$http.get(LOGOUT_USER_URL, options)
       .then(data => {
-        window.localStorage.removeItem(TOKEN_KEY)
-        this.user.authenticated = false
-        context.$router.push({path: '/signin'})
+        window.localStorage.removeItem(TOKEN_KEY);
+        this.user = {
+          authenticated: false
+        }
+        context.$http.defaults.headers.Authorization = null;
+        context.$router.push({ path: '/signin' });
       }, error => {
-
-      }) */
-    window.localStorage.removeItem(TOKEN_KEY);
-    this.user.authenticated = false;
-    context.$http.defaults.headers.Authorization = null;
-    context.$router.push({ path: '/signin' });
+        console.log(error);
+        window.localStorage.removeItem(TOKEN_KEY);
+        this.user = {
+          authenticated: false
+        }
+        context.$http.defaults.headers.Authorization = null;
+        context.$router.push({ path: '/signin' });
+      });
   },
 
   checkAuth() {
@@ -117,5 +128,4 @@ export default {
     }
     return {};
   },
-
 };
