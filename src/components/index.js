@@ -16,6 +16,7 @@ import LockCard from "./Cards/LockCard.vue";
 import LoginCard from "./Cards/LoginCard.vue";
 import StatsCard from "./Cards/StatsCard.vue";
 import ChartCard from "./Cards/ChartCard.vue";
+import ChartComponent from "./Cards/ChartComponent.vue";
 import TestimonialCard from "./Cards/TestimonialCard.vue";
 import GlobalSalesCard from "./Cards/GlobalSalesCard.vue";
 import NavTabsCard from "./Cards/NavTabsCard.vue";
@@ -51,6 +52,7 @@ export {
   StatsCard,
   LoginCard,
   ChartCard,
+  ChartComponent,
   GlobalSalesCard,
   NavTabsCard,
   ProductCard,

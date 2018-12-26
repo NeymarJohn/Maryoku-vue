@@ -48,8 +48,7 @@
           </md-table-row>
         </md-table>
         <p class="text-danger text-center" v-if="!componentObject.values.length">
-          No records were added yet.
-          <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalComponent({}, null)'>Go ahead and add one!</a>
+          <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalComponent({}, null)'>Add requirements for <strong>{{componentObject.componentId}}</strong></a>
         </p>
         <md-button class="md-button md-block md-primary md-size-15 md-layout-item center-icon" @click.native='showModalComponent({}, null)' v-if="!readonly && componentObject.values.length">
           <i class="material-icons">add</i> Add
@@ -90,7 +89,7 @@
           </md-table-row>
         </md-table>
         <p class="text-danger text-center" v-if="!componentObject.vendors.length">
-          No records were added yet.
+          No vendors were added yet.
           <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalVendors({}, null)'>Go ahead and add one!</a>
         </p>
         <md-button class="md-button md-block md-primary md-size-15 md-layout-item center-icon" @click.native='showModalVendors({}, null)' v-if="!readonly && vendorsObjectsArray.length">
@@ -99,30 +98,37 @@
       </template>
 
       <template slot="tab-pane-3">
-        <md-table table-header-color="green" class="components-table" v-if="componentObject.todos.length" :class="readonly ? 'readonly': ''">
-          <!--<md-table-row>
-            <md-table-head>What</md-table-head>
-            <md-table-head>Due Date</md-table-head>
-            <md-table-head>Assign To</md-table-head>
-            <md-table-head>Status</md-table-head>
-            <md-table-head></md-table-head>
-          </md-table-row>-->
-          <event-todo-row v-for="(item, index) in componentObject.todos"
-                          v-if="item !== null"
-                          :showModalTodo="showModalTodo"
-                          :showSwal="showSwalItems"
-                          :todoItem="item"
-                          :todoIndex="index"
-                          :key="'todo-' + index">
-          </event-todo-row>
-        </md-table>
+        <div class="md-layout">
+          <div class="md-layout-item md-size-5" style="margin: 0; padding: 0;">
+            <md-button class="md-icon-button md-info md-fab md-round" style="height: 24px; width: 24px; min-width: 24px; min-height: 24px; line-height: 24px;"
+                       @click="showModalTodo({}, null)" v-if="!readonly && componentObject.todos.length">
+              <i class="material-icons">add</i>
+            </md-button>
+          </div>
+          <div class="md-layout-item md-size-95" style="padding: 0;">
+            <md-table table-header-color="green" class="components-table" v-if="componentObject.todos.length" :class="readonly ? 'readonly': ''">
+              <!--<md-table-row>
+                <md-table-head>What</md-table-head>
+                <md-table-head>Due Date</md-table-head>
+                <md-table-head>Assign To</md-table-head>
+                <md-table-head>Status</md-table-head>
+                <md-table-head></md-table-head>
+              </md-table-row>-->
+              <event-todo-row v-for="(item, index) in componentObject.todos"
+                              v-if="item !== null"
+                              :showModalTodo="showModalTodo"
+                              :showSwal="showSwalItems"
+                              :todoItem="item"
+                              :todoIndex="index"
+                              :key="'todo-' + index">
+              </event-todo-row>
+            </md-table>
+          </div>
+        </div>
         <p class="text-danger text-center" v-if="!componentObject.todos.length">
-          No records were added yet.
+          No todos were added yet.
           <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalTodo({}, null)'>Go ahead and add one!</a>
         </p>
-        <md-button class="md-button md-block md-primary md-size-15 md-layout-item center-icon" @click="showModalTodo({}, null)" v-if="!readonly && componentObject.todos.length">
-          <i class="material-icons">add</i> Add
-        </md-button>
       </template>
     </event-tabs>
 
@@ -140,7 +146,7 @@
           <md-icon v-if="navPillsIcons">{{tabIcon[index]}}</md-icon>
         </md-list-item>
       </md-list>
-      <event-modal-inspirations ref="inspirationsModal" v-if="componentObject.id"></event-modal-inspirations>
+      <!--<event-modal-inspirations ref="inspirationsModal" v-if="componentObject.id"></event-modal-inspirations>-->
       <event-modal-vendor ref="vendorsModal"
                           :v-bind:readonly="$props.readonly"
                           :vendorItem="vendorItem"

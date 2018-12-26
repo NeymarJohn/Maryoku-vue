@@ -105,9 +105,7 @@
       };
     },
     mounted() {
-      console.log(auth.user);
       this.avatar = auth.user.avatar != null ? auth.user.avatar : "static/img/faces/avatar.jpg";
-      console.log("Avatar was set to: " + this.avatar);
     },
     methods: {
       toggleSidebar() {
