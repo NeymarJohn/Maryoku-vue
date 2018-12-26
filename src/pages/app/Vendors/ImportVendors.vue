@@ -1,7 +1,10 @@
 <template>
       <div class="md-layout-item md-size-100 wizard-pos">
-            <simple-wizard v-if="openWizard" :removeHeader="false" data-color="rose">
-              <wizard-tab>
+            <simple-wizard  v-if="openWizard" :removeHeader="false" data-color="rose">
+              <wizard-tab :before-change="() => sendCSVFile()">
+                <template slot="label">
+                  Upload file
+                </template>
                 <section ref="step1">
                   <div class="panel-body">
                     <div class="upload-option">
@@ -23,19 +26,54 @@
               </wizard-tab>
 
               <wizard-tab>
-                <section class="table-section"  ref="step2">
+              <template slot="label">
+                Assign Columns
+              </template>
+              <section class="table-section"  ref="step2">
+                <table class="border-table" v-if="parse_csv">
+                  <thead>
+                  <tr style="border-top: none;">
+                    <th v-for="(key, index) in parse_header"
+                        @click="sortBy(key)"
+                        :class="{ active: sortKey == key }">
+                      <md-field>
+                        <md-select id="remove-border" @input="setCSV($event, index)"  v-model="models[index].value" name="select">
+                          <md-option v-for="(item, index) in listOfTypes" :value="item.name" :key="index">{{ item.displayName }}</md-option>
+
+                        </md-select>
+                      </md-field>
+
+                    </th>
+                  </tr>
+                  </thead>
+                  <tr v-for="(csv) in parse_csv">
+                    <td v-for="(value) in csv">
+                      {{ value }}
+                    </td>
+                  </tr>
+
+                </table>
+
+              </section>
+            </wizard-tab>
+
+              <wizard-tab>
+                <template slot="label">
+                  View results
+                </template>
+                <section class="table-section"  ref="step3">
                   <table class="border-table" v-if="parse_csv">
                     <thead>
                     <tr style="border-top: none;">
                       <th v-for="(key, index) in parse_header"
                           @click="sortBy(key)"
                           :class="{ active: sortKey == key }">
-                          <md-field>
-                              <md-select id="remove-border" @input="setCSV($event, index)"  v-model="models[index].value" name="select">
-                                  <md-option v-for="(item, index) in listOfTypes" :value="item.name" :key="index">{{ item.displayName }}</md-option>
+                        <md-field>
+                          <!--<md-select id="remove-border" @input="setCSV($event, index)"  v-model="models[index].value" name="select">-->
+                            <!--<md-option v-for="(item, index) in listOfTypes" :value="item.name" :key="index">{{ item.displayName }}</md-option>-->
 
-                              </md-select>
-                          </md-field>
+                          <!--</md-select>-->
+                        </md-field>
 
                       </th>
                     </tr>
@@ -47,27 +85,28 @@
                     </tr>
 
                   </table>
-                    <md-button class="finish-btn" @click="sendCSVFile">
-                      FINISH
-                    </md-button>
+                  <md-button class="finish-btn" >
+                    FINISH
+                  </md-button>
                 </section>
               </wizard-tab>
             </simple-wizard>
     </div>
 </template>
 <script>
-  import CreateModal from './CreateModal/';
-  import VendorsTable from './Table';
   import Vendors from "@/models/Vendors";
+  import VendorsFile from "@/models/VendorsFile";
+  import vendorsModule from "./vendors.vuex"
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import {SimpleWizard, WizardTab} from "@/components";
   import swal from "sweetalert2";
-    import VueElementLoading from 'vue-element-loading';
+  import VueElementLoading from 'vue-element-loading';
   export default {
     components:{
       SimpleWizard,
       WizardTab,
     },
-      data() {
+      data () {
           return {
               openWizard: true,
               channel_name: '',
@@ -115,8 +154,12 @@
               parse_header: [],
               parse_csv: [],
               sortOrders: {},
-              sortKey: ''
+              sortKey: '',
+              rawCSVFile: null,
           };
+      },
+      created () {
+        this.$store.registerModule('vendorsVuex', vendorsModule);
       },
       filters: {
           capitalize: function (str) {
@@ -124,6 +167,7 @@
           }
       },
       methods: {
+          ...mapMutations('vendorsVuex', ['setFileToState']),
           sortBy: function (key) {
               let vm = this
               vm.sortKey = key
@@ -156,8 +200,12 @@
           loadCSV(e) {
               let vm = this
               if (window.FileReader) {
+                  let rawCSVFile = e.target.files[0];
                   let reader = new FileReader();
-                  reader.readAsText(e.target.files[0]);
+                  console.log('CSV file is: ', rawCSVFile);
+                  this.setFileToState(rawCSVFile);
+                  this.rawCSVFile = rawCSVFile;
+                  reader.readAsText(rawCSVFile);
                   // Handle errors load
                   reader.onload = function (event) {
                       let csv = event.target.result;
@@ -173,44 +221,19 @@
               }
           },
           async sendCSVFile() {
-              let finalData = [];
-              let vm = this;
+            let reader = new FileReader();
+            let _this = this;
 
-              this.parse_csv.forEach((csvValue, csvIndex) => {
-                  let tempVendorObject = {
-                      vendorDisplayName: null,
-                      productsCategory: 'test',
-                      vendorWebsite: null,
-                      vendorAddressLine1: null,
-                      vendorMainEmail: null,
-                      vendorMainPhoneNumber: null,
-                      vendorCategory: 'test',
-                      vendorAvailabilityOptions: 'test',
-                      vendorCancellationPolicy: 'test',
-                      vendorCity: 'test',
-                      vendorRefundPolicy: 'test'
-                  }
-
-                  csvValue.forEach((value, index) => {
-                      tempVendorObject[this.models[index].value] = value;
-                  });
-                  finalData.push(tempVendorObject);
-
-
+            reader.onload = e => {
+              let vendorsFile = new VendorsFile({vendorsFile: e.target.result});
+              vendorsFile.save().then(result => {
+                console.log(result);
               })
-
-              finalData.forEach((value, index) => {
-                  let vendor = new Vendors({});
-                  vendor.attach(value);
-              });
-
-
-              swal("Good job!", "You clicked the finish button!", "success");
-              this.openWizard = false;
-
-              this.$router.push('/vendors');
-
-
+                .catch((error) => {
+                  console.log(error);
+                });
+            };
+            reader.readAsDataURL(document.getElementById('csv_file').files[0]);
           }
       }
   };

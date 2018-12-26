@@ -28,7 +28,7 @@ export default {
 
         if (redirect) {
           context.$router.push({ path: redirect });
-        }
+        }a
       }, (resp) => {
         context.error = resp.body;
       });
@@ -60,9 +60,10 @@ export default {
         this.user.username = resp.data.username;
         this.user.avatar =  resp.data.pictureUrl;
         this.user.displayName = resp.data.displayName;
+
+
         this.user.defaultGroupId = resp.data.defaultGroupId;
         this.user.defaultCalendarId = resp.data.defaultCalendarId;
-
         this.setHeaders(context);
         // if (required){
         //   context.$router.push({
@@ -128,4 +129,5 @@ export default {
     }
     return {};
   },
+
 };
