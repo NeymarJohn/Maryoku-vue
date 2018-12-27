@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" isFullScreen/>
 
     <div class="md-layout-item md-size-100">
       <event-actions-edit :formData="formData"
@@ -35,8 +35,32 @@
         </md-card-content>
       </md-card>-->
     </div>
-
-    <div class="md-layout-item md-size-70 md-small-size-100 scrollable-container">
+    <div  class="md-layout-item md-size-70 md-small-size-100 scrollable-container" v-if="components == null || !components.length">
+      <pricing-card card-class="md-card-plain" icon-color="icon-black">
+        <h6 slot="category" class="category">Event Components</h6>
+        <md-icon slot="icon">extension</md-icon>
+        <h3 slot="title" class="title black-color">Space, Catering, Decorations and more ...</h3>
+        <p slot="description" class="card-description">Plan and manage here all the ingredients for a successful event.</p>
+        <!--<md-button slot="footer" class="md-info"><md-icon>add</md-icon> Event Component</md-button>-->
+        <drop-down slot="footer" direction="down" ref="dropdown" class="dropdown-component-button empty-timeline">
+          <md-button slot="title" class="md-info md-block" data-toggle="dropdown">
+            <md-icon>add</md-icon> Add Event Component
+          </md-button>
+          <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
+            <li v-for="item in componentsList" :key="item.id" @click="createNewComponent($event, item)">
+              <a :class="item.childComponents ? 'dropdown-toggle' : ''">
+                {{ item.value }}
+                <ul class="dropdown-menu" v-if="item.childComponents">
+                  <li v-for="subItem in item.childComponents" :key="subItem.id" @click="createNewComponent($event, subItem)">
+                    <a>{{ subItem.title }}</a></li>
+                </ul>
+              </a>
+            </li>
+          </ul>
+        </drop-down>
+      </pricing-card>
+    </div>
+    <div class="md-layout-item md-size-70 md-small-size-100 scrollable-container"  v-if="components !== null && components.length">
 
       <time-line plain :type="'simple'" class="mt-0">
 
@@ -56,11 +80,11 @@
 
         </event-card-component>
 
-        <time-line-item inverted transparent badge-type="info" badge-icon="add" class="empty-timeline" style="text-align: center;">
+        <time-line-item inverted transparent badge-type="info" badge-icon="chevron_right" class="empty-timeline" style="text-align: center;">
           <div slot="content">
             <drop-down direction="down" ref="dropdown" class="dropdown-component-button">
               <md-button slot="title" class="md-info md-block" data-toggle="dropdown">
-                Add Event Component <i class="fa fa-chevron-right"></i>
+                <md-icon>add</md-icon> Event Component
               </md-button>
               <ul class="dropdown-menu" :class="{'dropdown-menu-right': responsive}">
                 <li v-for="item in componentsList" :key="item.id" @click="createNewComponent($event, item)">
@@ -98,7 +122,7 @@
   import moment from 'moment';
   import VueElementLoading from 'vue-element-loading';
   import Vue from 'vue';
-  import { TimeLine, TimeLineItem } from "@/components";
+  import { TimeLine, TimeLineItem, PricingCard } from "@/components";
   import EventActionsEdit from './components/EventActionsEdit';
 
   export default {
@@ -109,6 +133,7 @@
       TimeLine,
       TimeLineItem,
       EventActionsEdit,
+      PricingCard,
     },
     data: () => ({
       responsive: false,

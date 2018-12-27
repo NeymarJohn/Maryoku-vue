@@ -4,7 +4,7 @@
     <md-card>
       <md-card-header class="md-card-header-text md-card-header-rose">
         <div class="card-text">
-          <h4 class="title2">Event Details</h4>
+          <h6 class="title2">Event Details</h6>
         </div>
       </md-card-header>
       <md-card-content>
@@ -109,7 +109,7 @@
     <md-card>
       <md-card-header class="md-card-header-text md-card-header-rose">
         <div class="card-text">
-          <h4 class="title2">Budget Control</h4>
+          <h6 class="title2">Budget Control</h6>
         </div>
       </md-card-header>
       <md-card-content>

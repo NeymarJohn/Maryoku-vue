@@ -14,7 +14,7 @@
       </div>
     </div>-->
     <event-tabs slot="header"
-                color-button="info"
+                color-button="rose"
                 :tab-name="['Requirements', 'Vendors', 'Todo']"
                 :componentTitle="componentTitle"
                 :readonly="readonly"
@@ -23,78 +23,92 @@
                 :showSwalComponent="showSwalComponent">
 
       <template slot="tab-pane-1">
-        <md-table v-model="componentObject.values" table-header-color="green" v-if="componentObject.values.length" class="components-table" :class="readonly ? 'readonly': ''">
-          <!--<md-table-row>
-            <md-table-head>Property Name</md-table-head>
-            <md-table-head>Value</md-table-head>
-            <md-table-head>Comment</md-table-head>
-            <md-table-head></md-table-head>
-          </md-table-row>-->
+        <div class="md-layout">
+          <div class="md-layout-item md-size-5" style="margin: 0; padding: 0;">
+            <md-button class="md-icon-button md-info md-fab md-round" style="height: 24px; width: 24px; min-width: 24px; min-height: 24px; line-height: 24px;"
+                       @click.native='showModalComponent({}, null)' v-if="!readonly && componentObject.values.length">
+              <i class="material-icons">add</i>
+            </md-button>
+          </div>
+          <div class="md-layout-item md-size-95" style="padding: 0;">
+            <md-table v-model="componentObject.values" table-header-color="green" v-if="componentObject.values.length" class="components-table" :class="readonly ? 'readonly': ''">
+              <md-table-row>
+                <md-table-head>Requirement</md-table-head>
+                <md-table-head>Value</md-table-head>
+                <!--<md-table-head>Comment</md-table-head>-->
+                <md-table-head></md-table-head>
+              </md-table-row>
 
-          <md-table-row slot="md-table-row"
-                        v-for="(item, index) in componentObject.values"
-                        v-if="item !== null"
-                        :key="'component-' + index"
-                        @click.native="showModalComponent(item, index)">
-            <md-table-cell>{{ item.title }}</md-table-cell>
-            <md-table-cell>{{ item.value }}</md-table-cell>
-            <!--<md-table-cell>{{ item.comment }}</md-table-cell>-->
-            <md-table-cell class="visible-on-hover">
-              <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'values')" v-if="!readonly">
-                <md-icon>delete</md-icon>
-              </md-button>
-            </md-table-cell>
-            <md-tooltip v-if="item.comment">{{item.comment}}</md-tooltip>
-          </md-table-row>
-        </md-table>
+              <md-table-row slot="md-table-row"
+                            v-for="(item, index) in componentObject.values"
+                            v-if="item !== null"
+                            :key="'component-' + index"
+                            @click.native="showModalComponent(item, index)">
+                <md-table-cell>{{ item.title }}</md-table-cell>
+                <md-table-cell>{{ item.value }}</md-table-cell>
+                <!--<md-table-cell>{{ item.comment }}</md-table-cell>-->
+                <md-table-cell class="visible-on-hover">
+                  <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'values')" v-if="!readonly">
+                    <md-icon>delete</md-icon>
+                  </md-button>
+                </md-table-cell>
+                <md-tooltip v-if="item.comment">{{item.comment}}</md-tooltip>
+              </md-table-row>
+            </md-table>
+          </div>
+        </div>
         <p class="text-danger text-center" v-if="!componentObject.values.length">
           <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalComponent({}, null)'>Add requirements for <strong>{{componentObject.componentId}}</strong></a>
         </p>
-        <md-button class="md-button md-block md-primary md-size-15 md-layout-item center-icon" @click.native='showModalComponent({}, null)' v-if="!readonly && componentObject.values.length">
-          <i class="material-icons">add</i> Add
-        </md-button>
       </template>
 
       <template slot="tab-pane-2">
-        <md-table v-model="vendorsObjectsArray" table-header-color="green" class="components-table" v-if="vendorsObjectsArray.length" :class="readonly ? 'readonly': ''">
-          <!--<md-table-row>
-            <md-table-head>Vendor Name</md-table-head>
-            <md-table-head>Contact Person</md-table-head>
-            <md-table-head>Email</md-table-head>
-            <md-table-head>Phone</md-table-head>
-            <md-table-head>Cost</md-table-head>
-            <md-table-head></md-table-head>
-          </md-table-row>-->
-          <md-table-row slot="md-table-row"
-                        v-for="(item, index) in vendorsObjectsArray"
-                        v-if="item !== null"
-                        :key="'vendor-' + index"
-                        @click.native="showModalVendors(item, index)">
-            <md-table-cell>{{ item.vendorDisplayName }}</md-table-cell>
-            <!--<md-table-cell>{{ item.contactPerson }}</md-table-cell>
-            <md-table-cell>{{ item.vendorMainEmail }}</md-table-cell>
-            <md-table-cell>{{ item.vendorMainPhoneNumber }}</md-table-cell>-->
-            <md-table-cell>${{ item.cost }}</md-table-cell>
-            <md-table-cell class="visible-on-hover min-actions">
-              <div class="actions-flex">
-                <!--<md-button class="md-raised md-primary md-icon-button" @click="sentProposalRequest($event)" v-if="!readonly && shouldUpdate">
-                  <md-icon>visibility</md-icon>
-                  <md-tooltip md-direction="top">Request Proposal</md-tooltip>
-                </md-button>-->
-                <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'vendors')" v-if="!readonly">
-                  <md-icon>delete</md-icon>
-                </md-button>
-              </div>
-            </md-table-cell>
-          </md-table-row>
-        </md-table>
+        <div class="md-layout">
+          <div class="md-layout-item md-size-5" style="margin: 0; padding: 0;">
+            <md-button class="md-icon-button md-info md-fab md-round" style="height: 24px; width: 24px; min-width: 24px; min-height: 24px; line-height: 24px;"
+                       @click.native='showModalVendors({}, null)' v-if="!readonly && vendorsObjectsArray.length">
+              <i class="material-icons">add</i>
+            </md-button>
+          </div>
+          <div class="md-layout-item md-size-95" style="padding: 0;">
+            <md-table v-model="vendorsObjectsArray" table-header-color="green" class="components-table" v-if="vendorsObjectsArray.length" :class="readonly ? 'readonly': ''">
+              <md-table-row>
+                <md-table-head>Vendor Name</md-table-head>
+                <!--<md-table-head>Contact Person</md-table-head>
+                <md-table-head>Email</md-table-head>
+                <md-table-head>Phone</md-table-head>-->
+                <md-table-head>Cost</md-table-head>
+                <md-table-head></md-table-head>
+              </md-table-row>
+              <md-table-row slot="md-table-row"
+                            v-for="(item, index) in vendorsObjectsArray"
+                            v-if="item !== null"
+                            :key="'vendor-' + index"
+                            @click.native="showModalVendors(item, index)">
+                <md-table-cell>{{ item.vendorDisplayName }}</md-table-cell>
+                <!--<md-table-cell>{{ item.contactPerson }}</md-table-cell>
+                <md-table-cell>{{ item.vendorMainEmail }}</md-table-cell>
+                <md-table-cell>{{ item.vendorMainPhoneNumber }}</md-table-cell>-->
+                <md-table-cell>${{ item.cost }}</md-table-cell>
+                <md-table-cell class="visible-on-hover min-actions">
+                  <div class="actions-flex">
+                    <!--<md-button class="md-raised md-primary md-icon-button" @click="sentProposalRequest($event)" v-if="!readonly && shouldUpdate">
+                      <md-icon>visibility</md-icon>
+                      <md-tooltip md-direction="top">Request Proposal</md-tooltip>
+                    </md-button>-->
+                    <md-button class="md-raised md-primary md-icon-button" @click="showSwalItems($event, index, 'vendors')" v-if="!readonly">
+                      <md-icon>delete</md-icon>
+                    </md-button>
+                  </div>
+                </md-table-cell>
+              </md-table-row>
+            </md-table>
+          </div>
+        </div>
         <p class="text-danger text-center" v-if="!componentObject.vendors.length">
           No vendors were added yet.
           <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalVendors({}, null)'>Go ahead and add one!</a>
         </p>
-        <md-button class="md-button md-block md-primary md-size-15 md-layout-item center-icon" @click.native='showModalVendors({}, null)' v-if="!readonly && vendorsObjectsArray.length">
-          <i class="material-icons">add</i> Add
-        </md-button>
       </template>
 
       <template slot="tab-pane-3">
@@ -107,13 +121,13 @@
           </div>
           <div class="md-layout-item md-size-95" style="padding: 0;">
             <md-table table-header-color="green" class="components-table" v-if="componentObject.todos.length" :class="readonly ? 'readonly': ''">
-              <!--<md-table-row>
-                <md-table-head>What</md-table-head>
+              <md-table-row>
+                <md-table-head>To Do</md-table-head>
                 <md-table-head>Due Date</md-table-head>
-                <md-table-head>Assign To</md-table-head>
-                <md-table-head>Status</md-table-head>
+                <!--<md-table-head>Assign To</md-table-head>
+                <md-table-head>Status</md-table-head>-->
                 <md-table-head></md-table-head>
-              </md-table-row>-->
+              </md-table-row>
               <event-todo-row v-for="(item, index) in componentObject.todos"
                               v-if="item !== null"
                               :showModalTodo="showModalTodo"

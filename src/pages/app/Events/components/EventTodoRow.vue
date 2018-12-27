@@ -1,7 +1,7 @@
 <template>
   <md-table-row slot="md-table-row" @click.native="showModalTodo(todoItem, todoIndex)">
     <md-table-cell>{{ todoItem.title }}</md-table-cell>
-    <!--<md-table-cell>{{ todoItem.dueDateMillis | moment }}</md-table-cell>-->
+    <md-table-cell>{{ todoItem.dueDateMillis | moment }}</md-table-cell>
     <!--<md-table-cell>{{ todoItem.assignee }}</md-table-cell>
     <md-table-cell>{{ todoItem.status }}</md-table-cell>-->
     <md-table-cell class="visible-on-hover" v-if="!readonly">

@@ -27,7 +27,7 @@
 }
 
 .md-table-head{
-  padding: 12px 8px;
+  padding: 2px 8px;
 }
 
 .md-tabs-content table thead{
@@ -39,15 +39,15 @@
 }
 
 .md-table-cell{
-  padding: 12px 8px;
+  padding: 2px 8px;
   font-size: $font-size-base;
 }
 
 .md-table-head-label{
-  font-size: $font-size-h5;
+  font-size: $font-size-base;
   padding-left: 0;
   padding-right: 10px;
-  font-weight: 400;
+  font-weight: 500;
   color: $gray-dark;
 }
 
@@ -220,13 +220,13 @@
   }
 
   .md-table-head-container.md-ripple{
-    padding: 5px;
+    padding: 1px;
     height: auto;
     overflow: hidden;
   }
 
   table>tbody>tr>td{
-    padding: 5px!important;
+    padding: 0px!important;
     outline: 0;
     max-width: 150px;
     width: 150px;
