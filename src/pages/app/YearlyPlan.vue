@@ -102,15 +102,18 @@
           <md-table class="calendar-grid" style="">
             <tr>
               <th class="weekday-column" style="border-top: none; border-left: none; border-radius: 6px; color: #ddd;">{{selectedYear}}</th>
-              <th v-for="(month,idx) in $moment.monthsShort()" >{{month}}</th>
+              <th class="month-column" v-for="(month,idx) in $moment.monthsShort()" >{{month}}</th>
             </tr>
             <tr v-for="(dayObj,idx) in yearlyCalendarDays" :class="{'weekend-row' : weekendDays[dayObj.weekday]}" style="height: 1px;">
-              <td class="cell-weekday">{{$moment.weekdaysShort(dayObj.weekday)}}</td>
-              <td v-for="(month,idx) in $moment.monthsShort()" style="padding:0;height: inherit;">
-                <span class="cell-date-number" :class="[{'cell-date-number-hidden' : dayObj.weekdayObj[idx] === '0'}]">{{dayObj.weekdayObj[idx]}}</span>
-                <div class="cell cell-active" v-if="dayObj.weekdayObj[idx] !== '0'" :id="`${dayObj.year}-${(idx+1).padStart(2,'0')}-${dayObj.weekdayObj[idx].padStart(2,'0')}`">
+              <td class="weekday-column cell-weekday">{{$moment.weekdaysShort(dayObj.weekday)}}</td>
+              <td v-for="(month,idx) in $moment.monthsShort()" class="month-column" style="padding:0;height: inherit;">
+                <!--<span class="cell-date-number" :class="[{'cell-date-number-hidden' : dayObj.weekdayObj[idx] === '0'}]">{{dayObj.weekdayObj[idx]}}</span>
+                <div class="cell cell-active" v-if="dayObj.weekdayObj[idx] !== '0'" :ref="`ref${dayObj.year}${(idx+1).padStart(2,'0')}${dayObj.weekdayObj[idx].padStart(2,'0')}`">
                 </div>
-                <div class="cell" v-else :id="`${dayObj.year}-${(idx+1).padStart(2,'0')}-${dayObj.weekdayObj[idx].padStart(2,'0')}`">
+                <div class="cell" v-else></div>-->
+                <div class="cell cell-active">
+                  <span class="cell-date-number" :class="[{'cell-date-number-hidden' : dayObj.weekdayObj[idx] === '0'}]">{{dayObj.weekdayObj[idx]}}</span>
+                  <span :class="[{'cell-date-number-hidden' : dayObj.weekdayObj[idx] === '0'}]"></span>
                 </div>
               </td>
             </tr>
@@ -149,6 +152,11 @@
     },
     mounted(){
       this.yearlyCalendarDays = this.calcCalendarDays(this.selectedYear);
+      let that = this;
+      setTimeout(function(){
+        console.log(that.$refs['ref20180101']);
+        that.$refs['ref20180101'][0].innerHTML = "Abc very long very long";
+      },1000);
     },
     methods: {
       calcCalendarDays(year) {
@@ -162,7 +170,6 @@
           monthCounters[monthCounter] = { counter: 1, lastMonthDay: theDate.getDate()};
         }
 
-        console.log(monthCounters);
         let preventLoop = 0;
 
         while (Object.keys(hasMoreDays).length < 12 && preventLoop < 3650) {
@@ -195,48 +202,26 @@
             }
             calDays.push({year: year, weekday: weekday, weekdayObj: weekdayObj});
           }
-          console.log(Object.keys(hasMoreDays));
+
         }
 
-        console.log(calDays);
         return calDays;
       }
     },
     computed: {
-      /*calDays() {
-        let result = [];
-        let selectedYearPlan = this.yearlyPlan[this.selectedYear];
-        let noMoreDays = false;
-
-        while (!noMoreDays){
-          for (let weekDayNumber=0; weekDayNumber < 7; weekDayNumber++){
-            let weekdaysShort = this.$moment.weekdaysShort(weekDayNumber);
-
-            let calDay = { day: weekdaysShort, months: { } };
-
-            for (let month=0; month < 12; month++){
-              let yearPlanDayOfWeekNumber = selectedYearPlan[month+1]['01'].dayOfWeekNumber;
-              let dateTextValue = '';
-              if (weekDayNumber === yearPlanDayOfWeekNumber){
-                console.log(weekDayNumber);
-                dateTextValue = '1';
-                noMoreDays = true;
-              }
-              let monthName = this.months[month].toLowerCase();
-              calDay.months[month] = dateTextValue;
-            }
-
-            result.push(calDay)
-          }
-        }
-
-        return result;
-      }*/
     }
   };
 </script>
 <style >
 
+  .calendar-grid table {
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   .calendar-grid td {
     text-align: center;
     border: 1px dotted #ccc;
@@ -249,10 +234,22 @@
 
   .calendar-grid .weekday-column {
     width: 2.5%;
+    min-width: 2.5%;
+    max-width: 2.5%;
+    overflow: hidden;
   }
 
   .calendar-grid .month-column {
-    width: 8.125%;
+    width: 1px;
+    min-width: 1px;
+    max-width: 1px;
+
+  }
+
+  .calendar-grid td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .calendar-grid .weekend-row {
@@ -261,16 +258,24 @@
 
   .calendar-grid .cell {
     width: 100%;
+    max-width: 100%;
+    min-width: 100%;
     height: 100%;
     position: relative;
-    border: 1px solid transparent;
+    padding: 0;
+    margin: 0;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline;
   }
 
   .calendar-grid .cell-active {
     cursor: pointer;
   }
 
-  .calendar-grid .cell-active:hover {
+  .calendar-grid td:hover {
     border: 1px solid lightblue;
   }
 
@@ -278,12 +283,13 @@
     float: left;
     font-size: 12px;
     font-weight: 500;
-    color: #bbb;
-    padding: 3px;
+    color: #999;
+    padding: 3px 6px;
   }
 
   .calendar-grid .cell-date-number-hidden {
     visibility: hidden;
+    display: none;
   }
 
   .calendar-grid .cell-weekday {
