@@ -1,437 +1,293 @@
 <template>
   <div class="md-layout">
-    <!--<div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
-      <stats-card header-color="blue">
-        <template slot="header">
-          <div class="card-icon">
-            <i class="fab fa-twitter"></i>
-          </div>
-          <p class="category">Folowers</p>
-          <h3 class="title">+<animated-number :value="245"></animated-number>
-          </h3>
-        </template>
-
-        <template slot="footer">
-          <div class="stats">
-             <md-icon>update</md-icon>
-             Just Updated
-          </div>
-        </template>
-      </stats-card>
-    </div>
-    <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
-      <stats-card header-color="rose">
-        <template slot="header">
-          <div class="card-icon">
-            <md-icon>equalizer</md-icon>
-          </div>
-          <p class="category">Website Visits</p>
-          <h3 class="title">
-            <animated-number :value="75"></animated-number>.<animated-number :value="521"></animated-number>
-          </h3>
-        </template>
-
-        <template slot="footer">
-          <div class="stats">
-             <md-icon>local_offer</md-icon>
-             Tracked from Google Analytics
-          </div>
-        </template>
-      </stats-card>
-    </div>
-    <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
-      <stats-card header-color="green">
-        <template  slot="header">
-          <div class="card-icon">
-            <md-icon >store</md-icon>
-          </div>
-          <p class="category">Revenue</p>
-          <h3 class="title">$
-            <animated-number :value="34"></animated-number>,<animated-number :value="245"></animated-number>
-          </h3>
-        </template>
-
-        <template slot="footer">
-          <div class="stats">
-             <md-icon>date_range</md-icon>
-             Last <animated-number :value="24"></animated-number> Hours
-          </div>
-        </template>
-      </stats-card>
-    </div>
-    <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
-      <stats-card header-color="warning">
-        <template slot="header">
-          <div class="card-icon">
-            <md-icon>weekend</md-icon>
-          </div>
-          <p class="category">Bookings</p>
-          <h3 class="title">
-            <animated-number :value="184"></animated-number>
-          </h3>
-        </template>
-
-        <template slot="footer">
-          <div class="stats">
-            <md-icon class="text-danger">warning</md-icon>
-            <a href="#pablo">Get More Space...</a>
-          </div>
-        </template>
-      </stats-card>
-    </div>
-    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
-      <chart-card
-        header-animation="true"
-        :chart-data="emailsSubscriptionChart.data"
-        :chart-options="emailsSubscriptionChart.options"
-        :chart-responsive-options="emailsSubscriptionChart.responsiveOptions"
-        chart-type="Bar"
-        chart-inside-header
-        background-color="rose">
-        <md-icon slot="fixed-button">build</md-icon>
-        <md-button class="md-simple md-info md-just-icon" slot="first-button">
-          <md-icon>refresh</md-icon>
-          <md-tooltip md-direction="bottom">Refresh</md-tooltip>
-        </md-button>
-        <md-button class="md-simple md-just-icon" slot="second-button">
-          <md-icon >edit</md-icon>
-          <md-tooltip md-direction="bottom">Change Date</md-tooltip>
-        </md-button>
-
-        <template slot="content">
-          <h4 class="title">Website Views</h4>
-            <p class="category">
-              Last Campaign Performance
-            </p>
-        </template>
-
-        <template slot="footer">
-          <div class="stats">
-            <md-icon>access_time</md-icon>
-            updated <animated-number :value="10"></animated-number> days ago
-          </div>
-        </template>
-      </chart-card>
-    </div>
-    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
-      <chart-card
-        :chart-data="dailySalesChart.data"
-        :chart-options="dailySalesChart.options"
-        chart-type="Line"
-        chart-inside-header
-        background-color="green">
-        <md-button class="md-simple md-info md-just-icon" slot="first-button">
-          <md-icon>refresh</md-icon>
-          <md-tooltip md-direction="bottom">Refresh</md-tooltip>
-        </md-button>
-        <md-button class="md-simple md-just-icon" slot="second-button">
-          <md-icon >edit</md-icon>
-          <md-tooltip md-direction="bottom">Change Date</md-tooltip>
-        </md-button>
-
-        <template slot="content">
-          <h4 class="title">Daily Sales</h4>
-            <p class="category">
-              <span class="text-success"><i class="fas fa-long-arrow-alt-up"></i> <animated-number :value="55"></animated-number>% </span> increase in today sales.
-            </p>
-        </template>
-
-        <template slot="footer">
-          <div class="stats">
-            <md-icon>access_time</md-icon>
-            updated <animated-number :value="4"></animated-number> minutes ago
-          </div>
-        </template>
-      </chart-card>
-    </div>
-    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
-      <chart-card
-        :chart-data="dataCompletedTasksChart.data"
-        :chart-options="dataCompletedTasksChart.options"
-        chart-type="Line"
-        chart-inside-header
-        background-color="blue">
-        <md-button class="md-simple md-info md-just-icon" slot="first-button">
-          <md-icon>refresh</md-icon>
-          <md-tooltip md-direction="bottom">Refresh</md-tooltip>
-        </md-button>
-        <md-button class="md-simple md-just-icon" slot="second-button">
-          <md-icon >edit</md-icon>
-          <md-tooltip md-direction="bottom">Change Date</md-tooltip>
-        </md-button>
-
-        <template slot="content">
-          <h4 class="title">Completed Tasks</h4>
-            <p class="category">
-              Last Campaign Performance
-            </p>
-        </template>
-
-        <template slot="footer">
-          <div class="stats">
-            <md-icon>access_time</md-icon>
-            campaign sent <animated-number :value="26"></animated-number> minutes ago
-          </div>
-        </template>
-      </chart-card>
-    </div>
     <div class="md-layout-item md-size-100">
-      <global-sales-card header-color="green">
-        <template slot="header">
-          <div class="card-icon">
-            <md-icon>language</md-icon>
+      <md-card style="margin-bottom: 0;">
+        <md-card-header class="md-card-header-text md-card-header-rose">
+          <div class="card-text">
+            <h6 class="title2">Budget Control</h6>
           </div>
-          <h4 class="title">Global Sales by Top Locations</h4>
-        </template>
-
-        <template slot="content">
+        </md-card-header>
+        <md-card-content>
           <div class="md-layout">
-            <div class="md-layout-item md-size-50">
-              <global-sales-table></global-sales-table>
+            <div class="md-layout-item md-size-20">
+              <md-field :class="[{'md-error': errors.has('eventName')}]">
+                <label>Total Annual Budget</label>
+                <md-input v-model="form.eventName"
+                          data-vv-name="eventName"
+                          v-validate= "modelValidations.eventName"
+                          required/>
+                <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
+              </md-field>
             </div>
-            <div class="md-layout-item md-size-50">
-              <async-world-map class="map" :data="mapData"></async-world-map>
+
+            <div class="md-layout-item md-size-15">
+              <md-field :class="[{'md-error': errors.has('eventName')}]">
+                <label>Annual Budget Per Employee</label>
+                <md-input v-model="form.eventName"
+                          data-vv-name="eventName"
+                          v-validate= "modelValidations.eventName"
+                          required/>
+                <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
+              </md-field>
+            </div>
+
+            <div class="md-layout-item md-size-15">
+              <md-field :class="[{'md-error': errors.has('eventName')}]">
+                <label>Events</label>
+                <md-input v-model="form.eventName"
+                          data-vv-name="eventName"
+                          v-validate= "modelValidations.eventName"
+                          required/>
+                <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
+              </md-field>
+            </div>
+
+            <div class="md-layout-item md-size-15">
+              <md-field :class="[{'md-error': errors.has('eventName')}]">
+                <label>Remaining Budget Per Employee</label>
+                <md-input v-model="form.eventName"
+                          data-vv-name="eventName"
+                          v-validate= "modelValidations.eventName"
+                          required/>
+                <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
+              </md-field>
+            </div>
+
+            <div class="md-layout-item md-size-20">
+              <md-field :class="[{'md-error': errors.has('eventName')}]">
+                <label>Total Remaining Budget</label>
+                <md-input v-model="form.eventName"
+                          data-vv-name="eventName"
+                          v-validate= "modelValidations.eventName"
+                          required/>
+                <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
+              </md-field>
+            </div>
+
+            <div class="md-layout-item md-size-15">
+              <md-field :class="[{'md-error': errors.has('eventName')}]">
+                <label>Total Remaining Budget</label>
+                <md-input v-model="form.eventName"
+                          data-vv-name="eventName"
+                          v-validate= "modelValidations.eventName"
+                          required/>
+                <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
+              </md-field>
             </div>
           </div>
-        </template>
-      </global-sales-card>
+        </md-card-content>
+      </md-card>
     </div>
-    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
-      <product-card
-        header-animation="true">
-        <img class="img" slot="imageHeader" :src="product1">
-        <md-icon slot="fixed-button">build</md-icon>
-        <template slot="first-button">
-          <md-icon>art_track</md-icon>
-          <md-tooltip md-direction="bottom">View</md-tooltip>
-        </template>
-        <template slot="second-button">
-          <md-icon >edit</md-icon>
-          <md-tooltip md-direction="bottom">Edit</md-tooltip>
-        </template>
-        <template slot="third-button">
-          <md-icon >close</md-icon>
-          <md-tooltip md-direction="bottom">Remove</md-tooltip>
-        </template>
-        <h4 slot="title" class="title">
-          <a href="#pablo">Cozy 5 Stars Apartment</a>
-        </h4>
-        <div slot="description" class="card-description">
-          The place is close to Barceloneta Beach and bus stop just 2 min by walk and near to "Naviglio" where you can enjoy the main night life in Barcelona.
-        </div>
-        <template slot="footer">
-          <div class="price">
-            <h4>$899/night</h4>
+
+    <div class="md-layout-item md-size-100 ">
+      <md-card style="margin-bottom: 0;">
+        <md-card-header class="md-card-header-text md-card-header-rose">
+          <div class="card-text">
+            <h6 class="title2">Filters</h6>
           </div>
-          <div class="stats">
-            <p class="category">
-              <md-icon>place</md-icon>
-              Barcelona, Spain
-            </p>
-          </div>
-        </template>
-      </product-card>
+        </md-card-header>
+        <md-card-content>Filters</md-card-content>
+      </md-card>
     </div>
-    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
-      <product-card
-        header-animation="true">
-        <img class="img" slot="imageHeader" :src="product2">
-        <md-icon slot="fixed-button">build</md-icon>
-        <template slot="first-button">
-          <md-icon>art_track</md-icon>
-          <md-tooltip md-direction="bottom">View</md-tooltip>
-        </template>
-        <template slot="second-button">
-          <md-icon >edit</md-icon>
-          <md-tooltip md-direction="bottom">Edit</md-tooltip>
-        </template>
-        <template slot="third-button">
-          <md-icon >close</md-icon>
-          <md-tooltip md-direction="bottom">Remove</md-tooltip>
-        </template>
-        <h4 slot="title" class="title">
-          <a href="#pablo">Office Studio</a>
-        </h4>
-        <div slot="description" class="card-description">
-          The place is close to Metro Station and bus stop just 2 min by walk and near to "Naviglio" where you can enjoy the night life in London, UK.
-        </div>
-        <template slot="footer">
-          <div class="price">
-            <h4>$1.119/night</h4>
+
+    <div class="md-layout-item md-size-100 ">
+      <md-card >
+        <md-card-header class="md-card-header-text md-card-header-rose">
+          <div class="card-text">
+            <h6 class="title2">Year Calendar</h6>
           </div>
-          <div class="stats">
-            <p class="category">
-              <md-icon>place</md-icon>
-              London, UK
-            </p>
-          </div>
-        </template>
-      </product-card>
+        </md-card-header>
+        <md-card-content>
+
+          <md-table class="calendar-grid" style="">
+            <tr>
+              <th class="weekday-column" style="border-top: none; border-left: none; border-radius: 6px; color: #ddd;">{{selectedYear}}</th>
+              <th v-for="(month,idx) in $moment.monthsShort()" >{{month}}</th>
+            </tr>
+            <tr v-for="(dayObj,idx) in yearlyCalendarDays" :class="{'weekend-row' : weekendDays[dayObj.weekday]}" style="height: 1px;">
+              <td class="cell-weekday">{{$moment.weekdaysShort(dayObj.weekday)}}</td>
+              <td v-for="(month,idx) in $moment.monthsShort()" style="padding:0;height: inherit;">
+                <span class="cell-date-number" :class="[{'cell-date-number-hidden' : dayObj.weekdayObj[idx] === '0'}]">{{dayObj.weekdayObj[idx]}}</span>
+                <div class="cell cell-active" v-if="dayObj.weekdayObj[idx] !== '0'" :id="`${dayObj.year}-${(idx+1).padStart(2,'0')}-${dayObj.weekdayObj[idx].padStart(2,'0')}`">
+                </div>
+                <div class="cell" v-else :id="`${dayObj.year}-${(idx+1).padStart(2,'0')}-${dayObj.weekdayObj[idx].padStart(2,'0')}`">
+                </div>
+              </td>
+            </tr>
+          </md-table>
+
+        </md-card-content>
+      </md-card>
     </div>
-    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
-      <product-card
-        header-animation="true">
-        <img class="img" slot="imageHeader" :src="product3">
-        <md-icon slot="fixed-button">build</md-icon>
-        <template slot="first-button">
-          <md-icon>art_track</md-icon>
-          <md-tooltip md-direction="bottom">View</md-tooltip>
-        </template>
-        <template slot="second-button">
-          <md-icon >edit</md-icon>
-          <md-tooltip md-direction="bottom">Edit</md-tooltip>
-        </template>
-        <template slot="third-button">
-          <md-icon >close</md-icon>
-          <md-tooltip md-direction="bottom">Remove</md-tooltip>
-        </template>
-        <h4 slot="title" class="title">
-          <a href="#pablo">Beautiful Castle</a>
-        </h4>
-        <div slot="description" class="card-description">
-          The place is close to Metro Station and bus stop just 2 min by walk and near to "Naviglio" where you can enjoy the main night life in Milan.
-        </div>
-        <template slot="footer">
-          <div class="price">
-            <h4>$459/night</h4>
-          </div>
-          <div class="stats">
-            <p class="category">
-              <md-icon>place</md-icon>
-                Milan, Italy
-            </p>
-          </div>
-        </template>
-      </product-card>
-    </div>-->
+    <div class="md-layout-item md-size-100 ">
+
+    </div>
   </div>
 </template>
 
 <script>
-import AsyncWorldMap from "@/components/WorldMap/AsyncWorldMap.vue";
-import {
-  StatsCard,
-  ChartCard,
-  ProductCard,
-  AnimatedNumber,
-  GlobalSalesCard,
-  GlobalSalesTable
-} from "@/components";
 
-export default {
-  components: {
-    StatsCard,
-    ChartCard,
-    AnimatedNumber,
-    ProductCard,
-    GlobalSalesCard,
-    GlobalSalesTable,
-    AsyncWorldMap
-  },
-  data() {
-    return {
-      product1: "static/img/card-2.jpg",
-      product2: "static/img/card-3.jpg",
-      product3: "static/img/card-1.jpg",
-      seq2: 0,
-      mapData: {
-        AU: 760,
-        BR: 550,
-        CA: 120,
-        DE: 1300,
-        FR: 540,
-        GB: 690,
-        GE: 200,
-        IN: 200,
-        RO: 600,
-        RU: 300,
-        US: 2920
-      },
-      dailySalesChart: {
-        data: {
-          labels: ["M", "T", "W", "T", "F", "S", "S"],
-          series: [[12, 17, 7, 17, 23, 18, 38]]
+  export default {
+    components: {
+    },
+    data() {
+      return {
+        selectedYear: new Date().getFullYear(),
+        yearlyCalendarDays: null,
+        weekendDays : [false, false, false, false, false, true, true],
+        form: {
+          eventName: ""
         },
-        options: {
-          lineSmooth: this.$Chartist.Interpolation.cardinal({
-            tension: 0
-          }),
-          low: 0,
-          high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-          chartPadding: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
+        modelValidations: {
+          eventName: {
+            required: true,
           }
-        }
-      },
-      dataCompletedTasksChart: {
-        data: {
-          labels: ["12am", "3pm", "6pm", "9pm", "12pm", "3am", "6am", "9am"],
-          series: [[230, 750, 450, 300, 280, 240, 200, 190]]
         },
+        months : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        weekDays : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+      }
+    },
+    mounted(){
+      this.yearlyCalendarDays = this.calcCalendarDays(this.selectedYear);
+    },
+    methods: {
+      calcCalendarDays(year) {
 
-        options: {
-          lineSmooth: this.$Chartist.Interpolation.cardinal({
-            tension: 0
-          }),
-          low: 0,
-          high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-          chartPadding: {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-          }
+        let calDays = [];
+        let hasMoreDays = {};
+        let monthCounters = [];
+
+        for (let monthCounter=0; monthCounter < 12; monthCounter++) {
+          let theDate = new Date(year, monthCounter+1,0,0,0,0,0);
+          monthCounters[monthCounter] = { counter: 1, lastMonthDay: theDate.getDate()};
         }
-      },
-      emailsSubscriptionChart: {
-        data: {
-          labels: [
-            "Ja",
-            "Fe",
-            "Ma",
-            "Ap",
-            "Mai",
-            "Ju",
-            "Jul",
-            "Au",
-            "Se",
-            "Oc",
-            "No",
-            "De"
-          ],
-          series: [[542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]]
-        },
-        options: {
-          axisX: {
-            showGrid: false
-          },
-          low: 0,
-          high: 1000,
-          chartPadding: {
-            top: 0,
-            right: 5,
-            bottom: 0,
-            left: 0
-          }
-        },
-        responsiveOptions: [
-          [
-            "screen and (max-width: 640px)",
-            {
-              seriesBarDistance: 5,
-              axisX: {
-                labelInterpolationFnc: function(value) {
-                  return value[0];
+
+        console.log(monthCounters);
+        let preventLoop = 0;
+
+        while (Object.keys(hasMoreDays).length < 12 && preventLoop < 3650) {
+
+          preventLoop++;
+
+          for (let weekday=0; weekday < 7; weekday++){
+            let weekdayObj = {};
+            for (let month=0; month < 12; month++){
+              if (monthCounters[month].counter <= monthCounters[month].lastMonthDay) {
+                let theDate = new Date(year, month, monthCounters[month].counter, 0, 0, 0, 0);
+                if (theDate.getDay() === weekday) {
+                  weekdayObj[month] = `${theDate.getDate()}`;
+                  monthCounters[month].counter++;
+                } else {
+                  weekdayObj[month] = '0';
                 }
+              } else {
+                weekdayObj[month] = '0';
+                hasMoreDays[month] = '';
+              }
+
+              if (Object.keys(hasMoreDays).length === 12){
+                break;
               }
             }
-          ]
-        ]
+
+            if (Object.keys(hasMoreDays).length === 12){
+              break;
+            }
+            calDays.push({year: year, weekday: weekday, weekdayObj: weekdayObj});
+          }
+          console.log(Object.keys(hasMoreDays));
+        }
+
+        console.log(calDays);
+        return calDays;
       }
-    };
-  }
-};
+    },
+    computed: {
+      /*calDays() {
+        let result = [];
+        let selectedYearPlan = this.yearlyPlan[this.selectedYear];
+        let noMoreDays = false;
+
+        while (!noMoreDays){
+          for (let weekDayNumber=0; weekDayNumber < 7; weekDayNumber++){
+            let weekdaysShort = this.$moment.weekdaysShort(weekDayNumber);
+
+            let calDay = { day: weekdaysShort, months: { } };
+
+            for (let month=0; month < 12; month++){
+              let yearPlanDayOfWeekNumber = selectedYearPlan[month+1]['01'].dayOfWeekNumber;
+              let dateTextValue = '';
+              if (weekDayNumber === yearPlanDayOfWeekNumber){
+                console.log(weekDayNumber);
+                dateTextValue = '1';
+                noMoreDays = true;
+              }
+              let monthName = this.months[month].toLowerCase();
+              calDay.months[month] = dateTextValue;
+            }
+
+            result.push(calDay)
+          }
+        }
+
+        return result;
+      }*/
+    }
+  };
 </script>
+<style >
+
+  .calendar-grid td {
+    text-align: center;
+    border: 1px dotted #ccc;
+  }
+
+  .calendar-grid th {
+    text-align: center;
+    border: 1px dotted #ccc;
+  }
+
+  .calendar-grid .weekday-column {
+    width: 2.5%;
+  }
+
+  .calendar-grid .month-column {
+    width: 8.125%;
+  }
+
+  .calendar-grid .weekend-row {
+    background-color: rgba(255, 223, 233, 0.5);
+  }
+
+  .calendar-grid .cell {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border: 1px solid transparent;
+  }
+
+  .calendar-grid .cell-active {
+    cursor: pointer;
+  }
+
+  .calendar-grid .cell-active:hover {
+    border: 1px solid lightblue;
+  }
+
+  .calendar-grid .cell-date-number {
+    float: left;
+    font-size: 12px;
+    font-weight: 500;
+    color: #bbb;
+    padding: 3px;
+  }
+
+  .calendar-grid .cell-date-number-hidden {
+    visibility: hidden;
+  }
+
+  .calendar-grid .cell-weekday {
+    font-size: 12px;
+    font-weight: 500;
+  }
+</style>

@@ -59,8 +59,21 @@ axios.interceptors.response.use(function (response) {
 });
 
 Vue.use(VueAxios, axios);
+Vue.use(require('vue-moment'));
 
 Model.$http = axios;
+
+Number.prototype.padStart = function(size, theChar)  {
+  var s = String(this);
+  while (s.length < (size || 2)) {s = "0" + s;}
+  return s;
+};
+
+String.prototype.padStart = function(size, theChar) {
+  var s = String(this);
+  while (s.length < (size || 2)) {s = theChar + s;}
+  return s;
+};
 
 /* eslint-disable no-new */
 new Vue({

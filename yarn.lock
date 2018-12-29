@@ -7124,6 +7124,11 @@ moment@^2.10.2, moment@^2.20.1:
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
   integrity sha1-PCV/mDn8DpP/UxSWMiOeuQeD/2Y=
 
+moment@^2.11.1:
+  version "2.23.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.23.0.tgz#759ea491ac97d54bac5ad776996e2a58cc1bc225"
+  integrity sha512-3IE39bHVqFbWWaPOMHZF98Q9c3LDKGTmypMiTM2QygGXXElkFWIH7GxfmlwmY2vwa+wmNsoYZmG2iusf1ZjJoA==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -10574,6 +10579,13 @@ vue-material@1.0.0-beta-10.2:
   resolved "https://registry.yarnpkg.com/vue-material/-/vue-material-1.0.0-beta-10.2.tgz#c3effea97e0c5a0c696b0051d5ef9c6e6cf2a5ed"
   integrity sha512-DXOUXm6M8zbeJ6LPvP1h/0EhXmCkxNGz2dM/0q4w+lsT9uTaos+YDrwQvJBJcxil3fEw6oHCfhG/peWks+8v7Q==
 
+vue-moment@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/vue-moment/-/vue-moment-4.0.0.tgz#20809d1e7d7fca63d556fb8d008b95993d32f5ea"
+  integrity sha512-lNkEPuA3i3A4q4TDSwOXoRF4Y2vHHdaTOSvpPyGgxoFQP8n4sUh6jU5aJj3FIMlXo5UaHLPIz5hvvpvYx9Wj0w==
+  dependencies:
+    moment "^2.11.1"
+
 vue-notifyjs@^0.4.3:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/vue-notifyjs/-/vue-notifyjs-0.4.3.tgz#4fd099d49753ccbbfd807e80ed7e0e2739176621"
@@ -10582,6 +10594,11 @@ vue-notifyjs@^0.4.3:
 vue-router@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.1.tgz#d9b05ad9c7420ba0f626d6500d693e60092cc1e9"
+
+vue-scrolling-table@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/vue-scrolling-table/-/vue-scrolling-table-0.2.2.tgz#068b74894df578749dfd6b13acfac9e3a7230a47"
+  integrity sha512-d9leE2ZdmGa18jzvDk7T/nTDeGx1haZKRbmOKEbUIdo4yVUIThI8D1N0DevJ/ZvGnTFl5IY2/YfEwSJ0Eog8fw==
 
 vue-style-loader@^3.0.0, vue-style-loader@^3.0.1:
   version "3.1.2"
