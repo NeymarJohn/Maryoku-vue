@@ -1,5 +1,6 @@
 <template>
   <div class="md-layout">
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
     <div class="md-layout-item md-size-100">
       <md-card style="margin-bottom: 0;">
         <md-card-header class="md-card-header-text md-card-header-rose">
@@ -106,14 +107,18 @@
             </tr>
             <tr v-for="(dayObj,idx) in yearlyCalendarDays" :class="{'weekend-row' : weekendDays[dayObj.weekday]}" style="height: 1px;">
               <td class="weekday-column cell-weekday">{{$moment.weekdaysShort(dayObj.weekday)}}</td>
-              <td v-for="(month,idx) in $moment.monthsShort()" class="month-column" style="padding:0;height: inherit;">
-                <!--<span class="cell-date-number" :class="[{'cell-date-number-hidden' : dayObj.weekdayObj[idx] === '0'}]">{{dayObj.weekdayObj[idx]}}</span>
-                <div class="cell cell-active" v-if="dayObj.weekdayObj[idx] !== '0'" :ref="`ref${dayObj.year}${(idx+1).padStart(2,'0')}${dayObj.weekdayObj[idx].padStart(2,'0')}`">
+              <td v-for="(month,idx) in $moment.monthsShort()" class="month-column" style="padding:0;height: inherit;" :class="{'event-cell' : dayObj.weekdayObj[idx].exists && dayObj.weekdayObj[idx].calendarEvents}">
+
+                <div v-if="dayObj.weekdayObj[idx].exists && dayObj.weekdayObj[idx].calendarEvents" class="cell cell-active event-cell" :ref="`ref${dayObj.year}${(idx+1).padStart(2,'0')}${dayObj.weekdayObj[idx].exists ? dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0') : '_'}`">
+                  <span class="cell-date-number event-cell" :class="[{'cell-date-number-hidden' : !dayObj.weekdayObj[idx].exists}]">{{dayObj.weekdayObj[idx].dayOnMonth}}</span>
+                  <span class="event-cell" :ref="`ref${dayObj.year}${(idx+1).padStart(2,'0')}${dayObj.weekdayObj[idx].exists ? dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0') : '_'}_text`" :class="[{'cell-date-number-hidden' : !dayObj.weekdayObj[idx].exists}]">
+                    <router-link :to="{path: `/events/${dayObj.weekdayObj[idx].calendarEvents[0].id}/edit`}">{{dayObj.weekdayObj[idx].calendarEvents[0].title}}</router-link>
+                    <md-tooltip direction="left">{{dayObj.weekdayObj[idx].calendarEvents[0].title}}</md-tooltip>
+                  </span>
                 </div>
-                <div class="cell" v-else></div>-->
-                <div class="cell cell-active">
-                  <span class="cell-date-number" :class="[{'cell-date-number-hidden' : dayObj.weekdayObj[idx] === '0'}]">{{dayObj.weekdayObj[idx]}}</span>
-                  <span :class="[{'cell-date-number-hidden' : dayObj.weekdayObj[idx] === '0'}]"></span>
+
+                <div v-else class="cell cell-active" :ref="`ref${dayObj.year}${(idx+1).padStart(2,'0')}${dayObj.weekdayObj[idx].exists ? dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0') : '_'}`">
+                  <span class="cell-date-number" :class="[{'cell-date-number-hidden' : !dayObj.weekdayObj[idx].exists}]">{{dayObj.weekdayObj[idx].dayOnMonth}}</span>
                 </div>
               </td>
             </tr>
@@ -129,12 +134,18 @@
 </template>
 
 <script>
-
+  import auth from '@/auth';
+  import Calendar from '@/models/Calendar';
+  import VueElementLoading from 'vue-element-loading';
   export default {
     components: {
+      VueElementLoading,
+
     },
     data() {
       return {
+        auth: auth,
+        isLoading: true,
         selectedYear: new Date().getFullYear(),
         yearlyCalendarDays: null,
         weekendDays : [false, false, false, false, false, true, true],
@@ -151,15 +162,30 @@
       }
     },
     mounted(){
-      this.yearlyCalendarDays = this.calcCalendarDays(this.selectedYear);
-      let that = this;
-      setTimeout(function(){
-        console.log(that.$refs['ref20180101']);
-        that.$refs['ref20180101'][0].innerHTML = "Abc very long very long";
-      },1000);
+      //this.$store.state.calendarId = this.auth.user.defaultCalendarId;
+      let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+
+      _calendar.calendarEvents().get().then(events => {
+        let eventsMap = {};
+        events.forEach(function(event){
+          let eventStartMillis = event.eventStartMillis;
+          let eventStartDate = new Date(eventStartMillis);
+          let eventDateStamp = `${eventStartDate.getFullYear()}${eventStartDate.getMonth().padStart(2,'0')}${eventStartDate.getDate().padStart(2,'0')}`;
+          if (eventsMap[eventDateStamp] === undefined){
+            eventsMap[eventDateStamp] = [];
+          }
+          eventsMap[eventDateStamp].push(event);
+        });
+
+        this.yearlyCalendarDays = this.calcCalendarDays(this.selectedYear, eventsMap);
+        this.isLoading = false;
+      }).catch((error) => {
+        console.log(error);
+        this.isLoading = false;
+      });
     },
     methods: {
-      calcCalendarDays(year) {
+      calcCalendarDays(year, eventsMap) {
 
         let calDays = [];
         let hasMoreDays = {};
@@ -181,14 +207,19 @@
             for (let month=0; month < 12; month++){
               if (monthCounters[month].counter <= monthCounters[month].lastMonthDay) {
                 let theDate = new Date(year, month, monthCounters[month].counter, 0, 0, 0, 0);
+
                 if (theDate.getDay() === weekday) {
-                  weekdayObj[month] = `${theDate.getDate()}`;
+                  weekdayObj[month] = { exists: true, dayOnMonth: `${theDate.getDate()}`};
                   monthCounters[month].counter++;
+
+                  let theDateStamp = `${theDate.getFullYear()}${theDate.getMonth().padStart(2,'0')}${theDate.getDate().padStart(2,'0')}`;
+                  weekdayObj[month].calendarEvents = eventsMap[theDateStamp];
+
                 } else {
-                  weekdayObj[month] = '0';
+                  weekdayObj[month] = {exists: false};
                 }
               } else {
-                weekdayObj[month] = '0';
+                weekdayObj[month] = {exists: false};
                 hasMoreDays[month] = '';
               }
 
@@ -212,7 +243,7 @@
     }
   };
 </script>
-<style >
+<style lang="scss">
 
   .calendar-grid table {
     width: 100%;
@@ -223,13 +254,22 @@
     text-overflow: ellipsis;
   }
   .calendar-grid td {
-    text-align: center;
-    border: 1px dotted #ccc;
+    border: 1px dotted #aaa;
+    text-align: left;
+
+    &.event-cell {
+      background-color: blue;
+      color: white;
+
+      &:hover {
+        background-color: blue;
+      }
+    }
   }
 
   .calendar-grid th {
     text-align: center;
-    border: 1px dotted #ccc;
+    border: 1px dotted #aaa;
   }
 
   .calendar-grid .weekday-column {
@@ -237,6 +277,7 @@
     min-width: 2.5%;
     max-width: 2.5%;
     overflow: hidden;
+    text-align: center;
   }
 
   .calendar-grid .month-column {
@@ -275,8 +316,15 @@
     cursor: pointer;
   }
 
+  .calendar-grid .event-cell {
+    cursor: pointer;
+    background-color: blue;
+    color: white;
+    font-weight: 500;
+  }
+
   .calendar-grid td:hover {
-    border: 1px solid lightblue;
+    background-color: #e3f2fd;
   }
 
   .calendar-grid .cell-date-number {
