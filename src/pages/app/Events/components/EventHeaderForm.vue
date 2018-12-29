@@ -82,7 +82,7 @@
         <div class="md-layout">
           <div class="md-layout-item md-size-40 md-small-size-100 pl-0" style="padding-left: 0;">
             <md-field :class="[{'md-error': errors.has('participants')}]">
-              <label>Guests Amount</label>
+              <label>Number of Participants</label>
               <md-input type="text"
                         v-model="form.participants"
                         data-vv-name="participants"

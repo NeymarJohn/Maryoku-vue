@@ -149,7 +149,6 @@
         swal({
           title: "Are you sure?",
           text: `You won't be able to revert this!`,
-          type: "warning",
           showCancelButton: true,
           confirmButtonClass: "md-button md-success",
           cancelButtonClass: "md-button md-danger",

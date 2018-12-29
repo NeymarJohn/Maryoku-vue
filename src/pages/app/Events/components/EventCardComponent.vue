@@ -105,9 +105,12 @@
             </md-table>
           </div>
         </div>
-        <p class="text-danger text-center" v-if="!componentObject.vendors.length">
+        <!--<p class="text-danger text-center" v-if="!componentObject.vendors.length">
           No vendors were added yet.
           <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalVendors({}, null)'>Go ahead and add one!</a>
+        </p>-->
+        <p class="text-danger text-center" v-if="!componentObject.vendors.length">
+          <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalVendors({}, null)'>Add vendors for <strong>{{componentObject.componentId}}</strong></a>
         </p>
       </template>
 
@@ -139,9 +142,12 @@
             </md-table>
           </div>
         </div>
-        <p class="text-danger text-center" v-if="!componentObject.todos.length">
+        <!--<p class="text-danger text-center" v-if="!componentObject.todos.length">
           No todos were added yet.
           <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalTodo({}, null)'>Go ahead and add one!</a>
+        </p>-->
+        <p class="text-danger text-center" v-if="!componentObject.todos.length">
+          <a class="text-danger text-center link-underscored" v-if="!readonly" @click='showModalTodo({}, null)'>Add To Do's for <strong>{{componentObject.componentId}}</strong></a>
         </p>
       </template>
     </event-tabs>
@@ -323,7 +329,6 @@
         swal({
           title: "Are you sure?",
           text: `You won't be able to revert this!`,
-          type: "warning",
           showCancelButton: true,
           confirmButtonClass: "md-button md-success",
           cancelButtonClass: "md-button md-danger",
@@ -356,7 +361,6 @@
         swal({
           title: "Are you sure?",
           text: `You won't be able to revert this!`,
-          type: "warning",
           showCancelButton: true,
           confirmButtonClass: "md-button md-success",
           cancelButtonClass: "md-button md-danger",

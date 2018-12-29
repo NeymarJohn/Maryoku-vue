@@ -1,6 +1,12 @@
 <template>
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
+    <div class="md-layout-item md-size-100 text-right">
+      <md-button class="md-success text-success" @click="routeToNewEvent()">
+        <md-icon>add_circle</md-icon>
+        Create New Event
+      </md-button>
+    </div>
     <div class="md-layout-item md-size-100">
       <md-card style="margin-bottom: 0;">
         <md-card-header class="md-card-header-text md-card-header-rose">
@@ -185,6 +191,21 @@
       });
     },
     methods: {
+      routeToNewEvent() {
+        this.$store.state.eventData = {
+          id: null,
+          calendar: {id: null},
+          title: null,
+          eventStartMillis: null,
+          eventEndMillis: null,
+          eventType: null,
+          numberOfParticipants: null,
+          totalBudget: null,
+          status: null,
+          components: null,
+        },
+          this.$router.push({ path: `/events/new` });
+      },
       calcCalendarDays(year, eventsMap) {
 
         let calDays = [];

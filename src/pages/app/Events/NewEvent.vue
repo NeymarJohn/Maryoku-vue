@@ -13,12 +13,7 @@
 
     <div  class="md-layout-item md-size-70 md-small-size-100 scrollable-container" v-if="components == null || !components.length">
       <pricing-card card-class="md-card-plain" icon-color="icon-black">
-        <h6 slot="category" class="category">Event Components</h6>
-        <md-icon slot="icon">extension</md-icon>
-        <h3 slot="title" class="title black-color">Space, Catering, Decorations and more ...</h3>
-        <p slot="description" class="card-description">Plan and manage here all the ingredients for a successful event.</p>
-        <!--<md-button slot="footer" class="md-info"><md-icon>add</md-icon> Event Component</md-button>-->
-        <drop-down slot="footer" direction="down" ref="dropdown" class="dropdown-component-button empty-timeline">
+        <drop-down slot="category" direction="down" ref="dropdown" class="dropdown-component-button empty-timeline">
           <md-button slot="title" class="md-info md-block" data-toggle="dropdown">
             <md-icon>add</md-icon> Add Event Component
           </md-button>
@@ -34,6 +29,11 @@
             </li>
           </ul>
         </drop-down>
+        <h6 slot="category" class="category">Event Components</h6>
+        <md-icon slot="icon">extension</md-icon>
+        <h3 slot="title" class="title black-color">Space, Catering, Decorations and more ...</h3>
+        <p slot="description" class="card-description">Plan and manage here all the ingredients for a successful event.</p>
+        <!--<md-button slot="footer" class="md-info"><md-icon>add</md-icon> Event Component</md-button>-->
       </pricing-card>
     </div>
     <div class="md-layout-item md-size-70 md-small-size-100 scrollable-container"  v-if="components !== null && components.length">
