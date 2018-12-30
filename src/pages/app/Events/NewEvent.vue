@@ -7,7 +7,7 @@
     </div>
 
 
-    <div class="md-layout-item md-size-30 md-small-size-100 scrollable-container" style="margin-top: -72px;">
+    <div class="md-layout-item md-size-30 md-small-size-100 scrollable-container" style="margin-top: -42px;">
       <event-header-form :occasionOptions="occasionsArray" :formData="formData"></event-header-form>
     </div>
 
@@ -265,9 +265,9 @@
     padding-top: 1px;
     //margin-top: 20px;
 
-    /*.md-card {
-      margin: 10px 0;
-    }*/
+    .md-card {
+      margin: 30px 0;
+    }
   }
   .md-toolbar-section-center {
     justify-content: center;

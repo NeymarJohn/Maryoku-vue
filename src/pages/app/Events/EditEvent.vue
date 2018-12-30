@@ -14,7 +14,7 @@
                          v-bind:shouldUpdate="true"
                          :event="event"></event-header-form>
     </md-card>-->
-    <div class="md-layout-item md-small-size-100 md-size-30 scrollable-container" style="margin-top: -72px;">
+    <div class="md-layout-item md-small-size-100 md-size-30 scrollable-container" style="margin-top: -42px;">
 
           <event-header-form :occasionOptions="occasionsArray"
                              :formData="formData"
@@ -125,6 +125,7 @@
   import Vue from 'vue';
   import { TimeLine, TimeLineItem, PricingCard } from "@/components";
   import EventActionsEdit from './components/EventActionsEdit';
+  import auth from '@/auth';
 
   export default {
     components: {
@@ -137,6 +138,7 @@
       PricingCard,
     },
     data: () => ({
+      auth: auth,
       responsive: false,
       calendarId: null,
       occasionsArray: null,
@@ -313,54 +315,56 @@
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
     created() {
-      let calendar = '';
+      this.auth.currentUser(this, true, function(){
+        let calendar = '';
 
-      if (this.$store.state.calendarId === null) {
-        calendar = Calendar.get().then(calendars => {
-          if (calendars.length === 0) {
-            return;
-          }
-          this.$store.state.calendarId = calendars[0].id;
+        if (this.$store.state.calendarId === null) {
+          calendar = Calendar.get().then(calendars => {
+            if (calendars.length === 0) {
+              return;
+            }
+            this.$store.state.calendarId = calendars[0].id;
+            this.calendar = new Calendar({id: this.$store.state.calendarId});
+            this.getEventData();
+          });
+        } else {
           this.calendar = new Calendar({id: this.$store.state.calendarId});
           this.getEventData();
+        }
+
+        let occasions = '';
+        if (this.$store.state.occasionsArray === null) {
+          occasions = Occasion.get().then((occasions) => {
+            this.$store.state.occasionsArray = occasions;
+            this.occasionsArray = occasions;
+          });
+        } else {
+          this.occasionsArray = this.$store.state.occasionsArray;
+        }
+
+        let components = '';
+        if (this.$store.state.componentsList === null) {
+          components = EventComponent.get().then((componentsList) => {
+            this.$store.state.componentsList = componentsList;
+            this.componentsList = componentsList;
+          });
+        } else {
+          this.componentsList = this.$store.state.componentsList;
+        }
+
+        // vendors are dynamically changed, so always get them
+        let vendors = Vendors.get().then((vendorsList) => {
+          this.$store.state.vendorsList = vendorsList;
         });
-      } else {
-        this.calendar = new Calendar({id: this.$store.state.calendarId});
-        this.getEventData();
-      }
 
-      let occasions = '';
-      if (this.$store.state.occasionsArray === null) {
-        occasions = Occasion.get().then((occasions) => {
-          this.$store.state.occasionsArray = occasions;
-          this.occasionsArray = occasions;
-        });
-      } else {
-        this.occasionsArray = this.$store.state.occasionsArray;
-      }
-
-      let components = '';
-      if (this.$store.state.componentsList === null) {
-        components = EventComponent.get().then((componentsList) => {
-          this.$store.state.componentsList = componentsList;
-          this.componentsList = componentsList;
-        });
-      } else {
-        this.componentsList = this.$store.state.componentsList;
-      }
-
-      // vendors are dynamically changed, so always get them
-      let vendors = Vendors.get().then((vendorsList) => {
-        this.$store.state.vendorsList = vendorsList;
-      });
-
-      Promise.all([vendors, components, occasions, calendar]).then(() => {
-        this.isLoading = false;
-      })
-      .catch((error) => {
-        console.log(error);
-        this.isLoading = false;
-      });
+        Promise.all([vendors, components, occasions, calendar]).then(() => {
+          this.isLoading = false;
+        })
+          .catch((error) => {
+            console.log(error);
+            this.isLoading = false;
+          });
+      }.bind(this));
     },
   };
 </script>

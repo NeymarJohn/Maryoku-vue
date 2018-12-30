@@ -5,29 +5,24 @@
       <!--<user-menu></user-menu>-->
       <mobile-menu></mobile-menu>
       <template slot="links">
-        <sidebar-item :link="{name: 'Me', icon: 'person_pin', path: '/me'}">
-        </sidebar-item>
+        <!--<sidebar-item :link="{name: 'Me', icon: 'person_pin', path: '/me'}">
+        </sidebar-item>-->
 
-        <sidebar-item :link="{name: 'My Company', icon: 'fingerprint', path: '/my-company'}">
-          <!--<sidebar-item :link="{name: 'Dashboard', icon: 'dashboard', path: '/my-company/dashboard'}"></sidebar-item>
+        <!--<sidebar-item :link="{name: 'My Company', icon: 'fingerprint', path: '/my-company'}">
+          <sidebar-item :link="{name: 'Dashboard', icon: 'dashboard', path: '/my-company/dashboard'}"></sidebar-item>
           <sidebar-item :link="{name: 'Edit Company Profile', icon: 'dashboard', path: '/my-company/company-profile'}"></sidebar-item>
           <sidebar-item :link="{name: 'Approvals & Sign Off', icon: 'dashboard', path: '/my-company/approvals'}"></sidebar-item>
           <sidebar-item :link="{name: 'Billing', icon: 'dashboard', path: '/my-company/billing'}"></sidebar-item>
-          <sidebar-item :link="{name: 'Settings', icon: 'settings', path: '/my-company/company-settings'}"></sidebar-item>-->
-        </sidebar-item>
+          <sidebar-item :link="{name: 'Settings', icon: 'settings', path: '/my-company/company-settings'}"></sidebar-item>
+        </sidebar-item>-->
 
-        <sidebar-item :link="{name: 'Team', icon: 'group_add', path: '/team'}">
-        </sidebar-item>
-
-        <sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
-        </sidebar-item>
-
-        <li class="menu-divider"></li>
-
-        <sidebar-item :link="{name: 'Our Events', icon: 'flag', path: '/events'}">
-        </sidebar-item>
+        <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
+        </sidebar-item>-->
 
         <sidebar-item :link="{name: 'Yearly Plan', icon: 'calendar_today', path: '/yearly-plan'}">
+        </sidebar-item>
+
+        <sidebar-item :link="{name: 'Our Events', icon: 'flag', path: '/events'}">
         </sidebar-item>
 
         <sidebar-item :link="{name: 'My Vendors', icon: 'contacts', path: '/vendors'}">
@@ -35,11 +30,16 @@
 
         <li class="menu-divider"></li>
 
+        <sidebar-item :link="{name: 'Team', icon: 'group_add', path: '/team'}">
+        </sidebar-item>
+
+        <!--<li class="menu-divider"></li>
+
         <sidebar-item :link="{name: 'Proposals', icon: 'local_offer', path: '/proposals'}">
         </sidebar-item>
 
         <sidebar-item :link="{name: 'Notes', icon: 'speaker_notes', path: '/notes'}">
-        </sidebar-item>
+        </sidebar-item>-->
 
         <!--<sidebar-item v-if="$route.meta.rtlActive" :link="{name: 'لوحة القيادةة', icon: 'dashboard', path: '/dashboard'}">
         </sidebar-item>
@@ -194,20 +194,20 @@ export default {
     }
   },
   mounted() {
-    let docClasses = document.body.classList;
-    let isWindows = navigator.platform.startsWith("Win");
-    if (isWindows) {
-      // if we are on windows OS we activate the perfectScrollbar function
-      initScrollbar("sidebar");
-      initScrollbar("sidebar-wrapper");
-      initScrollbar("main-panel");
+    this.auth.currentUser(this, true, function(){
+      let docClasses = document.body.classList;
+      let isWindows = navigator.platform.startsWith("Win");
+      if (isWindows) {
+        // if we are on windows OS we activate the perfectScrollbar function
+        initScrollbar("sidebar");
+        initScrollbar("sidebar-wrapper");
+        initScrollbar("main-panel");
 
-      docClasses.add("perfect-scrollbar-on");
-    } else {
-      docClasses.add("perfect-scrollbar-off");
-    }
-
-    this.auth.currentUser(this, true);
+        docClasses.add("perfect-scrollbar-on");
+      } else {
+        docClasses.add("perfect-scrollbar-off");
+      }
+    });
   }
 };
 </script>

@@ -115,7 +115,7 @@
       <md-card-content>
 
         <div class="md-layout">
-          <div class="md-layout-item md-size-70 md-small-size-100 " style="padding-left: 0;">
+          <div class="md-layout-item md-size-60 md-small-size-100 " style="padding-left: 0;">
             <md-field :class="[{'md-error': errors.has('budget')}]">
               <label>Budget</label>
               <md-input v-model="form.budget"
@@ -126,8 +126,8 @@
             </md-field>
           </div>
 
-          <div class="md-layout-item md-size-30 md-small-size-100 " style="padding: 0;">
-            <md-checkbox class="md-info" v-model="form.budgetPerPerson" @change="updateBudgetType($event)">Per Guest</md-checkbox>
+          <div class="md-layout-item md-size-40 md-small-size-100 " style="padding: 0;">
+            <md-checkbox class="md-info" v-model="form.budgetPerPersonFlag" @change="updateBudgetType($event)">Per Guest</md-checkbox>
           </div>
         </div>
 
@@ -144,7 +144,7 @@
           <div class="md-layout-item md-size-60 md-small-size-100 pl-0" style="padding-left: 0;">
             <div style="position: relative; top: 20%;">
               <p>
-                <i class="fa fa-circle text-success"></i> Remaining Budget (${{ (form.budgetPerPerson ? (form.budget * form.participants) - spentBudget : form.budget - spentBudget) | formatNum }})
+                <i class="fa fa-circle text-success"></i> Remaining Budget (${{ (form.budgetPerPersonFlag ? (form.budget * form.participants) - spentBudget : form.budget - spentBudget) | formatNum }})
               </p>
               <p>
                 <i class="fa fa-circle text-rose"></i> Spent Budget (${{ spentBudget | formatNum }})
@@ -229,14 +229,14 @@
       form: {
         eventName: "",
         occasion: "",
-        date: new Date(),
+        date: null,
         time: "",
         duration: "",
         participants: "",
         status: "draft",
         budget: "",
         location: "",
-        budgetPerPerson: false,
+        budgetPerPersonFlag: false,
       },
       uploadedImages: [],
 
@@ -283,8 +283,8 @@
     mounted() {
       if (this.formData) {
         this.form = this.formData;
-        this.form.date = moment()
-        this.formData.date = new Date();
+        this.form.date = moment(this.formData.eventStartInMillis);
+        this.formData.date = new Date(this.formData.eventStartInMillis);
       }
 
       this.$root.$on('statusChange', (newStatus) => {
@@ -312,6 +312,7 @@
         editedEvent.currency = 'USD'; // HARDCODED, REMOVE AFTER BACK WILL FIX API
         editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         editedEvent.components = this.$store.state.eventData.components;
+        editedEvent.budgetPerPersonFlag = this.form.budgetPerPersonFlag;
 
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
@@ -339,6 +340,7 @@
           currency: 'USD', // HARDCODED, REMOVE AFTER BACK WILL FIX API
           participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
           components: this.$store.state.eventData.components,
+          budgetPerPersonFlag: this.form.budgetPerPersonFlag,
         }).for(_calendar);
 
         newEvent.save().then(ev => {
@@ -421,7 +423,7 @@
         if (this.form.budget === 0 || this.form.budget === NaN || this.form.budget === '') {
           return this.calculateSpent() > 0 ? 0 : 1;
         }
-        if (this.form.budgetPerPerson){
+        if (this.form.budgetPerPersonFlag){
           return ( this.form.budget * this.form.participants ) - this.spentBudget;
         }
         if (this.spentBudget > this.form.budget) {

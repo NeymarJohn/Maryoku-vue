@@ -1,16 +1,16 @@
 <template>
   <div class="md-layout">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" isFullScreen/>
 
     <div class="md-layout-item md-size-100">
       <event-actions-show :event="event"></event-actions-show>
     </div>
 
-    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container">
+    <div class="md-layout-item md-size-30 md-small-size-100 scrollable-container">
       <event-info :occasionOptions="occasionsArray" :event="event" v-bind:readonly="true"></event-info>
     </div>
 
-    <div class="md-layout-item md-size-50 md-small-size-100 scrollable-container mt-small-20">
+    <div class="md-layout-item md-size-70 md-small-size-100 scrollable-container mt-small-20">
 
 
       <time-line plain :type="'simple'" class="mt-0">
@@ -45,6 +45,7 @@
   import EventActionsShow from './components/EventActionsShow';
   import VueElementLoading from 'vue-element-loading';
   import { TimeLine, TimeLineItem } from "@/components";
+  import auth from '@/auth';
 
   export default {
     components: {
@@ -57,6 +58,7 @@
       EventActionsShow
     },
     data: () => ({
+      auth: auth,
       uploadedImages: [],
       isModalLoading: false,
       responsive: false,
@@ -131,44 +133,46 @@
       },
     },
     created() {
-      let calendar = '';
+      this.auth.currentUser(this, true, function(){
+        let calendar = '';
 
-      if (this.$store.state.calendarId === null) {
-        calendar = Calendar.get().then(calendars => {
-          if (calendars.length === 0) {
-            return;
-          }
-          this.$store.state.calendarId = calendars[0].id;
-          this.getEventData();
-        })
-        .catch((error) => {
-          console.log(error);
+        if (this.$store.state.calendarId === null) {
+          calendar = Calendar.get().then(calendars => {
+            if (calendars.length === 0) {
+              return;
+            }
+            this.$store.state.calendarId = calendars[0].id;
+            this.getEventData();
+          })
+            .catch((error) => {
+              console.log(error);
+              this.isLoading = false;
+            });
+        } else {
+          this.getEventData()
+        }
+
+
+        let vendorsList = Vendors.get().then((vendorsList) => {
+          this.$store.state.vendorsList = vendorsList;
+        });
+
+        let components = '';
+
+        if (this.$store.state.componentsList === null) {
+          components = EventComponent.get().then((componentsList) => {
+            this.$store.state.componentsList = componentsList;
+          });
+        }
+
+        Promise.all([vendorsList, calendar, components]).then(() => {
           this.isLoading = false;
-        });
-      } else {
-        this.getEventData()
-      }
-
-
-      let vendorsList = Vendors.get().then((vendorsList) => {
-        this.$store.state.vendorsList = vendorsList;
-      });
-
-      let components = '';
-
-      if (this.$store.state.componentsList === null) {
-        components = EventComponent.get().then((componentsList) => {
-          this.$store.state.componentsList = componentsList;
-        });
-      }
-
-      Promise.all([vendorsList, calendar, components]).then(() => {
-        this.isLoading = false;
-      })
-      .catch((error) => {
-        console.log(error);
-        this.isLoading = false;
-      });
+        })
+          .catch((error) => {
+            console.log(error);
+            this.isLoading = false;
+          });
+      }.bind(this));
     },
   };
 </script>

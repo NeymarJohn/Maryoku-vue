@@ -169,26 +169,28 @@
     },
     mounted(){
       //this.$store.state.calendarId = this.auth.user.defaultCalendarId;
-      let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+      this.auth.currentUser(this, true, function() {
+        let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
-      _calendar.calendarEvents().get().then(events => {
-        let eventsMap = {};
-        events.forEach(function(event){
-          let eventStartMillis = event.eventStartMillis;
-          let eventStartDate = new Date(eventStartMillis);
-          let eventDateStamp = `${eventStartDate.getFullYear()}${eventStartDate.getMonth().padStart(2,'0')}${eventStartDate.getDate().padStart(2,'0')}`;
-          if (eventsMap[eventDateStamp] === undefined){
-            eventsMap[eventDateStamp] = [];
-          }
-          eventsMap[eventDateStamp].push(event);
+        _calendar.calendarEvents().get().then(events => {
+          let eventsMap = {};
+          events.forEach(function(event){
+            let eventStartMillis = event.eventStartMillis;
+            let eventStartDate = new Date(eventStartMillis);
+            let eventDateStamp = `${eventStartDate.getFullYear()}${eventStartDate.getMonth().padStart(2,'0')}${eventStartDate.getDate().padStart(2,'0')}`;
+            if (eventsMap[eventDateStamp] === undefined){
+              eventsMap[eventDateStamp] = [];
+            }
+            eventsMap[eventDateStamp].push(event);
+          });
+
+          this.yearlyCalendarDays = this.calcCalendarDays(this.selectedYear, eventsMap);
+          this.isLoading = false;
+        }).catch((error) => {
+          console.log(error);
+          this.isLoading = false;
         });
-
-        this.yearlyCalendarDays = this.calcCalendarDays(this.selectedYear, eventsMap);
-        this.isLoading = false;
-      }).catch((error) => {
-        console.log(error);
-        this.isLoading = false;
-      });
+      }.bind(this))
     },
     methods: {
       routeToNewEvent() {

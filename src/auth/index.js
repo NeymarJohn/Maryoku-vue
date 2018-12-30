@@ -51,7 +51,7 @@ export default {
     }
   },
 
-  currentUser(context, required) {
+  currentUser(context, required, cb) {
     context.$http.get(CURRENT_USER_URL, { headers: this.getAuthHeader() })
       .then((resp) => {
 
@@ -70,6 +70,10 @@ export default {
         //     path: '/'
         //   });
         // }
+
+        if (cb !== undefined){
+          cb();
+        }
       }, (_) => {
         this.unsetToken();
         if (required) {

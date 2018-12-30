@@ -15,19 +15,19 @@
         </md-button>
 
         <div class="md-collapse">
-          <div class="md-autocomplete" style="width: 50%;">
+          <!--<div class="md-autocomplete" style="width: 50%;">
             <md-autocomplete class="search" v-model="selectedEmployee" :md-options="employees" :md-open-on-focus="false">
               <label v-if="$route.meta.rtlActive">بحث...</label>
               <label v-else>Search...</label>
             </md-autocomplete>
-          </div>
+          </div>-->
           <md-list>
             <!--<md-list-item to="/">
               <i class="material-icons">dashboard</i>
               <p class="hidden-lg hidden-md">Dashboard</p>
             </md-list-item>-->
 
-            <li class="md-list-item">
+            <!--<li class="md-list-item">
               <a href="#" class="md-list-item-router md-list-item-container md-button-clean dropdown">
                 <div class="md-list-item-content">
                   <drop-down direction="down">
@@ -47,7 +47,7 @@
                   </drop-down>
                 </div>
               </a>
-            </li>
+            </li>-->
 
             <li class="md-list-item">
               <a href="#" class="md-list-item-router md-list-item-container md-button-clean dropdown">
@@ -105,7 +105,10 @@
       };
     },
     mounted() {
-      this.avatar = auth.user.avatar != null ? auth.user.avatar : "static/img/faces/avatar.jpg";
+      setTimeout(function(){
+        console.log("avatar: " + this.auth.user.avatar);
+        this.avatar = this.auth.user.avatar != null ? this.auth.user.avatar : "static/img/faces/avatar.jpg";
+      }.bind(this),3000);
     },
     methods: {
       toggleSidebar() {

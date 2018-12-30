@@ -42,7 +42,9 @@
       }
     },
     created() {
-      this.fetchTeam();
+      this.auth.currentUser(this, true, function(){
+        this.fetchTeam();
+      }.bind(this));
     },
     methods: {
       ...mapMutations('teamVuex', ['resetForm']),

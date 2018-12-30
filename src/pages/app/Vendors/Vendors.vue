@@ -33,6 +33,8 @@
   import Vendors from "@/models/Vendors";
   import VendorCategories from "@/models/VendorCategories";
   import VueElementLoading from 'vue-element-loading';
+  import auth from '@/auth';
+
   export default {
     components: {
       CreateModal,
@@ -42,6 +44,7 @@
     },
     data() {
       return {
+        auth: auth,
         vendorsList: [],
         tooltipModels: [],
         teamMembersLoading: true,
@@ -50,9 +53,9 @@
       }
     },
     created() {
-    this.fetch();
-
-
+      this.auth.currentUser(this, true, function(){
+        this.fetch();
+      }.bind(this));
     },
     methods: {
       ...mapMutations('vendors', ['resetForm']),

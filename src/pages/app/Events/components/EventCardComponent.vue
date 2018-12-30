@@ -153,7 +153,7 @@
     </event-tabs>
 
     <!-- should be inside of 'slot="content"' for rendering -->
-    <div class="tabs-timeline-content" slot="footer">
+    <div class="tabs-timeline-content" slot="content">
       <md-list class="nav-tabs">
         <md-list-item
           v-for="(item, index) in tabName"
