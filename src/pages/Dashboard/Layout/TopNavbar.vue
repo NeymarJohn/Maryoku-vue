@@ -62,7 +62,7 @@
                       </div>
                     </md-button>
                     <ul class="dropdown-menu dropdown-menu-right">
-                      <li><a href="#">My Profile</a></li>
+                      <li><router-link :to="{path: '/me'}">My Profile</router-link></li>
                       <li class="divider"></li>
                       <li><router-link :to="{path: '/signout'}">Sign Out</router-link></li>
                     </ul>
