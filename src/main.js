@@ -10,6 +10,7 @@ import auth from './auth';
 // Plugins
 import App from "./App.vue";
 import Chartist from "chartist";
+import VTooltip from 'v-tooltip'
 
 // router setup
 import routes from "./router/routes";
@@ -60,6 +61,7 @@ axios.interceptors.response.use(function (response) {
 
 Vue.use(VueAxios, axios);
 Vue.use(require('vue-moment'));
+Vue.use(VTooltip);
 
 Model.$http = axios;
 

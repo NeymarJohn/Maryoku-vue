@@ -38,7 +38,7 @@
               </md-field>
             </div>
 
-            <div class="md-layout-item md-size-15">
+            <!--<div class="md-layout-item md-size-15">
               <md-field :class="[{'md-error': errors.has('eventName')}]">
                 <label>Events</label>
                 <md-input v-model="form.eventName"
@@ -47,7 +47,7 @@
                           required/>
                 <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
               </md-field>
-            </div>
+            </div>-->
 
             <div class="md-layout-item md-size-15">
               <md-field :class="[{'md-error': errors.has('eventName')}]">
@@ -81,6 +81,13 @@
                 <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
               </md-field>
             </div>
+            <div class="md-layout-item md-size-15" style="max-height: 80px;">
+              <chart-component
+                class=""
+                :chart-data="pieChart.data"
+                :chart-options="pieChart.options"
+                chart-type="Pie"/>
+            </div>
           </div>
         </md-card-content>
       </md-card>
@@ -93,7 +100,26 @@
             <h6 class="title2">Filters</h6>
           </div>
         </md-card-header>
-        <md-card-content>Filters</md-card-content>
+        <md-card-content>
+
+          <md-field>
+            <label for="year">Year</label>
+            <md-select
+              required
+              v-model="selectedYear"
+              data-vv-name="year"
+              id="year"
+              name="year"
+              @md-selected="selectYear">
+              <md-option value="2016">2016</md-option>
+              <md-option value="2017">2017</md-option>
+              <md-option value="2018">2018</md-option>
+              <md-option value="2019">2019</md-option>
+              <md-option value="2020">2020</md-option>
+            </md-select>
+          </md-field>
+
+        </md-card-content>
       </md-card>
     </div>
 
@@ -113,20 +139,22 @@
             </tr>
             <tr v-for="(dayObj,idx) in yearlyCalendarDays" :class="{'weekend-row' : weekendDays[dayObj.weekday]}" style="height: 1px;">
               <td class="weekday-column cell-weekday">{{$moment.weekdaysShort(true,dayObj.weekday)}}</td>
-              <td v-for="(month,idx) in $moment.monthsShort()" class="month-column" style="padding:0;height: inherit;" :class="{'event-cell' : dayObj.weekdayObj[idx].exists && dayObj.weekdayObj[idx].calendarEvents}">
-
-                <div v-if="dayObj.weekdayObj[idx].exists && dayObj.weekdayObj[idx].calendarEvents" class="cell cell-active event-cell" :ref="`ref${dayObj.year}${(idx+1).padStart(2,'0')}${dayObj.weekdayObj[idx].exists ? dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0') : '_'}`">
-                  <span class="cell-date-number event-cell" :class="[{'cell-date-number-hidden' : !dayObj.weekdayObj[idx].exists}]">{{dayObj.weekdayObj[idx].dayOnMonth}}</span>
-                  <span class="event-cell" :ref="`ref${dayObj.year}${(idx+1).padStart(2,'0')}${dayObj.weekdayObj[idx].exists ? dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0') : '_'}_text`" :class="[{'cell-date-number-hidden' : !dayObj.weekdayObj[idx].exists}]">
+              <template v-for="(month,idx) in $moment.monthsShort()">
+                <td v-if="dayObj.weekdayObj[idx].exists && dayObj.weekdayObj[idx].calendarEvents" v-tooltip="dayObj.weekdayObj[idx].calendarEvents[0].title" class="month-column" style="padding:0;height: inherit;" :class="{'event-cell' : dayObj.weekdayObj[idx].exists && dayObj.weekdayObj[idx].calendarEvents}">
+                  <div  class="cell cell-active event-cell" :ref="`ref${dayObj.year}${(idx+1).padStart(2,'0')}${dayObj.weekdayObj[idx].exists ? dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0') : '_'}`">
+                    <span class="cell-date-number event-cell" :class="[{'cell-date-number-hidden' : !dayObj.weekdayObj[idx].exists}]">{{dayObj.weekdayObj[idx].dayOnMonth}}</span>
+                    <span class="event-cell" :ref="`ref${dayObj.year}${(idx+1).padStart(2,'0')}${dayObj.weekdayObj[idx].exists ? dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0') : '_'}_text`" :class="[{'cell-date-number-hidden' : !dayObj.weekdayObj[idx].exists}]">
                     <router-link :to="{path: `/events/${dayObj.weekdayObj[idx].calendarEvents[0].id}/edit`}">{{dayObj.weekdayObj[idx].calendarEvents[0].title}}</router-link>
-                    <md-tooltip direction="left">{{dayObj.weekdayObj[idx].calendarEvents[0].title}}</md-tooltip>
+                      <!--<md-tooltip direction="left">{{dayObj.weekdayObj[idx].calendarEvents[0].title}}</md-tooltip>-->
                   </span>
-                </div>
-
-                <div v-else class="cell cell-active" :ref="`ref${dayObj.year}${(idx+1).padStart(2,'0')}${dayObj.weekdayObj[idx].exists ? dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0') : '_'}`">
-                  <span class="cell-date-number" :class="[{'cell-date-number-hidden' : !dayObj.weekdayObj[idx].exists}]">{{dayObj.weekdayObj[idx].dayOnMonth}}</span>
-                </div>
-              </td>
+                  </div>
+                </td>
+                <td v-else class="month-column" style="padding:0;height: inherit;">
+                  <div class="cell cell-active" :ref="`ref${dayObj.year}${(idx+1).padStart(2,'0')}${dayObj.weekdayObj[idx].exists ? dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0') : '_'}`">
+                    <span class="cell-date-number" :class="[{'cell-date-number-hidden' : !dayObj.weekdayObj[idx].exists}]">{{dayObj.weekdayObj[idx].dayOnMonth}}</span>
+                  </div>
+                </td>
+              </template>
             </tr>
           </md-table>
 
@@ -143,16 +171,18 @@
   import auth from '@/auth';
   import Calendar from '@/models/Calendar';
   import VueElementLoading from 'vue-element-loading';
+  import ChartComponent from '@/components/Cards/ChartComponent';
+
   export default {
     components: {
       VueElementLoading,
-
+      ChartComponent,
     },
     data() {
       return {
         auth: auth,
         isLoading: true,
-        selectedYear: 2018,
+        selectedYear: new Date().getFullYear(),
         yearlyCalendarDays: null,
         weekendDays : [false, false, false, false, false, true, true],
         form: {
@@ -170,29 +200,57 @@
     mounted(){
       //this.$store.state.calendarId = this.auth.user.defaultCalendarId;
       this.auth.currentUser(this, true, function() {
-        let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        /*let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
         _calendar.calendarEvents().get().then(events => {
           let eventsMap = {};
-          events.forEach(function(event){
-            let eventStartMillis = event.eventStartMillis;
-            let eventStartDate = new Date(eventStartMillis);
-            let eventDateStamp = `${eventStartDate.getFullYear()}${eventStartDate.getMonth().padStart(2,'0')}${eventStartDate.getDate().padStart(2,'0')}`;
-            if (eventsMap[eventDateStamp] === undefined){
-              eventsMap[eventDateStamp] = [];
-            }
-            eventsMap[eventDateStamp].push(event);
-          });
+          if (events) {
+            events.forEach(function(event){
+              let eventStartMillis = event.eventStartMillis;
+              let eventStartDate = new Date(eventStartMillis);
+              let eventDateStamp = `${eventStartDate.getFullYear()}${eventStartDate.getMonth().padStart(2,'0')}${eventStartDate.getDate().padStart(2,'0')}`;
+              if (eventsMap[eventDateStamp] === undefined){
+                eventsMap[eventDateStamp] = [];
+              }
+              eventsMap[eventDateStamp].push(event);
+            });
+          }
 
           this.yearlyCalendarDays = this.calcCalendarDays(this.selectedYear, eventsMap);
           this.isLoading = false;
         }).catch((error) => {
           console.log(error);
           this.isLoading = false;
-        });
+        });*/
+
+
       }.bind(this))
     },
     methods: {
+      selectYear($e) {
+        this.isLoading = true;
+        let calendarId = this.auth.user.defaultCalendarId;
+        this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, { filters: { year: parseInt(this.selectedYear) }}, { headers: this.auth.getAuthHeader() })
+          .then(response => response.data)
+          .then((json) => {
+            console.log(json);
+            let eventsMap = {};
+            if (json.events) {
+              json.events.forEach(function(event){
+                let eventStartMillis = event.eventStartMillis;
+                let eventStartDate = new Date(eventStartMillis);
+                let eventDateStamp = `${eventStartDate.getFullYear()}${eventStartDate.getMonth().padStart(2,'0')}${eventStartDate.getDate().padStart(2,'0')}`;
+                if (eventsMap[eventDateStamp] === undefined){
+                  eventsMap[eventDateStamp] = [];
+                }
+                eventsMap[eventDateStamp].push(event);
+              });
+            }
+
+            this.yearlyCalendarDays = this.calcCalendarDays(this.selectedYear, eventsMap);
+            this.isLoading = false;
+          });
+      },
       routeToNewEvent() {
         this.$store.state.eventData = {
           id: null,
@@ -263,6 +321,20 @@
       }
     },
     computed: {
+      pieChart() {
+        return {
+          data: {
+            labels: [" ", " "], // should be empty to remove text from chart
+            series: [8900, 780]
+          },
+          options: {
+            padding: 0,
+            height: 60,
+            donut: true,
+            donutWidth: 10
+          }
+        }
+      },
     }
   };
 </script>
@@ -281,11 +353,11 @@
     text-align: left;
 
     &.event-cell {
-      background-color: blue;
+      background-color: #43a047;
       color: white;
 
       &:hover {
-        background-color: blue;
+        background-color: #43a047;
       }
     }
   }
@@ -317,7 +389,7 @@
   }
 
   .calendar-grid .weekend-row {
-    background-color: rgba(255, 223, 233, 0.5);
+    background-color: rgba(239, 239, 239, 0.7);
   }
 
   .calendar-grid .cell {
@@ -341,13 +413,17 @@
 
   .calendar-grid .event-cell {
     cursor: pointer;
-    background-color: blue;
-    color: white;
+    color: white !important;
     font-weight: 500;
+    top: 3px;
+  }
+
+  .calendar-grid a {
+    color: white !important;
   }
 
   .calendar-grid td:hover {
-    background-color: #e3f2fd;
+    background-color: #e1f5fe;
   }
 
   .calendar-grid .cell-date-number {

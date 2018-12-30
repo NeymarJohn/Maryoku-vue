@@ -206,7 +206,7 @@
   import Vue from 'vue';
   import $ from 'jquery';
   import moment from 'moment';
-  import ChartComponent from '../../../../components/Cards/ChartComponent';
+  import ChartComponent from '@/components/Cards/ChartComponent';
 
   export default {
     name: 'event-header-form',
