@@ -369,6 +369,12 @@ let appPages = {
       meta: {title: "Yearly Plan"}
     },
     {
+      path: "/yearly-plan/:year",
+      name: "YearlyPlan",
+      component: YearlyPlan,
+      meta: {title: "Yearly Plan"}
+    },
+    {
       path: "/vendors",
       name: "Vendors",
       component: Vendors

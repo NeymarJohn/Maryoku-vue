@@ -102,22 +102,68 @@
         </md-card-header>
         <md-card-content>
 
-          <md-field>
-            <label for="year">Year</label>
-            <md-select
-              required
-              v-model="selectedYear"
-              data-vv-name="year"
-              id="year"
-              name="year"
-              @md-selected="selectYear">
-              <md-option value="2016">2016</md-option>
-              <md-option value="2017">2017</md-option>
-              <md-option value="2018">2018</md-option>
-              <md-option value="2019">2019</md-option>
-              <md-option value="2020">2020</md-option>
-            </md-select>
-          </md-field>
+          <div class="md-layout">
+            <div class="md-layout-item md-size-25">
+              <md-field>
+                <label for="year">Year</label>
+                <md-select
+                  required
+                  v-model="selectedYear"
+                  data-vv-name="year"
+                  id="year"
+                  name="year"
+                  @md-selected="selectYear" md-dense>
+                  <md-option v-for="year in years" :value="year.item" >{{year.item}}</md-option>
+                </md-select>
+              </md-field>
+            </div>
+
+            <div class="md-layout-item md-size-25">
+              <md-field>
+                <label for="eventType">Event Types</label>
+                <md-select
+                  required
+                  v-model="selectedEventTypes"
+                  data-vv-name="eventType"
+                  id="eventType"
+                  name="eventType"
+                  @md-selected="selectEventTypes" multiple md-dense>
+                  <md-option v-for="eventType in eventTypes" :value="eventType.item" >{{eventType.item}}</md-option>
+                </md-select>
+              </md-field>
+            </div>
+
+            <div class="md-layout-item md-size-25">
+              <md-field>
+                <label for="countries">Countries</label>
+                <md-select
+                  required
+                  v-model="selectedCountries"
+                  data-vv-name="countries"
+                  id="countries"
+                  name="countries"
+                  @md-selected="selectCountries" multiple md-dense>
+                  <md-option v-for="country in countries" :value="country.item" >{{country.item}}</md-option>
+                </md-select>
+              </md-field>
+            </div>
+
+            <div class="md-layout-item md-size-25">
+              <md-field>
+                <label for="holidays">Holidays</label>
+                <md-select
+                  required
+                  v-model="selectedHolidays"
+                  data-vv-name="holidays"
+                  id="holidays"
+                  name="holidays"
+                  @md-selected="selectHolidays" multiple md-dense>
+                  <md-option v-for="holiday in holidays" :value="holiday.item" >{{holiday.item}}</md-option>
+                </md-select>
+              </md-field>
+            </div>
+
+          </div>
 
         </md-card-content>
       </md-card>
@@ -182,7 +228,14 @@
       return {
         auth: auth,
         isLoading: true,
-        selectedYear: new Date().getFullYear(),
+        selectedYear: this.$route.params.year || new Date().getFullYear(),
+        years: [],
+        eventTypes: [],
+        selectedEventTypes: [],
+        countries: [],
+        selectedCountries: [],
+        holidays: [],
+        selectedHolidays: [],
         yearlyCalendarDays: null,
         weekendDays : [false, false, false, false, false, true, true],
         form: {
@@ -200,6 +253,28 @@
     mounted(){
       //this.$store.state.calendarId = this.auth.user.defaultCalendarId;
       this.auth.currentUser(this, true, function() {
+        let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+
+        _calendar.years().get().then(years => {
+          this.years = years;
+          this.selectedYear = new Date().getFullYear();
+        });
+
+        _calendar.eventTypes().get().then(eventTypes => {
+          this.eventTypes = eventTypes;
+          this.selectedEventTypes = this.eventTypes.map(function(entry){ return entry.item;});
+        });
+
+        _calendar.countries().get().then(countries => {
+          this.countries = countries;
+          this.selectedCountries = this.countries.map(function(entry){ return entry.item;});
+        });
+
+        _calendar.holidays().get().then(holidays => {
+          this.holidays = holidays;
+          this.selectedHolidays = this.holidays.map(function(entry){ return entry.item;});
+        });
+
         /*let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
         _calendar.calendarEvents().get().then(events => {
@@ -223,7 +298,7 @@
           this.isLoading = false;
         });*/
 
-
+        this.selectYear();
       }.bind(this))
     },
     methods: {
@@ -250,6 +325,15 @@
             this.yearlyCalendarDays = this.calcCalendarDays(this.selectedYear, eventsMap);
             this.isLoading = false;
           });
+      },
+      selectEventTypes($e) {
+
+      },
+      selectCountries($e) {
+
+      },
+      selectHolidays($e) {
+
       },
       routeToNewEvent() {
         this.$store.state.eventData = {
