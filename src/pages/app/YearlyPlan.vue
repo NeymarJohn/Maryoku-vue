@@ -112,7 +112,7 @@
               <th class="month-column" v-for="(month,idx) in $moment.monthsShort()" >{{month}}</th>
             </tr>
             <tr v-for="(dayObj,idx) in yearlyCalendarDays" :class="{'weekend-row' : weekendDays[dayObj.weekday]}" style="height: 1px;">
-              <td class="weekday-column cell-weekday">{{$moment.weekdaysShort(dayObj.weekday)}}</td>
+              <td class="weekday-column cell-weekday">{{$moment.weekdaysShort(true,dayObj.weekday)}}</td>
               <td v-for="(month,idx) in $moment.monthsShort()" class="month-column" style="padding:0;height: inherit;" :class="{'event-cell' : dayObj.weekdayObj[idx].exists && dayObj.weekdayObj[idx].calendarEvents}">
 
                 <div v-if="dayObj.weekdayObj[idx].exists && dayObj.weekdayObj[idx].calendarEvents" class="cell cell-active event-cell" :ref="`ref${dayObj.year}${(idx+1).padStart(2,'0')}${dayObj.weekdayObj[idx].exists ? dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0') : '_'}`">
@@ -152,7 +152,7 @@
       return {
         auth: auth,
         isLoading: true,
-        selectedYear: new Date().getFullYear(),
+        selectedYear: 2018,
         yearlyCalendarDays: null,
         weekendDays : [false, false, false, false, false, true, true],
         form: {

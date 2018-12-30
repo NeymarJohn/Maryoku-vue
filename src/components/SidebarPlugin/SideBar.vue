@@ -9,6 +9,7 @@
       <a href="/" class="simple-text logo-mini">
         <div class="logo-img">
           <img :src="logo">
+          <!--<md-icon>calendar_today</md-icon>-->
         </div>
       </a>
       <a href="/" class="simple-text logo-normal">
@@ -82,7 +83,7 @@ export default {
     },
     logo: {
       type: String,
-      default: "static/img/vue-logo.png"
+      default: "static/img/calendar-loader-3.gif"
     },
     sidebarLinks: {
       type: Array,

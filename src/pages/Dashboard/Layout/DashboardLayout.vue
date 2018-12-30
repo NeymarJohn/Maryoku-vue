@@ -19,10 +19,10 @@
         <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
         </sidebar-item>-->
 
-        <sidebar-item :link="{name: 'Yearly Plan', icon: 'calendar_today', path: '/yearly-plan'}">
+        <sidebar-item :link="{name: 'Yearly Planner', icon: 'event', path: '/yearly-plan'}">
         </sidebar-item>
 
-        <sidebar-item :link="{name: 'Our Events', icon: 'flag', path: '/events'}">
+        <sidebar-item :link="{name: 'Our Events', icon: 'local_play', path: '/events'}">
         </sidebar-item>
 
         <sidebar-item :link="{name: 'My Vendors', icon: 'contacts', path: '/vendors'}">
