@@ -16,7 +16,7 @@
         </md-card-header>
         <md-card-content>
           <div class="md-layout">
-            <div class="md-layout-item md-size-20">
+            <div class="md-layout-item md-size-15">
               <md-field :class="[{'md-error': errors.has('eventName')}]">
                 <label>Total Annual Budget</label>
                 <md-input v-model="form.eventName"
@@ -49,7 +49,7 @@
               </md-field>
             </div>-->
 
-            <div class="md-layout-item md-size-15">
+            <div class="md-layout-item md-size-20">
               <md-field :class="[{'md-error': errors.has('eventName')}]">
                 <label>Remaining Budget Per Employee</label>
                 <md-input v-model="form.eventName"
@@ -60,7 +60,7 @@
               </md-field>
             </div>
 
-            <div class="md-layout-item md-size-20">
+            <div class="md-layout-item md-size-15">
               <md-field :class="[{'md-error': errors.has('eventName')}]">
                 <label>Total Remaining Budget</label>
                 <md-input v-model="form.eventName"
@@ -81,7 +81,7 @@
                 <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
               </md-field>
             </div>
-            <div class="md-layout-item md-size-15" style="max-height: 80px;">
+            <div class="md-layout-item md-size-10" style="max-height: 160px;">
               <chart-component
                 class=""
                 :chart-data="pieChart.data"
@@ -413,7 +413,7 @@
           },
           options: {
             padding: 0,
-            height: 60,
+            height: 80,
             donut: true,
             donutWidth: 10
           }
