@@ -112,7 +112,7 @@
                   data-vv-name="year"
                   id="year"
                   name="year"
-                  @md-selected="selectYear" md-dense>
+                  @md-closed="selectYear" md-dense>
                   <md-option v-for="year in years" :key="year.item" :value="parseInt(year.item)" >{{year.item}}</md-option>
                 </md-select>
               </md-field>
@@ -127,7 +127,7 @@
                   data-vv-name="eventType"
                   id="eventType"
                   name="eventType"
-                  @md-selected="selectEventTypes" multiple md-dense>
+                  @md-closed="selectEventTypes" multiple md-dense>
                   <md-option v-for="eventType in eventTypes" :key="eventType.item" :value="eventType.item" >{{eventType.item}}</md-option>
                 </md-select>
               </md-field>
@@ -142,22 +142,21 @@
                   data-vv-name="countries"
                   id="countries"
                   name="countries"
-                  @md-selected="selectCountries" multiple md-dense>
+                  @md-closed="selectCountries" multiple md-dense>
                   <md-option v-for="country in countries" :key="country.item" :value="country.item" >{{country.item}}</md-option>
                 </md-select>
               </md-field>
             </div>
 
             <div class="md-layout-item md-size-25">
-              <md-field>
-                <label for="holidays">Holidays</label>
+              <md-field v-if="holidaysSelectDisplayed">
+                <label for="holidays" disabled>Holidays</label>
                 <md-select
-
                   v-model="selectedHolidays"
                   data-vv-name="holidays"
                   id="holidays"
                   name="holidays"
-                  @md-selected="selectHolidays" multiple md-dense>
+                  @md-closed="selectHolidays" multiple md-dense>
                   <md-option v-for="holiday in holidays" :key="holiday.item" :value="holiday.item" >{{holiday.item}}</md-option>
                 </md-select>
               </md-field>
@@ -237,6 +236,7 @@
         selectedCountries: [],
         holidays: [],
         selectedHolidays: [],
+        holidaysSelectDisplayed: true,
         yearlyCalendarDays: null,
         weekendDays : [false, false, false, false, false, true, true],
         form: {
@@ -264,6 +264,7 @@
         _calendar.eventTypes().get().then(eventTypes => {
           this.eventTypes = eventTypes;
           this.selectedEventTypes = this.eventTypes.map(function(entry){ return entry.item;});
+          this.holidaysSelectDisplayed = true;
         });
 
         _calendar.countries().get().then(countries => {
@@ -307,8 +308,14 @@
         if (!this.ready) return;
 
         this.isLoading = true;
+        let filters = { filters: {
+          year: parseInt(this.selectedYear),
+          holidays: this.holidaysSelectDisplayed ? this.selectedHolidays : [],
+          countries: this.selectedCountries,
+          eventTypes: this.selectedEventTypes
+        }};
         let calendarId = this.auth.user.defaultCalendarId;
-        this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, { filters: { year: parseInt(this.selectedYear) }}, { headers: this.auth.getAuthHeader() })
+        this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.auth.getAuthHeader() })
           .then(response => response.data)
           .then((json) => {
             console.log(json);
@@ -330,13 +337,14 @@
           });
       },
       selectEventTypes($e) {
-
+        this.holidaysSelectDisplayed = this.selectedEventTypes.indexOf("Holiday") > -1;
+        this.selectYear(null);
       },
       selectCountries($e) {
-
+        this.selectYear(null);
       },
       selectHolidays($e) {
-
+        this.selectYear(null);
       },
       routeToNewEvent() {
         this.$store.state.eventData = {
