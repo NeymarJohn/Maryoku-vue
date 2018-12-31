@@ -107,7 +107,7 @@
               <md-field>
                 <label for="year">Year</label>
                 <md-select
-                  required
+
                   v-model="selectedYear"
                   data-vv-name="year"
                   id="year"
@@ -122,7 +122,7 @@
               <md-field>
                 <label for="eventType">Event Types</label>
                 <md-select
-                  required
+
                   v-model="selectedEventTypes"
                   data-vv-name="eventType"
                   id="eventType"
@@ -137,7 +137,7 @@
               <md-field>
                 <label for="countries">Countries</label>
                 <md-select
-                  required
+
                   v-model="selectedCountries"
                   data-vv-name="countries"
                   id="countries"
@@ -152,7 +152,7 @@
               <md-field>
                 <label for="holidays">Holidays</label>
                 <md-select
-                  required
+
                   v-model="selectedHolidays"
                   data-vv-name="holidays"
                   id="holidays"
