@@ -16,24 +16,24 @@
         </md-card-header>
         <md-card-content>
           <div class="md-layout">
-            <div class="md-layout-item md-size-15">
+            <div class="md-layout-item md-size-20">
               <md-field :class="[{'md-error': errors.has('eventName')}]">
                 <label>Total Annual Budget</label>
                 <md-input v-model="form.eventName"
                           data-vv-name="eventName"
                           v-validate= "modelValidations.eventName"
-                          required/>
+                          />
                 <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
               </md-field>
             </div>
 
-            <div class="md-layout-item md-size-15">
+            <div class="md-layout-item md-size-25">
               <md-field :class="[{'md-error': errors.has('eventName')}]">
                 <label>Annual Budget Per Employee</label>
                 <md-input v-model="form.eventName"
                           data-vv-name="eventName"
                           v-validate= "modelValidations.eventName"
-                          required/>
+                          />
                 <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
               </md-field>
             </div>
@@ -49,18 +49,29 @@
               </md-field>
             </div>-->
 
-            <div class="md-layout-item md-size-20">
+            <div class="md-layout-item md-size-25">
               <md-field :class="[{'md-error': errors.has('eventName')}]">
                 <label>Remaining Budget Per Employee</label>
                 <md-input v-model="form.eventName"
                           data-vv-name="eventName"
                           v-validate= "modelValidations.eventName"
-                          required/>
+                          />
                 <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
               </md-field>
             </div>
 
-            <div class="md-layout-item md-size-15">
+            <div class="md-layout-item md-size-20">
+              <md-field :class="[{'md-error': errors.has('eventName')}]">
+                <label>Total Remaining Budget</label>
+                <md-input v-model="form.eventName"
+                          data-vv-name="eventName"
+                          v-validate= "modelValidations.eventName"
+                          />
+                <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
+              </md-field>
+            </div>
+
+            <!--<div class="md-layout-item md-size-20">
               <md-field :class="[{'md-error': errors.has('eventName')}]">
                 <label>Total Remaining Budget</label>
                 <md-input v-model="form.eventName"
@@ -69,18 +80,7 @@
                           required/>
                 <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
               </md-field>
-            </div>
-
-            <div class="md-layout-item md-size-15">
-              <md-field :class="[{'md-error': errors.has('eventName')}]">
-                <label>Total Remaining Budget</label>
-                <md-input v-model="form.eventName"
-                          data-vv-name="eventName"
-                          v-validate= "modelValidations.eventName"
-                          required/>
-                <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
-              </md-field>
-            </div>
+            </div>-->
             <div class="md-layout-item md-size-10" style="max-height: 160px;">
               <chart-component
                 class=""
@@ -113,7 +113,7 @@
                   id="year"
                   name="year"
                   @md-selected="selectYear" md-dense>
-                  <md-option v-for="year in years" :value="year.item" >{{year.item}}</md-option>
+                  <md-option v-for="year in years" :key="year.item" :value="parseInt(year.item)" >{{year.item}}</md-option>
                 </md-select>
               </md-field>
             </div>
@@ -128,7 +128,7 @@
                   id="eventType"
                   name="eventType"
                   @md-selected="selectEventTypes" multiple md-dense>
-                  <md-option v-for="eventType in eventTypes" :value="eventType.item" >{{eventType.item}}</md-option>
+                  <md-option v-for="eventType in eventTypes" :key="eventType.item" :value="eventType.item" >{{eventType.item}}</md-option>
                 </md-select>
               </md-field>
             </div>
@@ -143,7 +143,7 @@
                   id="countries"
                   name="countries"
                   @md-selected="selectCountries" multiple md-dense>
-                  <md-option v-for="country in countries" :value="country.item" >{{country.item}}</md-option>
+                  <md-option v-for="country in countries" :key="country.item" :value="country.item" >{{country.item}}</md-option>
                 </md-select>
               </md-field>
             </div>
@@ -158,7 +158,7 @@
                   id="holidays"
                   name="holidays"
                   @md-selected="selectHolidays" multiple md-dense>
-                  <md-option v-for="holiday in holidays" :value="holiday.item" >{{holiday.item}}</md-option>
+                  <md-option v-for="holiday in holidays" :key="holiday.item" :value="holiday.item" >{{holiday.item}}</md-option>
                 </md-select>
               </md-field>
             </div>
@@ -181,9 +181,9 @@
           <md-table class="calendar-grid" style="">
             <tr>
               <th class="weekday-column" style="border-top: none; border-left: none; border-radius: 6px; color: #ddd;">{{selectedYear}}</th>
-              <th class="month-column" v-for="(month,idx) in $moment.monthsShort()" >{{month}}</th>
+              <th class="month-column" v-for="(month,idx) in $moment.monthsShort()" :key="idx">{{month}}</th>
             </tr>
-            <tr v-for="(dayObj,idx) in yearlyCalendarDays" :class="{'weekend-row' : weekendDays[dayObj.weekday]}" style="height: 1px;">
+            <tr v-for="(dayObj,idx) in yearlyCalendarDays" :key="idx" :class="{'weekend-row' : weekendDays[dayObj.weekday]}" style="height: 1px;">
               <td class="weekday-column cell-weekday">{{$moment.weekdaysShort(true,dayObj.weekday)}}</td>
               <template v-for="(month,idx) in $moment.monthsShort()">
                 <td v-if="dayObj.weekdayObj[idx].exists && dayObj.weekdayObj[idx].calendarEvents" v-tooltip="dayObj.weekdayObj[idx].calendarEvents[0].title" class="month-column" style="padding:0;height: inherit;" :class="{'event-cell' : dayObj.weekdayObj[idx].exists && dayObj.weekdayObj[idx].calendarEvents}">
@@ -226,6 +226,7 @@
     },
     data() {
       return {
+        ready: false,
         auth: auth,
         isLoading: true,
         selectedYear: this.$route.params.year || new Date().getFullYear(),
@@ -297,12 +298,14 @@
           console.log(error);
           this.isLoading = false;
         });*/
-
+        this.ready = true;
         this.selectYear();
       }.bind(this))
     },
     methods: {
       selectYear($e) {
+        if (!this.ready) return;
+
         this.isLoading = true;
         let calendarId = this.auth.user.defaultCalendarId;
         this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, { filters: { year: parseInt(this.selectedYear) }}, { headers: this.auth.getAuthHeader() })

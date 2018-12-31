@@ -366,12 +366,13 @@ let appPages = {
       path: "/yearly-plan",
       name: "YearlyPlan",
       component: YearlyPlan,
-      meta: {title: "Yearly Plan"}
-    },
-    {
-      path: "/yearly-plan/:year",
-      name: "YearlyPlan",
-      component: YearlyPlan,
+      children: [
+        {
+          path: "/:year",
+          name: "YearlyPlan By Year",
+          component: YearlyPlan
+        }
+      ],
       meta: {title: "Yearly Plan"}
     },
     {
