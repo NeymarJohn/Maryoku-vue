@@ -1,5 +1,5 @@
 <template>
-  <td class="non-editable-cell" >
+  <td class="non-editable-cell" v-tooltip="cellContents">
     <div class="cell cell-active">
       <span class="cell-date-number">{{dayOnMonth}}</span>
       <span class="event-cell">
@@ -20,7 +20,7 @@
       calendarEvents: {
         type: Array
       },
-      theDate: Date,
+      theDate: String,
       dayOnMonth: String,
     },
     methods: {
@@ -99,5 +99,15 @@
     font-weight: 500;
     color: #999;
     padding: 3px 6px;
+  }
+
+  .vue-tooltip.tooltip-custom {
+    background-color: #efefef;
+    border: 1px solid #aaa;
+    color: black;
+  }
+
+  .vue-tooltip.tooltip-custom .tooltip-arrow {
+    border-color: #aaa;
   }
 </style>
