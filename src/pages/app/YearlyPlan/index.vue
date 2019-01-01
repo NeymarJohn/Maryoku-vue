@@ -204,16 +204,23 @@
                 </td>
               </template>-->
               <template v-for="(month,idx) in $moment.monthsShort()">
-                <non-editable-event v-if="dayObj.weekdayObj[idx].exists && dayObj.weekdayObj[idx].calendarEvents"
-                                    :calendarEvents="dayObj.weekdayObj[idx].calendarEvents"
+                <template v-if="dayObj.weekdayObj[idx].exists">
+                  <template v-if="dayObj.weekdayObj[idx].calendarEvents">
+                  <non-editable-event :calendarEvents="dayObj.weekdayObj[idx].calendarEvents"
                                     :the-date="`${selectedYear}-${idx.padStart(2,'0')}-${dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0')}`"
                                     :day-on-month="dayObj.weekdayObj[idx].dayOnMonth"/>
-
-                <td v-else class="month-column" style="padding:0;height: inherit;">
-                  <div class="cell cell-active" :ref="`ref${dayObj.year}${(idx+1).padStart(2,'0')}${dayObj.weekdayObj[idx].exists ? dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0') : '_'}`">
-                    <span class="cell-date-number" :class="[{'cell-date-number-hidden' : !dayObj.weekdayObj[idx].exists}]">{{dayObj.weekdayObj[idx].dayOnMonth}}</span>
-                  </div>
-                </td>
+                  </template>
+                  <template v-else>
+                    <td class="month-column" style="padding:0;height: inherit;">
+                      <div class="cell cell-active" >
+                        <span class="cell-date-number">{{dayObj.weekdayObj[idx].dayOnMonth}}</span>
+                      </div>
+                    </td>
+                  </template>
+                </template>
+                <template v-else>
+                  <empty-cell/>
+                </template>
               </template>
             </tr>
           </md-table>
@@ -231,12 +238,19 @@
   import auth from '@/auth';
   import Calendar from '@/models/Calendar';
   import CalendarEvent from '@/models/CalendarEvent';
+  import CalendarMetadata from '@/models/CalendarMetadata';
   import VueElementLoading from 'vue-element-loading';
   import ChartComponent from '@/components/Cards/ChartComponent';
   import NonEditableEvent from './CalendarCellNonEditableEvent';
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import yearlyPlanVuexModule from './yearlyPlan.vuex'
+  import EmptyCell from './CalendarCellEmpty';
+  import EditableEvent from './CalendarCellEditableEvent';
 
   export default {
     components: {
+      EditableEvent,
+      EmptyCell,
       NonEditableEvent,
       VueElementLoading,
       ChartComponent,
@@ -270,6 +284,9 @@
         weekDays : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
       }
     },
+    created() {
+      this.$store.registerModule('yearlyPlanVuex', yearlyPlanVuexModule);
+    },
     mounted(){
       console.log("mounted !");
       this.ready = false;
@@ -279,32 +296,28 @@
 
         let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
-        _calendar.years().get().then(years => {
-          this.years = years;
+        _calendar.metadata().get().then(metadatas => {
+
+          let metadata = metadatas[0];
+
+          console.log(metadata);
+          console.log(metadata.eventTypes);
+
+          this.years = metadata.years;
           this.selectedYear = new Date().getFullYear();
 
-          _calendar.eventTypes().get().then(eventTypes => {
-            this.eventTypes = eventTypes;
-            this.selectedEventTypes = this.eventTypes.map(function(entry){ return entry.item;});
-            this.holidaysSelectDisplayed = true;
+          this.eventTypes = metadata.eventTypes;
+          this.selectedEventTypes = this.eventTypes.map(function(entry){ return entry.item;});
+          this.holidaysSelectDisplayed = true;
 
-            _calendar.countries().get().then(countries => {
-              this.countries = countries;
-              this.selectedCountries = this.countries.map(function(entry){ return entry.item;});
+          this.countries = metadata.countries;
+          this.selectedCountries = this.countries.map(function(entry){ return entry.item;});
 
-              _calendar.holidays().get().then(holidays => {
-                this.holidays = holidays;
-                this.selectedHolidays = this.holidays.map(function(entry){ return entry.item;});
+          this.holidays = metadata.holidays;
+          this.selectedHolidays = this.holidays.map(function(entry){ return entry.item;});
 
-                this.ready = true;
-                this.selectYear();
-
-              });
-
-            });
-
-          });
-
+          this.ready = true;
+          this.selectYear();
         });
 
       }.bind(this))
@@ -357,7 +370,7 @@
         this.$store.state.eventData = {
           id: null,
           calendar: {id: null},
-          title: null,
+          title: "Jamil",
           eventStartMillis: null,
           eventEndMillis: null,
           eventType: null,
@@ -423,6 +436,7 @@
       }
     },
     computed: {
+      ...mapState('yearlyPlanVuex', ['filtersData']),
       pieChart() {
         return {
           data: {

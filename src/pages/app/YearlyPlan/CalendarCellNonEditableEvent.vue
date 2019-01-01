@@ -1,10 +1,13 @@
 <template>
-  <td class="non-editable-cell" v-tooltip="cellContents">
+  <td class="non-editable-cell" v-tooltip="{html:`tooltipContent_${theDate}`}">
     <div class="cell cell-active">
       <span class="cell-date-number">{{dayOnMonth}}</span>
       <span class="event-cell">
         <router-link :to="{name: 'NewEvent', params: {selectedDate: theDate, selectedOccasion: cellContents }}">{{cellContents}}</router-link>
       </span>
+    </div>
+    <div :id="`tooltipContent_${theDate}`" class="tooltip-content">
+      <div class="title" v-for="calendarEvent in calendarEvents" :key="calendarEvent.id">{{calendarEvent.title}}</div>
     </div>
   </td>
 </template>
@@ -35,6 +38,9 @@
     computed: {
       cellContents() {
         return this.calendarEvents[0].title;
+      },
+      tooltipContents() {
+        return this.calendarEvents[0].title;
       }
     }
   }
@@ -55,7 +61,7 @@
     max-width: 1px;
 
     &:hover {
-      background-color: transparent;
+      background-color: #e1f5fe;
     }
   }
 
@@ -103,11 +109,11 @@
 
   .vue-tooltip.tooltip-custom {
     background-color: #efefef;
-    border: 1px solid #aaa;
+    border: 1px solid #ccc;
     color: black;
   }
 
   .vue-tooltip.tooltip-custom .tooltip-arrow {
-    border-color: #aaa;
+    border-color: #ccc;
   }
 </style>
