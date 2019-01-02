@@ -2,11 +2,8 @@
   <td class="non-editable-cell" v-tooltip="{html:`tooltipContent_${theDate}`, class: 'tooltip-custom-non-editable'}">
     <div class="cell cell-active">
       <span class="cell-date-number">{{dayOnMonth}}</span>
-      <span class="event-cell" v-if="calendarEvents.nonEditables.length > 1">
+      <span class="event-cell">
         <a href="#">{{cellContents}}</a>
-      </span>
-      <span v-else>
-        <router-link :to="{name: 'NewEvent', params: {selectedDate: theDate, selectedOccasion: cellContents }}">{{cellContents}}</router-link>
       </span>
     </div>
     <div :id="`tooltipContent_${theDate}`" class="tooltip-custom-non-editable" style="text-align: center;">

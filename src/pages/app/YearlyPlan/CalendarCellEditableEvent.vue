@@ -24,13 +24,11 @@
   </td>
 </template>
 <script>
-  import CalendarEvent from '@/models/CalendarEvent'
-  import { PricingCard } from '@/components'
 
   export default {
     name: 'editable-event',
     components: {
-      PricingCard,
+
     },
     props: {
       calendarEvents: {
