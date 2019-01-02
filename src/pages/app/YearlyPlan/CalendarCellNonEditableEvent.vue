@@ -88,10 +88,12 @@
     }
 
     .cell-active {
+      cursor: pointer;
       top: 3px;
     }
 
     .event-cell {
+      cursor: pointer;
       color: #ccc !important;
       font-weight: 500;
     }

@@ -218,7 +218,7 @@
                     </template>
                   </template>
                   <template v-else>
-                    <td class="month-column" style="padding:0;height: inherit; cursor: pointer;">
+                    <td class="month-column" style="padding:0;height: inherit;">
                       <div class="cell cell-active" >
                         <span class="cell-date-number">{{dayObj.weekdayObj[idx].dayOnMonth}}</span>
                       </div>

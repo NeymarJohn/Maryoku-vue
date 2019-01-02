@@ -1,7 +1,9 @@
 <template>
       <div class="md-layout-item md-size-100 wizard-pos">
             <simple-wizard  v-if="openWizard" :removeHeader="false" data-color="rose">
-              <wizard-tab :before-change="() => sendCSVFile()">
+              <wizard-tab>
+                <vue-element-loading :active="csvUploading" spinner="ring" color="#FF547C"/>
+
                 <template slot="label">
                   Upload file
                 </template>
@@ -16,7 +18,7 @@
                       <div class="upload-box_btn form-group">
                         <label for="csv_file" class="control-label col-sm-3 text-right">Browse</label>
                         <div class="col-sm-9">
-                          <input type="file" id="csv_file" name="csv_file" class="form-control" @change="loadCSV($event)">
+                          <input type="file" id="csv_file" @change="sendCSVFile" name="csv_file" class="form-control">
                         </div>
                       </div>
 
@@ -25,20 +27,28 @@
                 </section>
               </wizard-tab>
 
-              <wizard-tab>
+              <wizard-tab :before-change="() => updateVendorsFile()" >
               <template slot="label">
                 Assign Columns
               </template>
               <section class="table-section"  ref="step2">
-                <table class="border-table" v-if="parse_csv">
+                <table class="border-table" v-if="parseCSV">
                   <thead>
                   <tr style="border-top: none;">
-                    <th v-for="(key, index) in parse_header"
-                        @click="sortBy(key)"
-                        :class="{ active: sortKey == key }">
+                    <th
+                            v-if="column !== ''"
+                            v-for="(column, index) in parseCSV.columns"
+                        @click="sortBy(index)"
+                        :class="{ active: sortKey == index }">
                       <md-field>
-                        <md-select id="remove-border" @input="setCSV($event, index)"  v-model="models[index].value" name="select">
-                          <md-option v-for="(item, index) in listOfTypes" :value="item.name" :key="index">{{ item.displayName }}</md-option>
+                        <md-select id="remove-border" v-model="databaseVendorColumns[index].value"  name="select">
+                          <md-option
+                                  v-if="item !== ''"
+                                  v-for="(item, index) in databaseVendorColumns"
+                                  :value="item.name"
+                                  :key="index">
+                            {{ item.displayName }}
+                          </md-option>
 
                         </md-select>
                       </md-field>
@@ -46,9 +56,9 @@
                     </th>
                   </tr>
                   </thead>
-                  <tr v-for="(csv) in parse_csv">
-                    <td v-for="(value) in csv">
-                      {{ value }}
+                  <tr v-for="(row, rowIndex) in parseCSV.rows">
+                    <td v-for="(column, columnIndex) in parseCSV.columns">
+                      {{ row[column] }}
                     </td>
                   </tr>
 
@@ -62,30 +72,10 @@
                   View results
                 </template>
                 <section class="table-section"  ref="step3">
-                  <table class="border-table" v-if="parse_csv">
-                    <thead>
-                    <tr style="border-top: none;">
-                      <th v-for="(key, index) in parse_header"
-                          @click="sortBy(key)"
-                          :class="{ active: sortKey == key }">
-                        <md-field>
-                          <!--<md-select id="remove-border" @input="setCSV($event, index)"  v-model="models[index].value" name="select">-->
-                            <!--<md-option v-for="(item, index) in listOfTypes" :value="item.name" :key="index">{{ item.displayName }}</md-option>-->
-
-                          <!--</md-select>-->
-                        </md-field>
-
-                      </th>
-                    </tr>
-                    </thead>
-                    <tr v-for="(csv) in parse_csv">
-                      <td v-for="(value) in csv">
-                        {{ value }}
-                      </td>
-                    </tr>
-
-                  </table>
-                  <md-button class="finish-btn" >
+                  <p>Rows processed: {{ finalResult.processed }} </p>
+                  <p>Total: {{ finalResult.total }}</p>
+                  <p>Duplicates: {{ finalResult.duplicates }}</p>
+                  <md-button  class="finish-btn" >
                     FINISH
                   </md-button>
                 </section>
@@ -105,6 +95,7 @@
     components:{
       SimpleWizard,
       WizardTab,
+      VueElementLoading
     },
       data () {
           return {
@@ -112,47 +103,133 @@
               channel_name: '',
               type: '',
               models: [],
-              listOfTypes: [
+              finalResult: {
+                processed: 0,
+                total: 0,
+                duplicates: 0,
+              },
+              csvUploading: false,
+              databaseVendorColumns: [
+                {
+                  displayName: 'Vendor Display Name',
+                  name: 'vendorDisplayName',
+                  value: 'vendorDisplayName'
+
+                },
+                {
+                  displayName: 'Contact Person',
+                  name: 'contactPerson',
+                  value: 'contactPerson'
+
+                },
+                {
+                  displayName: 'Vendor Main Email',
+                  name: 'vendorMainEmail',
+                  value: 'vendorMainEmail'
+
+                },
+                {
+                  displayName: 'Vendor Main Phone Number',
+                  name: 'vendorMainPhoneNumber',
+                  value: 'vendorMainPhoneNumber'
+
+                },
+                {
+                  displayName: 'Vendor Website',
+                  name: 'vendorWebsite',
+                  value: 'vendorWebsite'
+
+                },
                   {
-                      displayName: 'Vendor Information',
-                      name: 'vendorDisplayName',
+                      displayName: 'Vendor Category',
+                      name: 'vendorCategory',
                       value: ''
                   },
                   {
-                      displayName: 'Category',
+                      displayName: 'Product Category',
                       name: 'productsCategory',
                       value: ''
 
                   },
                   {
-                      displayName: 'Website',
-                      name: 'vendorWebsite',
+                      displayName: 'Vendor Tax ID',
+                      name: 'vendorTaxId',
                       value: ''
 
                   },
+
                   {
-                      displayName: 'Address',
-                      name: 'vendorAddressLine1',
+                      displayName: 'Vendor Invoice Name',
+                      name: 'vendorInvoiceName',
                       value: ''
 
                   },
-                  {
-                      displayName: 'Email',
-                      name: 'vendorMainEmail',
-                      value: ''
 
-                  },
-                  {
-                      displayName: 'Phone Number',
-                      name: 'vendorMainPhonenumber',
-                      value: ''
+                {
+                  displayName: 'Vendor Address Line 1',
+                  name: 'vendorAddressLine1',
+                  value: ''
 
-                  }
+                },
+                {
+                  displayName: 'Vendor Address Line 2',
+                  name: 'vendorAddressLine2',
+                  value: ''
+
+                },
+                {
+                  displayName: 'Vendor City',
+                  name: 'vendorCity',
+                  value: ''
+
+                },
+                {
+                  displayName: 'Vendor Region',
+                  name: 'vendorRegion',
+                  value: ''
+
+                },
+                {
+                  displayName: 'Vendor Country',
+                  name: 'vendorCountry',
+                  value: ''
+
+                },
+                {
+                  displayName: 'Vendor Zip Code',
+                  name: 'vendorZipCode',
+                  value: ''
+
+                }
+                ,{
+                  displayName: 'Vendor Availability Options',
+                  name: 'vendorAvailabilityOptions',
+                  value: ''
+
+                },
+                {
+                  displayName: 'Vendor Cancellation Policy',
+                  name: 'vendorCancellationPolicy',
+                  value: ''
+
+                },
+                {
+                  displayName: 'Vendor Refund Policy',
+                  name: 'vendorRefundPolicy',
+                  value: ''
+
+                },
+                {
+                  displayName: 'Vendor Logo Image',
+                  name: 'vendorLogoImage',
+                  value: ''
+
+                }
               ],
               channel_fields: [],
               channel_entries: [],
               parse_header: [],
-              parse_csv: [],
+              parseCSV: [],
               sortOrders: {},
               sortKey: '',
               rawCSVFile: null,
@@ -168,6 +245,27 @@
       },
       methods: {
           ...mapMutations('vendorsVuex', ['setFileToState']),
+        updateVendorsFile: async function () {
+
+          let vendorFile = await VendorsFile.find(this.parseCSV.id)
+          console.log('Fetched vendor file is, ', vendorFile)
+          let columnsMapping = [];
+          this.parseCSV.columns.map((item, index) => {
+            if (item !== '') {
+              let mapping  = {}
+              mapping[item] = this.databaseVendorColumns[index].value
+              columnsMapping.push(mapping);
+            }
+          })
+          vendorFile.columnsMapping = columnsMapping;
+
+          let finalResponse = await vendorFile.save();
+          console.log(finalResponse, 'final')
+          this.finalResult = finalResponse;
+          this.$router.push('/vendors');
+          return true
+
+        },
           sortBy: function (key) {
               let vm = this
               vm.sortKey = key
@@ -175,61 +273,31 @@
           },
           setCSV(event, id) {
           },
-          csvJSON(csv) {
-              let vm = this
-              let lines = csv.split("\n")
-              let result = []
-              let headers = lines[0].split(",")
-
-              vm.parse_header = lines[0].split(",")
-              vm.parse_header.forEach((value, index) => {
-                  vm.models.push({value: vm.listOfTypes[0].name})
-              });
-              lines[0].split(",").forEach(function (key) {
-                  vm.sortOrders[key] = 1
-              });
-
-              lines.map(function (line, indexLine) {
-                  let obj = {}
-                  let currentLine = line.split(",")
-                  result.push(currentLine)
-              })
-              result.pop() // remove the last item because undefined values
-              return result // JavaScript object
-          },
-          loadCSV(e) {
-              let vm = this
-              if (window.FileReader) {
-                  let rawCSVFile = e.target.files[0];
-                  let reader = new FileReader();
-                  console.log('CSV file is: ', rawCSVFile);
-                  this.setFileToState(rawCSVFile);
-                  this.rawCSVFile = rawCSVFile;
-                  reader.readAsText(rawCSVFile);
-                  // Handle errors load
-                  reader.onload = function (event) {
-                      let csv = event.target.result;
-                      vm.parse_csv = vm.csvJSON(csv)
-                  };
-                  reader.onerror = function (evt) {
-                      if (evt.target.error.name == "NotReadableError") {
-                          alert("Canno't read file !");
-                      }
-                  };
-              } else {
-                  alert('FileReader are not supported in this browser.');
-              }
-          },
           async sendCSVFile() {
+            this.csvUploading = true;
             let reader = new FileReader();
             let _this = this;
 
             reader.onload = e => {
               let vendorsFile = new VendorsFile({vendorsFile: e.target.result});
               vendorsFile.save().then(result => {
-                console.log(result);
+                _this.parseCSV = result;
+                _this.parseCSV.newColumns = [];
+                _this.parseCSV.columns.map((item, index) => {
+                   if (item !== '') {
+                     let mapping = {}
+                     console.log(' Item is ', item)
+                     _this.databaseVendorColumns[index].value = item
+
+                     _this.parseCSV.newColumns.push(mapping)
+
+                   }
+
+                });
+                _this.csvUploading = false
               })
                 .catch((error) => {
+                  _this.csvUploading = false
                   console.log(error);
                 });
             };
