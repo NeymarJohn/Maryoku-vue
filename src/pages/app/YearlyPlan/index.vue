@@ -206,9 +206,16 @@
               <template v-for="(month,idx) in $moment.monthsShort()">
                 <template v-if="dayObj.weekdayObj[idx].exists">
                   <template v-if="dayObj.weekdayObj[idx].calendarEvents">
-                  <non-editable-event :calendarEvents="dayObj.weekdayObj[idx].calendarEvents"
-                                    :the-date="`${selectedYear}-${idx.padStart(2,'0')}-${dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0')}`"
-                                    :day-on-month="dayObj.weekdayObj[idx].dayOnMonth"/>
+                    <template v-if="dayObj.weekdayObj[idx].calendarEvents.editables.length > 0">
+                      <editable-event :calendarEvents="dayObj.weekdayObj[idx].calendarEvents"
+                                          :the-date="`${selectedYear}-${idx.padStart(2,'0')}-${dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0')}`"
+                                          :day-on-month="dayObj.weekdayObj[idx].dayOnMonth"/>
+                    </template>
+                    <template v-else>
+                      <non-editable-event :calendarEvents="dayObj.weekdayObj[idx].calendarEvents"
+                                          :the-date="`${selectedYear}-${idx.padStart(2,'0')}-${dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0')}`"
+                                          :day-on-month="dayObj.weekdayObj[idx].dayOnMonth"/>
+                    </template>
                   </template>
                   <template v-else>
                     <td class="month-column" style="padding:0;height: inherit;">
@@ -346,9 +353,17 @@
                 let eventStartDate = new Date(eventStartMillis);
                 let eventDateStamp = `${eventStartDate.getFullYear()}${eventStartDate.getMonth().padStart(2,'0')}${eventStartDate.getDate().padStart(2,'0')}`;
                 if (eventsMap[eventDateStamp] === undefined){
-                  eventsMap[eventDateStamp] = [];
+                  eventsMap[eventDateStamp] = {
+                    editables: [],
+                    nonEditables: []
+                  };
                 }
-                eventsMap[eventDateStamp].push(new CalendarEvent(event));
+                console.log("editable " + event.editable);
+                if (event.editable) {
+                  eventsMap[eventDateStamp].editables.push(new CalendarEvent(event));
+                } else {
+                  eventsMap[eventDateStamp].nonEditables.push(new CalendarEvent(event));
+                }
               });
             }
 

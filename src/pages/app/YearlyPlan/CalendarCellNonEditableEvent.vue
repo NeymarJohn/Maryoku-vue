@@ -7,7 +7,7 @@
       </span>
     </div>
     <div :id="`tooltipContent_${theDate}`" class="tooltip-content">
-      <div class="title" v-for="calendarEvent in calendarEvents" :key="calendarEvent.id">{{calendarEvent.title}}</div>
+      <div class="title" v-for="calendarEvent in calendarEvents.nonEditables" :key="calendarEvent.id">{{calendarEvent.title}}</div>
     </div>
   </td>
 </template>
@@ -21,7 +21,7 @@
     },
     props: {
       calendarEvents: {
-        type: Array
+        type: Object
       },
       theDate: String,
       dayOnMonth: String,
@@ -37,10 +37,10 @@
     },
     computed: {
       cellContents() {
-        return this.calendarEvents[0].title;
+        return this.calendarEvents.nonEditables[0].title;
       },
       tooltipContents() {
-        return this.calendarEvents[0].title;
+        return this.calendarEvents.nonEditables[0].title;
       }
     }
   }
@@ -63,48 +63,48 @@
     &:hover {
       background-color: #e1f5fe;
     }
-  }
 
-  .cell {
-    width: 100%;
-    max-width: 100%;
-    min-width: 100%;
-    height: 100%;
-    position: relative;
-    padding: 0;
-    margin: 0;
+    .cell {
+      width: 100%;
+      max-width: 100%;
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+      padding: 0;
+      margin: 0;
 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline;
-  }
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline;
+    }
 
-  .cell-active {
-    cursor: pointer;
-    top: 3px;
-  }
+    .cell-active {
+      cursor: pointer;
+      top: 3px;
+    }
 
-  .event-cell {
-    cursor: pointer;
-    color: #ccc !important;
-    font-weight: 500;
-  }
+    .event-cell {
+      cursor: pointer;
+      color: #ccc !important;
+      font-weight: 500;
+    }
 
-  a {
-    color: #bdbdbd !important;
-  }
+    a {
+      color: #bdbdbd !important;
+    }
 
-  /*.calendar-grid td:hover {
-    background-color: #e1f5fe;
-  }*/
+    /*.calendar-grid td:hover {
+      background-color: #e1f5fe;
+    }*/
 
-  .cell-date-number {
-    float: left;
-    font-size: 12px;
-    font-weight: 500;
-    color: #999;
-    padding: 3px 6px;
+    .cell-date-number {
+      float: left;
+      font-size: 12px;
+      font-weight: 500;
+      color: #999;
+      padding: 3px 6px;
+    }
   }
 
   .vue-tooltip.tooltip-custom {

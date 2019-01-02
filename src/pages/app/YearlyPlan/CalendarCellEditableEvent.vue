@@ -1,9 +1,9 @@
 <template>
-  <td class="non-editable-cell" >
+  <td class="editable-cell" >
     <div class="cell cell-active">
       <span class="cell-date-number">{{dayOnMonth}}</span>
       <span class="event-cell">
-        <router-link :to="{name: 'ShowEvent', params: {id: calendarEvents[0].id }}">{{cellContents}}</router-link>
+        <router-link :to="{name: 'EditEvent', params: {id: calendarEvents.editables[0].id }}">{{cellContents}}</router-link>
       </span>
     </div>
   </td>
@@ -18,9 +18,9 @@
     },
     props: {
       calendarEvents: {
-        type: Array
+        type: Object
       },
-      theDate: Date,
+      theDate: String,
       dayOnMonth: String,
     },
     methods: {
@@ -34,17 +34,17 @@
     },
     computed: {
       cellContents() {
-        return this.calendarEvents[0].title;
+        return this.calendarEvents.editables[0].title;
       }
     }
   }
 </script>
 <style lang="scss">
-  .non-editable-cell {
+  .editable-cell {
     padding:0;
     height: inherit;
-    background-color: transparent;
-    color: #999;
+    background-color: #03a9f4;
+    color: #fff;
 
     white-space: nowrap;
     overflow: hidden;
@@ -55,49 +55,49 @@
     max-width: 1px;
 
     &:hover {
-      background-color: transparent;
+      background-color: #03a9f4;
     }
-  }
 
-  .cell {
-    width: 100%;
-    max-width: 100%;
-    min-width: 100%;
-    height: 100%;
-    position: relative;
-    padding: 0;
-    margin: 0;
+    .cell {
+      width: 100%;
+      max-width: 100%;
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+      padding: 0;
+      margin: 0;
 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline;
-  }
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline;
+    }
 
-  .cell-active {
-    cursor: pointer;
-    top: 3px;
-  }
+    .cell-active {
+      cursor: pointer;
+      top: 3px;
+    }
 
-  .event-cell {
-    cursor: pointer;
-    color: #ccc !important;
-    font-weight: 500;
-  }
+    .event-cell {
+      cursor: pointer;
+      color: #fff !important;
+      font-weight: 500;
+    }
 
-  a {
-    color: #bdbdbd !important;
-  }
+    a {
+      color: #fff !important;
+    }
 
-  /*.calendar-grid td:hover {
-    background-color: #e1f5fe;
-  }*/
+    /*.calendar-grid td:hover {
+      background-color: #e1f5fe;
+    }*/
 
-  .cell-date-number {
-    float: left;
-    font-size: 12px;
-    font-weight: 500;
-    color: #999;
-    padding: 3px 6px;
+    .cell-date-number {
+      float: left;
+      font-size: 12px;
+      font-weight: 500;
+      color: #fff;
+      padding: 3px 6px;
+    }
   }
 </style>
