@@ -3,19 +3,20 @@
     <div class="cell cell-active">
       <span class="cell-date-number">{{dayOnMonth}}</span>
       <span class="event-cell">
-        <a href="#">{{cellContents}}</a>
+        {{cellContents}}
       </span>
     </div>
     <div :id="`tooltipContent_${theDate}`" class="tooltip-custom-non-editable" style="text-align: center;">
-      <div class="title">
-        Start planning for
-        <div v-for="calendarEvent in calendarEvents.nonEditables" :key="calendarEvent.id">
-          <a href="#" class="text-gray md-sm" style="padding: 0;" @click="createEventFor(calendarEvent)">
-            <strong>{{calendarEvent.title}}</strong>
-            <md-icon>chevron_right</md-icon>
-          </a>
-        </div>
-      </div>
+      <md-list class="md-double-line">
+        <md-list-item class="md-inset" v-for="calendarEvent in calendarEvents.nonEditables" :key="calendarEvent.id">
+          <md-button class="md-just-icon md-round md-sm md-rose" style="text-align: center; padding: 0; font-size: 10px;" :to="{name: 'NewEvent', params: {selectedDate: theDate, selectedOccasion: calendarEvent.title }}">
+            <i class="fa fa-calendar-plus"></i>
+          </md-button>
+          <div class="md-list-item-text  md-list-action">
+            <span>{{calendarEvent.title}}</span>
+          </div>
+        </md-list-item>
+      </md-list>
     </div>
   </td>
 </template>
