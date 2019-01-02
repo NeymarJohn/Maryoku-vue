@@ -8,7 +8,7 @@
 
 
     <div class="md-layout-item md-size-30 md-small-size-100 scrollable-container" style="margin-top: -42px;">
-      <event-header-form :occasionOptions="occasionsArray" :formData="formData"></event-header-form>
+      <event-header-form :selected-date="selectedDate" :selected-occasion="selectedOccasion" :occasionOptions="occasionsArray" :formData="formData"></event-header-form>
     </div>
 
     <div  class="md-layout-item md-size-70 md-small-size-100 scrollable-container" v-if="components == null || !components.length">
@@ -117,6 +117,10 @@
       EventActionsEdit,
       PricingCard,
     },
+    props: {
+      selectedDate: String,
+      selectedOccasion: String
+    },
     data: () => ({
       responsive: false,
       calendarId: null,
@@ -171,6 +175,10 @@
       }
     },
     mounted() {
+      this.formData = {
+        occasion: this.$route.params.selectedOccasion,
+        date: moment(this.$route.params.selectedDate, 'YYYY-MM-DD').toDate()
+      };
       this.onResponsiveInverted();
       this.readOnly = ['EventEdit', 'EventNew'].indexOf(this.$route.name) === -1;
       window.addEventListener("resize", this.onResponsiveInverted);

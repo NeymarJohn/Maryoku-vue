@@ -22,7 +22,7 @@
                 <md-input v-model="form.eventName"
                           data-vv-name="eventName"
                           v-validate= "modelValidations.eventName"
-                          />
+                />
                 <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
               </md-field>
             </div>
@@ -33,7 +33,7 @@
                 <md-input v-model="form.eventName"
                           data-vv-name="eventName"
                           v-validate= "modelValidations.eventName"
-                          />
+                />
                 <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
               </md-field>
             </div>
@@ -55,7 +55,7 @@
                 <md-input v-model="form.eventName"
                           data-vv-name="eventName"
                           v-validate= "modelValidations.eventName"
-                          />
+                />
                 <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
               </md-field>
             </div>
@@ -66,7 +66,7 @@
                 <md-input v-model="form.eventName"
                           data-vv-name="eventName"
                           v-validate= "modelValidations.eventName"
-                          />
+                />
                 <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
               </md-field>
             </div>
@@ -103,7 +103,7 @@
         <md-card-content>
 
           <div class="md-layout">
-            <div class="md-layout-item md-size-25">
+            <div class="md-layout-item md-size-10">
               <md-field>
                 <label for="year">Year</label>
                 <md-select
@@ -112,7 +112,7 @@
                   data-vv-name="year"
                   id="year"
                   name="year"
-                  @md-closed="selectYear" md-dense>
+                  @md-selected="filtersChanged = true">
                   <md-option v-for="year in years" :key="year.item" :value="parseInt(year.item)" >{{year.item}}</md-option>
                 </md-select>
               </md-field>
@@ -127,13 +127,13 @@
                   data-vv-name="eventType"
                   id="eventType"
                   name="eventType"
-                  @md-closed="selectEventTypes" multiple md-dense>
+                  @md-selected="filtersChanged = true" multiple>
                   <md-option v-for="eventType in eventTypes" :key="eventType.item" :value="eventType.item" >{{eventType.item}}</md-option>
                 </md-select>
               </md-field>
             </div>
 
-            <div class="md-layout-item md-size-25">
+            <div class="md-layout-item md-size-30">
               <md-field>
                 <label for="countries">Countries</label>
                 <md-select
@@ -142,13 +142,13 @@
                   data-vv-name="countries"
                   id="countries"
                   name="countries"
-                  @md-closed="selectCountries" multiple md-dense>
+                  @md-selected="filtersChanged = true" multiple >
                   <md-option v-for="country in countries" :key="country.item" :value="country.item" >{{country.item}}</md-option>
                 </md-select>
               </md-field>
             </div>
 
-            <div class="md-layout-item md-size-25">
+            <div class="md-layout-item md-size-30">
               <md-field v-if="holidaysSelectDisplayed">
                 <label for="holidays" disabled>Holidays</label>
                 <md-select
@@ -156,12 +156,15 @@
                   data-vv-name="holidays"
                   id="holidays"
                   name="holidays"
-                  @md-closed="selectHolidays" multiple md-dense>
+                  @md-selected="filtersChanged = true" multiple>
                   <md-option v-for="holiday in holidays" :key="holiday.item" :value="holiday.item" >{{holiday.item}}</md-option>
                 </md-select>
               </md-field>
             </div>
 
+            <div class="md-layout-item md-size-5">
+              <md-button class="md-info md-just-icon md-round" :disabled="!filtersChanged" @click="selectYear"><md-icon >refresh</md-icon></md-button>
+            </div>
           </div>
 
         </md-card-content>
@@ -184,13 +187,13 @@
             </tr>
             <tr v-for="(dayObj,idx) in yearlyCalendarDays" :key="idx" :class="{'weekend-row' : weekendDays[dayObj.weekday]}" style="height: 1px;">
               <td class="weekday-column cell-weekday">{{$moment.weekdaysShort(true,dayObj.weekday)}}</td>
-              <template v-for="(month,idx) in $moment.monthsShort()">
+              <!--<template v-for="(month,idx) in $moment.monthsShort()">
                 <td v-if="dayObj.weekdayObj[idx].exists && dayObj.weekdayObj[idx].calendarEvents" v-tooltip="dayObj.weekdayObj[idx].calendarEvents[0].title" class="month-column" style="padding:0;height: inherit;" :class="{'event-cell' : dayObj.weekdayObj[idx].exists && dayObj.weekdayObj[idx].calendarEvents}">
                   <div  class="cell cell-active event-cell" :ref="`ref${dayObj.year}${(idx+1).padStart(2,'0')}${dayObj.weekdayObj[idx].exists ? dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0') : '_'}`">
                     <span class="cell-date-number event-cell" :class="[{'cell-date-number-hidden' : !dayObj.weekdayObj[idx].exists}]">{{dayObj.weekdayObj[idx].dayOnMonth}}</span>
                     <span class="event-cell" :ref="`ref${dayObj.year}${(idx+1).padStart(2,'0')}${dayObj.weekdayObj[idx].exists ? dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0') : '_'}_text`" :class="[{'cell-date-number-hidden' : !dayObj.weekdayObj[idx].exists}]">
                     <router-link :to="{path: `/events/${dayObj.weekdayObj[idx].calendarEvents[0].id}/edit`}">{{dayObj.weekdayObj[idx].calendarEvents[0].title}}</router-link>
-                      <!--<md-tooltip direction="left">{{dayObj.weekdayObj[idx].calendarEvents[0].title}}</md-tooltip>-->
+                      &lt;!&ndash;<md-tooltip direction="left">{{dayObj.weekdayObj[idx].calendarEvents[0].title}}</md-tooltip>&ndash;&gt;
                   </span>
                   </div>
                 </td>
@@ -199,6 +202,32 @@
                     <span class="cell-date-number" :class="[{'cell-date-number-hidden' : !dayObj.weekdayObj[idx].exists}]">{{dayObj.weekdayObj[idx].dayOnMonth}}</span>
                   </div>
                 </td>
+              </template>-->
+              <template v-for="(month,idx) in $moment.monthsShort()">
+                <template v-if="dayObj.weekdayObj[idx].exists">
+                  <template v-if="dayObj.weekdayObj[idx].calendarEvents">
+                    <template v-if="dayObj.weekdayObj[idx].calendarEvents.editables.length > 0">
+                      <editable-event :calendarEvents="dayObj.weekdayObj[idx].calendarEvents"
+                                          :the-date="`${selectedYear}-${idx.padStart(2,'0')}-${dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0')}`"
+                                          :day-on-month="dayObj.weekdayObj[idx].dayOnMonth"/>
+                    </template>
+                    <template v-else>
+                      <non-editable-event :calendarEvents="dayObj.weekdayObj[idx].calendarEvents"
+                                          :the-date="`${selectedYear}-${idx.padStart(2,'0')}-${dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0')}`"
+                                          :day-on-month="dayObj.weekdayObj[idx].dayOnMonth"/>
+                    </template>
+                  </template>
+                  <template v-else>
+                    <td class="month-column" style="padding:0;height: inherit; cursor: pointer;">
+                      <div class="cell cell-active" >
+                        <span class="cell-date-number">{{dayObj.weekdayObj[idx].dayOnMonth}}</span>
+                      </div>
+                    </td>
+                  </template>
+                </template>
+                <template v-else>
+                  <empty-cell/>
+                </template>
               </template>
             </tr>
           </md-table>
@@ -215,11 +244,21 @@
 <script>
   import auth from '@/auth';
   import Calendar from '@/models/Calendar';
+  import CalendarEvent from '@/models/CalendarEvent';
+  import CalendarMetadata from '@/models/CalendarMetadata';
   import VueElementLoading from 'vue-element-loading';
   import ChartComponent from '@/components/Cards/ChartComponent';
+  import NonEditableEvent from './CalendarCellNonEditableEvent';
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import yearlyPlanVuexModule from './yearlyPlan.vuex'
+  import EmptyCell from './CalendarCellEmpty';
+  import EditableEvent from './CalendarCellEditableEvent';
 
   export default {
     components: {
+      EditableEvent,
+      EmptyCell,
+      NonEditableEvent,
       VueElementLoading,
       ChartComponent,
     },
@@ -228,6 +267,7 @@
         ready: false,
         auth: auth,
         isLoading: true,
+        filtersChanged: false,
         selectedYear: this.$route.params.year || new Date().getFullYear(),
         years: [],
         eventTypes: [],
@@ -251,69 +291,56 @@
         weekDays : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
       }
     },
+    created() {
+      this.$store.registerModule('yearlyPlanVuex', yearlyPlanVuexModule);
+    },
     mounted(){
+      console.log("mounted !");
+      this.ready = false;
+      this.filtersChanged = false;
       //this.$store.state.calendarId = this.auth.user.defaultCalendarId;
       this.auth.currentUser(this, true, function() {
+
         let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
-        _calendar.years().get().then(years => {
-          this.years = years;
-          this.selectedYear = new Date().getFullYear();
-        });
+        _calendar.metadata().get().then(metadatas => {
 
-        _calendar.eventTypes().get().then(eventTypes => {
-          this.eventTypes = eventTypes;
+          let metadata = metadatas[0];
+
+          console.log(metadata);
+          console.log(metadata.eventTypes);
+
+          this.years = metadata.years;
+          this.selectedYear = new Date().getFullYear();
+
+          this.eventTypes = metadata.eventTypes;
           this.selectedEventTypes = this.eventTypes.map(function(entry){ return entry.item;});
           this.holidaysSelectDisplayed = true;
-        });
 
-        _calendar.countries().get().then(countries => {
-          this.countries = countries;
+          this.countries = metadata.countries;
           this.selectedCountries = this.countries.map(function(entry){ return entry.item;});
-        });
 
-        _calendar.holidays().get().then(holidays => {
-          this.holidays = holidays;
+          this.holidays = metadata.holidays;
           this.selectedHolidays = this.holidays.map(function(entry){ return entry.item;});
+
+          this.ready = true;
+          this.selectYear();
         });
 
-        /*let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-
-        _calendar.calendarEvents().get().then(events => {
-          let eventsMap = {};
-          if (events) {
-            events.forEach(function(event){
-              let eventStartMillis = event.eventStartMillis;
-              let eventStartDate = new Date(eventStartMillis);
-              let eventDateStamp = `${eventStartDate.getFullYear()}${eventStartDate.getMonth().padStart(2,'0')}${eventStartDate.getDate().padStart(2,'0')}`;
-              if (eventsMap[eventDateStamp] === undefined){
-                eventsMap[eventDateStamp] = [];
-              }
-              eventsMap[eventDateStamp].push(event);
-            });
-          }
-
-          this.yearlyCalendarDays = this.calcCalendarDays(this.selectedYear, eventsMap);
-          this.isLoading = false;
-        }).catch((error) => {
-          console.log(error);
-          this.isLoading = false;
-        });*/
-        this.ready = true;
-        this.selectYear();
       }.bind(this))
     },
     methods: {
       selectYear($e) {
         if (!this.ready) return;
-
+        this.filtersChanged = false;
         this.isLoading = true;
         let filters = { filters: {
-          year: parseInt(this.selectedYear),
-          holidays: this.holidaysSelectDisplayed ? this.selectedHolidays : [],
-          countries: this.selectedCountries,
-          eventTypes: this.selectedEventTypes
-        }};
+            year: parseInt(this.selectedYear),
+            holidays: this.holidaysSelectDisplayed ? this.selectedHolidays : [],
+            countries: this.selectedCountries,
+            eventTypes: this.selectedEventTypes
+          }};
+        console.log("filters: " + filters);
         let calendarId = this.auth.user.defaultCalendarId;
         this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.auth.getAuthHeader() })
           .then(response => response.data)
@@ -326,9 +353,17 @@
                 let eventStartDate = new Date(eventStartMillis);
                 let eventDateStamp = `${eventStartDate.getFullYear()}${eventStartDate.getMonth().padStart(2,'0')}${eventStartDate.getDate().padStart(2,'0')}`;
                 if (eventsMap[eventDateStamp] === undefined){
-                  eventsMap[eventDateStamp] = [];
+                  eventsMap[eventDateStamp] = {
+                    editables: [],
+                    nonEditables: []
+                  };
                 }
-                eventsMap[eventDateStamp].push(event);
+                console.log("editable " + event.editable);
+                if (event.editable) {
+                  eventsMap[eventDateStamp].editables.push(new CalendarEvent(event));
+                } else {
+                  eventsMap[eventDateStamp].nonEditables.push(new CalendarEvent(event));
+                }
               });
             }
 
@@ -350,7 +385,7 @@
         this.$store.state.eventData = {
           id: null,
           calendar: {id: null},
-          title: null,
+          title: "Jamil",
           eventStartMillis: null,
           eventEndMillis: null,
           eventType: null,
@@ -416,6 +451,7 @@
       }
     },
     computed: {
+      ...mapState('yearlyPlanVuex', ['filtersData']),
       pieChart() {
         return {
           data: {
@@ -447,14 +483,14 @@
     border: 1px dotted #aaa;
     text-align: left;
 
-    &.event-cell {
-      background-color: #43a047;
-      color: white;
+    /*&.event-cell {
+      background-color: transparent;
+      color: #bdbdbd;
 
       &:hover {
-        background-color: #43a047;
+        background-color: transparent;
       }
-    }
+    }*/
   }
 
   .calendar-grid th {
@@ -508,18 +544,18 @@
 
   .calendar-grid .event-cell {
     cursor: pointer;
-    color: white !important;
+    color: #ccc !important;
     font-weight: 500;
     top: 3px;
   }
 
   .calendar-grid a {
-    color: white !important;
+    color: #bdbdbd !important;
   }
 
-  .calendar-grid td:hover {
+  /*.calendar-grid td:hover {
     background-color: #e1f5fe;
-  }
+  }*/
 
   .calendar-grid .cell-date-number {
     float: left;

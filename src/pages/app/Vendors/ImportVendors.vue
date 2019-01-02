@@ -1,9 +1,7 @@
 <template>
       <div class="md-layout-item md-size-100 wizard-pos">
             <simple-wizard  v-if="openWizard" :removeHeader="false" data-color="rose">
-              <wizard-tab>
-                <vue-element-loading :active="csvUploading" spinner="ring" color="#FF547C"/>
-
+              <wizard-tab :before-change="() => sendCSVFile()">
                 <template slot="label">
                   Upload file
                 </template>
@@ -18,7 +16,7 @@
                       <div class="upload-box_btn form-group">
                         <label for="csv_file" class="control-label col-sm-3 text-right">Browse</label>
                         <div class="col-sm-9">
-                          <input type="file" id="csv_file" @change="sendCSVFile" name="csv_file" class="form-control">
+                          <input type="file" id="csv_file" name="csv_file" class="form-control" @change="loadCSV($event)">
                         </div>
                       </div>
 
@@ -27,28 +25,20 @@
                 </section>
               </wizard-tab>
 
-              <wizard-tab :before-change="() => updateVendorsFile()" >
+              <wizard-tab>
               <template slot="label">
                 Assign Columns
               </template>
               <section class="table-section"  ref="step2">
-                <table class="border-table" v-if="parseCSV">
+                <table class="border-table" v-if="parse_csv">
                   <thead>
                   <tr style="border-top: none;">
-                    <th
-                            v-if="column !== ''"
-                            v-for="(column, index) in parseCSV.columns"
-                        @click="sortBy(index)"
-                        :class="{ active: sortKey == index }">
+                    <th v-for="(key, index) in parse_header"
+                        @click="sortBy(key)"
+                        :class="{ active: sortKey == key }">
                       <md-field>
-                        <md-select id="remove-border" v-model="parseCSV.newColumns[index][column]"  name="select">
-                          <md-option
-                                  v-if="item !== ''"
-                                  v-for="(item, index) in parseCSV.columns"
-                                  :value="item"
-                                  :key="index">
-                            {{ item }}
-                          </md-option>
+                        <md-select id="remove-border" @input="setCSV($event, index)"  v-model="models[index].value" name="select">
+                          <md-option v-for="(item, index) in listOfTypes" :value="item.name" :key="index">{{ item.displayName }}</md-option>
 
                         </md-select>
                       </md-field>
@@ -56,9 +46,9 @@
                     </th>
                   </tr>
                   </thead>
-                  <tr v-for="(row, rowIndex) in parseCSV.rows">
-                    <td v-for="(column, columnIndex) in parseCSV.columns">
-                      {{ row[column] }}
+                  <tr v-for="(csv) in parse_csv">
+                    <td v-for="(value) in csv">
+                      {{ value }}
                     </td>
                   </tr>
 
@@ -72,7 +62,7 @@
                   View results
                 </template>
                 <section class="table-section"  ref="step3">
-                  <table class="border-table" v-if="parseCSV">
+                  <table class="border-table" v-if="parse_csv">
                     <thead>
                     <tr style="border-top: none;">
                       <th v-for="(key, index) in parse_header"
@@ -88,7 +78,7 @@
                       </th>
                     </tr>
                     </thead>
-                    <tr v-for="(csv) in parseCSV">
+                    <tr v-for="(csv) in parse_csv">
                       <td v-for="(value) in csv">
                         {{ value }}
                       </td>
@@ -115,7 +105,6 @@
     components:{
       SimpleWizard,
       WizardTab,
-      VueElementLoading
     },
       data () {
           return {
@@ -123,7 +112,6 @@
               channel_name: '',
               type: '',
               models: [],
-              csvUploading: false,
               listOfTypes: [
                   {
                       displayName: 'Vendor Information',
@@ -164,7 +152,7 @@
               channel_fields: [],
               channel_entries: [],
               parse_header: [],
-              parseCSV: [],
+              parse_csv: [],
               sortOrders: {},
               sortKey: '',
               rawCSVFile: null,
@@ -180,13 +168,6 @@
       },
       methods: {
           ...mapMutations('vendorsVuex', ['setFileToState']),
-        updateVendorsFile: async function () {
-
-          let vendorFile = await VendorsFile.find(this.parseCSV.id)
-          vendorFile.columnsMapping = this.parseCSV.newColumns
-          vendorFile.save();
-
-        },
           sortBy: function (key) {
               let vm = this
               vm.sortKey = key
@@ -221,14 +202,14 @@
               if (window.FileReader) {
                   let rawCSVFile = e.target.files[0];
                   let reader = new FileReader();
-
+                  console.log('CSV file is: ', rawCSVFile);
                   this.setFileToState(rawCSVFile);
                   this.rawCSVFile = rawCSVFile;
                   reader.readAsText(rawCSVFile);
                   // Handle errors load
                   reader.onload = function (event) {
                       let csv = event.target.result;
-                      vm.parseCSV = vm.csvJSON(csv)
+                      vm.parse_csv = vm.csvJSON(csv)
                   };
                   reader.onerror = function (evt) {
                       if (evt.target.error.name == "NotReadableError") {
@@ -240,30 +221,15 @@
               }
           },
           async sendCSVFile() {
-            this.csvUploading = true;
             let reader = new FileReader();
             let _this = this;
 
             reader.onload = e => {
               let vendorsFile = new VendorsFile({vendorsFile: e.target.result});
               vendorsFile.save().then(result => {
-                _this.parseCSV = result;
-                _this.parseCSV.newColumns = [];
-                _this.parseCSV.columns.map((item, index) => {
-                   if (item !== '') {
-                     let mapping = {}
-                     console.log(' Item is ', item)
-
-                     mapping[item] = item
-                     _this.parseCSV.newColumns.push(mapping)
-
-                   }
-
-                });
-                _this.csvUploading = false
+                console.log(result);
               })
                 .catch((error) => {
-                  _this.csvUploading = false
                   console.log(error);
                 });
             };
