@@ -1,13 +1,24 @@
 <template>
-  <td class="non-editable-cell" v-tooltip="{html:`tooltipContent_${theDate}`}">
+  <td class="non-editable-cell" v-tooltip="{html:`tooltipContent_${theDate}`, class: 'tooltip-custom-non-editable'}">
     <div class="cell cell-active">
       <span class="cell-date-number">{{dayOnMonth}}</span>
-      <span class="event-cell">
+      <span class="event-cell" v-if="calendarEvents.nonEditables.length > 1">
+        <a href="#">{{cellContents}}</a>
+      </span>
+      <span v-else>
         <router-link :to="{name: 'NewEvent', params: {selectedDate: theDate, selectedOccasion: cellContents }}">{{cellContents}}</router-link>
       </span>
     </div>
-    <div :id="`tooltipContent_${theDate}`" class="tooltip-content">
-      <div class="title" v-for="calendarEvent in calendarEvents.nonEditables" :key="calendarEvent.id">{{calendarEvent.title}}</div>
+    <div :id="`tooltipContent_${theDate}`" class="tooltip-custom-non-editable" style="text-align: center;">
+      <div class="title">
+        Start planning for
+        <div v-for="calendarEvent in calendarEvents.nonEditables" :key="calendarEvent.id">
+          <a href="#" class="text-gray md-sm" style="padding: 0;" @click="createEventFor(calendarEvent)">
+            <strong>{{calendarEvent.title}}</strong>
+            <md-icon>chevron_right</md-icon>
+          </a>
+        </div>
+      </div>
     </div>
   </td>
 </template>
@@ -27,7 +38,9 @@
       dayOnMonth: String,
     },
     methods: {
-
+      createEventFor(event){
+        this.$router.push({ name: 'NewEvent', params: {selectedDate: this.theDate, selectedOccasion: event.title }});
+      }
     },
     created() {
 
@@ -39,9 +52,6 @@
       cellContents() {
         return this.calendarEvents.nonEditables[0].title;
       },
-      tooltipContents() {
-        return this.calendarEvents.nonEditables[0].title;
-      }
     }
   }
 </script>
@@ -107,13 +117,15 @@
     }
   }
 
-  .vue-tooltip.tooltip-custom {
-    background-color: #efefef;
-    border: 1px solid #ccc;
+  .vue-tooltip.tooltip-custom-non-editable {
+    background-color: #fff;
+    border: 1px solid #aaa;
     color: black;
+    font-size: 14px;
+    font-weight: 400;
   }
 
-  .vue-tooltip.tooltip-custom .tooltip-arrow {
-    border-color: #ccc;
+  .vue-tooltip.tooltip-custom-non-editable .tooltip-arrow {
+    border-color: #aaa;
   }
 </style>

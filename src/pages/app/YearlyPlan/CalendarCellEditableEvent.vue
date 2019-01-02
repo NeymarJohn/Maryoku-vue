@@ -1,20 +1,36 @@
 <template>
-  <td class="editable-cell" >
+  <td class="editable-cell" v-tooltip="{html:`tooltipContent_${theDate}`, class: 'tooltip-custom-editable'}">
     <div class="cell cell-active">
       <span class="cell-date-number">{{dayOnMonth}}</span>
       <span class="event-cell">
         <router-link :to="{name: 'EditEvent', params: {id: calendarEvents.editables[0].id }}">{{cellContents}}</router-link>
       </span>
     </div>
+    <div :id="`tooltipContent_${theDate}`" class="tooltip-custom-editable" style="text-align: center;">
+      <md-list class="md-double-line">
+        <md-list-item class="md-inset" v-for="calendarEvent in calendarEvents.editables" :key="calendarEvent.id">
+          <div class="md-list-item-text">
+            <span>{{calendarEvent.title}}</span>
+            <span>{{calendarEvent.occasion}}</span>
+          </div>
+
+          <md-button class="md-just-icon md-round md-sm md-rose md-list-action" :to="{name: 'EditEvent', params: {id: calendarEvent.id }}">
+            <md-icon>open_in_new</md-icon>
+          </md-button>
+        </md-list-item>
+      </md-list>
+
+    </div>
   </td>
 </template>
 <script>
   import CalendarEvent from '@/models/CalendarEvent'
+  import { PricingCard } from '@/components'
 
   export default {
     name: 'editable-event',
     components: {
-
+      PricingCard,
     },
     props: {
       calendarEvents: {
@@ -99,5 +115,27 @@
       color: #fff;
       padding: 3px 6px;
     }
+  }
+
+  .vue-tooltip.tooltip-custom-editable {
+    background-color: #fefefe;
+    border: 1px solid #03a9f4;
+    color: black;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .vue-tooltip.tooltip-custom-editable .tooltip-arrow {
+    border-color: #03a9f4;
+  }
+
+  .md-list {
+    padding: 0;
+    margin: 0;
+  }
+
+  .md-list-item {
+    padding: 0;
+    margin: 0;
   }
 </style>
