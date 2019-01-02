@@ -24,7 +24,7 @@ import Notes from "@/pages/app/Notes.vue";
 import Proposals from "@/pages/app/Proposals.vue";
 import Vendors from "@/pages/app/Vendors/Vendors.vue";
 import ImportVendors from "@/pages/app/Vendors/ImportVendors.vue";
-import YearlyPlan from "@/pages/app/YearlyPlan/index.vue";
+import YearlyPlan from "@/pages/app/YearlyPlan.vue";
 
 // Dashboard pages
 import Dashboard from "@/pages/Dashboard/Dashboard.vue";
@@ -366,6 +366,13 @@ let appPages = {
       path: "/yearly-plan",
       name: "YearlyPlan",
       component: YearlyPlan,
+      children: [
+        {
+          path: "/:year",
+          name: "YearlyPlan By Year",
+          component: YearlyPlan
+        }
+      ],
       meta: {title: "Yearly Plan"}
     },
     {

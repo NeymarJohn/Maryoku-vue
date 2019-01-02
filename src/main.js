@@ -10,8 +10,7 @@ import auth from './auth';
 // Plugins
 import App from "./App.vue";
 import Chartist from "chartist";
-import Tooltip from 'vue-directive-tooltip';
-import 'vue-directive-tooltip/css/index.css';
+import VTooltip from 'v-tooltip'
 
 // router setup
 import routes from "./router/routes";
@@ -62,13 +61,7 @@ axios.interceptors.response.use(function (response) {
 
 Vue.use(VueAxios, axios);
 Vue.use(require('vue-moment'));
-Vue.use(Tooltip, {
-  delay: 200,
-  placement: 'auto',
-  class: 'tooltip-custom', // ex: 'tooltip-custom tooltip-other-custom'
-  triggers: ['hover', 'focus'],
-  offset: 5
-});
+Vue.use(VTooltip);
 
 Model.$http = axios;
 

@@ -15,7 +15,7 @@
 
                      data-vv-name="occasion"
                      v-validate= "modelValidations.occasion"
-                     >
+                     required>
             <md-option v-for="option in occasionOptions"
                        :key="option.id"
                        :value="option.value">
@@ -30,7 +30,7 @@
           <md-input v-model="form.eventName"
                     data-vv-name="eventName"
                     v-validate= "modelValidations.eventName"
-                    />
+                    required/>
           <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
         </md-field>
 
@@ -39,7 +39,7 @@
           data-vv-name="date"
           ref="datePicker"
           v-validate= "modelValidations.date"
-          >
+          required>
           <label :class="[{'md-error': ($refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value') )}]">Date</label>
         </md-datepicker>
 
@@ -50,7 +50,7 @@
               <md-select v-model="form.time"
                          data-vv-name="time"
                          v-validate= "modelValidations.time"
-                         >
+                         required>
                 <md-option v-for="hour in hoursArray"
                            :key="hour"
                            :value="hour">
@@ -67,7 +67,7 @@
               <md-select v-model="form.duration"
                          data-vv-name="duration"
                          v-validate= "modelValidations.duration"
-                         >
+                         required>
                 <md-option v-for="hour in durationArray"
                            :key="hour"
                            :value="hour">
@@ -87,7 +87,7 @@
                         v-model="form.participants"
                         data-vv-name="participants"
                         v-validate= "modelValidations.participants"
-                        />
+                        required/>
               <span class="md-error" v-if="errors.has('participants')">The event participants is required and should be in range of 1 - 10 000</span>
             </md-field>
           </div>
@@ -98,7 +98,7 @@
                         v-model="form.location"
                         data-vv-name="location"
                         v-validate= "modelValidations.location"
-                        />
+                        required/>
               <span class="md-error" v-if="errors.has('location')">The location is required</span>
             </md-field>
           </div>
@@ -121,7 +121,7 @@
               <md-input v-model="form.budget"
                         data-vv-name="budget"
                         v-validate= "modelValidations.budget"
-                        />
+                        required/>
               <span class="md-error" v-if="errors.has('budget')">The event budget is required and should be in range of 1 - 1 000 000</span>
             </md-field>
           </div>

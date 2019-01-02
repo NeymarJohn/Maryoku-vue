@@ -8,8 +8,6 @@ import CalendarCountry from './CalendarCountry';
 import CalendarHoliday from './CalendarHoliday';
 import CalendarEvent from './CalendarEvent';
 import CalendarEventQuery from './CalendarEventQuery';
-import CalendarMetadata from './CalendarMetadata';
-
 
 export default class Calendar extends Model {
   resource() {
@@ -50,9 +48,5 @@ export default class Calendar extends Model {
 
   holidays(){
     return this.hasMany(CalendarHoliday);
-  }
-
-  metadata(){
-    return this.hasMany(CalendarMetadata);
   }
 }

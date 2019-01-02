@@ -281,8 +281,7 @@
             participants: event[0].numberOfParticipants,
             status: event[0].status,
             budget: event[0].totalBudget,
-            location: event[0].location,
-            budgetPerPersonFlag: event[0].budgetPerPersonFlag
+            location: event[0].location
           }
         })
         .catch((error) => {

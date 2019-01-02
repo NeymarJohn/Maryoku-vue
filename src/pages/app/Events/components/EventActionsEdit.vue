@@ -1,22 +1,21 @@
 <template>
   <div class="event-status-field">
     <div class="flex-end">
-      <label style="display: none;">Status: </label>
-      <md-field class="status-select" style="display: none;">
+      <!--<label>Status: </label>
+      <md-field class="status-select">
         <md-select v-model="status" name="event-status" @md-selected="changeFormStatus($event)">
           <md-option value="draft">Draft</md-option>
           <md-option value="approved">Approved</md-option>
           <md-option value="execution">Execution</md-option>
           <md-option value="done">Done</md-option>
         </md-select>
-      </md-field>
+      </md-field>-->
 
 
-      <md-button native-type="submit" @click="openImageGallery" class="md-success"  style="display: none;">
+      <!--<md-button native-type="submit" @click="openImageGallery" class="md-success">
         Image Gallery
         <span class="badge md-round md-info" v-if="uploadedImages.length">{{ uploadedImages.length }}</span>
-      </md-button>
-
+      </md-button>-->
       <md-button native-type="submit" @click="submitForm" class="md-success">
         Save
       </md-button>
