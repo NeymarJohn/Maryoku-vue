@@ -75,7 +75,7 @@
                   <p>Rows processed: {{ finalResult.processed }} </p>
                   <p>Total: {{ finalResult.total }}</p>
                   <p>Duplicates: {{ finalResult.duplicates }}</p>
-                  <md-button  class="finish-btn" >
+                  <md-button @click="backToVendor" class="finish-btn" >
                     FINISH
                   </md-button>
                 </section>
@@ -113,31 +113,36 @@
                 {
                   displayName: 'Vendor Display Name',
                   name: 'vendorDisplayName',
-                  value: 'vendorDisplayName'
+                  value: 'vendorDisplayName',
+                  mandatory: true
 
                 },
                 {
                   displayName: 'Contact Person',
                   name: 'contactPerson',
-                  value: 'contactPerson'
+                  value: 'contactPerson',
+                  mandatory: true
 
                 },
                 {
                   displayName: 'Vendor Main Email',
                   name: 'vendorMainEmail',
-                  value: 'vendorMainEmail'
+                  value: 'vendorMainEmail',
+                  mandatory: true
 
                 },
                 {
                   displayName: 'Vendor Main Phone Number',
                   name: 'vendorMainPhoneNumber',
-                  value: 'vendorMainPhoneNumber'
+                  value: 'vendorMainPhoneNumber',
+                  mandatory: true
 
                 },
                 {
                   displayName: 'Vendor Website',
                   name: 'vendorWebsite',
-                  value: 'vendorWebsite'
+                  value: 'vendorWebsite',
+                  mandatory: true
 
                 },
                   {
@@ -246,25 +251,48 @@
       methods: {
           ...mapMutations('vendorsVuex', ['setFileToState']),
         updateVendorsFile: async function () {
-
           let vendorFile = await VendorsFile.find(this.parseCSV.id)
-          console.log('Fetched vendor file is, ', vendorFile)
           let columnsMapping = [];
+          let mapping  = {}
           this.parseCSV.columns.map((item, index) => {
+
             if (item !== '') {
-              let mapping  = {}
               mapping[item] = this.databaseVendorColumns[index].value
-              columnsMapping.push(mapping);
+
             }
           })
-          vendorFile.columnsMapping = columnsMapping;
-
+          vendorFile.columnsMapping = mapping;
+          //validate column mapping
+          if(!this.validateColumnsMapping(mapping)){
+            return false
+          }
           let finalResponse = await vendorFile.save();
-          console.log(finalResponse, 'final')
           this.finalResult = finalResponse;
-          this.$router.push('/vendors');
           return true
 
+        },
+        validateColumnsMapping(mapping){
+          let _this = this;
+          let vendorColumns = this.databaseVendorColumns;
+          let isValid = true;
+          for (let i = 0; i < vendorColumns.length; i++) {
+
+          if(vendorColumns[i].mandatory){
+            if (Object.values(mapping).indexOf(vendorColumns[i].name) === -1) {
+              this.$notify(
+                {
+                  message: 'Field ' + vendorColumns[i].displayName + ' is mandatory.' ,
+                  horizontalAlign: 'center',
+                  verticalAlign: 'top',
+                  type: 'warning'
+                })
+              isValid = false;
+              break;
+            }
+          }
+        }
+
+        return isValid;
         },
           sortBy: function (key) {
               let vm = this
@@ -286,7 +314,6 @@
                 _this.parseCSV.columns.map((item, index) => {
                    if (item !== '') {
                      let mapping = {}
-                     console.log(' Item is ', item)
                      _this.databaseVendorColumns[index].value = item
 
                      _this.parseCSV.newColumns.push(mapping)
@@ -302,7 +329,10 @@
                 });
             };
             reader.readAsDataURL(document.getElementById('csv_file').files[0]);
-          }
+          },
+        backToVendor(){
+          this.$router.push('/vendors');
+        }
       }
   };
 </script>
