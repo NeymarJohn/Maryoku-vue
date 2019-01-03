@@ -331,6 +331,13 @@
             reader.readAsDataURL(document.getElementById('csv_file').files[0]);
           },
         backToVendor(){
+          this.$notify(
+            {
+              message: 'Vendor imported successfully' ,
+              horizontalAlign: 'center',
+              verticalAlign: 'top',
+              type: 'success'
+            })
           this.$router.push('/vendors');
         }
       }
