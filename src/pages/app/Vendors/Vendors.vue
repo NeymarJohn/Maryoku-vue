@@ -15,7 +15,7 @@
       </div>
       <md-card>
         <md-card-content style="min-height: 60px;">
-          <vue-element-loading :active="teamMembersLoading" spinner="ring" color="#FF547C"/>
+          <vue-element-loading :active="loadingData" spinner="ring" color="#FF547C"/>
 
           <vendors-table
                   :tooltipModels="tooltipModels"
@@ -24,11 +24,12 @@
           </vendors-table>
           <md-card-actions md-alignment="space-between">
             <div class="">
-              <p class="card-category">Showing {{ pagination.currentPage }} to {{ pagination.currentPage + 1 }} of {{ pagination.total }} entries</p>
+              <p class="card-category">Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</p>
             </div>
             <pagination class="pagination-no-border pagination-success"
-                        v-model="pagination.currentPage"
-                        :per-page="pagination.perPage"
+                        @input="pageChanged($event)"
+                        v-model="pagination.page"
+                        :per-page="pagination.limit"
                         :total="pagination.total">
             </pagination>
           </md-card-actions>
@@ -36,8 +37,8 @@
         </md-card-content>
       </md-card>
     </div>
-    <create-modal @vendorCreated="fetch"  ref="inviteModal"></create-modal>
-    <upload-modal @vendorImported="fetch"  ref="uploadModal"></upload-modal>
+    <create-modal @vendorCreated="fetchData(1)"  ref="inviteModal"></create-modal>
+    <upload-modal @vendorImported="fetchData(1)"  ref="uploadModal"></upload-modal>
     </div>
 </template>
 
@@ -51,7 +52,7 @@
   import VendorCategories from "@/models/VendorCategories";
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
-  import PaginationConstants from '@/constants/pagination'
+  import { paginationMixin } from '@/mixins/pagination'
 
 
   export default {
@@ -62,35 +63,37 @@
       UploadModal,
       Pagination
     },
+    mixins: [paginationMixin],
     data() {
       return {
         auth: auth,
         vendorsList: [],
         tooltipModels: [],
-        teamMembersLoading: true,
+        loadingData: true,
         importClicked: false,
-        tableHidden: true,
-        pagination: {
-          perPage: PaginationConstants.VENDORS_PER_PAGE,
-          currentPage: 1,
-          perPageOptions: [5, 10, 25, 50],
-          total: 0
-        },
+        tableHidden: true
       }
     },
     created() {
       this.auth.currentUser(this, true, function(){
-        this.fetch();
+        this.fetchData(1);
       }.bind(this));
     },
     methods: {
       ...mapMutations('vendors', ['resetForm']),
-      fetch() {
-        Vendors.page(1)
-          .limit(this.pagination.perPage)
+
+      fetchData(page) {
+        this.loadingData = true;
+
+        Vendors.page(page)
+          .limit(this.pagination.limit)
           .get().then(vendors => {
-          this.vendorsList = vendors;
-          this.teamMembersLoading = false;
+
+          this.vendorsList = vendors[0].results;
+
+          this.updatePagination(vendors[0].model)
+          this.loadingData = false;
+
           this.vendorsList.map((item, index) => {
             this.tooltipModels.push({
               value: false,

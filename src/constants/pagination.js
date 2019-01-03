@@ -1,3 +1,3 @@
 export default Object.freeze({
-  VENDORS_PER_PAGE: 2,
+  ROWS_PER_PAGE: 10,
 })
