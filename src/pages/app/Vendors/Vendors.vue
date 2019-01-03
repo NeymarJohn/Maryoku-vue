@@ -7,7 +7,7 @@
             <md-icon>add</md-icon>
             Create New
           </md-button>
-          <md-button @click="$router.push({ path: 'import-vendors' });" class="md-success">
+          <md-button @click="openUploadModal" class="md-success">
             <md-icon>cloud_upload</md-icon>
             Upload Vendors
           </md-button>
@@ -17,11 +17,27 @@
         <md-card-content style="min-height: 60px;">
           <vue-element-loading :active="teamMembersLoading" spinner="ring" color="#FF547C"/>
 
-          <vendors-table :tooltipModels="tooltipModels" :vendorsList="vendorsList"></vendors-table>
+          <vendors-table
+                  :tooltipModels="tooltipModels"
+                  :vendorsList="vendorsList">
+
+          </vendors-table>
+          <md-card-actions md-alignment="space-between">
+            <div class="">
+              <p class="card-category">Showing {{ pagination.currentPage }} to {{ pagination.currentPage + 1 }} of {{ pagination.total }} entries</p>
+            </div>
+            <pagination class="pagination-no-border pagination-success"
+                        v-model="pagination.currentPage"
+                        :per-page="pagination.perPage"
+                        :total="pagination.total">
+            </pagination>
+          </md-card-actions>
+
         </md-card-content>
       </md-card>
     </div>
     <create-modal @vendorCreated="fetch"  ref="inviteModal"></create-modal>
+    <upload-modal @vendorImported="fetch"  ref="uploadModal"></upload-modal>
     </div>
 </template>
 
@@ -29,18 +45,22 @@
   import CreateModal from './CreateModal';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import VendorsTable from './Table';
-  import ImportVendors from './ImportVendors';
+  import UploadModal from './ImportVendors';
+  import { Pagination } from "@/components"
   import Vendors from "@/models/Vendors";
   import VendorCategories from "@/models/VendorCategories";
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
+  import PaginationConstants from '@/constants/pagination'
+
 
   export default {
     components: {
       CreateModal,
       'vendors-table': VendorsTable,
       VueElementLoading,
-      ImportVendors
+      UploadModal,
+      Pagination
     },
     data() {
       return {
@@ -49,7 +69,13 @@
         tooltipModels: [],
         teamMembersLoading: true,
         importClicked: false,
-        tableHidden: true
+        tableHidden: true,
+        pagination: {
+          perPage: PaginationConstants.VENDORS_PER_PAGE,
+          currentPage: 1,
+          perPageOptions: [5, 10, 25, 50],
+          total: 0
+        },
       }
     },
     created() {
@@ -60,7 +86,9 @@
     methods: {
       ...mapMutations('vendors', ['resetForm']),
       fetch() {
-        Vendors.get().then(vendors => {
+        Vendors.page(1)
+          .limit(this.pagination.perPage)
+          .get().then(vendors => {
           this.vendorsList = vendors;
           this.teamMembersLoading = false;
           this.vendorsList.map((item, index) => {
@@ -115,6 +143,9 @@
       openInviteModal(){
         this.$refs.inviteModal.toggleModal(true);
         this.resetForm();
+      },
+      openUploadModal(){
+        this.$refs.uploadModal.toggleModal(true);
       }
       }
   };

@@ -1,5 +1,7 @@
 <template>
       <div class="md-layout-item md-size-100 wizard-pos">
+        <modal v-if="uploadModalOpen" @close="noticeModalHide" container-class="modal-container-wizard">
+          <template slot="body">
             <simple-wizard  v-if="openWizard" :removeHeader="false" data-color="rose">
               <wizard-tab>
                 <vue-element-loading :active="csvUploading" spinner="ring" color="#FF547C"/>
@@ -81,6 +83,8 @@
                 </section>
               </wizard-tab>
             </simple-wizard>
+          </template>
+        </modal>
     </div>
 </template>
 <script>
@@ -88,17 +92,19 @@
   import VendorsFile from "@/models/VendorsFile";
   import vendorsModule from "./vendors.vuex"
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-  import {SimpleWizard, WizardTab} from "@/components";
+  import {SimpleWizard, WizardTab, Modal} from "@/components";
   import swal from "sweetalert2";
   import VueElementLoading from 'vue-element-loading';
   export default {
     components:{
+      Modal,
       SimpleWizard,
       WizardTab,
       VueElementLoading
     },
       data () {
           return {
+              uploadModalOpen: false,
               openWizard: true,
               channel_name: '',
               type: '',
@@ -249,6 +255,15 @@
       },
       methods: {
           ...mapMutations('vendorsVuex', ['setFileToState']),
+        noticeModalHide: function () {
+          this.uploadModalOpen = false;
+        },
+        closeModal(){
+          this.uploadModalOpen = false;
+        },
+        toggleModal: function (show) {
+          this.uploadModalOpen = show;
+        },
         updateVendorsFile: async function () {
           let vendorFile = await VendorsFile.find(this.parseCSV.id)
           let columnsMapping = [];
@@ -330,6 +345,7 @@
             reader.readAsDataURL(document.getElementById('csv_file').files[0]);
           },
         backToVendor(){
+          this.$emit('vendorImported')
           this.$notify(
             {
               message: 'Vendor imported successfully' ,
@@ -337,7 +353,9 @@
               verticalAlign: 'top',
               type: 'success'
             })
-          this.$router.push('/vendors');
+          this.uploadModalOpen = false;
+//          this.$router.push('/vendors');
+
         }
       }
   };

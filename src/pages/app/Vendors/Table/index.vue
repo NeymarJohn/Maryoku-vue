@@ -97,7 +97,6 @@
 
         </md-table-row>
     </md-table>
-
 </div>
 </template>
 
