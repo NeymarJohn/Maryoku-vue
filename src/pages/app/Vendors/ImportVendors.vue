@@ -142,7 +142,6 @@
                   displayName: 'Vendor Website',
                   name: 'vendorWebsite',
                   value: 'vendorWebsite',
-                  mandatory: true
 
                 },
                   {
