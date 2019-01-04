@@ -12,7 +12,7 @@
       }
     },
     mounted(){
-      let before = new Date();
+      /*let before = new Date();
       if (window.focusEventListener != null){
         window.removeEventListener('focus', window.focusEventListener);
         window.focusEventListener = null;
@@ -24,7 +24,7 @@
         } else {
           before = new Date();
         }
-      });
+      });*/
     }
   };
 </script>

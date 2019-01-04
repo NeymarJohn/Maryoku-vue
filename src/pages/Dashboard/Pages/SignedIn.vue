@@ -32,12 +32,12 @@
           const client = Stomp.over(socket);
 
           client.connect({}, () => {
-            client.subscribe(`/topic/${that.auth.user.username}`, () => {
+            client.subscribe(`/topic/${that.auth.user.id}`, () => {
               alert('Your session timed out.');
               that.auth.logout(that);
             });
-          }, () => {
-            console.error('unable to connect');
+          }, (error) => {
+            console.error('unable to connect : ' + error);
           });
         });
         this.$router.push({ path: '/' });
