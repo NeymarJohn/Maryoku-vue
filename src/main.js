@@ -12,7 +12,6 @@ import App from "./App.vue";
 import Chartist from "chartist";
 import Tooltip from 'vue-directive-tooltip';
 import 'vue-directive-tooltip/css/index.css';
-import vSelectMenu from 'v-selectmenu';
 
 // router setup
 import routes from "./router/routes";
@@ -70,7 +69,6 @@ Vue.use(Tooltip, {
   triggers: ['hover', 'focus'],
   offset: 5
 });
-Vue.use(vSelectMenu, { language: "en"});
 
 Model.$http = axios;
 

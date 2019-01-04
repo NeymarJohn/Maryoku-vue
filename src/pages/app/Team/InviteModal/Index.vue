@@ -3,7 +3,7 @@
     <div class="md-layout">
         <modal v-if="inviteModalOpen" @close="noticeModalHide" container-class="modal-container">
             <template slot="header" class="header-position">
-                <h3 class="title">Invite Your Team</h3>
+                <h3 class="title">{{ modalTitle }}</h3>
                 <button class="btn-position" @click="closeModal">X</button>
             </template>
             <template slot="body">
@@ -11,46 +11,46 @@
                     <div class="md-layout-item md-small-size-100">
                         <div class="md-layout-item md-size-95 md-small-size-100">
                             <div class="grid-col">
-                            <md-field style="margin-right: 10px; width: 97%;" :class="[
-          {'md-valid': !errors.has('firstName') && touched.firstName},
-          {'md-error': errors.has('firstName')}]">
-                                <label>First Name</label>
-                                <md-input
-                                        ref="focusable"
-                                        v-model="first_name"
-                                        data-vv-name="firstName"
-                                        type="text"
-                                        autofocus
-                                        name="firstName"
-                                        required
-                                        v-validate="modelValidations.firstName">
-                                </md-input>
-                                <slide-y-down-transition>
-                                    <md-icon class="error" v-show="errors.has('firstName')">close</md-icon>
-                                </slide-y-down-transition>
-                                <slide-y-down-transition>
-                                    <md-icon class="success" v-show="!errors.has('firstName') && touched.firstName">done</md-icon>
-                                </slide-y-down-transition>
-                            </md-field>
-                            <md-field :class="[
-          {'md-valid': !errors.has('lastName') && touched.lastName},
-          {'md-error': errors.has('lastName')}]">
-                                <label>Last Name</label>
-                                <md-input
-                                        v-model="last_name"
-                                        data-vv-name="lastName"
-                                        type="text"
-                                        name="lastName"
-                                        required
-                                        v-validate="modelValidations.lastName">
-                                </md-input>
-                                <slide-y-down-transition>
-                                    <md-icon class="error" v-show="errors.has('lastName')">close</md-icon>
-                                </slide-y-down-transition>
-                                <slide-y-down-transition>
-                                    <md-icon class="success" v-show="!errors.has('lastName') && touched.lastName">done</md-icon>
-                                </slide-y-down-transition>
-                            </md-field>
+                            <!--<md-field style="margin-right: 10px; width: 97%;" :class="[-->
+          <!--{'md-valid': !errors.has('firstName') && touched.firstName},-->
+          <!--{'md-error': errors.has('firstName')}]">-->
+                                <!--<label>First Name</label>-->
+                                <!--<md-input-->
+                                        <!--ref="focusable"-->
+                                        <!--v-model="first_name"-->
+                                        <!--data-vv-name="firstName"-->
+                                        <!--type="text"-->
+                                        <!--autofocus-->
+                                        <!--name="firstName"-->
+                                        <!--required-->
+                                        <!--v-validate="modelValidations.firstName">-->
+                                <!--</md-input>-->
+                                <!--<slide-y-down-transition>-->
+                                    <!--<md-icon class="error" v-show="errors.has('firstName')">close</md-icon>-->
+                                <!--</slide-y-down-transition>-->
+                                <!--<slide-y-down-transition>-->
+                                    <!--<md-icon class="success" v-show="!errors.has('firstName') && touched.firstName">done</md-icon>-->
+                                <!--</slide-y-down-transition>-->
+                            <!--</md-field>-->
+                            <!--<md-field :class="[-->
+          <!--{'md-valid': !errors.has('lastName') && touched.lastName},-->
+          <!--{'md-error': errors.has('lastName')}]">-->
+                                <!--<label>Last Name</label>-->
+                                <!--<md-input-->
+                                        <!--v-model="last_name"-->
+                                        <!--data-vv-name="lastName"-->
+                                        <!--type="text"-->
+                                        <!--name="lastName"-->
+                                        <!--required-->
+                                        <!--v-validate="modelValidations.lastName">-->
+                                <!--</md-input>-->
+                                <!--<slide-y-down-transition>-->
+                                    <!--<md-icon class="error" v-show="errors.has('lastName')">close</md-icon>-->
+                                <!--</slide-y-down-transition>-->
+                                <!--<slide-y-down-transition>-->
+                                    <!--<md-icon class="success" v-show="!errors.has('lastName') && touched.lastName">done</md-icon>-->
+                                <!--</slide-y-down-transition>-->
+                            <!--</md-field>-->
                         </div>
                         </div>
                         <div class="md-layout-item md-size-95 md-small-size-100">
@@ -58,14 +58,15 @@
                           {'md-valid': !errors.has('email') && touched.email},
                           {'md-error': errors.has('email')}]">
                                 <label>Email</label>
-                                <md-input
+                                <md-textarea
+                                        pattern="^(\s?[^\s,]+@[^\s,]+\.[^\s,]+\s?,)*(\s?[^\s,]+@[^\s,]+\.[^\s,]+)$"
                                         v-model="emailAddress"
                                         data-vv-name="email"
                                         type="email"
                                         name="email"
                                         required
                                         v-validate="modelValidations.email">
-                                </md-input>
+                                </md-textarea>
                                 <slide-y-down-transition>
                                     <md-icon class="error" v-show="errors.has('email')">close</md-icon>
                                 </slide-y-down-transition>
@@ -90,6 +91,7 @@
                                     <md-option value="manager">Manager</md-option>
                                     <md-option value="team_leader">Team Leader</md-option>
                                     <md-option value="employee">Employee</md-option>
+                                    <md-option value="Guest">Guest</md-option>
                                 </md-select>
                                 <slide-y-down-transition>
                                     <md-icon class="error" v-show="errors.has('role')">close</md-icon>
@@ -116,6 +118,8 @@
                                     <md-option value="edit">Edit</md-option>
                                     <md-option value="create">Create</md-option>
                                     <md-option value="request_budget">Request Budget</md-option>
+                                    <md-option value="View">View</md-option>
+                                    <md-option value="Vote">Vote</md-option>
                                 </md-select>
                                 <slide-y-down-transition>
                                     <md-icon class="error" v-show="errors.has('permissions')">close</md-icon>
@@ -130,7 +134,7 @@
             </template>
             <template slot="footer">
                 <md-button class="move-left md-rose md-simple" @click="closeModal">Close</md-button>
-                <md-button native-type="validated" class="md-success" @click="sendInvitatio">Send Invitation</md-button>
+                <md-button native-type="validated" class="md-success" @click="sendInvitatio">{{ modalSubmitTitle }}</md-button>
             </template>
         </modal>
     </div>
@@ -139,7 +143,6 @@
 
 <script>
     import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-    import teamVuexModule from '../team.vuex'
     import {Modal, SimpleWizard, WizardTab} from "@/components";
     import swal from "sweetalert2";
     import Teams from "@/models/Teams";
@@ -162,27 +165,25 @@
         },
         data() {
             return {
-                inviteModalOpen: false,
               greenSuccess: false,
               touched: {
-                firstName: false,
-                lastName: false,
+//                firstName: false,
+//                lastName: false,
                 email: false,
                 permissions: false,
                 role: false,
               },
               modelValidations: {
-                firstName: {
-                  required: true,
-                  min: 5
-                },
-                lastName: {
-                  required: true,
-                  min: 5
-                },
+//                firstName: {
+//                  required: true,
+//                  min: 5
+//                },
+//                lastName: {
+//                  required: true,
+//                  min: 5
+//                },
                 email: {
                   required: true,
-                  email: true
                 },
                 role: {
                   required: true
@@ -194,28 +195,33 @@
             }
         },
         created() {
-            this.$store.registerModule('teamVuex', teamVuexModule);
         },
         computed: {
-            ...mapState('teamVuex', ['teamMemberData']),
-          first_name: {
-            get() {
-              return this.teamMemberData.firstName
-            },
-            set(value) {
-              this.setMemberProperty({key: 'firstName', actualValue: value})
-            },
-
-          },
-          last_name: {
-            get() {
-              return this.teamMemberData.lastName
-            },
-            set(value) {
-              this.setMemberProperty({key: 'lastName', actualValue: value})
-            },
-
-          },
+            ...mapState('teamVuex', [
+              'teamMemberData',
+              'inviteModalOpen',
+              'modalTitle',
+              'modalSubmitTitle',
+              'editMode'
+            ]),
+//          first_name: {
+//            get() {
+//              return this.teamMemberData.firstName
+//            },
+//            set(value) {
+//              this.setMemberProperty({key: 'firstName', actualValue: value})
+//            },
+//
+//          },
+//          last_name: {
+//            get() {
+//              return this.teamMemberData.lastName
+//            },
+//            set(value) {
+//              this.setMemberProperty({key: 'lastName', actualValue: value})
+//            },
+//
+//          },
           emailAddress: {
             get() {
               return this.teamMemberData.emailAddress
@@ -243,19 +249,16 @@
           },
         },
         methods: {
-          ...
-            mapMutations('teamVuex', [
-              'setMemberProperty','resetForm'
-            ]),
+          ...mapMutations('teamVuex', ['setMemberProperty','resetForm', 'setInviteModal']),
             noticeModalHide: function () {
-                this.inviteModalOpen = false;
+              this.setInviteModal(false);
             },
             closeModal(){
-              this.inviteModalOpen = false;
+              this.setInviteModal(false);
             },
-            toggleModal: function (show, ref) {
-                this.inviteModalOpen = show;
-              setTimeout(() => {this.$refs.focusable.$el.focus();}, 100);
+            toggleModal: function (show) {
+                this.setInviteModal(show);
+//              setTimeout(() => {this.$refs.focusable.$el.focus();}, 100);
             },
             onStepValidated(validated, model) {
                 this.wizardModel = {...this.wizardModel, ...model};
@@ -270,10 +273,12 @@
             });
           },
           sendInvitatio() {
-
             this.$validator.validateAll().then(res => {
-                  if(res){
-                  this.inviteModalOpen = false;
+              if (this.editMode) {
+                this.updateTeamMember();
+              } else {
+                if(res){
+                  this.setInviteModal(false);
                   Teams.first().then((team) => {
                     team.members().attach(this.teamMemberData).then(() => {
                       this.$emit('memberCreated');
@@ -291,17 +296,30 @@
                   this.$emit("on-validated", res);
                   return res;
                 }
+              }
               });
-            }
+            },
+         async updateTeamMember() {
+           let team = await Teams.get();
+           console.log(team);
+           let member = await team[0].members().find(this.editMode)
+           console.log(member)
+           member.emailAddress = this.teamMemberData.emailAddress;
+           await member.save();
+
+           this.setInviteModal(false);
+
+
+         }
         },
       watch: {
-        firstName() {
-          this.touched.firstName = true;
-        }
-        ,
-        lastName() {
-          this.touched.lastName = true;
-        },
+//        firstName() {
+//          this.touched.firstName = true;
+//        }
+//        ,
+//        lastName() {
+//          this.touched.lastName = true;
+//        },
         email() {
           this.touched.email = true;
         },

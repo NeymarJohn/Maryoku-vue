@@ -26,6 +26,7 @@
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import TeamTable from './Table';
   import Teams from "@/models/Teams";
+  import teamVuexModule from './team.vuex'
   import VueElementLoading from 'vue-element-loading';
   export default {
     components: {
@@ -42,12 +43,17 @@
       }
     },
     created() {
+      this.$store.registerModule('teamVuex', teamVuexModule);
+
       this.auth.currentUser(this, true, function(){
         this.fetchTeam();
       }.bind(this));
     },
+    destroyed() {
+      this.$store.unregisterModule('teamVuex');
+    },
     methods: {
-      ...mapMutations('teamVuex', ['resetForm']),
+      ...mapMutations('teamVuex', ['resetForm', 'setInviteModal', 'setEditMode']),
       fetchTeam(){
         this.teamMembersLoading = true;
         /*Teams.get().then(teams => {
@@ -67,7 +73,8 @@
       },
 
       openInviteModal(){
-        this.$refs.inviteModal.toggleModal(true);
+        this.setInviteModal({ showModal: true })
+        this.setEditMode({editMode: false})
         this.resetForm();
       }
     }

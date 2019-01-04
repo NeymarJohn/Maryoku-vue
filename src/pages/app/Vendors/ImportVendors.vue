@@ -2,7 +2,11 @@
       <div class="md-layout-item md-size-100 wizard-pos">
         <modal v-if="uploadModalOpen" @close="noticeModalHide" container-class="modal-container-wizard">
           <template slot="body">
-            <simple-wizard  v-if="openWizard" :removeHeader="false" data-color="rose">
+            <simple-wizard  v-if="openWizard" data-color="rose">
+              <template slot="header">
+                <h3 class="title">Upload Vendors</h3>
+                <button class="btn-position" @click="closeModal">X</button>
+              </template>
               <wizard-tab>
                 <vue-element-loading :active="csvUploading" spinner="ring" color="#FF547C"/>
 
@@ -255,6 +259,9 @@
       },
       methods: {
           ...mapMutations('vendorsVuex', ['setFileToState']),
+        closeModal(){
+          this.uploadModalOpen = false;
+        },
         noticeModalHide: function () {
           this.uploadModalOpen = false;
         },
@@ -345,7 +352,7 @@
             reader.readAsDataURL(document.getElementById('csv_file').files[0]);
           },
         backToVendor(){
-          this.$emit('vendorImported')
+
           this.$notify(
             {
               message: 'Vendor imported successfully' ,
@@ -415,5 +422,26 @@
     z-index: 9999;
     border: 1px solid white!important;
      padding: 0px 15px;
+  }
+  .btn-position{
+    position: absolute;
+    right: 15px;
+    font-weight: bold;
+    top: 20px;
+    font-size: 17px;
+    background-color: transparent!important;
+    box-shadow: none!important;
+    color: gray!important;
+    border-color: transparent;
+    cursor: pointer;
+
+    &:hover, &:visited, &:focus, &:active{
+      background-color: transparent!important;
+      box-shadow: none!important;
+      color: gray!important;
+    }
+  }
+  .header-position {
+    position: relative;
   }
 </style>

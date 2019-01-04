@@ -1,6 +1,16 @@
 <template>
-  <md-table v-model="teamMembers" table-header-color="rose" class="table-striped table-hover">
-    <md-table-row slot="md-table-row" slot-scope="{ item }">
+
+  <md-table slot-scope="{ item }" @md-selected="onSelect" v-model="teamMembers" table-header-color="rose" class="table-striped table-hover">
+    <div class="grid-col pad-20" slot="md-table-alternate-header" slot-scope="{ count }">
+      <div class="md-toolbar-section-start">{{ getAlternateLabel(count) }}</div>
+
+      <div class="md-toolbar-section-end">
+        <md-button @click.native="deleteAllTeamMember(item)" class="delete-btn md-raised md-primary md-icon-button">
+          <md-icon>delete</md-icon>
+        </md-button>
+      </div>
+    </div>
+    <md-table-row slot="md-table-row" slot-scope="{ item }" md-selectable="multiple">
       <md-table-cell md-label="Name">{{ item.firstName }} {{item.lastName}}</md-table-cell>
       <md-table-cell md-label="Email">{{ item.emailAddress }}</md-table-cell>
       <md-table-cell md-label="Role">{{ item.role }}</md-table-cell>
@@ -10,9 +20,13 @@
           <md-icon>delete</md-icon>
           <md-tooltip md-direction="top">Delete</md-tooltip>
         </md-button>
+        <md-button @click.native="toggleEditModal(true, item)" class="md-raised md-primary md-icon-button">
+          <md-icon>edit</md-icon>
+        </md-button>
       </md-table-cell>
     </md-table-row>
   </md-table>
+
 </template>
 
 <script>
@@ -48,26 +62,26 @@
     },
     data() {
       return {
-        inviteModalOpen: false,
         hideBtn: false,
         currentUserId: indexVuexModule.state.currentUser.id,
       }
     },
     methods: {
-      noticeModalHide: function () {
-        this.inviteModalOpen = false;
+      ...mapActions('teamVuex', ['setInviteModalAndTeamMember']),
+      onSelect (items) {
+        this.selected = items
       },
-      toggleModal: function (show) {
-        this.inviteModalOpen = show;
+      getAlternateLabel (count) {
+        let plural = ''
+
+        if (count > 1) {
+          plural = 's'
+        }
+
+        return `${count} user${plural} selected`
       },
-      validateStep(ref) {
-        return this.$refs[ref].validate();
-      },
-      onStepValidated(validated, model) {
-        this.wizardModel = {...this.wizardModel, ...model};
-      },
-      wizardComplete() {
-        swal("Good job!", "You clicked the finish button!", "success");
+      toggleEditModal: function (show, item) {
+        this.setInviteModalAndTeamMember({showModal: show, teamMember: item});
       },
       async deleteTeam(id){
         let team = await Teams.first(id);
@@ -103,10 +117,49 @@
               })
           }
         })
+      },
+      async deleteAllTeamMember(teamMember){
+        swal({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then(async (result) => {
+          if (result.value) {
+
+            teamMember.delete();
+            this.$emit("memberDeleted");
+            let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
+            this.teamMembers.splice(teamMemberIndex)
+
+            this.$notify(
+              {
+                message: 'Team member deleted successfully!',
+                horizontalAlign: 'center',
+                verticalAlign: 'top',
+                type: 'success'
+              })
+          }
+        })
       }
     }
   };
 </script>
 <style>
-
+.pad-20{
+  margin: 20px;
+}
+.md-table-alternate-header{
+  position: relative;
+}
+  .delete-btn{
+    padding: 5px;
+    height: 27px;
+    min-width: 27px;
+    width: 27px;
+    line-height: 27px;
+  }
 </style>

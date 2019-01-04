@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout">
-    <modal v-if="modalOpen" @close="noticeModalHide" :allow-click-outside="false">
+    <modal v-if="modalOpen" @close="noticeModalHide">
       <template slot="header">
         <h4 class="modal-title">
           {{ componentItemIndex !== null && componentItemIndex > -1 ? 'Edit' : 'Add new' }} component
@@ -25,16 +25,9 @@
                                  @md-opened="mdOpenedTitle"
                                  class="change-icon-order select-with-icon mb16"
                                  :class="[{'md-error': errors.has('title')}]">
-                  <label>Requirement</label>
+                  <label>Property Name</label>
                   <span class="md-error" v-if="errors.has('title')">This field is required</span>
-
-                  <template slot="md-autocomplete-item" slot-scope="{ item, term }">
-                    <md-highlight-text :md-term="term">{{ item.title }}</md-highlight-text>
-                    <div class="text-gray pull-right small" style="text-transform: uppercase;">{{ item.group}}</div>
-                  </template>
                 </md-autocomplete>
-                <!--<v-selectmenu :data="propertyValues"  key-field="id" show-field="title" class="md-select-menu change-icon-order select-with-icon mb16" :class="[{'md-error': errors.has('title')}]">
-                </v-selectmenu>-->
               </div>
             </div>
 
@@ -125,10 +118,6 @@
         propertyValuesObjects: [],
         propertyValues: [],
         propertyValuesArray: [],
-        list: [
-          {id:1 ,name:'Chicago Bulls',desc:'bbb'},
-          {id:2 ,name:'Cleveland Cavaliers',desc:'aaa'},
-        ]
       }
     },
     methods: {
@@ -201,28 +190,9 @@
       getEventComponentProperty() {
         let eventProperty = new EventComponentProperty().for(new EventComponent({id: this.component.componentId}));
 
-        eventProperty.get().then(eventProperties => {
-          this.propertyValuesObjects = eventProperties;
-          this.propertyValues = [];
-          eventProperties.forEach((eventProperty) => {
-            /*let p = {
-              id: eventProperty.id,
-                title: eventProperty.title
-            };*/
-            if (eventProperty.type === "Group"){
-              //p["list"] = [];
-
-              eventProperty.childProperties.forEach((childProperty) => {
-                let childP = {
-                  id: childProperty.id,
-                  title: childProperty.title,
-                  group: eventProperty.title
-                };
-               this.propertyValues.push(childP);
-              });
-            }
-            //this.propertyValues.push(p);
-          });
+        eventProperty.get().then(response => {
+          this.propertyValuesObjects = response;
+          this.propertyValues = response.length ? response.map((val) => val.title) : [];
           this.isLoading = false;
         })
           .catch((error) => {

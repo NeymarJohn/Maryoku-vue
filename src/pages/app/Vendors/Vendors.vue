@@ -72,6 +72,7 @@
         loadingData: true,
         importClicked: false,
         tableHidden: true
+
       }
     },
     created() {

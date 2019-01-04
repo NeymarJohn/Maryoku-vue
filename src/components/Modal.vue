@@ -27,17 +27,11 @@ export default {
     containerClass: {
       type: String,
       default: 'modal-container'
-    },
-    allowClickOutside: {
-      type: Boolean,
-      default: true
     }
   },
   methods: {
     closeModal: function() {
-      if (this.allowClickOutside) {
-        this.$emit('close');
-      }
+      this.$emit("close");
     }
   }
 };
