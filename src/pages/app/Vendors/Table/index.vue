@@ -23,12 +23,10 @@
                         @click="openPopover(index)"
                         class="md-raised md-info md-icon-button">
                     <md-icon>thumb_up</md-icon>
-                    <md-tooltip md-direction="left">Ranking</md-tooltip>
                 </md-button>
 
                  <md-button class="md-raised md-primary md-icon-button" @click.native="deleteVendor(item.id)">
                     <md-icon>delete</md-icon>
-                    <md-tooltip md-direction="left">Delete</md-tooltip>
                  </md-button>
 
                 <!--<md-button class="md-raised md-primary md-icon-button" @click.native="test">-->
@@ -38,11 +36,14 @@
 
                 <md-button class="md-raised md-primary md-icon-button" @click="openPopoverTags(index)">
                     <md-icon>local_offer</md-icon>
-                    <md-tooltip md-direction="left">Tags</md-tooltip>
                 </md-button>
             </md-table-cell>
 
-                <div class="popup-box" v-if="tooltipModels[index].value && (openPopup)"  :md-active.sync="tooltipModels[index].value" md-direction="left">
+                <div class="popup-box"
+                     v-click-outside="closeModal"
+                     v-if="tooltipModels[index].value && (openPopup)"
+                     :md-active.sync="tooltipModels[index].value"
+                     md-direction="left">
                     <div class="header-position">
                         <h3 class="title">Ranking</h3>
                         <button class="btn-position" @click="closeModal">X</button>
@@ -73,7 +74,7 @@
                         <md-button class="btn-success md-success">Submit</md-button>
                     </div>
                 </div>
-                <div class="popup-box" v-if="tooltipModels[index].value && (openPopupTags)"  :md-active.sync="tooltipModels[index].value" md-direction="left">
+                <div class="popup-box"  v-click-outside="closeTagsModal" v-if="tooltipModels[index].value && (openPopupTags)"  :md-active.sync="tooltipModels[index].value" md-direction="left">
                     <div class="header-position">
                         <h3 class="title">Tagging</h3>
                         <button class="btn-position" @click="closeTagsModal">X</button>
@@ -106,13 +107,16 @@
     import Vendors from "@/models/Vendors";
     import RankingModal from './RankingModal';
     import TagsModal from './TagsModal';
+    import ClickOutside from 'vue-click-outside'
+
     export default {
         components: {
             Modal,
             SimpleWizard,
             WizardTab,
             TagsModal,
-            RankingModal
+            RankingModal,
+            ClickOutside
         },
         props: {
             vendorsList: {
