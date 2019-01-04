@@ -1,11 +1,15 @@
 <template>
 
-  <md-table slot-scope="{ item }" @md-selected="onSelect" v-model="teamMembers" table-header-color="rose" class="table-striped table-hover">
+  <md-table slot-scope="{ item }"
+            @md-selected="onSelect"
+            v-model="teamMembers"
+            table-header-color="rose"
+            class="table-striped table-hover">
     <div class="grid-col pad-20" slot="md-table-alternate-header" slot-scope="{ count }">
       <div class="md-toolbar-section-start">{{ getAlternateLabel(count) }}</div>
 
       <div class="md-toolbar-section-end">
-        <md-button @click.native="deleteAllTeamMember(item)" class="delete-btn md-raised md-primary md-icon-button">
+        <md-button @click.native="deleteAllTeamMember()" class="delete-btn md-raised md-primary md-icon-button">
           <md-icon>delete</md-icon>
         </md-button>
       </div>
@@ -129,15 +133,17 @@
           confirmButtonText: 'Yes, delete it!'
         }).then(async (result) => {
           if (result.value) {
-
-            teamMember.delete();
-            this.$emit("memberDeleted");
-            let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
-            this.teamMembers.splice(teamMemberIndex)
+            this.selected.forEach((item, index) => {
+              let teamMember = item
+              teamMember.delete();
+              this.$emit("memberDeleted");
+              let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
+              this.teamMembers.splice(teamMemberIndex)
+            })
 
             this.$notify(
               {
-                message: 'Team member deleted successfully!',
+                message: 'Team members deleted successfully!',
                 horizontalAlign: 'center',
                 verticalAlign: 'top',
                 type: 'success'
