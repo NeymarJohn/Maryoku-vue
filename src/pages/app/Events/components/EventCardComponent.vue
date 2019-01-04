@@ -232,6 +232,7 @@
       deleteTodo: Function,
       deleteComponentItem: Function,
       deleteComponent: Function,
+      tabName: String,
     },
     name: 'event-card-component',
     data: function() {

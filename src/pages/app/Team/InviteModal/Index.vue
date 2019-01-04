@@ -11,46 +11,46 @@
                     <div class="md-layout-item md-small-size-100">
                         <div class="md-layout-item md-size-95 md-small-size-100">
                             <div class="grid-col">
-                            <!--<md-field style="margin-right: 10px; width: 97%;" :class="[-->
-          <!--{'md-valid': !errors.has('firstName') && touched.firstName},-->
-          <!--{'md-error': errors.has('firstName')}]">-->
-                                <!--<label>First Name</label>-->
-                                <!--<md-input-->
-                                        <!--ref="focusable"-->
-                                        <!--v-model="first_name"-->
-                                        <!--data-vv-name="firstName"-->
-                                        <!--type="text"-->
-                                        <!--autofocus-->
-                                        <!--name="firstName"-->
-                                        <!--required-->
-                                        <!--v-validate="modelValidations.firstName">-->
-                                <!--</md-input>-->
-                                <!--<slide-y-down-transition>-->
-                                    <!--<md-icon class="error" v-show="errors.has('firstName')">close</md-icon>-->
-                                <!--</slide-y-down-transition>-->
-                                <!--<slide-y-down-transition>-->
-                                    <!--<md-icon class="success" v-show="!errors.has('firstName') && touched.firstName">done</md-icon>-->
-                                <!--</slide-y-down-transition>-->
-                            <!--</md-field>-->
-                            <!--<md-field :class="[-->
-          <!--{'md-valid': !errors.has('lastName') && touched.lastName},-->
-          <!--{'md-error': errors.has('lastName')}]">-->
-                                <!--<label>Last Name</label>-->
-                                <!--<md-input-->
-                                        <!--v-model="last_name"-->
-                                        <!--data-vv-name="lastName"-->
-                                        <!--type="text"-->
-                                        <!--name="lastName"-->
-                                        <!--required-->
-                                        <!--v-validate="modelValidations.lastName">-->
-                                <!--</md-input>-->
-                                <!--<slide-y-down-transition>-->
-                                    <!--<md-icon class="error" v-show="errors.has('lastName')">close</md-icon>-->
-                                <!--</slide-y-down-transition>-->
-                                <!--<slide-y-down-transition>-->
-                                    <!--<md-icon class="success" v-show="!errors.has('lastName') && touched.lastName">done</md-icon>-->
-                                <!--</slide-y-down-transition>-->
-                            <!--</md-field>-->
+                            <md-field style="margin-right: 10px; width: 97%;" :class="[
+          {'md-valid': !errors.has('firstName') && touched.firstName},
+          {'md-error': errors.has('firstName')}]">
+                                <label>First Name</label>
+                                <md-input
+                                        ref="focusable"
+                                        v-model="first_name"
+                                        data-vv-name="firstName"
+                                        type="text"
+                                        autofocus
+                                        name="firstName"
+                                        required
+                                        v-validate="modelValidations.firstName">
+                                </md-input>
+                                <slide-y-down-transition>
+                                    <md-icon class="error" v-show="errors.has('firstName')">close</md-icon>
+                                </slide-y-down-transition>
+                                <slide-y-down-transition>
+                                    <md-icon class="success" v-show="!errors.has('firstName') && touched.firstName">done</md-icon>
+                                </slide-y-down-transition>
+                            </md-field>
+                            <md-field :class="[
+          {'md-valid': !errors.has('lastName') && touched.lastName},
+          {'md-error': errors.has('lastName')}]">
+                                <label>Last Name</label>
+                                <md-input
+                                        v-model="last_name"
+                                        data-vv-name="lastName"
+                                        type="text"
+                                        name="lastName"
+                                        required
+                                        v-validate="modelValidations.lastName">
+                                </md-input>
+                                <slide-y-down-transition>
+                                    <md-icon class="error" v-show="errors.has('lastName')">close</md-icon>
+                                </slide-y-down-transition>
+                                <slide-y-down-transition>
+                                    <md-icon class="success" v-show="!errors.has('lastName') && touched.lastName">done</md-icon>
+                                </slide-y-down-transition>
+                            </md-field>
                         </div>
                         </div>
                         <div class="md-layout-item md-size-95 md-small-size-100">
@@ -58,15 +58,14 @@
                           {'md-valid': !errors.has('email') && touched.email},
                           {'md-error': errors.has('email')}]">
                                 <label>Email</label>
-                                <md-textarea
-                                        pattern="^(\s?[^\s,]+@[^\s,]+\.[^\s,]+\s?,)*(\s?[^\s,]+@[^\s,]+\.[^\s,]+)$"
+                                <md-input
                                         v-model="emailAddress"
                                         data-vv-name="email"
                                         type="email"
                                         name="email"
                                         required
                                         v-validate="modelValidations.email">
-                                </md-textarea>
+                                </md-input>
                                 <slide-y-down-transition>
                                     <md-icon class="error" v-show="errors.has('email')">close</md-icon>
                                 </slide-y-down-transition>
@@ -166,23 +165,24 @@
                 inviteModalOpen: false,
               greenSuccess: false,
               touched: {
-//                firstName: false,
-//                lastName: false,
+                firstName: false,
+                lastName: false,
                 email: false,
                 permissions: false,
                 role: false,
               },
               modelValidations: {
-//                firstName: {
-//                  required: true,
-//                  min: 5
-//                },
-//                lastName: {
-//                  required: true,
-//                  min: 5
-//                },
+                firstName: {
+                  required: true,
+                  min: 5
+                },
+                lastName: {
+                  required: true,
+                  min: 5
+                },
                 email: {
                   required: true,
+                  email: true
                 },
                 role: {
                   required: true
@@ -198,24 +198,24 @@
         },
         computed: {
             ...mapState('teamVuex', ['teamMemberData']),
-//          first_name: {
-//            get() {
-//              return this.teamMemberData.firstName
-//            },
-//            set(value) {
-//              this.setMemberProperty({key: 'firstName', actualValue: value})
-//            },
-//
-//          },
-//          last_name: {
-//            get() {
-//              return this.teamMemberData.lastName
-//            },
-//            set(value) {
-//              this.setMemberProperty({key: 'lastName', actualValue: value})
-//            },
-//
-//          },
+          first_name: {
+            get() {
+              return this.teamMemberData.firstName
+            },
+            set(value) {
+              this.setMemberProperty({key: 'firstName', actualValue: value})
+            },
+
+          },
+          last_name: {
+            get() {
+              return this.teamMemberData.lastName
+            },
+            set(value) {
+              this.setMemberProperty({key: 'lastName', actualValue: value})
+            },
+
+          },
           emailAddress: {
             get() {
               return this.teamMemberData.emailAddress
@@ -295,13 +295,13 @@
             }
         },
       watch: {
-//        firstName() {
-//          this.touched.firstName = true;
-//        }
-//        ,
-//        lastName() {
-//          this.touched.lastName = true;
-//        },
+        firstName() {
+          this.touched.firstName = true;
+        }
+        ,
+        lastName() {
+          this.touched.lastName = true;
+        },
         email() {
           this.touched.email = true;
         },
