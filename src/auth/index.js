@@ -57,7 +57,6 @@ export default {
 
         context.user = { username: resp.data.username };
         //indexStore.commit('setCurrentUserData', resp.data)
-        this.user.id = resp.data.id;
         this.user.username = resp.data.username;
         this.user.avatar =  resp.data.pictureUrl;
         this.user.displayName = resp.data.displayName;
