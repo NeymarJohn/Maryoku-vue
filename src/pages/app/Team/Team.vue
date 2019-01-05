@@ -13,10 +13,21 @@
         <md-card-content style="min-height: 60px;">
           <vue-element-loading :active="teamMembersLoading" spinner="ring" color="#FF547C"/>
           <team-table :team-id="team.id" :teamMembers="teamMembers"></team-table>
+          <md-card-actions md-alignment="space-between">
+            <div class="">
+              <p class="card-category">Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</p>
+            </div>
+            <pagination class="pagination-no-border pagination-success"
+                        @input="pageChanged($event)"
+                        v-model="pagination.page"
+                        :per-page="pagination.limit"
+                        :total="pagination.total">
+            </pagination>
+          </md-card-actions>
         </md-card-content>
       </md-card>
     </div>
-    <invite-modal @memberCreated="fetchTeam" :team="team" ref="inviteModal"></invite-modal>
+    <invite-modal @memberCreated="fetchData(1)" :team="team" ref="inviteModal"></invite-modal>
   </div>
 </template>
 
@@ -28,12 +39,16 @@
   import Teams from "@/models/Teams";
   import teamVuexModule from './team.vuex'
   import VueElementLoading from 'vue-element-loading';
+  import { Pagination } from "@/components";
+  import { paginationMixin } from '@/mixins/pagination';
   export default {
     components: {
       InviteModal,
       'team-table': TeamTable,
-      VueElementLoading
+      VueElementLoading,
+      Pagination
     },
+    mixins: [paginationMixin],
     data() {
       return {
         auth:auth,
@@ -46,7 +61,7 @@
       this.$store.registerModule('teamVuex', teamVuexModule);
 
       this.auth.currentUser(this, true, function(){
-        this.fetchTeam();
+        this.fetchData(1);
       }.bind(this));
     },
     destroyed() {
@@ -54,7 +69,7 @@
     },
     methods: {
       ...mapMutations('teamVuex', ['resetForm', 'setInviteModal', 'setEditMode']),
-      fetchTeam(){
+      fetchData(page){
         this.teamMembersLoading = true;
         /*Teams.get().then(teams => {
           this.team = teams[0];
@@ -65,9 +80,11 @@
         }, (error) => {
           console.log(error)
         });*/
-        new Teams({id: this.auth.user.defaultGroupId}).members().get().then(members => {
+        new Teams({id: this.auth.user.defaultGroupId}).members().page(page)
+          .limit(this.pagination.limit).get().then(members => {
           console.log(members);
-          this.teamMembers = members;
+          this.teamMembers = members[0].results;
+          this.updatePagination(members[0].model)
           this.teamMembersLoading = false;
         });
       },

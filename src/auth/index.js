@@ -54,9 +54,8 @@ export default {
   currentUser(context, required, cb) {
     context.$http.get(CURRENT_USER_URL, { headers: this.getAuthHeader() })
       .then((resp) => {
-
         context.user = { username: resp.data.username };
-        //indexStore.commit('setCurrentUserData', resp.data)
+        indexStore.commit('setCurrentUserData', resp.data)
         this.user.id = resp.data.id;
         this.user.username = resp.data.username;
         this.user.avatar =  resp.data.pictureUrl;

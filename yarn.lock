@@ -10447,6 +10447,21 @@ uuid@^3.0.1, uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 
+v-dropdown@1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/v-dropdown/-/v-dropdown-1.0.5.tgz#54803dc2d801710a05b2da63c694e68c24268326"
+  integrity sha512-8FgTkKd5p2Wt/DmoLVECJGQZym4oZJLzTfD046x2Fosao0rokAqc+M6nSwLBppV/Qg7oj6Ymuz5rY3TGrG98OQ==
+  dependencies:
+    vue "^2.5.11"
+
+v-selectmenu@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/v-selectmenu/-/v-selectmenu-1.0.7.tgz#df232eda5114db061d9d3c63fa03f327a2ce7004"
+  integrity sha512-kMqJUQdiTAjspH3MHjSHK3az6u/dD4M43k7mq6vR5i51AF5vkI5kcKcA5yv2USZjR4jYx54Aowjy4Xtl8clA5Q==
+  dependencies:
+    v-dropdown "1.0.5"
+    vue "^2.5.11"
+
 validate-npm-package-license@^3.0.1:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/validate-npm-package-license/-/validate-npm-package-license-3.0.4.tgz#fc91f6b9c7ba15c857f4cb2c5defeec39d4f410a"
