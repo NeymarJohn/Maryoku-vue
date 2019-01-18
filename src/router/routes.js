@@ -25,6 +25,7 @@ import Proposals from "@/pages/app/Proposals.vue";
 import Vendors from "@/pages/app/Vendors/Vendors.vue";
 import ImportVendors from "@/pages/app/Vendors/ImportVendors.vue";
 import YearlyPlan from "@/pages/app/YearlyPlan/index.vue";
+import AnnualPlanner from "@/pages/app/AnnualPlanner/index.vue";
 
 // Dashboard pages
 import Dashboard from "@/pages/Dashboard/Dashboard.vue";
@@ -367,6 +368,12 @@ let appPages = {
       name: "YearlyPlan",
       component: YearlyPlan,
       meta: {title: "Yearly Plan"}
+    },
+    {
+      path: "/annual-planner/:year/:month",
+      name: "AnnualPlanner",
+      component: AnnualPlanner,
+      meta: {title: " "}
     },
     {
       path: "/vendors",

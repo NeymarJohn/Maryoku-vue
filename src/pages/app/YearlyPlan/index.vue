@@ -208,8 +208,8 @@
                   <template v-if="dayObj.weekdayObj[idx].calendarEvents">
                     <template v-if="dayObj.weekdayObj[idx].calendarEvents.editables.length > 0">
                       <editable-event :calendarEvents="dayObj.weekdayObj[idx].calendarEvents"
-                                          :the-date="`${selectedYear}-${idx.padStart(2,'0')}-${dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0')}`"
-                                          :day-on-month="dayObj.weekdayObj[idx].dayOnMonth"/>
+                                      :the-date="`${selectedYear}-${idx.padStart(2,'0')}-${dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0')}`"
+                                      :day-on-month="dayObj.weekdayObj[idx].dayOnMonth"/>
                     </template>
                     <template v-else>
                       <non-editable-event :calendarEvents="dayObj.weekdayObj[idx].calendarEvents"
@@ -222,18 +222,7 @@
                       <div class="cell cell-active" >
                         <span class="cell-date-number">{{dayObj.weekdayObj[idx].dayOnMonth}}</span>
                       </div>
-                      <div :id="`tooltipContent_${selectedYear}-${idx.padStart(2,'0')}-${dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0')}`" class="tooltip-custom-non-editable" style="text-align: center;">
-                        <md-list class="md-double-line">
-                          <md-list-item class="md-inset">
-                            <md-button class="md-just-icon md-round md-sm md-rose" style="text-align: center; padding: 0; font-size: 10px;" :to="{name: 'NewEvent', params: {selectedDate: `${selectedYear}-${idx.padStart(2,'0')}-${dayObj.weekdayObj[idx].dayOnMonth.padStart(2,'0')}`, selectedOccasion: calendarEvent.title }}">
-                              <i class="fa fa-calendar-plus"></i>
-                            </md-button>
-                            <div class="md-list-item-text  md-list-action">
-                              <span>Create New Event</span>
-                            </div>
-                          </md-list-item>
-                        </md-list>
-                      </div>
+
                     </td>
                   </template>
                 </template>
@@ -275,6 +264,7 @@
       ChartComponent,
     },
     data() {
+
       return {
         ready: false,
         auth: auth,
@@ -585,5 +575,17 @@
   .calendar-grid .cell-weekday {
     font-size: 12px;
     font-weight: 500;
+  }
+
+  .vue-tooltip.tooltip-custom-non-editable {
+    background-color: #fff;
+    border: 1px solid #aaa;
+    color: black;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .vue-tooltip.tooltip-custom-non-editable .tooltip-arrow {
+    border-color: #aaa;
   }
 </style>

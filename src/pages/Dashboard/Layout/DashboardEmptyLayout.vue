@@ -18,7 +18,7 @@
 
         <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
         </sidebar-item>-->
-        <sidebar-item :link="{name: 'Annual Planner', icon: 'key', path: '/annual-planner/2019/April'}">
+        <sidebar-item :link="{name: 'Annual Planner', icon: 'key', path: '/annual-planner'}">
         </sidebar-item>
 
         <sidebar-item :link="{name: 'Yearly Planner', icon: 'event', path: '/yearly-plan'}">
@@ -135,7 +135,7 @@
           :link="{name: 'Calendar', icon: 'date_range', path: '/calendar'}"></sidebar-item>-->
       </template>
     </side-bar>
-    <div class="main-panel" style="height: 100%;">
+    <div class="main-panel">
       <top-navbar></top-navbar>
 
       <div :class="{content: !$route.meta.hideContent}" @click="toggleSidebar">
