@@ -1,5 +1,5 @@
 <template>
-  <span>{{animatedNumber}}</span>
+  <span>{{prefix}}{{animatedNumber | numeral('0,0.[00]') }}{{suffix}}</span>
 </template>
 <script>
 import TWEEN from "@tweenjs/tween.js";
@@ -12,6 +12,14 @@ export default {
     duration: {
       type: Number,
       default: 800
+    },
+    prefix: {
+      type: String,
+      default: ''
+    },
+    suffix: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -33,18 +41,23 @@ export default {
         .easing(TWEEN.Easing.Quadratic.Out)
         .to({ tweeningNumber: newValue }, this.duration)
         .onUpdate(function(object) {
-          vm.animatedNumber = object.tweeningNumber.toFixed(0);
+          vm.animatedNumber = object.tweeningNumber.toFixed(vm.decimalDigits);
         })
         .start();
 
       animate();
     }
   },
+  computed: {
+    decimalDigits() {
+      return (`${this.value}`.split('.')[1] || []).length;
+    }
+  },
   mounted() {
     this.initAnimation(this.value, 0);
   },
   watch: {
-    number(newValue, oldValue) {
+    value(newValue, oldValue) {
       this.initAnimation(newValue, oldValue);
     }
   }

@@ -361,8 +361,6 @@ let appPages = {
       component: EditEvent,
       meta: {title: 'Edit Event'},
     },
-
-
     {
       path: "/yearly-plan",
       name: "YearlyPlan",

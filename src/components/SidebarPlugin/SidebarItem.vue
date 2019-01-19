@@ -104,6 +104,11 @@ export default {
       return this.children.length > 0 || this.menu === true;
     },
     isActive() {
+      if (this.$route.path.startsWith(this.link.path)) {
+        this.link.active = true;
+        return true;
+      }
+
       if (this.$route && this.$route.path) {
         let matchingRoute = this.children.find(c =>
           this.$route.path.startsWith(c.link.path)

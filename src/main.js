@@ -13,6 +13,7 @@ import Chartist from "chartist";
 import Tooltip from 'vue-directive-tooltip';
 import 'vue-directive-tooltip/css/index.css';
 import vSelectMenu from 'v-selectmenu';
+import vueNumeralFilterInstaller from 'vue-numeral-filter';
 
 // router setup
 import routes from "./router/routes";
@@ -71,6 +72,7 @@ Vue.use(Tooltip, {
   offset: 5
 });
 Vue.use(vSelectMenu, { language: "en"});
+Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
 
 Model.$http = axios;
 

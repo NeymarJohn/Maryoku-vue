@@ -153,6 +153,11 @@
     font-size: $mdb-btn-font-size-sm;
   }
 
+  &.md-md .md-ripple{
+    padding: 0.40625rem 1.25rem !important;
+    font-size: $mdb-btn-font-size-lg;
+  }
+
   &.btn-just-icon{
     font-size: 20px;
     padding: 12px 12px;

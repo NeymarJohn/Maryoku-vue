@@ -7479,6 +7479,11 @@ number-is-nan@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
 
+numeral@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/numeral/-/numeral-2.0.6.tgz#4ad080936d443c2561aed9f2197efffe25f4e506"
+  integrity sha1-StCAk21EPCVhrtnyGX7//iX05QY=
+
 nwsapi@^2.0.7:
   version "2.0.9"
   resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.0.9.tgz#77ac0cdfdcad52b6a1151a84e73254edc33ed016"
@@ -10641,6 +10646,13 @@ vue-notifyjs@^0.4.3:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/vue-notifyjs/-/vue-notifyjs-0.4.3.tgz#4fd099d49753ccbbfd807e80ed7e0e2739176621"
   integrity sha512-noZGki6q5B7YPmruA8+GYjSJC4WWXfmZxIpeWbfYYPYJ9ZBr+ggcswbIRFIuINlZYsOFaflb4Hpzd8bBZdHY7g==
+
+vue-numeral-filter@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/vue-numeral-filter/-/vue-numeral-filter-1.1.1.tgz#dc717c7d86cb10d2fc370ef992bcac80fb9fc666"
+  integrity sha512-QRrvadev2W0PRWHJbLsnOGq4eK0CQmfdyIFy+A4J8dxPNYe1W1W/AqNLFH7paV0lh0pvVPVczgXuOvA/X12T1A==
+  dependencies:
+    numeral "^2.0.6"
 
 vue-router@^3.0.1:
   version "3.0.1"
