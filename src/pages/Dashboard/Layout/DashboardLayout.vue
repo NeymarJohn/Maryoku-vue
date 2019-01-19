@@ -18,7 +18,7 @@
 
         <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
         </sidebar-item>-->
-        <sidebar-item :link="{name: 'Annual Planner', icon: 'key', path: '/annual-planner/2019/April'}">
+        <sidebar-item :link="{name: 'Annual Planner', icon: 'key', path: '/annual-planner'}">
         </sidebar-item>
 
         <sidebar-item :link="{name: 'Yearly Planner', icon: 'event', path: '/yearly-plan'}">

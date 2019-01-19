@@ -373,7 +373,19 @@ let appPages = {
       path: "/annual-planner/:year/:month",
       name: "AnnualPlanner",
       component: AnnualPlanner,
-      meta: {title: " "}
+      meta: {title: "Annual Planner"}
+    },
+    {
+      path: "/annual-planner/:year",
+      name: "AnnualPlanner",
+      component: AnnualPlanner,
+      meta: {title: "Annual Planner"}
+    },
+    {
+      path: "/annual-planner",
+      name: "AnnualPlanner",
+      component: AnnualPlanner,
+      meta: {title: "Annual Planner"}
     },
     {
       path: "/vendors",

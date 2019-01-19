@@ -197,7 +197,8 @@
   import VueElementLoading from 'vue-element-loading';
   import ChartComponent from '@/components/Cards/ChartComponent';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-  import AnnualPlannerVuexModule from './AnnualPlanner.vuex'
+  import AnnualPlannerVuexModule from './AnnualPlanner.vuex';
+  import moment from 'moment';
 
   export default {
     components: {
@@ -221,15 +222,48 @@
       this.isLoading = true;
       this.auth.currentUser(this, true, function() {
 
+        this.checkSelectedYearMonth();
 
         this.ready = true;
         this.isLoading = false;
       }.bind(this))
     },
     methods: {
+      checkSelectedYearMonth(){
+        let yearParam = this.$route.params.year;
+        let monthParam = this.$route.params.month;
+        let redirect = false;
+
+        if (yearParam === undefined || isNaN(yearParam)){
+          yearParam = moment().format('YYYY');
+          redirect = true;
+        }
+
+        if (monthParam === undefined || isNaN(yearParam)){
+          monthParam = moment().format('MM');
+          redirect = true;
+        }
+
+        if (redirect) {
+          this.$router.push({
+            path: `/annual-planner/${yearParam}/${monthParam}`
+          });
+        } else {
+          this.selectYearMonth(yearParam, monthParam);
+        }
+      },
+      selectYearMonth(year, month){
+        console.log(`working with ${year} as year and ${month} as month.`);
+      }
     },
     computed: {
       ...mapState('AnnualPlannerVuex', ['filtersData']),
+    },
+    watch: {
+      '$route' (to, from) {
+        // react to route changes...
+        this.checkSelectedYearMonth();
+      }
     }
   };
 </script>
