@@ -10,21 +10,21 @@
           <md-card style="padding: 0; margin: 0; height: 100%;">
             <md-card-content>
 
-            <md-field>
-              <md-select
+              <!--<md-field>
+                <md-select
 
 
-                data-vv-name="eventType"
-                id="eventType"
-                name="eventType" multiple>
-                <md-option>Holidays</md-option>
-                <md-option>Civil Days</md-option>
-                <md-option>Company Events</md-option>
-                <md-option>Personal Days</md-option>
-              </md-select>
-            </md-field>
-
-          </md-card-content>
+                  data-vv-name="eventType"
+                  id="eventType"
+                  name="eventType" multiple>
+                  <md-option>Holidays</md-option>
+                  <md-option>Civil Days</md-option>
+                  <md-option>Company Events</md-option>
+                  <md-option>Personal Days</md-option>
+                </md-select>
+              </md-field>
+  -->
+            </md-card-content>
           </md-card>
         </div>
 
