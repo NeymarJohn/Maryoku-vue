@@ -12,7 +12,9 @@
 
     <div class="md-layout-item md-size-65 " style="display: none; height: 100%;">
       <md-card style="margin-top: 0; height: 15%; ">
-        <md-card-content>filters</md-card-content>
+        <md-card-content>
+
+        </md-card-content>
       </md-card>
 
       <div class="md-layout" style="height: 85%;">

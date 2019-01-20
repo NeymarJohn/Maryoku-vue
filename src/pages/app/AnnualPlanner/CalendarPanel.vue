@@ -11,7 +11,7 @@
         </div>
 
         <div class="md-layout-item md-size-20" style="height: 15%; padding-left: 7.5px; padding-bottom: 7.5px; padding-right: 0;">
-          create new button
+          <md-button class="md-success" style="width: 99%; height: 100%; margin-top: 0; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
         </div>
 
         <div class="md-layout-item md-size-80" style="height: 85%;  padding: 0; margin: 0;">
@@ -44,7 +44,7 @@
 
               <div class="md-layout" style="height: 100%; overflow: hidden;">
 
-                <div class="md-layout-item md-size-100" style="height: 85%; padding: 7.5px;">
+                <div class="md-layout-item md-size-100" style="height: 90%; padding: 7.5px;">
                   <md-card style="margin: 0; height: 100%; overflow: auto;">
                     <md-card-content style="height: 100%; text-align: center;">
                       <h3 class="text-gray">{{currentMonthName}}</h3>
@@ -78,8 +78,16 @@
                   </md-card>
                 </div>
 
-                <div class="md-layout-item md-size-100" style="height: 15%; padding: 0; padding-left: 7.5px; padding-right: 7.5px; padding-top: 7.5px;">
-                  <md-card style="padding: 0; margin: 0; height: 100%;"><md-card-content>legend</md-card-content></md-card>
+                <div class="md-layout-item md-size-100" style="height: 10%; padding: 0; padding-left: 7.5px; padding-right: 7.5px; padding-top: 7.5px;">
+                  <md-card style="padding: 0; margin: 0; height: 100%;">
+                    <md-card-content style="text-align: center;">
+                      <div style="display: inline; margin-right: 15px;"><i class="fa fa-square text-warning" style="margin-right: 5px;"></i> Holidays</div>
+                      <div style="display: inline; margin-right: 15px;"><i class="fa fa-square text-success" style="margin-right: 5px;"></i> Company Events</div>
+                      <div style="display: inline; margin-right: 15px;"><i class="fa fa-square text-danger" style="margin-right: 5px;"></i> National Events</div>
+                      <div style="display: inline; margin-right: 15px;"><i class="fa fa-square text-info" style="margin-right: 5px;"></i> Civil Events</div>
+                      <div style="display: inline; margin-right: 15px;"><i class="fa fa-square text-primary" style="margin-right: 5px;"></i> Personal Schedule</div>
+                    </md-card-content>
+                  </md-card>
                 </div>
               </div>
 
@@ -97,7 +105,8 @@
             </div>
 
             <div class="md-layout-item md-size-100" style="height: 15%; padding: 7.5px; padding-right: 0; padding-bottom: 0;">
-              buttons
+              <md-button class="md-success" style="width: 99%; margin-top: 0; font-weight: 500;">Import Events</md-button>
+              <md-button class="md-success" style="width: 99%; margin-top: 0; font-weight: 500;">Export To Excel</md-button>
             </div>
           </div>
 
