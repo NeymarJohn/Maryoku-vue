@@ -7,7 +7,25 @@
       <div class="md-layout" style="height: 100%; overflow: hidden;">
 
         <div class="md-layout-item md-size-80" style="height: 15%; padding: 0; padding-right: 7.5px; padding-bottom: 7.5px;">
-          <md-card style="padding: 0; margin: 0; height: 100%;"><md-card-content>filters</md-card-content></md-card>
+          <md-card style="padding: 0; margin: 0; height: 100%;">
+            <md-card-content>
+
+            <md-field>
+              <md-select
+
+
+                data-vv-name="eventType"
+                id="eventType"
+                name="eventType" multiple>
+                <md-option>Holidays</md-option>
+                <md-option>Civil Days</md-option>
+                <md-option>Company Events</md-option>
+                <md-option>Personal Days</md-option>
+              </md-select>
+            </md-field>
+
+          </md-card-content>
+          </md-card>
         </div>
 
         <div class="md-layout-item md-size-20" style="height: 15%; padding-left: 7.5px; padding-bottom: 7.5px; padding-right: 0;">
@@ -65,7 +83,9 @@
                                 <md-button class="md-success md-just-icon md-round md-md">{{monthDay.dayInMonth}}</md-button>
                               </template>
                               <template v-else>
-                                <md-button class="md-simple md-round  md-just-icon md-md">{{monthDay.dayInMonth}}</md-button>
+                                <md-button class="md-simple md-round  md-just-icon md-md">
+                                  {{monthDay.dayInMonth}}
+                                </md-button>
                               </template>
                             </template>
                             <template v-else>
@@ -81,11 +101,10 @@
                 <div class="md-layout-item md-size-100" style="height: 10%; padding: 0; padding-left: 7.5px; padding-right: 7.5px; padding-top: 7.5px;">
                   <md-card style="padding: 0; margin: 0; height: 100%;">
                     <md-card-content style="text-align: center;">
-                      <div style="display: inline; margin-right: 15px;"><i class="fa fa-square text-warning" style="margin-right: 5px;"></i> Holidays</div>
-                      <div style="display: inline; margin-right: 15px;"><i class="fa fa-square text-success" style="margin-right: 5px;"></i> Company Events</div>
-                      <div style="display: inline; margin-right: 15px;"><i class="fa fa-square text-danger" style="margin-right: 5px;"></i> National Events</div>
-                      <div style="display: inline; margin-right: 15px;"><i class="fa fa-square text-info" style="margin-right: 5px;"></i> Civil Events</div>
-                      <div style="display: inline; margin-right: 15px;"><i class="fa fa-square text-primary" style="margin-right: 5px;"></i> Personal Schedule</div>
+                      <md-button class="md-simple md-sm md-warning"><i class="fa fa-square" style="margin-right: 5px;"></i> Holidays</md-button>
+                      <md-button class="md-simple md-sm md-info"><i class="fa fa-square" style="margin-right: 5px;"></i> Civil Days</md-button>
+                      <md-button class="md-simple md-sm md-success"><i class="fa fa-square" style="margin-right: 5px;"></i> Company Events</md-button>
+                      <md-button class="md-simple md-sm md-primary"><i class="fa fa-square" style="margin-right: 5px;"></i> Personal Schedule</md-button>
                     </md-card-content>
                   </md-card>
                 </div>
@@ -100,13 +119,115 @@
         <div class="md-layout-item md-size-20" style="height: 85%; padding: 0; margin: 0;">
 
           <div class="md-layout" style="height: 100%; overflow: hidden;">
-            <div class="md-layout-item md-size-100" style="height: 85%; padding: 7.5px; padding-right: 0;">
-              <md-card style="padding: 0; margin: 0; height: 100%;"><md-card-content>events</md-card-content></md-card>
+            <div class="md-layout-item md-size-100" style="height: 90%; padding: 7.5px; padding-right: 0;">
+              <md-card style="padding: 0; margin: 0; height: 100%;">
+                <md-card-content style="text-align: center; padding: 0; margin: 0; height: 100%; overflow: hidden;">
+
+                  <md-button class="md-simple md-round year-button disabled" style="font-size: 18px !important; font-weight: 500; padding: 8px; margin-top: 8px;">Events</md-button>
+
+                  <hr style="margin-top: 0; margin-left: 18px; margin-right: 18px; border-color: lightgray; border-top: none; border-left: none; border-right: none;" class="divider"/>
+
+                  <md-list class="md-triple-line md-dense" style="overflow: auto; height: 88%;">
+
+                    <md-list-item style="cursor: pointer;">
+                      <md-button class="md-just-icon md-md md-round md-success" style="margin-right: 8px;">1</md-button>
+
+                      <div class="md-list-item-text">
+                        <span style="font-weight: 500;">Thanks Giving</span>
+                        <span class="small text-gray">August 18, 2019</span>
+                      </div>
+                    </md-list-item>
+
+                    <md-list-item>
+                      <md-button class="md-just-icon md-md md-round md-danger" style="margin-right: 8px;">13</md-button>
+
+                      <div class="md-list-item-text">
+                        <span style="font-weight: 500;">Company Training</span>
+                        <span class="small text-gray">August 13, 2019 - 5am</span>
+                      </div>
+                    </md-list-item>
+
+                    <md-list-item>
+                      <md-button class="md-just-icon md-md md-round md-warning" style="margin-right: 8px;">15</md-button>
+
+                      <div class="md-list-item-text">
+                        <span style="font-weight: 500;">The Assumption of Mary</span>
+                        <span class="small text-gray">August 15, 2019</span>
+                      </div>
+                    </md-list-item>
+
+                    <md-list-item>
+                      <md-button class="md-just-icon md-md md-round md-info" style="margin-right: 8px;">24</md-button>
+
+                      <div class="md-list-item-text">
+                        <span style="font-weight: 500;">Mid Year Holiday</span>
+                        <span class="small text-gray">August 24, 2019</span>
+                      </div>
+                    </md-list-item>
+
+                    <md-list-item>
+                      <md-button class="md-just-icon md-md md-round md-primary" style="margin-right: 8px;">26</md-button>
+
+                      <div class="md-list-item-text">
+                        <span style="font-weight: 500;">Football Finals</span>
+                        <span class="small text-gray">August 26, 2019</span>
+                      </div>
+                    </md-list-item>
+
+                    <md-list-item>
+                      <md-button class="md-just-icon md-md md-round md-success" style="margin-right: 8px;">18</md-button>
+
+                      <div class="md-list-item-text">
+                        <span style="font-weight: 500;">Thanks Giving</span>
+                        <span class="small text-gray">August 18, 2019</span>
+                      </div>
+                    </md-list-item>
+
+                    <md-list-item>
+                      <md-button class="md-just-icon md-md md-round md-danger" style="margin-right: 8px;">13</md-button>
+
+                      <div class="md-list-item-text">
+                        <span style="font-weight: 500;">Company Training</span>
+                        <span class="small text-gray">August 13, 2019 - 5am</span>
+                      </div>
+                    </md-list-item>
+
+                    <md-list-item>
+                      <md-button class="md-just-icon md-md md-round md-warning" style="margin-right: 8px;">15</md-button>
+
+                      <div class="md-list-item-text">
+                        <span style="font-weight: 500;">The Assumption of Mary</span>
+                        <span class="small text-gray">August 15, 2019</span>
+                      </div>
+                    </md-list-item>
+
+                    <md-list-item>
+                      <md-button class="md-just-icon md-md md-round md-info" style="margin-right: 8px;">24</md-button>
+
+                      <div class="md-list-item-text">
+                        <span style="font-weight: 500;">Mid Year Holiday</span>
+                        <span class="small text-gray">August 24, 2019</span>
+                      </div>
+                    </md-list-item>
+
+                    <md-list-item>
+                      <md-button class="md-just-icon md-md md-round md-primary" style="margin-right: 8px;">26</md-button>
+
+                      <div class="md-list-item-text">
+                        <span style="font-weight: 500;">Football Finals</span>
+                        <span class="small text-gray">August 26, 2019</span>
+                      </div>
+                    </md-list-item>
+
+                  </md-list>
+
+                </md-card-content>
+              </md-card>
             </div>
 
-            <div class="md-layout-item md-size-100" style="height: 15%; padding: 7.5px; padding-right: 0; padding-bottom: 0;">
-              <md-button class="md-success" style="width: 99%; margin-top: 0; font-weight: 500;">Import Events</md-button>
-              <md-button class="md-success" style="width: 99%; margin-top: 0; font-weight: 500;">Export To Excel</md-button>
+            <div class="md-layout-item md-size-100" style="height: 10%; padding: 7.5px; padding-right: 0; padding-bottom: 0;">
+              <md-button class="md-success md-sm" style="width: 99%; margin-top: 0; font-weight: 500;">Import Events</md-button>
+              <md-button class="md-success md-sm" style="width: 99%; margin-top: 0; font-weight: 500;">Export To Excel</md-button>
             </div>
           </div>
 
@@ -142,7 +263,7 @@
         type: Number
       },
       year: {
-        type: String
+        type: Number
       },
       dayInMonth: {
         type: String

@@ -75,7 +75,7 @@
         type: Number
       },
       year: {
-        type: String
+        type: Number
       }
     },
     data() {
