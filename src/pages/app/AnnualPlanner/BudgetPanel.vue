@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout" style="height: 100%; overflow: hidden;">
+  <div class="md-layout" style="display: flex; overflow: hidden; height: 100%;">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
     <md-card style="background-color: #41535E; color: rgb(225, 234,239); height: 100%; margin-top: 0; margin-bottom: 0; margin-right: 0;">

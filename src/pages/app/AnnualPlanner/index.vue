@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout" style="height: 100%; overflow: hidden;">
+  <div class="md-layout" style="display: flex; overflow: hidden; height: 100%;">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
 
     <div class="md-layout-item md-size-15" style="padding: 0; margin: 0;">
@@ -13,7 +13,7 @@
     <div class="md-layout-item md-size-65 " style="display: none; height: 100%;">
       <md-card style="margin-top: 0; height: 15%; ">
         <md-card-content>
-
+123
         </md-card-content>
       </md-card>
 

@@ -1,10 +1,10 @@
 <template>
-  <div class="md-layout" style="height: 100%; overflow: hidden; padding: 0; margin: 0;">
+  <div class="md-layout" style="display: flex; overflow: hidden; padding: 0; margin: 0;">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
     <div class="md-layout-item md-size-100" style="padding: 0; margin: 0;">
 
-      <div class="md-layout" style="height: 100%; overflow: hidden;">
+      <div class="md-layout" style="height: 77%; overflow: hidden;">
 
         <div class="md-layout-item md-size-80" style="height: 15%; padding: 0; padding-right: 7.5px; padding-bottom: 7.5px;">
           <md-card style="padding: 0; margin: 0; height: 100%;">
@@ -28,7 +28,7 @@
           </md-card>
         </div>
 
-        <div class="md-layout-item md-size-20" style="height: 15%; padding-left: 7.5px; padding-bottom: 7.5px; padding-right: 0;">
+        <div class="md-layout-item md-size-20" style="height: 14%; padding-left: 7.5px; padding-bottom: 7.5px; padding-right: 0;">
           <md-button class="md-success" style="width: 99%; height: 100%; margin-top: 0; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
         </div>
 
