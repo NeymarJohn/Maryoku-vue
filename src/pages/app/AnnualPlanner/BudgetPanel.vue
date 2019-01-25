@@ -93,6 +93,7 @@
     mounted(){
       this.ready = true;
       this.isLoading = false;
+      this.totalRemainingBudget = 33450;
     },
     methods: {
 

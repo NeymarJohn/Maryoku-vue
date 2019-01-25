@@ -47,7 +47,7 @@
                   <hr style="margin-top: 0; margin-left: 18px; margin-right: 18px; border-color: lightgray; border-top: none; border-left: none; border-right: none;" class="divider"/>
 
                   <md-list style="width: 100%; padding: 0; margin: 0;">
-                    <md-list-item v-for="(month, idx) in $moment.months()" :ref="`month_${idx}`" :class="{'selected-month' : currentMonth === idx+1, 'month' : currentMonth !== idx+1}">
+                    <md-list-item v-for="(month, idx) in months" :key="month" :ref="`month_${idx}`" :class="{'selected-month' : currentMonth === idx+1, 'month' : currentMonth !== idx+1}">
                       <router-link :to="{name: 'AnnualPlanner', params: {year: currentYear, month: idx+1}}" style="width: 100%;">
                         <div :class="{'selected-month-item' : currentMonth === idx+1, 'item' : currentMonth !== idx+1}">{{month}} <div class="pull-right" :ref="`month_${idx}_count`">0</div></div>
                       </router-link>
@@ -278,7 +278,8 @@
         monthRows: [],
         currentMonthName: '',
         currentMonth: 0,
-        currentYear: 0
+        currentYear: 0,
+        months: this.$moment.months(),
       }
     },
     created() {
