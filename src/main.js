@@ -14,6 +14,7 @@ import Tooltip from 'vue-directive-tooltip';
 import 'vue-directive-tooltip/css/index.css';
 import vSelectMenu from 'v-selectmenu';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
+import VueFractionGrid from 'vue-fraction-grid'
 
 // router setup
 import routes from "./router/routes";
@@ -73,6 +74,7 @@ Vue.use(Tooltip, {
 });
 Vue.use(vSelectMenu, { language: "en"});
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
+Vue.use(VueFractionGrid);
 
 Model.$http = axios;
 

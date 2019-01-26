@@ -11,18 +11,12 @@
 <script>
   import auth from '@/auth';
   import VueElementLoading from 'vue-element-loading';
-  import ChartComponent from '@/components/Cards/ChartComponent';
-  import moment from 'moment';
-  import {
-    AnimatedNumber
-  } from "@/components";
+
 
   export default {
     name: 'calendar-filters-panel',
     components: {
       VueElementLoading,
-      ChartComponent,
-      AnimatedNumber,
     },
     props: {
 

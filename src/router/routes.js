@@ -411,7 +411,7 @@ let appPages = {
 const routes = [
   {
     path: "/",
-    redirect: "/yearly-plan",
+    redirect: "/annual-planner",
     name: "Root"
   },
   /*componentsMenu,

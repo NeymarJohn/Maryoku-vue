@@ -1,9 +1,8 @@
 <template>
-  <div class="md-layout" style="display: flex; overflow: hidden; height: 100%;">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
+  <div style="overflow: hidden; height: 100%; margin: 0; padding: 0;">
 
-    <md-card style="background-color: #41535E; color: rgb(225, 234,239); height: 100%; margin-top: 0; margin-bottom: 0; margin-right: 0;">
-      <md-card-content style="text-align: center;">
+    <md-card style="background-color: #41535E; color: rgb(225, 234,239); height: 100%; margin: 0; padding: 0;">
+      <md-card-content style="text-align: center; height: 100%;">
         <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total remaining budget</h5>
         <h4 style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
           <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
