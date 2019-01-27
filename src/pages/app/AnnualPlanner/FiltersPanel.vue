@@ -59,6 +59,8 @@
 <script>
   import auth from '@/auth';
   import Calendar from '@/models/Calendar';
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import AnnualPlannerVuexModule from './AnnualPlanner.vuex';
 
   export default {
     name: 'filters-panel',
@@ -88,11 +90,18 @@
       }
     },
     created() {
-
+      this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule);
     },
     mounted(){
       this.ready = true;
       this.isLoading = false;
+
+      const filtersData = this.$store.state.AnnualPlannerVuex.filtersData;
+      filtersData.year = this.year;
+      filtersData.month = this.month;
+      filtersData.eventTypes = this.selectedEventTypes;
+      filtersData.countries = this.selectedCountries;
+      filtersData.holidays = this.selectedHolidays;
 
       this.auth.currentUser(this, true, function() {
 
@@ -112,7 +121,7 @@
           this.holidays = metadata.holidays;
           this.selectedHolidays = this.holidays.map(function(entry){ return entry.item;});
 
-          this.$emit("filters-changed-event");
+          this.$emit("filters-changed-event", {eventTypes: this.selectedEventTypes, countries: this.selectedCountries, holidays: this.selectedHolidays});
         });
 
       }.bind(this));
@@ -120,10 +129,16 @@
     methods: {
       filtersChanged() {
         this.holidaysSelectDisplayed = this.selectedEventTypes.indexOf("Holiday") !== -1;
+        const filtersData = this.$store.state.AnnualPlannerVuex.filtersData;
+        filtersData.year = this.year;
+        filtersData.month = this.month;
+        filtersData.eventTypes = this.selectedEventTypes;
+        filtersData.countries = this.selectedCountries;
+        filtersData.holidays = this.selectedHolidays;
       },
     },
     computed: {
-
+      ...mapState('AnnualPlannerVuex', ['filtersData']),
     },
     watch: {
 

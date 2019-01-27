@@ -11,14 +11,25 @@
 
         <md-list class="md-triple-line md-dense" style="overflow: auto; height: 88%; min-height: 88%;">
 
-          <md-list-item v-for="(event, idx) in calendarEvents" style="cursor: pointer;">
-            <md-button class="md-just-icon md-md md-round md-success" style="margin-right: 8px;">1</md-button>
+          <template v-if="dates.length > 0" v-for="date in dates">
+            <md-list-item v-if="calendarEvents[date] !== undefined" v-for="calendarEvent in calendarEvents[date].editables" :key="calendarEvent.id" style="cursor: pointer;">
+              <md-button class="md-just-icon md-md md-round md-success" style="margin-right: 8px;">{{date.substr(6,2)}}</md-button>
 
-            <div class="md-list-item-text">
-              <span style="font-weight: 500;">Thanks Giving</span>
-              <span class="small text-gray">August 18, 2019</span>
-            </div>
-          </md-list-item>
+              <div class="md-list-item-text">
+                <span style="font-weight: 500;">{{calendarEvent.title}}</span>
+                <span class="small text-gray">August 18, 2019</span>
+              </div>
+            </md-list-item>
+
+            <md-list-item v-if="calendarEvents[date] !== undefined" v-for="calendarEvent in calendarEvents[date].nonEditables" :key="calendarEvent.id" style="cursor: pointer;">
+              <md-button class="md-just-icon md-md md-round md-info" style="margin-right: 8px;">{{date.substr(6,2)}}</md-button>
+
+              <div class="md-list-item-text">
+                <span style="font-weight: 500;">{{calendarEvent.title}}</span>
+                <span class="small text-gray">August 18, 2019</span>
+              </div>
+            </md-list-item>
+          </template>
 
         </md-list>
 
@@ -49,6 +60,7 @@
         auth: auth,
         isLoading: true,
         months: this.$moment.months(),
+        dates: Object.keys(this.calendarEvents),
       }
     },
     created() {
@@ -65,7 +77,9 @@
 
     },
     watch: {
-
+      calendarEvents(oldValue, newValue) {
+        this.dates = Object.keys(this.calendarEvents);
+      }
     }
   };
 </script>

@@ -22,7 +22,7 @@
           <table style="width: 100%; height: 100%;">
             <tr>
               <td style="width: 20%; padding-right: 15px;">
-                <month-select-panel></month-select-panel>
+                <month-select-panel :current-year="currentYear" :current-month="currentMonth"></month-select-panel>
               </td>
               <td style="width: 60%;">
                 <table style="width: 100%; height: 100%;">
@@ -146,6 +146,8 @@
   import FiltersPanel from './FiltersPanel';
   import MonthSelectPanel from './MonthSelectPanel';
   import MonthEventsPanel from './MonthEventsPanel';
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import AnnualPlannerVuexModule from './AnnualPlanner.vuex';
 
   export default {
     name: 'calendar-panel',
@@ -187,7 +189,7 @@
       }
     },
     created() {
-
+      this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule);
     },
     mounted(){
       this.ready = true;
@@ -197,7 +199,7 @@
     },
     methods: {
       refreshEvents(){
-        //alert(1);
+
       },
       selectYearMonth(year, month){
         let selectedMoment = moment().date(1).month(month-1).year(year);
@@ -207,6 +209,11 @@
         this.currentMonthName = selectedMoment.format('MMMM');
         this.currentMonth = currentMonth+1;
         this.currentYear = year;
+
+        const filtersData = this.$store.state.AnnualPlannerVuex.filtersData;
+
+        filtersData.year = parseInt(year);
+        filtersData.month = parseInt(month);
 
         this.monthRows = [];
         let currentMoment = moment(selectedMoment);
@@ -234,12 +241,13 @@
       },
       async queryEvents() {
         this.isLoading = true;
+        const storage = this.$store.state.AnnualPlannerVuex.filtersData;
         let filters = { filters: {
-            year: parseInt(this.year),
-            month: parseInt(this.month)+1,
-            holidays: this.holidaysSelectDisplayed ? this.selectedHolidays : [],
-            countries: this.selectedCountries,
-            eventTypes: this.selectedEventTypes
+            year: storage.year,
+            month: storage.month,
+            holidays: this.holidaysSelectDisplayed ? storage.holidays : [],
+            countries: this.selectedCountries ? storage.countries : [],
+            eventTypes: this.selectedEventTypes ? storage.eventTypes : []
           }};
         //console.log("filters: " + filters);
         let calendarId = this.auth.user.defaultCalendarId;
@@ -277,7 +285,7 @@
       }
     },
     computed: {
-
+      ...mapState('AnnualPlannerVuex', ['filtersData']),
     },
     watch: {
       year(newVal, oldVal){

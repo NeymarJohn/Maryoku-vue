@@ -5,6 +5,7 @@ export default {
         return {
           filtersData: {
             year: null,
+            month: null,
             eventTypes: [],
             countries: [],
             holidays: []

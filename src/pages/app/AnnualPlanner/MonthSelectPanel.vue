@@ -35,7 +35,8 @@
       VueElementLoading,
     },
     props: {
-
+      currentYear: Number,
+      currentMonth : Number
     },
     data() {
 
