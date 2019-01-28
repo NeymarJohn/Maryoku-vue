@@ -9,7 +9,7 @@
 
         <hr style="margin-top: 0; margin-left: 18px; margin-right: 18px; border-color: lightgray; border-top: none; border-left: none; border-right: none;" class="divider"/>
 
-        <md-list class="md-triple-line md-dense" style="overflow: auto; height: 88%; min-height: 88%;">
+        <!--<md-list class="md-triple-line md-dense" style="overflow: auto; height: 88%; min-height: 88%;">
 
           <template v-if="dates.length > 0" v-for="date in dates">
             <md-list-item v-if="calendarEvents[date] !== undefined" v-for="calendarEvent in calendarEvents[date].editables" :key="calendarEvent.id" style="cursor: pointer;">
@@ -22,7 +22,7 @@
             </md-list-item>
 
             <md-list-item v-if="calendarEvents[date] !== undefined" v-for="calendarEvent in calendarEvents[date].nonEditables" :key="calendarEvent.id" style="cursor: pointer;">
-              <md-button class="md-just-icon md-md md-round md-info" style="margin-right: 8px;">{{date.substr(6,2)}}</md-button>
+              <md-button class="md-just-icon md-md md-round" style="background-color: #bdbdbd !important; margin-right: 8px;">{{date.substr(6,2)}}</md-button>
 
               <div class="md-list-item-text">
                 <span style="font-weight: 500;">{{calendarEvent.title}}</span>
@@ -31,7 +31,33 @@
             </md-list-item>
           </template>
 
-        </md-list>
+        </md-list>-->
+
+        <div style="height: 480px; overflow: hidden;">
+          <md-list class="md-triple-line md-dense" style="overflow: auto; height: 98%; width: 100%; max-width: 100%; min-height: 88%;">
+
+            <template v-if="dates.length > 0" v-for="date in dates">
+              <md-list-item v-if="calendarEvents[date] !== undefined" v-for="calendarEvent in calendarEvents[date].editables" :key="calendarEvent.id" style="cursor: pointer;">
+                <md-button class="md-just-icon md-md md-round md-success" style="margin-right: 8px;">{{date.substr(6,2)}}</md-button>
+
+                <div class="md-list-item-text" style="white-space: normal;">
+                  <span style="font-weight: 500;">{{calendarEvent.title}}</span>
+                  <span class="small text-gray">August 18, 2019</span>
+                </div>
+              </md-list-item>
+
+              <md-list-item v-if="calendarEvents[date] !== undefined" v-for="calendarEvent in calendarEvents[date].nonEditables" :key="calendarEvent.id" style="cursor: pointer;">
+                <md-button class="md-just-icon md-md md-round" style="background-color: #bdbdbd !important; margin-right: 8px;">{{date.substr(6,2)}}</md-button>
+
+                <div class="md-list-item-text" style="white-space: normal;">
+                  <span style="font-weight: 500;">{{calendarEvent.title}}</span>
+                  <span class="small text-gray">August 18, 2019</span>
+                </div>
+              </md-list-item>
+            </template>
+
+          </md-list>
+        </div>
 
       </md-card-content>
     </md-card>

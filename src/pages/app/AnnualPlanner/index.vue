@@ -100,7 +100,7 @@
 
         if (redirect) {
           this.$router.push({
-            path: `/annual-planner/${yearParam}/${monthParam}`
+            path: `/planner/${yearParam}/${monthParam}`
           });
         } else {
           this.selectYearMonth(yearParam, monthParam);

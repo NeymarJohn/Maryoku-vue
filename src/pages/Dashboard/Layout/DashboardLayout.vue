@@ -18,22 +18,31 @@
 
         <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
         </sidebar-item>-->
-        <sidebar-item :link="{name: 'Annual Planner', icon: 'event', path: '/annual-planner'}">
+
+        <sidebar-item :link="{name: 'Company', icon: 'fingerprint', path: '/company'}">
         </sidebar-item>
 
-        <sidebar-item :link="{name: 'Yearly Planner', icon: 'calendar_today', path: '/yearly-plan'}">
+        <sidebar-item :link="{name: 'Team', icon: 'group_add', path: '/team'}">
         </sidebar-item>
 
-        <sidebar-item :link="{name: 'Our Events', icon: 'local_play', path: '/events'}">
+        <sidebar-item :link="{name: 'Yearly Plan', icon: 'event', path: '/planner'}">
         </sidebar-item>
+
+        <!--<sidebar-item :link="{name: 'Yearly Planner', icon: 'calendar_today', path: '/yearly-plan'}">
+        </sidebar-item>-->
+
+        <!--<sidebar-item :link="{name: 'Event Planner', icon: 'local_play', path: '/events'}">
+        </sidebar-item>-->
 
         <sidebar-item :link="{name: 'My Vendors', icon: 'contacts', path: '/vendors'}">
         </sidebar-item>
 
-        <li class="menu-divider"></li>
-
-        <sidebar-item :link="{name: 'Team', icon: 'group_add', path: '/team'}">
+        <sidebar-item :link="{name: 'Proposals', icon: 'local_offer', path: '/proposals'}">
         </sidebar-item>
+
+        <!--<li class="menu-divider"></li>
+
+        -->
 
         <!--<li class="menu-divider"></li>
 

@@ -5,6 +5,7 @@ import Home from "@/pages/app/Home.vue";
 import Me from "@/pages/app/Me.vue";
 import Profile from "@/pages/app/Profile.vue";
 import MyCompany from "@/pages/app/MyCompany/MyCompany.vue";
+import MyCompanyNew from "@/pages/app/MyCompany/MyCompanyNew.vue";
 import MyCompanyDashboard from "@/pages/app/MyCompany/MyCompanyDashboard.vue";
 import MyCompanyBilling from "@/pages/app/MyCompany/MyCompanyBilling.vue";
 import MyCompanyApprovals from "@/pages/app/MyCompany/MyCompanyApprovals.vue";
@@ -18,6 +19,7 @@ import VendorsSuggested from "@/pages/app/Community/vendors-suggested/index.vue"
 import Events from "@/pages/app/Events/Events.vue";
 import NewEvent from "@/pages/app/Events/NewEvent.vue";
 import EditEvent from "@/pages/app/Events/EditEvent.vue";
+import EditEventNew from "@/pages/app/Events/EditEventNew.vue";
 import ShowEvent from "@/pages/app/Events/ShowEvent.vue";
 import EventProposal from "@/pages/app/Events/EventProposal.vue";
 import Notes from "@/pages/app/Notes.vue";
@@ -273,11 +275,11 @@ let appPages = {
       component: Profile
     },
     {
-      path: "/my-company",
+      path: "/company",
       name: "MyCompany",
-      component: MyCompany,
+      component: MyCompanyNew,
       /*redirect: "/my-company/dashboard",*/
-      meta: {title: "My Company"},
+      meta: {title: "Company"},
       /*children: [
         {
           path: 'dashboard',
@@ -358,7 +360,7 @@ let appPages = {
     {
       path: "/events/:id/edit",
       name: "EditEvent",
-      component: EditEvent,
+      component: EditEventNew,
       meta: {title: 'Edit Event'},
     },
     {
@@ -368,22 +370,22 @@ let appPages = {
       meta: {title: "Yearly Plan"}
     },
     {
-      path: "/annual-planner/:year/:month",
+      path: "/planner/:year/:month",
       name: "AnnualPlanner",
       component: AnnualPlanner,
-      meta: {title: "Annual Planner"}
+      meta: {title: "Planner"}
     },
     {
-      path: "/annual-planner/:year",
+      path: "/planner/:year",
       name: "AnnualPlanner",
       component: AnnualPlanner,
-      meta: {title: "Annual Planner"}
+      meta: {title: "Planner"}
     },
     {
-      path: "/annual-planner",
+      path: "/planner",
       name: "AnnualPlanner",
       component: AnnualPlanner,
-      meta: {title: "Annual Planner"}
+      meta: {title: "Planner"}
     },
     {
       path: "/vendors",
@@ -411,7 +413,7 @@ let appPages = {
 const routes = [
   {
     path: "/",
-    redirect: "/annual-planner",
+    redirect: "/company",
     name: "Root"
   },
   /*componentsMenu,

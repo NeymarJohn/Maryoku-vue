@@ -7,11 +7,11 @@
         <td>
           <table style="width: 100%; height: 100%;">
             <tr>
-              <td style="width: 80%;min-width: 60%;max-width: 60%;padding-right: 15px;" colspan="2">
+              <td style="width: 80%;min-width: 80%;max-width: 80%;padding-right: 15px;" colspan="2">
                 <filters-panel @filters-changed-event="refreshEvents"></filters-panel>
               </td>
-              <td style="width: 20%;min-width: 40%;max-width: 40%; padding-left: 15px;">
-                <md-button class="md-success" style="width: 100%; height: 100%; margin-top: 5px; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
+              <td style="width: 20%;min-width: 20%;max-width: 20%; padding-left: 15px;">
+                <md-button class="md-success" style="width: 100%; height: 100%; margin-left: -6px; margin-top: 5px; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
               </td>
             </tr>
           </table>
@@ -21,7 +21,7 @@
         <td>
           <table style="width: 100%; height: 100%;">
             <tr>
-              <td style="width: 20%; padding-right: 15px;">
+              <td style="width: 20%; max-width: 20%; padding-right: 15px;">
                 <month-select-panel :current-year="currentYear" :current-month="currentMonth"></month-select-panel>
               </td>
               <td style="width: 60%;">
@@ -45,16 +45,16 @@
                               <td v-for="monthDay in monthRow" style="width: 14.2%; min-width: 14.2%; max-width: 14.2%;">
                                 <template v-if="monthDay !== 0">
                                   <template v-if="monthDay.hasEvents">
-                                    <md-button class="md-success md-just-icon md-round md-md">{{monthDay.dayInMonth}}</md-button>
+                                    <md-button :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">{{monthDay.dayInMonth}}</md-button>
                                   </template>
                                   <template v-else>
-                                    <md-button class="md-simple md-round  md-just-icon md-md">
+                                    <md-button :ref="`month-day-${monthDay.dayInMonth}`" class="md-simple md-round  md-just-icon md-md">
                                       {{monthDay.dayInMonth}}
                                     </md-button>
                                   </template>
                                 </template>
                                 <template v-else>
-                                  <md-button class="md-simple md-round  md-just-icon md-md" disabled="disabled"></md-button>
+                                  <md-button :ref="`month-day-${monthDay.dayInMonth}`" class="md-simple md-round  md-just-icon md-md" disabled="disabled"></md-button>
                                 </template>
                               </td>
                             </tr>
@@ -77,7 +77,7 @@
                   </tr>
                 </table>
               </td>
-              <td style="width: 20%;">
+              <td style="width: 20%;max-width: 20%;">
                 <table style="width: 100%; height: 100%;">
                   <tr style="height: 85%;">
                     <td>
@@ -96,36 +96,6 @@
           </table>
         </td>
       </tr>
-      <!--<tr style="height: 10%;">
-
-      </tr>
-      <tr style="height: 75%;">
-        <td  style="width: 20%; min-width: 20%; max-width: 20%;">
-          <month-select-panel></month-select-panel>
-        </td>
-        <td style="width: 40%; min-width: 40%; max-width: 40%; padding-left: 15px;padding-top: 15px;" >
-
-        </td>
-        <td style="width: 40%;min-width: 40%;max-width: 40%; padding-left: 15px;">
-          <month-events-panel :calendar-events="calendarEvents"></month-events-panel>
-        </td>
-      </tr>
-      <tr style="height: 5%;">
-        <td style="width: 60%;min-width: 60%;max-width: 60%; padding-left: 15px;padding-top: 15px;" >
-          <md-card style="padding: 0; margin: 0; height: 100%; ">
-            <md-card-content style="text-align: center;">
-              <md-button class="md-simple md-sm md-warning"><i class="fa fa-square" style="margin-right: 5px;"></i> Holidays</md-button>
-              <md-button class="md-simple md-sm md-info"><i class="fa fa-square" style="margin-right: 5px;"></i> Civil Days</md-button>
-              <md-button class="md-simple md-sm md-success"><i class="fa fa-square" style="margin-right: 5px;"></i> Company Events</md-button>
-              <md-button class="md-simple md-sm md-primary"><i class="fa fa-square" style="margin-right: 5px;"></i> Personal Schedule</md-button>
-            </md-card-content>
-          </md-card>
-        </td>
-        <td style="width: 40%;min-width: 40%;max-width: 40%; padding-left: 15px;padding-top: 15px;">
-          <md-button class="md-success md-sm disabled" disabled="disabled" style="width: 99%; height: 45%; margin-top: 0; font-weight: 500;">Import Events</md-button>
-          <md-button class="md-success md-sm" style="width: 99%; height: 45%; margin-top: 0; font-weight: 500;">Export To Excel</md-button>
-        </td>
-      </tr>-->
     </table>
 
   </div>
@@ -300,5 +270,7 @@
   };
 </script>
 <style lang="scss">
-
+  .md-grey {
+    background-color: #e0e0e0;
+  }
 </style>
