@@ -256,11 +256,10 @@
             this.ready = true;
           });
       },
-      ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'resetForm', 'setEditMode']),
+      ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'setEditMode']),
       openEventModal(){
         this.setEventModal({ showModal: true })
         this.setEditMode({editMode: false})
-        this.resetForm();
       }
     },
     computed: {
