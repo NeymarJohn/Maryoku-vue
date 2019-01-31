@@ -59,7 +59,6 @@ export default {
   },
   async mounted()
   {
-    console.log()
     this.vendors = await Vendors.get();
   },
   created() {

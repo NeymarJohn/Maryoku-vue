@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import Vuex from "vuex";
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import { Model } from 'vue-api-query';
@@ -24,7 +25,6 @@ import store from "./store";
 // plugin setup
 Vue.use(VueRouter);
 Vue.use(DashboardPlugin);
-
 
 // configure router
 const router = new VueRouter({

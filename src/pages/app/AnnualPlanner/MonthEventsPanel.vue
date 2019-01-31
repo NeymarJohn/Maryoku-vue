@@ -42,7 +42,7 @@
 
                 <div class="md-list-item-text" style="white-space: normal;">
                   <span style="font-weight: 500;">{{calendarEvent.title}}</span>
-                  <span class="small text-gray">August 18, 2019</span>
+                  <span class="small text-gray">{{calendarEvent.eventStartMillis | formatDate}}</span>
                 </div>
               </md-list-item>
 
@@ -67,7 +67,7 @@
 <script>
   import auth from '@/auth';
   import VueElementLoading from 'vue-element-loading';
-
+  import moment from 'moment';
 
   export default {
     name: 'month-events-panel',
@@ -106,6 +106,11 @@
       calendarEvents(oldValue, newValue) {
         this.dates = Object.keys(this.calendarEvents);
       }
+    },
+    filters: {
+      formatDate: function (date) {
+        return moment(date).format('MMMM Do, GGGG - HH:mm');
+      },
     }
   };
 </script>
