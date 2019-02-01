@@ -9,11 +9,7 @@ export default {
             eventTypes: [],
             countries: [],
             holidays: []
-          },
-          eventModalOpen: false,
-          modalTitle: 'Create New Event',
-          modalSubmitTitle: 'Save',
-          editMode: false
+          }
         };
     },
 
@@ -21,14 +17,15 @@ export default {
         /*setMemberProperty(state, {key, actualValue}) {
             state.teamMemberData[key] = actualValue;
         },*/
-      setEventModal(state, data) {
-        state.eventModalOpen = data.showModal;
-      },
-      setModalTitle(state, data) {
-        state.modalTitle = data;
-      },
-      setEditMode(state, data) {
-        state.editMode = data.editMode
-      },
+      resetForm(state){
+          /*state.teamMemberData.firstName = null;
+          state.teamMemberData.lastName = null;
+          state.teamMemberData.emailAddress = null;
+          state.teamMemberData.permissions = [];
+          state.teamMemberData.role = null;*/
+      }
+
     },
+
+    actions: {}
 };
