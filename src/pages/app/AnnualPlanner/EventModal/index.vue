@@ -206,7 +206,7 @@
       },
       time: {
         get() {
-          return this.eventData.time ? moment(this.eventData.time).format('HH:00') : ""
+          return this.eventData.time ? this.eventData.time : ""
         },
         set(value) {
           this.setEventProperty({key: 'time', actualValue: value});
@@ -281,12 +281,12 @@
         let _calendar = new Calendar({id: this.$store.state.calendarId});
         let editedEvent = new CalendarEvent({id: this.eventData.id});
 
-        editedEvent.title = this.eventData.eventName;
+        editedEvent.title = this.eventName;
         editedEvent.eventStartMillis = this.getEventStartInMillis();
         editedEvent.eventEndMillis = this.getEventEndInMillis();
-        editedEvent.location = this.eventData.location;
-        editedEvent.numberOfParticipants = this.eventData.participants;
-        editedEvent.totalBudget = this.eventData.budget;
+        editedEvent.location = this.location;
+        editedEvent.numberOfParticipants = this.participants;
+        editedEvent.totalBudget = this.budget;
         editedEvent.status = this.eventData.status;
         editedEvent.currency = 'USD'; // HARDCODED, REMOVE AFTER BACK WILL FIX API
         editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
@@ -302,18 +302,14 @@
 
       },
       createEvent() {
-        if (this.$store.state.calendarId === null) {
-          Calendar.get().then((calendars) => {
-            this.$store.state.calendarId = calendars[0].id;
-            this.saveEvent();
-          })
-            .catch((error) => {
-              console.log(error);
-              this.$parent.isLoading = false;
-            });
-        } else {
+        Calendar.get().then((calendars) => {
+          this.$store.state.calendarId = calendars[0].id;
           this.saveEvent();
-        }
+        })
+          .catch((error) => {
+            console.log(error);
+            this.$parent.isLoading = false;
+          });
       },
       validateEvent() {
         this.$validator.validateAll().then(isValid => {
@@ -348,14 +344,14 @@
         this.$parent.isLoading = false;
       },
       getEventStartInMillis() {
-        if (this.eventData.date && this.eventData.time) {
-          let eventStartTime = new Date(this.eventData.date).getTime() + (this.convertHoursToMillis(+this.eventData.time.substring(0, 2)));
+        if (this.date && this.time) {
+          let eventStartTime = new Date(this.date).getTime() + (this.convertHoursToMillis(+this.time.substring(0, 2)));
           return eventStartTime;
         }
       },
       getEventEndInMillis() {
-        if (this.eventData.date && this.eventData.time && this.eventData.duration) {
-          let eventEndTime = this.getEventStartInMillis() + this.convertHoursToMillis(this.eventData.duration);
+        if (this.date && this.time && this.duration) {
+          let eventEndTime = this.getEventStartInMillis() + this.convertHoursToMillis(this.duration);
           return eventEndTime;
         }
       },

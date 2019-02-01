@@ -50,7 +50,7 @@ export default {
         state.eventData['id'] = data.eventData.id;
         state.eventData['eventName'] = data.eventData.title;
         state.eventData['date'] = data.eventData.eventStartMillis;
-        state.eventData['time'] = data.eventData.eventStartMillis;
+        state.eventData['time'] = moment(data.eventData.eventStartMillis).format('HH:00');
         state.eventData['duration'] = moment(data.eventData.eventEndMillis).diff(data.eventData.eventStartMillis, 'hours');
         state.eventData['participants'] = data.eventData.numberOfParticipants;
         state.eventData['budget'] = data.eventData.totalBudget;
