@@ -11,7 +11,7 @@
                 <filters-panel @filters-changed-event="refreshEvents"></filters-panel>
               </td>
               <td style="width: 20%;min-width: 20%;max-width: 20%; padding-left: 15px;">
-                <md-button class="md-success" @click="openEventModal" style="width: 100%; height: 100%; margin-left: -6px; margin-top: 5px; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
+                <md-button class="md-success" style="width: 100%; height: 100%; margin-left: -6px; margin-top: 5px; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
               </td>
             </tr>
           </table>
@@ -97,13 +97,12 @@
         </td>
       </tr>
     </table>
-      <event-modal @refresh-events="refreshEvents" ref="eventModal"></event-modal>
+
   </div>
 </template>
 
 <script>
   import auth from '@/auth';
-  import EventModal from './EventModal/';
   import VueElementLoading from 'vue-element-loading';
   import ChartComponent from '@/components/Cards/ChartComponent';
   import CalendarFiltersPanel from './CalendarFiltersPanel';
@@ -120,7 +119,6 @@
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import AnnualPlannerVuexModule from './AnnualPlanner.vuex';
 
-
   export default {
     name: 'calendar-panel',
     components: {
@@ -132,7 +130,6 @@
       AnimatedNumber,
       CalendarFiltersPanel,
       AdvancedSelect,
-      EventModal
     },
     props: {
       month : {
@@ -172,8 +169,7 @@
     },
     methods: {
       refreshEvents(){
-        this.selectYearMonth(this.year, this.month);
-        this.queryEvents();
+
       },
       selectYearMonth(year, month){
         let selectedMoment = moment().date(1).month(month-1).year(year);
@@ -256,13 +252,6 @@
             this.isLoading = false;
             this.ready = true;
           });
-      },
-      ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'setModalTitle', 'setEditMode', 'setModalSubmitTitle']),
-      openEventModal(){
-        this.setEventModal({ showModal: true })
-        this.setModalTitle('Create New Event')
-        this.setModalSubmitTitle('Save')
-        this.setEditMode({ setEditMode: false })
       }
     },
     computed: {
