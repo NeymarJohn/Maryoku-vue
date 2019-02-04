@@ -3,7 +3,7 @@
         <div class="md-layout">
             <modal v-if="eventModalOpen">
                 <template slot="header">
-                    <h4 class="modal-title">{{modalTitle}}</h4>
+                    <h4 class="modal-title" v-if="modalTitle">{{modalTitle}}</h4>
                     <md-button class="md-simple md-just-icon md-round modal-default-button" @click="closeModal">
                         <md-icon>clear</md-icon>
                     </md-button>
@@ -109,7 +109,7 @@
                     </form>
                 </template>
                 <template slot="footer">
-                    <md-button class="md-primary" @click="validateEvent">
+                    <md-button class="md-success move-center" @click="validateEvent">
                         {{modalSubmitTitle}}
                     </md-button>
                 </template>
@@ -294,6 +294,7 @@
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
           this.closeModal();
+          this.$emit("refresh-events");
         })
           .catch((error) => {
             console.log(error);
@@ -342,6 +343,7 @@
 
         this.closeModal();
         this.$parent.isLoading = false;
+        this.$emit("refresh-events");
       },
       getEventStartInMillis() {
         if (this.date && this.time) {
@@ -373,7 +375,7 @@
 
 <style lang="scss">
     .modal-container {
-        max-width: 700px;
+        max-width: 600px;
     }
     .modal-z-index {
         z-index: 5;
@@ -381,5 +383,8 @@
     .large-z-index {
         z-index: 6;
         position: relative;
+    }
+    .move-center {
+        margin: 0 auto!important;;
     }
 </style>

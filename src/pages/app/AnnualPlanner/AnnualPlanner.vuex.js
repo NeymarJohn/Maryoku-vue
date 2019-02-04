@@ -24,8 +24,8 @@ export default {
             location: "",
           },
           eventModalOpen: false,
-          modalTitle: 'Create New Event',
-          modalSubmitTitle: 'Save',
+          modalTitle: '',
+          modalSubmitTitle: '',
           editMode: false
         };
     },
@@ -63,8 +63,8 @@ export default {
 
         if (typeof payload.eventData !== 'undefined') {
           commit('setEventData', payload)
-          commit('setModalTitle', 'Edit Event')
-          commit('setModalSubmitTitle', 'Save')
+          commit('setModalTitle', false)
+          commit('setModalSubmitTitle', 'Edit Details')
           commit('setEditMode', {editMode: payload.eventData.id})
         }
       }

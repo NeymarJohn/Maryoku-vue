@@ -97,7 +97,7 @@
         </td>
       </tr>
     </table>
-      <event-modal ref="eventModal"></event-modal>
+      <event-modal @refresh-events="refreshEvents" ref="eventModal"></event-modal>
   </div>
 </template>
 
@@ -172,7 +172,8 @@
     },
     methods: {
       refreshEvents(){
-
+        this.selectYearMonth(this.year, this.month);
+        this.queryEvents();
       },
       selectYearMonth(year, month){
         let selectedMoment = moment().date(1).month(month-1).year(year);
@@ -256,10 +257,11 @@
             this.ready = true;
           });
       },
-      ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'setModalTitle', 'setEditMode']),
+      ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'setModalTitle', 'setEditMode', 'setModalSubmitTitle']),
       openEventModal(){
         this.setEventModal({ showModal: true })
         this.setModalTitle('Create New Event')
+        this.setModalSubmitTitle('Save')
         this.setEditMode({ setEditMode: false })
       }
     },
