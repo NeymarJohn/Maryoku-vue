@@ -1,151 +1,148 @@
 <template>
-<div class='employee-body'>
-<div class='form-main'>
-<div class='form-block'>
+<div class='om-body'>
+<div class='om_form-main'>
+<div class='om_form-block'>
 <div>
 <Title
         class='emp-title'
         title='Oh,wow so thats you'
-        titleText='titleStyle'/>
+        titleText='om_titleStyle'/>
 </div>
         <InputText 
-                labelStyle='label_input'
+                labelStyle='om_label_input'
                 label='Full Name'
                 fieldStyle="field_input"
                 required
         />
         <InputText
-                labelStyle='label_input'
+                labelStyle='om_label_input'
                 label='Email Address'
                 required
         />
         <InputText 
-                labelStyle='label_input'
+                labelStyle='om_label_input'
                 label='Phone Number'
                 required
-        />
-        <Select 
-                labelStyle='label_input'
-                label="Branch" 
-                required
-        />
-        <Select 
-                labelStyle='label_input'
-                label="Department" 
-                required
-        />
-        <InputText 
-                labelStyle='label_input'
-                label='Marital status'
-        />
-        <InputText 
-                labelStyle='label_input'
-                label='Number of children'
-         />
+        />        
 </div>
-<div class='button-block'>
-        <ButtonDiv buttonStyle='buttonStyle' text='next'/>
+<div class='om_button-block'>
+        <ButtonDiv buttonStyle='om_buttonStyle' text='next' :onClick='onNext'/>
 </div>
 </div>
-<div class='logo-main'>
+<div class='om_logo-main'>
 <div>
-<img class='emp-logo' src="static/img/secure_booker.png">
+<img class='om_form-block' src="static/img/secure_booker.png">
         <Title
-                title='Join the Hive'
-                titleBlock='titleBlock'
-                titleText='titleStyle'
+                title='Smart Leadership'
+                titleBlock='om_titleStyle'
+                titleText='om_titleStyle'
         />
         <Title  
-                titleText='titleTextLogo'        
-                titleBlock='titleBlock'
-                title='We help you collect all events data, from participation rate to feedback and budget frends.Evething you need to lead'
+                titleText='om_titleTextLogo'        
+                titleBlock='om_titleStyle'
+                title='We help you collect all events data, from participation rate to feedback and budget frends. Evething you need to lead'
          />
 </div>
 </div>
 </div>
 </template>
 <script>
+//MAIN MODULES
+import {mapGetters} from 'vuex'
+
+//COMPONETS
 import InputText from '@/components/Inputs/InputText.vue'
 import Select from '@/components/Select/Select.vue'
 import Title from '@/components/Title/Title.vue'
 import ButtonDiv from '@/components/Button/ButtonDiv.vue'
 
+
 export default {
-    name:'Employee',
-    components:{
-   InputText,
-   Select,
-   Title,
-   ButtonDiv
-},
+        name:'Employee',
+        components:{
+        InputText,
+        Select,
+        Title,
+        ButtonDiv
+        },
+        data(){
+                return{
+                        
+                }
+        },
+                computed:{
+                ...mapGetters({})
+        },
+                methods:{
+                        onNext:function(){
+                                
+                                console.log(this,"eto next")
+                        }
+        }
+
 }
 </script>
 <style lang="scss">
-.employee-body{
+.om-body{
     display:flex;
     flex-direction:'column'      
 }
-.form-main {
+.om_form-main {
         width:50%;
         height: 100vh; 
         background-color: white;
         display: flex;
-        justify-content: center;
-        align-items: center; 
-        flex-direction: column;
+        justify-content: center;        
 }
-.logo-main {
+.om_logo-main {
         width:50%;
         height: 100vh;  
         background:  #ff527c;
         display: flex;
         align-items: center;  
 }
-.form-block{
+.om_form-block{
     width: 75%;
     display: flex;
     flex-direction: column;
+    margin-top: 60px
 }
-.emp-logo{
-        height: 100%;
-        width: 100%;        
+.om_form-block{
+                
 }
 .emp-title{
         text-align: center;
         margin-bottom: 20px
 }
-.label_input{
+.om_label_input{
         font-size: 20px !important;
         padding-left: 10px;
 }
-.titleStyle{
+.om_titleStyle{
       font-size: 40px;
       font-weight: 700; 
 }
-.titleBlock{
+.om_titleStyle{
        display:flex;
        justify-content: center; 
 }
-.titleTextLogo{
+.om_titleTextLogo{
     text-align: center;
     width: 70%;
     color: white;
     font-size: 26px;
     margin-top: 20px;
 }
-.buttonStyle{
-        position: absolute;
+.om_buttonStyle{        
         cursor: pointer;
         color: #ff527c;
         font-size: 20px;
-        margin-right: 20px;
-        top: 100px;
-        right: 0px;
+        margin-right: 20px;       
 }
-.button-block{
-      width:100%;
+.om_button-block{      
       display:flex;      
       justify-content: flex-end;
-      position:relative;        
+      align-items: flex-end;
+      margin-bottom: 45px;               
 }
 </style>

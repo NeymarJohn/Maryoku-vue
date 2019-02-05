@@ -40,8 +40,7 @@
     },
         methods: {
               checkImage:function(){                  
-                     this.isChecked=!this.isChecked  
-                     console.log(this )              
+                     this.isChecked=!this.isChecked                                    
               }  
         },       
     };

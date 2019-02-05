@@ -33,15 +33,7 @@
                 labelStyle='label_input'
                 label="Department" 
                 required
-        />
-        <InputText 
-                labelStyle='label_input'
-                label='Marital status'
-        />
-        <InputText 
-                labelStyle='label_input'
-                label='Number of children'
-         />
+        />        
 </div>
 <div class='button-block'>
         <ButtonDiv buttonStyle='buttonStyle' text='next'/>
@@ -85,8 +77,7 @@ export default {
         height: 100vh; 
         background-color: white;
         display: flex;
-        justify-content: center;
-        align-items: center;     
+        justify-content: center;            
 }
 .logo-main {
         width:50%;
@@ -101,8 +92,7 @@ export default {
     flex-direction: column;
 }
 .emp-logo{
-        height: 100%;
-        width: 100%;        
+               
 }
 .emp-title{
         text-align: center;
@@ -120,19 +110,17 @@ export default {
        display:flex;
        justify-content: center; 
 }
-.buttonStyle{
-        position: absolute;
+.buttonStyle{        
         cursor: pointer;
         color: #ff527c;
         font-size: 20px;
-        margin-right: 20px;
-        top: 100px;
-        right: 0px;
+        margin-right: 20px;        
 }
-.button-block{
-      width:100%;
+.button-block{      
       display:flex;      
       justify-content: flex-end;
-      position:relative;        
+       align-items: flex-end;
+      margin-bottom: 45px;               
+    
 }
 </style>

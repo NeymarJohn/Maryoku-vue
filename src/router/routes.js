@@ -38,6 +38,8 @@ import OfficeMenageMain from '@/pages/Dashboard/Pages/CommonInfoProfile/OfficeMe
 import CommonInfoProfile from '@/pages/Dashboard/Pages/CommonInfoProfile/index.vue'
 import EventForm from '@/pages/Dashboard/Pages/CommonInfoProfile/EventForm.vue'
 import Dietary from '@/pages/Dashboard/Pages/CommonInfoProfile/Dietary.vue'
+import Company from '@/pages/Dashboard/Pages/CommonInfoProfile/Company.vue'
+import Invite from '@/pages/Dashboard/Pages/CommonInfoProfile/Invite.vue'
 // Pages
 const User = () => import("@/pages/Dashboard/Pages/UserProfile.vue");
 const Pricing = () => import("@/pages/Dashboard/Pages/Pricing.vue");
@@ -444,13 +446,23 @@ const appCurrentInfo={
       name: "Dietary",
       component: Dietary
     },
+    {
+      path: "/company",
+      name: "Company",
+      component: Company
+    },
+    {
+      path: "/invite",
+      name: "InviteEmployee",
+      component: Invite
+    },
     ]
 }
 
 const routes = [
   {
     path: "/",
-    redirect: "/dietary",
+    redirect: "/invite",
     name: "Root"
   },
   /*componentsMenu,
