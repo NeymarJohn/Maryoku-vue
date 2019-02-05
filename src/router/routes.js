@@ -32,14 +32,6 @@ import AnnualPlanner from "@/pages/app/AnnualPlanner/index.vue";
 // Dashboard pages
 import Dashboard from "@/pages/Dashboard/Dashboard.vue";
 
-//OM/Emp_info_pages
-import EmployeeMain from '@/pages/Dashboard/Pages/CommonInfoProfile/Employee.vue'
-import OfficeMenageMain from '@/pages/Dashboard/Pages/CommonInfoProfile/OfficeMenage.vue'
-import CommonInfoProfile from '@/pages/Dashboard/Pages/CommonInfoProfile/index.vue'
-import EventForm from '@/pages/Dashboard/Pages/CommonInfoProfile/EventForm.vue'
-import Dietary from '@/pages/Dashboard/Pages/CommonInfoProfile/Dietary.vue'
-import Company from '@/pages/Dashboard/Pages/CommonInfoProfile/Company.vue'
-import Invite from '@/pages/Dashboard/Pages/CommonInfoProfile/Invite.vue'
 // Pages
 const User = () => import("@/pages/Dashboard/Pages/UserProfile.vue");
 const Pricing = () => import("@/pages/Dashboard/Pages/Pricing.vue");
@@ -52,9 +44,6 @@ const SignOut = () => import("@/pages/Dashboard/Pages/SignOut.vue");
 const Onboarding = () => import("@/pages/Dashboard/Pages/Onboarding.vue");
 const SignedIn = () => import("@/pages/Dashboard/Pages/SignedIn.vue");
 const Lock = () => import("@/pages/Dashboard/Pages/Lock.vue");
-// const EmployeeMain = () => import("@/pages/Pages/CommonInfoProfile/Employee.vue");
-// const OfficeMenageMain = () => import("@/pages/Pages/CommonInfoProfile/OfficeMenage.vue");
-// import EmployeeMain from '@/pages/Pages/CommonInfoProfile/Employee.vue'
 
 // Components pages
 const Buttons = () => import("@/pages/Dashboard/Components/Buttons.vue");
@@ -274,7 +263,7 @@ let appPages = {
   path: "/app",
   component: DashboardLayout,
   name: "App",
-  children: [    
+  children: [
     {
       path: "/me",
       name: "Me",
@@ -420,49 +409,11 @@ let appPages = {
     }
   ]
 };
-const appCurrentInfo={
-  path: "/app",  
-  name: "CommonInfoProfile",
-  component: CommonInfoProfile,
-  children: [
-    {
-      path: "/employee-form",
-      name: "EmployeeMain",
-      component: EmployeeMain
-    },
-    {
-      path: "/officeManager-form",
-      name: "OfficeMenageMain",
-      component: OfficeMenageMain
-    },
-    {
-      path: "/events",
-      name: "EventForm",
-      component: EventForm
-    },
-    ,
-    {
-      path: "/dietary",
-      name: "Dietary",
-      component: Dietary
-    },
-    {
-      path: "/company",
-      name: "Company",
-      component: Company
-    },
-    {
-      path: "/invite",
-      name: "InviteEmployee",
-      component: Invite
-    },
-    ]
-}
 
 const routes = [
   {
     path: "/",
-    redirect: "/invite",
+    redirect: "/company",
     name: "Root"
   },
   /*componentsMenu,
@@ -470,7 +421,6 @@ const routes = [
   tablesMenu,
   mapsMenu,
   pagesMenu,*/
-  appCurrentInfo,
   authPages,
   appPages,
   /*{
