@@ -25,7 +25,6 @@ export default new Vuex.Store({
     componentsList: null,
     vendorsList: null,
     occasionsArray: null,
-    currenciesArray: null,
     calendarId: null,
   },
   mutations: {
