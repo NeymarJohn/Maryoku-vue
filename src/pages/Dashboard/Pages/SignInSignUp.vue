@@ -54,8 +54,7 @@ export default {
   },
   methods: {
     authenticate(provider) {
-      const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`);
-      document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?callback=${callback}`;
+      document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}`;
     }
   },
   async mounted()
