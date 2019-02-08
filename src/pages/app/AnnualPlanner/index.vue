@@ -29,9 +29,6 @@
 
 <script>
   import auth from '@/auth';
-  import Calendar from '@/models/Calendar';
-  import CalendarEvent from '@/models/CalendarEvent';
-  import CalendarMetadata from '@/models/CalendarMetadata';
   import VueElementLoading from 'vue-element-loading';
   import ChartComponent from '@/components/Cards/ChartComponent';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
@@ -57,7 +54,6 @@
         ready: false,
         auth: auth,
         isLoading: true,
-        totalRemainingBudget: 0,
         monthRows: [],
         currentMonthName: '',
         currentMonth: 0,
@@ -69,14 +65,11 @@
       this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule);
     },
     mounted(){
-      console.log("mounted !");
       this.ready = false;
       this.isLoading = true;
       this.auth.currentUser(this, true, function() {
 
         this.checkSelectedYearMonth();
-
-        this.totalRemainingBudget = 26350;
 
         this.ready = true;
         this.isLoading = false;
@@ -108,13 +101,11 @@
       },
       selectYearMonth(year, month){
         let selectedMoment = moment().date(1).month(month-1).year(year);
-        let daysInMonth = selectedMoment.daysInMonth();
         let currentMonth = selectedMoment.month();
-        let currentYear = selectedMoment.year();
         this.currentMonthName = selectedMoment.format('MMMM');
         this.currentMonth = currentMonth+1;
         this.currentYear = year;
-      }
+      },
     },
     computed: {
       ...mapState('AnnualPlannerVuex', ['filtersData']),
