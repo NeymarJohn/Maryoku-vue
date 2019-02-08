@@ -205,20 +205,22 @@ export default {
     }
   },
   mounted() {
-    this.auth.currentUser(this, true, function(){
-      let docClasses = document.body.classList;
-      let isWindows = navigator.platform.startsWith("Win");
-      if (isWindows) {
-        // if we are on windows OS we activate the perfectScrollbar function
-        initScrollbar("sidebar");
-        initScrollbar("sidebar-wrapper");
-        initScrollbar("main-panel");
+    /*  NEET CODE REVIEW !!!!!!!!!!!!!!!!!!!!*/
 
-        docClasses.add("perfect-scrollbar-on");
-      } else {
-        docClasses.add("perfect-scrollbar-off");
-      }
-    });
+    // this.auth.currentUser(this, true, function(){
+    //   let docClasses = document.body.classList;
+    //   let isWindows = navigator.platform.startsWith("Win");
+    //   if (isWindows) {
+    //     // if we are on windows OS we activate the perfectScrollbar function
+    //     initScrollbar("sidebar");
+    //     initScrollbar("sidebar-wrapper");
+    //     initScrollbar("main-panel");
+
+    //     docClasses.add("perfect-scrollbar-on");
+    //   } else {
+    //     docClasses.add("perfect-scrollbar-off");
+    //   }
+    // });
   }
 };
 </script>
