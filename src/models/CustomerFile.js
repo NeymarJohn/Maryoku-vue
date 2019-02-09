@@ -1,7 +1,7 @@
 import Model from './Model'
 import VendorCategories from './VendorCategories'
 
-export default class EventsFile extends Model {
+export default class customerFile extends Model {
   resource() {
     return 'customerFiles'
   }
