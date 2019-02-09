@@ -88,7 +88,7 @@
                   <tr style="height: 15%;">
                     <td style="padding-top: 15px;">
                       <md-button class="md-success md-sm disabled" disabled="disabled" style="width: 99%; height: 45%; margin-top: 0; font-weight: 500;">Import Events</md-button>
-                      <md-button class="md-success md-sm" style="width: 99%; height: 45%; margin-top: 0; font-weight: 500;">Export To Excel</md-button>
+                      <md-button class="md-success md-sm" style="width: 99%; height: 45%; margin-top: 0; font-weight: 500;" @click="exportToExcel">Export To Excel</md-button>
                     </td>
                   </tr>
                 </table>
@@ -201,6 +201,12 @@
       this.selectYearMonth(this.year, this.month);
     },
     methods: {
+      exportToExcel() {
+        window.open(
+          'https://localhost:8080/1/calendars/123/export/2019',
+          '_blank' // <- This is what makes it open in a new window.
+        );
+      },
       refreshEvents(){
         this.selectYearMonth(this.year, this.month);
         this.queryEvents(this.year, this.month);
