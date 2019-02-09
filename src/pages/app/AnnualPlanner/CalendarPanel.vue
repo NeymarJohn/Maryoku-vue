@@ -321,12 +321,12 @@
       year(newVal, oldVal){
         this.selectYearMonth(this.year, this.month);
         this.queryEvents();
-        this.generateRows();
+        this.generateRows(this.year, this.month);
       },
       month(newVal, oldVal){
         this.selectYearMonth(this.year, this.month);
         this.queryEvents();
-        this.generateRows();
+        this.generateRows(this.year, this.month);
       },
     }
   };
