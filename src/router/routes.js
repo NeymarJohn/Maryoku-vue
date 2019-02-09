@@ -274,7 +274,7 @@ let appPages = {
   path: "/app",
   component: DashboardLayout,
   name: "App",
-  children: [    
+  children: [
     {
       path: "/me",
       name: "Me",
@@ -382,13 +382,13 @@ let appPages = {
     },
     {
       path: "/planner/:year/:month",
-      name: "AnnualPlanner",
+      name: "AnnualPlannerYearMonth",
       component: AnnualPlanner,
       meta: {title: "Planner"}
     },
     {
       path: "/planner/:year",
-      name: "AnnualPlanner",
+      name: "AnnualPlannerYEar",
       component: AnnualPlanner,
       meta: {title: "Planner"}
     },
@@ -421,9 +421,9 @@ let appPages = {
   ]
 };
 const appCurrentInfo={
-  path: "/additional-form",  
+  path: "/additional-form",
   name: "CommonInfoProfile",
-  component: CommonInfoProfile,  
+  component: CommonInfoProfile,
   children: [
     {
       path: "/employee-form",
