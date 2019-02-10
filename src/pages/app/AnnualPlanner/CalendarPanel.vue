@@ -203,8 +203,7 @@
     methods: {
       exportToExcel() {
         window.open(
-          'https://localhost:8080/1/calendars/123/export/2019',
-          '_blank' // <- This is what makes it open in a new window.
+          `${process.env.SERVER_URL}/1/calendars/123/export/2019`
         );
       },
       refreshEvents(){
