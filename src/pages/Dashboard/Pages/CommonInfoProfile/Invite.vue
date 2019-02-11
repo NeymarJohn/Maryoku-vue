@@ -51,6 +51,9 @@
 </div>
 </template>
 <script>
+
+import {isWrong} from '@/utils/helperFunction'
+
 import InputWithIcon from '@/components/Inputs/InputWithIcon.vue'
 import Select from '@/components/Select/Select.vue'
 import Title from '@/components/Title/Title.vue'
@@ -75,7 +78,9 @@ data(){
 }
 ,
  methods: {
-         onSkip:function(){                        
+         onSkip:function(){
+            const invitation=isWrong(this,['employee_email'])
+            this.$store.dispatch("user/sendEvent",invitation)                           
             this.$router.push('/officeManager-form')          
          }
          ,

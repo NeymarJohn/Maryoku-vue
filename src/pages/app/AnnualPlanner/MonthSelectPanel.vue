@@ -13,7 +13,7 @@
 
         <md-list style="width: 100%; padding: 0; margin: 0;">
           <md-list-item v-for="(month, idx) in months" :key="month" :ref="`month_${idx}`" :class="{'selected-month' : currentMonth === idx+1, 'month' : currentMonth !== idx+1}">
-            <router-link :to="{name: 'AnnualPlannerYearMonth', params: {year: currentYear, month: idx+1}}" style="width: 100%;">
+            <router-link :to="{name: 'AnnualPlanner', params: {year: currentYear, month: idx+1}}" style="width: 100%;">
               <div :class="{'selected-month-item' : currentMonth === idx+1, 'item' : currentMonth !== idx+1}">{{month}} <div class="pull-right" :ref="`month_${idx}_count`">0</div></div>
             </router-link>
           </md-list-item>

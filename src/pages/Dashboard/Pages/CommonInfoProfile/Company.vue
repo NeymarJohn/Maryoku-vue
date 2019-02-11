@@ -27,9 +27,10 @@
         <Autocomplete
                 label='Main office Address'
                 styleLabel='company_label_input'
-                id='auto'
+                id='city_getter'
                 required
-                :data='data'
+                :value='main_office_adddress'                
+                :data='autocomplete'
                 name='main_office_adddress'
                 :onChange='onChange'
                 :isErrors='errors'
@@ -42,19 +43,20 @@
                 :onChange='onChange'
                 
         />        
-        <Autocomplete
-        label='Industry'
-        styleLabel='company_label_input'
-        :data='data'
-        />
+       <Select
+         label='Industry'
+          labelStyle='company_label_input'
+          :data='industryList'
+          name='industry'
+          :onChange="onChange"
+          /> 
         <InputText 
                 labelStyle='company_label_input'
                 label='Website'
                 name='website'
                 :value='website'
                 :onChange='onChange'
-         />         
-            
+         />            
 </div>
 <div class='company_button-block' >
         <ButtonDiv buttonStyle='company_buttonStyle' text='next' :onClick='submitForm'/>
@@ -75,9 +77,17 @@
          />
 </div>
 </div>
+<div>
+</div>
+<div>
+</div>
 </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+
+import {isWrong} from '@/utils/helperFunction'
+
 import InputText from '@/components/Inputs/InputText.vue'
 import Select from '@/components/Select/Select.vue'
 import Title from '@/components/Title/Title.vue'
@@ -98,23 +108,37 @@ data(){
                 company_name:'',
                 upload_logo:null,
                 main_office_adddress:'',
-                number_of_employee:null,
+                number_of_employee:'',
                 industry:'',
                 website:'',                
                 errors:false,
-                data:["some data","some data","some data","some data","some data"]
-        }
-}
-,
+                        }
+},
+mounted:function(){        
+        this.$store.dispatch("user/getIndustry");
+        const auto =document.getElementById('city_getter');       
+        this.autocomplete = new google.maps.places.Autocomplete(auto,{types: ['geocode']});     
+},
+computed:{
+     ...mapGetters({  
+  industryList: 'user/getIndustryList'
+}),  
+},
+
  methods: {
          submitForm:function(){                                    
-            this.validFunc(this)                         
-            if(this.errors==false){                    
+            this.validFunc(this)  
+            console.log('@')                       
+            if(this.errors==false){
+                     console.log('@@')
+                const info=isWrong(this,['company_name','main_office_adddress','number_of_employee','industry','website'])
+                this.$store.dispatch("user/sendCompanyInfo",info)                    
                 this.$router.push('/invite')     
             }
               
          },
-         onChange:function(value, name){                
+         onChange:function(value, name){    
+                 console.log(this)                           
                  this[name]=value                    
          },
          validFunc:function(ctx,required){
@@ -132,13 +156,23 @@ data(){
                  ctx.errors=false   
             }
          }
+
          
  },
 
 }
 
-const auto =document.getElementById('auto')
-var autocomplete = new google.maps.places.Autocomplete(auto)
+// const auto =document.getElementById('auto')
+// var autocomplete = new google.maps.places.Autocomplete(auto)
+// autocomplete.addListener('place_changed', function() {
+          
+//           var place = autocomplete.getPlace();
+//           if (!place.geometry) {
+//             // User entered the name of a Place that was not suggested and
+//             // pressed the Enter key, or the Place Details request failed.
+//             window.alert("No details available for input: '" + place.name + "'");
+//             return;
+//           })
 </script>
 <style lang="scss">
 .company_body{

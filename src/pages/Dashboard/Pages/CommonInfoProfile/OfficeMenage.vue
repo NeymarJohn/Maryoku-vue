@@ -63,6 +63,9 @@
 //MAIN MODULES
 import {mapGetters} from 'vuex'
 
+//helper function
+import {isWrong} from '@/utils/helperFunction'
+
 //COMPONETS
 import InputText from '@/components/Inputs/InputText.vue'
 import Select from '@/components/Select/Select.vue'
@@ -92,7 +95,9 @@ export default {
                 methods:{
         submitForm:function(){                                    
             this.validFunc(this)                         
-            if(this.isErrors==false){                    
+            if(this.isErrors==false){  
+                const data=isWrong(this,['full_name','email','phone'])
+                this.$store.dispatch("user/sendOMInfo",data)                       
                 this.$router.push('/events-data')     
             }
               
