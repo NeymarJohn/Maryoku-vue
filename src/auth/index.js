@@ -3,7 +3,8 @@
     ? {SCHEME: 'https', HOSTNAME: 'api.262days.com'}
     : {SCHEME: 'http', HOSTNAME: process.env.SERVER_URL} */
 import { Model } from 'vue-api-query';
-import indexStore from '../store/index.js';
+import store from '../store';
+
 const { HOSTNAME } = { HOSTNAME: process.env.SERVER_URL};
 
 const API_URL = `${HOSTNAME}`;
@@ -54,35 +55,40 @@ export default {
   currentUser(context, required, cb) {
     context.$http.get(CURRENT_USER_URL, { headers: this.getAuthHeader() })
       .then((resp) => {
-        context.user = { username: resp.data.username };
-        indexStore.commit('setCurrentUserData', resp.data)
-        this.user.id = resp.data.id;
-        this.user.username = resp.data.username;
-        this.user.avatar =  resp.data.pictureUrl;
-        this.user.displayName = resp.data.displayName;
+        // context.user = { username: resp.data.username };        
+        store.dispatch("user/getUserFromApi" , resp.data)       
+        // this.user.id = resp.data.id;
+        // this.user.username = resp.data.username;
+        // this.user.avatar =  resp.data.pictureUrl;
+        // this.user.displayName = resp.data.displayName;
 
 
-        this.user.defaultGroupId = resp.data.defaultGroupId;
-        this.user.defaultCalendarId = resp.data.defaultCalendarId;
+        // this.user.defaultGroupId = resp.data.defaultGroupId;
+        // this.user.defaultCalendarId = resp.data.defaultCalendarId;
         this.setHeaders(context);
-        // if (required){
-        //   context.$router.push({
-        //     path: '/'
-        //   });
-        // }
+        if(!resp.data.onboarded){  
+               
+           if(resp.data.onboardingPath==="OM"){
+            context.$router.push('/company-form')
+           }else{
+            context.$router.push('/employee-form')
+           }
+       }else{
+        context.$router.push('/company')
+       }
 
         if (cb !== undefined){
           cb();
         }
-      }, (_) => {
-        this.unsetToken();
-        if (required) {
-          context.$router.push({
-            path: '/signin'/*,
-            query: { redirect: context.$route.fullPath },*/
-          });
-        }
-      });
+      })
+      .catch(
+        () => {
+          this.unsetToken();
+          if (required) {
+            context.$router.push({path:'/signin'});
+          }
+        })
+      
   },
 
   signup(context, creds, redirect) {
@@ -108,8 +114,7 @@ export default {
         }
         context.$http.defaults.headers.Authorization = null;
         context.$router.push({ path: '/signin' });
-      }, error => {
-        console.log(error);
+      }, error => {        
         window.localStorage.removeItem(TOKEN_KEY);
         this.user = {
           authenticated: false
