@@ -390,7 +390,8 @@ select.form-control {
   .md-input,
   .md-textarea{
     height: 36px;
-    padding: 7px 0;    
+    padding: 7px 0;
+    font-size: 14px !important;
     -webkit-text-fill-color: $black-color !important;
     appearance: none;
     font-weight: 400;

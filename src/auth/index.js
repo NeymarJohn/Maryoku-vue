@@ -55,27 +55,28 @@ export default {
   currentUser(context, required, cb) {
     context.$http.get(CURRENT_USER_URL, { headers: this.getAuthHeader() })
       .then((resp) => {
-        // context.user = { username: resp.data.username };        
-        store.dispatch("user/getUserFromApi" , resp.data)       
-        // this.user.id = resp.data.id;
-        // this.user.username = resp.data.username;
-        // this.user.avatar =  resp.data.pictureUrl;
-        // this.user.displayName = resp.data.displayName;
+        // context.user = { username: resp.data.username };
+        //store.dispatch("getUserFromApi" , resp.data)
+        this.user.id = resp.data.id;
+        this.user.username = resp.data.username;
+        this.user.avatar =  resp.data.pictureUrl;
+        this.user.displayName = resp.data.displayName;
 
 
-        // this.user.defaultGroupId = resp.data.defaultGroupId;
-        // this.user.defaultCalendarId = resp.data.defaultCalendarId;
+        this.user.defaultGroupId = resp.data.defaultGroupId;
+        this.user.defaultCalendarId = resp.data.defaultCalendarId;
+
         this.setHeaders(context);
-        if(!resp.data.onboarded){  
-               
-           if(resp.data.onboardingPath==="OM"){
+        /*if(!resp.data.onboarded){
+
+          if(resp.data.onboardingPath==="OM"){
             context.$router.push('/company-form')
-           }else{
+          }else{
             context.$router.push('/employee-form')
-           }
-       }else{
-        context.$router.push('/company')
-       }
+          }
+        }else{
+          context.$router.push('/company')
+        }*/
 
         if (cb !== undefined){
           cb();
@@ -88,7 +89,7 @@ export default {
             context.$router.push({path:'/signin'});
           }
         })
-      
+
   },
 
   signup(context, creds, redirect) {
@@ -114,7 +115,8 @@ export default {
         }
         context.$http.defaults.headers.Authorization = null;
         context.$router.push({ path: '/signin' });
-      }, error => {        
+      }, error => {
+        console.log(error);
         window.localStorage.removeItem(TOKEN_KEY);
         this.user = {
           authenticated: false
