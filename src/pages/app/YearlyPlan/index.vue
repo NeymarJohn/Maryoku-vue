@@ -449,6 +449,8 @@
 
         }
 
+        console.log(calDays)
+
         return calDays;
       }
     },

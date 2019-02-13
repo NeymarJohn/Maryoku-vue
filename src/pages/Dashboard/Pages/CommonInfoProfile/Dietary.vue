@@ -114,8 +114,8 @@
          </div>
        </div>        
 </div>
-<div class='button-block'>
-        <ButtonDiv buttonStyle='dietary_buttonStyle' text='skip' :onClick='onSkip'/>
+<div class='button-block' @click='onSkip'>
+        <ButtonDiv buttonStyle='dietary_buttonStyle' text='skip'/>
 </div>
 </div>
 <div class='dietary_logo-main'>
@@ -250,8 +250,8 @@
        </div> 
   </div>             
 </div>
-<div class='button-block' >
-        <ButtonDiv buttonStyle='dietary_buttonStyle' text='skip' :onClick='onSkip'/>
+<div class='button-block' @click='onSkip'>
+        <ButtonDiv buttonStyle='dietary_buttonStyle' text='skip'/>
 </div>
 </div>
 <div class='dietary_logo-main'>
@@ -300,22 +300,13 @@ export default {
         },
         methods: {
                 onSkip:function(){
-                        const data={}
-                        data['dietary']= this.dietary 
-                        data['another_food']=this.another_food                
-                        this.$store.dispatch("user/sendCompanyInfo",data) 
-                        this.$router.push('/company')     
+                        console.log(this)
+                    this.$router.push('/company')     
                 },
                 onSelect:function(food){
-                        if(!this.dietary.includes(food)){
-                              this.dietary.push(food)  
-                        }else{
-                             this.dietary=this.dietary.filter(item=>item!==food)
-
-                        }
-                        
+                        console.log(food)
                 },
-                onChange:function(value, name){                                   
+                onChange:function(value, name){                
                  this[name]=value                    
          },
         }
