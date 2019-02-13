@@ -25,9 +25,12 @@
                 titleBlock='invite_titleBlock'
                 titleText='invite_title-span'                
                 withSpan
-                spanText='Browse file'
-                spanStyles='invite_event-title'                 
-        /> 
+                spanText=' Browse file'
+                spanStyles='invite_event-title'
+                :onClick='UploadCSV'                 
+        >                
+                <input type="file" id='csv-upload' @change="onFileChange($event)" style="display:none"/>            
+        </Title> 
 </div>
 <div class='invite_button-block'>
         <ButtonDiv buttonStyle='invite_buttonStyle' text='skip' :onClick='onSkip'/>
@@ -51,6 +54,9 @@
 </div>
 </template>
 <script>
+
+import {isWrong} from '@/utils/helperFunction'
+
 import InputWithIcon from '@/components/Inputs/InputWithIcon.vue'
 import Select from '@/components/Select/Select.vue'
 import Title from '@/components/Title/Title.vue'
@@ -75,13 +81,26 @@ data(){
 }
 ,
  methods: {
-         onSkip:function(){                        
+         onSkip:function(){
+            const invitation=isWrong(this,['employee_email'])
+            this.$store.dispatch("user/sendEvent",invitation)                           
             this.$router.push('/officeManager-form')          
          }
          ,
          onChange:function(value, name){                 
                  this[name]=value
                  
+         },
+         UploadCSV:function(){                 
+                 document.getElementById('csv-upload').click()
+         }
+         ,onFileChange:function(e){
+                console.log(e,'@ eto func')
+                 const reader=new FileReader();
+                 reader.onload= e =>{
+                         console.log(e.target.result)
+                 }
+                 reader.readAsDataURL(e.target.files[0]);
          }
  },
     
@@ -150,7 +169,8 @@ data(){
       margin-bottom: 45px;           
 }
 .invite_event-title{
-        color:#23d0a1
+        color:#23d0a1;
+        cursor: pointer;
 }
 .invite_titleTextLogo{
     text-align: center;
