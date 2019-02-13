@@ -1,6 +1,6 @@
 <template>  
-    <md-autocomplete @input="triggerFunc($event,name)" :value='value' :md-input-id='id' md-input-placeholder="" :md-options="data" :class='autocompleteStyle'>
-      <label  :class='styleLabel'>{{label}} <span class='required-logo' v-if='required'>*</span></label>
+    <md-autocomplete v-model="selectedCountry" :id='id' :md-options="data" :class='autocompleteStyle'>
+      <label :class='styleLabel'>{{label}} <span class='required-logo' v-if='required'>*</span></label>
       <span class='md-error'>{{isErrors?'Required':''}}</span>
     </md-autocomplete> 
 </template>
@@ -8,11 +8,6 @@
 <script>
   export default {
     name: 'Autocomplete',
-    data(){
-      return{
-        selectIndustry:null
-      }
-    },
    props:{
         label:String,
         data:Array,
@@ -30,13 +25,12 @@
         name:String,
         onChange:Function,
          isErrors: Boolean,
-         id:String,
-         name:String
+         id:String
    },
    methods: {
-          triggerFunc:function($event,name){
-              console.log($event,name)                                       
-              this.onChange($event,name)
+          triggerFunc:function(value,name){
+              console.log(this)                                       
+              this.onChange(value,name)
           }
         } 
   }

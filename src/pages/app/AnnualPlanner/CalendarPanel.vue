@@ -1,7 +1,6 @@
 <template>
   <div class="md-layout" style="overflow: hidden; height: 100%;">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
-
     <table style="width: 100%; height: 100%; padding-left: 15px;" >
       <tr style="height: 10%;">
         <td>
@@ -45,8 +44,15 @@
                               <td v-for="monthDay in monthRow" style="width: 14.2%; min-width: 14.2%; max-width: 14.2%;">
                                 <template v-if="monthDay !== 0">
                                   <template v-if="monthDay.hasEvents">
-                                    <md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">{{monthDay.dayInMonth}}</md-button>
-                                    <md-button v-else :ref="`month-day-${monthDay.dayInMonth}`" class="md-success md-just-icon md-round md-md">{{monthDay.dayInMonth}}</md-button>
+                                    <md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
+                                      {{monthDay.dayInMonth}}
+                                      </md-button>
+                                    <md-button v-else-if="monthDay.events.editables.length" @click="openEditEventModal(true, monthDay.events.editables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-success md-just-icon md-round md-md">
+                                      {{monthDay.dayInMonth}}
+                                    </md-button>
+                                    <md-button v-else-if="monthDay.events.nonEditables.length" @click="openEditEventModal(true, monthDay.events.nonEditables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
+                                      {{monthDay.dayInMonth}}
+                                    </md-button>
                                   </template>
                                   <template v-else>
                                     <md-button :ref="`month-day-${monthDay.dayInMonth}`" class="md-simple md-round  md-just-icon md-md">
@@ -151,10 +157,9 @@
       },
       dayInMonth: {
         type: String
-      }
+      },
     },
     data() {
-
       return {
         ready: false,
         auth: auth,
@@ -168,6 +173,9 @@
         calendarEvents: {},
         occasionsArray: null,
         currenciesArray: null,
+        holidaysSelectDisplayed: true,
+        selectedCountries: true,
+        selectedEventTypes: true,
       }
     },
     created() {
@@ -201,14 +209,18 @@
       this.selectYearMonth(this.year, this.month);
     },
     methods: {
+      ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'setEditMode', 'setModalSubmitTitle', 'setEventModalAndEventData']),
+      ...mapActions('AnnualPlannerVuex', ['setEventModalAndEventData']),
       exportToExcel() {
+        let calendarId = this.auth.user.defaultCalendarId;
+
         window.open(
-          `${process.env.SERVER_URL}/1/calendars/123/export/2019`
+          `${process.env.SERVER_URL}/1/calendars/${calendarId}/export/2019`
         );
       },
       refreshEvents(){
         this.selectYearMonth(this.year, this.month);
-        this.queryEvents(this.year, this.month);
+        this.queryEvents();
       },
       selectYearMonth(year, month){
         let selectedMoment = moment().date(1).month(month-1).year(year);
@@ -234,18 +246,14 @@
             countries: this.selectedCountries ? storage.countries : [],
             eventTypes: this.selectedEventTypes ? storage.eventTypes : []
           }};
-        //console.log("filters: " + filters);
         let calendarId = this.auth.user.defaultCalendarId;
         this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.auth.getAuthHeader() })
-          .then(response => response.data)
-          .then((json) => {
-
+          .then((response) => {
             let eventsMap = {};
-            if (json.events) {
-              json.events.forEach(function(event){
+            if (response.data.events) {
+              response.data.events.forEach(function(event){
                 let eventStartMillis = event.eventStartMillis;
                 let eventStartDate = new Date(eventStartMillis);
-                // let eventDateStamp = `${eventStartDate.getFullYear()}${eventStartDate.getMonth().padStart(2,'0')}${eventStartDate.getDate().padStart(2,'0')}`;
                 let eventDateStamp = moment(eventStartDate).format('YYYYMMDD');
                 if (eventsMap[eventDateStamp] === undefined){
                   eventsMap[eventDateStamp] = {
@@ -262,12 +270,13 @@
               });
             }
 
-            //this.yearlyCalendarDays = this.calcCalendarDays(this.selectedYear, eventsMap);
             this.calendarEvents = eventsMap;
-            // console.log(eventsMap);
+
             this.generateRows(this.year, this.month);
             this.isLoading = false;
             this.ready = true;
+          }).catch((error) => {
+            console.log(error);
           });
       },
       generateRows(year, month) {
@@ -290,8 +299,8 @@
               } else {
                 row.push(0);
               }
-            } else if (this.selectedDay(currentMoment)) {
-              row.push({dayInMonth: currentMoment.date(), hasEvents: true});
+            } else if (this.selectedDay(currentMoment).hasEvents) {
+              row.push({dayInMonth: currentMoment.date(), hasEvents: true, events: this.selectedDay(currentMoment).events});
               currentMoment = currentMoment.add(1, 'day');
             } else if (currentMoment.date() <= daysInMonth && currentMoment.month() === currentMonth && currentMoment.year() === currentYear){
               row.push({dayInMonth: currentMoment.date(), hasEvents: false});
@@ -300,24 +309,32 @@
               row.push(0);
             }
           }
-          //console.log("adding row: " + JSON.stringify(row));
+          
           this.monthRows.push(row);
         }
       },
       selectedDay(currentMoment) {
         let currentDay = moment(currentMoment).format('YYYYMMDD');
         let eventsMap = Object.keys(this.calendarEvents);
+        let calendarEventsMap = {}
 
-        return eventsMap.includes(currentDay)
+        if (eventsMap.includes(currentDay)) {
+          calendarEventsMap = {'hasEvents': true, 'events': this.calendarEvents[currentDay]}
+        }
+
+        return calendarEventsMap;
       },
-      ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'setModalTitle', 'setEditMode', 'setModalSubmitTitle', 'setShowOccasion']),
       openEventModal(){
         this.setEventModal({ showModal: true })
-        this.setModalTitle('Create New Event')
         this.setModalSubmitTitle('Save')
         this.setEditMode({ editMode: false })
-        this.setShowOccasion({ showOccasion: true })
-      }
+      },
+      openEditEventModal: function (show, item) {
+        this.setEventModalAndEventData({showModal: show, eventData: item});
+      },
+      openEditEventModal: function (show, item) {
+        this.setEventModalAndEventData({showModal: show, eventData: item});
+      },
     },
     computed: {
       ...mapState('AnnualPlannerVuex', ['filtersData']),
@@ -326,12 +343,10 @@
       year(newVal, oldVal){
         this.selectYearMonth(this.year, this.month);
         this.queryEvents();
-        this.generateRows(this.year, this.month);
       },
       month(newVal, oldVal){
         this.selectYearMonth(this.year, this.month);
         this.queryEvents();
-        this.generateRows(this.year, this.month);
       },
     }
   };

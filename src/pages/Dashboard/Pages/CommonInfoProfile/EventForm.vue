@@ -122,9 +122,6 @@
 </div>
 </template>
 <script>
-
-import {isWrong} from '@/utils/helperFunction'
-
 import InputText from '@/components/Inputs/InputText.vue'
 import Select from '@/components/Select/Select.vue'
 import Title from '@/components/Title/Title.vue'
@@ -157,12 +154,11 @@ export default {
         },
         methods: {
                 onSkip:function(){
-                        const event=isWrong(this,['select_holiday','bithday','join_to_company'])
-                        this.$store.dispatch("user/sendEvent",event)     
-                        this.$router.push('/dietary')     
+                        console.log(this)
+                    this.$router.push('/dietary')     
                 },                
                 onChange:function(value, name){  
-                                      
+                        console.log(value,name)              
                  this[name]=value                    
                 },
         },

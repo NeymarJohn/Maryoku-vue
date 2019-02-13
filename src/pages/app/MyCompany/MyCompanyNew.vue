@@ -123,17 +123,12 @@
 </template>
 
 <script>
-//MAIN MODULES
-import {mapGetters} from 'vuex'
-
-//COMPONENTS
-import { Tabs, NavTabsCard } from "@/components";
-import MyCompanyDashboard from "src/pages/app/MyCompany/MyCompanyDashboard.vue";
-import MyCompanyApprovals from "src/pages/app/MyCompany/MyCompanyApprovals.vue";
-import MyCompanyProfile from "src/pages/app/MyCompany/MyCompanyProfile.vue";
-import MyCompanyBilling from "src/pages/app/MyCompany/MyCompanyBilling.vue";
-import MyCompanySettings from "src/pages/app/MyCompany/MyCompanySettings.vue";
-  
+  import { Tabs, NavTabsCard } from "@/components";
+  import MyCompanyDashboard from "src/pages/app/MyCompany/MyCompanyDashboard.vue";
+  import MyCompanyApprovals from "src/pages/app/MyCompany/MyCompanyApprovals.vue";
+  import MyCompanyProfile from "src/pages/app/MyCompany/MyCompanyProfile.vue";
+  import MyCompanyBilling from "src/pages/app/MyCompany/MyCompanyBilling.vue";
+  import MyCompanySettings from "src/pages/app/MyCompany/MyCompanySettings.vue";
 
   export default {
     components: {
@@ -161,12 +156,6 @@ import MyCompanySettings from "src/pages/app/MyCompany/MyCompanySettings.vue";
         ],
       };
     },
-    computed:{
-      ...mapGetters({
-        user:'user/getUser'
-      })
-    }
-    ,
     methods: {
       onSelect: function(items) {
         this.selected = items;
