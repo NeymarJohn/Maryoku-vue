@@ -54,6 +54,9 @@
 </div>
 </template>
 <script>
+
+import {isWrong} from '@/utils/helperFunction'
+
 import InputText from '@/components/Inputs/InputText.vue'
 import Select from '@/components/Select/Select.vue'
 import Title from '@/components/Title/Title.vue'
@@ -71,9 +74,7 @@ data(){
         return{
                 full_name:'',                
                 email:'',
-                phone:'',
-                branch:'',
-                department:'',                
+                phone:'',                                
                 isErrors:false    
         }
 }
@@ -81,7 +82,9 @@ data(){
  methods: {         
          submitForm:function(){                                                     
             this.validFunc(this)                         
-            if(this.isErrors==false){                    
+            if(this.isErrors==false){
+                const info=isWrong(this,['full_name','email','phone','industry','website'])
+                this.$store.dispatch("user/sendCompanyInfo",info)                      
                 this.$router.push('/events-data')     
             }
               

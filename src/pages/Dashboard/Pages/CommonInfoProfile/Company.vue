@@ -15,24 +15,23 @@
                 :value='company_name'
                 name='company_name'
                 :onChange='onChange'
-                :isErrors= 'errors'
+                :isErrors= 'isError'
                 required
         />
-        <InputText
+        <md-button :style="'background :'+'#ff527c '+ ' !important'"class="md-success md-round md-fileinput button-md-common">
+                <template>Upload  logo</template>
+                <input type="file" @change="onFileChange($event)">
+        </md-button>      
+         <InputText 
                 labelStyle='company_label_input'
-                label='Upload Logo'
-                name='upload_logo'
-                type='file'                
-        />
-        <Autocomplete
-                label='Main office Address'
-                styleLabel='company_label_input'
-                id='auto'
+                label='Main office address'
+                id='city_getter'
                 required
-                :data='data'
                 name='main_office_adddress'
+                :value='main_office_adddress'
                 :onChange='onChange'
-                :isErrors='errors'
+                :isErrors='isError'
+                
         />        
         <InputText 
                 labelStyle='company_label_input'
@@ -42,19 +41,20 @@
                 :onChange='onChange'
                 
         />        
-        <Autocomplete
-        label='Industry'
-        styleLabel='company_label_input'
-        :data='data'
-        />
+       <Select
+         label='Industry'
+          labelStyle='company_label_input'
+          :data='industryList'
+          name='industry'
+          :onChange="onChange"
+          /> 
         <InputText 
                 labelStyle='company_label_input'
                 label='Website'
                 name='website'
                 :value='website'
                 :onChange='onChange'
-         />         
-            
+         />            
 </div>
 <div class='company_button-block' >
         <ButtonDiv buttonStyle='company_buttonStyle' text='next' :onClick='submitForm'/>
@@ -75,9 +75,24 @@
          />
 </div>
 </div>
+<div>
+</div>
+<div>
+</div>
 </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+
+import {isWrong} from '@/utils/helperFunction'
+
+import CalendarEvent from '@/models/CalendarEvent';
+import CalendarEventImage from '@/models/CalendarEventImage';
+import Calendar from '@/models/Calendar';
+
+import CustomerFile from '@/models/CustomerFile';
+
+
 import InputText from '@/components/Inputs/InputText.vue'
 import Select from '@/components/Select/Select.vue'
 import Title from '@/components/Title/Title.vue'
@@ -98,23 +113,34 @@ data(){
                 company_name:'',
                 upload_logo:null,
                 main_office_adddress:'',
-                number_of_employee:null,
+                number_of_employee:'',
                 industry:'',
                 website:'',                
-                errors:false,
-                data:["some data","some data","some data","some data","some data"]
-        }
-}
-,
+                isError:false,
+                        }
+},
+mounted:function(){        
+        this.$store.dispatch("user/getIndustry");
+        const auto =document.getElementById('city_getter');             
+        this.autocomplete = new google.maps.places.Autocomplete(auto,{types: ['geocode']});     
+},
+computed:{
+     ...mapGetters({  
+  industryList: 'user/getIndustryList'
+}),  
+},
+
  methods: {
          submitForm:function(){                                    
-            this.validFunc(this)                         
-            if(this.errors==false){                    
+            this.validFunc(this)                                 
+            if(this.isError==false){                     
+                const info=isWrong(this,['company_name','main_office_adddress','number_of_employee','industry','website'])
+                this.$store.dispatch("user/sendCompanyInfo",info)                    
                 this.$router.push('/invite')     
             }
               
          },
-         onChange:function(value, name){                
+         onChange:function(value, name){                                           
                  this[name]=value                    
          },
          validFunc:function(ctx,required){
@@ -127,18 +153,48 @@ data(){
                 errorsObj.push('main_office_adddress')
             }             
             if(errorsObj.length!==0){                    
-              ctx.errors=true
+              ctx.isError=true
             }else{                    
-                 ctx.errors=false   
+                 ctx.isError=false   
             }
-         }
+         },
+         onFileChange(e) {
+        let files = e.target.files || e.dataTransfer.files;
+
+        if (!files.length) return;
+        this.createImage(files[0]);
+      },
+      createImage(file) {
+        let reader = new FileReader();
+        let _this = this;
+
+        reader.onload = e => {
+          if (true) {
+
+        //     this.isModalLoading = true;
+        //     let _calendar = new Calendar({id: this.$store.state.calendarId});
+        //     let editedEvent = new CalendarEvent({id: this.event.id});
+        console.log(e.target.result)
+            return new CustomerFile({customerFile: e.target.result}).save().then(result => {
+              _this.uploadedImages.push({src: e.target.result, thumb: e.target.result, id: result.id});
+              this.isModalLoading = false;
+            })
+              .catch((error) => {
+                console.log(error);
+                this.isModalLoading = false;
+              });
+
+          } else {
+            _this.uploadedImages.push({ src: e.target.result, thumb: e.target.result });
+          }
+        }
+        reader.readAsDataURL(file);
+      }
+
          
  },
 
 }
-
-const auto =document.getElementById('auto')
-var autocomplete = new google.maps.places.Autocomplete(auto)
 </script>
 <style lang="scss">
 .company_body{
@@ -173,8 +229,8 @@ var autocomplete = new google.maps.places.Autocomplete(auto)
         text-align: center;
         margin-bottom: 20px
 }
-.company_label_input{
-        font-size: 20px !important;
+.company_label_input{ 
+        font-size:15px;       
         padding-left: 10px;
 }
 .company_titleStyle{
@@ -206,5 +262,9 @@ var autocomplete = new google.maps.places.Autocomplete(auto)
       display:flex;     
       align-items: flex-end;
       margin-bottom: 45px; 
+}
+.button-md-common{
+        width:25%; 
+        background:  #ff527c !important;      
 }
 </style>

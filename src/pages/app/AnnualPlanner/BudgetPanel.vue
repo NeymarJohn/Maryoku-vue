@@ -2,54 +2,39 @@
   <div style="overflow: hidden; height: 100%; margin: 0; padding: 0;">
 
     <md-card style="background-color: #41535E; color: rgb(225, 234,239); height: 100%; margin: 0; padding: 0;">
-      <md-card-content style="text-align: center; height: 100%;background-color: #003434;">
-
-        <div style="padding: 8px;"></div>
-
-        <div>
-          <div style="text-align: center;">
-            <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Annual budget per employee</h5>
-            <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
-              <animated-number ref="annualBudgetPerEmployeeNumber" :value="annualBudgetPerEmployee" prefix="$"></animated-number>
-            </h4>
-            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
-          </div>
-        </div>
-
-        <div style="padding: 8px;"></div>       
-
-        <div>
-          <div style="text-align: center;">
-            <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total annual budget</h5>
-            <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
-              <animated-number ref="totalAnnualBudgetNumber" :value="totalAnnualBudget" prefix="$"></animated-number>
-            </h4>
-            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
-          </div>
-        </div>
-
-        <div style="padding: 8px;"></div>        
-
+      <md-card-content style="text-align: center; height: 100%;">
         <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total remaining budget</h5>
-        <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+        <h4 style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
           <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
         </h4>
-
         <div style="padding: 16px;"></div>
-        <chart-component
-                class=""
-                :chart-data="pieChart.data"
-                :chart-options="pieChart.options"
-                chart-type="Pie"/>
-                 <animated-number class="percentage" ref="remainingBudgetPerEmployeeNumber" :value="calculatePercentage" suffix="%"></animated-number>
+        <img src="https://cdn1.iconfinder.com/data/icons/charts-and-diagrams-1-1/512/donutchart-512.png"/>
         <div style="padding: 16px;"></div>
 
         <div>
           <div style="text-align: left;">
             <h5 style="font-size: 0.95em; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Remaining budget per employee</h5>
-            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
-              <animated-number ref="remainingBudgetPerEmployeeNumber" :value="remainingBudgetPerEmployee" prefix="$"></animated-number>
-            </h4>
+            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">$285.5</h4>
+            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
+          </div>
+        </div>
+
+        <div style="padding: 8px;"></div>
+
+        <div>
+          <div style="text-align: left;">
+            <h5 style="font-size: 0.95em; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Annual budget per employee</h5>
+            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">$285.5</h4>
+            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
+          </div>
+        </div>
+
+        <div style="padding: 8px;"></div>
+
+        <div>
+          <div style="text-align: left;">
+            <h5 style="font-size: 0.95em; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Total annual budget</h5>
+            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">$285.5</h4>
             <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
           </div>
         </div>
@@ -59,9 +44,7 @@
         <div>
           <div style="text-align: left;">
             <h5 style="font-size: 0.95em; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Total events</h5>
-            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
-              <animated-number ref="totalEventsNumber" :value="totalEvents"></animated-number>         
-            </h4>
+            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">20</h4>
             <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
           </div>
         </div>
@@ -74,7 +57,7 @@
   import auth from '@/auth';
   import VueElementLoading from 'vue-element-loading';
   import ChartComponent from '@/components/Cards/ChartComponent';
-
+  import moment from 'moment';
   import {
     AnimatedNumber
   } from "@/components";
@@ -100,7 +83,7 @@
         ready: false,
         auth: auth,
         isLoading: true,
-        statisticData: {}
+        totalRemainingBudget: 0
       }
     },
     created() {
@@ -109,65 +92,13 @@
     mounted(){
       this.ready = true;
       this.isLoading = false;
-      this.calendarStatistic()
+      this.totalRemainingBudget = 33450;
     },
     methods: {
-      calendarStatistic() {
-        let calendarId = this.auth.user.defaultCalendarId;
 
-        this.$http.get(`${process.env.SERVER_URL}/1/calendars/${calendarId}/statistics`, { headers: this.auth.getAuthHeader() })
-                .then((response) => {
-                  let statisticMap = {};
-                  response.data.forEach(function(data){
-                    statisticMap[data.item] = data.value
-                  })
-
-                  this.statisticData = statisticMap;
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-      },
     },
     computed: {
-      calculateRemain() {
-        return this.statisticData['annual_budget_allocated'];
-      },
-      calculateSpent() {
-        return this.statisticData['annual_budget'];
-      },
-      totalAnnualBudget() {
-        return this.statisticData['annual_budget'];
-      },
-      annualBudgetPerEmployee() {
-        return this.statisticData['annual_budget_per_employee'];
-      },
-      totalRemainingBudget() {
-        return this.statisticData['annual_budget'] - this.statisticData['annual_budget_allocated'];
-      },
-      remainingBudgetPerEmployee() {
-        return this.statisticData['annual_budget_per_employee'] - this.statisticData['annual_budget_per_employee_allocated'];
-      },
-      totalEvents() {
-        return this.statisticData['number_of_events'];
-      },
-      calculatePercentage() {
-        return parseFloat(((this.statisticData['annual_budget_per_employee'] / 100) * this.statisticData['annual_budget_per_employee_allocated']).toFixed(0))
-      },
-      pieChart() {
-        return {
-          data: {
-            labels: [" ", " "], // should be empty to remove text from chart
-            series: [this.calculateRemain, this.calculateSpent]
-          },
-          options: {
-            padding: 0,
-            height: 180,
-            donut: true,
-            donutWidth: 20
-          }
-        }
-      },
+
     },
     watch: {
 
@@ -175,33 +106,5 @@
   };
 </script>
 <style lang="scss">
-.ct-series-b .ct-point,
-.ct-series-b .ct-line,
-.ct-series-b .ct-bar,
-.ct-series-b .ct-slice-donut {
-  stroke: #253B3D;
-}
-.ct-series-a .ct-point,
-.ct-series-a .ct-line,
-.ct-series-a .ct-bar,
-.ct-series-a .ct-slice-donut {
-  stroke: #00AEED;
-}
-.md-card-content h4.title span {
-  color: #6cd6ee;
-}
-.md-card-content h4 span {
-  color: #006690;
-}
-.md-card-content h5{
-  font-size: 1.2rem!important;
-  font-weight: 400;
-}
-.percentage {
-  position: relative;
-  top: -108px;  
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #AEAAA8;
-}
+
 </style>
