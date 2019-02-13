@@ -28,7 +28,7 @@
                 </template>
                 <template slot="body">
                     <form>
-                        <div class="md-layout">
+                        <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
                                 <md-field :class="[{'md-error': errors.has('occasion')}]" class="select-with-icon">
                                     <label>Occasion</label>
@@ -46,7 +46,7 @@
                                 </md-field>
                             </div>
                         </div>
-                        <div class="md-layout">
+                        <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
                                 <md-datepicker
                                         v-model="date"
@@ -58,7 +58,7 @@
                                 </md-datepicker>
                             </div>
                         </div>
-                        <div class="md-layout">
+                        <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
                                 <md-field :class="[{'md-error': errors.has('time')}]" class="">
                                     <label>Start Time</label>
@@ -92,7 +92,8 @@
                                     <span class="md-error" v-if="errors.has('duration')">The event duration time is required</span>
                                 </md-field>
                             </div>
-
+                        </div>
+                        <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
                                 <md-field :class="[{'md-error': errors.has('participants')}]">
                                     <label>Number of Participants</label>
@@ -115,7 +116,8 @@
                                     <span class="md-error" v-if="errors.has('budget')">The event budget is required and should be in range of 1 - 1 000 000</span>
                                 </md-field>
                             </div>
-
+                        </div>
+                        <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
                                 <md-field :class="[{'md-error': errors.has('currency')}]" class="select-with-icon">
                                     <label>Currency</label>
@@ -395,6 +397,7 @@ import { error } from 'util';
           status: this.eventData.status,
           currency: this.currency,
           eventType: this.eventType,
+          edittable: true,
           participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         }).for(_calendar).save().then(response => {
             this.$parent.isLoading = false;
@@ -459,5 +462,11 @@ import { error } from 'util';
     }
     .items-center-g {
       justify-content: center;
+    }
+    .md-field .md-error {
+      text-align: left;
+    }
+    .mt-15 {
+      margin-bottom: 15px
     }
 </style>
