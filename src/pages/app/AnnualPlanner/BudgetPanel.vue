@@ -205,7 +205,7 @@
         return {
           data: {
             labels: [" ", " "], // should be empty to remove text from chart
-            series: [this.calculateRemain, this.calculateSpent]
+            series: [1000, 500]
           },
           options: {
             padding: 0,

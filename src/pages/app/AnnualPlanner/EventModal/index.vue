@@ -395,7 +395,7 @@
           totalBudget: this.budget,
           status: this.eventData.status,
           currency: this.currency,
-          eventType: this.eventType,
+          eventType: 'Company',
           edittable: true,
           participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         }).for(_calendar).save().then(response => {
