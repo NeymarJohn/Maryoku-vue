@@ -107,6 +107,10 @@
 
         let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
+        _calendar.statistics().get().then(statistics => {
+            console.log(statistics)
+        });
+
         _calendar.metadata().get().then(metadatas => {
 
           let metadata = metadatas[0];

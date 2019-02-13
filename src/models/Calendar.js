@@ -33,15 +33,7 @@ export default class Calendar extends Model {
   }
 
   statistics(){
-    return this.statistics;
-  }
-
-  monthCounts(){
-    return this.monthCounts;
-  }
-
-  year() {
-    return this.year;
+    return this.hasMany(CalendarStatistics)
   }
 
   years(){
