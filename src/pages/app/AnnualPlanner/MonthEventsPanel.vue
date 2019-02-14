@@ -33,12 +33,12 @@
 
         </md-list>-->
 
-        <div v-if="dates.length > 0" style="height: 480px; overflow: hidden;">
+        <div style="height: 480px; overflow: hidden;">
           <md-list class="md-triple-line md-dense" style="overflow: auto; height: 98%; width: 100%; max-width: 100%; min-height: 88%;">
 
-            <template v-for="date in dates">
-              <md-list-item  v-for="calendarEvent in calendarEvents[date].editables" :key="calendarEvent.id" style="cursor: pointer;">
-                <md-button @click="openEditEventModal(true, calendarEvent)" class="md-just-icon md-md md-round md-success" style="margin-right: 8px;">{{date.substr(6,2)}}</md-button>
+            <template v-if="dates.length > 0" v-for="date in dates">
+              <md-list-item v-if="calendarEvents[date] !== undefined" v-for="calendarEvent in calendarEvents[date].editables" :key="calendarEvent.id" style="cursor: pointer;">
+                <md-button @click="openEventModal(true, calendarEvent)" class="md-just-icon md-md md-round md-success" style="margin-right: 8px;">{{date.substr(6,2)}}</md-button>
                 <div class="md-list-item-text" style="white-space: normal;">
                   <span style="font-weight: 500;">{{calendarEvent.title}}</span>
                   <span class="small text-gray">{{calendarEvent.eventStartMillis | formatDate}}</span>
@@ -46,7 +46,7 @@
               </md-list-item>
 
               <md-list-item v-if="calendarEvents[date] !== undefined" v-for="calendarEvent in calendarEvents[date].nonEditables" :key="calendarEvent.id" style="cursor: pointer;">
-                <md-button @click="openEditEventModal(true, calendarEvent)" class="md-just-icon md-md md-round" style="background-color: #bdbdbd !important; margin-right: 8px;">{{date.substr(6,2)}}</md-button>
+                <md-button class="md-just-icon md-md md-round" style="background-color: #bdbdbd !important; margin-right: 8px;">{{date.substr(6,2)}}</md-button>
                 <div class="md-list-item-text" style="white-space: normal;">
                   <span style="font-weight: 500;">{{calendarEvent.title}}</span>
                   <span class="small text-gray">{{calendarEvent.eventStartMillis | formatDate}}</span>
@@ -59,7 +59,7 @@
 
       </md-card-content>
     </md-card>
-    <event-modal ref="eventModal"></event-modal>
+    <event-modal ref="eventModal" :shouldUpdate="true"></event-modal>
   </div>
 </template>
 
@@ -101,7 +101,8 @@
     },
     methods: {
       ...mapActions('AnnualPlannerVuex', ['setEventModalAndEventData']),
-      openEditEventModal: function (show, item) {
+      openEventModal: function (show, item) {
+        console.log(item)
         this.setEventModalAndEventData({showModal: show, eventData: item});
       },
     },
