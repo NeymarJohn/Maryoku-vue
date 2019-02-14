@@ -67,8 +67,8 @@ export default {
         this.user.defaultCalendarId = resp.data.defaultCalendarId;
 
         this.setHeaders(context);
-        if(!resp.data.onboarded){  
-               
+        /*if(!resp.data.onboarded){
+
            if(resp.data.onboardingPath==="OM"){
 
             context.$router.push('/company-form')
@@ -77,7 +77,8 @@ export default {
           }
         }else{
           context.$router.push('/company')
-        }
+        }*/
+        context.$router.push('/company')
 
         if (cb !== undefined){
           cb();
@@ -116,7 +117,7 @@ export default {
         }
         context.$http.defaults.headers.Authorization = null;
         context.$router.push({ path: '/signin' });
-      }, error => {        
+      }, error => {
         window.localStorage.removeItem(TOKEN_KEY);
         this.user = {
           authenticated: false
