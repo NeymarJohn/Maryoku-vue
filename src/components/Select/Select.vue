@@ -2,9 +2,8 @@
     <md-field >
         <label :class='labelStyle'>{{label}}<span class='required-logo' v-if='required'>*</span></label>
         <md-select   :name="name"  @input="triggerFunc($event,name)">
-            <md-option v-for='item of list' :key='item[valueName[0]]' :value="item[valueName[1]]">{{item[valueName[0]]}}</md-option>
-        </md-select > 
-         <span class='md-error'>{{isErrors?'Required':''}}</span>  
+            <md-option v-for='(value,index) in data' :key='index' :value="value">{{value}}</md-option>
+        </md-select >   
     </md-field>        
 </template>
 <script>
@@ -12,9 +11,9 @@
         name: "Select",
         
         model: {
-        },        
+        },
         props: {
-            list:Array,
+            data:Array,
             required:Boolean,            
             type:String,
             label: String,
@@ -25,12 +24,10 @@
             labelStyle: String,
             for:String,
             name:String,
-            onChange:Function,
-            valueName:Array,
-             isErrors: Boolean,
+            onChange:Function
         },
         methods: {
-            triggerFunc:function(value,name){             
+            triggerFunc:function(value,name){
               this.onChange(value,name)      
           }
         }

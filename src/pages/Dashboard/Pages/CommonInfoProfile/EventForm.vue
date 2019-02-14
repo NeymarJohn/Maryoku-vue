@@ -2,9 +2,6 @@
 <div v-if="role==='OM'">
 <div class='employee-body'>
 <div class='event_form-main'>
-<div class='event_button-block' >
-        <Button text='next' :onClick='onNext' class="md-success md-fileinput button-md-common"/>
-</div>
 <div class='event_form-block'>
 <div>
 <Title
@@ -13,7 +10,7 @@
         titleText='event_titleStyle'/>
         
 </div>
-        <Datepicker 
+        <InputText 
                 labelStyle='event_label_input'
                 label='Your bithday'
                 fieldStyle="field_input"
@@ -21,7 +18,7 @@
                 name='bithday'
                 :onChange='onChange'                
         />
-        <Datepicker
+        <InputText
                 labelStyle='event_label_input'
                 label='When did you join the company'
                 :value='join_to_company'
@@ -30,29 +27,18 @@
         /> 
         <Select
          label='Which holidays do u celebrate?'
-         labelStyle='event_label_input'         
-         :list='event_list'
-          name='select_holiday'
-          :valueName="['title','name']"
+         labelStyle='event_label_input'
+         name='select_holiday'
+         :data='data'
          :onChange="onChange"
          />
-          <Datepicker
-                v-if='add_dates.length!==0'
-                v-for='item  in add_dates'
-               :key='item.value_name'                
-                :label='item.description'
-                :value='item.value_name'
-                :name='item.value_name'
-                :onChange='onChange'                
-        /> 
         <Title
                 title='The more we know about important dates, the more we can celebrate you.'
                 titleBlock='event_titleBlock'
                 titleText='event_title-span'                
                 withSpan
                 spanText=' Add dates'
-                spanStyles='event_span-title' 
-                 :onClick='onShowModal'                
+                spanStyles='event_span-title'                 
         /> 
 </div>
 <div class='event_button-block' >
@@ -72,45 +58,6 @@
                 titleBlock='event_titleBlock'
                 title='Automate individual congratulation cards to help you give that personal touch your employees crave, without the usual efford that comes with it'
          />
-          <Modal v-if='showModal'> 
-                 <template   slot='header'>
-                        <Title
-                                title='Create new events'
-                                titleBlock='event_titleBlock'
-                                titleText='event_titleStyle'
-                        />
-                </template>
-                <template slot='body'>
-                 <div>
-                 <InputText 
-                labelStyle='event_label_input'
-                label='Description'
-                fieldStyle="field_input"
-                :value='description'
-                name='description'
-                :onChange='onChange'                
-        />
-        <InputText 
-                labelStyle='event_label_input'
-                label='Value name'
-                fieldStyle="field_input"
-                :value='value_name'
-                name='value_name'
-                :onChange='onChange'                
-        />
-                 </div>
-                </template>
-                <template slot='footer'>
-                 <div class='event_modal-footer'>
-                 <div class='event_button-block' >
-                         <Button text='Cancel' :onClick='onShowModal' class="md-success md-fileinput button-md-common"/>
-                </div>
-                <div class='event_button-block' >
-                        <Button text='Create' :onClick='onCreate' class="md-success md-fileinput button-md-common"/>
-                </div>
-                 </div>
-                </template>
-          </Modal>
 </div>
 </div>
 </div>
@@ -118,9 +65,6 @@
 <div v-else>
 <div class='employee-body'>
 <div class='event_form-main'>
-<div class='event_button-block' >
-        <Button text='next' :onClick='onNext' class="md-success md-fileinput button-md-common"/>
-</div>
 <div class='event_form-block'>
 <div>
 <Title
@@ -128,14 +72,17 @@
         title="We're ready here..."
         titleText='event_titleStyle'/>
 </div>
-        <Datepicker                 
-                label='Your bithday'                
+        <InputText 
+                labelStyle='event_label_input'
+                label='Your bithday'
+                fieldStyle="field_input"
                 :value='bithday'
                 name='bithday'
                 :onChange='onChange'
                 
         />
-        <Datepicker                
+        <InputText
+                labelStyle='event_label_input'
                 label='When did you join the company'
                 :value='join_to_company'
                 name='join_to_company'
@@ -144,28 +91,17 @@
         <Select
          label='Which holidays do u celebrate?'
           labelStyle='event_label_input'
-          :list='event_list'
+          :data='data'
           name='select_holiday'
-          :valueName="['title','name']"
           :onChange="onChange"
-          />
-          <Datepicker
-                v-if='add_dates.length!==0'
-                v-for='item  in add_dates'
-                :key='item.value_name'                
-                :label='item.description'
-                :value='item.value_name'
-                :name='item.value_name'
-                :onChange='onChange'                
-        />           
+          /> 
         <Title
                 title='The more we know about important dates, the more we can celebrate you.'
                 titleBlock='event_titleBlock'
                 titleText='event_title-span'
                 withSpan
                 spanText=' Add dates'
-                spanStyles='event_span-title'
-                 :onClick='onShowModal'                              
+                spanStyles='event_span-title'                              
         />       
 </div>
 <div class='event_button-block'>
@@ -180,63 +116,19 @@
                 titleBlock='event_titleBlock'
                 titleText='event_titleStyle'
         />
-        <Modal v-if='showModal'>
-               <template   slot='header'>
-                        <Title
-                                title='Create new events'
-                                titleBlock='event_titleBlock'
-                                titleText='event_titleStyle'
-                        />
-                </template>
-                <template slot='body'>
-                 <div>
-                 <InputText 
-                labelStyle='event_label_input'
-                label='Description'
-                fieldStyle="field_input"
-                :value='description'
-                name='description'
-                :onChange='onChange'                
-        />
-        <InputText 
-                labelStyle='event_label_input'
-                label='Value name'
-                fieldStyle="field_input"
-                :value='value_name'
-                name='value_name'
-                :onChange='onChange'                
-        />
-                 </div>
-                </template>
-                <template slot='footer'>
-                 <div class='event_modal-footer'>
-                 <div class='event_button-block' >
-                         <Button text='Cancel' :onClick='onShowModal' class="md-success md-fileinput button-md-common"/>
-                </div>
-                <div class='event_button-block' >
-                        <Button text='Create' :onClick='onCreate' class="md-success md-fileinput button-md-common"/>
-                </div>
-                 </div>
-                </template>
-        </Modal>
 </div>
 </div>
 </div>
-
 </div>
 </template>
 <script>
-//HELPER_FUNC
+
 import {isWrong} from '@/utils/helperFunction'
 
-//COMPONENTS
 import InputText from '@/components/Inputs/InputText.vue'
-import Datepicker from '@/components/Datepicker/Datepicker.vue'
 import Select from '@/components/Select/Select.vue'
 import Title from '@/components/Title/Title.vue'
 import ButtonDiv from '@/components/Button/ButtonDiv.vue'
-import Button from '@/components/Button/Button.vue'
-import Modal from '@/components/Modal.vue'
 
 export default {
     name:'Employee',
@@ -244,27 +136,18 @@ export default {
        officeManager:String     
     },
     components:{
-   Datepicker,
+   InputText,
    Select,
    Title,
-   ButtonDiv,
-   Button,
-   InputText,
-   Modal
+   ButtonDiv
         },
         data(){
                 return {
                         role: null,
-                        event_list:[{title:"Christian holidays",name:"Christian holidays"}, {title:"Jewish holidays",name:"Jewish holidays"},{title:"Muslim holidays",name:"Muslim holidays"} , {title:"Hindu holidays",name:"Muslim holidays"}],
+                        data:["Christian holidays", "Jewish holidays", "Muslim holidays", "Hindu holidays"],
                         select_holiday:'',
                         bithday:'',
-                        join_to_company:'',
-                        add_dates:[],
-                        showModal: false,
-                        description:'',
-                        value_name:'',
-                        listComponentName:['select_holiday','bithday','join_to_company']
-
+                        join_to_company:''
                 }
         }
         ,
@@ -273,34 +156,15 @@ export default {
                 this.role=onboardingPath  
         },
         methods: {
-                onSkip:function(){                           
-                        this.$router.push('/dietary')     
-                },                
-                onChange:function(value, name){                                      
-                 this[name]=value                    
-                }
-                ,onNext:function(){
-                        const event=isWrong(this,this.listComponentName)
+                onSkip:function(){
+                        const event=isWrong(this,['select_holiday','bithday','join_to_company'])
                         this.$store.dispatch("user/sendEvent",event)     
                         this.$router.push('/dietary')     
-                }
-                ,onShowModal:function(){                        
-                        this.showModal=!this.showModal
+                },                
+                onChange:function(value, name){  
+                                      
+                 this[name]=value                    
                 },
-                onCreate:function(){   
-                        const newAdd={}
-                        if(this.description&&this.value_name){
-                          newAdd['description']=this.description
-                         newAdd['value_name']=this.value_name                   
-                        this.add_dates.push(newAdd)
-                        this.listComponentName.push(this.value_name)
-                        this.onShowModal()
-                        this.description=''
-                        this.value_name=''      
-                        } 
-                        
-                },
-
         },
     
 }
@@ -330,20 +194,18 @@ export default {
     width: 75%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    transform: translateY(-10%);
+    margin-top: 60px
 }
 .event_emp-logo{
         height: 100%;
-        width: 100%; 
-         margin-bottom: -10%;       
+        width: 100%;        
 }
 .event_emp-title{
         text-align: center;
         margin-bottom: 20px
 }
 .event_label_input{
-        font-size: 20px ;
+        font-size: 20px !important;
         padding-left: 10px;
 }
 .event_titleStyle{
@@ -372,8 +234,7 @@ export default {
       margin-bottom: 45px;           
 }
 .event_span-title{
-        color:red;
-        cursor: pointer;
+        color:red
 }
 .titleTextLogo{
     text-align: center;
@@ -381,11 +242,6 @@ export default {
     color: white;
     font-size: 26px;
     margin-top: 20px;
-    line-height: 147%;
-}
-.event_modal-footer{
-        display: flex;
-        justify-content: space-around;
-        width: 100%;
+    line-height: normal;
 }
 </style>
