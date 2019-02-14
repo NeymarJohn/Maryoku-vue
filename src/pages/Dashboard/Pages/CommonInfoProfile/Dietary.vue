@@ -1,5 +1,5 @@
 <template>
-<div v-if="role==='OM'">
+<div v-if="role!=='OM'">
 <div class='dietery_employee-body'>
 <div class='dietary_form-main'>
 <div class='dietary_form-block'>
@@ -17,8 +17,8 @@
 </div>
        <div class='dietary-check-block'>
        <Icon
-            iconSourceOne="static/img/lock.jpg"
-            iconSourceTwo="static/img/login.jpg"
+            iconSourceOne="static/img/dietary/gluten_free_off.png"
+            iconSourceTwo="static/img/dietary/gluten_free_on.png"
             imageStyle='dietary-icon_logo'
             title='cluten free' 
             titleStyle='dietary_icon-title'
@@ -27,8 +27,8 @@
 
        />
        <Icon
-            iconSourceOne="static/img/lock.jpg"
-            iconSourceTwo="static/img/login.jpg"
+            iconSourceOne="static/img/dietary/lactose_free_off.png"
+            iconSourceTwo="static/img/dietary/lactose_free_on.png"
             imageStyle='dietary-icon_logo'
             title='lactuz free'
             titleStyle='dietary_icon-title'
@@ -36,8 +36,8 @@
             name='lactuz' 
        />
        <Icon
-            iconSourceOne="static/img/lock.jpg"
-            iconSourceTwo="static/img/login.jpg"
+            iconSourceOne="static/img/dietary/gmo_free_off.png"
+            iconSourceTwo="static/img/dietary/gmo_free_on.png"
             imageStyle='dietary-icon_logo'
             title='gmo free'
             titleStyle='dietary_icon-title'
@@ -45,8 +45,8 @@
             name='gmo'
        />
        <Icon
-            iconSourceOne="static/img/lock.jpg"
-            iconSourceTwo="static/img/login.jpg"
+            iconSourceOne="static/img/dietary/egg_free_off.png"
+            iconSourceTwo="static/img/dietary/egg_free_on.png"
             imageStyle='dietary-icon_logo'
             title='egg free'
             titleStyle='dietary_icon-title'
@@ -56,8 +56,8 @@
        </div> 
         <div class='dietary-check-block'>
        <Icon
-            iconSourceOne="static/img/lock.jpg"
-            iconSourceTwo="static/img/login.jpg"
+            iconSourceOne="static/img/dietary/sugar_free_off.png"
+            iconSourceTwo="static/img/dietary/sugar_free_on.png"
             imageStyle='dietary-icon_logo' 
             title='sugar free'
             titleStyle='dietary_icon-title'
@@ -65,8 +65,8 @@
             name='sugar'      
        />
        <Icon
-            iconSourceOne="static/img/lock.jpg"
-            iconSourceTwo="static/img/login.jpg"
+            iconSourceOne="static/img/dietary/peanut_free_off.png"
+            iconSourceTwo="static/img/dietary/peanut_free_on.png"
             imageStyle='dietary-icon_logo'
             title='peanut free'
             titleStyle='dietary_icon-title'
@@ -152,8 +152,8 @@
 <div >
         <div class='dietary-check-block'>
        <Icon
-            iconSourceOne="static/img/lock.jpg"
-            iconSourceTwo="static/img/login.jpg"
+            iconSourceOne="static/img/dietary/gluten_free_off.png"
+            iconSourceTwo="static/img/dietary/gluten_free_on.png"
             imageStyle='dietary-icon_logo'
             title='cluten free' 
             titleStyle='dietary_icon-title'
@@ -162,17 +162,18 @@
 
        />
        <Icon
-            iconSourceOne="static/img/lock.jpg"
-            iconSourceTwo="static/img/login.jpg"
+            iconSourceOne="static/img/dietary/lactose_free_off.png"
+            iconSourceTwo="static/img/dietary/lactose_free_on.png"
             imageStyle='dietary-icon_logo'
             title='lactuz free'
             titleStyle='dietary_icon-title'
             :onClick='onSelect'
             name='lactuz'
+            
        />
        <Icon
-            iconSourceOne="static/img/lock.jpg"
-            iconSourceTwo="static/img/login.jpg"
+            iconSourceOne="static/img/dietary/gmo_free_off.png"
+            iconSourceTwo="static/img/dietary/gmo_free_on.png"
             imageStyle='dietary-icon_logo'
             title='gmo free'
             titleStyle='dietary_icon-title'
@@ -180,8 +181,8 @@
             name='gmo'
        />
        <Icon
-            iconSourceOne="static/img/lock.jpg"
-            iconSourceTwo="static/img/login.jpg"
+            iconSourceOne="static/img/dietary/egg_free_off.png"
+            iconSourceTwo="static/img/dietary/egg_free_on.png"
             imageStyle='dietary-icon_logo'
             title='egg free'
             titleStyle='dietary_icon-title'
@@ -191,8 +192,8 @@
        </div> 
         <div class='dietary-check-block'>
         <Icon
-            iconSourceOne="static/img/lock.jpg"
-            iconSourceTwo="static/img/login.jpg"
+            iconSourceOne="static/img/dietary/sugar_free_off.png"
+            iconSourceTwo="static/img/dietary/sugar_free_on.png"
             imageStyle='dietary-icon_logo'
             title='sugar free'
             titleStyle='dietary_icon-title'
@@ -200,8 +201,8 @@
             name='sugar'       
        />
        <Icon
-            iconSourceOne="static/img/lock.jpg"
-            iconSourceTwo="static/img/login.jpg"
+            iconSourceOne="static/img/dietary/peanut_free_off.png"
+            iconSourceTwo="static/img/dietary/peanut_free_on.png"
             imageStyle='dietary-icon_logo'
             title='peanut free'
             titleStyle='dietary_icon-title'

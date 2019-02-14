@@ -39,7 +39,6 @@
       currentMonth : Number
     },
     data() {
-
       return {
         ready: false,
         auth: auth,
