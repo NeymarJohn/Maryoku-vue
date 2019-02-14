@@ -1,6 +1,6 @@
 <template>  
    <div  :class='titleBlock' >
-   <p :class="titleText">{{title}}<span :class='spanStyles'>{{spanText}}</span></p>
+   <p :class="titleText">{{title}}<span :class='spanStyles' @click='triggerFunc'>{{spanText}}<slot></slot></span></p>
    </div>      
 </template>
 <script>
@@ -14,12 +14,13 @@
             titleBlock:String,
             withSpan:Boolean,
             spanText:String,
-            spanStyles:String
+            spanStyles:String,
+            onClick:Function
            
         },
         methods: {
-           onClick:function(event){
-              console.log(this,event) 
+           triggerFunc:function(event){
+              this.onClick() 
              
            }
         }

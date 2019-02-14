@@ -15,7 +15,7 @@ export default {
           eventData: {
             id: null,
             occasion: "",
-            eventName: "New Event",
+            eventName: "",
             date: null,
             time: "",
             duration: "",
@@ -23,12 +23,13 @@ export default {
             status: "draft",
             budget: "",
             currency: "",
-            eventType: null,
+            location: "",
           },
           eventModalOpen: false,
           modalTitle: '',
           modalSubmitTitle: '',
           editMode: false,
+          showOccasion: false,
         };
     },
 
@@ -39,11 +40,17 @@ export default {
       setEventModal(state, data) {
         state.eventModalOpen = data.showModal;
       },
+      setModalTitle(state, data) {
+        state.modalTitle = data;
+      },
       setEditMode(state, data) {
         state.editMode = data.editMode
       },
       setModalSubmitTitle(state, data) {
         state.modalSubmitTitle = data;
+      },
+      setShowOccasion(state, data) {
+        state.showOccasion = data.showOccasion;
       },
       setEventData(state, data) {
         state.eventData['id'] = data.eventData.id;
@@ -55,7 +62,7 @@ export default {
         state.eventData['participants'] = data.eventData.numberOfParticipants;
         state.eventData['budget'] = data.eventData.totalBudget;
         state.eventData['currency'] = data.eventData.currency;
-        state.eventData['eventType'] = data.eventData.eventType;
+        state.eventData['location'] = data.eventData.location;
       },
     },
     actions: {
@@ -64,8 +71,10 @@ export default {
 
         if (typeof payload.eventData !== 'undefined') {
           commit('setEventData', payload)
+          commit('setModalTitle', false)
           commit('setModalSubmitTitle', 'Edit Details')
-          commit('setEditMode', {editMode: payload.eventData.calendar})
+          commit('setShowOccasion', {showOccasion: false})
+          commit('setEditMode', {editMode: payload.eventData.id})
         }
       }
     }
