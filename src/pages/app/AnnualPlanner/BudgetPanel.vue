@@ -16,7 +16,7 @@
           </div>
         </div>
 
-        <div style="padding: 8px;"></div>       
+        <div style="padding: 8px;"></div>
 
         <div>
           <div style="text-align: center;">
@@ -28,7 +28,7 @@
           </div>
         </div>
 
-        <div style="padding: 8px;"></div>        
+        <div style="padding: 8px;"></div>
 
         <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total remaining budget</h5>
         <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
@@ -60,7 +60,7 @@
           <div style="text-align: left;">
             <h5 style="font-size: 0.95em; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Total events</h5>
             <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
-              <animated-number ref="totalEventsNumber" :value="totalEvents"></animated-number>         
+              <animated-number ref="totalEventsNumber" :value="totalEvents"></animated-number>
             </h4>
             <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
           </div>
@@ -199,7 +199,7 @@
 }
 .percentage {
   position: relative;
-  top: -108px;  
+  top: -108px;
   font-size: 2.5rem;
   font-weight: 700;
   color: #AEAAA8;

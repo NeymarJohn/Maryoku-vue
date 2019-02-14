@@ -78,7 +78,6 @@ export default {
         }else{
           context.$router.push('/company')
         }*/
-        context.$router.push('/company')
 
         if (cb !== undefined){
           cb();
