@@ -153,7 +153,7 @@
   import CalendarEvent from '@/models/CalendarEvent';
   import Calendar from '@/models/Calendar';
   import {Modal} from "@/components";
-import { error } from 'util';
+  import { error } from 'util';
 
   export default {
     components: {
@@ -167,7 +167,6 @@ import { error } from 'util';
       hoursArray: [...Array(24).keys()].map(x =>  x < 10 ? `0${x}:00`: `${x}:00`),
       durationArray: [...Array(12).keys()].map(x =>  ++x),
       dateValid: true,
-      uploadedImages: [],
       editTitle: false,
       modelValidations: {
         eventName: {
@@ -396,7 +395,7 @@ import { error } from 'util';
           totalBudget: this.budget,
           status: this.eventData.status,
           currency: this.currency,
-          eventType: this.eventType,
+          eventType: 'Company',
           edittable: true,
           participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         }).for(_calendar).save().then(response => {
@@ -462,6 +461,9 @@ import { error } from 'util';
     }
     .items-center-g {
       justify-content: center;
+    }
+    .justify-beetwen {
+      justify-content: space-between
     }
     .md-field .md-error {
       text-align: left;

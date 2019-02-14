@@ -6,29 +6,70 @@
 
         <div style="padding: 8px;"></div>
 
-        <div>
-          <div style="text-align: center;">
-            <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Annual budget per employee</h5>
-            <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
-              <animated-number ref="annualBudgetPerEmployeeNumber" :value="annualBudgetPerEmployee" prefix="$"></animated-number>
-            </h4>
-            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
+        <form class="budget-form">
+          <div>
+            <div style="text-align: left;">
+              <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Annual budget per employee</h5>
+              <div class="d-flex  justify-beetwen items-center-v">
+                <md-field v-show="this.editAnnualBudgetPerEmployee" :class="[{'md-error': errors.has('annualBudgetPerEmployee')}]">
+                  <md-input v-model="annualBudgetPerEmployee"
+                            data-vv-name="annualBudgetPerEmployee"
+                            v-validate= "modelValidations.annualBudgetPerEmployee"
+                      />
+                      <span class="md-error" v-if="errors.has('annualBudgetPerEmployee')">The field is required</span>
+                  </md-field> 
+                <h4 v-show="!this.editAnnualBudgetPerEmployee" style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+                  <animated-number ref="annualBudgetPerEmployeeNumber" :value="this.annualBudgetPerEmployee" prefix="$"></animated-number>
+                </h4>
+                <div class="d-flex">
+                  <md-button v-show="!this.editAnnualBudgetPerEmployee" class="md-simple md-just-icon md-round fa fa-edit" @click="toogleEditAnnualBudgetPerEmployee">
+                  <md-icon>edit</md-icon>
+                </md-button>
+                <md-button v-show="this.editAnnualBudgetPerEmployee" class="md-simple md-just-icon md-round fas fa-times" @click="toogleEditAnnualBudgetPerEmployee">
+                  <md-icon class="text-red">clear</md-icon>
+                </md-button>
+                <md-button v-show="this.editAnnualBudgetPerEmployee" class="md-simple md-just-icon md-round fa fa-check" @click="toogleEditAnnualBudgetPerEmployee">
+                  <md-icon class="text-success">check</md-icon>
+                </md-button>
+                </div>
+              </div>
+              <hr v-show="!this.editAnnualBudgetPerEmployee" style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
+            </div>
           </div>
-        </div>
 
-        <div style="padding: 8px;"></div>
+          <div style="padding: 8px;"></div>       
 
-        <div>
-          <div style="text-align: center;">
-            <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total annual budget</h5>
-            <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
-              <animated-number ref="totalAnnualBudgetNumber" :value="totalAnnualBudget" prefix="$"></animated-number>
-            </h4>
-            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
+          <div>
+            <div style="text-align: left;">
+              <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total annual budget</h5>
+              
+              <div class="d-flex flex-wrap justify-beetwen items-center-v">
+                <md-field v-show="this.editTotalAnnualBudget" :class="[{'md-error': errors.has('totalAnnualBudget')}]">
+                     <md-input v-model="totalAnnualBudget"
+                               data-vv-name="totalAnnualBudget"
+                               v-validate= "modelValidations.totalAnnualBudget"
+                      />
+                      <span class="md-error" v-if="errors.has('annualBudgetPerEmployee')">The field is required</span>
+                </md-field> 
+                <h4 v-show="!this.editTotalAnnualBudget" style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+                  <animated-number ref="totalAnnualBudgetNumber" :value="this.totalAnnualBudget" prefix="$"></animated-number>
+                </h4>
+                <md-button v-show="!this.editTotalAnnualBudget" class="md-simple md-just-icon md-round fa fa-edit" @click="toogleEditTotalAnnualBudget">
+                  <md-icon>edit</md-icon>
+                </md-button>
+                <md-button v-show="this.editTotalAnnualBudget" class="md-simple md-just-icon md-round fas fa-times" @click="toogleEditTotalAnnualBudget">
+                  <md-icon class="text-red">clear</md-icon>
+                </md-button>
+                <md-button v-show="this.editTotalAnnualBudget" class="md-simple md-just-icon md-round fa fa-check" @click="toogleEditTotalAnnualBudget">
+                  <md-icon class="text-success">check</md-icon>
+                </md-button>
+              </div>
+              <hr v-show="!this.editTotalAnnualBudget" style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
+            </div>
           </div>
-        </div>
 
-        <div style="padding: 8px;"></div>
+          <div style="padding: 8px;"></div>  
+        </form>      
 
         <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total remaining budget</h5>
         <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
@@ -60,7 +101,7 @@
           <div style="text-align: left;">
             <h5 style="font-size: 0.95em; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Total events</h5>
             <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
-              <animated-number ref="totalEventsNumber" :value="totalEvents"></animated-number>
+              <animated-number ref="totalEventsNumber" :value="totalEvents"></animated-number>         
             </h4>
             <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
           </div>
@@ -74,6 +115,7 @@
   import auth from '@/auth';
   import VueElementLoading from 'vue-element-loading';
   import ChartComponent from '@/components/Cards/ChartComponent';
+  import Calendar from '@/models/Calendar';
 
   import {
     AnimatedNumber
@@ -95,38 +137,59 @@
       }
     },
     data() {
-
       return {
         ready: false,
         auth: auth,
         isLoading: true,
-        statisticData: {}
+        statisticData: {},
+        editAnnualBudgetPerEmployee: false,
+        editTotalAnnualBudget: false,
+        annualBudgetPerEmployee: 0,
+        totalAnnualBudget: 0,        
+        modelValidations: {
+          annualBudgetPerEmployee: {
+            required: true,
+            min_value: 1,
+            max_value: 1000000,
+          },
+          totalAnnualBudget: {
+            required: true,
+            min_value: 1,
+            max_value: 1000000,
+          },          
+        },
       }
     },
     created() {
-
+  
     },
-    mounted(){
+    async mounted(){
       this.ready = true;
       this.isLoading = false;
-      this.calendarStatistic()
+      this.getAnnualBudgetPerEmployee();
+
+      this.getTotalAnnualBudget(); 
+      
+      let calendarId = this.auth.user.defaultCalendarId;
+
+      // let calendar = await Calendar.first();
+      //     calendar.annualBudget = 100;      
+      //     calendar.save();
+
+      //   console.log(calendar)
     },
     methods: {
-      calendarStatistic() {
-        let calendarId = this.auth.user.defaultCalendarId;
-
-        this.$http.get(`${process.env.SERVER_URL}/1/calendars/${calendarId}/statistics`, { headers: this.auth.getAuthHeader() })
-                .then((response) => {
-                  let statisticMap = {};
-                  response.data.forEach(function(data){
-                    statisticMap[data.item] = data.value
-                  })
-
-                  this.statisticData = statisticMap;
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
+      getAnnualBudgetPerEmployee() {
+        this.annualBudgetPerEmployee = this.statisticData['annual_budget_per_employee'];
+      },
+      getTotalAnnualBudget() {
+        this.totalAnnualBudget = this.statisticData['annual_budget'];
+      },
+      toogleEditAnnualBudgetPerEmployee(){
+        this.editAnnualBudgetPerEmployee = !this.editAnnualBudgetPerEmployee;
+      },
+      toogleEditTotalAnnualBudget(){
+        this.editTotalAnnualBudget = !this.editTotalAnnualBudget;
       },
     },
     computed: {
@@ -135,12 +198,6 @@
       },
       calculateSpent() {
         return this.statisticData['annual_budget'];
-      },
-      totalAnnualBudget() {
-        return this.statisticData['annual_budget'];
-      },
-      annualBudgetPerEmployee() {
-        return this.statisticData['annual_budget_per_employee'];
       },
       totalRemainingBudget() {
         return this.statisticData['annual_budget'] - this.statisticData['annual_budget_allocated'];
@@ -158,7 +215,7 @@
         return {
           data: {
             labels: [" ", " "], // should be empty to remove text from chart
-            series: [this.calculateRemain, this.calculateSpent]
+            series: [1000, 500]
           },
           options: {
             padding: 0,
@@ -170,7 +227,7 @@
       },
     },
     watch: {
-
+        
     }
   };
 </script>
@@ -199,9 +256,26 @@
 }
 .percentage {
   position: relative;
-  top: -108px;
+  top: -108px;  
   font-size: 2.5rem;
   font-weight: 700;
   color: #AEAAA8;
+}
+.budget-form .md-field {
+  max-width: 133px;
+}
+.budget-form .md-field .md-input,
+.budget-form .md-field .md-textarea{
+  -webkit-text-fill-color: #fff !important;
+  color: #fff !important;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.md-button.md-simple .text-success{
+  color: #00c782 !important;
+}
+.md-button.md-simple .text-red{
+  color: #FF547C !important;
 }
 </style>

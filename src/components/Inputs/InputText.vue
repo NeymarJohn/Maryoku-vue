@@ -3,12 +3,10 @@
       <label :class='labelStyle'>{{label}}<span class='required-logo' v-if='required'>*</span></label>
       <md-input
         class='input-default'
-        :id='id'
         :type='type'
         :placeholder='placeholder'
         :value='value'
         @input='triggerFunc($event,name)'
-        @change='changeFunc($event,name)'
         :name='name'        
        ></md-input> 
     <span class='md-error'>{{isErrors?'Required':''}}</span>
@@ -26,30 +24,19 @@
             type:String,
             label: String,
             title: String,
-            placeholder: {
-                type:String,
-                default:''
-            },
+            placeholder: String,
             icon: String,
             disabled: Boolean,
             labelStyle:String,
             fieldStyle:String,
             name:String,
             onChange:Function,
-            isErrors: Boolean,
-            id:String,
-            onChangeInput:Function
+            isErrors: Boolean
         },
         methods: {
           triggerFunc:function(value,name){
-              
-              if(this.onChange){
-                 this.onChange(value,name) 
-              }                                      
-              
-          },
-          changeFunc:function(e,name){                                                    
-            this.onChange(e.target.value,name) 
+              console.log(this)                                       
+              this.onChange(value,name)
           }
         }           
         
@@ -57,7 +44,7 @@
 </script>
 <style lang="scss">
     .input-default{
-        font-size: 18px !important;
+        font-size:20px!important
     }
     .required-logo{
         color:red;

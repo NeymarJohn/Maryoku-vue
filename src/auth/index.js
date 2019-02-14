@@ -55,8 +55,8 @@ export default {
   currentUser(context, required, cb) {
     context.$http.get(CURRENT_USER_URL, { headers: this.getAuthHeader() })
       .then((resp) => {
-        context.user = { username: resp.data.username };
-        store.dispatch("user/getUserFromApi" , resp.data)
+        // context.user = { username: resp.data.username };
+        //store.dispatch("getUserFromApi" , resp.data)
         this.user.id = resp.data.id;
         this.user.username = resp.data.username;
         this.user.avatar =  resp.data.pictureUrl;
@@ -69,8 +69,7 @@ export default {
         this.setHeaders(context);
         /*if(!resp.data.onboarded){
 
-           if(resp.data.onboardingPath==="OM"){
-
+          if(resp.data.onboardingPath==="OM"){
             context.$router.push('/company-form')
           }else{
             context.$router.push('/employee-form')
@@ -117,6 +116,7 @@ export default {
         context.$http.defaults.headers.Authorization = null;
         context.$router.push({ path: '/signin' });
       }, error => {
+        console.log(error);
         window.localStorage.removeItem(TOKEN_KEY);
         this.user = {
           authenticated: false
