@@ -158,7 +158,7 @@
                     </form>
                 </template>
                 <template slot="footer">
-                    <md-button class="md-warning move-left" @click="showDeleteAlert">
+                    <md-button v-if="this.editMode" class="md-warning move-left" @click="showDeleteAlert">
                         Delete
                     </md-button>
                     <md-button class="md-success move-right" @click="validateEvent">
@@ -193,7 +193,7 @@
       durationArray: [...Array(12).keys()].map(x =>  ++x),
       dateValid: true,
       editTitle: false,
-      occasionOptions:null,
+      occasionsOptions:null,
       currenciesOptions:null,
       eventTypesOptions:null,
       modelValidations: {
@@ -229,9 +229,6 @@
     }),
 
     created() {
-
-
-
     },
     computed: {
       ...mapState('AnnualPlannerVuex', [
@@ -241,9 +238,10 @@
         'modalSubmitTitle',
         'editMode',
       ]),
+      
       id: {
         get() {
-          return this.eventData.id
+          return this.eventData.id;
         },
         set(value) {
           this.setEventProperty({key: 'id', actualValue: value});
@@ -463,8 +461,18 @@
           buttonsStyling: false
         }).then(result => {
           if (result.value) {
-            _this.isLoading = true;
-            
+            this.$parent.isLoading = true;
+          
+            let _calendar = new Calendar({id: this.$store.state.event.calendarId});
+            let event = new CalendarEvent({id: this.eventData.id});
+
+            event.for(_calendar).delete().then(result => {
+              this.$parent.isLoading = false;
+              this.closeModal();
+              this.$emit("refresh-events");
+            }).catch(() => {
+              this.$parent.isLoading = false;
+            });
           }
         });
       },
@@ -477,7 +485,7 @@
           occasion: this.occasion,
           eventStartMillis: this.getEventStartInMillis(),
           eventEndMillis: this.getEventEndInMillis(),
-          numberOfParticipants: this.participants,
+          numberOfParticipants: this.numberOfParticipants,
           totalBudget: this.totalBudget,
           status: this.eventData.status,
           currency: this.currency,

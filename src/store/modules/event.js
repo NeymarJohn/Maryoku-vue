@@ -24,9 +24,27 @@ const state = {
 }
 
 const getters = {
-    getEventData() {
-        return state.eventData;
-    }
+    // getEventData() {
+    //     return state.eventData;
+    // },
+    // getComponentsList() {
+    //   return state.componentsList;
+    // },
+    // getVendorsList() {
+    //   return state.vendorsList;
+    // },
+    // getCurrenciesArray() {
+    //   return state.currenciesArray;
+    // },
+    // getCalendarId() {
+    //   return state.calendarId;
+    // },
+    // getCalendarId() {
+    //   return state.param1;
+    // },
+    // getCurrentUser() {
+    //   return state.currentUser;
+    // }
 }
 
 const actions = {
