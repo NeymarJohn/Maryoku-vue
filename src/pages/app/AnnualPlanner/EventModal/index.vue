@@ -75,6 +75,17 @@
                                     <label :class="[{'md-error': ($refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value') )}]">Date</label>
                                 </md-datepicker>
                             </div>
+                              <div class="md-layout-item md-small-size-100">
+                                <md-field :class="[{'md-error': errors.has('numberOfParticipants')}]">
+                                    <label>Number of Participants</label>
+                                    <md-input type="text"
+                                              v-model="numberOfParticipants"
+                                              data-vv-name="numberOfParticipants"
+                                              v-validate= "modelValidations.numberOfParticipants"
+                                    />
+                                    <span class="md-error" v-if="errors.has('numberOfParticipants')">The event participants is required and should be in range of 1 - 10 000</span>
+                                </md-field>
+                            </div>
                         </div>
                         <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
@@ -113,18 +124,6 @@
                         </div>
                         <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
-                                <md-field :class="[{'md-error': errors.has('numberOfParticipants')}]">
-                                    <label>Number of Participants</label>
-                                    <md-input type="text"
-                                              v-model="numberOfParticipants"
-                                              data-vv-name="numberOfParticipants"
-                                              v-validate= "modelValidations.numberOfParticipants"
-                                    />
-                                    <span class="md-error" v-if="errors.has('numberOfParticipants')">The event participants is required and should be in range of 1 - 10 000</span>
-                                </md-field>
-                            </div>
-
-                            <div class="md-layout-item md-small-size-100">
                                 <md-field :class="[{'md-error': errors.has('totalBudget')}]">
                                     <label>Budget</label>
                                     <md-input v-model="totalBudget"
@@ -134,8 +133,6 @@
                                     <span class="md-error" v-if="errors.has('totalBudget')">The event budget is required and should be in range of 1 - 1 000 000</span>
                                 </md-field>
                             </div>
-                        </div>
-                        <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
                                 <md-field :class="[{'md-error': errors.has('currency')}]" class="select-with-icon">
                                     <label>Currency</label>
@@ -545,11 +542,11 @@
   .md-field>.md-icon~.md-input {
     margin: 0;
   }
+  .modal-container {
+    max-width: 570px;
+  }
 </style>
 <style lang="scss">
-    .modal-container {
-      max-width: 580px;
-    }
     .modal-z-index {
         z-index: 5;
     }
