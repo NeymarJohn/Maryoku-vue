@@ -49,6 +49,10 @@ export default class Calendar extends Model {
     return this.hasMany(CalendarYear);
   }
 
+  catepories(){
+    return this.hasMany(CalendarEventType);
+  }
+
   eventTypes(){
     return this.hasMany(CalendarEventType);
   }
