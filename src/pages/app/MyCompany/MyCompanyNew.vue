@@ -1,15 +1,15 @@
 <template>
   <div class="md-layout">
     <div class="md-layout-item md-size-30">
-      <md-card class="md-card-profile">
-        <div class="md-card-avatar" style="background-color: white; padding: 18px; border-radius: 8px;">
-          <img class="img" :src="company.logo" style="width: 80%; height: 80%;">
-        </div>
+      <md-card class="md-card-profile">       
         <md-card-content>
           <div class="md-layout">
-            <div class="md-layout-item md-size-100">
+          <div class='company-view-common-logo_block'>
+          <img class="company-logo" :src="company.logo" style="width: 80%; height: 80%;">
+            <div class='company-name-block'>
               <h4 class="title text-gray" style="font-weight: 500;">{{company.companyName}}</h4>
               <md-button class="md-rose md-sm">Edit Profile</md-button>
+            </div>
             </div>
             <div class="md-layout-item md-size-100">
               <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
@@ -65,12 +65,24 @@
               <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
             </div>
             <div class="md-layout-item md-size-100">
-              <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Branches</div>
+              <div class='company-branch_block'><div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Branches</div><div @click.prevent='onShowInput($event)'><md-icon  class='branch-add_icon'>add</md-icon></div></div>
               <div v-for="item of company.branches" class="md-layout">
                 <div class="md-layout-item md-size-100" style="text-align: left;">
                   <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon> {{item}}
                 </div>                
               </div>
+              <div v-show='showSearch'>
+               <InputText                 
+                labelStyle='company_label_input'
+                label='Branches address'
+                id='branches_getter'               
+                name='branch_adddress'
+                :value='branch_adddress'
+                :onChange='onChange'                             
+                
+        />  
+        <Button text='Add' :onClick='addIndustry'/>
+        </div>
             </div>
 
             <div class="md-layout-item md-size-100">
@@ -87,8 +99,14 @@
     <div class="md-layout-item md-size-33">
       <md-card>
         <md-card-content>
+        <div>
           <div class="title text-bold">Number of events</div>
-          <canvas id="number_of_events_chart" width="400" height="400"></canvas>
+          <div class="company-button-filter-block">
+          <ButtonDiv text='Yearly' class='button-filter'  :onClick='onChangeFilter("Yearly")'/>
+          <ButtonDiv text='Monthly' class='button-filter'  :onClick='onChangeFilter("Monthly")'/>
+          </div>
+        </div>  
+          <canvas id="number_of_events_chart" width="350" height="350"></canvas>
         </md-card-content>
       </md-card>
       <md-card>
@@ -130,6 +148,10 @@ import MyCompanyApprovals from "src/pages/app/MyCompany/MyCompanyApprovals.vue";
 import MyCompanyProfile from "src/pages/app/MyCompany/MyCompanyProfile.vue";
 import MyCompanyBilling from "src/pages/app/MyCompany/MyCompanyBilling.vue";
 import MyCompanySettings from "src/pages/app/MyCompany/MyCompanySettings.vue";
+import InputText from '@/components/Inputs/InputText.vue'
+import ButtonDiv from '@/components/Button/ButtonDiv.vue'
+import Button from '@/components/Button/Button.vue'
+import CustomerFile from '@/models/CustomerFile';
 
 
   
@@ -142,9 +164,16 @@ import MyCompanySettings from "src/pages/app/MyCompany/MyCompanySettings.vue";
       MyCompanyApprovals,
       MyCompanyProfile,
       MyCompanyBilling,
-      MyCompanySettings
+      MyCompanySettings,
+      InputText,
+      ButtonDiv,
+      Button
     },
     mounted:function(){
+      const branch =document.getElementById('branches_getter');             
+      this.autocomplete = new google.maps.places.Autocomplete(branch ,{types: ['geocode']}); 
+      CustomerFile.get().then(res=>console.log(res)).catch(e=>console.log(e))
+
       var ctx = document.getElementById("number_of_events_chart");
       var myChart = new Chart(ctx, {
     type: 'line',
@@ -154,10 +183,10 @@ import MyCompanySettings from "src/pages/app/MyCompany/MyCompanySettings.vue";
             label: '# of Events',
             data: [2, 5, 7, 9, 12, 15],
             backgroundColor: [                
-                'rgba(75, 192, 192, 0.2)',                
+                'rgba(255, 255, 255, 0.2)',                
             ],
             borderColor: [                
-                'rgba(75, 192, 192, 1)',                
+                '#71c278',                
             ],
             borderWidth: 1
         }]
@@ -184,7 +213,7 @@ import MyCompanySettings from "src/pages/app/MyCompany/MyCompanySettings.vue";
                 'rgba(255, 255, 255, 0.2)',                
             ],
             borderColor: [                
-                'rgba(75, 192, 192, 1)',                
+                '#26cfa0',                
             ],
             borderWidth: 1
         }]
@@ -214,18 +243,36 @@ import MyCompanySettings from "src/pages/app/MyCompany/MyCompanySettings.vue";
               "Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit"
           }
         ],
+        branch_adddress:'',
+        showSearch:false,
+        filter:'Yearly'
       };
     },
     computed:{
       ...mapGetters({
         company:'user/getCompany'
       })
-    }
+        
+}    
     ,
     methods: {
       onSelect: function(items) {
         this.selected = items;
       },
+       onChange:function(value, name){       
+                 this[name]=value   
+         },
+         onShowInput:function(){
+           console.log('@')
+           this.showSearch=!this.showSearch
+         }
+      ,addIndustry: function(value, name){                                  
+                 this.showSearch=!this.showSearch
+                 this.$store.dispatch("user/sendIndustry",this.branch_adddress)                    
+         },
+         onChangeFilter:function(name){
+           this.filter=name
+         }  
     }
   };
 </script>
@@ -237,4 +284,38 @@ import MyCompanySettings from "src/pages/app/MyCompany/MyCompanySettings.vue";
     font-size: 14px;
     margin-top: 12px;
   }
+  .company-view-common-logo_block{
+    display:flex;
+        
+  }
+   .company-logo{
+            width: 45% !important;
+            height: 110% !important;
+ }
+ .company-branch_block{
+   display:flex;
+   justify-content: space-between  
+ }
+ .branch-add_icon{
+  margin:0;
+  cursor: pointer;
+}
+.company-name-block{
+
+}
+.button-filter{
+  text-align: center;
+    padding: 0px 6px;
+    background: #25d0a2;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin:5px
+}
+.company-button-filter-block{
+      display: flex;
+    width: 62%;
+    justify-content: flex-end;
+}
+  
 </style>

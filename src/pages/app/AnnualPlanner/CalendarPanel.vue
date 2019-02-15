@@ -47,10 +47,10 @@
                                     <md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                       </md-button>
-                                    <md-button v-else-if="monthDay.events.editables.length" @click="openEditEventModal(true, monthDay.events.editables[0])" v-bind:class="{ 'multiple-events': multipleEvents(monthDay.events.editables.length) }" :ref="`month-day-${monthDay.dayInMonth}`" class="md-success md-just-icon md-round md-md">
+                                    <md-button v-else-if="monthDay.events.editables.length" @click="openEditEventModal(true, monthDay.events.editables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-success md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                     </md-button>
-                                    <md-button v-else-if="monthDay.events.nonEditables.length" @click="openEditEventModal(true, monthDay.events.nonEditables[0])" v-bind:class="{ 'multiple-events': multipleEvents(monthDay.events.nonEditables.length) }" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
+                                    <md-button v-else-if="monthDay.events.nonEditables.length" @click="openEditEventModal(true, monthDay.events.nonEditables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                     </md-button>
                                   </template>
@@ -78,8 +78,6 @@
                           <md-button class="md-simple md-sm md-info"><i class="fa fa-square" style="margin-right: 5px;"></i> Civil Days</md-button>
                           <md-button class="md-simple md-sm md-success"><i class="fa fa-square" style="margin-right: 5px;"></i> Company Events</md-button>
                           <md-button class="md-simple md-sm md-primary"><i class="fa fa-square" style="margin-right: 5px;"></i> Personal Schedule</md-button>
-                          <md-button class="md-simple md-sm md-simple"><i class="fa fa-square" style="margin-right: 5px;"></i> Social days</md-button>
-                          <md-button class="md-simple md-sm md-warning"><i class="fa fa-square" style="margin-right: 5px;"></i> Fun Days</md-button>
                         </md-card-content>
                       </md-card>
                     </td>
@@ -108,6 +106,8 @@
     </table>
       <event-modal
               @refresh-events="refreshEvents"
+              :occasionOptions="occasionsArray"
+              :currenciesOptions="currenciesArray"
               ref="eventModal">
       </event-modal>
   </div>
@@ -121,6 +121,8 @@
   import CalendarFiltersPanel from './CalendarFiltersPanel';
   import moment from 'moment';
   import CalendarEvent from '@/models/CalendarEvent';
+  import Occasion from '@/models/Occasion';
+  import Currency from "@/models/Currency";
 
   import {
     AnimatedNumber
@@ -171,7 +173,6 @@
         calendarEvents: {},
         occasionsArray: null,
         currenciesArray: null,
-        eventTypesArray: null,
         holidaysSelectDisplayed: true,
         selectedCountries: true,
         selectedEventTypes: true,
@@ -179,6 +180,28 @@
     },
     created() {
       this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule);
+
+      let occasions = '';
+
+      if (this.$store.state.occasionsArray === null) {
+        occasions = Occasion.get().then((occasions) => {
+          this.$store.state.occasionsArray = occasions;
+          this.occasionsArray = occasions;
+        });
+      } else {
+        this.occasionsArray = this.$store.state.occasionsArray;
+      }
+
+      let currencies = '';
+
+      if (this.$store.state.currenciesArray === null) {
+        currencies = Currency.get().then((currencies) => {
+          this.$store.state.currenciesArray = currencies;
+          this.currenciesArray = currencies;
+        });
+      } else {
+        this.currenciesArray = this.$store.state.currenciesArray;
+      }
     },
     mounted(){
       this.ready = true;
@@ -192,7 +215,7 @@
         let calendarId = this.auth.user.defaultCalendarId;
 
         window.open(
-          `${process.env.SERVER_URL}/1/calendars/${calendarId}/export/${this.year}`
+          `${process.env.SERVER_URL}/1/calendars/${calendarId}/export/2019`
         );
       },
       refreshEvents(){
@@ -301,7 +324,7 @@
 
         return calendarEventsMap;
       },
-      openEventModal() {
+      openEventModal(){
         this.setEventModal({ showModal: true })
         this.setModalSubmitTitle('Save')
         this.setEditMode({ editMode: false })
@@ -312,9 +335,6 @@
       openEditEventModal: function (show, item) {
         this.setEventModalAndEventData({showModal: show, eventData: item});
       },
-      multipleEvents(length) {
-        return length > 1;
-      }
     },
     computed: {
       ...mapState('AnnualPlannerVuex', ['filtersData']),
@@ -334,31 +354,5 @@
 <style lang="scss">
   .md-grey {
     background-color: #e0e0e0;
-  }
-  .vue-tooltip.tooltip-custom-non-editable {
-    background-color: #fff;
-    border: 1px solid #aaa;
-    color: black;
-    font-size: 14px;
-    font-weight: 400;
-  }
-
-  .vue-tooltip.tooltip-custom-non-editable .tooltip-arrow {
-    border-color: #aaa;
-  }
-
-  .vue-tooltip.tooltip-custom-editable {
-    background-color: #fefefe;
-    border: 1px solid #03a9f4;
-    color: black;
-    font-size: 14px;
-    font-weight: 500;
-  }
-
-  .vue-tooltip.tooltip-custom-editable .tooltip-arrow {
-    border-color: #03a9f4;
-  }
-  .multiple-events {
-    border:2px solid red;
   }
 </style>

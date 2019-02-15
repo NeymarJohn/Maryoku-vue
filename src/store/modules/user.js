@@ -47,7 +47,7 @@ const getters={
     return state.user
     },
     getIndustryList:(state)=>{
-        return state.industry.map(item=>item.title)
+        return state.industry
     },
     getCompany:(state)=>{
         return state.company
@@ -103,6 +103,15 @@ const actions={
 
         }
     },
+    async sendIndustry({commit,state}, industry){
+        try{          
+        //    const res=await postReq('/1/onboarding/me',email)
+           commit("addIndustry" , industry)
+        }catch(e){
+
+        }
+    },
+    
 }
 
 //mutations
@@ -112,7 +121,11 @@ const mutations= {
     },
     setIndustries(state,industry){
         state.industry=industry
-    }
+    },
+    addIndustry(state,industry){
+         state.company.branches.push(industry)
+        }
+  
 }
 
 export default {

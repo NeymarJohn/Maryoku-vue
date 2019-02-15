@@ -9,7 +9,9 @@
         :value='value'
         @input='triggerFunc($event,name)'
         @change='changeFunc($event,name)'
-        :name='name'        
+        @:keyup.enter='autoSubmit($event,name)'
+        :name='name'
+        :disabled='disabled'        
        ></md-input> 
     <span class='md-error'>{{isErrors?'Required':''}}</span>
     </md-field>    
@@ -38,7 +40,8 @@
             onChange:Function,
             isErrors: Boolean,
             id:String,
-            onChangeInput:Function
+            onChangeInput:Function,
+            disabled:Boolean
         },
         methods: {
           triggerFunc:function(value,name){
@@ -50,6 +53,11 @@
           },
           changeFunc:function(e,name){                                                    
             this.onChange(e.target.value,name) 
+          },
+          autoSubmit:function($event,name){
+              if(this.onBlur){
+                 this.onBlur(value,name) 
+              }
           }
         }           
         

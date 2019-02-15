@@ -20,13 +20,5 @@
     };
 </script>
 <style lang="scss">
-    .input-default{
-        border: none;
-        padding: 15px;
-        width: 100%;
-        border-bottom: 1px solid #e4e4e4
-    }
-    .required-logo{
-        color:red;
-    }
+    
 </style>

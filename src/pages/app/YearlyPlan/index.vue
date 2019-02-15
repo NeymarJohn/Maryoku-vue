@@ -305,8 +305,6 @@
 
         let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
-
-        console.log(_calendar)
         _calendar.metadata().get().then(metadatas => {
 
           let metadata = metadatas[0];
