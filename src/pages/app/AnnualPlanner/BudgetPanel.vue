@@ -207,9 +207,9 @@
             this.totalAnnualBudget = response.annualBudget;
             this.annualBudgetPerEmployee = response.annualBudgetPerEmployee;
             this.countEvents = response.events;
-            this.totalRemainingBudget = this.totalAnnualBudget - this.annualBudgetPerEmployee;
-            this.percentage = parseFloat((100 * this.annualBudgetPerEmployee / this.totalAnnualBudget).toFixed(0));
-            this.seriesData = [this.annualBudgetPerEmployee, this.totalAnnualBudget];
+            this.totalRemainingBudget = this.totalAnnualBudget;
+            this.percentage = parseFloat((100 * this.totalAnnualBudget / this.totalAnnualBudget).toFixed(0));
+            this.seriesData = [this.totalAnnualBudget];
           })
           .catch(error => {
             console.log(error);
