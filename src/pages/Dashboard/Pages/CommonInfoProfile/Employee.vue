@@ -27,32 +27,18 @@
                 :isErrors='isErrors'
                 :value='email'
         />
-       <div class='om_phone-block'>
-        <div class='phone_country-code'>
-        <Select
-         label='Country code'
-          labelStyle='om_label_input'
-          :list='list_code'
-          name='country_code'
-          required
-          :onChange="onChange"
-          :valueName="['name','dial_code']"
-          :isErrors='isErrors'
-          />
-          </div> 
         <InputText 
-                labelStyle='om_label_input'
+                labelStyle='label_input'
                 label='Phone Number'
-                :value='phone'
+                required
                 name='phone'
                 :onChange='onChange'
                 :isErrors='isErrors'
-                required
-        />
-        </div>                
+                :value='phone'
+        />               
 </div>
-<div class='button-block'>
-        <Button text='next' :onClick='submitForm' class="md-success md-fileinput button-md-common"/>
+<div class='button-block' @click='submitForm'>
+        <ButtonDiv buttonStyle='buttonStyle' text='next'/>
 </div>
 </div>
 <div class='logo-main'>
@@ -68,18 +54,13 @@
 </div>
 </template>
 <script>
-//CONSTANTS
-import country_code from "@/constants/country_code"
 
-//HELPER_FUNC
 import {isWrong} from '@/utils/helperFunction'
 
-//COMPONENTS
 import InputText from '@/components/Inputs/InputText.vue'
 import Select from '@/components/Select/Select.vue'
 import Title from '@/components/Title/Title.vue'
-import Button from '@/components/Button/Button.vue'
-
+import ButtonDiv from '@/components/Button/ButtonDiv.vue'
 
 export default {
     name:'Employee',
@@ -87,16 +68,14 @@ export default {
    InputText,
    Select,
    Title,
-   Button
+   ButtonDiv
 },
 data(){
         return{
                 full_name:'',                
                 email:'',
                 phone:'',                                
-                isErrors:false,
-                country_code:'',
-                list_code: country_code    
+                isErrors:false    
         }
 }
 ,
@@ -104,7 +83,7 @@ data(){
          submitForm:function(){                                                     
             this.validFunc(this)                         
             if(this.isErrors==false){
-                const info=isWrong(this,['full_name','email','phone','country_code'])
+                const info=isWrong(this,['full_name','email','phone','industry','website'])
                 this.$store.dispatch("user/sendCompanyInfo",info)                      
                 this.$router.push('/events-data')     
             }
@@ -123,10 +102,7 @@ data(){
             }
             if(ctx['phone']===''){
                 errorsObj.push('phone')
-            }
-            if(ctx['country_code']===''){
-                errorsObj.push('country_code')
-            }                           
+            }                          
             if(errorsObj.length!==0){                    
               ctx.isErrors=true
             }else{                    
@@ -158,7 +134,6 @@ data(){
 .form-block{
     width: 75%;
     display: flex;
-    justify-content: center;
     flex-direction: column;
 }
 .emp-logo{
@@ -169,7 +144,7 @@ data(){
         margin-bottom: 20px
 }
 .label_input{
-        font-size: 20px ;
+        font-size: 20px !important;
         padding-left: 10px;
 }
 .titleStyle{
@@ -195,15 +170,5 @@ data(){
        align-items: flex-end;
       margin-bottom: 45px;               
     
-}
-.om_phone-block{
-        display:flex;
-        .phone_country-code{
-                margin-right: 40px;
-                width: 30%;           
-        }
-        &.phone-number{
-
-        }
 }
 </style>

@@ -1,9 +1,6 @@
 <template>
 <div class='invite_body'>
 <div class='invite_form-main'>
-<div class='invite_button-block' >
-        <Button text='next' :onClick='onNext' class="md-success md-fileinput button-md-common"/>
-</div>
 <div class='invite_form-block'>
 <div>
 <Title
@@ -12,7 +9,6 @@
         titleText='invite_titleStyle'/>
         
 </div>
-        <div class='invite_massage-block'>
         <InputWithIcon 
                 labelStyle='invite_label_input'
                 placeholder='Invite by email address'
@@ -23,11 +19,7 @@
                 inputBlock='invite_input-block'
                 name="employee_email"
                 :onChange='onChange'          
-        />
-        <div class='send-button' >
-                <Button text='Send' :onClick='onSend' class="md-success md-fileinput button-md-common"/>
-        </div>
-   </div>            
+        />        
         <Title
                 title="Or upload employees' emails from csv file."
                 titleBlock='invite_titleBlock'
@@ -62,15 +54,13 @@
 </div>
 </template>
 <script>
-//HELPER FUNC
+
 import {isWrong} from '@/utils/helperFunction'
 
-//COMPONENTS
 import InputWithIcon from '@/components/Inputs/InputWithIcon.vue'
 import Select from '@/components/Select/Select.vue'
 import Title from '@/components/Title/Title.vue'
 import ButtonDiv from '@/components/Button/ButtonDiv.vue'
-import Button from '@/components/Button/Button.vue'
 
 export default {
     name:'Employee',
@@ -81,8 +71,7 @@ export default {
    InputWithIcon,
    Select,
    Title,
-   ButtonDiv,
-   Button
+   ButtonDiv
 },
 data(){
         return{
@@ -92,7 +81,9 @@ data(){
 }
 ,
  methods: {
-         onSkip:function(){                                      
+         onSkip:function(){
+            const invitation=isWrong(this,['employee_email'])
+            this.$store.dispatch("user/sendEvent",invitation)                           
             this.$router.push('/officeManager-form')          
          }
          ,
@@ -110,18 +101,6 @@ data(){
                          console.log(e.target.result)
                  }
                  reader.readAsDataURL(e.target.files[0]);
-         },onSend:function(){
-                 if(this.employee_email){
-                      const massages=this.employee_email.split(',').map(item=>item.trim())
-                      this.$store.dispatch("user/sendEvent",massages)      
-                 }
-         },
-         onNext:function(){
-                 if(this.employee_email){
-                      const massages=this.employee_email.split(',').map(item=>item.trim())
-                      this.$store.dispatch("user/sendEvent",massages)      
-                 }
-                  this.$router.push('/officeManager-form') 
          }
  },
     
@@ -138,8 +117,7 @@ data(){
         background-color: white;
         display: flex;
         justify-content: center;
-        flex-direction: row-reverse;       
-          
+        flex-direction: row-reverse;  
 }
 .invite_logo-main {
         width:50%;
@@ -149,17 +127,14 @@ data(){
         align-items: center;  
 }
 .invite_form-block{
-          width: 75%;
-         display: flex;
-         flex-direction: column;
-         margin-top: 60px;
-        justify-content: center;
-        transform: translateY(-10%);
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 60px
 }
 .invite_emp-logo{
         height: 100%;
-        width: 100%;
-         margin-bottom: -10%;        
+        width: 100%;        
 }
 .invite_emp-title{
         text-align: center;
@@ -203,7 +178,7 @@ data(){
     color: white;
     font-size: 26px;
     margin-top: 20px;
-    line-height: 147%;
+    line-height: normal;
 }
 .invite_input-img{
         width: 36px;
@@ -217,17 +192,5 @@ data(){
 .invite_input-block{
     border: 1.5px solid #b6b6b6;
     padding: 10px;
-    width:80%;
-    height: 100%
-    
-}
-.invite_massage-block{
-                display:flex;
-       .send-button{          
-                display: flex;
-                align-items: center;
-                margin-left: 40px;
-}
-               
 }
 </style>
