@@ -27,6 +27,19 @@
                 :isErrors='isErrors'
                 required
         />
+        <div class='om_phone-block'>
+        <div class='phone_country-code'>
+        <Select
+         label='Country code'
+          labelStyle='om_label_input'
+          :list='list_code'
+          name='country_code'
+          required
+          :onChange="onChange"
+          :valueName="['name','dial_code']"
+          :isErrors='isErrors'
+          />
+          </div> 
         <InputText 
                 labelStyle='om_label_input'
                 label='Phone Number'
@@ -35,15 +48,16 @@
                 :onChange='onChange'
                 :isErrors='isErrors'
                 required
-        />        
+        />
+        </div>        
 </div>
 <div class='om_button-block'>
-        <ButtonDiv buttonStyle='om_buttonStyle' text='next' :onClick='submitForm'/>
+        <Button text='next' :onClick='submitForm' class="md-success md-fileinput button-md-common"/>
 </div>
 </div>
 <div class='om_logo-main'>
 <div>
-<img class='om_form-block' src="static/img/secure_booker.png">
+<img class='om_emp-logo' src="static/img/secure_booker.png">
         <Title
                 title='Smart Leadership'
                 titleBlock='om_titleStyle'
@@ -51,7 +65,7 @@
         />
         <Title  
                 titleText='om_titleTextLogo'        
-                titleBlock='company_titleBlock'
+                titleBlock='om_titleStyle'
                 title='We help you collect all events data, from participation rate to feedback and budget frends. Evething you need to lead'
          />                
                
@@ -62,7 +76,7 @@
 <script>
 //MAIN MODULES
 import {mapGetters} from 'vuex'
-
+import country_code from "@/constants/country_code"
 //helper function
 import {isWrong} from '@/utils/helperFunction'
 
@@ -70,7 +84,7 @@ import {isWrong} from '@/utils/helperFunction'
 import InputText from '@/components/Inputs/InputText.vue'
 import Select from '@/components/Select/Select.vue'
 import Title from '@/components/Title/Title.vue'
-import ButtonDiv from '@/components/Button/ButtonDiv.vue'
+import Button from '@/components/Button/Button.vue'
 import Autocomplete from '@/components/Autocomplete/Autocomplete.vue'
 
 export default {
@@ -79,30 +93,32 @@ export default {
         InputText,
         Select,
         Title,
-        ButtonDiv
+        Button
         },
         data(){
                 return{
                    isErrors:false,
                    full_name:'',
                    email:'',
-                   phone:''     
+                   phone:'',
+                   country_code:'',
+                   list_code: country_code    
                 }
         },
-                computed:{
+                computed:{                        
                 ...mapGetters({})
         },
                 methods:{
         submitForm:function(){                                    
             this.validFunc(this)                         
             if(this.isErrors==false){  
-                const data=isWrong(this,['full_name','email','phone'])
+                const data=isWrong(this,['full_name','email','phone','country_code'])
                 this.$store.dispatch("user/sendOMInfo",data)                       
                 this.$router.push('/events-data')     
             }
               
          },
-         onChange:function(value, name){                
+         onChange:function(value, name){                                
                  this[name]=value                    
          },
          validFunc:function(ctx,required){                
@@ -115,7 +131,10 @@ export default {
             }
             if(ctx['phone']===''){
                 errorsObj.push('phone')
-            }              
+            }
+            if(ctx['country_code']===''){
+                errorsObj.push('country_code')
+            }               
             if(errorsObj.length!==0){                    
               ctx.isErrors=true
             }else{                    
@@ -148,8 +167,8 @@ export default {
 .om_form-block{
     width: 75%;
     display: flex;
-    flex-direction: column;
-    margin-top: 60px
+    flex-direction: column;    
+    justify-content: center;
 }
 .om_form-block{
                 
@@ -159,7 +178,7 @@ export default {
         margin-bottom: 20px
 }
 .om_label_input{
-        font-size: 20px !important;
+        font-size: 20px ;
         padding-left: 10px;
 }
 .om_titleStyle{
@@ -176,7 +195,7 @@ export default {
     color: white;
     font-size: 26px;
     margin-top: 20px;
-    line-height: normal;
+    line-height: 147%;
 }
 .om_buttonStyle{        
         cursor: pointer;
@@ -192,5 +211,20 @@ export default {
       justify-content: flex-end;
       align-items: flex-end;
       margin-bottom: 45px;               
+}
+.om_emp-logo{
+       width: 100%;
+    height: 100%;
+    margin-bottom: -10%;     
+}
+.om_phone-block{
+        display:flex;
+        .phone_country-code{
+                margin-right: 40px;
+                width: 30%;           
+        }
+        &.phone-number{
+
+        }
 }
 </style>

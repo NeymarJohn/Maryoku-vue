@@ -1,17 +1,15 @@
-<template>  
-    <md-field >
-        <label :class='labelStyle'>{{label}}<span class='required-logo' v-if='required'>*</span></label>
-        <md-select   :name="name"  @input="triggerFunc($event,name)">
-            <md-option v-for='item of list' :key='item[valueName[0]]' :value="item[valueName[1]]">{{item[valueName[0]]}}</md-option>
-        </md-select > 
-         <span class='md-error'>{{isErrors?'Required':''}}</span>  
-    </md-field>        
+<template>
+  <div>
+    <md-datepicker :name="name"  @input="triggerFunc($event,name)">
+      <label>{{label}}</label>
+    </md-datepicker>
+  </div>
 </template>
+
 <script>
-    export default {
-        name: "Select",
-        
-        model: {
+  export default {
+    name: 'Datepicker',
+    model: {
         },        
         props: {
             list:Array,
@@ -35,22 +33,5 @@
           }
         }
     };
+  
 </script>
-<style lang="scss">
-.required-logo{
-        color:red;
-    }    
-</style>
-
-
-
-
-
-
-
-
-
-
-
-
- 

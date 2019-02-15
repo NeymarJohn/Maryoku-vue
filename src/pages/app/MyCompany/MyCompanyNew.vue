@@ -131,6 +131,8 @@ import MyCompanyProfile from "src/pages/app/MyCompany/MyCompanyProfile.vue";
 import MyCompanyBilling from "src/pages/app/MyCompany/MyCompanyBilling.vue";
 import MyCompanySettings from "src/pages/app/MyCompany/MyCompanySettings.vue";
 
+import CustomerFile from '@/models/CustomerFile';
+
 
   
 
@@ -145,6 +147,8 @@ import MyCompanySettings from "src/pages/app/MyCompany/MyCompanySettings.vue";
       MyCompanySettings
     },
     mounted:function(){
+      CustomerFile.get().then(res=>console.log(res)).catch(e=>console.log(e))
+
       var ctx = document.getElementById("number_of_events_chart");
       var myChart = new Chart(ctx, {
     type: 'line',

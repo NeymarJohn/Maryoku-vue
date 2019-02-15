@@ -57,7 +57,7 @@
          />            
 </div>
 <div class='company_button-block' >
-        <ButtonDiv buttonStyle='company_buttonStyle' text='next' :onClick='submitForm'/>
+        <Button text='next' :onClick='submitForm' class="md-success md-fileinput button-md-common"/>
 </div>
 </div>
 <div class='company_logo-main'>
@@ -82,21 +82,23 @@
 </div>
 </template>
 <script>
+//MAIN MODULES
 import { mapGetters } from 'vuex'
 
+//HELPER FUNC
 import {isWrong} from '@/utils/helperFunction'
 
+//MODELS
 import CalendarEvent from '@/models/CalendarEvent';
 import CalendarEventImage from '@/models/CalendarEventImage';
 import Calendar from '@/models/Calendar';
-
 import CustomerFile from '@/models/CustomerFile';
 
-
+//COMPONENTS
 import InputText from '@/components/Inputs/InputText.vue'
 import Select from '@/components/Select/Select.vue'
 import Title from '@/components/Title/Title.vue'
-import ButtonDiv from '@/components/Button/ButtonDiv.vue'
+import Button from '@/components/Button/Button.vue'
 import Autocomplete from '@/components/Autocomplete/Autocomplete.vue'
 
 export default {
@@ -105,7 +107,7 @@ export default {
    InputText,
    Select,
    Title,
-   ButtonDiv,
+   Button,
    Autocomplete
 },
 data(){
@@ -219,11 +221,14 @@ computed:{
 .company_form-block{
     width: 75%;
     display: flex;
-    flex-direction: column;
+    flex-direction: column;    
+    justify-content: center;
+    
 }
 .company_emp-logo{
         height: 100%;
-        width: 100%;        
+        width: 100%;
+        margin-bottom: -10%;        
 }
 .company_emp-title{
         text-align: center;
@@ -242,12 +247,13 @@ computed:{
        justify-content: center; 
 }
 .company_titleTextLogo{
-    text-align: center;
-    width: 70%;
-    color: white;
-    font-size: 26px;
-    margin-top: 20px;
-    line-height: normal;
+         text-align: center;
+         width: 70%;
+         color: white;
+        font-size: 26px;
+        margin-top: 20px;
+        line-height: 147%;
+
 }
 .company_buttonStyle{        
         cursor: pointer;

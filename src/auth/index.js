@@ -71,7 +71,7 @@ export default {
 
            if(resp.data.onboardingPath==="OM"){
 
-            context.$router.push('/company-form')
+            context.$router.push('/events-data')
           }else{
             context.$router.push('/employee-form')
           }
