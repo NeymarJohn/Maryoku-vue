@@ -78,6 +78,8 @@
                           <md-button class="md-simple md-sm md-info"><i class="fa fa-square" style="margin-right: 5px;"></i> Civil Days</md-button>
                           <md-button class="md-simple md-sm md-success"><i class="fa fa-square" style="margin-right: 5px;"></i> Company Events</md-button>
                           <md-button class="md-simple md-sm md-primary"><i class="fa fa-square" style="margin-right: 5px;"></i> Personal Schedule</md-button>
+                          <md-button class="md-simple md-sm md-simple"><i class="fa fa-square" style="margin-right: 5px;"></i> Social days</md-button>
+                          <md-button class="md-simple md-sm md-warning"><i class="fa fa-square" style="margin-right: 5px;"></i> Fun Days</md-button>
                         </md-card-content>
                       </md-card>
                     </td>
@@ -106,8 +108,6 @@
     </table>
       <event-modal
               @refresh-events="refreshEvents"
-              :occasionOptions="occasionsArray"
-              :currenciesOptions="currenciesArray"
               ref="eventModal">
       </event-modal>
   </div>
@@ -121,9 +121,6 @@
   import CalendarFiltersPanel from './CalendarFiltersPanel';
   import moment from 'moment';
   import CalendarEvent from '@/models/CalendarEvent';
-  import Occasion from '@/models/Occasion';
-  import Currency from "@/models/Currency";
-  import Calendar from "@/models/Calendar"
 
   import {
     AnimatedNumber
@@ -182,48 +179,6 @@
     },
     created() {
       this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule);
-
-      let occasions = '';
-
-      if (this.$store.state.event.occasionsArray === null) {
-        occasions = Occasion.get().then((occasions) => {
-          this.$store.state.event.occasionsArray = occasions;
-          this.occasionsArray = occasions;
-        });
-      } else {
-        this.occasionsArray = this.$store.state.event.occasionsArray;
-      }
-
-      let currencies = '';
-
-      if (this.$store.state.event.currenciesArray === null) {
-        currencies = Currency.get().then((currencies) => {
-          this.$store.state.event.currenciesArray = currencies;
-          this.currenciesArray = currencies;
-        });
-      } else {
-        this.currenciesArray = this.$store.state.event.currenciesArray;
-      }
-
-      // if (this.$store.state.event.eventTypes === null) {
-      //   this.auth.currentUser(this, true, function() {
-
-      //     let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-
-      //     _calendar.metadata().get().then(metadatas => {
-
-            
-
-      //       let metadata = metadatas[0];
-
-      //       this.$store.state.event.eventTypes = metadata.eventTypes;
-      //       this.eventTypesArray = metadata.eventTypes;
-      //     });
-
-      //   }.bind(this));
-      // } else {
-      //   this.eventTypesArray = this.$store.state.event.eventTypes;
-      // }
     },
     mounted(){
       this.ready = true;

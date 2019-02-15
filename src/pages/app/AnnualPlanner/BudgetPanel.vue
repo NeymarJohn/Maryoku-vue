@@ -21,16 +21,21 @@
                 <h4 v-show="!this.editAnnualBudgetPerEmployee" style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
                   <animated-number ref="annualBudgetPerEmployeeNumber" :value="this.annualBudgetPerEmployee" prefix="$"></animated-number>
                 </h4>
-                <div class="d-flex">
-                  <md-button v-show="!this.editAnnualBudgetPerEmployee" class="md-simple md-just-icon md-round fa fa-edit" @click="toogleEditAnnualBudgetPerEmployee">
-                  <md-icon>edit</md-icon>
-                </md-button>
-                <md-button v-show="this.editAnnualBudgetPerEmployee" class="md-simple md-just-icon md-round fas fa-times" @click="toogleEditAnnualBudgetPerEmployee">
-                  <md-icon class="text-red">clear</md-icon>
-                </md-button>
-                <md-button v-show="this.editAnnualBudgetPerEmployee" class="md-simple md-just-icon md-round fa fa-check" @click="saveAnnualBudgetPerEmployee">
-                  <md-icon class="text-success">check</md-icon>
-                </md-button>
+
+                <div v-show="!this.editAnnualBudgetPerEmployee">
+                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click="openEditAnnualBudgetPerEmployee()">
+                    <md-icon>edit</md-icon>
+                  </md-button>
+                </div>
+
+                <div v-show="this.editAnnualBudgetPerEmployee" class="d-flex">
+                  <md-button class="md-simple md-just-icon md-round fas fa-times" @click="resetField()">
+                    <md-icon class="text-red">clear</md-icon>
+                  </md-button>
+                
+                  <md-button class="md-simple md-just-icon md-round fa fa-check" @click="saveBudgeData()">
+                    <md-icon class="text-success">check</md-icon>
+                  </md-button>
                 </div>
               </div>
               <hr v-show="!this.editAnnualBudgetPerEmployee" style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
@@ -54,20 +59,23 @@
                 <h4 v-show="!this.editTotalAnnualBudget" style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
                   <animated-number ref="totalAnnualBudgetNumber" :value="this.totalAnnualBudget" prefix="$"></animated-number>
                 </h4>
-                <md-button v-show="!this.editTotalAnnualBudget" class="md-simple md-just-icon md-round fa fa-edit" @click="toogleEditTotalAnnualBudget">
-                  <md-icon>edit</md-icon>
-                </md-button>
-                <md-button v-show="this.editTotalAnnualBudget" class="md-simple md-just-icon md-round fas fa-times" @click="toogleEditTotalAnnualBudget">
-                  <md-icon class="text-red">clear</md-icon>
-                </md-button>
-                <md-button v-show="this.editTotalAnnualBudget" class="md-simple md-just-icon md-round fa fa-check" @click="saveAnualBudget">
-                  <md-icon class="text-success">check</md-icon>
-                </md-button>
+                <div v-show="!this.editTotalAnnualBudget">
+                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click="openEditTotalAnnualBudget()">
+                    <md-icon>edit</md-icon>
+                  </md-button>
+                </div>
+                <div v-show="this.editTotalAnnualBudget" class="d-flex">
+                  <md-button class="md-simple md-just-icon md-round fas fa-times" @click="resetField()">
+                    <md-icon class="text-red">clear</md-icon>
+                  </md-button>
+                  <md-button class="md-simple md-just-icon md-round fa fa-check" @click="saveBudgeData()">
+                    <md-icon class="text-success">check</md-icon>
+                  </md-button>
+                </div>
               </div>
               <hr v-show="!this.editTotalAnnualBudget" style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
             </div>
           </div>
-
           <div style="padding: 8px;"></div>  
         </form>      
 
@@ -146,11 +154,13 @@
         editTotalAnnualBudget: false,
         annualBudgetPerEmployee: 0,
         totalAnnualBudget: 0,
-        countEvents:0,  
-        totalRemainingBudget:0,
-        percentage:0,
-        remainingBudgetPerEmployee:0,
-        seriesData:[],
+        countEvents: 0,  
+        totalRemainingBudget: 0,
+        percentage: 0,
+        remainingBudgetPerEmployee: 0,
+        seriesData: [],
+        totalAnnualBudgetCache: null,
+        annualBudgetPerEmployeeCache: null,
         modelValidations: {
           annualBudgetPerEmployee: {
             required: true,
@@ -170,32 +180,20 @@
     },
     mounted(){
       this.ready = true;
-      this.isLoading = true;
+      this.isLoading = false;
       this.queryBudgetInfo();
     },
     methods: {
-      async saveAnualBudget(){
+      async saveBudgeData(){
           let calendarId = this.auth.user.defaultCalendarId;
           let calendar = await Calendar.first();
 
           calendar.annualBudget = this.totalAnnualBudget;
-
-          calendar.save().then(response => {
-            this.toogleEditTotalAnnualBudget();
-            this.queryBudgetInfo();
-          }).catch(error => {
-            console.log(error);
-          });
-      },
-      async saveAnnualBudgetPerEmployee(){
-          let calendarId = this.auth.user.defaultCalendarId;
-          let calendar = await Calendar.first();
-
           calendar.annualBudgetPerEmployee = this.annualBudgetPerEmployee;
 
           calendar.save().then(response => {
-            this.toogleEditAnnualBudgetPerEmployee();
             this.queryBudgetInfo();
+            this.resetField();
           }).catch(error => {
             console.log(error);
           });
@@ -210,31 +208,39 @@
             this.totalRemainingBudget = this.totalAnnualBudget - this.annualBudgetPerEmployee;
             this.percentage = parseFloat((100 * this.annualBudgetPerEmployee / this.totalAnnualBudget).toFixed(0));
             this.seriesData = [this.annualBudgetPerEmployee, this.totalAnnualBudget];
+
+            this.totalAnnualBudgetCache = this.totalAnnualBudget;
+            this.annualBudgetPerEmployeeCache = this.annualBudgetPerEmployee;            
           })
           .catch(error => {
             console.log(error);
-          })
-          this.isLoading = false; 
+          }) 
       },
-      toogleEditAnnualBudgetPerEmployee(){
-        this.editAnnualBudgetPerEmployee = !this.editAnnualBudgetPerEmployee;
+      resetField() {
+        this.totalAnnualBudget = this.totalAnnualBudgetCache;
+        this.annualBudgetPerEmployee = this.annualBudgetPerEmployeeCache; 
+        this.editAnnualBudgetPerEmployee = false; 
+        this.editTotalAnnualBudget = false; 
       },
-      toogleEditTotalAnnualBudget(){
-        this.editTotalAnnualBudget = !this.editTotalAnnualBudget;
+      openEditAnnualBudgetPerEmployee(){
+        this.editAnnualBudgetPerEmployee = true;
+      },
+      openEditTotalAnnualBudget(){
+        this.editTotalAnnualBudget = true;
       },
     },
     computed: {
       pieChart() {
         return {
           data: {
-            labels: [" ", " "], // should be empty to remove text from chart
-            series: this.seriesData
+            series: this.seriesData,
           },
           options: {
             padding: 0,
             height: 180,
             donut: true,
-            donutWidth: 20
+            donutWidth: 20,
+            showLabel:false,
           }
         }
       },
@@ -244,7 +250,7 @@
         this.queryBudgetInfo();
       },
       month(newVal, oldVal){
-        this.queryBudgetInfo();
+        this.queryBudgetInfo(); 
       },
     }
   };

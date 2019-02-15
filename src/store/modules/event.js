@@ -19,6 +19,7 @@ const state = {
     vendorsList: null,
     occasionsArray: null,
     currenciesArray: null,
+    eventTypes: null,
     calendarId: null,
 }
 
@@ -33,7 +34,7 @@ const actions = {
 }
 
 const mutations = {
-    updateEventData(state, params) {
+      updateEventData(state, params) {
         state.eventData.components[params.index] = params.data;
       },
       removeSubComponent(state, params) {
