@@ -13,7 +13,8 @@ import Tooltip from 'vue-directive-tooltip';
 import 'vue-directive-tooltip/css/index.css';
 import vSelectMenu from 'v-selectmenu';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
-import VueFractionGrid from 'vue-fraction-grid'
+import VueFractionGrid from 'vue-fraction-grid';
+
 
 // router setup
 import routes from "./router/routes";

@@ -29,7 +29,18 @@ export default {
 
         if (redirect) {
           context.$router.push({ path: redirect });
-        }a
+        }
+      }, (resp) => {
+        context.error = resp.body;
+      });
+  },
+
+  register(context, email, callback) {
+    context.$http.get(`${REGISTRATION_URL}?email=${email}`)
+      .then((resp) => {
+        if (callback){
+          callback(resp.data);
+        }
       }, (resp) => {
         context.error = resp.body;
       });
@@ -53,43 +64,52 @@ export default {
   },
 
   currentUser(context, required, cb) {
-    context.$http.get(CURRENT_USER_URL, { headers: this.getAuthHeader() })
-      .then((resp) => {
-        context.user = { username: resp.data.username };
-        store.dispatch("user/getUserFromApi" , resp.data)
-        this.user.id = resp.data.id;
-        this.user.username = resp.data.username;
-        this.user.avatar =  resp.data.pictureUrl;
-        this.user.displayName = resp.data.displayName;
+    if (!this.user.authenticated || this.user.id === undefined){
+      context.$http.get(CURRENT_USER_URL, { headers: this.getAuthHeader() })
+        .then((resp) => {
+          context.user = { username: resp.data.username };
+          store.dispatch("user/getUserFromApi" , resp.data);
+          this.user.id = resp.data.id;
+          this.user.username = resp.data.username;
+          this.user.avatar =  resp.data.pictureUrl;
+          this.user.displayName = resp.data.displayName;
 
 
-        this.user.defaultGroupId = resp.data.defaultGroupId;
-        this.user.defaultCalendarId = resp.data.defaultCalendarId;
+          this.user.defaultGroupId = resp.data.defaultGroupId;
+          this.user.defaultCalendarId = resp.data.defaultCalendarId;
 
-        this.setHeaders(context);
-        if(!resp.data.onboarded){
+          this.user.customer = resp.data.customer;
 
-           if(resp.data.onboardingPath==="OM"){
+          this.setHeaders(context);
 
-            context.$router.push('/company-form')
+          if(!resp.data.onboarded){
+
+            if(resp.data.onboardingPath==="OM"){
+
+              context.$router.push('/company-form')
+            }else{
+              context.$router.push('/employee-form')
+            }
           }else{
-            context.$router.push('/employee-form')
+            context.$router.push('/company')
           }
-        }else{
-          context.$router.push('/company')
-        }
 
-        if (cb !== undefined){
-          cb();
-        }
-      })
-      .catch(
-        () => {
-          this.unsetToken();
-          if (required) {
-            context.$router.push({path:'/signin'});
+          if (cb !== undefined){
+            cb();
           }
         })
+        .catch(
+          () => {
+            this.unsetToken();
+            if (required) {
+              context.$router.push({path:'/signin'});
+            }
+          })
+    } else {
+      if (cb !== undefined){
+        cb();
+      }
+    }
 
   },
 

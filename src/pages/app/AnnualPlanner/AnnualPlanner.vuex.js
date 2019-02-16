@@ -15,13 +15,13 @@ export default {
           eventData: {
             id: null,
             occasion: "",
-            eventName: "New Event",
+            title: "New Event",
             date: null,
             time: "",
             duration: "",
-            participants: "",
+            numberOfParticipants: "",
             status: "draft",
-            budget: "",
+            totalBudget: "",
             currency: "",
             eventType: null,
           },
@@ -48,14 +48,14 @@ export default {
       setEventData(state, data) {
         state.eventData['id'] = data.eventData.id;
         state.eventData['occasion'] = data.eventData.occasion;
-        state.eventData['eventName'] = data.eventData.title;
-        state.eventData['date'] = data.eventData.eventStartMillis;
-        state.eventData['time'] = moment(data.eventData.eventStartMillis).format('HH:00');
-        state.eventData['duration'] = moment(data.eventData.eventEndMillis).diff(data.eventData.eventStartMillis, 'hours');
-        state.eventData['participants'] = data.eventData.numberOfParticipants;
-        state.eventData['budget'] = data.eventData.totalBudget;
+        state.eventData['title'] = data.eventData.title;;
+        state.eventData['numberOfParticipants'] = data.eventData.numberOfParticipants;
+        state.eventData['totalBudget'] = data.eventData.totalBudget;
         state.eventData['currency'] = data.eventData.currency;
         state.eventData['eventType'] = data.eventData.eventType;
+        state.eventData['date'] = data.eventData.eventStartMillis;
+        state.eventData['time'] = moment(data.eventData.eventStartMillis).format('HH:00');
+        state.eventData['duration'] = moment(data.eventData.eventEndMillis).diff(data.eventData.eventStartMillis, 'hours')
       },
     },
     actions: {
