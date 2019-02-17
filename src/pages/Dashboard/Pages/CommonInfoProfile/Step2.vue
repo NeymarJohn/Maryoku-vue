@@ -4,106 +4,65 @@
     <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen/>
     <div class="md-layout-item">
       <h2 class="title text-center" slot="title" style="text-align: center;">
-        Hey, it's your company
+        Oh, wow so that's you
       </h2>
       <signup-card style="padding-top: 32px; padding-bottom: 2px; padding-left: 0;">
         <div class="md-layout-item md-size-5" slot="content-left"></div>
         <div class="md-layout-item md-size-80" slot="content-middle">
 
-          <!-- Company Name -->
+          <!-- Full Name -->
           <div class="md-layout">
             <label class="md-layout-item md-size-35 md-form-label">
-              Company Name
+              Full Name
             </label>
             <div class="md-layout-item">
               <md-field>
-                <md-input v-model="company_name" type="text" autofocus></md-input>
+                <md-input v-model="full_name" type="text" autofocus></md-input>
               </md-field>
             </div>
           </div>
 
-          <!-- Workspace domain -->
+          <!-- Email Address -->
           <div class="md-layout">
             <label class="md-layout-item md-size-35 md-form-label">
-              Workspace Domain
-            </label>
-            <div class="md-layout-item md-size-65">
-              <md-field>
-                <md-input v-model="workspace_domain" type="text"></md-input>
-                <span class="md-suffix">.262days.com</span>
-              </md-field>
-            </div>
-          </div>
-
-          <!-- Company logo -->
-
-          <div class="md-layout">
-            <label class="md-layout-item md-size-35 md-form-label">
-              Company logo
-            </label>
-            <div class="md-layout-item md-size-65">
-              <md-field>
-                <input type="file" ref="inputFile" v-on="$listeners" @change="onFileChange"/>
-                <md-input v-model="logo_name" type="text" disabled></md-input>
-                <span class="md-suffix"><md-button class="md-simple md-rose" style="padding: 0; margin: 0; text-align: right;" @click.native="openPicker">Browse</md-button></span>
-              </md-field>
-            </div>
-          </div>
-
-          <!-- Office Address -->
-          <div class="md-layout">
-            <label class="md-layout-item md-size-35 md-form-label">
-              Main Office Address
+              Email Address
             </label>
             <div class="md-layout-item">
               <md-field>
-                <!--<md-input v-model="main_office_adddress" type="text"></md-input>-->
-                <places
-                  style="border: none; padding: 0;"
-                  v-model="main_office_adddress"
-                  @change="val => { form.country.data = val }"
-                  :options="{ countries: ['US','IL'] }">
-                </places>
+                <md-input v-model="email_address" type="text"></md-input>
               </md-field>
             </div>
           </div>
 
-          <!-- Number of employees -->
+          <!-- Birthday -->
 
           <div class="md-layout">
             <label class="md-layout-item md-size-35 md-form-label">
-              Number of employees
+              Birthday
             </label>
             <div class="md-layout-item">
-              <md-field>
-                <md-input v-model="number_of_employees" type="number"></md-input>
-              </md-field>
+              <md-datepicker :name="birthday" autofocus></md-datepicker>
             </div>
           </div>
 
-          <!-- Industry -->
+          <!-- First Day at work -->
+
           <div class="md-layout">
             <label class="md-layout-item md-size-35 md-form-label">
-              Industry
+              First day at work
             </label>
             <div class="md-layout-item">
-              <md-field>
-                <md-select v-model="industry" name="industry" id="industry">
-                  <md-option v-for="industryItem in industryList" :key="industryItem" :value="industryItem">{{industryItem}}</md-option>
-                </md-select>
-              </md-field>
+              <md-datepicker :name="firstDayAtWork" ></md-datepicker>
             </div>
           </div>
 
-          <!-- Website -->
+          <!-- Phone number -->
           <div class="md-layout">
             <label class="md-layout-item md-size-35 md-form-label">
-              Website
+              Phone Number
             </label>
             <div class="md-layout-item">
-              <md-field>
-                <md-input v-model="website" type="text"></md-input>
-              </md-field>
+              <vue-phone-number-input v-model="phone_number" />
             </div>
           </div>
 
@@ -117,6 +76,7 @@
             <div class="md-layout-item md-size-100">
               <md-button class="md-simple pull-left" @click="skip">Skip</md-button>
               <md-button class="md-success pull-right" @click="next">Next</md-button>
+              <md-button class="md-simple md-danger pull-right" @click="back">Back</md-button>
             </div>
           </div>
         </div>
@@ -135,7 +95,7 @@
 
   //MODELS
   import VueElementLoading from 'vue-element-loading';
-  import CustomerFile from '@/models/CustomerFile';
+  import Me from '@/models/Me';
   import auth from '@/auth';
 
   //COMPONENTS
@@ -165,17 +125,12 @@
         auth: auth,
         loading: false,
 
-        company_name:'',
-        workspace_domain:'',
-        upload_logo:null,
-        main_office_adddress:'',
-        number_of_employees:'',
-        industry:'',
-        website:'',
+        full_name: '',
+        email_address: '',
+        phone_number: '',
+        birthday: null,
+        firstDayAtWork: null,
         isError:false,
-        logo_name:'',
-        images:[],
-        isImageShow:false,
       }
     },
     attributes () {
@@ -193,16 +148,11 @@
     },
     mounted:function(){
       this.auth.currentUser(this, true, () => {
-        this.$store.dispatch("user/getIndustry");
-        //const auto =document.getElementById('city_getter');
-        //this.autocomplete = new google.maps.places.Autocomplete(auto,{types: ['geocode']});
-        let customer = this.auth.user.customer;
-        this.company_name = customer.name;
-        this.main_office_adddress = `${customer.mainAddressLine1 || ''} ${customer.mainAddressLine2 || ''} ${customer.mainAddressCity || ''} ${customer.mainAddressStateRegion || ''} ${customer.mainAddressCountry || ''} ${customer.mainAddressZip || ''}`;
-        this.industry = customer.industry;
-        this.number_of_employees = customer.numberOfEmployees;
-        this.website = customer.website;
-        this.workspace_domain = customer.workspaceDomain;
+        let user = this.auth.user;
+        this.full_name = user.displayName;
+        this.email_address = user.username;
+
+
       })
     },
     computed:{
@@ -215,11 +165,19 @@
       next() {
         this.loading = true;
         alert("SAVE ME!!!");
-        this.$router.push({name: 'MeForm'});
+        new Me({id: this.auth.user.id, onboarded: true}).save().then((response) => {
+          this.$router.push({name: 'AnnualPlanner'});
+        });
+      },
+      back() {
+        this.loading = true;
+        this.$router.push({name: 'Company'});
       },
       skip() {
         this.loading = true;
-        this.$router.push({name: 'MeForm'});
+        new Me({id: this.auth.user.id, onboarded: true}).save().then((response) => {
+          this.$router.push({name: 'AnnualPlanner'});
+        });
       },
       openPicker(){
         this.$refs.inputFile.click();
@@ -305,7 +263,7 @@
 
   }
 </script>
-<style lang="scss" scoped>
+<style lang="scss" scope>
   input[type="file"] {
     width: 1px;
     height: 1px;
@@ -315,5 +273,24 @@
     position: absolute;
     clip: rect(0 0 0 0);
     border: 0;
+  }
+
+  .md-datepicker i{
+    display: none;
+  }
+  .md-field.md-form-group:after,
+  .md-field.md-form-group:before,
+  .md-field.md-datepicker:after,
+  .md-field.md-datepicker:before {
+    width: 100%;
+  }
+  .md-field>.md-icon~label {
+    left: 0;
+  }
+  .md-field>.md-icon~.md-input {
+    margin: 0;
+  }
+  .modal-container {
+    max-width: 570px;
   }
 </style>

@@ -82,6 +82,7 @@
       setBgImage() {
         let images = {
           Company: "static/img/shutterstock_732491308.png",
+          MeForm: "static/img/shutterstock_495639391.png",
         };
         return {
           backgroundImage: `url(${images[this.$route.name]})`

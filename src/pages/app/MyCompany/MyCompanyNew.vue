@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout">
     <div class="md-layout-item md-size-30">
-      <md-card class="md-card-profile">       
+      <md-card class="md-card-profile">
         <md-card-content>
           <div class="md-layout">
           <div class='company-view-common-logo_block'>
@@ -45,7 +45,7 @@
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Contact Information</div>
               <div class="md-layout">
                 <div class="md-layout-item md-size-100" style="text-align: left;">
-                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon>{{company.address}} 
+                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon>{{company.address}}
                 </div>
                 <div class="md-layout-item md-size-100" style="text-align: left;">
                   <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">call</md-icon>{{company.phone}}
@@ -69,18 +69,18 @@
               <div v-for="item of company.branches" class="md-layout">
                 <div class="md-layout-item md-size-100" style="text-align: left;">
                   <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon> {{item}}
-                </div>                
+                </div>
               </div>
               <div v-show='showSearch'>
-               <InputText                 
+               <InputText
                 labelStyle='company_label_input'
                 label='Branches address'
-                id='branches_getter'               
+                id='branches_getter'
                 name='branch_adddress'
                 :value='branch_adddress'
-                :onChange='onChange'                             
-                
-        />  
+                :onChange='onChange'
+
+        />
         <Button text='Add' :onClick='addIndustry'/>
         </div>
             </div>
@@ -105,7 +105,7 @@
           <ButtonDiv text='Yearly' class='button-filter'  :onClick='onChangeFilter("Yearly")'/>
           <ButtonDiv text='Monthly' class='button-filter'  :onClick='onChangeFilter("Monthly")'/>
           </div>
-        </div>  
+        </div>
           <canvas id="number_of_events_chart" width="350" height="350"></canvas>
         </md-card-content>
       </md-card>
@@ -140,7 +140,7 @@
 //MAIN MODULES
 import {mapGetters} from 'vuex';
 import Chart from 'chart.js';
-  
+
 //COMPONENTS
 import { Tabs, NavTabsCard } from "@/components";
 import MyCompanyDashboard from "src/pages/app/MyCompany/MyCompanyDashboard.vue";
@@ -154,7 +154,7 @@ import Button from '@/components/Button/Button.vue'
 import CustomerFile from '@/models/CustomerFile';
 
 
-  
+
 
   export default {
     components: {
@@ -170,8 +170,8 @@ import CustomerFile from '@/models/CustomerFile';
       Button
     },
     mounted:function(){
-      const branch =document.getElementById('branches_getter');             
-      this.autocomplete = new google.maps.places.Autocomplete(branch ,{types: ['geocode']}); 
+      const branch =document.getElementById('branches_getter');
+      //this.autocomplete = new google.maps.places.Autocomplete(branch ,{types: ['geocode']});
       CustomerFile.get().then(res=>console.log(res)).catch(e=>console.log(e))
 
       var ctx = document.getElementById("number_of_events_chart");
@@ -182,11 +182,11 @@ import CustomerFile from '@/models/CustomerFile';
         datasets: [{
             label: '# of Events',
             data: [2, 5, 7, 9, 12, 15],
-            backgroundColor: [                
-                'rgba(255, 255, 255, 0.2)',                
+            backgroundColor: [
+                'rgba(255, 255, 255, 0.2)',
             ],
-            borderColor: [                
-                '#71c278',                
+            borderColor: [
+                '#71c278',
             ],
             borderWidth: 1
         }]
@@ -209,11 +209,11 @@ import CustomerFile from '@/models/CustomerFile';
         datasets: [{
             label: '# of Events',
             data: [80, 125, 145, 60, 92, 57],
-            backgroundColor: [                
-                'rgba(255, 255, 255, 0.2)',                
+            backgroundColor: [
+                'rgba(255, 255, 255, 0.2)',
             ],
-            borderColor: [                
-                '#26cfa0',                
+            borderColor: [
+                '#26cfa0',
             ],
             borderWidth: 1
         }]
@@ -252,27 +252,27 @@ import CustomerFile from '@/models/CustomerFile';
       ...mapGetters({
         company:'user/getCompany'
       })
-        
-}    
+
+}
     ,
     methods: {
       onSelect: function(items) {
         this.selected = items;
       },
-       onChange:function(value, name){       
-                 this[name]=value   
+       onChange:function(value, name){
+                 this[name]=value
          },
          onShowInput:function(){
            console.log('@')
            this.showSearch=!this.showSearch
          }
-      ,addIndustry: function(value, name){                                  
+      ,addIndustry: function(value, name){
                  this.showSearch=!this.showSearch
-                 this.$store.dispatch("user/sendIndustry",this.branch_adddress)                    
+                 this.$store.dispatch("user/sendIndustry",this.branch_adddress)
          },
          onChangeFilter:function(name){
            this.filter=name
-         }  
+         }
     }
   };
 </script>
@@ -286,7 +286,7 @@ import CustomerFile from '@/models/CustomerFile';
   }
   .company-view-common-logo_block{
     display:flex;
-        
+
   }
    .company-logo{
             width: 45% !important;
@@ -294,7 +294,7 @@ import CustomerFile from '@/models/CustomerFile';
  }
  .company-branch_block{
    display:flex;
-   justify-content: space-between  
+   justify-content: space-between
  }
  .branch-add_icon{
   margin:0;
@@ -317,5 +317,5 @@ import CustomerFile from '@/models/CustomerFile';
     width: 62%;
     justify-content: flex-end;
 }
-  
+
 </style>

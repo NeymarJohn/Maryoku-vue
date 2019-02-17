@@ -14,7 +14,8 @@ import 'vue-directive-tooltip/css/index.css';
 import vSelectMenu from 'v-selectmenu';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VueFractionGrid from 'vue-fraction-grid';
-
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 
 // router setup
 import routes from "./router/routes";
@@ -76,6 +77,7 @@ Vue.use(Tooltip, {
 Vue.use(vSelectMenu, { language: "en"});
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
 Vue.use(VueFractionGrid);
+Vue.component('vue-phone-number-input', VuePhoneNumberInput);
 
 Model.$http = axios;
 

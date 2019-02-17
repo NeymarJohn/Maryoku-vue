@@ -6612,6 +6612,15 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
+libphonenumber-js@^1.7.7:
+  version "1.7.8"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.7.8.tgz#2af21013f52201e41cde8721c1db88e4594d957f"
+  integrity sha512-aetBci3aETmuhHVILBH0/Ly7DlmRRwcQ1BpV+iB5rl65pj3eQq7hqq3EzRFTNnYC8rPmSPOfaVt4aa4puhWwbA==
+  dependencies:
+    minimist "^1.2.0"
+    semver-compare "^1.0.0"
+    xml2js "^0.4.17"
+
 load-json-file@^1.0.0:
   version "1.1.0"
   resolved "http://registry.npmjs.org/load-json-file/-/load-json-file-1.1.0.tgz#956905708d58b4bab4c2261b04f59f31c99374c0"
@@ -9404,7 +9413,7 @@ sass-loader@7.1.0:
     pify "^3.0.0"
     semver "^5.5.0"
 
-sax@^1.2.4, sax@~1.2.1, sax@~1.2.4:
+sax@>=0.6.0, sax@^1.2.4, sax@~1.2.1, sax@~1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 
@@ -9451,6 +9460,11 @@ selfsigned@^1.9.1:
   resolved "https://registry.yarnpkg.com/selfsigned/-/selfsigned-1.10.4.tgz#cdd7eccfca4ed7635d47a08bf2d5d3074092e2cd"
   dependencies:
     node-forge "0.7.5"
+
+semver-compare@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/semver-compare/-/semver-compare-1.0.0.tgz#0dee216a1c941ab37e9efb1788f6afc5ff5537fc"
+  integrity sha1-De4hahyUGrN+nvsXiPavxf9VN/w=
 
 "semver@2 || 3 || 4 || 5", semver@^5.1.0, semver@^5.3.0, semver@^5.4.1, semver@^5.5.0, semver@^5.5.1, semver@^5.6.0:
   version "5.6.0"
@@ -10581,6 +10595,11 @@ uuid@^3.0.1, uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 
+v-click-outside@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/v-click-outside/-/v-click-outside-2.0.2.tgz#7312e80ef72b979ff5144a08f36ebab24b5a2f8b"
+  integrity sha512-4dDekJloLi7WbVUM6IC/Gdv8qYaE+a2LY3sLUkzJc2WBf92kL0VPHGCTxVkTzZjHLVdkcjX0haiLXofrhZfHXA==
+
 v-dropdown@1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/v-dropdown/-/v-dropdown-1.0.5.tgz#54803dc2d801710a05b2da63c694e68c24268326"
@@ -10717,6 +10736,13 @@ vue-image-lightbox@^6.0.1:
     hammerjs "^2.0.8"
     vue-lazyload "^1.2.6"
 
+vue-input-ui@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/vue-input-ui/-/vue-input-ui-0.1.2.tgz#7a4b74bb1f4a7c449112659a98159e1374fd8e1a"
+  integrity sha512-yt5tVbKfiR+CyDAiXneIC3tnvRmwmSGndO1Ld9ZMWISE2gs2MmfSZw82O/GjOae9KKIEAGGPakYAbGNaJDfUoA==
+  dependencies:
+    vue "^2.5.21"
+
 vue-jest@^1.0.2:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/vue-jest/-/vue-jest-1.4.0.tgz#1d6b4d2774b0aec06cfe5d39789039d3381bc528"
@@ -10790,6 +10816,16 @@ vue-numeral-filter@^1.1.1:
   dependencies:
     numeral "^2.0.6"
 
+vue-phone-number-input@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/vue-phone-number-input/-/vue-phone-number-input-0.1.6.tgz#99e23c13e1f87ff702053a2ab6a9f4a8b141f874"
+  integrity sha512-WC9If+NY+ZW17TKDSz2bn7OTPsZHQ2Z8iL9VXjeEJCULk+igTArpBCc3udXFHmJrcZmLCj2n1kcZbMqj737Whw==
+  dependencies:
+    libphonenumber-js "^1.7.7"
+    v-click-outside "^2.0.2"
+    vue "^2.5.21"
+    vue-input-ui "^0.1.2"
+
 vue-places@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/vue-places/-/vue-places-1.1.0.tgz#b8900f42b8e944f5a273727b358c80dcf0ea75d5"
@@ -10842,6 +10878,11 @@ vue@2.5.17, vue@^2.5.11:
   version "2.5.17"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.17.tgz#0f8789ad718be68ca1872629832ed533589c6ada"
   integrity sha512-mFbcWoDIJi0w0Za4emyLiW72Jae0yjANHbCVquMKijcavBGypqlF7zHRgMa5k4sesdv7hv2rB4JPdZfR+TPfhQ==
+
+vue@^2.5.21:
+  version "2.6.6"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.6.tgz#dde41e483c11c46a7bf523909f4f2f816ab60d25"
+  integrity sha512-Y2DdOZD8sxApS+iUlwv1v8U1qN41kq6Kw45lM6nVZKhygeWA49q7VCCXkjXqeDBXgurrKWkYQ9cJeEJwAq0b9Q==
 
 vuex@^3.0.1:
   version "3.0.1"
@@ -11240,6 +11281,19 @@ ws@^6.0.0:
 xml-name-validator@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-3.0.0.tgz#6ae73e06de4d8c6e47f9fb181f78d648ad457c6a"
+
+xml2js@^0.4.17:
+  version "0.4.19"
+  resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.19.tgz#686c20f213209e94abf0d1bcf1efaa291c7827a7"
+  integrity sha512-esZnJZJOiJR9wWKMyuvSE1y6Dq5LCuJanqhxslH2bxM6duahNZ+HMpCLhBQGZkbX6xRf8x1Y2eJlgt2q3qo49Q==
+  dependencies:
+    sax ">=0.6.0"
+    xmlbuilder "~9.0.1"
+
+xmlbuilder@~9.0.1:
+  version "9.0.7"
+  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-9.0.7.tgz#132ee63d2ec5565c557e20f4c22df9aca686b10d"
+  integrity sha1-Ey7mPS7FVlxVfiD0wi35rKaGsQ0=
 
 xregexp@2.0.0:
   version "2.0.0"
