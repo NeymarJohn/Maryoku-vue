@@ -95,7 +95,8 @@ export default {
       this.auth.logout(this);
     },
     gotoMyProfile() {
-      this.$router.push('/pages/user');
+      //this.$router.push('/pages/user');
+      this.$router.push('/employee-form')
     }
   }
 };

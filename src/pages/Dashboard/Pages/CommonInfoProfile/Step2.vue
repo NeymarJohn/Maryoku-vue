@@ -165,7 +165,10 @@
       next() {
         this.loading = true;
         alert("SAVE ME!!!");
-        new Me({id: this.auth.user.id, onboarded: true}).save().then((response) => {
+        new Me({
+          id: this.auth.user.id,
+          onboarded: true
+        }).save().then((response) => {
           this.$router.push({name: 'AnnualPlanner'});
         });
       },

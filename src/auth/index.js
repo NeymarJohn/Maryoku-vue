@@ -82,7 +82,7 @@ export default {
 
           this.setHeaders(context);
 
-          if(!resp.data.onboarded){
+          /*if(!resp.data.onboarded){
 
             if(resp.data.onboardingPath==="OM"){
 
@@ -92,7 +92,7 @@ export default {
             }
           }else{
             context.$router.push('/company')
-          }
+          }*/
 
           if (cb !== undefined){
             cb();
