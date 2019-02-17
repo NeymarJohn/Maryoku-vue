@@ -60,8 +60,8 @@
                 <!--<md-input v-model="main_office_adddress" type="text"></md-input>-->
                 <places
                   style="border: none; padding: 0;"
-                  v-model="main_office_adddress"
-                  @change="val => { form.country.data = val }"
+                  v-model="main_office_adddress.label"
+                  @change="val => { main_office_adddress.data = val }"
                   :options="{ countries: ['US','IL'] }">
                 </places>
               </md-field>
@@ -136,6 +136,8 @@
   //MODELS
   import VueElementLoading from 'vue-element-loading';
   import CustomerFile from '@/models/CustomerFile';
+  import Customer from '@/models/Customer';
+  import Me from '@/models/Me';
   import auth from '@/auth';
 
   //COMPONENTS
@@ -168,7 +170,10 @@
         company_name:'',
         workspace_domain:'',
         upload_logo:null,
-        main_office_adddress:'',
+        main_office_adddress: {
+          label: '',
+          data: {}
+        },
         number_of_employees:'',
         industry:'',
         website:'',
@@ -198,7 +203,10 @@
         //this.autocomplete = new google.maps.places.Autocomplete(auto,{types: ['geocode']});
         let customer = this.auth.user.customer;
         this.company_name = customer.name;
-        this.main_office_adddress = `${customer.mainAddressLine1 || ''} ${customer.mainAddressLine2 || ''} ${customer.mainAddressCity || ''} ${customer.mainAddressStateRegion || ''} ${customer.mainAddressCountry || ''} ${customer.mainAddressZip || ''}`;
+        this.main_office_adddress = {
+          label: `${customer.mainAddressLine1 || ''} ${customer.mainAddressLine2 || ''} ${customer.mainAddressCity || ''} ${customer.mainAddressStateRegion || ''} ${customer.mainAddressCountry || ''} ${customer.mainAddressZip || ''}`,
+          data: {}
+        };
         this.industry = customer.industry;
         this.number_of_employees = customer.numberOfEmployees;
         this.website = customer.website;
@@ -214,12 +222,43 @@
     methods: {
       next() {
         this.loading = true;
-        alert("SAVE ME!!!");
-        this.$router.push({name: 'MeForm'});
+        const that = this;
+        new Customer({
+          id: this.auth.user.me.customer.id,
+          onboarded: true,
+          name: this.company_name,
+          mainAddressLine1: this.main_office_adddress.data.name,
+          mainAddressLine2: '',
+          mainAddressCity: this.main_office_adddress.data.administrative,
+          mainAddressStateRegion: this.main_office_adddress.data.county,
+          mainAddressCountry: this.main_office_adddress.data.country,
+          mainAddressZip: this.main_office_adddress.data.postcode,
+          numberOfEmployees: this.number_of_employees,
+          industry: this.industry,
+          website: this.website,
+          workspaceDomain: this.workspace_domain
+        }).save().then(res => {
+
+          Me.get().then(me => {
+            that.auth.user.me = me;
+            that.auth.user.customer = me.customer;
+          });
+
+          this.moveon();
+        });
       },
       skip() {
         this.loading = true;
-        this.$router.push({name: 'MeForm'});
+        new Customer({id: this.auth.user.me.customer.id, onboarded: true}).save().then(res => {
+          this.moveon();
+        });
+      },
+      moveon(){
+        if (!this.auth.user.me.onboarded){
+          this.$router.push({name: 'MeForm'});
+        } else {
+          this.$router.push({name: 'AnnualPlanner'});
+        }
       },
       openPicker(){
         this.$refs.inputFile.click();

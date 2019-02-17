@@ -3,6 +3,7 @@
     ? {SCHEME: 'https', HOSTNAME: 'api.262days.com'}
     : {SCHEME: 'http', HOSTNAME: process.env.SERVER_URL} */
 import { Model } from 'vue-api-query';
+import ME from '@/models/Me';
 import store from '../store';
 
 const { HOSTNAME } = { HOSTNAME: process.env.SERVER_URL};
@@ -79,6 +80,8 @@ export default {
           this.user.defaultCalendarId = resp.data.defaultCalendarId;
 
           this.user.customer = resp.data.customer;
+
+          this.user.me = resp.data;
 
           this.setHeaders(context);
 
