@@ -164,7 +164,7 @@
     methods: {
       next() {
         this.loading = true;
-        alert("SAVE ME!!!");
+
         new Me({
           id: this.auth.user.id,
           onboarded: true
