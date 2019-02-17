@@ -1,116 +1,129 @@
 <template>
-  <!--<div class='company_body'>
-    <div class='company_form-main'>
-      <div class='company_form-block'>
-        <div>
-          <Title
-            class='company_emp-title'
-            title="Hey, it's your company"
-            titleText='company_titleStyle'/>
-        </div>
-        <InputText
-          labelStyle='company_label_input'
-          label='Company Name'
-          fieldStyle="field_input"
-          :value='company_name'
-          name='company_name'
-          :onChange='onChange'
-          :isErrors= 'isError'
-          required
-        />
-        <div class='company-logo_name'>
-          <div class='company-logo_name-input'>
-            <InputText
-              labelStyle='company_label_input'
-              label='Logo Name'
-              fieldStyle="field_input"
-              :value='logo_name'
-              name='logo_name'
-              disabled
-            />
+
+  <div class="md-layout" style="margin-left: 160px; margin-right: 160px;">
+    <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen/>
+    <div class="md-layout-item">
+      <h2 class="title text-center" slot="title" style="text-align: center;">
+        Hey, it's your company
+      </h2>
+      <signup-card style="padding-top: 32px; padding-bottom: 2px; padding-left: 0;">
+        <div class="md-layout-item md-size-5" slot="content-left"></div>
+        <div class="md-layout-item md-size-80" slot="content-middle">
+
+          <!-- Company Name -->
+          <div class="md-layout">
+            <label class="md-layout-item md-size-35 md-form-label">
+              Company Name
+            </label>
+            <div class="md-layout-item">
+              <md-field>
+                <md-input v-model="company_name" type="text" autofocus></md-input>
+              </md-field>
+            </div>
           </div>
-          <md-button :style="'background :'+'#ff527c '+ ' !important'"class="md-success md-round md-fileinput button-md-common">
-            <template>Upload  logo</template>
-            <input type="file" @change="onFileChange($event)">
-          </md-button>
+
+          <!-- Workspace domain -->
+          <div class="md-layout">
+            <label class="md-layout-item md-size-35 md-form-label">
+              Workspace Domain
+            </label>
+            <div class="md-layout-item md-size-65">
+              <md-field>
+                <md-input v-model="workspace_domain" type="text"></md-input>
+                <span class="md-suffix">.262days.com</span>
+              </md-field>
+            </div>
+          </div>
+
+          <!-- Company logo -->
+
+          <div class="md-layout">
+            <label class="md-layout-item md-size-35 md-form-label">
+              Company logo
+            </label>
+            <div class="md-layout-item md-size-65">
+              <md-field>
+                <input type="file" ref="inputFile" v-on="$listeners" @change="onFileChange"/>
+                <md-input v-model="logo_name" type="text" disabled></md-input>
+                <span class="md-suffix"><md-button class="md-simple md-rose" style="padding: 0; margin: 0; text-align: right;" @click.native="openPicker">Browse</md-button></span>
+              </md-field>
+            </div>
+          </div>
+
+          <!-- Office Address -->
+          <div class="md-layout">
+            <label class="md-layout-item md-size-35 md-form-label">
+              Main Office Address
+            </label>
+            <div class="md-layout-item">
+              <md-field>
+                <!--<md-input v-model="main_office_adddress" type="text"></md-input>-->
+                <places
+                  style="border: none; padding: 0;"
+                  v-model="main_office_adddress"
+                  @change="val => { form.country.data = val }"
+                  :options="{ countries: ['US','IL'] }">
+                </places>
+              </md-field>
+            </div>
+          </div>
+
+          <!-- Number of employees -->
+
+          <div class="md-layout">
+            <label class="md-layout-item md-size-35 md-form-label">
+              Number of employees
+            </label>
+            <div class="md-layout-item">
+              <md-field>
+                <md-input v-model="number_of_employees" type="number"></md-input>
+              </md-field>
+            </div>
+          </div>
+
+          <!-- Industry -->
+          <div class="md-layout">
+            <label class="md-layout-item md-size-35 md-form-label">
+              Industry
+            </label>
+            <div class="md-layout-item">
+              <md-field>
+                <md-select v-model="industry" name="industry" id="industry">
+                  <md-option v-for="industryItem in industryList" :key="industryItem" :value="industryItem">{{industryItem}}</md-option>
+                </md-select>
+              </md-field>
+            </div>
+          </div>
+
+          <!-- Website -->
+          <div class="md-layout">
+            <label class="md-layout-item md-size-35 md-form-label">
+              Website
+            </label>
+            <div class="md-layout-item">
+              <md-field>
+                <md-input v-model="website" type="text"></md-input>
+              </md-field>
+            </div>
+          </div>
+
         </div>
-        <InputText
-          labelStyle='company_label_input'
-          label='Main office address'
-          id='city_getter'
-          required
-          name='main_office_adddress'
-          :value='main_office_adddress'
-          :onChange='onChange'
-          :isErrors='isError'
 
-        />
+        <div class="md-layout-item md-size-5" slot="content-right"></div>
 
-        <InputText
-          labelStyle='company_label_input'
-          label='Number of Employees'
-          name='number_of_employee'
-          :value='number_of_employee'
-          :onChange='onChange'
+        <div class="md-layout-item md-size-100" style="text-align: right; padding-top: 48px;" slot="footer">
+          <div class="md-layout">
 
-        />
-        &lt;!&ndash;<Autocomplete
-          label='Industry'
-          labelStyle='company_label_input'
-          :data='industryList'
-          :valueName="['title','id']"
-          name='industry'
-          :onChange="onChange"
-        />&ndash;&gt;
-
-        <md-autocomplete v-model="industry"
-                         data-vv-name="industry"
-                         :md-options="industryList"
-                         @md-selected="onChange"
-                         class="company_label_input">
-          <label>Industry</label>
-
-          <span class="md-error" v-if="errors.has('name')">This field is required</span>
-        </md-autocomplete>
-
-        <InputText
-          labelStyle='company_label_input'
-          label='Website'
-          name='website'
-          :value='website'
-          :onChange='onChange'
-        />
-      </div>
-      <div class='company_button-block' >
-        <Button text='next' :onClick='submitForm' class="md-success md-fileinput button-md-common"/>
-      </div>
-    </div>
-    <div class='company_logo-main'>
-      <div>
-        <img class='company_emp-logo' src="static/img/culture_builder.png">
-        <Title
-          title='Discover the power of community'
-          titleBlock='company_titleBlock'
-          titleText='company_titleStyle'
-        />
-        <Title
-          titleText='company_titleTextLogo'
-          titleBlock='company_titleBlock'
-          title='Leverage a Network of professional office managers collaborating on ideas, vendors and market trens'
-        />
-      </div>
-    </div>
-    <div>
-    </div>
-    <div>
-    </div>
-    <LightBox v-show='isImageShow' :images="images"></LightBox>
-  </div>-->
-  <div class="md-layout">
-    <div class="md-layout-item md-size-100">
-
+            <div class="md-layout-item md-size-100">
+              <md-button class="md-simple pull-left" @click="skip">Skip</md-button>
+              <md-button class="md-success pull-right" @click="next">Next</md-button>
+            </div>
+          </div>
+        </div>
+      </signup-card>
     </div>
   </div>
+
 </template>
 <script>
   //MAIN MODULES
@@ -121,7 +134,7 @@
   import {isWrong} from '@/utils/helperFunction'
 
   //MODELS
-  import Me from '@/models/Me';
+  import VueElementLoading from 'vue-element-loading';
   import CustomerFile from '@/models/CustomerFile';
   import auth from '@/auth';
 
@@ -131,6 +144,7 @@
   import Title from '@/components/Title/Title.vue'
   import Button from '@/components/Button/Button.vue'
   import Autocomplete from '@/components/Autocomplete/Autocomplete.vue'
+  import { SignupCard } from "@/components";
   import Places from 'vue-places';
 
   export default {
@@ -142,22 +156,39 @@
       Button,
       Autocomplete,
       LightBox,
-      Places
+      Places,
+      SignupCard,
+      VueElementLoading
     },
     data(){
       return{
         auth: auth,
+        loading: false,
+
         company_name:'',
         workspace_domain:'',
         upload_logo:null,
         main_office_adddress:'',
-        number_of_employee:'',
+        number_of_employees:'',
         industry:'',
         website:'',
         isError:false,
         logo_name:'',
         images:[],
-        isImageShow:false
+        isImageShow:false,
+      }
+    },
+    attributes () {
+      return {
+        ...this.$attrs,
+        type: this.type,
+        id: this.id,
+        name: this.name,
+        disabled: this.disabled,
+        required: this.required,
+        placeholder: this.placeholder,
+        readonly: this.readonly,
+        maxlength: this.maxlength
       }
     },
     mounted:function(){
@@ -167,9 +198,9 @@
         //this.autocomplete = new google.maps.places.Autocomplete(auto,{types: ['geocode']});
         let customer = this.auth.user.customer;
         this.company_name = customer.name;
-        this.main_office_adddress = `${customer.mainAddressLine1} ${customer.mainAddressLine2} ${customer.mainAddressLine1} ${customer.mainAddressCity} ${customer.mainAddressStateRegion} ${customer.mainAddressCountry} ${customer.mainAddressZip}`;
+        this.main_office_adddress = `${customer.mainAddressLine1 || ''} ${customer.mainAddressLine2 || ''} ${customer.mainAddressCity || ''} ${customer.mainAddressStateRegion || ''} ${customer.mainAddressCountry || ''} ${customer.mainAddressZip || ''}`;
         this.industry = customer.industry;
-        this.number_of_employee = customer.numberOfEmployees;
+        this.number_of_employees = customer.numberOfEmployees;
         this.website = customer.website;
         this.workspace_domain = customer.workspaceDomain;
       })
@@ -181,16 +212,27 @@
     },
 
     methods: {
+      next() {
+        this.loading = true;
+        this.$router.push({name: 'InviteEmployee'});
+      },
+      skip() {
+        this.loading = true;
+      },
+      openPicker(){
+        this.$refs.inputFile.click();
+      },
       submitForm:function(){
         this.validFunc(this)
         if(this.isError==false){
-          const info=isWrong(this,['company_name','main_office_adddress','number_of_employee','industry','website'])
+          const info=isWrong(this,['company_name','main_office_adddress','number_of_employees','industry','website'])
           this.$store.dispatch("user/sendCompanyInfo",info)
           this.$router.push('/invite')
         }
 
       },
       onChange:function(selectedIndustry){
+        alert(2);
         this.industry = selectedIndustry;
       },
       validFunc:function(ctx,required){
@@ -261,86 +303,15 @@
 
   }
 </script>
-<style lang="scss">
-  .company_body{
-    display:flex;
-    flex-direction:'column'
-  }
-  .company_form-main {
-    width:50%;
-    height: 100vh;
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-  }
-  .company_logo-main {
-    width:50%;
-    height: 100vh;
-    background:  #ff527c;
-    display: flex;
-    align-items: center;
-  }
-  .company_form-block{
-    width: 75%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-  }
-  .company_emp-logo{
-    height: 100%;
-    width: 100%;
-    margin-bottom: -10%;
-  }
-  .company_emp-title{
-    text-align: center;
-    margin-bottom: 20px
-  }
-  .company_label_input{
-    font-size:15px;
-    padding-left: 10px;
-  }
-  .company_titleStyle{
-    font-size: 40px;
-    font-weight: 700;
-  }
-  .company_titleBlock{
-    display:flex;
-    justify-content: center;
-  }
-  .company_titleTextLogo{
-    text-align: center;
-    width: 70%;
-    color: white;
-    font-size: 26px;
-    margin-top: 20px;
-    line-height: 147%;
-
-  }
-  .company_buttonStyle{
-    cursor: pointer;
-    color: #ff527c;
-    font-size: 20px;
-    border: 1px solid;
-    padding: 10px 15px;
-    border-radius: 10px;
-    height: max-content;
-  }
-  .company_button-block{
-    display:flex;
-    align-items: flex-end;
-    margin-bottom: 45px;
-  }
-  .button-md-common{
-    width:25%;
-    background:  #ff527c !important;
-  }
-  .company-logo_name{
-    display:flex;
-    justify-content: space-between;
-  }
-  .company-logo_name-input{
-    width: 60%
+<style lang="scss" scoped>
+  input[type="file"] {
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    position: absolute;
+    clip: rect(0 0 0 0);
+    border: 0;
   }
 </style>
