@@ -41,11 +41,17 @@
                                     <md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                       </md-button>
-                                    <md-button v-else-if="monthDay.events.editables.length" @click="openEditEventModal(true, monthDay.events.editables[0])" v-bind:class="{ 'multiple-events': multipleEvents(monthDay.events.editables.length) }" :ref="`month-day-${monthDay.dayInMonth}`" class="md-success md-just-icon md-round md-md">
+                                    <md-button v-else-if="monthDay.events.editables.length" @click="openEditEventModal(true, monthDay.events.editables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-success md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
+                                      <span v-if="monthDay.events.editables.length > 1" class="count">
+                                        {{monthDay.events.editables.length}}
+                                      </span>
                                     </md-button>
-                                    <md-button v-else-if="monthDay.events.nonEditables.length" @click="openEditEventModal(true, monthDay.events.nonEditables[0])" v-bind:class="{ 'multiple-events': multipleEvents(monthDay.events.nonEditables.length) }" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
+                                    <md-button v-else-if="monthDay.events.nonEditables.length" @click="openEditEventModal(true, monthDay.events.nonEditables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
+                                      <span v-if="monthDay.events.nonEditables.length > 1" class="count">
+                                        {{monthDay.events.nonEditables.length}}
+                                      </span>
                                     </md-button>
                                   </template>
                                   <template v-else>
@@ -308,9 +314,9 @@
         return calendarEventsMap;
       },
       openEventModal() {
-        this.setModalSubmitTitle('Save');
-        this.setEditMode({ editMode: false });
-        this.setEventModal({ showModal: true });
+        this.setEventModal({ showModal: true })
+        this.setModalSubmitTitle('Save')
+        this.setEditMode({ editMode: false })
       },
       openEditEventModal: function (show, item) {
         if (!item.editable){
@@ -318,9 +324,6 @@
         }
         item.numberOfParticipants = this.auth.user.customer.numberOfEmployees;
         this.setEventModalAndEventData({showModal: show, eventData: item});
-      },
-      multipleEvents(length) {
-        return length > 1;
       }
     },
     computed: {
@@ -338,6 +341,21 @@
     }
   };
 </script>
+<style scope>
+  .md-button.md-just-icon {
+    overflow: visible;
+  }
+  .md-button .md-button-content .count {
+    position: absolute;
+    top: -15px;
+    right: -20px;
+    min-width: 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 20px;
+    background-color: #00b878;
+  }
+</style>
 <style lang="scss">
   .md-grey {
     background-color: #e0e0e0;
@@ -364,12 +382,5 @@
 
   .vue-tooltip.tooltip-custom-editable .tooltip-arrow {
     border-color: #03a9f4;
-  }
-  .multiple-events {
-    border:2px solid red;
-  }
-
-  .velmld-overlay {
-    background-color: rgba(250,250,250,.9) !important;
   }
 </style>

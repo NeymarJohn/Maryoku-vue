@@ -26,7 +26,7 @@
       that.auth.setHeaders(this);
       that.auth.currentUser(that, true, function() {
 
-        /*const socket = new SockJS(`${process.env.SERVER_URL}/stomp`);
+        const socket = new SockJS(`${process.env.SERVER_URL}/stomp`);
         const client = Stomp.over(socket);
 
         client.connect({}, () => {
@@ -36,7 +36,7 @@
           });
         }, (error) => {
           console.error('unable to connect : ' + error);
-        });*/
+        });
 
         let me = that.auth.user.me;
         if (!me.customer.onboarded){
@@ -44,7 +44,7 @@
         } else if (!me.onboarded) {
           that.$router.push({path: '/me-form'});
         } else {
-          that.$router.push({ path: '/' });
+          this.$router.push({ path: '/' });
         }
       });
     },
