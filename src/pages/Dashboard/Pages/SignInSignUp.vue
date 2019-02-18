@@ -30,10 +30,16 @@
             </md-button>-->
             <h4 class="mt-3">or sign up with your work email address</h4>
           </div>
-          <md-field class="md-form-group" v-for="item in inputs" :key="item.name">
-            <md-icon>{{item.icon}}</md-icon>
-            <label>{{item.name}}</label>
-            <md-input v-model="email" :type="item.type"></md-input>
+          <md-field class="md-form-group" >
+            <md-icon>email</md-icon>
+            <label>Email Address</label>
+            <md-input v-model="email" type="email"></md-input>
+          </md-field>
+          <md-field class="md-form-group">
+            <md-icon>lock_outline</md-icon>
+            <label>Password</label>
+            <md-input v-model="password" type="password"></md-input>
+            <div class='md-error' style="text-align: center; width: 100%;">{{error}}</div>
           </md-field>
           <md-checkbox v-model="terms" style="text-align: center;"> I agree to 262Days <a href="https://www.262days.com/terms" target="_blank">Terms of Use</a> and <a href="https://www.262days.com/privacy" target="_blank">Privacy Policy</a></md-checkbox>
           <div class="button-container">
@@ -46,7 +52,6 @@
 </template>
 <script>
 import { SignupCard } from "@/components";
-import Vendors from 'src/models/Vendors';
 import auth from "@/auth";
 import VueElementLoading from 'vue-element-loading';
 
@@ -63,20 +68,21 @@ export default {
     },
     signup(){
       this.loading = true;
-      this.auth.register(this, this.email, (data) => {
-        alert(data.status);
-        if ('redirect' === data.status) {
-          this.auth.login(this, {username: this.email, password: this.email + this.email}, '/');
-        } else if ('exists' === data.status) {
-          alert("BAAAA");
-        }
+
+      this.auth.signupOrSignin(this, this.email, this.password, (data) => {
+        this.auth.login(this, {username: this.email, password: this.password}, (success) => {
+          this.$router.push({ path: '/signedin', query: {token: success.access_token} });
+        }, (failure) => {
+          this.loading = false;
+          if (failure.response.status === 401){
+            this.error = 'Sorry, wrong password, try again.';
+          } else {
+            this.error = 'Temporary failure, try again later';
+            console.log(JSON.stringify(failure.response));
+          }
+        } );
       })
     }
-  },
-  async mounted()
-  {
-    console.log()
-    this.vendors = await Vendors.get();
   },
   created() {
     const givenToken = this.$route.query.token;
@@ -85,8 +91,8 @@ export default {
   },
   data() {
     return {
+      error: '',
       loading: false,
-      vendors: [],
       firstname: null,
       terms: false,
       email: null,
@@ -133,12 +139,12 @@ export default {
           type: "email"
         },
 
-        /*{
+        {
           icon: "lock_outline",
-          name: "Password..",
+          name: "Password",
           nameAttr: "password",
           type: "password"
-        }*/
+        }
       ]
     };
   }

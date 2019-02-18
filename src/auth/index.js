@@ -21,23 +21,25 @@ export default {
     authenticated: !!window.localStorage.getItem(TOKEN_KEY),
   },
 
-  login(context, creds, redirect) {
+  login(context, creds, successCallback, errorCallback) {
     context.$http.post(SESSION_URL, creds)
       .then((resp) => {
         this.setToken(resp.data.access_token);
 
         this.setHeaders(context);
 
-        if (redirect) {
-          context.$router.push({ path: redirect });
+        if (successCallback) {
+          successCallback(resp.data);
         }
       }, (resp) => {
-        context.error = resp.body;
+        if (errorCallback){
+          errorCallback(resp);
+        }
       });
   },
 
-  register(context, email, callback) {
-    context.$http.get(`${REGISTRATION_URL}?email=${email}`)
+  signupOrSignin(context, email, password, callback) {
+    context.$http.post(`${REGISTRATION_URL}`, {username: email, password: password}, {'ContentType' : 'application/json'})
       .then((resp) => {
         if (callback){
           callback(resp.data);
@@ -114,20 +116,6 @@ export default {
       }
     }
 
-  },
-
-  signup(context, creds, redirect) {
-    context.$http.post(REGISTRATION_URL, creds)
-      .then((resp) => {
-        window.localStorage.setItem(TOKEN_KEY, resp.access_token);
-        this.user.authenticated = true;
-
-        if (redirect) {
-          context.$router.push({ path: redirect });
-        }
-      }, (resp) => {
-        context.errors = resp.body.errors;
-      });
   },
 
   logout(context, options) {
