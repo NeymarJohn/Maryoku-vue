@@ -210,6 +210,7 @@
       refreshEvents(){
         this.selectYearMonth(this.year, this.month);
         this.queryEvents();
+        this.$emit("month-count");
       },
       selectYearMonth(year, month){
         let selectedMoment = moment().date(1).month(month-1).year(year);
