@@ -273,7 +273,6 @@
             this.annualBudgetPerEmployee = statisticMap.annualBudgetPerEmployee;
             // this.countEvents = response.events;
             this.totalRemainingBudget = statisticMap.annualBudget - statisticMap.annualBudgetAllocated;
-            console.log(statisticMap)
             this.remainingBudgetPerEmployee = statisticMap.annualBudgetPerEmployee - statisticMap.annualBudgetPerEmployeeAllocated;
             this.seriesData = [statisticMap.annualBudget, statisticMap.annualBudgetPerEmployeeAllocated];
             this.countEvents = statisticMap.numberOfEvents;

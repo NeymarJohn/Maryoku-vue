@@ -70,17 +70,21 @@
     mounted(){
       this.ready = false;
       this.isLoading = true;
-      this.auth.currentUser(this, true, function() {
-        Calendar.find(this.auth.user.defaultCalendarId).then(function(calendar){
-          this.firstDayOfTheWeek = calendar.firstDayOfWeek;
-          this.monthCounts = calendar.monthCounts;
-          this.checkSelectedYearMonth();
-          this.ready = true;
-          this.isLoading = false;
-        }.bind(this));
-      }.bind(this))
+      this.monthCount();
     },
     methods: {
+      monthCount() {
+        console.log(1);
+        this.auth.currentUser(this, true, function() {
+          Calendar.find(this.auth.user.defaultCalendarId).then(function(calendar){
+            this.firstDayOfTheWeek = calendar.firstDayOfWeek;
+            this.monthCounts = calendar.monthCounts;
+            this.checkSelectedYearMonth();
+            this.ready = true;
+            this.isLoading = false;
+          }.bind(this));
+        }.bind(this))
+      },      
       checkSelectedYearMonth(){
         let yearParam = this.$route.params.year;
         let monthParam = this.$route.params.month;
@@ -119,6 +123,7 @@
       '$route' (to, from) {
         // react to route changes...
         this.checkSelectedYearMonth();
+        this.monthCount();
       }
     }
   };

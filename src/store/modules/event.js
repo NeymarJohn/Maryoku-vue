@@ -1,3 +1,12 @@
+const categoriesColorMap = {
+  "Holidays": "#ff9800 !important;",
+  "Civil Days": "#00bcd4 !important;",
+  "Company Days": "#00c782 !important;",
+  "Birthdays": "#FF547C !important;",
+  "Social Days": "#1d7eff !important;",
+  "Fun Days": "#f5db09 !important;",
+}
+
 const state = {
     currentUser: {
 
@@ -17,13 +26,17 @@ const state = {
     },
     componentsList: null,
     vendorsList: null,
-    occasionsArray: null,
     currenciesArray: null,
+    caregoriesArray: null,
     eventTypes: null,
     calendarId: null,
+    categoriesColorMap: categoriesColorMap
 }
 
 const getters = {
+    getCategoriesColorMap:(state)=>{
+      return state.categoriesColorMap
+    }
     // getEventData() {
     //     return state.eventData;
     // },
