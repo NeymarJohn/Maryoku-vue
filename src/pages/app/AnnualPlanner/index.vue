@@ -1,6 +1,6 @@
 <template>
   <div style="height: 100%;">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen background-color="#448aff"/>
 
     <table style="width: 100%; height: 100%; ">
       <tr>
@@ -8,7 +8,7 @@
           <budget-panel :month="Number(currentMonth)" :year="Number(currentYear)"></budget-panel>
         </td>
         <td style="width: 85%; height: 100%;">
-          <calendar-panel :month="Number(currentMonth)" :year="Number(currentYear)"></calendar-panel>
+          <calendar-panel :month="Number(currentMonth)" :year="Number(currentYear)" :firstDayOfTheWeek="firstDayOfTheWeek" :month-counts="monthCounts"></calendar-panel>
         </td>
       </tr>
     </table>
@@ -39,6 +39,7 @@
   } from "@/components";
   import BudgetPanel from './BudgetPanel';
   import CalendarPanel from './CalendarPanel';
+  import Calendar from '@/models/Calendar';
 
   export default {
     components: {
@@ -59,6 +60,8 @@
         currentMonth: 0,
         currentYear: 0,
         months: this.$moment.months(),
+        firstDayOfTheWeek: 'monday',
+        monthCounts: {},
       }
     },
     created() {
@@ -68,11 +71,13 @@
       this.ready = false;
       this.isLoading = true;
       this.auth.currentUser(this, true, function() {
-
-        this.checkSelectedYearMonth();
-
-        this.ready = true;
-        this.isLoading = false;
+        Calendar.find(this.auth.user.defaultCalendarId).then(function(calendar){
+          this.firstDayOfTheWeek = calendar.firstDayOfWeek;
+          this.monthCounts = calendar.monthCounts;
+          this.checkSelectedYearMonth();
+          this.ready = true;
+          this.isLoading = false;
+        }.bind(this));
       }.bind(this))
     },
     methods: {

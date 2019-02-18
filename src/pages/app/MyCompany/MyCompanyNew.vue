@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout">
     <div class="md-layout-item md-size-30">
-      <md-card class="md-card-profile">       
+      <md-card class="md-card-profile">
         <md-card-content>
           <div class="md-layout">
           <div class='company-view-common-logo_block'>
@@ -45,7 +45,7 @@
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Contact Information</div>
               <div class="md-layout">
                 <div class="md-layout-item md-size-100" style="text-align: left;">
-                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon>{{company.address}} 
+                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon>{{company.address}}
                 </div>
                 <div class="md-layout-item md-size-100" style="text-align: left;">
                   <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">call</md-icon>{{company.phone}}
@@ -67,23 +67,21 @@
             <div class="md-layout-item md-size-100">
               <div class='company-branch_block'><div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Branches</div><div @click.prevent='onShowInput($event)'><md-icon  class='branch-add_icon'>add</md-icon></div></div>
               <div v-for="item of company.branches" class="md-layout">
-                <div class="md-layout-item md-size-100" style="text-align: left;  display: flex; align-items: center;align-items: center;">
-                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon><div class='company-wrap-block'> {{item}}</div>
-                  <div  class='event-add-new-date-delete_button' @click.prevent='deleteBranch(item)'><md-icon  class='event-add_icon'>delete</md-icon></div>
-                </div>                             
+                <div class="md-layout-item md-size-100" style="text-align: left;">
+                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon> {{item}}
+                </div>
               </div>
               <div v-show='showSearch'>
-              
-               <InputText                 
+               <InputText
                 labelStyle='company_label_input'
                 label='Branches address'
-                id='branches_getter'               
-                name='branch_address'
-                :value='branch_address'
-                :onChange='onChange'                             
-                
-        />        
-        
+                id='branches_getter'
+                name='branch_adddress'
+                :value='branch_adddress'
+                :onChange='onChange'
+
+        />
+        <Button text='Add' :onClick='addIndustry'/>
         </div>
             </div>
 
@@ -107,7 +105,7 @@
           <ButtonDiv text='Yearly' class='button-filter'  :onClick='onChangeFilter("Yearly")'/>
           <ButtonDiv text='Monthly' class='button-filter'  :onClick='onChangeFilter("Monthly")'/>
           </div>
-        </div>  
+        </div>
           <canvas id="number_of_events_chart" width="350" height="350"></canvas>
         </md-card-content>
       </md-card>
@@ -127,17 +125,11 @@
       <md-card>
         <md-card-content>
           <div class="title text-bold">Attendants satisfaction rate</div>
-          <div>
-          <ControlPanel controlBlockStyle="control-panel-block"/>
-          </div>
         </md-card-content>
       </md-card>
       <md-card>
         <md-card-content>
           <div class="title text-bold">Average event cost per employee</div>
-           <div>
-          <ControlPanel controlBlockStyle="control-panel-block"/>
-          </div>
         </md-card-content>
       </md-card>
     </div>
@@ -148,7 +140,7 @@
 //MAIN MODULES
 import {mapGetters} from 'vuex';
 import Chart from 'chart.js';
-  
+
 //COMPONENTS
 import { Tabs, NavTabsCard } from "@/components";
 import MyCompanyDashboard from "src/pages/app/MyCompany/MyCompanyDashboard.vue";
@@ -159,11 +151,10 @@ import MyCompanySettings from "src/pages/app/MyCompany/MyCompanySettings.vue";
 import InputText from '@/components/Inputs/InputText.vue'
 import ButtonDiv from '@/components/Button/ButtonDiv.vue'
 import Button from '@/components/Button/Button.vue'
-import ControlPanel from '@/components/Button/ControlPanel.vue'
 import CustomerFile from '@/models/CustomerFile';
 
 
-  
+
 
   export default {
     components: {
@@ -176,12 +167,11 @@ import CustomerFile from '@/models/CustomerFile';
       MyCompanySettings,
       InputText,
       ButtonDiv,
-      Button,
-      ControlPanel
+      Button
     },
     mounted:function(){
-      const branch =document.getElementById('branches_getter');             
-      this.autocomplete = new google.maps.places.Autocomplete(branch ,{types: ['geocode']}); 
+      const branch =document.getElementById('branches_getter');
+      //this.autocomplete = new google.maps.places.Autocomplete(branch ,{types: ['geocode']});
       CustomerFile.get().then(res=>console.log(res)).catch(e=>console.log(e))
 
       var ctx = document.getElementById("number_of_events_chart");
@@ -192,11 +182,11 @@ import CustomerFile from '@/models/CustomerFile';
         datasets: [{
             label: '# of Events',
             data: [2, 5, 7, 9, 12, 15],
-            backgroundColor: [                
-                'rgba(255, 255, 255, 0.2)',                
+            backgroundColor: [
+                'rgba(255, 255, 255, 0.2)',
             ],
-            borderColor: [                
-                '#71c278',                
+            borderColor: [
+                '#71c278',
             ],
             borderWidth: 1
         }]
@@ -219,11 +209,11 @@ import CustomerFile from '@/models/CustomerFile';
         datasets: [{
             label: '# of Events',
             data: [80, 125, 145, 60, 92, 57],
-            backgroundColor: [                
-                'rgba(255, 255, 255, 0.2)',                
+            backgroundColor: [
+                'rgba(255, 255, 255, 0.2)',
             ],
-            borderColor: [                
-                '#26cfa0',                
+            borderColor: [
+                '#26cfa0',
             ],
             borderWidth: 1
         }]
@@ -253,7 +243,7 @@ import CustomerFile from '@/models/CustomerFile';
               "Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit"
           }
         ],
-        branch_address:'',
+        branch_adddress:'',
         showSearch:false,
         filter:'Yearly'
       };
@@ -262,32 +252,27 @@ import CustomerFile from '@/models/CustomerFile';
       ...mapGetters({
         company:'user/getCompany'
       })
-        
-}    
+
+}
     ,
     methods: {
       onSelect: function(items) {
         this.selected = items;
       },
-       onChange:function(value, name){                    
+       onChange:function(value, name){
                  this[name]=value
-                  console.log(value, name)                    
          },
-         onShowInput:function(value, name){          
+         onShowInput:function(){
+           console.log('@')
            this.showSearch=!this.showSearch
          }
-      ,addIndustry: function(value, name){                                  
+      ,addIndustry: function(value, name){
                  this.showSearch=!this.showSearch
-                 console.log(this.branch_address)
-                 this.$store.dispatch("user/sendIndustry",this.branch_address)                    
+                 this.$store.dispatch("user/sendIndustry",this.branch_adddress)
          },
          onChangeFilter:function(name){
            this.filter=name
-         },
-         deleteBranch(item){           
-            this.$store.dispatch("user/deleteBranchToCompany",item)
          }
-
     }
   };
 </script>
@@ -301,7 +286,7 @@ import CustomerFile from '@/models/CustomerFile';
   }
   .company-view-common-logo_block{
     display:flex;
-        
+
   }
    .company-logo{
             width: 45% !important;
@@ -309,7 +294,7 @@ import CustomerFile from '@/models/CustomerFile';
  }
  .company-branch_block{
    display:flex;
-   justify-content: space-between  
+   justify-content: space-between
  }
  .branch-add_icon{
   margin:0;
@@ -332,17 +317,5 @@ import CustomerFile from '@/models/CustomerFile';
     width: 62%;
     justify-content: flex-end;
 }
-.company-wrap-block{
-    white-space: nowrap;
-    overflow: hidden;    
-    text-overflow: ellipsis;
-}
-.control-panel-block{
-     display: flex;
-    justify-content: space-between;
-    background: gainsboro;
-    border-radius: 5px;
-    padding: 5px;
-}
-  
+
 </style>

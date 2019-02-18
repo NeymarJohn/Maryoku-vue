@@ -37,8 +37,6 @@
           required
           :onChange="onChange"
           :valueName="['name','dial_code']"
-          withSpan
-          :trim='isTrim'
           :isErrors='isErrors'
           />
           </div> 
@@ -100,11 +98,6 @@ data(){
                 country_code:'',
                 list_code: country_code    
         }
-},
-computed:{
-       isTrim(){
-               return this.country_code===''  
-         } 
 }
 ,
  methods: {         

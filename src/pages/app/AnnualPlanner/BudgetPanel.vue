@@ -4,52 +4,145 @@
     <md-card style="background-color: #41535E; color: rgb(225, 234,239); height: 100%; margin: 0; padding: 0;">
       <md-card-content style="text-align: center; height: 100%;background-color: #003434;">
 
-        <div style="padding: 8px;"></div>
 
-        <div>
-          <div style="text-align: center;">
-            <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Annual budget per employee</h5>
-            <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
-              <animated-number ref="annualBudgetPerEmployeeNumber" :value="annualBudgetPerEmployee" prefix="$"></animated-number>
+        <div style="text-align: left;">
+          <h5 style="font-size: 0.95rem !important; font-weight: 600; padding: 0; margin: 0;">Annual budget per employee</h5>
+          <div class="d-flex justify-beetwen items-center-v">
+            <md-field v-show="this.editAnnualBudgetPerEmployee" :class="[{'md-error': errors.has('annualBudgetPerEmployee')}]">
+              <md-input v-model="annualBudgetPerEmployee"
+                        data-vv-name="annualBudgetPerEmployee"
+                        v-validate= "modelValidations.annualBudgetPerEmployee"
+              />
+              <span class="md-error" v-if="errors.has('annualBudgetPerEmployee')">The field is required</span>
+            </md-field>
+            <h4 v-show="!this.editAnnualBudgetPerEmployee" style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+              <animated-number ref="annualBudgetPerEmployeeNumber" :value="this.annualBudgetPerEmployee" prefix="$"></animated-number>
             </h4>
-            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
+
+            <div v-show="!this.editAnnualBudgetPerEmployee">
+              <md-button class="md-simple md-just-icon md-round fa fa-edit" @click="openEditAnnualBudgetPerEmployee()">
+                <md-icon>edit</md-icon>
+              </md-button>
+            </div>
+
+            <div v-show="this.editAnnualBudgetPerEmployee" class="d-flex">
+              <md-button class="md-simple md-just-icon md-round fas fa-times" @click="resetField()">
+                <md-icon class="text-red">clear</md-icon>
+              </md-button>
+
+              <md-button class="md-simple md-just-icon md-round fa fa-check" @click="saveBudgeData()">
+                <md-icon class="text-success">check</md-icon>
+              </md-button>
+            </div>
           </div>
+
+          <hr v-show="!this.editAnnualBudgetPerEmployee" style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
         </div>
 
-        <div style="padding: 8px;"></div>
+          <div>
+            <div style="text-align: left;">
+              <h5 style="font-size: 0.95rem !important; font-weight: 600; padding: 0; margin: 0;">Total annual budget</h5>
 
-        <div>
-          <div style="text-align: center;">
-            <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total annual budget</h5>
-            <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
-              <animated-number ref="totalAnnualBudgetNumber" :value="totalAnnualBudget" prefix="$"></animated-number>
-            </h4>
-            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
+              <div class="d-flex justify-beetwen items-center-v">
+                <md-field v-show="this.editAnnualBudget" :class="[{'md-error': errors.has('annualBudget')}]">
+                     <md-input v-model="annualBudget"
+                               data-vv-name="annualBudget"
+                               v-validate= "modelValidations.annualBudget"
+                      />
+                      <span class="md-error" v-if="errors.has('annualBudgetPerEmployee')">The field is required</span>
+                </md-field>
+                <h4 v-show="!this.editAnnualBudget" style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+                  <animated-number ref="annualBudgetNumber" :value="this.annualBudget" prefix="$"></animated-number>
+                </h4>
+                <div v-show="!this.editAnnualBudget">
+                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click="openEditAnnualBudget()">
+                    <md-icon>edit</md-icon>
+                  </md-button>
+                </div>
+                <div v-show="this.editAnnualBudget" class="d-flex">
+                  <md-button class="md-simple md-just-icon md-round fas fa-times" @click="resetField()">
+                    <md-icon class="text-red">clear</md-icon>
+                  </md-button>
+                  <md-button class="md-simple md-just-icon md-round fa fa-check" @click="saveBudgeData()">
+                    <md-icon class="text-success">check</md-icon>
+                  </md-button>
+                </div>
+              </div>
+
+              <hr v-show="!this.editAnnualBudget" style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
+            </div>
           </div>
-        </div>
 
-        <div style="padding: 8px;"></div>
 
         <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total remaining budget</h5>
         <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
           <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
         </h4>
 
-        <div style="padding: 16px;"></div>
         <chart-component
                 class=""
                 :chart-data="pieChart.data"
                 :chart-options="pieChart.options"
                 chart-type="Pie"/>
-                 <animated-number class="percentage" ref="remainingBudgetPerEmployeeNumber" :value="calculatePercentage" suffix="%"></animated-number>
+                 <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
+        <div style="padding: 16px;"></div>
+
+        <div>
+          <div style="text-align: left;">
+            <h5 style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Remaining budget per employee</h5>
+            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+              <animated-number ref="remainingBudgetPerEmployeeNumber" :value="remainingBudgetPerEmployee" prefix="$"></animated-number>
+            </h4>
+            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
+          </div>
+        </div>
+
+        <div>
+          <div style="text-align: left;">
+            <h5 style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Total events</h5>
+            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+              <animated-number ref="totalEventsNumber" :value="countEvents"></animated-number>
+            </h4>
+            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
+          </div>
+        </div>
+      </md-card-content>
+    </md-card>
+
+    <md-card style="display: none; background-color: #41535E; color: rgb(225, 234,239); height: 100%; margin: 0; padding: 0;">
+      <md-card-content style="text-align: center; height: 100%;">
+        <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total remaining budget</h5>
+        <h4 style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+          <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
+        </h4>
+        <div style="padding: 16px;"></div>
+        <img src="https://cdn1.iconfinder.com/data/icons/charts-and-diagrams-1-1/512/donutchart-512.png"/>
         <div style="padding: 16px;"></div>
 
         <div>
           <div style="text-align: left;">
             <h5 style="font-size: 0.95em; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Remaining budget per employee</h5>
-            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
-              <animated-number ref="remainingBudgetPerEmployeeNumber" :value="remainingBudgetPerEmployee" prefix="$"></animated-number>
-            </h4>
+            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">$285.5</h4>
+            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
+          </div>
+        </div>
+
+        <div style="padding: 8px;"></div>
+
+        <div>
+          <div style="text-align: left;">
+            <h5 style="font-size: 0.95em; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Annual budget per employee</h5>
+            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">$285.5</h4>
+            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
+          </div>
+        </div>
+
+        <div style="padding: 8px;"></div>
+
+        <div>
+          <div style="text-align: left;">
+            <h5 style="font-size: 0.95em; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Total annual budget</h5>
+            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">$285.5</h4>
             <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
           </div>
         </div>
@@ -59,9 +152,7 @@
         <div>
           <div style="text-align: left;">
             <h5 style="font-size: 0.95em; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Total events</h5>
-            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
-              <animated-number ref="totalEventsNumber" :value="totalEvents"></animated-number>
-            </h4>
+            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">20</h4>
             <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
           </div>
         </div>
@@ -74,6 +165,7 @@
   import auth from '@/auth';
   import VueElementLoading from 'vue-element-loading';
   import ChartComponent from '@/components/Cards/ChartComponent';
+  import Calendar from '@/models/Calendar';
 
   import {
     AnimatedNumber
@@ -95,12 +187,52 @@
       }
     },
     data() {
-
       return {
         ready: false,
         auth: auth,
         isLoading: true,
-        statisticData: {}
+        statisticData: {},
+        editAnnualBudgetPerEmployee: false,
+        editAnnualBudget: false,
+        annualBudgetPerEmployee: {
+            type: Number,
+            default: 0
+        },
+        annualBudget: {
+            type: Number,
+            default: 0
+        },
+        countEvents: {
+            type: Number,
+            default: 0
+        },
+        totalRemainingBudget: {
+            type: Number,
+            default: 0
+        },
+        percentage: {
+            type: Number,
+            default: 0
+        },
+        remainingBudgetPerEmployee: {
+            type: Number,
+            default: 0
+        },
+        seriesData: [],
+        annualBudgetCache: null,
+        annualBudgetPerEmployeeCache: null,
+        modelValidations: {
+          annualBudgetPerEmployee: {
+            required: true,
+            min_value: 1,
+            max_value: 1000000,
+          },
+          annualBudget: {
+            required: true,
+            min_value: 1,
+            max_value: 1000000,
+          },
+        },
       }
     },
     created() {
@@ -108,57 +240,71 @@
     },
     mounted(){
       this.ready = true;
-      this.isLoading = false;
-      this.calendarStatistic()
+      this.isLoading = true;
+      this.queryBudgetInfo();
     },
     methods: {
-      calendarStatistic() {
+      async saveBudgeData(){
+          let calendarId = this.auth.user.defaultCalendarId;
+          let calendar = await Calendar.find(calendarId);
+
+          calendar.annualBudget = this.annualBudget;
+          calendar.annualBudgetPerEmployee = this.annualBudgetPerEmployee;
+
+          calendar.save().then(response => {
+            this.queryBudgetInfo();
+            this.resetField();
+          }).catch(error => {
+            console.log(error);
+          });
+      },
+      async queryBudgetInfo(){
         let calendarId = this.auth.user.defaultCalendarId;
 
-        this.$http.get(`${process.env.SERVER_URL}/1/calendars/${calendarId}/statistics`, { headers: this.auth.getAuthHeader() })
-                .then((response) => {
-                  let statisticMap = {};
-                  response.data.forEach(function(data){
-                    statisticMap[data.item] = data.value
-                  })
+        let calendar = await Calendar.find(calendarId).then(response => {
+            let statistics = response.statistics;
+            let statisticMap = {};
 
-                  this.statisticData = statisticMap;
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
+            statistics.forEach(function(data){
+              statisticMap[data.item] = data.value
+            });
+
+            this.annualBudget = statisticMap.annualBudget;
+            this.annualBudgetPerEmployee = statisticMap.annualBudgetPerEmployee;
+            // this.countEvents = response.events;
+            this.totalRemainingBudget = statisticMap.annualBudget - statisticMap.annualBudgetAllocated;
+            console.log(statisticMap)
+            this.remainingBudgetPerEmployee = statisticMap.annualBudgetPerEmployee - statisticMap.annualBudgetPerEmployeeAllocated;
+            this.seriesData = [statisticMap.annualBudget, statisticMap.annualBudgetPerEmployeeAllocated];
+            this.countEvents = statisticMap.numberOfEvents;
+
+            this.annualBudgetCache = this.annualBudget;
+            this.annualBudgetPerEmployeeCache = this.annualBudgetPerEmployee;
+          })
+          .catch(error => {
+            console.log(error);
+          })
+          this.isLoading = false;
+      },
+      resetField() {
+        this.annualBudget = this.annualBudgetCache;
+        this.annualBudgetPerEmployee = this.annualBudgetPerEmployeeCache;
+        this.editAnnualBudgetPerEmployee = false;
+        this.editAnnualBudget = false;
+      },
+      openEditAnnualBudgetPerEmployee(){
+        this.editAnnualBudgetPerEmployee = true;
+      },
+      openEditAnnualBudget(){
+        this.editAnnualBudget = true;
       },
     },
     computed: {
-      calculateRemain() {
-        return this.statisticData['annual_budget_allocated'];
-      },
-      calculateSpent() {
-        return this.statisticData['annual_budget'];
-      },
-      totalAnnualBudget() {
-        return this.statisticData['annual_budget'];
-      },
-      annualBudgetPerEmployee() {
-        return this.statisticData['annual_budget_per_employee'];
-      },
-      totalRemainingBudget() {
-        return this.statisticData['annual_budget'] - this.statisticData['annual_budget_allocated'];
-      },
-      remainingBudgetPerEmployee() {
-        return this.statisticData['annual_budget_per_employee'] - this.statisticData['annual_budget_per_employee_allocated'];
-      },
-      totalEvents() {
-        return this.statisticData['number_of_events'];
-      },
-      calculatePercentage() {
-        return parseFloat(((this.statisticData['annual_budget_per_employee'] / 100) * this.statisticData['annual_budget_per_employee_allocated']).toFixed(0))
-      },
       pieChart() {
         return {
           data: {
             labels: [" ", " "], // should be empty to remove text from chart
-            series: [this.calculateRemain, this.calculateSpent]
+            series: this.seriesData
           },
           options: {
             padding: 0,
@@ -170,7 +316,12 @@
       },
     },
     watch: {
-
+      year(newVal, oldVal){
+        this.queryBudgetInfo();
+      },
+      month(newVal, oldVal){
+        this.queryBudgetInfo();
+      },
     }
   };
 </script>
@@ -179,13 +330,13 @@
 .ct-series-b .ct-line,
 .ct-series-b .ct-bar,
 .ct-series-b .ct-slice-donut {
-  stroke: #253B3D;
+  stroke: #00AEED;
 }
 .ct-series-a .ct-point,
 .ct-series-a .ct-line,
 .ct-series-a .ct-bar,
 .ct-series-a .ct-slice-donut {
-  stroke: #00AEED;
+  stroke: #447b7d;
 }
 .md-card-content h4.title span {
   color: #6cd6ee;
@@ -203,5 +354,22 @@
   font-size: 2.5rem;
   font-weight: 700;
   color: #AEAAA8;
+}
+.budget-form .md-field {
+  max-width: 133px;
+}
+.budget-form .md-field .md-input,
+.budget-form .md-field .md-textarea{
+  -webkit-text-fill-color: #fff !important;
+  color: #fff !important;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.md-button.md-simple .text-success{
+  color: #00c782 !important;
+}
+.md-button.md-simple .text-red{
+  color: #FF547C !important;
 }
 </style>

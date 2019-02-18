@@ -36,29 +36,15 @@
           :valueName="['title','name']"
          :onChange="onChange"
          />
-         <div class='events-add-new-date-block'  v-if='add_dates.length!==0'  v-for='item  in add_dates'>
-         <div class='event-add-new-date_input'>
-             <InputText 
-               labelStyle='event_label_input'
-                label='Description'
-                fieldStyle="field_input"
-                :value='item.description'
-                name='description'
-                :onChange='onChange'
-                count                
-        />
-        </div>
-        <div class='event-add-new-date_datepicke'>
-          <Datepicker                
-                 :key='date'               
-                :value='item.date'
-                :name='item.date'
-                :onChange='onChange'
-                count                 
-        />
-        </div>
-        <div class='event-add-new-date-delete_button' @click.prevent='deleteDate(item.description)'><md-icon  class='event-add_icon'>clear</md-icon></div>
-        </div> 
+          <Datepicker
+                v-if='add_dates.length!==0'
+                v-for='item  in add_dates'
+               :key='item.value_name'                
+                :label='item.description'
+                :value='item.value_name'
+                :name='item.value_name'
+                :onChange='onChange'                
+        /> 
         <Title
                 title='The more we know about important dates, the more we can celebrate you.'
                 titleBlock='event_titleBlock'
@@ -66,7 +52,7 @@
                 withSpan
                 spanText=' Add dates'
                 spanStyles='event_span-title' 
-                 :onClick='onAddDate'                
+                 :onClick='onShowModal'                
         /> 
 </div>
 <div class='event_button-block' >
@@ -85,7 +71,46 @@
                 titleText='titleTextLogo'        
                 titleBlock='event_titleBlock'
                 title='Automate individual congratulation cards to help you give that personal touch your employees crave, without the usual efford that comes with it'
-         />         
+         />
+          <Modal v-if='showModal'> 
+                 <template   slot='header'>
+                        <Title
+                                title='Create new events'
+                                titleBlock='event_titleBlock'
+                                titleText='event_titleStyle'
+                        />
+                </template>
+                <template slot='body'>
+                 <div>
+                 <InputText 
+                labelStyle='event_label_input'
+                label='Description'
+                fieldStyle="field_input"
+                :value='description'
+                name='description'
+                :onChange='onChange'                
+        />
+        <InputText 
+                labelStyle='event_label_input'
+                label='Value name'
+                fieldStyle="field_input"
+                :value='value_name'
+                name='value_name'
+                :onChange='onChange'                
+        />
+                 </div>
+                </template>
+                <template slot='footer'>
+                 <div class='event_modal-footer'>
+                 <div class='event_button-block' >
+                         <Button text='Cancel' :onClick='onShowModal' class="md-success md-fileinput button-md-common"/>
+                </div>
+                <div class='event_button-block' >
+                        <Button text='Create' :onClick='onCreate' class="md-success md-fileinput button-md-common"/>
+                </div>
+                 </div>
+                </template>
+          </Modal>
 </div>
 </div>
 </div>
@@ -124,29 +149,15 @@
           :valueName="['title','name']"
           :onChange="onChange"
           />
-          <div class='events-add-new-date-block'  v-show='add_dates.length!==0' v-for='(item,index)  in add_dates'>
-          <div class='event-add-new-date_input'>
-              <InputText 
-                labelStyle='event_label_input'
-                label='Description'
-                fieldStyle="field_input"
-                :value='item.description'
-                name='description'
-                :onChange='onChange'
-                count                
-        />
-        </div>
-        <div class='event-add-new-date_datepicke'>
-          <Datepicker                
-                :key='date'               
-                :value='item.date'
-                :name='item.date'
-                :onChange='onChange'
-                count                
-        />
-        </div>
-        <div  class='event-add-new-date-delete_button' @click.prevent='deleteDate(item.description)'><md-icon  class='event-add_icon'>clear</md-icon></div>
-        </div>           
+          <Datepicker
+                v-if='add_dates.length!==0'
+                v-for='item  in add_dates'
+                :key='item.value_name'                
+                :label='item.description'
+                :value='item.value_name'
+                :name='item.value_name'
+                :onChange='onChange'                
+        />           
         <Title
                 title='The more we know about important dates, the more we can celebrate you.'
                 titleBlock='event_titleBlock'
@@ -154,7 +165,7 @@
                 withSpan
                 spanText=' Add dates'
                 spanStyles='event_span-title'
-                 :onClick='onAddDate'                              
+                 :onClick='onShowModal'                              
         />       
 </div>
 <div class='event_button-block'>
@@ -168,7 +179,46 @@
                 title='Just give us a reason to selebrate'
                 titleBlock='event_titleBlock'
                 titleText='event_titleStyle'
-        />        
+        />
+        <Modal v-if='showModal'>
+               <template   slot='header'>
+                        <Title
+                                title='Create new events'
+                                titleBlock='event_titleBlock'
+                                titleText='event_titleStyle'
+                        />
+                </template>
+                <template slot='body'>
+                 <div>
+                 <InputText 
+                labelStyle='event_label_input'
+                label='Description'
+                fieldStyle="field_input"
+                :value='description'
+                name='description'
+                :onChange='onChange'                
+        />
+        <InputText 
+                labelStyle='event_label_input'
+                label='Value name'
+                fieldStyle="field_input"
+                :value='value_name'
+                name='value_name'
+                :onChange='onChange'                
+        />
+                 </div>
+                </template>
+                <template slot='footer'>
+                 <div class='event_modal-footer'>
+                 <div class='event_button-block' >
+                         <Button text='Cancel' :onClick='onShowModal' class="md-success md-fileinput button-md-common"/>
+                </div>
+                <div class='event_button-block' >
+                        <Button text='Create' :onClick='onCreate' class="md-success md-fileinput button-md-common"/>
+                </div>
+                 </div>
+                </template>
+        </Modal>
 </div>
 </div>
 </div>
@@ -212,9 +262,8 @@ export default {
                         add_dates:[],
                         showModal: false,
                         description:'',
-                        date:'',
-                        listComponentName:['select_holiday','bithday','join_to_company'],
-                        new_number_of_event:0
+                        value_name:'',
+                        listComponentName:['select_holiday','bithday','join_to_company']
 
                 }
         }
@@ -227,26 +276,28 @@ export default {
                 onSkip:function(){                           
                         this.$router.push('/dietary')     
                 },                
-                onChange:function(value, name,count){                                      
-                 this[name]=value 
-                 console.log(value, name,count)
-                 if(this.new_number_of_event&&count){
-                         this.add_dates[this.new_number_of_event-1][name]=value
-                 }                   
+                onChange:function(value, name){                                      
+                 this[name]=value                    
                 }
                 ,onNext:function(){
-                        console.log(this.add_dates)
-                        // const event=isWrong(this,this.listComponentName)
-                        // this.$store.dispatch("user/sendEvent",event)     
-                        // this.$router.push('/dietary')     
+                        const event=isWrong(this,this.listComponentName)
+                        this.$store.dispatch("user/sendEvent",event)     
+                        this.$router.push('/dietary')     
                 }
-                ,onAddDate:function(){
-                        const newDate={description:'',date:''}
-                        this.new_number_of_event=++this.new_number_of_event                        
-                        this.add_dates.push(newDate)
+                ,onShowModal:function(){                        
+                        this.showModal=!this.showModal
                 },
-                deleteDate:function(value){   
-                      console.log(value)  
+                onCreate:function(){   
+                        const newAdd={}
+                        if(this.description&&this.value_name){
+                          newAdd['description']=this.description
+                         newAdd['value_name']=this.value_name                   
+                        this.add_dates.push(newAdd)
+                        this.listComponentName.push(this.value_name)
+                        this.onShowModal()
+                        this.description=''
+                        this.value_name=''      
+                        } 
                         
                 },
 
@@ -332,23 +383,9 @@ export default {
     margin-top: 20px;
     line-height: 147%;
 }
-.events-add-new-date-block{
-        display: flex;        
+.event_modal-footer{
+        display: flex;
+        justify-content: space-around;
         width: 100%;
 }
-.event-add-new-date_input{
-       width: 45%;
-    margin-right: 20px;     
-}
-.event-add-new-date_datepicke{
-width: 45%;
-}
-.event-add-new-date-delete_button{
-    align-items: center;
-    display: flex;
-}
-.event-add_icon{
-  cursor: pointer;    
-}
-
 </style>

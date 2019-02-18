@@ -19,11 +19,11 @@
         <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
         </sidebar-item>-->
 
-        <sidebar-item :link="{name: 'Company', icon: 'fingerprint', path: '/company'}">
+        <!--<sidebar-item :link="{name: 'Company', icon: 'fingerprint', path: '/company'}">
         </sidebar-item>
 
         <sidebar-item :link="{name: 'Team', icon: 'group_add', path: '/team'}">
-        </sidebar-item>
+        </sidebar-item>-->
 
         <sidebar-item :link="{name: 'Yearly Plan', icon: 'event', path: '/planner'}">
         </sidebar-item>
@@ -34,11 +34,11 @@
         <!--<sidebar-item :link="{name: 'Event Planner', icon: 'local_play', path: '/events'}">
         </sidebar-item>-->
 
-        <sidebar-item :link="{name: 'My Vendors', icon: 'contacts', path: '/vendors'}">
+        <!--<sidebar-item :link="{name: 'My Vendors', icon: 'contacts', path: '/vendors'}">
         </sidebar-item>
 
         <sidebar-item :link="{name: 'Proposals', icon: 'local_offer', path: '/proposals'}">
-        </sidebar-item>
+        </sidebar-item>-->
 
         <!--<li class="menu-divider"></li>
 
