@@ -1,4 +1,3 @@
-
 import Model from './Model';
 import CalendarIcon from './CalendarIcon';
 import CalendarColor from './CalendarColor';
@@ -47,10 +46,6 @@ export default class Calendar extends Model {
 
   years(){
     return this.hasMany(CalendarYear);
-  }
-
-  catepories(){
-    return this.hasMany(CalendarEventType);
   }
 
   eventTypes(){

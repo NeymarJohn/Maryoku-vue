@@ -5,14 +5,13 @@
     <md-card-content>
       <div class="md-layout">
         <slot name="content-left"></slot>
-        <slot name="content-middle"></slot>
         <slot name="content-right"></slot>
       </div>
     </md-card-content>
 
-    <md-card-actions v-if="$slots.footer" md-alignment="space-between">
-      <slot name="footer" v-if="$slots.footer"></slot>
-    </md-card-actions>
+    <!--<md-card-actions>
+      <slot name="footer"></slot>
+    </md-card-actions>-->
   </md-card>
 </template>
 

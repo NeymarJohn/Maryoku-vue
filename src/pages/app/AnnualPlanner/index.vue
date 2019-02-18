@@ -8,7 +8,7 @@
           <budget-panel :month="Number(currentMonth)" :year="Number(currentYear)"></budget-panel>
         </td>
         <td style="width: 85%; height: 100%;">
-          <calendar-panel :month="Number(currentMonth)" :year="Number(currentYear)" :firstDayOfTheWeek="firstDayOfTheWeek" :month-counts="monthCounts"></calendar-panel>
+          <calendar-panel :month="Number(currentMonth)" :year="Number(currentYear)"></calendar-panel>
         </td>
       </tr>
     </table>
@@ -39,7 +39,6 @@
   } from "@/components";
   import BudgetPanel from './BudgetPanel';
   import CalendarPanel from './CalendarPanel';
-  import Calendar from '@/models/Calendar';
 
   export default {
     components: {
@@ -60,8 +59,6 @@
         currentMonth: 0,
         currentYear: 0,
         months: this.$moment.months(),
-        firstDayOfTheWeek: 'monday',
-        monthCounts: {},
       }
     },
     created() {
@@ -71,13 +68,11 @@
       this.ready = false;
       this.isLoading = true;
       this.auth.currentUser(this, true, function() {
-        Calendar.find(this.auth.user.defaultCalendarId).then(function(calendar){
-          this.firstDayOfTheWeek = calendar.firstDayOfWeek;
-          this.monthCounts = calendar.monthCounts;
-          this.checkSelectedYearMonth();
-          this.ready = true;
-          this.isLoading = false;
-        }.bind(this));
+
+        this.checkSelectedYearMonth();
+
+        this.ready = true;
+        this.isLoading = false;
       }.bind(this))
     },
     methods: {

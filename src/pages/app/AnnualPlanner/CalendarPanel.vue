@@ -21,18 +21,24 @@
           <table style="width: 100%; height: 100%;">
             <tr>
               <td style="width: 20%; max-width: 20%; padding-right: 15px;">
-                <month-select-panel :current-year="currentYear" :current-month="currentMonth" :month-counts="monthCounts"></month-select-panel>
+                <month-select-panel :current-year="currentYear" :current-month="currentMonth"></month-select-panel>
               </td>
               <td style="width: 60%;">
                 <table style="width: 100%; height: 100%;">
-                  <tr style="height: 95%;">
+                  <tr style="height: 85%;">
                     <td style="padding-top: 15px; padding-right: 15px;">
                       <md-card style="margin: 0; height: 100%; overflow: auto;">
                         <md-card-content style="height: 100%; text-align: center;">
                           <h3 class="text-gray">{{currentMonthName}}</h3>
                           <table style="width: 100%; height: 90%; text-align: center;">
                             <tr>
-                              <th class="text-gray" v-for="dayOfWeek in weekDays">{{dayOfWeek}}</th>
+                              <th class="text-gray">Sun</th>
+                              <th class="text-gray">Mon</th>
+                              <th class="text-gray">Tue</th>
+                              <th class="text-gray">Wed</th>
+                              <th class="text-gray">Thu</th>
+                              <th class="text-gray">Fri</th>
+                              <th class="text-gray">Sat</th>
                             </tr>
                             <tr v-for="monthRow in monthRows">
                               <td v-for="monthDay in monthRow" style="width: 14.2%; min-width: 14.2%; max-width: 14.2%;">
@@ -41,10 +47,10 @@
                                     <md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                       </md-button>
-                                    <md-button v-else-if="monthDay.events.editables.length" @click="openEditEventModal(true, monthDay.events.editables[0])" v-bind:class="{ 'multiple-events': multipleEvents(monthDay.events.editables.length) }" :ref="`month-day-${monthDay.dayInMonth}`" class="md-success md-just-icon md-round md-md">
+                                    <md-button v-else-if="monthDay.events.editables.length" @click="openEditEventModal(true, monthDay.events.editables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-success md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                     </md-button>
-                                    <md-button v-else-if="monthDay.events.nonEditables.length" @click="openEditEventModal(true, monthDay.events.nonEditables[0])" v-bind:class="{ 'multiple-events': multipleEvents(monthDay.events.nonEditables.length) }" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
+                                    <md-button v-else-if="monthDay.events.nonEditables.length" @click="openEditEventModal(true, monthDay.events.nonEditables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                     </md-button>
                                   </template>
@@ -64,16 +70,14 @@
                       </md-card>
                     </td>
                   </tr>
-                  <tr style="height: 5%;">
+                  <tr style="height: 15%;">
                     <td style="padding-top: 15px; padding-right: 15px;">
                       <md-card style="padding: 0; margin: 0; height: 100%; ">
                         <md-card-content style="text-align: center;">
-                          <md-button class="md-simple md-xs md-warning"><i class="fa fa-square" style="margin-right: 5px;"></i> Holidays</md-button>
-                          <md-button class="md-simple md-xs md-info"><i class="fa fa-square" style="margin-right: 5px;"></i> Civil Days</md-button>
-                          <md-button class="md-simple md-xs md-success"><i class="fa fa-square" style="margin-right: 5px;"></i> Company Days</md-button>
-                          <md-button class="md-simple md-xs md-primary"><i class="fa fa-square" style="margin-right: 5px;"></i> Birthdays</md-button>
-                          <md-button class="md-simple md-xs md-simple"><i class="fa fa-square" style="margin-right: 5px;"></i> Social days</md-button>
-                          <md-button class="md-simple md-xs md-warning"><i class="fa fa-square" style="margin-right: 5px;"></i> Fun Days</md-button>
+                          <md-button class="md-simple md-sm md-warning"><i class="fa fa-square" style="margin-right: 5px;"></i> Holidays</md-button>
+                          <md-button class="md-simple md-sm md-info"><i class="fa fa-square" style="margin-right: 5px;"></i> Civil Days</md-button>
+                          <md-button class="md-simple md-sm md-success"><i class="fa fa-square" style="margin-right: 5px;"></i> Company Events</md-button>
+                          <md-button class="md-simple md-sm md-primary"><i class="fa fa-square" style="margin-right: 5px;"></i> Personal Schedule</md-button>
                         </md-card-content>
                       </md-card>
                     </td>
@@ -82,12 +86,12 @@
               </td>
               <td style="width: 20%;max-width: 20%;">
                 <table style="width: 100%; height: 100%;">
-                  <tr style="height: 95%;">
+                  <tr style="height: 85%;">
                     <td>
                       <month-events-panel :calendar-events="calendarEvents"></month-events-panel>
                     </td>
                   </tr>
-                  <tr style="height: 5%;">
+                  <tr style="height: 15%;">
                     <td style="padding-top: 15px;">
                       <md-button class="md-success md-sm disabled" disabled="disabled" style="width: 99%; height: 45%; margin-top: 0; font-weight: 500;">Import Events</md-button>
                       <md-button class="md-success md-sm" style="width: 99%; height: 45%; margin-top: 0; font-weight: 500;" @click="exportToExcel">Export To Excel</md-button>
@@ -102,6 +106,8 @@
     </table>
       <event-modal
               @refresh-events="refreshEvents"
+              :occasionOptions="occasionsArray"
+              :currenciesOptions="currenciesArray"
               ref="eventModal">
       </event-modal>
   </div>
@@ -115,6 +121,8 @@
   import CalendarFiltersPanel from './CalendarFiltersPanel';
   import moment from 'moment';
   import CalendarEvent from '@/models/CalendarEvent';
+  import Occasion from '@/models/Occasion';
+  import Currency from "@/models/Currency";
 
   import {
     AnimatedNumber
@@ -150,12 +158,6 @@
       dayInMonth: {
         type: String
       },
-      firstDayOfTheWeek: {
-        type: String
-      },
-      monthCounts: {
-        type: Object
-      }
     },
     data() {
       return {
@@ -171,20 +173,39 @@
         calendarEvents: {},
         occasionsArray: null,
         currenciesArray: null,
-        eventTypesArray: null,
         holidaysSelectDisplayed: true,
         selectedCountries: true,
         selectedEventTypes: true,
-        weekDays: []
       }
     },
     created() {
       this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule);
+
+      let occasions = '';
+
+      if (this.$store.state.occasionsArray === null) {
+        occasions = Occasion.get().then((occasions) => {
+          this.$store.state.occasionsArray = occasions;
+          this.occasionsArray = occasions;
+        });
+      } else {
+        this.occasionsArray = this.$store.state.occasionsArray;
+      }
+
+      let currencies = '';
+
+      if (this.$store.state.currenciesArray === null) {
+        currencies = Currency.get().then((currencies) => {
+          this.$store.state.currenciesArray = currencies;
+          this.currenciesArray = currencies;
+        });
+      } else {
+        this.currenciesArray = this.$store.state.currenciesArray;
+      }
     },
     mounted(){
       this.ready = true;
       this.isLoading = true;
-      this.weekDays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
       this.selectYearMonth(this.year, this.month);
     },
     methods: {
@@ -194,7 +215,7 @@
         let calendarId = this.auth.user.defaultCalendarId;
 
         window.open(
-          `${process.env.SERVER_URL}/1/calendars/${calendarId}/export/${this.year}`
+          `${process.env.SERVER_URL}/1/calendars/${calendarId}/export/2019`
         );
       },
       refreshEvents(){
@@ -229,7 +250,6 @@
         this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.auth.getAuthHeader() })
           .then((response) => {
             let eventsMap = {};
-            let occasionsArray = [];
             if (response.data.events) {
               response.data.events.forEach(function(event){
                 let eventStartMillis = event.eventStartMillis;
@@ -246,13 +266,10 @@
                   eventsMap[eventDateStamp].editables.push(new CalendarEvent(event));
                 } else {
                   eventsMap[eventDateStamp].nonEditables.push(new CalendarEvent(event));
-                  occasionsArray.push({id: event.eventStartMillis, value: event.title});
                 }
               });
             }
 
-            occasionsArray.sort(function(a, b){return a.id-b.id});
-            this.$store.state.event.occasionsArray = occasionsArray;
             this.calendarEvents = eventsMap;
 
             this.generateRows(this.year, this.month);
@@ -292,7 +309,7 @@
               row.push(0);
             }
           }
-
+          
           this.monthRows.push(row);
         }
       },
@@ -307,21 +324,17 @@
 
         return calendarEventsMap;
       },
-      openEventModal() {
+      openEventModal(){
         this.setEventModal({ showModal: true })
         this.setModalSubmitTitle('Save')
         this.setEditMode({ editMode: false })
       },
       openEditEventModal: function (show, item) {
-        if (!item.editable){
-          item.occasion = item.title;
-        }
-        item.numberOfParticipants = this.auth.user.customer.numberOfEmployees;
         this.setEventModalAndEventData({showModal: show, eventData: item});
       },
-      multipleEvents(length) {
-        return length > 1;
-      }
+      openEditEventModal: function (show, item) {
+        this.setEventModalAndEventData({showModal: show, eventData: item});
+      },
     },
     computed: {
       ...mapState('AnnualPlannerVuex', ['filtersData']),
@@ -341,31 +354,5 @@
 <style lang="scss">
   .md-grey {
     background-color: #e0e0e0;
-  }
-  .vue-tooltip.tooltip-custom-non-editable {
-    background-color: #fff;
-    border: 1px solid #aaa;
-    color: black;
-    font-size: 14px;
-    font-weight: 400;
-  }
-
-  .vue-tooltip.tooltip-custom-non-editable .tooltip-arrow {
-    border-color: #aaa;
-  }
-
-  .vue-tooltip.tooltip-custom-editable {
-    background-color: #fefefe;
-    border: 1px solid #03a9f4;
-    color: black;
-    font-size: 14px;
-    font-weight: 500;
-  }
-
-  .vue-tooltip.tooltip-custom-editable .tooltip-arrow {
-    border-color: #03a9f4;
-  }
-  .multiple-events {
-    border:2px solid red;
   }
 </style>
