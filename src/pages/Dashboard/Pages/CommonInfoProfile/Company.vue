@@ -23,7 +23,7 @@
           </div>
 
           <!-- Workspace domain -->
-          <div class="md-layout">
+          <div class="md-layout" style="display: none;">
             <label class="md-layout-item md-size-35 md-form-label">
               Workspace Domain
             </label>
