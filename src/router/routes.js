@@ -39,7 +39,6 @@ import CommonInfoProfile from '@/pages/Dashboard/Pages/CommonInfoProfile/index.v
 import EventForm from '@/pages/Dashboard/Pages/CommonInfoProfile/EventForm.vue'
 import Dietary from '@/pages/Dashboard/Pages/CommonInfoProfile/Dietary.vue'
 import Company from '@/pages/Dashboard/Pages/CommonInfoProfile/Company.vue'
-import Step2 from '@/pages/Dashboard/Pages/CommonInfoProfile/Step2.vue'
 import Invite from '@/pages/Dashboard/Pages/CommonInfoProfile/Invite.vue'
 // Pages
 const User = () => import("@/pages/Dashboard/Pages/UserProfile.vue");
@@ -453,11 +452,6 @@ const appCurrentInfo={
       component: Company
     },
     {
-      path: "/me-form",
-      name: "MeForm",
-      component: Step2
-    },
-    {
       path: "/invite",
       name: "InviteEmployee",
       component: Invite
@@ -468,7 +462,7 @@ const appCurrentInfo={
 const routes = [
   {
     path: "/",
-    redirect: "/planner",
+    redirect: "/employee-form",
     name: "Root"
   },
   /*componentsMenu,

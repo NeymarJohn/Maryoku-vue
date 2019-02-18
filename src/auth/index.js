@@ -3,7 +3,6 @@
     ? {SCHEME: 'https', HOSTNAME: 'api.262days.com'}
     : {SCHEME: 'http', HOSTNAME: process.env.SERVER_URL} */
 import { Model } from 'vue-api-query';
-import ME from '@/models/Me';
 import store from '../store';
 
 const { HOSTNAME } = { HOSTNAME: process.env.SERVER_URL};
@@ -30,18 +29,7 @@ export default {
 
         if (redirect) {
           context.$router.push({ path: redirect });
-        }
-      }, (resp) => {
-        context.error = resp.body;
-      });
-  },
-
-  register(context, email, callback) {
-    context.$http.get(`${REGISTRATION_URL}?email=${email}`)
-      .then((resp) => {
-        if (callback){
-          callback(resp.data);
-        }
+        }a
       }, (resp) => {
         context.error = resp.body;
       });
@@ -65,54 +53,43 @@ export default {
   },
 
   currentUser(context, required, cb) {
-    if (!this.user.authenticated || this.user.id === undefined){
-      context.$http.get(CURRENT_USER_URL, { headers: this.getAuthHeader() })
-        .then((resp) => {
-          context.user = { username: resp.data.username };
-          store.dispatch("user/getUserFromApi" , resp.data);
-          this.user.id = resp.data.id;
-          this.user.username = resp.data.username;
-          this.user.avatar =  resp.data.pictureUrl;
-          this.user.displayName = resp.data.displayName;
+    context.$http.get(CURRENT_USER_URL, { headers: this.getAuthHeader() })
+      .then((resp) => {
+        context.user = { username: resp.data.username };
+        store.dispatch("user/getUserFromApi" , resp.data)
+        this.user.id = resp.data.id;
+        this.user.username = resp.data.username;
+        this.user.avatar =  resp.data.pictureUrl;
+        this.user.displayName = resp.data.displayName;
 
 
-          this.user.defaultGroupId = resp.data.defaultGroupId;
-          this.user.defaultCalendarId = resp.data.defaultCalendarId;
+        this.user.defaultGroupId = resp.data.defaultGroupId;
+        this.user.defaultCalendarId = resp.data.defaultCalendarId;
 
-          this.user.customer = resp.data.customer;
+        this.setHeaders(context);
+        if(resp.data.onboarded){
 
-          this.user.me = resp.data;
+           if(resp.data.onboardingPath==="OM"){
 
-          this.setHeaders(context);
-
-          /*if(!resp.data.onboarded){
-
-            if(resp.data.onboardingPath==="OM"){
-
-              context.$router.push('/company-form')
-            }else{
-              context.$router.push('/employee-form')
-            }
+            context.$router.push('/company-form')
           }else{
-            context.$router.push('/company')
-          }*/
+            context.$router.push('/employee-form')
+          }
+        }else{
+          context.$router.push('/company')
+        }
 
-          if (cb !== undefined){
-            cb();
+        if (cb !== undefined){
+          cb();
+        }
+      })
+      .catch(
+        () => {
+          this.unsetToken();
+          if (required) {
+            context.$router.push({path:'/signin'});
           }
         })
-        .catch(
-          () => {
-            this.unsetToken();
-            if (required) {
-              context.$router.push({path:'/signin'});
-            }
-          })
-    } else {
-      if (cb !== undefined){
-        cb();
-      }
-    }
 
   },
 

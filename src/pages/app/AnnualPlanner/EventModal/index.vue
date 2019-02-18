@@ -5,17 +5,17 @@
                 <template slot="header">
                     <div class="md-layout d-flex items-center-g">
                             <div class="md-layout-item md-size-auto md-small-size-100 d-flex items-center-v text-center">
-                                <md-field v-show="this.editTitle" :class="[{'md-error': errors.has('title')}]">
+                                <md-field v-show="this.editTitle" :class="[{'md-error': errors.has('eventName')}]">
                                   <label>Event title</label>
-                                    <md-input v-model="title"
-                                              data-vv-name="title"
-                                              v-validate= "modelValidations.title"
+                                    <md-input v-model="eventName"
+                                              data-vv-name="eventName"
+                                              v-validate= "modelValidations.eventName"
                                     />
-                                    <span class="md-error" v-if="errors.has('title')">The event title is required</span>
+                                    <span class="md-error" v-if="errors.has('eventName')">The event title is required</span>
                                 </md-field> 
 
                                 <h4 class="modal-title" v-show="!this.editTitle">
-                                  <span v-if="title">{{title}}</span>
+                                  <span v-if="eventName">{{eventName}}</span>
                                 </h4>
                                 <md-button class="md-simple md-just-icon md-round fa fa-edit" @click="toogleTitle">
                                     <md-icon>edit</md-icon>
@@ -36,50 +36,16 @@
                                                data-vv-name="occasion"
                                                v-validate= "modelValidations.occasion"
                                     >
-                                        <md-option v-for="option in occasionsOptions"
-                                                   :key="option.value"
+                                        <md-option v-for="option in occasionOptions"
+                                                   :key="option.id"
                                                    :value="option.value">
                                             {{ option.value }}
                                         </md-option>
                                     </md-select>
                                     <span class="md-error" v-if="errors.has('occasion')">The event occasion is required</span>
                                 </md-field>
-                            </div>                           
-                        </div>
-                        <div class="md-layout mt-15">
-                            <div class="md-layout-item md-small-size-100">
-                                <md-field :class="[{'md-error': errors.has('eventType')}]" class="select-with-icon">
-                                    <label>Event Type</label>
-                                    <md-select v-model="eventType"
-                                               data-vv-name="eventType"
-                                               v-validate= "modelValidations.eventType"
-                                    >
-                                        <md-option v-for="option in eventTypesOptions"
-                                                   :key="option.item"
-                                                   :value="option.item">
-                                            {{ option.item }}
-                                        </md-option>
-                                    </md-select>
-                                    <span class="md-error" v-if="errors.has('eventType')">The event eventType is required</span>
-                                </md-field>
                             </div>
-                              <div class="md-layout-item md-small-size-100">
-                                <md-field :class="[{'md-error': errors.has('category')}]" class="select-with-icon">
-                                    <label>Category</label>
-                                    <md-select v-model="category"
-                                               data-vv-name="category"
-                                               v-validate= "modelValidations.category"
-                                    >
-                                        <md-option v-for="option in categoriesOptions"
-                                                   :key="option.id"
-                                                   :value="option.item">
-                                            {{ option.item }}
-                                        </md-option>
-                                    </md-select>
-                                    <span class="md-error" v-if="errors.has('category')">The event category is required</span>
-                                </md-field>
-                            </div> 
-                        </div>                        
+                        </div>
                         <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
                                 <md-datepicker
@@ -90,17 +56,6 @@
                                 >
                                     <label :class="[{'md-error': ($refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value') )}]">Date</label>
                                 </md-datepicker>
-                            </div>
-                              <div class="md-layout-item md-small-size-100">
-                                <md-field :class="[{'md-error': errors.has('numberOfParticipants')}]">
-                                    <label>Number of Participants</label>
-                                    <md-input type="text"
-                                              v-model="numberOfParticipants"
-                                              data-vv-name="numberOfParticipants"
-                                              v-validate= "modelValidations.numberOfParticipants"
-                                    />
-                                    <span class="md-error" v-if="errors.has('numberOfParticipants')">The event participants is required and should be in range of 1 - 10 000</span>
-                                </md-field>
                             </div>
                         </div>
                         <div class="md-layout mt-15">
@@ -140,19 +95,34 @@
                         </div>
                         <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
-                                <md-field :class="[{'md-error': errors.has('totalBudget')}]">
-                                    <label>Budget</label>
-                                    <md-input v-model="totalBudget"
-                                              data-vv-name="totalBudget"
-                                              v-validate= "modelValidations.totalBudget"
+                                <md-field :class="[{'md-error': errors.has('participants')}]">
+                                    <label>Number of Participants</label>
+                                    <md-input type="text"
+                                              v-model="participants"
+                                              data-vv-name="participants"
+                                              v-validate= "modelValidations.participants"
                                     />
-                                    <span class="md-error" v-if="errors.has('totalBudget')">The event budget is required and should be in range of 1 - 1 000 000</span>
+                                    <span class="md-error" v-if="errors.has('participants')">The event participants is required and should be in range of 1 - 10 000</span>
                                 </md-field>
                             </div>
+
+                            <div class="md-layout-item md-small-size-100">
+                                <md-field :class="[{'md-error': errors.has('budget')}]">
+                                    <label>Budget</label>
+                                    <md-input v-model="budget"
+                                              data-vv-name="budget"
+                                              v-validate= "modelValidations.budget"
+                                    />
+                                    <span class="md-error" v-if="errors.has('budget')">The event budget is required and should be in range of 1 - 1 000 000</span>
+                                </md-field>
+                            </div>
+                        </div>
+                        <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
                                 <md-field :class="[{'md-error': errors.has('currency')}]" class="select-with-icon">
                                     <label>Currency</label>
                                     <md-select v-model="currency"
+
                                                data-vv-name="currency"
                                                v-validate= "modelValidations.currency"
                                     >
@@ -170,10 +140,7 @@
                     </form>
                 </template>
                 <template slot="footer">
-                    <md-button v-if="this.editMode" class="md-warning move-left" @click="showDeleteAlert">
-                        Delete
-                    </md-button>
-                    <md-button class="md-success move-right" @click="validateEvent">
+                    <md-button class="md-success move-center" @click="validateEvent">
                         {{modalSubmitTitle}}
                     </md-button>
                 </template>
@@ -182,36 +149,28 @@
     </div>
 </template>
 <script>
-  import auth from '@/auth';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import CalendarEvent from '@/models/CalendarEvent';
+  import Calendar from '@/models/Calendar';
   import {Modal} from "@/components";
-  import Occasion from '@/models/Occasion';
-  import Currency from "@/models/Currency";
-  import Calendar from "@/models/Calendar"
-  import swal from "sweetalert2";
-  import { error } from 'util';
+import { error } from 'util';
 
   export default {
     components: {
       Modal,
     },
     props: {
-      year: Number,
-      month : Number,
-      occasionsOptions: Array,
+      occasionOptions: Array,
+      currenciesOptions: Array,
     },
     data: () => ({
-      auth: auth,
       hoursArray: [...Array(24).keys()].map(x =>  x < 10 ? `0${x}:00`: `${x}:00`),
       durationArray: [...Array(12).keys()].map(x =>  ++x),
       dateValid: true,
+      uploadedImages: [],
       editTitle: false,
-      currenciesOptions:null,
-      eventTypesOptions:null,
-      categoriesOptions:null,
       modelValidations: {
-        title: {
+        eventName: {
           required: true,
         },
         date: {
@@ -223,7 +182,7 @@
         duration: {
           required: true,
         },
-        numberOfParticipants: {
+        participants: {
           required: true,
           min_value: 1,
           max_value: 10000,
@@ -234,7 +193,7 @@
         currency: {
           required: true,
         },
-        totalBudget: {
+        budget: {
           required: true,
           min_value: 1,
           max_value: 1000000,
@@ -243,7 +202,6 @@
     }),
 
     created() {
-
     },
     computed: {
       ...mapState('AnnualPlannerVuex', [
@@ -253,10 +211,9 @@
         'modalSubmitTitle',
         'editMode',
       ]),
-      
       id: {
         get() {
-          return this.eventData.id;
+          return this.eventData.id
         },
         set(value) {
           this.setEventProperty({key: 'id', actualValue: value});
@@ -270,12 +227,12 @@
           this.setEventProperty({key: 'occasion', actualValue: value});
         }
       },
-      title: {
+      eventName: {
         get() {
-          return this.eventData.title
+          return this.eventData.eventName
         },
         set(value) {
-          this.setEventProperty({key: 'title', actualValue: value});
+          this.setEventProperty({key: 'eventName', actualValue: value});
         }
       },
       date: {
@@ -302,20 +259,20 @@
           this.setEventProperty({key: 'duration', actualValue: value});
         }
       },
-      numberOfParticipants: {
+      participants: {
         get() {
-          return this.eventData.numberOfParticipants
+          return this.eventData.participants
         },
         set(value) {
-          this.setEventProperty({key: 'numberOfParticipants', actualValue: value});
+          this.setEventProperty({key: 'participants', actualValue: value});
         }
       },
-      totalBudget: {
+      budget: {
         get() {
-          return this.eventData.totalBudget
+          return this.eventData.budget
         },
         set(value) {
-          this.setEventProperty({key: 'totalBudget', actualValue: value});
+          this.setEventProperty({key: 'budget', actualValue: value});
         }
       },
       currency: {
@@ -334,17 +291,8 @@
           this.setEventProperty({key: 'eventType', actualValue: value});
         }
       },
-      category: {
-        get() {
-          return this.eventData.category
-        },
-        set(value) {
-          this.setEventProperty({key: 'category', actualValue: value});
-        }
-      },      
     },
     mounted() {
-      console.log(this.occasionsOptions)      
       this.$root.$on('statusChange', (newStatus) => {
         this.status = newStatus;
       });
@@ -352,54 +300,9 @@
       this.$root.$on('submitForm', () => {
         this.validateEvent();
       });
-      
-      if (this.$store.state.event.eventTypes === null) {
-        this.auth.currentUser(this, true, function() {
-
-          let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-
-          _calendar.eventTypes().get().then(eventTypes => {
-            this.$store.state.event.eventTypes = eventTypes;
-            this.eventTypesOptions = eventTypes;
-          });
-
-          }.bind(this));
-      } else {
-        this.eventTypesOptions = this.$store.state.event.eventTypes;
-      }
-
-      this.queryCategories();
-      this.queryCurrencies();
     },
     methods: {
       ...mapMutations('AnnualPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
-      queryCategories() {
-        if (this.$store.state.event.caregoriesArray === null) {
-            this.auth.currentUser(this, true, function() {
-              let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-
-              _calendar.categories().get().then(categories => {
-                this.$store.state.event.caregoriesArray = categories;
-                this.categoriesOptions = categories;
-              });
-
-            }.bind(this));
-        } else {
-          this.categoriesOptions = this.$store.state.event.caregoriesArray;
-        }        
-      },
-      queryCurrencies() {
-        if (this.$store.state.event.currenciesArray === null) {
-          let currencies = '';
-
-          currencies = Currency.get().then((currencies) => {
-            this.$store.state.event.currenciesArray = currencies;
-            this.currenciesOptions = currencies;
-          });
-        } else {
-          this.currenciesOptions = this.$store.state.event.currenciesArray;
-        }
-      },
       closeModal(){
         this.editTitle = false;
         this.clearForm();
@@ -411,16 +314,15 @@
       clearForm() {
           this.id = null;
           this.occasion = null;
-          this.title = "New Event";
+          this.eventName = "New Event";
           this.date = null;
           this.time = "";
           this.duration = "";
-          this.numberOfParticipants = "";
+          this.participants = "";
           this.status = "draft";
-          this.totalBudget = "";
+          this.budget = "";
           this.currency = "";
           this.eventType = null;
-          this.category = null;
       },
       getError(fieldName) {
         return this.errors.first(fieldName);
@@ -429,25 +331,24 @@
         return this.$refs.datePicker.$el.classList.contains('md-has-value')
       },
       validateTitle() {
-        if (!this.title) {
+        if (!this.eventName) {
            this.editTitle = true;
         }
       },
       updateEvent() {
-        let _calendar = new Calendar({id: this.$store.state.event.calendarId});
+        let _calendar = new Calendar({id: this.$store.state.calendarId});
         let editedEvent = new CalendarEvent({id: this.eventData.id});
 
-        editedEvent.title = this.title;
+        editedEvent.title = this.eventName;
         editedEvent.occasion = this.occasion;
         editedEvent.eventStartMillis = this.getEventStartInMillis();
         editedEvent.eventEndMillis = this.getEventEndInMillis();
-        editedEvent.numberOfParticipants = this.numberOfParticipants;
-        editedEvent.totalBudget = this.totalBudget;
+        editedEvent.numberOfParticipants = this.participants;
+        editedEvent.totalBudget = this.budget;
         editedEvent.status = this.eventData.status;
         editedEvent.currency = this.currency;
-        editedEvent.eventType = this.eventType;
-        editedEvent.category = this.category;
         editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
           this.closeModal();
@@ -482,50 +383,20 @@
           }
         });
       },
-      showDeleteAlert(e, ev) {
-        const _this = this;
-        e.stopPropagation();
-        swal({
-          title: "Are you sure?",
-          text: `You won't be able to revert this!`,
-          showCancelButton: true,
-          confirmButtonClass: "md-button md-success",
-          cancelButtonClass: "md-button md-danger",
-          confirmButtonText: "Yes, delete it!",
-          buttonsStyling: false
-        }).then(result => {
-          if (result.value) {
-            this.$parent.isLoading = true;
-          
-            let _calendar = new Calendar({id: this.$store.state.event.calendarId});
-            let event = new CalendarEvent({id: this.eventData.id});
-
-            event.for(_calendar).delete().then(result => {
-              this.$parent.isLoading = false;
-              this.closeModal();
-              this.$emit("refresh-events");
-            }).catch(() => {
-              this.$parent.isLoading = false;
-            });
-          }
-        });
-      },
       saveEvent() {
         let _calendar = new Calendar({ id: this.$store.state.calendarId });
 
-        console.log(this.category)
         let newEvent = new CalendarEvent({
           calendar: {id: this.$store.state.calendarId},
-          title: this.title,
+          title: this.eventName,
           occasion: this.occasion,
           eventStartMillis: this.getEventStartInMillis(),
           eventEndMillis: this.getEventEndInMillis(),
-          numberOfParticipants: this.numberOfParticipants,
-          totalBudget: this.totalBudget,
+          numberOfParticipants: this.participants,
+          totalBudget: this.budget,
           status: this.eventData.status,
           currency: this.currency,
           eventType: this.eventType,
-          category: this.category,
           edittable: true,
           participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         }).for(_calendar).save().then(response => {
@@ -563,37 +434,13 @@
         });
       },
     },
-    watch: {
-      year(newVal, oldVal) {
-
-      },
-      month(newVal, oldVal) {
-
-      }
-    }
   };
 </script>
-<style lang="scss" scope>
-  .md-datepicker i{
-    display: none;
-  }
-  .md-field.md-form-group:after,
-  .md-field.md-form-group:before,
-  .md-field.md-datepicker:after,
-  .md-field.md-datepicker:before {
-    width: 100%;
-  }
-  .md-field>.md-icon~label {
-    left: 0;
-  }
-  .md-field>.md-icon~.md-input {
-    margin: 0;
-  }
-  .modal-container {
-    max-width: 570px;
-  }
-</style>
+
 <style lang="scss">
+    .modal-container {
+      max-width: 580px;
+    }
     .modal-z-index {
         z-index: 5;
     }
@@ -603,14 +450,6 @@
     }
     .move-center {
         margin: 0 auto!important;;
-    }
-    .move-left {
-      margin-left: 0!important;
-      margin-right: auto!important;
-    }
-    .move-right {
-      margin-right: 0!important;
-      margin-left: auto!important;
     }
     .text-center {
       text-align: center;
@@ -624,16 +463,10 @@
     .items-center-g {
       justify-content: center;
     }
-    .justify-beetwen {
-      justify-content: space-between
-    }
     .md-field .md-error {
       text-align: left;
     }
     .mt-15 {
       margin-bottom: 15px
-    }
-    .swal2-container {
-      z-index: 9999;
     }
 </style>

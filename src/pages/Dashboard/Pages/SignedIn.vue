@@ -21,32 +21,27 @@
     },
     created() {
       const that = this;
-      const givenToken = that.$route.query.token;
-      that.auth.setToken(givenToken);
-      that.auth.setHeaders(this);
-      that.auth.currentUser(that, true, function() {
+      setTimeout(() => {
 
-        /*const socket = new SockJS(`${process.env.SERVER_URL}/stomp`);
-        const client = Stomp.over(socket);
+        const givenToken = that.$route.query.token;
+        that.auth.setToken(givenToken);
+        that.auth.setHeaders(this);
+        that.auth.currentUser(that, true, function() {
 
-        client.connect({}, () => {
-          client.subscribe(`/topic/${that.auth.user.id}`, () => {
-            alert('Your session timed out.');
-            that.auth.logout(that);
+          const socket = new SockJS(`${process.env.SERVER_URL}/stomp`);
+          const client = Stomp.over(socket);
+
+          client.connect({}, () => {
+            client.subscribe(`/topic/${that.auth.user.id}`, () => {
+              alert('Your session timed out.');
+              that.auth.logout(that);
+            });
+          }, (error) => {
+            console.error('unable to connect : ' + error);
           });
-        }, (error) => {
-          console.error('unable to connect : ' + error);
-        });*/
-
-        let me = that.auth.user.me;
-        if (!me.customer.onboarded){
-          that.$router.push({path: '/company-form'});
-        } else if (!me.onboarded) {
-          that.$router.push({path: '/me-form'});
-        } else {
-          that.$router.push({ path: '/' });
-        }
-      });
+        });
+        this.$router.push({ path: '/' });
+      },2500)
     },
     data() {
       return {

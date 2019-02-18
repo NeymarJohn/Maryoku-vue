@@ -1,14 +1,14 @@
 <template>
   <div style="height: 100%;">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen background-color="#448aff"/>
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
 
     <table style="width: 100%; height: 100%; ">
       <tr>
         <td style="width: 15%; height: 100%;" >
-          <budget-panel @month-count="monthCount" :statistics="statisticsData" :month="Number(currentMonth)" :year="Number(currentYear)"></budget-panel>
+          <budget-panel :month="Number(currentMonth)" :year="Number(currentYear)"></budget-panel>
         </td>
         <td style="width: 85%; height: 100%;">
-          <calendar-panel @month-count="monthCount" :month="Number(currentMonth)" :year="Number(currentYear)" :firstDayOfTheWeek="firstDayOfTheWeek" :month-counts="monthCounts"></calendar-panel>
+          <calendar-panel :month="Number(currentMonth)" :year="Number(currentYear)"></calendar-panel>
         </td>
       </tr>
     </table>
@@ -39,7 +39,6 @@
   } from "@/components";
   import BudgetPanel from './BudgetPanel';
   import CalendarPanel from './CalendarPanel';
-  import Calendar from '@/models/Calendar';
 
   export default {
     components: {
@@ -50,6 +49,7 @@
       AnimatedNumber,
     },
     data() {
+
       return {
         ready: false,
         auth: auth,
@@ -58,10 +58,7 @@
         currentMonthName: '',
         currentMonth: 0,
         currentYear: 0,
-        statisticsData: null,
         months: this.$moment.months(),
-        firstDayOfTheWeek: 'monday',
-        monthCounts: {},
       }
     },
     created() {
@@ -70,30 +67,15 @@
     mounted(){
       this.ready = false;
       this.isLoading = true;
+      this.auth.currentUser(this, true, function() {
+
+        this.checkSelectedYearMonth();
+
+        this.ready = true;
+        this.isLoading = false;
+      }.bind(this))
     },
     methods: {
-      monthCount() {
-        this.auth.currentUser(this, true, function() {
-          Calendar.find(this.auth.user.defaultCalendarId).then(function(calendar){
-            this.firstDayOfTheWeek = calendar.firstDayOfWeek;
-            this.monthCounts = calendar.monthCounts;
-
-            let statistics = calendar.statistics;
-            let statisticMap = {};
-
-            statistics.forEach(function(data){
-              statisticMap[data.item] = data.value
-            });
-
-            this.statisticsData = statisticMap;
-
-            this.checkSelectedYearMonth();
-            
-            this.ready = true;
-            this.isLoading = false;
-          }.bind(this));
-        }.bind(this))
-      },      
       checkSelectedYearMonth(){
         let yearParam = this.$route.params.year;
         let monthParam = this.$route.params.month;
@@ -132,7 +114,6 @@
       '$route' (to, from) {
         // react to route changes...
         this.checkSelectedYearMonth();
-        this.monthCount();
       }
     }
   };

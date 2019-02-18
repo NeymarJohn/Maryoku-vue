@@ -7,6 +7,6 @@ export default class Me extends Model {
     }
 
     customer() {
-      return this['customer'];
+      return this.belongsTo(Customer);
     }
 }
