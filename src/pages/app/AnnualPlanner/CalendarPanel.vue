@@ -70,12 +70,12 @@
                       </md-card>
                     </td>
                   </tr>
-                  
+
                   <tr style="height: 5%;">
                     <td style="padding-top: 15px; padding-right: 15px;">
                       <md-card style="padding: 0; margin: 0; height: 100%; ">
                         <md-card-content style="text-align: center;">
-                          <md-button v-for="category in categoriesArray" class="md-simple md-xs" v-bind:style="`color: ${category.color}!important;`">
+                          <md-button v-for="category in categoriesArray" class="md-simple md-xs" v-bind:style="`color: ${category.color}!important;`" :key="category.id">
                             <i class="fa fa-square" style="margin-right: 5px;" v-bind:style="`color: ${category.color}!important;`"></i> {{category.item}}
                           </md-button>
                         </md-card-content>
@@ -111,7 +111,7 @@
               :occasions-options="this.occasionsArray"
               :categories-options="this.categoriesArray"
               :currencies-options="this.currenciesArray"
-              :event-types-options="this.eventTypesArray"                          
+              :event-types-options="this.eventTypesArray"
               ref="eventModal">
       </event-modal>
   </div>
@@ -127,7 +127,7 @@
   import CalendarEvent from '@/models/CalendarEvent';
   import Currency from "@/models/Currency";
   import Calendar from "@/models/Calendar";
-  
+
   import {
     AnimatedNumber
   } from "@/components";
@@ -182,7 +182,7 @@
         multiple: true,
         calendarEvents: {},
         occasionsArray: null,
-        categoriesArray: null,        
+        categoriesArray: null,
         currenciesArray: null,
         eventTypesArray: null,
         holidaysSelectDisplayed: true,
@@ -199,7 +199,7 @@
       this.isLoading = true;
       this.weekDays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
       this.selectYearMonth(this.year, this.month);
-      
+
       this.queryCategories();
       this.queryCurrencies();
       this.queryEventTypes();
@@ -220,7 +220,7 @@
             }.bind(this));
         } else {
           this.categoriesArray = this.$store.state.event.caregoriesArray;
-        }        
+        }
       },
       queryCurrencies() {
         if (this.$store.state.event.currenciesArray === null) {
