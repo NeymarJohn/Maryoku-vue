@@ -36,7 +36,7 @@
           <hr v-show="!this.editAnnualBudgetPerEmployee" style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
         </div>
 
-        <div style="padding: 16px;"></div>
+        <div style="padding: 8px;"></div>
         
           <div>
             <div style="text-align: left;">
@@ -72,7 +72,7 @@
             </div>
           </div>
 
-        <div style="padding: 16px;"></div>
+        <div style="padding: 8px;"></div>
 
         <div style="position:relative;">
           <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total remaining budget</h5>
@@ -87,7 +87,7 @@
           <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
         </div>
 
-        <div style="padding: 16px;"></div>
+        <div style="padding: 8px;"></div>
 
         <div>
           <div style="text-align: left;">
@@ -99,7 +99,7 @@
           <hr style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
         </div>
 
-        <div style="padding: 16px;"></div>
+        <div style="padding: 8px;"></div>
 
         <div>
           <div style="text-align: left;">
