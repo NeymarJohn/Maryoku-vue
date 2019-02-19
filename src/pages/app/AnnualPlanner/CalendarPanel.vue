@@ -362,13 +362,13 @@
   }
   .md-button .md-button-content .count {
     position: absolute;
-    top: -15px;
+    top: -5px;
     right: -20px;
     min-width: 20px;
     border-radius: 10px;
     font-size: 13px;
     line-height: 20px;
-    background-color: #00b878;
+    background-color: red;
   }
 </style>
 <style lang="scss">
