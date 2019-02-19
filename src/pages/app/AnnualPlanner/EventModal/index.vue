@@ -186,8 +186,6 @@
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import CalendarEvent from '@/models/CalendarEvent';
   import {Modal} from "@/components";
-  import Occasion from '@/models/Occasion';
-  import Currency from "@/models/Currency";
   import Calendar from "@/models/Calendar"
   import swal from "sweetalert2";
   import { error } from 'util';
@@ -200,6 +198,9 @@
       year: Number,
       month : Number,
       occasionsOptions: Array,
+      currenciesOptions:Array,
+      categoriesOptions:Array,
+      eventTypesOptions:Array,
     },
     data: () => ({
       auth: auth,
@@ -207,9 +208,6 @@
       durationArray: [...Array(12).keys()].map(x =>  ++x),
       dateValid: true,
       editTitle: false,
-      currenciesOptions:null,
-      eventTypesOptions:null,
-      categoriesOptions:null,
       modelValidations: {
         title: {
           required: true,
@@ -343,8 +341,7 @@
         }
       },      
     },
-    mounted() {
-      console.log(this.occasionsOptions)      
+    mounted() {    
       this.$root.$on('statusChange', (newStatus) => {
         this.status = newStatus;
       });
@@ -352,58 +349,13 @@
       this.$root.$on('submitForm', () => {
         this.validateEvent();
       });
-      
-      if (this.$store.state.event.eventTypes === null) {
-        this.auth.currentUser(this, true, function() {
-
-          let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-
-          _calendar.eventTypes().get().then(eventTypes => {
-            this.$store.state.event.eventTypes = eventTypes;
-            this.eventTypesOptions = eventTypes;
-          });
-
-          }.bind(this));
-      } else {
-        this.eventTypesOptions = this.$store.state.event.eventTypes;
-      }
-
-      this.queryCategories();
-      this.queryCurrencies();
     },
     methods: {
       ...mapMutations('AnnualPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
-      queryCategories() {
-        if (this.$store.state.event.caregoriesArray === null) {
-            this.auth.currentUser(this, true, function() {
-              let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-
-              _calendar.categories().get().then(categories => {
-                this.$store.state.event.caregoriesArray = categories;
-                this.categoriesOptions = categories;
-              });
-
-            }.bind(this));
-        } else {
-          this.categoriesOptions = this.$store.state.event.caregoriesArray;
-        }        
-      },
-      queryCurrencies() {
-        if (this.$store.state.event.currenciesArray === null) {
-          let currencies = '';
-
-          currencies = Currency.get().then((currencies) => {
-            this.$store.state.event.currenciesArray = currencies;
-            this.currenciesOptions = currencies;
-          });
-        } else {
-          this.currenciesOptions = this.$store.state.event.currenciesArray;
-        }
-      },
       closeModal(){
+        this.setEventModal(false);
         this.editTitle = false;
         this.clearForm();
-        this.setEventModal(false);
       },
       toogleTitle(){
         this.editTitle = !this.editTitle;

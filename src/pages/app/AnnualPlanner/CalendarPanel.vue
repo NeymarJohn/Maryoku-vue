@@ -7,7 +7,7 @@
           <table style="width: 100%; height: 100%;">
             <tr>
               <td style="width: 80%;min-width: 80%;max-width: 80%;padding-right: 15px;" colspan="2">
-                <filters-panel @filters-changed-event="refreshEvents"></filters-panel>
+                <filters-panel @filters-changed-event="refreshEvents" :categories-options="this.categoriesArray"></filters-panel>
               </td>
               <td style="width: 20%;min-width: 20%;max-width: 20%; padding-left: 15px;">
                 <md-button class="md-success" @click="openEventModal()" style="width: 100%; height: 100%; margin-left: -6px; margin-top: 5px; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
@@ -47,7 +47,7 @@
                                         {{monthDay.events.editables.length}}
                                       </span>
                                     </md-button>
-                                    <md-button v-else-if="monthDay.events.nonEditables.length" @click="openEditEventModal(true, monthDay.events.nonEditables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
+                                    <md-button v-else-if="monthDay.events.nonEditables.length" @click="openEditEventModal(true, monthDay.events.nonEditables[0])" :ref="`month-day-${monthDay.dayInMonth}`" style="background-color: #bdbdbd !important;" class="md-grey md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                       <span v-if="monthDay.events.nonEditables.length > 1" class="count">
                                         {{monthDay.events.nonEditables.length}}
@@ -75,12 +75,9 @@
                     <td style="padding-top: 15px; padding-right: 15px;">
                       <md-card style="padding: 0; margin: 0; height: 100%; ">
                         <md-card-content style="text-align: center;">
-                          <md-button class="md-simple md-xs md-warning"><i class="fa fa-square" style="margin-right: 5px;"></i> Holidays</md-button>
-                          <md-button class="md-simple md-xs md-info"><i class="fa fa-square" style="margin-right: 5px;"></i> Civil Days</md-button>
-                          <md-button class="md-simple md-xs md-success"><i class="fa fa-square" style="margin-right: 5px;"></i> Company Days</md-button>
-                          <md-button class="md-simple md-xs md-primary"><i class="fa fa-square" style="margin-right: 5px;"></i> Birthdays</md-button>
-                          <md-button class="md-simple md-xs"><i class="fa fa-square" style="color:#1d7eff!important;margin-right: 5px;"></i> Social days</md-button>
-                          <md-button class="md-simple md-xs"><i class="fa fa-square" style="color:#f5db09!important;margin-right: 5px;"></i> Fun Days</md-button>
+                          <md-button v-for="category in categoriesArray" class="md-simple md-xs" v-bind:style="`color: ${category.color}!important;`">
+                            <i class="fa fa-square" style="margin-right: 5px;" v-bind:style="`color: ${category.color}!important;`"></i> {{category.item}}
+                          </md-button>
                         </md-card-content>
                       </md-card>
                     </td>
@@ -91,7 +88,7 @@
                 <table style="width: 100%; height: 100%;">
                   <tr style="height: 95%;">
                     <td>
-                      <month-events-panel :calendar-events="calendarEvents"></month-events-panel>
+                      <month-events-panel :calendar-events="calendarEvents" :categories-array="categoriesArray"></month-events-panel>
                     </td>
                   </tr>
                   <tr style="height: 5%;">
@@ -170,7 +167,7 @@
       },
       monthCounts: {
         type: Object
-      }
+      },
     },
     data() {
       return {
@@ -202,6 +199,7 @@
       this.isLoading = true;
       this.weekDays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
       this.selectYearMonth(this.year, this.month);
+
       this.queryCategories();
       this.queryCurrencies();
       this.queryEventTypes();
@@ -386,14 +384,12 @@
         return moment().date(day).month(this.month-1).year(this.year);
       },
       colorWithCategory(category) {
-        return this.сategoriesColorMap[category];
+        let filterCategories = this.categoriesArray.filter(c => c.item === category)
+        return `${filterCategories[0].color}!important;`;
       }
     },
     computed: {
       ...mapState('AnnualPlannerVuex', ['filtersData']),
-      ...mapGetters({
-        сategoriesColorMap:'event/getCategoriesColorMap'
-      }),
     },
     watch: {
       year(newVal, oldVal){

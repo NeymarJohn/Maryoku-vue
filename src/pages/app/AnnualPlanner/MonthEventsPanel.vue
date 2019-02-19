@@ -46,7 +46,7 @@
               </md-list-item>
 
               <md-list-item v-if="calendarEvents[date] !== undefined" v-for="calendarEvent in calendarEvents[date].nonEditables" :key="calendarEvent.id" style="cursor: pointer;">
-                <md-button @click="openEditEventModal(true, calendarEvent)" class="md-just-icon md-md md-round" style="margin-right: 8px;">{{date.substr(6,2)}}</md-button>
+                <md-button @click="openEditEventModal(true, calendarEvent)" class="md-just-icon md-md md-round" style="background-color: #bdbdbd !important; margin-right: 8px;">{{date.substr(6,2)}}</md-button>
                 <div class="md-list-item-text" style="white-space: normal;">
                   <span style="font-weight: 500;">{{calendarEvent.title}}</span>
                   <span class="small text-gray">{{calendarEvent.eventStartMillis | formatDate}}</span>
@@ -81,6 +81,9 @@
       calendarEvents: {
         type: Object
       },
+      categoriesArray: {
+        type: Array
+      },
     },
     data() {
       return {
@@ -109,13 +112,13 @@
         this.setEventModalAndEventData({showModal: show, eventData: item});
       },
       colorWithCategory(category) {
-        return this.сategoriesColorMap[category];
-      },
+        console.log(this.categoriesArray)
+        let filterCategories = this.categoriesArray.filter(c => c.item === category)
+        return `${filterCategories[0].color}!important;`;
+      }
     },
     computed: {
-      ...mapGetters({
-        сategoriesColorMap:'event/getCategoriesColorMap'
-      }),
+
     },
     watch: {
       calendarEvents(oldValue, newValue) {
