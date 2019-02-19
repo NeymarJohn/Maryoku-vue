@@ -516,12 +516,6 @@
       },
     },
     watch: {
-      year(newVal, oldVal) {
-
-      },
-      month(newVal, oldVal) {
-
-      }
     }
   };
 </script>

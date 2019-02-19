@@ -38,7 +38,7 @@
                               <td v-for="monthDay in monthRow" style="width: 14.2%; min-width: 14.2%; max-width: 14.2%;">
                                 <template v-if="monthDay !== 0">
                                   <template v-if="monthDay.hasEvents">
-                                    <md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
+                                    <md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" class="md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                     </md-button>
                                     <md-button v-else-if="monthDay.events.editables.length" @click="openEditEventModal(true, monthDay.events.editables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-just-icon md-round md-md" v-bind:style="`background-color: ${colorWithCategory(monthDay.events.editables[0].category)}`">
@@ -199,7 +199,7 @@
       this.isLoading = true;
       this.weekDays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
       this.selectYearMonth(this.year, this.month);
-
+      
       this.queryCategories();
       this.queryCurrencies();
       this.queryEventTypes();
@@ -314,8 +314,8 @@
             occasionsArray.sort(function(a, b){return a.id-b.id});
             this.occasionsArray = occasionsArray;
             this.calendarEvents = eventsMap;
-
             this.generateRows(this.year, this.month);
+
             this.isLoading = false;
             this.ready = true;
           }).catch((error) => {
