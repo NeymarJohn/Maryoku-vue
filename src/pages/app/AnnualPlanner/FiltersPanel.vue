@@ -7,7 +7,7 @@
         <div class="md-layout" >
           <div class="md-layout-item md-size-30">
             <md-field>
-              <label for="eventType">Event Categories</label>
+              <label for="eventType">Event Types</label>
               <md-select
 
                 v-model="selectedEventTypes"
