@@ -40,7 +40,7 @@
                 v-model="selectedHolidays"
                 data-vv-name="holidays"
                 id="holidays"
-                name="holidays" multiple>
+                name="holidays" @md-selected="filtersChanged" multiple>
                 <md-option v-for="holiday in holidays" :key="holiday.item" :value="holiday.item" >{{holiday.item}}</md-option>
               </md-select>
             </md-field>
@@ -135,6 +135,8 @@
         filtersData.eventTypes = this.selectedEventTypes;
         filtersData.countries = this.selectedCountries;
         filtersData.holidays = this.selectedHolidays;
+
+        this.$emit('filters-changed-event');
       },
     },
     computed: {
