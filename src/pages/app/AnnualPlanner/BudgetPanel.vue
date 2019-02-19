@@ -206,7 +206,7 @@
     methods: {
       async saveBudgeData(){
           let calendarId = this.auth.user.defaultCalendarId;
-          let calendar = await Calendar.find(calendarId);
+          let calendar = await Calendar.params({year: this.$route.params.year}).find(calendarId);
 
           calendar.annualBudget = this.annualBudget;
           calendar.annualBudgetPerEmployee = this.annualBudgetPerEmployee;

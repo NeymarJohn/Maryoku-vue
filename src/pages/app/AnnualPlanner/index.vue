@@ -74,7 +74,7 @@
     methods: {
       monthCount() {
         this.auth.currentUser(this, true, function() {
-          Calendar.find(this.auth.user.defaultCalendarId).then(function(calendar){
+          Calendar.params({year: this.$route.params.year}).find(this.auth.user.defaultCalendarId).then(function(calendar){
             this.firstDayOfTheWeek = calendar.firstDayOfWeek;
             this.monthCounts = calendar.monthCounts;
 
@@ -88,12 +88,12 @@
             this.statisticsData = statisticMap;
 
             this.checkSelectedYearMonth();
-            
+
             this.ready = true;
             this.isLoading = false;
           }.bind(this));
         }.bind(this))
-      },      
+      },
       checkSelectedYearMonth(){
         let yearParam = this.$route.params.year;
         let monthParam = this.$route.params.month;
