@@ -4,7 +4,7 @@
     <vue-element-loading :active="loading" spinner="ring" color="#FF547C" isFullScreen/>
     <div class="md-layout-item">
       <h2 class="title text-center" slot="title" style="text-align: center;">
-        Hey, it's your company
+        Hey, tell us about you
       </h2>
       <signup-card style="padding-top: 32px; padding-bottom: 2px; padding-left: 0;">
         <div class="md-layout-item md-size-5" slot="content-left"></div>
@@ -16,8 +16,38 @@
               Company Name
             </label>
             <div class="md-layout-item">
-              <md-field>
-                <md-input v-model="company_name" type="text" autofocus></md-input>
+              <md-field :class="[
+          {'md-valid': !errors.has('companyName') && touched.companyName},
+          {'md-error': errors.has('companyName')}]">
+                <md-input v-model="companyName" type="text" autofocus required data-vv-name="companyName" v-validate="modelValidations.companyName"></md-input>
+              </md-field>
+            </div>
+          </div>
+
+          <!-- Full Name -->
+          <div class="md-layout">
+            <label class="md-layout-item md-size-35 md-form-label">
+              Full Name
+            </label>
+            <div class="md-layout-item">
+              <md-field :class="[
+          {'md-valid': !errors.has('fullName') && touched.fullName},
+          {'md-error': errors.has('fullName')}]">
+                <md-input v-model="fullName" type="text" autofocus required data-vv-name="fullName" v-validate="modelValidations.fullName"></md-input>
+              </md-field>
+            </div>
+          </div>
+
+          <!-- Email Address -->
+          <div class="md-layout">
+            <label class="md-layout-item md-size-35 md-form-label">
+              Email Address
+            </label>
+            <div class="md-layout-item">
+              <md-field :class="[
+          {'md-valid': !errors.has('email') && touched.email},
+          {'md-error': errors.has('email')}]">
+                <md-input v-model="email" type="text" required data-vv-name="email" v-validate="modelValidations.email"></md-input>
               </md-field>
             </div>
           </div>
@@ -37,7 +67,7 @@
 
           <!-- Company logo -->
 
-          <div class="md-layout">
+          <div class="md-layout" style="display: none;">
             <label class="md-layout-item md-size-35 md-form-label">
               Company logo
             </label>
@@ -51,7 +81,7 @@
           </div>
 
           <!-- Office Address -->
-          <div class="md-layout">
+          <div class="md-layout" style="display: none;">
             <label class="md-layout-item md-size-35 md-form-label">
               Main Office Address
             </label>
@@ -70,7 +100,7 @@
 
           <!-- Number of employees -->
 
-          <div class="md-layout">
+          <div class="md-layout" style="display: none;">
             <label class="md-layout-item md-size-35 md-form-label">
               Number of employees
             </label>
@@ -82,7 +112,7 @@
           </div>
 
           <!-- Industry -->
-          <div class="md-layout">
+          <div class="md-layout" style="display: none;">
             <label class="md-layout-item md-size-35 md-form-label">
               Industry
             </label>
@@ -96,7 +126,7 @@
           </div>
 
           <!-- Website -->
-          <div class="md-layout">
+          <div class="md-layout" style="display: none;">
             <label class="md-layout-item md-size-35 md-form-label">
               Website
             </label>
@@ -167,7 +197,9 @@
         auth: auth,
         loading: false,
 
-        company_name:'',
+        companyName:'',
+        fullName: '',
+        email: '',
         workspace_domain:'',
         upload_logo:null,
         main_office_adddress: {
@@ -181,6 +213,36 @@
         logo_name:'',
         images:[],
         isImageShow:false,
+        touched: {
+          email: false,
+          fullName: false,
+          companyName: false
+        },
+        modelValidations: {
+          companyName: {
+            required: true,
+            min: 3
+          },
+          fullName: {
+            required: true,
+            min: 3
+          },
+          email: {
+            required: true,
+            email: true
+          }
+        },
+      }
+    },
+    watch: {
+      email() {
+        this.touched.email = true;
+      },
+      fullName() {
+        this.touched.fullName = true;
+      },
+      companyName() {
+        this.touched.companyName = true;
       }
     },
     attributes () {
@@ -199,18 +261,21 @@
     mounted:function(){
       this.auth.currentUser(this, true, () => {
         this.$store.dispatch("user/getIndustry");
-        //const auto =document.getElementById('city_getter');
-        //this.autocomplete = new google.maps.places.Autocomplete(auto,{types: ['geocode']});
+
+        let user = this.auth.user;
+        this.fullName = user.displayName;
+        this.email = user.email;
+
         let customer = this.auth.user.customer;
-        this.company_name = customer.name;
-        this.main_office_adddress = {
+        this.companyName = customer.name;
+        /*this.main_office_adddress = {
           label: `${customer.mainAddressLine1 || ''} ${customer.mainAddressLine2 || ''} ${customer.mainAddressCity || ''} ${customer.mainAddressStateRegion || ''} ${customer.mainAddressCountry || ''} ${customer.mainAddressZip || ''}`,
           data: {}
         };
         this.industry = customer.industry;
         this.number_of_employees = customer.numberOfEmployees;
         this.website = customer.website;
-        this.workspace_domain = customer.workspaceDomain;
+        this.workspace_domain = customer.workspaceDomain;*/
       })
     },
     computed:{
@@ -223,42 +288,40 @@
       next() {
         this.loading = true;
         const that = this;
-        new Customer({
-          id: this.auth.user.me.customer.id,
-          onboarded: true,
-          name: this.company_name,
-          mainAddressLine1: this.main_office_adddress.data.name,
-          mainAddressLine2: '',
-          mainAddressCity: this.main_office_adddress.data.administrative,
-          mainAddressStateRegion: this.main_office_adddress.data.county,
-          mainAddressCountry: this.main_office_adddress.data.country,
-          mainAddressZip: this.main_office_adddress.data.postcode,
-          numberOfEmployees: this.number_of_employees,
-          industry: this.industry,
-          website: this.website,
-          workspaceDomain: this.workspace_domain
-        }).save().then(res => {
 
-          Me.get().then(me => {
-            that.auth.user.me = me;
-            that.auth.user.customer = me.customer;
-          });
-
-          this.moveon();
+        this.$validator.validateAll().then(isValid => {
+          if (isValid){
+            new Customer({
+              id: this.auth.user.me.customer.id,
+              onboarded: true,
+              name: this.companyName
+            }).save().then(res => {
+              new Me({
+                id: this.auth.user.id,
+                onboarded: true,
+                emailAddress: this.email,
+                displayName: this.fullName
+              }).save().then((response) => {
+                Me.get().then(me => {
+                  that.auth.user.me = me;
+                  that.auth.user.customer = me.customer;
+                  this.moveon();
+                });
+              });
+            });
+          }
         });
       },
       skip() {
         this.loading = true;
         new Customer({id: this.auth.user.me.customer.id, onboarded: true}).save().then(res => {
-          this.moveon();
+          new Me({id: this.auth.user.id, onboarded: true}).save().then((response) => {
+          });
         });
+        this.moveon();
       },
       moveon(){
-        if (!this.auth.user.me.onboarded){
-          this.$router.push({name: 'MeForm'});
-        } else {
-          this.$router.push({name: 'AnnualPlanner'});
-        }
+        this.$router.push({name: 'AnnualPlanner'});
       },
       openPicker(){
         this.$refs.inputFile.click();

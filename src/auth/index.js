@@ -74,17 +74,19 @@ export default {
           store.dispatch("user/getUserFromApi" , resp.data);
           this.user.id = resp.data.id;
           this.user.username = resp.data.username;
+          this.user.email = resp.data.emailAddress;
           this.user.avatar =  resp.data.pictureUrl;
           this.user.displayName = resp.data.displayName;
 
 
           this.user.defaultGroupId = resp.data.defaultGroupId;
           this.user.defaultCalendarId = resp.data.defaultCalendarId;
+
           this.user.customer = resp.data.customer;
+
           this.user.me = resp.data;
 
           this.setHeaders(context);
-
 
           /*if(!resp.data.onboarded){
 

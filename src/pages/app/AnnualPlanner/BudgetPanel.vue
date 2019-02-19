@@ -1,13 +1,11 @@
 <template>
   <div style="overflow: hidden; height: 100%; margin: 0; padding: 0;">
 
-    <md-card style="background-color: #41535E; color: rgb(225, 234,239); height: 100%; margin: 0; padding: 0;">
-      <md-card-content style="text-align: center; height: 100%;background-color: #003434;">
-
-
+    <md-card class="budget-panel" style="background-color: #41535E; color: rgb(225, 234,239); height: 100%; margin: 0; padding: 0;">
+      <md-card-content style="text-align: center; height: 100%;">
         <div style="text-align: left;">
           <h5 style="font-size: 0.95rem !important; font-weight: 600; padding: 0; margin: 0;">Annual budget per employee</h5>
-          <div class="d-flex justify-beetwen items-center-v">
+          <div class="d-flex flex-wrap justify-beetwen items-center-v">
             <md-field v-show="this.editAnnualBudgetPerEmployee" :class="[{'md-error': errors.has('annualBudgetPerEmployee')}]">
               <md-input v-model="annualBudgetPerEmployee"
                         data-vv-name="annualBudgetPerEmployee"
@@ -20,30 +18,31 @@
             </h4>
 
             <div v-show="!this.editAnnualBudgetPerEmployee">
-              <md-button class="md-simple md-just-icon md-round fa fa-edit" @click="openEditAnnualBudgetPerEmployee()">
+              <md-button class="md-icon-button md-simple" @click="openEditAnnualBudgetPerEmployee()">
                 <md-icon>edit</md-icon>
               </md-button>
             </div>
 
-            <div v-show="this.editAnnualBudgetPerEmployee" class="d-flex">
-              <md-button class="md-simple md-just-icon md-round fas fa-times" @click="resetField()">
+            <div v-show="this.editAnnualBudgetPerEmployee" class="d-flex ml-auto mr-0">
+              <md-button class="md-icon-button md-simple" @click="resetField()">
                 <md-icon class="text-red">clear</md-icon>
               </md-button>
 
-              <md-button class="md-simple md-just-icon md-round fa fa-check" @click="saveBudgeData()">
+              <md-button class="md-icon-button md-simple" @click="saveBudgeData()">
                 <md-icon class="text-success">check</md-icon>
               </md-button>
             </div>
           </div>
-
           <hr v-show="!this.editAnnualBudgetPerEmployee" style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
         </div>
 
+        <div style="padding: 16px;"></div>
+        
           <div>
             <div style="text-align: left;">
               <h5 style="font-size: 0.95rem !important; font-weight: 600; padding: 0; margin: 0;">Total annual budget</h5>
 
-              <div class="d-flex justify-beetwen items-center-v">
+              <div class="d-flex flex-wrap justify-beetwen items-center-v">
                 <md-field v-show="this.editAnnualBudget" :class="[{'md-error': errors.has('annualBudget')}]">
                      <md-input v-model="annualBudget"
                                data-vv-name="annualBudget"
@@ -51,19 +50,19 @@
                       />
                       <span class="md-error" v-if="errors.has('annualBudgetPerEmployee')">The field is required</span>
                 </md-field>
-                <h4 v-show="!this.editAnnualBudget" style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+                <h4 v-show="!this.editAnnualBudget" style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; rgb(125,192,217);">
                   <animated-number ref="annualBudgetNumber" :value="this.annualBudget" prefix="$"></animated-number>
                 </h4>
                 <div v-show="!this.editAnnualBudget">
-                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click="openEditAnnualBudget()">
+                  <md-button class="md-icon-button md-simple" @click="openEditAnnualBudget()">
                     <md-icon>edit</md-icon>
                   </md-button>
                 </div>
-                <div v-show="this.editAnnualBudget" class="d-flex">
-                  <md-button class="md-simple md-just-icon md-round fas fa-times" @click="resetField()">
+                <div v-show="this.editAnnualBudget" class="d-flex ml-auto mr-0">
+                  <md-button class="md-icon-button md-simple" @click="resetField()">
                     <md-icon class="text-red">clear</md-icon>
                   </md-button>
-                  <md-button class="md-simple md-just-icon md-round fa fa-check" @click="saveBudgeData()">
+                  <md-button class="md-icon-button md-simple" @click="saveBudgeData()">
                     <md-icon class="text-success">check</md-icon>
                   </md-button>
                 </div>
@@ -73,88 +72,43 @@
             </div>
           </div>
 
+        <div style="padding: 16px;"></div>
 
-        <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total remaining budget</h5>
-        <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
-          <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
-        </h4>
+        <div style="position:relative;">
+          <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total remaining budget</h5>
+          <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+            <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
+          </h4>
 
-        <chart-component
-                class=""
-                :chart-data="pieChart.data"
-                :chart-options="pieChart.options"
-                chart-type="Pie"/>
-                 <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
+          <chart-component
+                  :chart-data="pieChart.data"
+                  :chart-options="pieChart.options"
+                  chart-type="Pie"/>
+          <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
+        </div>
+
         <div style="padding: 16px;"></div>
 
         <div>
           <div style="text-align: left;">
             <h5 style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Remaining budget per employee</h5>
-            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+            <h4 style="font-size: 0.95rem; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
               <animated-number ref="remainingBudgetPerEmployeeNumber" :value="remainingBudgetPerEmployee" prefix="$"></animated-number>
             </h4>
-            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
           </div>
+          <hr style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
         </div>
+
+        <div style="padding: 16px;"></div>
 
         <div>
           <div style="text-align: left;">
             <h5 style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Total events</h5>
-            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+            <h4 style="font-size: 0.95rem; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
               <animated-number ref="totalEventsNumber" :value="countEvents"></animated-number>
             </h4>
-            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
           </div>
-        </div>
-      </md-card-content>
-    </md-card>
-
-    <md-card style="display: none; background-color: #41535E; color: rgb(225, 234,239); height: 100%; margin: 0; padding: 0;">
-      <md-card-content style="text-align: center; height: 100%;">
-        <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total remaining budget</h5>
-        <h4 style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
-          <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
-        </h4>
-        <div style="padding: 16px;"></div>
-        <img src="https://cdn1.iconfinder.com/data/icons/charts-and-diagrams-1-1/512/donutchart-512.png"/>
-        <div style="padding: 16px;"></div>
-
-        <div>
-          <div style="text-align: left;">
-            <h5 style="font-size: 0.95em; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Remaining budget per employee</h5>
-            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">$285.5</h4>
-            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
-          </div>
-        </div>
-
-        <div style="padding: 8px;"></div>
-
-        <div>
-          <div style="text-align: left;">
-            <h5 style="font-size: 0.95em; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Annual budget per employee</h5>
-            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">$285.5</h4>
-            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
-          </div>
-        </div>
-
-        <div style="padding: 8px;"></div>
-
-        <div>
-          <div style="text-align: left;">
-            <h5 style="font-size: 0.95em; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Total annual budget</h5>
-            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">$285.5</h4>
-            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
-          </div>
-        </div>
-
-        <div style="padding: 8px;"></div>
-
-        <div>
-          <div style="text-align: left;">
-            <h5 style="font-size: 0.95em; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Total events</h5>
-            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">20</h4>
-            <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
-          </div>
+          <hr style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
         </div>
       </md-card-content>
     </md-card>
@@ -184,6 +138,9 @@
       },
       year: {
         type: Number
+      },
+      statistics: {
+        type: Object
       }
     },
     data() {
@@ -236,12 +193,11 @@
       }
     },
     created() {
-
+      this.queryBudgetInfo();
     },
     mounted(){
       this.ready = true;
       this.isLoading = true;
-      this.queryBudgetInfo();
     },
     methods: {
       async saveBudgeData(){
@@ -252,39 +208,27 @@
           calendar.annualBudgetPerEmployee = this.annualBudgetPerEmployee;
 
           calendar.save().then(response => {
+            this.$emit("month-count");
             this.queryBudgetInfo();
             this.resetField();
           }).catch(error => {
-            console.log(error);
+            console.error(error);
           });
       },
-      async queryBudgetInfo(){
-        let calendarId = this.auth.user.defaultCalendarId;
-
-        let calendar = await Calendar.find(calendarId).then(response => {
-            let statistics = response.statistics;
-            let statisticMap = {};
-
-            statistics.forEach(function(data){
-              statisticMap[data.item] = data.value
-            });
-
-            this.annualBudget = statisticMap.annualBudget;
-            this.annualBudgetPerEmployee = statisticMap.annualBudgetPerEmployee;
-            // this.countEvents = response.events;
-            this.totalRemainingBudget = statisticMap.annualBudget - statisticMap.annualBudgetAllocated;
-            console.log(statisticMap)
-            this.remainingBudgetPerEmployee = statisticMap.annualBudgetPerEmployee - statisticMap.annualBudgetPerEmployeeAllocated;
-            this.seriesData = [statisticMap.annualBudget, statisticMap.annualBudgetPerEmployeeAllocated];
-            this.countEvents = statisticMap.numberOfEvents;
-
+      queryBudgetInfo(){
+        if (this.statistics) {
+            this.annualBudget = this.statistics.annualBudget;
+            this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee;
+            this.totalRemainingBudget = this.statistics.annualBudget - this.statistics.annualBudgetAllocated;
+            this.remainingBudgetPerEmployee = this.statistics.annualBudgetPerEmployee - this.statistics.annualBudgetPerEmployeeAllocated;
+            this.seriesData = [this.statistics.annualBudget, this.statistics.annualBudgetPerEmployeeAllocated];
+            this.countEvents = this.statistics.numberOfEvents;
+           
             this.annualBudgetCache = this.annualBudget;
             this.annualBudgetPerEmployeeCache = this.annualBudgetPerEmployee;
-          })
-          .catch(error => {
-            console.log(error);
-          })
-          this.isLoading = false;
+        }
+
+        this.isLoading = false;
       },
       resetField() {
         this.annualBudget = this.annualBudgetCache;
@@ -322,6 +266,9 @@
       month(newVal, oldVal){
         this.queryBudgetInfo();
       },
+      statistics(newVal, oldVal){
+        this.queryBudgetInfo();
+      }
     }
   };
 </script>
@@ -342,15 +289,18 @@
   color: #6cd6ee;
 }
 .md-card-content h4 span {
-  color: #006690;
+  color: rgb(125,192,217);
 }
 .md-card-content h5{
   font-size: 1.2rem!important;
   font-weight: 400;
 }
 .percentage {
-  position: relative;
-  top: -108px;
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
   font-size: 2.5rem;
   font-weight: 700;
   color: #AEAAA8;
@@ -358,8 +308,10 @@
 .budget-form .md-field {
   max-width: 133px;
 }
-.budget-form .md-field .md-input,
-.budget-form .md-field .md-textarea{
+.budget-panel .md-field {
+  margin-top: 0;
+}
+.budget-panel .md-field .md-input{
   -webkit-text-fill-color: #fff !important;
   color: #fff !important;
 }

@@ -17,8 +17,8 @@ const state = {
     },
     componentsList: null,
     vendorsList: null,
-    occasionsArray: null,
     currenciesArray: null,
+    caregoriesArray: null,
     eventTypes: null,
     calendarId: null,
 }
