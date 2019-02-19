@@ -37,6 +37,8 @@
           required
           :onChange="onChange"
           :valueName="['name','dial_code']"
+          withSpan
+          :trim='isTrim'
           :isErrors='isErrors'
           />
           </div> 
@@ -105,8 +107,10 @@ export default {
                    list_code: country_code    
                 }
         },
-                computed:{                        
-                ...mapGetters({})
+         computed:{
+       isTrim(){
+               return this.country_code===''  
+         } 
         },
                 methods:{
         submitForm:function(){                                    

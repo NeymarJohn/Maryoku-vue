@@ -62,7 +62,7 @@
                       </div>
                     </md-button>
                     <ul class="dropdown-menu dropdown-menu-right">
-                      <li><router-link :to="{path: '/company-form'}">My Profile</router-link></li>
+                      <li><router-link :to="{path: '/me-form'}">My Profile</router-link></li>
                       <li><router-link :to="{path: '/company-form'}">Account Settings</router-link></li>
                       <li class="divider"></li>
                       <li><router-link :to="{path: '/signout'}">Sign Out</router-link></li>
@@ -108,7 +108,7 @@
     mounted() {
       setTimeout(function(){
         console.log("avatar: " + this.auth.user.avatar);
-        this.avatar = this.auth.user.avatar != null ? this.auth.user.avatar : "static/img/placeholder.jpg";
+        this.avatar = this.auth.user.avatar != null ? this.auth.user.avatar : "static/img/faces/avatar.jpg";
       }.bind(this),3000);
     },
     methods: {

@@ -12,7 +12,7 @@
                                               v-validate= "modelValidations.title"
                                     />
                                     <span class="md-error" v-if="errors.has('title')">The event title is required</span>
-                                </md-field> 
+                                </md-field>
 
                                 <h4 class="modal-title" v-show="!this.editTitle">
                                   <span v-if="title">{{title}}</span>
@@ -21,7 +21,7 @@
                                     <md-icon>edit</md-icon>
                                 </md-button>
                             </div>
-                    </div>                 
+                    </div>
                     <md-button class="md-simple md-just-icon md-round modal-default-button" @click="closeModal">
                         <md-icon>clear</md-icon>
                     </md-button>
@@ -34,17 +34,16 @@
                                     <label>Occasion</label>
                                     <md-select v-model="occasion"
                                                data-vv-name="occasion"
-                                               v-validate= "modelValidations.occasion"
-                                    >
+                                               v-validate= "modelValidations.occasion">
                                         <md-option v-for="option in occasionsOptions"
-                                                   :key="option.value"
+                                                   :key="option.id"
                                                    :value="option.value">
                                             {{ option.value }}
                                         </md-option>
                                     </md-select>
                                     <span class="md-error" v-if="errors.has('occasion')">The event occasion is required</span>
                                 </md-field>
-                            </div>                           
+                            </div>
                         </div>
                         <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
@@ -63,23 +62,7 @@
                                     <span class="md-error" v-if="errors.has('eventType')">The event eventType is required</span>
                                 </md-field>
                             </div>
-                              <div class="md-layout-item md-small-size-100">
-                                <md-field :class="[{'md-error': errors.has('category')}]" class="select-with-icon">
-                                    <label>Category</label>
-                                    <md-select v-model="category"
-                                               data-vv-name="category"
-                                               v-validate= "modelValidations.category"
-                                    >
-                                        <md-option v-for="option in categoriesOptions"
-                                                   :key="option.id"
-                                                   :value="option.item">
-                                            {{ option.item }}
-                                        </md-option>
-                                    </md-select>
-                                    <span class="md-error" v-if="errors.has('category')">The event category is required</span>
-                                </md-field>
-                            </div> 
-                        </div>                        
+                        </div>
                         <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
                                 <md-datepicker
@@ -153,6 +136,7 @@
                                 <md-field :class="[{'md-error': errors.has('currency')}]" class="select-with-icon">
                                     <label>Currency</label>
                                     <md-select v-model="currency"
+
                                                data-vv-name="currency"
                                                v-validate= "modelValidations.currency"
                                     >
@@ -170,10 +154,9 @@
                     </form>
                 </template>
                 <template slot="footer">
-                     <md-button v-if="this.editMode" class="md-simple move-left md-just-icon" @click="showDeleteAlert">
-                        <md-icon class="md-theme-warning" style="font-size: 1.5rem !important;">delete </md-icon>
+                    <md-button v-if="this.editMode" class="md-warning move-left" @click="showDeleteAlert">
+                        Delete
                     </md-button>
-
                     <md-button class="md-success move-right" @click="validateEvent">
                         {{modalSubmitTitle}}
                     </md-button>
@@ -187,6 +170,8 @@
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import CalendarEvent from '@/models/CalendarEvent';
   import {Modal} from "@/components";
+  import Occasion from '@/models/Occasion';
+  import Currency from "@/models/Currency";
   import Calendar from "@/models/Calendar"
   import swal from "sweetalert2";
   import { error } from 'util';
@@ -196,12 +181,7 @@
       Modal,
     },
     props: {
-      year: Number,
-      month : Number,
-      occasionsOptions: Array,
-      currenciesOptions:Array,
-      categoriesOptions:Array,
-      eventTypesOptions:Array,
+
     },
     data: () => ({
       auth: auth,
@@ -209,6 +189,9 @@
       durationArray: [...Array(12).keys()].map(x =>  ++x),
       dateValid: true,
       editTitle: false,
+      occasionsOptions:null,
+      currenciesOptions:null,
+      eventTypesOptions:null,
       modelValidations: {
         title: {
           required: true,
@@ -242,7 +225,6 @@
     }),
 
     created() {
-
     },
     computed: {
       ...mapState('AnnualPlannerVuex', [
@@ -252,7 +234,7 @@
         'modalSubmitTitle',
         'editMode',
       ]),
-      
+
       id: {
         get() {
           return this.eventData.id;
@@ -263,7 +245,7 @@
       },
       occasion: {
         get() {
-          return this.eventData.occasion
+          return this.eventData.occasion;
         },
         set(value) {
           this.setEventProperty({key: 'occasion', actualValue: value});
@@ -333,16 +315,8 @@
           this.setEventProperty({key: 'eventType', actualValue: value});
         }
       },
-      category: {
-        get() {
-          return this.eventData.category
-        },
-        set(value) {
-          this.setEventProperty({key: 'category', actualValue: value});
-        }
-      },      
     },
-    mounted() {    
+    mounted() {
       this.$root.$on('statusChange', (newStatus) => {
         this.status = newStatus;
       });
@@ -350,13 +324,42 @@
       this.$root.$on('submitForm', () => {
         this.validateEvent();
       });
+
+      let occasions = '';
+      let currencies = '';
+
+      this.occasionsOptions = this.$store.state.event.occasionsArray;
+
+      if (this.$store.state.event.currenciesArray === null) {
+        currencies = Currency.get().then((currencies) => {
+          this.$store.state.event.currenciesArray = currencies;
+          this.currenciesOptions = this.$store.state.event.currenciesArray;
+        });
+      } else {
+        this.currenciesOptions = this.$store.state.event.currenciesArray;
+      }
+
+      if (this.$store.state.event.eventTypes === null) {
+        this.auth.currentUser(this, true, function() {
+
+          let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+
+          _calendar.eventTypes().get().then(eventTypes => {
+            this.$store.state.event.eventTypes = eventTypes;
+            this.eventTypesOptions = eventTypes;
+          });
+
+        }.bind(this));
+      } else {
+        this.eventTypesOptions = this.$store.state.event.eventTypes;
+      }
     },
     methods: {
       ...mapMutations('AnnualPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
       closeModal(){
-        this.setEventModal(false);
         this.editTitle = false;
         this.clearForm();
+        this.setEventModal(false);
       },
       toogleTitle(){
         this.editTitle = !this.editTitle;
@@ -373,7 +376,6 @@
           this.totalBudget = "";
           this.currency = "";
           this.eventType = null;
-          this.category = null;
       },
       getError(fieldName) {
         return this.errors.first(fieldName);
@@ -399,8 +401,9 @@
         editedEvent.status = this.eventData.status;
         editedEvent.currency = this.currency;
         editedEvent.eventType = this.eventType;
-        editedEvent.category = this.category;
         editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+        editedEvent.category = 'CompanyDays';
+
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
           this.closeModal();
@@ -426,9 +429,9 @@
         this.validateTitle();
         this.$validator.validateAll().then(isValid => {
           if ((this.dateValid = this.validateDate()) && isValid) {
-            
+
             this.$parent.isLoading = true;
-            this.setEventModal(false);
+
             this.editMode ? this.updateEvent() : this.createEvent();
           } else {
             this.showNotify();
@@ -449,7 +452,7 @@
         }).then(result => {
           if (result.value) {
             this.$parent.isLoading = true;
-          
+
             let _calendar = new Calendar({id: this.$store.state.event.calendarId});
             let event = new CalendarEvent({id: this.eventData.id});
 
@@ -477,9 +480,9 @@
           status: this.eventData.status,
           currency: this.currency,
           eventType: this.eventType,
-          category: this.category,
           edittable: true,
           participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+          category: 'CompanyDays',
         }).for(_calendar).save().then(response => {
             this.$parent.isLoading = false;
             this.closeModal();
@@ -516,6 +519,9 @@
       },
     },
     watch: {
+      'eventModalOpen' : function(newValue, oldValue){
+        this.occasionsOptions = this.$store.state.event.occasionsArray;
+      }
     }
   };
 </script>

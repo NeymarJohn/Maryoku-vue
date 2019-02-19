@@ -24,7 +24,6 @@ export default {
             totalBudget: "",
             currency: "",
             eventType: null,
-            category: null,
           },
           eventModalOpen: false,
           modalTitle: '',
@@ -55,12 +54,8 @@ export default {
         state.eventData['currency'] = data.eventData.currency;
         state.eventData['eventType'] = data.eventData.eventType;
         state.eventData['date'] = data.eventData.eventStartMillis;
-        state.eventData['category'] = data.eventData.category;
         state.eventData['time'] = moment(data.eventData.eventStartMillis).format('HH:00');
         state.eventData['duration'] = moment(data.eventData.eventEndMillis).diff(data.eventData.eventStartMillis, 'hours')
-      },
-      setEventDate(state, data) {
-        state.eventData['date'] = data.date;
       },
     },
     actions: {

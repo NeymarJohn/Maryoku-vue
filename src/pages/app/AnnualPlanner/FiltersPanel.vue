@@ -7,8 +7,9 @@
         <div class="md-layout" >
           <div class="md-layout-item md-size-30">
             <md-field>
-              <label for="eventType">Event Categories</label>
+              <label for="eventType">Event Types</label>
               <md-select
+
                 v-model="selectedEventTypes"
                 data-vv-name="eventType"
                 id="eventType"
@@ -39,7 +40,7 @@
                 v-model="selectedHolidays"
                 data-vv-name="holidays"
                 id="holidays"
-                name="holidays" @md-selected="filtersChanged" multiple>
+                name="holidays" multiple>
                 <md-option v-for="holiday in holidays" :key="holiday.item" :value="holiday.item" >{{holiday.item}}</md-option>
               </md-select>
             </md-field>
@@ -81,8 +82,6 @@
         isLoading: true,
         selectedEventTypes: [],
         eventTypes: [],
-        selectedCategories: [],
-        categories: [],        
         countries: [],
         selectedCountries: [],
         holidays: [],
@@ -107,10 +106,6 @@
       this.auth.currentUser(this, true, function() {
 
         let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-
-        _calendar.categories().get().then(categories => {
-            categories
-        });
 
         _calendar.metadata().get().then(metadatas => {
 
@@ -140,8 +135,6 @@
         filtersData.eventTypes = this.selectedEventTypes;
         filtersData.countries = this.selectedCountries;
         filtersData.holidays = this.selectedHolidays;
-
-        this.$emit('filters-changed-event');
       },
     },
     computed: {
