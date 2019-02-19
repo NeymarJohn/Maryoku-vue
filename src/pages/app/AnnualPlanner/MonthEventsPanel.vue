@@ -112,7 +112,6 @@
         this.setEventModalAndEventData({showModal: show, eventData: item});
       },
       colorWithCategory(category) {
-        console.log(this.categoriesArray)
         let filterCategories = this.categoriesArray.filter(c => c.item === category)
         return `${filterCategories[0].color}!important;`;
       }

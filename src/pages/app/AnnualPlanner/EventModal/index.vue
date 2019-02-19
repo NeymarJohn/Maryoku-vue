@@ -170,9 +170,10 @@
                     </form>
                 </template>
                 <template slot="footer">
-                    <md-button v-if="this.editMode" class="md-warning move-left" @click="showDeleteAlert">
-                        Delete
+                     <md-button v-if="this.editMode" class="md-simple move-left md-just-icon" @click="showDeleteAlert">
+                        <md-icon class="md-theme-warning" style="font-size: 1.5rem !important;">delete </md-icon>
                     </md-button>
+
                     <md-button class="md-success move-right" @click="validateEvent">
                         {{modalSubmitTitle}}
                     </md-button>
@@ -427,7 +428,7 @@
           if ((this.dateValid = this.validateDate()) && isValid) {
             
             this.$parent.isLoading = true;
-
+            this.setEventModal(false);
             this.editMode ? this.updateEvent() : this.createEvent();
           } else {
             this.showNotify();
@@ -465,7 +466,6 @@
       saveEvent() {
         let _calendar = new Calendar({ id: this.$store.state.calendarId });
 
-        console.log(this.category)
         let newEvent = new CalendarEvent({
           calendar: {id: this.$store.state.calendarId},
           title: this.title,
