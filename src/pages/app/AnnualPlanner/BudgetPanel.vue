@@ -84,13 +84,11 @@
                 :chart-data="pieChart.data"
                 :chart-options="pieChart.options"
                 chart-type="Pie"/>
-                 <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
-        <div style="padding: 16px;"></div>
-
+        <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
         <div>
           <div style="text-align: left;">
             <h5 style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Remaining budget per employee</h5>
-            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+            <h4 style="font-size: 0.95rem; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
               <animated-number ref="remainingBudgetPerEmployeeNumber" :value="remainingBudgetPerEmployee" prefix="$"></animated-number>
             </h4>
             <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
@@ -100,7 +98,7 @@
         <div>
           <div style="text-align: left;">
             <h5 style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Total events</h5>
-            <h4 style="font-size: 1.5em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+            <h4 style="font-size: 0.95rem; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
               <animated-number ref="totalEventsNumber" :value="countEvents"></animated-number>
             </h4>
             <hr style="border-top: 1px solid rgb(84,102,115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84,102,115);"/>
@@ -184,6 +182,9 @@
       },
       year: {
         type: Number
+      },
+      statistics: {
+        type: Object
       }
     },
     data() {
@@ -236,12 +237,11 @@
       }
     },
     created() {
-
+      this.queryBudgetInfo();
     },
     mounted(){
       this.ready = true;
       this.isLoading = true;
-      this.queryBudgetInfo();
     },
     methods: {
       async saveBudgeData(){
@@ -252,39 +252,27 @@
           calendar.annualBudgetPerEmployee = this.annualBudgetPerEmployee;
 
           calendar.save().then(response => {
+            this.$emit("month-count");
             this.queryBudgetInfo();
             this.resetField();
           }).catch(error => {
             console.log(error);
           });
       },
-      async queryBudgetInfo(){
-        let calendarId = this.auth.user.defaultCalendarId;
-
-        let calendar = await Calendar.find(calendarId).then(response => {
-            let statistics = response.statistics;
-            let statisticMap = {};
-
-            statistics.forEach(function(data){
-              statisticMap[data.item] = data.value
-            });
-
-            this.annualBudget = statisticMap.annualBudget;
-            this.annualBudgetPerEmployee = statisticMap.annualBudgetPerEmployee;
-            // this.countEvents = response.events;
-            this.totalRemainingBudget = statisticMap.annualBudget - statisticMap.annualBudgetAllocated;
-            console.log(statisticMap)
-            this.remainingBudgetPerEmployee = statisticMap.annualBudgetPerEmployee - statisticMap.annualBudgetPerEmployeeAllocated;
-            this.seriesData = [statisticMap.annualBudget, statisticMap.annualBudgetPerEmployeeAllocated];
-            this.countEvents = statisticMap.numberOfEvents;
+      queryBudgetInfo(){
+        if (this.statistics) {
+            this.annualBudget = this.statistics.annualBudget;
+            this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee;
+            this.totalRemainingBudget = this.statistics.annualBudget - this.statistics.annualBudgetAllocated;
+            this.remainingBudgetPerEmployee = this.statistics.annualBudgetPerEmployee - this.statistics.annualBudgetPerEmployeeAllocated;
+            this.seriesData = [this.statistics.annualBudget, this.statistics.annualBudgetPerEmployeeAllocated];
+            this.countEvents = this.statistics.numberOfEvents;
 
             this.annualBudgetCache = this.annualBudget;
             this.annualBudgetPerEmployeeCache = this.annualBudgetPerEmployee;
-          })
-          .catch(error => {
-            console.log(error);
-          })
-          this.isLoading = false;
+        }
+
+        this.isLoading = false;
       },
       resetField() {
         this.annualBudget = this.annualBudgetCache;
@@ -322,6 +310,9 @@
       month(newVal, oldVal){
         this.queryBudgetInfo();
       },
+      statistics(newVal, oldVal){
+        this.queryBudgetInfo();
+      }
     }
   };
 </script>
