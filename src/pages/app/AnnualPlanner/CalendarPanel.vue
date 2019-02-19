@@ -40,22 +40,16 @@
                                   <template v-if="monthDay.hasEvents">
                                     <md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
-                                    </md-button>
-                                    <md-button v-else-if="monthDay.events.editables.length" @click="openEditEventModal(true, monthDay.events.editables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-success md-just-icon md-round md-md" v-bind:style="`background-color: ${colorWithCategory(monthDay.events.editables[0].category)}`">
+                                      </md-button>
+                                    <md-button v-else-if="monthDay.events.editables.length" @click="openEditEventModal(true, monthDay.events.editables[0])" v-bind:class="{ 'multiple-events': multipleEvents(monthDay.events.editables.length) }" :ref="`month-day-${monthDay.dayInMonth}`" class="md-success md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
-                                      <span v-if="monthDay.events.editables.length > 1" class="count">
-                                        {{monthDay.events.editables.length}}
-                                      </span>
                                     </md-button>
-                                    <md-button v-else-if="monthDay.events.nonEditables.length" @click="openEditEventModal(true, monthDay.events.nonEditables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
+                                    <md-button v-else-if="monthDay.events.nonEditables.length" @click="openEditEventModal(true, monthDay.events.nonEditables[0])" v-bind:class="{ 'multiple-events': multipleEvents(monthDay.events.nonEditables.length) }" :ref="`month-day-${monthDay.dayInMonth}`" class="md-grey md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
-                                      <span v-if="monthDay.events.nonEditables.length > 1" class="count">
-                                        {{monthDay.events.nonEditables.length}}
-                                      </span>
                                     </md-button>
                                   </template>
                                   <template v-else>
-                                    <md-button :ref="`month-day-${monthDay.dayInMonth}`" @click="openEventModal()" class="md-simple md-round  md-just-icon md-md">
+                                    <md-button :ref="`month-day-${monthDay.dayInMonth}`" class="md-simple md-round  md-just-icon md-md">
                                       {{monthDay.dayInMonth}}
                                     </md-button>
                                   </template>
@@ -70,7 +64,6 @@
                       </md-card>
                     </td>
                   </tr>
-                  
                   <tr style="height: 5%;">
                     <td style="padding-top: 15px; padding-right: 15px;">
                       <md-card style="padding: 0; margin: 0; height: 100%; ">
@@ -79,8 +72,8 @@
                           <md-button class="md-simple md-xs md-info"><i class="fa fa-square" style="margin-right: 5px;"></i> Civil Days</md-button>
                           <md-button class="md-simple md-xs md-success"><i class="fa fa-square" style="margin-right: 5px;"></i> Company Days</md-button>
                           <md-button class="md-simple md-xs md-primary"><i class="fa fa-square" style="margin-right: 5px;"></i> Birthdays</md-button>
-                          <md-button class="md-simple md-xs"><i class="fa fa-square" style="color:#1d7eff!important;margin-right: 5px;"></i> Social days</md-button>
-                          <md-button class="md-simple md-xs"><i class="fa fa-square" style="color:#f5db09!important;margin-right: 5px;"></i> Fun Days</md-button>
+                          <md-button class="md-simple md-xs md-simple"><i class="fa fa-square" style="margin-right: 5px;"></i> Social days</md-button>
+                          <md-button class="md-simple md-xs md-warning"><i class="fa fa-square" style="margin-right: 5px;"></i> Fun Days</md-button>
                         </md-card-content>
                       </md-card>
                     </td>
@@ -109,9 +102,6 @@
     </table>
       <event-modal
               @refresh-events="refreshEvents"
-              :year="this.year"
-              :month="this.month"
-              :occasions-options="this.occasionsArray"
               ref="eventModal">
       </event-modal>
   </div>
@@ -185,7 +175,7 @@
         holidaysSelectDisplayed: true,
         selectedCountries: true,
         selectedEventTypes: true,
-        weekDays: [],
+        weekDays: []
       }
     },
     created() {
@@ -210,7 +200,6 @@
       refreshEvents(){
         this.selectYearMonth(this.year, this.month);
         this.queryEvents();
-        this.$emit("month-count");
       },
       selectYearMonth(year, month){
         let selectedMoment = moment().date(1).month(month-1).year(year);
@@ -263,7 +252,7 @@
             }
 
             occasionsArray.sort(function(a, b){return a.id-b.id});
-            this.occasionsArray = occasionsArray;
+            this.$store.state.event.occasionsArray = occasionsArray;
             this.calendarEvents = eventsMap;
 
             this.generateRows(this.year, this.month);
@@ -319,9 +308,9 @@
         return calendarEventsMap;
       },
       openEventModal() {
-        this.setEventModal({ showModal: true })
-        this.setModalSubmitTitle('Save')
-        this.setEditMode({ editMode: false })
+        this.setModalSubmitTitle('Save');
+        this.setEditMode({ editMode: false });
+        this.setEventModal({ showModal: true });
       },
       openEditEventModal: function (show, item) {
         if (!item.editable){
@@ -330,15 +319,12 @@
         item.numberOfParticipants = this.auth.user.customer.numberOfEmployees;
         this.setEventModalAndEventData({showModal: show, eventData: item});
       },
-      colorWithCategory(category) {
-        return this.сategoriesColorMap[category];
+      multipleEvents(length) {
+        return length > 1;
       }
     },
     computed: {
       ...mapState('AnnualPlannerVuex', ['filtersData']),
-      ...mapGetters({
-        сategoriesColorMap:'event/getCategoriesColorMap'
-      }),
     },
     watch: {
       year(newVal, oldVal){
@@ -352,21 +338,6 @@
     }
   };
 </script>
-<style scope>
-  .md-button.md-just-icon {
-    overflow: visible;
-  }
-  .md-button .md-button-content .count {
-    position: absolute;
-    top: -15px;
-    right: -20px;
-    min-width: 20px;
-    border-radius: 10px;
-    font-size: 13px;
-    line-height: 20px;
-    background-color: #00b878;
-  }
-</style>
 <style lang="scss">
   .md-grey {
     background-color: #e0e0e0;
@@ -393,5 +364,12 @@
 
   .vue-tooltip.tooltip-custom-editable .tooltip-arrow {
     border-color: #03a9f4;
+  }
+  .multiple-events {
+    border:2px solid red;
+  }
+
+  .velmld-overlay {
+    background-color: rgba(250,250,250,.9) !important;
   }
 </style>
