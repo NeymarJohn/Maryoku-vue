@@ -17,7 +17,7 @@
             </label>
             <div class="md-layout-item">
               <md-field>
-                <md-input v-model="fullName" type="text" autofocus required data-vv-name="fullName" v-validate="modelValidations.fullName"></md-input>
+                <md-input v-model="full_name" type="text" autofocus></md-input>
               </md-field>
             </div>
           </div>
@@ -29,14 +29,14 @@
             </label>
             <div class="md-layout-item">
               <md-field>
-                <md-input v-model="email" type="text" required data-vv-name="email" v-validate="modelValidations.email"></md-input>
+                <md-input v-model="email_address" type="text"></md-input>
               </md-field>
             </div>
           </div>
 
           <!-- Birthday -->
 
-          <div class="md-layout" style="display: none;">
+          <div class="md-layout">
             <label class="md-layout-item md-size-35 md-form-label">
               Birthday
             </label>
@@ -47,7 +47,7 @@
 
           <!-- First Day at work -->
 
-          <div class="md-layout" style="display: none;">
+          <div class="md-layout">
             <label class="md-layout-item md-size-35 md-form-label">
               First day at work
             </label>
@@ -57,12 +57,12 @@
           </div>
 
           <!-- Phone number -->
-          <div class="md-layout" style="display: none;">
+          <div class="md-layout">
             <label class="md-layout-item md-size-35 md-form-label">
               Phone Number
             </label>
             <div class="md-layout-item">
-              <vue-phone-number-input v-model="phoneNumber" @update="updatePhoneNumber" />
+              <vue-phone-number-input v-model="phone_number" />
             </div>
           </div>
 
@@ -125,27 +125,12 @@
         auth: auth,
         loading: false,
 
-        fullName: '',
-        email: '',
-        phoneNumber: '',
-        formattedNumber: '',
+        full_name: '',
+        email_address: '',
+        phone_number: '',
         birthday: null,
         firstDayAtWork: null,
         isError:false,
-        touched: {
-          email: false,
-          fullName: false
-        },
-        modelValidations: {
-          fullName: {
-            required: true,
-            min: 3
-          },
-          email: {
-            required: true,
-            email: true
-          }
-        },
       }
     },
     attributes () {
@@ -164,12 +149,9 @@
     mounted:function(){
       this.auth.currentUser(this, true, () => {
         let user = this.auth.user;
-        this.fullName = user.displayName;
-        this.email = user.email;
-        /*this.phoneNumber = user.me.phoneNumber;
-        this.formattedNumber = user.me.phoneNumber;
-        this.birthday = user.me.birthday;
-        this.firstDayAtWork = user.me.companyStartDate;*/
+        this.full_name = user.displayName;
+        this.email_address = user.username;
+
 
       })
     },
@@ -180,19 +162,12 @@
     },
 
     methods: {
-      updatePhoneNumber(data){
-        this.formattedNumber = data.formattedNumber;
-      },
       next() {
         this.loading = true;
+
         new Me({
           id: this.auth.user.id,
-          onboarded: true,
-          emailAddress: this.email,
-          displayName: this.fullName,
-          birthday: this.birthday,
-          phoneNumber: this.formattedNumber,
-          companyStartDate: this.firstDayAtWork,
+          onboarded: true
         }).save().then((response) => {
           this.$router.push({name: 'AnnualPlanner'});
         });

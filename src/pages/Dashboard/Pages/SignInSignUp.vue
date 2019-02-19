@@ -30,17 +30,15 @@
             </md-button>-->
             <h4 class="mt-3">or sign up with your work email address</h4>
           </div>
-          <md-field :class="[
-          {'md-valid': !errors.has('email') && touched.email},
-          {'md-error': errors.has('email')}]">
+          <md-field class="md-form-group" >
+            <md-icon>email</md-icon>
             <label>Email Address</label>
-            <md-input v-model="email" type="email" data-vv-name="email" required v-validate="modelValidations.email"></md-input>
+            <md-input v-model="email" type="email"></md-input>
           </md-field>
-          <md-field :class="[
-          {'md-valid': !errors.has('password') && touched.password},
-          {'md-error': errors.has('password')}]">
+          <md-field class="md-form-group">
+            <md-icon>lock_outline</md-icon>
             <label>Password</label>
-            <md-input v-model="password" type="password" data-vv-name="password" required v-validate="modelValidations.password"></md-input>
+            <md-input v-model="password" type="password"></md-input>
             <div class='md-error' style="text-align: center; width: 100%;">{{error}}</div>
           </md-field>
           <md-checkbox v-model="terms" style="text-align: center;"> I agree to 262Days <a href="https://www.262days.com/terms" target="_blank">Terms of Use</a> and <a href="https://www.262days.com/privacy" target="_blank">Privacy Policy</a></md-checkbox>
@@ -71,39 +69,25 @@ export default {
     signup(){
       this.loading = true;
 
-      this.$validator.validateAll().then(isValid => {
-        if (isValid){
-          this.auth.signupOrSignin(this, this.email, this.password, (data) => {
-            this.auth.login(this, {username: this.email, password: this.password}, (success) => {
-              this.$router.push({ path: '/signedin', query: {token: success.access_token} });
-            }, (failure) => {
-              this.loading = false;
-              if (failure.response.status === 401){
-                this.error = 'Sorry, wrong password, try again.';
-              } else {
-                this.error = 'Temporary failure, try again later';
-                console.log(JSON.stringify(failure.response));
-              }
-            } );
-          })
-        } else {
+      this.auth.signupOrSignin(this, this.email, this.password, (data) => {
+        this.auth.login(this, {username: this.email, password: this.password}, (success) => {
+          this.$router.push({ path: '/signedin', query: {token: success.access_token} });
+        }, (failure) => {
           this.loading = false;
-        }
-      });
+          if (failure.response.status === 401){
+            this.error = 'Sorry, wrong password, try again.';
+          } else {
+            this.error = 'Temporary failure, try again later';
+            console.log(JSON.stringify(failure.response));
+          }
+        } );
+      })
     }
   },
   created() {
     const givenToken = this.$route.query.token;
     this.auth.setToken(givenToken);
     this.auth.currentUser(this, true);
-  },
-  watch: {
-    email() {
-      this.touched.email = true;
-    },
-    password() {
-      this.touched.password = true;
-    },
   },
   data() {
     return {
@@ -115,20 +99,6 @@ export default {
       password: null,
       serverURL: process.env.SERVER_URL,
       auth: auth,
-      touched: {
-        email: false,
-        password: false
-      },
-      modelValidations: {
-        email: {
-          required: true,
-          email: true
-        },
-        password: {
-          required: true,
-          min: 8
-        }
-      },
       contentLeft: [
         {
           colorIcon: "icon-success",
@@ -152,6 +122,28 @@ export default {
           title: "Work Less",
           description:
             "Stop spending hours on phone calls, emails, quotes and invoices. Locate ranked suppliers and have them work for you."
+        }
+      ],
+      inputs: [
+        /*{
+          icon: "face",
+          name: "First Name...",
+          nameAttr: "firstname",
+          type: "text"
+        },*/
+
+        {
+          icon: "email",
+          name: "Email Address",
+          nameAttr: "email",
+          type: "email"
+        },
+
+        {
+          icon: "lock_outline",
+          name: "Password",
+          nameAttr: "password",
+          type: "password"
         }
       ]
     };
