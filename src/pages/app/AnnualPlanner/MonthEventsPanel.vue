@@ -124,7 +124,7 @@
     },
     filters: {
       formatDate: function (date) {
-        return moment(date).format('MMMM Do, GGGG - HH:mm');
+        return moment(date).format('MMMM Do, GGGG');
       },
     }
   };
