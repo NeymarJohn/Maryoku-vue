@@ -74,6 +74,7 @@
     methods: {
       monthCount() {
         this.auth.currentUser(this, true, function() {
+
           Calendar.params({year: this.$route.params.year}).find(this.auth.user.defaultCalendarId).then(function(calendar){
             this.firstDayOfTheWeek = calendar.firstDayOfWeek;
             this.monthCounts = calendar.monthCounts;
