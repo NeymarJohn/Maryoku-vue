@@ -7,14 +7,14 @@
         <div class="md-layout" >
           <div class="md-layout-item md-size-30">
             <md-field>
-              <label for="category">Event Categories</label>
+              <label for="eventType">Event Categories</label>
               <md-select
-                v-model="selectedCategories"
-                data-vv-name="category"
-                id="category"
-                name="category"
+                v-model="selectedEventTypes"
+                data-vv-name="eventType"
+                id="eventType"
+                name="eventType"
                 @md-selected="filtersChanged" multiple>
-                <md-option v-for="category in categoriesOptions" :key="category.item" :value="category.item" >{{category.item}}</md-option>
+                <md-option v-for="eventType in eventTypes" :key="eventType.item" :value="eventType.item" >{{eventType.item}}</md-option>
               </md-select>
             </md-field>
           </div>
@@ -71,10 +71,7 @@
       },
       year: {
         type: Number
-      },
-      categoriesOptions: {
-        type: Array
-      },
+      }
     },
     data() {
 
@@ -82,6 +79,7 @@
         ready: false,
         auth: auth,
         isLoading: true,
+        selectedEventTypes: [],
         eventTypes: [],
         selectedCategories: [],
         categories: [],        
@@ -106,63 +104,51 @@
       filtersData.countries = this.selectedCountries;
       filtersData.holidays = this.selectedHolidays;
 
-      this.filterBaseData();
+      this.auth.currentUser(this, true, function() {
+
+        let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+
+        _calendar.categories().get().then(categories => {
+            categories
+        });
+
+        _calendar.metadata().get().then(metadatas => {
+
+          let metadata = metadatas[0];
+
+          this.eventTypes = metadata.eventTypes;
+          this.selectedEventTypes = this.eventTypes.map(function(entry){ return entry.item;});
+          this.holidaysSelectDisplayed = true;
+
+          this.countries = metadata.countries;
+          this.selectedCountries = this.countries.map(function(entry){ return entry.item;});
+
+          this.holidays = metadata.holidays;
+          this.selectedHolidays = this.holidays.map(function(entry){ return entry.item;});
+
+          this.$emit("filters-changed-event", {eventTypes: this.selectedEventTypes, countries: this.selectedCountries, holidays: this.selectedHolidays});
+        });
+
+      }.bind(this));
     },
     methods: {
-      filterBaseData() {
-        this.auth.currentUser(this, true, function() {
-
-          let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-
-          _calendar.categories().get().then(categories => {
-              categories
-          });
-
-          _calendar.metadata().get().then(metadatas => {
-
-            let metadata = metadatas[0];
-
-            this.holidaysSelectDisplayed = true;
-
-            this.countries = metadata.countries;
-            this.selectedCountries = this.countries.map(function(entry){ return entry.item;});
-
-            this.holidays = metadata.holidays;
-
-            this.selectedHolidays = this.holidays.map(function(entry){ return entry.item;});
-          });
-
-          if (this.categoriesOptions) {
-            let categoriesMap = []
-
-            this.categoriesOptions.forEach(element => {
-                categoriesMap.push(element.item)
-            });
-
-            this.selectedCategories = categoriesMap;
-          }
-
-          this.$emit("filters-changed-event", {categories: this.selectedCategories, countries: this.selectedCountries, holidays: this.selectedHolidays});
-        }.bind(this));
-      },
       filtersChanged() {
+        this.holidaysSelectDisplayed = this.selectedEventTypes.indexOf("Holidays") !== -1;
         const filtersData = this.$store.state.AnnualPlannerVuex.filtersData;
         filtersData.year = this.year;
         filtersData.month = this.month;
-        filtersData.categories = this.selectedCategories;
+        filtersData.eventTypes = this.selectedEventTypes;
         filtersData.countries = this.selectedCountries;
         filtersData.holidays = this.selectedHolidays;
 
-        this.$emit('filters-changed-event', {categories: this.selectedCategories, countries: this.selectedCountries, holidays: this.selectedHolidays});
+        this.$emit('filters-changed-event');
       },
     },
     computed: {
       ...mapState('AnnualPlannerVuex', ['filtersData']),
     },
     watch: {
-      categoriesOptions(newVal, oldVal) {
-        this.filterBaseData()
-      }
+
     }
   };
 </script>
