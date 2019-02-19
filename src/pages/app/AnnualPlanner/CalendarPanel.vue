@@ -93,7 +93,7 @@
                   </tr>
                   <tr style="height: 5%;">
                     <td style="padding-top: 15px;">
-                      <md-button class="md-success md-sm disabled" disabled="disabled" style="width: 99%; height: 45%; margin-top: 0; font-weight: 500;">Import Events</md-button>
+                      <md-button class="md-grey md-sm disabled" disabled="disabled" style="width: 99%; height: 45%; margin-top: 0; font-weight: 500;">Import Events</md-button>
                       <md-button class="md-success md-sm" style="width: 99%; height: 45%; margin-top: 0; font-weight: 500;" @click="exportToExcel">Export To Excel</md-button>
                     </td>
                   </tr>
@@ -187,7 +187,7 @@
         eventTypesArray: null,
         holidaysSelectDisplayed: true,
         selectedCountries: true,
-        selectedEventTypes: true,
+        selectedCategories: true,
         weekDays: [],
       }
     },
@@ -283,7 +283,7 @@
             month: storage.month,
             holidays: this.holidaysSelectDisplayed ? storage.holidays : [],
             countries: this.selectedCountries ? storage.countries : [],
-            eventTypes: this.selectedEventTypes ? storage.eventTypes : []
+            categories: this.selectedCategories ? storage.categories : []
           }};
         let calendarId = this.auth.user.defaultCalendarId;
         this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.auth.getAuthHeader() })

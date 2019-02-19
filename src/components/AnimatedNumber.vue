@@ -1,5 +1,5 @@
 <template>
-  <span>{{prefix}}{{animatedNumber | numeral('0,0.[00]') }}{{suffix}}</span>
+  <span>{{prefix}}{{animatedNumber | numeral('0,0') }}{{suffix}}</span>
 </template>
 <script>
 import TWEEN from "@tweenjs/tween.js";

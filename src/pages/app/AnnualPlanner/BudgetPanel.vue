@@ -1,7 +1,7 @@
 <template>
   <div style="overflow: hidden; height: 100%; margin: 0; padding: 0;">
 
-    <md-card class="budget-panel" style="background-color: #41535E; color: rgb(225, 234,239); height: 100%; margin: 0; padding: 0;">
+    <md-card class="budget-panel" style="background-color: #37474f; color: rgb(225, 234,239); height: 100%; margin: 0; padding: 0;">
       <md-card-content style="text-align: center; height: 100%;">
         <div style="text-align: left;">
           <h5 style="font-size: 0.95rem !important; font-weight: 600; padding: 0; margin: 0;">Annual budget per employee</h5>
@@ -36,8 +36,8 @@
           <hr v-show="!this.editAnnualBudgetPerEmployee" style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
         </div>
 
-        <div style="padding: 8px;"></div>
-        
+        <div style="padding: 16px;"></div>
+
           <div>
             <div style="text-align: left;">
               <h5 style="font-size: 0.95rem !important; font-weight: 600; padding: 0; margin: 0;">Total annual budget</h5>
@@ -72,7 +72,7 @@
             </div>
           </div>
 
-        <div style="padding: 8px;"></div>
+        <div style="padding: 16px;"></div>
 
         <div style="position:relative;">
           <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total remaining budget</h5>
@@ -80,14 +80,17 @@
             <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
           </h4>
 
-          <chart-component
-                  :chart-data="pieChart.data"
-                  :chart-options="pieChart.options"
-                  chart-type="Pie"/>
-          <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
+          <div style="display: grid;margin-top: 18px;">
+            <chart-component
+              :chart-data="pieChart.data"
+              :chart-options="pieChart.options"
+              chart-type="Pie"
+            style="grid-column: 1; grid-row: 1;"/>
+            <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
+          </div>
         </div>
 
-        <div style="padding: 8px;"></div>
+        <div style="padding: 16px;"></div>
 
         <div>
           <div style="text-align: left;">
@@ -99,7 +102,7 @@
           <hr style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
         </div>
 
-        <div style="padding: 8px;"></div>
+        <div style="padding: 16px;"></div>
 
         <div>
           <div style="text-align: left;">
@@ -120,6 +123,7 @@
   import VueElementLoading from 'vue-element-loading';
   import ChartComponent from '@/components/Cards/ChartComponent';
   import Calendar from '@/models/Calendar';
+  import numeral from 'numeral';
 
   import {
     AnimatedNumber
@@ -217,13 +221,15 @@
       },
       queryBudgetInfo(){
         if (this.statistics) {
-            this.annualBudget = this.statistics.annualBudget;
-            this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee;
+            this.annualBudget = this.statistics.annualBudget | numeral('0,0');
+            this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee | numeral('0,0');
             this.totalRemainingBudget = this.statistics.annualBudget - this.statistics.annualBudgetAllocated;
             this.remainingBudgetPerEmployee = this.statistics.annualBudgetPerEmployee - this.statistics.annualBudgetPerEmployeeAllocated;
             this.seriesData = [this.statistics.annualBudget, this.statistics.annualBudgetPerEmployeeAllocated];
             this.countEvents = this.statistics.numberOfEvents;
-           
+
+            this.percentage = ((this.statistics.annualBudgetAllocated / this.statistics.annualBudget) * 100).toFixed(2);
+
             this.annualBudgetCache = this.annualBudget;
             this.annualBudgetPerEmployeeCache = this.annualBudgetPerEmployee;
         }
@@ -252,9 +258,9 @@
           },
           options: {
             padding: 0,
-            height: 180,
+            height: 120,
             donut: true,
-            donutWidth: 20
+            donutWidth: 12
           }
         }
       },
@@ -277,13 +283,13 @@
 .ct-series-b .ct-line,
 .ct-series-b .ct-bar,
 .ct-series-b .ct-slice-donut {
-  stroke: #00AEED;
+  stroke: #7DC0D9;
 }
 .ct-series-a .ct-point,
 .ct-series-a .ct-line,
 .ct-series-a .ct-bar,
 .ct-series-a .ct-slice-donut {
-  stroke: #447b7d;
+  stroke: #455a64;
 }
 .md-card-content h4.title span {
   color: #6cd6ee;
@@ -296,14 +302,15 @@
   font-weight: 400;
 }
 .percentage {
-  position: absolute;
-  top: 58%;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-  transform: translateX(-50%);
-  font-size: 2.5rem;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  grid-column: 1;
+  grid-row: 1;
+  margin-top: auto;
+  margin-bottom: auto;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #AEAAA8;
+  color: #7DC0D9;
 }
 .budget-form .md-field {
   max-width: 133px;
