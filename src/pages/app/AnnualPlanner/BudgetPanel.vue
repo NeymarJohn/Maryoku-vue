@@ -313,6 +313,7 @@
       statistics(newVal, oldVal){
         this.queryBudgetInfo();
       }
+    
     }
   };
 </script>

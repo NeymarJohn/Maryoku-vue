@@ -38,7 +38,7 @@
 
             <template v-for="date in dates">
               <md-list-item  v-for="calendarEvent in calendarEvents[date].editables" :key="calendarEvent.id" style="cursor: pointer;">
-                <md-button @click="openEditEventModal(true, calendarEvent)" class="md-just-icon md-md md-round md-success"  v-bind:style="`background-color: ${colorWithCategory(calendarEvent.category)}`" style="margin-right: 8px;">{{date.substr(6,2)}}</md-button>
+                <md-button @click="openEditEventModal(true, calendarEvent)" class="md-just-icon md-md md-round"  v-bind:style="`background-color: ${colorWithCategory(calendarEvent.category)}`" style="margin-right: 8px;">{{date.substr(6,2)}}</md-button>
                 <div class="md-list-item-text" style="white-space: normal;">
                   <span style="font-weight: 500;">{{calendarEvent.title}}</span>
                   <span class="small text-gray">{{calendarEvent.eventStartMillis | formatDate}}</span>
