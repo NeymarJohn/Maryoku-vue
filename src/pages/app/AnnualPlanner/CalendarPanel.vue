@@ -182,7 +182,7 @@
         multiple: true,
         calendarEvents: {},
         occasionsArray: null,
-        categoriesArray: null,
+        categoriesArray: [],
         currenciesArray: null,
         eventTypesArray: null,
         holidaysSelectDisplayed: true,
