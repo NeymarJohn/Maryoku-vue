@@ -74,6 +74,7 @@ export default {
           store.dispatch("user/getUserFromApi" , resp.data);
           this.user.id = resp.data.id;
           this.user.username = resp.data.username;
+          this.user.email = resp.data.emailAddress;
           this.user.avatar =  resp.data.pictureUrl;
           this.user.displayName = resp.data.displayName;
 

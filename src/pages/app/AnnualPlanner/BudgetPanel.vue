@@ -256,23 +256,41 @@
             this.queryBudgetInfo();
             this.resetField();
           }).catch(error => {
-            console.log(error);
+            console.error(error);
           });
       },
-      queryBudgetInfo(){
-        if (this.statistics) {
-            this.annualBudget = this.statistics.annualBudget;
-            this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee;
-            this.totalRemainingBudget = this.statistics.annualBudget - this.statistics.annualBudgetAllocated;
-            this.remainingBudgetPerEmployee = this.statistics.annualBudgetPerEmployee - this.statistics.annualBudgetPerEmployeeAllocated;
-            this.seriesData = [this.statistics.annualBudget, this.statistics.annualBudgetPerEmployeeAllocated];
-            this.countEvents = this.statistics.numberOfEvents;
+      async queryBudgetInfo(){
+        try {
+          let calendarId = this.auth.user.defaultCalendarId;
+
+          let calendar = await Calendar.find(calendarId).then(response => {
+            let statistics = response.statistics;
+            let statisticMap = {};
+
+            statistics.forEach(function(data){
+              statisticMap[data.item] = data.value
+            });
+
+            this.annualBudget = statisticMap.annualBudget;
+            this.annualBudgetPerEmployee = statisticMap.annualBudgetPerEmployee;
+            // this.countEvents = response.events;
+            this.totalRemainingBudget = statisticMap.annualBudget - statisticMap.annualBudgetAllocated;
+
+            this.remainingBudgetPerEmployee = statisticMap.annualBudgetPerEmployee - statisticMap.annualBudgetPerEmployeeAllocated;
+            this.seriesData = [statisticMap.annualBudget, statisticMap.annualBudgetPerEmployeeAllocated];
+            this.countEvents = statisticMap.numberOfEvents;
 
             this.annualBudgetCache = this.annualBudget;
             this.annualBudgetPerEmployeeCache = this.annualBudgetPerEmployee;
+          })
+            .catch(error => {
+              console.error(error);
+            });
+          this.isLoading = false;
+        } catch(e){
+          console.error(e);
+          this.isLoading = false;
         }
-
-        this.isLoading = false;
       },
       resetField() {
         this.annualBudget = this.annualBudgetCache;
