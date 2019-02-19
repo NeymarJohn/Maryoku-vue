@@ -38,7 +38,7 @@
                               <td v-for="monthDay in monthRow" style="width: 14.2%; min-width: 14.2%; max-width: 14.2%;">
                                 <template v-if="monthDay !== 0">
                                   <template v-if="monthDay.hasEvents">
-                                    <md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" style="background-color: #bdbdbd !important;" class="md-white md-just-icon md-round md-md">
+                                    <md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" class="md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                     </md-button>
                                     <md-button v-else-if="monthDay.events.editables.length" @click="openEditEventModal(true, monthDay.events.editables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-just-icon md-round md-md" v-bind:style="`background-color: ${colorWithCategory(monthDay.events.editables[0].category)}`">
@@ -70,12 +70,12 @@
                       </md-card>
                     </td>
                   </tr>
-
+                  
                   <tr style="height: 5%;">
                     <td style="padding-top: 15px; padding-right: 15px;">
                       <md-card style="padding: 0; margin: 0; height: 100%; ">
                         <md-card-content style="text-align: center;">
-                          <md-button v-for="category in categoriesArray" class="md-simple md-xs" v-bind:style="`color: ${category.color}!important;`" :key="category.id">
+                          <md-button v-for="category in categoriesArray" class="md-simple md-xs" v-bind:style="`color: ${category.color}!important;`">
                             <i class="fa fa-square" style="margin-right: 5px;" v-bind:style="`color: ${category.color}!important;`"></i> {{category.item}}
                           </md-button>
                         </md-card-content>
@@ -93,7 +93,7 @@
                   </tr>
                   <tr style="height: 5%;">
                     <td style="padding-top: 15px;">
-                      <md-button class="md-success md-sm disabled" disabled="disabled" style="width: 99%; height: 45%; margin-top: 0; font-weight: 500;">Import Events</md-button>
+                      <md-button class="md-grey md-sm disabled" disabled="disabled" style="width: 99%; height: 45%; margin-top: 0; font-weight: 500;">Import Events</md-button>
                       <md-button class="md-success md-sm" style="width: 99%; height: 45%; margin-top: 0; font-weight: 500;" @click="exportToExcel">Export To Excel</md-button>
                     </td>
                   </tr>
@@ -111,7 +111,7 @@
               :occasions-options="this.occasionsArray"
               :categories-options="this.categoriesArray"
               :currencies-options="this.currenciesArray"
-              :event-types-options="this.eventTypesArray"
+              :event-types-options="this.eventTypesArray"                          
               ref="eventModal">
       </event-modal>
   </div>
@@ -127,7 +127,7 @@
   import CalendarEvent from '@/models/CalendarEvent';
   import Currency from "@/models/Currency";
   import Calendar from "@/models/Calendar";
-
+  
   import {
     AnimatedNumber
   } from "@/components";
@@ -182,12 +182,12 @@
         multiple: true,
         calendarEvents: {},
         occasionsArray: null,
-        categoriesArray: [],
+        categoriesArray: null,        
         currenciesArray: null,
         eventTypesArray: null,
         holidaysSelectDisplayed: true,
         selectedCountries: true,
-        selectedEventTypes: true,
+        selectedCategories: true,
         weekDays: [],
       }
     },
@@ -199,7 +199,7 @@
       this.isLoading = true;
       this.weekDays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
       this.selectYearMonth(this.year, this.month);
-
+      
       this.queryCategories();
       this.queryCurrencies();
       this.queryEventTypes();
@@ -220,7 +220,7 @@
             }.bind(this));
         } else {
           this.categoriesArray = this.$store.state.event.caregoriesArray;
-        }
+        }        
       },
       queryCurrencies() {
         if (this.$store.state.event.currenciesArray === null) {
@@ -283,7 +283,7 @@
             month: storage.month,
             holidays: this.holidaysSelectDisplayed ? storage.holidays : [],
             countries: this.selectedCountries ? storage.countries : [],
-            eventTypes: this.selectedEventTypes ? storage.eventTypes : []
+            categories: this.selectedCategories ? storage.categories : []
           }};
         let calendarId = this.auth.user.defaultCalendarId;
         this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.auth.getAuthHeader() })
@@ -337,7 +337,7 @@
           for (var dayIdx = 0; dayIdx < 7; dayIdx++) { // 7 days
             if (currentMoment.date() === 1 && currentMoment.month() === currentMonth && currentMoment.year() === currentYear) {
               if (currentMoment.weekday() === dayIdx){
-                row.push({dayInMonth: currentMoment.date(), hasEvents: this.selectedDay(currentMoment).hasEvents});
+                row.push({dayInMonth: currentMoment.date(), hasEvents: true});
                 currentMoment = currentMoment.add(1, 'day');
               } else {
                 row.push(0);
@@ -384,8 +384,10 @@
         return moment().date(day).month(this.month-1).year(this.year);
       },
       colorWithCategory(category) {
-        let filterCategories = this.categoriesArray.filter(c => c.item === category);
-        return filterCategories[0] != null ? `${filterCategories[0].color}!important;` : '';
+        if (this.categoriesArray) {
+          let filterCategories = this.categoriesArray.filter(c => c.item === category)
+          return `${filterCategories[0].color}!important;`;
+        }
       }
     },
     computed: {

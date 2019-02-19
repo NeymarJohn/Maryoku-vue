@@ -8,7 +8,7 @@ export default {
           filtersData: {
             year: null,
             month: null,
-            eventTypes: [],
+            categories: [],
             countries: [],
             holidays: []
           },
@@ -69,7 +69,7 @@ export default {
 
         if (typeof payload.eventData !== 'undefined') {
           commit('setEventData', payload)
-          commit('setModalSubmitTitle', 'Edit Details')
+          commit('setModalSubmitTitle', 'Save')
           commit('setEditMode', {editMode: payload.eventData.calendar})
         }
       }

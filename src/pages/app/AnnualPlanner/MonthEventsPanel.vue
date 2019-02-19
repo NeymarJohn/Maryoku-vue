@@ -112,8 +112,8 @@
         this.setEventModalAndEventData({showModal: show, eventData: item});
       },
       colorWithCategory(category) {
-        let filterCategories = this.categoriesArray.filter(c => c.item === category);
-        return filterCategories[0] != null ? `${filterCategories[0].color}!important;` : '';
+        let filterCategories = this.categoriesArray.filter(c => c.item === category)
+        return `${filterCategories[0].color}!important;`;
       }
     },
     computed: {
