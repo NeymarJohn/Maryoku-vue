@@ -245,9 +245,7 @@ import listMonth from "@/constants/month";
       Select
     },
     mounted:function(){
-      // const branch =document.getElementById('branches_getter');             
-      // this.autocomplete = new google.maps.places.Autocomplete(branch ,{types: ['geocode']}); 
-      // CustomerFile.get().then(res=>console.log(res)).catch(e=>console.log(e))      
+          
       const chart = document.getElementById("number_of_events_chart");      
        new Chart(chart, {
     type: 'line',
@@ -466,6 +464,9 @@ const BarChat = document.getElementById("event_vs_category");
             }else{
               return this.listMonth
             }
+       },
+       isShow(){
+         
        } 
 }    
     ,
