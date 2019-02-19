@@ -128,7 +128,7 @@
     },
     methods: {
       filtersChanged() {
-        this.holidaysSelectDisplayed = this.selectedEventTypes.indexOf("Holiday") !== -1;
+        this.holidaysSelectDisplayed = this.selectedEventTypes.indexOf("Holidays") !== -1;
         const filtersData = this.$store.state.AnnualPlannerVuex.filtersData;
         filtersData.year = this.year;
         filtersData.month = this.month;
