@@ -33,7 +33,6 @@
                             <div class="md-layout-item md-small-size-100">
                               <md-autocomplete v-model="occasion"
                                                 data-vv-name="occasion"
-                                                v-validate= "modelValidations.occasion"
                                                 :md-options="occasionsList"
                                                 @md-opened="mdOpened"
                                                 class="change-icon-order select-with-icon mb16"
@@ -51,8 +50,7 @@
                                     <md-select v-model="eventType"
                                                data-vv-name="eventType"
                                                v-validate= "modelValidations.eventType"
-                                               required
-                                    >
+                                               required>
                                         <md-option v-for="option in eventTypesOptions"
                                                    :key="option.item"
                                                    :value="option.item">
@@ -68,8 +66,7 @@
                                     <md-select v-model="category"
                                                data-vv-name="category"
                                                v-validate= "modelValidations.category"
-                                               required
-                                    >
+                                               required>
                                         <md-option v-for="option in categoriesOptions"
                                                    :key="option.id"
                                                    :value="option.item">

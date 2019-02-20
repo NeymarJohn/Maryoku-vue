@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-datepicker :name="name"  @input="triggerFunc($event,name)">
+    <md-datepicker :name="name"  @input="triggerFunc($event,name,count)">
       <label>{{label}}</label>
     </md-datepicker>
   </div>
@@ -26,10 +26,11 @@
             onChange:Function,
             valueName:Array,
              isErrors: Boolean,
+             count:Boolean
         },
         methods: {
-            triggerFunc:function(value,name){             
-              this.onChange(value,name)      
+            triggerFunc:function(value,name,count){             
+              this.onChange(value,name,count)      
           }
         }
     };
