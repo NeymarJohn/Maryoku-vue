@@ -498,7 +498,6 @@
             });
       },
       getEventStartInMillis() {
-        console.log(`${this.date} ___ ${this.time}`);
         if (this.date && this.time) {
           let eventStartTime = new Date(this.date).getTime() + (this.convertHoursToMillis(+this.time.split(":")[0]));
           return eventStartTime;
