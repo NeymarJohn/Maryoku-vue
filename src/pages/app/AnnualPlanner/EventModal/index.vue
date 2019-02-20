@@ -417,7 +417,7 @@
         }
       },
       updateEvent() {
-        let _calendar = new Calendar({id: this.$store.state.event.calendarId});
+        let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
         let editedEvent = new CalendarEvent({id: this.eventData.id});
 
         editedEvent.title = this.title;
@@ -442,21 +442,10 @@
           });
 
       },
-      createEvent() {
-        Calendar.get().then((calendars) => {
-          this.$store.state.calendarId = calendars[0].id;
-          this.saveEvent();
-        })
-          .catch((error) => {
-            console.log(error);
-            this.$parent.isLoading = false;
-          });
-      },
       validateEvent() {
         this.validateTitle();
         this.$validator.validateAll().then(isValid => {
           if ((this.dateValid = this.validateDate()) && isValid) {
-
             this.$parent.isLoading = true;
             this.setEventModal(false);
             this.editMode ? this.updateEvent() : this.createEvent();
@@ -480,7 +469,7 @@
           if (result.value) {
             this.$parent.isLoading = true;
 
-            let _calendar = new Calendar({id: this.$store.state.event.calendarId});
+            let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
             let event = new CalendarEvent({id: this.eventData.id});
 
             event.for(_calendar).delete().then(result => {
@@ -493,11 +482,12 @@
           }
         });
       },
-      saveEvent() {
-        let _calendar = new Calendar({ id: this.$store.state.calendarId });
+      createEvent() {
+        let calendarId = this.auth.user.defaultCalendarId
+        let _calendar = new Calendar({ id: calendarId});
 
         let newEvent = new CalendarEvent({
-          calendar: {id: this.$store.state.calendarId},
+          calendar: {id: calendarId},
           title: this.title,
           occasion: this.occasion,
           eventStartMillis: this.getEventStartInMillis(),

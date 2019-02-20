@@ -250,6 +250,8 @@
         }
       },
       exportToExcel() {
+        console.log(this.auth.user.defaultCalendarId)
+        return;
         let calendarId = this.auth.user.defaultCalendarId;
 
         window.open(
