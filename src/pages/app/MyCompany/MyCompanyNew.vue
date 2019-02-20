@@ -106,7 +106,7 @@
     </div>
     <div class="md-layout-item md-size-33">
       <div class='chart-box'>
-        <md-card-content>
+        <md-card-content  style="max-height: 200px">
         <div class='chart-title'>
           <div class="title text-bold">Number of events</div>
           <div class="company-button-filter-block">
@@ -135,8 +135,8 @@
         />
         </div>
           </div>  
-          <canvas v-show='!isMonthly'  id="number_of_events_chart" width="350" height="150"></canvas>
-          <canvas v-show='isMonthly'  id="number_of_events_chart_monthly" width="350" height="150"></canvas>
+          <canvas v-show='!isMonthly' style="max-height: 150px" id="number_of_events_chart" width="350" height="150"></canvas>
+          <canvas v-show='isMonthly' style="max-height: 150px"  id="number_of_events_chart_monthly" width="350" height="150"></canvas>
         </md-card-content>
       </div>
       <md-card>
@@ -160,9 +160,9 @@
         </md-card-content>
       </md-card>
       <md-card>
-        <md-card-content>
+        <md-card-content style="max-height: 200px">
           <div class="title text-bold">Event categories comparison</div>
-          <canvas id="event_vs_category" width="350" height="150"></canvas>
+          <canvas id="event_vs_category" style="max-height: 150px" width="350" height="150"></canvas>
         </md-card-content>
       </md-card>
     </div>
@@ -559,7 +559,7 @@ const BarChat = document.getElementById("event_vs_category");
     justify-content: space-between;
     background: #25d0a2;
     border-radius: 5px;
-    padding: 5px;
+    padding: 2px;;
     color:white;
     font-size: 1rem
 }

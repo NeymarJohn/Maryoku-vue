@@ -65,7 +65,7 @@
         cursor:pointer;
     }
     .indicator-line{       
-        height: 17px;
+        height: 12px;;
     }
     .indecator-event-block{
         display: flex;
