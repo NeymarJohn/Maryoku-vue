@@ -7,7 +7,7 @@
         :type='type'
         :placeholder='placeholder'
         :value='value'
-        @input='triggerFunc($event,name)'
+        @input='triggerFunc($event,name,count)'
         @change='changeFunc($event,name)'
         @:keyup.enter='autoSubmit($event,name)'
         :name='name'
@@ -41,17 +41,17 @@
             isErrors: Boolean,
             id:String,
             onChangeInput:Function,
-            disabled:Boolean
+            disabled:Boolean,
+            count:Boolean
         },
         methods: {
-          triggerFunc:function(value,name){
-              
+          triggerFunc:function(value,name,count){              
               if(this.onChange){
-                 this.onChange(value,name) 
+                 this.onChange(value,name,count) 
               }                                      
               
           },
-          changeFunc:function(e,name){                                                    
+          changeFunc:function(e,name){                                                                  
             this.onChange(e.target.value,name) 
           },
           autoSubmit:function($event,name){

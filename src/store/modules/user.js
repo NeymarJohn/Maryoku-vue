@@ -57,76 +57,86 @@ const getters={
 
 //actions
 const actions={
-  getUserFromApi({commit,state}, data){
-    commit("setUser" , data)
-  },
-  async getIndustry({commit,state}){
-    Industry.get().then(industries => {
-      commit("setIndustries" , industries.map((industry) => { return industry.title}));
-    }, (error) => {
-      commit("setIndustries" , []);
-      console.error(error);
-    });
-  },
-  async sendCompanyInfo({commit,state}, info){
-    try{
-      const res=await postReq('/1/onboarding/me',info)
-    }catch(e){
+    getUserFromApi({commit,state}, data){        
+         commit("setUser" , data)
+    },
+    async getIndustry({commit,state}){
+           try{
+            const res= await getReq()
+            commit("setIndustries" , res.data)
+           }catch(e){               
+            commit("setIndustries" , [])
+           }       
+    },
+    async sendCompanyInfo({commit,state}, info){
+        try{          
+           const res=await postReq('/1/onboarding/me',info)           
+        }catch(e){
 
-    }
-  },
-  async sendOMInfo({commit,state}, om){
-    try{
-      const res=await postReq('/1/onboarding/customer',om)
-    }catch(e){
+        }
+    },
+    async sendOMInfo({commit,state}, om){
+        try{          
+           const res=await postReq('/1/onboarding/customer',om)           
+        }catch(e){
 
-    }
-  },
-  async sendEvent({commit,state}, event){
-    try{
-      const res=await postReq('/1/onboarding/me',event)
-    }catch(e){
+        }
+    },
+    async sendEvent({commit,state}, event){
+        try{          
+           const res=await postReq('/1/onboarding/me',event)           
+        }catch(e){
 
-    }
-  },
-  async sendDietary({commit,state}, dietary){
-    try{
-      const res=await postReq('/1/onboarding/me',dietary)
-    }catch(e){
+        }
+    },
+    async sendDietary({commit,state}, dietary){
+        try{         
+           const res=await postReq('/1/onboarding/me',dietary)           
+        }catch(e){
 
-    }
-  },
-  async sendInvitation({commit,state}, email){
-    try{
-      const res=await postReq('/1/onboarding/me',email)
+        }
+    },
+    async sendInvitation({commit,state}, email){
+        try{          
+           const res=await postReq('/1/onboarding/me',email)
+           
+        }catch(e){
 
-    }catch(e){
+        }
+    },
+    async sendIndustry({commit,state}, industry){
+        try{          
+        //    const res=await postReq('/1/onboarding/me',email)
+           commit("addIndustry" , industry)
+        }catch(e){
 
-    }
-  },
-  async sendIndustry({commit,state}, industry){
-    try{
-      //    const res=await postReq('/1/onboarding/me',email)
-      commit("addIndustry" , industry)
-    }catch(e){
-
-    }
-  },
+        }
+    },
+    async deleteBranchToCompany({commit,state},branch){{
+        try{
+            commit('deleteBranch', branch)
+        }catch(e){
+            console.log(e)
+        }
+    }}
 
 }
 
 //mutations
 const mutations= {
-  setUser(state,data){
-    state.user=data
-  },
-  setIndustries(state,industry){
-    state.industry=industry
-  },
-  addIndustry(state,industry){
-    state.company.branches.push(industry)
-  }
-
+    setUser(state,data){
+        state.user=data
+    },
+    setIndustries(state,industry){
+        state.industry=industry
+    },
+    addIndustry(state,industry){
+         state.company.branches.push(industry)
+        },
+    deleteBranch(state,branch){
+        const newBranch=state.company.branches.filter(item=>item!==branch)        
+        state.company.branches=newBranch
+    }
 }
 
 export default {
