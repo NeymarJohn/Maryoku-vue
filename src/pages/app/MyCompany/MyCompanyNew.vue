@@ -8,7 +8,7 @@
           <img class="company-logo" :src="company.logo" style="width: 80%; height: 80%;">
             <div class='company-name-block'>
               <h4 class="title text-gray" style="font-weight: 500;">{{company.companyName}}</h4>
-              <md-button class="md-rose md-sm">Edit Profile</md-button>
+              <md-button class="md-rose md-sm" @click='isEditable'>Edit Profile</md-button>
             </div>
             </div>
             <div class="md-layout-item md-size-100">
@@ -16,25 +16,35 @@
             </div>
             <div class="md-layout-item md-size-100">
               <div class="md-layout">
-                <div class="md-layout-item md-size-50" style="text-align: left;">
+                <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
                   <h5 class="title text-bold text-gray info-text-size">Main Office</h5>
                 </div>
-                <div class="md-layout-item md-size-50" style="text-align: left;">
-                  <h5 class="title info-text-size">{{company.mainOffice}}</h5>
+                <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
+                  <h5  class="title info-text-size">{{company.mainOffice}}</h5>
+                  
+                </div>
+                <div v-else class="md-layout-item md-size-100" style="text-align: left;">
+                  <InputText label='Main Office' :value='company.mainOffice' name='mainOffice'  :onChange='onChange'/>
                 </div>
 
-                <div class="md-layout-item md-size-50" style="text-align: left;">
+                <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
                   <h5 class="title text-bold text-gray info-text-size">Number of Employees</h5>
                 </div>
-                <div class="md-layout-item md-size-50" style="text-align: left;">
+                <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
                   <h5 class="title info-text-size">{{company.numberOfEmployees}}</h5>
                 </div>
+                <div v-else class="md-layout-item md-size-100" style="text-align: left;">
+                  <InputText label='Number of Employees' name='numberOfEmployees' :value='company.numberOfEmployees' :onChange="onChange"/>
+                </div>
 
-                <div class="md-layout-item md-size-50" style="text-align: left;">
+                <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
                   <h5 class="title text-bold text-gray info-text-size">Industry</h5>
                 </div>
-                <div class="md-layout-item md-size-50" style="text-align: left;">
+                <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
                   <h5 class="title info-text-size">{{company.industry}}</h5>
+                </div>
+                <div v-else class="md-layout-item md-size-100" style="text-align: left;">
+                  <InputText label='Industry' name='industry' :value='company.industry' :onChange="onChange"/>
                 </div>
               </div>
             </div>
@@ -44,20 +54,34 @@
             <div class="md-layout-item md-size-100">
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Contact Information</div>
               <div class="md-layout">
-                <div class="md-layout-item md-size-100" style="text-align: left; display: flex;">
+                <div v-if='!isShowForm' class="md-layout-item md-size-100" style="text-align: left; display: flex;">
                   <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon><div class='company-wrap-block'>{{company.address}}</div> 
                 </div>
-                <div class="md-layout-item md-size-100" style="text-align: left;">
+                <div v-else class="md-layout-item md-size-100" style="text-align: left;">
+                  <InputText label='Company address' name='address' :value='company.address' :onChange="onChange"/>
+                </div>
+                <div v-if='!isShowForm' class="md-layout-item md-size-100" style="text-align: left;">
                   <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">call</md-icon>{{company.phone}}
                 </div>
+                <div v-else class="md-layout-item md-size-100" style="text-align: left;">
+                  <InputText label='Phone' name='phone' :value='company.phone' :onChange="onChange"/>
+                </div>
 
-                <div class="md-layout-item md-size-100" style="text-align: left;">
+                <div v-if='!isShowForm' class="md-layout-item md-size-100" style="text-align: left;">
                   <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">mail_outline</md-icon>{{company.email}}
                 </div>
+                <div v-else class="md-layout-item md-size-100" style="text-align: left;">
+                  <InputText label='Company Email' name='email' :value='company.email' :onChange="onChange"/>
+                </div>
 
-                <div class="md-layout-item md-size-100" style="text-align: left;">
+                <div v-if='!isShowForm' class="md-layout-item md-size-100" style="text-align: left;">
                   <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">web_asset</md-icon>{{company.domain}}
                 </div>
+                <div v-else class="md-layout-item md-size-100" style="text-align: center;">
+                  <InputText label='Company Domain' name='domain' :value='company.domain'  :onChange="onChange"/>
+                  <md-button class="md-rose md-sm" @click.prevent='saveInfoFromForm'>Save Profile</md-button>
+                </div>
+                          
               </div>
             </div>
 
@@ -104,16 +128,17 @@
         </md-card-content>
       </md-card>
     </div>
-    <div class="md-layout-item md-size-33">
+    <div class="md-layout-item md-size-33" style="position: relative">
       <div class='chart-box'>
         <md-card-content  style="max-height: 200px">
-        <div class='chart-title'>
-          <div class="title text-bold">Number of events</div>
+        <div class='chart-title'>         
+          <div class="title text-bold">Number of events</div>          
           <div class="company-button-filter-block">
-          <ButtonDiv text='Yearly' class='button-filter'  />
+          <ButtonDiv text='Yearly' class='button-filter'  :onClick='onChangeFilterToEarly'/>
           <ButtonDiv text='Monthly' class='button-filter'   :onClick='onChangeFilter'/>
           </div>          
         </div>
+        <div><span class='info-chat-value'>23</span><span class='info-chart'>{{`This year of ${new Date().getFullYear()}`}}</span></div>
         <div class='filter-block' v-if='showFilter'>
         <div class='filter-datepicker'>
              <Select                
@@ -135,8 +160,8 @@
         />
         </div>
           </div>  
-          <canvas v-show='!isMonthly' style="max-height: 150px" id="number_of_events_chart" width="350" height="150"></canvas>
-          <canvas v-show='isMonthly' style="max-height: 150px"  id="number_of_events_chart_monthly" width="350" height="150"></canvas>
+          <canvas v-show='!isMonthly' style="max-height: 130px" id="number_of_events_chart" width="350" height="150"></canvas>
+          <canvas v-show='isMonthly' style="max-height: 130px"  id="number_of_events_chart_monthly" width="350" height="150"></canvas>
         </md-card-content>
       </div>
       <md-card>
@@ -225,6 +250,9 @@ import Datepicker from '@/components/Datepicker/Datepicker.vue';
 //CONSTANST
 import listMonth from "@/constants/month";
 
+//helper function
+import {isWrong} from '@/utils/helperFunction'
+
   
 
   export default {
@@ -244,15 +272,16 @@ import listMonth from "@/constants/month";
       Datepicker,
       Select
     },
-    mounted:function(){
+     mounted:async function(){
           
+          this.$store.dispatch("user/getUserFromApi")
+          this.$store.dispatch("user/putUserFromApi") 
       const chart = document.getElementById("number_of_events_chart");      
        new Chart(chart, {
     type: 'line',
     data: {
         labels: ["2014", "2015", "2016", "2017", "2018", "2019"],
-        datasets: [{
-            label: '# of Events',
+        datasets: [{            
             data: [2, 5, 7, 9, 12, 15],
             backgroundColor: [                
                 'rgba(255, 255, 255, 0.2)',                
@@ -264,6 +293,9 @@ import listMonth from "@/constants/month";
         }]
     },
     options: {
+      legend: {
+        display: false
+    },
         scales: {
             yAxes: [{
                 ticks: {
@@ -278,8 +310,7 @@ import listMonth from "@/constants/month";
     type: 'line',
     data: {
         labels: ['Jan', "Feb", "Mar", "Apr", "May", "June"],
-        datasets: [{
-            label: '# of Events',
+        datasets: [{            
             data: [80, 125, 145, 60, 92, 57],
             backgroundColor: [                
                 'rgba(255, 255, 255, 0.2)',                
@@ -291,6 +322,9 @@ import listMonth from "@/constants/month";
         }]
     },
     options: {
+      legend: {
+        display: false
+    },
         scales: {
             yAxes: [{
                 ticks: {
@@ -305,8 +339,7 @@ const chart3 = document.getElementById("number_of_events_chart_monthly");
     type: 'line',
     data: {
         labels: [],
-        datasets: [{
-            label: '# of Events',
+        datasets: [{            
             data: [80, 125, 145, 60, 92, 57],
             backgroundColor: [                
                 'rgba(255, 255, 255, 0.2)',                
@@ -318,6 +351,9 @@ const chart3 = document.getElementById("number_of_events_chart_monthly");
         }]
     },
     options: {
+      legend: {
+        display: false
+    },
         scales: {
             yAxes: [{
                 ticks: {
@@ -354,6 +390,9 @@ const BarChat = document.getElementById("event_vs_category");
         ]
     },
     options: {
+      legend: {
+        display: false
+    },
      		animation: {
         	duration: 10,
         },
@@ -377,7 +416,7 @@ const BarChat = document.getElementById("event_vs_category");
      				}, 
             }],
         },
-        legend: {display: true}
+        
     }
 });
     },
@@ -409,7 +448,8 @@ const BarChat = document.getElementById("event_vs_category");
         monthValue:[{month:'Jan', events:'34'}, {month:'Feb', events:'41'}, {month:'Mar', events:'24'}, {month:'Apr', events:'14'}, {month:'May', events:'34'}, {month:'Jun', events:'14'}, {month:'Jul', events:'24'}, {month:'Aug', events:'34'},{month:'Sep', events:'14'} ,{ month:'Oct', events:'44'}, {month:'Nov', events:'14'}, {month:'Dec', events:'34'}],
         month:'',
         monthRete:'',
-        listMonth:listMonth,        
+        listMonth:listMonth,
+        isShowForm:false        
       }
     },
     computed:{
@@ -474,7 +514,8 @@ const BarChat = document.getElementById("event_vs_category");
       onSelect: function(items) {
         this.selected = items;
       },
-       onChange:function(value, name){                           
+       onChange:function(value, name){ 
+         console.log(this)                          
                  this[name]=value                                                                 
          },
          onShowInput:function(value, name){          
@@ -495,12 +536,44 @@ const BarChat = document.getElementById("event_vs_category");
          }
          ,getMonthControlRate(month){
            this.monthRete=month
-         }
+         },
+         onChangeFilterToEarly(){
+           this.from=''
+           this.to=''
+           this.showFilter=false           
+         },
+          isEditable(){
+            this.isShowForm=!this.isShowForm
+          },
+          saveInfoFromForm(){
+            const data=isWrong(this,['mainOffice','numberOfEmployees','industry','address','phone','email','domain'])
+            for(let key in this.company){
+              if(data[key]){
+                if(data[key]!==this.company[key]){
+                    this.company[key]=data[key]
+                }
+              }              
+            }
+             this.$store.dispatch("user/putUserFromApi",this.company) 
+             this.isShowForm=!this.isShowForm
+          }
 
     }
   };
 </script>
 <style >
+.info-chat-value{
+      color: black;
+    font-weight: 500;
+    font-size: 1.2rem;
+    margin-left: 10px;
+}
+.info-chart{
+  font-size: 0.85rem;
+    font-weight: 500;
+    color: #c6c6c6;
+    margin-left: 5px;
+}
   .text-bold {
     font-weight: 600;
   }
@@ -539,6 +612,7 @@ const BarChat = document.getElementById("event_vs_category");
 .company-button-filter-block{
       display: flex;   
     justify-content: flex-end;
+    
 }
 .company-wrap-block{
     white-space: nowrap;
@@ -550,7 +624,7 @@ const BarChat = document.getElementById("event_vs_category");
     justify-content: space-between;
     background: #87e1fe;
     border-radius: 5px;
-    padding: 5px;
+    padding: 2px;
     color:white;
     font-size: 1rem
 }
@@ -586,7 +660,10 @@ const BarChat = document.getElementById("event_vs_category");
    width:50%
  }
  .filter-block{
-   display:flex
+   display:flex;
+   position: absolute;
+    top: -20px;
+    left: 30px;
  }
  .indicator-event-type-title-rate{
         font-size: 0.85rem;
