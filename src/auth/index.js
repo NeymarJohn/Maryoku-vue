@@ -81,11 +81,12 @@ export default {
 
           this.user.defaultGroupId = resp.data.defaultGroupId;
           this.user.defaultCalendarId = resp.data.defaultCalendarId;
+
           this.user.customer = resp.data.customer;
+
           this.user.me = resp.data;
 
           this.setHeaders(context);
-
 
           /*if(!resp.data.onboarded){
 

@@ -31,20 +31,17 @@
                     <form>
                         <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
-                                <md-field :class="[{'md-error': errors.has('occasion')}]" class="select-with-icon">
-                                    <label>Occasion</label>
-                                    <md-select v-model="occasion"
-                                               data-vv-name="occasion"
-                                               v-validate= "modelValidations.occasion"
-                                    >
-                                        <md-option v-for="option in occasionsOptions"
-                                                   :key="option.value"
-                                                   :value="option.value">
-                                            {{ option.value }}
-                                        </md-option>
-                                    </md-select>
-                                    <span class="md-error" v-if="errors.has('occasion')">The event occasion is required</span>
-                                </md-field>
+                              <md-autocomplete v-model="occasion"
+                                                data-vv-name="occasion"
+                                                v-validate= "modelValidations.occasion"
+                                                :md-options="occasionsList"
+                                                @md-opened="mdOpened"
+                                                class="change-icon-order select-with-icon mb16"
+                                                :class="[{'md-error': errors.has('occasion')}]">
+                                  <label>Occasion</label>
+                                  <span class="md-error" v-if="errors.has('occasion')">This field is required</span>
+                                </md-autocomplete>
+
                             </div>
                         </div>
                         <div class="md-layout mt-15">
@@ -243,13 +240,19 @@
           min_value: 1,
           max_value: 1000000,
         },
+        eventType: {
+          required: true,
+        },
+        category: {
+          required: true,
+        },
       },
     }),
 
     created() {
       [...Array(12).keys()].map(x =>  this.hoursArray.push(`${x}:00 AM`));
       [...Array(12).keys()].map(x =>  x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`));
-      this.hoursArray.push()
+      this.hoursArray.push();
     },
     computed: {
       ...mapState('AnnualPlannerVuex', [
@@ -259,7 +262,21 @@
         'modalSubmitTitle',
         'editMode',
       ]),
+      occasionsList: {
+        get: function() {
+          if (!this.occasionsOptions) {
+            return [];
+          }
 
+          let occasionList = this.occasionsOptions.map((val) => val.value);
+
+          if (this.occasionCache !== "") {
+            occasionList.push(this.occasionCache)
+          }
+           
+          return occasionList;          
+        }
+      },
       id: {
         get() {
           return this.eventData.id;
@@ -276,6 +293,14 @@
           this.setEventProperty({key: 'occasion', actualValue: value});
         }
       },
+      occasionCache: {
+        get() {
+          return this.eventData.occasionCache
+        },
+        set(value) {
+          this.setEventProperty({key: 'occasionCache', actualValue: value});
+        }
+      },      
       title: {
         get() {
           return this.eventData.title
@@ -370,7 +395,8 @@
       },
       clearForm() {
           this.id = null;
-          this.occasion = null;
+          this.occasion = "";
+          this.occasionCache = "";
           this.title = "New Event";
           this.date = null;
           this.time = "";
@@ -524,6 +550,10 @@
           type: 'danger',
         });
       },
+      mdOpened:function() {
+        this.occasion += " ";
+        this.occasion = this.occasion.substring(0, this.occasion.length -1)
+      }
     },
     watch: {
     }

@@ -9,12 +9,10 @@
         props: {
             text:String,
             buttonStyle:String,
-            onClick:Function,
-            filter:String
+            onClick:Function
         },   
         methods:{
             triggerFunc:function(){
-                if(this.filter){this.onClick(this.filter)}
                 this.onClick()
             }
         }     
