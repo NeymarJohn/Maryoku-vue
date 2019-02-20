@@ -9,8 +9,7 @@
             <md-field v-show="this.editAnnualBudgetPerEmployee" :class="[{'md-error': errors.has('annualBudgetPerEmployee')}]">
               <md-input v-model="annualBudgetPerEmployee"
                         data-vv-name="annualBudgetPerEmployee"
-                        v-validate= "modelValidations.annualBudgetPerEmployee"
-              />
+                        v-validate= "modelValidations.annualBudgetPerEmployee" style="width: 10px;"/>
               <span class="md-error" v-if="errors.has('annualBudgetPerEmployee')">The field is required</span>
             </md-field>
             <h4 v-show="!this.editAnnualBudgetPerEmployee" style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
@@ -46,8 +45,7 @@
                 <md-field v-show="this.editAnnualBudget" :class="[{'md-error': errors.has('annualBudget')}]">
                      <md-input v-model="annualBudget"
                                data-vv-name="annualBudget"
-                               v-validate= "modelValidations.annualBudget"
-                      />
+                               v-validate= "modelValidations.annualBudget" style="width: 10px;"/>
                       <span class="md-error" v-if="errors.has('annualBudgetPerEmployee')">The field is required</span>
                 </md-field>
                 <h4 v-show="!this.editAnnualBudget" style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; rgb(125,192,217);">
@@ -224,10 +222,10 @@
             this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee | numeral('0,0');
             this.totalRemainingBudget = this.statistics.annualBudget - this.statistics.annualBudgetAllocated;
             this.remainingBudgetPerEmployee = this.statistics.annualBudgetPerEmployee - this.statistics.annualBudgetPerEmployeeAllocated;
-            this.seriesData = [this.statistics.annualBudget, this.statistics.annualBudgetPerEmployeeAllocated];
+            this.seriesData = [this.statistics.annualBudgetPerEmployeeAllocated, this.statistics.annualBudget];
             this.countEvents = this.statistics.numberOfEvents;
 
-            this.percentage = ((this.statistics.annualBudgetAllocated / this.statistics.annualBudget) * 100).toFixed(2);
+            this.percentage = 100 - ((this.statistics.annualBudgetAllocated / this.statistics.annualBudget) * 100).toFixed(2);
 
             this.annualBudgetCache = this.annualBudget;
             this.annualBudgetPerEmployeeCache = this.annualBudgetPerEmployee;

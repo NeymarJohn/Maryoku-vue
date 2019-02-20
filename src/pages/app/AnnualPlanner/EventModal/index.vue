@@ -498,18 +498,22 @@
             });
       },
       getEventStartInMillis() {
+        console.log(`${this.date} ___ ${this.time}`);
         if (this.date && this.time) {
-          let eventStartTime = new Date(this.date).getTime() + (this.convertHoursToMillis(+this.time.substring(0, 2)));
+          let eventStartTime = new Date(this.date).getTime() + (this.convertHoursToMillis(+this.time.split(":")[0]));
           return eventStartTime;
         }
       },
       getEventEndInMillis() {
         if (this.date && this.time && this.duration) {
-          let eventEndTime = this.getEventStartInMillis() + this.convertHoursToMillis(this.duration);
+          let eventEndTime = this.getEventStartInMillis() + this.convertDurationToMillis(this.duration);
           return eventEndTime;
         }
       },
       convertHoursToMillis(hours) {
+        return hours * 60 * 60 * 1000;
+      },
+      convertDurationToMillis(hours) {
         return hours * 60 * 60 * 1000;
       },
       showNotify() {
