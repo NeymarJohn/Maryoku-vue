@@ -120,15 +120,12 @@ const actions={
         //  commit("setUser" , data)
     },
     async getIndustry({commit,state}){
-        Industry
-        .get()
-        .then(res=>{
-            commit("setIndustries" , res)
-        })
-        .catch(e=>{
+           try{
+               const {id}=state.user.customer            
+            commit("setIndustries" , res.data)
+           }catch(e){               
             commit("setIndustries" , [])
-        })
-                
+           }       
     },
     async sendCompanyInfo({commit,state}, info){
         try{          

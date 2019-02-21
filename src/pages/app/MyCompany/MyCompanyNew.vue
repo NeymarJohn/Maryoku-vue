@@ -5,7 +5,7 @@
         <md-card-content>
           <div class="md-layout">
           <div class='company-view-common-logo_block'>
-          <img class="company-logo" :src="customer.logoFileId||'static/img/placeholder.jpg'" style="width: 80%; height: 80%;">
+          <img class="company-logo" :src="customer.logoFileId" style="width: 80%; height: 80%;">
             <div class='company-name-block'>
               <h4 class="title text-gray" style="font-weight: 500;">{{customer.name}}</h4>
               <md-button class="md-rose md-sm" @click='isEditable'>Edit Profile</md-button>
@@ -16,42 +16,35 @@
             </div>
             <div class="md-layout-item md-size-100">
               <div class="md-layout">
-                <div v-show='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
-                  <div class="title text-bold text-gray info-text-size" >Main Office</div>
+                <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
+                  <h5 class="title text-bold text-gray info-text-size">Main Office</h5>
                 </div>
-                <div v-show='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
-                  <div  class="title info-text-size">{{customer.mainAddressCity}}</div>
+                <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
+                  <h5  class="title info-text-size">{{customer.mainAddressCity}}</h5>
                   
                 </div>
-                <div v-show='isShowForm' class="md-layout-item md-size-100" style="text-align: left;">
-                  <InputText v-gmaps-searchbox='"mainOffice"' label='Main Office' :value='customer.mainAddressCity' name='mainAddressCity'  :onChange='onChange'/>
+                <div v-else class="md-layout-item md-size-100" style="text-align: left;">
+                  <InputText v-gmaps-searchbox='mainOffice' label='Main Office' :value='customer.mainAddressCity' name='mainAddressCity'  :onChange='onChange'/>
                 </div>
 
                 <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
-                  <div class="title text-bold text-gray info-text-size">Number of Employees</div>
+                  <h5 class="title text-bold text-gray info-text-size">Number of Employees</h5>
                 </div>
                 <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
-                  <div class="title info-text-size">{{customer.numberOfEmployees}}</div>
+                  <h5 class="title info-text-size">{{customer.numberOnEmployees}}</h5>
                 </div>
                 <div v-else class="md-layout-item md-size-100" style="text-align: left;">
-                  <InputText label='Number of Employees' name='numberOnEmployees' :value='String(customer.numberOfEmployees)' :onChange="onChange"/>
+                  <InputText label='Number of Employees' name='numberOnEmployees' :value='+(customer.numberOnEmployees)' :onChange="onChange"/>
                 </div>
 
                 <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
-                  <div class="title text-bold text-gray info-text-size">Industry</div>
+                  <h5 class="title text-bold text-gray info-text-size">Industry</h5>
                 </div>
                 <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
-                  <div class="title info-text-size">{{customer.industry}}</div>
+                  <h5 class="title info-text-size">{{customer.industry}}</h5>
                 </div>
                 <div v-else class="md-layout-item md-size-100" style="text-align: left;">
-                          <Select                
-                            label='Industry'
-                            labelStyle='om_label_input'
-                            :list='industryList'
-                            name='industry'                
-                            :onChange="onChange" 
-                            :valueName="['id','title']"                                                       
-                  />                           
+                  <InputText label='Industry' name='industry' :value='customer.industry' :onChange="onChange"/>
                 </div>
               </div>
             </div>
@@ -278,9 +271,10 @@ import {isWrong} from '@/utils/helperFunction'
       Datepicker,
       Select
     },
-     mounted:function(){
-          this.$store.dispatch("user/getIndustry");
-          this.$store.dispatch("user/getUserFromApi")          
+     mounted:async function(){
+          
+          this.$store.dispatch("user/getUserFromApi")
+          this.$store.dispatch("user/putUserFromApi") 
       const chart = document.getElementById("number_of_events_chart");      
        new Chart(chart, {
     type: 'line',
@@ -454,18 +448,12 @@ const BarChat = document.getElementById("event_vs_category");
         month:'',
         monthRete:'',
         listMonth:listMonth,
-        isShowForm:false,
-        vm: {
-                    searchPlace: '',
-                    location: {}
-
-                }        
+        isShowForm:false        
       }
     },
     computed:{
       ...mapGetters({
-        customer:'user/getCustomer',
-        industryList:'user/getIndustryList'
+        customer:'user/getCustomer'
       }),
        getMonth(){
          return this.monthValue.map(item=>item.month)
@@ -525,7 +513,8 @@ const BarChat = document.getElementById("event_vs_category");
       onSelect: function(items) {
         this.selected = items;
       },
-       onChange:function(value, name){                                 
+       onChange:function(value, name){ 
+         console.log(this)                          
                  this[name]=value                                                                 
          },
          onShowInput:function(value, name){          

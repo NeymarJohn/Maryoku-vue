@@ -31,20 +31,16 @@
                     <form>
                         <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
-                                <md-field :class="[{'md-error': errors.has('occasion')}]" class="select-with-icon">
-                                    <label>Occasion</label>
-                                    <md-select v-model="occasion"
-                                               data-vv-name="occasion"
-                                               v-validate= "modelValidations.occasion"
-                                    >
-                                        <md-option v-for="option in occasionsOptions"
-                                                   :key="option.value"
-                                                   :value="option.value">
-                                            {{ option.value }}
-                                        </md-option>
-                                    </md-select>
-                                    <span class="md-error" v-if="errors.has('occasion')">The event occasion is required</span>
-                                </md-field>
+                              <md-autocomplete v-model="occasion"
+                                                data-vv-name="occasion"
+                                                :md-options="occasionsList"
+                                                @md-opened="mdOpened"
+                                                class="change-icon-order select-with-icon mb16"
+                                                :class="[{'md-error': errors.has('occasion')}]">
+                                  <label>Occasion</label>
+                                  <span class="md-error" v-if="errors.has('occasion')">This field is required</span>
+                                </md-autocomplete>
+
                             </div>
                         </div>
                         <div class="md-layout mt-15">
@@ -54,8 +50,7 @@
                                     <md-select v-model="eventType"
                                                data-vv-name="eventType"
                                                v-validate= "modelValidations.eventType"
-                                               required
-                                    >
+                                               required>
                                         <md-option v-for="option in eventTypesOptions"
                                                    :key="option.item"
                                                    :value="option.item">
@@ -71,8 +66,7 @@
                                     <md-select v-model="category"
                                                data-vv-name="category"
                                                v-validate= "modelValidations.category"
-                                               required
-                                    >
+                                               required>
                                         <md-option v-for="option in categoriesOptions"
                                                    :key="option.id"
                                                    :value="option.item">
@@ -243,13 +237,19 @@
           min_value: 1,
           max_value: 1000000,
         },
+        eventType: {
+          required: true,
+        },
+        category: {
+          required: true,
+        },
       },
     }),
 
     created() {
       [...Array(12).keys()].map(x =>  this.hoursArray.push(`${x}:00 AM`));
       [...Array(12).keys()].map(x =>  x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`));
-      this.hoursArray.push()
+      this.hoursArray.push();
     },
     computed: {
       ...mapState('AnnualPlannerVuex', [
@@ -259,7 +259,21 @@
         'modalSubmitTitle',
         'editMode',
       ]),
+      occasionsList: {
+        get: function() {
+          if (!this.occasionsOptions) {
+            return [];
+          }
 
+          let occasionList = this.occasionsOptions.map((val) => val.value);
+
+          if (this.occasionCache !== "") {
+            occasionList.push(this.occasionCache)
+          }
+           
+          return occasionList;          
+        }
+      },
       id: {
         get() {
           return this.eventData.id;
@@ -276,6 +290,14 @@
           this.setEventProperty({key: 'occasion', actualValue: value});
         }
       },
+      occasionCache: {
+        get() {
+          return this.eventData.occasionCache
+        },
+        set(value) {
+          this.setEventProperty({key: 'occasionCache', actualValue: value});
+        }
+      },      
       title: {
         get() {
           return this.eventData.title
@@ -370,7 +392,8 @@
       },
       clearForm() {
           this.id = null;
-          this.occasion = null;
+          this.occasion = "";
+          this.occasionCache = "";
           this.title = "New Event";
           this.date = null;
           this.time = "";
@@ -394,7 +417,7 @@
         }
       },
       updateEvent() {
-        let _calendar = new Calendar({id: this.$store.state.event.calendarId});
+        let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
         let editedEvent = new CalendarEvent({id: this.eventData.id});
 
         editedEvent.title = this.title;
@@ -419,21 +442,10 @@
           });
 
       },
-      createEvent() {
-        Calendar.get().then((calendars) => {
-          this.$store.state.calendarId = calendars[0].id;
-          this.saveEvent();
-        })
-          .catch((error) => {
-            console.log(error);
-            this.$parent.isLoading = false;
-          });
-      },
       validateEvent() {
         this.validateTitle();
         this.$validator.validateAll().then(isValid => {
           if ((this.dateValid = this.validateDate()) && isValid) {
-
             this.$parent.isLoading = true;
             this.setEventModal(false);
             this.editMode ? this.updateEvent() : this.createEvent();
@@ -457,7 +469,7 @@
           if (result.value) {
             this.$parent.isLoading = true;
 
-            let _calendar = new Calendar({id: this.$store.state.event.calendarId});
+            let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
             let event = new CalendarEvent({id: this.eventData.id});
 
             event.for(_calendar).delete().then(result => {
@@ -470,11 +482,12 @@
           }
         });
       },
-      saveEvent() {
-        let _calendar = new Calendar({ id: this.$store.state.calendarId });
+      createEvent() {
+        let calendarId = this.auth.user.defaultCalendarId
+        let _calendar = new Calendar({ id: calendarId});
 
         let newEvent = new CalendarEvent({
-          calendar: {id: this.$store.state.calendarId},
+          calendar: {id: calendarId},
           title: this.title,
           occasion: this.occasion,
           eventStartMillis: this.getEventStartInMillis(),
@@ -524,6 +537,10 @@
           type: 'danger',
         });
       },
+      mdOpened:function() {
+        this.occasion += " ";
+        this.occasion = this.occasion.substring(0, this.occasion.length -1)
+      }
     },
     watch: {
     }
@@ -590,6 +607,6 @@
       margin-bottom: 15px
     }
     .swal2-container {
-      z-index: 9999;
+      z-index: 10000;
     }
 </style>
