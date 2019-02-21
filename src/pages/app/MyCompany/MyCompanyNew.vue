@@ -5,9 +5,9 @@
         <md-card-content>
           <div class="md-layout">
           <div class='company-view-common-logo_block'>
-          <img class="company-logo" :src="company.logo" style="width: 80%; height: 80%;">
+          <img class="company-logo" :src="customer.logoFileId" style="width: 80%; height: 80%;">
             <div class='company-name-block'>
-              <h4 class="title text-gray" style="font-weight: 500;">{{company.companyName}}</h4>
+              <h4 class="title text-gray" style="font-weight: 500;">{{customer.name}}</h4>
               <md-button class="md-rose md-sm" @click='isEditable'>Edit Profile</md-button>
             </div>
             </div>
@@ -20,31 +20,31 @@
                   <h5 class="title text-bold text-gray info-text-size">Main Office</h5>
                 </div>
                 <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
-                  <h5  class="title info-text-size">{{company.mainOffice}}</h5>
+                  <h5  class="title info-text-size">{{customer.mainAddressCity}}</h5>
                   
                 </div>
                 <div v-else class="md-layout-item md-size-100" style="text-align: left;">
-                  <InputText label='Main Office' :value='company.mainOffice' name='mainOffice'  :onChange='onChange'/>
+                  <InputText v-gmaps-searchbox='mainOffice' label='Main Office' :value='customer.mainAddressCity' name='mainAddressCity'  :onChange='onChange'/>
                 </div>
 
                 <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
                   <h5 class="title text-bold text-gray info-text-size">Number of Employees</h5>
                 </div>
                 <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
-                  <h5 class="title info-text-size">{{company.numberOfEmployees}}</h5>
+                  <h5 class="title info-text-size">{{customer.numberOnEmployees}}</h5>
                 </div>
                 <div v-else class="md-layout-item md-size-100" style="text-align: left;">
-                  <InputText label='Number of Employees' name='numberOfEmployees' :value='company.numberOfEmployees' :onChange="onChange"/>
+                  <InputText label='Number of Employees' name='numberOnEmployees' :value='+(customer.numberOnEmployees)' :onChange="onChange"/>
                 </div>
 
                 <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
                   <h5 class="title text-bold text-gray info-text-size">Industry</h5>
                 </div>
                 <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
-                  <h5 class="title info-text-size">{{company.industry}}</h5>
+                  <h5 class="title info-text-size">{{customer.industry}}</h5>
                 </div>
                 <div v-else class="md-layout-item md-size-100" style="text-align: left;">
-                  <InputText label='Industry' name='industry' :value='company.industry' :onChange="onChange"/>
+                  <InputText label='Industry' name='industry' :value='customer.industry' :onChange="onChange"/>
                 </div>
               </div>
             </div>
@@ -55,30 +55,30 @@
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Contact Information</div>
               <div class="md-layout">
                 <div v-if='!isShowForm' class="md-layout-item md-size-100" style="text-align: left; display: flex;">
-                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon><div class='company-wrap-block'>{{company.address}}</div> 
+                  <md-icon class="text-gray branch-add_icon" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon><div class='company-wrap-block'>{{customer.mainAddressCountry}}</div> 
                 </div>
                 <div v-else class="md-layout-item md-size-100" style="text-align: left;">
-                  <InputText label='Company address' name='address' :value='company.address' :onChange="onChange"/>
+                  <InputText v-gmaps-searchbox='addreess' label='Company address' name='mainAddressCountry' :value='customer.mainAddressCountry' :onChange="onChange"/>
                 </div>
                 <div v-if='!isShowForm' class="md-layout-item md-size-100" style="text-align: left;">
-                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">call</md-icon>{{company.phone}}
+                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">call</md-icon>{{customer.phone}}
                 </div>
                 <div v-else class="md-layout-item md-size-100" style="text-align: left;">
-                  <InputText label='Phone' name='phone' :value='company.phone' :onChange="onChange"/>
+                  <InputText label='Phone' name='phone' :value='customer.phone||""' :onChange="onChange"/>
                 </div>
 
                 <div v-if='!isShowForm' class="md-layout-item md-size-100" style="text-align: left;">
-                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">mail_outline</md-icon>{{company.email}}
+                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">mail_outline</md-icon>{{customer.workspaceDomain}}
                 </div>
                 <div v-else class="md-layout-item md-size-100" style="text-align: left;">
-                  <InputText label='Company Email' name='email' :value='company.email' :onChange="onChange"/>
+                  <InputText  label='Company Email' name='workspaceDomain' :value='customer.workspaceDomain' :onChange="onChange"/>
                 </div>
 
                 <div v-if='!isShowForm' class="md-layout-item md-size-100" style="text-align: left;">
-                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">web_asset</md-icon>{{company.domain}}
+                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">web_asset</md-icon>{{customer.website}}
                 </div>
                 <div v-else class="md-layout-item md-size-100" style="text-align: center;">
-                  <InputText label='Company Domain' name='domain' :value='company.domain'  :onChange="onChange"/>
+                  <InputText label='Company Domain' name='website' :value='customer.website'  :onChange="onChange"/>
                   <md-button class="md-rose md-sm" @click.prevent='saveInfoFromForm'>Save Profile</md-button>
                 </div>
                           
@@ -95,7 +95,7 @@
                 </div>
               </div>
               
-              <div v-for="item of company.branches" >              
+              <div v-for="item of customer.branches||[]" >              
                 <div  style="text-align: left;  display: flex; align-items: center;align-items: center; justify-content: space-between;">
                   <md-icon class="branch-add_icon" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon><div class='company-wrap-block'> {{item}}</div>
                   <div  class='event-add-new-date-delete_button' @click.prevent='deleteBranch(item)'><md-icon  class='event-add_icon'>delete</md-icon></div>
@@ -106,12 +106,11 @@
               <form @submit.prevent='addIndustry' action="#">
                <InputText                 
                 labelStyle='company_label_input'
-                label='Branches address'
-                id='branches_getter'               
+                label='Branches address'                           
                 name='branch_address'
                 :value='branch_address'
                 :onChange='onChange'                             
-                
+                v-gmaps-searchbox='"branches_getter"'
         />        
         </form>
         </div>
@@ -454,7 +453,7 @@ const BarChat = document.getElementById("event_vs_category");
     },
     computed:{
       ...mapGetters({
-        company:'user/getCompany'
+        customer:'user/getCustomer'
       }),
        getMonth(){
          return this.monthValue.map(item=>item.month)
@@ -546,15 +545,15 @@ const BarChat = document.getElementById("event_vs_category");
             this.isShowForm=!this.isShowForm
           },
           saveInfoFromForm(){
-            const data=isWrong(this,['mainOffice','numberOfEmployees','industry','address','phone','email','domain'])
-            for(let key in this.company){
+            const data=isWrong(this,['mainAddressCity','numberOnEmployees','industry','mainAddressCountry','phone','workspaceDomain','website'])
+            for(let key in this.customer){
               if(data[key]){
-                if(data[key]!==this.company[key]){
-                    this.company[key]=data[key]
+                if(data[key]!==this.customer[key]){
+                    this.customer[key]=data[key]
                 }
               }              
             }
-             this.$store.dispatch("user/putUserFromApi",this.company) 
+             this.$store.dispatch("user/putUserFromApi",this.customer) 
              this.isShowForm=!this.isShowForm
           }
 

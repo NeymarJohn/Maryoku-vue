@@ -39,9 +39,50 @@ const mockCompany={
 
 
 const state={
-  user:null,
+  user:{
+    id: "...",
+  username: "...",
+  emailAddress: "...",
+  firstName: "...",
+  lastName: "...",
+  displayName: "...",
+  pictureUrl: "...",
+  locale: "...",
+  location: null,
+  role: null,
+  permissions: null,
+  onboarded: false,
+  onboardingPath: "OM",
+  phoneNumberCountryCode: null,
+  phoneNumber: null,
+  birthday: null,
+  companyStartDate: null,
+  importantDates: [
+    
+  ],
+  defaultGroupId: "",
+  defaultCalendarId: "",
+  },
   industry:[],
-  company:mockCompany
+  customer:{
+    id: "",
+    name: "example inc",
+    workspaceDomain: "example.262days.com",
+    onboarded: false,
+    mainAddressLine1: null,
+    mainAddressLine2: null,
+    mainAddressCity: null,
+    mainAddressStateRegion: null,
+    mainAddressCountry: null,
+    mainAddressZip: null,
+    numberOnEmployees: 0,
+    industry: null,
+    website: "www.example.com",
+    logoFileId:"" ,
+    files: [
+      
+    ],
+  }
 }
 
 //getters
@@ -52,8 +93,8 @@ const getters={
   getIndustryList:(state)=>{
     return state.industry
   },
-  getCompany:(state)=>{
-    return state.company
+  getCustomer:(state)=>{
+    return state.customer
   }
 }
 
@@ -66,8 +107,9 @@ const actions={
             Me.get()
             .then(res=>{
                 commit("setUser" , res[0])
+                commit('setCustomer',res[0].customer)
                 Customer.find(res[0].customer.id)
-                .then(res=>console.log(res, 'eto customer'))
+                .then(res=>commit)
                 .catch(e=>console.log(e, 'eto customer, error')) 
             }
              
@@ -137,8 +179,8 @@ const actions={
         }
     }},
     putUserFromApi({commit,state},data){
-        new Me({id:state.user.id,firstName:'Petya'}).save().then(res=>console.log(res,'true user')).catch(e=>console.log(e,'false user'))
-        new Customer({numberOnEmployees:10}).save().then(res=>console.log(res,'true customer')).catch(e=>console.log(e,'false customer'))
+        // new Me({id:state.user.id,firstName:'Petya'}).save().then(res=>console.log(res,'true user')).catch(e=>console.log(e,'false user'))
+        new Customer({id:state.customer.id,...data}).save().then(res=>console.log(res,'true customer')).catch(e=>console.log(e,'false customer'))
         console.log(data)
     }
 
@@ -151,6 +193,9 @@ const mutations= {
     },
     setIndustries(state,industry){
         state.industry=industry
+    },
+    setCustomer(state, customer){
+        state.customer=customer
     },
     addIndustry(state,industry){
          state.company.branches.push(industry)
