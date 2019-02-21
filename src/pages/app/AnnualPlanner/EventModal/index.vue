@@ -128,12 +128,10 @@
                         </div>
                         <div class="md-layout mt-15">
                             <div class="md-layout-item md-small-size-100">
-                                <md-field :class="[{'md-error': errors.has('totalBudget')}]">
+                                <md-field>
                                     <label>Budget</label>
                                     <md-input v-model="totalBudget"
-                                              data-vv-name="totalBudget"
-                                              v-validate= "modelValidations.totalBudget"
-                                              required/>
+                                              data-vv-name="totalBudget"/>
                                     <span class="md-error" v-if="errors.has('totalBudget')">The event budget is required and should be in range of 1 - 1 000 000</span>
                                 </md-field>
                             </div>
@@ -232,11 +230,6 @@
         currency: {
           required: true,
         },
-        totalBudget: {
-          required: true,
-          min_value: 1,
-          max_value: 1000000,
-        },
         eventType: {
           required: true,
         },
@@ -247,8 +240,9 @@
     }),
 
     created() {
-      [...Array(12).keys()].map(x =>  this.hoursArray.push(`${x}:00 AM`));
-      [...Array(12).keys()].map(x =>  x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`));
+      [...Array(12).keys()].map(x => x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined);
+      [...Array(12).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`));
+
       this.hoursArray.push();
     },
     computed: {
@@ -540,24 +534,28 @@
       mdOpened:function() {
         this.occasion += " ";
         this.occasion = this.occasion.substring(0, this.occasion.length -1)
-      }
+      },
     },
     watch: {
     }
   };
 </script>
 <style lang="scss" scope>
-  .md-datepicker i{
-    display: none;
-  }
-  .md-field.md-form-group:after,
-  .md-field.md-form-group:before,
-  .md-field.md-datepicker:after,
-  .md-field.md-datepicker:before {
-    width: 100%;
-  }
-  .md-field>.md-icon~label {
-    left: 0;
+  .md-datepicker {
+    .md-icon.md-date-icon {
+      display: none;
+
+      &~label {
+        left: 0;
+      }
+    }
+    input {
+      margin-left: 0 !important;
+    }
+
+    &.md-field::after {
+      width: 100%;
+    }
   }
   .md-field>.md-icon~.md-input {
     margin: 0;
