@@ -77,9 +77,9 @@
                                 </md-field>
                             </div>
                         </div>
-                        
+
                         <div class="md-layout mb-15">
-                          <div class="md-layout-item md-size-33 md-small-size-100">
+                          <div class="md-layout-item md-size-100 md-small-size-100">
                             <md-datepicker
                               v-model="date"
                               data-vv-name="date"
@@ -89,16 +89,19 @@
                               <label :class="[{'md-error': ($refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value') )}]">Date</label>
                             </md-datepicker>
                           </div>
-                            <div class="md-layout-item md-size-33 md-small-size-100">
-                                <md-field :class="[{'md-error': errors.has('time')}]" class="">
-                                    <label>Start Time</label>
-                                    <md-select v-model="time"
-                                               data-vv-name="time"
-                                               v-validate= "modelValidations.time"
-                                               required>
+                        </div>         
+
+                        <div class="md-layout mb-15">
+                          <div class="md-layout-item md-size-50 md-small-size-100">
+                            <md-field :class="[{'md-error': errors.has('time')}]" class="">
+                              <label>Start Time</label>
+                              <md-select v-model="time"
+                                         data-vv-name="time"
+                                         v-validate= "modelValidations.time"
+                                         required>
                                         <md-option v-for="hour in hoursArray"
-                                                   :key="hour"
-                                                   :value="hour">
+                                            :key="hour"
+                                            :value="hour">
                                             {{ hour }}
                                         </md-option>
                                     </md-select>
@@ -106,7 +109,7 @@
                                 </md-field>
                             </div>
 
-                            <div class="md-layout-item md-size-33 md-small-size-100">
+                            <div class="md-layout-item md-size-50 md-small-size-100">
                                 <md-field :class="[{'md-error': errors.has('duration')}]" class="">
                                     <label>Duration</label>
                                     <md-select v-model="duration"

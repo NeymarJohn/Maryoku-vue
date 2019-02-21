@@ -29,7 +29,8 @@ Vue.use(VueRouter);
 Vue.use(DashboardPlugin);
 
 Vue.use(VueGmaps, {
-  key: process.env.GOOGLE_API_KEY|| 'AIzaSyA2vZszC43EeV_86cOpsODl0jqs7Eaj3fI'
+  key: process.env.GOOGLE_API_KEY|| 'AIzaSyA2vZszC43EeV_86cOpsODl0jqs7Eaj3fI',
+  libraries: ['places']
 })
 
 
