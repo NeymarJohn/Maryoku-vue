@@ -184,8 +184,7 @@ const actions={
     }},
     putUserFromApi({commit,state},data){
        if(data['phoneNumber']){
-        new Me({...data}).save().then(res=>{
-            console.log(res)
+        new Me({...data}).save().then(res=>{            
             commit("setUser" , res)
             
         })
