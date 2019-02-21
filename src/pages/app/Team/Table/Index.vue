@@ -86,7 +86,7 @@
       return {
         hideBtn: false,
         openPopover: false,
-        currentUserId: indexVuexModule.state.currentUser.id,
+        currentUserId: indexVuexModule.state.event.currentUser.id,
       }
     },
     methods: {
@@ -134,7 +134,7 @@
           confirmButtonText: 'Yes, delete it!'
         }).then(async (result) => {
           if (result.value) {
-
+            console.log(teamMember)
             teamMember.delete();
             this.$emit("memberDeleted");
             let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
