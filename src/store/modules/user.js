@@ -2,7 +2,6 @@ import axios from 'axios'
 import Industry from '@/models/Industry';
 import Me from '@/models/Me';
 import Customer from '@/models/Customer';
-import { of } from 'rxjs';
 
 function getReq(endpoint){
   return axios({
@@ -183,36 +182,15 @@ const actions={
         }
     }},
     putUserFromApi({commit,state},data){
-       if(data['phoneNumber']){
-        new Me({...data}).save().then(res=>{            
-            commit("setUser" , res)
-            
-        })
-            .catch(e=>console.log(e,'false user'))
-        return
-       }        
-        
-        new Customer({...data}).save().then(res=>{
-            Me.get()
-            .then(res=>{
-                commit("setUser" , res[0])
-                commit('setCustomer',res[0].customer)
-                Customer.find(res[0].customer.id)
-                .then(res=>commit)
-                .catch(e=>console.log(e, 'eto customer, error')) 
-            }
-             
-            )
-            .catch(e=>console.log(e))})
-            .catch(e=>console.log(e,'false customer'))
-       
+        // new Me({id:state.user.id,firstName:'Petya'}).save().then(res=>console.log(res,'true user')).catch(e=>console.log(e,'false user'))
+        new Customer({id:state.customer.id,...data}).save().then(res=>console.log(res,'true customer')).catch(e=>console.log(e,'false customer'))
+        console.log(data)
     }
 
 }
 
 //mutations
 const mutations= {
-
     setUser(state,data){
         state.user=data
     },

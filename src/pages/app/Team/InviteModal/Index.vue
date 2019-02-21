@@ -300,16 +300,24 @@
               });
             },
          async updateTeamMember() {
-           let team = await Teams.get();
-           console.log(team);
-           let member = await team[0].members().find(this.editMode)
-           console.log(member)
+           let team = await Teams.first();
+
+           let member = await team.members().find(this.editMode)
            member.emailAddress = this.teamMemberData.emailAddress;
-           await member.save();
+           await member.for(team).save().then(result => {
+              this.$emit('memberCreated');
+              this.$notify(
+                {
+                  message: 'Team member Update successfully!',
+                  horizontalAlign: 'center',
+                  verticalAlign: 'top',
+                  type: 'success'
+                })
+            }).catch(() => {
+
+            });
 
            this.setInviteModal(false);
-
-
          }
         },
       watch: {
