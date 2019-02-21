@@ -15,7 +15,6 @@ import vSelectMenu from 'v-selectmenu';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VueFractionGrid from 'vue-fraction-grid';
 import VuePhoneNumberInput from 'vue-phone-number-input';
-import VueGmaps from 'vue-gmaps'
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 
 // router setup
@@ -27,10 +26,6 @@ import store from "./store";
 // plugin setup
 Vue.use(VueRouter);
 Vue.use(DashboardPlugin);
-
-Vue.use(VueGmaps, {
-  key: process.env.GOOGLE_API_KEY|| 'AIzaSyA2vZszC43EeV_86cOpsODl0jqs7Eaj3fI'
-})
 
 
 // configure router

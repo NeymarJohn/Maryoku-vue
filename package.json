@@ -44,7 +44,6 @@
     "vue-directive-tooltip": "^1.5.0",
     "vue-element-loading": "^1.0.5",
     "vue-fraction-grid": "^1.1.0",
-    "vue-gmaps": "^0.2.2",
     "vue-image-lightbox": "^6.0.1",
     "vue-lazyload": "^1.2.6",
     "vue-material": "1.0.0-beta-10.2",
