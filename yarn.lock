@@ -6621,11 +6621,6 @@ libphonenumber-js@^1.7.7:
     semver-compare "^1.0.0"
     xml2js "^0.4.17"
 
-load-google-maps-api@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/load-google-maps-api/-/load-google-maps-api-0.0.2.tgz#e77f4189f087f6f9ae93b1026a9012791c909c31"
-  integrity sha1-539BifCH9vmuk7ECapASeRyQnDE=
-
 load-json-file@^1.0.0:
   version "1.1.0"
   resolved "http://registry.npmjs.org/load-json-file/-/load-json-file-1.1.0.tgz#956905708d58b4bab4c2261b04f59f31c99374c0"
@@ -10728,13 +10723,6 @@ vue-fraction-grid@^1.1.0:
 vue-functional-data-merge@^2.0.2:
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-2.0.7.tgz#bdee655181eacdcb1f96ce95a4cc14e75313d1da"
-
-vue-gmaps@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/vue-gmaps/-/vue-gmaps-0.2.2.tgz#319944671417f1ecd573206685b4c8efbe472ca4"
-  integrity sha1-MZlEZxQX8ezVcyBmhbTI775HLKQ=
-  dependencies:
-    load-google-maps-api "0.0.2"
 
 vue-hot-reload-api@^2.2.0, vue-hot-reload-api@^2.3.0:
   version "2.3.1"
