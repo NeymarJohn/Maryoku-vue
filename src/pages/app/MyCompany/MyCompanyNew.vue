@@ -5,10 +5,21 @@
         <md-card-content>
           <div class="md-layout">
           <div class='company-view-common-logo_block'>
+          <div class='company-main-logo-block'>
           <img class="company-logo" :src="customer.logoFileId||'static/img/placeholder.jpg'" style="width: 80%; height: 80%;">
+          <div>
+          <div class="company-logo-button-block">
+                <div @click='UploadAvatar'>            
+                 <md-icon class='company-logo-button'>edit<input type="file" id='company-avatar-upload' @change="onFileChange($event)" style="display:none"/></md-icon>
+                 </div> 
+                 <div @click='deleteAvatar(customer.files[0])'>            
+                <md-icon class='company-logo-button'>clear</md-icon>
+                </div>             
+          </div>
+          </div>
+          </div>
             <div class='company-name-block'>
-              <h4 class="title text-gray" style="font-weight: 500;">{{customer.name}}</h4>
-              <md-button class="md-rose md-sm" @click='isEditable'>Edit Profile</md-button>
+              <h4 class="title text-gray" style="font-weight: 500;">{{customer.name}}</h4>              
             </div>
             </div>
             <div class="md-layout-item md-size-100">
@@ -16,42 +27,56 @@
             </div>
             <div class="md-layout-item md-size-100">
               <div class="md-layout">
-                <div v-show='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
-                  <div class="title text-bold text-gray info-text-size" >Main Office</div>
-                </div>
-                <div v-show='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
-                  <div  class="title info-text-size">{{customer.mainAddressCity}}</div>
-                  
-                </div>
-                <div v-show='isShowForm' class="md-layout-item md-size-100" style="text-align: left;">
-                  <InputText v-gmaps-searchbox='"mainOffice"' label='Main Office' :value='customer.mainAddressCity' name='mainAddressCity'  :onChange='onChange'/>
-                </div>
-
-                <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
+                <div v-show='formSwitcher!=="numberOfEmployees"' class="md-layout-item md-size-50" style="text-align: left;">
                   <div class="title text-bold text-gray info-text-size">Number of Employees</div>
                 </div>
-                <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
+                <div v-show='formSwitcher!=="numberOfEmployees"' class="md-layout-item md-size-50" style="text-align: left; display: flex; justify-content: space-between; align-items: center;">
                   <div class="title info-text-size">{{customer.numberOfEmployees}}</div>
+                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click='isShow(customer,"numberOfEmployees")'>
+                                    <md-icon>edit</md-icon>
+                   </md-button>
                 </div>
-                <div v-else class="md-layout-item md-size-100" style="text-align: left;">
-                  <InputText label='Number of Employees' name='numberOnEmployees' :value='String(customer.numberOfEmployees)' :onChange="onChange"/>
+                <div v-show='formSwitcher==="numberOfEmployees"' class="md-layout-item md-size-100" style="text-align: left; display: flex; justify-content: space-between; align-items: center;">
+                  <InputText label='Number of Employees' name='numberOfEmployees' :value='String(customer.numberOfEmployees)' :onChange="onChange"/>
+                  
+                  <div class='delete-edit-block'>
+                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click.prevent='saveInfoFromForm(customer,"numberOfEmployees")'>
+                                    <md-icon>done</md-icon>
+                   </md-button>
+                    <md-button class="md-simple md-just-icon md-round" @click="isClose">
+                        <md-icon>clear</md-icon>
+                    </md-button>
+                  </div>
                 </div>
 
-                <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
+                <div v-show='formSwitcher!=="industry"' class="md-layout-item md-size-50" style="text-align: left; display: flex; justify-content: space-between; align-items: center;">
                   <div class="title text-bold text-gray info-text-size">Industry</div>
                 </div>
-                <div v-if='!isShowForm' class="md-layout-item md-size-50" style="text-align: left;">
-                  <div class="title info-text-size">{{customer.industry}}</div>
+                <div v-show='formSwitcher!=="industry"' class="md-layout-item md-size-50" style="text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex;
+    justify-content: space-between;
+    align-items: center;">
+                  <div class="title info-text-size" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{customer.industry}}</div>
+                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click='isShow(customer,"industry")'>
+                                    <md-icon>edit</md-icon>
+                   </md-button>
                 </div>
-                <div v-else class="md-layout-item md-size-100" style="text-align: left;">
+                <div v-show='formSwitcher==="industry"' class="md-layout-item md-size-100" style="text-align: left; display: flex;">
                           <Select                
-                            label='Industry'
-                            labelStyle='om_label_input'
-                            :list='industryList'
-                            name='industry'                
-                            :onChange="onChange" 
-                            :valueName="['id','title']"                                                       
-                  />                           
+                              label='Industry'
+                              labelStyle='om_label_input'
+                              :list='industryList'
+                              name='industry'                
+                              :onChange="onChange" 
+                              :valueName="['id','title']"                                                       
+                  />  
+                  <div class='delete-edit-block'>
+                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click.prevent='saveInfoFromForm(customer,"industry")'>
+                                    <md-icon>done</md-icon>
+                   </md-button>
+                    <md-button class="md-simple md-just-icon md-round" @click="isClose">
+                        <md-icon>clear</md-icon>
+                    </md-button>
+                  </div>                         
                 </div>
               </div>
             </div>
@@ -61,32 +86,76 @@
             <div class="md-layout-item md-size-100">
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Contact Information</div>
               <div class="md-layout">
-                <div v-if='!isShowForm' class="md-layout-item md-size-100" style="text-align: left; display: flex;">
-                  <md-icon class="text-gray branch-add_icon" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon><div class='company-wrap-block'>{{customer.mainAddressCountry}}</div> 
+                <div v-show='formSwitcher!=="mainAddressCountry"' class="md-layout-item md-size-100" style="text-align: left; display: flex; justify-content: space-between; align-items: center;">
+                  <md-icon class="text-gray branch-add_icon" style="margin:0px">pin_drop</md-icon>
+                  <div class='company-wrap-block'>{{customer.mainAddressCountry}}</div>
+                   <md-button class="md-simple md-just-icon md-round fa fa-edit" @click='isShow(customer,"mainAddressCountry")'>
+                                    <md-icon>edit</md-icon>
+                   </md-button>
                 </div>
-                <div v-else class="md-layout-item md-size-100" style="text-align: left;">
-                  <InputText v-gmaps-searchbox='addreess' label='Company address' name='mainAddressCountry' :value='customer.mainAddressCountry' :onChange="onChange"/>
+                <div v-show='formSwitcher==="mainAddressCountry"' class="md-layout-item md-size-100" style=" display: flex ">
+                  <InputText label='Company address' name='mainAddressCountry' :value='customer.mainAddressCountry' :onChange="onChange"/>
+                  <div class='delete-edit-block'>
+                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click.prevent='saveInfoFromForm(customer,"mainAddressCountry")'>
+                                    <md-icon>done</md-icon>
+                   </md-button>
+                    <md-button class="md-simple md-just-icon md-round" @click="isClose">
+                        <md-icon>clear</md-icon>
+                    </md-button>
+                  </div> 
                 </div>
-                <div v-if='!isShowForm' class="md-layout-item md-size-100" style="text-align: left;">
-                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">call</md-icon>{{customer.phone}}
+                <div v-show='formSwitcher!=="phoneNumber"' class="md-layout-item md-size-100" style=" left; display: flex; justify-content: space-between; align-items: center;">
+                  <md-icon class="text-gray" style="margin:0px">call</md-icon><div>{{user.phoneNumber}}</div>
+                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click='isShow(user,"phoneNumber")'>
+                                    <md-icon>edit</md-icon>
+                   </md-button>
                 </div>
-                <div v-else class="md-layout-item md-size-100" style="text-align: left;">
-                  <InputText label='Phone' name='phone' :value='customer.phone||""' :onChange="onChange"/>
+                <div v-show='formSwitcher==="phoneNumber"' class="md-layout-item md-size-100" style="text-align: left; display: flex;">
+                  <InputText label='Phone' name='phoneNumber' :value='String(user.phoneNumber)||""' :onChange="onChange"/>
+                  <div class='delete-edit-block'>
+                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click.prevent='saveInfoFromForm(user,"phoneNumber")'>
+                                    <md-icon>done</md-icon>
+                   </md-button>
+                    <md-button class="md-simple md-just-icon md-round" @click="isClose">
+                        <md-icon>clear</md-icon>
+                    </md-button>
+                  </div> 
                 </div>
 
-                <div v-if='!isShowForm' class="md-layout-item md-size-100" style="text-align: left;">
-                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">mail_outline</md-icon>{{customer.workspaceDomain}}
+                <div v-show='formSwitcher!=="workspaceDomain"' class="md-layout-item md-size-100" style="text-align: left; display: flex; justify-content: space-between; align-items: center;">
+                  <md-icon class="text-gray" style="margin:0px">mail_outline</md-icon><div>{{customer.workspaceDomain}}</div>
+                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click='isShow(customer,"workspaceDomain")'>
+                                    <md-icon>edit</md-icon>
+                   </md-button>
                 </div>
-                <div v-else class="md-layout-item md-size-100" style="text-align: left;">
+                <div v-show='formSwitcher==="workspaceDomain"' class="md-layout-item md-size-100" style="text-align: left; display: flex">
                   <InputText  label='Company Email' name='workspaceDomain' :value='customer.workspaceDomain' :onChange="onChange"/>
+                  <div class='delete-edit-block'>
+                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click.prevent='saveInfoFromForm(customer,"workspaceDomain")'>
+                                    <md-icon>done</md-icon>
+                   </md-button>
+                    <md-button class="md-simple md-just-icon md-round" @click="isClose">
+                        <md-icon>clear</md-icon>
+                    </md-button>
+                  </div> 
                 </div>
 
-                <div v-if='!isShowForm' class="md-layout-item md-size-100" style="text-align: left;">
-                  <md-icon class="text-gray" style="margin-right: 12px; margin-bottom: 12px;">web_asset</md-icon>{{customer.website}}
+                <div v-show='formSwitcher!=="website"' class="md-layout-item md-size-100" style="text-align: left; display: flex; justify-content: space-between; align-items: center; ">
+                  <md-icon class="text-gray" style="margin:0px">web_asset</md-icon><div>{{customer.website}}</div>
+                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click='isShow(customer,"website")'>
+                                    <md-icon>edit</md-icon>
+                   </md-button>
                 </div>
-                <div v-else class="md-layout-item md-size-100" style="text-align: center;">
+                <div v-show='formSwitcher==="website"'  class="md-layout-item md-size-100" style="text-align: center; display:flex">
                   <InputText label='Company Domain' name='website' :value='customer.website'  :onChange="onChange"/>
-                  <md-button class="md-rose md-sm" @click.prevent='saveInfoFromForm'>Save Profile</md-button>
+                  <div class='delete-edit-block'>
+                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click.prevent='saveInfoFromForm(customer,"website")'>
+                                    <md-icon>done</md-icon>
+                   </md-button>
+                    <md-button class="md-simple md-just-icon md-round" @click="isClose">
+                        <md-icon>clear</md-icon>
+                    </md-button>
+                  </div> 
                 </div>
                           
               </div>
@@ -147,16 +216,40 @@
         <div><span class='info-chat-value'>23</span><span class='info-chart'>{{`This year of ${new Date().getFullYear()}`}}</span></div>
         <div class='filter-block' v-if='showFilter'>
         <div class='filter-datepicker'>
+        <div class='filter-datepicker-block'>
+        <Select 
+                               
+                label='Start year'
+                labelStyle='om_label_input'
+                :list='["2014", "2015", "2016", "2017", "2018", "2019"]'
+                name='startPeriod'                
+                :onChange="onChange"
+                                              
+        />
+        </div>
+        <div class='filter-datepicker-block'>
              <Select                
                 label='From'
                 labelStyle='om_label_input'
                 :list='listMonth'
                 name='from'                
                 :onChange="onChange"                                             
-        />
+        /> 
+        </div>      
         </div>
         <div class='filter-datepicker'>
+        <div class='filter-datepicker-block'>
          <Select                
+                label='Finish year'
+                labelStyle='om_label_input'
+                :list='["2014", "2015", "2016", "2017", "2018", "2019"]'
+                name='finishPeriod'                
+                :onChange="onChange"
+                                              
+        />
+        </div>
+        <div class='filter-datepicker-block'>
+        <Select                
                 label='To'
                 labelStyle='om_label_input'
                 :list='listMonth'
@@ -165,9 +258,31 @@
                                               
         />
         </div>
-          </div>  
-          <canvas v-show='!isMonthly' style="max-height: 130px" id="number_of_events_chart" width="350" height="150"></canvas>
-          <canvas v-show='isMonthly' style="max-height: 130px"  id="number_of_events_chart_monthly" width="350" height="150"></canvas>
+        </div>
+          </div> 
+          
+          <LineChart
+               v-if='!isMonthly'
+               key="username-input"
+              classStyle="max-height: 130px"
+              id="number_of_events_chart"
+              width="350"
+              height="150"
+              :dataChart='dataChart.data'
+              type='line'
+              :optionChart='dataChart.options'      
+          />          
+          <LineChart
+              v-else
+               key="email-input"
+              classStyle="max-height: 130px"
+              id="number_of_events_chart_monthly"
+              width="350"
+              height="150"
+              :dataChart='getDataFromDuration'
+              type='line'
+              :optionChart='dataChart.options'      
+          />          
         </md-card-content>
       </div>
       <md-card>
@@ -192,8 +307,18 @@
       </md-card>
       <md-card>
         <md-card-content style="max-height: 200px">
-          <div class="title text-bold">Event categories comparison</div>
-          <canvas id="event_vs_category" style="max-height: 150px" width="350" height="150"></canvas>
+         
+          <div class="title text-bold">Average event cost per employee</div>
+          <LineChart            
+            classStyle="max-height: 130px"
+            id="number_of_participants_chart"
+            width="350"
+            height="150"
+            :dataChart='dataChartParticipan.data'
+            type='line'
+            :optionChart='dataChart.options'      
+          />  
+          
         </md-card-content>
       </md-card>
     </div>
@@ -224,8 +349,16 @@
       </md-card>
       <md-card>
         <md-card-content>
-          <div class="title text-bold">Average event cost per employee</div>
-          <canvas  id="number_of_participants_chart" width="350" height="150"></canvas>           
+           <div class="title text-bold">Event categories comparison</div>
+          <LineChart            
+            classStyle="max-height: 130px"
+            id="event_vs_category"
+            width="350"
+            height="150"
+            :dataChart='dataEventVsCategory.data'
+            type='bar'
+            :optionChart='dataChart.options'      
+          />                 
         </md-card-content>
       </md-card>
     </div>
@@ -250,7 +383,10 @@ import ButtonDiv from '@/components/Button/ButtonDiv.vue';
 import Button from '@/components/Button/Button.vue';
 import ControlPanel from '@/components/Button/ControlPanel.vue';
 import LineIndicator from '@/components/Chart/LineIndicator.vue';
-import CustomerFile from '@/models/CustomerFile';
+import LineChart from '@/components/Chart/LineChart.vue'
+
+
+ import CustomerFile from '@/models/CustomerFile';
 import Datepicker from '@/components/Datepicker/Datepicker.vue';
 
 //CONSTANST
@@ -276,169 +412,73 @@ import {isWrong} from '@/utils/helperFunction'
       ControlPanel,
       LineIndicator,
       Datepicker,
-      Select
+      Select,
+      LineChart
     },
      mounted:function(){
           this.$store.dispatch("user/getIndustry");
-          this.$store.dispatch("user/getUserFromApi")          
-      const chart = document.getElementById("number_of_events_chart");      
-       new Chart(chart, {
-    type: 'line',
-    data: {
-        labels: ["2014", "2015", "2016", "2017", "2018", "2019"],
-        datasets: [{            
-            data: [2, 5, 7, 9, 12, 15],
-            backgroundColor: [                
-                'rgba(255, 255, 255, 0.2)',                
-            ],
-            borderColor: [                
-                '#71c278',                
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-      legend: {
-        display: false
-    },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    }
-});
- const chart2 = document.getElementById("number_of_participants_chart");
-       new Chart(chart2, {
-    type: 'line',
-    data: {
-        labels: ['Jan', "Feb", "Mar", "Apr", "May", "June"],
-        datasets: [{            
-            data: [80, 125, 145, 60, 92, 57],
-            backgroundColor: [                
-                'rgba(255, 255, 255, 0.2)',                
-            ],
-            borderColor: [                
-                '#26cfa0',                
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-      legend: {
-        display: false
-    },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    }
-});
-const chart3 = document.getElementById("number_of_events_chart_monthly");
-       new Chart(chart3, {
-    type: 'line',
-    data: {
-        labels: [],
-        datasets: [{            
-            data: [80, 125, 145, 60, 92, 57],
-            backgroundColor: [                
-                'rgba(255, 255, 255, 0.2)',                
-            ],
-            borderColor: [                
-                '#26cfa0',                
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-      legend: {
-        display: false
-    },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    }
-});
- const numberWithCommas = function(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
-const dataPack1 = [40, 47, 44, 38 ];
-const dataPack2 = [10, 12, 7, 5];
-const BarChat = document.getElementById("event_vs_category");
-       new Chart(BarChat, {
-    type: 'bar',
-    data: {
-        labels: ['Q1', "Q2", "Q3", "Q4"],
-        datasets: [{
-            label: '# of type Events',
-            data: dataPack1,
-            backgroundColor: '#25d0a2'                
-            
-        },
-        {
-            label: '# of Categories',
-            data: dataPack2,
-            backgroundColor: '#89e0fe'               
-            
-        }
-        
-        
-        ]
-    },
-    options: {
-      legend: {
-        display: false
-    },
-     		animation: {
-        	duration: 10,
-        },
-        tooltips: {
-					mode: 'label',
-          callbacks: {
-          label: function(tooltipItem, data) { 
-          	return data.datasets[tooltipItem.datasetIndex].label + ": " + numberWithCommas(tooltipItem.yLabel);
-          }
-          }
-         },
-        scales: {
-          xAxes: [{ 
-          	stacked: true, 
-            gridLines: { display: false },
-            }],
-          yAxes: [{ 
-          	stacked: true, 
-            ticks: {
-        			callback: function(value) { return numberWithCommas(value); },
-     				}, 
-            }],
-        },
-        
-    }
-});
+          this.$store.dispatch("user/getUserFromApi")  
+          CustomerFile.get().then(e=>console.log(e, 'eto get'))
     },
     data() {
       return {
-        firstTabs: [
-          {
-            tab: 'Sign contract for "What are conference organizers afraid of?"'
-          },
-          {
-            tab: "Lines From Great Russian Literature? Or E-mails From My Boss?"
-          },
-          {
-            tab:
-              "Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit"
-          }
-        ],
+        dataChart:{
+        data:{
+          
+            labels: ["2014", "2015", "2016", "2017", "2018", "2019"],
+            datasets: [{            
+                data: [2, 5, 7, 9, 12, 15],
+                backgroundColor: [                
+                    'rgba(255, 255, 255, 0.2)',                
+                ],
+                borderColor: [                
+                    '#71c278',                
+                ],
+                borderWidth: 1
+            }]    
+        },
+        options: {
+              legend: {
+                display: false
+            },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        
+        }, 
+        dataChartParticipan:{
+            data: {
+                    labels: ['Jan', "Feb", "Mar", "Apr", "May", "June"],
+                    datasets: [{            
+                        data: [80, 125, 145, 60, 92, 57],
+                        backgroundColor: [                
+                            'rgba(255, 255, 255, 0.2)',                
+                        ],
+                        borderColor: [                
+                            '#26cfa0',                
+                        ],
+                        borderWidth: 1
+                    }]
+                }
+        },
+        dataEventVsCategory:{
+          data: {
+                    labels: ['Holiday', "Civil", "Company Days", "Birthday", "Social Days", "Fun Days"],
+                    datasets:[{
+                      label: '# of type Events',
+                      data: [Math.ceil(Math.random()*100),Math.ceil(Math.random()*100),Math.ceil(Math.random()*100),Math.ceil(Math.random()*100),Math.ceil(Math.random()*100),Math.ceil(Math.random()*100)],
+                      backgroundColor: '#25d0a2'  
+                                                  
+            
+        }]
+                
+        }}
+        ,      
         branch_address:'',
         showSearch:false,
         showFilter:false,
@@ -450,21 +490,20 @@ const BarChat = document.getElementById("event_vs_category");
           ],
         from:'',
         to:'',
+        startPeriod:'',
+        finishPeriod:'',
         monthValue:[{month:'Jan', events:'34'}, {month:'Feb', events:'41'}, {month:'Mar', events:'24'}, {month:'Apr', events:'14'}, {month:'May', events:'34'}, {month:'Jun', events:'14'}, {month:'Jul', events:'24'}, {month:'Aug', events:'34'},{month:'Sep', events:'14'} ,{ month:'Oct', events:'44'}, {month:'Nov', events:'14'}, {month:'Dec', events:'34'}],
         month:'',
         monthRete:'',
         listMonth:listMonth,
         isShowForm:false,
-        vm: {
-                    searchPlace: '',
-                    location: {}
-
-                }        
+        formSwitcher:''       
       }
     },
     computed:{
       ...mapGetters({
         customer:'user/getCustomer',
+        user:'user/getUser',
         industryList:'user/getIndustryList'
       }),
        getMonth(){
@@ -503,11 +542,11 @@ const BarChat = document.getElementById("event_vs_category");
            return meanValue/this.rate[0].length
          }
        },
-       isMonthly(){        
-         return this.from&&this.to
+       isMonthly(){             
+         return Boolean(this.from&&this.to&&this.startPeriod&&this.finishPeriod)
        },
        getDuration(){
-            if(this.from&&this.to){
+            if(this.from&&this.to&&this.startPerion&&this.finishPerion){
                 const from=this.listMonth.indexOf(this.from)
                 const to=this.listMonth.indexOf(this.to)
                 const duration=this.listMonth.splice(from,to)
@@ -516,17 +555,72 @@ const BarChat = document.getElementById("event_vs_category");
               return this.listMonth
             }
        },
-       isShow(){
-         
-       } 
-}    
+                          getDataFromDuration(){
+                              const duration=["2014", "2015", "2016", "2017", "2018", "2019"]
+                              function filter(start, from ,finish, to, period){
+                                const startY=period.indexOf(start)
+                                const finishY= period.indexOf(finish)
+                                const yearPeriod= period.splice(startY,finishY)                    
+                                var allPeriod=[]
+                                yearPeriod.forEach(item=>{
+                                var month=["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+                                  if(item===start){
+                                    
+                                    var startMonth=month.indexOf(from)
+                                    var firstY= month.splice(startMonth)
+
+                                    allPeriod=allPeriod.concat(firstY)
+                                  } else if(item===finish){
+                                      var finishMonth=month.indexOf(to)    
+                                      var lastY= month.splice(0,finishMonth)   
+                                        allPeriod=allPeriod.concat(lastY)
+                                  }else{
+                                  allPeriod=allPeriod.concat(month)
+                                  }
+                                  }
+
+                                )
+                                return allPeriod
+                                }
+                      
+                      if(this.from&&this.to&&this.startPeriod&&this.finishPeriod){
+                         const period =  filter(this.startPeriod,this.from,this.finishPeriod,this.to,duration)
+                         const dataArray=period.map(item=>Math.ceil(Math.random()*100))                        
+                         return{
+                                labels: period,
+                                datasets: [{            
+                                    data: dataArray,
+                                    backgroundColor: [                
+                                        'rgba(255, 255, 255, 0.2)',                
+                                    ],
+                                    borderColor: [                
+                                        '#26cfa0',                
+                                    ],
+                                    borderWidth: 1
+                                }]
+
+                    }                  
+                  }
+        
+} 
+ }  
     ,
     methods: {
+      isShow(obj,value){        
+        let ifChange=false
+        for(let key in obj){          
+          if(key===value)this.formSwitcher=value
+        }        
+       },
+       isClose(){
+          this.formSwitcher=''
+       },
       onSelect: function(items) {
         this.selected = items;
       },
        onChange:function(value, name){                                 
-                 this[name]=value                                                                 
+                 this[name]=value
+                                                                               
          },
          onShowInput:function(value, name){          
            this.showSearch=!this.showSearch
@@ -550,23 +644,89 @@ const BarChat = document.getElementById("event_vs_category");
          onChangeFilterToEarly(){
            this.from=''
            this.to=''
+           this.startPerion=''
+           this.finishPerion=''
            this.showFilter=false           
          },
           isEditable(){
             this.isShowForm=!this.isShowForm
           },
-          saveInfoFromForm(){
-            const data=isWrong(this,['mainAddressCity','numberOnEmployees','industry','mainAddressCountry','phone','workspaceDomain','website'])
-            for(let key in this.customer){
-              if(data[key]){
-                if(data[key]!==this.customer[key]){
-                    this.customer[key]=data[key]
-                }
-              }              
+          saveInfoFromForm(obj,objName){            
+            if(this[objName]!==obj[objName]) {
+              let a = {}
+              a[objName]=this[objName]
+              a["id"]=obj.id
+
+              this.$store.dispatch("user/putUserFromApi",a) 
+              this.formSwitcher=''
+            }           
+          },
+          onFileChange(e) {
+          if(e.target.files.length){
+
+           
+        let reader = new FileReader();
+        let _this = this;
+        const file=e.target.files[0]
+        
+        reader.onload = e => {
+          if (true) {
+            this.isImageShow = true;
+            this.logo_name=file.name
+            const newImage={
+              src:e.target.result,
+              thumb:e.target.result
             }
-             this.$store.dispatch("user/putUserFromApi",this.customer) 
-             this.isShowForm=!this.isShowForm
+            
+
+            //     this.isModalLoading = true;
+            //     let _calendar = new Calendar({id: this.$store.state.calendarId});
+            //     let editedEvent = new CalendarEvent({id: this.event.id});
+            this.logo_name=file.name
+            console.log(e.target)
+            return new CustomerFile({customerFile: e.target.result}).save().then(result => {
+                console.log()
+                customer.logoFileId=e.target.result
+              // _this.uploadedImages.push({src: e.target.result, thumb: e.target.result, id: result.id});
+              // this.isImageShow = true;
+              // this.logo_name=file.name
+              // const newImage={
+              //   src:e.target.result,
+              //   thumb:e.target.result
+              // }
+            })
+              .catch((error) => {
+                console.log(error);
+              });
+
+          } else {
+            _this.uploadedImages.push({ src: e.target.result, thumb: e.target.result });
           }
+        }
+        reader.readAsDataURL(file);
+          }
+      },
+      UploadAvatar(){  
+        console.log('@')               
+                 document.getElementById('company-avatar-upload').click()
+         },
+      deleteAvatar(id){
+        console.log('delete')
+        CustomerFile({id: e.target.result}).delete().then(result => {
+                console.log(result)
+                // customer.logoFileId=e.target.result
+              // _this.uploadedImages.push({src: e.target.result, thumb: e.target.result, id: result.id});
+              // this.isImageShow = true;
+              // this.logo_name=file.name
+              // const newImage={
+              //   src:e.target.result,
+              //   thumb:e.target.result
+              // }
+            })
+              .catch((error) => {
+                console.log(error);
+              });
+      }   
 
     }
   };
@@ -593,7 +753,9 @@ const BarChat = document.getElementById("event_vs_category");
   }
   .company-view-common-logo_block{
     display:flex;
-    justify-content: space-between;    
+    justify-content: space-between;
+    width: 100%;
+    align-items: center    
   }
    .company-logo{
             width: 40% !important;
@@ -667,13 +829,18 @@ const BarChat = document.getElementById("event_vs_category");
     background:#aff3e1;
  }
  .filter-datepicker{
-   width:50%
+   width:25%;
+   display:flex
+   
+ }
+ .filter-datepicker-block{
+   width:50%;
  }
  .filter-block{
    display:flex;
    position: absolute;
     top: -20px;
-    left: 30px;
+    left: 20px;
  }
  .indicator-event-type-title-rate{
         font-size: 0.85rem;
@@ -689,5 +856,19 @@ const BarChat = document.getElementById("event_vs_category");
   display: flex;
     justify-content: space-between;
     margin: 20px 0px;
+}
+.delete-edit-block{
+  display:flex;
+}
+.company-logo-button{
+  font-size: 0.85rem !important;
+  cursor:pointer;
+}
+.company-logo-button-block{
+      display: flex;
+    flex-direction: column-reverse;
+}
+.company-main-logo-block{
+  display:flex
 }
 </style>

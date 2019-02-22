@@ -281,7 +281,7 @@
                   this.setInviteModal(false);
                   Teams.first().then((team) => {
                     team.members().attach(this.teamMemberData).then(() => {
-                      this.$emit('membersRefresh');
+                      this.$emit('memberCreated');
                       this.$notify(
                         {
                           message: 'Team member invited successfully!',
@@ -300,27 +300,16 @@
               });
             },
          async updateTeamMember() {
-           let team = await Teams.first();
-           let member = await team.members().find(this.editMode);
-
+           let team = await Teams.get();
+           console.log(team);
+           let member = await team[0].members().find(this.editMode)
+           console.log(member)
            member.emailAddress = this.teamMemberData.emailAddress;
-           member.role = this.teamMemberData.role;
-           member.permissions = this.teamMemberData.permissions;
+           await member.save();
 
            this.setInviteModal(false);
 
-           await member.for(team).save().then(result => {
-              this.$emit('membersRefresh');
-              this.$notify(
-                {
-                  message: 'Team member Update successfully!',
-                  horizontalAlign: 'center',
-                  verticalAlign: 'top',
-                  type: 'success'
-                })
-            }).catch(error => {
-              console.log(error)
-            });
+
          }
         },
       watch: {

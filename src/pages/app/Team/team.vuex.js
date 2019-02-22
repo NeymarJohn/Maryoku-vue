@@ -43,7 +43,7 @@ export default {
 
       },
       setTeamMemberData(state, data) {
-        console.log(data);
+          console.log(data.teamMember['permissions'])
         state.teamMemberData['emailAddress'] = data.teamMember['emailAddress']
         state.teamMemberData['role'] = data.teamMember['role']
         state.teamMemberData['permissions'] = data.teamMember['permissions'].split(',')
