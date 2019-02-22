@@ -134,9 +134,19 @@
           confirmButtonText: 'Yes, delete it!'
         }).then(async (result) => {
           if (result.value) {
-            let notifySuccessMessage = 'Team member deleted successfully!';
-              
-            this.deleteMember(teamMember, notifySuccessMessage);
+            console.log(teamMember)
+            teamMember.delete();
+            this.$emit("memberDeleted");
+            let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
+            this.teamMembers.splice(teamMemberIndex, 1)
+
+            this.$notify(
+              {
+                message: 'Team member deleted successfully!',
+                horizontalAlign: 'center',
+                verticalAlign: 'top',
+                type: 'success'
+              })
           }
         })
       },
@@ -151,35 +161,24 @@
           confirmButtonText: 'Yes, delete it!'
         }).then(async (result) => {
           if (result.value) {
-            let notifySuccessMessage = 'Team members deleted successfully!';
-
             this.selected.forEach((item, index) => {
-              this.deleteMember(item, notifySuccessMessage);
+              let teamMember = item
+              teamMember.delete();
+              this.$emit("memberDeleted");
+              let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
+              this.teamMembers.splice(teamMemberIndex)
             })
+
+            this.$notify(
+              {
+                message: 'Team members deleted successfully!',
+                horizontalAlign: 'center',
+                verticalAlign: 'top',
+                type: 'success'
+              })
           }
         })
-      },
-      async deleteMember(teamMember, notifySuccessMessage) {
-        let team = await Teams.first();
-        let member = await team.members().find(teamMember.id);
-
-        member.for(team).delete().then(response => {
-          this.$emit("membersRefresh");
-          let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
-          this.teamMembers.splice(teamMemberIndex)
-          
-          this.$notify(
-            {
-              message: notifySuccessMessage,
-              horizontalAlign: 'center',
-              verticalAlign: 'top',
-              type: 'success'
-            })
-        }).catch(error => {
-          console.log(error)
-        });
       }
-
     }
   };
 </script>
