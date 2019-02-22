@@ -250,15 +250,12 @@
         },
         methods: {
           ...mapMutations('teamVuex', ['setMemberProperty','resetForm', 'setInviteModal']),
-            noticeModalHide: function () {
-              this.setInviteModal(false);
-            },
             closeModal(){
               this.setInviteModal(false);
+              this.resetForm();
             },
-            toggleModal: function (show) {
-                this.setInviteModal(show);
-//              setTimeout(() => {this.$refs.focusable.$el.focus();}, 100);
+            noticeModalHide: function () {
+              this.closeModal()
             },
             onStepValidated(validated, model) {
                 this.wizardModel = {...this.wizardModel, ...model};
@@ -274,42 +271,53 @@
           },
           sendInvitatio() {
             this.$validator.validateAll().then(res => {
-              if (this.editMode) {
-                this.updateTeamMember();
-              } else {
-                if(res){
-                  this.setInviteModal(false);
-                  Teams.first().then((team) => {
-                    team.members().attach(this.teamMemberData).then(() => {
-                      this.$emit('memberCreated');
-                      this.$notify(
-                        {
-                          message: 'Team member invited successfully!',
-                          horizontalAlign: 'center',
-                          verticalAlign: 'top',
-                          type: 'success'
-                        })
-                    });
+              if(res){
+                if (this.editMode) {
+                  this.updateTeamMember();
+                } else {
+                    this.setInviteModal(false);
+                    Teams.first().then((team) => {
+                      team.members().attach(this.teamMemberData).then(() => {
+                        this.$emit('membersRefresh');
+                        this.$notify(
+                          {
+                            message: 'Team member invited successfully!',
+                            horizontalAlign: 'center',
+                            verticalAlign: 'top',
+                            type: 'success'
+                          })
+                      });
 
-                  });
-                }else {
-                  this.$emit("on-validated", res);
+                    });
+                }
+              } else {
+                this.$emit("on-validated", res);
                   return res;
                 }
-              }
               });
             },
          async updateTeamMember() {
-           let team = await Teams.get();
-           console.log(team);
-           let member = await team[0].members().find(this.editMode)
-           console.log(member)
+           let team = await Teams.first();
+           let member = await team.members().find(this.editMode);
+
            member.emailAddress = this.teamMemberData.emailAddress;
-           await member.save();
+           member.role = this.teamMemberData.role;
+           member.permissions = this.teamMemberData.permissions;
 
            this.setInviteModal(false);
 
-
+           await member.for(team).save().then(result => {
+              this.$emit('membersRefresh');
+              this.$notify(
+                {
+                  message: 'Team member Update successfully!',
+                  horizontalAlign: 'center',
+                  verticalAlign: 'top',
+                  type: 'success'
+                })
+            }).catch(error => {
+              console.log(error)
+            });
          }
         },
       watch: {

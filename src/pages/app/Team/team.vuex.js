@@ -43,10 +43,12 @@ export default {
 
       },
       setTeamMemberData(state, data) {
-          console.log(data.teamMember['permissions'])
         state.teamMemberData['emailAddress'] = data.teamMember['emailAddress']
         state.teamMemberData['role'] = data.teamMember['role']
-        state.teamMemberData['permissions'] = data.teamMember['permissions'].split(',')
+        
+        if (data.teamMember['permissions']) {
+          state.teamMemberData['permissions'] = data.teamMember['permissions'].split(',')
+        }
 
       },
       setEditMode(state, data) {
@@ -66,7 +68,6 @@ export default {
     actions: {
       setInviteModalAndTeamMember({ dispatch, commit }, payload) {
         commit('setInviteModal', payload)
-
         if (typeof payload.teamMember !== 'undefined') {
           commit('setTeamMemberData', payload)
           commit('setModalTitle', 'Edit Team Member')

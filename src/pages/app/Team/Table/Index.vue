@@ -1,6 +1,6 @@
 <template>
-
-  <md-table @md-selected="onSelect"
+     <md-table 
+            @md-selected="onSelect"
             v-model="teamMembers"
             table-header-color="rose"
             class="table-striped table-hover">
@@ -48,7 +48,6 @@
       </md-table-cell>
     </md-table-row>
   </md-table>
-
 </template>
 
 <script>
@@ -84,9 +83,10 @@
     },
     data() {
       return {
+        selected: [],
         hideBtn: false,
         openPopover: false,
-        currentUserId: indexVuexModule.state.currentUser.id,
+        currentUserId: indexVuexModule.state.event.currentUser.id,
       }
     },
     methods: {
@@ -134,19 +134,10 @@
           confirmButtonText: 'Yes, delete it!'
         }).then(async (result) => {
           if (result.value) {
-
-            teamMember.delete();
-            this.$emit("memberDeleted");
-            let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
-            this.teamMembers.splice(teamMemberIndex, 1)
-
-            this.$notify(
-              {
-                message: 'Team member deleted successfully!',
-                horizontalAlign: 'center',
-                verticalAlign: 'top',
-                type: 'success'
-              })
+            let notifySuccessMessage = 'Team member deleted successfully!';
+              
+            this.deleteMember(teamMember, notifySuccessMessage);
+            this.$emit("membersRefresh");
           }
         })
       },
@@ -161,24 +152,37 @@
           confirmButtonText: 'Yes, delete it!'
         }).then(async (result) => {
           if (result.value) {
-            this.selected.forEach((item, index) => {
-              let teamMember = item
-              teamMember.delete();
-              this.$emit("memberDeleted");
-              let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
-              this.teamMembers.splice(teamMemberIndex)
-            })
+            let notifySuccessMessage = 'Team member deleted successfully!';
 
-            this.$notify(
-              {
-                message: 'Team members deleted successfully!',
-                horizontalAlign: 'center',
-                verticalAlign: 'top',
-                type: 'success'
-              })
+            this.selected.forEach((item, index) => {
+              this.deleteMember(item, notifySuccessMessage);
+              this.$emit("membersRefresh");
+            })
+            
+            this.selected = [];
           }
         })
+      },
+      async deleteMember(teamMember, notifySuccessMessage) {
+        let team = await Teams.first();
+        let member = await team.members().find(teamMember.id);
+
+        member.for(team).delete().then(response => {
+          let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
+          this.teamMembers.splice(teamMemberIndex)
+        }).catch(error => {
+          console.log(error)
+        });
+
+        this.$notify(
+          {
+            message: notifySuccessMessage,
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'success'
+          })        
       }
+
     }
   };
 </script>

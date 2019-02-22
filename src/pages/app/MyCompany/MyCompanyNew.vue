@@ -5,19 +5,7 @@
         <md-card-content>
           <div class="md-layout">
           <div class='company-view-common-logo_block'>
-          <div class='company-main-logo-block'>
           <img class="company-logo" :src="customer.logoFileId||'static/img/placeholder.jpg'" style="width: 80%; height: 80%;">
-          <div>
-          <div class="company-logo-button-block">
-                <div @click='UploadAvatar'>            
-                 <md-icon class='company-logo-button'>edit<input type="file" id='company-avatar-upload' @change="onFileChange($event)" style="display:none"/></md-icon>
-                 </div> 
-                 <div @click='deleteAvatar(customer.files[0])'>            
-                <md-icon class='company-logo-button'>clear</md-icon>
-                </div>             
-          </div>
-          </div>
-          </div>
             <div class='company-name-block'>
               <h4 class="title text-gray" style="font-weight: 500;">{{customer.name}}</h4>              
             </div>
@@ -216,40 +204,16 @@
         <div><span class='info-chat-value'>23</span><span class='info-chart'>{{`This year of ${new Date().getFullYear()}`}}</span></div>
         <div class='filter-block' v-if='showFilter'>
         <div class='filter-datepicker'>
-        <div class='filter-datepicker-block'>
-        <Select 
-                               
-                label='Start year'
-                labelStyle='om_label_input'
-                :list='["2014", "2015", "2016", "2017", "2018", "2019"]'
-                name='startPeriod'                
-                :onChange="onChange"
-                                              
-        />
-        </div>
-        <div class='filter-datepicker-block'>
              <Select                
                 label='From'
                 labelStyle='om_label_input'
                 :list='listMonth'
                 name='from'                
                 :onChange="onChange"                                             
-        /> 
-        </div>      
-        </div>
-        <div class='filter-datepicker'>
-        <div class='filter-datepicker-block'>
-         <Select                
-                label='Finish year'
-                labelStyle='om_label_input'
-                :list='["2014", "2015", "2016", "2017", "2018", "2019"]'
-                name='finishPeriod'                
-                :onChange="onChange"
-                                              
         />
         </div>
-        <div class='filter-datepicker-block'>
-        <Select                
+        <div class='filter-datepicker'>
+         <Select                
                 label='To'
                 labelStyle='om_label_input'
                 :list='listMonth'
@@ -258,31 +222,9 @@
                                               
         />
         </div>
-        </div>
-          </div> 
-          
-          <LineChart
-               v-if='!isMonthly'
-               key="username-input"
-              classStyle="max-height: 130px"
-              id="number_of_events_chart"
-              width="350"
-              height="150"
-              :dataChart='dataChart.data'
-              type='line'
-              :optionChart='dataChart.options'      
-          />          
-          <LineChart
-              v-else
-               key="email-input"
-              classStyle="max-height: 130px"
-              id="number_of_events_chart_monthly"
-              width="350"
-              height="150"
-              :dataChart='getDataFromDuration'
-              type='line'
-              :optionChart='dataChart.options'      
-          />          
+          </div>  
+          <canvas v-show='!isMonthly' style="max-height: 130px" id="number_of_events_chart" width="350" height="150"></canvas>
+          <canvas v-show='isMonthly' style="max-height: 130px"  id="number_of_events_chart_monthly" width="350" height="150"></canvas>
         </md-card-content>
       </div>
       <md-card>
@@ -307,18 +249,8 @@
       </md-card>
       <md-card>
         <md-card-content style="max-height: 200px">
-         
-          <div class="title text-bold">Average event cost per employee</div>
-          <LineChart            
-            classStyle="max-height: 130px"
-            id="number_of_participants_chart"
-            width="350"
-            height="150"
-            :dataChart='dataChartParticipan.data'
-            type='line'
-            :optionChart='dataChart.options'      
-          />  
-          
+          <div class="title text-bold">Event categories comparison</div>
+          <canvas id="event_vs_category" style="max-height: 150px" width="350" height="150"></canvas>
         </md-card-content>
       </md-card>
     </div>
@@ -349,16 +281,8 @@
       </md-card>
       <md-card>
         <md-card-content>
-           <div class="title text-bold">Event categories comparison</div>
-          <LineChart            
-            classStyle="max-height: 130px"
-            id="event_vs_category"
-            width="350"
-            height="150"
-            :dataChart='dataEventVsCategory.data'
-            type='bar'
-            :optionChart='dataChart.options'      
-          />                 
+          <div class="title text-bold">Average event cost per employee</div>
+          <canvas  id="number_of_participants_chart" width="350" height="150"></canvas>           
         </md-card-content>
       </md-card>
     </div>
@@ -383,10 +307,7 @@ import ButtonDiv from '@/components/Button/ButtonDiv.vue';
 import Button from '@/components/Button/Button.vue';
 import ControlPanel from '@/components/Button/ControlPanel.vue';
 import LineIndicator from '@/components/Chart/LineIndicator.vue';
-import LineChart from '@/components/Chart/LineChart.vue'
-
-
- import CustomerFile from '@/models/CustomerFile';
+import CustomerFile from '@/models/CustomerFile';
 import Datepicker from '@/components/Datepicker/Datepicker.vue';
 
 //CONSTANST
@@ -412,73 +333,169 @@ import {isWrong} from '@/utils/helperFunction'
       ControlPanel,
       LineIndicator,
       Datepicker,
-      Select,
-      LineChart
+      Select
     },
      mounted:function(){
           this.$store.dispatch("user/getIndustry");
-          this.$store.dispatch("user/getUserFromApi")  
-          CustomerFile.get().then(e=>console.log(e, 'eto get'))
+          this.$store.dispatch("user/getUserFromApi")          
+      const chart = document.getElementById("number_of_events_chart");      
+       new Chart(chart, {
+    type: 'line',
+    data: {
+        labels: ["2014", "2015", "2016", "2017", "2018", "2019"],
+        datasets: [{            
+            data: [2, 5, 7, 9, 12, 15],
+            backgroundColor: [                
+                'rgba(255, 255, 255, 0.2)',                
+            ],
+            borderColor: [                
+                '#71c278',                
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+      legend: {
+        display: false
+    },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+ const chart2 = document.getElementById("number_of_participants_chart");
+       new Chart(chart2, {
+    type: 'line',
+    data: {
+        labels: ['Jan', "Feb", "Mar", "Apr", "May", "June"],
+        datasets: [{            
+            data: [80, 125, 145, 60, 92, 57],
+            backgroundColor: [                
+                'rgba(255, 255, 255, 0.2)',                
+            ],
+            borderColor: [                
+                '#26cfa0',                
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+      legend: {
+        display: false
+    },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+const chart3 = document.getElementById("number_of_events_chart_monthly");
+       new Chart(chart3, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{            
+            data: [80, 125, 145, 60, 92, 57],
+            backgroundColor: [                
+                'rgba(255, 255, 255, 0.2)',                
+            ],
+            borderColor: [                
+                '#26cfa0',                
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+      legend: {
+        display: false
+    },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+ const numberWithCommas = function(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+const dataPack1 = [40, 47, 44, 38 ];
+const dataPack2 = [10, 12, 7, 5];
+const BarChat = document.getElementById("event_vs_category");
+       new Chart(BarChat, {
+    type: 'bar',
+    data: {
+        labels: ['Q1', "Q2", "Q3", "Q4"],
+        datasets: [{
+            label: '# of type Events',
+            data: dataPack1,
+            backgroundColor: '#25d0a2'                
+            
+        },
+        {
+            label: '# of Categories',
+            data: dataPack2,
+            backgroundColor: '#89e0fe'               
+            
+        }
+        
+        
+        ]
+    },
+    options: {
+      legend: {
+        display: false
+    },
+     		animation: {
+        	duration: 10,
+        },
+        tooltips: {
+					mode: 'label',
+          callbacks: {
+          label: function(tooltipItem, data) { 
+          	return data.datasets[tooltipItem.datasetIndex].label + ": " + numberWithCommas(tooltipItem.yLabel);
+          }
+          }
+         },
+        scales: {
+          xAxes: [{ 
+          	stacked: true, 
+            gridLines: { display: false },
+            }],
+          yAxes: [{ 
+          	stacked: true, 
+            ticks: {
+        			callback: function(value) { return numberWithCommas(value); },
+     				}, 
+            }],
+        },
+        
+    }
+});
     },
     data() {
       return {
-        dataChart:{
-        data:{
-          
-            labels: ["2014", "2015", "2016", "2017", "2018", "2019"],
-            datasets: [{            
-                data: [2, 5, 7, 9, 12, 15],
-                backgroundColor: [                
-                    'rgba(255, 255, 255, 0.2)',                
-                ],
-                borderColor: [                
-                    '#71c278',                
-                ],
-                borderWidth: 1
-            }]    
-        },
-        options: {
-              legend: {
-                display: false
-            },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-        
-        }, 
-        dataChartParticipan:{
-            data: {
-                    labels: ['Jan', "Feb", "Mar", "Apr", "May", "June"],
-                    datasets: [{            
-                        data: [80, 125, 145, 60, 92, 57],
-                        backgroundColor: [                
-                            'rgba(255, 255, 255, 0.2)',                
-                        ],
-                        borderColor: [                
-                            '#26cfa0',                
-                        ],
-                        borderWidth: 1
-                    }]
-                }
-        },
-        dataEventVsCategory:{
-          data: {
-                    labels: ['Holiday', "Civil", "Company Days", "Birthday", "Social Days", "Fun Days"],
-                    datasets:[{
-                      label: '# of type Events',
-                      data: [Math.ceil(Math.random()*100),Math.ceil(Math.random()*100),Math.ceil(Math.random()*100),Math.ceil(Math.random()*100),Math.ceil(Math.random()*100),Math.ceil(Math.random()*100)],
-                      backgroundColor: '#25d0a2'  
-                                                  
-            
-        }]
-                
-        }}
-        ,      
+        firstTabs: [
+          {
+            tab: 'Sign contract for "What are conference organizers afraid of?"'
+          },
+          {
+            tab: "Lines From Great Russian Literature? Or E-mails From My Boss?"
+          },
+          {
+            tab:
+              "Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit"
+          }
+        ],
         branch_address:'',
         showSearch:false,
         showFilter:false,
@@ -490,8 +507,6 @@ import {isWrong} from '@/utils/helperFunction'
           ],
         from:'',
         to:'',
-        startPeriod:'',
-        finishPeriod:'',
         monthValue:[{month:'Jan', events:'34'}, {month:'Feb', events:'41'}, {month:'Mar', events:'24'}, {month:'Apr', events:'14'}, {month:'May', events:'34'}, {month:'Jun', events:'14'}, {month:'Jul', events:'24'}, {month:'Aug', events:'34'},{month:'Sep', events:'14'} ,{ month:'Oct', events:'44'}, {month:'Nov', events:'14'}, {month:'Dec', events:'34'}],
         month:'',
         monthRete:'',
@@ -542,11 +557,11 @@ import {isWrong} from '@/utils/helperFunction'
            return meanValue/this.rate[0].length
          }
        },
-       isMonthly(){             
-         return Boolean(this.from&&this.to&&this.startPeriod&&this.finishPeriod)
+       isMonthly(){        
+         return this.from&&this.to
        },
        getDuration(){
-            if(this.from&&this.to&&this.startPerion&&this.finishPerion){
+            if(this.from&&this.to){
                 const from=this.listMonth.indexOf(this.from)
                 const to=this.listMonth.indexOf(this.to)
                 const duration=this.listMonth.splice(from,to)
@@ -554,56 +569,9 @@ import {isWrong} from '@/utils/helperFunction'
             }else{
               return this.listMonth
             }
-       },
-                          getDataFromDuration(){
-                              const duration=["2014", "2015", "2016", "2017", "2018", "2019"]
-                              function filter(start, from ,finish, to, period){
-                                const startY=period.indexOf(start)
-                                const finishY= period.indexOf(finish)
-                                const yearPeriod= period.splice(startY,finishY)                    
-                                var allPeriod=[]
-                                yearPeriod.forEach(item=>{
-                                var month=["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-                                  if(item===start){
-                                    
-                                    var startMonth=month.indexOf(from)
-                                    var firstY= month.splice(startMonth)
-
-                                    allPeriod=allPeriod.concat(firstY)
-                                  } else if(item===finish){
-                                      var finishMonth=month.indexOf(to)    
-                                      var lastY= month.splice(0,finishMonth)   
-                                        allPeriod=allPeriod.concat(lastY)
-                                  }else{
-                                  allPeriod=allPeriod.concat(month)
-                                  }
-                                  }
-
-                                )
-                                return allPeriod
-                                }
-                      
-                      if(this.from&&this.to&&this.startPeriod&&this.finishPeriod){
-                         const period =  filter(this.startPeriod,this.from,this.finishPeriod,this.to,duration)
-                         const dataArray=period.map(item=>Math.ceil(Math.random()*100))                        
-                         return{
-                                labels: period,
-                                datasets: [{            
-                                    data: dataArray,
-                                    backgroundColor: [                
-                                        'rgba(255, 255, 255, 0.2)',                
-                                    ],
-                                    borderColor: [                
-                                        '#26cfa0',                
-                                    ],
-                                    borderWidth: 1
-                                }]
-
-                    }                  
-                  }
+       }
         
-} 
- }  
+}    
     ,
     methods: {
       isShow(obj,value){        
@@ -619,8 +587,7 @@ import {isWrong} from '@/utils/helperFunction'
         this.selected = items;
       },
        onChange:function(value, name){                                 
-                 this[name]=value
-                                                                               
+                 this[name]=value                                                                 
          },
          onShowInput:function(value, name){          
            this.showSearch=!this.showSearch
@@ -644,8 +611,6 @@ import {isWrong} from '@/utils/helperFunction'
          onChangeFilterToEarly(){
            this.from=''
            this.to=''
-           this.startPerion=''
-           this.finishPerion=''
            this.showFilter=false           
          },
           isEditable(){
@@ -660,73 +625,7 @@ import {isWrong} from '@/utils/helperFunction'
               this.$store.dispatch("user/putUserFromApi",a) 
               this.formSwitcher=''
             }           
-          },
-          onFileChange(e) {
-          if(e.target.files.length){
-
-           
-        let reader = new FileReader();
-        let _this = this;
-        const file=e.target.files[0]
-        
-        reader.onload = e => {
-          if (true) {
-            this.isImageShow = true;
-            this.logo_name=file.name
-            const newImage={
-              src:e.target.result,
-              thumb:e.target.result
-            }
-            
-
-            //     this.isModalLoading = true;
-            //     let _calendar = new Calendar({id: this.$store.state.calendarId});
-            //     let editedEvent = new CalendarEvent({id: this.event.id});
-            this.logo_name=file.name
-            console.log(e.target)
-            return new CustomerFile({customerFile: e.target.result}).save().then(result => {
-                console.log()
-                customer.logoFileId=e.target.result
-              // _this.uploadedImages.push({src: e.target.result, thumb: e.target.result, id: result.id});
-              // this.isImageShow = true;
-              // this.logo_name=file.name
-              // const newImage={
-              //   src:e.target.result,
-              //   thumb:e.target.result
-              // }
-            })
-              .catch((error) => {
-                console.log(error);
-              });
-
-          } else {
-            _this.uploadedImages.push({ src: e.target.result, thumb: e.target.result });
           }
-        }
-        reader.readAsDataURL(file);
-          }
-      },
-      UploadAvatar(){  
-        console.log('@')               
-                 document.getElementById('company-avatar-upload').click()
-         },
-      deleteAvatar(id){
-        console.log('delete')
-        CustomerFile({id: e.target.result}).delete().then(result => {
-                console.log(result)
-                // customer.logoFileId=e.target.result
-              // _this.uploadedImages.push({src: e.target.result, thumb: e.target.result, id: result.id});
-              // this.isImageShow = true;
-              // this.logo_name=file.name
-              // const newImage={
-              //   src:e.target.result,
-              //   thumb:e.target.result
-              // }
-            })
-              .catch((error) => {
-                console.log(error);
-              });
-      }   
 
     }
   };
@@ -829,18 +728,13 @@ import {isWrong} from '@/utils/helperFunction'
     background:#aff3e1;
  }
  .filter-datepicker{
-   width:25%;
-   display:flex
-   
- }
- .filter-datepicker-block{
-   width:50%;
+   width:50%
  }
  .filter-block{
    display:flex;
    position: absolute;
     top: -20px;
-    left: 20px;
+    left: 30px;
  }
  .indicator-event-type-title-rate{
         font-size: 0.85rem;
@@ -859,16 +753,5 @@ import {isWrong} from '@/utils/helperFunction'
 }
 .delete-edit-block{
   display:flex;
-}
-.company-logo-button{
-  font-size: 0.85rem !important;
-  cursor:pointer;
-}
-.company-logo-button-block{
-      display: flex;
-    flex-direction: column-reverse;
-}
-.company-main-logo-block{
-  display:flex
 }
 </style>

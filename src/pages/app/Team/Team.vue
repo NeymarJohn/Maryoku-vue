@@ -12,7 +12,7 @@
       <md-card>
         <md-card-content style="min-height: 60px;">
           <vue-element-loading :active="teamMembersLoading" spinner="ring" color="#FF547C"/>
-          <team-table :team-id="team.id" :teamMembers="teamMembers"></team-table>
+          <team-table :team-id="team.id" :teamMembers="teamMembers" @membersRefresh="fetchData(1)"></team-table>
           <md-card-actions md-alignment="space-between">
             <div class="">
               <p class="card-category">Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</p>
@@ -27,7 +27,7 @@
         </md-card-content>
       </md-card>
     </div>
-    <invite-modal @memberCreated="fetchData(1)" :team="team" ref="inviteModal"></invite-modal>
+    <invite-modal @membersRefresh="fetchData(1)" :team="team" ref="inviteModal"></invite-modal>
   </div>
 </template>
 
@@ -68,7 +68,7 @@
       this.$store.unregisterModule('teamVuex');
     },
     methods: {
-      ...mapMutations('teamVuex', ['resetForm', 'setInviteModal', 'setEditMode']),
+      ...mapMutations('teamVuex', ['resetForm', 'setInviteModal', 'setEditMode', 'setModalTitle']),
       fetchData(page){
         this.teamMembersLoading = true;
         /*Teams.get().then(teams => {
@@ -92,6 +92,7 @@
       openInviteModal(){
         this.setInviteModal({ showModal: true })
         this.setEditMode({editMode: false})
+        this.setModalTitle('Invite your Team')
         this.resetForm();
       }
     }

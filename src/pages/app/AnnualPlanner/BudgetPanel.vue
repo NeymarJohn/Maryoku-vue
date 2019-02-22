@@ -222,7 +222,9 @@
             this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee | numeral('0,0');
             this.totalRemainingBudget = this.statistics.annualBudget - this.statistics.annualBudgetAllocated;
             this.remainingBudgetPerEmployee = this.statistics.annualBudgetPerEmployee - this.statistics.annualBudgetPerEmployeeAllocated;
-            this.seriesData = [this.statistics.annualBudgetPerEmployeeAllocated, this.statistics.annualBudget];
+            this.seriesData = [this.statistics.annualBudgetPerEmployeeAllocated, (this.statistics.annualBudget - this.statistics.annualBudgetPerEmployeeAllocated)];
+
+
             this.countEvents = this.statistics.numberOfEvents;
 
             this.percentage = 100 - ((this.statistics.annualBudgetAllocated / this.statistics.annualBudget) * 100).toFixed(2);
