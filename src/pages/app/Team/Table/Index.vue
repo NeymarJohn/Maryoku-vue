@@ -1,5 +1,4 @@
 <template>
-
   <md-table @md-selected="onSelect"
             v-model="teamMembers"
             table-header-color="rose"
@@ -134,19 +133,9 @@
           confirmButtonText: 'Yes, delete it!'
         }).then(async (result) => {
           if (result.value) {
-            console.log(teamMember)
-            teamMember.delete();
-            this.$emit("memberDeleted");
-            let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
-            this.teamMembers.splice(teamMemberIndex, 1)
-
-            this.$notify(
-              {
-                message: 'Team member deleted successfully!',
-                horizontalAlign: 'center',
-                verticalAlign: 'top',
-                type: 'success'
-              })
+            let notifySuccessMessage = 'Team member deleted successfully!';
+              
+            this.deleteMember(teamMember, notifySuccessMessage);
           }
         })
       },
@@ -161,24 +150,36 @@
           confirmButtonText: 'Yes, delete it!'
         }).then(async (result) => {
           if (result.value) {
-            this.selected.forEach((item, index) => {
-              let teamMember = item
-              teamMember.delete();
-              this.$emit("memberDeleted");
-              let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
-              this.teamMembers.splice(teamMemberIndex)
-            })
+            let notifySuccessMessage = 'Team members deleted successfully!';
 
-            this.$notify(
-              {
-                message: 'Team members deleted successfully!',
-                horizontalAlign: 'center',
-                verticalAlign: 'top',
-                type: 'success'
-              })
+            console.log(this.selected)
+            // this.selected.forEach((item, index) => {
+              // this.deleteMember(item, notifySuccessMessage);
+            // })
           }
         })
+      },
+      async deleteMember(teamMember, notifySuccessMessage) {
+        let team = await Teams.first();
+        let member = await team.members().find(teamMember.id);
+
+        member.for(team).delete().then(response => {
+          this.$emit("membersRefresh");
+          let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
+          this.teamMembers.splice(teamMemberIndex)
+          
+          this.$notify(
+            {
+              message: notifySuccessMessage,
+              horizontalAlign: 'center',
+              verticalAlign: 'top',
+              type: 'success'
+            })
+        }).catch(error => {
+          console.log(error)
+        });
       }
+
     }
   };
 </script>

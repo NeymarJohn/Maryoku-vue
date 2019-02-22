@@ -6350,6 +6350,10 @@ libphonenumber-js@^1.7.7:
 load-google-maps-api@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/load-google-maps-api/-/load-google-maps-api-0.0.2.tgz#e77f4189f087f6f9ae93b1026a9012791c909c31"
+<<<<<<< HEAD
+  integrity sha1-539BifCH9vmuk7ECapASeRyQnDE=
+=======
+>>>>>>> master
 
 load-json-file@^1.0.0:
   version "1.1.0"
@@ -10306,6 +10310,10 @@ vue-functional-data-merge@^2.0.2:
 vue-gmaps@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/vue-gmaps/-/vue-gmaps-0.2.2.tgz#319944671417f1ecd573206685b4c8efbe472ca4"
+<<<<<<< HEAD
+  integrity sha1-MZlEZxQX8ezVcyBmhbTI775HLKQ=
+=======
+>>>>>>> master
   dependencies:
     load-google-maps-api "0.0.2"
 
