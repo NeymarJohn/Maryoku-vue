@@ -1,113 +1,47 @@
 <template>
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
+ <div style="padding: 16px;"></div>
 
-    <div class="md-layout-item md-size-100 text-right">
-      <md-button class="md-success text-success" @click="routeToNewEvent()">
-        <md-icon>add_circle</md-icon>
-        Create New Event
-      </md-button>
-    </div>
-    <div class="md-layout-item md-size-100">
-      <md-card>
-        <md-card-header class="md-card-header-icon md-card-header-rose">
-          <div class="card-icon">
-            <md-icon>assignment</md-icon>
+        <div style="position:relative;">
+          <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total remaining budget</h5>
+          <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+            <animated-number ref="totalRemainingBudgetNumber" value="1232" prefix="$"></animated-number>
+          </h4>
+
+          <div style="display: grid;margin-top: 18px;">
+            <chart-component
+              :chart-data="pieChart.data"
+              :chart-options="pieChart.options"
+              chart-type="Pie"
+            style="grid-column: 1; grid-row: 1;"/>
+            <animated-number class="percentage" ref="percentageNumber" value="234" suffix="%"></animated-number>
           </div>
-          <h4 class="title">Upcoming Events</h4>
-        </md-card-header>
-        <md-card-content>
-          <md-table v-model="upcomingEvents" table-header-color="rose" class="table-striped table-hover right-align-actions" v-if="upcomingEvents.length">
-            <md-table-row slot="md-table-row" slot-scope="{ item }" @click="routeToEvent(item.id, $event)" class="hover-row">
-              <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
-              <md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>
-              <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
-              <md-table-cell md-label="Status">{{ item.status }}</md-table-cell>
-              <md-table-cell md-label="Actions">
-                <!--<md-button @click="viewEvent(item)" class="md-raised md-info md-icon-button">
-                  <md-icon>visibility</md-icon>
-                </md-button>-->
-                <md-button @click="editEvent($event, item)" class="md-raised md-info md-icon-button">
-                  <md-icon>edit</md-icon>
-                </md-button>
-                <md-button @click="showDeleteAlert($event, item)" class="md-raised md-primary md-icon-button">
-                  <md-icon>close</md-icon>
-                </md-button>
-
-               <!-- <div class="float-right"><md-icon>share</md-icon></div>-->
-              </md-table-cell>
-            </md-table-row>
-          </md-table>
-          <div class="empty-table text-danger text-center" v-else>
-            No events yet,
-            <span class="text-link" @click="routeToNewEvent()">
-              create one now
-            </span>
-          </div>
-
-        </md-card-content>
-      </md-card>
-    </div>
-
-    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100" v-if="recentEvents.length">
-      <div class="header text-center">
-        <h4 class="title">Recent Events</h4>
-      </div>
-    </div>
-
-    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33 card-link"
-      v-for="event in recentEvents"
-      :key="event.id"
-      @click="routeToEvent(event.id)">
-
-      <product-card header-animation="true">
-        <img class="img" slot="imageHeader" :src="imageHref(event.coverImage)">
-
-
-        <h4 slot="title" class="title">
-          <a @click="routeToEvent(event.id)">{{ event.title }}</a>
-        </h4>
-        <div slot="description" class="card-description">
-          {{ event.eventStartMillis | moment }}
         </div>
-        <template slot="footer">
-          <div class="price">
-            <h4>{{event.numberOfParticipants}} Guests &middot; {{duration(event)}} hours</h4>
-          </div>
-          <div class="stats">
-            <p class="category">
-              <md-icon>place</md-icon>
-              {{ event.location }}
-            </p>
-          </div>
-        </template>
-      </product-card>
-    </div>
+
+
   </div>
 </template>
 
 <script>
+  import ChartComponent from '@/components/Cards/ChartComponent';
   import auth from '@/auth';
+
   import {
-    Tabs,
-    ProductCard
+    AnimatedNumber
   } from "@/components";
 
-  import Calendar from '../../../models/Calendar';
   import moment from 'moment';
   import VueElementLoading from 'vue-element-loading';
-  import swal from "sweetalert2";
+
 
   export default {
     components: {
-      Tabs,
-      ProductCard,
-      VueElementLoading
+      VueElementLoading,
+      ChartComponent,
+      AnimatedNumber,
     },
-    mounted() {
-      this.$store.state.calendarId = this.auth.user.defaultCalendarId;
-      this.getCalendarEvents();
-    },
+
     data() {
       return {
         auth: auth,
@@ -117,117 +51,37 @@
         isLoading: true,
       };
     },
-
-    methods: {
-      getCalendarEvents() {
-        let _calendar = new Calendar({id: this.$store.state.calendarId});
-
-        _calendar.calendarEvents().get().then(events => {
-          this.upcomingEvents = events.reduce(function (result, element) {
-            if (element.status.toLowerCase() !== 'done') {
-              result.push(element);
-            }
-            return result;
-          }, []);
-          this.recentEvents = events.reduce(function (result, element) {
-            if (element.status.toLowerCase() === 'done') {
-              result.push(element);
-            }
-            return result;
-          }, []);
-
-          this.isLoading = false;
-        })
-          .catch((error) => {
-            console.log(error);
-            this.isLoading = false;
-          });
-      },
-      showDeleteAlert(e, ev) {
-        const _this = this;
-        e.stopPropagation();
-        swal({
-          title: "Are you sure?",
-          text: `You won't be able to revert this!`,
-          showCancelButton: true,
-          confirmButtonClass: "md-button md-success",
-          cancelButtonClass: "md-button md-danger",
-          confirmButtonText: "Yes, delete it!",
-          buttonsStyling: false
-        }).then(result => {
-          if (result.value) {
-            _this.isLoading = true;
-            let event = _this.upcomingEvents.find((e) => { return e.id === ev.id })
-            ev.delete().then(result => {
-              _this.upcomingEvents.splice(this.upcomingEvents.indexOf(event), 1)
-              _this.isLoading = false;
-            }).catch(() => {
-              _this.isLoading = false;
-            })
+    computed: {
+      pieChart() {
+        return {
+          data: {
+            labels: [" ", " "], // should be empty to remove text from chart
+            series: this.seriesData
+          },
+          options: {
+            padding: 0,
+            height: 120,
+            donut: true,
+            donutWidth: 12
           }
-        });
-      },
-      editEvent(ev, event) {
-        if (ev.target.tagName === 'I') {
-          ev.stopPropagation();
-          this.$router.push(`/events/${event.id}/edit`)
         }
       },
-      viewEvent(event) {
-        this.$router.push(`/events/${event.id}`)
-      },
-      imageHref(image) {
-        return image && image.href ? `${process.env.SERVER_URL}${image.href}` : this.product3;
-      },
-      duration(event) {
-        return (event.eventEndMillis - event.eventStartMillis) / 3600000
-      },
-      routeToEvent(eventId) {
-        this.$router.push({ path: `/events/${eventId}/edit` });
-      },
-      routeToNewEvent() {
-        this.$store.state.eventData = {
-          id: null,
-          calendar: {id: null},
-          title: null,
-          eventStartMillis: null,
-          eventEndMillis: null,
-          eventType: null,
-          numberOfParticipants: null,
-          totalBudget: null,
-          status: null,
-          components: null,
-        },
-        this.$router.push({ path: `/events/new` });
-      }
     },
-    filters: {
-      moment: function (date) {
-        return moment(date).format('MMMM Do, GGGG');
-      }
-    }
-  };
+  }
+
+
 </script>
 
 <style lang="scss">
-  .card-link .md-card {
-    cursor: pointer;
-  }
-
-  .float-right {
-    float: right;
-  }
-
-  .hover-row:hover {
-    cursor: pointer;
-  }
-  .right-align-actions {
-    .md-table-cell:last-child, .md-table-head:last-child {
-      text-align: right;
-    }
-  }
-  .text-link {
-    text-decoration: underline;
-    cursor: pointer;
-  }
+ .percentage {
+  padding-bottom: 8px;
+  padding-left: 5px;
+  grid-column: 1;
+  grid-row: 1;
+  margin-top: auto;
+  margin-bottom: auto;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #7DC0D9;
+}
 </style>

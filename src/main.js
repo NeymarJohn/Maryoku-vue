@@ -31,7 +31,7 @@ Vue.use(DashboardPlugin);
 Vue.use(VueGmaps, {
   key: process.env.GOOGLE_API_KEY|| 'AIzaSyA2vZszC43EeV_86cOpsODl0jqs7Eaj3fI',
   libraries: ['places']
-})
+});
 
 
 // configure router
@@ -62,14 +62,14 @@ Object.defineProperty(Vue.prototype, "$Chartist", {
   }
 });
 
-axios.interceptors.response.use(function (response) {
+/*axios.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
   if (error.response.status === 401 && router.currentRoute.path != "/signin") {
     return router.push({ path: '/signin' })
   }
   return Promise.reject(error);
-});
+});*/
 
 Vue.use(VueAxios, axios);
 Vue.use(require('vue-moment'));

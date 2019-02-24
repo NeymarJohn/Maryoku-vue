@@ -59,7 +59,7 @@ const state={
   birthday: null,
   companyStartDate: null,
   importantDates: [
-    
+
   ],
   defaultGroupId: "",
   defaultCalendarId: "",
@@ -70,19 +70,13 @@ const state={
     name: "example inc",
     workspaceDomain: "example.262days.com",
     onboarded: false,
-    mainAddressLine1: null,
-    mainAddressLine2: null,
-    mainAddressCity: null,
-    mainAddressStateRegion: null,
-    mainAddressCountry: null,
-    mainAddressZip: null,
+    mainAddress: null,
     numberOnEmployees: 0,
     industry: null,
     website: "www.example.com",
     logoFileId:"" ,
-    files: [
-      
-    ],
+    branches: [],
+    files: [],
   }
 }
 
@@ -101,9 +95,9 @@ const getters={
 
 //actions
 const actions={
-   getUserFromApi({commit,state}, data){  
-        
-    
+   getUserFromApi({commit,state}, data){
+
+
 
             Me.get()
             .then(res=>{
@@ -111,13 +105,13 @@ const actions={
                 commit('setCustomer',res[0].customer)
                 Customer.find(res[0].customer.id)
                 .then(res=>commit)
-                .catch(e=>console.log(e, 'eto customer, error')) 
+                .catch(e=>console.log(e, 'eto customer, error'))
             }
-             
+
             )
             .catch(e=>console.log(e))
-            
-           
+
+
         //  commit("setUser" , data)
     },
     async getIndustry({commit,state}){
@@ -129,46 +123,46 @@ const actions={
         .catch(e=>{
             commit("setIndustries" , [])
         })
-                
+
     },
     async sendCompanyInfo({commit,state}, info){
-        try{          
-           const res=await postReq('/1/onboarding/me',info)           
+        try{
+           const res=await postReq('/1/onboarding/me',info)
         }catch(e){
 
         }
     },
     async sendOMInfo({commit,state}, om){
-        try{          
-           const res=await postReq('/1/onboarding/customer',om)           
+        try{
+           const res=await postReq('/1/onboarding/customer',om)
         }catch(e){
 
         }
     },
     async sendEvent({commit,state}, event){
-        try{          
-           const res=await postReq('/1/onboarding/me',event)           
+        try{
+           const res=await postReq('/1/onboarding/me',event)
         }catch(e){
 
         }
     },
     async sendDietary({commit,state}, dietary){
-        try{         
-           const res=await postReq('/1/onboarding/me',dietary)           
+        try{
+           const res=await postReq('/1/onboarding/me',dietary)
         }catch(e){
 
         }
     },
     async sendInvitation({commit,state}, email){
-        try{          
+        try{
            const res=await postReq('/1/onboarding/me',email)
-           
+
         }catch(e){
 
         }
     },
     async sendIndustry({commit,state}, industry){
-        try{          
+        try{
         //    const res=await postReq('/1/onboarding/me',email)
            commit("addIndustry" , industry)
         }catch(e){
@@ -184,14 +178,14 @@ const actions={
     }},
     putUserFromApi({commit,state},data){
        if(data['phoneNumber']){
-        new Me({...data}).save().then(res=>{            
+        new Me({...data}).save().then(res=>{
             commit("setUser" , res)
-            
+
         })
             .catch(e=>console.log(e,'false user'))
         return
-       }        
-        
+       }
+
         new Customer({...data}).save().then(res=>{
             Me.get()
             .then(res=>{
@@ -199,13 +193,13 @@ const actions={
                 commit('setCustomer',res[0].customer)
                 Customer.find(res[0].customer.id)
                 .then(res=>commit)
-                .catch(e=>console.log(e, 'eto customer, error')) 
+                .catch(e=>console.log(e, 'eto customer, error'))
             }
-             
+
             )
             .catch(e=>console.log(e))})
             .catch(e=>console.log(e,'false customer'))
-       
+
     }
 
 }
@@ -226,9 +220,9 @@ const mutations= {
          state.company.branches.push(industry)
         },
     deleteBranch(state,branch){
-        const newBranch=state.company.branches.filter(item=>item!==branch)        
+        const newBranch=state.company.branches.filter(item=>item!==branch)
         state.company.branches=newBranch
-    }    
+    }
 }
 
 export default {
