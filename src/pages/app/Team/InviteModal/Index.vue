@@ -55,23 +55,23 @@
                         </div>
                         <div class="md-layout-item md-size-95 md-small-size-100">
                             <md-field :class="[
-                          {'md-valid': !errors.has('email') && touched.email},
-                          {'md-error': errors.has('email')}]">
+                          {'md-valid': !errors.has('emailAddress') && touched.email},
+                          {'md-error': errors.has('emailAddress')}]">
                                 <label>Email</label>
                                 <md-textarea
                                         pattern="^(\s?[^\s,]+@[^\s,]+\.[^\s,]+\s?,)*(\s?[^\s,]+@[^\s,]+\.[^\s,]+)$"
                                         v-model="emailAddress"
-                                        data-vv-name="email"
-                                        type="email"
-                                        name="email"
+                                        data-vv-name="emailAddress"
+                                        type="emailAddress"
+                                        name="emailAddress"
                                         required
-                                        v-validate="modelValidations.email">
+                                        v-validate="modelValidations.emailAddress">
                                 </md-textarea>
                                 <slide-y-down-transition>
-                                    <md-icon class="error" v-show="errors.has('email')">close</md-icon>
+                                    <md-icon class="error" v-show="errors.has('emailAddress')">close</md-icon>
                                 </slide-y-down-transition>
                                 <slide-y-down-transition>
-                                    <md-icon class="success" v-show="!errors.has('email') && touched.email">done</md-icon>
+                                    <md-icon class="success" v-show="!errors.has('emailAddress') && touched.email">done</md-icon>
                                 </slide-y-down-transition>
                             </md-field>
                         </div>
@@ -182,7 +182,7 @@
 //                  required: true,
 //                  min: 5
 //                },
-                email: {
+                emailAddress: {
                   required: true,
                 },
                 role: {
@@ -250,16 +250,16 @@
         },
         methods: {
           ...mapMutations('teamVuex', ['setMemberProperty','resetForm', 'setInviteModal']),
-            closeModal(){
-              this.setInviteModal(false);
-              this.resetForm();
-            },
-            noticeModalHide: function () {
-              this.closeModal()
-            },
-            onStepValidated(validated, model) {
-                this.wizardModel = {...this.wizardModel, ...model};
-            },
+          closeModal(){
+            this.setInviteModal(false);
+            this.resetForm();
+          },
+          noticeModalHide: function () {
+            this.closeModal()
+          },
+          onStepValidated(validated, model) {
+              this.wizardModel = {...this.wizardModel, ...model};
+          },
           getError(fieldName) {
             return this.errors.first(fieldName);
           },
@@ -269,9 +269,30 @@
               return res;
             });
           },
+          validateEmails() {
+            let emailList= this.emailAddress.split(',');
+            let pattern = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            let emailValidateMap = [];
+
+            emailList.forEach((item, index) => {
+              emailValidateMap.push(pattern.test(item))
+            })
+            
+            let errorMap = emailValidateMap.filter(function(item){
+                return item == false;
+            });
+            
+            if (errorMap.length) {
+              return false;
+            }
+
+            return true;
+          },
+          
           sendInvitatio() {
+            this.validateEmails()
             this.$validator.validateAll().then(res => {
-              if(res){
+              if(res && this.validateEmails()){
                 if (this.editMode) {
                   this.updateTeamMember();
                 } else {
@@ -287,8 +308,9 @@
                             type: 'success'
                           })
                       });
-
                     });
+                    
+                    this.resetForm();
                 }
               } else {
                 this.$emit("on-validated", res);
@@ -303,7 +325,6 @@
            member.emailAddress = this.teamMemberData.emailAddress;
            member.role = this.teamMemberData.role;
            member.permissions = this.teamMemberData.permissions;
-
            this.setInviteModal(false);
 
            await member.for(team).save().then(result => {
@@ -318,6 +339,8 @@
             }).catch(error => {
               console.log(error)
             });
+
+            this.resetForm();
          }
         },
       watch: {

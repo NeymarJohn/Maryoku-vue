@@ -86,7 +86,7 @@
         selected: [],
         hideBtn: false,
         openPopover: false,
-        currentUserId: indexVuexModule.state.currentUser.id,
+        currentUserId: indexVuexModule.state.event.currentUser.id,
       }
     },
     methods: {

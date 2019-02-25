@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout">
-    <div class="md-layout-item md-small-size-30 md-medium-size-30 md-large-size-20">
+    <div class="md-layout-item md-size-30">
       <md-card class="md-card-profile">
         <md-card-content>
           <div class="md-layout">
@@ -26,46 +26,8 @@
               <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
             </div>
             <div class="md-layout-item md-size-100">
-              <md-field >
-                <label class="" style="cursor: pointer !important;" @click='editing.numberOfEmployees = true'>
-                  Number of employees
-                </label>
-                <md-input type="text" v-model="numberOfEmployees" @click='editing.numberOfEmployees = true'></md-input>
-                <span class="md-suffix" style="display: inline-block; white-space: nowrap;">
-                  <md-button @click='editing.numberOfEmployees = false' v-show="editing.numberOfEmployees" class="md-simple md-just-icon md-round md-sm md-success" style="padding: 0; margin: 0; text-align: right;" @click.native="openPicker"><md-icon>check</md-icon></md-button>
-                  <md-button @click='editing.numberOfEmployees = false' v-show="editing.numberOfEmployees" class="md-simple md-just-icon md-round md-sm md-rose" style="padding: 0; margin: 0; text-align: right;" @click.native="openPicker"><md-icon>close</md-icon></md-button>
-                  <md-button v-show="!editing.numberOfEmployees" class="inline-edit md-simple md-just-icon md-round fa fa-edit" @click='editing.numberOfEmployees = true'>
-                    <md-icon>edit</md-icon>
-                  </md-button>
-                    </span>
-              </md-field>
-
-              <md-field >
-                <label class="" style="cursor: pointer !important;" @click='editing.numberOfEmployees = true'>
-                  Industry
-                </label>
-                <!--<Select
-                  label='Industry'
-                  labelStyle='om_label_input'
-                  :list='industryList'
-                  name='industry'
-                  :onChange="onChange"
-                  :valueName="['id','title']"
-                />-->
-                <md-select v-model="industry">
-                  <md-option v-for="industry in industryList" :key="industry.id" :value="industry.title">{{industry.title}}</md-option>
-                </md-select>
-                <span class="md-suffix" style="display: inline-block; white-space: nowrap;">
-                  <md-button @click='editing.numberOfEmployees = false' v-show="editing.numberOfEmployees" class="md-simple md-just-icon md-round md-sm md-success" style="padding: 0; margin: 0; text-align: right;" @click.native="openPicker"><md-icon>check</md-icon></md-button>
-                  <md-button @click='editing.numberOfEmployees = false' v-show="editing.numberOfEmployees" class="md-simple md-just-icon md-round md-sm md-rose" style="padding: 0; margin: 0; text-align: right;" @click.native="openPicker"><md-icon>close</md-icon></md-button>
-                  <md-button v-show="!editing.numberOfEmployees" class="inline-edit md-simple md-just-icon md-round fa fa-edit" @click='editing.numberOfEmployees = true'>
-                    <md-icon>edit</md-icon>
-                  </md-button>
-                    </span>
-              </md-field>
-
               <div class="md-layout">
-                <!--<div v-show='formSwitcher!=="numberOfEmployees"' class="md-layout-item md-size-50" style="text-align: left;">
+                <div v-show='formSwitcher!=="numberOfEmployees"' class="md-layout-item md-size-50" style="text-align: left;">
                   <div class="title text-bold text-gray info-text-size">Number of Employees</div>
                 </div>
                 <div v-show='formSwitcher!=="numberOfEmployees"' class="md-layout-item md-size-50" style="text-align: left; display: flex; justify-content: space-between; align-items: center;">
@@ -85,7 +47,7 @@
                       <md-icon>clear</md-icon>
                     </md-button>
                   </div>
-                </div>-->
+                </div>
 
                 <div v-show='formSwitcher!=="industry"' class="md-layout-item md-size-50" style="text-align: left; display: flex; justify-content: space-between; align-items: center;">
                   <div class="title text-bold text-gray info-text-size">Industry</div>
@@ -465,12 +427,6 @@
       return {
         auth: auth,
         customerLogoUrl: 'static/img/placeholder.jpg',
-
-        numberOfEmployees: 100,
-        editing: {
-          numberOfEmployees: false,
-        },
-
         dataChart:{
           data:{
             labels: ["2014", "2015", "2016", "2017", "2018", "2019"],
@@ -755,7 +711,7 @@
     }
   };
 </script>
-<style lang="scss" scoped>
+<style >
   .info-chat-value{
     color: black;
     font-weight: 500;
@@ -894,34 +850,5 @@
   }
   .company-main-logo-block{
     display:flex
-  }
-
-
-
-  .md-disabled {
-    cursor: pointer;
-  }
-
-  .md-field .inline-edit {
-    visibility: hidden;
-  }
-
-  .md-field:hover {
-    .inline-edit {
-      visibility: visible;
-    }
-  }
-
-  .md-input {
-    font-size: 24px !important;
-    width: 80% !important;
-    padding: 0 !important;
-    margin-top: auto !important;
-    margin-bottom: auto !important;
-    cursor: pointer !important;
-  }
-
-  .md-select >.md-icon {
-    display: none !important;
   }
 </style>
