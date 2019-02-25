@@ -86,7 +86,7 @@
         selected: [],
         hideBtn: false,
         openPopover: false,
-        currentUserId: indexVuexModule.state.currentUser.id,
+        currentUserId: indexVuexModule.state.event.currentUser.id,
       }
     },
     methods: {
@@ -156,8 +156,9 @@
 
             this.selected.forEach((item, index) => {
               this.deleteMember(item, notifySuccessMessage);
-              this.$emit("membersRefresh");
             })
+
+            this.$emit("membersRefresh");
             
             this.selected = [];
           }

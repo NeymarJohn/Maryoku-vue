@@ -59,14 +59,25 @@
                           {'md-error': errors.has('email')}]">
                                 <label>Email</label>
                                 <md-textarea
-                                        pattern="^(\s?[^\s,]+@[^\s,]+\.[^\s,]+\s?,)*(\s?[^\s,]+@[^\s,]+\.[^\s,]+)$"
+                                        v-if="!this.editMode"
+                                        v-model="emailAddress"
+                                        data-vv-name="email"
+                                        type="email"
+                                        name="email"
+                                        required
+                                        md-autogrow
+                                        v-validate="modelValidations.email">
+                                </md-textarea>
+                                <md-input 
+                                        v-else
                                         v-model="emailAddress"
                                         data-vv-name="email"
                                         type="email"
                                         name="email"
                                         required
                                         v-validate="modelValidations.email">
-                                </md-textarea>
+                                  
+                                </md-input>
                                 <slide-y-down-transition>
                                     <md-icon class="error" v-show="errors.has('email')">close</md-icon>
                                 </slide-y-down-transition>
@@ -173,6 +184,7 @@
                 permissions: false,
                 role: false,
               },
+              emailArray: [],
               modelValidations: {
 //                firstName: {
 //                  required: true,
@@ -224,7 +236,7 @@
 //          },
           emailAddress: {
             get() {
-              return this.teamMemberData.emailAddress
+              return this.teamMemberData.emailAddress;
             },
             set(value) {
               this.setMemberProperty({key: 'emailAddress', actualValue: value});
@@ -233,33 +245,33 @@
           },
           member_role: {
             get() {
-              return this.teamMemberData.role
+              return this.teamMemberData.role;
             },
             set(value) {
-              this.setMemberProperty({key: 'role', actualValue: value})
+              this.setMemberProperty({key: 'role', actualValue: value});
             }
           },
           permission: {
             get() {
-              return this.teamMemberData.permissions
+              return this.teamMemberData.permissions;
             },
             set(value) {
-              this.setMemberProperty({key: 'permissions', actualValue: value})
+              this.setMemberProperty({key: 'permissions', actualValue: value});
             }
           },
         },
         methods: {
           ...mapMutations('teamVuex', ['setMemberProperty','resetForm', 'setInviteModal']),
-            closeModal(){
-              this.setInviteModal(false);
-              this.resetForm();
-            },
-            noticeModalHide: function () {
-              this.closeModal()
-            },
-            onStepValidated(validated, model) {
-                this.wizardModel = {...this.wizardModel, ...model};
-            },
+          closeModal(){
+            this.setInviteModal(false);
+            this.resetForm();
+          },
+          noticeModalHide: function () {
+            this.closeModal()
+          },
+          onStepValidated(validated, model) {
+              this.wizardModel = {...this.wizardModel, ...model};
+          },
           getError(fieldName) {
             return this.errors.first(fieldName);
           },
@@ -269,26 +281,65 @@
               return res;
             });
           },
+          validateEmails() {           
+            this.emailArray = [];
+            let pattern = /(^[a-zA-Z0-9]([a-zA-Z0-9_\.]*)@([a-zA-Z0-9_\.]*)([.][a-z]{3})$)|(^[a-zA-Z0-9]([a-zA-Z0-9_\.]*)@([a-zA-Z0-9_\.]*)(\.[a-z]{3})(\.[a-z]{2})*$)/i;
+            let emailValidateMap = [];
+            let emailList = this.emailAddress.replace(/(?:\r\n|\r|\n)/g, ',').split(',').map(function(item) {
+              return item.trim();
+            });
+
+            emailList = emailList.filter(function(item, pos){
+              if (item != '') {
+                return emailList.indexOf(item) == pos; 
+              }
+            });
+
+            emailList.forEach((item, index) => {
+              emailValidateMap.push(pattern.test(item))
+            })
+
+            let errorMap = emailValidateMap.filter(function(item){
+                return item == false;
+            });
+            
+            if (errorMap.length) {
+              this.$validator.errors.add({ field: 'email', msg: 'Email is not correct!'})
+              return false;
+            }
+
+            this.emailArray = emailList;
+            
+            return true;
+          },
+          
           sendInvitatio() {
             this.$validator.validateAll().then(res => {
-              if(res){
+              if(this.validateEmails() && res){
                 if (this.editMode) {
                   this.updateTeamMember();
                 } else {
-                    this.setInviteModal(false);
-                    Teams.first().then((team) => {
-                      team.members().attach(this.teamMemberData).then(() => {
-                        this.$emit('membersRefresh');
-                        this.$notify(
-                          {
-                            message: 'Team member invited successfully!',
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'success'
-                          })
-                      });
-
-                    });
+                  this.setInviteModal(false);
+                  Teams.first().then((team) => {
+                    this.emailArray.forEach((item, index) => {
+                    let member = Object.assign({}, this.teamMemberData, {emailAddress: item, username: item});
+                      if (member) {
+                        team.members().attach(member).then(() => {
+                          member = {};
+                          this.$emit('membersRefresh');
+                          this.resetForm();
+                                                  
+                          this.$notify(
+                            {
+                              message: 'Team member invited successfully!',
+                              horizontalAlign: 'center',
+                              verticalAlign: 'top',
+                              type: 'success'
+                            });                           
+                        });
+                      }
+                    });                    
+                  });
                 }
               } else {
                 this.$emit("on-validated", res);
@@ -303,7 +354,6 @@
            member.emailAddress = this.teamMemberData.emailAddress;
            member.role = this.teamMemberData.role;
            member.permissions = this.teamMemberData.permissions;
-
            this.setInviteModal(false);
 
            await member.for(team).save().then(result => {
@@ -318,6 +368,8 @@
             }).catch(error => {
               console.log(error)
             });
+
+            this.resetForm();
          }
         },
       watch: {

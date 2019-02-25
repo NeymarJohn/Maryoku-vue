@@ -26,10 +26,9 @@ export default {
     },
 
     mutations: {
-        setMemberProperty(state, {key, actualValue}) {
+      setMemberProperty(state, {key, actualValue}) {
             state.teamMemberData[key] = actualValue;
-        },
-
+      },
       setInviteModal(state, data) {
           state.inviteModalOpen = data.showModal;
 
