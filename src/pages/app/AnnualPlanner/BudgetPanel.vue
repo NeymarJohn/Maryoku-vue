@@ -229,8 +229,6 @@
 
             this.annualBudgetCache = this.annualBudget;
             this.annualBudgetPerEmployeeCache = this.annualBudgetPerEmployee;
-
-            console.log(this.seriesData)
         }
 
         this.isLoading = false;

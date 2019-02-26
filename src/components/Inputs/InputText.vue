@@ -1,6 +1,7 @@
 <template>  
 <md-field :class='fieldStyle'>
-      <label :class='labelStyle'>{{label}}<span class='required-logo' v-if='required'>*</span></label>
+      <label v-if='!editebleMode' key='label-editable' :class='labelStyle'>{{label}}<span class='required-logo' v-if='required'>*</span></label>
+      <label v-if='editebleMode' key='label-noeditable'  style="cursor: pointer !important;" @click='toggleEditableComponent'>{{label}}</label>
       <md-input
         class='input-default'
         :id='id'
@@ -13,13 +14,25 @@
         :name='name'
         :disabled='disabled'        
        ></md-input> 
-    <span class='md-error'>{{isErrors?'Required':''}}</span>
+    <span v-if='!editebleMode' key='input-noeditable' class='md-error'>{{isErrors?'Required':''}}</span>
+    <span v-if='editebleMode' class="md-suffix" key='input-editable' style="display: inline-block; white-space: nowrap;">
+       <md-button @click='editing.numberOfEmployees = false' v-show="isEditable" class="md-simple md-just-icon md-round md-sm md-success" style="padding: 0; margin: 0; text-align: right;" @click.native="openPicker"><md-icon>check</md-icon></md-button>
+       <md-button @click='editing.numberOfEmployees = false' v-show="isEditable" class="md-simple md-just-icon md-round md-sm md-rose" style="padding: 0; margin: 0; text-align: right;" @click.native="openPicker"><md-icon>close</md-icon></md-button>
+       <md-button v-show="!isEditable" class="inline-edit md-simple md-just-icon md-round fa fa-edit" @click='toggleEditableComponent'>
+       <md-icon>edit</md-icon>
+       </md-button>
+      </span>
     </md-field>    
 </template>
 <script>
     export default {
-        name: "inputText",        
+        name: "input-common",        
         model: {
+        },
+        data(){
+            return{
+                isEditable:false
+            }
         }        
         ,
         props: {
@@ -42,7 +55,8 @@
             id:String,
             onChangeInput:Function,
             disabled:Boolean,
-            count:Boolean
+            count:Boolean,
+            editebleMode:Boolean
         },
         methods: {
           triggerFunc:function(value,name,count){              
@@ -58,12 +72,29 @@
               if(this.onBlur){
                  this.onBlur(value,name) 
               }
+          },
+          toggleEditableComponent(){
+              this.isEditable=!this.isEditable
           }
         }           
         
     };
-</script>
-<style lang="scss">
+//     <md-field >
+//                 <label class="" style="cursor: pointer !important;" @click='editing.numberOfEmployees = true'>
+//                   Number of employees
+//                 </label>
+//                 <md-input type="text" v-model="numberOfEmployees" @click='editing.numberOfEmployees = true'></md-input>
+//                 <span class="md-suffix" style="display: inline-block; white-space: nowrap;">
+//                   <md-button @click='editing.numberOfEmployees = false' v-show="editing.numberOfEmployees" class="md-simple md-just-icon md-round md-sm md-success" style="padding: 0; margin: 0; text-align: right;" @click.native="openPicker"><md-icon>check</md-icon></md-button>
+//                   <md-button @click='editing.numberOfEmployees = false' v-show="editing.numberOfEmployees" class="md-simple md-just-icon md-round md-sm md-rose" style="padding: 0; margin: 0; text-align: right;" @click.native="openPicker"><md-icon>close</md-icon></md-button>
+//                   <md-button v-show="!editing.numberOfEmployees" class="inline-edit md-simple md-just-icon md-round fa fa-edit" @click='editing.numberOfEmployees = true'>
+//                     <md-icon>edit</md-icon>
+//                   </md-button>
+//                     </span>
+//               </md-field>
+//
+ </script>
+<style lang="scss" scoped>
     .input-default{
         font-size: 18px !important;
     }
@@ -75,7 +106,34 @@
     }
     .display{
         display:none
-    }    
+    }
+     .md-disabled {
+    cursor: pointer;
+  }
+
+  .md-field .inline-edit {
+    visibility: hidden;
+  }
+
+  .md-field:hover {
+    .inline-edit {
+      visibility: visible;
+    }
+  }
+
+  .md-input {
+    font-size: 24px !important;
+    width: 80% !important;
+    padding: 0 !important;
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+    cursor: pointer !important;
+  }
+
+  .md-select >.md-icon {
+    display: none !important;
+  }      
 </style>
+
 
 

@@ -105,5 +105,14 @@
         font-weight: 500;
         color:#c6c6c6
     }
+    .right-side-indicator{
+    background: #f4f4f4;
+  }
+  .left-side-indicator-participants{
+    background: #bce9fc;
+  }
+  .left-side-indicator-rate{
+    background:#aff3e1;
+  }
 </style>
 

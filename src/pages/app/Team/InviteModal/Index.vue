@@ -283,7 +283,7 @@
           },
           validateEmails() {           
             this.emailArray = [];
-            let pattern = /(^[a-zA-Z0-9]([a-zA-Z0-9_\.]*)@([a-zA-Z0-9_\.]*)([.][a-z]{3})$)|(^[a-zA-Z0-9]([a-zA-Z0-9_\.]*)@([a-zA-Z0-9_\.]*)(\.[a-z]{3})(\.[a-z]{2})*$)/i;
+            let pattern = /(^[a-zA-Z0-9]([a-zA-Z0-9_\.]*)@([a-zA-Z0-9_\.]*)([.][a-z]{1,3})$)|(^[a-zA-Z0-9]([a-zA-Z0-9_\.]*)@([a-zA-Z0-9_\.]*)(\.[a-z]{1,3})(\.[a-z]{2,})*$)/i;
             let emailValidateMap = [];
             let emailList = this.emailAddress.replace(/(?:\r\n|\r|\n)/g, ',').split(',').map(function(item) {
               return item.trim();

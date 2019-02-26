@@ -1,8 +1,12 @@
 import Model from './Model'
-import TeamMembers from './TeamMembers'
+import CustomerStatistics from './CustomerStatistics'
 
 export default class Customer extends Model {
     resource() {
         return 'customers'
+    }
+
+    statistics() {
+      return this.hasMany(CustomerStatistics)
     }
 }
