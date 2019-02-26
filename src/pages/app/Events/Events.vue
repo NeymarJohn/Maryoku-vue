@@ -32,6 +32,9 @@
          </div>
          </div>      
         <div>
+        <div class="md-layout-item md-size-100">
+              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
+            </div>
         <div class="md-layout-item md-layout md-gutter">
         <div class="md-layout-item">
         <div class='md-caption title-text'>Event Occasion</div>
@@ -53,6 +56,9 @@
         <div class='md-caption title-text'>With Spouses</div>       
         </div>
       </div>
+      <div class="md-layout-item md-size-100">
+              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
+            </div>
         <div class="md-layout-item">
           <h5 class='title-budget-main'>Total remaining budget</h5>
           <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152, 0.8);">
@@ -104,10 +110,21 @@
         main block
         </div>
         <div class="md-layout-item md-size-25">
-        components
+              <md-button class='button-event-creatig'>
+                Create New Event
+            </md-button>
+        </div>       
         </div>
-       
-        </div>
+        <div class="md-layout-item md-size-100 block-flex copyright-block">
+        <div>
+         <md-button class="footer-link-button" v-for='(item, index) in footerLink' :key="index">
+                {{item.title}}
+            </md-button>
+         </div>
+         <div>
+         <p>{{`&copy; ${new Date().getFullYear()}`}} <span class='copyright'>Creative Tim</span>{{`, made with love for a better web`}}</p>
+         </div>   
+        </div>  
   </div>
 </template>
 
@@ -139,6 +156,7 @@ import Icon from '@/components/Icon/Icon.vue'
         recentEvents: [],
         upcomingEvents: [],
         isLoading: false,
+        footerLink:[{title:"HOME"},{title:"COMPANY"},{title:"PORTFOLIO"},{title:"BLOG"},]
       };
     },
     computed: {
@@ -245,5 +263,17 @@ import Icon from '@/components/Icon/Icon.vue'
 .block-flex{
   display: flex;
 }
-
+.button-event-creatig .md-ripple{
+  background-color: #00bcd4;
+}
+.footer-link-button .md-ripple{
+  color: #89229b;
+  background-color: rgba(240, 240, 240, 1);
+}
+.copyright{
+  color:#9c27b0
+}
+.copyright-block{
+  justify-content: space-between;
+}
  </style>
