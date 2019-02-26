@@ -99,7 +99,14 @@
           </md-card-content>
         </md-card>
         </div>
-        <div class="md-layout-item">
+        <div class="md-layout-item md-size-75 block-flex">
+        <div class="md-layout-item md-size-75">
+        main block
+        </div>
+        <div class="md-layout-item md-size-25">
+        components
+        </div>
+       
         </div>
   </div>
 </template>
@@ -234,6 +241,9 @@ import Icon from '@/components/Icon/Icon.vue'
     font-size: 20px;
     font-weight: 500;
     line-height: 1.2;
+}
+.block-flex{
+  display: flex;
 }
 
  </style>
