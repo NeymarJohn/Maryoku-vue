@@ -82,6 +82,7 @@
         });*/
         new Teams({id: this.auth.user.defaultGroupId}).members().page(page)
           .limit(this.pagination.limit).get().then(members => {
+          console.log(members);
           this.teamMembers = members[0].results;
           this.updatePagination(members[0].model)
           this.teamMembersLoading = false;

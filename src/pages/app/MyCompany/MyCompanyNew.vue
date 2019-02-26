@@ -29,88 +29,34 @@
               <InputText
                     labelStyle='company_label_input'
                     label='Number of employees'
-                    name='branch_address'
-                    :value='customer.numberOfEmployees'
+                    name='numberOfEmployees'
+                    :value='String(customer.numberOfEmployees)'
                     :onChange='onChange'
                     editebleMode
+                    :actionFunc='saveInfoFromForm'
+                    :ctx='customer'
+                    fieldStyle="without-border"
                   />
 
-              <md-field >
-                <label class="" style="cursor: pointer !important;" @click='editing.numberOfEmployees = true'>
-                  Industry
-                </label>
-                <!--<Select
-                  label='Industry'
-                  labelStyle='om_label_input'
-                  :list='industryList'
-                  name='industry'
-                  :onChange="onChange"
-                  :valueName="['id','title']"
-                />-->
-                <md-select v-model="industry">
-                  <md-option v-for="industry in industryList" :key="industry.id" :value="industry.title">{{industry.title}}</md-option>
-                </md-select>
-                <span class="md-suffix" style="display: inline-block; white-space: nowrap;">
-                  <md-button @click='editing.numberOfEmployees = false' v-show="editing.numberOfEmployees" class="md-simple md-just-icon md-round md-sm md-success" style="padding: 0; margin: 0; text-align: right;" @click.native="openPicker"><md-icon>check</md-icon></md-button>
-                  <md-button @click='editing.numberOfEmployees = false' v-show="editing.numberOfEmployees" class="md-simple md-just-icon md-round md-sm md-rose" style="padding: 0; margin: 0; text-align: right;" @click.native="openPicker"><md-icon>close</md-icon></md-button>
-                  <md-button v-show="!editing.numberOfEmployees" class="inline-edit md-simple md-just-icon md-round fa fa-edit" @click='editing.numberOfEmployees = true'>
-                    <md-icon>edit</md-icon>
-                  </md-button>
-                    </span>
-              </md-field>
-
-              <div class="md-layout">
-                <!--<div v-show='formSwitcher!=="numberOfEmployees"' class="md-layout-item md-size-50" style="text-align: left;">
-                  <div class="title text-bold text-gray info-text-size">Number of Employees</div>
-                </div>
-                <div v-show='formSwitcher!=="numberOfEmployees"' class="md-layout-item md-size-50" style="text-align: left; display: flex; justify-content: space-between; align-items: center;">
-                  <div class="title info-text-size">{{customer.numberOfEmployees}}</div>
-                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click='isShow(customer,"numberOfEmployees")'>
-                    <md-icon>edit</md-icon>
-                  </md-button>
-                </div>
-                <div v-show='formSwitcher==="numberOfEmployees"' class="md-layout-item md-size-100" style="text-align: left; display: flex; justify-content: space-between; align-items: center;">
-                  <InputText label='Number of Employees' name='numberOfEmployees' :value='String(customer.numberOfEmployees)' :onChange="onChange"/>
-
-                  <div class='delete-edit-block'>
-                    <md-button class="md-simple md-just-icon md-round fa fa-edit" @click.prevent='saveInfoFromForm(customer,"numberOfEmployees")'>
-                      <md-icon>done</md-icon>
-                    </md-button>
-                    <md-button class="md-simple md-just-icon md-round" @click="isClose">
-                      <md-icon>clear</md-icon>
-                    </md-button>
-                  </div>
-                </div>-->
-
-                <div v-show='formSwitcher!=="industry"' class="md-layout-item md-size-50" style="text-align: left; display: flex; justify-content: space-between; align-items: center;">
-                  <div class="title text-bold text-gray info-text-size">Industry</div>
-                </div>
-                <div v-show='formSwitcher!=="industry"' class="md-layout-item md-size-50" style="text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex;
-    justify-content: space-between;
-    align-items: center;">
-                  <div class="title info-text-size" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{customer.industry}}</div>
-                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click='isShow(customer,"industry")'>
-                    <md-icon>edit</md-icon>
-                  </md-button>
-                </div>
-                <div v-show='formSwitcher==="industry"' class="md-layout-item md-size-100" style="text-align: left; display: flex;">
-                  <Select
+              
+              <Select
                     label='Industry'
                     labelStyle='om_label_input'
                     :list='industryList'
                     name='industry'
                     :onChange="onChange"
                     :valueName="['id','title']"
+                    editebleMode
+                    :actionFunc='saveInfoFromForm'
+                    :ctx='customer'
+                    :value='customer.industry'
+                    fieldStyle="without-border"
                   />
-                  <div class='delete-edit-block'>
-                    <md-button class="md-simple md-just-icon md-round fa fa-edit" @click.prevent='saveInfoFromForm(customer,"industry")'>
-                      <md-icon>done</md-icon>
-                    </md-button>
-                    <md-button class="md-simple md-just-icon md-round" @click="isClose">
-                      <md-icon>clear</md-icon>
-                    </md-button>
-                  </div>
-                </div>
+
+              <div class="md-layout">
+                
+
+               
               </div>
             </div>
             <div class="md-layout-item md-size-100">
@@ -118,79 +64,51 @@
             </div>
             <div class="md-layout-item md-size-100">
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Contact Information</div>
-              <div class="md-layout">
-                <div v-show='formSwitcher!=="mainAddressCountry"' class="md-layout-item md-size-100" style="text-align: left; display: flex; justify-content: space-between; align-items: center;">
-                  <md-icon class="text-gray branch-add_icon" style="margin:0px">pin_drop</md-icon>
-                  <div class='company-wrap-block'>{{customer.mainAddressCountry}}</div>
-                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click='isShow(customer,"mainAddressCountry")'>
-                    <md-icon>edit</md-icon>
-                  </md-button>
-                </div>
-                <div v-show='formSwitcher==="mainAddressCountry"' class="md-layout-item md-size-100" style=" display: flex ">
-                  <InputText label='Company address' name='mainAddressCountry' :value='customer.mainAddressCountry' :onChange="onChange"/>
-                  <div class='delete-edit-block'>
-                    <md-button class="md-simple md-just-icon md-round fa fa-edit" @click.prevent='saveInfoFromForm(customer,"mainAddressCountry")'>
-                      <md-icon>done</md-icon>
-                    </md-button>
-                    <md-button class="md-simple md-just-icon md-round" @click="isClose">
-                      <md-icon>clear</md-icon>
-                    </md-button>
-                  </div>
-                </div>
-                <div v-show='formSwitcher!=="phoneNumber"' class="md-layout-item md-size-100" style=" left; display: flex; justify-content: space-between; align-items: center;">
-                  <md-icon class="text-gray" style="margin:0px">call</md-icon><div>{{user.phoneNumber}}</div>
-                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click='isShow(user,"phoneNumber")'>
-                    <md-icon>edit</md-icon>
-                  </md-button>
-                </div>
-                <div v-show='formSwitcher==="phoneNumber"' class="md-layout-item md-size-100" style="text-align: left; display: flex;">
-                  <InputText label='Phone' name='phoneNumber' :value='String(user.phoneNumber)||""' :onChange="onChange"/>
-                  <div class='delete-edit-block'>
-                    <md-button class="md-simple md-just-icon md-round fa fa-edit" @click.prevent='saveInfoFromForm(user,"phoneNumber")'>
-                      <md-icon>done</md-icon>
-                    </md-button>
-                    <md-button class="md-simple md-just-icon md-round" @click="isClose">
-                      <md-icon>clear</md-icon>
-                    </md-button>
-                  </div>
-                </div>
-
-                <div v-show='formSwitcher!=="workspaceDomain"' class="md-layout-item md-size-100" style="text-align: left; display: flex; justify-content: space-between; align-items: center;">
-                  <md-icon class="text-gray" style="margin:0px">mail_outline</md-icon><div>{{customer.workspaceDomain}}</div>
-                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click='isShow(customer,"workspaceDomain")'>
-                    <md-icon>edit</md-icon>
-                  </md-button>
-                </div>
-                <div v-show='formSwitcher==="workspaceDomain"' class="md-layout-item md-size-100" style="text-align: left; display: flex">
-                  <InputText  label='Company Email' name='workspaceDomain' :value='customer.workspaceDomain' :onChange="onChange"/>
-                  <div class='delete-edit-block'>
-                    <md-button class="md-simple md-just-icon md-round fa fa-edit" @click.prevent='saveInfoFromForm(customer,"workspaceDomain")'>
-                      <md-icon>done</md-icon>
-                    </md-button>
-                    <md-button class="md-simple md-just-icon md-round" @click="isClose">
-                      <md-icon>clear</md-icon>
-                    </md-button>
-                  </div>
-                </div>
-
-                <div v-show='formSwitcher!=="website"' class="md-layout-item md-size-100" style="text-align: left; display: flex; justify-content: space-between; align-items: center; ">
-                  <md-icon class="text-gray" style="margin:0px">web_asset</md-icon><div>{{customer.website}}</div>
-                  <md-button class="md-simple md-just-icon md-round fa fa-edit" @click='isShow(customer,"website")'>
-                    <md-icon>edit</md-icon>
-                  </md-button>
-                </div>
-                <div v-show='formSwitcher==="website"'  class="md-layout-item md-size-100" style="text-align: center; display:flex">
-                  <InputText label='Company Domain' name='website' :value='customer.website'  :onChange="onChange"/>
-                  <div class='delete-edit-block'>
-                    <md-button class="md-simple md-just-icon md-round fa fa-edit" @click.prevent='saveInfoFromForm(customer,"website")'>
-                      <md-icon>done</md-icon>
-                    </md-button>
-                    <md-button class="md-simple md-just-icon md-round" @click="isClose">
-                      <md-icon>clear</md-icon>
-                    </md-button>
-                  </div>
-                </div>
-
+              <div class="md-layout">                
+                   <InputText
+                    labelStyle='company_label_input'
+                    label='Company address'
+                    name='mainAddressCountry'
+                    :value='customer.mainAddressCountry'
+                    :onChange='onChange'
+                    editebleMode
+                    :actionFunc='saveInfoFromForm'
+                    :ctx='customer'
+                    fieldStyle="without-border"
+                  />             
+                  <InputText
+                    labelStyle='company_label_input'
+                    label='Phone'
+                    name='phoneNumber'
+                    :value='String(user.phoneNumber)||""'
+                    :onChange='onChange'
+                    editebleMode
+                    :actionFunc='saveInfoFromForm'
+                    :ctx='user'
+                    fieldStyle="without-border"
+                  />
+                  <InputText
+                    labelStyle='company_label_input'
+                    label='Company Email'
+                    name='workspaceDomain'
+                    :value='customer.workspaceDomain'
+                    :onChange='onChange'
+                    editebleMode
+                    :actionFunc='saveInfoFromForm'
+                    :ctx='customer'
+                    fieldStyle="without-border"
+                  />
+                  <InputText
+                    labelStyle='company_label_input'
+                    label='Company Domain'
+                    name='website'
+                    :value='customer.website'
+                    :onChange='onChange'
+                    editebleMode
+                    :actionFunc='saveInfoFromForm'
+                    :ctx='customer'
+                    fieldStyle="without-border"
+                  /> 
               </div>
             </div>
 
@@ -747,7 +665,7 @@
     }
   };
 </script>
-<style>
+<style lang='scss'>
   .info-chat-value{
     color: black;
     font-weight: 500;
@@ -877,5 +795,8 @@
   }
   .company-main-logo-block{
     display:flex
+  }
+  .md-layout-item >.fc-divider{
+    margin: 15px -10px !important;
   }
 </style>

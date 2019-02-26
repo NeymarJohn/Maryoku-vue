@@ -42,7 +42,7 @@
               :chart-data="pieChart.data"
               :chart-options="pieChart.options"
               chart-type="Pie"
-            style="grid-column: 1; grid-row: 1;"/>
+            style="grid-column: 1; grid-row: 1; color:red"/>
             <animated-number class="percentage" ref="percentageNumber" value="234" suffix="%"></animated-number>
           </div>
         </div>
@@ -90,7 +90,7 @@ import Icon from '@/components/Icon/Icon.vue'
         return {
           data: {
             labels: [" ", " "], // should be empty to remove text from chart
-            series: this.seriesData
+            series: ["100", "70"]
           },
           options: {
             padding: 0,
