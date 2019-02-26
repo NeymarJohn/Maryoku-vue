@@ -58,7 +58,7 @@ export default {
         state.eventData['eventType'] = data.eventData.eventType;
         state.eventData['date'] = data.eventData.eventStartMillis;
         state.eventData['category'] = data.eventData.category;
-        state.eventData['time'] = moment(data.eventData.eventStartMillis).format('HH:00');
+        state.eventData['time'] = moment(data.eventData.eventStartMillis).format('h:00 A');
         state.eventData['duration'] = moment(data.eventData.eventEndMillis).diff(data.eventData.eventStartMillis, 'hours')
       },
       setEventDate(state, data) {

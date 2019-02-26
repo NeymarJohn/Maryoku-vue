@@ -184,6 +184,7 @@
   import Calendar from "@/models/Calendar"
   import swal from "sweetalert2";
   import { error } from 'util';
+  import moment from 'moment';
 
   export default {
     components: {
@@ -504,7 +505,7 @@
       },
       getEventStartInMillis() {
         if (this.date && this.time) {
-          let eventStartTime = new Date(this.date).getTime() + (this.convertHoursToMillis(+this.time.split(":")[0]));
+          let eventStartTime = new Date(this.date).getTime() + (this.convertHoursToMillis(moment(this.time, 'HH:mm a').format('H')));
           return eventStartTime;
         }
       },
