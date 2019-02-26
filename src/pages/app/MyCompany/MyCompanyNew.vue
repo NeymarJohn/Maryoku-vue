@@ -26,7 +26,7 @@
               <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
             </div>
             <div class="md-layout-item md-size-100">              
-              <InputText
+              <input-text
                     labelStyle='company_label_input'
                     label='Number of employees'
                     name='numberOfEmployees'
@@ -39,7 +39,7 @@
                   />
 
               
-              <Select
+              <select-common
                     label='Industry'
                     labelStyle='om_label_input'
                     :list='industryList'
@@ -65,7 +65,7 @@
             <div class="md-layout-item md-size-100">
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Contact Information</div>
               <div class="md-layout">                
-                   <InputText
+                   <input-text
                     labelStyle='company_label_input'
                     label='Company address'
                     name='mainAddressCountry'
@@ -76,7 +76,7 @@
                     :ctx='customer'
                     fieldStyle="without-border"
                   />             
-                  <InputText
+                  <input-text
                     labelStyle='company_label_input'
                     label='Phone'
                     name='phoneNumber'
@@ -87,7 +87,7 @@
                     :ctx='user'
                     fieldStyle="without-border"
                   />
-                  <InputText
+                  <input-text
                     labelStyle='company_label_input'
                     label='Company Email'
                     name='workspaceDomain'
@@ -98,7 +98,7 @@
                     :ctx='customer'
                     fieldStyle="without-border"
                   />
-                  <InputText
+                  <input-text
                     labelStyle='company_label_input'
                     label='Company Domain'
                     name='website'
@@ -131,7 +131,7 @@
 
               <div v-show='showSearch'>
                 <form @submit.prevent='addIndustry' action="#">
-                  <InputText
+                  <input-text
                     labelStyle='company_label_input'
                     label='Branches address'
                     name='branch_address'
@@ -168,7 +168,7 @@
           <div class='filter-block' v-if='showFilter'>
             <div class='filter-datepicker'>
               <div class='filter-datepicker-block'>
-                <Select
+                <select-common
                   label='Start year'
                   labelStyle='om_label_input'
                   :list='["2014", "2015", "2016", "2017", "2018", "2019"]'
@@ -177,7 +177,7 @@
                 />
               </div>
               <div class='filter-datepicker-block'>
-                <Select
+                <select-common
                   label='From'
                   labelStyle='om_label_input'
                   :list='listMonth'
@@ -188,7 +188,7 @@
             </div>
             <div class='filter-datepicker'>
               <div class='filter-datepicker-block'>
-                <Select
+                <select-common
                   label='Finish year'
                   labelStyle='om_label_input'
                   :list='["2014", "2015", "2016", "2017", "2018", "2019"]'
@@ -198,7 +198,7 @@
                 />
               </div>
               <div class='filter-datepicker-block'>
-                <Select
+                <select-common
                   label='To'
                   labelStyle='om_label_input'
                   :list='listMonth'
@@ -355,13 +355,13 @@
       MyCompanyProfile,
       MyCompanyBilling,
       MyCompanySettings,
-      InputText,
+      "input-text":InputText,
       ButtonDiv,
       Button,
       ControlPanel,
       LineIndicator,
       Datepicker,
-      Select,
+      "select-common":Select,
       LineChart
     },
     mounted:function(){

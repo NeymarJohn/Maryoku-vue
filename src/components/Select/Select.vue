@@ -21,7 +21,7 @@
 </template>
 <script>
     export default {
-        name: "select-common",
+        name: "Select",
         
         model: {
         },        

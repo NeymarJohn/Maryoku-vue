@@ -32,21 +32,70 @@
          </div>
          </div>      
         <div>
-          <h5 style="font-size: 1.05em; font-weight: 600; padding: 0; margin: 0;">Total remaining budget</h5>
-          <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
+        <div class="md-layout-item md-layout md-gutter">
+        <div class="md-layout-item">
+        <div class='md-caption title-text'>Event Occasion</div>
+        <div class='md-caption title-text'>Date</div>
+        <div class='md-caption title-text'>Start Time</div>
+        <div class='md-caption title-text'>Duration</div>
+        <div class='md-caption title-text' >Geography</div>
+        <div class='md-caption title-text'>Participants</div>
+        <div class='md-caption title-text'>Participant Type</div>
+        
+        </div>
+        <div class="md-layout-item">
+        <div class='md-caption title-text'>MLK Day</div>
+        <div class='md-caption title-text'>Dec 20, 2019</div>
+        <div class='md-caption title-text'>10:00 AM</div>
+        <div class='md-caption title-text'>6 Hours</div>
+        <div class='md-caption title-text' >New York</div>
+        <div class='md-caption title-text'>74</div>
+        <div class='md-caption title-text'>With Spouses</div>       
+        </div>
+      </div>
+        <div class="md-layout-item">
+          <h5 class='title-budget-main'>Total remaining budget</h5>
+          <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152, 0.8);">
             <animated-number ref="totalRemainingBudgetNumber" value="1232" prefix="$"></animated-number>
           </h4>
 
-          <div style="display: grid;margin-top: 18px;">
+          <div style="display: grid;margin-top: 18px; color: rgb(33, 201, 152, 0.8);">
             <chart-component
               :chart-data="pieChart.data"
               :chart-options="pieChart.options"
               chart-type="Pie"
-            style="grid-column: 1; grid-row: 1; color:red"/>
+            style="grid-column: 1; grid-row: 1; color:red"/>            
             <animated-number class="percentage" ref="percentageNumber" value="234" suffix="%"></animated-number>
           </div>
         </div>
         </div>
+        </div>
+        <div class="md-layout-item">
+        <div>
+        <div class='md-caption title-text'>
+        Remaining budget per employee
+        </div>
+        <div class='md-caption title-text title-budget-prise'>
+        $22
+        </div>
+        </div>
+        <div>
+        <div class='md-caption title-text'>
+        Budget per employee
+        </div>
+        <div class='md-caption title-text title-budget-prise'>
+        $22
+        </div>
+        </div>
+        <div>
+        <div class='md-caption title-text '>
+        Total budget for the event
+        </div>
+        <div class='md-caption title-text title-budget-prise'>
+        $22
+        </div>
+        </div>      
+        </div>         
           </md-card-content>
         </md-card>
         </div>
@@ -116,7 +165,7 @@ import Icon from '@/components/Icon/Icon.vue'
   margin-bottom: auto;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #7DC0D9;
+  color: rgba(33, 201, 152, 0.8)
 }
 .logo-block{
     display: flex;
@@ -158,4 +207,33 @@ import Icon from '@/components/Icon/Icon.vue'
           margin: 0px 5px
       }
 }
+.title-text{
+  font-family: 'Roboto';
+  font-size: 12px;
+  font-weight: 300;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 2;
+  letter-spacing: normal;
+  text-align: left;
+  color: #959595;
+}
+.title-budget-main{
+  font-family: 'Roboto';
+  font-size: 18px;
+  font-weight: 300;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.33;
+  letter-spacing: normal;
+  text-align: center;
+  color: #000000;
+}
+.title-budget-prise{
+    color: rgba(33, 200, 152, 0.8)!important;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
  </style>

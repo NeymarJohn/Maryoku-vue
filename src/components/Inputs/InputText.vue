@@ -26,7 +26,7 @@
 </template>
 <script>
     export default {
-        name: "input-common",        
+        name: "InputText",        
         model: {
         },
         data(){
