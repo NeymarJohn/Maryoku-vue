@@ -76,7 +76,6 @@
                                         name="email"
                                         required
                                         v-validate="modelValidations.email">
-                                  
                                 </md-input>
                                 <slide-y-down-transition>
                                     <md-icon class="error" v-show="errors.has('email')">close</md-icon>
