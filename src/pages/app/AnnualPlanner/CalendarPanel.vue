@@ -205,7 +205,7 @@
       this.queryEventTypes();
     },
     methods: {
-      ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'setEditMode', 'setModalSubmitTitle', 'setEventModalAndEventData', 'setEventDate']),
+      ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'setEditMode', 'setModalSubmitTitle', 'setEventModalAndEventData', 'setEventDate', 'setNumberOfParticipants']),
       ...mapActions('AnnualPlannerVuex', ['setEventModalAndEventData']),
       queryCategories() {
         if (this.$store.state.event.caregoriesArray === null) {
@@ -368,16 +368,17 @@
         return calendarEventsMap;
       },
       openEventModal(currentDate) {
-        this.setEventModal({ showModal: true })
-        this.setModalSubmitTitle('Save')
-        this.setEditMode({ editMode: false })
-        this.setEventDate({date: currentDate ? currentDate : null})
+        this.setEventModal({ showModal: true });
+        this.setModalSubmitTitle('Save');
+        this.setEditMode({ editMode: false });
+        this.setNumberOfParticipants({numberOfParticipants: this.auth.user.customer.numberOfEmployees});
+        this.setEventDate({date: currentDate ? currentDate : null});
       },
       openEditEventModal: function (show, item) {
         if (!item.editable){
           item.occasion = item.title;
         }
-        item.numberOfParticipants = this.auth.user.customer.numberOfEmployees;
+
         this.setEventModalAndEventData({showModal: show, eventData: item});
       },
       fullDateWithDay(day) {

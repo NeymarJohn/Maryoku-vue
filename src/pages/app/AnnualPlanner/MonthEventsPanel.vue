@@ -108,7 +108,7 @@
         if (!item.editable){
           item.occasion = item.title;
         }
-        item.numberOfParticipants = this.auth.user.customer.numberOfEmployees;
+
         this.setEventModalAndEventData({showModal: show, eventData: item});
       },
       colorWithCategory(category) {

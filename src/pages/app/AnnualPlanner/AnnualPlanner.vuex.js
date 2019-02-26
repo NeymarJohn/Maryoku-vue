@@ -64,6 +64,9 @@ export default {
       setEventDate(state, data) {
         state.eventData['date'] = data.date;
       },
+      setNumberOfParticipants(state, data) {
+        state.eventData['numberOfParticipants'] = data.numberOfParticipants;
+      },
     },
     actions: {
       setEventModalAndEventData({ dispatch, commit }, payload) {
