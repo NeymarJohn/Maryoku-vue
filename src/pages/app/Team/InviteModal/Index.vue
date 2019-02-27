@@ -54,12 +54,11 @@
                         </div>
                         </div>
                         <div class="md-layout-item md-size-95 md-small-size-100 mb25">
-                            <md-field :class="[
+                            <md-field class="height-auto" :class="[
                           {'md-valid': !errors.has('email') && touched.email},
                           {'md-error': errors.has('email')}]">
                                 <label>Email</label>
                                 <md-textarea
-                                        class="height-auto"
                                         v-if="!this.editMode"
                                         v-model="emailAddress"
                                         data-vv-name="email"
@@ -399,9 +398,15 @@
     };
 </script>
 <style lang="scss">
-  .md-field.md-has-textarea:not(.md-autogrow) .md-textarea.height-auto {
+  .md-field.md-has-textarea.height-auto:not(.md-autogrow) .md-textarea {
     height: auto;
     min-height: auto;
+  }
+  .md-field.md-has-textarea.height-auto:not(.md-autogrow):after,
+  .md-field.md-has-textarea.height-auto:not(.md-autogrow):before {
+      height: 1px;
+      top: auto;
+      bottom: 10px;
   }
   .mb25 {
     margin-bottom: 25px;
