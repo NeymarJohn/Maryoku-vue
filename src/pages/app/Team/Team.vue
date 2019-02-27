@@ -68,7 +68,7 @@
       this.$store.unregisterModule('teamVuex');
     },
     methods: {
-      ...mapMutations('teamVuex', ['resetForm', 'setInviteModal', 'setEditMode', 'setModalTitle', 'setMemberProperty']),
+      ...mapMutations('teamVuex', ['resetForm', 'setInviteModal', 'setEditMode', 'setModalTitle']),
       fetchData(page){
         this.teamMembersLoading = true;
         /*Teams.get().then(teams => {
@@ -80,29 +80,19 @@
         }, (error) => {
           console.log(error)
         });*/
-
-        let currentUserId = this.auth.user.id;
         new Teams({id: this.auth.user.defaultGroupId}).members().page(page)
           .limit(this.pagination.limit).get().then(members => {
-
-          let result = members[0].results.filter(function(item, pos){
-            return item.id != currentUserId;
-          });
-
-          this.teamMembers = result;
+          this.teamMembers = members[0].results;
           this.updatePagination(members[0].model)
           this.teamMembersLoading = false;
         });
       },
 
       openInviteModal(){
-        this.resetForm();
-        this.setMemberProperty({key: 'role', actualValue: 'co_producer'});
-        this.setMemberProperty({key: 'permissions', actualValue: ['sign_off']});
-
         this.setInviteModal({ showModal: true })
         this.setEditMode({editMode: false})
         this.setModalTitle('Invite your Team')
+        this.resetForm();
       }
     }
   };

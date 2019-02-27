@@ -136,16 +136,8 @@
           if (result.value) {
             let notifySuccessMessage = 'Team member deleted successfully!';
               
-            this.deleteMember(teamMember);         
+            this.deleteMember(teamMember, notifySuccessMessage);
             this.$emit("membersRefresh");
-
-            this.$notify(
-              {
-                message: 'Team member deleted successfully!',
-                horizontalAlign: 'center',
-                verticalAlign: 'top',
-                type: 'success'
-              })   
           }
         })
       },
@@ -163,24 +155,16 @@
             let notifySuccessMessage = 'Team member deleted successfully!';
 
             this.selected.forEach((item, index) => {
-              this.deleteMember(item);
+              this.deleteMember(item, notifySuccessMessage);
             })
 
             this.$emit("membersRefresh");
             
-            this.$notify(
-              {
-                message: 'Team members deleted successfully!',
-                horizontalAlign: 'center',
-                verticalAlign: 'top',
-                type: 'success'
-              })   
-
             this.selected = [];
           }
         })
       },
-      async deleteMember(teamMember) {
+      async deleteMember(teamMember, notifySuccessMessage) {
         let team = await Teams.first();
         let member = await team.members().find(teamMember.id);
 
@@ -189,8 +173,17 @@
           this.teamMembers.splice(teamMemberIndex)
         }).catch(error => {
           console.log(error)
-        });     
+        });
+
+        this.$notify(
+          {
+            message: notifySuccessMessage,
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'success'
+          })        
       }
+
     }
   };
 </script>

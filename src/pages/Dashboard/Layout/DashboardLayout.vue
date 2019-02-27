@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" :class="[{'nav-open': $sidebar.showSidebar}, {'rtl': $route.meta.rtlActive}]">
+  <div  :class="[{'nav-open': $sidebar.showSidebar}, {'rtl': $route.meta.rtlActive}]">
     <notifications></notifications>
     <side-bar>
       <!--<user-menu></user-menu>-->
