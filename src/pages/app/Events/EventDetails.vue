@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
-    <div class="md-layout-item md-size-25">
+    <div class="md-layout-item md-size-20">
       <md-card class="md-card-profile">
         <div class="logo-block">
           <div class="event-planer-logo">
@@ -11,8 +11,7 @@
           <div></div>
         </div>
         <md-card-content>
-          <div class="md-layout-item">
-            <div class="control-main-block">
+          <div class="control-main-block">
               <div class="company-control-logo">
                 <div class="company-logo-block">
                   <md-icon class="company-logo">create</md-icon>
@@ -30,63 +29,80 @@
               </div>
             </div>
             <div>
+
               <div class="md-layout-item md-size-100">
-                <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
+                <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
               </div>
-              <div class="md-layout-item md-layout md-gutter">
-                <div class="md-layout-item">
-                  <div class="md-caption title-text">Event Occasion</div>
-                  <div class="md-caption title-text">Date</div>
-                  <div class="md-caption title-text">Start Time</div>
-                  <div class="md-caption title-text">Duration</div>
-                  <div class="md-caption title-text">Geography</div>
-                  <div class="md-caption title-text">Participants</div>
-                  <div class="md-caption title-text">Participant Type</div>
-                </div>
-                <div class="md-layout-item">
-                  <div class="md-caption title-text">MLK Day</div>
-                  <div class="md-caption title-text">Dec 20, 2019</div>
-                  <div class="md-caption title-text">10:00 AM</div>
-                  <div class="md-caption title-text">6 Hours</div>
-                  <div class="md-caption title-text">New York</div>
-                  <div class="md-caption title-text">74</div>
-                  <div class="md-caption title-text">With Spouses</div>
-                </div>
+
+              <div class="md-layout">
+                  <div class="md-layout-item md-caption title-text">Event Occasion</div>
+                  <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.occasion}}</div>
               </div>
+              <div class="md-layout">                    
+                  <div class="md-layout-item md-caption title-text">Start Time</div>                 
+                  <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.eventStartMillis | formatTime}}</div>
+              </div>
+              
+              <div class="md-layout">   
+                  <div class="md-layout-item md-caption title-text">Duration</div>                 
+                  <div class="md-layout-item md-size-40 md-caption title-text">
+                      {{calendarEvent.eventStartMillis | formatDuration(calendarEvent.eventEndMillis)}} Hours
+                  </div>
+              </div>
+              <div class="md-layout">                     
+                  <div class="md-layout-item md-caption title-text">Geography</div>                 
+                  <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.location}}</div>
+              </div>
+              <div class="md-layout">                     
+                  <div class="md-layout-item md-caption title-text">Participants</div>                 
+                  <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.numberOfParticipants}}</div>
+              </div>
+              <div class="md-layout">   
+                  <div class="md-layout-item md-caption title-text">Participant Type</div>                 
+                  <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.participantsType}}</div>
+              </div>
+
+
               <div class="md-layout-item md-size-100">
-                <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
+                <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
               </div>
               <div class="md-layout-item">
                 <h5 class="title-budget-main">Total remaining budget</h5>
                 <h4
                   class="title"
                   style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152, 0.8);">
-                  <animated-number ref="totalRemainingBudgetNumber" value="1232" prefix="$"></animated-number>
+                  <div class="title-budget-prise">
+                     <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
+                  </div>
                 </h4>
 
-                <div style="display: grid;margin-top: 18px; color: rgb(33, 201, 152, 0.8);">
+                <div style="display: grid;margin-top: 18px; ">
                   <chart-component
                     :chart-data="pieChart.data"
                     :chart-options="pieChart.options"
                     chart-type="Pie"
                     style="grid-column: 1; grid-row: 1; color:red"/>
-                  <animated-number class="percentage" ref="percentageNumber" value="234" suffix="%"></animated-number>
+                  <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
                 </div>
               </div>
             </div>
-          </div>
           <div class="md-layout-item">
             <div>
               <div class="md-caption title-text">Remaining budget per employee</div>
-              <div class="md-caption title-text title-budget-prise">$22</div>
+            <!-- TODO Need calculate with components -->
+              <div class="md-caption title-text title-budget-prise">$0</div>
             </div>
             <div>
               <div class="md-caption title-text">Budget per employee</div>
-              <div class="md-caption title-text title-budget-prise">$22</div>
+              <div class="md-caption title-text title-budget-prise">
+                  <animated-number ref="budgetPerPersonNumber" :value="calendarEvent.budgetPerPerson" prefix="$"></animated-number>
+              </div>
             </div>
             <div>
               <div class="md-caption title-text">Total budget for the event</div>
-              <div class="md-caption title-text title-budget-prise">$22</div>
+              <div class="md-caption title-text title-budget-prise">
+                  <animated-number ref="totalBudgetNumber" :value="calendarEvent.totalBudget" prefix="$"></animated-number>
+              </div>
             </div>
           </div>
         </md-card-content>
@@ -123,6 +139,8 @@ import ChartComponent from "@/components/Cards/ChartComponent";
 import auth from "@/auth";
 import moment from "moment";
 import VueElementLoading from "vue-element-loading";
+import Calendar from '@/models/Calendar';
+import CalendarEvent from '@/models/CalendarEvent';
 
 //COMPONENTS
 import { AnimatedNumber } from "@/components";
@@ -139,9 +157,10 @@ export default {
   data() {
     return {
       auth: auth,
-      product3: "static/img/shutterstock_289440710.png",
-      recentEvents: [],
-      upcomingEvents: [],
+      calendarEvent: {},
+      percentage: 0,
+      totalRemainingBudget: 0,
+      seriesData: [],
       isLoading: false,
       footerLink: [
         { title: "HOME" },
@@ -151,23 +170,29 @@ export default {
       ]
     };
   },
+  mounted() {
+    this.getEvent();
+  },
+  methods: {
+    getEvent() {
+        this.auth.currentUser(this, true, function() {
+            let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+
+            _calendar.calendarEvents().find(this.$route.params.id).then(event => {
+                this.calendarEvent = event;              
+                this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
+                this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
+                this.seriesData = [(100 - this.percentage), this.percentage];
+            });
+        }.bind(this));
+    }, 
+  },
   computed: {
-    // getEvent() {
-    //     this.auth.currentUser(this, true, function() {
-
-    //       let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-
-    //       _calendar.calendarEvents().get().then(categories => {
-              
-    //       });
-
-    //     }.bind(this));
-    // },  
     pieChart() {
       return {
         data: {
           labels: [" ", " "], // should be empty to remove text from chart
-          series: ["100", "70"]
+          series: this.seriesData
         },
         options: {
           padding: 0,
@@ -177,11 +202,28 @@ export default {
         }
       };
     }
-  }
+  },
+  filters: {
+    formatDate: function (date) {
+      return moment(date).format('Do, MMM');
+    },
+    formatTime: function(date) {
+      return moment(date).format('h:00 A')
+    },
+    formatDuration: function(startDate, endDate) {
+      return moment(endDate).diff(startDate, 'hours')
+    }
+  },
+  watch: {
+  },  
 };
 </script>
 
 <style lang="scss">
+// .md-layout-item.md-layout.md-gutter {
+//   margin-right: -20px;
+//   margin-left: -20px;
+// }
 .percentage {
   padding-bottom: 8px;
   padding-left: 5px;
@@ -191,7 +233,6 @@ export default {
   margin-bottom: auto;
   font-size: 1.5rem;
   font-weight: 700;
-  color: rgba(33, 201, 152, 0.8);
 }
 .logo-block {
   display: flex;
