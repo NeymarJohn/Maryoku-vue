@@ -3,7 +3,15 @@
     <div class="md-layout">
         <modal v-if="inviteModalOpen" @close="noticeModalHide" container-class="modal-container">
             <template slot="header" class="header-position">
-                <h4 class="title color-success">{{ modalTitle }}</h4>
+                <div class="md-layout" style="text-align:center">
+                    <div class="md-layout-item md-size-100">
+                      <h3 class="title color-success">{{ modalTitle }}</h3>
+                    </div>
+                    <div v-show="!this.editMode" class="md-layout-item md-size-80 md-small-size-100 mx-auto">
+                       <span class="md-subheading">Type in comma separated list of emails, then choose a role and permission to invite members of your team</span>
+                    </div>
+                </div>
+
                 <button class="btn-position" @click="closeModal">X</button>
             </template>
             <template slot="body">
@@ -398,6 +406,9 @@
     };
 </script>
 <style lang="scss">
+  .mt-0 {
+    margin-top: 0;
+  }
   .md-field.md-has-textarea.height-auto:not(.md-autogrow) .md-textarea {
     height: auto;
     min-height: auto;
