@@ -12,7 +12,7 @@
       <md-card>
         <md-card-content style="min-height: 60px;">
           <vue-element-loading :active="teamMembersLoading" spinner="ring" color="#FF547C"/>
-          <team-table :team-id="team.id" :teamMembers="teamMembers" @membersRefresh="fetchData(1)"></team-table>
+          <team-table :team-id="team.id" :teamMembers="teamMembers" @membersRefresh="fetchData(pagination.from)"></team-table>
           <md-card-actions md-alignment="space-between">
             <div class="">
               <p class="card-category">Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</p>
@@ -27,7 +27,7 @@
         </md-card-content>
       </md-card>
     </div>
-    <invite-modal @membersRefresh="fetchData(1)" :team="team" ref="inviteModal"></invite-modal>
+    <invite-modal @membersRefresh="fetchData(pagination.from)" :team="team" ref="inviteModal"></invite-modal>
   </div>
 </template>
 
@@ -61,7 +61,7 @@
       this.$store.registerModule('teamVuex', teamVuexModule);
 
       this.auth.currentUser(this, true, function(){
-        this.fetchData(1);
+        this.fetchData(this.pagination.from);
       }.bind(this));
     },
     destroyed() {
@@ -82,7 +82,6 @@
         });*/
         new Teams({id: this.auth.user.defaultGroupId}).members().page(page)
           .limit(this.pagination.limit).get().then(members => {
-          console.log(members);
           this.teamMembers = members[0].results;
           this.updatePagination(members[0].model)
           this.teamMembersLoading = false;

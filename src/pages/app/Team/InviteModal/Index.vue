@@ -68,7 +68,7 @@
                                         md-autogrow
                                         v-validate="modelValidations.email">
                                 </md-textarea>
-                                <md-input 
+                                <md-input
                                         v-else
                                         v-model="emailAddress"
                                         data-vv-name="email"
@@ -76,7 +76,6 @@
                                         name="email"
                                         required
                                         v-validate="modelValidations.email">
-                                  
                                 </md-input>
                                 <slide-y-down-transition>
                                     <md-icon class="error" v-show="errors.has('email')">close</md-icon>
@@ -281,9 +280,9 @@
               return res;
             });
           },
-          validateEmails() {           
+          validateEmails() {
             this.emailArray = [];
-            let pattern = /(^[a-zA-Z0-9]([a-zA-Z0-9_\.]*)@([a-zA-Z0-9_\.]*)([.][a-z]{3})$)|(^[a-zA-Z0-9]([a-zA-Z0-9_\.]*)@([a-zA-Z0-9_\.]*)(\.[a-z]{3})(\.[a-z]{2})*$)/i;
+            let pattern = /(^[a-zA-Z0-9]([a-zA-Z0-9_\.\+]*)@([a-zA-Z0-9_\.]*)([.][a-z]{1,3})$)|(^[a-zA-Z0-9]([a-zA-Z0-9_\.]*)@([a-zA-Z0-9_\.]*)(\.[a-z]{1,3})(\.[a-z]{2,})*$)/i;
             let emailValidateMap = [];
             let emailList = this.emailAddress.replace(/(?:\r\n|\r|\n)/g, ',').split(',').map(function(item) {
               return item.trim();
@@ -291,7 +290,7 @@
 
             emailList = emailList.filter(function(item, pos){
               if (item != '') {
-                return emailList.indexOf(item) == pos; 
+                return emailList.indexOf(item) == pos;
               }
             });
 
@@ -302,17 +301,17 @@
             let errorMap = emailValidateMap.filter(function(item){
                 return item == false;
             });
-            
+
             if (errorMap.length) {
               this.$validator.errors.add({ field: 'email', msg: 'Email is not correct!'})
               return false;
             }
 
             this.emailArray = emailList;
-            
+
             return true;
           },
-          
+
           sendInvitatio() {
             this.$validator.validateAll().then(res => {
               if(this.validateEmails() && res){
@@ -328,17 +327,17 @@
                           member = {};
                           this.$emit('membersRefresh');
                           this.resetForm();
-                                                  
+
                           this.$notify(
                             {
                               message: 'Team member invited successfully!',
                               horizontalAlign: 'center',
                               verticalAlign: 'top',
                               type: 'success'
-                            });                           
+                            });
                         });
                       }
-                    });                    
+                    });
                   });
                 }
               } else {
@@ -348,7 +347,7 @@
               });
             },
          async updateTeamMember() {
-           let team = await Teams.first();
+           let team = new Teams(this.user.auth.defaultGroupId);
            let member = await team.members().find(this.editMode);
 
            member.emailAddress = this.teamMemberData.emailAddress;

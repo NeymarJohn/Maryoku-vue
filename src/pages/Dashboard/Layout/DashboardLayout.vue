@@ -1,5 +1,5 @@
 <template>
-  <div  :class="[{'nav-open': $sidebar.showSidebar}, {'rtl': $route.meta.rtlActive}]">
+  <div class="wrapper" :class="[{'nav-open': $sidebar.showSidebar}, {'rtl': $route.meta.rtlActive}]">
     <notifications></notifications>
     <side-bar>
       <!--<user-menu></user-menu>-->
@@ -22,9 +22,6 @@
         <sidebar-item :link="{name: 'Company', icon: 'fingerprint', path: '/company'}">
         </sidebar-item>
 
-        <!--<sidebar-item :link="{name: 'Team', icon: 'group_add', path: '/team'}">
-        </sidebar-item>-->
-
         <sidebar-item :link="{name: 'Yearly Plan', icon: 'event', path: '/planner'}">
         </sidebar-item>
 
@@ -43,8 +40,12 @@
         <!--<li class="menu-divider"></li>
 
         -->
+        <li class="menu-divider"></li>
 
-        <!--<li class="menu-divider"></li>
+        <sidebar-item :link="{name: 'Team', icon: 'group_add', path: '/team'}">
+        </sidebar-item>
+
+        <!--
 
         <sidebar-item :link="{name: 'Proposals', icon: 'local_offer', path: '/proposals'}">
         </sidebar-item>

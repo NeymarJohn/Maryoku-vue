@@ -334,7 +334,7 @@
   import LineIndicator from '@/components/Chart/LineIndicator.vue';
   import LineChart from '@/components/Chart/LineChart.vue'
 
- import Customer from '@/models/Customer';
+
   import CustomerFile from '@/models/CustomerFile';
   import Datepicker from '@/components/Datepicker/Datepicker.vue';
 
@@ -364,13 +364,9 @@
       "select-common":Select,
       LineChart
     },
-     mounted:  function(){
+    mounted:function(){
       this.$store.dispatch("user/getIndustry");
       this.$store.dispatch("user/getUserFromApi");
-     Customer.get().statistics().then(res=>console.log(res))
-
-      
-      console.log(customer.statistics())
       this.auth.currentUser(this, true, () => {
         this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';
       });
