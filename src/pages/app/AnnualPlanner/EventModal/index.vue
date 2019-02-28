@@ -164,12 +164,8 @@
                     </form>
                 </template>
                 <template slot="footer">
-                    <md-button v-if="this.editMode" class="md-simple move-left md-just-icon" @click="showDeleteAlert">
+                     <md-button v-if="this.editMode" class="md-simple move-left md-just-icon" @click="showDeleteAlert">
                         <md-icon class="md-theme-warning" style="font-size: 1.5rem !important;">delete </md-icon>
-                    </md-button>
-
-                    <md-button v-if="this.editMode" @click="openEventPlanner" class="md-success">
-                      Open in Event Planner
                     </md-button>
 
                     <md-button class="md-success move-right" @click="validateEvent">
@@ -537,10 +533,7 @@
       mdOpened:function() {
         this.occasion += " ";
         this.occasion = this.occasion.substring(0, this.occasion.length -1)
-      },
-      openEventPlanner() {
-        this.$router.push({ name: 'EditEvent', params: {id: this.id }});
-      },
+      }
     },
     watch: {
     }
