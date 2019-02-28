@@ -25,9 +25,9 @@ export default {
         };
     },
 
-    mutations: {       
+    mutations: {
       setMemberProperty(state, {key, actualValue}) {
-        state.teamMemberData[key] = actualValue;
+            state.teamMemberData[key] = actualValue;
       },
       setInviteModal(state, data) {
           state.inviteModalOpen = data.showModal;
@@ -42,7 +42,6 @@ export default {
 
       },
       setTeamMemberData(state, data) {
-        state.teamMemberData['id'] = data.teamMember['id']
         state.teamMemberData['emailAddress'] = data.teamMember['emailAddress']
         state.teamMemberData['role'] = data.teamMember['role']
         
@@ -53,6 +52,7 @@ export default {
       },
       setEditMode(state, data) {
        state.editMode = data.editMode
+
       },
       resetForm(state){
           state.teamMemberData.firstName = null;

@@ -19,6 +19,7 @@ import VendorsSuggested from "@/pages/app/Community/vendors-suggested/index.vue"
 import Events from "@/pages/app/Events/Events.vue";
 import NewEvent from "@/pages/app/Events/NewEvent.vue";
 import EditEvent from "@/pages/app/Events/EditEvent.vue";
+import EventDetails from "@/pages/app/Events/EventDetails.vue";
 import EditEventNew from "@/pages/app/Events/EditEventNew.vue";
 import ShowEvent from "@/pages/app/Events/ShowEvent.vue";
 import EventProposal from "@/pages/app/Events/EventProposal.vue";
@@ -366,13 +367,13 @@ let appPages = {
     {
       path: "/events/:id",
       name: "ShowEvent",
-      component: ShowEvent,
+      component: EventDetails,
       meta: {title: 'Event Details'},
     },
     {
       path: "/events/:id/edit",
       name: "EditEvent",
-      component: EditEventNew,
+      component: EventDetails,
       meta: {title: 'Edit Event'},
     },
     {
