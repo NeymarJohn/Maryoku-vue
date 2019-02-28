@@ -220,8 +220,8 @@
           </div>
           <div>
             <LineIndicator
-              v-for="(item,index) in chechParticipant"
-              :key="createUnicId()+index"
+              v-for="item in chechParticipant"
+              :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-participants'
               rightIndicatorStyle ='right-side-indicator'
               :total='item.total'
@@ -256,10 +256,10 @@
               <span class='indicator-event-type-title-rate'>{{`Average attendants satisfaction in ${new Date().getFullYear()}`}}</span>
             </div>
           </div>
-          <div class='chart-scroll-block'>
+          <div>
             <LineIndicator
-              v-for="(item,index) in checkMonth"
-              :key="createUnicId()+index"
+              v-for="item in checkMonth"
+              :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-rate'
               rightIndicatorStyle ='right-side-indicator'
               :total='item.total'
@@ -341,23 +341,20 @@
        const options = {          
           types: ['geocode']
         }
-       
+       this.rate=this.getChartSatisfactionRate()
+       this.participants=this.getChartParticipantsPerEvent()
       const inputMainAddress = document.getElementById('main_address_customer')
       
       const inputBranch = document.getElementById('branch_address_search')
-     
       const autocomplete2 = new google.maps.places.Autocomplete(inputBranch, options)
       
       const autocomplete1 = new google.maps.places.Autocomplete(inputMainAddress, options)
-       this.rate=this.getChartSatisfactionRate()
-       this.participants=this.getChartParticipantsPerEvent()
 
 
       this.$store.dispatch("user/getIndustry");
       this.$store.dispatch("user/getUserFromApi");
       this.$store.dispatch("user/getChartsFromApi",this.customer.id); 
      
-            
       this.auth.currentUser(this, true, () => {
         this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';
       });
@@ -410,8 +407,7 @@
         user:'user/getUser',
         industryList:'user/getIndustryList',
         charts:'user/getChartStatistics'
-      })
-      ,
+      }),
       getChartNumberOfEventsPerYear(){
         const parse_data=[]
         const parse_label=[]
@@ -541,11 +537,28 @@
         }else{
           const count= this.listMonth.indexOf(this.month)
           return this.rate[count]
-        } 
+        }  
+
+
+        // const count= this.listMonth.indexOf(this.month)
+        // return this.rate[count]
+        // const currentMonth= this.listMonth[new Date().getMonth()]
+        // console.log(currentMonth,'currentMonth') 
+        // let countMonth=new Date().getMonth()
+        // console.log(this.listMonth.indexOf(currentMonth), 'eto index')
+        // if(countMonth===this.listMonth.indexOf(currentMonth)){
+        //   return this.rate[countMonth]
+        // }else{
+        //   const count= this.listMonth.indexOf(currentMonth)
+        // return this.rate[count]
+        // }             
+        
+        
       },
       chechParticipant(){
         const currentMonth=this.listMonth[new Date().getMonth()]
-        const currentCount=new Date().getMonth()        
+        const currentCount=new Date().getMonth()
+        console.log(this.monthRate,'eto rate')
         if(!this.monthRate){
            return this.participants[currentCount]
         }else{
@@ -590,7 +603,7 @@
         const chart=this.charts.eventCostPerEmployeePerYearMonth
         const duration=[]
         for (let year in chart){
-        const y=year.split('__')
+        const y=year.split('_')
         if(!duration.includes(y[0]))duration.push(y[0])
         }
         this.duration=duration
@@ -769,7 +782,8 @@
              return currentObj
           
           })        
-          }           
+          }          
+           this.rate=listRete
            return listRete
         },
         getChartParticipantsPerEvent(){
@@ -811,14 +825,10 @@
           }         
            
            return listRete
-        },
-        createUnicId(){
-        return performance.now()
-      }  
+        } 
  
 
-    },    
-      
+    }, 
        
   };
 </script>
@@ -955,10 +965,5 @@
   }
   .md-layout-item >.fc-divider{
     margin: 15px -10px !important;
-  }
-  .chart-scroll-block{
-    height:175px;
-    overflow: scroll;
-    overflow-x: auto;
   }
 </style>

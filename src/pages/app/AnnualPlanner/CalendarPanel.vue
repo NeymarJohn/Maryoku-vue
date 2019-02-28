@@ -7,7 +7,7 @@
           <table style="width: 100%; height: 100%;">
             <tr>
               <td style="width: 80%;min-width: 80%;max-width: 80%;padding-right: 15px;" colspan="2">
-                <filters-panel @filters-changed-event="refreshEvents" :categories-options="this.categoriesArray"></filters-panel>
+                <filters-panel @filters-changed-event="refreshEvents"></filters-panel>
               </td>
               <td style="width: 20%;min-width: 20%;max-width: 20%; padding-left: 15px;">
                 <md-button class="md-success" @click="openEventModal()" style="width: 100%; height: 100%; margin-left: -6px; margin-top: 5px; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
@@ -75,7 +75,7 @@
                     <td style="padding-top: 15px; padding-right: 15px;">
                       <md-card style="padding: 0; margin: 0; height: 100%; ">
                         <md-card-content style="text-align: center;">
-                          <md-button v-for="category in categoriesArray" class="md-simple md-xs" v-bind:style="`color: ${category.color}!important;`" :key="category.id">
+                          <md-button v-for="category in categories" class="md-simple md-xs" v-bind:style="`color: ${category.color}!important;`" :key="category.id">
                             <i class="fa fa-square" style="margin-right: 5px;" v-bind:style="`color: ${category.color}!important;`"></i> {{category.item}}
                           </md-button>
                         </md-card-content>
@@ -88,7 +88,7 @@
                 <table style="width: 100%; height: 100%;">
                   <tr style="height: 95%;">
                     <td>
-                      <month-events-panel :calendar-events="calendarEvents" :categories-array="categoriesArray"></month-events-panel>
+                      <month-events-panel :calendar-events="calendarEvents" :categories-array="categories"></month-events-panel>
                     </td>
                   </tr>
                   <tr style="height: 5%;">
@@ -109,9 +109,6 @@
               :year="this.year"
               :month="this.month"
               :occasions-options="this.occasionsArray"
-              :categories-options="this.categoriesArray"
-              :currencies-options="this.currenciesArray"
-              :event-types-options="this.eventTypesArray"
               ref="eventModal">
       </event-modal>
   </div>
@@ -181,10 +178,7 @@
         value: [1],
         multiple: true,
         calendarEvents: {},
-        occasionsArray: null,
-        categoriesArray: [],
-        currenciesArray: null,
-        eventTypesArray: null,
+        occasionsArray: [],
         holidaysSelectDisplayed: true,
         selectedCountries: true,
         selectedCategories: true,
@@ -199,56 +193,11 @@
       this.isLoading = true;
       this.weekDays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
       this.selectYearMonth(this.year, this.month);
-
-      this.queryCategories();
-      this.queryCurrencies();
-      this.queryEventTypes();
     },
     methods: {
       ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'setEditMode', 'setModalSubmitTitle', 'setEventModalAndEventData', 'setEventDate', 'setNumberOfParticipants']),
       ...mapActions('AnnualPlannerVuex', ['setEventModalAndEventData']),
-      queryCategories() {
-        if (this.$store.state.event.caregoriesArray === null) {
-            this.auth.currentUser(this, true, function() {
-              let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
-              _calendar.categories().get().then(categories => {
-                this.$store.state.event.caregoriesArray = categories;
-                this.categoriesArray = categories;
-              });
-
-            }.bind(this));
-        } else {
-          this.categoriesArray = this.$store.state.event.caregoriesArray;
-        }
-      },
-      queryCurrencies() {
-        if (this.$store.state.event.currenciesArray === null) {
-          let currencies = '';
-
-          currencies = Currency.get().then((currencies) => {
-            this.$store.state.event.currenciesArray = currencies;
-            this.currenciesArray = currencies;
-          });
-        } else {
-          this.currenciesArray = this.$store.state.event.currenciesArray;
-        }
-      },
-      queryEventTypes() {
-        if (this.$store.state.event.eventTypes === null) {
-          this.auth.currentUser(this, true, function() {
-            let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-
-            _calendar.eventTypes().get().then(eventTypes => {
-              this.$store.state.event.eventTypes = eventTypes;
-              this.eventTypesArray = eventTypes;
-            });
-
-            }.bind(this));
-        } else {
-          this.eventTypesArray = this.$store.state.event.eventTypes;
-        }
-      },
       exportToExcel() {
         let calendarId = this.auth.user.defaultCalendarId;
 
@@ -274,7 +223,7 @@
         filtersData.month = parseInt(month);
         //console.log(`working with ${year} as year and ${month} as month, days in month: ${daysInMonth} , first date week day is: ${selectedMoment.weekday()}. `);
       },
-      async queryEvents() {
+      queryEvents() {
         this.isLoading = true;
         const storage = this.$store.state.AnnualPlannerVuex.filtersData;
 
@@ -385,12 +334,15 @@
         return moment().date(day).month(this.month-1).year(this.year);
       },
       colorWithCategory(category) {
-        let filterCategories = this.categoriesArray.filter(c => c.item === category);
+        let filterCategories = this.categories.filter(c => c.item === category);
         return filterCategories[0] != null ? `${filterCategories[0].color}!important;` : '';
-      }
+      },
     },
     computed: {
       ...mapState('AnnualPlannerVuex', ['filtersData']),
+      ...mapGetters({
+        categories: 'event/getCategoriesList',
+      }),
     },
     watch: {
       year(newVal, oldVal){

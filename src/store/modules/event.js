@@ -1,57 +1,106 @@
+import Calendar from '@/models/Calendar';
+import Currency from '@/models/Currency';
+import EventTheme from '@/models/EventTheme'
+
 const state = {
     currentUser: {
 
     },
     param1: "test param",
-    eventData: {
+    eventData: {      
       id: null,
-      calendar: {id: null},
-      title: null,
-      eventStartMillis: null,
-      eventEndMillis: null,
+      occasion: "",
+      occasionCache: "",
+      title: "New Event",
+      date: null,
+      time: "",
+      duration: "",
+      numberOfParticipants: "",
+      status: "draft",
+      totalBudget: "",
+      currency: "",
       eventType: null,
-      numberOfParticipants: null,
-      totalBudget: null,
-      status: null,
+      category: null,
       components: null,
     },
     componentsList: null,
     vendorsList: null,
-    currenciesArray: null,
-    caregoriesArray: null,
-    eventTypes: null,
+    currencies: [],
+    categories: [],
+    eventTypes: [],
+    eventThemes: [],
     calendarId: null,
 }
 
 const getters = {
-    // getEventData() {
-    //     return state.eventData;
-    // },
-    // getComponentsList() {
-    //   return state.componentsList;
-    // },
-    // getVendorsList() {
-    //   return state.vendorsList;
-    // },
-    // getCurrenciesArray() {
-    //   return state.currenciesArray;
-    // },
-    // getCalendarId() {
-    //   return state.calendarId;
-    // },
-    // getCalendarId() {
-    //   return state.param1;
-    // },
-    // getCurrentUser() {
-    //   return state.currentUser;
-    // }
+  getCurrenciesList:(state)=>{
+    return state.currencies;
+  },
+  getCategoriesList:(state)=>{
+    return state.categories;
+  },
+  getEventTypesList:(state)=>{
+    return state.eventTypes
+  },
+  getEventThemesList:(state)=>{
+    return state.eventThemes;
+  }
 }
 
 const actions = {
-
+  async getEventThemes({commit,state}){
+    EventTheme
+      .get()
+      .then(res=>{
+          commit("setEventThemes" , res)
+      })
+      .catch(e=>{
+          commit("setEventThemes" , [])
+      })
+  },
+  async getCurrencies({commit,state}){
+    Currency
+      .get()
+      .then(res=>{
+          commit("setCurrencies" , res)
+      })
+      .catch(e=>{
+          commit("setCurrencies" , [])
+      })
+  },
+  async getCategories({commit,state}, data){
+    let _calendar = new Calendar({id: data});
+    _calendar.categories().get().then(res => {
+        commit("setCategories" , res)
+    })
+    .catch(e=>{
+      commit("setCategories" , [])
+    });
+  },
+  async getEventTypes({commit,state}, data){
+    let _calendar = new Calendar({id: data});
+    _calendar.eventTypes().get().then(res => {
+        commit("setEventTypes" , res)
+    })
+    .catch(e=>{
+      commit("setEventTypes" , [])
+    });
+  },
 }
 
 const mutations = {
+      setCurrencies(state,currencies){
+        state.currencies = currencies
+      },
+      setCategories(state,categories){
+        state.categories = categories
+      },
+      setEventTypes(state,eventTypes){
+        state.eventTypes = eventTypes
+      },
+      setEventThemes(state,eventThemes){
+        state.eventThemes = eventThemes
+      },
       updateEventData(state, params) {
         state.eventData.components[params.index] = params.data;
       },
@@ -66,7 +115,7 @@ const mutations = {
       },
       setCurrentUserData(state, data){
         state.currentUser = data;
-      }
+      },
 }
 
 export default {

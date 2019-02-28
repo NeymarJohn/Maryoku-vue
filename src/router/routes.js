@@ -16,9 +16,11 @@ import Community from "@/pages/app/Community.vue";
 import CommunityNew from "@/pages/app/Community/Community-new.vue";
 import VendorsSuggested from "@/pages/app/Community/vendors-suggested/index.vue";
 
-import Events_old from "@/pages/app/Events/Events_old.vue";
+import Events from "@/pages/app/Events/Events.vue";
+import CurrentEvents from "@/pages/app/Events/CurrentEvents.vue";
 import NewEvent from "@/pages/app/Events/NewEvent.vue";
 import EditEvent from "@/pages/app/Events/EditEvent.vue";
+import EventDetails from "@/pages/app/Events/EventDetails.vue";
 import EditEventNew from "@/pages/app/Events/EditEventNew.vue";
 import ShowEvent from "@/pages/app/Events/ShowEvent.vue";
 import EventProposal from "@/pages/app/Events/EventProposal.vue";
@@ -347,8 +349,8 @@ let appPages = {
       },
     {
       path: "/events",
-      name: "Events_old",
-      component: Events_old,
+      name: "Events",
+      component: Events,
       meta: {title: 'Our Events'},
     },
     {
@@ -366,14 +368,14 @@ let appPages = {
     {
       path: "/events/:id",
       name: "ShowEvent",
-      component: ShowEvent,
+      component: EventDetails,
       meta: {title: 'Event Details'},
     },
     {
       path: "/events/:id/edit",
       name: "EditEvent",
-      component: EditEventNew,
-      meta: {title: 'Edit Event'},
+      component: CurrentEvents,
+      meta: {title: 'Current Event'},
     },
     {
       path: "/yearly-plan",

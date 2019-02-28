@@ -10,10 +10,13 @@
             type: this.type,
             data: this.getData,
             options:  this.optionChart        
-            })          
+            })
+            console.log('mounted', this.id, this)
+            console.log(this.dataChart,'this.dataChart',this.optionChart,'this.optionChart')
         },
         computed:{
-         getData(){           
+         getData(){
+             console.log(this.dataChart)
              return this.dataChart
          },
         }
@@ -29,10 +32,10 @@
 
         },
         beforeUpdate(){
-            console.log('beforeUpdate')
+            console.log('beforeUpdate', this)
         },
         updated(){
-            console.log('updated')
+            console.log('updated', this.dataChart,'this.dataChart',this.optionChart,'this.optionChart')
         }
 
     }
