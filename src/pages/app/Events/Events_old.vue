@@ -3,10 +3,7 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
 
     <div class="md-layout-item md-size-100 text-right">
-      <md-button class="md-success text-success" @click="routeToNewEvent()">
-        <md-icon>add_circle</md-icon>
-        Create New Event
-      </md-button>
+      <md-button class="button-event-creatig" @click="openEventModal()">Create New Event</md-button>
     </div>
     <div class="md-layout-item md-size-100">
       <md-card>
@@ -83,6 +80,7 @@
         </template>
       </product-card>
     </div>
+    <event-modal @refresh-events="refreshEvents" ref="eventModal"></event-modal>
   </div>
 </template>
 
@@ -93,7 +91,10 @@
     ProductCard
   } from "@/components";
 
-  import Calendar from '../../../models/Calendar';
+  import EventModal from "./EventModal/";
+  import { mapMutations } from "vuex";
+  import EventPlannerVuexModule from "./EventPlanner.vuex";
+  import Calendar from "@/models/Calendar";
   import moment from 'moment';
   import VueElementLoading from 'vue-element-loading';
   import swal from "sweetalert2";
@@ -102,7 +103,11 @@
     components: {
       Tabs,
       ProductCard,
-      VueElementLoading
+      VueElementLoading,
+      EventModal
+    },
+    created() {
+      this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
     },
     mounted() {
       this.$store.state.calendarId = this.auth.user.defaultCalendarId;
@@ -119,6 +124,18 @@
     },
 
     methods: {
+      ...mapMutations("EventPlannerVuex", [
+        "setEventModal",
+        "setEditMode",
+        "setModalSubmitTitle",
+        "setEventModalAndEventData",
+        "setNumberOfParticipants"
+      ]),
+      openEventModal() {
+        this.setEventModal({ showModal: true });
+        this.setModalSubmitTitle("Save");
+        this.setEditMode({ editMode: false });
+      },
       getCalendarEvents() {
         let _calendar = new Calendar({id: this.$store.state.calendarId});
 
@@ -185,20 +202,8 @@
       routeToEvent(eventId) {
         this.$router.push({ path: `/events/${eventId}/edit` });
       },
-      routeToNewEvent() {
-        this.$store.state.eventData = {
-          id: null,
-          calendar: {id: null},
-          title: null,
-          eventStartMillis: null,
-          eventEndMillis: null,
-          eventType: null,
-          numberOfParticipants: null,
-          totalBudget: null,
-          status: null,
-          components: null,
-        },
-        this.$router.push({ path: `/events/new` });
+      refreshEvents() {
+        this.getCalendarEvents();
       }
     },
     filters: {
@@ -210,6 +215,9 @@
 </script>
 
 <style lang="scss">
+  .button-event-creatig .md-ripple {
+    background-color: #00bcd4;
+  }
   .card-link .md-card {
     cursor: pointer;
   }

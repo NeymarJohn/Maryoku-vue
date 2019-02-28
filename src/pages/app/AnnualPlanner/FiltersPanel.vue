@@ -114,10 +114,6 @@
 
           let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
-          _calendar.categories().get().then(categories => {
-              categories
-          });
-
           _calendar.metadata().get().then(metadatas => {
 
             let metadata = metadatas[0];
