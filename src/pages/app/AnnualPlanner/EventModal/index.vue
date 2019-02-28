@@ -51,7 +51,7 @@
                                                data-vv-name="eventType"
                                                v-validate= "modelValidations.eventType"
                                                required>
-                                        <md-option v-for="option in eventTypesOptions"
+                                        <md-option v-for="option in eventTypes"
                                                    :key="option.item"
                                                    :value="option.item">
                                             {{ option.item }}
@@ -67,7 +67,7 @@
                                                data-vv-name="category"
                                                v-validate= "modelValidations.category"
                                                required>
-                                        <md-option v-for="option in categoriesOptions"
+                                        <md-option v-for="option in categories"
                                                    :key="option.id"
                                                    :value="option.item">
                                             {{ option.item }}
@@ -150,7 +150,7 @@
                                                data-vv-name="currency"
                                                v-validate= "modelValidations.currency"
                                     >
-                                        <md-option v-for="option in currenciesOptions"
+                                        <md-option v-for="option in currencies"
                                                    :key="option.id"
                                                    :value="option.value">
                                             {{ option.value }}
@@ -164,8 +164,12 @@
                     </form>
                 </template>
                 <template slot="footer">
-                     <md-button v-if="this.editMode" class="md-simple move-left md-just-icon" @click="showDeleteAlert">
+                    <md-button v-if="this.editMode" class="md-simple move-left md-just-icon" @click="showDeleteAlert">
                         <md-icon class="md-theme-warning" style="font-size: 1.5rem !important;">delete </md-icon>
+                    </md-button>
+
+                    <md-button v-if="this.editMode" @click="openEventPlanner" class="md-success">
+                      Open in Event Planner
                     </md-button>
 
                     <md-button class="md-success move-right" @click="validateEvent">
@@ -194,9 +198,6 @@
       year: Number,
       month : Number,
       occasionsOptions: Array,
-      currenciesOptions:Array,
-      categoriesOptions:Array,
-      eventTypesOptions:Array,
     },
     data: () => ({
       auth: auth,
@@ -252,6 +253,11 @@
         'modalSubmitTitle',
         'editMode',
       ]),
+      ...mapGetters({
+        categories: 'event/getCategoriesList',
+        currencies: 'event/getCurrenciesList',
+        eventTypes: 'event/getEventTypesList'
+      }),
       occasionsList: {
         get: function() {
           if (!this.occasionsOptions) {
@@ -533,7 +539,10 @@
       mdOpened:function() {
         this.occasion += " ";
         this.occasion = this.occasion.substring(0, this.occasion.length -1)
-      }
+      },
+      openEventPlanner() {
+        this.$router.push({ name: 'EditEvent', params: {id: this.id }});
+      },
     },
     watch: {
     }

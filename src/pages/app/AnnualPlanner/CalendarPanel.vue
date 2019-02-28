@@ -109,9 +109,6 @@
               :year="this.year"
               :month="this.month"
               :occasions-options="this.occasionsArray"
-              :categories-options="this.categories"
-              :currencies-options="this.currencies"
-              :event-types-options="this.eventTypes"
               ref="eventModal">
       </event-modal>
   </div>
@@ -197,33 +194,11 @@
       this.weekDays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
       this.selectYearMonth(this.year, this.month);
 
-      this.queryCategories();
-      this.queryCurrencies();
-      this.queryEventTypes();
     },
     methods: {
       ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'setEditMode', 'setModalSubmitTitle', 'setEventModalAndEventData', 'setEventDate', 'setNumberOfParticipants']),
       ...mapActions('AnnualPlannerVuex', ['setEventModalAndEventData']),
 
-      queryCategories() {
-        if (this.categories.length === 0) {
-          this.auth.currentUser(this, true, function() {
-            this.$store.dispatch("event/getCategories", this.auth.user.defaultCalendarId);
-          }.bind(this));
-        }
-      },
-      queryCurrencies() {
-        if (this.currencies.length === 0) {
-          this.$store.dispatch("event/getCurrencies")
-        }
-      },
-      queryEventTypes() {
-        if (this.eventTypes.length === 0) {
-          this.auth.currentUser(this, true, function() {
-              this.$store.dispatch("event/getEventTypes", this.auth.user.defaultCalendarId)
-          }.bind(this));
-        }
-      },
       exportToExcel() {
         let calendarId = this.auth.user.defaultCalendarId;
 
@@ -362,14 +337,12 @@
       colorWithCategory(category) {
         let filterCategories = this.categories.filter(c => c.item === category);
         return filterCategories[0] != null ? `${filterCategories[0].color}!important;` : '';
-      }
+      },
     },
     computed: {
       ...mapState('AnnualPlannerVuex', ['filtersData']),
       ...mapGetters({
         categories: 'event/getCategoriesList',
-        currencies: 'event/getCurrenciesList',
-        eventTypes: 'event/getEventTypesList'
       }),
     },
     watch: {
