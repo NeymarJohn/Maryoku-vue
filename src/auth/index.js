@@ -73,8 +73,9 @@ export default {
           context.user = { username: resp.data.username };
           store.dispatch("user/getUserFromApi" , resp.data);
           store.dispatch("event/getCategories", resp.data.defaultCalendarId);
-          store.dispatch("event/getCurrencies");
           store.dispatch("event/getEventTypes", resp.data.defaultCalendarId);
+          store.dispatch("event/getCurrencies");
+        //  store.dispatch("event/getEventThemes");
 
           this.user.id = resp.data.id;
           this.user.username = resp.data.username;

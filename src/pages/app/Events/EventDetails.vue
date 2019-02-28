@@ -109,10 +109,7 @@
       </md-card>
     </div>
     <div class="md-layout-item md-size-75 block-flex">
-      <div class="md-layout-item md-size-75">main block</div>
-      <div class="md-layout-item md-size-25">
-        <md-button class="button-event-creatig">Create New Event</md-button>
-      </div>
+
     </div>
     <div class="md-layout-item md-size-100 block-flex copyright-block">
       <div>

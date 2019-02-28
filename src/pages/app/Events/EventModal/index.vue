@@ -246,7 +246,7 @@
       this.hoursArray.push();
     },
     computed: {
-      ...mapState('AnnualPlannerVuex', [
+      ...mapState('EventPlannerVuex', [
         'eventData',
         'eventModalOpen',
         'modalTitle',
@@ -380,7 +380,7 @@
       });
     },
     methods: {
-      ...mapMutations('AnnualPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
+      ...mapMutations('EventPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
       closeModal(){
         this.setEventModal(false);
         this.editTitle = false;

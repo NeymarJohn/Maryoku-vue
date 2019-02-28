@@ -1,5 +1,6 @@
 import Calendar from '@/models/Calendar';
 import Currency from '@/models/Currency';
+import EventTheme from '@/models/EventTheme'
 
 const state = {
     currentUser: {
@@ -27,6 +28,7 @@ const state = {
     currencies: [],
     categories: [],
     eventTypes: [],
+    eventThemes: [],
     calendarId: null,
 }
 
@@ -39,10 +41,23 @@ const getters = {
   },
   getEventTypesList:(state)=>{
     return state.eventTypes
+  },
+  getEventThemesList:(state)=>{
+    return state.eventThemes;
   }
 }
 
 const actions = {
+  getEventThemes({commit,state}){
+    EventTheme
+      .get()
+      .then(res=>{
+          commit("setEventThemes" , res)
+      })
+      .catch(e=>{
+          commit("setEventThemes" , [])
+      })
+  },
   getCurrencies({commit,state}){
     Currency
       .get()
@@ -82,6 +97,9 @@ const mutations = {
       },
       setEventTypes(state,eventTypes){
         state.eventTypes = eventTypes
+      },
+      setEventThemes(state,eventThemes){
+        state.eventThemes = eventThemes
       },
       updateEventData(state, params) {
         state.eventData.components[params.index] = params.data;

@@ -15,6 +15,7 @@ export default {
             totalBudget: "",
             currency: "",
             eventType: null,
+            eventTheme: null,
             category: null,
           },
           eventModalOpen: false,
@@ -36,6 +37,9 @@ export default {
       },
       setModalSubmitTitle(state, data) {
         state.modalSubmitTitle = data;
+      },
+      setNumberOfParticipants(state, data) {
+        state.eventData['numberOfParticipants'] = data.numberOfParticipants;
       },
     },
     actions: {
