@@ -78,7 +78,7 @@ const state={
     branches: [],
     files: [],
   }
-  ,charts:[]
+  ,charts:{}
 }
 
 //getters

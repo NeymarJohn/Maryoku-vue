@@ -1,241 +1,279 @@
 <template>
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
-
-    <div class="md-layout-item md-size-100 text-right">
-      <md-button class="button-event-creatig" @click="openEventModal()">Create New Event</md-button>
-    </div>
-    <div class="md-layout-item md-size-100">
-      <md-card>
-        <md-card-header class="md-card-header-icon md-card-header-rose">
-          <div class="card-icon">
-            <md-icon>assignment</md-icon>
-          </div>
-          <h4 class="title">Upcoming Events</h4>
-        </md-card-header>
+      <div class="md-layout-item md-size-25">      
+      <md-card class="md-card-profile">
+      <div class='logo-block'>
+      <div class='event-planer-logo'>
+            <md-icon class='company-logo'>date_range</md-icon>
+         </div>
+         <div class='event-title'> Event Information
+         </div>
+         <div>
+         </div>
+         </div>
         <md-card-content>
-          <md-table v-model="upcomingEvents" table-header-color="rose" class="table-striped table-hover right-align-actions" v-if="upcomingEvents.length">
-            <md-table-row slot="md-table-row" slot-scope="{ item }" @click="routeToEvent(item.id, $event)" class="hover-row">
-              <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
-              <md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>
-              <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
-              <md-table-cell md-label="Status">{{ item.status }}</md-table-cell>
-              <md-table-cell md-label="Actions">
-                <!--<md-button @click="viewEvent(item)" class="md-raised md-info md-icon-button">
-                  <md-icon>visibility</md-icon>
-                </md-button>-->
-                <md-button @click="editEvent($event, item)" class="md-raised md-info md-icon-button">
-                  <md-icon>edit</md-icon>
-                </md-button>
-                <md-button @click="showDeleteAlert($event, item)" class="md-raised md-primary md-icon-button">
-                  <md-icon>close</md-icon>
-                </md-button>
-
-               <!-- <div class="float-right"><md-icon>share</md-icon></div>-->
-              </md-table-cell>
-            </md-table-row>
-          </md-table>
-          <div class="empty-table text-danger text-center" v-else>
-            No events yet,
-            <span class="text-link" @click="routeToNewEvent()">
-              create one now
-            </span>
-          </div>
-
-        </md-card-content>
-      </md-card>
-    </div>
-
-    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100" v-if="recentEvents.length">
-      <div class="header text-center">
-        <h4 class="title">Recent Events</h4>
-      </div>
-    </div>
-
-    <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33 card-link"
-      v-for="event in recentEvents"
-      :key="event.id"
-      @click="routeToEvent(event.id)">
-
-      <product-card header-animation="true">
-        <img class="img" slot="imageHeader" :src="imageHref(event.coverImage)">
-
-
-        <h4 slot="title" class="title">
-          <a @click="routeToEvent(event.id)">{{ event.title }}</a>
-        </h4>
-        <div slot="description" class="card-description">
-          {{ event.eventStartMillis | moment }}
+         <div class="md-layout-item ">
+         <div class="control-main-block">
+             <div class='company-control-logo'>
+             <div class='company-logo-block'>
+            <md-icon class='company-logo'>create</md-icon>
+            </div>
+         </div>
+           <div class='company-control-logo'>
+           <div class='company-logo-block'>
+            <md-icon class='company-logo'>sms</md-icon>
+            </div>
+         </div>
+           <div class='company-control-logo'>
+           <div class='company-logo-block'>
+            <md-icon class='company-logo'>person</md-icon>
+            </div>
+         </div>
+         </div>      
+        <div>
+        <div class="md-layout-item md-size-100">
+              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
+            </div>
+        <div class="md-layout-item md-layout md-gutter">
+        <div class="md-layout-item">
+        <div class='md-caption title-text'>Event Occasion</div>
+        <div class='md-caption title-text'>Date</div>
+        <div class='md-caption title-text'>Start Time</div>
+        <div class='md-caption title-text'>Duration</div>
+        <div class='md-caption title-text' >Geography</div>
+        <div class='md-caption title-text'>Participants</div>
+        <div class='md-caption title-text'>Participant Type</div>
+        
         </div>
-        <template slot="footer">
-          <div class="price">
-            <h4>{{event.numberOfParticipants}} Guests &middot; {{duration(event)}} hours</h4>
+        <div class="md-layout-item">
+        <div class='md-caption title-text'>MLK Day</div>
+        <div class='md-caption title-text'>Dec 20, 2019</div>
+        <div class='md-caption title-text'>10:00 AM</div>
+        <div class='md-caption title-text'>6 Hours</div>
+        <div class='md-caption title-text' >New York</div>
+        <div class='md-caption title-text'>74</div>
+        <div class='md-caption title-text'>With Spouses</div>       
+        </div>
+      </div>
+      <div class="md-layout-item md-size-100">
+              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
+            </div>
+        <div class="md-layout-item">
+          <h5 class='title-budget-main'>Total remaining budget</h5>
+          <h4 class="title" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152, 0.8);">
+            <animated-number ref="totalRemainingBudgetNumber" value="1232" prefix="$"></animated-number>
+          </h4>
+
+          <div style="display: grid;margin-top: 18px; color: rgb(33, 201, 152, 0.8);">
+            <chart-component
+              :chart-data="pieChart.data"
+              :chart-options="pieChart.options"
+              chart-type="Pie"
+            style="grid-column: 1; grid-row: 1; color:red"/>            
+            <animated-number class="percentage" ref="percentageNumber" value="234" suffix="%"></animated-number>
           </div>
-          <div class="stats">
-            <p class="category">
-              <md-icon>place</md-icon>
-              {{ event.location }}
-            </p>
-          </div>
-        </template>
-      </product-card>
-    </div>
-    <event-modal @refresh-events="refreshEvents" ref="eventModal"></event-modal>
+        </div>
+        </div>
+        </div>
+        <div class="md-layout-item">
+        <div>
+        <div class='md-caption title-text'>
+        Remaining budget per employee
+        </div>
+        <div class='md-caption title-text title-budget-prise'>
+        $22
+        </div>
+        </div>
+        <div>
+        <div class='md-caption title-text'>
+        Budget per employee
+        </div>
+        <div class='md-caption title-text title-budget-prise'>
+        $22
+        </div>
+        </div>
+        <div>
+        <div class='md-caption title-text '>
+        Total budget for the event
+        </div>
+        <div class='md-caption title-text title-budget-prise'>
+        $22
+        </div>
+        </div>      
+        </div>         
+          </md-card-content>
+        </md-card>
+        </div>
+        <div class="md-layout-item md-size-75 block-flex">
+        <div class="md-layout-item md-size-75">
+        main block
+        </div>
+        <div class="md-layout-item md-size-25">
+              <md-button class='button-event-creatig'>
+                Create New Event
+            </md-button>
+        </div>       
+        </div>
+        <div class="md-layout-item md-size-100 block-flex copyright-block">
+        <div>
+         <md-button class="footer-link-button" v-for='(item, index) in footerLink' :key="index">
+                {{item.title}}
+            </md-button>
+         </div>
+         <div>
+         <p>{{`&copy; ${new Date().getFullYear()}`}} <span class='copyright'>Creative Tim</span>{{`, made with love for a better web`}}</p>
+         </div>   
+        </div>  
   </div>
 </template>
 
 <script>
-  import auth from '@/auth';
-  import {
-    Tabs,
-    ProductCard
-  } from "@/components";
+//MAIN MODULES
+import ChartComponent from '@/components/Cards/ChartComponent';
+import auth from '@/auth';
+import moment from 'moment';
+import VueElementLoading from 'vue-element-loading';
 
-  import EventModal from "./EventModal/";
-  import { mapMutations } from "vuex";
-  import EventPlannerVuexModule from "./EventPlanner.vuex";
-  import Calendar from "@/models/Calendar";
-  import moment from 'moment';
-  import VueElementLoading from 'vue-element-loading';
-  import swal from "sweetalert2";
+//COMPONENTS
+import {AnimatedNumber} from "@/components";
+import Icon from '@/components/Icon/Icon.vue'
+
+
 
   export default {
     components: {
-      Tabs,
-      ProductCard,
       VueElementLoading,
-      EventModal
+      ChartComponent,
+      AnimatedNumber,
+      Icon
     },
-    created() {
-      this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
-    },
-    mounted() {
-      this.$store.state.calendarId = this.auth.user.defaultCalendarId;
-      this.getCalendarEvents();
-    },
+
     data() {
       return {
         auth: auth,
         product3: "static/img/shutterstock_289440710.png",
         recentEvents: [],
         upcomingEvents: [],
-        isLoading: true,
+        isLoading: false,
+        footerLink:[{title:"HOME"},{title:"COMPANY"},{title:"PORTFOLIO"},{title:"BLOG"},]
       };
     },
-
-    methods: {
-      ...mapMutations("EventPlannerVuex", [
-        "setEventModal",
-        "setEditMode",
-        "setModalSubmitTitle",
-        "setEventModalAndEventData",
-        "setNumberOfParticipants"
-      ]),
-      openEventModal() {
-        this.setEventModal({ showModal: true });
-        this.setModalSubmitTitle("Save");
-        this.setEditMode({ editMode: false });
-      },
-      getCalendarEvents() {
-        let _calendar = new Calendar({id: this.$store.state.calendarId});
-
-        _calendar.calendarEvents().get().then(events => {
-          this.upcomingEvents = events.reduce(function (result, element) {
-            if (element.status.toLowerCase() !== 'done') {
-              result.push(element);
-            }
-            return result;
-          }, []);
-          this.recentEvents = events.reduce(function (result, element) {
-            if (element.status.toLowerCase() === 'done') {
-              result.push(element);
-            }
-            return result;
-          }, []);
-
-          this.isLoading = false;
-        })
-          .catch((error) => {
-            console.log(error);
-            this.isLoading = false;
-          });
-      },
-      showDeleteAlert(e, ev) {
-        const _this = this;
-        e.stopPropagation();
-        swal({
-          title: "Are you sure?",
-          text: `You won't be able to revert this!`,
-          showCancelButton: true,
-          confirmButtonClass: "md-button md-success",
-          cancelButtonClass: "md-button md-danger",
-          confirmButtonText: "Yes, delete it!",
-          buttonsStyling: false
-        }).then(result => {
-          if (result.value) {
-            _this.isLoading = true;
-            let event = _this.upcomingEvents.find((e) => { return e.id === ev.id })
-            ev.delete().then(result => {
-              _this.upcomingEvents.splice(this.upcomingEvents.indexOf(event), 1)
-              _this.isLoading = false;
-            }).catch(() => {
-              _this.isLoading = false;
-            })
+    computed: {
+      pieChart() {
+        return {
+          data: {
+            labels: [" ", " "], // should be empty to remove text from chart
+            series: ["100", "70"]
+          },
+          options: {
+            padding: 0,
+            height: 120,
+            donut: true,
+            donutWidth: 12
           }
-        });
-      },
-      editEvent(ev, event) {
-        if (ev.target.tagName === 'I') {
-          ev.stopPropagation();
-          this.$router.push(`/events/${event.id}/edit`)
         }
       },
-      viewEvent(event) {
-        this.$router.push(`/events/${event.id}`)
-      },
-      imageHref(image) {
-        return image && image.href ? `${process.env.SERVER_URL}${image.href}` : this.product3;
-      },
-      duration(event) {
-        return (event.eventEndMillis - event.eventStartMillis) / 3600000
-      },
-      routeToEvent(eventId) {
-        this.$router.push({ path: `/events/${eventId}/edit` });
-      },
-      refreshEvents() {
-        this.getCalendarEvents();
-      }
     },
-    filters: {
-      moment: function (date) {
-        return moment(date).format('MMMM Do, GGGG');
-      }
-    }
-  };
+  }
+
+
 </script>
 
 <style lang="scss">
-  .button-event-creatig .md-ripple {
-    background-color: #00bcd4;
-  }
-  .card-link .md-card {
-    cursor: pointer;
-  }
-
-  .float-right {
-    float: right;
-  }
-
-  .hover-row:hover {
-    cursor: pointer;
-  }
-  .right-align-actions {
-    .md-table-cell:last-child, .md-table-head:last-child {
-      text-align: right;
+ .percentage {
+  padding-bottom: 8px;
+  padding-left: 5px;
+  grid-column: 1;
+  grid-row: 1;
+  margin-top: auto;
+  margin-bottom: auto;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(33, 201, 152, 0.8)
+}
+.logo-block{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0px 15px;
+    margin: -20px 0px 20px 0px;
+    .event-planer-logo{
+      background:#eb3e79;
+      width: 64px;
+      height: 64px;
+      display:flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 5px;  
+        .company-logo{
+          color:white !important;
+        }
     }
-  }
-  .text-link {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-</style>
+    .event-title{
+      font-family: 'Roboto';
+      font-size: 18px;
+      font-weight: 300;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 1.33;
+      letter-spacing: normal;
+      text-align: left;
+      color: #000000;
+    }
+}
+.control-main-block{
+          display: flex;
+          justify-content: center;
+      .company-logo-block{
+          border: 2px solid #8b8b8b;
+          padding: 7px;
+          border-radius: 50%;
+          margin: 0px 5px
+      }
+}
+.title-text{
+  font-family: 'Roboto';
+  font-size: 12px;
+  font-weight: 300;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 2;
+  letter-spacing: normal;
+  text-align: left;
+  color: #959595;
+}
+.title-budget-main{
+  font-family: 'Roboto';
+  font-size: 18px;
+  font-weight: 300;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.33;
+  letter-spacing: normal;
+  text-align: center;
+  color: #000000;
+}
+.title-budget-prise{
+    color: rgba(33, 200, 152, 0.8)!important;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+.block-flex{
+  display: flex;
+}
+.button-event-creatig .md-ripple{
+  background-color: #00bcd4;
+}
+.footer-link-button .md-ripple{
+  color: #89229b;
+  background-color: rgba(240, 240, 240, 1);
+}
+.copyright{
+  color:#9c27b0
+}
+.copyright-block{
+  justify-content: space-between;
+}
+ </style>
