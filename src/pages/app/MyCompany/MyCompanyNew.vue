@@ -35,28 +35,20 @@
                     editebleMode
                     :actionFunc='saveInfoFromForm'
                     :ctx='customer'
-                    fieldStyle="without-border"
-                  />
-
-              
+                    fieldStyle="without-border"/>              
               <select-common
                     label='Industry'
                     labelStyle='om_label_input'
                     :list='industryList'
                     name='industry'
                     :onChange="onChange"
-                    :valueName="['id','title']"
+                    :valueName="['title','id']"
                     editebleMode
                     :actionFunc='saveInfoFromForm'
                     :ctx='customer'
                     :value='customer.industry'
-                    fieldStyle="without-border"
-                  />
-
-              <div class="md-layout">
-                
-
-               
+                    fieldStyle="without-border"/>
+              <div class="md-layout">              
               </div>
             </div>
             <div class="md-layout-item md-size-100">
@@ -68,14 +60,14 @@
                    <input-text
                     labelStyle='company_label_input'
                     label='Company address'
-                    name='mainAddressCountry'
-                    :value='customer.mainAddressCountry'
+                    name='mainAddress'
+                    id='main_address_customer'
+                    :value='customer.mainAddress'
                     :onChange='onChange'
                     editebleMode
                     :actionFunc='saveInfoFromForm'
                     :ctx='customer'
-                    fieldStyle="without-border"
-                  />             
+                    fieldStyle="without-border"/>             
                   <input-text
                     labelStyle='company_label_input'
                     label='Phone'
@@ -85,8 +77,7 @@
                     editebleMode
                     :actionFunc='saveInfoFromForm'
                     :ctx='user'
-                    fieldStyle="without-border"
-                  />
+                    fieldStyle="without-border"/>
                   <input-text
                     labelStyle='company_label_input'
                     label='Company Email'
@@ -96,8 +87,7 @@
                     editebleMode
                     :actionFunc='saveInfoFromForm'
                     :ctx='customer'
-                    fieldStyle="without-border"
-                  />
+                    fieldStyle="without-border"/>
                   <input-text
                     labelStyle='company_label_input'
                     label='Company Domain'
@@ -107,11 +97,9 @@
                     editebleMode
                     :actionFunc='saveInfoFromForm'
                     :ctx='customer'
-                    fieldStyle="without-border"
-                  /> 
+                    fieldStyle="without-border"/>                
               </div>
             </div>
-
             <div class="md-layout-item md-size-100">
               <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
             </div>
@@ -136,9 +124,8 @@
                     label='Branches address'
                     name='branch_address'
                     :value='branch_address'
-                    :onChange='onChange'
-                    v-gmaps-searchbox='"branches_getter"'
-                  />
+                    id='branch_address_search'
+                    :onChange='onChange'/>                  
                 </form>
               </div>
             </div>
@@ -148,7 +135,6 @@
             </div>
             <div class="md-layout-item md-size-100">
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Customer Infromation</div>
-
             </div>
           </div>
         </md-card-content>
@@ -171,10 +157,9 @@
                 <select-common
                   label='Start year'
                   labelStyle='om_label_input'
-                  :list='["2014", "2015", "2016", "2017", "2018", "2019"]'
+                  :list='getDurationForChart'
                   name='startPeriod'
-                  :onChange="onChange"
-                />
+                  :onChange="onChange"/>
               </div>
               <div class='filter-datepicker-block'>
                 <select-common
@@ -182,8 +167,7 @@
                   labelStyle='om_label_input'
                   :list='listMonth'
                   name='from'
-                  :onChange="onChange"
-                />
+                  :onChange="onChange"/>
               </div>
             </div>
             <div class='filter-datepicker'>
@@ -191,11 +175,9 @@
                 <select-common
                   label='Finish year'
                   labelStyle='om_label_input'
-                  :list='["2014", "2015", "2016", "2017", "2018", "2019"]'
+                  :list='getDurationForChart'
                   name='finishPeriod'
-                  :onChange="onChange"
-
-                />
+                  :onChange="onChange"/>
               </div>
               <div class='filter-datepicker-block'>
                 <select-common
@@ -203,8 +185,7 @@
                   labelStyle='om_label_input'
                   :list='listMonth'
                   name='to'
-                  :onChange="onChange"
-                />
+                  :onChange="onChange"/>
               </div>
             </div>
           </div>
@@ -216,10 +197,9 @@
             id="number_of_events_chart"
             width="350"
             height="150"
-            :dataChart='dataChart.data'
+            :dataChart='getChartNumberOfEventsPerYear'
             type='line'
-            :optionChart='dataChart.options'
-          />
+            :optionChart='dataChart.options'/>
           <LineChart
             v-else
             key="email-input"
@@ -229,8 +209,7 @@
             height="150"
             :dataChart='getDataFromDuration'
             type='line'
-            :optionChart='dataChart.options'
-          />
+            :optionChart='dataChart.options'/>
         </md-card-content>
       </div>
       <md-card>
@@ -242,31 +221,27 @@
           <div>
             <LineIndicator
               v-for="item in chechParticipant"
-              :key="item.total"
+              :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-participants'
               rightIndicatorStyle ='right-side-indicator'
               :total='item.total'
               :typeEvent='item.typeEvent'
               :eventDate='item.eventDate'
-              :currentValue='item.currentValue'
-            />
+              :currentValue='item.currentValue'/>
           </div>
         </md-card-content>
       </md-card>
       <md-card>
         <md-card-content style="max-height: 200px">
-
           <div class="title text-bold">Average event cost per employee</div>
           <LineChart
             classStyle="max-height: 130px"
             id="number_of_participants_chart"
             width="350"
             height="150"
-            :dataChart='dataChartParticipan.data'
+            :dataChart='getChartEventPerEmployee'
             type='line'
-            :optionChart='dataChart.options'
-          />
-
+            :optionChart='dataChart.options'/>
         </md-card-content>
       </md-card>
     </div>
@@ -284,14 +259,13 @@
           <div>
             <LineIndicator
               v-for="item in checkMonth"
-              :key="item.total"
+              :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-rate'
               rightIndicatorStyle ='right-side-indicator'
               :total='item.total'
               :categoryEvent="item.category"
               :currentValue='item.currentValue'
-              isRate
-            />
+              isRate/>
           </div>
         </md-card-content>
       </md-card>
@@ -303,10 +277,9 @@
             id="event_vs_category"
             width="350"
             height="150"
-            :dataChart='dataEventVsCategory.data'
+            :dataChart='getChartEventsPerCategory'
             type='bar'
-            :optionChart='dataChart.options'
-          />
+            :optionChart='dataChart.options'/>
         </md-card-content>
       </md-card>
     </div>
@@ -339,7 +312,7 @@
   import Datepicker from '@/components/Datepicker/Datepicker.vue';
 
   //CONSTANST
-  import listMonth from "@/constants/month";
+  import listMonth,{months_short} from "@/constants/month";
 
   //helper function
   import {isWrong} from '@/utils/helperFunction'
@@ -364,13 +337,25 @@
       "select-common":Select,
       LineChart
     },
-     mounted:  function(){
+     mounted(){
+       const options = {          
+          types: ['geocode']
+        }
+       this.rate=this.getChartSatisfactionRate()
+       this.participants=this.getChartParticipantsPerEvent()
+      const inputMainAddress = document.getElementById('main_address_customer')
+      
+      const inputBranch = document.getElementById('branch_address_search')
+      const autocomplete2 = new google.maps.places.Autocomplete(inputBranch, options)
+      
+      const autocomplete1 = new google.maps.places.Autocomplete(inputMainAddress, options)
+
+
       this.$store.dispatch("user/getIndustry");
       this.$store.dispatch("user/getUserFromApi");
-     Customer.get().statistics().then(res=>console.log(res))
-
-      
-      console.log(customer.statistics())
+      this.$store.dispatch("user/getChartsFromApi",this.customer.id); 
+     
+            
       this.auth.currentUser(this, true, () => {
         this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';
       });
@@ -385,20 +370,7 @@
           numberOfEmployees: false,
         },
 
-        dataChart:{
-          data:{
-            labels: ["2014", "2015", "2016", "2017", "2018", "2019"],
-            datasets: [{
-              data: [2, 5, 7, 9, 12, 15],
-              backgroundColor: [
-                'rgba(255, 255, 255, 0.2)',
-              ],
-              borderColor: [
-                '#71c278',
-              ],
-              borderWidth: 1
-            }]
-          },
+        dataChart:{          
           options: {
             legend: {
               display: false
@@ -412,62 +384,145 @@
             }
           }
 
-        },
-        dataChartParticipan:{
-          data: {
-            labels: ['Jan', "Feb", "Mar", "Apr", "May", "June"],
-            datasets: [{
-              data: [80, 125, 145, 60, 92, 57],
-              backgroundColor: [
-                'rgba(255, 255, 255, 0.2)',
-              ],
-              borderColor: [
-                '#26cfa0',
-              ],
-              borderWidth: 1
-            }]
-          }
-        },
-        dataEventVsCategory:{
-          data: {
-            labels: ['Holiday', "Civil", "Company Days", "Birthday", "Social Days", "Fun Days"],
-            datasets:[{
-              label: '# of type Events',
-              data: [Math.ceil(Math.random()*100),Math.ceil(Math.random()*100),Math.ceil(Math.random()*100),Math.ceil(Math.random()*100),Math.ceil(Math.random()*100),Math.ceil(Math.random()*100)],
-              backgroundColor: '#25d0a2'
-
-
-            }]
-
-          }}
-        ,
+        },      
         branch_address:'',
         showSearch:false,
-        showFilter:false,
-        rate:[[{category:'Space/Location',total:'304',currentValue:'39'},{category:'Catering',total:'400',currentValue:'167'},{category:'Content',total:'600',currentValue:'300'},{category:'Giveaway',total:'246',currentValue:'230'}],
-          [{category:'Space/Location',total:'673',currentValue:'324'},{category:'Catering',total:'373',currentValue:'167'},{category:'Content',total:'203',currentValue:'78'},{category:'Giveaway',total:'231',currentValue:'160'}]],
-        participants:[
-          [{typeEvent:'Comapany Trainig', eventDate:'August 19,2018', total:'324',currentValue:'23'},{typeEvent:'Outreach Program', eventDate:'August 12,2018',total:'543',currentValue:'167'},{typeEvent:'Development Workshop', eventDate:'August 23,2018',total:'400',currentValue:'323'},{typeEvent:'Meeting', eventDate:'August 27,2018',total:'434',currentValue:'89'}],
-          [{typeEvent:'Comapany Trainig', eventDate:'July 20,2019', total:'224',currentValue:'123'},{typeEvent:'Outreach Program', eventDate:'August 12,2018',total:'443',currentValue:'267'},{typeEvent:'Development Workshop', eventDate:'August 23,2018',total:'400',currentValue:'123'},{typeEvent:'Meeting', eventDate:'August 27,2018',total:'334',currentValue:'189'}]
-        ],
+        showFilter:false,       
         from:'',
         to:'',
         startPeriod:'',
-        finishPeriod:'',
-        monthValue:[{month:'Jan', events:'34'}, {month:'Feb', events:'41'}, {month:'Mar', events:'24'}, {month:'Apr', events:'14'}, {month:'May', events:'34'}, {month:'Jun', events:'14'}, {month:'Jul', events:'24'}, {month:'Aug', events:'34'},{month:'Sep', events:'14'} ,{ month:'Oct', events:'44'}, {month:'Nov', events:'14'}, {month:'Dec', events:'34'}],
-        month:'',
-        monthRete:'',
+        finishPeriod:'',       
+        month:"",
+        monthRate:"",
         listMonth:listMonth,
+        shortNameM:months_short,
         isShowForm:false,
-        formSwitcher:''
+        formSwitcher:'',
+        duration:[],
+        vm:{searchPlace:""}
       }
     },
     computed:{
       ...mapGetters({
         customer:'user/getCustomer',
         user:'user/getUser',
-        industryList:'user/getIndustryList'
+        industryList:'user/getIndustryList',
+        charts:'user/getChartStatistics'
       }),
+      getChartNumberOfEventsPerYear(){
+        const parse_data=[]
+        const parse_label=[]
+        if(this.charts.numberOfEventsPerYear){ 
+            const chart=this.charts.numberOfEventsPerYear
+            for(let key in chart){              
+              parse_label.push(key)
+              parse_data.push(chart[key]) 
+          }
+          return{            
+            labels: parse_label,
+            datasets: [{
+              data: parse_data,
+              backgroundColor: [
+                'rgba(255, 255, 255, 0.2)',
+              ],
+              borderColor: [
+                '#71c278',
+              ],
+              borderWidth: 1
+            }]                     
+          }
+        }else{
+          return{            
+            labels: [],
+            datasets:[{
+              label: '# of type Events',
+              data: [],
+              backgroundColor: '#25d0a2'
+
+            }]          
+          }
+        }
+
+
+        
+      } 
+      ,
+      getChartEventPerEmployee(){
+        const parse_data=[]
+        const parse_month=[]
+        if(this.charts.eventCostPerEmployeePerYearMonth){          
+          const chart= this.charts.eventCostPerEmployeePerYearMonth          
+          for(let key in chart){
+          const moths= key.split('__')
+          parse_month.push(this.shortNameM[moths[1]-1])
+          parse_data.push(chart[key]) 
+          }
+           if(parse_month.length<6&&parse_data.length<6){
+             return{               
+                labels: parse_month,
+                datasets: [{
+                  data: parse_data,
+                  backgroundColor: [
+                    'rgba(255, 255, 255, 0.2)',
+                  ],
+                  borderColor: [
+                    '#26cfa0',
+                  ],
+                  borderWidth: 1
+                }]          
+                }
+            
+        }else{
+           const arrLenght=parse_data.length-6
+            const dataCh=parse_data.splice(arrLenght)
+            const labemlCh=parse_month.splice(arrLenght)
+            return{               
+                labels: labemlCh,
+                datasets: [{
+                  data: dataCh,
+                  backgroundColor: [
+                    'rgba(255, 255, 255, 0.2)',
+                  ],
+                  borderColor: [
+                    '#26cfa0',
+                  ],
+                  borderWidth: 1
+                }]          
+                }  
+        }
+        }},
+        getChartEventsPerCategory(chartData){
+           const parse_data=[]
+          const parse_label=[]
+        if(this.charts.eventsPerCategory){ 
+            const chart=this.charts.eventsPerCategory
+            for(let key in chart){
+              const moths= key.split('__')
+              parse_label.push(key)
+              parse_data.push(chart[key]) 
+          }
+          return{            
+            labels: parse_label,
+            datasets:[{
+              label: '# of type Events',
+              data: parse_data,
+              backgroundColor: '#25d0a2'
+
+            }]          
+          }
+        }else{
+          return{            
+            labels: [],
+            datasets:[{
+              label: '# of type Events',
+              data: [],
+              backgroundColor: '#25d0a2'
+
+            }]          
+          }
+        }
+        },        
+             
       getMonth(){
         return this.monthValue.map(item=>item.month)
       },
@@ -475,34 +530,62 @@
         return this.monthValue.map(item=>item.events)
       },
       checkMonth(){
-        const firstPart=["January",  "March",  "May", "July",  "September", "December"]
-        if(firstPart.includes(this.month)){
-          return this.rate[1]
+        const currentMonth=this.listMonth[new Date().getMonth()]
+        const currentCount=new Date().getMonth()
+        
+        if(!this.month){
+           return this.rate[currentCount]
         }else{
-          return this.rate[0]
-        }
+          const count= this.listMonth.indexOf(this.month)
+          return this.rate[count]
+        }  
+
+
+        // const count= this.listMonth.indexOf(this.month)
+        // return this.rate[count]
+        // const currentMonth= this.listMonth[new Date().getMonth()]
+        // console.log(currentMonth,'currentMonth') 
+        // let countMonth=new Date().getMonth()
+        // console.log(this.listMonth.indexOf(currentMonth), 'eto index')
+        // if(countMonth===this.listMonth.indexOf(currentMonth)){
+        //   return this.rate[countMonth]
+        // }else{
+        //   const count= this.listMonth.indexOf(currentMonth)
+        // return this.rate[count]
+        // }             
+        
+        
       },
       chechParticipant(){
-        const firstPart=["January",  "March",  "May", "July",  "September", "December"]
-        if(firstPart.includes(this.monthRete)){
-          return this.participants[1]
+        const currentMonth=this.listMonth[new Date().getMonth()]
+        const currentCount=new Date().getMonth()
+        console.log(this.monthRate,'eto rate')
+        if(!this.monthRate){
+           return this.participants[currentCount]
         }else{
-          return this.participants[0]
-        }
+          const count= this.listMonth.indexOf(this.monthRate)
+          return this.participants[count]
+        }       
       },
       getMeanМalue(){
-        const firstPart=["January",  "March",  "May", "July",  "September", "December"]
-        if(firstPart.includes(this.month)){
-          let meanValue=0
-          this.rate[1].forEach(item=>{meanValue=meanValue+item.currentValue*100/item.total})
-          this.rate[1].length
-          return meanValue/this.rate[1].length
-        }else{
-          let meanValue=0
-          this.rate[0].forEach(item=>{meanValue=meanValue+item.currentValue*100/item.total})
-          this.rate[0].length
-          return meanValue/this.rate[0].length
-        }
+       const count = this.listMonth.indexOf(this.month)       
+       if(count==-1){
+         return 0
+       }else{
+         let meanValue=0
+       this.rate[count].forEach(item=>{
+         if(item.currentValue&&item.total){
+           meanValue=meanValue+item.currentValue*100/item.total
+         }         
+         })         
+       this.rate[count].length
+       if(meanValue){
+          return meanValue/this.rate[count].length 
+       }else{
+         return 0
+       }
+           
+       }      
       },
       isMonthly(){
         return Boolean(this.from&&this.to&&this.startPeriod&&this.finishPeriod)
@@ -517,8 +600,18 @@
           return this.listMonth
         }
       },
+      getDurationForChart(){
+        const chart=this.charts.eventCostPerEmployeePerYearMonth
+        const duration=[]
+        for (let year in chart){
+        const y=year.split('_')
+        if(!duration.includes(y[0]))duration.push(y[0])
+        }
+        this.duration=duration
+        return duration
+      } ,
       getDataFromDuration(){
-        const duration=["2014", "2015", "2016", "2017", "2018", "2019"]
+        const duration=this.duration
         function filter(start, from ,finish, to, period){
           const startY=period.indexOf(start)
           const finishY= period.indexOf(finish)
@@ -580,7 +673,7 @@
       onSelect: function(items) {
         this.selected = items;
       },
-      onChange:function(value, name){
+      onChange:function(value, name){        
         this[name]=value
 
       },
@@ -597,11 +690,12 @@
       deleteBranch(item){
         this.$store.dispatch("user/deleteBranchToCompany",item)
       },
-      getMonthFromControl(month){
+      getMonthFromControl(month){        
         this.month=month
       }
       ,getMonthControlRate(month){
-        this.monthRete=month
+        
+        this.monthRate=month
       },
       onChangeFilterToEarly(){
         this.from=''
@@ -618,7 +712,6 @@
           let a = {}
           a[objName]=this[objName]
           a["id"]=obj.id
-
           this.$store.dispatch("user/putUserFromApi",a)
           this.formSwitcher=''
         }
@@ -634,8 +727,7 @@
         let _this = this;
 
         reader.onload = e => {
-          return new CustomerFile({customerFile: e.target.result}).save().then(result => {
-            //_this.uploadedImages.push({src: e.target.result, thumb: e.target.result, id: result.id});
+          return new CustomerFile({customerFile: e.target.result}).save().then(result => {            
             _this.customerLogoUrl = `${process.env.SERVER_URL}/1/customerFiles/${result.id}`
           })
             .catch((error) => {
@@ -648,25 +740,97 @@
         console.log('@')
         document.getElementById('company-avatar-upload').click()
       },
-      deleteAvatar(id){
-        console.log('delete')
+      deleteAvatar(id){        
         CustomerFile({id: e.target.result}).delete().then(result => {
           console.log(result)
-          // customer.logoFileId=e.target.result
-          // _this.uploadedImages.push({src: e.target.result, thumb: e.target.result, id: result.id});
-          // this.isImageShow = true;
-          // this.logo_name=file.name
-          // const newImage={
-          //   src:e.target.result,
-          //   thumb:e.target.result
-          // }
+         
         })
           .catch((error) => {
             console.log(error);
           });
-      }
+      },
+      getChartSatisfactionRate(){
+          const currentYear=new Date().getFullYear()
+          const months=this.listMonth
+          let listRete=null
+          if(this.charts.satisfactionRatesPerYearMonth){
+            const chart=this.charts.satisfactionRatesPerYearMonth
+            let filterYear=null           
+             for(let key in chart){               
+              if(key==currentYear){                
+                filterYear=chart[key]                
+              }              
+          }    
+              
+           listRete= months.map((item,index)=>{
+            const currentObj=[]
+            for(let month in filterYear){                     
+             if((month-1)===index){
+                const categori=filterYear[month]
+                 for(let key in categori){                   
+                     const obj={}
+                     obj['category']=key
+                     obj['total']='100'
+                     obj['currentValue']=String(categori[key])
+                     currentObj.push(obj)
+                 }
+             }else{
+               const a = {category:'N/D',total:'0',currentValue:'0'}
+               currentObj.push(a)
+               }
+             }
+             
+             return currentObj
+          
+          })        
+          }          
+           this.rate=listRete
+           return listRete
+        },
+        getChartParticipantsPerEvent(){
+          // {typeEvent:'Comapany Trainig', eventDate:'August 19,2018', total:'324',currentValue:'23'}
+          const currentYear=new Date().getFullYear()
+          const months=this.listMonth
+          let listRete=null
+          if(this.charts.participantsPerEventPerYearMonthEventType){
+            const chart=this.charts.participantsPerEventPerYearMonthEventType
+            
+            let filterYear=null           
+             for(let key in chart){               
+              if(key==currentYear){                
+                filterYear=chart[key]                
+              }              
+          }    
+            
+           listRete= months.map((item,index)=>{
+            const currentObj=[]
+            for(let month in filterYear){                     
+             if((month-1)===index){
+                const categori=filterYear[month]                
+                 for(let key in categori){                                    
+                     const obj={}
+                     obj['typeEvent']=key
+                     obj['total']=String(categori[key].Invited)
+                     obj['currentValue']=String(categori[key].Actual)
+                     currentObj.push(obj)
+                 }
+             }else{
+               const a = {category:'N/D',total:'0',currentValue:'0'}
+               currentObj.push(a)
+               }
+             }
+            
+             return currentObj
+          
+          })        
+          }         
+           
+           return listRete
+        } 
+ 
 
-    }
+    }, 
+       
   };
 </script>
 <style lang='scss'>

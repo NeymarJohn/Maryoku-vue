@@ -37,16 +37,25 @@
             leftIndicatorStyle:String,
             rightIndicatorStyle:String,
             isRate:Boolean,
-            eventDate:String,
+            eventDate:{type:String, default:''},
             typeEvent:String,
             categoryEvent:String
         },
         computed:{
-             leftWidth(){                
-                 return this.currentValue*100/this.total
+             leftWidth(){                  
+                     if(this.currentValue*100/this.total){
+                         return this.currentValue*100/this.total
+                     }else{
+                         return 0
+                     }         
              },
-             rightWidth(){                 
-                 return 100-this.currentValue*100/this.total
+             rightWidth(){
+                  if(this.currentValue&&this.total){
+                     return 100-this.currentValue*100/this.total
+                 }else{
+                     return 100
+                 }                          
+                 
              }
         }
         ,

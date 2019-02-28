@@ -12,8 +12,7 @@
         @change='changeFunc($event,name)'
         @:keyup.enter='autoSubmit($event,name)'
         :name='name'
-        :disabled='disabled'        
-       ></md-input> 
+        :disabled='disabled'></md-input>       
     <span v-if='!editebleMode' key='input-noeditable' class='md-error'>{{isErrors?'Required':''}}</span>
     <span v-if='editebleMode' class="md-suffix" key='input-editable' style="display: inline-block; white-space: nowrap;">
        <md-button @click.prevent="makeAction" v-show="isEditable" class="md-simple md-just-icon md-round md-sm md-success" style="padding: 0; margin: 0; text-align: right;"><md-icon>check</md-icon></md-button>
@@ -31,7 +30,10 @@
         },
         data(){
             return{
-                isEditable:false
+                isEditable:false,
+                vm:{
+                  searchPlace:''
+                }
             }
         }        
         ,
@@ -58,10 +60,12 @@
             count:Boolean,
             editebleMode:Boolean,
             actionFunc:Function,
-            ctx:Object
+            ctx:Object,
+            googleSearch:Boolean
         },
         methods: {
-          triggerFunc:function(value,name,count){              
+          triggerFunc:function(value,name,count){
+            console.log(this.id)                       
               if(this.onChange){
                  this.onChange(value,name,count) 
               }                                      
@@ -133,6 +137,9 @@
 }
 .button-height{
       height: 20px;
+}
+.hidden-input{
+  display: none;
 }      
 </style>
 
