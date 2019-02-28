@@ -78,7 +78,6 @@ const state={
     branches: [],
     files: [],
   }
-  ,charts:[]
 }
 
 //getters
@@ -91,13 +90,15 @@ const getters={
   },
   getCustomer:(state)=>{
     return state.customer
-  },
-  getChartStatistics:(state)=>state.charts  
+  }
 }
 
 //actions
 const actions={
    getUserFromApi({commit,state}, data){
+
+
+
             Me.get()
             .then(res=>{
                 commit("setUser" , res[0])
@@ -108,7 +109,10 @@ const actions={
             }
 
             )
-            .catch(e=>console.log(e))        
+            .catch(e=>console.log(e))
+
+
+        //  commit("setUser" , data)
     },
     async getIndustry({commit,state}){
         Industry
@@ -197,13 +201,6 @@ const actions={
             .catch(e=>console.log(e,'false customer'))
 
     }
-    ,getChartsFromApi({commit,state},id){
-      new Customer({id: id})
-      .statistics()
-      .get()
-      .then(res=>commit('setCustomerChart',res[0]))
-      .catch(e=>console.log(e,'chart api errors'))
-    }
 
 }
 
@@ -225,9 +222,6 @@ const mutations= {
     deleteBranch(state,branch){
         const newBranch=state.company.branches.filter(item=>item!==branch)
         state.company.branches=newBranch
-    },
-    setCustomerChart(state,charts){
-    state.charts=charts
     }
 }
 

@@ -3,7 +3,15 @@
     <div class="md-layout">
         <modal v-if="inviteModalOpen" @close="noticeModalHide" container-class="modal-container">
             <template slot="header" class="header-position">
-                <h3 class="title">{{ modalTitle }}</h3>
+                <div class="md-layout" style="text-align:center">
+                    <div class="md-layout-item md-size-100">
+                      <h3 class="title color-success">{{ modalTitle }}</h3>
+                    </div>
+                    <div v-show="!this.editMode" class="md-layout-item md-size-80 md-small-size-100 mx-auto">
+                       <span class="md-subheading">Type in comma separated list of emails, then choose a role and permission to invite members of your team</span>
+                    </div>
+                </div>
+
                 <button class="btn-position" @click="closeModal">X</button>
             </template>
             <template slot="body">
@@ -53,8 +61,8 @@
                             <!--</md-field>-->
                         </div>
                         </div>
-                        <div class="md-layout-item md-size-95 md-small-size-100">
-                            <md-field :class="[
+                        <div class="md-layout-item md-size-95 md-small-size-100 mb25">
+                            <md-field class="height-auto" :class="[
                           {'md-valid': !errors.has('email') && touched.email},
                           {'md-error': errors.has('email')}]">
                                 <label>Email</label>
@@ -65,7 +73,7 @@
                                         type="email"
                                         name="email"
                                         required
-                                        md-autogrow
+                                        rows="3"
                                         v-validate="modelValidations.email">
                                 </md-textarea>
                                 <md-input
@@ -83,8 +91,10 @@
                                 <slide-y-down-transition>
                                     <md-icon class="success" v-show="!errors.has('email') && touched.email">done</md-icon>
                                 </slide-y-down-transition>
+
+                                <span class="md-error" v-if="errors.has('email')">{{ errors.first('email') }}</span>
                             </md-field>
-                        </div>
+                        </div> 
 
                         <div class="md-layout-item md-size-95 md-small-size-100">
                             <md-field :class="[
@@ -109,6 +119,7 @@
                                 <slide-y-down-transition>
                                     <md-icon class="success" v-show="!errors.has('role') && touched.role">done</md-icon>
                                 </slide-y-down-transition>
+                                <span class="md-error" v-if="errors.has('role')">{{ errors.first('role') }}</span>
                             </md-field>
                         </div>
                         <div class="md-layout-item md-size-95 md-small-size-100">
@@ -137,6 +148,7 @@
                                 <slide-y-down-transition>
                                     <md-icon class="success" v-show="!errors.has('permissions') && touched.permissions">done</md-icon>
                                 </slide-y-down-transition>
+                                <span class="md-error" v-if="errors.has('permissions')">{{ errors.first('permissions') }}</span>
                             </md-field>
                         </div>
                     </div>
@@ -152,6 +164,7 @@
 </template>
 
 <script>
+    import auth from '@/auth';
     import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
     import {Modal, SimpleWizard, WizardTab} from "@/components";
     import swal from "sweetalert2";
@@ -175,6 +188,7 @@
         },
         data() {
             return {
+              auth:auth,
               greenSuccess: false,
               touched: {
 //                firstName: false,
@@ -327,16 +341,16 @@
                           member = {};
                           this.$emit('membersRefresh');
                           this.resetForm();
-
-                          this.$notify(
-                            {
-                              message: 'Team member invited successfully!',
-                              horizontalAlign: 'center',
-                              verticalAlign: 'top',
-                              type: 'success'
-                            });
                         });
                       }
+                    });
+
+                    this.$notify(
+                    {
+                      message: 'Team member invited successfully!',
+                      horizontalAlign: 'center',
+                      verticalAlign: 'top',
+                      type: 'success'
                     });
                   });
                 }
@@ -347,7 +361,7 @@
               });
             },
          async updateTeamMember() {
-           let team = new Teams(this.user.auth.defaultGroupId);
+           let team = new Teams({id: this.auth.user.defaultGroupId});
            let member = await team.members().find(this.editMode);
 
            member.emailAddress = this.teamMemberData.emailAddress;
@@ -392,6 +406,25 @@
     };
 </script>
 <style lang="scss">
+  .mt-0 {
+    margin-top: 0;
+  }
+  .md-field.md-has-textarea.height-auto:not(.md-autogrow) .md-textarea {
+    height: auto;
+    min-height: auto;
+  }
+  .md-field.md-has-textarea.height-auto:not(.md-autogrow):after,
+  .md-field.md-has-textarea.height-auto:not(.md-autogrow):before {
+      height: 1px;
+      top: auto;
+      bottom: 10px;
+  }
+  .mb25 {
+    margin-bottom: 25px;
+  }
+  .modal-header .color-success {
+      color: #42b983;
+  }
     .btn-position{
         position: absolute;
         right: 15px;

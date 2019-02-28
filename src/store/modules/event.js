@@ -1,57 +1,58 @@
+import Calendar from '@/models/Calendar';
+import Currency from '@/models/Currency';
+
 const state = {
     currentUser: {
 
     },
     param1: "test param",
-    eventData: {
+    eventData: {      
       id: null,
-      calendar: {id: null},
-      title: null,
-      eventStartMillis: null,
-      eventEndMillis: null,
+      occasion: "",
+      occasionCache: "",
+      title: "New Event",
+      date: null,
+      time: "",
+      duration: "",
+      numberOfParticipants: "",
+      status: "draft",
+      totalBudget: "",
+      currency: "",
       eventType: null,
-      numberOfParticipants: null,
-      totalBudget: null,
-      status: null,
+      category: null,
       components: null,
     },
     componentsList: null,
     vendorsList: null,
-    currenciesArray: null,
+    currencies: [],
     caregoriesArray: null,
     eventTypes: null,
     calendarId: null,
 }
 
 const getters = {
-    // getEventData() {
-    //     return state.eventData;
-    // },
-    // getComponentsList() {
-    //   return state.componentsList;
-    // },
-    // getVendorsList() {
-    //   return state.vendorsList;
-    // },
-    // getCurrenciesArray() {
-    //   return state.currenciesArray;
-    // },
-    // getCalendarId() {
-    //   return state.calendarId;
-    // },
-    // getCalendarId() {
-    //   return state.param1;
-    // },
-    // getCurrentUser() {
-    //   return state.currentUser;
-    // }
+  getCurrenciesList:(state)=>{
+    return state.currencies;
+  },
 }
 
 const actions = {
-
+  async getCurrencies({commit,state}){
+    Currency
+      .get()
+      .then(res=>{
+          commit("setCurrencies" , res)
+      })
+      .catch(e=>{
+          commit("setCurrencies" , [])
+      })
+  },
 }
 
 const mutations = {
+      setCurrencies(state,currencies){
+        state.currencies = currencies
+      },
       updateEventData(state, params) {
         state.eventData.components[params.index] = params.data;
       },
@@ -66,7 +67,7 @@ const mutations = {
       },
       setCurrentUserData(state, data){
         state.currentUser = data;
-      }
+      },
 }
 
 export default {
