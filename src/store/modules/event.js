@@ -43,7 +43,7 @@ const getters = {
 }
 
 const actions = {
-  async getCurrencies({commit,state}){
+  getCurrencies({commit,state}){
     Currency
       .get()
       .then(res=>{
@@ -53,7 +53,7 @@ const actions = {
           commit("setCurrencies" , [])
       })
   },
-  async getCategories({commit,state}, data){
+  getCategories({commit,state}, data){
     let _calendar = new Calendar({id: data});
     _calendar.categories().get().then(res => {
         commit("setCategories" , res)
@@ -62,7 +62,7 @@ const actions = {
       commit("setCategories" , [])
     });
   },
-  async getEventTypes({commit,state}, data){
+  getEventTypes({commit,state}, data){
     let _calendar = new Calendar({id: data});
     _calendar.eventTypes().get().then(res => {
         commit("setEventTypes" , res)

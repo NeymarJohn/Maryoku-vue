@@ -110,7 +110,7 @@
         main block
         </div>
         <div class="md-layout-item md-size-25">
-              <md-button class='button-event-creatig'>
+              <md-button class='button-event-creatig' @click="openEventModal()">
                 Create New Event
             </md-button>
         </div>       
@@ -124,7 +124,11 @@
          <div>
          <p>{{`&copy; ${new Date().getFullYear()}`}} <span class='copyright'>Creative Tim</span>{{`, made with love for a better web`}}</p>
          </div>   
-        </div>  
+        </div>
+        <event-modal
+              @refresh-events="refreshEvents"
+              ref="eventModal">
+      </event-modal>  
   </div>
 </template>
 
@@ -134,19 +138,20 @@ import ChartComponent from '@/components/Cards/ChartComponent';
 import auth from '@/auth';
 import moment from 'moment';
 import VueElementLoading from 'vue-element-loading';
+import {mapMutations} from 'vuex';
 
 //COMPONENTS
 import {AnimatedNumber} from "@/components";
 import Icon from '@/components/Icon/Icon.vue'
-
-
+import EventModal from './EventModal/';
 
   export default {
     components: {
       VueElementLoading,
       ChartComponent,
       AnimatedNumber,
-      Icon
+      Icon,
+      EventModal
     },
 
     data() {
@@ -174,6 +179,18 @@ import Icon from '@/components/Icon/Icon.vue'
           }
         }
       },
+    },
+    methods: {
+     ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'setEditMode', 'setModalSubmitTitle', 'setEventModalAndEventData', 'setEventDate', 'setNumberOfParticipants']),
+     openEventModal() {
+        this.setEventModal({ showModal: true });
+        this.setModalSubmitTitle('Save');
+        this.setEditMode({ editMode: false });
+        this.setNumberOfParticipants({numberOfParticipants: this.auth.user.customer.numberOfEmployees});
+      },
+      refreshEvents() {
+        
+      }
     },
   }
 
