@@ -28,7 +28,7 @@
                 </div>
               </div>
             </div>
-          <div>
+            <div>
 
               <div class="md-layout-item md-size-100">
                 <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
@@ -109,7 +109,7 @@
       </md-card>
     </div>
     <div class="md-layout-item md-size-75 block-flex">
-      <event-blocks></event-blocks>
+
     </div>
     <div class="md-layout-item md-size-100 block-flex copyright-block">
       <div>
@@ -142,15 +142,13 @@ import CalendarEvent from '@/models/CalendarEvent';
 //COMPONENTS
 import { AnimatedNumber } from "@/components";
 import Icon from "@/components/Icon/Icon.vue";
-import EventBlocks from "./components/EventBlocks";
 
 export default {
   components: {
     VueElementLoading,
     ChartComponent,
     AnimatedNumber,
-    Icon,
-    EventBlocks,
+    Icon
   },
 
   data() {
@@ -171,7 +169,6 @@ export default {
   },
   mounted() {
     this.getEvent();
-    this.$store.dispatch("event/getComponents");
   },
   methods: {
     getEvent() {

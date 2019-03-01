@@ -377,7 +377,9 @@
             }
           }
 
-        },      
+        },
+        participants:[],
+        rate:[],      
         branch_address:'',
         showSearch:false,
         showFilter:false,       
@@ -535,8 +537,7 @@
       },
       chechParticipant(){
         const currentCount=new Date().getMonth()
-        const currentMonth=this.listMonth[currentCount]
-        console.log(this.participants,currentCount,'chechParticipant')
+        const currentMonth=this.listMonth[currentCount]        
         if(!this.monthRate){         
             return this.participants[currentCount]          
         }else{
