@@ -40,45 +40,10 @@ const mockCompany={
 
 
 const state={
-  user:{
-    id: "...",
-  username: "...",
-  emailAddress: "...",
-  firstName: "...",
-  lastName: "...",
-  displayName: "...",
-  pictureUrl: "...",
-  locale: "...",
-  location: null,
-  role: null,
-  permissions: null,
-  onboarded: false,
-  onboardingPath: "OM",
-  phoneNumberCountryCode: null,
-  phoneNumber: null,
-  birthday: null,
-  companyStartDate: null,
-  importantDates: [
-
-  ],
-  defaultGroupId: "",
-  defaultCalendarId: "",
-  },
+  user:{},
   industry:[],
-  customer:{
-    id: "",
-    name: "example inc",
-    workspaceDomain: "example.262days.com",
-    onboarded: false,
-    mainAddress: null,
-    numberOnEmployees: 0,
-    industry: null,
-    website: "www.example.com",
-    logoFileId:"" ,
-    branches: [],
-    files: [],
-  }
-  ,charts:{}
+  customer:{},
+  charts:{}
 }
 
 //getters

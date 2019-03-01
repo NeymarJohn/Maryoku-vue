@@ -109,23 +109,9 @@
       </md-card>
     </div>
     <div class="md-layout-item md-size-75 block-flex">
-      <event-blocks></event-blocks>
-    </div>
-    <div class="md-layout-item md-size-100 block-flex copyright-block">
-      <div>
-        <md-button
-          class="footer-link-button"
-          v-for="(item, index) in footerLink"
-          :key="index"
-        >{{item.title}}</md-button>
-      </div>
-      <div>
-        <p>
-          {{`&copy; ${new Date().getFullYear()}`}}
-          <span class="copyright">Creative Tim</span>
-          {{`, made with love for a better web`}}
-        </p>
-      </div>
+      <EventElements/>
+      
+    </div>   
     </div>
   </div>
 </template>
@@ -142,7 +128,9 @@ import CalendarEvent from '@/models/CalendarEvent';
 //COMPONENTS
 import { AnimatedNumber } from "@/components";
 import Icon from "@/components/Icon/Icon.vue";
+import EventElements from './EventElements.vue'
 import EventBlocks from "./components/EventBlocks";
+
 
 export default {
   components: {
@@ -150,7 +138,9 @@ export default {
     ChartComponent,
     AnimatedNumber,
     Icon,
+    EventElements,
     EventBlocks,
+
   },
 
   data() {
@@ -160,13 +150,7 @@ export default {
       percentage: 0,
       totalRemainingBudget: 0,
       seriesData: [],
-      isLoading: false,
-      footerLink: [
-        { title: "HOME" },
-        { title: "COMPANY" },
-        { title: "PORTFOLIO" },
-        { title: "BLOG" }
-      ]
+      isLoading: false      
     };
   },
   mounted() {
