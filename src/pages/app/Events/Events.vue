@@ -111,6 +111,13 @@
     },
     mounted() {
       this.$store.state.calendarId = this.auth.user.defaultCalendarId;
+      
+      this.auth.currentUser(this, true, function() {
+        this.$store.dispatch("event/getCategories", this.auth.user.defaultCalendarId);
+        this.$store.dispatch("event/getEventTypes", this.auth.user.defaultCalendarId);
+        this.$store.dispatch("event/getCurrencies");
+      }.bind(this))
+      
       this.getCalendarEvents();
     },
     data() {

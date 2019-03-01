@@ -81,9 +81,6 @@
       calendarEvents: {
         type: Object
       },
-      categoriesArray: {
-        type: Array
-      },
     },
     data() {
       return {
@@ -112,12 +109,14 @@
         this.setEventModalAndEventData({showModal: show, eventData: item});
       },
       colorWithCategory(category) {
-        let filterCategories = this.categoriesArray.filter(c => c.item === category);
+        let filterCategories = this.categories.filter(c => c.item === category);
         return filterCategories[0] != null ? `${filterCategories[0].color}!important;` : '';
       }
     },
     computed: {
-
+      ...mapGetters({
+        categories: 'event/getCategoriesList',
+      }),
     },
     watch: {
       calendarEvents(oldValue, newValue) {
