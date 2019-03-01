@@ -70,18 +70,18 @@
         selectedComponents(id) {
           return this.componentsData.includes(id);
         },
-      async updateEvent(){
-        let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-        let event = await _calendar.calendarEvents().find(this.eventId);
-        
-       // event.components = this.componentsData;
+        async updateEvent(){
+            let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = await _calendar.calendarEvents().find(this.eventId);
+            
+        // event.components = this.componentsData;
 
-        await event.for(_calendar).save().then(result => {
+            await event.for(_calendar).save().then(result => {
 
-        }).catch(error => {
-              console.log(error)
-        });
-      },        
+            }).catch(error => {
+                console.log(error)
+            });
+        },        
     },
     created() {
       console.log(this.components)
