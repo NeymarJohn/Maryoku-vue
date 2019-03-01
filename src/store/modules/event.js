@@ -1,6 +1,7 @@
 import Calendar from '@/models/Calendar';
 import Currency from '@/models/Currency';
 import EventTheme from '@/models/EventTheme'
+import EventComponent from '@/models/EventComponent';
 
 const state = {
     currentUser: {
@@ -23,7 +24,7 @@ const state = {
       category: null,
       components: null,
     },
-    componentsList: null,
+    components: null,
     vendorsList: null,
     currencies: [],
     categories: [],
@@ -44,11 +45,14 @@ const getters = {
   },
   getEventThemesList:(state)=>{
     return state.eventThemes;
+  },
+  getComponentsList:(state)=>{
+    return state.components;
   }
 }
 
 const actions = {
-  getEventThemes({commit,state}){
+  async getEventThemes({commit,state}){
     EventTheme
       .get()
       .then(res=>{
@@ -58,7 +62,7 @@ const actions = {
           commit("setEventThemes" , [])
       })
   },
-  getCurrencies({commit,state}){
+  async getCurrencies({commit,state}){
     Currency
       .get()
       .then(res=>{
@@ -68,7 +72,7 @@ const actions = {
           commit("setCurrencies" , [])
       })
   },
-  getCategories({commit,state}, data){
+  async getCategories({commit,state}, data){
     let _calendar = new Calendar({id: data});
     _calendar.categories().get().then(res => {
         commit("setCategories" , res)
@@ -77,7 +81,7 @@ const actions = {
       commit("setCategories" , [])
     });
   },
-  getEventTypes({commit,state}, data){
+  async getEventTypes({commit,state}, data){
     let _calendar = new Calendar({id: data});
     _calendar.eventTypes().get().then(res => {
         commit("setEventTypes" , res)
@@ -86,6 +90,16 @@ const actions = {
       commit("setEventTypes" , [])
     });
   },
+  async getComponents({commit,state}, data){
+    EventComponent
+      .get()
+      .then(res=>{
+          commit("setComponents" , res)
+      })
+      .catch(e=>{
+          commit("setComponents" , [])
+      })
+  },  
 }
 
 const mutations = {
@@ -100,6 +114,9 @@ const mutations = {
       },
       setEventThemes(state,eventThemes){
         state.eventThemes = eventThemes
+      },
+      setComponents(state,components){
+        state.components = components
       },
       updateEventData(state, params) {
         state.eventData.components[params.index] = params.data;

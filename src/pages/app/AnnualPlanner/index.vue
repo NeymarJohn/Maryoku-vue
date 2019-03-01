@@ -71,14 +71,17 @@
       this.ready = false;
       this.isLoading = true;
 
-      this.$store.dispatch("event/getCategories", this.auth.user.defaultCalendarId);
-      this.$store.dispatch("event/getEventTypes", this.auth.user.defaultCalendarId);
-      this.$store.dispatch("event/getCurrencies");
+      if (this.categories.length == 0 || this.eventTypes.length == 0 || this.currencies.length == 0) {
+        this.auth.currentUser(this, true, function() {
+          this.$store.dispatch("event/getCategories", this.auth.user.defaultCalendarId);
+          this.$store.dispatch("event/getEventTypes", this.auth.user.defaultCalendarId);
+          this.$store.dispatch("event/getCurrencies");
+        }.bind(this))
+      }
     },
     methods: {
       monthCount() {
         this.auth.currentUser(this, true, function() {
-
           Calendar.params({year: this.$route.params.year}).find(this.auth.user.defaultCalendarId).then(function(calendar){
             this.firstDayOfTheWeek = calendar.firstDayOfWeek;
             this.monthCounts = calendar.monthCounts;
@@ -132,6 +135,11 @@
     },
     computed: {
       ...mapState('AnnualPlannerVuex', ['filtersData']),
+            ...mapGetters({
+        categories: 'event/getCategoriesList',
+        currencies: 'event/getCurrenciesList',
+        eventTypes: 'event/getEventTypesList'
+      }),
     },
     watch: {
       '$route' (to, from) {
