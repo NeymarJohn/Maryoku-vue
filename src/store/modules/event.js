@@ -24,7 +24,7 @@ const state = {
       category: null,
       components: null,
     },
-    components: [],
+    components: null,
     vendorsList: null,
     currencies: [],
     categories: [],

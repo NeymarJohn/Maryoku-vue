@@ -13,19 +13,19 @@
         <md-card-content>
           <div class="control-main-block">
               <div class="company-control-logo">
-                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default">
-                    <md-icon>create</md-icon>
-                  </md-button>
+                <div class="company-logo-block">
+                  <md-icon class="company-logo">create</md-icon>
+                </div>
               </div>
               <div class="company-control-logo">
-                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default">
-                    <md-icon class="company-logo">sms</md-icon>
-                  </md-button>
+                <div class="company-logo-block">
+                  <md-icon class="company-logo">sms</md-icon>
+                </div>
               </div>
               <div class="company-control-logo">
-                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default">
-                    <md-icon class="company-logo">person</md-icon>
-                  </md-button>
+                <div class="company-logo-block">
+                  <md-icon class="company-logo">person</md-icon>
+                </div>
               </div>
             </div>
           <div>
@@ -108,24 +108,9 @@
         </md-card-content>
       </md-card>
     </div>
-    <div class="md-layout-item md-size-70 block-flex">
-      <event-blocks :event-id="eventId" :event-components="selectedComponents"></event-blocks>
-    </div>
-    <div class="md-layout-item md-size-100 block-flex copyright-block">
-      <div>
-        <md-button
-          class="footer-link-button"
-          v-for="(item, index) in footerLink"
-          :key="index"
-        >{{item.title}}</md-button>
-      </div>
-      <div>
-        <p>
-          {{`&copy; ${new Date().getFullYear()}`}}
-          <span class="copyright">Creative Tim</span>
-          {{`, made with love for a better web`}}
-        </p>
-      </div>
+    <div class="md-layout-item md-size-75 block-flex">
+      <event-blocks></event-blocks>
+    </div>   
     </div>
   </div>
 </template>
@@ -138,12 +123,13 @@ import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import Calendar from '@/models/Calendar';
 import CalendarEvent from '@/models/CalendarEvent';
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
 
 //COMPONENTS
 import { AnimatedNumber } from "@/components";
 import Icon from "@/components/Icon/Icon.vue";
+import EventElements from './EventElements.vue'
 import EventBlocks from "./components/EventBlocks";
+
 
 export default {
   components: {
@@ -151,32 +137,24 @@ export default {
     ChartComponent,
     AnimatedNumber,
     Icon,
+    EventElements,
     EventBlocks,
+
   },
 
   data() {
     return {
       auth: auth,
       calendarEvent: {},
-      selectedComponents: [],
-      eventId: null,
       percentage: 0,
       totalRemainingBudget: 0,
       seriesData: [],
-      isLoading: false,
-      footerLink: [
-        { title: "HOME" },
-        { title: "COMPANY" },
-        { title: "PORTFOLIO" },
-        { title: "BLOG" }
-      ]
+      isLoading: false      
     };
   },
   mounted() {
     this.getEvent();
-    if (this.components.length === 0) {
-      this.$store.dispatch("event/getComponents");
-    }
+    this.$store.dispatch("event/getComponents");
   },
   methods: {
     getEvent() {
@@ -184,9 +162,7 @@ export default {
             let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
             _calendar.calendarEvents().find(this.$route.params.id).then(event => {
-                this.eventId = event.id;
-                this.calendarEvent = event;
-                this.selectedComponents = event.components;
+                this.calendarEvent = event;              
                 this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
                 this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
                 this.seriesData = [(100 - this.percentage), this.percentage];
@@ -195,9 +171,6 @@ export default {
     }, 
   },
   computed: {
-    ...mapGetters({
-      components: "event/getComponentsList"
-    }),
     pieChart() {
       return {
         data: {
@@ -234,9 +207,6 @@ export default {
 //   margin-right: -20px;
 //   margin-left: -20px;
 // }
-.company-control-logo .md-button{
-      border: 2px solid #959595;
-}
 .percentage {
   padding-bottom: 8px;
   padding-left: 5px;
