@@ -337,15 +337,10 @@
       "select-common":Select,
       LineChart
     },
-    created(){
-      this.$store.dispatch("user/getUserFromApi") 
-      console.log() 
-    }
-    ,
      mounted(){
        const options = {          
           types: ['geocode']
-        }         
+        }
        this.rate=this.getChartSatisfactionRate()
        this.participants=this.getChartParticipantsPerEvent()
       const inputMainAddress = document.getElementById('main_address_customer')      
@@ -353,6 +348,7 @@
       const autocomplete2 = new google.maps.places.Autocomplete(inputBranch, options)      
       const autocomplete1 = new google.maps.places.Autocomplete(inputMainAddress, options)
       this.$store.dispatch("user/getIndustry");     
+            
       this.auth.currentUser(this, true, () => {
         this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';
       });
@@ -381,9 +377,7 @@
             }
           }
 
-        },
-        participants:[],
-        rate:[],      
+        },      
         branch_address:'',
         showSearch:false,
         showFilter:false,       
@@ -541,8 +535,8 @@
       },
       chechParticipant(){
         const currentCount=new Date().getMonth()
-        const currentMonth=this.listMonth[currentCount]       
-
+        const currentMonth=this.listMonth[currentCount]
+        console.log(this.participants,currentCount,'chechParticipant')
         if(!this.monthRate){         
             return this.participants[currentCount]          
         }else{
