@@ -14,7 +14,7 @@
                 id="category"
                 name="category"
                 @md-selected="filtersChanged" multiple>
-                <md-option v-for="category in categories" :key="category.item" :value="category.item" >{{category.item}}</md-option>
+                <md-option v-for="category in categoriesOptions" :key="category.item" :value="category.item" >{{category.item}}</md-option>
               </md-select>
             </md-field>
           </div>
@@ -22,6 +22,7 @@
             <md-field>
               <label for="countries">Countries</label>
               <md-select
+
                 v-model="selectedCountries"
                 data-vv-name="countries"
                 id="countries"
@@ -44,7 +45,7 @@
             </md-field>
           </div>
           <div class="md-layout-item md-size-10" style="text-align: center; margin-top: auto; margin-bottom: auto;">
-            <md-button class="md-info md-md" @click="filterBaseData">Refresh</md-button>
+            <md-button class="md-info md-md" @click="$emit('filters-changed-event')">Refresh</md-button>
           </div>
         </div>
 
@@ -71,6 +72,9 @@
       year: {
         type: Number
       },
+      categoriesOptions: {
+        type: Array
+      },
     },
     data() {
 
@@ -80,6 +84,7 @@
         isLoading: true,
         eventTypes: [],
         selectedCategories: [],
+        categories: [],        
         countries: [],
         selectedCountries: [],
         holidays: [],
@@ -93,6 +98,13 @@
     mounted(){
       this.ready = true;
       this.isLoading = false;
+
+      const filtersData = this.$store.state.AnnualPlannerVuex.filtersData;
+      filtersData.year = this.year;
+      filtersData.month = this.month;
+      filtersData.eventTypes = this.selectedEventTypes;
+      filtersData.countries = this.selectedCountries;
+      filtersData.holidays = this.selectedHolidays;
 
       this.filterBaseData();
     },
@@ -116,34 +128,35 @@
             this.selectedHolidays = this.holidays.map(function(entry){ return entry.item;});
           });
 
-          this.categories.forEach(element => {
-              this.selectedCategories.push(element.item)
-          });
+          if (this.categoriesOptions) {
+            let categoriesMap = []
+
+            this.categoriesOptions.forEach(element => {
+                categoriesMap.push(element.item)
+            });
+
+            this.selectedCategories = categoriesMap;
+          }
 
           this.$emit("filters-changed-event", {categories: this.selectedCategories, countries: this.selectedCountries, holidays: this.selectedHolidays});
         }.bind(this));
       },
       filtersChanged() {
-        if (this.isLoading == false) {
-          const filtersData = this.$store.state.AnnualPlannerVuex.filtersData;
-          filtersData.year = this.year;
-          filtersData.month = this.month;
-          filtersData.categories = this.selectedCategories;
-          filtersData.countries = this.selectedCountries;
-          filtersData.holidays = this.selectedHolidays;
+        const filtersData = this.$store.state.AnnualPlannerVuex.filtersData;
+        filtersData.year = this.year;
+        filtersData.month = this.month;
+        filtersData.categories = this.selectedCategories;
+        filtersData.countries = this.selectedCountries;
+        filtersData.holidays = this.selectedHolidays;
 
-          this.$emit('filters-changed-event', {categories: this.selectedCategories, countries: this.selectedCountries, holidays: this.selectedHolidays});
-        }
+        this.$emit('filters-changed-event', {categories: this.selectedCategories, countries: this.selectedCountries, holidays: this.selectedHolidays});
       },
     },
     computed: {
       ...mapState('AnnualPlannerVuex', ['filtersData']),
-      ...mapGetters({
-        categories: 'event/getCategoriesList',
-      }),
     },
     watch: {
-      categories(newVal, oldVal) {
+      categoriesOptions(newVal, oldVal) {
         this.filterBaseData()
       }
     }

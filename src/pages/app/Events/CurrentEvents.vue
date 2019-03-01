@@ -28,7 +28,7 @@
                 </div>
               </div>
             </div>
-          <div>
+            <div>
 
               <div class="md-layout-item md-size-100">
                 <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
@@ -109,23 +109,9 @@
       </md-card>
     </div>
     <div class="md-layout-item md-size-75 block-flex">
-      <event-blocks></event-blocks>
+      <EventElements/>
     </div>
-    <div class="md-layout-item md-size-100 block-flex copyright-block">
-      <div>
-        <md-button
-          class="footer-link-button"
-          v-for="(item, index) in footerLink"
-          :key="index"
-        >{{item.title}}</md-button>
-      </div>
-      <div>
-        <p>
-          {{`&copy; ${new Date().getFullYear()}`}}
-          <span class="copyright">Creative Tim</span>
-          {{`, made with love for a better web`}}
-        </p>
-      </div>
+   
     </div>
   </div>
 </template>
@@ -142,7 +128,7 @@ import CalendarEvent from '@/models/CalendarEvent';
 //COMPONENTS
 import { AnimatedNumber } from "@/components";
 import Icon from "@/components/Icon/Icon.vue";
-import EventBlocks from "./components/EventBlocks";
+import EventElements from './EventElements.vue'
 
 export default {
   components: {
@@ -150,7 +136,7 @@ export default {
     ChartComponent,
     AnimatedNumber,
     Icon,
-    EventBlocks,
+    EventElements
   },
 
   data() {
@@ -160,18 +146,11 @@ export default {
       percentage: 0,
       totalRemainingBudget: 0,
       seriesData: [],
-      isLoading: false,
-      footerLink: [
-        { title: "HOME" },
-        { title: "COMPANY" },
-        { title: "PORTFOLIO" },
-        { title: "BLOG" }
-      ]
+      isLoading: false      
     };
   },
   mounted() {
     this.getEvent();
-    this.$store.dispatch("event/getComponents");
   },
   methods: {
     getEvent() {

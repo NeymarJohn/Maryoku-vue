@@ -7,7 +7,7 @@
           <table style="width: 100%; height: 100%;">
             <tr>
               <td style="width: 80%;min-width: 80%;max-width: 80%;padding-right: 15px;" colspan="2">
-                <filters-panel @filters-changed-event="refreshEvents"></filters-panel>
+                <filters-panel @filters-changed-event="refreshEvents" :categories-options="this.categories"></filters-panel>
               </td>
               <td style="width: 20%;min-width: 20%;max-width: 20%; padding-left: 15px;">
                 <md-button class="md-success" @click="openEventModal()" style="width: 100%; height: 100%; margin-left: -6px; margin-top: 5px; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
@@ -88,7 +88,7 @@
                 <table style="width: 100%; height: 100%;">
                   <tr style="height: 95%;">
                     <td>
-                      <month-events-panel :calendar-events="calendarEvents"></month-events-panel>
+                      <month-events-panel :calendar-events="calendarEvents" :categories-array="categories"></month-events-panel>
                     </td>
                   </tr>
                   <tr style="height: 5%;">
@@ -193,6 +193,11 @@
       this.isLoading = true;
       this.weekDays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
       this.selectYearMonth(this.year, this.month);
+      console.log('@@@')
+      this.$store.dispatch("user/getUserFromApi");  
+       
+      // this.$store.dispatch("user/getChartsFromApi",this.customer.id); 
+
     },
     methods: {
       ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'setEditMode', 'setModalSubmitTitle', 'setEventModalAndEventData', 'setEventDate', 'setNumberOfParticipants']),
@@ -223,7 +228,7 @@
         filtersData.month = parseInt(month);
         //console.log(`working with ${year} as year and ${month} as month, days in month: ${daysInMonth} , first date week day is: ${selectedMoment.weekday()}. `);
       },
-      queryEvents() {
+      async queryEvents() {
         this.isLoading = true;
         const storage = this.$store.state.AnnualPlannerVuex.filtersData;
 
@@ -342,6 +347,7 @@
       ...mapState('AnnualPlannerVuex', ['filtersData']),
       ...mapGetters({
         categories: 'event/getCategoriesList',
+        customer:'user/getCustomer'
       }),
     },
     watch: {

@@ -78,7 +78,7 @@ const state={
     branches: [],
     files: [],
   }
-  ,charts:[]
+  ,charts:{}
 }
 
 //getters
@@ -101,10 +101,15 @@ const actions={
             Me.get()
             .then(res=>{
                 commit("setUser" , res[0])
-                commit('setCustomer',res[0].customer)
+                commit('setCustomer',res[0].customer)                
                 Customer.find(res[0].customer.id)
                 .then(res=>commit)
                 .catch(e=>console.log(e, 'eto customer, error'))
+                new Customer({id: res[0].customer.id})
+                  .statistics()
+                  .get()
+                  .then(res=>commit('setCustomerChart',res[0]))
+                  .catch(e=>console.log(e,'chart api errors'))
             }
 
             )

@@ -343,18 +343,12 @@
         }
        this.rate=this.getChartSatisfactionRate()
        this.participants=this.getChartParticipantsPerEvent()
-      const inputMainAddress = document.getElementById('main_address_customer')
-      
+      const inputMainAddress = document.getElementById('main_address_customer')      
       const inputBranch = document.getElementById('branch_address_search')
-      const autocomplete2 = new google.maps.places.Autocomplete(inputBranch, options)
-      
+      const autocomplete2 = new google.maps.places.Autocomplete(inputBranch, options)      
       const autocomplete1 = new google.maps.places.Autocomplete(inputMainAddress, options)
-
-
-      this.$store.dispatch("user/getIndustry");
-      this.$store.dispatch("user/getUserFromApi");
-      this.$store.dispatch("user/getChartsFromApi",this.customer.id); 
-     
+      this.$store.dispatch("user/getIndustry");     
+            
       this.auth.currentUser(this, true, () => {
         this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';
       });
@@ -532,35 +526,18 @@
         const currentMonth=this.listMonth[new Date().getMonth()]
         const currentCount=new Date().getMonth()
         
-        if(!this.month){
-           return this.rate[currentCount]
+        if(!this.month){          
+            return this.rate[currentCount]                   
         }else{
           const count= this.listMonth.indexOf(this.month)
           return this.rate[count]
-        }  
-
-
-        // const count= this.listMonth.indexOf(this.month)
-        // return this.rate[count]
-        // const currentMonth= this.listMonth[new Date().getMonth()]
-        // console.log(currentMonth,'currentMonth') 
-        // let countMonth=new Date().getMonth()
-        // console.log(this.listMonth.indexOf(currentMonth), 'eto index')
-        // if(countMonth===this.listMonth.indexOf(currentMonth)){
-        //   return this.rate[countMonth]
-        // }else{
-        //   const count= this.listMonth.indexOf(currentMonth)
-        // return this.rate[count]
-        // }             
-        
-        
+        }         
       },
       chechParticipant(){
-        const currentMonth=this.listMonth[new Date().getMonth()]
         const currentCount=new Date().getMonth()
-        console.log(this.monthRate,'eto rate')
-        if(!this.monthRate){
-           return this.participants[currentCount]
+        const currentMonth=this.listMonth[currentCount]       
+        if(!this.monthRate){         
+            return this.participants[currentCount]          
         }else{
           const count= this.listMonth.indexOf(this.monthRate)
           return this.participants[count]
@@ -809,8 +786,8 @@
                  for(let key in categori){                                    
                      const obj={}
                      obj['typeEvent']=key
-                     obj['total']=String(categori[key].Invited)
-                     obj['currentValue']=String(categori[key].Actual)
+                     obj['total']=String(categori[key].Invited||0)
+                     obj['currentValue']=String(categori[key].Actual||0)
                      currentObj.push(obj)
                  }
              }else{
