@@ -1,12 +1,12 @@
 <template>
        <md-card class="md-card-profile">
-        <md-card-header>
+        <card-header>
              <md-card-content>
                 <div class="md-layout-item md-size-100">
                     <h4 style="text-align:left;">Team Building Event</h4>
                 </div>
              </md-card-content>
-        </md-card-header>
+        </card-header>
         <md-card-content>
             <div class="md-layout-item md-size-100">
                 <md-tabs class="light-theme">
@@ -19,11 +19,8 @@
                         <div class="md-layout">
                             <div class="md-layout-item">
                                 <md-list>
-                                <md-list-item v-for="child in item.childComponents" :key="child.id" @click="selectComponent(child.id)"> 
-                                    <div class="image-block">
-                                        <img v-show="!selectedComponents(child.id)" :src="`${child.imageOff}`">
-                                        <img v-show="selectedComponents(child.id)" :src="`${child.imageOn}`">    
-                                    </div>
+                                <md-list-item v-for="child in item.childComponents" :key="child.id"> 
+                                    <md-icon>grade</md-icon>
                                     {{child.title}}
                                 </md-list-item>
                             </md-list>
@@ -33,19 +30,10 @@
                 </md-tabs>                
             </div>
         </md-card-content>
-        <md-card-content class="mt-auto">
-            <div class="md-layout-item" style="text-align:right;">
-                <md-button class="md-success" @click="updateEvent">
-                    Next
-                </md-button>                
-            </div>
-        </md-card-content>    
       </md-card>
 </template>
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-  import Calendar from "@/models/Calendar"
-  import auth from '@/auth';
 
   export default {
     name: 'event-blocks',
@@ -53,41 +41,17 @@
 
     },
     props: {
-        eventId: String
+
     },
-    data: () => ({
-        auth: auth,
-        componentsData: [],
-    }),
     methods: {
-        selectComponent(id) {
-            if (this.componentsData.includes(id)) {
-                this.componentsData.splice(this.componentsData.indexOf(id), 1)
-            } else {
-                this.componentsData.push(id);
-            }
-        },
-        selectedComponents(id) {
-          return this.componentsData.includes(id);
-        },
-        async updateEvent(){
-            let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-            let event = await _calendar.calendarEvents().find(this.eventId);
-            
-        // event.components = this.componentsData;
 
-            await event.for(_calendar).save().then(result => {
-
-            }).catch(error => {
-                console.log(error)
-            });
-        },        
     },
     created() {
       console.log(this.components)
     },
     mounted() {
      
+
     },
     computed: {
         ...mapGetters({
@@ -97,34 +61,9 @@
   }
 </script>
 <style lang="scss">
-    .mt-auto {
-        margin-top: auto;
-    }
     .light-theme {
         display: flex;
         flex-direction: row;
-        justify-content: flex-end;
-        .md-list {
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-        .md-tab {
-            padding-top: 0;
-            .md-list {
-                padding-top: 0;
-                flex-wrap: wrap;
-            }
-        }
-        .md-list.md-theme-default .md-list-item-container:not(.md-list-item-default):not([disabled]):hover {
-            background: none;
-        }
-        .md-list-item-content{
-            cursor: pointer;
-            flex-direction: column;
-            .image-block {
-                margin-bottom: 10px;
-            }
-        }
         .md-content {
             width: 100%;
         }

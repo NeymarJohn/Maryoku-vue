@@ -108,8 +108,8 @@
         </md-card-content>
       </md-card>
     </div>
-    <div class="md-layout-item md-size-70 block-flex">
-      <event-blocks :event-id="eventId"></event-blocks>
+    <div class="md-layout-item md-size-75 block-flex">
+      <event-blocks></event-blocks>
     </div>
     <div class="md-layout-item md-size-100 block-flex copyright-block">
       <div>
@@ -157,7 +157,6 @@ export default {
     return {
       auth: auth,
       calendarEvent: {},
-      eventId: null,
       percentage: 0,
       totalRemainingBudget: 0,
       seriesData: [],
@@ -180,7 +179,6 @@ export default {
             let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
             _calendar.calendarEvents().find(this.$route.params.id).then(event => {
-                this.eventId = event.id;
                 this.calendarEvent = event;              
                 this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
                 this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
