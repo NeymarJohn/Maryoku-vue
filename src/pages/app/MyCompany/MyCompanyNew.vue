@@ -337,23 +337,24 @@
       "select-common":Select,
       LineChart
     },
-    created(){
-      this.$store.dispatch("user/getUserFromApi") 
-      console.log() 
-    }
-    ,
+   created(){
+        this.$store.dispatch("user/getUserFromApi");
+        this.$store.dispatch("user/getIndustry");         
+   } 
+    ,    
      mounted(){
        const options = {          
           types: ['geocode']
-        }         
+        }
+         this.$store.dispatch("user/getUserFromApi");
+        this.$store.dispatch("user/getIndustry");         
        this.rate=this.getChartSatisfactionRate()
        this.participants=this.getChartParticipantsPerEvent()
       const inputMainAddress = document.getElementById('main_address_customer')      
       const inputBranch = document.getElementById('branch_address_search')
       const autocomplete2 = new google.maps.places.Autocomplete(inputBranch, options)      
-      const autocomplete1 = new google.maps.places.Autocomplete(inputMainAddress, options)
-      this.$store.dispatch("user/getIndustry");     
-      this.auth.currentUser(this, true, () => {
+      const autocomplete1 = new google.maps.places.Autocomplete(inputMainAddress, options)     
+      this.auth.currentUser(this, true, () => {        
         this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';
       });
     },
@@ -398,7 +399,7 @@
         isShowForm:false,
         formSwitcher:'',
         duration:[],
-        vm:{searchPlace:""}
+       
       }
     },
     computed:{
