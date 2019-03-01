@@ -535,7 +535,8 @@
       },
       chechParticipant(){
         const currentCount=new Date().getMonth()
-        const currentMonth=this.listMonth[currentCount]       
+        const currentMonth=this.listMonth[currentCount]
+        console.log(this.participants,currentCount,'chechParticipant')
         if(!this.monthRate){         
             return this.participants[currentCount]          
         }else{

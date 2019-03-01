@@ -110,7 +110,23 @@
     </div>
     <div class="md-layout-item md-size-75 block-flex">
 
-    </div>  
+    </div>
+    <div class="md-layout-item md-size-100 block-flex copyright-block">
+      <div>
+        <md-button
+          class="footer-link-button"
+          v-for="(item, index) in footerLink"
+          :key="index"
+        >{{item.title}}</md-button>
+      </div>
+      <div>
+        <p>
+          {{`&copy; ${new Date().getFullYear()}`}}
+          <span class="copyright">Creative Tim</span>
+          {{`, made with love for a better web`}}
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 

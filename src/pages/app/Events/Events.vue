@@ -110,7 +110,7 @@
       this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
     },
     mounted() {
-      this.$store.state.calendarId = this.auth.user.defaultCalendarId;
+      //this.$store.state.calendarId = this.auth.user.defaultCalendarId;
       this.getCalendarEvents();
     },
     data() {
@@ -137,7 +137,8 @@
         this.setEditMode({ editMode: false });
       },
       getCalendarEvents() {
-        let _calendar = new Calendar({id: this.$store.state.calendarId});
+        alert(this.auth.user.defaultCalendarId);
+        let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
         _calendar.calendarEvents().get().then(events => {
           this.upcomingEvents = events.reduce(function (result, element) {
