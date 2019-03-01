@@ -88,7 +88,7 @@
                 <table style="width: 100%; height: 100%;">
                   <tr style="height: 95%;">
                     <td>
-                      <month-events-panel :calendar-events="calendarEvents" :categories-array="categories"></month-events-panel>
+                      <month-events-panel :calendar-events="calendarEvents"></month-events-panel>
                     </td>
                   </tr>
                   <tr style="height: 5%;">

@@ -1,6 +1,7 @@
 import Calendar from '@/models/Calendar';
 import Currency from '@/models/Currency';
 import EventTheme from '@/models/EventTheme'
+import EventComponent from '@/models/EventComponent';
 
 const state = {
     currentUser: {
@@ -23,7 +24,7 @@ const state = {
       category: null,
       components: null,
     },
-    componentsList: null,
+    components: null,
     vendorsList: null,
     currencies: [],
     categories: [],
@@ -44,6 +45,9 @@ const getters = {
   },
   getEventThemesList:(state)=>{
     return state.eventThemes;
+  },
+  getComponentsList:(state)=>{
+    return state.components;
   }
 }
 
@@ -86,6 +90,16 @@ const actions = {
       commit("setEventTypes" , [])
     });
   },
+  async getComponents({commit,state}, data){
+    EventComponent
+      .get()
+      .then(res=>{
+          commit("setComponents" , res)
+      })
+      .catch(e=>{
+          commit("setComponents" , [])
+      })
+  },  
 }
 
 const mutations = {
@@ -100,6 +114,9 @@ const mutations = {
       },
       setEventThemes(state,eventThemes){
         state.eventThemes = eventThemes
+      },
+      setComponents(state,components){
+        state.components = components
       },
       updateEventData(state, params) {
         state.eventData.components[params.index] = params.data;
