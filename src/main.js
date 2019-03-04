@@ -17,7 +17,6 @@ import VueFractionGrid from 'vue-fraction-grid';
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import VueGmaps from 'vue-gmaps'
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';
-import VTooltip from 'v-tooltip';
 
 // router setup
 import routes from "./router/routes";
@@ -81,7 +80,6 @@ Vue.use(Tooltip, {
   triggers: ['hover', 'focus'],
   offset: 5
 });
-Vue.use(VTooltip)
 Vue.use(vSelectMenu, { language: "en"});
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
 Vue.use(VueFractionGrid);

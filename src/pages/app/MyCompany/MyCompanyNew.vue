@@ -6,7 +6,7 @@
           <div class="md-layout">
             <div class='company-view-common-logo_block'>
               <div class='company-main-logo-block'>
-                <img class="company-logo" :src="customerLogoUrl">
+                <img class="company-logo" :src="customerLogoUrl" style="width: 80%; height: 80%;">
                 <div>
                   <div class="company-logo-button-block">
                     <div @click='UploadAvatar'>
@@ -23,258 +23,85 @@
               </div>
             </div>
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="margin: 15px;"></div>
+              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
             </div>
-
-<div class="md-layout-item md-size-100 has-action" style="text-align:left;">
-                  <div style="display:flex;align-items:center;justify-content: space-between;">
-                    <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
-                      <span>Number of Employees</span>
-                      <span class="value">{{customer.numberOfEmployees}}</span>
-                    </p>
-                    <v-popover
-                      offset="16"
-                      :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'
-                    >
-                      <md-button class="tooltip-target b3 inline-edit md-simple md-just-icon md-round fa fa-edit button-height">
-                        <md-icon>edit</md-icon>
-                      </md-button>
-                      
-                      <template slot="popover">
-                        <input-text
-                              labelStyle='company_label_input'
-                              label='Number of employees'
-                              name='numberOfEmployees'
-                              :value='String(customer.numberOfEmployees)'
-                              :onChange='onChange'
-                              editebleMode
-                              :isEditable="isEnabled"
-                              :actionFunc='saveInfoFromForm'
-                              :ctx='customer'
-                              fieldStyle="without-border"/> 
-                        
-                        <div class="action-block">
-                          <a v-close-popover>Close</a>
-                          <md-button>Save</md-button>
-                        </div>
-                      </template>
-                    </v-popover>
-                  </div>
-                </div>              
-
-              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
-                  <div style="display:flex;align-items:center;justify-content: space-between;">
-                    <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
-                      <span>Industry</span>
-                      <span class="value">{{customer.industry}}</span>
-                    </p>
-                    <v-popover
-                      offset="16"
-                      :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'
-                    >
-                      <md-button class="tooltip-target b3 inline-edit md-simple md-just-icon md-round fa fa-edit button-height">
-                        <md-icon>edit</md-icon>
-                      </md-button>
-                      
-                      <template slot="popover">
-                        <select-common
-                                label='Industry'
-                                labelStyle='om_label_input'
-                                :list='industryList'
-                                name='industry'
-                                :onChange="onChange"
-                                :valueName="['title','id']"
-                                editebleMode
-                                :isEditable="isEnabled"
-                                :actionFunc='saveInfoFromForm'
-                                :ctx='customer'
-                                :value='customer.industry'
-                                fieldStyle="without-border"/>
-                        
-                        <div class="action-block">
-                          <a v-close-popover>Close</a>
-                          <md-button>Save</md-button>
-                        </div>
-                      </template>
-                    </v-popover>
-                  </div>
-                </div>  
-
-            <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="margin: 15px;"></div>
-            </div>
-            <div>
-              <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Contact Information</div>
-              <div class="md-layout">
-                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
-                  <div style="display:flex;align-items:center;justify-content: space-between;">
-                    <p>
-                      <md-icon>
-                        phone
-                      </md-icon>
-                      {{customer.mainAddress}}
-                    </p>
-                    <v-popover
-                      offset="16"
-                      :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'
-                    >
-                      <md-button class="tooltip-target b3 inline-edit md-simple md-just-icon md-round fa fa-edit button-height">
-                        <md-icon>edit</md-icon>
-                      </md-button>
-                      
-                      <template slot="popover">
-                        <input-text
-                              labelStyle='company_label_input'
-                              label='Company address'
-                              name='mainAddress'
-                              id='main_address_customer'
-                              :value='customer.mainAddress'
-                              :onChange='onChange'
-                              editebleMode
-                              :isEditable="isEnabled"
-                              :actionFunc='saveInfoFromForm'
-                              :ctx='customer'
-                              fieldStyle="without-border"/>  
-                        
-                        <div class="action-block">
-                          <a v-close-popover>Close</a>
-                          <md-button>Save</md-button>
-                        </div>
-                      </template>
-                    </v-popover>
-                  </div>
-                </div>
-                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
-                  <div style="display:flex;align-items:center;justify-content: space-between;">
-                    <p>
-                      <md-icon>
-                        phone
-                      </md-icon>
-                      {{customer.phoneNumber}}
-                    </p>
-                    <v-popover
-                      offset="16"
-                      :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'
-                    >
-                      <md-button class="tooltip-target b3 inline-edit md-simple md-just-icon md-round fa fa-edit button-height">
-                        <md-icon>edit</md-icon>
-                      </md-button>
-
-                      <template slot="popover">
-                        <input-text
-                          labelStyle='company_label_input'
-                          label='Phone'
-                          name='phoneNumber'
-                          :value='String(user.phoneNumber)||""'
-                          :onChange='onChange'
-                          editebleMode
-                          :isEditable="isEnabled"
-                          :actionFunc='saveInfoFromForm'
-                          :ctx='user'
-                          fieldStyle="without-border"/>
-                        
-                        <div class="action-block">
-                          <a v-close-popover>Close</a>
-                          <md-button>Save</md-button>
-                        </div>
-                      </template>
-                    </v-popover>
-                  </div>
-                </div>
-
-                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
-                  <div style="display:flex;align-items:center;justify-content: space-between;">
-                    <p>
-                      <md-icon>
-                        phone
-                      </md-icon>
-                      {{customer.workspaceDomain}}
-                    </p>
-                    <v-popover
-                      offset="16"
-                      :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'
-                    >
-                      <md-button class="tooltip-target b3 inline-edit md-simple md-just-icon md-round fa fa-edit button-height">
-                        <md-icon>edit</md-icon>
-                      </md-button>
-
-                      <template slot="popover">
-                        <input-text
-                          labelStyle='company_label_input'
-                          label='Company Email'
-                          name='workspaceDomain'
-                          :value='customer.workspaceDomain'
-                          :onChange='onChange'
-                          editebleMode
-                          :isEditable="isEnabled"
-                          :actionFunc='saveInfoFromForm'
-                          :ctx='customer'
-                          fieldStyle="without-border"/>
-                        
-                        <div class="action-block">
-                          <a v-close-popover>Close</a>
-                          <md-button>Save</md-button>
-                        </div>
-                      </template>
-                    </v-popover>
-                  </div>
-                </div>
-
-
-                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
-                  <div style="display:flex;align-items:center;justify-content: space-between;">
-                    <p>
-                      <md-icon>
-                        phone
-                      </md-icon>
-                      {{customer.website}}
-                    </p>
-                    <v-popover
-                      offset="16"
-                      :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'
-                    >
-                      <md-button class="tooltip-target b3 inline-edit md-simple md-just-icon md-round fa fa-edit button-height">
-                        <md-icon>edit</md-icon>
-                      </md-button>
-
-                      <template slot="popover">
-                        <input-text
-                          labelStyle='company_label_input'
-                          label='Company Domain'
-                          name='website'
-                          :value='customer.website'
-                          :onChange='onChange'
-                          editebleMode
-                          :isEditable="isEnabled"
-                          :actionFunc='saveInfoFromForm'
-                          :ctx='customer'
-                          fieldStyle="without-border"/>  
-                        
-                        <div class="action-block">
-                          <a v-close-popover>Close</a>
-                          <md-button>Save</md-button>
-                        </div>
-                      </template>
-                    </v-popover>
-                  </div>
-                </div>
+            <div class="md-layout-item md-size-100">              
+              <input-text
+                    labelStyle='company_label_input'
+                    label='Number of employees'
+                    name='numberOfEmployees'
+                    :value='String(customer.numberOfEmployees)'
+                    :onChange='onChange'
+                    editebleMode
+                    :actionFunc='saveInfoFromForm'
+                    :ctx='customer'
+                    fieldStyle="without-border"/>              
+              <select-common
+                    label='Industry'
+                    labelStyle='om_label_input'
+                    :list='industryList'
+                    name='industry'
+                    :onChange="onChange"
+                    :valueName="['title','id']"
+                    editebleMode
+                    :actionFunc='saveInfoFromForm'
+                    :ctx='customer'
+                    :value='customer.industry'
+                    fieldStyle="without-border"/>
+              <div class="md-layout">              
               </div>
-
             </div>
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="margin: 15px;"></div>
+              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
+            </div>
+            <div class="md-layout-item md-size-100">
+              <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Contact Information</div>
+              <div class="md-layout">                
+                   <input-text
+                    labelStyle='company_label_input'
+                    label='Company address'
+                    name='mainAddress'
+                    id='main_address_customer'
+                    :value='customer.mainAddress'
+                    :onChange='onChange'
+                    editebleMode
+                    :actionFunc='saveInfoFromForm'
+                    :ctx='customer'
+                    fieldStyle="without-border"/>             
+                  <input-text
+                    labelStyle='company_label_input'
+                    label='Phone'
+                    name='phoneNumber'
+                    :value='String(user.phoneNumber)||""'
+                    :onChange='onChange'
+                    editebleMode
+                    :actionFunc='saveInfoFromForm'
+                    :ctx='user'
+                    fieldStyle="without-border"/>
+                  <input-text
+                    labelStyle='company_label_input'
+                    label='Company Email'
+                    name='workspaceDomain'
+                    :value='customer.workspaceDomain'
+                    :onChange='onChange'
+                    editebleMode
+                    :actionFunc='saveInfoFromForm'
+                    :ctx='customer'
+                    fieldStyle="without-border"/>
+                  <input-text
+                    labelStyle='company_label_input'
+                    label='Company Domain'
+                    name='website'
+                    :value='customer.website'
+                    :onChange='onChange'
+                    editebleMode
+                    :actionFunc='saveInfoFromForm'
+                    :ctx='customer'
+                    fieldStyle="without-border"/>                
+              </div>
+            </div>
+            <div class="md-layout-item md-size-100">
+              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
             </div>
             <div class="md-layout-item md-size-100">
               <div class='company-branch_block'>
@@ -304,7 +131,7 @@
             </div>
 
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="margin: 15px;"></div>
+              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
             </div>
             <div class="md-layout-item md-size-100">
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Customer Infromation</div>
@@ -314,16 +141,31 @@
       </md-card>
     </div>
     <div class="md-layout-item md-size-33" style="position: relative">
+   
       <div class='chart-box'>
-        <md-card-content  style="max-height: 200px">
-          <div class='chart-title'>
-            <div class="title text-bold">Number of events</div>
-            <div class="company-button-filter-block">
-              <ButtonDiv text='Yearly' class='button-filter'  :onClick='onChangeFilterToEarly'/>
-              <ButtonDiv text='Monthly' class='button-filter'   :onClick='onChangeFilter'/>
-            </div>
-          </div>
-          <div><span class='info-chat-value'>23</span><span class='info-chart'>{{`This year of ${new Date().getFullYear()}`}}</span></div>
+        <div class="logo-block">
+                <LineChart
+                  v-if='!isMonthly&&getChartNumberOfEventsPerYear'
+                  key="username-input"
+                  classStyle="max-height: 130px;  border-radius: 5px; box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31); background-image: linear-gradient(322deg, #4d9b51, #62b766);"
+                  id="number_of_events_chart"
+                  width="350"
+                  height="150"
+                  :dataChart='getChartNumberOfEventsPerYear'
+                  type='line'
+                  :optionChart='dataChart.options'/>
+                <LineChart
+                  v-else
+                  key="email-input"
+                  classStyle="max-height: 130px;  border-radius: 5px;box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);background-image: linear-gradient(322deg, #4d9b51, #62b766);"
+                  id="number_of_events_chart_monthly"
+                  width="350"
+                  height="150"
+                  :dataChart='getDataFromDuration'
+                  type='line'
+                  :optionChart='dataChart.options'/>
+              </div>
+        <md-card-content  style="max-height: 200px">         
           <div class='filter-block' v-if='showFilter'>
             <div class='filter-datepicker'>
               <div class='filter-datepicker-block'>
@@ -361,38 +203,31 @@
                   :onChange="onChange"/>
               </div>
             </div>
+          </div>          
+            <div class='chart-title'>
+            <div class="title text-bold">Number of events</div>
+            <div class="company-button-filter-block">
+              <ButtonDiv text='Yearly' class='button-filter'  :onClick='onChangeFilterToEarly'/>
+              <ButtonDiv text='Monthly' class='button-filter'   :onClick='onChangeFilter'/>
+            </div>
           </div>
-
-          <LineChart
-            v-if='!isMonthly'
-            key="username-input"
-            classStyle="max-height: 130px"
-            id="number_of_events_chart"
-            width="350"
-            height="150"
-            :dataChart='getChartNumberOfEventsPerYear'
-            type='line'
-            :optionChart='dataChart.options'/>
-          <LineChart
-            v-else
-            key="email-input"
-            classStyle="max-height: 130px"
-            id="number_of_events_chart_monthly"
-            width="350"
-            height="150"
-            :dataChart='getDataFromDuration'
-            type='line'
-            :optionChart='dataChart.options'/>
+          <div><span class='info-chat-value'>23</span><span class='info-chart'>{{`This year of ${new Date().getFullYear()}`}}</span></div>
         </md-card-content>
       </div>
       <md-card>
+      <div class="logo-block">
+          <div class="event-planer-logo partisipation-logo">
+            <md-icon class="company-logo ">how_to_reg</md-icon>
+          </div>              
+        </div>
         <md-card-content>
           <div class="title text-bold">Average number of participants per event</div>
           <div>
             <ControlPanel :onClick='getMonthControlRate' controlBlockStyle="control-panel-block-participants"/>
           </div>
           <div>
-            <LineIndicator
+           <LineIndicator
+             v-if='chechParticipant'              
               v-for="item in chechParticipant"
               :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-participants'
@@ -405,32 +240,41 @@
         </md-card-content>
       </md-card>
       <md-card>
-        <md-card-content style="max-height: 200px">
-          <div class="title text-bold">Average event cost per employee</div>
-          <LineChart
-            classStyle="max-height: 130px"
+      <div class="logo-block">
+         <LineChart
+            v-if='getChartEventPerEmployee'
+            classStyle="max-height: 130px; border-radius: 5px;  box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);  background-image: linear-gradient(322deg, #c3255b, #ea3c77);"
             id="number_of_participants_chart"
             width="350"
             height="150"
             :dataChart='getChartEventPerEmployee'
             type='line'
-            :optionChart='dataChart.options'/>
+            :optionChart='dataChart.options'/>               
+        </div>
+        <md-card-content style="max-height: 200px">        
+             <div class="title text-bold">Average event cost per employee</div>
         </md-card-content>
       </md-card>
     </div>
     <div class="md-layout-item md-size-33">
       <md-card>
+       <div class="logo-block">
+          <div class="event-planer-logo rate-logo">
+            <md-icon class="company-logo">thumbs_up_down</md-icon>
+          </div>                
+        </div>
         <md-card-content>
           <div class="title text-bold">Attendants satisfaction rate</div>
           <div>
             <ControlPanel :onClick='getMonthFromControl' controlBlockStyle="control-panel-block-rate"/>
             <div class='rate-mean-block'>
-              <span class='indicator-event-info-mean-value'>{{`${Math.floor(getMeanМalue)}%`}}</span>
+              <span class='indicator-event-info-mean-value'>{{`${Math.floor(getMeanValue)}%`}}</span>
               <span class='indicator-event-type-title-rate'>{{`Average attendants satisfaction in ${new Date().getFullYear()}`}}</span>
             </div>
           </div>
           <div>
-            <LineIndicator
+             <LineIndicator
+             v-if='chechParticipant' 
               v-for="item in checkMonth"
               :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-rate'
@@ -443,16 +287,19 @@
         </md-card-content>
       </md-card>
       <md-card>
-        <md-card-content>
-          <div class="title text-bold">Event categories comparison</div>
+      <div class="logo-block">
           <LineChart
-            classStyle="max-height: 130px"
+            v-if='getChartEventsPerCategory'
+            classStyle="max-height: 130px; border-radius: 5px;  box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);  background-image: linear-gradient(322deg, #4d9b51, #62b766);"
             id="event_vs_category"
             width="350"
             height="150"
             :dataChart='getChartEventsPerCategory'
             type='bar'
-            :optionChart='dataChart.options'/>
+            :optionChart='dataChart.options'/>               
+        </div>      
+        <md-card-content>        
+            <div class="title text-bold">Event categories comparison</div>
         </md-card-content>
       </md-card>
     </div>
@@ -480,7 +327,7 @@
   import LineIndicator from '@/components/Chart/LineIndicator.vue';
   import LineChart from '@/components/Chart/LineChart.vue'
 
-  import Customer from '@/models/Customer';
+ import Customer from '@/models/Customer';
   import CustomerFile from '@/models/CustomerFile';
   import Datepicker from '@/components/Datepicker/Datepicker.vue';
 
@@ -508,29 +355,21 @@
       LineIndicator,
       Datepicker,
       "select-common":Select,
-      LineChart,
-    },
-   created(){
-        this.$store.dispatch("user/getUserFromApi");
-        this.$store.dispatch("user/getIndustry");         
-   } 
+      LineChart
+    }   
     ,    
-     mounted(){
+     mounted(){      
        const options = {          
           types: ['geocode']
         }
-         this.$store.dispatch("user/getUserFromApi");
-        this.$store.dispatch("user/getIndustry");         
-       this.rate=this.getChartSatisfactionRate()
-       this.participants=this.getChartParticipantsPerEvent()
-      const inputMainAddress = document.getElementById('main_address_customer')      
-      const inputBranch = document.getElementById('branch_address_search')
-      const autocomplete2 = new google.maps.places.Autocomplete(inputBranch, options)      
-      const autocomplete1 = new google.maps.places.Autocomplete(inputMainAddress, options)     
-      this.auth.currentUser(this, true, () => {        
-        this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';
-      });
+        this.auth.currentUser(this, true, function() {
+        this.$store.dispatch("user/getUserFromApi");
+         this.$store.dispatch("user/getIndustry");   
+        this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';      
+      }.bind(this))         
     },
+   
+    
     data() {
       return {
         auth: auth,
@@ -546,18 +385,47 @@
             legend: {
               display: false
             },
+            elements: {
+            line: {
+                borderColor:'white' 
+            },
+            }
+        ,layout: {
+            padding: {
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: 10
+            }
+        }
+            ,
             scales: {
               yAxes: [{
                 ticks: {
-                  beginAtZero:true
-                }
+                  beginAtZero:true,
+                  fontColor:"white"
+                },
+                gridLines: {
+                    color: 'white',
+                     zeroLineColor: 'white',
+                     
+                  }
+              }],
+              xAxes: [{
+                ticks: {
+                  beginAtZero:true,
+                  fontColor:"white"
+                },
+                gridLines: {
+                    color: 'white',
+                    zeroLineColor: 'white',
+                    fontColor: "white"
+                  }
               }]
             }
           }
 
-        },
-        participants:[],
-        rate:[],      
+        },             
         branch_address:'',
         showSearch:false,
         showFilter:false,       
@@ -571,8 +439,7 @@
         shortNameM:months_short,
         isShowForm:false,
         formSwitcher:'',
-        duration:[],
-        isEnabled: true,       
+        duration:[],       
       }
     },
     computed:{
@@ -580,117 +447,14 @@
         customer:'user/getCustomer',
         user:'user/getUser',
         industryList:'user/getIndustryList',
-        charts:'user/getChartStatistics'
-      }),
-      getChartNumberOfEventsPerYear(){
-        const parse_data=[]
-        const parse_label=[]
-        if(this.charts.numberOfEventsPerYear){ 
-            const chart=this.charts.numberOfEventsPerYear
-            for(let key in chart){              
-              parse_label.push(key)
-              parse_data.push(chart[key]) 
-          }
-          return{            
-            labels: parse_label,
-            datasets: [{
-              data: parse_data,
-              backgroundColor: [
-                'rgba(255, 255, 255, 0.2)',
-              ],
-              borderColor: [
-                '#71c278',
-              ],
-              borderWidth: 1
-            }]                     
-          }
-        }else{
-          return{            
-            labels: [],
-            datasets:[{
-              label: '# of type Events',
-              data: [],
-              backgroundColor: '#25d0a2'
-
-            }]          
-          }
-        }
-      },
-      getChartEventPerEmployee(){
-        const parse_data=[]
-        const parse_month=[]
-        if(this.charts.eventCostPerEmployeePerYearMonth){          
-          const chart= this.charts.eventCostPerEmployeePerYearMonth          
-          for(let key in chart){
-          const moths= key.split('__')
-          parse_month.push(this.shortNameM[moths[1]-1])
-          parse_data.push(chart[key]) 
-          }
-           if(parse_month.length<6&&parse_data.length<6){
-             return{               
-                labels: parse_month,
-                datasets: [{
-                  data: parse_data,
-                  backgroundColor: [
-                    'rgba(255, 255, 255, 0.2)',
-                  ],
-                  borderColor: [
-                    '#26cfa0',
-                  ],
-                  borderWidth: 1
-                }]          
-                }
-            
-        }else{
-           const arrLenght=parse_data.length-6
-            const dataCh=parse_data.splice(arrLenght)
-            const labemlCh=parse_month.splice(arrLenght)
-            return{               
-                labels: labemlCh,
-                datasets: [{
-                  data: dataCh,
-                  backgroundColor: [
-                    'rgba(255, 255, 255, 0.2)',
-                  ],
-                  borderColor: [
-                    '#26cfa0',
-                  ],
-                  borderWidth: 1
-                }]          
-                }  
-        }
-        }},
-        getChartEventsPerCategory(chartData){
-           const parse_data=[]
-          const parse_label=[]
-        if(this.charts.eventsPerCategory){ 
-            const chart=this.charts.eventsPerCategory
-            for(let key in chart){
-              const moths= key.split('__')
-              parse_label.push(key)
-              parse_data.push(chart[key]) 
-          }
-          return{            
-            labels: parse_label,
-            datasets:[{
-              label: '# of type Events',
-              data: parse_data,
-              backgroundColor: '#25d0a2'
-
-            }]          
-          }
-        }else{
-          return{            
-            labels: [],
-            datasets:[{
-              label: '# of type Events',
-              data: [],
-              backgroundColor: '#25d0a2'
-
-            }]          
-          }
-        }
-        },        
+        charts:'user/getChartStatistics',
+        getChartNumberOfEventsPerYear:'user/getChartNumberOfEventsPerYear',
+        getChartEventPerEmployee:'user/getChartEventPerEmployee',
+        getChartEventsPerCategory:'user/getChartEventsPerCategory',
+        participants:'user/getChartParticipantsPerEvent',
+        rate:'user/getChartSatisfactionRate'
+      }),     
+                  
              
       getMonth(){
         return this.monthValue.map(item=>item.month)
@@ -700,27 +464,27 @@
       },
       checkMonth(){
         const currentMonth=this.listMonth[new Date().getMonth()]
-        const currentCount=new Date().getMonth()
-        
-        if(!this.month){          
-            return this.rate[currentCount]                   
+        const currentCount=new Date().getMonth()  
+        // if(!this.rate)return false      
+        if(!this.month){
+              return this.rate[currentCount]       
+                                       
         }else{
           const count= this.listMonth.indexOf(this.month)
           return this.rate[count]
         }         
       },
-      chechParticipant(){
+      chechParticipant(){       
         const currentCount=new Date().getMonth()
-        const currentMonth=this.listMonth[currentCount]       
-
+        const currentMonth=this.listMonth[currentCount]           
         if(!this.monthRate){         
-            return this.participants[currentCount]          
+                 return this.participants[currentCount]            
         }else{
-          const count= this.listMonth.indexOf(this.monthRate)
+          const count= this.listMonth.indexOf(this.monthRate)          
           return this.participants[count]
-        }       
+        }              
       },
-      getMeanМalue(){
+      getMeanValue(){        
        const count = this.listMonth.indexOf(this.month)       
        if(count==-1){
          return 0
@@ -757,7 +521,7 @@
         const chart=this.charts.eventCostPerEmployeePerYearMonth
         const duration=[]
         for (let year in chart){
-        const y=year.split('_')
+        const y=year.split('__')
         if(!duration.includes(y[0]))duration.push(y[0])
         }
         this.duration=duration
@@ -902,152 +666,12 @@
             console.log(error);
           });
       },
-      getChartSatisfactionRate(){
-          const currentYear=new Date().getFullYear()
-          const months=this.listMonth
-          let listRete=null
-          if(this.charts.satisfactionRatesPerYearMonth){
-            const chart=this.charts.satisfactionRatesPerYearMonth
-            let filterYear=null           
-             for(let key in chart){               
-              if(key==currentYear){                
-                filterYear=chart[key]                
-              }              
-          }    
-              
-           listRete= months.map((item,index)=>{
-            const currentObj=[]
-            for(let month in filterYear){                     
-             if((month-1)===index){
-                const categori=filterYear[month]
-                 for(let key in categori){                   
-                     const obj={}
-                     obj['category']=key
-                     obj['total']='100'
-                     obj['currentValue']=String(categori[key])
-                     currentObj.push(obj)
-                 }
-             }else{
-               const a = {category:'N/D',total:'0',currentValue:'0'}
-               currentObj.push(a)
-               }
-             }
-             
-             return currentObj
-          
-          })        
-          }          
-           this.rate=listRete
-           return listRete
-        },
-        getChartParticipantsPerEvent(){
-          // {typeEvent:'Comapany Trainig', eventDate:'August 19,2018', total:'324',currentValue:'23'}
-          const currentYear=new Date().getFullYear()
-          const months=this.listMonth
-          let listRete=null
-          if(this.charts.participantsPerEventPerYearMonthEventType){
-            const chart=this.charts.participantsPerEventPerYearMonthEventType
-            
-            let filterYear=null           
-             for(let key in chart){               
-              if(key==currentYear){                
-                filterYear=chart[key]                
-              }              
-          }    
-            
-           listRete= months.map((item,index)=>{
-            const currentObj=[]
-            for(let month in filterYear){                     
-             if((month-1)===index){
-                const categori=filterYear[month]                
-                 for(let key in categori){                                    
-                     const obj={}
-                     obj['typeEvent']=key
-                     obj['total']=String(categori[key].Invited||0)
-                     obj['currentValue']=String(categori[key].Actual||0)
-                     currentObj.push(obj)
-                 }
-             }else{
-               const a = {category:'N/D',total:'0',currentValue:'0'}
-               currentObj.push(a)
-               }
-             }
-            
-             return currentObj
-          
-          })        
-          }         
-           
-           return listRete
-        } 
- 
-
+    
     }, 
        
   };
 </script>
-<style lang='scss'>
-  .has-action {
-    .v-popover {
-      visibility: hidden;
-    }
-    :hover  {
-      .v-popover{
-        visibility: visible;
-      }
-    }
-  }
-  .md-card-profile {
-    .header {
-      font-size: 11px;
-      font-weight: 300;
-      text-align: left;
-      color: #292929!important;
-    }
-    .value {
-      color:#292929!important;
-    }
-    p {
-      font-family: Roboto;
-      font-size: 11px;
-      font-weight: 300;
-      color: #999999;
-      i {
-        font-size: 16px!important;
-        color: #999999!important;
-      }
-    }
-  }
-  .tooltip {
-    &.popover {
-      $color: #f9f9f9;
-
-      .popover-inner {
-        background: $color;
-        color: black;
-        padding: 24px;
-        border-radius: 5px;
-        box-shadow: 0 5px 30px rgba(black, .1);
-      }
-      .wrapper {
-        height: auto
-      }
-      .popover-arrow {
-        border-color: $color;
-      }
-      .action-block {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-    }
-  }
-
-  .md-card-profile {
-      font-size: 14px;
-      font-weight: 300;
-      color: #292929!important;
-  }
+<style lang='scss' >
   .info-chat-value{
     color: black;
     font-weight: 500;
@@ -1069,14 +693,13 @@
   }
   .company-view-common-logo_block{
     display:flex;
-    // justify-content: space-between;
+    justify-content: space-between;
     width: 100%;
     align-items: center
   }
   .company-logo{
-    max-width: 80px !important;
-    max-height: 80px !important;
-    border-radius: 10px;
+    width: 40% !important;
+    height: 100% !important;
   }
   .company-branch_block{
     display:flex;
@@ -1092,11 +715,12 @@
   .button-filter{
     text-align: center;
     padding: 0px 6px;
-    background: #25d0a2;
+    background: #62b766;
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    margin:5px
+    margin:5px;
+    width: 90px;
   }
   .company-button-filter-block{
     display: flex;
@@ -1111,7 +735,7 @@
   .control-panel-block-participants{
     display: flex;
     justify-content: space-between;
-    background: #87e1fe;
+    background: #21c4d7;
     border-radius: 5px;
     padding: 2px;
     color:white;
@@ -1120,7 +744,7 @@
   .control-panel-block-rate{
     display: flex;
     justify-content: space-between;
-    background: #25d0a2;
+    background: #ffa322;
     border-radius: 5px;
     padding: 2px;;
     color:white;
@@ -1135,6 +759,7 @@
     border-radius: 5px;
     margin-top: 30px;
     box-shadow: 0 0 10px rgba(80,80,80,.1);
+    padding-top: 1px;
   } 
   .filter-datepicker{
     width:25%;
@@ -1180,7 +805,49 @@
     display:flex
   }
   .md-layout-item >.fc-divider{
-    color: #ececec;
     margin: 15px -10px !important;
   }
+  .chart-line-number-of-events{
+    border-radius: 5px;
+    box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);
+    background-image: linear-gradient(322deg, #4d9b51, #62b766);
+  }
+  .partisipation-logo{
+       background-image: linear-gradient(322deg, #13a5b6, #21c4d7) !important;
+        box-shadow: 0px 5px 5.8px 1.2px rgba(0, 0, 0, 0.08);
+  }
+  .rate-logo{    
+    box-shadow: 0px 5px 5.8px 1.2px rgba(0, 0, 0, 0.08);
+    background-image: linear-gradient(to right, #ffa625, #fb8d02) !important;
+  }
+  .logo-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0px 15px;
+  margin: -20px 0px 20px 0px;
+  .event-planer-logo {
+    background: #eb3e79;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    .company-logo {
+      color: white !important;
+    }
+  }
+  .event-title {
+    font-family: "Roboto";
+    font-size: 18px;
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.33;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000000;
+  }
+}
 </style>

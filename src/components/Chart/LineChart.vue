@@ -10,7 +10,7 @@
             type: this.type,
             data: this.getData,
             options:  this.optionChart        
-            })          
+            })                      
         },
         computed:{
          getData(){           
@@ -32,7 +32,7 @@
             console.log('beforeUpdate')
         },
         updated(){
-            console.log('updated')
+            console.log('updated',this.data)
         }
 
     }

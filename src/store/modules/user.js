@@ -2,6 +2,8 @@ import axios from 'axios'
 import Industry from '@/models/Industry';
 import Me from '@/models/Me';
 import Customer from '@/models/Customer';
+import Calendar from '@/models/Calendar';
+import listMonth,{months_short} from "@/constants/month"
 import { of } from 'rxjs';
 
 function getReq(endpoint){
@@ -25,25 +27,15 @@ employee part - should post to `/1/onboarding/me`
 List of industries get from: `/1/industries`
  */
 //state
-const mockCompany={
-  logo:'static/img/reinhart-foodservice-logo.jpg',
-  companyName:'Reynholm Industries',
-  mainOffice:'San Diego, CA',
-  numberOfEmployees: '200',
-  industry:'Logistics',
-  address: '5th Ave, Corner Pine st.San Diego, CA 19082',
-  phone: '12 234 0945',
-  email: 'company@example.com',
-  domain:'www.example.com.es',
-  branches:['Peninsula ave. 15 street, North Drive','Upper Lake street, corner Crest village','75 ave. Darktown 19880']
-}
+
 
 
 const state={
   user:{},
   industry:[],
   customer:{},
-  charts:{}
+  charts:{},
+  upcomingEvents:[]
 }
 
 //getters
@@ -57,8 +49,241 @@ const getters={
   getCustomer:(state)=>{
     return state.customer
   },
-  getChartStatistics:(state)=>state.charts  
-}
+  getChartStatistics:(state)=>state.charts
+  ,getUpcomingEvents:(state)=>{
+    return state.upcomingEvents;
+  },
+  getChartNumberOfEventsPerYear:(state)=>{
+    if(state.charts.numberOfEventsPerYear){
+          const parse_data=[]
+        const parse_label=[]
+        if(state.charts.numberOfEventsPerYear){ 
+            const chart=state.charts.numberOfEventsPerYear
+            for(let key in chart){              
+              parse_label.push(key)
+              parse_data.push(chart[key]) 
+          }
+          console.log(parse_data)
+          return{            
+            labels: parse_label,
+            datasets: [{
+              data: parse_data,
+              pointBackgroundColor:'white',
+              pointStyle:'circle', 
+              borderColor: [
+                'white',
+              ],
+              borderWidth: 3
+            }]                     
+          }
+        }else{
+          return{            
+            labels: [],
+            datasets:[{
+              label: '# of type Events',
+              data: [],
+              backgroundColor: '#25d0a2'
+      
+            }]          
+          }
+        }
+        }      
+      }
+      ,getChartEventPerEmployee:(state)=>{
+        const parse_data=[]
+  const parse_month=[]
+  if(state.charts.eventCostPerEmployeePerYearMonth){          
+    const chart= state.charts.eventCostPerEmployeePerYearMonth          
+    for(let key in chart){
+    const moths= key.split('__')
+    parse_month.push(months_short[moths[1]-1])
+    parse_data.push(chart[key]) 
+    }
+     if(parse_month.length<6&&parse_data.length<6){
+       return{               
+          labels: parse_month,
+          datasets: [{
+            data: parse_data,
+            pointBackgroundColor:'white',
+            pointStyle:'circle', 
+            borderColor: [
+              'white',
+            ],
+            borderWidth: 3
+          }]
+                  
+          }
+         
+      
+  }else{
+     const arrLenght=parse_data.length-6
+      const dataCh=parse_data.splice(arrLenght)
+      const labemlCh=parse_month.splice(arrLenght)
+      return{               
+          labels: labemlCh,
+          datasets: [{
+            data: dataCh,
+            backgroundColor: [
+              'rgba(255, 255, 255, 0.2)',
+            ],
+            borderColor: [
+              '#26cfa0',
+            ],
+            borderWidth: 1
+          }]          
+          }  
+  }
+  }}
+  ,getChartEventsPerCategory:(state)=>{
+    const parse_data=[]
+    const parse_label=[]
+  if(state.charts.eventsPerCategory){ 
+      const chart=state.charts.eventsPerCategory
+      for(let key in chart){
+        const moths= key.split('__')
+        parse_label.push(key)
+        parse_data.push(chart[key]) 
+    }
+    return{            
+      labels: parse_label,
+      datasets:[{
+        label: '# of type Events',
+        data: parse_data,
+        backgroundColor: 'white'
+
+      }]          
+    }
+  }else{
+    return{            
+      labels: [],
+      datasets:[{
+        label: '# of type Events',
+        data: [],
+        backgroundColor: '#25d0a2'
+
+      }]          
+    }
+  }
+  },
+  getChartParticipantsPerEvent:(state)=>{
+    const currentYear=new Date().getFullYear()
+      const months=listMonth
+      let listRete=null
+      if(state.charts.participantsPerEventPerYearMonthEventType){
+        const chart=state.charts.participantsPerEventPerYearMonthEventType
+        
+        let filterYear=null           
+         for(let key in chart){               
+          if(key==currentYear){                
+            filterYear=chart[key]                
+          }              
+      }        
+       listRete= months.map((item,index)=>{
+        const currentObj=[]
+        for(let month in filterYear){                     
+         if((month-1)===index){
+            const categori=filterYear[month]                
+             for(let key in categori){                                    
+                 const obj={}
+                 obj['typeEvent']=key
+                 obj['total']=String(categori[key].Invited||0)
+                 obj['currentValue']=String(categori[key].Actual||0)
+                 currentObj.push(obj)
+             }
+         }else{
+           const a = {category:'N/D',total:'0',currentValue:'0'}
+           currentObj.push(a)
+           }
+         }
+        
+         return currentObj
+      
+      })        
+      }      
+       return listRete 
+  },
+  getChartSatisfactionRate:(state)=>{
+    const currentYear=new Date().getFullYear()
+    const months=listMonth
+    let listRete=null
+    if(state.charts.satisfactionRatesPerYearMonth){
+      const chart=state.charts.satisfactionRatesPerYearMonth
+      let filterYear=null           
+       for(let key in chart){               
+        if(key==currentYear){                
+          filterYear=chart[key]                
+        }              
+    }    
+        
+     listRete= months.map((item,index)=>{
+      const currentObj=[]
+      for(let month in filterYear){                     
+       if((month-1)===index){
+          const categori=filterYear[month]
+           for(let key in categori){                   
+               const obj={}
+               obj['category']=key
+               obj['total']='100'
+               obj['currentValue']=String(categori[key])
+               currentObj.push(obj)
+           }
+       }else{
+         const a = {category:'N/D',total:'0',currentValue:'0'}
+         currentObj.push(a)
+         }
+       }
+       
+       return currentObj
+    
+    })        
+    }       
+     
+     return listRete
+  }
+
+} 
+
+// getChartSatisfactionRate(){
+//   const currentYear=new Date().getFullYear()
+//   const months=this.listMonth
+//   let listRete=null
+//   if(this.charts.satisfactionRatesPerYearMonth){
+//     const chart=this.charts.satisfactionRatesPerYearMonth
+//     let filterYear=null           
+//      for(let key in chart){               
+//       if(key==currentYear){                
+//         filterYear=chart[key]                
+//       }              
+//   }    
+      
+//    listRete= months.map((item,index)=>{
+//     const currentObj=[]
+//     for(let month in filterYear){                     
+//      if((month-1)===index){
+//         const categori=filterYear[month]
+//          for(let key in categori){                   
+//              const obj={}
+//              obj['category']=key
+//              obj['total']='100'
+//              obj['currentValue']=String(categori[key])
+//              currentObj.push(obj)
+//          }
+//      }else{
+//        const a = {category:'N/D',total:'0',currentValue:'0'}
+//        currentObj.push(a)
+//        }
+//      }
+     
+//      return currentObj
+  
+//   })        
+//   }       
+   
+//    return listRete
+// }
+
+
+
 
 //actions
 const actions={
@@ -66,7 +291,7 @@ const actions={
             Me.get()
             .then(res=>{
                 commit("setUser" , res[0])
-                commit('setCustomer',res[0].customer)                
+                commit('setCustomer',res[0].customer)                               
                 Customer.find(res[0].customer.id)
                 .then(res=>commit)
                 .catch(e=>console.log(e, 'eto customer, error'))
@@ -75,7 +300,20 @@ const actions={
                   .get()
                   .then(res=>commit('setCustomerChart',res[0]))
                   .catch(e=>console.log(e,'chart api errors'))
+
+                  let _calendar = new Calendar({id: res[0].defaultCalendarId});
+
+                  _calendar.calendarEvents().get().then(events => {                   
+                   let upcomingEvents = events.reduce(function (result, element) {
+                      if (element.status.toLowerCase() !== 'done') {
+                        result.push(element);
+                      }
+                      return result;
+                    }, []);
+                    commit('setUpcomingEvents',upcomingEvents)
+                })  
             }
+            
 
             )
             .catch(e=>console.log(e))        
@@ -198,7 +436,10 @@ const mutations= {
     },
     setCustomerChart(state,charts){
     state.charts=charts
-    }
+    },
+    setUpcomingEvents(state,data){
+      state.upcomingEvents=data
+    }    
 }
 
 export default {
