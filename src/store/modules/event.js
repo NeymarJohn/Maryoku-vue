@@ -30,7 +30,7 @@ const state = {
     categories: [],
     eventTypes: [],
     eventThemes: [],
-    calendarId: null,    
+    calendarId: null,
 }
 
 const getters = {
@@ -48,8 +48,7 @@ const getters = {
   },
   getComponentsList:(state)=>{
     return state.components;
-  },
-  
+  }
 }
 
 const actions = {
@@ -100,7 +99,7 @@ const actions = {
       .catch(e=>{
           commit("setComponents" , [])
       })
-  }       
+  },  
 }
 
 const mutations = {
@@ -134,7 +133,6 @@ const mutations = {
       setCurrentUserData(state, data){
         state.currentUser = data;
       },
-      
 }
 
 export default {

@@ -6,7 +6,7 @@
           <div class="md-layout">
             <div class='company-view-common-logo_block'>
               <div class='company-main-logo-block'>
-                <img class="company-logo" :src="customerLogoUrl" style="width: 80%; height: 80%;">
+                <img class="company-logo" :src="customerLogoUrl">
                 <div>
                   <div class="company-logo-button-block">
                     <div @click='UploadAvatar'>
@@ -56,49 +56,61 @@
             </div>
             <div class="md-layout-item md-size-100">
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Contact Information</div>
-              <div class="md-layout">                
-                   <input-text
-                    labelStyle='company_label_input'
-                    label='Company address'
-                    name='mainAddress'
-                    id='main_address_customer'
-                    :value='customer.mainAddress'
-                    :onChange='onChange'
-                    editebleMode
-                    :actionFunc='saveInfoFromForm'
-                    :ctx='customer'
-                    fieldStyle="without-border"/>             
-                  <input-text
-                    labelStyle='company_label_input'
-                    label='Phone'
-                    name='phoneNumber'
-                    :value='String(user.phoneNumber)||""'
-                    :onChange='onChange'
-                    editebleMode
-                    :actionFunc='saveInfoFromForm'
-                    :ctx='user'
-                    fieldStyle="without-border"/>
-                  <input-text
-                    labelStyle='company_label_input'
-                    label='Company Email'
-                    name='workspaceDomain'
-                    :value='customer.workspaceDomain'
-                    :onChange='onChange'
-                    editebleMode
-                    :actionFunc='saveInfoFromForm'
-                    :ctx='customer'
-                    fieldStyle="without-border"/>
-                  <input-text
-                    labelStyle='company_label_input'
-                    label='Company Domain'
-                    name='website'
-                    :value='customer.website'
-                    :onChange='onChange'
-                    editebleMode
-                    :actionFunc='saveInfoFromForm'
-                    :ctx='customer'
-                    fieldStyle="without-border"/>                
+
+
+            <div class="md-layout">
+              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                    <popover-input
+                      label='Company address'
+                      icon="location_on"
+                      name='mainAddress'
+                      id='main_address_customer'
+                      :value='customer.mainAddress'
+                      :onChange='onChange'
+                      :actionFunc='saveInfoFromForm'
+                      :ctx='customer'>
+                    </popover-input>   
               </div>
+
+              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                    <popover-input
+                      label='Phone'
+                      icon="phone"
+                      name='phoneNumber'
+                      :value='String(user.phoneNumber)||""'
+                      :onChange='onChange'
+                      :actionFunc='saveInfoFromForm'
+                      :ctx='user'>
+                    </popover-input>  
+              </div>
+
+              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                    <popover-input
+                      label='Company Email'
+                      icon="email"
+                      name='workspaceDomain'
+                      :value='customer.workspaceDomain'
+                      :onChange='onChange'
+                      :actionFunc='saveInfoFromForm'
+                      :ctx='customer'>
+                    </popover-input>
+              </div>
+
+              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                    <popover-input
+                      label='Company Domain'
+                      icon="site"
+                      name='workspaceDomain'
+                      :value='customer.website'
+                      :onChange='onChange'
+                      :actionFunc='saveInfoFromForm'
+                      :ctx='customer'>
+                    </popover-input>   
+              </div>
+            </div>
+
+
+
             </div>
             <div class="md-layout-item md-size-100">
               <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
@@ -191,7 +203,7 @@
           </div>
 
           <LineChart
-            v-if='!isMonthly&&getChartNumberOfEventsPerYear'
+            v-if='!isMonthly'
             key="username-input"
             classStyle="max-height: 130px"
             id="number_of_events_chart"
@@ -219,8 +231,7 @@
             <ControlPanel :onClick='getMonthControlRate' controlBlockStyle="control-panel-block-participants"/>
           </div>
           <div>
-           <LineIndicator
-             v-if='chechParticipant'              
+            <LineIndicator
               v-for="item in chechParticipant"
               :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-participants'
@@ -236,7 +247,6 @@
         <md-card-content style="max-height: 200px">
           <div class="title text-bold">Average event cost per employee</div>
           <LineChart
-            v-if='getChartEventPerEmployee'
             classStyle="max-height: 130px"
             id="number_of_participants_chart"
             width="350"
@@ -254,13 +264,12 @@
           <div>
             <ControlPanel :onClick='getMonthFromControl' controlBlockStyle="control-panel-block-rate"/>
             <div class='rate-mean-block'>
-              <span class='indicator-event-info-mean-value'>{{`${Math.floor(getMeanValue)}%`}}</span>
+              <span class='indicator-event-info-mean-value'>{{`${Math.floor(getMeanМalue)}%`}}</span>
               <span class='indicator-event-type-title-rate'>{{`Average attendants satisfaction in ${new Date().getFullYear()}`}}</span>
             </div>
           </div>
           <div>
-             <LineIndicator
-             v-if='chechParticipant' 
+            <LineIndicator
               v-for="item in checkMonth"
               :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-rate'
@@ -276,7 +285,6 @@
         <md-card-content>
           <div class="title text-bold">Event categories comparison</div>
           <LineChart
-            v-if='getChartEventsPerCategory'
             classStyle="max-height: 130px"
             id="event_vs_category"
             width="350"
@@ -310,8 +318,9 @@
   import ControlPanel from '@/components/Button/ControlPanel.vue';
   import LineIndicator from '@/components/Chart/LineIndicator.vue';
   import LineChart from '@/components/Chart/LineChart.vue'
+  import PopoverInput from  '@/components/Tooltips/PopoverInput.vue'
 
- import Customer from '@/models/Customer';
+  import Customer from '@/models/Customer';
   import CustomerFile from '@/models/CustomerFile';
   import Datepicker from '@/components/Datepicker/Datepicker.vue';
 
@@ -339,21 +348,30 @@
       LineIndicator,
       Datepicker,
       "select-common":Select,
-      LineChart
-    }   
+      LineChart,
+      PopoverInput
+    },
+   created(){
+        this.$store.dispatch("user/getUserFromApi");
+        this.$store.dispatch("user/getIndustry");         
+   } 
     ,    
-     mounted(){      
+     mounted(){
        const options = {          
           types: ['geocode']
         }
-        this.auth.currentUser(this, true, function() {
-        this.$store.dispatch("user/getUserFromApi");
-         this.$store.dispatch("user/getIndustry");   
-        this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';      
-      }.bind(this))         
+         this.$store.dispatch("user/getUserFromApi");
+        this.$store.dispatch("user/getIndustry");         
+       this.rate=this.getChartSatisfactionRate()
+       this.participants=this.getChartParticipantsPerEvent()
+      const inputMainAddress = document.getElementById('main_address_customer')      
+      const inputBranch = document.getElementById('branch_address_search')
+      const autocomplete2 = new google.maps.places.Autocomplete(inputBranch, options)      
+      const autocomplete1 = new google.maps.places.Autocomplete(inputMainAddress, options)     
+      this.auth.currentUser(this, true, () => {        
+        this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';
+      });
     },
-   
-    
     data() {
       return {
         auth: auth,
@@ -378,7 +396,9 @@
             }
           }
 
-        },             
+        },
+        participants:[],
+        rate:[],      
         branch_address:'',
         showSearch:false,
         showFilter:false,       
@@ -392,7 +412,8 @@
         shortNameM:months_short,
         isShowForm:false,
         formSwitcher:'',
-        duration:[],       
+        duration:[],
+        isEnabled: true,       
       }
     },
     computed:{
@@ -400,14 +421,117 @@
         customer:'user/getCustomer',
         user:'user/getUser',
         industryList:'user/getIndustryList',
-        charts:'user/getChartStatistics',
-        getChartNumberOfEventsPerYear:'user/getChartNumberOfEventsPerYear',
-        getChartEventPerEmployee:'user/getChartEventPerEmployee',
-        getChartEventsPerCategory:'user/getChartEventsPerCategory',
-        participants:'user/getChartParticipantsPerEvent',
-        rate:'user/getChartSatisfactionRate'
-      }),     
-                  
+        charts:'user/getChartStatistics'
+      }),
+      getChartNumberOfEventsPerYear(){
+        const parse_data=[]
+        const parse_label=[]
+        if(this.charts.numberOfEventsPerYear){ 
+            const chart=this.charts.numberOfEventsPerYear
+            for(let key in chart){              
+              parse_label.push(key)
+              parse_data.push(chart[key]) 
+          }
+          return{            
+            labels: parse_label,
+            datasets: [{
+              data: parse_data,
+              backgroundColor: [
+                'rgba(255, 255, 255, 0.2)',
+              ],
+              borderColor: [
+                '#71c278',
+              ],
+              borderWidth: 1
+            }]                     
+          }
+        }else{
+          return{            
+            labels: [],
+            datasets:[{
+              label: '# of type Events',
+              data: [],
+              backgroundColor: '#25d0a2'
+
+            }]          
+          }
+        }
+      },
+      getChartEventPerEmployee(){
+        const parse_data=[]
+        const parse_month=[]
+        if(this.charts.eventCostPerEmployeePerYearMonth){          
+          const chart= this.charts.eventCostPerEmployeePerYearMonth          
+          for(let key in chart){
+          const moths= key.split('__')
+          parse_month.push(this.shortNameM[moths[1]-1])
+          parse_data.push(chart[key]) 
+          }
+           if(parse_month.length<6&&parse_data.length<6){
+             return{               
+                labels: parse_month,
+                datasets: [{
+                  data: parse_data,
+                  backgroundColor: [
+                    'rgba(255, 255, 255, 0.2)',
+                  ],
+                  borderColor: [
+                    '#26cfa0',
+                  ],
+                  borderWidth: 1
+                }]          
+                }
+            
+        }else{
+           const arrLenght=parse_data.length-6
+            const dataCh=parse_data.splice(arrLenght)
+            const labemlCh=parse_month.splice(arrLenght)
+            return{               
+                labels: labemlCh,
+                datasets: [{
+                  data: dataCh,
+                  backgroundColor: [
+                    'rgba(255, 255, 255, 0.2)',
+                  ],
+                  borderColor: [
+                    '#26cfa0',
+                  ],
+                  borderWidth: 1
+                }]          
+                }  
+        }
+        }},
+        getChartEventsPerCategory(chartData){
+           const parse_data=[]
+          const parse_label=[]
+        if(this.charts.eventsPerCategory){ 
+            const chart=this.charts.eventsPerCategory
+            for(let key in chart){
+              const moths= key.split('__')
+              parse_label.push(key)
+              parse_data.push(chart[key]) 
+          }
+          return{            
+            labels: parse_label,
+            datasets:[{
+              label: '# of type Events',
+              data: parse_data,
+              backgroundColor: '#25d0a2'
+
+            }]          
+          }
+        }else{
+          return{            
+            labels: [],
+            datasets:[{
+              label: '# of type Events',
+              data: [],
+              backgroundColor: '#25d0a2'
+
+            }]          
+          }
+        }
+        },        
              
       getMonth(){
         return this.monthValue.map(item=>item.month)
@@ -417,27 +541,27 @@
       },
       checkMonth(){
         const currentMonth=this.listMonth[new Date().getMonth()]
-        const currentCount=new Date().getMonth()  
-        // if(!this.rate)return false      
-        if(!this.month){
-              return this.rate[currentCount]       
-                                       
+        const currentCount=new Date().getMonth()
+        
+        if(!this.month){          
+            return this.rate[currentCount]                   
         }else{
           const count= this.listMonth.indexOf(this.month)
           return this.rate[count]
         }         
       },
-      chechParticipant(){       
+      chechParticipant(){
         const currentCount=new Date().getMonth()
-        const currentMonth=this.listMonth[currentCount]           
+        const currentMonth=this.listMonth[currentCount]       
+
         if(!this.monthRate){         
-                 return this.participants[currentCount]            
+            return this.participants[currentCount]          
         }else{
-          const count= this.listMonth.indexOf(this.monthRate)          
+          const count= this.listMonth.indexOf(this.monthRate)
           return this.participants[count]
-        }              
+        }       
       },
-      getMeanValue(){        
+      getMeanМalue(){
        const count = this.listMonth.indexOf(this.month)       
        if(count==-1){
          return 0
@@ -474,7 +598,7 @@
         const chart=this.charts.eventCostPerEmployeePerYearMonth
         const duration=[]
         for (let year in chart){
-        const y=year.split('__')
+        const y=year.split('_')
         if(!duration.includes(y[0]))duration.push(y[0])
         }
         this.duration=duration
@@ -619,12 +743,131 @@
             console.log(error);
           });
       },
-    
+      getChartSatisfactionRate(){
+          const currentYear=new Date().getFullYear()
+          const months=this.listMonth
+          let listRete=null
+          if(this.charts.satisfactionRatesPerYearMonth){
+            const chart=this.charts.satisfactionRatesPerYearMonth
+            let filterYear=null           
+             for(let key in chart){               
+              if(key==currentYear){                
+                filterYear=chart[key]                
+              }              
+          }    
+              
+           listRete= months.map((item,index)=>{
+            const currentObj=[]
+            for(let month in filterYear){                     
+             if((month-1)===index){
+                const categori=filterYear[month]
+                 for(let key in categori){                   
+                     const obj={}
+                     obj['category']=key
+                     obj['total']='100'
+                     obj['currentValue']=String(categori[key])
+                     currentObj.push(obj)
+                 }
+             }else{
+               const a = {category:'N/D',total:'0',currentValue:'0'}
+               currentObj.push(a)
+               }
+             }
+             
+             return currentObj
+          
+          })        
+          }          
+           this.rate=listRete
+           return listRete
+        },
+        getChartParticipantsPerEvent(){
+          // {typeEvent:'Comapany Trainig', eventDate:'August 19,2018', total:'324',currentValue:'23'}
+          const currentYear=new Date().getFullYear()
+          const months=this.listMonth
+          let listRete=null
+          if(this.charts.participantsPerEventPerYearMonthEventType){
+            const chart=this.charts.participantsPerEventPerYearMonthEventType
+            
+            let filterYear=null           
+             for(let key in chart){               
+              if(key==currentYear){                
+                filterYear=chart[key]                
+              }              
+          }    
+            
+           listRete= months.map((item,index)=>{
+            const currentObj=[]
+            for(let month in filterYear){                     
+             if((month-1)===index){
+                const categori=filterYear[month]                
+                 for(let key in categori){                                    
+                     const obj={}
+                     obj['typeEvent']=key
+                     obj['total']=String(categori[key].Invited||0)
+                     obj['currentValue']=String(categori[key].Actual||0)
+                     currentObj.push(obj)
+                 }
+             }else{
+               const a = {category:'N/D',total:'0',currentValue:'0'}
+               currentObj.push(a)
+               }
+             }
+            
+             return currentObj
+          
+          })        
+          }         
+           
+           return listRete
+        } 
+ 
+
     }, 
        
   };
 </script>
 <style lang='scss'>
+  .has-action {
+    .v-popover {
+      visibility: hidden;
+    }
+    :hover  {
+      .v-popover{
+        visibility: visible;
+      }
+    }
+  }
+  .tooltip {
+    &.popover {
+      $color: #f9f9f9;
+
+      .popover-inner {
+        background: $color;
+        color: black;
+        padding: 24px;
+        border-radius: 5px;
+        box-shadow: 0 5px 30px rgba(black, .1);
+      }
+      .wrapper {
+        height: auto
+      }
+      .popover-arrow {
+        border-color: $color;
+      }
+      .action-block {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+  }
+
+  .md-card-profile {
+      font-size: 14px;
+      font-weight: 300;
+      color: #292929!important;
+  }
   .info-chat-value{
     color: black;
     font-weight: 500;
@@ -646,13 +889,14 @@
   }
   .company-view-common-logo_block{
     display:flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     width: 100%;
     align-items: center
   }
   .company-logo{
-    width: 40% !important;
-    height: 100% !important;
+    max-width: 80px !important;
+    max-height: 80px !important;
+    border-radius: 10px;
   }
   .company-branch_block{
     display:flex;
