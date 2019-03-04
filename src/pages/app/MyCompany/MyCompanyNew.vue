@@ -23,97 +23,258 @@
               </div>
             </div>
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
+              <div class="fc-divider" style="margin: 15px;"></div>
             </div>
-            <div class="md-layout-item md-size-100">              
-              <input-text
-                    labelStyle='company_label_input'
-                    label='Number of employees'
-                    name='numberOfEmployees'
-                    :value='String(customer.numberOfEmployees)'
-                    :onChange='onChange'
-                    editebleMode
-                    :actionFunc='saveInfoFromForm'
-                    :ctx='customer'
-                    fieldStyle="without-border"/>              
-              <select-common
-                    label='Industry'
-                    labelStyle='om_label_input'
-                    :list='industryList'
-                    name='industry'
-                    :onChange="onChange"
-                    :valueName="['title','id']"
-                    editebleMode
-                    :actionFunc='saveInfoFromForm'
-                    :ctx='customer'
-                    :value='customer.industry'
-                    fieldStyle="without-border"/>
-              <div class="md-layout">              
-              </div>
-            </div>
+
+<div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                    <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
+                      <span>Number of Employees</span>
+                      <span class="value">{{customer.numberOfEmployees}}</span>
+                    </p>
+                    <v-popover
+                      offset="16"
+                      :disabled="!isEnabled"
+                      hideOnTargetClick
+                      placement='right'
+                    >
+                      <md-button class="tooltip-target b3 inline-edit md-simple md-just-icon md-round fa fa-edit button-height">
+                        <md-icon>edit</md-icon>
+                      </md-button>
+                      
+                      <template slot="popover">
+                        <input-text
+                              labelStyle='company_label_input'
+                              label='Number of employees'
+                              name='numberOfEmployees'
+                              :value='String(customer.numberOfEmployees)'
+                              :onChange='onChange'
+                              editebleMode
+                              :isEditable="isEnabled"
+                              :actionFunc='saveInfoFromForm'
+                              :ctx='customer'
+                              fieldStyle="without-border"/> 
+                        
+                        <div class="action-block">
+                          <a v-close-popover>Close</a>
+                          <md-button>Save</md-button>
+                        </div>
+                      </template>
+                    </v-popover>
+                  </div>
+                </div>              
+
+              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                    <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
+                      <span>Industry</span>
+                      <span class="value">{{customer.industry}}</span>
+                    </p>
+                    <v-popover
+                      offset="16"
+                      :disabled="!isEnabled"
+                      hideOnTargetClick
+                      placement='right'
+                    >
+                      <md-button class="tooltip-target b3 inline-edit md-simple md-just-icon md-round fa fa-edit button-height">
+                        <md-icon>edit</md-icon>
+                      </md-button>
+                      
+                      <template slot="popover">
+                        <select-common
+                                label='Industry'
+                                labelStyle='om_label_input'
+                                :list='industryList'
+                                name='industry'
+                                :onChange="onChange"
+                                :valueName="['title','id']"
+                                editebleMode
+                                :isEditable="isEnabled"
+                                :actionFunc='saveInfoFromForm'
+                                :ctx='customer'
+                                :value='customer.industry'
+                                fieldStyle="without-border"/>
+                        
+                        <div class="action-block">
+                          <a v-close-popover>Close</a>
+                          <md-button>Save</md-button>
+                        </div>
+                      </template>
+                    </v-popover>
+                  </div>
+                </div>  
+
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
+              <div class="fc-divider" style="margin: 15px;"></div>
             </div>
-            <div class="md-layout-item md-size-100">
+            <div>
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Contact Information</div>
+              <div class="md-layout">
+                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                    <p>
+                      <md-icon>
+                        phone
+                      </md-icon>
+                      {{customer.mainAddress}}
+                    </p>
+                    <v-popover
+                      offset="16"
+                      :disabled="!isEnabled"
+                      hideOnTargetClick
+                      placement='right'
+                    >
+                      <md-button class="tooltip-target b3 inline-edit md-simple md-just-icon md-round fa fa-edit button-height">
+                        <md-icon>edit</md-icon>
+                      </md-button>
+                      
+                      <template slot="popover">
+                        <input-text
+                              labelStyle='company_label_input'
+                              label='Company address'
+                              name='mainAddress'
+                              id='main_address_customer'
+                              :value='customer.mainAddress'
+                              :onChange='onChange'
+                              editebleMode
+                              :isEditable="isEnabled"
+                              :actionFunc='saveInfoFromForm'
+                              :ctx='customer'
+                              fieldStyle="without-border"/>  
+                        
+                        <div class="action-block">
+                          <a v-close-popover>Close</a>
+                          <md-button>Save</md-button>
+                        </div>
+                      </template>
+                    </v-popover>
+                  </div>
+                </div>
+                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                    <p>
+                      <md-icon>
+                        phone
+                      </md-icon>
+                      {{customer.phoneNumber}}
+                    </p>
+                    <v-popover
+                      offset="16"
+                      :disabled="!isEnabled"
+                      hideOnTargetClick
+                      placement='right'
+                    >
+                      <md-button class="tooltip-target b3 inline-edit md-simple md-just-icon md-round fa fa-edit button-height">
+                        <md-icon>edit</md-icon>
+                      </md-button>
+
+                      <template slot="popover">
+                        <input-text
+                          labelStyle='company_label_input'
+                          label='Phone'
+                          name='phoneNumber'
+                          :value='String(user.phoneNumber)||""'
+                          :onChange='onChange'
+                          editebleMode
+                          :isEditable="isEnabled"
+                          :actionFunc='saveInfoFromForm'
+                          :ctx='user'
+                          fieldStyle="without-border"/>
+                        
+                        <div class="action-block">
+                          <a v-close-popover>Close</a>
+                          <md-button>Save</md-button>
+                        </div>
+                      </template>
+                    </v-popover>
+                  </div>
+                </div>
+
+                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                    <p>
+                      <md-icon>
+                        phone
+                      </md-icon>
+                      {{customer.workspaceDomain}}
+                    </p>
+                    <v-popover
+                      offset="16"
+                      :disabled="!isEnabled"
+                      hideOnTargetClick
+                      placement='right'
+                    >
+                      <md-button class="tooltip-target b3 inline-edit md-simple md-just-icon md-round fa fa-edit button-height">
+                        <md-icon>edit</md-icon>
+                      </md-button>
+
+                      <template slot="popover">
+                        <input-text
+                          labelStyle='company_label_input'
+                          label='Company Email'
+                          name='workspaceDomain'
+                          :value='customer.workspaceDomain'
+                          :onChange='onChange'
+                          editebleMode
+                          :isEditable="isEnabled"
+                          :actionFunc='saveInfoFromForm'
+                          :ctx='customer'
+                          fieldStyle="without-border"/>
+                        
+                        <div class="action-block">
+                          <a v-close-popover>Close</a>
+                          <md-button>Save</md-button>
+                        </div>
+                      </template>
+                    </v-popover>
+                  </div>
+                </div>
 
 
-            <div class="md-layout">
-              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
-                    <popover-input
-                      label='Company address'
-                      icon="location_on"
-                      name='mainAddress'
-                      id='main_address_customer'
-                      :value='customer.mainAddress'
-                      :onChange='onChange'
-                      :actionFunc='saveInfoFromForm'
-                      :ctx='customer'>
-                    </popover-input>   
+                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                    <p>
+                      <md-icon>
+                        phone
+                      </md-icon>
+                      {{customer.website}}
+                    </p>
+                    <v-popover
+                      offset="16"
+                      :disabled="!isEnabled"
+                      hideOnTargetClick
+                      placement='right'
+                    >
+                      <md-button class="tooltip-target b3 inline-edit md-simple md-just-icon md-round fa fa-edit button-height">
+                        <md-icon>edit</md-icon>
+                      </md-button>
+
+                      <template slot="popover">
+                        <input-text
+                          labelStyle='company_label_input'
+                          label='Company Domain'
+                          name='website'
+                          :value='customer.website'
+                          :onChange='onChange'
+                          editebleMode
+                          :isEditable="isEnabled"
+                          :actionFunc='saveInfoFromForm'
+                          :ctx='customer'
+                          fieldStyle="without-border"/>  
+                        
+                        <div class="action-block">
+                          <a v-close-popover>Close</a>
+                          <md-button>Save</md-button>
+                        </div>
+                      </template>
+                    </v-popover>
+                  </div>
+                </div>
               </div>
-
-              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
-                    <popover-input
-                      label='Phone'
-                      icon="phone"
-                      name='phoneNumber'
-                      :value='String(user.phoneNumber)||""'
-                      :onChange='onChange'
-                      :actionFunc='saveInfoFromForm'
-                      :ctx='user'>
-                    </popover-input>  
-              </div>
-
-              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
-                    <popover-input
-                      label='Company Email'
-                      icon="email"
-                      name='workspaceDomain'
-                      :value='customer.workspaceDomain'
-                      :onChange='onChange'
-                      :actionFunc='saveInfoFromForm'
-                      :ctx='customer'>
-                    </popover-input>
-              </div>
-
-              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
-                    <popover-input
-                      label='Company Domain'
-                      icon="site"
-                      name='workspaceDomain'
-                      :value='customer.website'
-                      :onChange='onChange'
-                      :actionFunc='saveInfoFromForm'
-                      :ctx='customer'>
-                    </popover-input>   
-              </div>
-            </div>
-
-
 
             </div>
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
+              <div class="fc-divider" style="margin: 15px;"></div>
             </div>
             <div class="md-layout-item md-size-100">
               <div class='company-branch_block'>
@@ -143,7 +304,7 @@
             </div>
 
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
+              <div class="fc-divider" style="margin: 15px;"></div>
             </div>
             <div class="md-layout-item md-size-100">
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Customer Infromation</div>
@@ -318,7 +479,6 @@
   import ControlPanel from '@/components/Button/ControlPanel.vue';
   import LineIndicator from '@/components/Chart/LineIndicator.vue';
   import LineChart from '@/components/Chart/LineChart.vue'
-  import PopoverInput from  '@/components/Tooltips/PopoverInput.vue'
 
   import Customer from '@/models/Customer';
   import CustomerFile from '@/models/CustomerFile';
@@ -349,7 +509,6 @@
       Datepicker,
       "select-common":Select,
       LineChart,
-      PopoverInput
     },
    created(){
         this.$store.dispatch("user/getUserFromApi");
@@ -838,6 +997,27 @@
       }
     }
   }
+  .md-card-profile {
+    .header {
+      font-size: 11px;
+      font-weight: 300;
+      text-align: left;
+      color: #292929!important;
+    }
+    .value {
+      color:#292929!important;
+    }
+    p {
+      font-family: Roboto;
+      font-size: 11px;
+      font-weight: 300;
+      color: #999999;
+      i {
+        font-size: 16px!important;
+        color: #999999!important;
+      }
+    }
+  }
   .tooltip {
     &.popover {
       $color: #f9f9f9;
@@ -1000,6 +1180,7 @@
     display:flex
   }
   .md-layout-item >.fc-divider{
+    color: #ececec;
     margin: 15px -10px !important;
   }
 </style>

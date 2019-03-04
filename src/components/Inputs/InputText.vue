@@ -30,7 +30,6 @@
         },
         data(){
             return{
-                isEditable:false,
                 vm:{
                   searchPlace:''
                 }
@@ -58,6 +57,7 @@
             onChangeInput:Function,
             disabled:Boolean,
             count:Boolean,
+            isEditable:Boolean,
             editebleMode:Boolean,
             actionFunc:Function,
             ctx:Object,
@@ -83,9 +83,7 @@
               this.isEditable=!this.isEditable
           },
           makeAction(){
-             console.log('@@')
-             this.actionFunc(this.ctx,this.name)            
-              this.isEditable=false
+             this.actionFunc(this.ctx,this.name)
         
         }           
         } 
