@@ -14,11 +14,11 @@
                         <i class="fa fa-square" style="margin-right: 15px;" v-bind:style="`color: ${tab.icon}!important;`"></i>
                         {{ tab.label }} 
                     </template>
-                    <md-tab v-for="item in components" :key="item.id" :id="`tab-${item.value}`" class="12311111" :md-icon="`${item.color}`" :md-label="`${item.value}`" @click="!item.childComponents ? selectComponent(item.id) : ''">
+                    <md-tab v-for="item in components" :key="item.id" :id="`tab-${item.value}`" :md-icon="`${item.color}`" :md-label="`${item.value}`" @click="!item.childComponents ? selectComponent(item) : ''">
                         <div class="md-layout">
                             <div class="md-layout-item">
                                 <md-list>
-                                    <md-list-item v-for="child in item.childComponents" :key="child.id" @click="selectComponent(child.id)"> 
+                                    <md-list-item v-for="child in item.childComponents" :key="child.id" @click="selectComponent(child)"> 
                                         <div class="image-block">
                                             <img v-show="!selectedComponents(child.id)" :src="`${child.imageOff}`">
                                             <img v-show="selectedComponents(child.id)" :src="`${child.imageOn}`">    
@@ -61,11 +61,11 @@
         componentsData: [],
     }),
     methods: {
-        selectComponent(id) {
-            if (this.componentsData.includes(id)) {
-                this.componentsData.splice(this.componentsData.indexOf(id), 1)
+        selectComponent(item) {
+            if (this.componentsData.includes(item.id)) {
+                this.componentsData.splice(this.componentsData.indexOf(item.id), 1)
             } else {
-                this.componentsData.push(id);
+                this.componentsData.push(item.id);
             }
         },
         selectedComponents(id) {
@@ -88,7 +88,21 @@
                 })  
             });          
         },
-       selectEventComponents() {
+        async deleteComponent(component) {
+            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = await calendar.calendarEvents().find(this.eventId);
+
+            let eventComponent = new EventComponent(component).for(calendar, event);
+
+            eventComponent.delete().then(result => {
+                this.isLoading = false;
+            })
+            .catch(error => {
+                console.log(error);
+                this.isLoading = false;
+            })
+        },        
+        selectEventComponents() {
             let map = []
 
             this.eventComponents.forEach(function(item){
