@@ -14,7 +14,7 @@
                         <i class="fa fa-square" style="margin-right: 15px;" v-bind:style="`color: ${tab.icon}!important;`"></i>
                         {{ tab.label }} 
                     </template>
-                    <md-tab v-for="item in components" :key="item.id" :id="`tab-${item.value}`" :md-icon="`${item.color}`" :md-label="`${item.value}`" @click="!item.childComponents ? selectComponent(item.id) : ''">
+                    <md-tab v-for="item in components" :key="item.id" :id="`tab-${item.value}`" class="12311111" :md-icon="`${item.color}`" :md-label="`${item.value}`" @click="!item.childComponents ? selectComponent(item.id) : ''">
                         <div class="md-layout">
                             <div class="md-layout-item">
                                 <md-list>
