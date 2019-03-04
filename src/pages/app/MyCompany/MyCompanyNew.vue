@@ -191,7 +191,7 @@
           </div>
 
           <LineChart
-            v-if='!isMonthly'
+            v-if='!isMonthly&&getChartNumberOfEventsPerYear'
             key="username-input"
             classStyle="max-height: 130px"
             id="number_of_events_chart"
@@ -219,7 +219,8 @@
             <ControlPanel :onClick='getMonthControlRate' controlBlockStyle="control-panel-block-participants"/>
           </div>
           <div>
-            <LineIndicator
+           <LineIndicator
+             v-if='chechParticipant'              
               v-for="item in chechParticipant"
               :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-participants'
@@ -235,6 +236,7 @@
         <md-card-content style="max-height: 200px">
           <div class="title text-bold">Average event cost per employee</div>
           <LineChart
+            v-if='getChartEventPerEmployee'
             classStyle="max-height: 130px"
             id="number_of_participants_chart"
             width="350"
@@ -252,12 +254,13 @@
           <div>
             <ControlPanel :onClick='getMonthFromControl' controlBlockStyle="control-panel-block-rate"/>
             <div class='rate-mean-block'>
-              <span class='indicator-event-info-mean-value'>{{`${Math.floor(getMeanМalue)}%`}}</span>
+              <span class='indicator-event-info-mean-value'>{{`${Math.floor(getMeanValue)}%`}}</span>
               <span class='indicator-event-type-title-rate'>{{`Average attendants satisfaction in ${new Date().getFullYear()}`}}</span>
             </div>
           </div>
           <div>
-            <LineIndicator
+             <LineIndicator
+             v-if='chechParticipant' 
               v-for="item in checkMonth"
               :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-rate'
@@ -273,6 +276,7 @@
         <md-card-content>
           <div class="title text-bold">Event categories comparison</div>
           <LineChart
+            v-if='getChartEventsPerCategory'
             classStyle="max-height: 130px"
             id="event_vs_category"
             width="350"
@@ -336,28 +340,20 @@
       Datepicker,
       "select-common":Select,
       LineChart
-    },
-   created(){
-        this.$store.dispatch("user/getUserFromApi");
-        this.$store.dispatch("user/getIndustry");         
-   } 
+    }   
     ,    
-     mounted(){
+     mounted(){      
        const options = {          
           types: ['geocode']
         }
-         this.$store.dispatch("user/getUserFromApi");
-        this.$store.dispatch("user/getIndustry");         
-       this.rate=this.getChartSatisfactionRate()
-       this.participants=this.getChartParticipantsPerEvent()
-      const inputMainAddress = document.getElementById('main_address_customer')      
-      const inputBranch = document.getElementById('branch_address_search')
-      const autocomplete2 = new google.maps.places.Autocomplete(inputBranch, options)      
-      const autocomplete1 = new google.maps.places.Autocomplete(inputMainAddress, options)     
-      this.auth.currentUser(this, true, () => {        
-        this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';
-      });
+        this.auth.currentUser(this, true, function() {
+        this.$store.dispatch("user/getUserFromApi");
+         this.$store.dispatch("user/getIndustry");   
+        this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';      
+      }.bind(this))         
     },
+   
+    
     data() {
       return {
         auth: auth,
@@ -382,9 +378,7 @@
             }
           }
 
-        },
-        participants:[],
-        rate:[],      
+        },             
         branch_address:'',
         showSearch:false,
         showFilter:false,       
@@ -398,8 +392,7 @@
         shortNameM:months_short,
         isShowForm:false,
         formSwitcher:'',
-        duration:[],
-       
+        duration:[],       
       }
     },
     computed:{
@@ -407,121 +400,14 @@
         customer:'user/getCustomer',
         user:'user/getUser',
         industryList:'user/getIndustryList',
-        charts:'user/getChartStatistics'
-      }),
-      getChartNumberOfEventsPerYear(){
-        const parse_data=[]
-        const parse_label=[]
-        if(this.charts.numberOfEventsPerYear){ 
-            const chart=this.charts.numberOfEventsPerYear
-            for(let key in chart){              
-              parse_label.push(key)
-              parse_data.push(chart[key]) 
-          }
-          return{            
-            labels: parse_label,
-            datasets: [{
-              data: parse_data,
-              backgroundColor: [
-                'rgba(255, 255, 255, 0.2)',
-              ],
-              borderColor: [
-                '#71c278',
-              ],
-              borderWidth: 1
-            }]                     
-          }
-        }else{
-          return{            
-            labels: [],
-            datasets:[{
-              label: '# of type Events',
-              data: [],
-              backgroundColor: '#25d0a2'
-
-            }]          
-          }
-        }
-
-
-        
-      } 
-      ,
-      getChartEventPerEmployee(){
-        const parse_data=[]
-        const parse_month=[]
-        if(this.charts.eventCostPerEmployeePerYearMonth){          
-          const chart= this.charts.eventCostPerEmployeePerYearMonth          
-          for(let key in chart){
-          const moths= key.split('__')
-          parse_month.push(this.shortNameM[moths[1]-1])
-          parse_data.push(chart[key]) 
-          }
-           if(parse_month.length<6&&parse_data.length<6){
-             return{               
-                labels: parse_month,
-                datasets: [{
-                  data: parse_data,
-                  backgroundColor: [
-                    'rgba(255, 255, 255, 0.2)',
-                  ],
-                  borderColor: [
-                    '#26cfa0',
-                  ],
-                  borderWidth: 1
-                }]          
-                }
-            
-        }else{
-           const arrLenght=parse_data.length-6
-            const dataCh=parse_data.splice(arrLenght)
-            const labemlCh=parse_month.splice(arrLenght)
-            return{               
-                labels: labemlCh,
-                datasets: [{
-                  data: dataCh,
-                  backgroundColor: [
-                    'rgba(255, 255, 255, 0.2)',
-                  ],
-                  borderColor: [
-                    '#26cfa0',
-                  ],
-                  borderWidth: 1
-                }]          
-                }  
-        }
-        }},
-        getChartEventsPerCategory(chartData){
-           const parse_data=[]
-          const parse_label=[]
-        if(this.charts.eventsPerCategory){ 
-            const chart=this.charts.eventsPerCategory
-            for(let key in chart){
-              const moths= key.split('__')
-              parse_label.push(key)
-              parse_data.push(chart[key]) 
-          }
-          return{            
-            labels: parse_label,
-            datasets:[{
-              label: '# of type Events',
-              data: parse_data,
-              backgroundColor: '#25d0a2'
-
-            }]          
-          }
-        }else{
-          return{            
-            labels: [],
-            datasets:[{
-              label: '# of type Events',
-              data: [],
-              backgroundColor: '#25d0a2'
-
-            }]          
-          }
-        }
-        },        
+        charts:'user/getChartStatistics',
+        getChartNumberOfEventsPerYear:'user/getChartNumberOfEventsPerYear',
+        getChartEventPerEmployee:'user/getChartEventPerEmployee',
+        getChartEventsPerCategory:'user/getChartEventsPerCategory',
+        participants:'user/getChartParticipantsPerEvent',
+        rate:'user/getChartSatisfactionRate'
+      }),     
+                  
              
       getMonth(){
         return this.monthValue.map(item=>item.month)
@@ -531,27 +417,27 @@
       },
       checkMonth(){
         const currentMonth=this.listMonth[new Date().getMonth()]
-        const currentCount=new Date().getMonth()
-        
-        if(!this.month){          
-            return this.rate[currentCount]                   
+        const currentCount=new Date().getMonth()  
+        // if(!this.rate)return false      
+        if(!this.month){
+              return this.rate[currentCount]       
+                                       
         }else{
           const count= this.listMonth.indexOf(this.month)
           return this.rate[count]
         }         
       },
-      chechParticipant(){
+      chechParticipant(){       
         const currentCount=new Date().getMonth()
-        const currentMonth=this.listMonth[currentCount]       
-
+        const currentMonth=this.listMonth[currentCount]           
         if(!this.monthRate){         
-            return this.participants[currentCount]          
+                 return this.participants[currentCount]            
         }else{
-          const count= this.listMonth.indexOf(this.monthRate)
+          const count= this.listMonth.indexOf(this.monthRate)          
           return this.participants[count]
-        }       
+        }              
       },
-      getMeanМalue(){
+      getMeanValue(){        
        const count = this.listMonth.indexOf(this.month)       
        if(count==-1){
          return 0
@@ -588,7 +474,7 @@
         const chart=this.charts.eventCostPerEmployeePerYearMonth
         const duration=[]
         for (let year in chart){
-        const y=year.split('_')
+        const y=year.split('__')
         if(!duration.includes(y[0]))duration.push(y[0])
         }
         this.duration=duration
@@ -733,86 +619,7 @@
             console.log(error);
           });
       },
-      getChartSatisfactionRate(){
-          const currentYear=new Date().getFullYear()
-          const months=this.listMonth
-          let listRete=null
-          if(this.charts.satisfactionRatesPerYearMonth){
-            const chart=this.charts.satisfactionRatesPerYearMonth
-            let filterYear=null           
-             for(let key in chart){               
-              if(key==currentYear){                
-                filterYear=chart[key]                
-              }              
-          }    
-              
-           listRete= months.map((item,index)=>{
-            const currentObj=[]
-            for(let month in filterYear){                     
-             if((month-1)===index){
-                const categori=filterYear[month]
-                 for(let key in categori){                   
-                     const obj={}
-                     obj['category']=key
-                     obj['total']='100'
-                     obj['currentValue']=String(categori[key])
-                     currentObj.push(obj)
-                 }
-             }else{
-               const a = {category:'N/D',total:'0',currentValue:'0'}
-               currentObj.push(a)
-               }
-             }
-             
-             return currentObj
-          
-          })        
-          }          
-           this.rate=listRete
-           return listRete
-        },
-        getChartParticipantsPerEvent(){
-          // {typeEvent:'Comapany Trainig', eventDate:'August 19,2018', total:'324',currentValue:'23'}
-          const currentYear=new Date().getFullYear()
-          const months=this.listMonth
-          let listRete=null
-          if(this.charts.participantsPerEventPerYearMonthEventType){
-            const chart=this.charts.participantsPerEventPerYearMonthEventType
-            
-            let filterYear=null           
-             for(let key in chart){               
-              if(key==currentYear){                
-                filterYear=chart[key]                
-              }              
-          }    
-            
-           listRete= months.map((item,index)=>{
-            const currentObj=[]
-            for(let month in filterYear){                     
-             if((month-1)===index){
-                const categori=filterYear[month]                
-                 for(let key in categori){                                    
-                     const obj={}
-                     obj['typeEvent']=key
-                     obj['total']=String(categori[key].Invited||0)
-                     obj['currentValue']=String(categori[key].Actual||0)
-                     currentObj.push(obj)
-                 }
-             }else{
-               const a = {category:'N/D',total:'0',currentValue:'0'}
-               currentObj.push(a)
-               }
-             }
-            
-             return currentObj
-          
-          })        
-          }         
-           
-           return listRete
-        } 
- 
-
+    
     }, 
        
   };

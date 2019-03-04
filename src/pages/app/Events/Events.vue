@@ -91,8 +91,9 @@
     ProductCard
   } from "@/components";
 
+
   import EventModal from "./EventModal/";
-  import { mapMutations } from "vuex";
+  import { mapMutations,mapGetters } from "vuex";
   import EventPlannerVuexModule from "./EventPlanner.vuex";
   import Calendar from "@/models/Calendar";
   import moment from 'moment';
@@ -109,24 +110,27 @@
     created() {
       this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
     },
-    mounted() {
-      this.$store.state.calendarId = this.auth.user.defaultCalendarId;
-      
-      this.auth.currentUser(this, true, function() {
-        this.$store.dispatch("event/getCategories", this.auth.user.defaultCalendarId);
-        this.$store.dispatch("event/getEventTypes", this.auth.user.defaultCalendarId);
-        this.$store.dispatch("event/getCurrencies");
-      }.bind(this))
-      
-      this.getCalendarEvents();
+   computed:{      
+       ...mapGetters({       
+        upcomingEvents:'user/getUpcomingEvents'
+      })    
     },
+    mounted() {     
+      this.auth.currentUser(this, true, function() {
+        this.$store.dispatch("user/getUserFromApi");       
+      }.bind(this))  
+   
+       
+    },
+    updated(){      
+    }
+  ,
     data() {
       return {
         auth: auth,
         product3: "static/img/shutterstock_289440710.png",
-        recentEvents: [],
-        upcomingEvents: [],
-        isLoading: true,
+        recentEvents: [],        
+        isLoading: false,
       };
     },
 
@@ -143,30 +147,32 @@
         this.setModalSubmitTitle("Save");
         this.setEditMode({ editMode: false });
       },
-      getCalendarEvents() {
-        let _calendar = new Calendar({id: this.$store.state.calendarId});
+      // getCalendarEvents() {
+      //   console.log(this.$store.state.user.defaultCalendarId)
+      //   let _calendar = new Calendar({id: this.$store.state.user.defaultCalendarId});
 
-        _calendar.calendarEvents().get().then(events => {
-          this.upcomingEvents = events.reduce(function (result, element) {
-            if (element.status.toLowerCase() !== 'done') {
-              result.push(element);
-            }
-            return result;
-          }, []);
-          this.recentEvents = events.reduce(function (result, element) {
-            if (element.status.toLowerCase() === 'done') {
-              result.push(element);
-            }
-            return result;
-          }, []);
+      //   _calendar.calendarEvents().get().then(events => {
+      //     console.log(events,'eto event')
+      //     this.upcomingEvents = events.reduce(function (result, element) {
+      //       if (element.status.toLowerCase() !== 'done') {
+      //         result.push(element);
+      //       }
+      //       return result;
+      //     }, []);
+      //     this.recentEvents = events.reduce(function (result, element) {
+      //       if (element.status.toLowerCase() === 'done') {
+      //         result.push(element);
+      //       }
+      //       return result;
+      //     }, []);
 
-          this.isLoading = false;
-        })
-          .catch((error) => {
-            console.log(error);
-            this.isLoading = false;
-          });
-      },
+      //     this.isLoading = false;
+      //   })
+      //     .catch((error) => {
+      //       console.log(error);
+      //       this.isLoading = false;
+      //     });
+      // },
       showDeleteAlert(e, ev) {
         const _this = this;
         e.stopPropagation();
