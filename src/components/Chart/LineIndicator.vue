@@ -115,13 +115,13 @@
         color:#c6c6c6
     }
     .right-side-indicator{
-    background: #f7f7f7;
+    background: #f4f4f4;
   }
   .left-side-indicator-participants{
-    background: #21c4d7;
+    background: #bce9fc;
   }
   .left-side-indicator-rate{
-    background:#ffa322;
+    background:#aff3e1;
   }
 </style>
 

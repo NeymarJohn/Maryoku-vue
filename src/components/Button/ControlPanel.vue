@@ -1,8 +1,8 @@
 <template>  
 <div :class='controlBlockStyle'>           
-<div  class='previus_button' @click.prevent='onPrevious'><md-icon  class='icon-control-panel'>keyboard_arrow_left</md-icon></div>
+<div  class='previus_button' @click.prevent='onPrevious'><md-icon  class='icon-control-panel'>skip_previous</md-icon></div>
 <span>{{month[currentMonth]}}</span>
-<div  class='next_button' @click.prevent='onNext'><md-icon  class='icon-control-panel'>keyboard_arrow_right</md-icon></div>
+<div  class='next_button' @click.prevent='onNext'><md-icon  class='icon-control-panel'>skip_next</md-icon></div>
 </div>
 </template>
 <script>
@@ -59,7 +59,6 @@
     }
     .icon-control-panel{
         cursor:pointer;
-        color:white !important;
     }
 </style>
 

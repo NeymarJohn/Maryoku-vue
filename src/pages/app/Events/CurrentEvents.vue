@@ -13,17 +13,17 @@
         <md-card-content>
           <div class="control-main-block">
               <div class="company-control-logo">
-                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default">
+                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default" :class="{selected: selectedTab('blocks')}" @click="selectTab('blocks')">
                     <md-icon>create</md-icon>
                   </md-button>
               </div>
               <div class="company-control-logo">
-                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default">
+                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default" :class="{selected: selectedTab('proposals')}" @click="selectTab('proposals')">
                     <md-icon class="company-logo">sms</md-icon>
                   </md-button>
               </div>
               <div class="company-control-logo">
-                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default">
+                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default" :class="{selected: selectedTab('settigns')}" @click="selectTab('settigns')">
                     <md-icon class="company-logo">person</md-icon>
                   </md-button>
               </div>
@@ -108,18 +108,16 @@
         </md-card-content>
       </md-card>
     </div>
-    <div class="md-layout-item md-size-70 block-flex">
-    <EventElements/>
-      
+
+    <div v-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
+      <event-blocks :event-id="eventId" :event-components="selectedComponents"></event-blocks>
     </div>
+    <div v-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
+     <EventElements/>
+    </div>
+
     <div class="md-layout-item md-size-100 block-flex copyright-block">
-      <div>
-        <md-button
-          class="footer-link-button"
-          v-for="(item, index) in footerLink"
-          :key="index"
-        >{{item.title}}</md-button>
-      </div>
+      <div></div>
       <div>
         <p>
           {{`&copy; ${new Date().getFullYear()}`}}
@@ -164,6 +162,7 @@ export default {
       auth: auth,
       calendarEvent: {},
       selectedComponents: [],
+      currentTab: null,
       eventId: null,
       percentage: 0,
       totalRemainingBudget: 0,
@@ -192,6 +191,12 @@ export default {
             });
         }.bind(this));
     }, 
+    selectTab(tab) {
+      this.currentTab = tab;
+    },
+    selectedTab(tab) {
+      return this.currentTab === tab;
+    }
   },
   computed: {
     ...mapGetters({
@@ -233,6 +238,15 @@ export default {
 //   margin-right: -20px;
 //   margin-left: -20px;
 // }
+.control-main-block {
+  .md-button.selected {
+    background-color: #eb3e79!important;
+    border-color:#eb3e79!important;;
+    i {
+      color: #fff!important;
+    }
+  }
+}
 .company-control-logo .md-button{
       border: 2px solid #959595;
 }

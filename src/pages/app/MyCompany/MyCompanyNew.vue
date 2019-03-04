@@ -6,7 +6,7 @@
           <div class="md-layout">
             <div class='company-view-common-logo_block'>
               <div class='company-main-logo-block'>
-                <img class="company-logo" :src="customerLogoUrl" style="width: 80%; height: 80%;">
+                <img class="company-logo" :src="customerLogoUrl">
                 <div>
                   <div class="company-logo-button-block">
                     <div @click='UploadAvatar'>
@@ -23,85 +23,213 @@
               </div>
             </div>
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
+              <div class="fc-divider" style="margin: 15px;"></div>
             </div>
-            <div class="md-layout-item md-size-100">              
-              <input-text
-                    labelStyle='company_label_input'
-                    label='Number of employees'
-                    name='numberOfEmployees'
-                    :value='String(customer.numberOfEmployees)'
-                    :onChange='onChange'
-                    editebleMode
-                    :actionFunc='saveInfoFromForm'
-                    :ctx='customer'
-                    fieldStyle="without-border"/>              
-              <select-common
-                    label='Industry'
-                    labelStyle='om_label_input'
-                    :list='industryList'
-                    name='industry'
-                    :onChange="onChange"
-                    :valueName="['title','id']"
-                    editebleMode
-                    :actionFunc='saveInfoFromForm'
-                    :ctx='customer'
-                    :value='customer.industry'
-                    fieldStyle="without-border"/>
-              <div class="md-layout">              
-              </div>
-            </div>
+
+              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                    <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
+                      <span>Number of Employees</span>
+                      <span class="value">{{customer.numberOfEmployees}}</span>
+                    </p>
+                    <v-popover
+                      offset="16"
+                      :disabled="!isEnabled"
+                      hideOnTargetClick
+                      placement='right'>
+                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                        <md-icon>edit</md-icon>
+                      </md-button>
+                      
+                      <template slot="popover">
+                        <input-text
+                              labelStyle='company_label_input'
+                              label='Number of employees'
+                              name='numberOfEmployees'
+                              :value='String(customer.numberOfEmployees)'
+                              :onChange='onChange'
+                              editebleMode
+                              :isEditable="isEnabled"
+                              :actionFunc='saveInfoFromForm'
+                              :ctx='customer'
+                              fieldStyle="without-border"/> 
+                      </template>
+                    </v-popover>
+                  </div>
+                </div>              
+
+              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                    <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
+                      <span>Industry</span>
+                      <span class="value">{{customer.industry}}</span>
+                    </p>
+                    <v-popover
+                      offset="16"
+                      :disabled="!isEnabled"
+                      hideOnTargetClick
+                      placement='right'>
+                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                        <md-icon>edit</md-icon>
+                      </md-button>
+                      
+                      <template slot="popover">
+                        <select-common
+                                label='Industry'
+                                labelStyle='om_label_input'
+                                :list='industryList'
+                                name='industry'
+                                :onChange="onChange"
+                                :valueName="['title','id']"
+                                editebleMode
+                                :isEditable="isEnabled"
+                                :actionFunc='saveInfoFromForm'
+                                :ctx='customer'
+                                :value='customer.industry'
+                                fieldStyle="without-border"/>
+                      </template>
+                    </v-popover>
+                  </div>
+                </div>  
+
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
+              <div class="fc-divider" style="margin: 15px;"></div>
             </div>
-            <div class="md-layout-item md-size-100">
+            <div>
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Contact Information</div>
-              <div class="md-layout">                
-                   <input-text
-                    labelStyle='company_label_input'
-                    label='Company address'
-                    name='mainAddress'
-                    id='main_address_customer'
-                    :value='customer.mainAddress'
-                    :onChange='onChange'
-                    editebleMode
-                    :actionFunc='saveInfoFromForm'
-                    :ctx='customer'
-                    fieldStyle="without-border"/>             
-                  <input-text
-                    labelStyle='company_label_input'
-                    label='Phone'
-                    name='phoneNumber'
-                    :value='String(user.phoneNumber)||""'
-                    :onChange='onChange'
-                    editebleMode
-                    :actionFunc='saveInfoFromForm'
-                    :ctx='user'
-                    fieldStyle="without-border"/>
-                  <input-text
-                    labelStyle='company_label_input'
-                    label='Company Email'
-                    name='workspaceDomain'
-                    :value='customer.workspaceDomain'
-                    :onChange='onChange'
-                    editebleMode
-                    :actionFunc='saveInfoFromForm'
-                    :ctx='customer'
-                    fieldStyle="without-border"/>
-                  <input-text
-                    labelStyle='company_label_input'
-                    label='Company Domain'
-                    name='website'
-                    :value='customer.website'
-                    :onChange='onChange'
-                    editebleMode
-                    :actionFunc='saveInfoFromForm'
-                    :ctx='customer'
-                    fieldStyle="without-border"/>                
+              <div class="md-layout">
+                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                    <p>
+                      <i class="fa fa-map-marker-alt" style="margin-right:10px;"></i>
+                      {{customer.mainAddress}}
+                    </p>
+                    <v-popover
+                      offset="16"
+                      :disabled="!isEnabled"
+                      hideOnTargetClick
+                      placement='right'>
+                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                        <md-icon>edit</md-icon>
+                      </md-button>
+                      
+                      <template slot="popover">
+                        <input-text
+                              labelStyle='company_label_input'
+                              label='Company address'
+                              name='mainAddress'
+                              id='main_address_customer'
+                              :value='customer.mainAddress'
+                              :onChange='onChange'
+                              editebleMode
+                              :isEditable="isEnabled"
+                              :actionFunc='saveInfoFromForm'
+                              :ctx='customer'
+                              fieldStyle="without-border"/>
+                      </template>
+                    </v-popover>
+                  </div>
+                </div>
+                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                    <p>
+                      <i class="fa fa-phone-volume" style="margin-right:10px;"></i>
+                      {{String(user.phoneNumber)||""}}
+                    </p>
+                    <v-popover
+                      offset="16"
+                      :disabled="!isEnabled"
+                      hideOnTargetClick
+                      placement='right'>
+                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                        <md-icon>edit</md-icon>
+                      </md-button>
+
+                      <template slot="popover">
+                        <input-text
+                          labelStyle='company_label_input'
+                          label='Phone'
+                          name='phoneNumber'
+                          :value='String(user.phoneNumber)||""'
+                          :onChange='onChange'
+                          editebleMode
+                          :isEditable="isEnabled"
+                          :actionFunc='saveInfoFromForm'
+                          :ctx='user'
+                          fieldStyle="without-border"/>
+                      </template>
+                    </v-popover>
+                  </div>
+                </div>
+                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                    <p>
+                      <i class="fa fa-envelope" style="margin-right:10px;"></i>
+                      {{customer.workspaceDomain}}
+                    </p>
+                    <v-popover
+                      offset="16"
+                      :disabled="!isEnabled"
+                      hideOnTargetClick
+                      placement='right'>
+                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                        <md-icon>edit</md-icon>
+                      </md-button>
+
+                      <template slot="popover">
+                        <input-text
+                          labelStyle='company_label_input'
+                          label='Company Email'
+                          name='workspaceDomain'
+                          :value='customer.workspaceDomain'
+                          :onChange='onChange'
+                          editebleMode
+                          :isEditable="isEnabled"
+                          :actionFunc='saveInfoFromForm'
+                          :ctx='customer'
+                          fieldStyle="without-border"/>
+                      </template>
+                    </v-popover>
+                  </div>
+                </div>
+
+
+                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                  <div style="display:flex;align-items:center;justify-content: space-between;">
+                    <p>
+                      <i class="fa fa-globe" style="margin-right:10px;"></i>
+                      {{customer.website}}
+                    </p>
+                    <v-popover
+                      offset="16"
+                      :disabled="!isEnabled"
+                      hideOnTargetClick
+                      placement='right'>
+                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                        <md-icon>edit</md-icon>
+                      </md-button>
+
+                      <template slot="popover">
+                        <input-text
+                          labelStyle='company_label_input'
+                          label='Company Domain'
+                          name='website'
+                          :value='customer.website'
+                          :onChange='onChange'
+                          editebleMode
+                          :isEditable="isEnabled"
+                          :actionFunc='saveInfoFromForm'
+                          :ctx='customer'
+                          fieldStyle="without-border"/>  
+                      </template>
+                    </v-popover>
+                  </div>
+                </div>
               </div>
+
             </div>
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
+              <div class="fc-divider" style="margin: 15px;"></div>
             </div>
             <div class="md-layout-item md-size-100">
               <div class='company-branch_block'>
@@ -131,7 +259,7 @@
             </div>
 
             <div class="md-layout-item md-size-100">
-              <div class="fc-divider" style="color: #eeeeee; margin: 15px;"></div>
+              <div class="fc-divider" style="margin: 15px;"></div>
             </div>
             <div class="md-layout-item md-size-100">
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Customer Infromation</div>
@@ -141,31 +269,16 @@
       </md-card>
     </div>
     <div class="md-layout-item md-size-33" style="position: relative">
-   
       <div class='chart-box'>
-        <div class="logo-block">
-                <LineChart
-                  v-if='!isMonthly&&getChartNumberOfEventsPerYear'
-                  key="username-input"
-                  classStyle="max-height: 130px;  border-radius: 5px; box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31); background-image: linear-gradient(322deg, #4d9b51, #62b766);"
-                  id="number_of_events_chart"
-                  width="350"
-                  height="150"
-                  :dataChart='getChartNumberOfEventsPerYear'
-                  type='line'
-                  :optionChart='dataChart.options'/>
-                <LineChart
-                  v-else
-                  key="email-input"
-                  classStyle="max-height: 130px;  border-radius: 5px;box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);background-image: linear-gradient(322deg, #4d9b51, #62b766);"
-                  id="number_of_events_chart_monthly"
-                  width="350"
-                  height="150"
-                  :dataChart='getDataFromDuration'
-                  type='line'
-                  :optionChart='dataChart.options'/>
-              </div>
-        <md-card-content  style="max-height: 200px">         
+        <md-card-content  style="max-height: 200px">
+          <div class='chart-title'>
+            <div class="title text-bold">Number of events</div>
+            <div class="company-button-filter-block">
+              <ButtonDiv text='Yearly' class='button-filter'  :onClick='onChangeFilterToEarly'/>
+              <ButtonDiv text='Monthly' class='button-filter'   :onClick='onChangeFilter'/>
+            </div>
+          </div>
+          <div><span class='info-chat-value'>23</span><span class='info-chart'>{{`This year of ${new Date().getFullYear()}`}}</span></div>
           <div class='filter-block' v-if='showFilter'>
             <div class='filter-datepicker'>
               <div class='filter-datepicker-block'>
@@ -203,23 +316,31 @@
                   :onChange="onChange"/>
               </div>
             </div>
-          </div>          
-            <div class='chart-title'>
-            <div class="title text-bold">Number of events</div>
-            <div class="company-button-filter-block">
-              <ButtonDiv text='Yearly' class='button-filter'  :onClick='onChangeFilterToEarly'/>
-              <ButtonDiv text='Monthly' class='button-filter'   :onClick='onChangeFilter'/>
-            </div>
           </div>
-          <div><span class='info-chat-value'>23</span><span class='info-chart'>{{`This year of ${new Date().getFullYear()}`}}</span></div>
+
+          <LineChart
+            v-if='!isMonthly&&getChartNumberOfEventsPerYear'
+            key="username-input"
+            classStyle="max-height: 130px"
+            id="number_of_events_chart"
+            width="350"
+            height="150"
+            :dataChart='getChartNumberOfEventsPerYear'
+            type='line'
+            :optionChart='dataChart.options'/>
+          <LineChart
+            v-else
+            key="email-input"
+            classStyle="max-height: 130px"
+            id="number_of_events_chart_monthly"
+            width="350"
+            height="150"
+            :dataChart='getDataFromDuration'
+            type='line'
+            :optionChart='dataChart.options'/>
         </md-card-content>
       </div>
       <md-card>
-      <div class="logo-block">
-          <div class="event-planer-logo partisipation-logo">
-            <md-icon class="company-logo ">how_to_reg</md-icon>
-          </div>              
-        </div>
         <md-card-content>
           <div class="title text-bold">Average number of participants per event</div>
           <div>
@@ -240,29 +361,22 @@
         </md-card-content>
       </md-card>
       <md-card>
-      <div class="logo-block">
-         <LineChart
+        <md-card-content style="max-height: 200px">
+          <div class="title text-bold">Average event cost per employee</div>
+          <LineChart
             v-if='getChartEventPerEmployee'
-            classStyle="max-height: 130px; border-radius: 5px;  box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);  background-image: linear-gradient(322deg, #c3255b, #ea3c77);"
+            classStyle="max-height: 130px"
             id="number_of_participants_chart"
             width="350"
             height="150"
             :dataChart='getChartEventPerEmployee'
             type='line'
-            :optionChart='dataChart.options'/>               
-        </div>
-        <md-card-content style="max-height: 200px">        
-             <div class="title text-bold">Average event cost per employee</div>
+            :optionChart='dataChart.options'/>
         </md-card-content>
       </md-card>
     </div>
     <div class="md-layout-item md-size-33">
       <md-card>
-       <div class="logo-block">
-          <div class="event-planer-logo rate-logo">
-            <md-icon class="company-logo">thumbs_up_down</md-icon>
-          </div>                
-        </div>
         <md-card-content>
           <div class="title text-bold">Attendants satisfaction rate</div>
           <div>
@@ -287,19 +401,17 @@
         </md-card-content>
       </md-card>
       <md-card>
-      <div class="logo-block">
+        <md-card-content>
+          <div class="title text-bold">Event categories comparison</div>
           <LineChart
             v-if='getChartEventsPerCategory'
-            classStyle="max-height: 130px; border-radius: 5px;  box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);  background-image: linear-gradient(322deg, #4d9b51, #62b766);"
+            classStyle="max-height: 130px"
             id="event_vs_category"
             width="350"
             height="150"
             :dataChart='getChartEventsPerCategory'
             type='bar'
-            :optionChart='dataChart.options'/>               
-        </div>      
-        <md-card-content>        
-            <div class="title text-bold">Event categories comparison</div>
+            :optionChart='dataChart.options'/>
         </md-card-content>
       </md-card>
     </div>
@@ -327,7 +439,7 @@
   import LineIndicator from '@/components/Chart/LineIndicator.vue';
   import LineChart from '@/components/Chart/LineChart.vue'
 
- import Customer from '@/models/Customer';
+  import Customer from '@/models/Customer';
   import CustomerFile from '@/models/CustomerFile';
   import Datepicker from '@/components/Datepicker/Datepicker.vue';
 
@@ -374,7 +486,6 @@
       return {
         auth: auth,
         customerLogoUrl: 'static/img/placeholder.jpg',
-
         numberOfEmployees: 100,
         editing: {
           numberOfEmployees: false,
@@ -385,42 +496,11 @@
             legend: {
               display: false
             },
-            elements: {
-            line: {
-                borderColor:'white' 
-            },
-            }
-        ,layout: {
-            padding: {
-                left: 10,
-                right: 10,
-                top: 10,
-                bottom: 10
-            }
-        }
-            ,
             scales: {
               yAxes: [{
                 ticks: {
-                  beginAtZero:true,
-                  fontColor:"white"
-                },
-                gridLines: {
-                    color: 'white',
-                     zeroLineColor: 'white',
-                     
-                  }
-              }],
-              xAxes: [{
-                ticks: {
-                  beginAtZero:true,
-                  fontColor:"white"
-                },
-                gridLines: {
-                    color: 'white',
-                    zeroLineColor: 'white',
-                    fontColor: "white"
-                  }
+                  beginAtZero:true
+                }
               }]
             }
           }
@@ -439,7 +519,8 @@
         shortNameM:months_short,
         isShowForm:false,
         formSwitcher:'',
-        duration:[],       
+        duration:[],
+        isEnabled: true,
       }
     },
     computed:{
@@ -671,7 +752,65 @@
        
   };
 </script>
-<style lang='scss' >
+<style lang='scss'>
+  .has-action {
+    .v-popover {
+      visibility: hidden;
+    }
+    :hover  {
+      .v-popover{
+        visibility: visible;
+      }
+    }
+  }
+  .md-card-profile {
+    .header {
+      font-size: 11px;
+      font-weight: 300;
+      text-align: left;
+      color: #292929!important;
+    }
+    .value {
+      color:#292929!important;
+    }
+    p {
+      font-family: Roboto;
+      font-size: 11px;
+      font-weight: 300;
+      color: #999999;
+      margin: 5px 0;
+      i {
+        font-size: 16px!important;
+        color: #999999!important;
+      }
+    }
+  }
+  .tooltip {
+    &.popover {
+      $color: #f9f9f9;
+
+      .popover-inner {
+        background: $color;
+        color: black;
+        padding: 24px;
+        border-radius: 5px;
+        box-shadow: 0 5px 30px rgba(black, .1);
+      }
+      .wrapper {
+        height: auto
+      }
+      .popover-arrow {
+        border-color: $color;
+      }
+    }
+  }
+
+  .md-card-profile {
+      font-size: 14px;
+      font-weight: 300;
+      color: #292929!important;
+      min-height: calc(100vh - 183px);
+  }
   .info-chat-value{
     color: black;
     font-weight: 500;
@@ -693,13 +832,14 @@
   }
   .company-view-common-logo_block{
     display:flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     width: 100%;
     align-items: center
   }
   .company-logo{
-    width: 40% !important;
-    height: 100% !important;
+    max-width: 80px !important;
+    max-height: 80px !important;
+    border-radius: 10px;
   }
   .company-branch_block{
     display:flex;
@@ -715,12 +855,11 @@
   .button-filter{
     text-align: center;
     padding: 0px 6px;
-    background: #62b766;
+    background: #25d0a2;
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    margin:5px;
-    width: 90px;
+    margin:5px
   }
   .company-button-filter-block{
     display: flex;
@@ -735,7 +874,7 @@
   .control-panel-block-participants{
     display: flex;
     justify-content: space-between;
-    background: #21c4d7;
+    background: #87e1fe;
     border-radius: 5px;
     padding: 2px;
     color:white;
@@ -744,7 +883,7 @@
   .control-panel-block-rate{
     display: flex;
     justify-content: space-between;
-    background: #ffa322;
+    background: #25d0a2;
     border-radius: 5px;
     padding: 2px;;
     color:white;
@@ -759,7 +898,6 @@
     border-radius: 5px;
     margin-top: 30px;
     box-shadow: 0 0 10px rgba(80,80,80,.1);
-    padding-top: 1px;
   } 
   .filter-datepicker{
     width:25%;
@@ -805,49 +943,7 @@
     display:flex
   }
   .md-layout-item >.fc-divider{
+    color: #ececec;
     margin: 15px -10px !important;
   }
-  .chart-line-number-of-events{
-    border-radius: 5px;
-    box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);
-    background-image: linear-gradient(322deg, #4d9b51, #62b766);
-  }
-  .partisipation-logo{
-       background-image: linear-gradient(322deg, #13a5b6, #21c4d7) !important;
-        box-shadow: 0px 5px 5.8px 1.2px rgba(0, 0, 0, 0.08);
-  }
-  .rate-logo{    
-    box-shadow: 0px 5px 5.8px 1.2px rgba(0, 0, 0, 0.08);
-    background-image: linear-gradient(to right, #ffa625, #fb8d02) !important;
-  }
-  .logo-block {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 0px 15px;
-  margin: -20px 0px 20px 0px;
-  .event-planer-logo {
-    background: #eb3e79;
-    width: 64px;
-    height: 64px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-    .company-logo {
-      color: white !important;
-    }
-  }
-  .event-title {
-    font-family: "Roboto";
-    font-size: 18px;
-    font-weight: 300;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: 1.33;
-    letter-spacing: normal;
-    text-align: left;
-    color: #000000;
-  }
-}
 </style>
