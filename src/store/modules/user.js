@@ -63,7 +63,7 @@ const getters={
               parse_label.push(key)
               parse_data.push(chart[key]) 
           }
-          console.log(parse_data)
+          
           return{            
             labels: parse_label,
             datasets: [{
@@ -179,27 +179,31 @@ const getters={
           }              
       }        
        listRete= months.map((item,index)=>{
-        const currentObj=[]
-        for(let month in filterYear){                     
-         if((month-1)===index){
-            const categori=filterYear[month]                
+     
+              
+        for(let month in filterYear){
+          const currentObj=[]                             
+         if((month-1)==index){
+            const categori=filterYear[month]                          
              for(let key in categori){                                    
                  const obj={}
                  obj['typeEvent']=key
                  obj['total']=String(categori[key].Invited||0)
-                 obj['currentValue']=String(categori[key].Actual||0)
+                 obj['currentValue']=String(categori[key].Actual||0)                 
                  currentObj.push(obj)
              }
-         }else{
-           const a = {category:'N/D',total:'0',currentValue:'0'}
-           currentObj.push(a)
+         }else{          
+           currentObj.push({typeEvent:'N/D',total:'0',currentValue:'0'})
            }
+           return currentObj
+      
          }
-        
-         return currentObj
+         
+         
       
       })        
-      }      
+      } 
+         
        return listRete 
   },
   getChartSatisfactionRate:(state)=>{
