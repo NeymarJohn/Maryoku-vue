@@ -4,15 +4,17 @@
       <md-card class="md-card-profile">
         <md-card-content>
           <div class="md-layout">
-            <div class='company-view-common-logo_block hover-block'>
+            <div class='company-view-common-logo_block'>
               <div class='company-main-logo-block'>
-                <img class="company-logo" :src="customerLogoUrl">
-                <div class="company-logo-button-block onhover-block">
-                  <div @click='UploadAvatar'>
-                    <md-icon class='company-logo-button'>edit<input type="file" id='company-avatar-upload' @change="onFileChange($event)" style="display:none"/></md-icon>
-                  </div>
-                  <div @click='deleteAvatar(customer.files[0])'>
-                    <md-icon class='company-logo-button'>clear</md-icon>
+                <img class="company-logo" :src="getAvatar">
+                <div>
+                  <div class="company-logo-button-block">
+                    <div @click='UploadAvatar'>
+                      <md-icon class='company-logo-button'>edit<input type="file" id='company-avatar-upload' @change="onFileChange($event)" style="display:none"/></md-icon>
+                    </div>
+                    <div @click='deleteAvatar(customer.files[0])'>
+                      <md-icon class='company-logo-button'>clear</md-icon>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -24,7 +26,7 @@
               <div class="fc-divider" style="margin: 15px;"></div>
             </div>
 
-              <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
+              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
                       <span>Number of Employees</span>
@@ -35,7 +37,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
                       
@@ -56,7 +58,7 @@
                   </div>
                 </div>              
 
-              <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
+              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
                       <span>Industry</span>
@@ -67,7 +69,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target onhover-block b3 md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
                       
@@ -96,7 +98,7 @@
             <div>
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Contact Information</div>
               <div class="md-layout">
-                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
+                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p>
                       <i class="fa fa-map-marker-alt" style="margin-right:10px;"></i>
@@ -107,7 +109,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
                       
@@ -128,7 +130,7 @@
                     </v-popover>
                   </div>
                 </div>
-                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
+                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p>
                       <i class="fa fa-phone-volume" style="margin-right:10px;"></i>
@@ -139,7 +141,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
 
@@ -159,7 +161,7 @@
                     </v-popover>
                   </div>
                 </div>
-                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
+                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p>
                       <i class="fa fa-envelope" style="margin-right:10px;"></i>
@@ -170,7 +172,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
 
@@ -192,7 +194,7 @@
                 </div>
 
 
-                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
+                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p>
                       <i class="fa fa-globe" style="margin-right:10px;"></i>
@@ -203,7 +205,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
 
@@ -337,7 +339,7 @@
               <ButtonDiv text='Monthly' class='button-filter'   :onClick='onChangeFilter'/>
             </div>
           </div>
-          <div><span class='info-chat-value'>23</span><span class='info-chart'>{{`This year of ${new Date().getFullYear()}`}}</span></div>
+          <div><span class='info-chat-value'>{{getNumberEvents}}</span><span class='info-chart'>{{`This year of ${new Date().getFullYear()}`}}</span></div>
         </md-card-content>
       </div>
       <md-card>
@@ -498,9 +500,7 @@
     
     data() {
       return {
-        auth: auth,
-        customerLogoUrl: 'static/img/placeholder.jpg',
-        numberOfEmployees: 100,
+        auth: auth,        
         editing: {
           numberOfEmployees: false,
         },
@@ -517,35 +517,46 @@
             }
         ,layout: {
             padding: {
-                left: 10,
+                left: 20,
                 right: 10,
-                top: 10,
+                top: 25,
                 bottom: 10
             }
         }
             ,
             scales: {
               yAxes: [{
+                 position: 'right',
                 ticks: {
                   beginAtZero:true,
-                  fontColor:"white"
+                  fontColor:"white",
+                  padding: 5,
+                   fontSize: 15,
+                   
                 },
                 gridLines: {
                     color: 'white',
                      zeroLineColor: 'white',
                      
-                  }
+                  },
+                  
               }],
               xAxes: [{
                 ticks: {
                   beginAtZero:true,
-                  fontColor:"white"
+                  fontColor:"white",
+                  padding: 5,
+                  fontSize: 12
                 },
                 gridLines: {
                     color: 'white',
                     zeroLineColor: 'white',
                     fontColor: "white"
+                  },
+                  gridLines: {
+                    display: false,
                   }
+                  
               }]
             }
           }
@@ -579,9 +590,22 @@
         getChartEventsPerCategory:'user/getChartEventsPerCategory',
         participants:'user/getChartParticipantsPerEvent',
         rate:'user/getChartSatisfactionRate'
-      }),     
-                  
-             
+      }),
+      getNumberEvents(){
+        if(this.charts.numberOfEventsPerYear){
+          const charts=this.charts.numberOfEventsPerYear
+          const year= new Date().getFullYear()
+          for(let key in charts){
+            if(key==year)return charts[key]
+          }
+        }else{
+          return 0
+        }
+      },
+      getAvatar(){           
+            return  this.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.customer.logoFileId}` : 'static/img/placeholder.jpg';
+
+      },            
       getMonth(){
         return this.monthValue.map(item=>item.month)
       },
@@ -590,8 +614,7 @@
       },
       checkMonth(){
         const currentMonth=this.listMonth[new Date().getMonth()]
-        const currentCount=new Date().getMonth()  
-        // if(!this.rate)return false      
+        const currentCount=new Date().getMonth()             
         if(!this.month){
               return this.rate[currentCount]       
                                        
@@ -770,7 +793,8 @@
         let _this = this;
 
         reader.onload = e => {
-          return new CustomerFile({customerFile: e.target.result}).save().then(result => {            
+          return new CustomerFile({customerFile: e.target.result}).save().then(result => {
+            this.$store.dispatch("user/getUserFromApi");            
             _this.customerLogoUrl = `${process.env.SERVER_URL}/1/customerFiles/${result.id}`
           })
             .catch((error) => {
@@ -784,8 +808,8 @@
         document.getElementById('company-avatar-upload').click()
       },
       deleteAvatar(id){        
-        CustomerFile({id: e.target.result}).delete().then(result => {
-          console.log(result)
+       new CustomerFile({id: id}).delete().then(result => {
+          this.$store.dispatch("user/getUserFromApi"); 
          
         })
           .catch((error) => {
@@ -798,12 +822,12 @@
   };
 </script>
 <style lang='scss'>
-  .hover-block {
-    .onhover-block {
+  .has-action {
+    .v-popover {
       visibility: hidden;
     }
     :hover  {
-      .onhover-block{
+      .v-popover{
         visibility: visible;
       }
     }
@@ -832,14 +856,14 @@
   }
   .tooltip {
     &.popover {
-      $color: #fdfdfd;
+      $color: #f9f9f9;
+
       .popover-inner {
         background: $color;
         color: black;
         padding: 24px;
         border-radius: 5px;
-        border:none;
-        box-shadow: 0 10px 50px rgba(black, .3);
+        box-shadow: 0 5px 30px rgba(black, .1);
       }
       .wrapper {
         height: auto
@@ -849,30 +873,7 @@
       }
     }
   }
-  .tooltip[x-placement^="right"] {
-    .tooltip-arrow {
-      border-width: 10px 10px 10px 0;
-      left: -10px;
-    }
-  }
-  .tooltip[x-placement^="top"] {
-    .tooltip-arrow {
-      border-width: 0 10px 10px 10px;
-      bottom: -10px;
-    }
-  }
-  .tooltip[x-placement^="bottom"] {
-    .tooltip-arrow {
-      border-width: 10px 10px 10px 0;
-      top: -10px;
-    }
-  }
-  .tooltip[x-placement^="left"] {
-    .tooltip-arrow {
-      border-width: 10px 0 10px 10px;
-      right: -10px;
-    }
-  }  
+
   .md-card-profile {
       font-size: 14px;
       font-weight: 300;
