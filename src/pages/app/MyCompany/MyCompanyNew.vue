@@ -839,7 +839,7 @@
         padding: 24px;
         border-radius: 5px;
         border:none;
-        box-shadow: 0 5px 30px rgba(black, .3);
+        box-shadow: 0 10px 50px rgba(black, .3);
       }
       .wrapper {
         height: auto
@@ -849,7 +849,30 @@
       }
     }
   }
-
+  .tooltip[x-placement^="right"] {
+    .tooltip-arrow {
+      border-width: 10px 10px 10px 0;
+      left: -10px;
+    }
+  }
+  .tooltip[x-placement^="top"] {
+    .tooltip-arrow {
+      border-width: 0 10px 10px 10px;
+      bottom: -10px;
+    }
+  }
+  .tooltip[x-placement^="bottom"] {
+    .tooltip-arrow {
+      border-width: 10px 10px 10px 0;
+      top: -10px;
+    }
+  }
+  .tooltip[x-placement^="left"] {
+    .tooltip-arrow {
+      border-width: 10px 0 10px 10px;
+      right: -10px;
+    }
+  }  
   .md-card-profile {
       font-size: 14px;
       font-weight: 300;
