@@ -7,7 +7,7 @@
             <div class='md-layout-item md-size-100 company-view-common-logo_block hover-block'>
               <div class='company-main-logo-block'>
                 <img class="company-logo" :src="getAvatar">
-                <div>
+                <div class="onhover-block">
                   <div class="company-logo-button-block">
                     <div @click='UploadAvatar'>
                       <md-icon class='company-logo-button'>edit<input type="file" id='company-avatar-upload' @change="onFileChange($event)" style="display:none"/></md-icon>
@@ -15,7 +15,6 @@
                     <div @click='deleteAvatar(customer.files[0])'>
                       <md-icon class='company-logo-button'>clear</md-icon>
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -37,7 +36,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default"  @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
                       
@@ -49,10 +48,12 @@
                               :value='String(customer.numberOfEmployees)'
                               :onChange='onChange'
                               editebleMode
+                              :focus="inputFocus"
                               :isEditable="isEnabled"
                               :actionFunc='saveInfoFromForm'
                               :ctx='customer'
-                              fieldStyle="without-border"/> 
+                              fieldStyle="without-border"
+                              @update-focus-value="onUpdateFocus"/> 
                       </template>
                     </v-popover>
                   </div>
@@ -111,7 +112,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
                       
@@ -124,10 +125,12 @@
                               :value='customer.mainAddress'
                               :onChange='onChange'
                               editebleMode
+                              :focus="inputFocus"
                               :isEditable="isEnabled"
                               :actionFunc='saveInfoFromForm'
                               :ctx='customer'
-                              fieldStyle="without-border"/>
+                              fieldStyle="without-border"
+                              @update-focus-value="onUpdateFocus"/>
                       </template>
                     </v-popover>
                   </div>
@@ -145,7 +148,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
 
@@ -157,10 +160,12 @@
                           :value='String(user.phoneNumber)||""'
                           :onChange='onChange'
                           editebleMode
+                          :focus="inputFocus"
                           :isEditable="isEnabled"
                           :actionFunc='saveInfoFromForm'
                           :ctx='user'
-                          fieldStyle="without-border"/>
+                          fieldStyle="without-border"
+                          @update-focus-value="onUpdateFocus"/>
                       </template>
                     </v-popover>
                   </div>
@@ -178,7 +183,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
 
@@ -190,10 +195,12 @@
                           :value='customer.workspaceDomain'
                           :onChange='onChange'
                           editebleMode
+                          :focus="inputFocus"
                           :isEditable="isEnabled"
                           :actionFunc='saveInfoFromForm'
                           :ctx='customer'
-                          fieldStyle="without-border"/>
+                          fieldStyle="without-border"
+                          @update-focus-value="onUpdateFocus"/>
                       </template>
                     </v-popover>
                   </div>
@@ -209,7 +216,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
 
@@ -221,10 +228,12 @@
                           :value='customer.website'
                           :onChange='onChange'
                           editebleMode
+                          :focus="inputFocus"
                           :isEditable="isEnabled"
                           :actionFunc='saveInfoFromForm'
                           :ctx='customer'
-                          fieldStyle="without-border"/>  
+                          fieldStyle="without-border"
+                          @update-focus-value="onUpdateFocus"/>  
                       </template>
                     </v-popover>
                   </div>
@@ -237,9 +246,40 @@
             </div>
             <div class="md-layout-item md-size-100" style="padding:0;">
                 <div class='company-branch_block'>
-                  <div class="header text-bold text-gray" style="margin-bottom:0;">Branches</div>
-                  <div @click.prevent='onShowInput($event)'><md-icon  class='branch-add_icon'>add</md-icon>
-                </div>
+                  <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
+                    <div style="display:flex;align-items:center;justify-content: space-between;">
+                      <div class="header text-bold text-gray" style="margin:0;">Branches</div>
+                      <v-popover
+                        offset="16"
+                        :disabled="!isEnabled"
+                        hideOnTargetClick
+                        placement='right'>
+                        <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
+                          <md-icon>add</md-icon>
+                        </md-button>
+
+                        <template slot="popover">
+                          <form @submit.prevent='addIndustry' action="#">
+                            <input-text
+                              labelStyle='company_label_input'
+                              label='Branches address'
+                              name='branch_address'
+                              :onChange='onChange'
+                              editebleMode
+                              :focus="inputFocus"
+                              :isEditable="isEnabled" 
+                              :value='branch_address'
+                              id='branch_address_search'
+                              :actionFunc='saveInfoFromForm'
+                              :ctx='customer'
+                              fieldStyle="without-border"
+                              @update-focus-value="onUpdateFocus"/>
+
+                              </form>
+                        </template>
+                      </v-popover>
+                    </div>
+                  </div>
               </div>
 
               <div class="md-layout">
@@ -249,17 +289,6 @@
                       <md-icon class="branch-add_icon" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon><div class='company-wrap-block'> {{item}}</div>
                       <div  class='event-add-new-date-delete_button' @click.prevent='deleteBranch(item)'><md-icon  class='event-add_icon'>delete</md-icon></div>
                     </div>
-                  </div>
-                  <div v-show='showSearch'>
-                    <form @submit.prevent='addIndustry' action="#">
-                      <input-text
-                        labelStyle='company_label_input'
-                        label='Branches address'
-                        name='branch_address'
-                        :value='branch_address'
-                        id='branch_address_search'
-                        :onChange='onChange'/>                  
-                    </form>
                   </div>
                 </div>                
               </div>
@@ -282,7 +311,7 @@
                 <LineChart
                   v-if='!isMonthly&&getChartNumberOfEventsPerYear'
                   key="username-input"
-                  classStyle="max-height: 150px;  border-radius: 5px; box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31); background-image: linear-gradient(322deg, #4d9b51, #62b766);"
+                  classStyle="max-height: 130px;  border-radius: 5px; box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31); background-image: linear-gradient(322deg, #4d9b51, #62b766);"
                   id="number_of_events_chart"
                   width="350"
                   height="150"
@@ -292,7 +321,7 @@
                 <LineChart
                   v-else
                   key="email-input"
-                  classStyle="max-height: 150px;  border-radius: 5px;box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);background-image: linear-gradient(322deg, #4d9b51, #62b766);"
+                  classStyle="max-height: 130px;  border-radius: 5px;box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);background-image: linear-gradient(322deg, #4d9b51, #62b766);"
                   id="number_of_events_chart_monthly"
                   width="350"
                   height="150"
@@ -342,14 +371,14 @@
             <div class='chart-title'>
             <div class="title text-bold">Number of events</div>
             <div class="company-button-filter-block">
-              <ButtonDiv text='Yearly' class='button-filter' secondClass='chenge-filter' :classChenger='!showFilter'  :onClick='onChangeFilterToEarly'/>
-              <ButtonDiv text='Monthly' class='button-filter' secondClass='chenge-filter' :classChenger='showFilter'    :onClick='onChangeFilter'/>
+              <ButtonDiv text='Yearly' class='button-filter'  :onClick='onChangeFilterToEarly'/>
+              <ButtonDiv text='Monthly' class='button-filter'   :onClick='onChangeFilter'/>
             </div>
           </div>
           <div><span class='info-chat-value'>{{numberOfEvents}}</span><span class='info-chart'>{{`This year of ${currentYear}`}}</span></div>
         </md-card-content>
       </div>
-      <md-card class='margin-block-for-card'>
+      <md-card>
       <div class="logo-block">
           <div class="event-planer-logo partisipation-logo">
             <md-icon class="company-logo ">how_to_reg</md-icon>
@@ -374,11 +403,11 @@
           </div>
         </md-card-content>
       </md-card>
-      <md-card class='margin-block-for-card'>
+      <md-card>
       <div class="logo-block">
          <LineChart
             v-if='getChartEventPerEmployee'
-            classStyle="max-height: 150px; border-radius: 5px;  box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);  background-image: linear-gradient(322deg, #c3255b, #ea3c77);"
+            classStyle="max-height: 130px; border-radius: 5px;  box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);  background-image: linear-gradient(322deg, #c3255b, #ea3c77);"
             id="number_of_participants_chart"
             width="350"
             height="150"
@@ -391,7 +420,7 @@
         </md-card-content>
       </md-card>
     </div>
-    <div class="md-layout-item md-size-33 ">
+    <div class="md-layout-item md-size-33">
       <md-card>
        <div class="logo-block">
           <div class="event-planer-logo rate-logo">
@@ -421,11 +450,11 @@
           </div>
         </md-card-content>
       </md-card>
-      <md-card class='margin-block-for-card'>
+      <md-card>
       <div class="logo-block">
           <LineChart
             v-if='getChartEventsPerCategory'
-            classStyle="max-height: 150px; border-radius: 5px;  box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);  background-image: linear-gradient(322deg, #4d9b51, #62b766);"
+            classStyle="max-height: 130px; border-radius: 5px;  box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);  background-image: linear-gradient(322deg, #4d9b51, #62b766);"
             id="event_vs_category"
             width="350"
             height="150"
@@ -446,7 +475,6 @@
   import {mapGetters, mapMutations, mapState} from 'vuex';
   import Chart from 'chart.js';
   import auth from '@/auth';
-   import swal from "sweetalert2";
 
   //COMPONENTS
   import { Tabs, NavTabsCard } from "@/components";
@@ -493,9 +521,8 @@ const currentYear=new Date().getFullYear()
       Datepicker,
       "select-common":Select,
       LineChart
-    }   
-    ,    
-     mounted(){      
+    },    
+    mounted(){      
        const options = {          
           types: ['geocode']
         }
@@ -503,16 +530,15 @@ const currentYear=new Date().getFullYear()
         let autocomplete = new google.maps.places.Autocomplete(input, options)
         console.log(autocomplete.description)
         this.auth.currentUser(this, true, function() {
-        this.$store.dispatch("user/getUserFromApi");
-         this.$store.dispatch("user/getIndustry");   
-        this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';      
+          this.$store.dispatch("user/getUserFromApi");
+          this.$store.dispatch("user/getIndustry");   
+          this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';      
       }.bind(this))         
     },
-   
-    
     data() {
       return {
-        auth: auth,        
+        auth: auth,
+        inputFocus: false,
         editing: {
           numberOfEmployees: false,
         },
@@ -554,7 +580,6 @@ const currentYear=new Date().getFullYear()
                   
               }],
               xAxes: [{
-                barThickness:20,
                 ticks: {
                   beginAtZero:true,
                   fontColor:"white",
@@ -741,6 +766,9 @@ const currentYear=new Date().getFullYear()
     }
     ,
     methods: {
+      onUpdateFocus(newValue) {
+        this.inputFocus = newValue;
+      },
       isShow(obj,value){
         let ifChange=false
         for(let key in obj){
@@ -790,8 +818,15 @@ const currentYear=new Date().getFullYear()
       saveInfoFromForm(obj,objName){
         if(this[objName]!==obj[objName]) {
           let a = {}
-          a[objName]=this[objName]
+          
           a["id"]=obj.id
+          
+          if (objName !== "branch_address") {
+            a[objName]= this[objName]
+          } else {
+           
+          }
+
           this.$store.dispatch("user/putUserFromApi",a)
           this.formSwitcher=''
         }
@@ -821,26 +856,14 @@ const currentYear=new Date().getFullYear()
         console.log('@')
         document.getElementById('company-avatar-upload').click()
       },
-      deleteAvatar(id){ 
-        
-        swal({
-          title: "Are you sure want to delete company logo?",          
-          showCancelButton: true,
-          confirmButtonClass: "md-button md-success",
-          cancelButtonClass: "md-button md-danger",
-          confirmButtonText: "Yes, delete it!",
-          buttonsStyling: false
-        }).then(result => {
-           new CustomerFile({id: id}).delete().then(result => {
+      deleteAvatar(id){        
+       new CustomerFile({id: id}).delete().then(result => {
           this.$store.dispatch("user/getUserFromApi"); 
          
         })
           .catch((error) => {
             console.log(error);
           });
-            }).catch(() => {
-               console.log(error);
-            });
       },
     
     }, 
@@ -863,7 +886,7 @@ const currentYear=new Date().getFullYear()
       text-align: left;
       margin: 0 0 8px 15px;      
       font-size: 11px;
-      font-weight: 300;
+      font-weight: 400;
       text-align: left;
       color: #292929!important;
     }
@@ -874,6 +897,9 @@ const currentYear=new Date().getFullYear()
       margin-right: 8px;
       i {
         vertical-align: middle;
+        font-size: 16px!important;
+        color: #999999!important;
+        opacity: 0.5;        
       }
     } 
     .value {
@@ -882,13 +908,9 @@ const currentYear=new Date().getFullYear()
     p {
       font-family: Roboto;
       font-size: 11px;
-      font-weight: 300;
+      font-weight: 400;
       color: #999999;
       margin: 5px 0;
-      i {
-        font-size: 16px!important;
-        color: #999999!important;
-      }
     }
   }
   .tooltip {
@@ -936,7 +958,7 @@ const currentYear=new Date().getFullYear()
   }  
   .md-card-profile {
       font-size: 14px;
-      font-weight: 300;
+      font-weight: 400;
       color: #292929!important;
       min-height: calc(100vh - 183px);
   }
@@ -952,16 +974,8 @@ const currentYear=new Date().getFullYear()
     color: #c6c6c6;
     margin-left: 5px;
   }
-  .text-bold {  
-      font-family: 'Roboto';
-      font-size: 12px;
-      font-weight: 300;
-      font-style: normal;
-      font-stretch: normal;
-      line-height: 2;
-      letter-spacing: normal;
-      text-align: left;
-      color: #292929;
+  .text-bold {
+    font-weight: 600;
   }
   .info-text-size {
     font-size: 14px;
@@ -996,16 +1010,6 @@ const currentYear=new Date().getFullYear()
     padding: 0px 6px;
     background: #62b766;
     color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    margin:5px;
-    width: 90px;
-  }
-  .chenge-filter{
-    background:#f0f0f0;
-    text-align: center;
-    padding: 0px 6px;
-    color: black;
     border-radius: 5px;
     cursor: pointer;
     margin:5px;
@@ -1063,7 +1067,6 @@ const currentYear=new Date().getFullYear()
     position: absolute;
     top: -40px;
     left: 20px;
-    z-index: 2; 
   }
   .indicator-event-type-title-rate{
     font-size: 0.85rem;
@@ -1089,6 +1092,7 @@ const currentYear=new Date().getFullYear()
   }
   .company-logo-button-block{
     display: flex;
+    height: 100%;
     justify-content: center;
     flex-direction: column-reverse;
   }
@@ -1117,7 +1121,7 @@ const currentYear=new Date().getFullYear()
   justify-content: space-between;
   align-items: flex-end;
   padding: 0px 15px;
-  margin: -20px 0px 0px 0px;
+  margin: -20px 0px 20px 0px;
   .event-planer-logo {
     background: #eb3e79;
     width: 64px;
@@ -1133,7 +1137,7 @@ const currentYear=new Date().getFullYear()
   .event-title {
     font-family: "Roboto";
     font-size: 18px;
-    font-weight: 300;
+    font-weight: 400;
     font-style: normal;
     font-stretch: normal;
     line-height: 1.33;
@@ -1142,13 +1146,4 @@ const currentYear=new Date().getFullYear()
     color: #000000;
   }
 }
-.margin-block-for-card{
-  margin: 40px 0 !important;
-}
 </style>
-
-
-
-
-        
-      
