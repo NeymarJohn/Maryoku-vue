@@ -86,9 +86,17 @@
         color:#c6c6c6 
     }
     .indicator-event-type-title{
-       font-size: 0.64rem;
-        font-weight: 500;
-        color:#c6c6c6 
+        width: 238px;
+        height: 11px;
+        font-family: 'Roboto';
+        font-size: 12px;
+        font-weight: 300;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 2;
+        letter-spacing: normal;
+        text-align: left;
+        color: #292929;
     }
     .indicator-event-info-block{
         display:flex;
@@ -96,12 +104,26 @@
         line-height: 0.84rem;
     }
     .indicator-event-info-number-total{
-        font-weight: 500;
-        color: #c6c6c6;
+        font-family: "Roboto";
+        font-size: 14px;
+        font-weight: 300;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 1.71;
+        letter-spacing: normal;
+        text-align: left;
+        color: #999999;
     }
     .indicator-event-info-number-currentV{
-        color:black;
-        font-weight: 500;
+        font-family: "Roboto";
+        font-size: 14px;
+        font-weight: 300;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 1.71;
+        letter-spacing: normal;
+        text-align: left;        
+        color: #000000;
     }
     .indicator-event-info-block-rate{
         display:flex;
@@ -125,3 +147,16 @@
   }
 </style>
 
+{
+  width: 238px;
+  height: 11px;
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 300;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 2;
+  letter-spacing: normal;
+  text-align: left;
+  color: #292929;
+}

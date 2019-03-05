@@ -1,5 +1,5 @@
 <template>  
-<div @click.prevent='triggerFunc' :class='buttonStyle'>{{text}}</div>
+<div @click.prevent='triggerFunc' :class='[classChenger?buttonStyle:secondClass]'>{{text}}</div>
 </template>
 <script>
     export default {
@@ -10,7 +10,9 @@
             text:String,
             buttonStyle:String,
             onClick:Function,
-            filter:String
+            filter:String,
+            secondClass:{type:String,default:''},
+            classChenger:{type:Boolean,default:true}
         },   
         methods:{
             triggerFunc:function(){
