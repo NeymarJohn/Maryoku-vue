@@ -63,17 +63,17 @@ const getters={
               parse_label.push(key)
               parse_data.push(chart[key]) 
           }
+          console.log(parse_data)
           return{            
             labels: parse_label,
             datasets: [{
               data: parse_data,
-              backgroundColor: [
-                'rgba(255, 255, 255, 0.2)',
-              ],
+              pointBackgroundColor:'white',
+              pointStyle:'circle', 
               borderColor: [
-                '#71c278',
+                'white',
               ],
-              borderWidth: 1
+              borderWidth: 3
             }]                     
           }
         }else{
@@ -104,15 +104,16 @@ const getters={
           labels: parse_month,
           datasets: [{
             data: parse_data,
-            backgroundColor: [
-              'rgba(255, 255, 255, 0.2)',
-            ],
+            pointBackgroundColor:'white',
+            pointStyle:'circle', 
             borderColor: [
-              '#26cfa0',
+              'white',
             ],
-            borderWidth: 1
-          }]          
+            borderWidth: 3
+          }]
+                  
           }
+         
       
   }else{
      const arrLenght=parse_data.length-6
@@ -148,7 +149,7 @@ const getters={
       datasets:[{
         label: '# of type Events',
         data: parse_data,
-        backgroundColor: '#25d0a2'
+        backgroundColor: 'white'
 
       }]          
     }

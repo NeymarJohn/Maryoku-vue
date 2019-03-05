@@ -4,17 +4,15 @@
       <md-card class="md-card-profile">
         <md-card-content>
           <div class="md-layout">
-            <div class='company-view-common-logo_block'>
+            <div class='company-view-common-logo_block hover-block'>
               <div class='company-main-logo-block'>
                 <img class="company-logo" :src="customerLogoUrl">
-                <div>
-                  <div class="company-logo-button-block">
-                    <div @click='UploadAvatar'>
-                      <md-icon class='company-logo-button'>edit<input type="file" id='company-avatar-upload' @change="onFileChange($event)" style="display:none"/></md-icon>
-                    </div>
-                    <div @click='deleteAvatar(customer.files[0])'>
-                      <md-icon class='company-logo-button'>clear</md-icon>
-                    </div>
+                <div class="company-logo-button-block onhover-block">
+                  <div @click='UploadAvatar'>
+                    <md-icon class='company-logo-button'>edit<input type="file" id='company-avatar-upload' @change="onFileChange($event)" style="display:none"/></md-icon>
+                  </div>
+                  <div @click='deleteAvatar(customer.files[0])'>
+                    <md-icon class='company-logo-button'>clear</md-icon>
                   </div>
                 </div>
               </div>
@@ -26,7 +24,7 @@
               <div class="fc-divider" style="margin: 15px;"></div>
             </div>
 
-              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+              <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
                       <span>Number of Employees</span>
@@ -37,7 +35,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
                       
@@ -58,7 +56,7 @@
                   </div>
                 </div>              
 
-              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+              <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
                       <span>Industry</span>
@@ -69,7 +67,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target onhover-block b3 md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
                       
@@ -98,7 +96,7 @@
             <div>
               <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Contact Information</div>
               <div class="md-layout">
-                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p>
                       <i class="fa fa-map-marker-alt" style="margin-right:10px;"></i>
@@ -109,7 +107,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
                       
@@ -130,7 +128,7 @@
                     </v-popover>
                   </div>
                 </div>
-                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p>
                       <i class="fa fa-phone-volume" style="margin-right:10px;"></i>
@@ -141,7 +139,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
 
@@ -161,7 +159,7 @@
                     </v-popover>
                   </div>
                 </div>
-                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p>
                       <i class="fa fa-envelope" style="margin-right:10px;"></i>
@@ -172,7 +170,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
 
@@ -194,7 +192,7 @@
                 </div>
 
 
-                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p>
                       <i class="fa fa-globe" style="margin-right:10px;"></i>
@@ -205,7 +203,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
 
@@ -269,16 +267,31 @@
       </md-card>
     </div>
     <div class="md-layout-item md-size-33" style="position: relative">
+   
       <div class='chart-box'>
-        <md-card-content  style="max-height: 200px">
-          <div class='chart-title'>
-            <div class="title text-bold">Number of events</div>
-            <div class="company-button-filter-block">
-              <ButtonDiv text='Yearly' class='button-filter'  :onClick='onChangeFilterToEarly'/>
-              <ButtonDiv text='Monthly' class='button-filter'   :onClick='onChangeFilter'/>
-            </div>
-          </div>
-          <div><span class='info-chat-value'>23</span><span class='info-chart'>{{`This year of ${new Date().getFullYear()}`}}</span></div>
+        <div class="logo-block">
+                <LineChart
+                  v-if='!isMonthly&&getChartNumberOfEventsPerYear'
+                  key="username-input"
+                  classStyle="max-height: 130px;  border-radius: 5px; box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31); background-image: linear-gradient(322deg, #4d9b51, #62b766);"
+                  id="number_of_events_chart"
+                  width="350"
+                  height="150"
+                  :dataChart='getChartNumberOfEventsPerYear'
+                  type='line'
+                  :optionChart='dataChart.options'/>
+                <LineChart
+                  v-else
+                  key="email-input"
+                  classStyle="max-height: 130px;  border-radius: 5px;box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);background-image: linear-gradient(322deg, #4d9b51, #62b766);"
+                  id="number_of_events_chart_monthly"
+                  width="350"
+                  height="150"
+                  :dataChart='getDataFromDuration'
+                  type='line'
+                  :optionChart='dataChart.options'/>
+              </div>
+        <md-card-content  style="max-height: 200px">         
           <div class='filter-block' v-if='showFilter'>
             <div class='filter-datepicker'>
               <div class='filter-datepicker-block'>
@@ -316,31 +329,23 @@
                   :onChange="onChange"/>
               </div>
             </div>
+          </div>          
+            <div class='chart-title'>
+            <div class="title text-bold">Number of events</div>
+            <div class="company-button-filter-block">
+              <ButtonDiv text='Yearly' class='button-filter'  :onClick='onChangeFilterToEarly'/>
+              <ButtonDiv text='Monthly' class='button-filter'   :onClick='onChangeFilter'/>
+            </div>
           </div>
-
-          <LineChart
-            v-if='!isMonthly&&getChartNumberOfEventsPerYear'
-            key="username-input"
-            classStyle="max-height: 130px"
-            id="number_of_events_chart"
-            width="350"
-            height="150"
-            :dataChart='getChartNumberOfEventsPerYear'
-            type='line'
-            :optionChart='dataChart.options'/>
-          <LineChart
-            v-else
-            key="email-input"
-            classStyle="max-height: 130px"
-            id="number_of_events_chart_monthly"
-            width="350"
-            height="150"
-            :dataChart='getDataFromDuration'
-            type='line'
-            :optionChart='dataChart.options'/>
+          <div><span class='info-chat-value'>23</span><span class='info-chart'>{{`This year of ${new Date().getFullYear()}`}}</span></div>
         </md-card-content>
       </div>
       <md-card>
+      <div class="logo-block">
+          <div class="event-planer-logo partisipation-logo">
+            <md-icon class="company-logo ">how_to_reg</md-icon>
+          </div>              
+        </div>
         <md-card-content>
           <div class="title text-bold">Average number of participants per event</div>
           <div>
@@ -361,22 +366,29 @@
         </md-card-content>
       </md-card>
       <md-card>
-        <md-card-content style="max-height: 200px">
-          <div class="title text-bold">Average event cost per employee</div>
-          <LineChart
+      <div class="logo-block">
+         <LineChart
             v-if='getChartEventPerEmployee'
-            classStyle="max-height: 130px"
+            classStyle="max-height: 130px; border-radius: 5px;  box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);  background-image: linear-gradient(322deg, #c3255b, #ea3c77);"
             id="number_of_participants_chart"
             width="350"
             height="150"
             :dataChart='getChartEventPerEmployee'
             type='line'
-            :optionChart='dataChart.options'/>
+            :optionChart='dataChart.options'/>               
+        </div>
+        <md-card-content style="max-height: 200px">        
+             <div class="title text-bold">Average event cost per employee</div>
         </md-card-content>
       </md-card>
     </div>
     <div class="md-layout-item md-size-33">
       <md-card>
+       <div class="logo-block">
+          <div class="event-planer-logo rate-logo">
+            <md-icon class="company-logo">thumbs_up_down</md-icon>
+          </div>                
+        </div>
         <md-card-content>
           <div class="title text-bold">Attendants satisfaction rate</div>
           <div>
@@ -401,17 +413,19 @@
         </md-card-content>
       </md-card>
       <md-card>
-        <md-card-content>
-          <div class="title text-bold">Event categories comparison</div>
+      <div class="logo-block">
           <LineChart
             v-if='getChartEventsPerCategory'
-            classStyle="max-height: 130px"
+            classStyle="max-height: 130px; border-radius: 5px;  box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);  background-image: linear-gradient(322deg, #4d9b51, #62b766);"
             id="event_vs_category"
             width="350"
             height="150"
             :dataChart='getChartEventsPerCategory'
             type='bar'
-            :optionChart='dataChart.options'/>
+            :optionChart='dataChart.options'/>               
+        </div>      
+        <md-card-content>        
+            <div class="title text-bold">Event categories comparison</div>
         </md-card-content>
       </md-card>
     </div>
@@ -496,11 +510,42 @@
             legend: {
               display: false
             },
+            elements: {
+            line: {
+                borderColor:'white' 
+            },
+            }
+        ,layout: {
+            padding: {
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: 10
+            }
+        }
+            ,
             scales: {
               yAxes: [{
                 ticks: {
-                  beginAtZero:true
-                }
+                  beginAtZero:true,
+                  fontColor:"white"
+                },
+                gridLines: {
+                    color: 'white',
+                     zeroLineColor: 'white',
+                     
+                  }
+              }],
+              xAxes: [{
+                ticks: {
+                  beginAtZero:true,
+                  fontColor:"white"
+                },
+                gridLines: {
+                    color: 'white',
+                    zeroLineColor: 'white',
+                    fontColor: "white"
+                  }
               }]
             }
           }
@@ -753,12 +798,12 @@
   };
 </script>
 <style lang='scss'>
-  .has-action {
-    .v-popover {
+  .hover-block {
+    .onhover-block {
       visibility: hidden;
     }
     :hover  {
-      .v-popover{
+      .onhover-block{
         visibility: visible;
       }
     }
@@ -855,11 +900,12 @@
   .button-filter{
     text-align: center;
     padding: 0px 6px;
-    background: #25d0a2;
+    background: #62b766;
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    margin:5px
+    margin:5px;
+    width: 90px;
   }
   .company-button-filter-block{
     display: flex;
@@ -874,7 +920,7 @@
   .control-panel-block-participants{
     display: flex;
     justify-content: space-between;
-    background: #87e1fe;
+    background: #21c4d7;
     border-radius: 5px;
     padding: 2px;
     color:white;
@@ -883,7 +929,7 @@
   .control-panel-block-rate{
     display: flex;
     justify-content: space-between;
-    background: #25d0a2;
+    background: #ffa322;
     border-radius: 5px;
     padding: 2px;;
     color:white;
@@ -898,6 +944,7 @@
     border-radius: 5px;
     margin-top: 30px;
     box-shadow: 0 0 10px rgba(80,80,80,.1);
+    padding-top: 1px;
   } 
   .filter-datepicker{
     width:25%;
@@ -946,4 +993,47 @@
     color: #ececec;
     margin: 15px -10px !important;
   }
+  .chart-line-number-of-events{
+    border-radius: 5px;
+    box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);
+    background-image: linear-gradient(322deg, #4d9b51, #62b766);
+  }
+  .partisipation-logo{
+       background-image: linear-gradient(322deg, #13a5b6, #21c4d7) !important;
+        box-shadow: 0px 5px 5.8px 1.2px rgba(0, 0, 0, 0.08);
+  }
+  .rate-logo{    
+    box-shadow: 0px 5px 5.8px 1.2px rgba(0, 0, 0, 0.08);
+    background-image: linear-gradient(to right, #ffa625, #fb8d02) !important;
+  }
+  .logo-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0px 15px;
+  margin: -20px 0px 20px 0px;
+  .event-planer-logo {
+    background: #eb3e79;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    .company-logo {
+      color: white !important;
+    }
+  }
+  .event-title {
+    font-family: "Roboto";
+    font-size: 18px;
+    font-weight: 300;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.33;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000000;
+  }
+}
 </style>
