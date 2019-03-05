@@ -179,31 +179,27 @@ const getters={
           }              
       }        
        listRete= months.map((item,index)=>{
-     
-              
-        for(let month in filterYear){
-          const currentObj=[]                             
-         if((month-1)==index){
-            const categori=filterYear[month]                          
+        const currentObj=[]
+        for(let month in filterYear){                     
+         if((month-1)===index){
+            const categori=filterYear[month]                
              for(let key in categori){                                    
                  const obj={}
                  obj['typeEvent']=key
                  obj['total']=String(categori[key].Invited||0)
-                 obj['currentValue']=String(categori[key].Actual||0)                 
+                 obj['currentValue']=String(categori[key].Actual||0)
                  currentObj.push(obj)
              }
-         }else{          
-           currentObj.push({typeEvent:'N/D',total:'0',currentValue:'0'})
+         }else{
+           const a = {category:'N/D',total:'0',currentValue:'0'}
+           currentObj.push(a)
            }
-           return currentObj
-      
          }
-         
-         
+        
+         return currentObj
       
       })        
-      } 
-         
+      }      
        return listRete 
   },
   getChartSatisfactionRate:(state)=>{
