@@ -728,8 +728,8 @@
       },
       onShowInput:function(value, name){
         this.showSearch=!this.showSearch
-      }
-      ,addIndustry: function(value, name){
+      },
+      addIndustry: function(value, name){
         this.showSearch=!this.showSearch
         this.$store.dispatch("user/sendIndustry",this.branch_address)
       },
