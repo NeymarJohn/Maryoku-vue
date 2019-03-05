@@ -4,17 +4,15 @@
       <md-card class="md-card-profile">
         <md-card-content>
           <div class="md-layout">
-            <div class='company-view-common-logo_block'>
+            <div class='md-layout-item md-size-100 company-view-common-logo_block hover-block'>
               <div class='company-main-logo-block'>
-                <img class="company-logo" :src="getAvatar">
-                <div>
-                  <div class="company-logo-button-block">
-                    <div @click='UploadAvatar'>
-                      <md-icon class='company-logo-button'>edit<input type="file" id='company-avatar-upload' @change="onFileChange($event)" style="display:none"/></md-icon>
-                    </div>
-                    <div @click='deleteAvatar(customer.files[0])'>
-                      <md-icon class='company-logo-button'>clear</md-icon>
-                    </div>
+                <img class="company-logo" :src="customerLogoUrl">
+                <div class="company-logo-button-block onhover-block">
+                  <div @click='UploadAvatar'>
+                    <md-icon class='company-logo-button'>edit<input type="file" id='company-avatar-upload' @change="onFileChange($event)" style="display:none"/></md-icon>
+                  </div>
+                  <div @click='deleteAvatar(customer.files[0])'>
+                    <md-icon class='company-logo-button'>clear</md-icon>
                   </div>
                 </div>
               </div>
@@ -25,8 +23,7 @@
             <div class="md-layout-item md-size-100">
               <div class="fc-divider" style="margin: 15px;"></div>
             </div>
-
-              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+              <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
                       <span>Number of Employees</span>
@@ -37,7 +34,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
                       
@@ -58,7 +55,7 @@
                   </div>
                 </div>              
 
-              <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+              <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
                       <span>Industry</span>
@@ -69,7 +66,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target onhover-block b3 md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
                       
@@ -96,20 +93,22 @@
               <div class="fc-divider" style="margin: 15px;"></div>
             </div>
             <div>
-              <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Contact Information</div>
+              <div class="header text-bold text-gray ">Contact Information</div>
               <div class="md-layout">
-                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p>
-                      <i class="fa fa-map-marker-alt" style="margin-right:10px;"></i>
-                      {{customer.mainAddress}}
+                      <span class="icon-container">
+                        <i class="fa fa-map-marker-alt"></i>
+                      </span>
+                      <span>{{customer.mainAddress}}</span>
                     </p>
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
                       
@@ -130,18 +129,20 @@
                     </v-popover>
                   </div>
                 </div>
-                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p>
-                      <i class="fa fa-phone-volume" style="margin-right:10px;"></i>
-                      {{String(user.phoneNumber)||""}}
+                      <span class="icon-container">
+                        <i class="fa fa-phone-volume"></i>
+                      </span>
+                      <span>{{String(user.phoneNumber)||""}}</span>
                     </p>
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
 
@@ -161,18 +162,20 @@
                     </v-popover>
                   </div>
                 </div>
-                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p>
-                      <i class="fa fa-envelope" style="margin-right:10px;"></i>
-                      {{customer.workspaceDomain}}
+                      <span class="icon-container">
+                        <i class="fa fa-envelope"></i>
+                      </span>
+                      <span>{{customer.workspaceDomain}}</span>
                     </p>
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
 
@@ -192,20 +195,18 @@
                     </v-popover>
                   </div>
                 </div>
-
-
-                <div class="md-layout-item md-size-100 has-action" style="text-align:left;">
+                <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p>
-                      <i class="fa fa-globe" style="margin-right:10px;"></i>
-                      {{customer.website}}
+                      <span class="icon-container"><i class="fa fa-globe"></i></span>
+                      <span>{{customer.website}}</span>
                     </p>
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
 
@@ -231,38 +232,41 @@
             <div class="md-layout-item md-size-100">
               <div class="fc-divider" style="margin: 15px;"></div>
             </div>
-            <div class="md-layout-item md-size-100">
-              <div class='company-branch_block'>
-                <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Branches</div>
-                <div @click.prevent='onShowInput($event)'><md-icon  class='branch-add_icon'>add</md-icon>
+            <div class="md-layout-item md-size-100" style="padding:0;">
+                <div class='company-branch_block'>
+                  <div class="header text-bold text-gray" style="margin-bottom:0;">Branches</div>
+                  <div @click.prevent='onShowInput($event)'><md-icon  class='branch-add_icon'>add</md-icon>
                 </div>
               </div>
 
-              <div v-for="item of customer.branches||[]" >
-                <div  style="text-align: left;  display: flex; align-items: center;align-items: center; justify-content: space-between;">
-                  <md-icon class="branch-add_icon" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon><div class='company-wrap-block'> {{item}}</div>
-                  <div  class='event-add-new-date-delete_button' @click.prevent='deleteBranch(item)'><md-icon  class='event-add_icon'>delete</md-icon></div>
-                </div>
-              </div>
-
-              <div v-show='showSearch'>
-                <form @submit.prevent='addIndustry' action="#">
-                  <input-text
-                    labelStyle='company_label_input'
-                    label='Branches address'
-                    name='branch_address'
-                    :value='branch_address'
-                    id='branch_address_search'
-                    :onChange='onChange'/>                  
-                </form>
+              <div class="md-layout">
+                <div class="md-layout-item md-size-100">
+                  <div v-for="item of customer.branches||[]" >
+                    <div  style="text-align: left;  display: flex; align-items: center;align-items: center; justify-content: space-between;">
+                      <md-icon class="branch-add_icon" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon><div class='company-wrap-block'> {{item}}</div>
+                      <div  class='event-add-new-date-delete_button' @click.prevent='deleteBranch(item)'><md-icon  class='event-add_icon'>delete</md-icon></div>
+                    </div>
+                  </div>
+                  <div v-show='showSearch'>
+                    <form @submit.prevent='addIndustry' action="#">
+                      <input-text
+                        labelStyle='company_label_input'
+                        label='Branches address'
+                        name='branch_address'
+                        :value='branch_address'
+                        id='branch_address_search'
+                        :onChange='onChange'/>                  
+                    </form>
+                  </div>
+                </div>                
               </div>
             </div>
 
             <div class="md-layout-item md-size-100">
               <div class="fc-divider" style="margin: 15px;"></div>
             </div>
-            <div class="md-layout-item md-size-100">
-              <div class="header text-bold text-gray " style="text-align: left; margin-bottom: 8px;">Customer Infromation</div>
+            <div>
+              <div class="header text-bold text-gray ">Customer Infromation</div>
             </div>
           </div>
         </md-card-content>
@@ -339,7 +343,7 @@
               <ButtonDiv text='Monthly' class='button-filter'   :onClick='onChangeFilter'/>
             </div>
           </div>
-          <div><span class='info-chat-value'>{{getNumberEvents}}</span><span class='info-chart'>{{`This year of ${new Date().getFullYear()}`}}</span></div>
+          <div><span class='info-chat-value'>23</span><span class='info-chart'>{{`This year of ${new Date().getFullYear()}`}}</span></div>
         </md-card-content>
       </div>
       <md-card>
@@ -500,7 +504,9 @@
     
     data() {
       return {
-        auth: auth,        
+        auth: auth,
+        customerLogoUrl: 'static/img/placeholder.jpg',
+        numberOfEmployees: 100,
         editing: {
           numberOfEmployees: false,
         },
@@ -517,46 +523,35 @@
             }
         ,layout: {
             padding: {
-                left: 20,
+                left: 10,
                 right: 10,
-                top: 25,
+                top: 10,
                 bottom: 10
             }
         }
             ,
             scales: {
               yAxes: [{
-                 position: 'right',
                 ticks: {
                   beginAtZero:true,
-                  fontColor:"white",
-                  padding: 5,
-                   fontSize: 15,
-                   
+                  fontColor:"white"
                 },
                 gridLines: {
                     color: 'white',
                      zeroLineColor: 'white',
                      
-                  },
-                  
+                  }
               }],
               xAxes: [{
                 ticks: {
                   beginAtZero:true,
-                  fontColor:"white",
-                  padding: 5,
-                  fontSize: 12
+                  fontColor:"white"
                 },
                 gridLines: {
                     color: 'white',
                     zeroLineColor: 'white',
                     fontColor: "white"
-                  },
-                  gridLines: {
-                    display: false,
                   }
-                  
               }]
             }
           }
@@ -590,22 +585,9 @@
         getChartEventsPerCategory:'user/getChartEventsPerCategory',
         participants:'user/getChartParticipantsPerEvent',
         rate:'user/getChartSatisfactionRate'
-      }),
-      getNumberEvents(){
-        if(this.charts.numberOfEventsPerYear){
-          const charts=this.charts.numberOfEventsPerYear
-          const year= new Date().getFullYear()
-          for(let key in charts){
-            if(key==year)return charts[key]
-          }
-        }else{
-          return 0
-        }
-      },
-      getAvatar(){           
-            return  this.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.customer.logoFileId}` : 'static/img/placeholder.jpg';
-
-      },            
+      }),     
+                  
+             
       getMonth(){
         return this.monthValue.map(item=>item.month)
       },
@@ -614,7 +596,8 @@
       },
       checkMonth(){
         const currentMonth=this.listMonth[new Date().getMonth()]
-        const currentCount=new Date().getMonth()             
+        const currentCount=new Date().getMonth()  
+        // if(!this.rate)return false      
         if(!this.month){
               return this.rate[currentCount]       
                                        
@@ -793,8 +776,7 @@
         let _this = this;
 
         reader.onload = e => {
-          return new CustomerFile({customerFile: e.target.result}).save().then(result => {
-            this.$store.dispatch("user/getUserFromApi");            
+          return new CustomerFile({customerFile: e.target.result}).save().then(result => {            
             _this.customerLogoUrl = `${process.env.SERVER_URL}/1/customerFiles/${result.id}`
           })
             .catch((error) => {
@@ -808,8 +790,8 @@
         document.getElementById('company-avatar-upload').click()
       },
       deleteAvatar(id){        
-       new CustomerFile({id: id}).delete().then(result => {
-          this.$store.dispatch("user/getUserFromApi"); 
+        CustomerFile({id: e.target.result}).delete().then(result => {
+          console.log(result)
          
         })
           .catch((error) => {
@@ -822,23 +804,34 @@
   };
 </script>
 <style lang='scss'>
-  .has-action {
-    .v-popover {
+  .hover-block {
+    .onhover-block {
       visibility: hidden;
     }
     :hover  {
-      .v-popover{
+      .onhover-block{
         visibility: visible;
       }
     }
   }
   .md-card-profile {
     .header {
+      text-align: left;
+      margin: 0 0 8px 15px;      
       font-size: 11px;
       font-weight: 300;
       text-align: left;
       color: #292929!important;
     }
+    .icon-container {
+      display: inline-block;
+      width: 16px;
+      text-align: center;
+      margin-right: 8px;
+      i {
+        vertical-align: middle;
+      }
+    } 
     .value {
       color:#292929!important;
     }
@@ -856,14 +849,14 @@
   }
   .tooltip {
     &.popover {
-      $color: #f9f9f9;
-
+      $color: #fdfdfd;
       .popover-inner {
         background: $color;
         color: black;
         padding: 24px;
         border-radius: 5px;
-        box-shadow: 0 5px 30px rgba(black, .1);
+        border:none;
+        box-shadow: 0 10px 50px rgba(black, .3);
       }
       .wrapper {
         height: auto
@@ -873,7 +866,30 @@
       }
     }
   }
-
+  .tooltip[x-placement^="right"] {
+    .tooltip-arrow {
+      border-width: 10px 10px 10px 0;
+      left: -10px;
+    }
+  }
+  .tooltip[x-placement^="top"] {
+    .tooltip-arrow {
+      border-width: 0 10px 10px 10px;
+      bottom: -10px;
+    }
+  }
+  .tooltip[x-placement^="bottom"] {
+    .tooltip-arrow {
+      border-width: 10px 10px 10px 0;
+      top: -10px;
+    }
+  }
+  .tooltip[x-placement^="left"] {
+    .tooltip-arrow {
+      border-width: 10px 0 10px 10px;
+      right: -10px;
+    }
+  }  
   .md-card-profile {
       font-size: 14px;
       font-weight: 300;
@@ -903,7 +919,8 @@
     display:flex;
     // justify-content: space-between;
     width: 100%;
-    align-items: center
+    align-items: center;
+    margin-bottom: 10px;    
   }
   .company-logo{
     max-width: 80px !important;
@@ -912,7 +929,8 @@
   }
   .company-branch_block{
     display:flex;
-    justify-content: space-between
+    justify-content: space-between;
+    align-items: center;
   }
   .branch-add_icon{
     margin:0;
@@ -1008,6 +1026,7 @@
   }
   .company-logo-button-block{
     display: flex;
+    justify-content: center;
     flex-direction: column-reverse;
   }
   .company-main-logo-block{
@@ -1015,7 +1034,7 @@
   }
   .md-layout-item >.fc-divider{
     color: #ececec;
-    margin: 15px -10px !important;
+    margin: 15px -8px !important;
   }
   .chart-line-number-of-events{
     border-radius: 5px;
