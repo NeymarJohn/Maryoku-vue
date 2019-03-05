@@ -63,7 +63,7 @@ const getters={
               parse_label.push(key)
               parse_data.push(chart[key]) 
           }
-          
+          console.log(parse_data)
           return{            
             labels: parse_label,
             datasets: [{

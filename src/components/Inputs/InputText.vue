@@ -13,7 +13,9 @@
         @:keyup.enter='autoSubmit($event,name)'
         :name='name'
         :disabled='disabled'
-        ref="focusable"></md-input>       
+        :ref="'focusable-' + name"
+        @blur.prevent="updatefocusValue"></md-input>   
+    
     <span v-if='!editebleMode' key='input-noeditable' class='md-error'>{{isErrors?'Required':''}}</span>
     <span v-if='editebleMode' class="md-suffix" key='input-editable' style="display: inline-block; white-space: nowrap;">
        <md-button v-close-popover @click.prevent="makeAction" v-show="isEditable" class="md-simple md-just-icon md-round md-sm md-success" style="padding: 0; margin: 0; text-align: right;"><md-icon>check</md-icon></md-button>
@@ -48,6 +50,7 @@
                 default:''
             },
             icon: String,
+            focus: Boolean,
             disabled: Boolean,
             labelStyle:String,
             fieldStyle:String,
@@ -65,11 +68,11 @@
             googleSearch:Boolean,
         },
         mounted () {
-            setTimeout (() => {
-            this.$refs.focusable.$el.focus()
-          });
         },
         methods: {
+          updatefocusValue(event) {
+            this.$emit("update-focus-value", false)
+          },
           triggerFunc:function(value,name,count){
             console.log(this.id)                       
               if(this.onChange){
@@ -91,7 +94,16 @@
           makeAction(){
              this.actionFunc(this.ctx,this.name)
           }           
-        } 
+        },
+        watch: {
+          focus(val) {
+            if(val) {
+              setTimeout(() => {
+                this.$refs[`focusable-${this.name}`].$el.focus()
+              }, 500)
+            }
+          }
+        },
     };
 
  </script>

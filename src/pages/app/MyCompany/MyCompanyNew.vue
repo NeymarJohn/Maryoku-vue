@@ -6,16 +6,13 @@
           <div class="md-layout">
             <div class='md-layout-item md-size-100 company-view-common-logo_block hover-block'>
               <div class='company-main-logo-block'>
-                <img class="company-logo" :src="getAvatar">
-                <div>
-                  <div class="company-logo-button-block">
-                    <div @click='UploadAvatar'>
-                      <md-icon class='company-logo-button'>edit<input type="file" id='company-avatar-upload' @change="onFileChange($event)" style="display:none"/></md-icon>
-                    </div>
-                    <div @click='deleteAvatar(customer.files[0])'>
-                      <md-icon class='company-logo-button'>clear</md-icon>
-                    </div>
-
+                <img class="company-logo" :src="customerLogoUrl">
+                <div class="company-logo-button-block onhover-block">
+                  <div @click='UploadAvatar'>
+                    <md-icon class='company-logo-button'>edit<input type="file" id='company-avatar-upload' @change="onFileChange($event)" style="display:none"/></md-icon>
+                  </div>
+                  <div @click='deleteAvatar(customer.files[0])'>
+                    <md-icon class='company-logo-button'>clear</md-icon>
                   </div>
                 </div>
               </div>
@@ -37,7 +34,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default"  @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
                       
@@ -49,10 +46,12 @@
                               :value='String(customer.numberOfEmployees)'
                               :onChange='onChange'
                               editebleMode
+                              :focus="inputFocus"
                               :isEditable="isEnabled"
                               :actionFunc='saveInfoFromForm'
                               :ctx='customer'
-                              fieldStyle="without-border"/> 
+                              fieldStyle="without-border"
+                              @update-focus-value="onUpdateFocus"/> 
                       </template>
                     </v-popover>
                   </div>
@@ -111,7 +110,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
                       
@@ -124,10 +123,12 @@
                               :value='customer.mainAddress'
                               :onChange='onChange'
                               editebleMode
+                              :focus="inputFocus"
                               :isEditable="isEnabled"
                               :actionFunc='saveInfoFromForm'
                               :ctx='customer'
-                              fieldStyle="without-border"/>
+                              fieldStyle="without-border"
+                              @update-focus-value="onUpdateFocus"/>
                       </template>
                     </v-popover>
                   </div>
@@ -145,7 +146,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
 
@@ -157,10 +158,12 @@
                           :value='String(user.phoneNumber)||""'
                           :onChange='onChange'
                           editebleMode
+                          :focus="inputFocus"
                           :isEditable="isEnabled"
                           :actionFunc='saveInfoFromForm'
                           :ctx='user'
-                          fieldStyle="without-border"/>
+                          fieldStyle="without-border"
+                          @update-focus-value="onUpdateFocus"/>
                       </template>
                     </v-popover>
                   </div>
@@ -178,7 +181,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
 
@@ -190,10 +193,12 @@
                           :value='customer.workspaceDomain'
                           :onChange='onChange'
                           editebleMode
+                          :focus="inputFocus"
                           :isEditable="isEnabled"
                           :actionFunc='saveInfoFromForm'
                           :ctx='customer'
-                          fieldStyle="without-border"/>
+                          fieldStyle="without-border"
+                          @update-focus-value="onUpdateFocus"/>
                       </template>
                     </v-popover>
                   </div>
@@ -209,7 +214,7 @@
                       :disabled="!isEnabled"
                       hideOnTargetClick
                       placement='right'>
-                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default">
+                      <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
 
@@ -221,10 +226,12 @@
                           :value='customer.website'
                           :onChange='onChange'
                           editebleMode
+                          :focus="inputFocus"
                           :isEditable="isEnabled"
                           :actionFunc='saveInfoFromForm'
                           :ctx='customer'
-                          fieldStyle="without-border"/>  
+                          fieldStyle="without-border"
+                          @update-focus-value="onUpdateFocus"/>  
                       </template>
                     </v-popover>
                   </div>
@@ -237,9 +244,34 @@
             </div>
             <div class="md-layout-item md-size-100" style="padding:0;">
                 <div class='company-branch_block'>
-                  <div class="header text-bold text-gray" style="margin-bottom:0;">Branches</div>
-                  <div @click.prevent='onShowInput($event)'><md-icon  class='branch-add_icon'>add</md-icon>
-                </div>
+                  <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
+                    <div style="display:flex;align-items:center;justify-content: space-between;">
+                      <div class="header text-bold text-gray" style="margin-bottom:0;">Branches</div>
+                      <v-popover
+                        offset="16"
+                        :disabled="!isEnabled"
+                        hideOnTargetClick
+                        placement='right'>
+                        <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
+                          <md-icon>add</md-icon>
+                        </md-button>
+
+                        <template slot="popover">
+                          <form @submit.prevent='addIndustry' action="#">
+                            <input-text
+                              labelStyle='company_label_input'
+                              label='Branches address'
+                              name='branch_address'
+                              :value='branch_address'
+                              :focus="inputFocus"
+                              id='branch_address_search'
+                              :onChange='onChange'
+                              @update-focus-value="onUpdateFocus"/>                  
+                          </form>
+                        </template>
+                      </v-popover>
+                    </div>
+                  </div>
               </div>
 
               <div class="md-layout">
@@ -249,17 +281,6 @@
                       <md-icon class="branch-add_icon" style="margin-right: 12px; margin-bottom: 12px;">pin_drop</md-icon><div class='company-wrap-block'> {{item}}</div>
                       <div  class='event-add-new-date-delete_button' @click.prevent='deleteBranch(item)'><md-icon  class='event-add_icon'>delete</md-icon></div>
                     </div>
-                  </div>
-                  <div v-show='showSearch'>
-                    <form @submit.prevent='addIndustry' action="#">
-                      <input-text
-                        labelStyle='company_label_input'
-                        label='Branches address'
-                        name='branch_address'
-                        :value='branch_address'
-                        id='branch_address_search'
-                        :onChange='onChange'/>                  
-                    </form>
                   </div>
                 </div>                
               </div>
@@ -346,7 +367,7 @@
               <ButtonDiv text='Monthly' class='button-filter'   :onClick='onChangeFilter'/>
             </div>
           </div>
-          <div><span class='info-chat-value'>{{numberOfEvents}}</span><span class='info-chart'>{{`This year of ${currentYear}`}}</span></div>
+          <div><span class='info-chat-value'>23</span><span class='info-chart'>{{`This year of ${new Date().getFullYear()}`}}</span></div>
         </md-card-content>
       </div>
       <md-card>
@@ -472,7 +493,6 @@
   //helper function
   import {isWrong} from '@/utils/helperFunction'
 
-const currentYear=new Date().getFullYear()
 
 
   export default {
@@ -492,26 +512,23 @@ const currentYear=new Date().getFullYear()
       Datepicker,
       "select-common":Select,
       LineChart
-    }   
-    ,    
-     mounted(){      
+    },    
+    mounted(){      
        const options = {          
           types: ['geocode']
         }
-        let input = document.getElementById('branch_address_search')
-        let autocomplete = new google.maps.places.Autocomplete(input, options)
-        console.log(autocomplete.description)
         this.auth.currentUser(this, true, function() {
-        this.$store.dispatch("user/getUserFromApi");
-         this.$store.dispatch("user/getIndustry");   
-        this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';      
+          this.$store.dispatch("user/getUserFromApi");
+          this.$store.dispatch("user/getIndustry");   
+          this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';      
       }.bind(this))         
     },
-   
-    
     data() {
       return {
-        auth: auth,        
+        auth: auth,
+        customerLogoUrl: 'static/img/placeholder.jpg',
+        numberOfEmployees: 100,
+        inputFocus: false,
         editing: {
           numberOfEmployees: false,
         },
@@ -528,46 +545,35 @@ const currentYear=new Date().getFullYear()
             }
         ,layout: {
             padding: {
-                left: 20,
+                left: 10,
                 right: 10,
-                top: 25,
+                top: 10,
                 bottom: 10
             }
         }
             ,
             scales: {
               yAxes: [{
-                 position: 'right',
                 ticks: {
                   beginAtZero:true,
-                  fontColor:"white",
-                  padding: 5,
-                   fontSize: 15,
-                   
+                  fontColor:"white"
                 },
                 gridLines: {
                     color: 'white',
                      zeroLineColor: 'white',
                      
-                  },
-                  
+                  }
               }],
               xAxes: [{
                 ticks: {
                   beginAtZero:true,
-                  fontColor:"white",
-                  padding: 5,
-                  fontSize: 12
+                  fontColor:"white"
                 },
                 gridLines: {
                     color: 'white',
                     zeroLineColor: 'white',
                     fontColor: "white"
-                  },
-                  gridLines: {
-                    display: false,
                   }
-                  
               }]
             }
           }
@@ -588,7 +594,6 @@ const currentYear=new Date().getFullYear()
         formSwitcher:'',
         duration:[],
         isEnabled: true,
-        currentYear:currentYear
       }
     },
     computed:{
@@ -602,22 +607,9 @@ const currentYear=new Date().getFullYear()
         getChartEventsPerCategory:'user/getChartEventsPerCategory',
         participants:'user/getChartParticipantsPerEvent',
         rate:'user/getChartSatisfactionRate'
-      }),
-      numberOfEvents(){
-        if(this.charts.numberOfEventsPerYear){
-          const charts=this.charts.numberOfEventsPerYear
-          const year= new Date().getFullYear()
-          for(let key in charts){
-            if(key==year)return charts[key]
-          }
-        }else{
-          return 0
-        }
-      },
-      getAvatar(){           
-            return  this.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.customer.logoFileId}` : 'static/img/placeholder.jpg';
-
-      },            
+      }),     
+                  
+             
       getMonth(){
         return this.monthValue.map(item=>item.month)
       },
@@ -626,7 +618,8 @@ const currentYear=new Date().getFullYear()
       },
       checkMonth(){
         const currentMonth=this.listMonth[new Date().getMonth()]
-        const currentCount=new Date().getMonth()             
+        const currentCount=new Date().getMonth()  
+        // if(!this.rate)return false      
         if(!this.month){
               return this.rate[currentCount]       
                                        
@@ -739,6 +732,9 @@ const currentYear=new Date().getFullYear()
     }
     ,
     methods: {
+      onUpdateFocus(newValue) {
+        this.inputFocus = newValue;
+      },
       isShow(obj,value){
         let ifChange=false
         for(let key in obj){
@@ -805,8 +801,7 @@ const currentYear=new Date().getFullYear()
         let _this = this;
 
         reader.onload = e => {
-          return new CustomerFile({customerFile: e.target.result}).save().then(result => {
-            this.$store.dispatch("user/getUserFromApi");            
+          return new CustomerFile({customerFile: e.target.result}).save().then(result => {            
             _this.customerLogoUrl = `${process.env.SERVER_URL}/1/customerFiles/${result.id}`
           })
             .catch((error) => {
@@ -820,8 +815,8 @@ const currentYear=new Date().getFullYear()
         document.getElementById('company-avatar-upload').click()
       },
       deleteAvatar(id){        
-       new CustomerFile({id: id}).delete().then(result => {
-          this.$store.dispatch("user/getUserFromApi"); 
+        CustomerFile({id: e.target.result}).delete().then(result => {
+          console.log(result)
          
         })
           .catch((error) => {
@@ -1029,7 +1024,7 @@ const currentYear=new Date().getFullYear()
   .filter-block{
     display:flex;
     position: absolute;
-    top: -40px;
+    top: -20px;
     left: 20px;
   }
   .indicator-event-type-title-rate{
