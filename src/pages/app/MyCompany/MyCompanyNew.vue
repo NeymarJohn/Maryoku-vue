@@ -832,14 +832,14 @@
   }
   .tooltip {
     &.popover {
-      $color: #f9f9f9;
-
+      $color: #fdfdfd;
       .popover-inner {
         background: $color;
         color: black;
         padding: 24px;
         border-radius: 5px;
-        box-shadow: 0 5px 30px rgba(black, .1);
+        border:none;
+        box-shadow: 0 5px 30px rgba(black, .3);
       }
       .wrapper {
         height: auto
