@@ -35,8 +35,9 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'>
+                      :auto-hide="false"
+                      placement='right'
+                      open-group="group1">
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default"  @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -69,8 +70,9 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'>
+                      :auto-hide="false"
+                      placement='right'
+                      open-group="group2">
                       <md-button class="tooltip-target onhover-block b3 md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -82,7 +84,7 @@
                                 :list='industryList'
                                 name='industry'
                                 :onChange="onChange"
-                                :valueName="['title','title']"
+                                :valueName="['title','id']"
                                 editebleMode
                                 :isEditable="isEnabled"
                                 :actionFunc='saveInfoFromForm'
@@ -111,8 +113,9 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'>
+                      :auto-hide="false"
+                      placement='right'
+                      open-group="group3">
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -147,8 +150,9 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'>
+                      :auto-hide="false"
+                      placement='right'
+                      open-group="group4">
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -182,8 +186,9 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'>
+                      :auto-hide="false"
+                      placement='right'
+                      open-group="group5">
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -215,8 +220,9 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'>
+                      :auto-hide="false"
+                      placement='right'
+                      open-group="group6">
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -253,8 +259,9 @@
                       <v-popover
                         offset="16"
                         :disabled="!isEnabled"
-                        hideOnTargetClick
-                        placement='right'>
+                        :auto-hide="false"
+                        placement='right'
+                        open-group="group7">
                         <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                           <md-icon>add</md-icon>
                         </md-button>
@@ -536,7 +543,7 @@ const currentYear=new Date().getFullYear()
           types: ['geocode']
         }
         let input = document.getElementById('branch_address_search')
-        // let autocomplete = new google.maps.places.Autocomplete(input, options)        
+        let autocomplete = new google.maps.places.Autocomplete(input, options)        
         this.auth.currentUser(this, true, function() {
           this.$store.dispatch("user/getUserFromApi");
           this.$store.dispatch("user/getIndustry");   
@@ -1009,7 +1016,7 @@ const currentYear=new Date().getFullYear()
   .text-bold {  
       font-family: 'Roboto';
       font-size: 12px;
-      font-weight: 400;
+      font-weight: 300;
       font-style: normal;
       font-stretch: normal;
       line-height: 2;

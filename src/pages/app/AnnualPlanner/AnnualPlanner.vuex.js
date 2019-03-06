@@ -15,6 +15,7 @@ export default {
           eventData: {
             id: null,
             occasion: "",
+            theme: "",
             occasionCache: "",
             title: "New Event",
             date: null,
@@ -51,6 +52,7 @@ export default {
         state.eventData['id'] = data.eventData.id;
         state.eventData['occasion'] = data.eventData.occasion ? data.eventData.occasion : state.eventData['occasion'];
         state.eventData['occasionCache'] = state.eventData['occasion'];
+        state.eventData['theme'] = data.eventData.theme;
         state.eventData['title'] = data.eventData.title;;
         state.eventData['numberOfParticipants'] = data.eventData.numberOfParticipants;
         state.eventData['totalBudget'] = data.eventData.totalBudget;
