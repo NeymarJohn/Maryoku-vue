@@ -35,9 +35,8 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      :auto-hide="false"
-                      placement='right'
-                      open-group="group1">
+                      hideOnTargetClick
+                      placement='right'>
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default"  @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -65,14 +64,13 @@
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
                       <span>Industry</span>
-                      <span class="value">{{customer.industry}}</span>
+                      <span class="value" :title='customer.industry'>{{customer.industry}}</span>
                     </p>
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      :auto-hide="false"
-                      placement='right'
-                      open-group="group2">
+                      hideOnTargetClick
+                      placement='right'>
                       <md-button class="tooltip-target onhover-block b3 md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -84,7 +82,7 @@
                                 :list='industryList'
                                 name='industry'
                                 :onChange="onChange"
-                                :valueName="['title','id']"
+                                :valueName="['title','title']"
                                 editebleMode
                                 :isEditable="isEnabled"
                                 :actionFunc='saveInfoFromForm'
@@ -113,9 +111,8 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      :auto-hide="false"
-                      placement='right'
-                      open-group="group3">
+                      hideOnTargetClick
+                      placement='right'>
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -150,9 +147,8 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      :auto-hide="false"
-                      placement='right'
-                      open-group="group4">
+                      hideOnTargetClick
+                      placement='right'>
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -186,9 +182,8 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      :auto-hide="false"
-                      placement='right'
-                      open-group="group5">
+                      hideOnTargetClick
+                      placement='right'>
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -220,9 +215,8 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      :auto-hide="false"
-                      placement='right'
-                      open-group="group6">
+                      hideOnTargetClick
+                      placement='right'>
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -259,9 +253,8 @@
                       <v-popover
                         offset="16"
                         :disabled="!isEnabled"
-                        :auto-hide="false"
-                        placement='right'
-                        open-group="group7">
+                        hideOnTargetClick
+                        placement='right'>
                         <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                           <md-icon>add</md-icon>
                         </md-button>
@@ -543,7 +536,7 @@ const currentYear=new Date().getFullYear()
           types: ['geocode']
         }
         let input = document.getElementById('branch_address_search')
-        let autocomplete = new google.maps.places.Autocomplete(input, options)        
+        // let autocomplete = new google.maps.places.Autocomplete(input, options)        
         this.auth.currentUser(this, true, function() {
           this.$store.dispatch("user/getUserFromApi");
           this.$store.dispatch("user/getIndustry");   
@@ -650,8 +643,7 @@ const currentYear=new Date().getFullYear()
         participants:'user/getChartParticipantsPerEvent',
         rate:'user/getChartSatisfactionRate'
       }),
-     isLoading(){
-       console.log(this.charts.length)        
+     isLoading(){               
        return Boolean(this.getChartNumberOfEventsPerYear)
       },
       numberOfEvents(){
@@ -943,6 +935,9 @@ const currentYear=new Date().getFullYear()
     .value {
       width: 30%;
       color:#292929!important;
+      white-space: nowrap;
+      overflow: hidden;   
+      text-overflow: ellipsis; 
     }
     p {
       font-family: Roboto;
@@ -1016,7 +1011,7 @@ const currentYear=new Date().getFullYear()
   .text-bold {  
       font-family: 'Roboto';
       font-size: 12px;
-      font-weight: 300;
+      font-weight: 400;
       font-style: normal;
       font-stretch: normal;
       line-height: 2;

@@ -11,9 +11,9 @@
         </md-select > 
          <span v-if='!editebleMode' class='md-error'>{{isErrors?'Required':''}}</span>
          <span v-if='editebleMode' class="md-suffix" key='input-editable' style="display: inline-block; white-space: nowrap;">
-            <md-button v-close-popover @click.prevent="makeAction" v-show="isEditable" class="md-simple md-just-icon md-round md-sm md-success" style="padding: 0; margin: 0; text-align: right;"><md-icon>check</md-icon></md-button>
-            <md-button v-close-popover @click.prevent="toggleEditableComponent" v-show="isEditable" class="md-simple md-just-icon md-round md-sm md-rose" style="padding: 0; margin: 0; text-align: right;"><md-icon>close</md-icon></md-button>
-            <md-button v-close-popover v-show="!isEditable" class="inline-edit md-simple md-just-icon md-round fa fa-edit button-height" @click='toggleEditableComponent'>
+            <md-button @click.prevent="makeAction" v-show="isEditable" class="md-simple md-just-icon md-round md-sm md-success" style="padding: 0; margin: 0; text-align: right;"><md-icon>check</md-icon></md-button>
+            <md-button @click.prevent="toggleEditableComponent" v-show="isEditable" class="md-simple md-just-icon md-round md-sm md-rose" style="padding: 0; margin: 0; text-align: right;"><md-icon>close</md-icon></md-button>
+            <md-button v-show="!isEditable" class="inline-edit md-simple md-just-icon md-round fa fa-edit button-height" @click='toggleEditableComponent'>
                 <md-icon>edit</md-icon>
             </md-button>
       </span> 
@@ -24,7 +24,12 @@
         name: "Select",
         
         model: {
-        },         
+        },        
+        data(){
+            return{
+                isEditable:false
+            }
+        },        
         props: {
             list:Array,
             required:Boolean,            
@@ -43,20 +48,24 @@
             withSpan:Boolean,
             trim:Boolean,
             editebleMode:Boolean,
-            isEditable:Boolean,
             actionFunc:Function,
             ctx:Object,
             value:String,
             fieldStyle:String,
         },
         methods: {
-          triggerFunc:function(value,name){                        
+            triggerFunc:function(value,name){                        
               this.onChange(value,name)      
-          },
+          }
+          ,
           toggleEditableComponent(){
+              this.isEditable=!this.isEditable
           },
           makeAction(){
-            this.actionFunc(this.ctx,this.name)
+             console.log('@@')
+             this.actionFunc(this.ctx,this.name)            
+              this.isEditable=false
+        
         } 
           
         }

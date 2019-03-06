@@ -89,7 +89,7 @@
               }
           },
           toggleEditableComponent(){
-            
+
           },
           makeAction(){
              this.actionFunc(this.ctx,this.name)

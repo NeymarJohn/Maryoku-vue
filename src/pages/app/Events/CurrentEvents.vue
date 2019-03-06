@@ -108,8 +108,8 @@
         </md-card-content>
       </md-card>
     </div>
-
-    <div v-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
+ <EventElements/>
+   <div v-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
       <event-blocks :event-id="eventId" :event-components="selectedComponents"></event-blocks>
     </div>
     <div v-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
@@ -130,6 +130,9 @@
 </template>
 
 <script>
+
+
+
 //MAIN MODULES
 import ChartComponent from "@/components/Cards/ChartComponent";
 import auth from "@/auth";
