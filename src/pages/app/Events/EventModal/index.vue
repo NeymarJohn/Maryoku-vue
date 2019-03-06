@@ -40,7 +40,22 @@
                                   <label>Occasion</label>
                                   <span class="md-error" v-if="errors.has('occasion')">This field is required</span>
                                 </md-autocomplete>
-
+                          </div>
+                          <div class="md-layout-item md-small-size-100">
+                                <md-field :class="[{'md-error': errors.has('theme')}]" class="select-with-icon">
+                                    <label>Theme</label>
+                                    <md-select v-model="theme"
+                                               data-vv-name="theme"
+                                               v-validate= "modelValidations.category"
+                                               required>
+                                        <md-option v-for="event in eventThemes"
+                                                   :key="event.id"
+                                                   :value="event.id">
+                                            {{ event.title }}
+                                        </md-option>
+                                    </md-select>
+                                    <span class="md-error" v-if="errors.has('theme')">The event category is required</span>
+                                </md-field>
                             </div>
                         </div>
                         <div class="md-layout mb16">
@@ -256,7 +271,8 @@
       ...mapGetters({
         categories: 'event/getCategoriesList',
         currencies: 'event/getCurrenciesList',
-        eventTypes: 'event/getEventTypesList'
+        eventTypes: 'event/getEventTypesList',
+        eventThemes: 'event/getEventThemesList'
       }),
       occasionsList: {
         get: function() {
@@ -287,6 +303,14 @@
         },
         set(value) {
           this.setEventProperty({key: 'occasion', actualValue: value});
+        }
+      },
+      theme: {
+        get() {
+          return this.eventData.theme;
+        },
+        set(value) {
+          this.setEventProperty({key: 'theme', actualValue: value});
         }
       },
       occasionCache: {
@@ -392,6 +416,7 @@
       clearForm() {
           this.id = null;
           this.occasion = "";
+          this.theme = "";
           this.occasionCache = "";
           this.title = "New Event";
           this.date = null;
@@ -421,6 +446,7 @@
 
         editedEvent.title = this.title;
         editedEvent.occasion = this.occasion;
+        editedEvent.theme = this.theme
         editedEvent.eventStartMillis = this.getEventStartInMillis();
         editedEvent.eventEndMillis = this.getEventEndInMillis();
         editedEvent.numberOfParticipants = this.numberOfParticipants;
@@ -489,6 +515,7 @@
           calendar: {id: calendarId},
           title: this.title,
           occasion: this.occasion,
+          theme: this.theme,
           eventStartMillis: this.getEventStartInMillis(),
           eventEndMillis: this.getEventEndInMillis(),
           numberOfParticipants: this.numberOfParticipants,

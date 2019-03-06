@@ -35,8 +35,9 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'>
+                      :auto-hide="false"
+                      placement='right'
+                      open-group="group1">
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default"  @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -64,13 +65,14 @@
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
                       <span>Industry</span>
-                      <span class="value" :title='customer.industry'>{{customer.industry}}</span>
+                      <span class="value">{{customer.industry}}</span>
                     </p>
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'>
+                      :auto-hide="false"
+                      placement='right'
+                      open-group="group2">
                       <md-button class="tooltip-target onhover-block b3 md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -106,13 +108,14 @@
                       <span class="icon-container">
                         <i class="fa fa-map-marker-alt"></i>
                       </span>
-                      <span>{{customer.mainAddress}}</span>
+                      <span>{{customer.mainAddress.onelineAddress}}</span>
                     </p>
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'>
+                      :auto-hide="false"
+                      placement='right'
+                      open-group="group3">
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -123,7 +126,7 @@
                               label='Company address'
                               name='mainAddress'
                               id='main_address_customer'
-                              :value='customer.mainAddress'
+                              :value='customer.mainAddress.onelineAddress'
                               :onChange='onChange'
                               editebleMode
                               :focus="inputFocus"
@@ -147,8 +150,9 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'>
+                      :auto-hide="false"
+                      placement='right'
+                      open-group="group4">
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -182,8 +186,9 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'>
+                      :auto-hide="false"
+                      placement='right'
+                      open-group="group5">
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -215,8 +220,9 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      hideOnTargetClick
-                      placement='right'>
+                      :auto-hide="false"
+                      placement='right'
+                      open-group="group6">
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -253,8 +259,9 @@
                       <v-popover
                         offset="16"
                         :disabled="!isEnabled"
-                        hideOnTargetClick
-                        placement='right'>
+                        :auto-hide="false"
+                        placement='right'
+                        open-group="group7">
                         <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                           <md-icon>add</md-icon>
                         </md-button>
@@ -643,7 +650,8 @@ const currentYear=new Date().getFullYear()
         participants:'user/getChartParticipantsPerEvent',
         rate:'user/getChartSatisfactionRate'
       }),
-     isLoading(){               
+     isLoading(){
+       console.log(this.charts.length)        
        return Boolean(this.getChartNumberOfEventsPerYear)
       },
       numberOfEvents(){
@@ -837,13 +845,17 @@ const currentYear=new Date().getFullYear()
           let a = {}
           
           a["id"]=obj.id
-          
-          if (objName !== "branch_address") {
-            a[objName] = this[objName]
-          } else {
-           a.branches = [{
+
+          if (objName === "branch_address") {
+            a.branches = [{
              onelineAddress: this[objName]
            }]
+          } else if (objName === "mainAddress") {
+            a[objName] = {
+              onelineAddress:this[objName]
+            }
+          } else {
+            a[objName] = this[objName]
           }
 
           this.$store.dispatch("user/putUserFromApi",a)
@@ -935,9 +947,6 @@ const currentYear=new Date().getFullYear()
     .value {
       width: 30%;
       color:#292929!important;
-      white-space: nowrap;
-      overflow: hidden;   
-      text-overflow: ellipsis; 
     }
     p {
       font-family: Roboto;
