@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout">
-  <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
+  <vue-element-loading :active="isLoadingScreen" spinner="ring" color="#FF547C"/>
     <div class="md-layout-item md-small-size-30 md-medium-size-30 md-large-size-20">
       <md-card class="md-card-profile">
         <md-card-content>
@@ -543,6 +543,9 @@ const currentYear=new Date().getFullYear()
           this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';      
       }.bind(this))
     },
+    updated() {
+      this.isLoadingScreen=false
+    },
     data() {
       return {
         auth: auth,
@@ -640,8 +643,9 @@ const currentYear=new Date().getFullYear()
         participants:'user/getChartParticipantsPerEvent',
         rate:'user/getChartSatisfactionRate'
       }),
-     isLoading(){        
-       return !Boolean(this.charts)
+     isLoading(){
+       console.log(this.charts.length)        
+       return Boolean(this.getChartNumberOfEventsPerYear)
       },
       numberOfEvents(){
         if(this.charts.numberOfEventsPerYear){

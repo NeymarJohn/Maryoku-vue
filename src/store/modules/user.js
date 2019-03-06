@@ -220,8 +220,9 @@ const getters={
     }    
         
      listRete= months.map((item,index)=>{
-      const currentObj=[]
-      for(let month in filterYear){                     
+      
+      for(let month in filterYear){  
+        const currentObj=[]                   
        if((month-1)===index){
           const categori=filterYear[month]
            for(let key in categori){                   
@@ -235,9 +236,8 @@ const getters={
          const a = {category:'',total:'',currentValue:''}
          currentObj.push(a)
          }
-       }
-       
-       return currentObj
+         return currentObj
+       } 
     
     })        
     }       
