@@ -292,11 +292,36 @@
 
               <div class="md-layout">
                 <div class="md-layout-item md-size-100">
-                  <div v-for="item of this.branches || []" >
+                  <div v-for="(branch, index) of customer.branches || []" :key="index">
                     <div  style="text-align: left;  display: flex; align-items: center;align-items: center; justify-content: space-between;">
-                      <p>{{item.onelineAddress}}</p>
+                      <p>{{branch.onelineAddress}}</p>
+                      <v-popover
+                        offset="16"
+                        :disabled="!isEnabled"
+                        hideOnTargetClick
+                        placement='right'>
+                        <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default" @click="branchFocus(index)">
+                          <md-icon>edit</md-icon>
+                        </md-button>
 
-                      <md-button class="md-button md-icon-button md-simple md-theme-default" @click.prevent='deleteBranch(item)'>
+                        <template slot="popover">
+                            <input-text
+                              labelStyle='company_label_input'
+                              label='Branches address'
+                              name='branch_address_update'
+                              :onChange='onChange'
+                              editebleMode
+                              :focus="inputFocus"
+                              :isEditable="isEnabled"
+                              :value='branch_address'
+                              id='branch_address_update'
+                              :actionFunc='saveInfoFromForm'
+                              :ctx='customer'
+                              fieldStyle="without-border"
+                              @update-focus-value="onUpdateFocus"/>
+                        </template>
+                      </v-popover>
+                      <md-button class="md-button md-icon-button md-simple md-theme-default" @click.prevent='deleteBranch(index)'>
                         <md-icon  class='event-add_icon'>delete</md-icon>
                       </md-button>
                     </div>
@@ -543,7 +568,7 @@ const currentYear=new Date().getFullYear()
           types: ['geocode']
         }
         let input = document.getElementById('branch_address_search')
-        // let autocomplete = new google.maps.places.Autocomplete(input, options)        
+        // let autocomplete = new google.maps.places.Autocomplete(input, options)
         this.auth.currentUser(this, true, function() {
           this.$store.dispatch("user/getUserFromApi");
           this.$store.dispatch("user/getIndustry");   
@@ -620,6 +645,8 @@ const currentYear=new Date().getFullYear()
 
         },             
         branch_address:'',
+        branchIndex: 0,
+        tmpObject: null,
         showSearch:false,
         showFilter:false,       
         from:'',
@@ -648,10 +675,13 @@ const currentYear=new Date().getFullYear()
         getChartEventPerEmployee:'user/getChartEventPerEmployee',
         getChartEventsPerCategory:'user/getChartEventsPerCategory',
         participants:'user/getChartParticipantsPerEvent',
-        rate:'user/getChartSatisfactionRate'
+        rate:'user/getChartSatisfactionRate',
       }),
-     isLoading(){
-       console.log(this.charts.length)        
+      branches() {
+        return this.customer.branches
+      },
+      isLoading(){
+       console.log(this.charts.length)
        return Boolean(this.getChartNumberOfEventsPerYear)
       },
       numberOfEvents(){
@@ -817,11 +847,36 @@ const currentYear=new Date().getFullYear()
         this.showSearch=!this.showSearch
         this.$store.dispatch("user/sendIndustry",this.branch_address)
       },
+      editBranchAddress(payload) {
+        this.$store.dispatch("user/editBranchAddress", payload)
+      },
+      branchFocus(index) {
+        this.inputFocus = true;
+        this.branchIndex = index
+      },
       onChangeFilter:function(){
         this.showFilter=!this.showFilter
       },
-      deleteBranch(item){
-        this.$store.dispatch("user/deleteBranchToCompany",item)
+      deleteBranch(branchIndex){
+        swal({
+          title: "Are you sure want to delete this branch?",
+          showCancelButton: true,
+          confirmButtonClass: "md-button md-success",
+          cancelButtonClass: "md-button md-danger",
+          confirmButtonText: "Yes, delete it!",
+          buttonsStyling: false
+        })
+         .then(result => {
+              if(result.value === true) {
+                    console.log(result)
+                    this.$store.dispatch("user/deleteBranchToCompany", branchIndex)
+                    this.tmpObject.branches = this.branches
+                    this.$store.dispatch("user/putUserFromApi", this.tmpObject)
+                  }
+                })
+                .catch(err => {
+                  console.log(err)
+                })
       },
       getMonthFromControl(month){        
         this.month=month
@@ -847,18 +902,30 @@ const currentYear=new Date().getFullYear()
           a["id"]=obj.id
 
           if (objName === "branch_address") {
-            a.branches = [{
-             onelineAddress: this[objName]
-           }]
+            a.branches = [];
+            this.branches.push({
+              onelineAddress: this[objName]
+            })
+            a.branches = this.branches;
           } else if (objName === "mainAddress") {
             a[objName] = {
               onelineAddress:this[objName]
             }
           } else {
-            a[objName] = this[objName]
+            if (objName === "branch_address_update"){
+
+              this.editBranchAddress({newAddress: this[objName], index: this.branchIndex})
+              a.branches = this.branches
+
+              console.log(a.branches)
+              return;
+            } else {
+              a[objName] = this[objName];
+            }
           }
 
-          this.$store.dispatch("user/putUserFromApi",a)
+          this.tmpObject = a
+          this.$store.dispatch("user/putUserFromApi", this.tmpObject)
           this.formSwitcher=''
         }
       },
@@ -883,7 +950,7 @@ const currentYear=new Date().getFullYear()
         };
         reader.readAsDataURL(file);
       },
-      UploadAvatar(){        
+      UploadAvatar(){
         document.getElementById('company-avatar-upload').click()
       },
       deleteAvatar(id){ 

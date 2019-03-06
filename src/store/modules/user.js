@@ -35,7 +35,10 @@ const state={
   industry:[],
   customer:{},
   charts:{},
-  upcomingEvents:[]
+  upcomingEvents:[],
+  company: {
+    branches: []
+  }
 }
 
 //getters
@@ -45,6 +48,9 @@ const getters={
   },
   getIndustryList:(state)=>{
     return state.industry
+  },
+  getCompany: (state) => {
+    return state.company
   },
   getCustomer:(state)=>{
     return state.customer
@@ -326,15 +332,22 @@ const actions={
 
         }
     },
-    async sendIndustry({commit,state}, industry){
+    async sendIndustry({commit,state}, branch){
         try{
         //    const res=await postReq('/1/onboarding/me',email)
-           commit("addIndustry" , industry)
+           commit("addBranch" , branch)
         }catch(e){
 
         }
     },
-    async deleteBranchToCompany({commit,state},branch){{
+    async editBranchAddress({commit, state}, payload) {
+      try {
+        commit("editBranch", payload)
+      } catch(e) {
+        console.log(e)
+      }
+    },
+    async deleteBranchToCompany({commit,state}, branch){{
         try{
             commit('deleteBranch', branch)
         }catch(e){
@@ -342,6 +355,7 @@ const actions={
         }
     }},
     putUserFromApi({commit,state},data){
+      console.log(data, 'putUserFromApi')
        if(data['phoneNumber']){
         new Me({...data}).save().then(res=>{
             commit("setUser" , res)
@@ -388,12 +402,17 @@ const mutations= {
     setCustomer(state, customer){
         state.customer=customer
     },
-    addIndustry(state,industry){
-         state.company.branches.push(industry)
-        },
-    deleteBranch(state,branch){
-        const newBranch=state.company.branches.filter(item=>item!==branch)
-        state.company.branches=newBranch
+    addBranch(state,industry){
+      state.customer.branches.push(industry)
+    },
+    deleteBranch(state, branchIndex){
+      const updatedBranches = state.customer.branches.filter((item, index) => index !== branchIndex)
+      state.customer.branches = updatedBranches
+    },
+    editBranch(state, branchInfo) {
+      let editedBranches = state.customer.branches.slice()
+      editedBranches[branchInfo.index].onelineAddress = branchInfo.newAddress
+      state.customer.branches = editedBranches
     },
     setCustomerChart(state,charts){
     state.charts=charts
