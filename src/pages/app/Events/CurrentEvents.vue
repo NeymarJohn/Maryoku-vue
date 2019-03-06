@@ -107,13 +107,12 @@
           </div>
         </md-card-content>
       </md-card>
-    </div>
- <EventElements/>
+    </div> 
    <div v-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
       <event-blocks :event-id="eventId" :event-components="selectedComponents"></event-blocks>
     </div>
     <div v-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
-     <EventElements/>
+     
     </div>
 
     <div class="md-layout-item md-size-100 block-flex copyright-block">
@@ -157,7 +156,6 @@ export default {
     Icon,
     EventElements,
     EventBlocks,
-
   },
 
   data() {
