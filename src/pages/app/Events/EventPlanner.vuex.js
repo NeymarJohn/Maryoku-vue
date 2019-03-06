@@ -8,7 +8,6 @@ export default {
             occasionCache: "",
             title: "New Event",
             date: null,
-            theme: "",
             time: "",
             duration: "",
             numberOfParticipants: "",

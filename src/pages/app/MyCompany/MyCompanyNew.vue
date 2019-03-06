@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout">
-  <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
+  <vue-element-loading :active="isLoadingScreen" spinner="ring" color="#FF547C"/>
     <div class="md-layout-item md-small-size-30 md-medium-size-30 md-large-size-20">
       <md-card class="md-card-profile">
         <md-card-content>
@@ -35,9 +35,8 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      :auto-hide="false"
-                      placement='right'
-                      open-group="group1">
+                      hideOnTargetClick
+                      placement='right'>
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default"  @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -70,9 +69,8 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      :auto-hide="false"
-                      placement='right'
-                      open-group="group2">
+                      hideOnTargetClick
+                      placement='right'>
                       <md-button class="tooltip-target onhover-block b3 md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -84,7 +82,7 @@
                                 :list='industryList'
                                 name='industry'
                                 :onChange="onChange"
-                                :valueName="['title','id']"
+                                :valueName="['title','title']"
                                 editebleMode
                                 :isEditable="isEnabled"
                                 :actionFunc='saveInfoFromForm'
@@ -113,9 +111,8 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      :auto-hide="false"
-                      placement='right'
-                      open-group="group3">
+                      hideOnTargetClick
+                      placement='right'>
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -150,9 +147,8 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      :auto-hide="false"
-                      placement='right'
-                      open-group="group3">
+                      hideOnTargetClick
+                      placement='right'>
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -186,9 +182,8 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      :auto-hide="false"
-                      placement='right'
-                      open-group="group4">
+                      hideOnTargetClick
+                      placement='right'>
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -220,9 +215,8 @@
                     <v-popover
                       offset="16"
                       :disabled="!isEnabled"
-                      :auto-hide="false"
-                      placement='right'
-                      open-group="group5">
+                      hideOnTargetClick
+                      placement='right'>
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
@@ -259,9 +253,8 @@
                       <v-popover
                         offset="16"
                         :disabled="!isEnabled"
-                        :auto-hide="false"
-                        placement='right'
-                        open-group="group6">
+                        hideOnTargetClick
+                        placement='right'>
                         <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                           <md-icon>add</md-icon>
                         </md-button>
@@ -543,12 +536,15 @@ const currentYear=new Date().getFullYear()
           types: ['geocode']
         }
         let input = document.getElementById('branch_address_search')
-        let autocomplete = new google.maps.places.Autocomplete(input, options)        
+        // let autocomplete = new google.maps.places.Autocomplete(input, options)        
         this.auth.currentUser(this, true, function() {
           this.$store.dispatch("user/getUserFromApi");
           this.$store.dispatch("user/getIndustry");   
           this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';      
       }.bind(this))
+    },
+    updated() {
+      this.isLoadingScreen=false
     },
     data() {
       return {
@@ -647,8 +643,9 @@ const currentYear=new Date().getFullYear()
         participants:'user/getChartParticipantsPerEvent',
         rate:'user/getChartSatisfactionRate'
       }),
-     isLoading(){        
-       return !Boolean(this.charts)
+     isLoading(){
+       console.log(this.charts.length)        
+       return Boolean(this.getChartNumberOfEventsPerYear)
       },
       numberOfEvents(){
         if(this.charts.numberOfEventsPerYear){
@@ -875,8 +872,7 @@ const currentYear=new Date().getFullYear()
         };
         reader.readAsDataURL(file);
       },
-      UploadAvatar(){
-        console.log('@')
+      UploadAvatar(){        
         document.getElementById('company-avatar-upload').click()
       },
       deleteAvatar(id){ 
@@ -1013,7 +1009,7 @@ const currentYear=new Date().getFullYear()
   .text-bold {  
       font-family: 'Roboto';
       font-size: 12px;
-      font-weight: 300;
+      font-weight: 400;
       font-style: normal;
       font-stretch: normal;
       line-height: 2;

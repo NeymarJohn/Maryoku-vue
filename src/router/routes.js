@@ -470,7 +470,7 @@ const appCurrentInfo={
 const routes = [
   {
     path: "/",
-    redirect: "/planner",
+    redirect: "/company",
     name: "Root"
   },
   /*componentsMenu,
