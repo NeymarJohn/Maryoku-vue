@@ -868,8 +868,7 @@ const currentYear=new Date().getFullYear()
         };
         reader.readAsDataURL(file);
       },
-      UploadAvatar(){
-        console.log('@')
+      UploadAvatar(){        
         document.getElementById('company-avatar-upload').click()
       },
       deleteAvatar(id){ 

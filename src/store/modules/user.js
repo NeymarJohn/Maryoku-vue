@@ -193,7 +193,7 @@ const getters={
                  currentObj.push(obj)
              }
          }else{          
-           currentObj.push({typeEvent:'N/D',total:'0',currentValue:'0'})
+           currentObj.push({typeEvent:'',total:'',currentValue:''})
            }
            return currentObj
       
@@ -232,7 +232,7 @@ const getters={
                currentObj.push(obj)
            }
        }else{
-         const a = {category:'N/D',total:'0',currentValue:'0'}
+         const a = {category:'',total:'',currentValue:''}
          currentObj.push(a)
          }
        }
@@ -246,49 +246,6 @@ const getters={
   }
 
 } 
-
-// getChartSatisfactionRate(){
-//   const currentYear=new Date().getFullYear()
-//   const months=this.listMonth
-//   let listRete=null
-//   if(this.charts.satisfactionRatesPerYearMonth){
-//     const chart=this.charts.satisfactionRatesPerYearMonth
-//     let filterYear=null           
-//      for(let key in chart){               
-//       if(key==currentYear){                
-//         filterYear=chart[key]                
-//       }              
-//   }    
-      
-//    listRete= months.map((item,index)=>{
-//     const currentObj=[]
-//     for(let month in filterYear){                     
-//      if((month-1)===index){
-//         const categori=filterYear[month]
-//          for(let key in categori){                   
-//              const obj={}
-//              obj['category']=key
-//              obj['total']='100'
-//              obj['currentValue']=String(categori[key])
-//              currentObj.push(obj)
-//          }
-//      }else{
-//        const a = {category:'N/D',total:'0',currentValue:'0'}
-//        currentObj.push(a)
-//        }
-//      }
-     
-//      return currentObj
-  
-//   })        
-//   }       
-   
-//    return listRete
-// }
-
-
-
-
 //actions
 const actions={
    getUserFromApi({commit,state}, data){

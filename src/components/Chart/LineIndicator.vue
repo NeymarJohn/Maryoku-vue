@@ -1,22 +1,28 @@
 <template>  
 <div >
-<div class='indecator-event-block' v-if='isRate'>
+<div class='indecator-event-block' v-if='isRate' v-show='isNoDataRate'>
 <div class='indicator-event-info-block-rate'>
 <span class='indicator-event-type-title-rate'>{{categoryEvent}}</span>
 </div>
 <div><span class='indicator-event-info-number-currentV'>{{`${Math.floor(leftWidth)}%`}}</span></div>
 </div>
-<div class='indecator-event-block' v-else>
+<div class='indecator-event-block' v-else v-show='isNoData'>
 <div class='indicator-event-info-block'>
 <div class='indicator-event-type-title'>{{typeEvent}}</div>
 <div class='indicator-event-date-title'>{{eventDate}}</div>
 </div>
-<div><span class='indicator-event-info-number-currentV'>{{currentValue}}</span>/<span class='indicator-event-info-number-total'>{{total}}</span></div>
+<div v-show='isNoData'><span class='indicator-event-info-number-currentV'>{{currentValue}}</span>/<span class='indicator-event-info-number-total'>{{total}}</span></div>
 </div>           
-<div class='indicator-block'>
+<div class='indicator-block' v-if='!isRate' v-show='isNoData'>
 <div class='indicator-line' :class='leftIndicatorStyle' :style="{  width: leftWidth + '%' }"/>
 <div class='indicator-line' :class='rightIndicatorStyle' :style="{  width: rightWidth + '%' }"/>
 </div>
+<div class='indicator-block'v-if='isRate' v-show='isNoDataRate'>
+<div class='indicator-line' :class='leftIndicatorStyle' :style="{  width: leftWidth + '%' }"/>
+<div class='indicator-line' :class='rightIndicatorStyle' :style="{  width: rightWidth + '%' }"/>
+</div>
+<div v-if='!isRate' v-show='!isNoData'>{{'No data yet, add your events'}}<span><router-link to="/events"> now</router-link></span></div>
+<div v-if='isRate' v-show='!isNoDataRate'>{{'No data yet, add your events'}}<span><router-link to="/events"> now</router-link></span></div>
 </div>
 </template>
 <script>
@@ -56,6 +62,15 @@
                      return 100
                  }                          
                  
+             },
+             isNoData(){
+
+                 console.log(Boolean(this.typeEvent===''&&this.currentValue==='0'&&this.total==='0'))
+                 return Boolean(this.typeEvent&&this.currentValue&&this.total)
+             },
+             isNoDataRate(){
+                 
+                 return Boolean(this.categoryEvent&&this.currentValue&&this.total)
              }
         }
         ,
