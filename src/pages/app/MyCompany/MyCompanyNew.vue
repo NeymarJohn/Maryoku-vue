@@ -82,7 +82,7 @@
                                 :list='industryList'
                                 name='industry'
                                 :onChange="onChange"
-                                :valueName="['title','id']"
+                                :valueName="['title','title']"
                                 editebleMode
                                 :isEditable="isEnabled"
                                 :actionFunc='saveInfoFromForm'
@@ -536,7 +536,7 @@ const currentYear=new Date().getFullYear()
           types: ['geocode']
         }
         let input = document.getElementById('branch_address_search')
-        let autocomplete = new google.maps.places.Autocomplete(input, options)        
+        // let autocomplete = new google.maps.places.Autocomplete(input, options)        
         this.auth.currentUser(this, true, function() {
           this.$store.dispatch("user/getUserFromApi");
           this.$store.dispatch("user/getIndustry");   
