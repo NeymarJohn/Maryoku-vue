@@ -285,8 +285,8 @@
           if (this.occasionCache !== "") {
             occasionList.push(this.occasionCache)
           }
-           
-          return occasionList;          
+
+          return occasionList;
         }
       },
       id: {
@@ -320,7 +320,7 @@
         set(value) {
           this.setEventProperty({key: 'occasionCache', actualValue: value});
         }
-      },      
+      },
       title: {
         get() {
           return this.eventData.title
@@ -597,45 +597,44 @@
   .modal-container {
     max-width: 570px;
   }
-</style>
-<style lang="scss">
-    .modal-z-index {
-        z-index: 5;
-    }
-    .large-z-index {
-        z-index: 6;
-        position: relative;
-    }
-    .move-center {
-        margin: 0 auto!important;;
-    }
-    .move-left {
-      margin-left: 0!important;
-      margin-right: auto!important;
-    }
-    .move-right {
-      margin-right: 0!important;
-      margin-left: auto!important;
-    }
-    .text-center {
-      text-align: center;
-    }
-    .d-flex {
-      display: flex;
-    }
-    .items-center-v {
-      align-items: center;
-    }
-    .items-center-g {
-      justify-content: center;
-    }
-    .justify-beetwen {
-      justify-content: space-between
-    }
-    .md-field .md-error {
-      text-align: left;
-    }
-    .swal2-container {
-      z-index: 10000;
-    }
+
+  .modal-z-index {
+    z-index: 5;
+  }
+  .large-z-index {
+    z-index: 6;
+    position: relative;
+  }
+  .move-center {
+    margin: 0 auto!important;;
+  }
+  .move-left {
+    margin-left: 0!important;
+    margin-right: auto!important;
+  }
+  .move-right {
+    margin-right: 0!important;
+    margin-left: auto!important;
+  }
+  .text-center {
+    text-align: center;
+  }
+  .d-flex {
+    display: flex;
+  }
+  .items-center-v {
+    align-items: center;
+  }
+  .items-center-g {
+    justify-content: center;
+  }
+  .justify-beetwen {
+    justify-content: space-between
+  }
+  .md-field .md-error {
+    text-align: left;
+  }
+  .swal2-container {
+    z-index: 10000;
+  }
 </style>

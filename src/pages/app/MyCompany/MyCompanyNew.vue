@@ -65,7 +65,7 @@
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
                       <span>Industry</span>
-                      <span class="value">{{customer.industry}}</span>
+                      <span class="value" :title='customer.industry'>{{customer.industry}}</span>
                     </p>
                     <v-popover
                       offset="16"
@@ -681,7 +681,6 @@ const currentYear=new Date().getFullYear()
         return this.customer.branches
       },
       isLoading(){
-       console.log(this.charts.length)
        return Boolean(this.getChartNumberOfEventsPerYear)
       },
       numberOfEvents(){
@@ -1014,6 +1013,9 @@ const currentYear=new Date().getFullYear()
     .value {
       width: 30%;
       color:#292929!important;
+      white-space: nowrap;
+      overflow: hidden;   
+      text-overflow: ellipsis; 
     }
     p {
       font-family: Roboto;
