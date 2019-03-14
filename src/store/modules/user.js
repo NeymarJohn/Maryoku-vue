@@ -93,54 +93,58 @@ const getters={
             }]          
           }
         }
-        }      
-      }
-      ,getChartEventPerEmployee:(state)=>{
-        const parse_data=[]
-  const parse_month=[]
-  if(state.charts.eventCostPerEmployeePerYearMonth){          
-    const chart= state.charts.eventCostPerEmployeePerYearMonth          
-    for(let key in chart){
-    const moths= key.split('__')
-    parse_month.push(months_short[moths[1]-1])
-    parse_data.push(chart[key]) 
-    }
-     if(parse_month.length<6&&parse_data.length<6){
-       return{               
-          labels: parse_month,
-          datasets: [{
-            data: parse_data,
-            pointBackgroundColor:'white',
-            pointStyle:'circle', 
-            borderColor: [
-              'white',
-            ],
-            borderWidth: 3
-          }]
-                  
+      }      
+    },
+    getChartEventPerEmployee:(state)=>{
+      const parse_data=[]
+      const parse_month=[]
+
+      if(state.charts.eventCostPerEmployeePerYearMonth){          
+        const chart= state.charts.eventCostPerEmployeePerYearMonth          
+
+        console.log(chart)
+
+        for(let key in chart){
+          const moths = key.split('__')
+
+          parse_month.push(months_short[moths[1]-1])
+          parse_data.push(chart[key]) 
+        }
+
+        if(parse_month.length<6&&parse_data.length<6){
+          return{               
+            labels: parse_month.sort(),
+            datasets: [{
+              data: parse_data.sort(),
+              pointBackgroundColor:'white',
+              pointStyle:'circle', 
+              borderColor: [
+                'white',
+              ],
+              borderWidth: 3
+            }]
           }
-         
-      
-  }else{
-     const arrLenght=parse_data.length-6
-      const dataCh=parse_data.splice(arrLenght)
-      const labemlCh=parse_month.splice(arrLenght)
-      return{               
-          labels: labemlCh,
-          datasets: [{
-            data: dataCh,
-            backgroundColor: [
-              'rgba(255, 255, 255, 0.2)',
-            ],
-            borderColor: [
-              '#26cfa0',
-            ],
-            borderWidth: 1
-          }]          
+        }else{
+          const arrLenght=parse_data.length-6
+          const dataCh=parse_data.sort().splice(arrLenght)
+          const labemlCh=parse_month.sort().splice(arrLenght)
+            return{               
+              labels: labemlCh,
+              datasets: [{
+                data: dataCh,
+                backgroundColor: [
+                  'rgba(255, 255, 255, 0.2)',
+                ],
+                borderColor: [
+                  '#26cfa0',
+                ],
+              borderWidth: 1
+              }]          
           }  
-  }
-  }}
-  ,getChartEventsPerCategory:(state)=>{
+        }
+      }
+  },
+  getChartEventsPerCategory:(state)=>{
     const parse_data=[]
     const parse_label=[]
   if(state.charts.eventsPerCategory){ 
