@@ -347,13 +347,13 @@ const actions={
         console.log(e)
       }
     },
-    async deleteBranchToCompany({commit,state}, branch){{
+    async deleteBranchToCompany({commit,state}, branch){
         try{
             commit('deleteBranch', branch)
         }catch(e){
             console.log(e)
         }
-    }},
+    },
     putUserFromApi({commit,state},data){
       console.log(data, 'putUserFromApi')
        if(data['phoneNumber']){
@@ -379,8 +379,8 @@ const actions={
             .catch(e=>console.log(e))})
             .catch(e=>console.log(e,'false customer'))
 
-    }
-    ,getChartsFromApi({commit,state},id){
+    },
+    getChartsFromApi({commit,state},id){
       new Customer({id: id})
       .statistics()
       .get()

@@ -70,7 +70,7 @@ export default {
     if (!this.user.authenticated || this.user.id === undefined){
       context.$http.get(CURRENT_USER_URL, { headers: this.getAuthHeader() })
         .then((resp) => {
-          context.user = { username: resp.data.username };
+          // context.user = { username: resp.data.username };
           store.dispatch("user/getUserFromApi" , resp.data);
 
           this.user.id = resp.data.id;

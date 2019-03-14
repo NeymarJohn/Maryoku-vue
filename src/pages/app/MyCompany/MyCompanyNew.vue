@@ -101,7 +101,7 @@
             </div>
             <div>
               <div class="header text-bold text-gray ">Contact Information</div>
-              <div class="md-layout">
+              <div v-if="customer.mainAddress" class="md-layout">
                 <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p>
@@ -291,41 +291,41 @@
               </div>
 
               <div class="md-layout">
-                <div class="md-layout-item md-size-100">
-                  <div v-for="(branch, index) of customer.branches || []" :key="index">
-                    <div  style="text-align: left;  display: flex; align-items: center;align-items: center; justify-content: space-between;">
-                      <p>{{branch.onelineAddress}}</p>
-                      <v-popover
-                        offset="16"
-                        :disabled="!isEnabled"
-                        hideOnTargetClick
-                        placement='right'>
-                        <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default" @click="branchFocus(index)">
-                          <md-icon>edit</md-icon>
-                        </md-button>
+                <div v-if="customer.branches" class="md-layout-item md-size-100">
+                    <div v-for="(branch, index) of customer.branches || []" :key="index">
+                      <div  style="text-align: left;  display: flex; align-items: center;align-items: center; justify-content: space-between;">
+                        <p>{{branch.onelineAddress}}</p>
+                        <v-popover
+                          offset="16"
+                          :disabled="!isEnabled"
+                          hideOnTargetClick
+                          placement='right'>
+                          <md-button class="tooltip-target b3 md-button md-icon-button md-simple md-theme-default" @click="branchFocus(index)">
+                            <md-icon>edit</md-icon>
+                          </md-button>
 
-                        <template slot="popover">
-                            <input-text
-                              labelStyle='company_label_input'
-                              label='Branches address'
-                              name='branch_address_update'
-                              :onChange='onChange'
-                              editebleMode
-                              :focus="inputFocus"
-                              :isEditable="isEnabled"
-                              :value='branch_address'
-                              id='branch_address_update'
-                              :actionFunc='saveInfoFromForm'
-                              :ctx='customer'
-                              fieldStyle="without-border"
-                              @update-focus-value="onUpdateFocus"/>
-                        </template>
-                      </v-popover>
-                      <md-button class="md-button md-icon-button md-simple md-theme-default" @click.prevent='deleteBranch(index)'>
-                        <md-icon  class='event-add_icon'>delete</md-icon>
-                      </md-button>
+                          <template slot="popover">
+                              <input-text
+                                labelStyle='company_label_input'
+                                label='Branches address'
+                                name='branch_address_update'
+                                :onChange='onChange'
+                                editebleMode
+                                :focus="inputFocus"
+                                :isEditable="isEnabled"
+                                :value='branch_address'
+                                id='branch_address_update'
+                                :actionFunc='saveInfoFromForm'
+                                :ctx='customer'
+                                fieldStyle="without-border"
+                                @update-focus-value="onUpdateFocus"/>
+                          </template>
+                        </v-popover>
+                        <md-button class="md-button md-icon-button md-simple md-theme-default" @click.prevent='deleteBranch(index)'>
+                          <md-icon  class='event-add_icon'>delete</md-icon>
+                        </md-button>
+                      </div>
                     </div>
-                  </div>
                 </div>                
               </div>
             </div>
@@ -427,14 +427,13 @@
           </div>
           <div>
            <LineIndicator
-             v-if='chechParticipant'              
+              v-if='chechParticipant'              
               v-for="item in chechParticipant"
               :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-participants'
               rightIndicatorStyle ='right-side-indicator'
               :total='item.total'
               :typeEvent='item.typeEvent'
-              :eventDate='item.eventDate'
               :currentValue='item.currentValue'/>
           </div>
         </md-card-content>
@@ -487,7 +486,7 @@
         </md-card-content>
       </md-card>
       <md-card class='margin-block-for-card'>
-      <div class="logo-block">
+        <div class="logo-block">
           <LineChart
             v-if='getChartEventsPerCategory'
             classStyle="max-height: 150px; border-radius: 5px;  box-shadow: 0px 2px 9px 0 rgba(0, 0, 0, 0.31);  background-image: linear-gradient(322deg, #4d9b51, #62b766);"
@@ -569,11 +568,15 @@ const currentYear=new Date().getFullYear()
         }
         let input = document.getElementById('branch_address_search')
         // let autocomplete = new google.maps.places.Autocomplete(input, options)
+
+        if (this.industryList == 0 ) {
+          this.$store.dispatch("user/getIndustry"); 
+        }
+
         this.auth.currentUser(this, true, function() {
-          this.$store.dispatch("user/getUserFromApi");
-          this.$store.dispatch("user/getIndustry");   
+          this.$store.dispatch("user/getUserFromApi");          
           this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';      
-      }.bind(this))
+        }.bind(this))
     },
     updated() {
       this.isLoadingScreen=false
@@ -706,7 +709,12 @@ const currentYear=new Date().getFullYear()
       },
       checkMonth(){
         const currentMonth=this.listMonth[new Date().getMonth()]
-        const currentCount=new Date().getMonth()             
+        const currentCount=new Date().getMonth()     
+        
+        if (!this.rate) {
+          return [];
+        }
+
         if(!this.month){
               return this.rate[currentCount]       
                                        
@@ -717,9 +725,14 @@ const currentYear=new Date().getFullYear()
       },
       chechParticipant(){       
         const currentCount=new Date().getMonth()
-        const currentMonth=this.listMonth[currentCount]           
-        if(!this.monthRate){         
-                 return this.participants[currentCount]            
+        const currentMonth=this.listMonth[currentCount] 
+        
+        if (!this.participant) {
+          return [];
+        }    
+
+        if(!this.monthRate){
+          return this.participant[currentCount]            
         }else{
           const count= this.listMonth.indexOf(this.monthRate)          
           return this.participants[count]

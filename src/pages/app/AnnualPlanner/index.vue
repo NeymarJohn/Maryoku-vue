@@ -136,7 +136,7 @@
     },
     computed: {
       ...mapState('AnnualPlannerVuex', ['filtersData']),
-            ...mapGetters({
+      ...mapGetters({
         categories: 'event/getCategoriesList',
         currencies: 'event/getCurrenciesList',
         eventTypes: 'event/getEventTypesList'
