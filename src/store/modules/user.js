@@ -102,8 +102,6 @@ const getters={
       if(state.charts.eventCostPerEmployeePerYearMonth){          
         const chart= state.charts.eventCostPerEmployeePerYearMonth          
 
-        console.log(chart)
-
         for(let key in chart){
           const moths = key.split('__')
 

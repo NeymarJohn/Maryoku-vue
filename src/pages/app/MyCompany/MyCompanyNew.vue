@@ -473,7 +473,7 @@
           </div>
           <div>
              <LineIndicator
-             v-if='participantsList' 
+              v-if='ratesList' 
               v-for="item in ratesList"
               :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-rate'
@@ -803,6 +803,8 @@ const currentYear=new Date().getFullYear()
       },
       month(newVal, oldVal){
         this.checkMonth(); 
+      },
+      monthRate(newVal, oldVal){
         this.chechParticipant();
       }
     },
@@ -827,11 +829,10 @@ const currentYear=new Date().getFullYear()
       chechParticipant(){     
         const currentCount=new Date().getMonth()
         const currentMonth=this.listMonth[currentCount] 
-          
-        if (!this.participant) {
+
+        if (!this.participants) {
           return [];
-        }    
-        
+        }
         if(!this.monthRate){
           this.participantsList = this.participant[currentCount]            
         }else{
@@ -858,7 +859,6 @@ const currentYear=new Date().getFullYear()
       },
       onChange:function(value, name){        
         this[name]=value
-
       },
       onShowInput:function(value, name){
         this.showSearch=!this.showSearch
@@ -887,16 +887,16 @@ const currentYear=new Date().getFullYear()
           buttonsStyling: false
         })
          .then(result => {
-              if(result.value === true) {
-                    console.log(result)
-                    this.$store.dispatch("user/deleteBranchToCompany", branchIndex)
-                    this.tmpObject.branches = this.branches
-                    this.$store.dispatch("user/putUserFromApi", this.tmpObject)
-                  }
-                })
-                .catch(err => {
-                  console.log(err)
-                })
+          if(result.value === true) {
+                console.log(result)
+                this.$store.dispatch("user/deleteBranchToCompany", branchIndex)
+                this.tmpObject.branches = this.branches
+                this.$store.dispatch("user/putUserFromApi", this.tmpObject)
+              }
+          })
+          .catch(err => {
+            console.log(err)
+          })
       },
       getMonthFromControl(month){     
         this.month=month
