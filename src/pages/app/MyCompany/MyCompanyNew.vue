@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout">
-  <vue-element-loading :active="isLoadingScreen" spinner="ring" color="#FF547C"/>
+  <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen background-color="#448aff"/>
     <div class="md-layout-item md-small-size-30 md-medium-size-30 md-large-size-20">
       <md-card class="md-card-profile">
         <md-card-content>
@@ -427,8 +427,8 @@
           </div>
           <div>
            <LineIndicator
-              v-if='chechParticipant'              
-              v-for="item in chechParticipant"
+              v-if='participantsList'              
+              v-for="item in participantsList"
               :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-participants'
               rightIndicatorStyle ='right-side-indicator'
@@ -473,8 +473,8 @@
           </div>
           <div>
              <LineIndicator
-             v-if='chechParticipant' 
-              v-for="item in checkMonth"
+             v-if='participantsList' 
+              v-for="item in ratesList"
               :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-rate'
               rightIndicatorStyle ='right-side-indicator'
@@ -561,8 +561,7 @@ const currentYear=new Date().getFullYear()
       VueElementLoading
     }   
     ,    
-     mounted(){      
-
+     mounted(){    
        const options = {          
           types: ['geocode']
         }
@@ -577,9 +576,6 @@ const currentYear=new Date().getFullYear()
           this.$store.dispatch("user/getUserFromApi");          
           this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';      
         }.bind(this))
-    },
-    updated() {
-      this.isLoadingScreen=false
     },
     data() {
       return {
@@ -665,7 +661,9 @@ const currentYear=new Date().getFullYear()
         duration:[],
         isEnabled: true,
         currentYear:currentYear,
-        isLoadingScreen:true
+        ratesList:[],
+        participantsList:[],
+        isLoading:true
       }
     },
     computed:{
@@ -682,9 +680,6 @@ const currentYear=new Date().getFullYear()
       }),
       branches() {
         return this.customer.branches
-      },
-      isLoading(){
-       return Boolean(this.getChartNumberOfEventsPerYear)
       },
       numberOfEvents(){
         if(this.charts.numberOfEventsPerYear){
@@ -706,37 +701,6 @@ const currentYear=new Date().getFullYear()
       },
       getEvents(){
         return this.monthValue.map(item=>item.events)
-      },
-      checkMonth(){
-        const currentMonth=this.listMonth[new Date().getMonth()]
-        const currentCount=new Date().getMonth()     
-        
-        if (!this.rate) {
-          return [];
-        }
-
-        if(!this.month){
-              return this.rate[currentCount]       
-                                       
-        }else{
-          const count= this.listMonth.indexOf(this.month)
-          return this.rate[count]
-        }         
-      },
-      chechParticipant(){       
-        const currentCount=new Date().getMonth()
-        const currentMonth=this.listMonth[currentCount] 
-        
-        if (!this.participant) {
-          return [];
-        }    
-
-        if(!this.monthRate){
-          return this.participant[currentCount]            
-        }else{
-          const count= this.listMonth.indexOf(this.monthRate)          
-          return this.participants[count]
-        }              
       },
       getMeanValue(){        
        const count = this.listMonth.indexOf(this.month)       
@@ -829,10 +793,50 @@ const currentYear=new Date().getFullYear()
         }
 
       }
-    }
-    ,
-
+    },
+    watch:{
+      rate(newVal, oldVal){
+        this.checkMonth();
+      },
+      participants(newVal, oldVal){
+        this.chechParticipant();
+      }
+    },
     methods: {
+      checkMonth(){
+        const currentMonth=this.listMonth[new Date().getMonth()]
+        const currentCount=new Date().getMonth()     
+        
+        if (!this.rate) {
+          return [];
+        }
+
+        if(!this.month){
+          this.ratesList = this.rate[currentCount];       
+        }else{
+          const count= this.listMonth.indexOf(this.month)
+          this.ratesList = this.rate[count]
+        }
+        
+        this.isLoading=false;
+      },
+      chechParticipant(){     
+        const currentCount=new Date().getMonth()
+        const currentMonth=this.listMonth[currentCount] 
+          
+        if (!this.participant) {
+          return [];
+        }    
+        
+        if(!this.monthRate){
+          this.participantsList = this.participant[currentCount]            
+        }else{
+          const count= this.listMonth.indexOf(this.monthRate)          
+          this.participantsList = this.participants[count]
+        } 
+        
+        this.isLoading=false;
+      },
       onUpdateFocus(newValue) {
         this.inputFocus = newValue;
       },
