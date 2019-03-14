@@ -800,6 +800,10 @@ const currentYear=new Date().getFullYear()
       },
       participants(newVal, oldVal){
         this.chechParticipant();
+      },
+      month(newVal, oldVal){
+        this.checkMonth(); 
+        this.chechParticipant();
       }
     },
     methods: {
@@ -894,11 +898,10 @@ const currentYear=new Date().getFullYear()
                   console.log(err)
                 })
       },
-      getMonthFromControl(month){        
+      getMonthFromControl(month){     
         this.month=month
-      }
-      ,getMonthControlRate(month){
-        
+      },
+      getMonthControlRate(month){
         this.monthRate=month
       },
       onChangeFilterToEarly(){
