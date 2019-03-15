@@ -109,7 +109,7 @@
       </md-card>
     </div> 
    <div v-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
-      <event-blocks :event-id="eventId" :event-components="selectedComponents"></event-blocks>
+      <event-blocks :event="event" :event-components="selectedComponents"></event-blocks>
     </div>
     <div v-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
      
@@ -183,6 +183,7 @@ export default {
             let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
             _calendar.calendarEvents().find(this.$route.params.id).then(event => {
+                this.event = event;
                 this.eventId = event.id;
                 this.calendarEvent = event;
                 this.selectedComponents = event.components;

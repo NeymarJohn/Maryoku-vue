@@ -205,8 +205,9 @@
       async saveBudgeData(){
           let calendarId = this.auth.user.defaultCalendarId;
           let calendar = await Calendar.params({year: this.$route.params.year}).find(calendarId);
-          calendar.annualBudget = this.annualBudget;
-          calendar.annualBudgetPerEmployee = this.annualBudgetPerEmployee;
+          calendar.annualBudget = Number(this.annualBudget);
+          calendar.annualBudgetPerEmployee = Number(this.annualBudgetPerEmployee);
+
 
           calendar.save().then(response => {
             this.$emit("month-count");

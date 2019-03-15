@@ -1,5 +1,6 @@
 <template>
        <md-card class="md-card-profile">
+        <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
         <md-card-header>
              <md-card-content>
                 <div class="md-layout-item md-size-100">
@@ -11,9 +12,12 @@
             <div class="md-layout-item md-size-100">
                 <md-tabs class="light-theme">
                     <template slot="md-tab" slot-scope="{ tab }">
-                        <i class="fa fa-square" style="margin-right: 15px;" v-bind:style="`color: ${tab.icon}!important;`"></i>
-                        {{ tab.label }} 
+                        <div class="button">
+                            <i class="fa fa-square" style="margin-right: 15px;" v-bind:style="`color: ${tab.icon}!important;`"></i>
+                            {{ tab.label }} 
+                        </div>
                     </template>
+            
                     <md-tab v-for="item in components" :key="item.id" :id="`tab-${item.value}`" :md-icon="`${item.color}`" :md-label="`${item.value}`" @click="!item.childComponents ? selectComponent(item) : ''">
                         <div class="md-layout">
                             <div class="md-layout-item">
@@ -34,7 +38,7 @@
         </md-card-content>
         <md-card-content class="mt-auto">
             <div class="md-layout-item" style="text-align:right;">
-                <md-button class="md-success" @click="createComponent">
+                <md-button class="md-success">
                     Next
                 </md-button>
             </div>
@@ -45,62 +49,72 @@
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import Calendar from "@/models/Calendar"
   import EventComponent from "@/models/EventComponent";
+  import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
 
   export default {
     name: 'event-blocks',
     components: {
-
+        VueElementLoading,
     },
     props: {
-        eventId: String,
+        event: Object,
         eventComponents: Array,
     },
     data: () => ({
         auth: auth,
         componentsData: [],
+        isLoading:true,
     }),
     methods: {
         selectComponent(item) {
             if (this.componentsData.includes(item.id)) {
                 this.componentsData.splice(this.componentsData.indexOf(item.id), 1)
+                this.deleteComponent(item)
             } else {
                 this.componentsData.push(item.id);
+                this.createComponent(item)
             }
         },
         selectedComponents(id) {
           return this.componentsData.includes(id);
         },
-        async createComponent(){
+        async createComponent(component){
+            this.isLoading = true;
             let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-            let event = await calendar.calendarEvents().find(this.eventId);
-            let eventId = this.eventId;
-            this.componentsData.forEach(function(item){
+            let value = new EventComponent({ componentId: component.id, todos: [], values: [], vendors: [], calendarEvent: this.event.id }).for(calendar, this.event);
 
-                let value = new EventComponent({ componentId: item, todos: [], values: [], vendors: [], calendarEvent: eventId }).for(calendar, event);
-                
-                value.save().then(result => {
-                    
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.isLoading = false;
-                })  
-            });          
-        },
-        async deleteComponent(component) {
-            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-            let event = await calendar.calendarEvents().find(this.eventId);
-
-            let eventComponent = new EventComponent(component).for(calendar, event);
-
-            eventComponent.delete().then(result => {
+            value.save().then(result => {
+                this.eventComponents.push(Object.assign({}, result));
                 this.isLoading = false;
             })
             .catch(error => {
                 console.log(error);
-                this.isLoading = false;
-            })
+            })       
+        },
+        async deleteComponent(component) {
+            this.isLoading = true;
+            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let componentId = null;
+            let componentsArray = this.eventComponents;
+            this.eventComponents.forEach(function(item, index, componentsArray){
+                if(item.componentId == component.id) {
+                    componentId = item.id;
+                    componentsArray.splice(index, 1)
+                }
+            });
+
+            if (componentId) {
+                let eventComponent = new EventComponent({id: componentId}).for(calendar, this.event);
+
+                eventComponent.delete().then(result => {
+                    this.eventComponents = componentsArray;
+                    this.isLoading = false;
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+            }
         },        
         selectEventComponents() {
             let map = []
@@ -116,6 +130,7 @@
       
     },
     mounted() {
+        this.isLoading = false;
         this.selectEventComponents()
     },
     computed: {
@@ -124,9 +139,9 @@
         })
     },
     watch: {
-        eventComponents(newVal, oldVal) {
-            this.selectEventComponents();
-        },
+        // eventComponents(newVal, oldVal) {
+        //     this.selectEventComponents();
+        // },
     }
   }
 </script>
