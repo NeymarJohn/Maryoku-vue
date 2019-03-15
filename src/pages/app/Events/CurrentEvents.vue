@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
-    <div class="md-layout-item md-size-20">
+    <div class="md-layout-item md-xlarge-size-20 md-large-size-30 md-small-size-40">
       <md-card class="md-card-profile">
         <div class="logo-block">
           <div class="event-planer-logo">
@@ -29,82 +29,87 @@
               </div>
             </div>
           <div>
-
-              <div class="md-layout-item md-size-100">
-                <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
+              <div class="md-layout md-gutter">
+                <div class="md-layout-item">
+                  <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
+                </div>
               </div>
-
-              <div class="md-layout">
+              <div class="md-layout md-gutter">
                   <div class="md-layout-item md-caption title-text">Event Occasion</div>
                   <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.occasion}}</div>
               </div>
-              <div class="md-layout">                    
+              <div class="md-layout md-gutter">                    
                   <div class="md-layout-item md-caption title-text">Start Time</div>                 
                   <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.eventStartMillis | formatTime}}</div>
               </div>
               
-              <div class="md-layout">   
+              <div class="md-layout md-gutter">   
                   <div class="md-layout-item md-caption title-text">Duration</div>                 
                   <div class="md-layout-item md-size-40 md-caption title-text">
                       {{calendarEvent.eventStartMillis | formatDuration(calendarEvent.eventEndMillis)}} Hours
                   </div>
               </div>
-              <div class="md-layout">                     
+              <div class="md-layout md-gutter">                     
                   <div class="md-layout-item md-caption title-text">Geography</div>                 
                   <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.location}}</div>
               </div>
-              <div class="md-layout">                     
+              <div class="md-layout md-gutter">                     
                   <div class="md-layout-item md-caption title-text">Participants</div>                 
                   <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.numberOfParticipants}}</div>
               </div>
-              <div class="md-layout">   
+              <div class="md-layout md-gutter">   
                   <div class="md-layout-item md-caption title-text">Participant Type</div>                 
                   <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.participantsType}}</div>
               </div>
 
-
-              <div class="md-layout-item md-size-100">
-                <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
-              </div>
-              <div class="md-layout-item">
-                <h5 class="title-budget-main">Total remaining budget</h5>
-                <h4
-                  class="title"
-                  style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152, 0.8);">
-                  <div class="title-budget-prise">
-                     <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
-                  </div>
-                </h4>
-
-                <div style="display: grid;margin-top: 18px; ">
-                  <chart-component
-                    :chart-data="pieChart.data"
-                    :chart-options="pieChart.options"
-                    chart-type="Pie"
-                    style="grid-column: 1; grid-row: 1; color:red"/>
-                  <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
+              <div class="md-layout md-gutter">
+                <div class="md-layout-item">
+                  <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
                 </div>
               </div>
+              <div class="md-layout md-gutter">
+                <div class="md-layout-item">
+                  <h5 class="title-budget-main">Total remaining budget</h5>
+                  <h4
+                    class="title"
+                    style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152, 0.8);">
+                    <div class="title-budget-prise title">
+                      <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
+                    </div>
+                  </h4>
+
+                  <div style="display: grid;margin: 18px; 0;">
+                    <chart-component
+                      :chart-data="pieChart.data"
+                      :chart-options="pieChart.options"
+                      chart-type="Pie"
+                      style="grid-column: 1; grid-row: 1; color:red"/>
+                    <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
+                  </div>
+                </div>
+              </div>  
             </div>
-          <div class="md-layout-item">
-            <div>
-              <div class="md-caption title-text">Remaining budget per employee</div>
-            <!-- TODO Need calculate with components -->
-              <div class="md-caption title-text title-budget-prise">$0</div>
-            </div>
-            <div>
-              <div class="md-caption title-text">Budget per employee</div>
-              <div class="md-caption title-text title-budget-prise">
-                  <animated-number ref="budgetPerPersonNumber" :value="calendarEvent.budgetPerPerson" prefix="$"></animated-number>
+            <div class="md-layout md-gutter">
+              <div class="md-layout-item">
+                <div>
+                  <div class="md-caption title-text">Remaining budget per employee</div>
+                <!-- TODO Need calculate with components -->
+                  <div class="md-caption title-text title-budget-prise">$0</div>
+                  </div>
+                  <div>
+                    <div class="md-caption title-text">Budget per employee</div>
+                    <div class="md-caption title-text title-budget-prise">
+                        <animated-number ref="budgetPerPersonNumber" :value="calendarEvent.budgetPerPerson" prefix="$"></animated-number>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="md-caption title-text">Total budget for the event</div>
+                    <div class="md-caption title-text title-budget-prise">
+                        <animated-number ref="totalBudgetNumber" :value="calendarEvent.totalBudget" prefix="$"></animated-number>
+                    </div>
+                  </div>
               </div>
             </div>
-            <div>
-              <div class="md-caption title-text">Total budget for the event</div>
-              <div class="md-caption title-text title-budget-prise">
-                  <animated-number ref="totalBudgetNumber" :value="calendarEvent.totalBudget" prefix="$"></animated-number>
-              </div>
-            </div>
-          </div>
         </md-card-content>
       </md-card>
     </div> 
@@ -113,17 +118,6 @@
     </div>
     <div v-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
      
-    </div>
-
-    <div class="md-layout-item md-size-100 block-flex copyright-block">
-      <div></div>
-      <div>
-        <p>
-          {{`&copy; ${new Date().getFullYear()}`}}
-          <span class="copyright">Creative Tim</span>
-          {{`, made with love for a better web`}}
-        </p>
-      </div>
     </div>
   </div>
 </template>
@@ -212,9 +206,9 @@ export default {
         },
         options: {
           padding: 0,
-          height: 120,
+          height: 156,
           donut: true,
-          donutWidth: 12
+          donutWidth: 15,
         }
       };
     }
@@ -235,16 +229,20 @@ export default {
 };
 </script>
 
+<style scope>
+  .md-layout, .md-layout-item {
+      width: initial;
+  }
+</style>
 <style lang="scss" >
-// .md-layout-item.md-layout.md-gutter {
-//   margin-right: -20px;
-//   margin-left: -20px;
-// }
 .control-main-block {
   .company-control-logo {
     margin-right:8px;
     &:last-child {
       margin-right: 0;
+    }
+    i{
+      font-size: 24px!important;
     }
   }
   .md-button.selected {
@@ -265,8 +263,9 @@ export default {
   grid-row: 1;
   margin-top: auto;
   margin-bottom: auto;
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   font-weight: 700;
+  color: #515151;
 }
 .logo-block {
   display: flex;
@@ -276,20 +275,23 @@ export default {
   margin: -20px 0px 20px 0px;
   .event-planer-logo {
     background: #eb3e79;
-    width: 64px;
+    width:100%;
+    max-width: 64px;
     height: 64px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 5px;
+    margin-right: 10px;
     .company-logo {
       color: white !important;
     }
   }
   .event-title {
+    white-space: nowrap;
     font-family: "Roboto";
-    font-size: 18px;
-    font-weight: 300;
+    font-size: 1.125rem;
+    font-weight: 400;
     font-style: normal;
     font-stretch: normal;
     line-height: 1.33;
@@ -311,18 +313,20 @@ export default {
 .title-text {
   font-family: "Roboto";
   font-size: 12px;
-  font-weight: 300;
+  font-weight: 400;
   font-style: normal;
   font-stretch: normal;
-  line-height: 2;
+  line-height: 2.2;
   letter-spacing: normal;
   text-align: left;
   color: #959595;
 }
 .title-budget-main {
+  margin-top: 5px;
+  margin-bottom: 0;
   font-family: "Roboto";
   font-size: 18px;
-  font-weight: 300;
+  font-weight: 400;
   font-style: normal;
   font-stretch: normal;
   line-height: 1.33;
@@ -332,9 +336,14 @@ export default {
 }
 .title-budget-prise {
   color: rgba(33, 200, 152, 0.8) !important;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 500;
   line-height: 1.2;
+  margin-bottom: 5px;
+}
+.title-budget-prise.title{
+  font-size: 1.9375rem;
+  margin-bottom: 0;
 }
 .block-flex {
   display: flex;
@@ -351,5 +360,19 @@ export default {
 }
 .copyright-block {
   justify-content: space-between;
+}
+.md-card-profile {
+  .ct-series-b .ct-point,
+  .ct-series-b .ct-line,
+  .ct-series-b .ct-bar,
+  .ct-series-b .ct-slice-donut {
+    stroke: #21c998;
+  }
+  .ct-series-a .ct-point,
+  .ct-series-a .ct-line,
+  .ct-series-a .ct-bar,
+  .ct-series-a .ct-slice-donut {
+    stroke: #ebebeb;
+  }
 }
 </style>

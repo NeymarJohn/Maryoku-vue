@@ -274,19 +274,8 @@
     }
   };
 </script>
-<style lang="scss">
-.ct-series-b .ct-point,
-.ct-series-b .ct-line,
-.ct-series-b .ct-bar,
-.ct-series-b .ct-slice-donut {
-  stroke: #7DC0D9;
-}
-.ct-series-a .ct-point,
-.ct-series-a .ct-line,
-.ct-series-a .ct-bar,
-.ct-series-a .ct-slice-donut {
-  stroke: #455a64;
-}
+
+<style scoped lang="scss">
 .md-card-content h4.title span {
   color: #6cd6ee;
 }
@@ -326,5 +315,21 @@
 }
 .md-button.md-simple .text-red{
   color: #FF547C !important;
+}
+</style>
+<style lang="scss">
+.budget-panel {
+  .ct-series-b .ct-point,
+  .ct-series-b .ct-line,
+  .ct-series-b .ct-bar,
+  .ct-series-b .ct-slice-donut {
+    stroke: #7DC0D9;
+  }
+  .ct-series-a .ct-point,
+  .ct-series-a .ct-line,
+  .ct-series-a .ct-bar,
+  .ct-series-a .ct-slice-donut {
+    stroke: #455a64;
+  }
 }
 </style>
