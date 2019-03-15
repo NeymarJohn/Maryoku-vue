@@ -12,13 +12,14 @@
             <div class="md-layout-item md-size-100">
                 <md-tabs class="light-theme">
                     <template slot="md-tab" slot-scope="{ tab }">
-                        <div class="button">
-                            <i class="fa fa-square" style="margin-right: 15px;" v-bind:style="`color: ${tab.icon}!important;`"></i>
-                            {{ tab.label }} 
+                        <div class="item" :class="{selected: selectedComponents(tab.data.id)}">
+                            <i class="fa fa-square" style="margin-right: 15px;" :style="`color: ${tab.icon}!important;`"></i>
+                            {{ tab.label }}
+                            <i v-if="tab.data.childComponents" class="caret fas fa-caret-right"></i>
                         </div>
                     </template>
             
-                    <md-tab v-for="item in components" :key="item.id" :id="`tab-${item.value}`" :md-icon="`${item.color}`" :md-label="`${item.value}`" @click="!item.childComponents ? selectComponent(item) : ''">
+                    <md-tab v-for="item in components" :key="item.id" :id="`tab-${item.value}`" :md-icon="`${item.color}`" :md-label="`${item.value}`" :md-template-data="item" @click="!item.childComponents ? selectComponent(item) : ''">
                         <div class="md-layout">
                             <div class="md-layout-item">
                                 <md-list>
@@ -181,7 +182,6 @@
         }
         .md-button {
             height: 50px;
-            background-color: rgba($color: #000000, $alpha: 0.05)!important;
             color:#3c4858!important;
             i,
             &:hover,
@@ -192,15 +192,35 @@
             &:active i,
             &:active:focus,
             &:active:focus i,
-            &:active:hover{
-              background-color: rgba($color: #000000, $alpha: 0.05)!important;    
+            &:active:hover{  
               color:#3c4858!important;
             }
-            &.md-active{
-                background-color: #ffd966!important;
+            .caret{
+                width: auto;
+                min-width: 0;
+                margin-right: 0;
+                margin-left: auto;
             }
             .md-ripple {
-                justify-content: flex-start
+                padding: 0!important;
+                .md-button-content {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    width: 100%;
+                    height:100%;
+                    .item {
+                        display: flex;
+                        align-items: center;
+                        padding: 13px;
+                        width: 100%;
+                        text-align: left;
+                        background-color: rgba($color: #000000, $alpha: 0.05)!important;    
+                        &.selected{
+                            background-color: #ffd966!important;
+                        }
+                    }
+                }
             }
         }
         .md-list {
