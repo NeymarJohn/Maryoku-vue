@@ -241,6 +241,12 @@ export default {
 //   margin-left: -20px;
 // }
 .control-main-block {
+  .company-control-logo {
+    margin-right:8px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
   .md-button.selected {
     background-color: #eb3e79!important;
     border-color:#eb3e79!important;;
