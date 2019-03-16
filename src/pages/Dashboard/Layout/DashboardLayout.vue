@@ -18,7 +18,8 @@
 
         <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
         </sidebar-item>-->
-
+         <sidebar-item :link="{name: 'My Profile', icon: 'perm_identity', path: '/profile'}">
+        </sidebar-item>
         <sidebar-item :link="{name: 'Company', icon: 'fingerprint', path: '/company'}">
         </sidebar-item>
 
