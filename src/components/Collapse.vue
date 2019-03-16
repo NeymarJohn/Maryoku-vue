@@ -6,14 +6,55 @@
       {[getColorCollapse(colorCollapse)]: true}]"
       v-for="(item, index) in collapse" :key="item">
       <div class="md-collapse-label" @click="toggle(index + 1)">
-        <h5 class="md-collapse-title">
+      <div class="md-layout " v-if="icon">
+        <h5 class="md-collapse-title md-layout-item" > <!--md-size-40"-->
             {{item}}
-            <md-icon>{{icon}}</md-icon>
+            
         </h5>
-      </div>
+        
+        <div class="md-layout-item">
 
+        </div>
+        <div class="md-layout-item" style=" padding-right: 0px;">
+            <div class="md-layout">
+                <div class="md-layout-item md-size-20" style="text-align:right;padding-right: 0px;padding-left: 0px;"> 
+                  <md-icon style="margin-right: 0px; font-size: 15px !important;">{{icon}}</md-icon>
+                </div>
+                <div class="md-layout-item md-size-80" style="text-align:left;padding-right: 0px;padding-left: 0px;">
+                  <span class="date-content">
+                  February 03, 2019 
+                  </span>
+                </div>
+            </div>
+        </div>
+       
+        </div>
+      
+      
+      <div class="md-layout" v-else>
+          <h5 class="md-collapse-title md-layout-item" > <!--md-size-40"-->
+            {{item}}
+            
+          </h5>
+          <!-- <div class="md-layout-item">
+
+        </div> -->
+        <div class="md-layout-item" style=" padding-right: 0px;">
+            <div class="md-layout">
+                
+                <div class="md-layout-item" style="text-align:right;padding-right: 0px;padding-left: 0px;">
+                  <span class="date-content">
+                  February 03, 2019 
+                  </span>
+                </div>
+            </div>
+        </div>
+      </div>
+      
+      </div>
+      
       <collapse-transition>
-      <div class="md-collapse-content" v-show="getActiveCollapse(index + 1)">
+      <div class="md-collapse-content" style="padding-left: 0px;" v-show="getActiveCollapse(index + 1)">
         <slot :name="getCollapseContent(index + 1)"></slot>
       </div>
       </collapse-transition>
@@ -68,5 +109,18 @@ export default {
 <style lang="scss" scoped>
 .text-center {
   display: flex;
+}
+.date-content{
+   width: 94px;
+  height: 12px;
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 300;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #999999;
 }
 </style>
