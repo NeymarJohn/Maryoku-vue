@@ -11,7 +11,7 @@
                             <md-icon  style=" text-align: center;">perm_identity</md-icon>
                         </div>
                         
-                        <div class="md-layout-item  Personal-Information">
+                        <div class="md-layout-item  personal-Information">
                             Personal Information 
                             </div>
                                  
@@ -106,7 +106,7 @@ export default {
 </script>
 
 <style lang="scss">
-    .Personal-Information {
+    .personal-Information {
         text-align: center;
         font-family: Roboto;
         font-size: 18px;

@@ -26,25 +26,25 @@
             icon="query_builder"
             color-collapse="warning">
               <template slot="md-collapse-pane-1">
-                <event-details :where="EventLocation" :when="EventDate" :DressCode="EventDressCode"></event-details>
+                <event-details :where="eventLocation" :when="eventDate" :dressCode="eventDressCode"></event-details>
               </template>
               <template slot="md-collapse-pane-2">
-                  <event-details :where="EventLocation" :when="EventDate" :DressCode="EventDressCode"></event-details>
+                  <event-details :where="eventLocation" :when="eventDate" :dressCode="eventDressCode"></event-details>
               </template>
               <template slot="md-collapse-pane-3">
-                  <event-details :where="EventLocation" :when="EventDate" :DressCode="EventDressCode"></event-details>
+                  <event-details :where="eventLocation" :when="eventDate" :dressCode="eventDressCode"></event-details>
               </template>
                <template slot="md-collapse-pane-4">
-                  <event-details :where="EventLocation" :when="EventDate" :DressCode="EventDressCode"></event-details>
+                  <event-details :where="eventLocation" :when="eventDate" :dressCode="eventDressCode"></event-details>
               </template>
                <template slot="md-collapse-pane-5">
-                  <event-details :where="EventLocation" :when="EventDate" :DressCode="EventDressCode"></event-details>
+                  <event-details :where="eventLocation" :when="eventDate" :dressCode="eventDressCode"></event-details>
               </template>
                <template slot="md-collapse-pane-6">
-                  <event-details :where="EventLocation" :when="EventDate" :DressCode="EventDressCode"></event-details>
+                  <event-details :where="eventLocation" :when="eventDate" :dressCode="eventDressCode"></event-details>
               </template>
                <template slot="md-collapse-pane-7">
-                  <event-details :where="EventLocation" :when="EventDate" :DressCode="EventDressCode"></event-details>
+                  <event-details :where="eventLocation" :when="eventDate" :dressCode="eventDressCode"></event-details>
               </template>
         </collapse>
             </md-card-content>
@@ -63,16 +63,14 @@ export default {
   data()
   {
       return { 
-          EventLocation:'',
-          EventDate:'',
-          EventDressCode:''
+          eventLocation:'',
+          eventDate:'',
+          eventDressCode:''
       }
   },
   mounted()
   {
-      this.EventLocation = 'test'; 
-      this.EventDate='20-02-2019';
-      this.EventDressCode = 'test22';
+
   }
 }
 </script>

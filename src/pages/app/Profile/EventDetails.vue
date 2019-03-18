@@ -139,27 +139,23 @@
 <script>
     export default {
         props: {
-            EventLocation: {
+            where: {
                 type: String
             },
-            EventDate: {
+            when: {
                 type: String
             },
-            EventDressCode: {
+            dressCode: {
                 type: String
             }
         },
         mounted() {
-            console.log('EEEe', this.EventLocation)
+           
         },
     }
 </script>
 
 <style lang="scss">
-    .test {
-        font-size: 20px;
-    }
-    
     .add-photo {
         width: 67px;
         height: 14px;

@@ -1,5 +1,5 @@
 <template>
-    <div class="Dierty-constraints-main">
+    <div class="dierty-constraints-main">
         <md-card>
             <md-card-header class="md-card-header-icon ">
                 <div class="md-layout">
@@ -71,7 +71,7 @@
         background-image: linear-gradient(to right, #65ba69, #43a047 100%);
 }
 
-.Dierty-constraints-main{
+.dierty-constraints-main{
     width: 349px;
     height: 212px;
     border-radius: 6px;
