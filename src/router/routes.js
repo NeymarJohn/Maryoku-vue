@@ -3,7 +3,7 @@ import AuthLayout from "@/pages/Dashboard/Pages/AuthLayout.vue";
 
 import Home from "@/pages/app/Home.vue";
 import Me from "@/pages/app/Me.vue";
-import Profile from "@/pages/app/Profile.vue";
+import Profile from "@/pages/app/Profile/index.vue";
 import MyCompany from "@/pages/app/MyCompany/MyCompany.vue";
 import MyCompanyNew from "@/pages/app/MyCompany/MyCompanyNew.vue";
 import MyCompanyDashboard from "@/pages/app/MyCompany/MyCompanyDashboard.vue";
