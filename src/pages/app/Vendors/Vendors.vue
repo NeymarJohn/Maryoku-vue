@@ -1,19 +1,24 @@
 <template>
   <div class="md-layout">
-    <div class="md-layout-item md-size-100">
-      <div class="table table-stats text-right">
-        <div class="text-right">
-          <md-button class="md-success text-rose" @click="openInviteModal">
-            <md-icon>add</md-icon>
-            Create New
-          </md-button>
-          <md-button @click="openUploadModal" class="md-success">
-            <md-icon>cloud_upload</md-icon>
-            Upload Vendors
-          </md-button>
-        </div>
-      </div>
+    <div class="md-layout-item md-size-50">
       <md-card>
+        <md-card-header class="md-card-header-icon md-card-header-warning">
+
+          <div class="card-text">
+            <h4 class="title">Vendors List</h4>
+            <div class="ct-label">See all vendors uploaded below</div>
+          </div>
+
+          <div class="table table-stats text-right vendors-actions-list">
+            <md-button class="md-default text-rose" @click="openInviteModal">
+              Add a record
+            </md-button>
+            <md-button @click="openUploadModal" class="md-default">
+              Upload Excel File
+            </md-button>
+          </div>
+
+        </md-card-header>
         <md-card-content style="min-height: 60px;">
           <vue-element-loading :active="loadingData" spinner="ring" color="#FF547C"/>
 
@@ -37,6 +42,10 @@
         </md-card-content>
       </md-card>
     </div>
+
+    <div class="md-layout-item md-size-50">
+      <company-form></company-form>
+    </div>
     <create-modal @vendorCreated="fetchData(1)"  ref="inviteModal"></create-modal>
     <upload-modal @vendorImported="fetchData(1)"  ref="uploadModal"></upload-modal>
     </div>
@@ -45,7 +54,8 @@
 <script>
   import CreateModal from './CreateModal';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-  import VendorsTable from './Table';
+  import VendorsTable from './Table/vendors-list.vue';
+  import companyForm from './Form/company-form.vue';
   import UploadModal from './ImportVendors';
   import { Pagination } from "@/components"
   import Vendors from "@/models/Vendors";
@@ -61,7 +71,8 @@
       'vendors-table': VendorsTable,
       VueElementLoading,
       UploadModal,
-      Pagination
+      Pagination,
+        companyForm
     },
     mixins: [paginationMixin],
     data() {
@@ -72,7 +83,6 @@
         loadingData: true,
         importClicked: false,
         tableHidden: true
-
       }
     },
     created() {
@@ -89,6 +99,8 @@
         Vendors.page(page)
           .limit(this.pagination.limit)
           .get().then(vendors => {
+
+              console.log('vendors => ', vendors);
 
           this.vendorsList = vendors[0].results;
 

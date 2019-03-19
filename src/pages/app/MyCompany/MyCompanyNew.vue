@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout">
-  <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
+  <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen background-color="#448aff"/>
     <div class="md-layout-item md-small-size-30 md-medium-size-30 md-large-size-20">
       <md-card class="md-card-profile">
         <md-card-content>
@@ -41,7 +41,7 @@
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default"  @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
-
+                      
                       <template slot="popover">
                         <input-text
                               labelStyle='company_label_input'
@@ -55,11 +55,11 @@
                               :actionFunc='saveInfoFromForm'
                               :ctx='customer'
                               fieldStyle="without-border"
-                              @update-focus-value="onUpdateFocus"/>
+                              @update-focus-value="onUpdateFocus"/> 
                       </template>
                     </v-popover>
                   </div>
-                </div>
+                </div>              
 
               <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
@@ -76,7 +76,7 @@
                       <md-button class="tooltip-target onhover-block b3 md-button md-icon-button md-simple md-theme-default">
                         <md-icon>edit</md-icon>
                       </md-button>
-
+                      
                       <template slot="popover">
                         <select-common
                                 label='Industry'
@@ -94,7 +94,7 @@
                       </template>
                     </v-popover>
                   </div>
-                </div>
+                </div>  
 
             <div class="md-layout-item md-size-100">
               <div class="fc-divider" style="margin: 15px;"></div>
@@ -119,7 +119,7 @@
                       <md-button class="tooltip-target b3 onhover-block md-button md-icon-button md-simple md-theme-default" @click="inputFocus = true">
                         <md-icon>edit</md-icon>
                       </md-button>
-
+                      
                       <template slot="popover">
                         <input-text
                               labelStyle='company_label_input'
@@ -240,7 +240,7 @@
                           :actionFunc='saveInfoFromForm'
                           :ctx='customer'
                           fieldStyle="without-border"
-                          @update-focus-value="onUpdateFocus"/>
+                          @update-focus-value="onUpdateFocus"/>  
                       </template>
                     </v-popover>
                   </div>
@@ -275,7 +275,7 @@
                               :onChange='onChange'
                               editebleMode
                               :focus="inputFocus"
-                              :isEditable="isEnabled"
+                              :isEditable="isEnabled" 
                               :value='branch_address'
                               id='branch_address_search'
                               :actionFunc='saveInfoFromForm'
@@ -326,7 +326,7 @@
                         </md-button>
                       </div>
                     </div>
-                </div>
+                </div>                
               </div>
             </div>
 
@@ -341,7 +341,7 @@
       </md-card>
     </div>
     <div class="md-layout-item md-size-33" style="position: relative">
-
+   
       <div class='chart-box'>
         <div class="logo-block">
                 <LineChart
@@ -365,7 +365,7 @@
                   type='line'
                   :optionChart='dataChart.options'/>
               </div>
-        <md-card-content  style="max-height: 200px">
+        <md-card-content  style="max-height: 200px">         
           <div class='filter-block' v-if='showFilter'>
             <div class='filter-datepicker'>
               <div class='filter-datepicker-block'>
@@ -403,7 +403,7 @@
                   :onChange="onChange"/>
               </div>
             </div>
-          </div>
+          </div>          
             <div class='chart-title'>
             <div class="title text-bold">Number of events</div>
             <div class="company-button-filter-block">
@@ -418,7 +418,7 @@
       <div class="logo-block">
           <div class="event-planer-logo partisipation-logo">
             <md-icon class="company-logo ">how_to_reg</md-icon>
-          </div>
+          </div>              
         </div>
         <md-card-content>
           <div class="title text-bold">Average number of participants per event</div>
@@ -427,7 +427,7 @@
           </div>
           <div>
            <LineIndicator
-              v-if='participantsList'
+              v-if='participantsList'              
               v-for="item in participantsList"
               :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-participants'
@@ -448,9 +448,9 @@
             height="150"
             :dataChart='getChartEventPerEmployee'
             type='line'
-            :optionChart='dataChart.options'/>
+            :optionChart='dataChart.options'/>               
         </div>
-        <md-card-content style="max-height: 200px">
+        <md-card-content style="max-height: 200px">        
              <div class="title text-bold">Average event cost per employee</div>
         </md-card-content>
       </md-card>
@@ -460,7 +460,7 @@
        <div class="logo-block">
           <div class="event-planer-logo rate-logo">
             <md-icon class="company-logo">thumbs_up_down</md-icon>
-          </div>
+          </div>                
         </div>
         <md-card-content>
           <div class="title text-bold">Attendants satisfaction rate</div>
@@ -473,7 +473,7 @@
           </div>
           <div>
              <LineIndicator
-              v-if='ratesList'
+              v-if='ratesList' 
               v-for="item in ratesList"
               :key="item.total+item.typeEvent"
               leftIndicatorStyle='left-side-indicator-rate'
@@ -495,9 +495,9 @@
             height="150"
             :dataChart='getChartEventsPerCategory'
             type='bar'
-            :optionChart='dataChart.options'/>
-        </div>
-        <md-card-content>
+            :optionChart='dataChart.options'/>               
+        </div>      
+        <md-card-content>        
             <div class="title text-bold">Event categories comparison</div>
         </md-card-content>
       </md-card>
@@ -559,22 +559,22 @@ const currentYear=new Date().getFullYear()
       "select-common":Select,
       LineChart,
       VueElementLoading
-    }
-    ,
-     mounted(){
-       const options = {
+    }   
+    ,    
+     mounted(){    
+       const options = {          
           types: ['geocode']
         }
         let input = document.getElementById('branch_address_search')
         // let autocomplete = new google.maps.places.Autocomplete(input, options)
 
         if (this.industryList == 0 ) {
-          this.$store.dispatch("user/getIndustry");
+          this.$store.dispatch("user/getIndustry"); 
         }
 
         this.auth.currentUser(this, true, function() {
-          this.$store.dispatch("user/getUserFromApi");
-          this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';
+          this.$store.dispatch("user/getUserFromApi");          
+          this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';      
         }.bind(this))
     },
     data() {
@@ -585,14 +585,14 @@ const currentYear=new Date().getFullYear()
           numberOfEmployees: false,
         },
 
-        dataChart:{
+        dataChart:{          
           options: {
             legend: {
               display: false
             },
             elements: {
             line: {
-                borderColor:'white'
+                borderColor:'white' 
             },
             }
         ,layout: {
@@ -612,14 +612,14 @@ const currentYear=new Date().getFullYear()
                   fontColor:"white",
                   padding: 5,
                    fontSize: 15,
-
+                   
                 },
                 gridLines: {
                     color: 'white',
                      zeroLineColor: 'white',
-
+                     
                   },
-
+                  
               }],
               xAxes: [{
                 barThickness:20,
@@ -637,21 +637,21 @@ const currentYear=new Date().getFullYear()
                   gridLines: {
                     display: false,
                   }
-
+                  
               }]
             }
           }
 
-        },
+        },             
         branch_address:'',
         branchIndex: 0,
         tmpObject: null,
         showSearch:false,
-        showFilter:false,
+        showFilter:false,       
         from:'',
         to:'',
         startPeriod:'',
-        finishPeriod:'',
+        finishPeriod:'',       
         month:"",
         monthRate:"",
         listMonth:listMonth,
@@ -692,18 +692,18 @@ const currentYear=new Date().getFullYear()
           return 0
         }
       },
-      getAvatar(){
+      getAvatar(){           
             return  this.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.customer.logoFileId}` : 'static/img/placeholder.jpg';
 
-      },
+      },            
       getMonth(){
         return this.monthValue.map(item=>item.month)
       },
       getEvents(){
         return this.monthValue.map(item=>item.events)
       },
-      getMeanValue(){
-       const count = this.listMonth.indexOf(this.month)
+      getMeanValue(){        
+       const count = this.listMonth.indexOf(this.month)       
        if(count==-1){
          return 0
        }else{
@@ -711,16 +711,16 @@ const currentYear=new Date().getFullYear()
        this.rate[count].forEach(item=>{
          if(item.currentValue&&item.total){
            meanValue=meanValue+item.currentValue*100/item.total
-         }
-         })
+         }         
+         })         
        this.rate[count].length
        if(meanValue){
-          return meanValue/this.rate[count].length
+          return meanValue/this.rate[count].length 
        }else{
          return 0
        }
-
-       }
+           
+       }      
       },
       isMonthly(){
         return Boolean(this.from&&this.to&&this.startPeriod&&this.finishPeriod)
@@ -802,7 +802,7 @@ const currentYear=new Date().getFullYear()
         this.chechParticipant();
       },
       month(newVal, oldVal){
-        this.checkMonth();
+        this.checkMonth(); 
       },
       monthRate(newVal, oldVal){
         this.chechParticipant();
@@ -811,35 +811,35 @@ const currentYear=new Date().getFullYear()
     methods: {
       checkMonth(){
         const currentMonth=this.listMonth[new Date().getMonth()]
-        const currentCount=new Date().getMonth()
-
+        const currentCount=new Date().getMonth()     
+        
         if (!this.rate) {
           return [];
         }
 
         if(!this.month){
-          this.ratesList = this.rate[currentCount];
+          this.ratesList = this.rate[currentCount];       
         }else{
           const count= this.listMonth.indexOf(this.month)
           this.ratesList = this.rate[count]
         }
-
+        
         this.isLoading=false;
       },
-      chechParticipant(){
+      chechParticipant(){     
         const currentCount=new Date().getMonth()
-        const currentMonth=this.listMonth[currentCount]
+        const currentMonth=this.listMonth[currentCount] 
 
         if (!this.participants) {
           return [];
         }
         if(!this.monthRate){
-          this.participantsList = this.participant[currentCount]
+          this.participantsList = this.participant[currentCount]            
         }else{
-          const count= this.listMonth.indexOf(this.monthRate)
+          const count= this.listMonth.indexOf(this.monthRate)          
           this.participantsList = this.participants[count]
-        }
-
+        } 
+        
         this.isLoading=false;
       },
       onUpdateFocus(newValue) {
@@ -857,7 +857,7 @@ const currentYear=new Date().getFullYear()
       onSelect: function(items) {
         this.selected = items;
       },
-      onChange:function(value, name){
+      onChange:function(value, name){        
         this[name]=value
       },
       onShowInput:function(value, name){
@@ -898,7 +898,7 @@ const currentYear=new Date().getFullYear()
             console.log(err)
           })
       },
-      getMonthFromControl(month){
+      getMonthFromControl(month){     
         this.month=month
       },
       getMonthControlRate(month){
@@ -917,7 +917,7 @@ const currentYear=new Date().getFullYear()
       saveInfoFromForm(obj,objName){
         if(this[objName]!==obj[objName]) {
           let a = {}
-
+          
           a["id"]=obj.id
 
           if (objName === "branch_address") {
@@ -960,7 +960,7 @@ const currentYear=new Date().getFullYear()
 
         reader.onload = e => {
           return new CustomerFile({customerFile: e.target.result}).save().then(result => {
-            this.$store.dispatch("user/getUserFromApi");
+            this.$store.dispatch("user/getUserFromApi");            
             _this.customerLogoUrl = `${process.env.SERVER_URL}/1/customerFiles/${result.id}`
           })
             .catch((error) => {
@@ -972,10 +972,10 @@ const currentYear=new Date().getFullYear()
       UploadAvatar(){
         document.getElementById('company-avatar-upload').click()
       },
-      deleteAvatar(id){
-
+      deleteAvatar(id){ 
+        
         swal({
-          title: "Are you sure want to delete company logo?",
+          title: "Are you sure want to delete company logo?",          
           showCancelButton: true,
           confirmButtonClass: "md-button md-success",
           cancelButtonClass: "md-button md-danger",
@@ -983,8 +983,8 @@ const currentYear=new Date().getFullYear()
           buttonsStyling: false
         }).then(result => {
            new CustomerFile({id: id}).delete().then(result => {
-          this.$store.dispatch("user/getUserFromApi");
-
+          this.$store.dispatch("user/getUserFromApi"); 
+         
         })
           .catch((error) => {
             console.log(error);
@@ -993,9 +993,9 @@ const currentYear=new Date().getFullYear()
                console.log(error);
             });
       },
-
-    },
-
+    
+    }, 
+       
   };
 </script>
 <style lang='scss'>
@@ -1012,7 +1012,7 @@ const currentYear=new Date().getFullYear()
   .md-card-profile {
     .header {
       text-align: left;
-      margin: 0 0 8px 15px;
+      margin: 0 0 8px 15px;      
       font-size: 11px;
       font-weight: 400;
       text-align: left;
@@ -1027,15 +1027,15 @@ const currentYear=new Date().getFullYear()
         vertical-align: middle;
         font-size: 16px!important;
         color: #999999!important;
-        opacity: 0.5;
+        opacity: 0.5;        
       }
-    }
+    } 
     .value {
       width: 30%;
       color:#292929!important;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      overflow: hidden;   
+      text-overflow: ellipsis; 
     }
     p {
       font-family: Roboto;
@@ -1087,7 +1087,7 @@ const currentYear=new Date().getFullYear()
       border-width: 10px 0 10px 10px;
       right: -10px;
     }
-  }
+  }  
   .md-card-profile {
       font-size: 14px;
       font-weight: 400;
@@ -1106,7 +1106,7 @@ const currentYear=new Date().getFullYear()
     color: #c6c6c6;
     margin-left: 5px;
   }
-  .text-bold {
+  .text-bold {  
       font-family: 'Roboto';
       font-size: 12px;
       font-weight: 400;
@@ -1126,7 +1126,7 @@ const currentYear=new Date().getFullYear()
     // justify-content: space-between;
     width: 100%;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 10px;    
   }
   .company-logo{
     max-width: 80px !important;
@@ -1203,7 +1203,7 @@ const currentYear=new Date().getFullYear()
     margin-top: 30px;
     box-shadow: 0 0 10px rgba(80,80,80,.1);
     padding-top: 1px;
-  }
+  } 
   .filter-datepicker{
     width:25%;
     display:flex
@@ -1217,7 +1217,7 @@ const currentYear=new Date().getFullYear()
     position: absolute;
     top: -40px;
     left: 20px;
-    z-index: 2;
+    z-index: 2; 
   }
   .indicator-event-type-title-rate{
     font-size: 0.85rem;
@@ -1263,7 +1263,7 @@ const currentYear=new Date().getFullYear()
        background-image: linear-gradient(322deg, #13a5b6, #21c4d7) !important;
         box-shadow: 0px 5px 5.8px 1.2px rgba(0, 0, 0, 0.08);
   }
-  .rate-logo{
+  .rate-logo{    
     box-shadow: 0px 5px 5.8px 1.2px rgba(0, 0, 0, 0.08);
     background-image: linear-gradient(to right, #ffa625, #fb8d02) !important;
   }
@@ -1305,4 +1305,5 @@ const currentYear=new Date().getFullYear()
 
 
 
-
+        
+      

@@ -34,7 +34,7 @@
         <div class="md-layout" v-else>
           <h5 class="md-collapse-title md-layout-item">
             <!--md-size-40"-->
-            {{item.title}}
+            {{item}}
   
           </h5>
           <!-- <div class="md-layout-item">
