@@ -1,6 +1,6 @@
 <template>
   <div style="height: 100%;">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen background-color="#448aff"/>
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
 
     <table style="width: 100%; height: 100%; ">
       <tr>
