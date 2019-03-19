@@ -41,46 +41,46 @@
                             </div>
                         </div>
                         <div class="md-layout ">
-                            <label style="text-align: left" class="md-layout-item md-size-22 md-form-label">
+                            <label style="text-align: left" class="md-form-label">
                                     Name :
                                 </label>
-                            <div class="md-layout-item">
+                            <div class="md-layout-item" style="padding-top:20px;">
                                 
-                                <span></span>
+                                <span>{{userInfo.displayName}}</span>
                             </div>
                         </div>
                         <div class="md-layout ">
-                            <label style="text-align: left" class="md-layout-item md-size-22 md-form-label">
+                            <label style="text-align: left" class=" md-form-label">
                                     Email :
                                 </label>
-                            <div class="md-layout-item">
+                            <div class="md-layout-item" style="padding-top:20px;text-align: left">
                                
-                                <span></span>
+                                <span>{{userInfo.email}}</span>
                             </div>
                         </div>
                         <div class="md-layout ">
-                            <label style="text-align: left" class="md-layout-item md-size-22 md-form-label">
+                            <label style="text-align: left" class=" md-form-label">
                                     Role :
                                 </label>
-                            <div class="md-layout-item">
+                            <div class="md-layout-item" style="padding-top:20px">
                                 
                                 <span></span>
                             </div>
                         </div>
                         <div class="md-layout ">
-                            <label style="text-align: left" class="md-layout-item md-size-22 md-form-label">
+                            <label style="text-align: left" class="md-form-label">
                                     Department :
                                 </label>
-                            <div class="md-layout-item">
+                            <div class="md-layout-item" style="padding-top:20px">
                                 
                                 <span></span>
                             </div>
                         </div>
                         <div class="md-layout ">
-                            <label style="text-align: left" class="md-layout-item md-size-22 md-form-label">
+                            <label style="text-align: left" class=" md-form-label">
                                     Branch : 
                                 </label>
-                            <div class="md-layout-item">
+                            <div class="md-layout-item" style="padding-top:20px">
                                
                                 <span></span>
                             </div>
@@ -101,6 +101,11 @@ import MySpecialDates from "./MySpecialDates";
 export default {
     components:{
         MySpecialDates
+    },
+    props:{
+        userInfo:Object
+    },
+    mounted(){
     }
 }
 </script>
