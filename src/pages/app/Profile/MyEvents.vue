@@ -1,7 +1,7 @@
 <template>
   <div>
     <md-card>
-      <md-card-header class="md-card-header-icon md-card-header-warning">
+      <md-card-header class="md-card-header-icon md-card-header-rose">
         <div class="card-icon" style="padding: 12px;">
           <md-icon>event</md-icon>
         </div>

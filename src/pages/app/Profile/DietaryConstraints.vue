@@ -1,7 +1,7 @@
 <template>
   <div>
     <md-card>
-      <md-card-header class="md-card-header-icon md-card-header-green">
+      <md-card-header class="md-card-header-icon md-card-header-rose">
         <div class="card-icon" style="padding: 12px;">
           <md-icon>fastfood</md-icon>
         </div>
