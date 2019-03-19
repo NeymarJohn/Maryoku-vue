@@ -1,22 +1,22 @@
 <template>
   <div class="md-layout">
-   
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen background-color="#448aff" />
-  
-      <div class="md-layout md-gutter">
-         <div class="md-layout-item">
-            <personal-information :userInfo="auth.user"></personal-information>
-          </div>
-            <div class="md-layout-item" >
-              
-              <my-events :events="upCommingEvents"></my-events>
-            </div>
-         
-            <div class="md-layout-item">
-              <dietary-constraints></dietary-constraints>
-            </div>
-        
+
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen />
+
+    <div class="md-layout ">
+      <div class="md-layout-item md-size-33">
+        <personal-information :userInfo="auth.user"></personal-information>
       </div>
+      <div class="md-layout-item md-size-33" >
+
+        <my-events :events="upCommingEvents"></my-events>
+      </div>
+
+      <div class="md-layout-item md-size-33">
+        <dietary-constraints></dietary-constraints>
+      </div>
+
+    </div>
   </div>
 </template>
 
@@ -27,7 +27,7 @@
   import DietaryConstraints from "./DietaryConstraints.vue";
   import MySpecialDates from "./MySpecialDates.vue";
   import auth from '@/auth';
-import { mapGetters } from 'vuex';
+  import { mapGetters } from 'vuex';
   // import {
   //   StatsCard,
   //   ChartCard,
@@ -36,7 +36,7 @@ import { mapGetters } from 'vuex';
   //   GlobalSalesCard,
   //   GlobalSalesTable
   // } from "@/components";
-  
+
   export default {
     components: {
       VueElementLoading,
@@ -44,29 +44,29 @@ import { mapGetters } from 'vuex';
       MyEvents,
       DietaryConstraints,
       MySpecialDates,
-      
+
     },
     data() {
       return  {
         auth: auth,
-      } 
-          
+      }
+
     },
 
     computed:
-    {
-      ...mapGetters({
-        upCommingEvents:'user/getUpcomingEvents'
-      })
-    },
+      {
+        ...mapGetters({
+          upCommingEvents:'user/getUpcomingEvents'
+        })
+      },
     mounted()
     {
       this.auth.currentUser(this, true,()=>{
-        this.$store.dispatch("user/getUserFromApi"); 
-          
+        this.$store.dispatch("user/getUserFromApi");
+
       })
-      
+
     }
   };
-    
+
 </script>
