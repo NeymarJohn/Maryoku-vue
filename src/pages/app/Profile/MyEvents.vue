@@ -1,5 +1,5 @@
 <template>
-  <div class="my-event">
+  <div>
     <md-card>
       <md-card-header class="md-card-header-icon md-card-header-rose">
         <div class="card-icon" style="padding: 12px;">
@@ -9,6 +9,7 @@
       </md-card-header>
 
       <md-card-content>
+        <h6 v-if="!eventList">No events yet</h6>
         <collapse :collapse="eventList"  icon="query_builder" color-collapse="warning" >
 
           <template v-for="(item,index) in eventList"  :slot="`md-collapse-pane-${index+1}`">

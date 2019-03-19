@@ -1,5 +1,5 @@
 <template>
-  <div class="dierty-constraints-main">
+  <div>
     <md-card>
       <md-card-header class="md-card-header-icon md-card-header-rose">
         <div class="card-icon" style="padding: 12px;">

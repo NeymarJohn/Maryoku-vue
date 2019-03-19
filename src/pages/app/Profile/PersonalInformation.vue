@@ -1,90 +1,94 @@
 <template>
-  <div class="main-personal">
+  <div class="">
 
     <div class="md-layout">
 
-      <md-card>
-        <md-card-header class="md-card-header-icon md-card-header-rose">
-          <div class="card-icon" style="padding: 12px;">
-            <md-icon>person</md-icon>
-          </div>
-          <h4 class="title">Personal Information</h4>
-        </md-card-header>
-
-        <md-card-content>
-
-          <div class="md-layout">
-            <div class="md-layout-item">
-
+      <div class="md-layout-item md-size-100">
+        <md-card>
+          <md-card-header class="md-card-header-icon md-card-header-rose">
+            <div class="card-icon" style="padding: 12px;">
+              <md-icon>person</md-icon>
             </div>
-            <div class="md-layout-item">
+            <h4 class="title">Personal Information</h4>
+          </md-card-header>
 
-              <div class="img-circle">
-                <template>
-                  <div class="image-container">
-                    <img src="static/img/profile-picture.png"> </div>
-                </template>
+          <md-card-content>
+
+            <div class="md-layout">
+              <div class="md-layout-item">
+
               </div>
+              <div class="md-layout-item">
 
-              <div >
-                <button class="profile-button" ><span >Change Profile Picture</span></button>
+                <div class="img-circle">
+                  <template>
+                    <div class="image-container">
+                      <img src="static/img/profile-picture.png"> </div>
+                  </template>
+                </div>
+
+                <div >
+                  <button class="profile-button" ><span >Change Profile Picture</span></button>
+                </div>
+              </div>
+              <div class="md-layout-item">
+
               </div>
             </div>
-            <div class="md-layout-item">
+            <div class="md-layout ">
+              <label style="text-align: left" class="md-form-label">
+                Name :
+              </label>
+              <div class="md-layout-item" style="padding-top:20px;">
 
+                <span>{{userInfo.displayName}}</span>
+              </div>
             </div>
-          </div>
-          <div class="md-layout ">
-            <label style="text-align: left" class="md-form-label">
-              Name :
-            </label>
-            <div class="md-layout-item" style="padding-top:20px;">
+            <div class="md-layout ">
+              <label style="text-align: left" class=" md-form-label">
+                Email :
+              </label>
+              <div class="md-layout-item" style="padding-top:20px;text-align: left">
 
-              <span>{{userInfo.displayName}}</span>
+                <span>{{userInfo.email}}</span>
+              </div>
             </div>
-          </div>
-          <div class="md-layout ">
-            <label style="text-align: left" class=" md-form-label">
-              Email :
-            </label>
-            <div class="md-layout-item" style="padding-top:20px;text-align: left">
+            <div class="md-layout ">
+              <label style="text-align: left" class=" md-form-label">
+                Role :
+              </label>
+              <div class="md-layout-item" style="padding-top:20px">
 
-              <span>{{userInfo.email}}</span>
+                <span></span>
+              </div>
             </div>
-          </div>
-          <div class="md-layout ">
-            <label style="text-align: left" class=" md-form-label">
-              Role :
-            </label>
-            <div class="md-layout-item" style="padding-top:20px">
+            <div class="md-layout ">
+              <label style="text-align: left" class="md-form-label">
+                Department :
+              </label>
+              <div class="md-layout-item" style="padding-top:20px">
 
-              <span></span>
+                <span></span>
+              </div>
             </div>
-          </div>
-          <div class="md-layout ">
-            <label style="text-align: left" class="md-form-label">
-              Department :
-            </label>
-            <div class="md-layout-item" style="padding-top:20px">
+            <div class="md-layout ">
+              <label style="text-align: left" class=" md-form-label">
+                Branch :
+              </label>
+              <div class="md-layout-item" style="padding-top:20px">
 
-              <span></span>
+                <span></span>
+              </div>
             </div>
-          </div>
-          <div class="md-layout ">
-            <label style="text-align: left" class=" md-form-label">
-              Branch :
-            </label>
-            <div class="md-layout-item" style="padding-top:20px">
+          </md-card-content>
 
-              <span></span>
-            </div>
-          </div>
-        </md-card-content>
+        </md-card>
+      </div>
+    </div>
 
-      </md-card>
+    <div class="md-layout">
 
-      <div class="md-layout">
-
+      <div class="md-layout-item md-size-100">
         <MySpecialDates></MySpecialDates>
       </div>
     </div>
