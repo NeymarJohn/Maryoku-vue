@@ -63,7 +63,6 @@
     {
       this.auth.currentUser(this, true,()=>{
         this.$store.dispatch("user/getUserFromApi");
-
       })
 
     }

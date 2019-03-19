@@ -89,7 +89,7 @@
     <div class="md-layout">
 
       <div class="md-layout-item md-size-100">
-        <MySpecialDates></MySpecialDates>
+        <MySpecialDates :birthDate="userInfo.me.birthday" :workingSince="userInfo.me.companyStartDate"></MySpecialDates>
       </div>
     </div>
   </div>
