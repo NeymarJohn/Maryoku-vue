@@ -38,7 +38,7 @@
         <div class="md-layout">
             <div class="md-layout-item md-size-100">
                 <p>
-                    March 06, 2019, Wednesday - 1:00 PM
+                    {{eventDate}} - {{endHourDateEvent}}
                 </p>
             </div>
         </div>
@@ -138,9 +138,16 @@
 
 <script>
     export default {
+        data()
+        {
+            return{
+                eventDate:'',
+                endHourDateEvent:''
+            }
+        },
         props: {
             where: {
-                type: String
+                type: Number
             },
             when: {
                 type: String
@@ -150,7 +157,11 @@
             }
         },
         mounted() {
-           
+          
+            let options = {  day: 'numeric',year: 'numeric', month: 'long', weekday: 'long' };
+            this.eventDate=new Date(this.when).toLocaleDateString("en-US", options);
+            let hourOptions ={hour: '2-digit',minute:'2-digit'};
+            this.endHourDateEvent=new Date(this.when).toLocaleTimeString("en-US", hourOptions)
         },
     }
 </script>
