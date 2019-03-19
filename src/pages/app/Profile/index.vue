@@ -1,13 +1,15 @@
 <template>
   <div class="md-layout">
+   
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen background-color="#448aff" />
   
       <div class="md-layout md-gutter">
          <div class="md-layout-item">
-            <personal-information></personal-information>
+            <personal-information :userInfo="auth.user"></personal-information>
           </div>
             <div class="md-layout-item" >
-              <my-events></my-events>
+              
+              <my-events :events="upCommingEvents"></my-events>
             </div>
          
             <div class="md-layout-item">
@@ -24,6 +26,8 @@
   import MyEvents from "./MyEvents.vue";
   import DietaryConstraints from "./DietaryConstraints.vue";
   import MySpecialDates from "./MySpecialDates.vue";
+  import auth from '@/auth';
+import { mapGetters } from 'vuex';
   // import {
   //   StatsCard,
   //   ChartCard,
@@ -44,10 +48,25 @@
     },
     data() {
       return  {
-
+        auth: auth,
       } 
           
-        }
-      };
+    },
+
+    computed:
+    {
+      ...mapGetters({
+        upCommingEvents:'user/getUpcomingEvents'
+      })
+    },
+    mounted()
+    {
+      this.auth.currentUser(this, true,()=>{
+        this.$store.dispatch("user/getUserFromApi"); 
+          
+      })
+      
+    }
+  };
     
 </script>
