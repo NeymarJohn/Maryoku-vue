@@ -1,131 +1,72 @@
 <template>
   <div>
     <div :class="[
-        'md-collapse',
-        activeCollapse(index + 1),
-        {[getColorCollapse(colorCollapse)]: true}]" v-for="(item, index) in collapse" :key="item">
+      'md-collapse',
+      activeCollapse(index + 1),
+      {[getColorCollapse(colorCollapse)]: true}]"
+      v-for="(item, index) in collapse" :key="item">
       <div class="md-collapse-label" @click="toggle(index + 1)">
-        <div class="md-layout " v-if="icon">
-          <h5 class="md-collapse-title md-layout-item">
-            <!--md-size-40"-->
-            {{item.title}}
-  
-          </h5>
-  
-          <div class="md-layout-item">
-  
-          </div>
-          <div class="md-layout-item" style=" padding-right: 0px;">
-            <div class="md-layout">
-              <div class="md-layout-item md-size-20" style="text-align:right;padding-right: 0px;padding-left: 0px;">
-                <md-icon style="margin-right: 0px; font-size: 15px !important;">{{icon}}</md-icon>
-              </div>
-              <div class="md-layout-item md-size-80" style="text-align:left;padding-right: 0px;padding-left: 0px;">
-                <span class="date-content">
-                    {{new Date(item.eventStartMillis).toLocaleDateString("en-US", {  day: 'numeric',year: 'numeric', month: 'long'})}}
-                    </span>
-              </div>
-            </div>
-          </div>
-  
-        </div>
-  
-  
-        <div class="md-layout" v-else>
-          <h5 class="md-collapse-title md-layout-item">
-            <!--md-size-40"-->
+        <h5 class="md-collapse-title">
             {{item}}
-  
-          </h5>
-          <!-- <div class="md-layout-item">
-  
-          </div> -->
-          <div class="md-layout-item" style=" padding-right: 0px;">
-            <div class="md-layout">
-  
-              <div class="md-layout-item" style="text-align:right;padding-right: 0px;padding-left: 0px;">
-                <span class="date-content">
-                      {{new Date(item.eventStartMillis).toLocaleDateString("en-US", {  day: 'numeric',year: 'numeric', month: 'long'})}} 
-                    </span>
-              </div>
-            </div>
-          </div>
-        </div>
-  
+            <md-icon>{{icon}}</md-icon>
+        </h5>
       </div>
-  
+
       <collapse-transition>
-        <div class="md-collapse-content" style="padding-left: 0px;" v-show="getActiveCollapse(index + 1)">
-          <slot :name="getCollapseContent(index + 1)"></slot>
-        </div>
+      <div class="md-collapse-content" v-show="getActiveCollapse(index + 1)">
+        <slot :name="getCollapseContent(index + 1)"></slot>
+      </div>
       </collapse-transition>
     </div>
   </div>
 </template>
 
 <script>
-  import {
+import { CollapseTransition } from "vue2-transitions";
+
+export default {
+  name: "collapse",
+  components: {
     CollapseTransition
-  } from "vue2-transitions";
-  
-  export default {
-    name: "collapse",
-    components: {
-      CollapseTransition
+  },
+  props: {
+    collapse: Array,
+    icon: String,
+    colorCollapse: String
+  },
+  data() {
+    return {
+      isActive: 0
+    };
+  },
+  methods: {
+    getActiveCollapse(index) {
+      return this.isActive == index;
     },
-    props: {
-      collapse: Array,
-      icon: String,
-      colorCollapse: String
-    },
-    data() {
+    activeCollapse(index) {
       return {
-        isActive: 0
+        "is-active": this.isActive == index
       };
     },
-    mounted() {},
-    methods: {
-      getActiveCollapse(index) {
-        return this.isActive == index;
-      },
-      activeCollapse(index) {
-        return {
-          "is-active": this.isActive == index
-        };
-      },
-      toggle(index) {
-        if (index == this.isActive) {
-          this.isActive = 0;
-        } else {
-          this.isActive = index;
-        }
-      },
-      getCollapseContent: function(index) {
-        return "md-collapse-pane-" + index + "";
-      },
-      getColorCollapse: function(colorCollapse) {
-        return "md-" + colorCollapse + "";
+    toggle(index) {
+      if (index == this.isActive) {
+        this.isActive = 0;
+      } else {
+        this.isActive = index;
       }
+    },
+    getCollapseContent: function(index) {
+      return "md-collapse-pane-" + index + "";
+    },
+    getColorCollapse: function(colorCollapse) {
+      return "md-" + colorCollapse + "";
     }
-  };
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-  .text-center {
-    display: flex;
-  }
-  
-  .date-content {
-    width: 94px;
-    height: 12px;
-    font-family: Roboto;
-    font-size: 12px;
-    font-weight: 300;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: left;
-    color: #999999;
-  }
+.text-center {
+  display: flex;
+}
 </style>
