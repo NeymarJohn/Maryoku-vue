@@ -23,12 +23,15 @@
                 <div class="img-circle">
                   <template>
                     <div class="image-container">
-                      <img src="static/img/profile-picture.png"> </div>
+                      <img style ="width:100px; height: 100px" src="static/img/placeholder.jpg" v-if="imageUrl == null "> 
+                      <img style ="width:100px; height: 100px" :src="imageUrl" v-if="imageUrl !=null">
+                      </div> <!--profile-picture.png-->
                   </template>
                 </div>
 
                 <div >
-                  <button class="profile-button" ><span >Change Profile Picture</span></button>
+                  <button  class="profile-button" @click="uploadImage"><span >Change Profile Picture</span></button>
+                  <input type="file" style="display: none;" ref="inputFile" accept="image/*" @change="onFilePicked">
                 </div>
               </div>
               <div class="md-layout-item">
@@ -89,7 +92,7 @@
     <div class="md-layout">
 
       <div class="md-layout-item md-size-100">
-        <MySpecialDates></MySpecialDates>
+        <my-special-dates :birthDate="userInfo.me.birthday" :workingSince="userInfo.me.companyStartDate"></my-special-dates>
       </div>
     </div>
   </div>
@@ -106,6 +109,29 @@
       userInfo:Object
     },
     mounted(){
+    },
+    data(){
+      return{
+        imageUrl:null
+      }
+    },
+    methods:{
+       uploadImage() {
+         this.$refs.inputFile.click();
+         
+      },
+      
+      onFilePicked(event){
+        let file = event.target.files || event.dataTransfer.files;
+         if (!file.length) {
+          return;
+        }
+        let url = URL.createObjectURL(file[0]);
+        this.imageUrl = url
+        const formData = new FormData();
+        formData.append("images",file[0],file[0].name) // TODO :: send this object once we have api for userPorfile photo
+        
+      }
     }
   }
 </script>
@@ -147,6 +173,12 @@
     height: 33px;
     box-shadow: 0px 4px 20px 0 rgba(0, 0, 0, 0.14);
     background-color: #9c27b0;
+    cursor: pointer;
+  }
+
+  .profile-button:hover{
+    background-color: #999999;
+    color:white
   }
 
   .profile-button span{

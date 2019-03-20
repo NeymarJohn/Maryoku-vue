@@ -50,7 +50,7 @@
 
       //     return event.title
       // })
-
+      
       this.eventList= this.events;
       //   debugger
     },

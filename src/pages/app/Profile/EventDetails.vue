@@ -61,7 +61,7 @@
         <div class="md-layout">
             <div class="md-layout-item md-size-100">
                 <p>
-                    Corporate Style
+                    Casual
                 </p>
             </div>
         </div>
@@ -75,7 +75,7 @@
                             <button class="comming-button" ><span class="comming">Comming</span></button>
                         </div>
                     </div>
-                    <div class="md-layout-item md-size-35" style="margin-left: 0px;padding-left: 0px;">
+                    <div class="md-layout-item md-size-35" style="margin-left: 0px;padding-left: 20px;">
                         <div style="width:50%; height: 100%;">
                          <button class="notcomming-button" > <span class="notcomming">Not coming</span></button>
                     </div>

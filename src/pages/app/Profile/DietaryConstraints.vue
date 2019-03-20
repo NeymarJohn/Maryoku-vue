@@ -11,21 +11,11 @@
       <md-card-content>
 
         <div class="md-layout" style="margin-top:83px; margin-bottom:91px;">
-          <div class="md-layout-item md-size-20">
-            <md-icon>add_circle_outline</md-icon>
+          <div class="md-layout-item" v-for="(item,index) in dietaryIconOnList" >
+            <img :src="`static/img/dietary/${item.on}.png`" @click="toggleFlag(index)" v-if="item.flagOn">
+            <img :src="`static/img/dietary/${item.off}.png`" @click="toggleFlag(index)" v-if="!item.flagOn">
           </div>
-          <div class="md-layout-item md-size-20">
-            <md-icon>all_inclusive</md-icon>
-          </div>
-          <div class="md-layout-item md-size-20">
-            <md-icon>ac_unit</md-icon>
-          </div>
-          <div class="md-layout-item md-size-20">
-            <md-icon>spa</md-icon>
-          </div>
-          <div class="md-layout-item md-size-20">
-            <md-icon>sentiment_satisfied_alt</md-icon>
-          </div>
+          
         </div>
       </md-card-content>
 
@@ -41,7 +31,56 @@
   export default {
     components: {
       Collapse
+    },
+
+    data(){
+      return{
+        showOnIcon:true,
+        showOffIcon:false,
+        dietaryIconOnList:[
+          {
+            on:"eco_off",
+            off:"eco_on",
+            flagOn:true
+            
+          },
+          {
+            on:"egg_free_off",
+            off:"egg_free_on",
+            flagOn:true
+            
+          },
+          {
+            on:"gluten_free_off",
+            off:"gluten_free_on",
+            flagOn:true
+          },
+          {
+            on:"gmo_free_off",
+            off:"gmo_free_on",
+            flagOn:true
+          },
+          {
+            on:"kosher_off",
+            off:"kosher_on",
+            flagOn:true
+          },
+          {
+            on:"lactose_free_off",
+            off:"lactose_free_on",
+            flagOn:true
+          }
+          
+        ]
+      }
+    },
+
+    methods:{
+      toggleFlag(index){
+        this.dietaryIconOnList[index].flagOn=!this.dietaryIconOnList[index].flagOn
+      }
     }
+    
   }
 </script>
 <style lang="scss" >

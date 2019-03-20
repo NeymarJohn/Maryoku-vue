@@ -8,9 +8,7 @@
         <h4 class="title">My Special Dates</h4>
       </md-card-header>
       <md-card-content>
-        <collapse :collapse="[
-                                                  'Birthday',
-                                                  'Working since']" color-collapse="success">
+        <collapse :collapse="mySpecialDateList" color-collapse="success">
           <template slot="md-collapse-pane-1">
             <!-- <event-details :where="EventLocation" :when="EventDate" :DressCode="EventDressCode"></event-details> -->
             <div class="md-layout">
@@ -54,6 +52,20 @@
   export default {
     components: {
       Collapse
+    },
+    data(){
+      return {
+        mySpecialDateList:[]
+      }
+    },
+    props:{
+      workingSince:Date,
+      birthDate: Date
+    },
+    mounted(){
+
+      this.mySpecialDateList.push({title: 'Birthday', eventStartMillis:this.birthDate});
+      this.mySpecialDateList.push({title: 'Working since', eventStartMillis:this.workingSince});
     }
   }
 </script>
