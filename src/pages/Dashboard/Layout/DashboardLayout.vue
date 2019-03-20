@@ -32,6 +32,9 @@
         <sidebar-item :link="{name: 'Event Planner', icon: 'local_play', path: '/events'}">
         </sidebar-item>
 
+        <sidebar-item :link="{name: 'Vendors List', icon: 'group', path: '/vendors'}">
+        </sidebar-item>
+
         <!--<sidebar-item :link="{name: 'My Vendors', icon: 'contacts', path: '/vendors'}">
         </sidebar-item>
 

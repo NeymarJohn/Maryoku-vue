@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout">
-    <div class="md-layout-item md-size-50">
+    <div :class="['md-layout-item',vendor_selected ? 'md-size-50' : 'md-size-100' ]">
       <md-card>
         <md-card-header class="md-card-header-icon md-card-header-warning">
 
@@ -24,6 +24,7 @@
 
           <vendors-table
                   :tooltipModels="tooltipModels"
+                  @select-vendor="onSelectVendor"
                   :vendorsList="vendorsList">
 
           </vendors-table>
@@ -43,8 +44,8 @@
       </md-card>
     </div>
 
-    <div class="md-layout-item md-size-50">
-      <company-form></company-form>
+    <div class="md-layout-item md-size-50" v-if="vendor_selected">
+      <company-form :selected_vendor="selected_vendor"></company-form>
     </div>
     <create-modal @vendorCreated="fetchData(1)"  ref="inviteModal"></create-modal>
     <upload-modal @vendorImported="fetchData(1)"  ref="uploadModal"></upload-modal>
@@ -54,8 +55,8 @@
 <script>
   import CreateModal from './CreateModal';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-  import VendorsTable from './Table/vendors-list.vue';
-  import companyForm from './Form/company-form.vue';
+  import VendorsTable from './Table/vendorsList.vue';
+  import companyForm from './Form/companyForm.vue';
   import UploadModal from './ImportVendors';
   import { Pagination } from "@/components"
   import Vendors from "@/models/Vendors";
@@ -82,7 +83,9 @@
         tooltipModels: [],
         loadingData: true,
         importClicked: false,
-        tableHidden: true
+        tableHidden: true,
+        selected_vendor : {},
+          vendor_selected : false
       }
     },
     created() {
@@ -163,6 +166,10 @@
       openUploadModal(){
         this.$refs.uploadModal.toggleModal(true);
       }
+      ,onSelectVendor(data) {
+          this.$set(this,'vendor_selected',true);
+          this.$set(this,'selected_vendor',data);
+        }
       }
   };
 </script>

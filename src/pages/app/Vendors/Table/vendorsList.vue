@@ -2,24 +2,17 @@
     <div>
         <md-card-content>
             <md-table v-model="vendorsList" table-header-color="orange">
-                <md-table-row slot="md-table-row" slot-scope="{ item }">
+                <md-table-row slot="md-table-row" slot-scope="{ item }" :key="item.id" @click="selectVendor(item)">
                     <md-table-cell md-label="ID"> {{ item.vendorDisplayName }}</md-table-cell>
                     <md-table-cell md-label="Vendor Name">{{ item.vendorDisplayName }}</md-table-cell>
-                    <md-table-cell md-label="Company Ranking">
-                        <label class="star-rating__star"
-                               v-for="rating in ratings"
-                               :class="{'is-selected' : ((item.company_ranking >= rating) && item.company_ranking != null)}"
-                               >
-                            <input class="star-rating star-rating__checkbox" type="radio" :value="rating" :name="`company_ranking_`+item.id"
-                                   v-model="item.company_ranking">★</label>
-                    </md-table-cell>
                     <md-table-cell md-label="Market Ranking">
                         <label class="star-rating__star"
                                v-for="rating in ratings"
-                               :class="{'is-selected' : ((item.market_ranking >= rating) && item.market_ranking != null)}"
+                               v-on:click="setRanking(item.id,rating, index)"
+                               :class="{'is-selected' : ((item.rank >= rating) && item.rank != null)}"
                                >
                             <input class="star-rating star-rating__checkbox" type="radio" :value="rating" :name="`market_ranking_`+item.id"
-                                   v-model="item.market_ranking">★</label>
+                                   v-model="item.rank">★</label>
                     </md-table-cell>
                     <md-table-cell>
                         <md-button class="md-button md-primary md-sm md-theme-default auto-width" @click.native="deleteVendor(item.id)">
@@ -117,6 +110,34 @@
             })
 
           }
+          ,selectVendor(item) {
+               this.$emit('select-vendor',item);
+           }
+           ,setRanking(id,ranking,value) {
+                swal({
+                    title: 'Are you sure you want to rank?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes'
+                }).then(async (result) => {
+                    if (result.value) {
+                        let vendor = await Vendors.find(id);
+                        vendor.rank = ranking;
+                        vendor.save();
+                        this.$notify(
+                            {
+                                message: 'Vendor Ranked successfully!',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'success'
+                            })
+                    }
+                })
+
+
+            }
         }
     };
 </script>
