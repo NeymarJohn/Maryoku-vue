@@ -1,9 +1,9 @@
 <template>
-  <div class="">
+  <div >
 
-    <div class="md-layout">
+    <div class="md-layout" style="width:100%">
 
-      <div class="md-layout-item md-size-100">
+      <!-- <div class="md-layout-item md-size-100"> -->
         <md-card>
           <md-card-header class="md-card-header-icon md-card-header-rose">
             <div class="card-icon" style="padding: 12px;">
@@ -38,47 +38,57 @@
 
               </div>
             </div>
-            <div class="md-layout ">
-              <label style="text-align: left" class="md-form-label">
-                Name :
-              </label>
-              <div class="md-layout-item" style="padding-top:20px;">
+            <div class="md-layout " style="margin-top: 15%">
+              <div class="md-layout-item md-size-20" style="padding-left: 0px;padding-right: 0px;">
+                <label style="text-align: left" class="md-form-label">
+                  Name :
+                </label>
+              </div>  
+              <div class="md-layout-item md-size-80" style="text-align: left;padding-left: 0px;">
 
-                <span>{{userInfo.displayName}}</span>
+                <span style="font-size: 14px;">{{userInfo.displayName}}</span>
               </div>
             </div>
-            <div class="md-layout ">
-              <label style="text-align: left" class=" md-form-label">
-                Email :
-              </label>
-              <div class="md-layout-item" style="padding-top:20px;text-align: left">
+            <div class="md-layout " style="margin-top: 5%">
+              <div class="md-layout-item md-size-20" style="padding-left: 0px;padding-right: 0px;">
+                <label style="text-align: left" class=" md-form-label">
+                  Email :
+                </label>
+              </div>
+              <div class="md-layout-item md-size-80" style="text-align: left;padding-left: 0px;">
 
-                <span>{{userInfo.email}}</span>
+                <span style="font-size: 14px;"></span>
               </div>
             </div>
-            <div class="md-layout ">
-              <label style="text-align: left" class=" md-form-label">
-                Role :
-              </label>
-              <div class="md-layout-item" style="padding-top:20px">
-
-                <span></span>
-              </div>
-            </div>
-            <div class="md-layout ">
-              <label style="text-align: left" class="md-form-label">
-                Department :
-              </label>
-              <div class="md-layout-item" style="padding-top:20px">
+            <div class="md-layout " style="margin-top: 5%">
+              <div class="md-layout-item md-size-20" style="padding-left: 0px;padding-right: 0px;">
+                <label style="text-align: left" class=" md-form-label">
+                  Role :
+                </label>
+              </div>  
+              <div class="md-layout-item md-size-80" style="text-align: left;padding-left: 0px;">
 
                 <span></span>
               </div>
             </div>
-            <div class="md-layout ">
-              <label style="text-align: left" class=" md-form-label">
-                Branch :
-              </label>
-              <div class="md-layout-item" style="padding-top:20px">
+            <div class="md-layout " style="margin-top: 5%">
+              <div class="md-layout-item md-size-35" style="padding-left: 0px;padding-right: 0px;">
+                <label style="text-align: left" class="md-form-label">
+                  Department :
+                </label>
+              </div>  
+              <div class="md-layout-item md-size-65" style="text-align: left;padding-left: 0px;">
+
+                <span></span>
+              </div>
+            </div>
+            <div class="md-layout " style="margin-top: 5%">
+              <div class="md-layout-item md-size-35" style="padding-left: 0px;padding-right: 0px;">
+                <label style="text-align: left" class=" md-form-label">
+                  Branch :
+                </label>
+              </div>  
+              <div class="md-layout-item md-size-80" style="text-align: left;padding-left: 0px;">
 
                 <span></span>
               </div>
@@ -86,7 +96,7 @@
           </md-card-content>
 
         </md-card>
-      </div>
+      <!-- </div> -->
     </div>
 
     

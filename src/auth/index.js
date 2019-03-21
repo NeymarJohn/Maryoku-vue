@@ -19,6 +19,7 @@ const TOKEN_KEY = "manage_id_token";
 export default {
   user: {
     authenticated: !!window.localStorage.getItem(TOKEN_KEY),
+    me: {}
   },
 
   login(context, creds, successCallback, errorCallback) {

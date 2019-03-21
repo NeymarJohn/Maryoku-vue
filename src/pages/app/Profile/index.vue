@@ -4,10 +4,10 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen />
 
     <div class="md-layout ">
-      <div class="md-layout-item md-size-30">
+      <div class="md-layout-item md-size-25" >
         <personal-information :userInfo="auth.user"></personal-information>
       </div>
-      <div class="md-layout-item md-size-30" >
+      <div class="md-layout-item md-size-25" >
           <div class="md-layout">
             <dietary-constraints></dietary-constraints>
           </div>
