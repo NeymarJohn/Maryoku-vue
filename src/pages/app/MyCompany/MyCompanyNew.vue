@@ -834,7 +834,7 @@ const currentYear=new Date().getFullYear()
           return [];
         }
         if(!this.monthRate){
-          this.participantsList = this.participants[currentCount]
+          this.participantsList = this.participant[currentCount]
         }else{
           const count= this.listMonth.indexOf(this.monthRate)
           this.participantsList = this.participants[count]
