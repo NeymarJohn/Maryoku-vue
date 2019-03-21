@@ -10,10 +10,18 @@
 
       <md-card-content>
 
-        <div class="md-layout" style="margin-top:83px; margin-bottom:91px;">
-          <div class="md-layout-item" v-for="(item,index) in dietaryIconOnList" >
-            <img :src="`static/img/dietary/${item.on}.png`" @click="toggleFlag(index)" v-if="item.flagOn">
-            <img :src="`static/img/dietary/${item.off}.png`" @click="toggleFlag(index)" v-if="!item.flagOn">
+        <div class="md-layout" style="margin-top:5%">
+          <div class="md-layout-item" v-for="(item,index) in dietaryIconOnFirstList" >
+            <img :src="`static/img/dietary/${item.on}.png`" @click="toggleFlagFirstList(index)" v-if="item.flagOn">
+            <img :src="`static/img/dietary/${item.off}.png`" @click="toggleFlagFirstList(index)" v-if="!item.flagOn">
+          </div>
+          
+        </div>
+
+        <div class="md-layout"   style="margin-top:5%">
+          <div class="md-layout-item" v-for="(item,index) in dietaryIconOnSecondList" >
+            <img :src="`static/img/dietary/${item.on}.png`" @click="toggleFlagSecondList(index)" v-if="item.flagOn">
+            <img :src="`static/img/dietary/${item.off}.png`" @click="toggleFlagSecondList(index)" v-if="!item.flagOn">
           </div>
           
         </div>
@@ -37,7 +45,7 @@
       return{
         showOnIcon:true,
         showOffIcon:false,
-        dietaryIconOnList:[
+        dietaryIconOnFirstList:[
           {
             on:"eco_off",
             off:"eco_on",
@@ -54,7 +62,11 @@
             on:"gluten_free_off",
             off:"gluten_free_on",
             flagOn:true
-          },
+          }
+          
+        ],
+
+        dietaryIconOnSecondList:[
           {
             on:"gmo_free_off",
             off:"gmo_free_on",
@@ -69,15 +81,18 @@
             on:"lactose_free_off",
             off:"lactose_free_on",
             flagOn:true
-          }
-          
+          }     
         ]
       }
     },
 
     methods:{
-      toggleFlag(index){
-        this.dietaryIconOnList[index].flagOn=!this.dietaryIconOnList[index].flagOn
+      toggleFlagFirstList(index){
+        this.dietaryIconOnFirstList[index].flagOn=!this.dietaryIconOnFirstList[index].flagOn
+      },
+
+       toggleFlagSecondList(index){
+        this.dietaryIconOnSecondList[index].flagOn=!this.dietaryIconOnSecondList[index].flagOn
       }
     }
     
