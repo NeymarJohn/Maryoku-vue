@@ -18,8 +18,7 @@
 
         <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
         </sidebar-item>-->
-         <sidebar-item :link="{name: 'My Profile', icon: 'perm_identity', path: '/profile'}">
-        </sidebar-item>
+        
         <sidebar-item :link="{name: 'Company', icon: 'fingerprint', path: '/company'}">
         </sidebar-item>
 
@@ -30,6 +29,9 @@
         </sidebar-item>-->
 
         <sidebar-item :link="{name: 'Event Planner', icon: 'local_play', path: '/events'}">
+        </sidebar-item>
+
+        <sidebar-item :link="{name: 'Vendors List', icon: 'group', path: '/vendors'}">
         </sidebar-item>
 
         <!--<sidebar-item :link="{name: 'My Vendors', icon: 'contacts', path: '/vendors'}">
