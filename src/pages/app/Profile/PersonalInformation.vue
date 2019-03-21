@@ -89,21 +89,14 @@
       </div>
     </div>
 
-    <div class="md-layout">
-
-      <div class="md-layout-item md-size-100">
-        <my-special-dates :birthDate="userInfo.me.birthday" :workingSince="userInfo.me.companyStartDate"></my-special-dates>
-      </div>
-    </div>
+    
   </div>
 </template>
 <script>
-  import MySpecialDates from "./MySpecialDates";
   import StatsCard from '../../../components/Cards/StatsCard';
   export default {
     components:{
-      StatsCard,
-      MySpecialDates
+      StatsCard
     },
     props:{
       userInfo:Object

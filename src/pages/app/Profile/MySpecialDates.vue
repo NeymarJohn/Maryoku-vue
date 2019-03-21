@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width:100%">
     <md-card>
       <md-card-header class="md-card-header-icon md-card-header-blue">
         <div class="card-icon" style="padding: 12px;">
