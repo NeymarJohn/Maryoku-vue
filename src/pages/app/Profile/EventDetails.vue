@@ -147,10 +147,10 @@
         },
         props: {
             where: {
-                type: Number
+                type: String
             },
             when: {
-                type: String
+                type: Number
             },
             dressCode: {
                 type: String
