@@ -7,14 +7,14 @@
         </div>
         <h5 class="title">My Events</h5>
       </md-card-header>
-
+  
       <md-card-content>
-        <h6 v-if="!eventList">No events yet</h6>
-        <collapse :collapse="eventList"  icon="query_builder" color-collapse="warning" >
-
-          <template v-for="(item,index) in eventList"  :slot="`md-collapse-pane-${index+1}`">
-            <event-details :titleCollaps="eventTitleFromCollaps" :where="eventLocation" :when="item.eventStartMillis" :dressCode="eventDressCode"></event-details>
-          </template>
+        <h6 v-if="emptyEvents">No events yet</h6>
+        <collapse :collapse="events" icon="query_builder" color-collapse="warning">
+  
+          <template v-for="(item,index) in events" :slot="`md-collapse-pane-${index+1}`">
+              <event-details :titleCollaps="eventTitleFromCollaps" :where="eventLocation" :when="item.eventStartMillis" :dressCode="eventDressCode"></event-details>
+</template>
         </collapse>
       </md-card-content>
 
@@ -37,26 +37,28 @@
         eventLocation: '',
         eventDate: '',
         eventDressCode: '',
-        eventList:[],
-        // eventsTitleList: [],
-        eventTitleFromCollaps:''
+        emptyEvents:'',
+        eventTitleFromCollaps: ''
       }
     },
     props: {
       events: Array
     },
     mounted() {
-      // this.eventsTitleList = this.events.map((event) => {
-
-      //     return event.title
-      // })
       
-      this.eventList= this.events;
-      //   debugger
     },
-
-    methods:{
-
+  
+    watch: {
+      events(newVal, oldVal) {
+        if (newVal.length == 0){
+          this.emptyEvents = true
+        }else{
+          this.emptyEvents = false
+        }
+      }
+    },
+    methods: {
+  
     }
   }
 </script>
@@ -76,7 +78,7 @@
     color: var(--slate);
     padding-top: 20px;
   }
-
+  
   .header-icon-myEvents {
     width: 63px;
     height: 64px;
@@ -84,7 +86,7 @@
     box-shadow: 0px 4px 20px 0 rgba(0, 0, 0, 0.14);
     background-image: linear-gradient(to right, #ffa625, #fb8d02), linear-gradient(to top, #000000, #ffffff);
   }
-
+  
   .my-event {
     width: 513px;
     height: 842px;
