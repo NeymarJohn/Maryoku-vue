@@ -59,14 +59,15 @@
       }
     },
     props:{
-      workingSince:Date,
-      birthDate: Date
+      workingSince:Number,
+      birthDate: Number
     },
     mounted(){
 
       this.mySpecialDateList.push({title: 'Birthday', eventStartMillis:this.birthDate});
       this.mySpecialDateList.push({title: 'Working since', eventStartMillis:this.workingSince});
     }
+    
   }
 </script>
 <style lang="scss">
