@@ -10,19 +10,19 @@
             <md-card-content>    
                 <div class="md-layout">
                     <div class="md-layout-item">
-                        <md-checkbox v-model="holidayType" value="Christian">Christian</md-checkbox>
+                        <md-checkbox v-model="holidayTypeChristian" value="Christian">Christian</md-checkbox>
                     </div>
                     <div class="md-layout-item">
-                        <md-checkbox v-model="holidayType" value="Jewish">Jewish</md-checkbox>
+                        <md-checkbox v-model="holidayTypeJewish" value="Jewish">Jewish</md-checkbox>
                     </div>
                 </div>
 
                 <div class="md-layout">
                     <div class="md-layout-item">
-                        <md-checkbox v-model="holidayType" value="Hindu" >Hindu</md-checkbox>
+                        <md-checkbox v-model="holidayTypeHindu" value="Hindu" >Hindu</md-checkbox>
                     </div>
                     <div class="md-layout-item">
-                        <md-checkbox  v-model="holidayType" value="Muslim">Muslim</md-checkbox>
+                        <md-checkbox  v-model="holidayTypeMuslim" value="Muslim">Muslim</md-checkbox>
                     </div>
                 </div>
             </md-card-content>    
@@ -33,7 +33,10 @@
 export default {
     data(){
         return{
-            holidayType:''
+            holidayTypeChristian:'',
+            holidayTypeJewish:'',
+            holidayTypeHindu:'',
+            holidayTypeMuslim:''
         }
     }
 }
