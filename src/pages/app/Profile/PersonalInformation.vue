@@ -57,7 +57,7 @@
               </div>
               <div class="md-layout-item md-size-80" style="text-align: left;padding-left: 0px;">
 
-                <span style="font-size: 14px;"></span>
+                <span style="font-size: 14px;">{{userInfo.email}}</span>
               </div>
             </div>
             <div class="md-layout " style="margin-top: 5%">
