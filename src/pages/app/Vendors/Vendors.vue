@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout">
-    <div :class="['md-layout-item',vendor_selected ? 'md-size-50' : 'md-size-100' ]">
+    <div class="md-layout-item md-size-50">
       <md-card>
         <md-card-header class="md-card-header-text md-card-header-warning">
 
