@@ -5,7 +5,7 @@
                 <md-table-row slot="md-table-row" slot-scope="{ item }" :key="item.id" @click="selectVendor(item)">
                     <md-table-cell md-label="ID"> {{ item.vendorDisplayName }}</md-table-cell>
                     <md-table-cell md-label="Vendor Name">{{ item.vendorDisplayName }}</md-table-cell>
-                    <md-table-cell md-label="Market Ranking">
+                    <md-table-cell md-label="Ranking">
                         <label class="star-rating__star"
                                v-for="rating in ratings"
                                @click="setRanking(item.id,rating)"
