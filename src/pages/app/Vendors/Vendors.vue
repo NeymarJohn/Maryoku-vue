@@ -11,7 +11,7 @@
 
           <div class="table table-stats text-right vendors-actions-list">
             <md-button class="md-default text-rose" @click="openInviteModal">
-              Add a record
+              Add Vendor
             </md-button>
             <md-button @click="openUploadModal" class="md-default">
               Upload Excel File
