@@ -2,10 +2,10 @@
   <div class="md-layout">
     <div :class="['md-layout-item',vendor_selected ? 'md-size-50' : 'md-size-100' ]">
       <md-card>
-        <md-card-header class="md-card-header-icon md-card-header-warning">
+        <md-card-header class="md-card-header-text md-card-header-warning">
 
           <div class="card-text">
-            <h4 class="title">Vendors List</h4>
+            <h4 class="title" style="color: white;">Vendors List</h4>
             <div class="ct-label">See all vendors uploaded below</div>
           </div>
 
@@ -173,7 +173,7 @@
       }
   };
 </script>
-<style >
+<style lang="scss" scoped>
   .md-table-head-label {
     font-weight: 500;
   }
