@@ -15,7 +15,7 @@
             <img :src="`static/img/dietary/${item.on}.png`" @click="toggleFlagFirstList(index)" v-if="item.flagOn">
             <img :src="`static/img/dietary/${item.off}.png`" @click="toggleFlagFirstList(index)" v-if="!item.flagOn">
           </div>
-          
+
         </div>
 
         <div class="md-layout"   style="margin-top:5%">
@@ -23,7 +23,7 @@
             <img :src="`static/img/dietary/${item.on}.png`" @click="toggleFlagSecondList(index)" v-if="item.flagOn">
             <img :src="`static/img/dietary/${item.off}.png`" @click="toggleFlagSecondList(index)" v-if="!item.flagOn">
           </div>
-          
+
         </div>
       </md-card-content>
 
@@ -47,23 +47,23 @@
         showOffIcon:false,
         dietaryIconOnFirstList:[
           {
-            on:"eco_off",
-            off:"eco_on",
+            on:"sugar_free_off",
+            off:"sugar_free_on",
             flagOn:true
-            
+
           },
           {
             on:"egg_free_off",
             off:"egg_free_on",
             flagOn:true
-            
+
           },
           {
             on:"gluten_free_off",
             off:"gluten_free_on",
             flagOn:true
           }
-          
+
         ],
 
         dietaryIconOnSecondList:[
@@ -73,15 +73,15 @@
             flagOn:true
           },
           {
-            on:"kosher_off",
-            off:"kosher_on",
+            on:"peanut_free_off",
+            off:"peanut_free_on",
             flagOn:true
           },
           {
             on:"lactose_free_off",
             off:"lactose_free_on",
             flagOn:true
-          }     
+          }
         ]
       }
     },
@@ -95,7 +95,7 @@
         this.dietaryIconOnSecondList[index].flagOn=!this.dietaryIconOnSecondList[index].flagOn
       }
     }
-    
+
   }
 </script>
 <style lang="scss" >
