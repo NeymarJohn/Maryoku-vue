@@ -23,7 +23,6 @@
           <vue-element-loading :active="loadingData" spinner="ring" color="#FF547C"/>
 
           <vendors-table
-                  v-if="vendorsList"
                   :tooltipModels="tooltipModels"
                   @select-vendor="onSelectVendor"
                   @close-vendor="onCloseVendorForm"

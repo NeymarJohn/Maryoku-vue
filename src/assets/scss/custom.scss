@@ -135,27 +135,11 @@ $tooltip-border-color: $blue-grey-200 !default;
   margin-left: 1em;
 }
 
-.vendors-table {
+.vendor-table {
   &_item {
     &.selected {
       background: #efefef;
     }
-  }
-  &_item-actions {
-    >.md-table-cell-container {
-      flex: 1;
-      display: flex;
-      justify-content: space-around;
-      .md-button  {
-        >div[class^="md-"]{
-          padding : 0 !important;
-        }
-      }
-    }
-  }
-  .star-rating__star {
-    padding : 0;
-    font-size : 1.2em;
   }
 }
 
@@ -166,10 +150,6 @@ $tooltip-border-color: $blue-grey-200 !default;
     position : absolute;
     top : 1.4em;
     right :0;
-  }
-  .md-chips.md-field {
-    padding : 0;
-    margin-top : 0;
   }
 }
 

@@ -5,39 +5,38 @@
         <div class="card-icon" style="padding: 12px;">
           <md-icon>event_note</md-icon>
         </div>
-        <h4 class="title">My Special Dates</h4>
+        <div class="md-layout" style="width: 70%;">
+            <div class="md-layout-item" style="padding-right: 0px;padding-left: 0px;">
+              <div class="md-layout">
+                  <div class="md-layout-item md-size-90"  style="padding-left: 0px;padding-right: 0px;">
+                    <h4 class="title"><span style="font-size:18px;">My Special Dates</span></h4>
+                  </div> 
+                  <div class="md-layout-item md-size-10 add-date" style="padding-left: 10px;padding-right: 0px;" @click="addNewSpecialDateItem">
+                      <md-icon style="font-size: 19px !important; color: #02adc2;" >add_circle</md-icon>
+                  </div>  
+              </div>
+            </div>
+           
+          </div>
       </md-card-header>
       <md-card-content>
-        <collapse :collapse="mySpecialDateList" color-collapse="success">
-          <template slot="md-collapse-pane-1">
-            <!-- <event-details :where="EventLocation" :when="EventDate" :DressCode="EventDressCode"></event-details> -->
-            <div class="md-layout">
-              <div class="md-layout-item md-size-100">
-                <p>The main office @ 15 Sunset Blvd. Transportation will be provided from the office. If you're arriving solo, the venue is located @ street name. Parking is available in building garage.
-                </p>
-              </div>
-            </div>
-          </template>
-
-          <template slot="md-collapse-pane-2">
-            <!-- <event-details :where="EventLocation" :when="EventDate" :DressCode="EventDressCode"></event-details> -->
-            <div class="md-layout">
-              <div class="md-layout-item md-size-100">
-                <p>The main office @ 15 Sunset Blvd. Transportation will be provided from the office. If you're arriving solo, the venue is located @ street name. Parking is available in building garage.
-                </p>
-              </div>
-            </div>
-          </template>
-
-        </collapse>
-
-        <div class="md-layout" style="margin-top:4%;margin-bottom:5%;">
-          <div class="md-layout-item md-size-100">
-            <div>
-              <span class="add-date">Add a date</span> <md-icon style="color: #02adc2;">add_circle</md-icon>
-            </div>
-          </div>
+        <div class="md-layout mb16">
+          <div class="md-layout-item md-size-100 md-small-size-100">
+           <md-datepicker v-model="birthdayDate" >
+              <label >Birthday Date</label>
+            </md-datepicker>
+          </div>  
         </div>
+        <div class="md-layout mb16">
+          <div class="md-layout-item md-size-100 md-small-size-100">
+           <md-datepicker v-model="workingSinceDate" >
+              <label >workingSince Date</label>
+            </md-datepicker>
+          </div>  
+        </div>
+   
+       <new-special-date :DateList="specialDateList" ></new-special-date>
+       
       </md-card-content>
 
     </md-card>
@@ -48,14 +47,18 @@
   import {
     Collapse
   } from "@/components";
-
+  import NewSpecialDate from './newSpecailDate';
   export default {
     components: {
-      Collapse
+      Collapse,
+      NewSpecialDate
     },
     data(){
       return {
-        mySpecialDateList:[]
+        mySpecialDateList:[],
+        birthdayDate:null,
+        workingSinceDate:null,
+        specialDateList:[],
       }
     },
     props:{
@@ -66,7 +69,27 @@
 
       this.mySpecialDateList.push({title: 'Birthday', eventStartMillis:this.birthDate});
       this.mySpecialDateList.push({title: 'Working since', eventStartMillis:this.workingSince});
-    }
+    },
+
+    methods:{
+      addNewSpecialDateItem(){
+        let checkEmptyRows= this.specialDateList.filter(row=>row.title=== null)
+        if (checkEmptyRows.length >= 1 && this.specialDateList.length > 0)
+        return 
+        this.specialDateList.push({
+          title:'',
+          selectedDate:null,
+          editable:false
+        })
+
+      },
+
+     
+
+      
+    },
+
+
     
   }
 </script>
@@ -98,5 +121,10 @@
     border-radius: 6px;
     // box-shadow: 0px 1px 4px 0 rgba(0, 0, 0, 0.14);
     // background-color: #ffffff;
+  }
+  
+  .add-date{
+    cursor: pointer;
+  
   }
 </style>
