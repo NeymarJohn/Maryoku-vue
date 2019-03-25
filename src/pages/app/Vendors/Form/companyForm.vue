@@ -1,17 +1,20 @@
 <template>
-    <div>
+    <div class="vendor-form">
         <md-card >
             <md-card-header class="md-card-header-icon md-card-header-rose">
                 <div class="card-icon">
                     <md-icon>mail_outline</md-icon>
                 </div>
                 <h4 class="title2">{{selected_vendor.vendorDisplayName}}’s Company</h4>
+                <md-card-actions md-alignment="right">
+                    <md-button class="md-rose md-sm" @click="saveVendor">Save</md-button>
+                </md-card-actions>
             </md-card-header>
 
             <md-card-content class="md-layout">
                 <div class="md-layout-item md-size-100">
                     <md-field>
-                        <label>Name</label>
+                        <label>Vendor Name</label>
                         <md-input v-model="selected_vendor.vendorDisplayName" type="text"></md-input>
                     </md-field>
                 </div>
@@ -62,34 +65,63 @@
                     </md-field>
                 </div>
 
-                <div class="md-layout-item md-size-50">
-                    <md-field>
-                        <label>Contact Person</label>
-                        <md-input v-model="selected_vendor.vendorContactPerson" type="text"></md-input>
-                    </md-field>
+                <div class="md-layout-item md-size-100 margin-bottom_30">&nbsp;</div>
+
+                <div class="md-layout-item md-size-33">
+                    <label>Contact Person</label>
                 </div>
-                <div class="md-layout-item md-size-50">
+                <div class="md-layout-item md-size-33">
+                    <label>Email Address</label>
+
+                </div>
+                <div class="md-layout-item md-size-30">
+                    <label>Phone Number</label>
+                </div>
+
+                <div v-for="(contactPerson , index) in contactPersonList" :key="index" class="md-layout-item md-size-100 contact-person-list">
+                    <div class="md-layout-item md-size-33">
+                        <md-field >
+                            <md-input v-model="contactPerson.name" :name="'name_' + index" type="text"></md-input>
+                        </md-field>
+                    </div>
+                    <div class="md-layout-item md-size-33">
+                        <md-field >
+                            <md-input v-model="contactPerson.email" :name="'email_' + index"  type="text"></md-input>
+                        </md-field>
+                    </div>
+                    <div class="md-layout-item md-size-30">
+                        <md-field >
+                            <md-input v-model="contactPerson.phone_number"  :name="'phone_number_' + index" type="text"></md-input>
+                        </md-field>
+                    </div>
+                    <div class="delete-item" v-if="contactPersonList.length > 1" @click="deleteContactPersonItem(index)">
+                        <md-icon  class="md-theme-rose" > delete_outline</md-icon>
+                    </div>
+                </div>
+
+                <div class="md-layout-item md-size-100">
+                    <md-button class="md-rose md-sm" @click="addContactPerson">+ Add contact person</md-button>
+                </div>
+
+
+                <div class="md-layout-item md-size-100">
                     <md-field>
                         <label>Attachments</label>
-                        <md-file v-model="selected_vendor.vendorAttachments" multiple />
+                        <md-file v-model="selected_vendor.vendorAttachments" />
                     </md-field>
                 </div>
 
 
             </md-card-content>
-
-            <md-card-actions md-alignment="right">
-                <md-button class="md-rose" @click="saveVendor">Save</md-button>
-            </md-card-actions>
         </md-card>
     </div>
 </template>
 
 <script>
 
+    import Vue from 'vue';
     import Vendors from "@/models/Vendors";
     import swal from "sweetalert2";
-
 
     export default {
         components: {
@@ -104,7 +136,9 @@
 
         },
       created() {
-
+          /**
+           * Get categories for vendors
+           */
           Vendors.find('categories').then(categories => {
               this.vendorCategory = categories;
 
@@ -115,17 +149,28 @@
 
       },
         mounted() {
+            let _self = this;
 
+            //check if vendor has contact person list already
+            if ( this.selected_vendor.vendorContactPerson &&  this.selected_vendor.vendorContactPerson.length) {
+                _self.$set(this,'contactPersonList',this.selected_vendor.vendorContactPerson);
+            } else {
+                _self.$set(this,'contactPersonList',[]);
+                // Init contact person list by adding a default object for it
+                this.addContactPerson();
+            }
         },
         data() {
             return {
                 company : {},
-                vendorCategory: []
-
+                vendorCategory: [],
+                contactPersonList : []
             }
         },
         methods: {
-
+            /**
+             * Modify selected vendor from vendors list
+             */
             saveVendor() {
                 swal({
                     title: 'Are you sure that you want to edit this vendor?',
@@ -145,7 +190,7 @@
                         vendor.vendorMainPhoneNumber = this.selected_vendor.vendorMainPhoneNumber;
                         vendor.vendorCategory = this.selected_vendor.vendorCategory;
                         vendor.vendorTagging = this.selected_vendor.vendorTagging;
-                        vendor.vendorContactPerson = this.selected_vendor.vendorContactPerson;
+                        vendor.vendorContactPerson = this.contactPersonList;
                         vendor.vendorAttachments = this.selected_vendor.vendorAttachments;
                         vendor.save();
 
@@ -160,6 +205,24 @@
                 })
 
 
+            },
+            /**
+             * Add new contact person to the selected vendor
+             */
+            addContactPerson() {
+                this.contactPersonList.push({
+                    name : null,
+                    email : null,
+                    phone_number : null
+                });
+            },
+            /**
+             * Delete item from contact person list
+             * @param index
+             */
+            deleteContactPersonItem(index) {
+                this.contactPersonList.splice(index,1);
+                console.log(this.contactPersonList);
             }
         }
     };

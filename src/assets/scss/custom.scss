@@ -130,6 +130,60 @@ $tooltip-border-color: $blue-grey-200 !default;
 }
 
 .vendors-actions-list {
-  margin-top : 1em;
+  margin-top : 2em;
+  float: left;
+  margin-left: 1em;
+}
+
+.vendor-table {
+  &_item {
+    &.selected {
+      background: #efefef;
+    }
+  }
+}
+
+.vendor-form {
+  .md-card-actions {
+    border : none;
+    padding : 0;
+    position : absolute;
+    top : 1.4em;
+    right :0;
+  }
+}
+
+.contact-person-list {
+  padding : 0;
+  position: relative;
+  .md-layout-item {
+    display: inline-block;
+    position: relative;
+
+
+    .md-field {
+      margin: 0;
+      padding-bottom: 0;
+    }
+  }
+  .delete-item {
+    position: absolute;
+    left: -0.9em;
+    top: 8px;
+    opacity: 0;
+    cursor: pointer;
+
+  }
+
+  &:hover {
+    .delete-item {
+      opacity: 1;
+    }
+  }
+}
+.margin-bottom {
+  &_30{
+    margin-bottom : 30px;
+  }
 }
 @import 'vue-image-lightbox/dist/vue-image-lightbox.min.css'

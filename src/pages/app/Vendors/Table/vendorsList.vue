@@ -1,20 +1,28 @@
 <template>
     <div>
         <md-card-content>
-            <md-table v-model="vendorsList" table-header-color="orange">
-                <md-table-row slot="md-table-row" slot-scope="{ item }" :key="item.id" @click="selectVendor(item)">
-                    <md-table-cell md-label="ID"> {{ item.vendorDisplayName }}</md-table-cell>
+            <md-table v-model="vendorsList" table-header-color="orange" class="vendor-table">
+                <md-table-row slot="md-table-row" slot-scope="{ item }" :key="item.id" @click="selectVendor(item)" :class="{selected:item.id == selectedVendor}" class="vendor-table_item">
                     <md-table-cell md-label="Vendor Name">{{ item.vendorDisplayName }}</md-table-cell>
-                    <md-table-cell md-label="Market Ranking">
+                    <md-table-cell md-label="Ranking">
                         <label class="star-rating__star"
                                v-for="rating in ratings"
-                               v-on:click="setRanking(item.id,rating, index)"
+                               @click="setRanking(item.id,rating)"
                                :class="{'is-selected' : ((item.rank >= rating) && item.rank != null)}"
                                >
                             <input class="star-rating star-rating__checkbox" type="radio" :value="rating" :name="`market_ranking_`+item.id"
                                    v-model="item.rank">★</label>
                     </md-table-cell>
+                    <md-table-cell md-label="People">
+                        12
+                    </md-table-cell>
+                    <md-table-cell md-label="Average Score">
+                        89%
+                    </md-table-cell>
                     <md-table-cell>
+                        <md-button class="md-button md-primary md-sm md-theme-default auto-width" @click.native="deleteVendor(item.id)">
+                            add rank
+                        </md-button>
                         <md-button class="md-button md-primary md-sm md-theme-default auto-width" @click.native="deleteVendor(item.id)">
                             delete
                         </md-button>
@@ -73,8 +81,9 @@
               tags: [],
               tag: ' ',
               name: 'Direction',
-                    ratings: [1, 2, 3, 4, 5],
-                index : 1
+              ratings: [1, 2, 3, 4, 5],
+              index : 1,
+              selectedVendor: undefined,
 
             }
         },
@@ -84,7 +93,7 @@
           },
            deleteVendor(id){
             swal({
-              title: 'Are you sure?',
+              title: 'Are you sure you want to delete this vendor?',
               text: "You won't be able to revert this!",
               type: 'warning',
               showCancelButton: true,
@@ -111,32 +120,28 @@
 
           }
           ,selectVendor(item) {
-               this.$emit('select-vendor',item);
+               let _self = this;
+
+               if (  _self.selectedVendor != item.id ) {
+                   _self.$set(_self,'selectedVendor',item.id);
+                   _self.$emit('select-vendor',item);
+               } else {
+                   _self.$set(_self,'selectedVendor',undefined);
+                   _self.$emit('close-vendor',{});
+               }
+
            }
-           ,setRanking(id,ranking,value) {
-                swal({
-                    title: 'Are you sure you want to rank?',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes'
-                }).then(async (result) => {
-                    if (result.value) {
-                        let vendor = await Vendors.find(id);
-                        vendor.rank = ranking;
-                        vendor.save();
-                        this.$notify(
-                            {
-                                message: 'Vendor Ranked successfully!',
-                                horizontalAlign: 'center',
-                                verticalAlign: 'top',
-                                type: 'success'
-                            })
-                    }
+           , async setRanking(id,ranking) {
+                let vendor = await Vendors.find(id);
+                vendor.rank = ranking;
+                vendor.save();
+                console.log(vendor);
+                this.$notify({
+                    message: 'Vendor Ranked successfully!',
+                    horizontalAlign: 'center',
+                    verticalAlign: 'top',
+                    type: 'success'
                 })
-
-
             }
         }
     };
