@@ -299,6 +299,20 @@
                   this.inviteModalOpen = false;
                   let vendor = new Vendors({});
 
+                this.vendorsMemberData.vendorContactPerson = [{
+                    name : null,
+                    email : null,
+                    phone_number : null
+                }];
+
+                    this.vendorsMemberData.vendorAttachments = [{
+                        path : null
+                    }];
+
+
+                this.vendorsMemberData.vendorTagging = [];
+
+
                   vendor.attach(this.vendorsMemberData).then(() => {
                     this.$emit('vendorCreated')
                     this.$notify(

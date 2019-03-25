@@ -15,10 +15,9 @@ export default {
         vendorCity: 'test',
         vendorRefundPolicy: 'test'
       },
-        csvFile: null,
+        csvFile: null
     };
   },
-
   mutations: {
     setMemberProperty(state, {key, actualValue}) {
       state.vendorsMemberData[key] = actualValue;
