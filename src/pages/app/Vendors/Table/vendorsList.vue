@@ -14,19 +14,44 @@
                                    v-model="item.rank">★</label>
                     </md-table-cell>
                     <md-table-cell md-label="People">
-                        12
+                        {{item.voters}}
                     </md-table-cell>
                     <md-table-cell md-label="Average Score">
-                        89%
+                        {{item.avgScore}}%
                     </md-table-cell>
                     <md-table-cell class="vendors-table_item-actions">
-                        <md-button class="md-button md-primary md-sm md-theme-default auto-width">
+                        <md-button class="md-button md-primary md-sm md-theme-default auto-width" @click="openPopover(index)">
                             add rank
                         </md-button>
                         <md-button class="md-button md-primary md-sm md-theme-default auto-width" @click.native="deleteVendor(item.id)">
                             delete
                         </md-button>
                     </md-table-cell>
+
+
+
+
+                    <div class="popup-box"
+                         v-click-outside="closeModal"
+                         v-if="tooltipModels[index].value && (openPopup)"
+                         :md-active.sync="tooltipModels[index].value"
+                         md-direction="left">
+                        <div class="header-position">
+                            <h3 class="title">Ranking</h3>
+                            <button class="btn-position" @click="closeModal">X</button>
+                        </div>
+                        <div class="md-layout-item md-size-100 md-small-size-100">
+                            <label class="star-rating__star"
+                                   v-for="rating in ratings"
+                                   @click="setRanking(item.id,rating)"
+                                   :class="{'is-selected' : ((item.rank >= rating) && item.rank != null)}"
+                            >
+                                <input class="star-rating star-rating__checkbox" type="radio" :value="rating" :name="`market_ranking_`+item.id"
+                                       v-model="item.rank">★</label>
+                        </div>
+                    </div>
+
+
                 </md-table-row>
             </md-table>
         </md-card-content>
@@ -91,6 +116,16 @@
           closeModal(){
             this.openPopup = false;
           },
+            openPopover(index){
+                this.tooltipModels[index].value = !this.tooltipModels[index].value && (this.openPopup = true);
+
+                this.tooltipModels.map((item, itemIndex) => {
+                    if (index !== itemIndex) {
+                        this.tooltipModels[itemIndex].value = false;
+                    }
+                })
+
+            },
            deleteVendor(id){
             swal({
               title: 'Are you sure you want to delete this vendor?',

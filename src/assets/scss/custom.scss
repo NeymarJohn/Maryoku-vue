@@ -145,7 +145,7 @@ $tooltip-border-color: $blue-grey-200 !default;
     >.md-table-cell-container {
       flex: 1;
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
       .md-button  {
         >div[class^="md-"]{
           padding : 0 !important;
