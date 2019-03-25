@@ -20,7 +20,7 @@
                         89%
                     </md-table-cell>
                     <md-table-cell>
-                        <md-button class="md-button md-primary md-sm md-theme-default auto-width" @click.native="deleteVendor(item.id)">
+                        <md-button class="md-button md-primary md-sm md-theme-default auto-width">
                             add rank
                         </md-button>
                         <md-button class="md-button md-primary md-sm md-theme-default auto-width" @click.native="deleteVendor(item.id)">
