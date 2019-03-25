@@ -1,19 +1,19 @@
 <template>
   <div class="md-layout">
-    <div class="md-layout-item md-size-50">
+    <div :class="['md-layout-item',vendor_selected ? 'md-size-50' : 'md-size-100' ]">
       <md-card>
-        <md-card-header class="md-card-header-text md-card-header-warning">
+        <md-card-header class="md-card-header-icon md-card-header-warning">
 
           <div class="card-text">
-            <h4 class="title" style="color: white;">Vendors List</h4>
+            <h4 class="title">Vendors List</h4>
             <div class="ct-label">See all vendors uploaded below</div>
           </div>
 
-          <div class="table table-stats text-left vendors-actions-list">
-            <md-button class="md-rose" @click="openInviteModal">
-              Add Vendor
+          <div class="table table-stats text-right vendors-actions-list">
+            <md-button class="md-default text-rose" @click="openInviteModal">
+              Add a record
             </md-button>
-            <md-button @click="openUploadModal" class="md-rose">
+            <md-button @click="openUploadModal" class="md-default">
               Upload Excel File
             </md-button>
           </div>
@@ -25,13 +25,12 @@
           <vendors-table
                   :tooltipModels="tooltipModels"
                   @select-vendor="onSelectVendor"
-                  @close-vendor="onCloseVendorForm"
                   :vendorsList="vendorsList">
 
           </vendors-table>
           <md-card-actions md-alignment="space-between">
             <div class="">
-              <p class="card-category">Showing {{ pagination.from }} to {{ pagination.limit < pagination.total ? pagination.limit : pagination.total }} of {{ pagination.total }} records</p>
+              <p class="card-category">Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</p>
             </div>
             <pagination class="pagination-no-border pagination-success"
                         @input="pageChanged($event)"
@@ -86,7 +85,7 @@
         importClicked: false,
         tableHidden: true,
         selected_vendor : {},
-        vendor_selected : false
+          vendor_selected : false
       }
     },
     created() {
@@ -169,17 +168,12 @@
       }
       ,onSelectVendor(data) {
           this.$set(this,'vendor_selected',true);
-            this.$set(this,'selected_vendor',data);
-        },
-        onCloseVendorForm(data){
-            this.$set(this,'vendor_selected',false);
-            this.$set(this,'selected_vendor',{});
-
+          this.$set(this,'selected_vendor',data);
         }
       }
   };
 </script>
-<style lang="scss" scoped>
+<style >
   .md-table-head-label {
     font-weight: 500;
   }
