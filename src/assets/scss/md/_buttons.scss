@@ -77,6 +77,10 @@
     @include btn-styles($brand-rose);
   }
 
+  &.md-purple{
+    @include btn-styles($brand-purple);
+  }
+
   &:focus,
   &:active,
   &:active:focus{

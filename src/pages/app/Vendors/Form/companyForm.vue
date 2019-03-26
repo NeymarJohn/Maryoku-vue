@@ -97,7 +97,7 @@
                 </div>
 
                 <div class="md-layout-item md-size-100">
-                    <md-button class="md-info md-sm" @click="addContactPerson">+ Add contact person</md-button>
+                    <md-button class="md-purple md-xs" @click="addContactPerson">+ Add contact person</md-button>
                 </div>
 
 
@@ -115,7 +115,7 @@
                         </div>
                 </div>
                 <div class="md-layout-item md-size-100">
-                    <md-button class="md-info md-sm" @click="addAttachment">+ Add Attachment</md-button>
+                    <md-button class="md-purple md-xs" @click="addAttachment">+ Add Attachment</md-button>
                 </div>
 
 
