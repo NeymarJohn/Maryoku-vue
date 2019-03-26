@@ -1,14 +1,14 @@
 <template>
   <div>
     <div :class="[
-        'md-collapse',
-        activeCollapse(index + 1),
-        {[getColorCollapse(colorCollapse)]: true}]" v-for="(item, index) in collapse" :key="item">
+          'md-collapse',
+          activeCollapse(index + 1),
+          {[getColorCollapse(colorCollapse)]: true}]" v-for="(item, index) in collapse" :key="item">
       <div class="md-collapse-label" @click="toggle(index + 1)">
         <div class="md-layout " v-if="icon">
           <h5 class="md-collapse-title md-layout-item">
             <!--md-size-40"-->
-            {{item.title}}
+            {{getTitle(item.title)}}
   
           </h5>
   
@@ -22,8 +22,8 @@
               </div>
               <div class="md-layout-item md-size-80" style="text-align:left;padding-right: 0px;padding-left: 0px;">
                 <span class="date-content">
-                    {{new Date(item.eventStartMillis).toLocaleDateString("en-US", {  day: 'numeric',year: 'numeric', month: 'long'})}}
-                    </span>
+                      {{new Date(item.eventStartMillis).toLocaleDateString("en-US", {  day: 'numeric',year: 'numeric', month: 'long'})}}
+                      </span>
               </div>
             </div>
           </div>
@@ -38,15 +38,15 @@
   
           </h5>
           <!-- <div class="md-layout-item">
-  
-          </div> -->
+    
+            </div> -->
           <div class="md-layout-item" style=" padding-right: 0px;">
             <div class="md-layout">
   
               <div class="md-layout-item" style="text-align:right;padding-right: 0px;padding-left: 0px;">
                 <span class="date-content">
-                      {{new Date(item.eventStartMillis).toLocaleDateString("en-US", {  day: 'numeric',year: 'numeric', month: 'long'})}} 
-                    </span>
+                        {{new Date(item.eventStartMillis).toLocaleDateString("en-US", {  day: 'numeric',year: 'numeric', month: 'long'})}} 
+                      </span>
               </div>
             </div>
           </div>
@@ -80,13 +80,19 @@
     },
     data() {
       return {
-        isActive: 0
+        isActive: 0,
+        activeList: [],
+        showedList:[]
       };
     },
     mounted() {},
     methods: {
       getActiveCollapse(index) {
-        return this.isActive == index;
+        // return this.isActive == index;
+        console.log('this.activeList',this.activeList)
+        return this.activeList.includes(index);
+  
+  
       },
       activeCollapse(index) {
         return {
@@ -94,10 +100,21 @@
         };
       },
       toggle(index) {
+        
+        if (this.activeList.includes(index)) {
+          
+          this.activeList = this.activeList.filter(x => x != index)
+          // debugger
+  
+        }else{
+          this.activeList.push(index);
+        }
         if (index == this.isActive) {
           this.isActive = 0;
+  
         } else {
           this.isActive = index;
+          
         }
       },
       getCollapseContent: function(index) {
@@ -105,8 +122,22 @@
       },
       getColorCollapse: function(colorCollapse) {
         return "md-" + colorCollapse + "";
+      },
+  
+      getTitle(title) {
+        if (title.length < 10) {
+          return title
+        } else {
+          return title.substring(0, 8) + " ..."
+        }
+      }
+    },
+    watch:{
+      activeList(newVal,oldVal){
+        this.showedList = newVal
       }
     }
+  
   };
 </script>
 
