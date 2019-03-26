@@ -27,7 +27,8 @@
                   :tooltipModels="tooltipModels"
                   @select-vendor="onSelectVendor"
                   @close-vendor="onCloseVendorForm"
-                  :vendorsList="vendorsList">
+                  :vendorsList="vendorsList"
+                  ref="VendorsTable">
 
           </vendors-table>
           <md-card-actions md-alignment="space-between" v-if="pagination.limit < pagination.total">
@@ -46,9 +47,11 @@
       </md-card>
     </div>
 
-    <div class="md-layout-item md-size-50" v-if="vendor_selected">
-      <company-form :selected_vendor="selected_vendor"></company-form>
+    <div class="md-layout-item md-size-50" v-if="vendor_selected || add_vendor">
+      <company-form :selected_vendor="selected_vendor" :creation_mode="add_vendor" @vendorCreated="fetchData(1)"></company-form>
     </div>
+
+
     <create-modal @vendorCreated="fetchData(1)"  ref="inviteModal"></create-modal>
     <upload-modal @vendorImported="fetchData(1)"  ref="uploadModal"></upload-modal>
     </div>
@@ -57,7 +60,7 @@
 <script>
   import CreateModal from './CreateModal';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-  import VendorsTable from './Table/vendorsList.vue';
+  import VendorsTable from './Table/vendorsList';
   import companyForm from './Form/companyForm.vue';
   import UploadModal from './ImportVendors';
   import { Pagination } from "@/components"
@@ -75,7 +78,7 @@
       VueElementLoading,
       UploadModal,
       Pagination,
-        companyForm
+      companyForm
     },
     mixins: [paginationMixin],
     data() {
@@ -87,6 +90,7 @@
         importClicked: false,
         tableHidden: true,
         selected_vendor : {},
+        add_vendor : false,
         vendor_selected : false
       }
     },
@@ -101,6 +105,7 @@
       fetchData(page) {
         this.loadingData = true;
 
+
         Vendors.page(page)
           .limit(this.pagination.limit)
           .get().then(vendors => {
@@ -112,7 +117,9 @@
           this.updatePagination(vendors[0].model)
           this.loadingData = false;
 
-          this.vendorsList.map((item, index) => {
+            this.onCloseVendorForm();
+
+            this.vendorsList.map((item, index) => {
             this.tooltipModels.push({
               value: false,
               textarea: '',
@@ -162,8 +169,13 @@
         });
       },
       openInviteModal(){
-        this.$refs.inviteModal.toggleModal(true);
-        this.resetForm();
+//        this.$refs.inviteModal.toggleModal(true);
+//        this.resetForm();
+          this.$set(this,'vendor_selected',false);
+          this.$set(this,'selected_vendor',{});
+          this.$set(this,'add_vendor',true);
+          this.$refs.VendorsTable.resetSelectedVendor({});
+
       },
       openUploadModal(){
         this.$refs.uploadModal.toggleModal(true);
@@ -171,10 +183,13 @@
       ,onSelectVendor(data) {
           this.$set(this,'vendor_selected',true);
             this.$set(this,'selected_vendor',data);
+            this.$set(this,'add_vendor',false);
+
         },
         onCloseVendorForm(data){
             this.$set(this,'vendor_selected',false);
             this.$set(this,'selected_vendor',{});
+            this.$set(this,'add_vendor',false);
 
         }
       }

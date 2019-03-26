@@ -1,48 +1,19 @@
 <template>
     <div>
       <div class="md-layout">
-            <div class="md-layout-item md-size-10">
-                 <div>
-                    <md-icon style="font-size: 15px !important; padding-right: 1%;">room</md-icon>
-                </div>
-            </div>
-            <div class="md-layout-item md-size-30" style="padding-left: 0px; ">
-               
+            <div class="md-layout-item md-size-15">
                 <label>
                      Where
                  </label>
             </div>
-
-            <div class="md-layout-item md-size-60" style="padding-left: 0px; padding-right: 0px; ">
-                <div class="md-layout">
-                    <div>
-                        {{eventDate}} - {{endHourDateEvent}}
-                    </div>
-                   
-                </div>
-                <div class="md-layout md-gutter">
-                    <div class="md-layout-item md-size-10">
-                        <div >
-                            Attending
-                        </div>
-                    </div>
-                    <div class="md-layout-item md-size-25" style="margin-left: 12%;">
-                        <div style="width:50%; height: 100%;">
-                            <button class="attending-button" ><span class="attending">Yes</span></button>
-                        </div>
-                    </div>
-                   
-                    <div class="md-layout-item md-size-25">
-                        <div style="width:50%; height: 100%;">
-                            <button class="attending-button" ><span class="attending">No</span></button>
-                        </div>
-                    </div>
-                   
+            <div class="md-layout-item md-size-85" style="padding-left: 0px; ">
+                <div>
+                    <md-icon style="font-size: 15px !important; padding-right: 1%;">room</md-icon>
                 </div>
             </div>
         </div>
     
-        <div class="md-layout" style="margin-top:4%;">
+        <div class="md-layout">
             <div class="md-layout-item md-size-100">
                 <p>The main office @ 15 Sunset Blvd. Transportation will be provided from the office. If you're arriving solo, the venue is located @ street name. Parking is available in building garage.
                 </p>
@@ -51,19 +22,39 @@
     
     
     
+        <div class="md-layout">
+            <div class="md-layout-item md-size-15">
+                <label>
+                    when
+                 </label>
+            </div>
+            <div class="md-layout-item md-size-85" style="padding-left: 0px;">
+                <div>
+                    <md-icon style="font-size: 15px !important;padding-right: 2%;">alarm</md-icon>
+                </div>
+            </div>
+        </div>
+    
+        <div class="md-layout">
+            <div class="md-layout-item md-size-100">
+                <p>
+                    {{eventDate}} - {{endHourDateEvent}}
+                </p>
+            </div>
+        </div>
+    
     
     
         <div class="md-layout">
-            <div class="md-layout-item md-size-10" style="padding-right: 0px;">
-                
-                 <div>
-                    <md-icon style="font-size: 15px !important;">face</md-icon>
-                </div>
-            </div>
-            <div class="md-layout-item md-size-70" style="padding-left: 0px; margin-right: 1%;">
-               <label>
+            <div class="md-layout-item md-size-27" style="padding-right: 0px;">
+                <label>
                     Dress code
                 </label>
+            </div>
+            <div class="md-layout-item md-size-70" style="padding-left: 0px; margin-right: 1%;">
+                <div>
+                    <md-icon style="font-size: 15px !important;padding-right: 35px;">face</md-icon>
+                </div>
             </div>
         </div>
     
@@ -78,7 +69,18 @@
 
         <div class="md-layout " style="margin-bottom:8%; margin-top:2%">
             <div class="md-layout-item md-size-70">
-                
+                <div class="md-layout">
+                    <div class="md-layout-item md-size-35" style="padding-left: 0px;">
+                        <div style="width:50%; height: 100%;">
+                            <button class="comming-button" ><span class="comming">Comming</span></button>
+                        </div>
+                    </div>
+                    <div class="md-layout-item md-size-35" style="margin-left: 0px;padding-left: 20px;">
+                        <div style="width:50%; height: 100%;">
+                         <button class="notcomming-button" > <span class="notcomming">Not coming</span></button>
+                    </div>
+                    </div>
+                </div>    
             </div>
              <div class="md-layout-item">
                     
@@ -206,12 +208,6 @@
      background-color: #fb8f05;
     }
 
-    .attending-button{
-     width: 50px;
-     height: 26px;
-     border-radius: 5px;
-     background-color: #fb8f05;
-    }
     .notcomming-button{
          width: 94px;
         height: 26px;
@@ -220,7 +216,7 @@
 
     }
 
-    .attending{
+    .comming{
         width: 48px;
         height: 15px;
         font-family: Roboto;

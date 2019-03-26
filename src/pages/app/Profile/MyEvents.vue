@@ -10,11 +10,11 @@
   
       <md-card-content>
         <h6 v-if="emptyEvents">No events yet</h6>
-        <collapse :collapse="events" icon="keyboard_arrow_down" color-collapse="warning" >
+        <collapse :collapse="events" icon="query_builder" color-collapse="warning">
   
           <template v-for="(item,index) in events" :slot="`md-collapse-pane-${index+1}`">
               <event-details :titleCollaps="eventTitleFromCollaps" :where="eventLocation" :when="item.eventStartMillis" :dressCode="eventDressCode"></event-details>
-          </template>
+</template>
         </collapse>
       </md-card-content>
 
