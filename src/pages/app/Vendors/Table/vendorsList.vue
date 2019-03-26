@@ -44,7 +44,7 @@
                         <div class="md-layout-item md-size-100 md-small-size-100">
                             <label class="star-rating__star"
                                    v-for="rating in ratings"
-                                   @click="Ranking(item.id,rating)"
+                                   @click="setRanking(item.id,rating)"
                                    :class="{'is-selected' : ((item.rank >= rating) && item.rank != null)}">
                                 <input class="star-rating star-rating__checkbox" type="radio" :value="rating" :name="`market_ranking_`+item.id"
                                        v-model="item.rank">★</label>
@@ -117,6 +117,20 @@
 
         },
         methods: {
+        async setRanking(id,ranking) {
+            let vendor = await Vendors.find(id);
+            vendor.rank = ranking;
+            vendor.save();
+
+            this.$notify(
+                {
+                    message: 'Vendor Ranked successfully!',
+                    horizontalAlign: 'center',
+                    verticalAlign: 'top',
+                    type: 'success'
+                })
+
+        },
           closeModal(){
             this.openPopup = false;
           },
@@ -178,18 +192,6 @@
            },
             resetSelectedVendor(data){
                this.$set(this,'selectedVendor',data);
-            },
-            async Ranking(id,ranking) {
-                let vendor = await Vendors.find(id);
-                vendor.rank = ranking;
-                vendor.save();
-                console.log(vendor);
-                this.$notify({
-                    message: 'Vendor Ranked successfully!',
-                    horizontalAlign: 'center',
-                    verticalAlign: 'top',
-                    type: 'success'
-                })
             }
         }
     };

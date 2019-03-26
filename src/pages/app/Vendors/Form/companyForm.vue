@@ -234,8 +234,6 @@
       },
         beforeUpdate(){
 
-            console.log(this.selected_vendor);
-
             if ( !this.selected_vendor.vendorContactPerson ) {
                 this.selected_vendor.vendorContactPerson=[{
                     name : null,
