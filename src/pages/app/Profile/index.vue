@@ -7,7 +7,7 @@
       <div class="md-layout-item md-size-25">
         <personal-information :userInfo="auth.user" v-if="auth.user.displayName" :key="auth.user"></personal-information>
       </div>
-      <div class="md-layout-item md-size-25">
+      <div class="md-layout-item md-size-35">
         <div class="md-layout">
           <dietary-constraints></dietary-constraints>
         </div>

@@ -9,11 +9,11 @@
             <div class="ct-label">See all vendors uploaded below</div>
           </div>
 
-          <div class="table table-stats text-left vendors-actions-list">
-            <md-button class="md-rose" @click="openInviteModal">
+          <div class="table table-stats vendors-actions-list">
+            <md-button class="md-info" @click="openInviteModal">
               Add Vendor
             </md-button>
-            <md-button @click="openUploadModal" class="md-rose">
+            <md-button @click="openUploadModal" class="md-info">
               Upload Excel File
             </md-button>
           </div>
@@ -23,13 +23,14 @@
           <vue-element-loading :active="loadingData" spinner="ring" color="#FF547C"/>
 
           <vendors-table
+                  v-if="vendorsList"
                   :tooltipModels="tooltipModels"
                   @select-vendor="onSelectVendor"
                   @close-vendor="onCloseVendorForm"
                   :vendorsList="vendorsList">
 
           </vendors-table>
-          <md-card-actions md-alignment="space-between">
+          <md-card-actions md-alignment="space-between" v-if="pagination.limit < pagination.total">
             <div class="">
               <p class="card-category">Showing {{ pagination.from }} to {{ pagination.limit < pagination.total ? pagination.limit : pagination.total }} of {{ pagination.total }} records</p>
             </div>
