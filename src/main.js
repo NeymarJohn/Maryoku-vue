@@ -18,6 +18,7 @@ import VuePhoneNumberInput from 'vue-phone-number-input';
 import VueGmaps from 'vue-gmaps'
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import VTooltip from 'v-tooltip';
+import VueGtm from 'vue-gtm';
 
 // router setup
 import routes from "./router/routes";
@@ -86,6 +87,14 @@ Vue.use(vSelectMenu, { language: "en"});
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
 Vue.use(VueFractionGrid);
 Vue.component('vue-phone-number-input', VuePhoneNumberInput);
+
+Vue.use(VueGtm, {
+  id: 'GTM-5FH68TF', // Your GTM ID
+  enabled: true, // defaults to true. Plugin can be disabled by setting this to false for Ex: enabled: !!GDPR_Cookie (optional)
+  debug: true, // Whether or not display console logs debugs (optional)
+  vueRouter: router, // Pass the router instance to automatically sync with router (optional)
+  ignoredViews: [] // If router, you can exclude some routes name (case insensitive) (optional)
+});
 
 Model.$http = axios;
 

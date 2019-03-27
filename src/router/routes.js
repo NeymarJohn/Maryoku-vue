@@ -250,25 +250,25 @@ let authPages = {
       path: "/signin",
       name: "SignIn",
       component: SignInSignUp,
-      meta: {auth: false}
+      meta: {auth: false, gtm: "SignIn"}
     },
     {
       path: "/signout",
       name: "SignOut",
       component: SignOut,
-      meta: {auth: false, title: 'Sign Out'}
+      meta: {auth: false, title: 'Sign Out', gtm: "SignOut"}
     },
     {
       path: "/get-started",
       name: "GetStarted",
       component: Onboarding,
-      meta: {auth: false, title: 'Get Started'}
+      meta: {auth: false, title: 'Get Started', gtm: "GetStarted"}
     },
     {
       path: "/signedin",
       name: "SignedIn",
       component: SignedIn,
-      meta: {auth: false, title: 'Signed In'}
+      meta: {auth: false, title: 'Signed In', gtm: "SignedIn"}
     }
   ]
 };
@@ -281,19 +281,21 @@ let appPages = {
     {
       path: "/me",
       name: "Me",
-      component: Me
+      component: Me,
+      meta: {gtm: "Me"}
     },
     {
       path: "/profile",
       name: "Profile",
-      component: Profile
+      component: Profile,
+      meta: {gtm: "Profile"}
     },
     {
       path: "/company",
       name: "MyCompany",
       component: MyCompanyNew,
       /*redirect: "/my-company/dashboard",*/
-      meta: {title: "Company"},
+      meta: {title: "Company", gtm: "MyCompany"},
       /*children: [
         {
           path: 'dashboard',
@@ -330,7 +332,8 @@ let appPages = {
     {
       path: "/team",
       name: "Team",
-      component: Team
+      component: Team,
+      meta: {gtm: "Team"}
     },
     {
       path: "/community",
@@ -351,7 +354,7 @@ let appPages = {
       path: "/events",
       name: "Events",
       component: Events,
-      meta: {title: 'Our Events'},
+      meta: {title: 'Our Events', gtm: "Events"},
     },
     {
       path: "/events/proposal",
@@ -369,13 +372,13 @@ let appPages = {
       path: "/events/:id",
       name: "ShowEvent",
       component: EventDetails,
-      meta: {title: 'Event Details'},
+      meta: {title: 'Event Details', gtm: "Event Details"},
     },
     {
       path: "/events/:id/edit",
       name: "EditEvent",
       component: CurrentEvents,
-      meta: {title: 'Current Event'},
+      meta: {title: 'Current Event', gtm: "Event Edit"},
     },
     {
       path: "/yearly-plan",
@@ -387,24 +390,25 @@ let appPages = {
       path: "/planner/:year/:month",
       name: "AnnualPlannerYearMonth",
       component: AnnualPlanner,
-      meta: {title: "Planner"}
+      meta: {title: "Planner", gtm: "Planner"}
     },
     {
       path: "/planner/:year",
       name: "AnnualPlannerYEar",
       component: AnnualPlanner,
-      meta: {title: "Planner"}
+      meta: {title: "Planner", gtm: "Planner"}
     },
     {
       path: "/planner",
       name: "AnnualPlanner",
       component: AnnualPlanner,
-      meta: {title: "Planner"}
+      meta: {title: "Planner", gtm: "Planner"}
     },
     {
       path: "/vendors",
       name: "Vendors",
-      component: Vendors
+      component: Vendors,
+      meta: {gtm: "Vendors"}
     },
     {
       path: "/import-vendors",
@@ -471,7 +475,8 @@ const routes = [
   {
     path: "/",
     redirect: "/company",
-    name: "Root"
+    name: "Root",
+    meta: {gtm : "Root"}
   },
   /*componentsMenu,
   formsMenu,
