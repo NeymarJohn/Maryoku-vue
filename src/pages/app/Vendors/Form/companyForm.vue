@@ -7,128 +7,56 @@
                 </div>
                 <h4 class="title2">{{selected_vendor.vendorDisplayName}}’s Company</h4>
                 <md-card-actions md-alignment="right">
-                    <md-button v-if="creation_mode" class="md-success md-sm" @click="addVendor" >Create</md-button>
-                    <md-button v-else-if="!creation_mode" class="md-info md-sm" @click="saveVendor">Save</md-button>
+                    <md-button class="md-info md-sm" @click="saveVendor">Save</md-button>
                 </md-card-actions>
             </md-card-header>
 
             <md-card-content class="md-layout">
                 <div class="md-layout-item md-size-100">
-                    <md-field  :class="[
-                          {'md-valid': !errors.has('vendorDisplayName') && selected_vendor.vendorDisplayName},
-                          {'md-error': errors.has('vendorDisplayName')}]">
+                    <md-field>
                         <label>Vendor Name</label>
-                        <md-input
-                                v-model="selected_vendor.vendorDisplayName"
-                                type="text"
-                                required
-                                data-vv-name="vendorDisplayName"
-                                name="vendorDisplayName"
-                                v-validate="modelValidations.vendorDisplayName"
-                        ></md-input>
-                        <slide-y-down-transition>
-                            <md-icon class="error" v-show="errors.has('vendorDisplayName')">close</md-icon>
-                        </slide-y-down-transition>
-                        <slide-y-down-transition>
-                            <md-icon class="success" v-show="!errors.has('vendorDisplayName') && selected_vendor.vendorDisplayName">done</md-icon>
-                        </slide-y-down-transition>
-
+                        <md-input v-model="selected_vendor.vendorDisplayName" type="text"></md-input>
                     </md-field>
                 </div>
 
                 <div class="md-layout-item md-size-50">
-                    <md-field :class="[
-                          {'md-valid': !errors.has('vendorWebsite') && selected_vendor.vendorWebsite},
-                          {'md-error': errors.has('vendorWebsite')}]">
+                    <md-field>
                         <label>Website</label>
-                        <md-input v-model="selected_vendor.vendorWebsite"
-                                  type="text"
-                                  required
-                                  data-vv-name="vendorWebsite"
-                                  name="vendorWebsite"
-                                  v-validate="modelValidations.vendorWebsite"></md-input>
-
-                        <slide-y-down-transition>
-                            <md-icon class="error" v-show="errors.has('vendorWebsite')">close</md-icon>
-                        </slide-y-down-transition>
-                        <slide-y-down-transition>
-                            <md-icon class="success" v-show="!errors.has('vendorWebsite') && selected_vendor.vendorWebsite">done</md-icon>
-                        </slide-y-down-transition>
-                    </md-field>
-                </div>
-
-                <div class="md-layout-item md-size-50">
-                    <md-field :class="[
-                          {'md-valid': !errors.has('vendorMainEmail') && selected_vendor.vendorMainEmail},
-                          {'md-error': errors.has('vendorMainEmail')}]">
-                        <label>Email</label>
-                        <md-input v-model="selected_vendor.vendorMainEmail"
-                                  type="email"
-                                  required
-                                  data-vv-name="vendorMainEmail"
-                                  name="vendorMainEmail"
-                                  v-validate="modelValidations.vendorMainEmail"></md-input>
-                        <slide-y-down-transition>
-                            <md-icon class="error" v-show="errors.has('vendorMainEmail')">close</md-icon>
-                        </slide-y-down-transition>
-                        <slide-y-down-transition>
-                            <md-icon class="success" v-show="!errors.has('vendorMainEmail') && selected_vendor.vendorMainEmail">done</md-icon>
-                        </slide-y-down-transition>
-                    </md-field>
-                </div>
-
-                <div class="md-layout-item md-size-50">
-                    <md-field :class="[
-                          {'md-valid': !errors.has('vendorAddressLine1') && selected_vendor.vendorAddressLine1},
-                          {'md-error': errors.has('vendorAddressLine1')}]">
-                        <label>Address</label>
-                        <md-input v-model="selected_vendor.vendorAddressLine1"
-                                  type="email"
-                                  required
-                                  data-vv-name="vendorAddressLine1"
-                                  name="vendorAddressLine1"
-                                  v-validate="modelValidations.vendorAddressLine1"></md-input>
-                        <slide-y-down-transition>
-                            <md-icon class="error" v-show="errors.has('vendorAddressLine1')">close</md-icon>
-                        </slide-y-down-transition>
-                        <slide-y-down-transition>
-                            <md-icon class="success" v-show="!errors.has('vendorAddressLine1') && selected_vendor.vendorAddressLine1">done</md-icon>
-                        </slide-y-down-transition>
-                    </md-field>
-
-                </div>
-
-                <div  class="md-layout-item md-size-50">
-                    <md-field :class="[
-                    {'md-valid': !errors.has('vendorMainPhoneNumber') && selected_vendor.vendorMainPhoneNumber},
-                    {'md-error': errors.has('vendorMainPhoneNumber')}]">
-                        <label>Phone Number</label>
-                        <md-input
-                                  v-model="selected_vendor.vendorMainPhoneNumber"
-                                  type="number"
-                                  required
-                                  data-vv-name="vendorMainPhoneNumber"
-                                  name="vendorMainPhoneNumber"
-                                  v-validate="modelValidations.vendorMainPhoneNumber"></md-input>
-                        <slide-y-down-transition>
-                            <md-icon class="error" v-show="errors.has('vendorMainPhoneNumber')">close</md-icon>
-                        </slide-y-down-transition>
-                        <slide-y-down-transition>
-                            <md-icon class="success" v-show="!errors.has('vendorMainPhoneNumber') && selected_vendor.vendorMainPhoneNumber">done</md-icon>
-                        </slide-y-down-transition>
+                        <md-input v-model="selected_vendor.vendorWebsite" type="text"></md-input>
                     </md-field>
                 </div>
 
                 <div class="md-layout-item md-size-50">
                     <md-field >
+                        <label>Email</label>
+                        <md-input v-model="selected_vendor.vendorMainEmail" type="email"></md-input>
+                    </md-field>
+                </div>
+
+                <div class="md-layout-item md-size-50">
+                    <md-field>
+                        <label>Address</label>
+                        <md-input v-model="selected_vendor.vendorAddressLine1" type="text"></md-input>
+                    </md-field>
+
+                </div>
+
+                <div  class="md-layout-item md-size-50">
+                    <md-field>
+                        <label>Phone Number</label>
+                        <md-input v-model="selected_vendor.vendorMainPhoneNumber" type="text"></md-input>
+                    </md-field>
+                </div>
+
+                <div class="md-layout-item md-size-50">
+                    <md-field>
                         <label for="category">Category</label>
                         <md-select v-model="selected_vendor.vendorCategory" name="select">
                             <md-option v-for="(option, index) in vendorCategory"  :key="index"  :value="option.id">{{ option.value }}</md-option>
                         </md-select>
-
                     </md-field>
                 </div>
-                <div class="md-layout-item md-size-50" v-if="selected_vendor.vendorTagging">
+                <div class="md-layout-item md-size-50">
                     <md-field>
                         <md-chips v-model="selected_vendor.vendorTagging" name="tagging" id="tagging" md-placeholder="Tagging" md-check-duplicated></md-chips>
                     </md-field>
@@ -176,7 +104,7 @@
                 <div class="md-layout-item md-size-100">
 
                         <label>Attachments</label>
-                        <div v-for="(attachment , index) in selected_vendor.vendorAttachments" :key="index" class="md-layout-item md-size-100 contact-person-list">
+                        <div v-for="(attachment , index) in vendorAttachments" :key="index" class="md-layout-item md-size-100 contact-person-list">
                             <md-field>
                                 <md-file v-model="attachment.path" />
                                 <div class="delete-item" @click="deleteAttachmentItem(index)">
@@ -200,23 +128,17 @@
 
     import Vue from 'vue';
     import Vendors from "@/models/Vendors";
-    import VendorCategories from "@/models/VendorCategories";
     import swal from "sweetalert2";
-    import {SlideYDownTransition} from "vue2-transitions";
 
     export default {
         components: {
-            SlideYDownTransition
+
 
         },
         props: {
             selected_vendor : {
                 type : Object,
                 default : {}
-            },
-            creation_mode : {
-                type : Boolean,
-                default : false
             }
 
         },
@@ -231,26 +153,11 @@
               console.log(error)
           });
 
+
+
+
+
       },
-        beforeUpdate(){
-
-            if ( !this.selected_vendor.vendorContactPerson ) {
-                this.selected_vendor.vendorContactPerson=[{
-                    name : null,
-                    email : null,
-                    phone_number : null
-                }]
-            }
-
-            if ( !this.selected_vendor.vendorAttachments ) {
-                this.selected_vendor.vendorAttachments=[];
-            }
-
-
-            if ( !this.selected_vendor.vendorTagging ) {
-                this.selected_vendor.vendorTagging=[];
-            }
-        },
         mounted() {
 
 
@@ -260,56 +167,45 @@
                 company : {},
                 vendorCategory: [],
                 contactPersonList : [],
-                vendorAttachments : [],
-                modelValidations: {
-                    vendorDisplayName: {
-                        required: true,
-                        min: 5
-                    },
-                    vendorAddressLine1: {
-                        required: true,
-                        min: 5
-                    },
-                    vendorMainEmail: {
-                        required: true,
-                        email: true
-                    },
-                    vendorWebsite: {
-                        required: true,
-                        min: 5
-                    },
-                    vendorMainPhoneNumber: {
-                        required: true,
-                        min: 5
-                    }
-                }
+                vendorAttachments : []
             }
         },
         methods: {
             /**
              * Modify selected vendor from vendors list
              */
-            async saveVendor() {
-                let vendor = await Vendors.find(this.selected_vendor.id);
+            saveVendor() {
+                swal({
+                    title: 'Are you sure that you want to edit this vendor?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Edit'
+                }).then(async (result) => {
+                    if (result.value) {
+                        let vendor = await Vendors.find(this.selected_vendor.id);
 
-                vendor.vendorDisplayName = this.selected_vendor.vendorDisplayName;
-                vendor.vendorWebsite = this.selected_vendor.vendorWebsite;
-                vendor.vendorMainEmail = this.selected_vendor.vendorMainEmail;
-                vendor.vendorAddressLine1 = this.selected_vendor.vendorAddressLine1;
-                vendor.vendorMainPhoneNumber = this.selected_vendor.vendorMainPhoneNumber;
-                vendor.vendorCategory = this.selected_vendor.vendorCategory;
-                vendor.vendorTagging = this.selected_vendor.vendorTagging;
-                vendor.vendorContactPerson = this.selected_vendor.vendorContactPerson;
-                vendor.vendorAttachments = this.selected_vendor.vendorAttachments;
-                vendor.save();
+                        vendor.vendorDisplayName = this.selected_vendor.vendorDisplayName;
+                        vendor.vendorWebsite = this.selected_vendor.vendorWebsite;
+                        vendor.vendorMainEmail = this.selected_vendor.vendorMainEmail;
+                        vendor.vendorAddressLine1 = this.selected_vendor.vendorAddressLine1;
+                        vendor.vendorMainPhoneNumber = this.selected_vendor.vendorMainPhoneNumber;
+                        vendor.vendorCategory = this.selected_vendor.vendorCategory;
+                        vendor.vendorTagging = this.selected_vendor.vendorTagging;
+                        vendor.vendorContactPerson = this.contactPersonList;
+                        vendor.vendorAttachments = this.selected_vendor.vendorAttachments;
+                        vendor.save();
 
-                this.$notify(
-                    {
-                        message: 'Vendor Updated successfully!',
-                        horizontalAlign: 'center',
-                        verticalAlign: 'top',
-                        type: 'success'
-                    })
+                        this.$notify(
+                            {
+                                message: 'Vendor Updated successfully!',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'success'
+                            })
+                    }
+                })
 
 
             },
@@ -317,13 +213,11 @@
              * Add new contact person to the selected vendor
              */
             addContactPerson() {
-                console.log('i am here');
                 this.selected_vendor.vendorContactPerson.push({
                     name : null,
                     email : null,
                     phone_number : null
                 });
-                this.$forceUpdate();
 
             },
             /**
@@ -337,45 +231,17 @@
              * Add new attachment file to the selected vendor
              */
             addAttachment() {
-                this.selected_vendor.vendorAttachments.push({
+                this.vendorAttachments.push({
                     path : null
                 });
-                this.$forceUpdate();
             },
             /**
              * Delete item from attachments list
              * @param index
              */
             deleteAttachmentItem(index) {
-                this.selected_vendor.vendorAttachments.splice(index,1);
+                this.vendorAttachments.splice(index,1);
             },
-            async addVendor() {
-                this.$validator.validateAll().then(res => {
-
-                    if(res){
-                        let vendor = new Vendors({});
-
-                        vendor.attach(this.selected_vendor).then(() => {
-                            this.$emit('vendorCreated')
-                            this.$notify(
-                                {
-                                    message: 'Vendor created successfully!',
-                                    horizontalAlign: 'center',
-                                    verticalAlign: 'top',
-                                    type: 'success'
-                                })
-
-                        });
-
-
-                    }else {
-                        this.$emit("on-validated", res);
-                        return res;
-                    }
-
-                });
-            }
-
         }
     };
 </script>

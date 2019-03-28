@@ -2,14 +2,16 @@
     <div>
         <md-card-content>
             <md-table v-model="vendorsList" table-header-color="orange" class="vendors-table">
-                <md-table-row slot="md-table-row" slot-scope="{ item }" :key="vendorsList.indexOf(item)"   :class="{selected:item.id == selectedVendor}" class="vendors-table_item">
-                    <md-table-cell md-label="Vendor Name"  > {{ item.vendorDisplayName }}</md-table-cell>
+                <md-table-row slot="md-table-row" slot-scope="{ item }" :key="item.id" @click="selectVendor(item)" :class="{selected:item.id == selectedVendor}" class="vendors-table_item">
+                    <md-table-cell md-label="Vendor Name">{{ item.vendorDisplayName }}</md-table-cell>
                     <md-table-cell md-label="Ranking">
-                        <label class="star-rating__star labeled"
+                        <label class="star-rating__star"
                                v-for="rating in ratings"
+                               @click="setRanking(item.id,rating)"
                                :class="{'is-selected' : ((item.rank >= rating) && item.rank != null)}"
                                >
-                            ★</label>
+                            <input class="star-rating star-rating__checkbox" type="radio" :value="rating" :name="`market_ranking_`+item.id"
+                                   v-model="item.rank">★</label>
                     </md-table-cell>
                     <md-table-cell md-label="People">
                         {{item.voters}}
@@ -18,10 +20,7 @@
                         {{item.avgScore}}%
                     </md-table-cell>
                     <md-table-cell class="vendors-table_item-actions">
-                        <md-button class="md-button md-success md-sm md-theme-default auto-width md-just-icon" @click="selectVendor(item)">
-                            <md-icon>edit</md-icon>
-                        </md-button>
-                        <md-button class="md-button md-info md-sm md-theme-default auto-width md-just-icon" @click="openPopover(vendorsList.indexOf(item))">
+                        <md-button class="md-button md-info md-sm md-theme-default auto-width md-just-icon" @click="openPopover(index)">
                           <md-icon>star</md-icon>
                         </md-button>
                         <md-button class="md-button md-rose md-sm md-theme-default auto-width" @click.native="deleteVendor(item.id)">
@@ -31,11 +30,11 @@
 
 
 
-                    <!-- Ranking Popup -->
+
                     <div class="popup-box"
                          v-click-outside="closeModal"
-                         v-if="tooltipModels[vendorsList.indexOf(item)] && tooltipModels[vendorsList.indexOf(item)].value && (openPopup)"
-                         :md-active.sync="tooltipModels[vendorsList.indexOf(item)] ? tooltipModels[vendorsList.indexOf(item)].value : tooltipModels[vendorsList.indexOf(item)]"
+                         v-if="tooltipModels[index] && tooltipModels[index].value && (openPopup)"
+                         :md-active.sync="tooltipModels[index] ? tooltipModels[index].value : tooltipModels[index]"
                          md-direction="left">
                         <div class="header-position">
                             <h3 class="title">Ranking</h3>
@@ -50,7 +49,6 @@
                                        v-model="item.rank">★</label>
                         </div>
                     </div>
-                    <!-- ./Ranking Popup -->
 
 
                 </md-table-row>
@@ -108,29 +106,12 @@
               tag: ' ',
               name: 'Direction',
               ratings: [1, 2, 3, 4, 5],
-              index : 0,
+              index : 1,
               selectedVendor: undefined,
 
             }
         },
-        mounted(){
-
-        },
         methods: {
-        async setRanking(id,ranking) {
-            let vendor = await Vendors.find(id);
-            vendor.rank = ranking;
-            vendor.save();
-
-            this.$notify(
-                {
-                    message: 'Vendor Ranked successfully!',
-                    horizontalAlign: 'center',
-                    verticalAlign: 'top',
-                    type: 'success'
-                })
-
-        },
           closeModal(){
             this.openPopup = false;
           },
@@ -189,9 +170,18 @@
                    _self.$emit('close-vendor',{});
                }
 
-           },
-            resetSelectedVendor(data){
-               this.$set(this,'selectedVendor',data);
+           }
+           , async setRanking(id,ranking) {
+                let vendor = await Vendors.find(id);
+                vendor.rank = ranking;
+                vendor.save();
+                console.log(vendor);
+                this.$notify({
+                    message: 'Vendor Ranked successfully!',
+                    horizontalAlign: 'center',
+                    verticalAlign: 'top',
+                    type: 'success'
+                })
             }
         }
     };
@@ -267,7 +257,7 @@
         color: #ABABAB;
         transition: color .2s ease-out;
 
-        &:not(.labeled):hover {
+        &:hover {
             cursor: pointer;
         }
 
@@ -319,27 +309,8 @@
         z-index: 9999;
         width: 360px;
         position: absolute;
-        border-radius: 5px;
         background: white;
         border:1px solid rgba(0, 0, 0, 0.14);
-        padding : 1em;
-
-        .header-position {
-            padding : 0;
-            margin-bottom : 0.5em;
-            h3{
-                margin : 0;
-                padding : 0;
-            }
-            .btn-position {
-                top  : 0;
-                right:0;
-            }
-        }
-
-        .md-layout-item {
-            padding : 0;
-        }
     }
 .clearfix {
     clear: both;
