@@ -34,23 +34,16 @@
   
               <div class="img-circle">
                 <template>
-                  <div class="md-layout">
-                   <div class="md-layout-item md-size-95"  style="padding-right: 0px;padding-left: 0px;">
                       <div class="image-container">
-                        <img style ="width:100px; height: 100px" src="static/img/placeholder.jpg" v-if="imageUrl === null "> 
+                        <img style ="width:100px; height: 100px" src="static/img/placeholder.jpg" v-if="imageUrl == null "> 
                         <img style ="width:100px; height: 100px" :src="imageUrl" v-if="imageUrl !=null">
                         </div> <!--profile-picture.png-->
-                   </div>
-                   <div class="md-layout-item md-size-5 hover-clear" style="padding-right: 0px;padding-left: 0px;" @click="showRemoveConfirmDialog">
-                       <md-icon style="font-size: 15px !important;" v-if="imageUrl !=null">clear</md-icon>
-                   </div>
-                  </div> 
                 </template>
                 </div>
 
                 <div >
                   <button  class="profile-button" @click="uploadImage"><span >Change Profile Picture</span></button>
-                  <input type="file" style="display: none;" ref="inputFile" accept="image/gif, image/jpg, image/png" @change="onFilePicked">
+                  <input type="file" style="display: none;" ref="inputFile" accept="image/*" @change="onFilePicked">
                 </div>
               </div>
               <div class="md-layout-item">
@@ -119,19 +112,6 @@
     </div>
 
   <personal-information-modal @closePersonalInformationModal="hidePersonalInfoModal" :showModal="flag"></personal-information-modal>
-  <md-dialog-confirm
-        :md-active.sync="dialogConfirmFlag"
-        md-title="remove profile picture"
-        :md-content="dialogMessage"
-        md-confirm-text="Agree"
-        md-cancel-text="Disagree"
-        @md-cancel="onCancel"
-        @md-confirm="confirmDelete" />
-  <md-dialog-alert
-      :md-active.sync="alretExceedPictureSize"
-      md-content="Your Profile Picture should be less 500K !"
-      md-confirm-text="ok !" />
-      
   </div>
 </template>
 
@@ -143,21 +123,15 @@
       StatsCard,
       personalInformationModal
     },
-    mounted(){
-      this.imageUrl = userInfo.me.pictureUrl 
-    },
     props: {
       userInfo: Object
     },
-   
+    mounted() {},
     data() {
       return {
         imageUrl: null,
         personalModalFlag: false,
-        flag: false,
-        dialogConfirmFlag:false,
-        dialogMessage:"",
-        alretExceedPictureSize:false
+        flag: false
       }
     },
     methods: {
@@ -171,16 +145,11 @@
         if (!file.length) {
           return;
         }
-        if (file[0].size <= 500000){
-          let url = URL.createObjectURL(file[0]);
-          this.imageUrl = url
-        
+        let url = URL.createObjectURL(file[0]);
+        this.imageUrl = url
         const formData = new FormData();
         formData.append("images", file[0], file[0].name) // TODO :: send this object once we have api for userPorfile photo
-      }else{
-        this.alretExceedPictureSize = true
-      }
-
+  
       },
   
       hidePersonalInfoModal() {
@@ -192,19 +161,6 @@
       showPersonalModal(){
         
         this.flag = true
-      },
-
-      showRemoveConfirmDialog(){
-        this.dialogMessage="Are you sure you want delete profile picture ?"
-        this.dialogConfirmFlag =  true
-      },
-
-      confirmDelete(){
-        this.imageUrl = null
-        this.dialogConfirmFlag = false
-      },
-      onCancel(){
-        this.dialogConfirmFlag = false
       }
   
     }
@@ -261,9 +217,6 @@
     cursor: pointer;
   }
   
-  .hover-clear:hover{
-    cursor: pointer;
-  }
   .profile-button span {
     width: 141px;
     height: 14px;

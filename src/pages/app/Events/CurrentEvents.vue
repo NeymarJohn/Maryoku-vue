@@ -112,12 +112,15 @@
             </div>
         </md-card-content>
       </md-card>
-    </div> 
-   <div v-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
+    </div>
+      <div v-if="!currentTab" class="md-layout-item md-size-60 block-flex">
+          <event-building-blocks :event="event"></event-building-blocks>
+      </div>
+   <div v-else-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
       <event-blocks :event="event" :event-components="selectedComponents"></event-blocks>
     </div>
-    <div v-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
-     
+    <div v-else-if="selectedTab('proposals')" class="md-layout-item md-size-70 block-flex">
+        proposals
     </div>
   </div>
 </template>
@@ -139,12 +142,14 @@ import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
 import { AnimatedNumber } from "@/components";
 import Icon from "@/components/Icon/Icon.vue";
 import EventElements from './EventElements.vue'
-import EventBlocks from "./components/EventBlocks";
+import EventBlocks from "./components/NewEventBlocks";
+import EventBuildingBlocks from "./components/EventBuildingBlocks";
 
 
 export default {
   components: {
-    VueElementLoading,
+      EventBuildingBlocks,
+      VueElementLoading,
     ChartComponent,
     AnimatedNumber,
     Icon,
@@ -188,7 +193,11 @@ export default {
         }.bind(this));
     }, 
     selectTab(tab) {
-      this.currentTab = tab;
+      if ( this.currentTab === tab ) {
+          this.currentTab = null;
+      } else {
+          this.currentTab = tab
+      }
     },
     selectedTab(tab) {
       return this.currentTab === tab;

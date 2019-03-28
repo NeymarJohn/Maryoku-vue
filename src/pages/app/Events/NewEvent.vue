@@ -191,6 +191,22 @@
           this.buttonRowClass = val ? 'large-z-index' : '';
         }
       )
+
+
+        this.$store.state.eventData = {
+            id: null,
+            calendar: {id: null},
+            title: "Jamil",
+            eventStartMillis: null,
+            eventEndMillis: null,
+            eventType: null,
+            numberOfParticipants: null,
+            totalBudget: null,
+            status: null,
+            components: null,
+        }
+
+
     },
     beforeDestroy() {
       window.removeEventListener("resize", this.onResponsiveInverted);

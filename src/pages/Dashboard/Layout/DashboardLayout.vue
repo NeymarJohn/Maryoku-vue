@@ -22,14 +22,15 @@
         <sidebar-item :link="{name: 'Company', icon: 'fingerprint', path: '/company'}">
         </sidebar-item>
 
-        <sidebar-item :link="{name: 'Yearly Plan', icon: 'event', path: '/planner'}">
-        </sidebar-item>
-
         <!--<sidebar-item :link="{name: 'Yearly Planner', icon: 'calendar_today', path: '/yearly-plan'}">
         </sidebar-item>-->
 
-        <sidebar-item :link="{name: 'Event Planner', icon: 'local_play', path: '/events'}">
+        <sidebar-item :link="{name: 'Events', icon: 'local_play'}">
+          <sidebar-item :link="{name: 'Create Event', path: '/events/new'}" @click="routeToNewEvent()"></sidebar-item>
+          <sidebar-item :link="{name: 'Events List', path: '/events'}"></sidebar-item>
+          <sidebar-item :link="{name: 'Year Planner', path: '/planner'}"></sidebar-item>
         </sidebar-item>
+
 
         <sidebar-item :link="{name: 'Vendors List', icon: 'group', path: '/vendors'}">
         </sidebar-item>
@@ -206,7 +207,10 @@ export default {
       if (this.$sidebar.showSidebar) {
         this.$sidebar.displaySidebar(false);
       }
-    }
+    },
+      routeToNewEvent() {
+          this.$router.push({ path: `/events/new` });
+      }
   },
   mounted() {
     /*  NEET CODE REVIEW !!!!!!!!!!!!!!!!!!!!*/
