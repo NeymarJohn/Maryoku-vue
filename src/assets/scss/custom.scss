@@ -410,4 +410,17 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
   }
 }
-@import 'vue-image-lightbox/dist/vue-image-lightbox.min.css'
+@import 'vue-image-lightbox/dist/vue-image-lightbox.min.css';
+
+
+.md-switch-info {
+  &.md-checked {
+    .md-switch-thumb {
+      border: 1px solid #64b5f6 !important;
+    }
+
+    .md-switch-container {
+      background-color: #64b5f6 !important;
+    }
+  }
+}

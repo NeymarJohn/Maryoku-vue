@@ -6,11 +6,14 @@ import Me from "@/pages/app/Me.vue";
 import Profile from "@/pages/app/Profile/index.vue";
 import MyCompany from "@/pages/app/MyCompany/MyCompany.vue";
 import MyCompanyNew from "@/pages/app/MyCompany/MyCompanyNew.vue";
+import CompanyDashboard from "@/pages/app/CompanyDashboard/CompanyDashboard.vue";
+
 import MyCompanyDashboard from "@/pages/app/MyCompany/MyCompanyDashboard.vue";
 import MyCompanyBilling from "@/pages/app/MyCompany/MyCompanyBilling.vue";
 import MyCompanyApprovals from "@/pages/app/MyCompany/MyCompanyApprovals.vue";
 import MyCompanyProfile from "@/pages/app/MyCompany/MyCompanyProfile.vue";
 import MyCompanySettings from "@/pages/app/MyCompany/MyCompanySettings.vue";
+
 import Team from "@/pages/app/Team/Team.vue";
 import Community from "@/pages/app/Community.vue";
 import CommunityNew from "@/pages/app/Community/Community-new.vue";
@@ -292,42 +295,15 @@ let appPages = {
     },
     {
       path: "/company",
+      name: "CompanyDashboard",
+      component: CompanyDashboard,
+      meta: {title: "Company Dashboard", gtm: "CompanyDashboard"},
+    },
+    {
+      path: "/old-company",
       name: "MyCompany",
       component: MyCompanyNew,
-      /*redirect: "/my-company/dashboard",*/
-      meta: {title: "Company", gtm: "MyCompany"},
-      /*children: [
-        {
-          path: 'dashboard',
-          name: 'MyCompanyDashboard',
-          component: MyCompanyDashboard,
-          meta: {title: 'My Company / Dashboard'}
-        },
-        {
-          path: 'company-profile',
-          name: 'MyCompanyProfile',
-          component: MyCompanyProfile,
-          meta: {title: 'My Company / Company Profile'}
-        },
-        {
-          path: 'approvals',
-          name: 'MyCompanyApprovals',
-          component: MyCompanyApprovals,
-          meta: {title: 'My Company / Approvals Sign-Off'}
-        },
-        {
-          path: 'billing',
-          name: 'MyCompanyBilling',
-          component: MyCompanyBilling,
-          meta: {title: 'My Company / Billing'}
-        },
-        {
-          path: 'company-settings',
-          name: 'MyCompanySettings',
-          component: MyCompanySettings,
-          meta: {title: 'My Company / Settings'}
-        },
-      ]*/
+      meta: {title: "My Company", gtm: "MyCompany"},
     },
     {
       path: "/team",
