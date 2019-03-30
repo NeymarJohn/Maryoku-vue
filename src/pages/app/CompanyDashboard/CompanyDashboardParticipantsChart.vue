@@ -12,17 +12,17 @@
       <div class="filter"></div>
       <div class="bar-item">
         <h5 style="margin-bottom: 0; margin-top: 0; font-weight: 500;" >Company Training</h5>
-        <div class="text-gray" style="padding-bottom: 6px;">August 19, 2018 <small class="pull-right"><span class="black-color">198</span> / 231</small></div>
+        <div class="text-gray small" style="padding-bottom: 6px;">August 19, 2018 <span class="pull-right"><span class="black-color">198</span> / 231</span></div>
         <md-progress-bar class="md-info" style="min-height: 18px;" :md-value="(198/231)*100"></md-progress-bar>
       </div>
       <div class="bar-item">
         <h5 style="margin-bottom: 0; margin-top: 0; font-weight: 500;" >Outreach Program </h5>
-        <div class="text-gray" style="padding-bottom: 6px;">August 25, 2018 <small class="pull-right"><span class="black-color">422</span> / 500</small></div>
+        <div class="text-gray small" style="padding-bottom: 6px;">August 25, 2018 <span class="pull-right"><span class="black-color">422</span> / 500</span></div>
         <md-progress-bar class="md-info" style="min-height: 18px;" :md-value="(422/500)*100"></md-progress-bar>
       </div>
       <div class="bar-item">
         <h5 style="margin-bottom: 0; margin-top: 0; font-weight: 500;" >Development Workshop</h5>
-        <div class="text-gray" style="padding-bottom: 6px;">August 19, 2019 <small class="pull-right"><span class="black-color">59</span> / 60</small></div>
+        <div class="text-gray small" style="padding-bottom: 6px;">August 19, 2019 <span class="pull-right"><span class="black-color">59</span> / 60</span></div>
         <md-progress-bar class="md-info" style="min-height: 18px;" :md-value="(59/60)*100"></md-progress-bar>
       </div>
     </md-card-content>

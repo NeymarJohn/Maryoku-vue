@@ -5,6 +5,7 @@
     :chart-options="colouredLineChart.options"
     chart-type="Line"
     header-icon
+    :no-footer="!displayByYearOrMonth"
     chart-inside-content
     background-color="green">
     <template slot="chartInsideHeader">
@@ -13,12 +14,45 @@
       </div>
       <h3 class="title" >
         16 <small style="font-size: 0.95rem; color: #7c7c7c;">Events on 2019</small>
+        <md-switch class="md-switch-info pull-right text-right" style="padding: 0; margin: 12px;" v-model="displayByYearOrMonth" v-tooltip.bottom="'Click to view Events Distribution by Year or Month'">
+          Events by {{displayByYearOrMonth ? 'Month' : 'Year'}}
+        </md-switch>
       </h3>
     </template>
-    <template slot="footer">
-      <md-switch class="md-switch-info" v-model="displayByYearOrMonth" v-tooltip="'Click to view Events Distribution by Year or Month'">
-        Events by {{displayByYearOrMonth ? 'Month' : 'Year'}}
-      </md-switch>
+    <template slot="footer" style="justify-content: center !important;" >
+      <div class="md-layout">
+        <div class="md-layout-item md-size-50">
+          <md-field>
+            <label for="month">Month</label>
+            <md-select v-model="filterMonth" name="filterMonth" id="filterMonth">
+              <md-option value="January">January</md-option>
+              <md-option value="February">February</md-option>
+              <md-option value="March">March</md-option>
+              <md-option value="April">April</md-option>
+              <md-option value="May">May</md-option>
+              <md-option value="June">June</md-option>
+              <md-option value="July">July</md-option>
+              <md-option value="August">August</md-option>
+              <md-option value="September">September</md-option>
+              <md-option value="October">October</md-option>
+              <md-option value="November">November</md-option>
+              <md-option value="December">December</md-option>
+            </md-select>
+          </md-field>
+        </div>
+        <div class="md-layout-item md-size-50">
+          <md-field class="">
+            <label for="year">Year</label>
+            <md-select v-model="filterYear" name="filterYear" id="filterYear">
+              <md-option value="2019">2019</md-option>
+              <md-option value="2018">2018</md-option>
+              <md-option value="2017">2017</md-option>
+              <md-option value="2016">2016</md-option>
+              <md-option value="2015">2015</md-option>
+            </md-select>
+          </md-field>
+        </div>
+      </div>
     </template>
   </chart-card>
 </template>
@@ -38,6 +72,8 @@
       return {
         auth: auth,
         displayByYearOrMonth: false,
+        filterYear: 2017,
+        filterMonth: "March",
         colouredLineChart: {
           data: {
             labels: [
