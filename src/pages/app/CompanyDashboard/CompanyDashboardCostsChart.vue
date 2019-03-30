@@ -12,9 +12,9 @@
       <div class="card-icon">
         <md-icon>timeline</md-icon>
       </div>
-      <h4 class="title" style="padding-top: 6px;">
+      <h5 class="title" style="padding-top: 6px;">
         Average Event Cost per Employee
-      </h4>
+      </h5>
     </template>
   </chart-card>
 </template>

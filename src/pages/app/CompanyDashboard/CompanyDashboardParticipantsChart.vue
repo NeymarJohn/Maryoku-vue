@@ -4,9 +4,25 @@
       <div class="card-icon">
         <md-icon>timeline</md-icon>
       </div>
-      <h4 class="title" style="padding-top: 6px;">
-        Average Number of Participants per Event
-      </h4>
+      <h5 class="title" style="padding-top: 6px;">
+        Participants per Event
+        <md-field class="pull-right" style="max-width: 120px; margin: 0; border: none;" md-inline>
+          <md-select v-model="filterMonth" name="filterMonth" id="filterMonth">
+            <md-option value="January">January</md-option>
+            <md-option value="February">February</md-option>
+            <md-option value="March">March</md-option>
+            <md-option value="April">April</md-option>
+            <md-option value="May">May</md-option>
+            <md-option value="June">June</md-option>
+            <md-option value="July">July</md-option>
+            <md-option value="August">August</md-option>
+            <md-option value="September">September</md-option>
+            <md-option value="October">October</md-option>
+            <md-option value="November">November</md-option>
+            <md-option value="December">December</md-option>
+          </md-select>
+        </md-field>
+      </h5>
     </md-card-header>
     <md-card-content>
       <div class="filter"></div>
