@@ -297,7 +297,6 @@
       this.$store.registerModule('yearlyPlanVuex', yearlyPlanVuexModule);
     },
     mounted(){
-      console.log("mounted !");
       this.ready = false;
       this.filtersChanged = false;
       //this.$store.state.calendarId = this.auth.user.defaultCalendarId;

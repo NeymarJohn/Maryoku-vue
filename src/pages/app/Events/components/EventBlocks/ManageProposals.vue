@@ -1,62 +1,49 @@
 <template>
-       <div class="manage-proposals md-layout">
-        <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
-           <div class="md-layout-item md-size-100">
-               <md-button class="md-button md-info md-theme-default auto-width" @click="goBack">
-                   Go back to Building Blocks
-               </md-button>
-           </div>
+    <md-card>
+        <md-card-header class="md-card-header-text md-card-header-warning">
 
-           <div class="md-layout-item md-size-40">
-               <md-card >
-                   <md-card-header class="md-card-header-icon md-card-header-rose">
-                       <div class="card-icon">
-                           <md-icon>mail_outline</md-icon>
-                       </div>
-                       <h4 class="title2">Catering</h4>
-                   </md-card-header>
+            <div class="card-text">
+                <h4 class="title" style="color: white;">Manage Proposals</h4>
+                <div class="ct-label">Applicable vendors from your list</div>
+            </div>
 
-                   <md-card-content class="md-layout blocks-list">
 
-                       <div class="blocks-list_item md-layout" v-for="(block,index) in eventBlocks">
-                           <div class="md-layout-item md-size-100">
-                               <md-field >
-                                   <label>Requirement Description</label>
-                                   <md-input
-                                           v-model="block.req_desc"
-                                           type="text"
-                                   ></md-input>
-                               </md-field>
-                           </div>
+        </md-card-header>
 
-                           <div class="md-layout-item md-size-50" >
-                               <md-field >
-                                   <label >Priority</label>
-                                   <md-select v-model="block.priority" name="select">
-                                       <md-option v-for="(option, index) in prioritisList"  :key="index"  :value="option.value">{{ option.value }}</md-option>
-                                   </md-select>
-                               </md-field>
-                           </div>
+        <md-card-content style="min-height: 60px;">
 
-                           <div class="md-layout-item md-size-50 block-actions">
-                               <md-button  class="md-info md-sm"  >Edit</md-button>
-                           </div>
-                       </div>
+            <md-table  v-model="proposals" table-header-color="orange" >
+                <md-table-row slot="md-table-row" slot-scope="{ item }" :key="proposals.indexOf(item)"   >
+                    <md-table-cell md-label="Vendor Name"  > {{ item.title }}</md-table-cell>
+                    <md-table-cell md-label="People">
+                        ${{item.price}}
+                    </md-table-cell>
+                    <md-table-cell md-label="Average Score">
+                        {{item.requirements}}%
+                    </md-table-cell>
+                    <md-table-cell class="vendors-table_item-actions">
+                        <md-button class="md-button md-info md-sm md-theme-default auto-width md-just-icon" >
+                            VIEW
+                        </md-button>
+                        <md-button class="md-button md-info md-sm md-theme-default auto-width md-just-icon">
+                            SET AS WINNING PROPOSAL
+                        </md-button>
+                    </md-table-cell>
+                </md-table-row>
+            </md-table>
 
-                   </md-card-content>
 
-                   <md-card-actions md-alignment="right">
-                       <md-button class="md-info"  @click="addBlock">Add Field</md-button>
-                       <md-button class="md-info" >Save</md-button>
-                   </md-card-actions>
-               </md-card>
-           </div>
+        </md-card-content>
 
-           <div class="md-layout-item md-size-60">
-                <manage-proposals></manage-proposals>
-           </div>
-
-      </div>
+        <md-card-actions md-alignment="right" >
+            <md-button class="md-info" >
+                Compare proposals
+            </md-button>
+            <md-button class="md-info">
+                Give me proposals
+            </md-button>
+        </md-card-actions>
+    </md-card>
 </template>
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
@@ -64,13 +51,11 @@
   import EventComponent from "@/models/EventComponent";
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
-  import ManageProposals from './EventBlocks/ManageProposals.vue';
 
   export default {
     name: 'event-blocks',
     components: {
         VueElementLoading,
-        ManageProposals
     },
     props: {
 
@@ -78,34 +63,20 @@
     data: () => ({
         auth: auth,
         isLoading:true,
-        eventBlocks : [
+        proposals : [
             {
-                req_desc: "Set-up, service and clean up",
-                priority : "Preferred"
-            }
-        ],
-        prioritisList : [
-            {
-                label : 'Preferred',
-                value : 'Preferred'
+                title : 'Dakota Rice',
+                price : '1,901',
+                requirements : 98
             },
             {
-                label : 'Nice to have',
-                value : 'Nice to have'
+                title : 'Dakota Rice',
+                price : '1,901',
+                requirements : 98
             }
         ]
     }),
     methods: {
-
-        addBlock(){
-            this.eventBlocks.push({
-                req_desc: "",
-                priority : ""
-            })
-        },
-        goBack() {
-            this.$emit('go-to-building-blocks',{})
-        }
 
 
     },

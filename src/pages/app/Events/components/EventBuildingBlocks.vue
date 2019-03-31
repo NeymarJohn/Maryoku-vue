@@ -44,7 +44,7 @@
                         </div>
                     </md-card-content>
 
-                    <md-card-actions md-alignment="center">
+                    <md-card-actions md-alignment="right">
                         <md-button>Manage Personals</md-button>
                     </md-card-actions>
                 </md-card>

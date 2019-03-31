@@ -26,7 +26,15 @@
         </sidebar-item>-->
 
         <sidebar-item :link="{name: 'Events', icon: 'local_play'}">
-          <sidebar-item :link="{name: 'Create Event', path: '/events/new'}" @click="routeToNewEvent()"></sidebar-item>
+
+          <li class="nav-item router-link-active">
+            <md-button class="md-button button-event-creatig " @click="openEventModal()">
+              <md-icon>event</md-icon>
+              <span>Create New Event</span>
+            </md-button>
+          </li>
+
+          <!--<sidebar-item :link="{name: 'Create Event'}" @click="openEventModal()"></sidebar-item>-->
           <sidebar-item :link="{name: 'Events List', path: '/events'}"></sidebar-item>
           <sidebar-item :link="{name: 'Year Planner', path: '/planner'}"></sidebar-item>
         </sidebar-item>
@@ -166,6 +174,10 @@
 /* eslint-disable no-new */
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
+import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+
+import EventModal from "../../app/Events/EventModal/";
+import EventPlannerVuexModule from '../../app/Events/EventPlanner.vuex';
 
 function hasElement(className) {
   return document.getElementsByClassName(className).length > 0;
@@ -203,15 +215,27 @@ export default {
     }
   },
   methods: {
+      ...mapMutations("EventPlannerVuex", [
+          "setEventModal",
+          "setEditMode",
+          "setModalSubmitTitle",
+          "setEventModalAndEventData",
+          "setNumberOfParticipants"
+      ]),
     toggleSidebar() {
       if (this.$sidebar.showSidebar) {
         this.$sidebar.displaySidebar(false);
       }
-    },
-      routeToNewEvent() {
-          this.$router.push({ path: `/events/new` });
-      }
+    },openEventModal() {
+          console.log('i am here');
+          this.setEventModal({ showModal: true });
+          this.setModalSubmitTitle("Save");
+          this.setEditMode({ editMode: false });
+      },
   },
+    created(){
+        this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
+    },
   mounted() {
     /*  NEET CODE REVIEW !!!!!!!!!!!!!!!!!!!!*/
 
@@ -229,7 +253,12 @@ export default {
     //     docClasses.add("perfect-scrollbar-off");
     //   }
     // });
-  }
+
+      console.log('state ',this.$store.state);
+  },
+    computed:{
+
+    }
 };
 </script>
 <style lang="scss">

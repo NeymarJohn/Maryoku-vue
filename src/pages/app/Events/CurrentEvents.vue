@@ -114,7 +114,7 @@
       </md-card>
     </div>
       <div v-if="!currentTab" class="md-layout-item md-size-60 block-flex">
-          <event-building-blocks :event="event"></event-building-blocks>
+          <event-building-blocks  @go-to-building-blocks="resetTab"></event-building-blocks>
       </div>
    <div v-else-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
       <event-blocks :event="event" :event-components="selectedComponents"></event-blocks>
@@ -201,7 +201,12 @@ export default {
     },
     selectedTab(tab) {
       return this.currentTab === tab;
-    }
+    },
+      resetTab () {
+            console.log('i am herererer');
+          this.currentTab = null;
+
+      }
   },
   computed: {
     ...mapGetters({

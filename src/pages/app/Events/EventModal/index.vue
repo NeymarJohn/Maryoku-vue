@@ -527,9 +527,14 @@
           edittable: true,
           participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         }).for(_calendar).save().then(response => {
+            console.log('new event => ' , response);
+            console.log('new event => ' , response.id);
             this.$parent.isLoading = false;
             this.closeModal();
-            this.$emit("refresh-events");
+            //this.$emit("refresh-events");
+
+            this.$router.push({ path: `/events/`+response.id +`/edit` })
+
           })
             .catch((error) => {
               console.log(error);
