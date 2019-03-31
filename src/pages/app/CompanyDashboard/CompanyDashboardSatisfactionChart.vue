@@ -55,17 +55,18 @@
 <script>
   import auth from "@/auth";
   import {
-    ProgrssBar
+
   } from "@/components";
   export default {
     name: "company-dashboard-satisfaction-chart",
     components: {
-      ProgrssBar
+
     },
     data() {
       return {
         auth: auth,
-        amount2: 20
+        amount2: 20,
+        filterMonth: "March"
       };
     }
   };
