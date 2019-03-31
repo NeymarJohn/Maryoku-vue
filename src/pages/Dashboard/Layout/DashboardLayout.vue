@@ -33,8 +33,6 @@
               <span>Create New Event</span>
             </md-button>
           </li>
-
-          <!--<sidebar-item :link="{name: 'Create Event'}" @click="openEventModal()"></sidebar-item>-->
           <sidebar-item :link="{name: 'Events List', path: '/events'}"></sidebar-item>
           <sidebar-item :link="{name: 'Year Planner', path: '/planner'}"></sidebar-item>
         </sidebar-item>
@@ -227,11 +225,12 @@ export default {
         this.$sidebar.displaySidebar(false);
       }
     },openEventModal() {
-          console.log('i am here');
+          this.$router.push({ path: `/events` , name  : 'Events', params : { mode : 'create-event'} });
           this.setEventModal({ showModal: true });
           this.setModalSubmitTitle("Save");
           this.setEditMode({ editMode: false });
-      },
+      }
+
   },
     created(){
         this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);

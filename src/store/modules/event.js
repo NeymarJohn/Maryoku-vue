@@ -57,7 +57,6 @@ const actions = {
     EventTheme
       .get()
       .then(res=>{
-          console.log(res);
           commit("setEventThemes" , res)
       })
       .catch(e=>{

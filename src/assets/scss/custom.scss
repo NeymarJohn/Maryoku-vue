@@ -438,13 +438,13 @@ $tooltip-border-color: $blue-grey-200 !default;
         button {
           width: 61%;
           margin: 10px auto;
-          min-width:auto;
+          min-width: auto;
 
           .md-ripple {
             padding: 12px 0 !important;
           }
           .md-icon.md-theme-default.md-icon-font {
-            margin-right : 0 !important;
+            margin-right: 0 !important;
           }
           span {
             display: none;
@@ -456,7 +456,7 @@ $tooltip-border-color: $blue-grey-200 !default;
       .nav {
         li {
           button {
-            margin : 10px 15px 0;
+            margin: 10px 15px 0;
             width: 89%;
             display: block;
             white-space: nowrap;
@@ -472,10 +472,25 @@ $tooltip-border-color: $blue-grey-200 !default;
       }
     }
   }
-
 }
 
 .manage-proposals {
   align-content: flex-start;
 }
-@import 'vue-image-lightbox/dist/vue-image-lightbox.min.css'
+
+.md-switch-info {
+  &.md-checked {
+    .md-switch-thumb {
+      border: 1px solid #64b5f6 !important;
+    }
+
+    .md-switch-container {
+      background-color: #64b5f6 !important;
+    }
+  }
+}
+
+@import 'vue-image-lightbox/dist/vue-image-lightbox.min.css';
+
+
+

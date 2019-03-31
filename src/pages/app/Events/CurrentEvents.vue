@@ -13,7 +13,7 @@
         <md-card-content>
           <div class="control-main-block">
               <div class="company-control-logo">
-                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default" :class="{selected: selectedTab('blocks')}" @click="selectTab('blocks')">
+                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default" :class="{selected: selectedTab('blocks') || selectedTab(null)}" @click="selectTab('blocks')">
                     <md-icon>create</md-icon>
                   </md-button>
               </div>
@@ -113,10 +113,10 @@
         </md-card-content>
       </md-card>
     </div>
-      <div v-if="!currentTab" class="md-layout-item md-size-60 block-flex">
-          <event-building-blocks  @go-to-building-blocks="resetTab"></event-building-blocks>
+      <div v-if="!currentTab && event" class="md-layout-item md-size-60 block-flex" >
+          <event-building-blocks   :event="event" :event-components="selectedComponents" @go-to-building-blocks="resetTab"></event-building-blocks>
       </div>
-   <div v-else-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
+    <div v-else-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
       <event-blocks :event="event" :event-components="selectedComponents"></event-blocks>
     </div>
     <div v-else-if="selectedTab('proposals')" class="md-layout-item md-size-70 block-flex">
@@ -167,7 +167,8 @@ export default {
       percentage: 0,
       totalRemainingBudget: 0,
       seriesData: [],
-      isLoading: false      
+      isLoading: false,
+      event : null
     };
   },
   mounted() {
@@ -203,9 +204,7 @@ export default {
       return this.currentTab === tab;
     },
       resetTab () {
-            console.log('i am herererer');
           this.currentTab = null;
-
       }
   },
   computed: {

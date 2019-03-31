@@ -2512,6 +2512,10 @@ chart.js@^2.7.2:
     chartjs-color "^2.1.0"
     moment "^2.10.2"
 
+chartist-plugin-tooltip@0.0.11:
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/chartist-plugin-tooltip/-/chartist-plugin-tooltip-0.0.11.tgz#cec2195fa505f4d34e6d8e41a86bfbcb9bfff461"
+
 chartist@0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/chartist/-/chartist-0.11.0.tgz#84ba5e05490d096d93dcfa9343ebc31ef6a3bd28"
@@ -10328,7 +10332,6 @@ vue-gmaps@^0.2.2:
 vue-gtm@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/vue-gtm/-/vue-gtm-2.0.0.tgz#8e6ce2408410abda9787e68d257cb1a957c75805"
-  integrity sha512-9h2FI8Z4kZQ5SP55uFFQVHDwdr5UsJav8HpaRmsWB9D4lbP/HAzcsNxLPbgr/pLOMP+0ZXIYte90Cj0Uqyj2bg==
 
 vue-hot-reload-api@^2.2.0, vue-hot-reload-api@^2.3.0:
   version "2.3.1"

@@ -109,6 +109,10 @@
     },
     created() {
       this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
+
+      this.$on('open-event-modal',function () {
+          alert('open event modal');
+      })
     },
    computed:{      
        ...mapGetters({       
@@ -118,7 +122,11 @@
     mounted() {     
       this.auth.currentUser(this, true, function() {
         this.$store.dispatch("user/getUserFromApi");       
-      }.bind(this))  
+      }.bind(this))
+
+        if ( this.$route.params.mode && this.$route.params.mode == 'create-event') {
+            this.openEventModal();
+        }
    
        
     },

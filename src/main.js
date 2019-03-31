@@ -9,6 +9,7 @@ import auth from './auth';
 // Plugins
 import App from "./App.vue";
 import Chartist from "chartist";
+import ChartistTooltipPlugin from "chartist-plugin-tooltip";
 import Tooltip from 'vue-directive-tooltip';
 import 'vue-directive-tooltip/css/index.css';
 import vSelectMenu from 'v-selectmenu';

@@ -304,14 +304,9 @@
 
         let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
-
-        console.log(_calendar)
         _calendar.metadata().get().then(metadatas => {
 
           let metadata = metadatas[0];
-
-          console.log(metadata);
-          console.log(metadata.eventTypes);
 
           this.years = metadata.years;
           this.selectedYear = new Date().getFullYear();
@@ -343,12 +338,10 @@
             countries: this.selectedCountries,
             eventTypes: this.selectedEventTypes
           }};
-        console.log("filters: " + filters);
         let calendarId = this.auth.user.defaultCalendarId;
         this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.auth.getAuthHeader() })
           .then(response => response.data)
           .then((json) => {
-            console.log(json);
             let eventsMap = {};
             if (json.events) {
               json.events.forEach(function(event){

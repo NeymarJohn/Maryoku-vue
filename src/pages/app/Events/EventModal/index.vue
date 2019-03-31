@@ -285,8 +285,8 @@
           if (this.occasionCache !== "") {
             occasionList.push(this.occasionCache)
           }
-           
-          return occasionList;          
+
+          return occasionList;
         }
       },
       id: {
@@ -320,7 +320,7 @@
         set(value) {
           this.setEventProperty({key: 'occasionCache', actualValue: value});
         }
-      },      
+      },
       title: {
         get() {
           return this.eventData.title
@@ -527,12 +527,10 @@
           edittable: true,
           participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         }).for(_calendar).save().then(response => {
-            console.log('new event => ' , response);
             console.log('new event => ' , response.id);
             this.$parent.isLoading = false;
             this.closeModal();
             //this.$emit("refresh-events");
-
             this.$router.push({ path: `/events/`+response.id +`/edit` })
 
           })
