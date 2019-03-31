@@ -135,7 +135,7 @@
     }
   };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .noUi-horizontal {
     height: 6px;
   }
