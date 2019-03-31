@@ -210,14 +210,37 @@ $tooltip-border-color: $blue-grey-200 !default;
 /**
  * Event Page
  */
-.personal-management {
+.proposals-management {
 
-  .personal-management_items {
+  .proposals-management_items {
     align-content : flex-start;
   }
 
-  &_item {
+  .proposals-management_item {
     margin-bottom : 0;
+
+    .md-actions {
+
+
+      .md-button {
+        min-width : 1px;
+        background: none !important;
+        box-shadow: none;
+        margin : 0;
+
+        .md-ripple {
+          padding : 0 !important;
+          background: none;
+
+          i {
+            width : auto;
+            height : auto;
+            line-height:inherit;
+          }
+        }
+      }
+    }
+
     .card-header {
       margin : 0;
       padding: 3px 10px;
@@ -249,27 +272,7 @@ $tooltip-border-color: $blue-grey-200 !default;
       }
     }
 
-    .md-actions {
 
-
-      .md-button {
-        min-width : 1px;
-        background: none !important;
-        box-shadow: none;
-        margin : 0;
-
-        .md-ripple {
-          padding : 0 !important;
-          background: none;
-
-          i {
-            width : auto;
-            height : auto;
-            line-height:inherit;
-          }
-        }
-      }
-    }
 
     .md-card-content {
       padding: 6px 0;

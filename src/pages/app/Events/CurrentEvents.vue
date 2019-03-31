@@ -113,12 +113,9 @@
         </md-card-content>
       </md-card>
     </div>
-      <div v-if="!currentTab && event" class="md-layout-item md-size-60 block-flex" >
+      <div v-if="!currentTab && event" class="md-layout-item md-size-70 block-flex" >
           <event-building-blocks   :event="event" :event-components="selectedComponents" @go-to-building-blocks="resetTab"></event-building-blocks>
       </div>
-    <div v-else-if="selectedTab('blocks')" class="md-layout-item md-size-70 block-flex">
-      <event-blocks :event="event" :event-components="selectedComponents"></event-blocks>
-    </div>
     <div v-else-if="selectedTab('proposals')" class="md-layout-item md-size-70 block-flex">
         proposals
     </div>
