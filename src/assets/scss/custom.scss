@@ -496,4 +496,59 @@ $tooltip-border-color: $blue-grey-200 !default;
 @import 'vue-image-lightbox/dist/vue-image-lightbox.min.css';
 
 
+.company-title {
+  .vlabeledit {
 
+    .vlabeledit-label {
+      font-weight: 500;
+      font-size: 21px;
+      padding: 6px;
+      border: 1px solid transparent;
+      display: flex;
+
+      &:hover {
+        border: 1px solid lightgray;
+        border-radius: 5px;
+      }
+    }
+
+    .vlabeledit-input {
+      font-size: 21px;
+      font-weight: 500;
+      border: 1px solid lightgray;
+      border-radius: 5px;
+      padding: 6px;
+    }
+  }
+}
+
+.company-profile-section {
+  .vlabeledit {
+
+    .vlabeledit-label {
+      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+      border: 1px solid transparent;
+      display: inline-block;
+      width: 100%;
+      padding: 2px;
+      font-size: 12px;
+
+      &:hover {
+        border: 1px solid lightgray;
+        border-radius: 5px;
+      }
+    }
+
+    .vlabeledit-input {
+      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+      border: 1px solid lightgray;
+      border-radius: 5px;
+      width: 100%;
+      padding: 6px;
+
+      &::-webkit-input-placeholder {
+        font-size: 12px;
+      }
+    }
+  }
+}

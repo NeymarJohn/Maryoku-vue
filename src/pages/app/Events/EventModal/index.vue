@@ -213,6 +213,11 @@
       year: Number,
       month : Number,
       occasionsOptions: Array,
+        currentEvent : {
+          type : Object,
+            default : null
+        }
+
     },
     data: () => ({
       auth: auth,
@@ -459,7 +464,8 @@
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
           this.closeModal();
-          this.$emit("refresh-events");
+
+          location.reload();
         })
           .catch((error) => {
             console.log(error);

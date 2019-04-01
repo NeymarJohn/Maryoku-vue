@@ -110,9 +110,6 @@
     created() {
       this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
 
-      this.$on('open-event-modal',function () {
-          alert('open event modal');
-      })
     },
    computed:{      
        ...mapGetters({       

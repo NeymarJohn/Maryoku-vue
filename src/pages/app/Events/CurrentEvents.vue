@@ -29,6 +29,10 @@
               </div>
             </div>
           <div>
+              <md-button class="md-button md-small md-theme-default"  @click="openEventModal()" style="margin-top : 1em;">
+                  Edit Event Info <md-icon class="company-logo">create</md-icon>
+              </md-button>
+
               <div class="md-layout md-gutter">
                 <div class="md-layout-item">
                   <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
@@ -38,27 +42,27 @@
                   <div class="md-layout-item md-caption title-text">Event Occasion</div>
                   <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.occasion}}</div>
               </div>
-              <div class="md-layout md-gutter">                    
-                  <div class="md-layout-item md-caption title-text">Start Time</div>                 
+              <div class="md-layout md-gutter">
+                  <div class="md-layout-item md-caption title-text">Start Time</div>
                   <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.eventStartMillis | formatTime}}</div>
               </div>
-              
-              <div class="md-layout md-gutter">   
-                  <div class="md-layout-item md-caption title-text">Duration</div>                 
+
+              <div class="md-layout md-gutter">
+                  <div class="md-layout-item md-caption title-text">Duration</div>
                   <div class="md-layout-item md-size-40 md-caption title-text">
                       {{calendarEvent.eventStartMillis | formatDuration(calendarEvent.eventEndMillis)}} Hours
                   </div>
               </div>
-              <div class="md-layout md-gutter">                     
-                  <div class="md-layout-item md-caption title-text">Geography</div>                 
+              <div class="md-layout md-gutter">
+                  <div class="md-layout-item md-caption title-text">Geography</div>
                   <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.location}}</div>
               </div>
-              <div class="md-layout md-gutter">                     
-                  <div class="md-layout-item md-caption title-text">Participants</div>                 
+              <div class="md-layout md-gutter">
+                  <div class="md-layout-item md-caption title-text">Participants</div>
                   <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.numberOfParticipants}}</div>
               </div>
-              <div class="md-layout md-gutter">   
-                  <div class="md-layout-item md-caption title-text">Participant Type</div>                 
+              <div class="md-layout md-gutter">
+                  <div class="md-layout-item md-caption title-text">Participant Type</div>
                   <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.participantsType}}</div>
               </div>
 
@@ -87,7 +91,7 @@
                     <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
                   </div>
                 </div>
-              </div>  
+              </div>
             </div>
             <div class="md-layout md-gutter">
               <div class="md-layout-item">
@@ -119,11 +123,19 @@
     <div v-else-if="selectedTab('proposals')" class="md-layout-item md-size-70 block-flex">
         proposals
     </div>
+
+      <event-modal @refresh-events="refreshEvents" :currentEvent="calendarEvent" ref="eventModal"></event-modal>
+
+
   </div>
+
+
 </template>
 
 <script>
 
+    import EventModal from "./EventModal/";
+    import EventPlannerVuexModule from "./EventPlanner.vuex";
 
 
 //MAIN MODULES
@@ -133,7 +145,7 @@ import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import Calendar from '@/models/Calendar';
 import CalendarEvent from '@/models/CalendarEvent';
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+import {mapState, mapMutations,mapGetters, mapActions} from 'vuex';
 
 //COMPONENTS
 import { AnimatedNumber } from "@/components";
@@ -141,6 +153,8 @@ import Icon from "@/components/Icon/Icon.vue";
 import EventElements from './EventElements.vue'
 import EventBlocks from "./components/NewEventBlocks";
 import EventBuildingBlocks from "./components/EventBuildingBlocks";
+
+
 
 
 export default {
@@ -152,6 +166,7 @@ export default {
     Icon,
     EventElements,
     EventBlocks,
+      EventModal
   },
 
   data() {
@@ -168,6 +183,10 @@ export default {
       event : null
     };
   },
+    created(){
+      this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
+
+    },
   mounted() {
     this.getEvent();
     if (this.components.length === 0) {
@@ -175,6 +194,14 @@ export default {
     }
   },
   methods: {
+      ...mapMutations("EventPlannerVuex", [
+      "setEventModal",
+      "setEditMode",
+      "setModalSubmitTitle",
+      "setEventModalAndEventData",
+      "setNumberOfParticipants",
+          "setEventData"
+  ]),
     getEvent() {
         this.auth.currentUser(this, true, function() {
             let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
@@ -189,7 +216,7 @@ export default {
                 this.seriesData = [(100 - this.percentage), this.percentage];
             });
         }.bind(this));
-    }, 
+    },
     selectTab(tab) {
       if ( this.currentTab === tab ) {
           this.currentTab = null;
@@ -200,8 +227,19 @@ export default {
     selectedTab(tab) {
       return this.currentTab === tab;
     },
-      resetTab () {
-          this.currentTab = null;
+    resetTab () {
+      this.currentTab = null;
+    },
+    openEventModal() {
+          console.log(this.event);
+
+        this.setEventData(this.event);
+        this.setEventModal({ showModal: true });
+      this.setModalSubmitTitle("Edit");
+      this.setEditMode({ editMode: true });
+    },
+      refreshEvents() {
+          this.getCalendarEvents();
       }
   },
   computed: {
@@ -235,7 +273,7 @@ export default {
     }
   },
   watch: {
-  },  
+  },
 };
 </script>
 
