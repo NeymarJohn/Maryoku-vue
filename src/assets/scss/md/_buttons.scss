@@ -189,25 +189,6 @@
     overflow: hidden;
     position: relative;
     line-height: 41px;
-
-    &.md-xs {
-      font-size: 10px;
-      height: 24px;
-      min-width: 24px;
-      width: 24px;
-      padding: 8px;
-      overflow: hidden;
-      position: relative;
-      line-height: 24px;
-
-      .md-button-content{
-        display: flex;
-        align-items: center;
-        i{
-          font-size: 14px !important;
-        }
-      }
-    }
   }
 
   .md-button-content{

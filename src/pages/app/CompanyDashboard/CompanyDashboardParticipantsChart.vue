@@ -6,7 +6,7 @@
       </div>
       <h5 class="title" style="padding-top: 6px;">
         Participants per Event
-        <md-field class="pull-right md-xs" style="max-width: 120px; margin: 0; border: none;" md-inline>
+        <md-field class="pull-right" style="max-width: 120px; margin: 0; border: none;" md-inline>
           <md-select v-model="filterMonth" name="filterMonth" id="filterMonth">
             <md-option value="January">January</md-option>
             <md-option value="February">February</md-option>
@@ -27,17 +27,17 @@
     <md-card-content>
       <div class="filter"></div>
       <div class="bar-item">
-        <h5 style="margin-bottom: 0; margin-top: 0; font-weight: 500; font-size: 14px;" >Company Training</h5>
+        <h5 style="margin-bottom: 0; margin-top: 0; font-weight: 500;" >Company Training</h5>
         <div class="text-gray small" style="padding-bottom: 6px;">August 19, 2018 <span class="pull-right"><span class="black-color">198</span> / 231</span></div>
         <md-progress-bar class="md-info" style="min-height: 18px;" :md-value="(198/231)*100"></md-progress-bar>
       </div>
       <div class="bar-item">
-        <h5 style="margin-bottom: 0; margin-top: 0; font-weight: 500;font-size: 14px;" >Outreach Program </h5>
+        <h5 style="margin-bottom: 0; margin-top: 0; font-weight: 500;" >Outreach Program </h5>
         <div class="text-gray small" style="padding-bottom: 6px;">August 25, 2018 <span class="pull-right"><span class="black-color">422</span> / 500</span></div>
         <md-progress-bar class="md-info" style="min-height: 18px;" :md-value="(422/500)*100"></md-progress-bar>
       </div>
       <div class="bar-item">
-        <h5 style="margin-bottom: 0; margin-top: 0; font-weight: 500;font-size: 14px;" >Development Workshop</h5>
+        <h5 style="margin-bottom: 0; margin-top: 0; font-weight: 500;" >Development Workshop</h5>
         <div class="text-gray small" style="padding-bottom: 6px;">August 19, 2019 <span class="pull-right"><span class="black-color">59</span> / 60</span></div>
         <md-progress-bar class="md-info" style="min-height: 18px;" :md-value="(59/60)*100"></md-progress-bar>
       </div>
@@ -64,18 +64,5 @@
   };
 </script>
 <style lang="scss" scoped>
-  .md-menu.md-select {
-    &i{
-      background-color: #00b0ff !important;
-    }
-  }
-  .md-select-value {
-    font-size: 14px;
-  }
 
-  .md-select i {
-    width: 13px !important;
-    height: 13px;
-    line-height: 13px;
-  }
 </style>

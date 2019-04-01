@@ -1,5 +1,5 @@
 <template>
-    <div >
+    <div class="md-layout">
         <md-card v-if="!selectedBlock" class="proposals-management">
             <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
             <md-card-header class="md-card-header-icon md-card-header-warning">
@@ -124,9 +124,7 @@
         },
         resetSelectedBlock(){
             this.$set(this,'selectedBlock',null);
-
         }
-
     },
     created() {
       
@@ -137,7 +135,6 @@
         let event = EventComponent.get()
             .then(res=> {
                 this.$set(this,'buildingBlocksList',res);
-                console.log(this.buildingBlocksList);
             })
             .catch(error => {
                 console.log('Error ', error);
