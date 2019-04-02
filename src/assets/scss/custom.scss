@@ -493,6 +493,144 @@ $tooltip-border-color: $blue-grey-200 !default;
   }
 }
 
+/**
+ * Event TimeLine
+ */
+.time-line-blocks {
+  padding : 0;
+
+  &_items {
+    align-content: flex-start;
+    .md-layout-item {
+      padding : 0;
+    }
+  }
+
+  h5 {
+    margin : 0;
+    font-size: 15px;
+
+    &.section-desc {
+      margin-bottom : 2em;
+    }
+  }
+
+
+  &_item {
+    position: relative;
+    padding : 0.7em  3.5em;
+    margin-bottom: 1.2em;
+    border-radius: 3px;
+    color : #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.21);
+
+    &:active {
+      transform: rotate(-1deg);
+    }
+
+    .md-icon {
+      position: absolute;
+      left: 0.6em;
+      color : #fff !important;
+      font-size: 22px !important;
+    }
+
+    h5 {
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+
+  }
+
+  &_selected-items {
+    list-style: none;
+    padding : 0;
+
+    &_item {
+      position : relative;
+      padding-left : 90px;
+
+      .md-icon {
+        position: absolute;
+        left : 0;
+        top: -4px;
+        font-size : 35px !important;
+        width : 51px;
+        height : 51px;
+        background: #eeeeee;
+        color : #bcbcbc !important;
+        box-shadow: 0px 4px 20px 0 rgba(0, 0, 0, 0.14);
+        border-radius: 50%;
+      }
+
+      .drag-here {
+        border-radius: 10px;
+        background-color: #e4e4e4;
+        font-size: 16px;
+        opacity: 0.87;
+        text-align: center;
+        color: rgba(149, 149, 149, 0.87);
+        padding : 10px;
+
+      }
+
+      &.time-line-item {
+        position: relative;
+
+        &:after {
+          content : '';
+          position : absolute;
+          width : 2px;
+          height: 100%;
+          background-color: #e5e5e5;
+          left: 25px;
+          top: 76px;
+
+        }
+        .md-icon {
+          color : #fff !important;
+          font-size: 25px !important;
+          top: 1em;
+        }
+
+        .md-card {
+          border-radius: 6px;
+          box-shadow: 0px 1px 24px 0 rgba(0, 0, 0, 0.14);
+          padding : 10px 20px;
+          position: relative;
+          &:after {
+            content: '';
+            position: absolute;
+            left: -14px;
+            top: 26px;
+            width: 0;
+            height: 0;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid #16141400;
+            border-right: 20px solid #fff;
+          }
+
+          .item-time {
+            color : #fff;
+            padding: 4px 13px;
+            font-size: 12px;
+            font-weight: 900;
+            border-radius: 100px;
+            margin-right: 1em;
+          }
+          .item-title {
+            opacity: 0.87;
+            font-size: 18px;
+            color: rgba(0, 0, 0, 0.87);
+          }
+          .item-desc {
+
+          }
+        }
+      }
+    }
+  }
+}
 @import 'vue-image-lightbox/dist/vue-image-lightbox.min.css';
 
 
