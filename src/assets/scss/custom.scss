@@ -502,9 +502,14 @@ $tooltip-border-color: $blue-grey-200 !default;
     .vlabeledit-label {
       font-weight: 500;
       font-size: 21px;
-      padding: 6px;
+      padding: 3px;
       border: 1px solid transparent;
-      display: flex;
+      display: inline-block;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 60%;
 
       &:hover {
         border: 1px solid lightgray;
@@ -517,7 +522,7 @@ $tooltip-border-color: $blue-grey-200 !default;
       font-weight: 500;
       border: 1px solid lightgray;
       border-radius: 5px;
-      padding: 6px;
+      padding: 3px;
     }
   }
 }
@@ -530,8 +535,13 @@ $tooltip-border-color: $blue-grey-200 !default;
       border: 1px solid transparent;
       display: inline-block;
       width: 100%;
-      padding: 2px;
+      padding: 3px;
       font-size: 12px;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
 
       &:hover {
         border: 1px solid lightgray;
@@ -544,7 +554,7 @@ $tooltip-border-color: $blue-grey-200 !default;
       border: 1px solid lightgray;
       border-radius: 5px;
       width: 100%;
-      padding: 6px;
+      padding: 8px;
 
       &::-webkit-input-placeholder {
         font-size: 12px;

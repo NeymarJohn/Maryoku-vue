@@ -9,7 +9,7 @@
         </div>
       </div>
       <h4 class="title company-title" style="padding-top: 24px;">
-        <label-edit v-bind:text="companyName"></label-edit>
+        <label-edit :text="companyName" placeholder="Company Name" :title="companyName" @text-updated-blur="setCompanyName" @text-updated-enter="setCompanyName"></label-edit>
       </h4>
     </md-card-header>
     <md-card-content class="company-profile-section">
@@ -18,19 +18,19 @@
         <div class="md-layout-item md-size-33"><span class="text-gray" style="font-weight: 500;">Main Office</span></div>
         <div class="md-layout-item md-size-66 text-right">
           <h6 style="padding: 0;margin: 4px 0; text-transform: none !important;">
-            <label-edit v-bind:text="companyProfile.mainAddress" placeholder="Your Main Location"></label-edit>
+            <label-edit :text="mainAddress" placeholder="Office Address" :title="mainAddress" @text-updated-blur="setMainAddress" @text-updated-enter="setMainAddress"></label-edit>
           </h6>
         </div>
         <div class="md-layout-item md-size-60"><span class="text-gray" style="font-weight: 500;">Number of Employees</span></div>
         <div class="md-layout-item md-size-40 text-right">
           <h6 style="padding: 0;margin: 4px 0; text-transform: none !important;">
-            <label-edit v-bind:text="companyProfile.mainAddress" placeholder="1"></label-edit>
+            <label-edit v-bind:text="companyProfile.numberOfEmployees" placeholder="1"></label-edit>
           </h6>
         </div>
         <div class="md-layout-item md-size-33"><span class="text-gray" style="font-weight: 500;">Industry</span></div>
         <div class="md-layout-item md-size-66 text-right">
           <h6 style="padding: 0;margin: 4px 0; text-transform: none !important;">
-          <label-edit v-bind:text="companyProfile.mainAddress" placeholder="Your Industry"></label-edit>
+          <label-edit v-bind:text="companyProfile.industry" placeholder="Your Industry"></label-edit>
         </h6>
         </div>
       </div>
@@ -92,6 +92,7 @@
         auth: auth,
         logoButtonsVisible: false,
         companyName: "",
+        mainAddress: "",
         companyProfile: {
           mainOffice: "",
           numberOfEmployees: "",
@@ -105,7 +106,11 @@
     },
     mounted(){
       this.auth.currentUser(this, true, () => {
-        this.companyName = this.auth.user.customer.name;
+        let customer = this.auth.user.customer;
+        this.companyName = customer.name;
+        this.mainAddress = customer.mainAddress;
+        this.companyProfile.numberOfEmployees = customer.numberOfEmployees;
+        this.companyProfile.industry = customer.industry;
       });
     },
     methods: {
@@ -115,6 +120,12 @@
       onMouseLeave: function() {
         this.logoButtonsVisible = false;
       },
+      setCompanyName(val) {
+        this.companyName = val;
+      },
+      setMainAddress(val) {
+        this.mainAddress = val;
+      }
     }
   };
 </script>
