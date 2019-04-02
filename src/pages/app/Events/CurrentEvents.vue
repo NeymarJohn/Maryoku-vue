@@ -13,7 +13,7 @@
         <md-card-content>
           <div class="control-main-block">
               <div class="company-control-logo">
-                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default" :class="{selected: selectedTab('blocks') || selectedTab(null)}" @click="selectTab('blocks')">
+                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default" :class="{selected: selectedTab('blocks')}" @click="selectTab('blocks')">
                     <md-icon>create</md-icon>
                   </md-button>
               </div>
@@ -23,7 +23,7 @@
                   </md-button>
               </div>
               <div class="company-control-logo">
-                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default" :class="{selected: selectedTab('settigns')}" @click="selectTab('settigns')">
+                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default" :class="{selected: selectedTab('timeline')}" @click="selectTab('timeline')">
                     <md-icon class="company-logo">person</md-icon>
                   </md-button>
               </div>
@@ -117,15 +117,22 @@
         </md-card-content>
       </md-card>
     </div>
-      <div v-if="!currentTab && event" class="md-layout-item md-size-70 block-flex" >
+      <div v-if="selectedTab('blocks') && event" class="md-layout-item md-size-70 block-flex" >
           <event-building-blocks   :event="event" :event-components="selectedComponents" @go-to-building-blocks="resetTab"></event-building-blocks>
       </div>
     <div v-else-if="selectedTab('proposals')" class="md-layout-item md-size-70 block-flex">
         proposals
     </div>
 
-      <event-modal @refresh-events="refreshEvents" :currentEvent="calendarEvent" ref="eventModal"></event-modal>
+      <div v-else-if="selectedTab('timeline')" class="md-layout-item md-size-70 block-flex">
+          <event-time-line :event="event" :event-components="selectedComponents"></event-time-line>
+      </div>
 
+
+
+      <!-- New Event Modal -->
+      <event-modal @refresh-events="refreshEvents" :currentEvent="calendarEvent" ref="eventModal"></event-modal>
+      <!-- ./New Event Modal -->
 
   </div>
 
@@ -153,6 +160,7 @@ import Icon from "@/components/Icon/Icon.vue";
 import EventElements from './EventElements.vue'
 import EventBlocks from "./components/NewEventBlocks";
 import EventBuildingBlocks from "./components/EventBuildingBlocks";
+import EventTimeLine from "./components/EventTimeLine.vue";
 
 
 
@@ -166,7 +174,8 @@ export default {
     Icon,
     EventElements,
     EventBlocks,
-      EventModal
+      EventModal,
+      EventTimeLine
   },
 
   data() {
@@ -174,7 +183,7 @@ export default {
       auth: auth,
       calendarEvent: {},
       selectedComponents: [],
-      currentTab: null,
+      currentTab: 'blocks',
       eventId: null,
       percentage: 0,
       totalRemainingBudget: 0,
@@ -218,11 +227,7 @@ export default {
         }.bind(this));
     },
     selectTab(tab) {
-      if ( this.currentTab === tab ) {
-          this.currentTab = null;
-      } else {
-          this.currentTab = tab
-      }
+        this.currentTab = tab
     },
     selectedTab(tab) {
       return this.currentTab === tab;
