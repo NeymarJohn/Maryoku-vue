@@ -17,7 +17,7 @@
 
                     <drag :transfer-data="{ block }" class="time-line-blocks_item " :style="`background: ` + block.color">
                         <md-icon>{{block.icon}}</md-icon>
-                        <h5>{{block.title}}</h5>
+                        <h5>{{block.type}}</h5>
                     </drag>
 
                 </div>
@@ -33,30 +33,94 @@
 
             </md-card-content>
         </md-card>
-        <div class="md-layout-item md-size-70">
+        <div class="md-layout-item md-size-70 time-line-section">
             <h4>Timeline</h4>
+            <md-button class="md-info md-sm preview-event" @click="previewEvent">
+                Preview
+            </md-button>
 
             <drop  @drop="handleDrop">
                 <ul class="time-line-blocks_selected-items">
-                    <li v-for="(item,index) in timelineItems" :key="item.id" class="time-line-blocks_selected-items_item time-line-item">
-                        <md-icon :style="`background : ` + item.color">{{item.icon}}</md-icon>
+                    <li v-for="(item,index) in timelineItems" :key="index" class="time-line-blocks_selected-items_item time-line-item">
+                        <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">{{item.icon}}</md-icon>
 
-                        <md-card >
+                        <md-card class="block-info" v-if="item.mode === 'saved' ">
+                            <div class="card-actions">
+                                <md-button  class="md-info md-sm md-just-icon md-simple md-round" @click="modifyItem(index)">
+                                    <md-icon>create</md-icon>
+                                </md-button>
+                                <md-button  class="md-danger md-sm md-just-icon md-simple md-round" @click="removeItem(index)">
+                                    <md-icon>delete_outline</md-icon>
+                                </md-button>
+                            </div>
                             <div class="item-title-and-time">
                                 <span class="item-time" :style="`background : ` + item.color">
-                                    8:30 AM - 10:30 AM
+                                    {{item.from }} - {{item.to}}
                                 </span>
                                 <span class="item-title">
-                                    Title bar
+                                    {{item.title ? item.title : 'Title Bar' }}
                                 </span>
                             </div>
                             <p class="item-desc">
-                                Meeting place and setup time can be described here
+                                {{ item.description }}
                             </p>
+                        </md-card>
+
+                        <md-card class="block-form" v-else="item.mode === 'edit' ">
+                            <md-card-content class="md-layout">
+                                <div class="md-layout-item md-size-50">
+                                    <md-field >
+                                        <label>From Time</label>
+                                        <md-select v-model="item.from"
+                                                   >
+                                            <md-option v-for="hour in hoursArray"
+                                                       :key="hour"
+                                                       :value="hour">
+                                                {{ hour }}
+                                            </md-option>
+                                        </md-select>
+                                    </md-field>
+                                </div>
+                                <div class="md-layout-item md-size-50">
+                                    <md-field >
+                                        <label>To Time</label>
+                                        <md-select v-model="item.to"
+                                        >
+                                            <md-option v-for="hour in hoursArray"
+                                                       :key="hour"
+                                                       :value="hour">
+                                                {{ hour }}
+                                            </md-option>
+                                        </md-select>
+                                    </md-field>
+                                </div>
+                                <div class="md-layout-item md-size-100">
+                                    <md-field >
+                                        <label>Optional title</label>
+                                        <md-input
+                                                v-model="item.title"
+                                                type="text"
+                                        ></md-input>
+                                    </md-field>
+                                </div>
+                                <div class="md-layout-item md-size-100">
+                                    <md-field >
+                                        <label>Description</label>
+                                        <md-input
+                                                v-model="item.description"
+                                                type="text"
+                                        ></md-input>
+                                    </md-field>
+                                </div>
+                            </md-card-content>
+                            <md-card-actions md-alignment="left">
+                                <md-button  class="md-info" @click="saveTimelineItem(index)">Save</md-button>
+                            </md-card-actions>
+
                         </md-card>
                     </li>
                     <li class="time-line-blocks_selected-items_item">
-                        <md-icon>add</md-icon>
+                        <md-icon class="time-line-blocks_icon">add</md-icon>
                         <md-card class="drag-here">
                             Drag and drop a building block here
                         </md-card>
@@ -95,42 +159,43 @@
         blocksList : [
             {
                 id : 1,
-                title : 'setup',
+                type : 'setup',
                 icon : 'place',
                 color : '#f44336'
             },
             {
                 id : 2,
-                title : 'activity',
+                type : 'activity',
                 icon : 'notifications_active',
                 color : '#4caf50'
             },
             {
                 id: 3,
-                title : 'meal',
+                type : 'meal',
                 icon : 'restaurant',
                 color : '#00bcd4'
             },
             {
                 id: 4,
-                title : 'DISCUSSION',
+                type : 'DISCUSSION',
                 icon : 'sms',
                 color : '#ff9800'
             },
             {
                 id: 5,
-                title : 'TRANSPORTATION',
+                type : 'TRANSPORTATION',
                 icon : 'train',
                 color : '#f44336'
             },
             {
                 id: 6,
-                title : 'RELAXATION',
+                type : 'RELAXATION',
                 icon : 'weekend',
                 color : '#4caf50'
             }
         ],
-        timelineItems : []
+        timelineItems : [],
+        hoursArray : []
 
     }),
     methods: {
@@ -140,13 +205,32 @@
        * @param event
        */
       handleDrop(data,event){
-          console.log(data.block);
-          this.timelineItems.push(data.block);
-          console.log(this.timelineItems);
-      }
+          let block = Object.assign({}, data.block);
+          block.mode = 'edit';
+          this.timelineItems.push(Object.assign({}, data.block));
+      },
+        saveTimelineItem(index){
+          this.$set(this.timelineItems[index],'mode','saved');
+        },
+        removeItem(index){
+            this.timelineItems.splice(index,1);
+        },
+        modifyItem(index) {
+            this.$set(this.timelineItems[index],'mode','edit');
+
+        },
+        previewEvent(){
+            this.$router.push({ path: `/events/`+this.event.id })
+
+        }
 
     },
     created() {
+        [...Array(12).keys()].map(x => x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined);
+        [...Array(12).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`));
+        [...Array(8).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`));
+
+        this.hoursArray.push();
       
     },
     mounted() {

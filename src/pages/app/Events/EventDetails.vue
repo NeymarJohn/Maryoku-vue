@@ -1,116 +1,23 @@
 <template>
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
-    <div class="md-layout-item md-size-20">
-      <md-card class="md-card-profile">
-        <div class="logo-block">
-          <div class="event-planer-logo">
-            <md-icon class="company-logo">date_range</md-icon>
-          </div>
-          <div class="event-title">Event Information</div>
-          <div></div>
-        </div>
-        <md-card-content>
-          <div class="control-main-block">
-              <div class="company-control-logo">
-                <div class="company-logo-block">
-                  <md-icon class="company-logo">create</md-icon>
-                </div>
-              </div>
-              <div class="company-control-logo">
-                <div class="company-logo-block">
-                  <md-icon class="company-logo">sms</md-icon>
-                </div>
-              </div>
-              <div class="company-control-logo">
-                <div class="company-logo-block">
-                  <md-icon class="company-logo">person</md-icon>
-                </div>
-              </div>
-            </div>
-            <div>
+    <div class="md-layout-item md-size-100">
+      <md-card class="event-details">
+            <md-card-content>
+              <div class="md-layout-item md-size-100 event-details_banner" :style="`background-image : url(https://bit.ly/2TWGILO)`">
 
-              <div class="md-layout-item md-size-100">
-                <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
               </div>
 
-              <div class="md-layout">
-                  <div class="md-layout-item md-caption title-text">Event Occasion</div>
-                  <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.occasion}}</div>
-              </div>
-              <div class="md-layout">                    
-                  <div class="md-layout-item md-caption title-text">Start Time</div>                 
-                  <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.eventStartMillis | formatTime}}</div>
-              </div>
-              
-              <div class="md-layout">   
-                  <div class="md-layout-item md-caption title-text">Duration</div>                 
-                  <div class="md-layout-item md-size-40 md-caption title-text">
-                      {{calendarEvent.eventStartMillis | formatDuration(calendarEvent.eventEndMillis)}} Hours
-                  </div>
-              </div>
-              <div class="md-layout">                     
-                  <div class="md-layout-item md-caption title-text">Geography</div>                 
-                  <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.location}}</div>
-              </div>
-              <div class="md-layout">                     
-                  <div class="md-layout-item md-caption title-text">Participants</div>                 
-                  <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.numberOfParticipants}}</div>
-              </div>
-              <div class="md-layout">   
-                  <div class="md-layout-item md-caption title-text">Participant Type</div>                 
-                  <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.participantsType}}</div>
-              </div>
+              <div class="md-layout-item md-size-50">
+                <h1 class="event-title">{{calendarEvent.title}}</h1>
+                <div class="event-date">March 17 2019</div>
 
 
-              <div class="md-layout-item md-size-100">
-                <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
               </div>
-              <div class="md-layout-item">
-                <h5 class="title-budget-main">Total remaining budget</h5>
-                <h4
-                  class="title"
-                  style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152, 0.8);">
-                  <div class="title-budget-prise">
-                     <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
-                  </div>
-                </h4>
-
-                <div style="display: grid;margin-top: 18px; ">
-                  <chart-component
-                    :chart-data="pieChart.data"
-                    :chart-options="pieChart.options"
-                    chart-type="Pie"
-                    style="grid-column: 1; grid-row: 1; color:red"/>
-                  <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
-                </div>
-              </div>
-            </div>
-          <div class="md-layout-item">
-            <div>
-              <div class="md-caption title-text">Remaining budget per employee</div>
-            <!-- TODO Need calculate with components -->
-              <div class="md-caption title-text title-budget-prise">$0</div>
-            </div>
-            <div>
-              <div class="md-caption title-text">Budget per employee</div>
-              <div class="md-caption title-text title-budget-prise">
-                  <animated-number ref="budgetPerPersonNumber" :value="calendarEvent.budgetPerPerson" prefix="$"></animated-number>
-              </div>
-            </div>
-            <div>
-              <div class="md-caption title-text">Total budget for the event</div>
-              <div class="md-caption title-text title-budget-prise">
-                  <animated-number ref="totalBudgetNumber" :value="calendarEvent.totalBudget" prefix="$"></animated-number>
-              </div>
-            </div>
-          </div>
-        </md-card-content>
+            </md-card-content>
       </md-card>
     </div>
-    <div class="md-layout-item md-size-75 block-flex">
 
-    </div>  
   </div>
 </template>
 
@@ -126,10 +33,14 @@ import CalendarEvent from '@/models/CalendarEvent';
 //COMPONENTS
 import { AnimatedNumber } from "@/components";
 import Icon from "@/components/Icon/Icon.vue";
+import MdListItem from "../../../../node_modules/vue-material/src/components/MdList/MdListItem/MdListItem.vue";
+import MdListItemButton from "../../../../node_modules/vue-material/src/components/MdList/MdListItem/MdListItemButton.vue";
 
 export default {
   components: {
-    VueElementLoading,
+      MdListItemButton,
+      MdListItem,
+      VueElementLoading,
     ChartComponent,
     AnimatedNumber,
     Icon
