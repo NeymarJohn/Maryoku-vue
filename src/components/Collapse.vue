@@ -3,17 +3,17 @@
     <div :class="[
           'md-collapse',
           activeCollapse(index + 1),
-          {[getColorCollapse(colorCollapse)]: true}]" v-for="(item, index) in collapse" :key="item">
+          {[getColorCollapse(colorCollapse)]: true}]" v-for="(item, index) in collapse" :key="index">
       <div class="md-collapse-label" @click="toggle(index + 1)">
-        <div class="md-layout " v-if="icon">
+        <div class="md-layout " v-if="icon && item.eventStartMillis">
           <h5 class="md-collapse-title md-layout-item">
             <!--md-size-40"-->
             {{getTitle(item.title)}}
   
           </h5>
-  
+
           <div class="md-layout-item">
-  
+
           </div>
           <div class="md-layout-item" style=" padding-right: 0px;">
             <div class="md-layout">
@@ -31,7 +31,7 @@
         </div>
   
   
-        <div class="md-layout" v-else>
+        <div class="md-layout" v-else-if="item.eventStartMillis">
           <h5 class="md-collapse-title md-layout-item">
             <!--md-size-40"-->
             {{item.title}}
@@ -47,6 +47,21 @@
                 <span class="date-content">
                         {{new Date(item.eventStartMillis).toLocaleDateString("en-US", {  day: 'numeric',year: 'numeric', month: 'long'})}} 
                       </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="md-layout" v-else>
+          <h5 class="md-collapse-title md-layout-item">
+            <!--md-size-40"-->
+            {{item.title}}
+
+          </h5>
+          <div class="md-layout-item">
+            <div class="md-layout">
+              <div class="md-layout-item">
+                <md-icon >{{icon}}</md-icon>
               </div>
             </div>
           </div>
