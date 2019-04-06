@@ -57,7 +57,8 @@
         let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: '5c77b318518e7eb3779b1c3e'});
 
-        new EventTimelineItem({
+        /*new EventTimelineItem({
+          event: { id: event.id},
           title: "abc",
           buildingBlockType: "setup",
           description: "abc",
@@ -66,8 +67,8 @@
           order: 1
         }).for(calendar, event).save().then(res => {
           console.log(JSON.stringify(res));
-        })
-        /*calendar.calendarEvents().find('5c77b318518e7eb3779b1c3e').then(event => {
+        })*/
+        /*calendar.calendarEvents().find(event.id).then(event => {
           console.log("event: ");
           console.log(JSON.stringify(event));
           new CalendarEvent(event).timelineItems().get().then(items => {
@@ -75,6 +76,10 @@
             console.log(JSON.stringify(items));
           });
         });*/
+
+      new EventTimelineItem().for(calendar, event).find('5ca8fabca2950a149f6439c7').then(res => {
+          console.log(JSON.stringify(res));
+        })
       });
     }
   };
