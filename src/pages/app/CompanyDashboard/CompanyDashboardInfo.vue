@@ -2,14 +2,18 @@
   <md-card>
     <md-card-header class="md-card-header-icon md-card-header-white" @mouseleave.native="onMouseLeave" @mouseenter.native="onMouseOver">
       <div class="card-icon" style="width: 96px; height: 96px; padding: 0; object-fit: contain;" >
-        <img src="/static/img/reinhart-foodservice-logo.jpg" style="object-fit: scale-down; padding: 4px; width: 100%; height: 100%;"/>
+        <img :src="companyProfile.companyLogo" style="object-fit: scale-down; padding: 4px; width: 100%; height: 100%;"/>
+        <vue-element-loading :active="!loaded" :is-full-screen="false"/>
         <div v-show="logoButtonsVisible" style="margin-top: -15%; text-align: center;">
-          <md-button class="md-xs md-just-icon md-round md-info md-icon-button"><md-icon>edit</md-icon></md-button>
-          <md-button class="md-xs md-just-icon md-round md-danger md-icon-button"><md-icon>close</md-icon></md-button>
+          <md-button class="md-xs md-just-icon md-round md-info md-icon-button md-fileinput">
+            <md-icon>edit</md-icon>
+            <input type="file" @change="onFileChange">
+          </md-button>
+          <md-button v-if="companyProfile.logoFileId" class="md-xs md-just-icon md-round md-danger md-icon-button"  @click="removeImage"><md-icon>close</md-icon></md-button>
         </div>
       </div>
       <h4 class="title company-title" style="padding-top: 24px;">
-        <label-edit :text="companyName" placeholder="Company Name" :title="companyName" @text-updated-blur="setCompanyName" @text-updated-enter="setCompanyName"></label-edit>
+        <label-edit :text="companyProfile.name" field-name="name" :required="true" :title="companyProfile.name" @text-updated-blur="companyValueChanged" @text-updated-enter="companyValueChanged"></label-edit>
       </h4>
     </md-card-header>
     <md-card-content class="company-profile-section">
@@ -18,13 +22,13 @@
         <div class="md-layout-item md-size-33"><span class="text-gray" style="font-weight: 500;">Main Office</span></div>
         <div class="md-layout-item md-size-66 text-right">
           <h6 style="padding: 0;margin: 4px 0; text-transform: none !important;">
-            <label-edit :text="mainAddress" placeholder="Office Address" :title="mainAddress" @text-updated-blur="setMainAddress" @text-updated-enter="setMainAddress"></label-edit>
+            <label-edit :text="companyProfile.mainAddress.onelineAddress" field-name="mainAddress" :title="companyProfile.mainAddress.onelineAddress" @text-updated-blur="companyValueChanged" @text-updated-enter="companyValueChanged"></label-edit>
           </h6>
         </div>
         <div class="md-layout-item md-size-60"><span class="text-gray" style="font-weight: 500;">Number of Employees</span></div>
         <div class="md-layout-item md-size-40 text-right">
           <h6 style="padding: 0;margin: 4px 0; text-transform: none !important;">
-            <label-edit v-bind:text="companyProfile.numberOfEmployees" placeholder="1"></label-edit>
+            <label-edit :text="companyProfile.numberOfEmployees" field-name="numberOfEmployees" :title="companyProfile.numberOfEmployees" @text-updated-blur="companyValueChanged" @text-updated-enter="companyValueChanged"></label-edit>
           </h6>
         </div>
         <div class="md-layout-item md-size-33"><span class="text-gray" style="font-weight: 500;">Industry</span></div>
@@ -80,37 +84,48 @@
 </template>
 <script>
   import auth from "@/auth";
-  import LabelEdit from 'label-edit';
+  import {LabelEdit} from '@/components';
+  import CustomerFile from '@/models/CustomerFile';
+  import Customer from '@/models/Customer';
+  import VueElementLoading from 'vue-element-loading';
 
   export default {
     name: "company-dashboard-info",
     components: {
-      LabelEdit
+      LabelEdit,
+      VueElementLoading
     },
     data() {
       return {
         auth: auth,
+        loaded: false,
         logoButtonsVisible: false,
-        companyName: "",
-        mainAddress: "",
         companyProfile: {
-          mainOffice: "",
+          id: null,
+          name: "",
+          mainAddress: {onelineAddress: ""},
           numberOfEmployees: "",
           industry: "",
-          mainAddress: "",
           mainPhoneNumber: "",
           mainEmailAddress: "",
           mainWebSiteAddress: "",
+          companyLogo: undefined,
+          logoFileId: undefined
         }
       };
     },
     mounted(){
       this.auth.currentUser(this, true, () => {
         let customer = this.auth.user.customer;
-        this.companyName = customer.name;
-        this.mainAddress = customer.mainAddress;
+        this.companyProfile.id = customer.id;
+        this.companyProfile.name = customer.name;
+        this.mainAddress = { onelineAddress: customer.mainAddress ? customer.mainAddress.onelineAddress : '' };
         this.companyProfile.numberOfEmployees = customer.numberOfEmployees;
         this.companyProfile.industry = customer.industry;
+        this.companyProfile.logoFileId = customer.logoFileId;
+        this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
+
+        this.loaded = true;
       });
     },
     methods: {
@@ -120,12 +135,60 @@
       onMouseLeave: function() {
         this.logoButtonsVisible = false;
       },
-      setCompanyName(val) {
-        this.companyName = val;
+      companyValueChanged(val, fieldName) {
+        this.companyProfile[fieldName] = val;
+        this.saveCompanyDetails();
       },
-      setMainAddress(val) {
-        this.mainAddress = val;
-      }
+      saveCompanyDetails() {
+        let customer = this.auth.user.customer;
+        new Customer(this.companyProfile).save().then(res=>{
+          /*this.$notify(
+            {
+              message: 'Saved successfully!',
+              horizontalAlign: 'center',
+              verticalAlign: 'top',
+              type: 'success'
+            })*/
+        });
+      },
+      onFileChange(e) {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) return;
+        this.createImage(files[0]);
+      },
+      createImage(file, type) {
+        let reader = new FileReader();
+        let vm = this;
+
+        reader.onload = e => {
+          this.loaded = false;
+          return new CustomerFile({customerFile: e.target.result}).save().then(result => {
+            let customer = this.auth.user.customer;
+            customer.logoFileId = result.id;
+            new Customer({id: customer.id, logoFileId: result.id}).save();
+            this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
+            this.companyProfile.logoFileId = customer.logoFileId;
+            this.loaded = true;
+          })
+            .catch((error) => {
+              console.log(error);
+              this.loaded = true;
+            });
+        };
+        reader.readAsDataURL(file);
+      },
+      removeImage: function(type) {
+        this.loaded = false;
+        let customer = this.auth.user.customer;
+        new CustomerFile({id: customer.logoFileId}).delete().then(res => {
+          this.loaded = true;
+          customer.logoFileId = null;
+          this.companyProfile.logoFileId = undefined;
+          this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
+        }).catch((error) => {
+          this.loaded = true;
+        });
+      },
     }
   };
 </script>

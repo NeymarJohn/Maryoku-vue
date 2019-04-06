@@ -782,6 +782,7 @@ $tooltip-border-color: $blue-grey-200 !default;
       text-overflow: ellipsis;
       white-space: nowrap;
       max-width: 60%;
+      width: 60%;
 
       &:hover {
         border: 1px solid lightgray;
