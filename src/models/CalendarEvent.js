@@ -2,7 +2,6 @@ import Model from './Model';
 import Calendar from './Calendar';
 import CalendarEventInspiration from './CalendarEventInspiration';
 import CalendarEventImage from './CalendarEventImage';
-import EventTimelineItem from './EventTimelineItem';
 
 export default class CalendarEvent extends Model {
   resource() {
@@ -23,9 +22,5 @@ export default class CalendarEvent extends Model {
 
   inspirations() {
     return this.hasMany(CalendarEventInspiration)
-  }
-
-  timelineItems(){
-    return this.hasMany(EventTimelineItem)
   }
 }
