@@ -1,7 +1,7 @@
 <template>
     <div class="md-layout">
+        <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
         <md-card  class="time-line-blocks md-layout-item md-size-30">
-            <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
             <md-card-header class="md-card-header-icon md-card-header-warning">
                 <div class="card-icon">
                     <md-icon>extension</md-icon>
@@ -48,7 +48,7 @@
                                 <div class="md-layout-item md-size-50">
                                     <md-field >
                                         <label>From Time</label>
-                                        <md-select v-model="item.from"
+                                        <md-select v-model="item.startTime"
                                         >
                                             <md-option v-for="hour in hoursArray"
                                                        :key="hour"
@@ -61,7 +61,7 @@
                                 <div class="md-layout-item md-size-50">
                                     <md-field >
                                         <label>To Time</label>
-                                        <md-select v-model="item.to"
+                                        <md-select v-model="item.endTime"
                                         >
                                             <md-option v-for="hour in hoursArray"
                                                        :key="hour"
@@ -108,7 +108,7 @@
                             </div>
                             <div class="item-title-and-time">
                                 <span class="item-time" :style="`background : ` + item.color">
-                                    {{ new Date(item.startTimeMillis).getTime() }} - {{item.endTimeMillis}}
+                                    {{ item.startTime }} - {{item.endTime}}
                                 </span>
                                 <span class="item-title">
                                     {{item.title ? item.title : 'Title Bar' }}
@@ -219,6 +219,8 @@
 
         removeItem(item){
 
+          this.isLoading = true;
+
             let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
             let event = new CalendarEvent({id: this.event.id});
 
@@ -247,9 +249,12 @@
             new EventTimelineItem().for(calendar, event).get().then(res => {
 
                 this.timelineItems = res;
+                this.isLoading = false;
+
             })
         },
         saveTimelineItem(item,index) {
+            this.isLoading = true;
 
             let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
             let event = new CalendarEvent({id: this.event.id});
@@ -260,8 +265,8 @@
                 title: item.title,
                 buildingBlockType: item.buildingBlockType,
                 description: item.description,
-                startTimeMillis: this.getEventStartInMillis(item.from),
-                endTimeMillis: this.getEventStartInMillis(item.to),
+                startTime: item.startTime,
+                endTime: item.endTime,
                 order: order,
                 icon : item.icon,
                 color : item.color
@@ -277,6 +282,8 @@
 
         },
         updateTimelineItem(item,index) {
+            this.isLoading = true;
+
             let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
             let event = new CalendarEvent({id: this.event.id});
 
@@ -294,27 +301,7 @@
             }).catch(error => {
                 console.log(error)
             })
-        },
-        getEventStartInMillis(time) {
-
-            console.log(moment(time, 'HH:mm a').format('H'));
-            console.log(this.convertHoursToMillis(moment(time, 'HH:mm a').format('H')));
-
-            if (time) {
-                  let eventStartTime = new Date((this.convertHoursToMillis(moment(time, 'HH:mm a').format('H'))));
-                  console.log(eventStartTime);
-                  return eventStartTime;
-              }
-          },
-          getEventEndInMillis(time) {
-              if (time) {
-                  let eventEndTime = this.getEventStartInMillis() + this.convertHoursToMillis(moment(time, 'HH:mm a').format('H'));
-                  return eventEndTime;
-              }
-          },
-          convertHoursToMillis(hours) {
-              return hours * 60 * 60 * 1000;
-          }
+        }
 
     },
     created() {
@@ -328,7 +315,6 @@
       
     },
     mounted() {
-        this.isLoading = false;
 
         this.getTimelineItems();
 

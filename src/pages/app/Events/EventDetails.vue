@@ -10,7 +10,7 @@
 
     <div class="md-layout-item md-size-100">
       <md-card class="event-details">
-            <md-card-content class="md-layout" v-if="calendarEvent">
+            <md-card-content class="md-layout" v-if="calendarEvent.id">
 
               <!-- Event Banner -->
               <event-banner :event="calendarEvent"></event-banner>
