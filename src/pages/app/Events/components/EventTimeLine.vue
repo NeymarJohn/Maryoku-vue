@@ -17,7 +17,7 @@
 
                     <drag :transfer-data="{ block }" class="time-line-blocks_item " :style="`background: ` + block.color">
                         <md-icon>{{block.icon}}</md-icon>
-                        <h5>{{block.type}}</h5>
+                        <h5>{{block.buildingBlockType}}</h5>
                     </drag>
 
                 </div>
@@ -44,7 +44,7 @@
                     <li v-for="(item,index) in timelineItems" :key="index" class="time-line-blocks_selected-items_item time-line-item">
                         <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">{{item.icon}}</md-icon>
 
-                        <md-card class="block-info" v-if="item.mode === 'saved' ">
+                        <md-card class="block-info" v-if="!item.mode || item.mode === 'saved' ">
                             <div class="card-actions">
                                 <md-button  class="md-info md-sm md-just-icon md-simple md-round" @click="modifyItem(index)">
                                     <md-icon>create</md-icon>
@@ -55,7 +55,7 @@
                             </div>
                             <div class="item-title-and-time">
                                 <span class="item-time" :style="`background : ` + item.color">
-                                    {{item.from }} - {{item.to}}
+                                    {{ new Date(item.startTimeMillis).getTime() }} - {{item.endTimeMillis}}
                                 </span>
                                 <span class="item-title">
                                     {{item.title ? item.title : 'Title Bar' }}
@@ -114,7 +114,7 @@
                                 </div>
                             </md-card-content>
                             <md-card-actions md-alignment="left">
-                                <md-button  class="md-info" @click="saveTimelineItem(index)">Save</md-button>
+                                <md-button  class="md-info" @click="saveTimelineItem(item,index)">Save</md-button>
                             </md-card-actions>
 
                         </md-card>
@@ -134,7 +134,10 @@
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import Calendar from "@/models/Calendar";
+  import CalendarEvent from "@/models/CalendarEvent";
   import EventComponent from "@/models/EventComponent";
+  import EventTimelineItem from '@/models/EventTimelineItem';
+
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
   import EventBlocks from "../components/NewEventBlocks";
@@ -150,7 +153,7 @@
     },
     props: {
         event: Object,
-        eventComponents: Array
+        eventComponents: [Array,Function]
 
     },
     data: () => ({
@@ -159,37 +162,37 @@
         blocksList : [
             {
                 id : 1,
-                type : 'setup',
+                buildingBlockType : 'setup',
                 icon : 'place',
                 color : '#f44336'
             },
             {
                 id : 2,
-                type : 'activity',
+                buildingBlockType : 'activity',
                 icon : 'notifications_active',
                 color : '#4caf50'
             },
             {
                 id: 3,
-                type : 'meal',
+                buildingBlockType : 'meal',
                 icon : 'restaurant',
                 color : '#00bcd4'
             },
             {
                 id: 4,
-                type : 'DISCUSSION',
+                buildingBlockType : 'DISCUSSION',
                 icon : 'sms',
                 color : '#ff9800'
             },
             {
                 id: 5,
-                type : 'TRANSPORTATION',
+                buildingBlockType : 'TRANSPORTATION',
                 icon : 'train',
                 color : '#f44336'
             },
             {
                 id: 6,
-                type : 'RELAXATION',
+                buildingBlockType : 'RELAXATION',
                 icon : 'weekend',
                 color : '#4caf50'
             }
@@ -209,9 +212,7 @@
           block.mode = 'edit';
           this.timelineItems.push(Object.assign({}, data.block));
       },
-        saveTimelineItem(index){
-          this.$set(this.timelineItems[index],'mode','saved');
-        },
+
         removeItem(index){
             this.timelineItems.splice(index,1);
         },
@@ -221,6 +222,43 @@
         },
         previewEvent(){
             this.$router.push({ path: `/events/`+this.event.id })
+
+        },
+        getTimelineItems() {
+
+            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+
+            new EventTimelineItem().for(calendar, event).get().then(res => {
+
+                this.timelineItems = res;
+
+                console.log('events => ',res);
+            })
+        },
+        saveTimelineItem(item,index) {
+
+            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+            let order = index++;
+
+            new EventTimelineItem({
+                event: { id: event.id},
+                title: item.title,
+                buildingBlockType: item.buildingBlockType,
+                description: item.description,
+                startTimeMillis: 1554620534251,
+                endTimeMillis: 1554620534251,
+                order: 1
+            }).for(calendar, event).save()
+                .then(res => {
+
+                    this.getTimelineItems();
+
+                })
+                .catch(error=>{
+                    console.log(error);
+                })
 
         }
 
@@ -235,6 +273,8 @@
     },
     mounted() {
         this.isLoading = false;
+
+        this.getTimelineItems();
 
     }
   }

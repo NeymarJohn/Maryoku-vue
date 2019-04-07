@@ -33,32 +33,7 @@
 
               <!-- Event TimeLine -->
               <div class="md-layout-item md-size-50">
-                <div class=" time-line-section">
-                  <h4>Timeline</h4>
-
-                  <div >
-                    <ul class="time-line-blocks_selected-items">
-                      <li v-for="(item,index) in timelineItems" :key="index" class="time-line-blocks_selected-items_item time-line-item">
-                        <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">{{item.icon}}</md-icon>
-
-                        <md-card class="block-info" >
-
-                          <div class="item-title-and-time">
-                                <span class="item-time" :style="`background : ` + item.color">
-                                    {{item.from }} - {{item.to}}
-                                </span>
-                            <span class="item-title">
-                                    {{item.title ? item.title : 'Title Bar' }}
-                                </span>
-                          </div>
-                          <p class="item-desc">
-                            {{ item.description }}
-                          </p>
-                        </md-card>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                <event-time-line-items :event="calendarEvent"></event-time-line-items>
               </div>
               <!-- ./Event Timeline -->
 
@@ -88,6 +63,7 @@ import EventBanner from "./components/EventBlocks/EventBanner.vue"
 import EventTabs from "./components/EventBlocks/EventTabs.vue"
 import EventImages from "./components/EventBlocks/EventImages.vue"
 import EventQuestionsAnswers from "./components/EventBlocks/EventQuestionsAnswers.vue"
+import EventTimeLineItems from "./components/EventBlocks/EventTimelineItems.vue"
 
 export default {
   components: {
@@ -99,7 +75,8 @@ export default {
       EventBanner,
       EventTabs,
       EventImages,
-      EventQuestionsAnswers
+      EventQuestionsAnswers,
+      EventTimeLineItems
   },
 
   data() {

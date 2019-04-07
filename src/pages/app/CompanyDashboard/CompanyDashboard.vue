@@ -34,7 +34,7 @@
 
   import Calendar from "@/models/Calendar";
   import CalendarEvent from "@/models/CalendarEvent";
-  import EventTimelineItem from '@/models/EventTimelineItem';
+  import EventPageHeaderImage from '@/models/EventPageHeaderImage';
 
   export default {
     components: {
@@ -77,9 +77,13 @@
           });
         });*/
 
-      new EventTimelineItem().for(calendar, event).find('5ca8fabca2950a149f6439c7').then(res => {
+      /*new EventTimelineItem().for(calendar, event).find('5ca8fabca2950a149f6439c7').then(res => {
           console.log(JSON.stringify(res));
-        })
+        })*/
+
+        /*new EventPageHeaderImage().get().then(headerImages => {
+          console.log(JSON.stringify(headerImages));
+        });*/
       });
     }
   };
