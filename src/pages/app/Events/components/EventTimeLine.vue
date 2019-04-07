@@ -43,36 +43,13 @@
                 <ul class="time-line-blocks_selected-items">
                     <li v-for="(item,index) in timelineItems" :key="index" class="time-line-blocks_selected-items_item time-line-item">
                         <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">{{item.icon}}</md-icon>
-
-                        <md-card class="block-info" v-if="!item.mode || item.mode === 'saved' ">
-                            <div class="card-actions">
-                                <md-button  class="md-info md-sm md-just-icon md-simple md-round" @click="modifyItem(index)">
-                                    <md-icon>create</md-icon>
-                                </md-button>
-                                <md-button  class="md-danger md-sm md-just-icon md-simple md-round" @click="removeItem(index)">
-                                    <md-icon>delete_outline</md-icon>
-                                </md-button>
-                            </div>
-                            <div class="item-title-and-time">
-                                <span class="item-time" :style="`background : ` + item.color">
-                                    {{ new Date(item.startTimeMillis).getTime() }} - {{item.endTimeMillis}}
-                                </span>
-                                <span class="item-title">
-                                    {{item.title ? item.title : 'Title Bar' }}
-                                </span>
-                            </div>
-                            <p class="item-desc">
-                                {{ item.description }}
-                            </p>
-                        </md-card>
-
-                        <md-card class="block-form" v-else="item.mode === 'edit' ">
+                        <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit' ">
                             <md-card-content class="md-layout">
                                 <div class="md-layout-item md-size-50">
                                     <md-field >
                                         <label>From Time</label>
                                         <md-select v-model="item.from"
-                                                   >
+                                        >
                                             <md-option v-for="hour in hoursArray"
                                                        :key="hour"
                                                        :value="hour">
@@ -114,10 +91,34 @@
                                 </div>
                             </md-card-content>
                             <md-card-actions md-alignment="left">
-                                <md-button  class="md-info" @click="saveTimelineItem(item,index)">Save</md-button>
+                                <md-button  class="md-info" v-if="!item.dateCreated" @click="saveTimelineItem(item,index)">Save</md-button>
+                                <md-button  class="md-info" v-else @click="updateTimelineItem(item,index)">Edit</md-button>
                             </md-card-actions>
 
                         </md-card>
+
+                        <md-card class="block-info" v-else-if="!item.mode || item.mode === 'saved' ">
+                            <div class="card-actions">
+                                <md-button  class="md-info md-sm md-just-icon md-simple md-round" @click="modifyItem(index)">
+                                    <md-icon>create</md-icon>
+                                </md-button>
+                                <md-button  class="md-danger md-sm md-just-icon md-simple md-round" @click="removeItem(item)">
+                                    <md-icon>delete_outline</md-icon>
+                                </md-button>
+                            </div>
+                            <div class="item-title-and-time">
+                                <span class="item-time" :style="`background : ` + item.color">
+                                    {{ new Date(item.startTimeMillis).getTime() }} - {{item.endTimeMillis}}
+                                </span>
+                                <span class="item-title">
+                                    {{item.title ? item.title : 'Title Bar' }}
+                                </span>
+                            </div>
+                            <p class="item-desc">
+                                {{ item.description }}
+                            </p>
+                        </md-card>
+
                     </li>
                     <li class="time-line-blocks_selected-items_item">
                         <md-icon class="time-line-blocks_icon">add</md-icon>
@@ -137,6 +138,8 @@
   import CalendarEvent from "@/models/CalendarEvent";
   import EventComponent from "@/models/EventComponent";
   import EventTimelineItem from '@/models/EventTimelineItem';
+  import moment from 'moment';
+  import swal from "sweetalert2";
 
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
@@ -210,11 +213,23 @@
       handleDrop(data,event){
           let block = Object.assign({}, data.block);
           block.mode = 'edit';
+          console.log(block);
           this.timelineItems.push(Object.assign({}, data.block));
       },
 
-        removeItem(index){
-            this.timelineItems.splice(index,1);
+        removeItem(item){
+
+            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+
+            let timelineItem = new EventTimelineItem({id: item.id}).for(calendar, event);
+
+            timelineItem.delete().then(result => {
+                this.getTimelineItems();
+
+            }).catch(error => {
+                console.log(error);
+            })
         },
         modifyItem(index) {
             this.$set(this.timelineItems[index],'mode','edit');
@@ -232,8 +247,6 @@
             new EventTimelineItem().for(calendar, event).get().then(res => {
 
                 this.timelineItems = res;
-
-                console.log('events => ',res);
             })
         },
         saveTimelineItem(item,index) {
@@ -247,9 +260,11 @@
                 title: item.title,
                 buildingBlockType: item.buildingBlockType,
                 description: item.description,
-                startTimeMillis: 1554620534251,
-                endTimeMillis: 1554620534251,
-                order: 1
+                startTimeMillis: this.getEventStartInMillis(item.from),
+                endTimeMillis: this.getEventStartInMillis(item.to),
+                order: order,
+                icon : item.icon,
+                color : item.color
             }).for(calendar, event).save()
                 .then(res => {
 
@@ -260,7 +275,46 @@
                     console.log(error);
                 })
 
-        }
+        },
+        updateTimelineItem(item,index) {
+            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+
+            let timelineItem = new EventTimelineItem({id: item.id}).for(calendar, event);
+
+
+            timelineItem.title = item.title;
+            timelineItem.description = item.description;
+            timelineItem.startTimeMillis = item.startTimeMillis;
+            timelineItem.endTimeMillis = item.endTimeMillis;
+
+            timelineItem.save().then(res=>{
+                this.getTimelineItems();
+
+            }).catch(error => {
+                console.log(error)
+            })
+        },
+        getEventStartInMillis(time) {
+
+            console.log(moment(time, 'HH:mm a').format('H'));
+            console.log(this.convertHoursToMillis(moment(time, 'HH:mm a').format('H')));
+
+            if (time) {
+                  let eventStartTime = new Date((this.convertHoursToMillis(moment(time, 'HH:mm a').format('H'))));
+                  console.log(eventStartTime);
+                  return eventStartTime;
+              }
+          },
+          getEventEndInMillis(time) {
+              if (time) {
+                  let eventEndTime = this.getEventStartInMillis() + this.convertHoursToMillis(moment(time, 'HH:mm a').format('H'));
+                  return eventEndTime;
+              }
+          },
+          convertHoursToMillis(hours) {
+              return hours * 60 * 60 * 1000;
+          }
 
     },
     created() {
@@ -269,6 +323,8 @@
         [...Array(8).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`));
 
         this.hoursArray.push();
+
+        console.log(this.event);
       
     },
     mounted() {
