@@ -741,18 +741,6 @@ $tooltip-border-color: $blue-grey-200 !default;
         background-repeat: no-repeat;
       }
     }
-
-    .default-image-box {
-      height: 111px;
-      box-shadow: 0px 8px 10px 0 rgba(0, 0, 0, 0.2);
-      border-radius: 2.1px;
-      background: #efefef;
-      text-align: center;
-      padding-top: 40px;
-      font-weight: bold;
-      opacity: 0.5;
-
-    }
   }
 
   .time-line-blocks_selected-items_item.time-line-item:last-child:after {
@@ -794,6 +782,7 @@ $tooltip-border-color: $blue-grey-200 !default;
       text-overflow: ellipsis;
       white-space: nowrap;
       max-width: 60%;
+      width: 60%;
 
       &:hover {
         border: 1px solid lightgray;

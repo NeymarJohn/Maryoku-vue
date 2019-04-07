@@ -32,6 +32,10 @@
   import CompanyDashboardSatisfactionChart from "./CompanyDashboardSatisfactionChart";
   import CompanyDashboardCostsChart from "./CompanyDashboardCostsChart";
 
+  import Calendar from "@/models/Calendar";
+  import CalendarEvent from "@/models/CalendarEvent";
+  import EventPageHeaderImage from '@/models/EventPageHeaderImage';
+
   export default {
     components: {
       CompanyDashboardInfo,
@@ -45,6 +49,42 @@
       return {
         auth: auth
       };
+    },
+    mounted() {
+      console.log("*** Test 123");
+
+      this.auth.currentUser(this, true, () => {
+        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: '5c77b318518e7eb3779b1c3e'});
+
+        /*new EventTimelineItem({
+          event: { id: event.id},
+          title: "abc",
+          buildingBlockType: "setup",
+          description: "abc",
+          startTimeMillis: 0,
+          endTimeMillis: 0,
+          order: 1
+        }).for(calendar, event).save().then(res => {
+          console.log(JSON.stringify(res));
+        })*/
+        /*calendar.calendarEvents().find(event.id).then(event => {
+          console.log("event: ");
+          console.log(JSON.stringify(event));
+          new CalendarEvent(event).timelineItems().get().then(items => {
+            console.log("event timeline items");
+            console.log(JSON.stringify(items));
+          });
+        });*/
+
+      /*new EventTimelineItem().for(calendar, event).find('5ca8fabca2950a149f6439c7').then(res => {
+          console.log(JSON.stringify(res));
+        })*/
+
+        /*new EventPageHeaderImage().get().then(headerImages => {
+          console.log(JSON.stringify(headerImages));
+        });*/
+      });
     }
   };
 </script>
