@@ -239,8 +239,6 @@ export default {
       this.currentTab = null;
     },
     openEventModal() {
-          console.log(this.event);
-
         this.setEventData(this.event);
         this.setEventModal({ showModal: true });
       this.setModalSubmitTitle("Edit");

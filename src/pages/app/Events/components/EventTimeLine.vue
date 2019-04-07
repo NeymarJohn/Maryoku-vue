@@ -213,7 +213,6 @@
       handleDrop(data,event){
           let block = Object.assign({}, data.block);
           block.mode = 'edit';
-          console.log(block);
           this.timelineItems.push(Object.assign({}, data.block));
       },
 
@@ -311,8 +310,6 @@
 
         this.hoursArray.push();
 
-        console.log(this.event);
-      
     },
     mounted() {
 
