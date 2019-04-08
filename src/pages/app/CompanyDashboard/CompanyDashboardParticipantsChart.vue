@@ -34,6 +34,9 @@
           <md-progress-bar class="md-info" style="min-height: 18px;" :md-value="(item.actual/item.invited)*100"></md-progress-bar>
         </div>
       </template>
+      <div class="" v-if="items.length === 0">
+        <h6 style="text-align: center;">No participants information for this month</h6>
+      </div>
     </md-card-content>
   </md-card>
 </template>

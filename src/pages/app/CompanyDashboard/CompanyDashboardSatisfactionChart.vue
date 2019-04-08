@@ -34,6 +34,9 @@
           <md-progress-bar class="md-warning" style="min-height: 18px;" :md-value="item.value"></md-progress-bar>
         </div>
       </template>
+      <div class="" v-if="items.length === 0">
+        <h6 style="text-align: center;">No satisfaction rates on this month</h6>
+      </div>
     </md-card-content>
     <md-card-actions style="justify-content: center;">
       <h4 class="title" style="font-weight: 500; text-align: center;">
