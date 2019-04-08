@@ -2,11 +2,7 @@
     <div class="questions-answers-list">
         <md-card>
             <md-card-header>
-                <h4 class="title">Questions & Answers 
-                    <md-button class="md-info md-sm edit-event-component"   @click="showQuestionsAnswersModal">
-                        Edit
-                    </md-button>
-                </h4>
+                <h4 class="title">Questions & Answers</h4>
             </md-card-header>
             <md-card-content>
                 <collapse
@@ -25,8 +21,6 @@
                 </collapse>
             </md-card-content>
         </md-card>
-
-        <edit-questions-and-answers :event="event" rel="questionsAnswersModal"></edit-questions-and-answers>
     </div>
 </template>
 <script>
@@ -38,14 +32,10 @@
 
   import { Collapse } from "@/components";
 
-  //COMPONENTS
-  import EditQuestionsAndAnswers from './Modals/EditQuestionsAndAnswers.vue';
-
   export default {
     name: 'event-questions-answers',
     components: {
-        Collapse,
-        EditQuestionsAndAnswers
+        Collapse
     },
     props: {
         event
@@ -62,15 +52,9 @@
                 title : 'Question 3'
             }
         ],
-        showModal : false
     }),
     methods: {
-        ...mapMutations("EventPlannerVuex", [
-            "setQuestionsAnswersModal"
-        ]),
-        showQuestionsAnswersModal() {
-            this.setQuestionsAnswersModal({ showModal: true });
-        }
+
     },
     created() {
       

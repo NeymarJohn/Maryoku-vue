@@ -317,6 +317,7 @@
              * Add new contact person to the selected vendor
              */
             addContactPerson() {
+                console.log('i am here');
                 this.selected_vendor.vendorContactPerson.push({
                     name : null,
                     email : null,

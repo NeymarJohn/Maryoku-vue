@@ -19,8 +19,8 @@
               <!-- Event Info -->
               <div class="md-layout-item md-size-50">
 
-                <h1 class="event-title">{{calendarEvent.occasion}}</h1>
-                <div class="event-date">{{getEventDate(calendarEvent.eventStartMillis)}}</div>
+                <h1 class="event-title">{{calendarEvent.title}}</h1>
+                <div class="event-date">March 17 2019</div>
 
                 <event-tabs :event="calendarEvent" ></event-tabs>
 
@@ -151,17 +151,9 @@ export default {
                 this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
                 this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
                 this.seriesData = [(100 - this.percentage), this.percentage];
-                console.log(event);
             });
         }.bind(this));
-    },
-      getEventDate(eventStartMillis) {
-
-        let x = new Date(eventStartMillis);
-
-        return x.getDate() + '-' + x.getMonth() + '-' + x.getFullYear();
-
-      }
+    }
   },
   computed: {
     pieChart() {

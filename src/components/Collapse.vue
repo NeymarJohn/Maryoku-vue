@@ -104,7 +104,10 @@
     methods: {
       getActiveCollapse(index) {
         // return this.isActive == index;
+        console.log('this.activeList',this.activeList)
         return this.activeList.includes(index);
+  
+  
       },
       activeCollapse(index) {
         return {

@@ -710,10 +710,6 @@ $tooltip-border-color: $blue-grey-200 !default;
       }
       .md-card-content {
         padding : 0 ;
-
-        .md-collapse-title {
-          padding : 0;
-        }
       }
     }
 
@@ -765,10 +761,6 @@ $tooltip-border-color: $blue-grey-200 !default;
 }
 
 .event-info-tabs {
-  margin-bottom : 3em;
-  .md-card-tabs {
-    margin-bottom: 0;
-  }
   .md-card-content {
     padding : 0;
 
@@ -778,39 +770,6 @@ $tooltip-border-color: $blue-grey-200 !default;
         margin-left : 0;
       }
     }
-    .tab-content {
-      width: calc(100% - 229px);
-    }
-    .md-has-textarea {
-      margin-top : 0;
-      .md-textarea {
-        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-        font-weight: 300;
-        font-size : 14px;
-        padding : 0 !important;
-        width : 100%;
-
-      }
-
-
-      &:not(.editable) {
-
-        &:after {
-          display: none;
-        }
-
-        .md-textarea {
-          resize: none;
-          pointer-events: none;
-        }
-      }
-
-
-    }
-  }
-
-  .tabs-actions {
-    margin-left : 242px;
   }
 }
 
@@ -819,37 +778,8 @@ $tooltip-border-color: $blue-grey-200 !default;
   margin-left : 15px;
 }
 
-.edit-timeline-btn  , .edit-event-component{
-  margin-left : 15px !important;
-}
-
-.event_questions-answers-modal {
-
-  .modal-header {
-    h4 {
-      margin : 0;
-    }
-  }
-  .modal-body {
-    overflow: auto;
-    height: 430px;
-    margin : 1em auto;
-  }
-
-  .question-item {
-    margin-bottom: 1em;
-    border: 1px solid #efefef;
-    padding: 1em;
-    border-radius: 5px;
-
-    .md-field {
-      margin-top : 0 !important;
-    }
-  }
-
-  .add-question-btn {
-    width : 100%;
-  }
+.edit-timeline-btn {
+  margin-left : 15px;
 }
 @import 'vue-image-lightbox/dist/vue-image-lightbox.min.css';
 
