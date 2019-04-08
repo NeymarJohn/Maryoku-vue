@@ -21,10 +21,23 @@ export default {
             eventTheme: null,
             category: null,
           },
+            eventPage : {
+                headerImage : null,
+                meetingPlaceDescription:"",
+                whenToArrive:"",
+                whatYouNeedToKnow: "",
+                qnas: [],
+                published:false,
+                dateCreated:"",
+                lastUpdated:"",
+                images:[]
+            },
           eventModalOpen: false,
           modalTitle: '',
           modalSubmitTitle: '',
           editMode: false,
+            questionsAnswersModal : false,
+            editHeaderModal : false,
         };
     },
 
@@ -32,9 +45,18 @@ export default {
       setEventProperty(state, {key, actualValue}) {
           state.eventData[key] = actualValue;
       },
+        setEventPageProperty(state, {key, actualValue}) {
+            state.eventPage[key] = actualValue;
+        },
       setEventModal(state, data) {
         state.eventModalOpen = data.showModal;
       },
+        setQuestionsAnswersModal(state, data) {
+            state.questionsAnswersModal = data.showModal;
+        },
+        setHeaderModal(state, data) {
+            state.editHeaderModal = data.showModal;
+        },
       setEditMode(state, data) {
         state.editMode = data.editMode
       },
@@ -58,7 +80,19 @@ export default {
           state.eventData['category'] = data.category;
           state.eventData['time'] = moment(data.eventStartMillis).format('h:00 A');
           state.eventData['duration'] = moment(data.eventEndMillis).diff(data.eventStartMillis, 'hours')
-      }
+      },
+        setEventPageData(state, data) {
+            state.eventPage['headerImage'] = data.headerImage;
+            state.eventPage['meetingPlaceDescription'] = data.meetingPlaceDescription;
+            state.eventPage['whenToArrive'] = data.whenToArrive;
+            state.eventPage['whatYouNeedToKnow'] = data.whatYouNeedToKnow;
+            state.eventPage['qnas'] = data.qnas;
+            state.eventPage['published'] = data.published;
+            state.eventPage['dateCreated'] = data.dateCreated;
+            state.eventPage['lastUpdated'] = data.lastUpdated;
+            state.eventPage['images'] = data.images;
+
+        }
     },
     actions: {
       setEventModalAndEventData({ dispatch, commit }, payload) {

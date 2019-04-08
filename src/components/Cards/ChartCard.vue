@@ -19,7 +19,6 @@
     </md-card-header>
 
     <md-card-content>
-      <vue-element-loading :active="showLoader" spinner="ring" color="#FF547C"/>
       <div v-if="chartInsideContent" :id="chartId" class="ct-chart"></div>
       <div class="md-card-action-buttons text-center" v-if="headerAnimation === 'true'">
         <md-button class="md-danger md-simple fix-broken-card" @click="fixHeader" v-if="headerDown">
@@ -38,14 +37,9 @@
   </md-card>
 </template>
 <script>
-  import VueElementLoading from 'vue-element-loading';
 export default {
   name: "chart-card",
-  components: {
-    VueElementLoading
-  },
   props: {
-    showLoader: Boolean,
     HeaderText: Boolean,
     HeaderIcon: Boolean,
     noFooter: Boolean,

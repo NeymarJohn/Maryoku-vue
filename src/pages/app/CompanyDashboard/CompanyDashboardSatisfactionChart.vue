@@ -9,33 +9,39 @@
 
         <md-field class="pull-right" style="max-width: 120px; margin: 0; border: none;" md-inline>
           <md-select v-model="filterMonth" name="filterMonth" id="filterMonth">
-            <md-option value="01">January</md-option>
-            <md-option value="02">February</md-option>
-            <md-option value="03">March</md-option>
-            <md-option value="04">April</md-option>
-            <md-option value="05">May</md-option>
-            <md-option value="06">June</md-option>
-            <md-option value="07">July</md-option>
-            <md-option value="08">August</md-option>
-            <md-option value="09">September</md-option>
-            <md-option value="10">October</md-option>
-            <md-option value="11">November</md-option>
-            <md-option value="12">December</md-option>
+            <md-option value="January">January</md-option>
+            <md-option value="February">February</md-option>
+            <md-option value="March">March</md-option>
+            <md-option value="April">April</md-option>
+            <md-option value="May">May</md-option>
+            <md-option value="June">June</md-option>
+            <md-option value="July">July</md-option>
+            <md-option value="August">August</md-option>
+            <md-option value="September">September</md-option>
+            <md-option value="October">October</md-option>
+            <md-option value="November">November</md-option>
+            <md-option value="December">December</md-option>
           </md-select>
         </md-field>
       </h5>
     </md-card-header>
-    <md-card-content style="min-height: 120px;">
-      <vue-element-loading :active="loading" spinner="ring" color="#FF547C"/>
+    <md-card-content>
       <div class="filter"></div>
-      <template v-for="item in items">
-        <div class="bar-item">
-          <h5 style="margin-top: 0; font-weight: 500;font-size: 14px;" class="text-gray" >{{item.text}} <small class="pull-right black-color">{{item.value}}%</small></h5>
-          <md-progress-bar class="md-warning" style="min-height: 18px;" :md-value="item.value"></md-progress-bar>
-        </div>
-      </template>
-      <div class="" v-if="items.length === 0">
-        <h6 style="text-align: center;">No satisfaction rates this month</h6>
+      <div class="bar-item">
+        <h5 style="margin-top: 0; font-weight: 500;font-size: 14px;" class="text-gray" >Space / Location <small class="pull-right black-color">82%</small></h5>
+        <md-progress-bar class="md-warning" style="min-height: 18px;" :md-value="82"></md-progress-bar>
+      </div>
+      <div class="bar-item">
+        <h5 style="margin-top: 0; font-weight: 500;font-size: 14px;" class="text-gray" >Catering <small class="pull-right black-color">87%</small></h5>
+        <md-progress-bar class="md-warning" style="min-height: 18px;" :md-value="87"></md-progress-bar>
+      </div>
+      <div class="bar-item">
+        <h5 style="margin-top: 0; font-weight: 500;font-size: 14px;" class="text-gray" >Content <small class="pull-right black-color">79%</small></h5>
+        <md-progress-bar class="md-warning" style="min-height: 18px;" :md-value="79"></md-progress-bar>
+      </div>
+      <div class="bar-item">
+        <h5 style="margin-top: 0; font-weight: 500;font-size: 14px;" class="text-gray" >Gift / Giveaway <small class="pull-right black-color">95%</small></h5>
+        <md-progress-bar class="md-warning" style="min-height: 18px;" :md-value="95"></md-progress-bar>
       </div>
     </md-card-content>
     <md-card-actions style="justify-content: center;">
@@ -48,51 +54,19 @@
 </template>
 <script>
   import auth from "@/auth";
-  import VueElementLoading from 'vue-element-loading';
   import {
 
   } from "@/components";
   export default {
     name: "company-dashboard-satisfaction-chart",
     components: {
-      VueElementLoading
-    },
-    props: {
-      satisfactionRatesPerYearMonth: {
-        type: Object,
-        default: ()=>{return {};}
-      }
-    },
-    watch: {
-      satisfactionRatesPerYearMonth(newVal, oldVal){
-        this.loading = false;
-        let keys = Object.keys(newVal["2019"]);
-        if (keys.length > 0){
-          for (const key of keys) {
-            let contents = newVal["2019"][key];
-            let contentsArray = [];
-            let types = Object.keys(contents);
-            for (const type of types){
-              contentsArray.push({text: type, value: contents[type]})
-            }
-            this.itemsPerMonth[key] = contentsArray;
-          }
-        }
 
-        let value = this.itemsPerMonth[this.filterMonth];
-        if (value){
-          this.items = value;
-        }
-      }
     },
     data() {
       return {
         auth: auth,
-        loading: true,
-        items: [],
-        itemsPerMonth: {},
         amount2: 20,
-        filterMonth: "03"
+        filterMonth: "March"
       };
     }
   };

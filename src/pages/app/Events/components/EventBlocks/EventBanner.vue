@@ -6,6 +6,8 @@
             </md-button>
             <input type="file" style="display: none;" ref="inputFile" accept="image/gif, image/jpg, image/png" @change="onFilePicked">
         </div>
+
+        <edit-header-image :event="event" rel="editHeaderModal"></edit-header-image>
     </div>
 </template>
 <script>
@@ -15,20 +17,28 @@
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
 
+  import EditHeaderImage from './Modals/EditHeaderImage.vue';
+
   export default {
     name: 'event-banner',
     components: {
-
+        EditHeaderImage
     },
     props: {
         event
     },
     data: () => ({
-        bannerURL : 'https://bit.ly/2TWGILO', // default image for banner
+//        bannerURL : this.event.eventPage.headerId ? '/static/img/page-headers/' + this.event.eventPage.headerId : 'https://bit.ly/2TWGILO', // default image for banner
     }),
     methods: {
+        ...mapMutations("EventPlannerVuex", [
+            "setHeaderModal"
+        ]),
         uploadImage() {
-            this.$refs.inputFile.click();
+            //this.$refs.inputFile.click();
+
+            this.setHeaderModal({ showModal: true });
+
 
         },
         onFilePicked(event) {
@@ -50,13 +60,15 @@
 
     },
     created() {
-      
+
     },
     mounted() {
 
     },
     computed: {
-
+        bannerURL() {
+            return this.event.eventPage.headerImage ? '/static/img/page-headers/' + this.event.eventPage.headerImage : 'https://bit.ly/2TWGILO';
+        }
     }
   }
 </script>

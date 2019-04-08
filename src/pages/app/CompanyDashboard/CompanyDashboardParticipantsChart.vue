@@ -8,85 +8,57 @@
         Participants per Event
         <md-field class="pull-right md-xs" style="max-width: 120px; margin: 0; border: none;" md-inline>
           <md-select v-model="filterMonth" name="filterMonth" id="filterMonth">
-            <md-option value="01">January</md-option>
-            <md-option value="02">February</md-option>
-            <md-option value="03">March</md-option>
-            <md-option value="04">April</md-option>
-            <md-option value="05">May</md-option>
-            <md-option value="06">June</md-option>
-            <md-option value="07">July</md-option>
-            <md-option value="08">August</md-option>
-            <md-option value="09">September</md-option>
-            <md-option value="10">October</md-option>
-            <md-option value="11">November</md-option>
-            <md-option value="12">December</md-option>
+            <md-option value="January">January</md-option>
+            <md-option value="February">February</md-option>
+            <md-option value="March">March</md-option>
+            <md-option value="April">April</md-option>
+            <md-option value="May">May</md-option>
+            <md-option value="June">June</md-option>
+            <md-option value="July">July</md-option>
+            <md-option value="August">August</md-option>
+            <md-option value="September">September</md-option>
+            <md-option value="October">October</md-option>
+            <md-option value="November">November</md-option>
+            <md-option value="December">December</md-option>
           </md-select>
         </md-field>
       </h5>
     </md-card-header>
-    <md-card-content style="min-height: 120px">
-      <vue-element-loading :active="loading" spinner="ring" color="#FF547C"/>
+    <md-card-content>
       <div class="filter"></div>
-      <template v-for="item in items">
-        <div class="bar-item">
-          <h5 style="margin-bottom: 0; margin-top: 0; font-weight: 500; font-size: 14px;" >{{item.text}}</h5>
-          <div class="text-gray small" style="padding-bottom: 6px;">{{item.theDate}} <span class="pull-right"><span class="black-color">{{item.actual}}</span> / {{item.invited}}</span></div>
-          <md-progress-bar class="md-info" style="min-height: 18px;" :md-value="(item.actual/item.invited)*100"></md-progress-bar>
-        </div>
-      </template>
-      <div class="" v-if="items.length === 0">
-        <h6 style="text-align: center;">No participants information this month</h6>
+      <div class="bar-item">
+        <h5 style="margin-bottom: 0; margin-top: 0; font-weight: 500; font-size: 14px;" >Company Training</h5>
+        <div class="text-gray small" style="padding-bottom: 6px;">August 19, 2018 <span class="pull-right"><span class="black-color">198</span> / 231</span></div>
+        <md-progress-bar class="md-info" style="min-height: 18px;" :md-value="(198/231)*100"></md-progress-bar>
+      </div>
+      <div class="bar-item">
+        <h5 style="margin-bottom: 0; margin-top: 0; font-weight: 500;font-size: 14px;" >Outreach Program </h5>
+        <div class="text-gray small" style="padding-bottom: 6px;">August 25, 2018 <span class="pull-right"><span class="black-color">422</span> / 500</span></div>
+        <md-progress-bar class="md-info" style="min-height: 18px;" :md-value="(422/500)*100"></md-progress-bar>
+      </div>
+      <div class="bar-item">
+        <h5 style="margin-bottom: 0; margin-top: 0; font-weight: 500;font-size: 14px;" >Development Workshop</h5>
+        <div class="text-gray small" style="padding-bottom: 6px;">August 19, 2019 <span class="pull-right"><span class="black-color">59</span> / 60</span></div>
+        <md-progress-bar class="md-info" style="min-height: 18px;" :md-value="(59/60)*100"></md-progress-bar>
       </div>
     </md-card-content>
   </md-card>
 </template>
 <script>
   import auth from "@/auth";
-  import VueElementLoading from 'vue-element-loading';
   import {
 
   } from "@/components";
   export default {
     name: "company-dashboard-participants-chart",
     components: {
-      VueElementLoading
-    },
-    props: {
-      participantsPerEventPerYearMonthEventType: {
-        type: Object,
-        default: ()=>{return {};}
-      }
-    },
-    watch: {
-      participantsPerEventPerYearMonthEventType(newVal, oldVal){
-        this.loading = false;
-        let keys = Object.keys(newVal["2019"]);
-        if (keys.length > 0){
-          for (const key of keys) {
-            let contents = newVal["2019"][key];
-            let contentsArray = [];
-            let types = Object.keys(contents);
-            for (const type of types){
-              contentsArray.push({text: type, invited: contents[type].Invited, actual: contents[type].Actual, theDate: ""})
-            }
-            this.itemsPerMonth[key] = contentsArray;
-          }
-        }
 
-        let value = this.itemsPerMonth[this.filterMonth];
-        if (value){
-          this.items = value;
-        }
-      }
     },
     data() {
       return {
         auth: auth,
-        loading: true,
-        items: [],
-        itemsPerMonth: {},
         amount2: 20,
-        filterMonth: "03",
+        filterMonth: "March",
       };
     }
   };

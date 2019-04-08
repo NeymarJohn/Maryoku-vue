@@ -108,7 +108,7 @@
     },
     props: {
         event: Object,
-        eventComponents: Array
+        eventComponents: [Array,Function]
 
     },
     data: () => ({

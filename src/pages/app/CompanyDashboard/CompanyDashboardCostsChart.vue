@@ -7,8 +7,7 @@
     header-icon
     chart-inside-content
     no-footer
-    background-color="rose"
-    :show-loader="loading">
+    background-color="rose">
     <template slot="chartInsideHeader">
       <div class="card-icon">
         <md-icon>timeline</md-icon>
@@ -31,41 +30,19 @@
     components: {
       ChartCard
     },
-    props: {
-      eventCostPerEmployeePerYearMonth: {
-        type: Object,
-        default: ()=>{ return {}}
-      },
-    },
-    watch: {
-      eventCostPerEmployeePerYearMonth(newVal, oldVal){
-        this.loading = false;
-        let labels = [];
-        let series = [];
-        let keys = Object.keys(newVal);
-        if (keys.length > 0){
-          for (const key of keys) {
-            let parts = key.split("__");
-            labels.push(`${parts[0]}-${parts[1]}`);
-            series.push(newVal[key]);
-          }
-        }
-
-        this.colouredLineChart.data = {
-          labels: labels,
-          series : [series]
-        };
-      }
-    },
     data() {
       return {
         auth: auth,
-        loading: true,
         colouredLineChart: {
           data: {
             labels: [
+              "'15",
+              "'16",
+              "'17",
+              "'18",
+              "'19"
             ],
-            series: [[]]
+            series: [[3, 11, 14, 12, 16]]
           },
           options: {
             lineSmooth: this.$Chartist.Interpolation.cardinal({

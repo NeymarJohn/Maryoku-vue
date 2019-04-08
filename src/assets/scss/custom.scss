@@ -710,6 +710,10 @@ $tooltip-border-color: $blue-grey-200 !default;
       }
       .md-card-content {
         padding : 0 ;
+
+        .md-collapse-title {
+          padding : 0;
+        }
       }
     }
 
@@ -761,6 +765,10 @@ $tooltip-border-color: $blue-grey-200 !default;
 }
 
 .event-info-tabs {
+  margin-bottom : 3em;
+  .md-card-tabs {
+    margin-bottom: 0;
+  }
   .md-card-content {
     padding : 0;
 
@@ -770,6 +778,39 @@ $tooltip-border-color: $blue-grey-200 !default;
         margin-left : 0;
       }
     }
+    .tab-content {
+      width: calc(100% - 229px);
+    }
+    .md-has-textarea {
+      margin-top : 0;
+      .md-textarea {
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        font-weight: 300;
+        font-size : 14px;
+        padding : 0 !important;
+        width : 100%;
+
+      }
+
+
+      &:not(.editable) {
+
+        &:after {
+          display: none;
+        }
+
+        .md-textarea {
+          resize: none;
+          pointer-events: none;
+        }
+      }
+
+
+    }
+  }
+
+  .tabs-actions {
+    margin-left : 242px;
   }
 }
 
@@ -778,9 +819,94 @@ $tooltip-border-color: $blue-grey-200 !default;
   margin-left : 15px;
 }
 
-.edit-timeline-btn {
-  margin-left : 15px;
+.edit-timeline-btn  , .edit-event-component{
+  margin-left : 15px !important;
 }
+
+.event_questions-answers-modal , .event_header-image-modal{
+
+  .modal-header {
+    h4 {
+      margin : 0;
+    }
+  }
+  .modal-body {
+    overflow: auto;
+    max-height: 430px;
+    margin : 1em auto;
+  }
+
+  .question-item {
+    margin-bottom: 1em;
+    border: 1px solid #efefef;
+    padding: 1em;
+    border-radius: 5px;
+
+    .md-field {
+      margin-top : 0 !important;
+    }
+  }
+
+  .add-question-btn {
+    width : 100%;
+  }
+}
+
+.header-images-list {
+
+  &_item {
+
+    margin-bottom : 1em;
+    position: relative;
+
+    img {
+      border-radius: 2.1px;
+      box-shadow: 0px 8px 10px 0 rgba(0, 0, 0, 0.2);
+      border : 2px solid transparent;
+
+
+      &.selected {
+        border : 2px solid $brand-rose;
+      }
+    }
+
+    .md-button {
+      position: absolute;
+      top : 0;
+      right : 0.5em;
+      height: auto;
+
+      .md-icon.md-theme-default.md-icon-font {
+        color : #fff !important;
+      }
+    }
+
+  }
+}
+
+.event_header-image-modal {
+  .preview-image {
+    position : fixed;
+    top : 0;
+    bottom : 0;
+    left : 0;
+    right : 0;
+    z-index : 9999999999999;
+    background: #00000094;
+    text-align: center;
+    padding: 0 10%;
+
+    .md-button {
+      position: absolute;
+      right: 9%;
+      top: 9%;
+    }
+    img {
+      margin : 10% auto;
+    }
+  }
+}
+
 @import 'vue-image-lightbox/dist/vue-image-lightbox.min.css';
 
 

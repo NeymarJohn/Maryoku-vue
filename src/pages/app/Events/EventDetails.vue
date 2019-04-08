@@ -19,8 +19,8 @@
               <!-- Event Info -->
               <div class="md-layout-item md-size-50">
 
-                <h1 class="event-title">{{calendarEvent.title}}</h1>
-                <div class="event-date">March 17 2019</div>
+                <h1 class="event-title">{{calendarEvent.occasion}}</h1>
+                <div class="event-date">{{getEventDate(calendarEvent.eventStartMillis)}}</div>
 
                 <event-tabs :event="calendarEvent" ></event-tabs>
 
@@ -52,6 +52,8 @@ import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import Calendar from '@/models/Calendar';
 import CalendarEvent from '@/models/CalendarEvent';
+import EventPlannerVuexModule from "./EventPlanner.vuex";
+import {mapState, mapMutations,mapGetters, mapActions} from 'vuex';
 
 //COMPONENTS
 import { AnimatedNumber } from "@/components";
@@ -138,10 +140,19 @@ export default {
       ],
     };
   },
+    created(){
+        this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
+
+    },
   mounted() {
     this.getEvent();
+
   },
   methods: {
+    ...mapMutations("EventPlannerVuex", [
+        "setEventPageData",
+        "setEventPageProperty"
+    ]),
     getEvent() {
         this.auth.currentUser(this, true, function() {
             let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
@@ -151,11 +162,46 @@ export default {
                 this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
                 this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
                 this.seriesData = [(100 - this.percentage), this.percentage];
+
+                if ( event.eventPage == null ) {
+                    this.setEventPageData();
+                }
+
             });
+
         }.bind(this));
-    }
+    },
+      getEventDate(eventStartMillis) {
+
+        let x = new Date(eventStartMillis);
+
+        return x.getDate() + '-' + x.getMonth() + '-' + x.getFullYear();
+
+      },
+      setEventPageData() {
+
+          let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+          let editedEvent = new CalendarEvent({id: this.calendarEvent.id});
+
+          editedEvent = this.calendarEvent;
+          editedEvent.eventPage = this.eventPage;
+
+          editedEvent.for(_calendar).save().then(response => {
+              console.log(response);
+
+          })
+              .catch((error) => {
+                  console.log(error);
+
+              });
+
+
+      }
   },
   computed: {
+      ...mapState('EventPlannerVuex', [
+          'eventPage',
+      ]),
     pieChart() {
       return {
         data: {

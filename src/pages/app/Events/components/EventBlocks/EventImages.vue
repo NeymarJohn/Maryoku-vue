@@ -29,6 +29,7 @@
   import EventComponent from "@/models/EventComponent";
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
+  import swal from "sweetalert2";
 
 
   export default {
@@ -61,6 +62,14 @@
               formData.append("images", file[0], file[0].name) // TODO :: send this object once we have api for userPorfile photo
           }else{
               this.alretExceedPictureSize = true
+              this.$notify(
+                  {
+                      message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
+                      horizontalAlign: 'center',
+                      verticalAlign: 'top',
+                      type: 'warning'
+                  })
+
           }
 
       },
