@@ -1,9 +1,9 @@
 <template>
   <div class="md-layout">
-    <div class="md-layout-item md-small-size-100 md-medium-size-30 md-large-size-25">
+    <div class="md-layout-item md-small-size-100 md-medium-size-40 md-large-size-25">
       <company-dashboard-info></company-dashboard-info>
     </div>
-    <div class="md-layout-item md-small-size-100 md-medium-size-70 md-large-size-75">
+    <div class="md-layout-item md-small-size-100 md-medium-size-60 md-large-size-75">
       <div class="md-layout">
         <div class="md-layout-item md-medium-size-100 md-large-size-50">
           <company-dashboard-events-chart></company-dashboard-events-chart>

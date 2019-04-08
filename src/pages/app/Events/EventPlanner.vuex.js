@@ -25,6 +25,7 @@ export default {
           modalTitle: '',
           modalSubmitTitle: '',
           editMode: false,
+            questionsAnswersModal : false
         };
     },
 
@@ -35,6 +36,9 @@ export default {
       setEventModal(state, data) {
         state.eventModalOpen = data.showModal;
       },
+        setQuestionsAnswersModal(state, data) {
+            state.questionsAnswersModal = data.showModal;
+        },
       setEditMode(state, data) {
         state.editMode = data.editMode
       },
