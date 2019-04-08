@@ -3,11 +3,12 @@
     header-animation="false"
     :chart-data="colouredLineChart.data"
     :chart-options="colouredLineChart.options"
-    chart-type="Line"
+    chart-type="Bar"
     header-icon
     chart-inside-content
     no-footer
-    background-color="green">
+    background-color="blue"
+  :show-loader="loading">
     <template slot="chartInsideHeader">
       <div class="card-icon">
         <md-icon>timeline</md-icon>
@@ -29,19 +30,40 @@
     components: {
       ChartCard
     },
+    props: {
+      eventsPerCategory: {
+        type: Object,
+        default: ()=>{ return {}}
+      },
+    },
+    watch: {
+      eventsPerCategory(newVal, oldVal){
+        this.loading = false;
+        let labels = [];
+        let series = [];
+        let keys = Object.keys(newVal);
+        if (keys.length > 0){
+          for (const key of keys) {
+            labels.push(key);
+            series.push(newVal[key]);
+          }
+        }
+
+        this.colouredLineChart.data = {
+          labels: labels,
+            series : [series]
+        };
+      }
+    },
     data() {
       return {
         auth: auth,
+        loading: true,
         colouredLineChart: {
           data: {
             labels: [
-              "'15",
-              "'16",
-              "'17",
-              "'18",
-              "'19"
             ],
-            series: [[3, 11, 14, 12, 16]]
+            series: [[]]
           },
           options: {
             lineSmooth: this.$Chartist.Interpolation.cardinal({
