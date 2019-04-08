@@ -35,7 +35,7 @@
         </div>
       </template>
       <div class="" v-if="items.length === 0">
-        <h6 style="text-align: center;">No satisfaction rates on this month</h6>
+        <h6 style="text-align: center;">No satisfaction rates this month</h6>
       </div>
     </md-card-content>
     <md-card-actions style="justify-content: center;">

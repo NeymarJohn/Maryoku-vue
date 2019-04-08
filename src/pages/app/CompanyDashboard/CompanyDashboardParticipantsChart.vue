@@ -35,7 +35,7 @@
         </div>
       </template>
       <div class="" v-if="items.length === 0">
-        <h6 style="text-align: center;">No participants information for this month</h6>
+        <h6 style="text-align: center;">No participants information this month</h6>
       </div>
     </md-card-content>
   </md-card>
