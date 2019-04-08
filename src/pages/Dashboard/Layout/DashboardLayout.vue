@@ -18,7 +18,7 @@
 
         <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
         </sidebar-item>-->
-
+        
         <sidebar-item :link="{name: 'Company', icon: 'fingerprint', path: '/company'}">
         </sidebar-item>
 
@@ -33,8 +33,8 @@
               <span>Create New Event</span>
             </md-button>
           </li>
-          <sidebar-item :link="{name: 'Events List',  icon: 'event', path: '/events'}"></sidebar-item>
-          <sidebar-item :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>
+          <sidebar-item :link="{name: 'Events List', path: '/events'}"></sidebar-item>
+          <sidebar-item :link="{name: 'Year Planner', path: '/planner'}"></sidebar-item>
         </sidebar-item>
 
 

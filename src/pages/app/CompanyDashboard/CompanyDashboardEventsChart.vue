@@ -13,7 +13,7 @@
         <md-icon>timeline</md-icon>
       </div>
       <h3 class="title" >
-        {{currentYearEventsCount}} <small style="font-size: 0.95rem; color: #7c7c7c;">Events on {{currentYear}}</small>
+        16 <small style="font-size: 0.95rem; color: #7c7c7c;">Events on 2019</small>
         <md-switch class="md-switch-info pull-right text-right" style="padding: 0; margin: 12px;" v-model="displayByYearOrMonth" v-tooltip.bottom="'Click to view Events Distribution by Year or Month'">
           Events by {{displayByYearOrMonth ? 'Month' : 'Year'}}
         </md-switch>
@@ -22,20 +22,8 @@
     <template slot="footer" style="justify-content: center !important;" >
       <div class="md-layout">
         <div class="md-layout-item md-size-50">
-          <md-field class="">
-            <label for="year">Start from year</label>
-            <md-select v-model="filterYear" name="filterYear" id="filterYear">
-              <md-option value="2019">2019</md-option>
-              <md-option value="2018">2018</md-option>
-              <md-option value="2017">2017</md-option>
-              <md-option value="2016">2016</md-option>
-              <md-option value="2015">2015</md-option>
-            </md-select>
-          </md-field>
-        </div>
-        <div class="md-layout-item md-size-50">
           <md-field>
-            <label for="month">Start from month</label>
+            <label for="month">Month</label>
             <md-select v-model="filterMonth" name="filterMonth" id="filterMonth">
               <md-option value="January">January</md-option>
               <md-option value="February">February</md-option>
@@ -49,6 +37,18 @@
               <md-option value="October">October</md-option>
               <md-option value="November">November</md-option>
               <md-option value="December">December</md-option>
+            </md-select>
+          </md-field>
+        </div>
+        <div class="md-layout-item md-size-50">
+          <md-field class="">
+            <label for="year">Year</label>
+            <md-select v-model="filterYear" name="filterYear" id="filterYear">
+              <md-option value="2019">2019</md-option>
+              <md-option value="2018">2018</md-option>
+              <md-option value="2017">2017</md-option>
+              <md-option value="2016">2016</md-option>
+              <md-option value="2015">2015</md-option>
             </md-select>
           </md-field>
         </div>
@@ -68,29 +68,6 @@
     components: {
       ChartCard
     },
-    props: {
-      currentYear: {
-        type: String,
-        default: 0
-      },
-      currentYearEventsCount : {
-        type: Number,
-        default: 0
-      },
-      numberOfEventsPerYear: {
-        type: Object,
-        default: {}
-      }
-    },
-    watch: {
-      numberOfEventsPerYear(newVal, oldVal){
-        label = []
-        this.colouredLineChart.data = {
-          labels: labels,
-          series : [series]
-        }
-      }
-    },
     data() {
       return {
         auth: auth,
@@ -106,7 +83,7 @@
               "'18",
               "'19"
             ],
-            series: [[0,0,0,0,0]]
+            series: [[3, 11, 14, 12, 16]]
           },
           options: {
             lineSmooth: this.$Chartist.Interpolation.cardinal({
