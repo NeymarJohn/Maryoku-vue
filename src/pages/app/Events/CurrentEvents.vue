@@ -10,10 +10,10 @@
           <div class="event-title">Event Information</div>
           <div></div>
         </div>
-        <md-card-content v-if="event">
+        <md-card-content>
           <div class="control-main-block">
               <div class="company-control-logo">
-                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default" :class="{selected: routeName === 'EditEvent'}" @click="goToComponent('/edit')">
+                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default" :class="{selected: selectedTab('blocks')}" @click="selectTab('blocks')">
                     <md-icon>create</md-icon>
                   </md-button>
               </div>
@@ -23,7 +23,7 @@
                   </md-button>
               </div>
               <div class="company-control-logo">
-                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default" :class="{selected: routeName === 'EditTimeLine'}" @click="goToComponent('/edit/timeline')">
+                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default" :class="{selected: selectedTab('timeline')}" @click="selectTab('timeline')">
                     <md-icon class="company-logo">person</md-icon>
                   </md-button>
               </div>
@@ -117,17 +117,17 @@
         </md-card-content>
       </md-card>
     </div>
-      <div v-if="event && routeName === 'EditEvent'" class="md-layout-item md-size-70 block-flex" >
+      <div v-if="selectedTab('blocks') && event" class="md-layout-item md-size-70 block-flex" >
           <event-building-blocks   :event="event" :event-components="selectedComponents" @go-to-building-blocks="resetTab"></event-building-blocks>
       </div>
+    <div v-else-if="selectedTab('proposals')" class="md-layout-item md-size-70 block-flex">
+        proposals
+    </div>
 
-    <!--<div v-else-if="selectedTab('proposals')" class="md-layout-item md-size-70 block-flex">-->
-        <!--proposals-->
-    <!--</div>-->
-
-      <div v-else-if="event &&  routeName === 'EditTimeLine' " class="md-layout-item md-size-70 block-flex">
+      <div v-else-if="selectedTab('timeline')" class="md-layout-item md-size-70 block-flex">
           <event-time-line :event="event" :event-components="selectedComponents"></event-time-line>
       </div>
+
 
 
       <!-- New Event Modal -->
@@ -189,14 +189,11 @@ export default {
       totalRemainingBudget: 0,
       seriesData: [],
       isLoading: false,
-      event : null,
-        routeName : null
+      event : null
     };
   },
     created(){
       this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
-
-      this.routeName = this.$route.name;
 
     },
   mounted() {
@@ -239,6 +236,8 @@ export default {
       this.currentTab = null;
     },
     openEventModal() {
+          console.log(this.event);
+
         this.setEventData(this.event);
         this.setEventModal({ showModal: true });
       this.setModalSubmitTitle("Edit");
@@ -246,10 +245,6 @@ export default {
     },
       refreshEvents() {
           this.getCalendarEvents();
-      },
-      goToComponent (route) {
-          this.$router.push({ path: `/events/`+ this.event.id + route });
-          location.reload();
       }
   },
   computed: {
