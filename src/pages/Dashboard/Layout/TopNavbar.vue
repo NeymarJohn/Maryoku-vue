@@ -48,7 +48,12 @@
                 </div>
               </a>
             </li>-->
-
+            <!--<li class="md-list-item">
+              <md-button class="md-button md-info" style="margin-top: 6px;" @click="openEventModal()">
+                <md-icon>event</md-icon>
+                <span>Create New Event</span>
+              </md-button>
+            </li>-->
             <li class="md-list-item">
               <a href="#" class="md-list-item-router md-list-item-container md-button-clean dropdown">
                 <div class="md-list-item-content">
@@ -62,7 +67,7 @@
                       </div>
                     </md-button>
                     <ul class="dropdown-menu dropdown-menu-right">
-                      <li><router-link :to="{path: '/profile'}">My Profile</router-link></li>
+                      <li><router-link :to="{path: '/settings'}">My Profile</router-link></li>
                       <li><router-link :to="{path: '/company-form'}">Account Settings</router-link></li>
                       <li class="divider"></li>
                       <li><router-link :to="{path: '/signout'}">Sign Out</router-link></li>

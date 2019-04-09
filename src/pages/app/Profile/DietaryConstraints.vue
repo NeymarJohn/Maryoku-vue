@@ -5,10 +5,10 @@
         <div class="card-icon" style="padding: 12px;">
           <md-icon>fastfood</md-icon>
         </div>
-        <h4 class="title">Dietary Preferences</h4>
+        <h4 class="title profile-title">Dietary Preferences</h4>
       </md-card-header>
 
-      <md-card-content>
+      <md-card-content style="padding: 0; margin: 0; padding-bottom: 12px;">
 
         <div class="md-layout" style="margin-top:5%">
           <div class="md-layout-item" v-for="(item,index) in dietaryIconOnFirstList" >

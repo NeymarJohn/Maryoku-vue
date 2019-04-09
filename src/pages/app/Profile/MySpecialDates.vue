@@ -9,14 +9,14 @@
             <div class="md-layout-item" style="padding-right: 0px;padding-left: 0px;">
               <div class="md-layout">
                   <div class="md-layout-item md-size-90"  style="padding-left: 0px;padding-right: 0px;">
-                    <h4 class="title"><span style="font-size:18px;">My Special Dates</span></h4>
-                  </div> 
+                    <h4 class="title profile-title"><span style="font-size:18px;">My Special Dates</span></h4>
+                  </div>
                   <div class="md-layout-item md-size-10 add-date" style="padding-left: 10px;padding-right: 0px;" @click="addNewSpecialDateItem">
                       <md-icon style="font-size: 19px !important; color: #02adc2;" >add_circle</md-icon>
-                  </div>  
+                  </div>
               </div>
             </div>
-           
+
           </div>
       </md-card-header>
       <md-card-content>
@@ -25,18 +25,18 @@
            <md-datepicker v-model="birthdayDate" >
               <label >Birthday Date</label>
             </md-datepicker>
-          </div>  
+          </div>
         </div>
         <div class="md-layout mb16">
           <div class="md-layout-item md-size-100 md-small-size-100">
            <md-datepicker v-model="workingSinceDate" >
               <label >workingSince Date</label>
             </md-datepicker>
-          </div>  
+          </div>
         </div>
-   
+
        <new-special-date :DateList="specialDateList" ></new-special-date>
-       
+
       </md-card-content>
 
     </md-card>
@@ -75,7 +75,7 @@
       addNewSpecialDateItem(){
         let checkEmptyRows= this.specialDateList.filter(row=>row.title=== null)
         if (checkEmptyRows.length >= 1 && this.specialDateList.length > 0)
-        return 
+        return
         this.specialDateList.push({
           title:'',
           selectedDate:null,
@@ -84,13 +84,13 @@
 
       },
 
-     
 
-      
+
+
     },
 
 
-    
+
   }
 </script>
 <style lang="scss">
@@ -122,9 +122,9 @@
     // box-shadow: 0px 1px 4px 0 rgba(0, 0, 0, 0.14);
     // background-color: #ffffff;
   }
-  
+
   .add-date{
     cursor: pointer;
-  
+
   }
 </style>

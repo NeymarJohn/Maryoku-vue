@@ -1,7 +1,37 @@
 <template>
   <div class="md-layout">
+    <div class="md-layout-item md-size-100">
 
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen />
+      <tabs
+        :tab-name="['My Profile', 'My Company']"
+        color-button="rose"
+        plain>
+        <template slot="tab-pane-1">
+          <div class="md-layout">
+            <div class="md-layout-item md-size-30">
+              <personal-information :user-info="auth.user"></personal-information>
+              <holidays-celebrate></holidays-celebrate>
+            </div>
+            <div class="md-layout-item md-size-35">
+              <dietary-constraints></dietary-constraints>
+              <my-special-dates :birthDate="auth.user.me.birthday" :workingSince="auth.user.me.companyStartDate" :key="auth.user.me" ></my-special-dates>
+            </div>
+            <div class="md-layout-item md-size-35">
+              <my-events :events="upCommingEvents"  ></my-events>
+            </div>
+          </div>
+        </template>
+        <template slot="tab-pane-2">
+          <div class="md-layout">
+            <div class="md-layout-item md-size-25">
+              <company-dashboard-info></company-dashboard-info>
+            </div>
+          </div>
+        </template>
+      </tabs>
+    </div>
+    <!---->
+    <!--<vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen />
 
     <div class="md-layout ">
       <div class="md-layout-item md-size-25">
@@ -26,21 +56,27 @@
         <my-events :events="upCommingEvents"  ></my-events>
       </div>
 
-    </div>
+    </div>-->
   </div>
 </template>
 
 <script>
   import VueElementLoading from 'vue-element-loading';
   import PersonalInformation from "./PersonalInformation.vue";
+  import CompanyDashboardInfo from "../CompanyDashboard/CompanyDashboardInfo.vue";
   import MyEvents from "./MyEvents.vue";
   import DietaryConstraints from "./DietaryConstraints.vue";
   import MySpecialDates from "./MySpecialDates.vue";
   import HolidaysCelebrate from './HolidaysCelebrate.vue';
+
+  import { EditProfileForm, UserCard } from "@/pages";
+
   import auth from '@/auth';
   import {
     mapGetters
   } from 'vuex';
+
+  import { Tabs } from "@/components";
 
   export default {
     components: {
@@ -49,8 +85,11 @@
       MyEvents,
       DietaryConstraints,
       MySpecialDates,
-      HolidaysCelebrate
-
+      HolidaysCelebrate,
+      Tabs,
+      EditProfileForm,
+      UserCard,
+      CompanyDashboardInfo
     },
     data() {
       return {
@@ -72,6 +111,59 @@
       this.auth.currentUser(this, true, () => {
         this.$store.dispatch("user/getUserFromApi");
       })
+    },
+    methods: {
+      onFileChange(e) {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) return;
+        this.createImage(files[0]);
+      },
+      createImage(file, type) {
+        let reader = new FileReader();
+        let vm = this;
+
+        reader.onload = e => {
+          this.loaded = false;
+          return new CustomerFile({customerFile: e.target.result}).save().then(result => {
+            let customer = this.auth.user.customer;
+            customer.logoFileId = result.id;
+            new Customer({id: customer.id, logoFileId: result.id}).save();
+            this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
+            this.companyProfile.logoFileId = customer.logoFileId;
+            this.loaded = true;
+          })
+            .catch((error) => {
+              console.log(error);
+              this.loaded = true;
+            });
+        };
+        reader.readAsDataURL(file);
+      },
+      removeImage: function(type) {
+        this.loaded = false;
+        let customer = this.auth.user.customer;
+        new CustomerFile({id: customer.logoFileId}).delete().then(res => {
+          this.loaded = true;
+          customer.logoFileId = null;
+          this.companyProfile.logoFileId = undefined;
+          this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
+        }).catch((error) => {
+          this.loaded = true;
+        });
+      },
     }
   };
 </script>
+<style lang="scss" scoped>
+  .md-card-tabs  {
+
+    .active.md-list-item.md-rose .md-list-item-button{
+      background-color: transparent !important;
+      box-shadow: none;
+      -webkit-box-shadow: none;
+      color: black !important;
+      border-bottom: 3px solid #FF547C;
+      border-radius: 0;
+    }
+  }
+</style>
