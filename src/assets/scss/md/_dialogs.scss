@@ -49,10 +49,7 @@
 }
 
 .modal-container-wizard {
-    max-width: 80%;
-    &.md{
-      max-width: 60%;
-    }
+  max-width: 80%;
   margin: 0 auto;
   padding: 0;
   left: 2.5%;
@@ -63,6 +60,7 @@
   // border-radius: 6px;
   border: none;
 }
+
 .modal-header{
   display: flex;
   align-items: center;
