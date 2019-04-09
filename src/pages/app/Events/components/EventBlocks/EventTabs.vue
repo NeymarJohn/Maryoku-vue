@@ -86,7 +86,7 @@
             //this.closeModal();
 
 
-            editedEvent.for(_calendar).save().then(response => {
+            editedEvent.save().then(response => {
                 console.log(response);
 
             })

@@ -158,7 +158,7 @@ export default {
             let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
             _calendar.calendarEvents().find(this.$route.params.id).then(event => {
-                this.calendarEvent = event;              
+                this.calendarEvent = event.for(_calendar);
                 this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
                 this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
                 this.seriesData = [(100 - this.percentage), this.percentage];
@@ -186,7 +186,7 @@ export default {
           editedEvent = this.calendarEvent;
           editedEvent.eventPage = this.eventPage;
 
-          editedEvent.for(_calendar).save().then(response => {
+          editedEvent.save().then(response => {
               console.log(response);
 
           })
@@ -229,7 +229,7 @@ export default {
     }
   },
   watch: {
-  },  
+  },
 };
 </script>
 

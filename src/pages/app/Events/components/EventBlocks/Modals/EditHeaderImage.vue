@@ -22,7 +22,7 @@
                         </div>
                     </div>
 
-                    
+
                 </template>
                 <template slot="footer">
                     <md-button class="md-success move-right" @click="saveHeaderImage">
@@ -100,7 +100,7 @@
             //this.closeModal();
 
 
-            editedEvent.for(_calendar).save().then(response => {
+            editedEvent.save().then(response => {
                 console.log(response);
 
             })

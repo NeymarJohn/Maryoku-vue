@@ -19,7 +19,7 @@
         <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
         </sidebar-item>-->
 
-        <sidebar-item :link="{name: 'Company', icon: 'fingerprint', path: '/company'}">
+        <sidebar-item :link="{name: 'Dashboard', icon: 'dashboard', path: '/company'}">
         </sidebar-item>
 
         <!--<sidebar-item :link="{name: 'Yearly Planner', icon: 'calendar_today', path: '/yearly-plan'}">
