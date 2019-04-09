@@ -1,6 +1,6 @@
 <template>
   <md-card>
-    <md-card-header class="md-card-header-icon md-card-header-blue">
+    <md-card-header class="md-card-header-icon md-card-header-rose">
       <div class="card-icon">
         <md-icon>person</md-icon>
       </div>

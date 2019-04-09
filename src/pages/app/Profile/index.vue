@@ -4,7 +4,7 @@
 
       <tabs
         :tab-name="['My Profile', 'My Company']"
-        color-button="rose"
+        color-button="info"
         plain>
         <template slot="tab-pane-1">
           <div class="md-layout">
@@ -23,8 +23,38 @@
         </template>
         <template slot="tab-pane-2">
           <div class="md-layout">
-            <div class="md-layout-item md-size-25">
+            <div class="md-layout-item md-size-33">
               <company-dashboard-info></company-dashboard-info>
+            </div>
+            <div class="md-layout-item md-size-33">
+              <md-card>
+                <md-card-header class="md-card-header-icon md-card-header-rose">
+                  <div class="card-icon">
+                    <md-icon>group</md-icon>
+                  </div>
+                  <h5 class="title profile-title">
+                    Contact Information
+                  </h5>
+                </md-card-header>
+                <md-card-content style="min-height: 320px;">
+
+                </md-card-content>
+              </md-card>
+            </div>
+            <div class="md-layout-item md-size-33">
+              <md-card>
+                <md-card-header class="md-card-header-icon md-card-header-warning">
+                  <div class="card-icon">
+                    <md-icon>language</md-icon>
+                  </div>
+                  <h5 class="title profile-title">
+                    Branches
+                  </h5>
+                </md-card-header>
+                <md-card-content style="min-height: 320px;">
+
+                </md-card-content>
+              </md-card>
             </div>
           </div>
         </template>
