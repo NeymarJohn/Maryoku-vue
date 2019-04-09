@@ -288,10 +288,10 @@ let appPages = {
       meta: {gtm: "Me"}
     },
     {
-      path: "/settings",
-      name: "Settings",
+      path: "/profile",
+      name: "Profile",
       component: Profile,
-      meta: {gtm: "Settings"}
+      meta: {gtm: "Profile"}
     },
     {
       path: "/company",

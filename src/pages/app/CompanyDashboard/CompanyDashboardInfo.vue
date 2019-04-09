@@ -18,7 +18,7 @@
     </md-card-header>
     <md-card-content class="company-profile-section">
       <div class="separator">&nbsp;</div>
-      <div class="md-layout" style="text-align: left;">
+      <div class="md-layout">
         <div class="md-layout-item md-size-33"><span class="text-gray" style="font-weight: 500;">Main Office</span></div>
         <div class="md-layout-item md-size-66 text-right">
           <h6 style="padding: 0;margin: 4px 0; text-transform: none !important;">
@@ -39,8 +39,8 @@
         </div>
       </div>
       <hr class="divider"/>
-      <h6 style="margin: 16px 0; text-align: left;" class="">Contact Information</h6>
-      <div class="md-layout" style="text-align: left;">
+      <h6 style="margin: 16px 0;" class="">Contact Information</h6>
+      <div class="md-layout">
         <div class="md-layout-item md-size-10"><i class="fa fa-map-marker-alt text-gray"></i></div>
         <div class="md-layout-item md-size-90">
           <span class="text-gray" style="font-weight: 500;">
@@ -67,8 +67,8 @@
         </div>
       </div>
       <hr class="divider"/>
-      <h6 style="margin: 16px 0; text-align: left;">Branches</h6>
-      <div class="md-layout" style="text-align: left;">
+      <h6 style="margin: 16px 0;">Branches</h6>
+      <div class="md-layout">
         <div class="md-layout-item md-size-33"><span class="text-gray" style="font-weight: 500;">Branch 1</span></div>
         <div class="md-layout-item md-size-66 text-right"><h6 style="padding: 0;margin: 4px 0; text-transform: none !important;">San Diego, CA</h6></div>
         <div class="md-layout-item md-size-50"><span class="text-gray" style="font-weight: 500;">Branch 2</span></div>

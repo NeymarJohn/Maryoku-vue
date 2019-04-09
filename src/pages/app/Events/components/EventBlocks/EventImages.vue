@@ -54,7 +54,7 @@
           if (!file.length) {
               return;
           }
-          if (file[0].size <= 1500000){
+          if (file[0].size <= 500000){
               let url = URL.createObjectURL(file[0]);
               this.eventImages.push(url);
 
@@ -80,7 +80,7 @@
 
     },
     created() {
-
+      
     },
     mounted() {
 
