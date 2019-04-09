@@ -1,32 +1,32 @@
 <template>
-    <div class="event-info-tabs">
-        <tabs
-                :tab-name="['MEETING PLACE', 'WHEN TO ARRIVE', 'WHAT YOU NEED TO KNOW']"
-                flex-column
-                color-button="danger">
-            <!-- here you can add your content for tab-content -->
-            <template slot="tab-pane-1">
-                <md-field :class="{editable : editMode}">
-                         <md-textarea  v-model="event.eventPage.meetingPlaceDescription " placeholder="Add description here ...">
+    <div class="event-info">
 
-                         </md-textarea>
-                </md-field>
-            </template>
-            <template slot="tab-pane-2">
-                <md-field :class="{editable : editMode}">
-                    <md-textarea  v-model="event.eventPage.whenToArrive" placeholder="Add description here ...">
+        <div class="info-item">
+            <h4>MEETING PLACE</h4>
+            <md-field :class="{editable : editMode}">
+                <md-textarea  v-model="event.eventPage.meetingPlaceDescription " placeholder="Add description here ...">
 
-                    </md-textarea>
-                </md-field>
-            </template>
-            <template slot="tab-pane-3">
-                <md-field :class="{editable : editMode}">
-                    <md-textarea  v-model="event.eventPage.whatYouNeedToKnow" placeholder="Add description here ...">
+                </md-textarea>
+            </md-field>
+        </div>
 
-                    </md-textarea>
-                </md-field>
-            </template>
-        </tabs>
+        <div class="info-item">
+            <h4>WHEN TO ARRIVE</h4>
+            <md-field :class="{editable : editMode}">
+                <md-textarea  v-model="event.eventPage.whenToArrive " placeholder="Add description here ...">
+
+                </md-textarea>
+            </md-field>
+        </div>
+
+        <div class="info-item">
+            <h4>WHAT YOU NEED TO KNOW</h4>
+            <md-field :class="{editable : editMode}">
+                <md-textarea  v-model="event.eventPage.whatYouNeedToKnow " placeholder="Add description here ...">
+
+                </md-textarea>
+            </md-field>
+        </div>
 
         <div class="tabs-actions">
             <md-button class="md-info md-sm edit-timeline-btn" v-if="!editMode" @click="toggleEditMode">
@@ -82,12 +82,9 @@
             editedEvent.eventPage.whenToArrive = this.event.eventPage.whenToArrive;
             editedEvent.eventPage.whatYouNeedToKnow = this.event.eventPage.whatYouNeedToKnow;
 
-
-            //this.closeModal();
-
-
             editedEvent.save().then(response => {
-                console.log(response);
+
+                this.toggleEditMode();
 
             })
                 .catch((error) => {

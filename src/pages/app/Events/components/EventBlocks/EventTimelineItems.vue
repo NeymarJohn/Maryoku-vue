@@ -42,6 +42,7 @@
 
   //COMPONENTS
   import { Tabs } from "@/components";
+  import _ from 'underscore';
 
 
   export default {
@@ -64,9 +65,8 @@
             let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
             let event = new CalendarEvent({id: this.event.id});
 
-
             new EventTimelineItem().for(calendar, event).get().then(res => {
-                this.timelineItems = res;
+                this.timelineItems = _.sortBy(res, function(item){ return item.order});
                 this.isLoading = false;
 
             })

@@ -32,7 +32,7 @@
             </md-button>
 
             <drop @drop="handleDrop">
-                <div class="time-line-blocks_selected-items">
+                <draggable :list="timelineItems" class="time-line-blocks_selected-items">
 
                     <div v-for="(item,index) in timelineItems" :key="index"
                          class="time-line-blocks_selected-items_item time-line-item">
@@ -41,9 +41,7 @@
                         <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit' ">
                             <md-card-content class="md-layout">
                                 <div class="md-layout-item md-size-50">
-                                    <md-field :class="[
-                          {'md-valid': item.startTime},
-                          {'md-error': !item.startTime}]">
+                                    <md-field >
                                         <label>From Time</label>
                                         <md-select v-model="item.startTime"
                                         >
@@ -56,9 +54,7 @@
                                     </md-field>
                                 </div>
                                 <div class="md-layout-item md-size-50">
-                                    <md-field :class="[
-                          {'md-valid': item.endTime},
-                          {'md-error': !item.endTime}]">
+                                    <md-field >
                                         <label>To Time</label>
                                         <md-select v-model="item.endTime"
                                         >
@@ -71,9 +67,7 @@
                                     </md-field>
                                 </div>
                                 <div class="md-layout-item md-size-100">
-                                    <md-field :class="[
-                          {'md-valid': item.title},
-                          {'md-error': !item.title}]">
+                                    <md-field >
                                         <label>Title</label>
                                         <md-input
                                                 v-model="item.title"
@@ -95,7 +89,7 @@
                                 <md-button class="md-info" v-if="!item.dateCreated"
                                            @click="saveTimelineItem(item,index)">Save
                                 </md-button>
-                                <md-button class="md-info" v-else @click="updateTimelineItem(item,index)">Edit
+                                <md-button class="md-info" v-else @click="updateTimelineItem(item)">Edit
                                 </md-button>
                             </md-card-actions>
 
@@ -117,7 +111,7 @@
                                     {{ item.startTime }} - {{item.endTime}}
                                 </span>
                                 <span class="item-title">
-                                    {{item.title ? item.title : 'Title Bar' }}
+                                    {{item.title }}
                                 </span>
                             </div>
                             <p class="item-desc">
@@ -133,7 +127,7 @@
                             Drag and drop a building block here
                         </md-card>
                     </div>
-                </div>
+                </draggable>
             </drop>
         </div>
     </div>
@@ -154,6 +148,7 @@
     import EventBlocks from "../components/NewEventBlocks";
     import draggable from 'vuedraggable';
     import {Drag, Drop} from 'vue-drag-drop';
+    import _ from 'underscore';
 
     export default {
         name: 'event-building-blocks',
@@ -226,11 +221,12 @@
              * @param event
              */
             handleDrop(data, event) {
-                console.log(data);
                 if ( data ) {
                     let block = Object.assign({}, data.block);
                     block.mode = 'edit';
                     this.timelineItems.push(Object.assign({}, data.block));
+                } else {
+                    this.updateTimelineITemsOrder();
                 }
 
             },
@@ -263,19 +259,21 @@
                 let event = new CalendarEvent({id: this.event.id});
 
                 new EventTimelineItem().for(calendar, event).get().then(res => {
-                    this.timelineItems = res;
+                    this.timelineItems = _.sortBy(res, function(item){ return item.order});
+                    console.log(this.timelineItems);
                     this.isLoading = false;
                 })
             },
             saveTimelineItem(item, index) {
                 this.isLoading = true;
 
-                if ( !item.startTime || !item.endTime || !item.title ) {
+                if ( !item.startTime || !item.endTime ||
+                     ( !item.title && !item.description ) ) {
                     this.isLoading = false;
 
                     this.$notify(
                         {
-                            message: 'Check the Required Fields',
+                            message: 'From time, To time and ( Title or Description ) id Required',
                             horizontalAlign: 'center',
                             verticalAlign: 'top',
                             type: 'warning'
@@ -309,8 +307,24 @@
                     })
 
             },
-            updateTimelineItem(item, index) {
+            updateTimelineItem(item) {
                 this.isLoading = true;
+
+                if ( !item.startTime || !item.endTime ||
+                    ( !item.title && !item.description ) ) {
+                    this.isLoading = false;
+
+                    this.$notify(
+                        {
+                            message: 'From time, To time and ( Title or Description ) id Required',
+                            horizontalAlign: 'center',
+                            verticalAlign: 'top',
+                            type: 'warning'
+                        })
+
+                    return;
+                }
+
 
                 let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
@@ -329,6 +343,42 @@
                 }).catch(error => {
                     console.log(error)
                 })
+            },
+            updateTimelineITemsOrder() {
+
+                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let event = new CalendarEvent({id: this.event.id});
+
+                let new_order = 1;
+
+                this.timelineItems.forEach(item => {
+
+                    let timelineItem = new EventTimelineItem({id: item.id}).for(calendar, event);
+
+                    timelineItem.order = new_order;
+
+                    timelineItem.save().then(res => {
+
+                        this.$notify(
+                            {
+                                message: "Timeline Items order modified successfully",
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'success'
+                            });
+
+
+
+                    }).catch(error => {
+                        console.log(error)
+                    })
+
+                    new_order+=1;
+
+
+                })
+
+
             }
 
         },

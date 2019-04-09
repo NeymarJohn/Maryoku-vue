@@ -88,11 +88,8 @@
             editedEvent = this.event;
             editedEvent.eventPage.qnas = this.questionsList;
 
-            //this.closeModal();
-
             editedEvent.save().then(response => {
-                console.log(response);
-
+                this.closeModal();
             })
                 .catch((error) => {
                     console.log(error);

@@ -764,23 +764,18 @@ $tooltip-border-color: $blue-grey-200 !default;
   }
 }
 
-.event-info-tabs {
-  margin-bottom : 3em;
-  .md-card-tabs {
-    margin-bottom: 0;
-  }
-  .md-card-content {
-    padding : 0;
+.event-info {
+  margin : 3em auto;
 
-    .md-list {
-      padding : 0;
-      .md-list-item {
-        margin-left : 0;
-      }
+  .info-item {
+    margin-bottom : 1em;
+
+    h4 {
+      font-weight: 500;
+      margin: 0 0 5px;
+      font-size: 14px;
     }
-    .tab-content {
-      width: calc(100% - 229px);
-    }
+
     .md-has-textarea {
       margin-top : 0;
       .md-textarea {
@@ -789,10 +784,9 @@ $tooltip-border-color: $blue-grey-200 !default;
         font-size : 14px;
         padding : 0 !important;
         width : 100%;
+        min-height: auto !important;
 
       }
-
-
       &:not(.editable) {
 
         &:after {
@@ -810,7 +804,9 @@ $tooltip-border-color: $blue-grey-200 !default;
   }
 
   .tabs-actions {
-    margin-left : 242px;
+    .md-button {
+      margin-left : 0 !important;
+    }
   }
 }
 

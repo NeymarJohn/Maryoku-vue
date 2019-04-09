@@ -97,11 +97,10 @@
             editedEvent = this.event;
             editedEvent.eventPage.headerImage = this.selectedImage;
 
-            //this.closeModal();
 
 
             editedEvent.save().then(response => {
-                console.log(response);
+                this.closeModal();
 
             })
                 .catch((error) => {

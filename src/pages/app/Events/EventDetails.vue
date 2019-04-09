@@ -3,9 +3,12 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
 
     <!-- Publish Event Button -->
-    <md-button class="md-info publish-event">
-      Publish Event
-    </md-button>
+    <div class="md-layout-item text-right">
+      <md-button class="md-info publish-event">
+        Publish Event
+      </md-button>
+    </div>
+
     <!-- ./Publish Event Button -->
 
     <div class="md-layout-item md-size-100">

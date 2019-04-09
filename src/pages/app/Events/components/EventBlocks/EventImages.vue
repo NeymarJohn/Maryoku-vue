@@ -1,13 +1,13 @@
 <template>
     <div class="event-images-list md-layout">
 
-        <md-card class="md-layout-item md-size-25 default-image-box" v-if="eventImages.length == 0">
+        <md-card class="md-layout-item md-size-25 default-image-box" v-if="event.eventPage.images.length == 0">
             Add Images here
         </md-card>
 
-        <md-card v-for="(image,index) in eventImages" :key="index" class="md-layout-item md-size-25">
+        <md-card v-for="(image,index) in event.eventPage.images" :key="index" class="md-layout-item md-size-25">
             <md-card-media>
-                <div class="event-images_image-item" :style="`background-image : url(`+image+`)`">
+                <div class="event-images_image-item" :style="`background-image : url(`+`${process.env.SERVER_URL}/1/${image}`+`)`">
                     <md-button class="md-info md-sm" @click="removeEventImage(index)">
                         DELETE
                     </md-button>
@@ -15,7 +15,7 @@
             </md-card-media>
         </md-card>
 
-        <div class="update-banner-form" v-if="eventImages.length < 3">
+        <div class="update-banner-form" v-if="event.eventPage.images.length < 3">
             <md-button  title="Add Images" class="add-event-image md-info md-sm md-just-icon md-round" @click="uploadEventImage">
                 <md-icon>add</md-icon>
             </md-button>
@@ -26,10 +26,13 @@
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import Calendar from "@/models/Calendar"
+  import CalendarEvent from "@/models/CalendarEvent"
   import EventComponent from "@/models/EventComponent";
+  import CalendarEventPageImage from "@/models/CalendarEventPageImage"
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
   import swal from "sweetalert2";
+
 
 
   export default {
@@ -54,12 +57,15 @@
           if (!file.length) {
               return;
           }
-          if (file[0].size <= 1500000){
-              let url = URL.createObjectURL(file[0]);
-              this.eventImages.push(url);
 
-              const formData = new FormData();
-              formData.append("images", file[0], file[0].name) // TODO :: send this object once we have api for userPorfile photo
+          if (file[0].size <= 1500000){
+
+              this.createImage(file[0]);
+
+
+//              let url = URL.createObjectURL(file[0]);
+//              const formData = new FormData();
+//              formData.append("images", file[0], file[0].name) // TODO :: send this object once we have api for userPorfile photo
           }else{
               this.alretExceedPictureSize = true
               this.$notify(
@@ -73,6 +79,39 @@
           }
 
       },
+        createImage(file, type) {
+            let reader = new FileReader();
+            let vm = this;
+
+            this.$parent.isLoading = true;
+
+            reader.onload = e => {
+                return new CalendarEventPageImage({id : e.target.result}).save().then(result => {
+
+                    console.log('image ', result.id);
+
+                    let editedEvent = new CalendarEvent({id: this.event.id});
+
+                    editedEvent = this.event;
+                    editedEvent.eventPage.images.push(result.id)
+
+                    editedEvent.save().then(response => {
+                        console.log(response);
+
+                        this.$parent.isLoading = false;
+                    }).catch((error) => {
+                        console.log(error);
+
+                    });
+
+                })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            };
+            reader.readAsDataURL(file);
+        },
+
       removeEventImage(index){
           this.eventImages.splice(index,1);
 
