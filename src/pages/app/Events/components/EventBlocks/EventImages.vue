@@ -7,7 +7,7 @@
 
     <md-card v-for="(image,index) in event.eventPage.images" :key="index" class="md-layout-item md-size-25">
       <md-card-media>
-        <div class="event-images_image-item" :style="`background-image : url(`+`${serverUrl}/1/eventPageImages/${image}`+`)`">
+        <div class="event-images_image-item" :style="`background-image : url(`+`${serverUrl}/1/eventPageImages/${image.id}`+`)`">
           <md-button class="md-info md-sm" @click="removeEventImage(index)">
             DELETE
           </md-button>
@@ -95,7 +95,7 @@
 
             console.log('image ', result.id);
 
-            this.event.eventPage.images.push(result.id);
+            this.event.eventPage.images.push({id: result.id});
 
             this.$parent.isLoading = false;
 
@@ -110,7 +110,7 @@
       removeEventImage(index){
         const calendar = new Calendar({id: this.auth.user.defaultCalendarId});
         const event = new CalendarEvent({id: this.event.id});
-        return new CalendarEventPageImage({id : this.event.eventPage.images[index]}).for(calendar, event).delete().then(result => {
+        return new CalendarEventPageImage({id : this.event.eventPage.images[index].id}).for(calendar, event).delete().then(result => {
 
           console.log('image ', result.id);
 

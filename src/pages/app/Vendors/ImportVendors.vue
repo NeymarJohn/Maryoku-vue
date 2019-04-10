@@ -1,110 +1,99 @@
 <template>
-      <div class="md-layout-item md-size-100 wizard-pos">
-        <modal v-if="uploadModalOpen" @close="noticeModalHide" container-class="modal-container-wizard">
-          <template slot="body">
-            <simple-wizard  v-if="openWizard" data-color="rose">
-              <template slot="header">
-                <h3 class="title">Upload Vendors</h3>
-                <button class="btn-position" @click="closeModal">X</button>
-              </template>
-              <wizard-tab>
-                <vue-element-loading :active="csvUploading" spinner="ring" color="#FF547C"/>
+    <div class="md-layout-item md-size-50 wizard-pos">
+        <modal v-if="uploadModalOpen" @close="noticeModalHide" container-class="modal-container-wizard md">
+            <template slot="body">
+                <div class="md-layout-item">
+                    <md-card>
+                        <md-card-header class="md-card-header-text md-card-header-blue">
+                            <div class="card-text sm">
+                                <i class="fa fa-upload"></i>
+                            </div>
+                            <h5 class="title">
+                                <span>Upload Vendors</span>
+                                <button class="btn-position" @click="closeModal"><i class="md-icon md-icon-font md-theme-defaul">close</i></button>
+                            </h5>
+                        </md-card-header>
+                        <md-card-content style="min-height: 60px;">
+                            <div class="md-layout">
+                                <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33 btn-area">
+                                    <button class="md-button md-lg md-theme-default" v-model="step1" v-bind:class="{ active: step1 }" v-on:click="showUploadFile">
+                                        <span class="fa fa-upload"></span><br>Upload File</button>
+                                    <button class="md-button md-lg md-theme-default"  v-model="step2" v-bind:class="{ active: step2 }" v-on:click="showAssign">
+                                        <span class="fa fa-edit"></span><br>Assign Column</button>
+                                    <button class="md-button md-lg md-theme-default"  v-model="step3" v-bind:class="{ active: step3 }" v-on:click="showResults">
+                                        <span class="fa fa-list-alt"></span><br>View Results</button>
+                                </div>
+                                <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-66">
+                                    <div class="step1" v-if="step1">
+                                        <p>
+                                            Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits.
+                                        </p>
+                                        <div class="main-upload-box">
+                                            <div class="upload-option">
+                                                <md-icon>file_upload</md-icon>
+                                                <span>Upload from CSV file</span>
+                                            </div>
+                                            <div class="upload-box">
+                                                <span>Select File to upload</span>
+                                                <div class="upload-box_btn form-group">
+                                                    <label for="csv_file" class="control-label col-sm-3 text-right">Browse</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="file" id="csv_file" @change="sendCSVFile" name="csv_file" class="form-control">
+                                                    </div>
+                                                </div>
 
-                <template slot="label">
-                  Upload file
-                </template>
-                <section ref="step1">
-                  <div class="panel-body">
-                    <div class="upload-option">
-                      <md-icon>file_upload</md-icon>
-                      <span>Upload from CSV file</span>
-                    </div>
-                    <div class="upload-box">
-                      <span>Select File to upload</span>
-                      <div class="upload-box_btn form-group">
-                        <label for="csv_file" class="control-label col-sm-3 text-right">Browse</label>
-                        <div class="col-sm-9">
-                          <input type="file" id="csv_file" @change="sendCSVFile" name="csv_file" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="step2" v-if="step2">
+                                        <GlobalSalesTable></GlobalSalesTable>
+                                    </div>
+                                    <div class="step3" v-if="step3">
+                                        <p>
+                                            Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits.
+                                        </p>
+                                        <span>Row processed: 10</span>
+                                        <span>Total: 10</span>
+                                        <span>Duplicates: 0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-card-content>
+                        <div class="md-layout">
+                            <div class="md-layout-item md-medium-size-100 md-xsmall-size-100">
+                                <button class="md-button next-btn" v-on:click="showAssign" v-if="step1">
+                                    NEXT
+                                </button>
+                                <button class="md-button next-btn" v-on:click="showResults" v-if="step2">
+                                    NEXT
+                                </button>
+                                <button class="md-button next-btn" v-on:click="closeModal" v-if="step3">
+                                    FINISH
+                                </button>
+                            </div>
                         </div>
-                      </div>
-
-                    </div>
-                  </div>
-                </section>
-              </wizard-tab>
-
-              <wizard-tab :before-change="() => updateVendorsFile()" >
-              <template slot="label">
-                Assign Columns
-              </template>
-              <section class="table-section"  ref="step2">
-                <table class="border-table" v-if="parseCSV">
-                  <thead>
-                  <tr style="border-top: none;">
-                    <th
-                            v-if="column !== ''"
-                            v-for="(column, index) in parseCSV.columns"
-                        @click="sortBy(index)"
-                        :class="{ active: sortKey == index }">
-                      <md-field>
-                        <md-select id="remove-border" v-model="databaseVendorColumns[index].value"  name="select">
-                          <md-option
-                                  v-if="item !== ''"
-                                  v-for="(item, index) in databaseVendorColumns"
-                                  :value="item.name"
-                                  :key="index">
-                            {{ item.displayName }}
-                          </md-option>
-
-                        </md-select>
-                      </md-field>
-
-                    </th>
-                  </tr>
-                  </thead>
-                  <tr v-for="(row, rowIndex) in parseCSV.rows">
-                    <td v-for="(column, columnIndex) in parseCSV.columns">
-                      {{ row[column] }}
-                    </td>
-                  </tr>
-
-                </table>
-
-              </section>
-            </wizard-tab>
-
-              <wizard-tab>
-                <template slot="label">
-                  View results
-                </template>
-                <section class="table-section"  ref="step3">
-                  <p>Rows processed: {{ finalResult.processed }} </p>
-                  <p>Total: {{ finalResult.total }}</p>
-                  <p>Duplicates: {{ finalResult.duplicates }}</p>
-                  <md-button @click="backToVendor" class="finish-btn" >
-                    FINISH
-                  </md-button>
-                </section>
-              </wizard-tab>
-            </simple-wizard>
-          </template>
+                    </md-card>
+                </div>
+            </template>
         </modal>
     </div>
+
 </template>
 <script>
   import Vendors from "@/models/Vendors";
   import VendorsFile from "@/models/VendorsFile";
   import vendorsModule from "./vendors.vuex"
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-  import {SimpleWizard, WizardTab, Modal} from "@/components";
+  import {GlobalSalesTable, Modal} from "@/components";
   import swal from "sweetalert2";
   import VueElementLoading from 'vue-element-loading';
+  import Button from "../../../components/Button/ControlPanel";
   export default {
     components:{
-      Modal,
-      SimpleWizard,
-      WizardTab,
-      VueElementLoading
+        Button,
+        Modal,
+        GlobalSalesTable,
+        VueElementLoading
     },
       data () {
           return {
@@ -247,6 +236,9 @@
               sortOrders: {},
               sortKey: '',
               rawCSVFile: null,
+              step1:true,
+              step2:false,
+              step3:false,
           };
       },
       created () {
@@ -260,12 +252,12 @@
       methods: {
           ...mapMutations('vendorsVuex', ['setFileToState']),
         closeModal(){
-          this.uploadModalOpen = false;
+            this.$set(this,'step1',true);
+            this.$set(this,'step2',false);
+            this.$set(this,'step3',false);
+            this.uploadModalOpen = false;
         },
         noticeModalHide: function () {
-          this.uploadModalOpen = false;
-        },
-        closeModal(){
           this.uploadModalOpen = false;
         },
         toggleModal: function (show) {
@@ -363,32 +355,61 @@
           this.uploadModalOpen = false;
 //          this.$router.push('/vendors');
 
-        }
+        },
+          showUploadFile(){
+            this.$set(this,'step1',true);
+            this.$set(this,'step2',false);
+            this.$set(this,'step3',false);
+          },
+          showAssign(){
+              this.$set(this,'step1',false);
+              this.$set(this,'step2',true);
+              this.$set(this,'step3',false);
+          },
+          showResults(){
+              this.$set(this,'step1',false);
+              this.$set(this,'step2',false);
+              this.$set(this,'step3',true);
+          }
       }
   };
 </script>
 <style lang="scss">
-  .upload-option{
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-  .upload-box {
-    background: #FF547C;
-    padding: 15px;
-
-    & span{
-      color: white;
-      display: inline-block;
-      }
-    &_btn{
-      padding: 5px 20px;
-      background: #00c782;
-      width: 88px;
-      height: 35px;
-      border-radius: 2px;
-      display: inline-block;
+    .step1{
+        p{
+            text-align: center;
+        }
     }
-  }
+    .step3{
+        text-align: center;
+        span{
+            display: block;
+        }
+    }
+    .main-upload-box{
+        padding: 10px;
+        text-align: center;
+        border: 2px dashed #f2f2f2 !important;
+        .upload-option{
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .upload-box {
+            & span{
+                display: inline-block;
+            }
+            &_btn{
+                padding: 5px 20px;
+                background: linear-gradient(60deg, #ffa726, #fb8c00);
+                width: 88px;
+                cursor: pointer;
+                height: 35px;
+                border-radius: 2px;
+                color: #fff;
+                display: inline-block;
+            }
+        }
+    }
  .border-table {
     border-collapse: collapse;
   }
@@ -444,4 +465,45 @@
   .header-position {
     position: relative;
   }
+    .title{
+        span{
+            color: #919191;
+            font-weight: normal;
+            padding: 10px;
+            font-size: 14px;
+        }
+        button{
+            padding: 0;
+            top: 0;
+            right: 0;
+            i{
+                color: #c2c2c2;
+            }
+        }
+    }
+    .btn-area{
+        button{
+            &.active{
+                background: #00bcd4 !important;
+            }
+            &:focus {
+                background: #00bcd4 !important;
+            }
+            box-shadow: none;
+            background: transparent !important;
+            padding: 20px;
+            width: 75%;
+            color: #959595 !important;
+            span{
+                padding: 0 0 15px 0;
+            }
+        }
+    }
+    .next-btn{
+        background: #0caf50 !important;
+        font-size: 10px;
+        float: right;
+        padding: 10px;
+        right: 15px;
+    }
 </style>
