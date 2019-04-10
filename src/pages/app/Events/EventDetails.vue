@@ -22,8 +22,18 @@
               <!-- Event Info -->
               <div class="md-layout-item md-size-50">
 
-                <h1 class="event-title">{{calendarEvent.occasion}}</h1>
-                <div class="event-date">{{getEventDate(calendarEvent.eventStartMillis)}}</div>
+                <div class="event-title-date">
+                  <md-field>
+                    <md-input v-model="calendarEvent.occasion" />
+                  </md-field>
+
+                  <md-datepicker v-model="date" :value="new Date(calendarEvent.eventStartMillis)">
+                    <label></label>
+                  </md-datepicker>
+                  <md-button class="md-info md-sm" @click="editTitleDate">
+                    Edit
+                  </md-button>
+                </div>
 
                 <event-tabs :event="calendarEvent" ></event-tabs>
 
@@ -141,6 +151,7 @@ export default {
               description : 'description here'
           }
       ],
+        newEventStartTime : null
     };
   },
     created(){
@@ -198,6 +209,25 @@ export default {
 
               });
 
+      },
+      editTitleDate() {
+
+          let editedEvent = new CalendarEvent({id: this.calendarEvent.id});
+
+          editedEvent = this.calendarEvent;
+          editedEvent.occasion = this.calendarEvent.occasion;
+          editedEvent.eventStartMillis = this.newEventStartTime !== null ? this.newEventStartTime : this.calendarEvent.eventStartMillis
+
+          editedEvent.save().then(response => {
+
+              console.log('Event Saved');
+
+          })
+              .catch((error) => {
+                  console.log(error);
+
+              });
+
 
       }
   },
@@ -218,7 +248,16 @@ export default {
           donutWidth: 12
         }
       };
-    }
+    },
+      date: {
+          get() {
+              return this.calendarEvent.eventStartMillis ? new Date(this.calendarEvent.eventStartMillis) :  null
+          },
+          set(value) {
+              let eventStartTime = new Date(value).getTime();
+              this.$set(this,'newEventStartTime',eventStartTime)
+          }
+      },
   },
   filters: {
     formatDate: function (date) {
@@ -235,104 +274,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-// .md-layout-item.md-layout.md-gutter {
-//   margin-right: -20px;
-//   margin-left: -20px;
-// }
-.percentage {
-  padding-bottom: 8px;
-  padding-left: 5px;
-  grid-column: 1;
-  grid-row: 1;
-  margin-top: auto;
-  margin-bottom: auto;
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-.logo-block {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 0px 15px;
-  margin: -20px 0px 20px 0px;
-  .event-planer-logo {
-    background: #eb3e79;
-    width: 64px;
-    height: 64px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-    .company-logo {
-      color: white !important;
-    }
-  }
-  .event-title {
-    font-family: "Roboto";
-    font-size: 18px;
-    font-weight: 300;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: 1.33;
-    letter-spacing: normal;
-    text-align: left;
-    color: #000000;
-  }
-}
-.control-main-block {
-  display: flex;
-  justify-content: center;
-  .company-logo-block {
-    border: 2px solid #8b8b8b;
-    padding: 7px;
-    border-radius: 50%;
-    margin: 0px 5px;
-  }
-}
-.title-text {
-  font-family: "Roboto";
-  font-size: 12px;
-  font-weight: 300;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: 2;
-  letter-spacing: normal;
-  text-align: left;
-  color: #959595;
-}
-.title-budget-main {
-  font-family: "Roboto";
-  font-size: 18px;
-  font-weight: 300;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: 1.33;
-  letter-spacing: normal;
-  text-align: center;
-  color: #000000;
-}
-.title-budget-prise {
-  color: rgba(33, 200, 152, 0.8) !important;
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 1.2;
-}
-.block-flex {
-  display: flex;
-}
-.button-event-creatig .md-ripple {
-  background-color: #00bcd4;
-}
-.footer-link-button .md-ripple {
-  color: #89229b;
-  background-color: rgba(240, 240, 240, 1);
-}
-.copyright {
-  color: #9c27b0;
-}
-.copyright-block {
-  justify-content: space-between;
-}
-</style>

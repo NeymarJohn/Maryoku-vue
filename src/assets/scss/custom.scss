@@ -673,14 +673,24 @@ $tooltip-border-color: $blue-grey-200 !default;
     background-size: cover;
   }
 
-  .event-title {
-    font-size: 40px;
-    font-weight: 500;
-    margin : 20px 0 17px;
-  }
-  .event-date {
-    font-size: 25px;
-    color : #999;
+  .event-title-date {
+
+    .md-input {
+      font-size: 40px;
+      font-weight: 500;
+      margin : 20px 0 17px;
+    }
+
+    .md-datepicker {
+      margin-top : 0;
+
+      .md-input {
+        font-size: 25px;
+        color : #999 !important;
+        -webkit-text-fill-color: #999 !important;
+        font-weight: 400;
+      }
+    }
   }
 
   .md-card-tabs {
@@ -769,24 +779,27 @@ $tooltip-border-color: $blue-grey-200 !default;
 
   .info-item {
     margin-bottom : 1em;
+    flex : 0;
 
     h4 {
       font-weight: 500;
       margin: 0 0 5px;
-      font-size: 14px;
+      font-size: 13px;
+      padding-left : 0;
     }
 
     .md-has-textarea {
       margin-top : 0;
+      padding-left : 0;
+
       .md-textarea {
         font-family: "Roboto", "Helvetica", "Arial", sans-serif;
         font-weight: 300;
         font-size : 14px;
         padding : 0 !important;
         width : 100%;
-        min-height: auto !important;
-
       }
+
       &:not(.editable) {
 
         &:after {

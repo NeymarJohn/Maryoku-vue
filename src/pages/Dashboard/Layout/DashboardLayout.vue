@@ -37,7 +37,6 @@
           <sidebar-item :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>
         </sidebar-item>
 
-        <li class="menu-divider"></li>
 
         <sidebar-item :link="{name: 'Vendors List', icon: 'group', path: '/vendors'}">
         </sidebar-item>
@@ -51,10 +50,10 @@
         <!--<li class="menu-divider"></li>
 
         -->
+        <li class="menu-divider"></li>
 
-
-        <!--<sidebar-item :link="{name: 'Team', icon: 'group_add', path: '/team'}">
-        </sidebar-item>-->
+        <sidebar-item :link="{name: 'Team', icon: 'group_add', path: '/team'}">
+        </sidebar-item>
 
         <!--
 

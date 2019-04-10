@@ -1,27 +1,27 @@
 <template>
     <div class="event-info">
 
-        <div class="info-item">
-            <h4>MEETING PLACE</h4>
-            <md-field :class="{editable : editMode}">
+        <div class="info-item md-layout">
+            <h4 class="md-layout-item md-size-30">MEETING PLACE</h4>
+            <md-field  class="md-layout-item md-size-70" :class="{editable : editMode}">
                 <md-textarea  v-model="event.eventPage.meetingPlaceDescription " placeholder="Add description here ...">
 
                 </md-textarea>
             </md-field>
         </div>
 
-        <div class="info-item">
-            <h4>WHEN TO ARRIVE</h4>
-            <md-field :class="{editable : editMode}">
+        <div class="info-item md-layout">
+            <h4 class="md-layout-item md-size-30">WHEN TO ARRIVE</h4>
+            <md-field class="md-layout-item md-size-70" :class="{editable : editMode}">
                 <md-textarea  v-model="event.eventPage.whenToArrive " placeholder="Add description here ...">
 
                 </md-textarea>
             </md-field>
         </div>
 
-        <div class="info-item">
-            <h4>WHAT YOU NEED TO KNOW</h4>
-            <md-field :class="{editable : editMode}">
+        <div class="info-item md-layout">
+            <h4 class="md-layout-item md-size-30">WHAT YOU NEED TO KNOW</h4>
+            <md-field class="md-layout-item md-size-70" :class="{editable : editMode}">
                 <md-textarea  v-model="event.eventPage.whatYouNeedToKnow " placeholder="Add description here ...">
 
                 </md-textarea>

@@ -1,9 +1,7 @@
 <template>
   <div class="event-images-list md-layout">
 
-    <md-card class="md-layout-item md-size-25 default-image-box" v-if="event.eventPage.images.length == 0">
-      Add Images here
-    </md-card>
+
 
     <md-card v-for="(image,index) in event.eventPage.images" :key="index" class="md-layout-item md-size-25">
       <md-card-media>
@@ -15,10 +13,13 @@
       </md-card-media>
     </md-card>
 
-    <div class="update-banner-form" v-if="event.eventPage.images.length < 3">
-      <md-button  title="Add Images" class="add-event-image md-info md-sm md-just-icon md-round" @click="uploadEventImage">
-        <md-icon>add</md-icon>
-      </md-button>
+    <md-card v-for="(n,index) in (3 - event.eventPage.images.length)" :key="index + 1000"  class="md-layout-item md-size-25 default-image-box">
+      <div class="" @click="uploadEventImage">
+        Add Images here
+      </div>
+    </md-card>
+
+    <div class="update-banner-form">
       <input type="file" style="display: none;" ref="eventFile" accept="image/gif, image/jpg, image/png" @change="onEventFilePicked">
     </div>
   </div>
@@ -65,11 +66,8 @@
 
           this.createImage(file[0]);
 
+        } else {
 
-//              let url = URL.createObjectURL(file[0]);
-//              const formData = new FormData();
-//              formData.append("images", file[0], file[0].name) // TODO :: send this object once we have api for userPorfile photo
-        }else{
           this.alretExceedPictureSize = true
           this.$notify(
             {
@@ -92,9 +90,6 @@
           const calendar = new Calendar({id: this.auth.user.defaultCalendarId});
           const event = new CalendarEvent({id: this.event.id});
           return new CalendarEventPageImage({featuredImageFile : e.target.result}).for(calendar, event).save().then(result => {
-
-            console.log('image ', result.id);
-
             this.event.eventPage.images.push({id: result.id});
 
             this.$parent.isLoading = false;
@@ -111,8 +106,6 @@
         const calendar = new Calendar({id: this.auth.user.defaultCalendarId});
         const event = new CalendarEvent({id: this.event.id});
         return new CalendarEventPageImage({id : this.event.eventPage.images[index].id}).for(calendar, event).delete().then(result => {
-
-          console.log('image ', result.id);
 
           this.event.eventPage.images.splice(index,1);
 
