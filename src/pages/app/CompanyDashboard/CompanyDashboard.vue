@@ -50,7 +50,6 @@
           .statistics()
           .get()
           .then(res=>{
-            console.log(JSON.stringify(res[0], null, 4));
             this.statistics = res[0];
           })
           .catch(e=>console.log(e,'chart api errors'))
