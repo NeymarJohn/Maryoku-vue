@@ -1,16 +1,28 @@
 <template>
     <div class="event-info">
 
+      <div class="tabs-actions text-right">
+        <md-button class="md-info md-sm edit-timeline-btn" v-if="!editMode" @click="toggleEditMode">
+          Edit
+        </md-button>
+        <md-button class="md-info md-sm edit-timeline-btn" v-if="editMode" @click="editEventInfo">
+          Save
+        </md-button>
+        <md-button class="md-default md-sm edit-timeline-btn" v-if="editMode" @click="toggleEditMode">
+          Cancel
+        </md-button>
+      </div>
+
         <div class="info-item md-layout">
-            <h4 class="md-layout-item md-size-30 md-rose md-button md-just-icon text-center" style="border-bottom-right-radius: 0; border-top-right-radius: 0;">MEETING PLACE</h4>
-            <md-field  class="md-layout-item md-size-70 md-button text-center" :class="{editable : editMode}" style="color: white; background-color: #efefef !important; margin-left: -1px; border-bottom-left-radius: 0; border-top-left-radius: 0; min-height: auto; padding: 0 12px;">
+            <h4 class="md-layout-item md-size-30 md-rose md-button md-round md-just-icon text-center">MEETING PLACE</h4>
+            <md-field  class="md-layout-item md-size-65 md-button text-center" :class="{editable : editMode}" style="color: white; background-color: #fcfcfc !important; margin-left: 15px; border-bottom-left-radius: 0; border-top-left-radius: 0; min-height: auto; padding: 0 12px;">
                 <md-textarea  v-model="event.eventPage.meetingPlaceDescription" placeholder="Add description here ..."></md-textarea>
             </md-field>
         </div>
 
         <div class="info-item md-layout">
-          <h4 class="md-layout-item md-size-30 md-rose md-button md-just-icon text-center" style="border-bottom-right-radius: 0; border-top-right-radius: 0;">WHEN TO ARRIVE</h4>
-          <md-field  class="md-layout-item md-size-70 md-button text-center" :class="{editable : editMode}" style="color: white; background-color: #efefef !important; margin-left: -1px; border-bottom-left-radius: 0; border-top-left-radius: 0; min-height: auto; padding: 0 12px;">
+          <h4 class="md-layout-item md-size-30 md-rose md-button md-round md-just-icon text-center">WHEN TO ARRIVE</h4>
+          <md-field  class="md-layout-item md-size-65 md-button text-center" :class="{editable : editMode}" style="color: white; background-color: #fcfcfc !important; margin-left: 15px; border-bottom-left-radius: 0; border-top-left-radius: 0; min-height: auto; padding: 0 12px;">
                 <md-textarea  v-model="event.eventPage.whenToArrive " placeholder="Add description here ...">
 
                 </md-textarea>
@@ -18,24 +30,12 @@
         </div>
 
         <div class="info-item md-layout">
-          <h4 class="md-layout-item md-size-30 md-rose md-button md-just-icon text-center" style="border-bottom-right-radius: 0; border-top-right-radius: 0;">WHAT YOU NEED TO KNOW</h4>
-          <md-field  class="md-layout-item md-size-70 md-button text-center" :class="{editable : editMode}" style="color: white; background-color: #efefef !important; margin-left: -1px; border-bottom-left-radius: 0; border-top-left-radius: 0; min-height: auto; padding: 0 12px;">
+          <h4 class="md-layout-item md-size-30 md-rose md-button md-round md-just-icon text-center">WHAT YOU NEED TO KNOW</h4>
+          <md-field  class="md-layout-item md-size-65 md-button text-center" :class="{editable : editMode}" style="color: white; background-color: #fcfcfc !important; margin-left: 15px; border-bottom-left-radius: 0; border-top-left-radius: 0; min-height: auto; padding: 0 12px;">
                 <md-textarea  v-model="event.eventPage.whatYouNeedToKnow " placeholder="Add description here ...">
 
                 </md-textarea>
             </md-field>
-        </div>
-
-        <div class="tabs-actions text-right">
-            <md-button class="md-info md-sm edit-timeline-btn" v-if="!editMode" @click="toggleEditMode">
-                Edit
-            </md-button>
-            <md-button class="md-info md-sm edit-timeline-btn" v-if="editMode" @click="editEventInfo">
-                Save
-            </md-button>
-            <md-button class="md-default md-sm edit-timeline-btn" v-if="editMode" @click="toggleEditMode">
-                Cancel
-            </md-button>
         </div>
 
     </div>

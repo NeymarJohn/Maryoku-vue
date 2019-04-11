@@ -736,8 +736,10 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
   }
   .event-images-list {
-    align-content : flex-start;
-    justify-content: flex-start;
+    align-content : center;
+    justify-content: center;
+
+    margin-top: 2rem;
 
     .md-card {
       padding : 0;
@@ -775,7 +777,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 }
 
 .event-info {
-  margin : 1em auto;
+  margin : 2em auto;
 
   .info-item {
     margin-bottom : 1em;
