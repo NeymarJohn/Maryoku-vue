@@ -48,12 +48,12 @@
                 </div>
               </a>
             </li>-->
-            <!--<li class="md-list-item">
-              <md-button class="md-button md-info" style="margin-top: 6px;" @click="openEventModal()">
+            <li class="md-list-item">
+              <md-button class="md-button md-purple" style="margin-top: 6px;" @click="openEventModal()">
                 <md-icon>event</md-icon>
                 <span>Create New Event</span>
               </md-button>
-            </li>-->
+            </li>
             <li class="md-list-item">
               <a href="#" class="md-list-item-router md-list-item-container md-button-clean dropdown">
                 <div class="md-list-item-content">
@@ -91,6 +91,8 @@
 
 <script>
   import auth from '@/auth';
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import EventPlannerVuexModule from '../../app/Events/EventPlanner.vuex';
 
   export default {
     data() {
@@ -116,7 +118,17 @@
         this.avatar = this.auth.user.avatar != null ? this.auth.user.avatar : "static/img/placeholder.jpg";
       }.bind(this),3000);
     },
+    created(){
+      this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
+    },
     methods: {
+      ...mapMutations("EventPlannerVuex", [
+        "setEventModal",
+        "setEditMode",
+        "setModalSubmitTitle",
+        "setEventModalAndEventData",
+        "setNumberOfParticipants"
+      ]),
       toggleSidebar() {
         this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
       },
@@ -124,6 +136,12 @@
         if (this.$sidebar) {
           this.$sidebar.toggleMinimize();
         }
+      },
+      openEventModal() {
+        this.$router.push({ path: `/events` , name  : 'Events', params : { mode : 'create-event'} });
+        this.setEventModal({ showModal: true });
+        this.setModalSubmitTitle("Save");
+        this.setEditMode({ editMode: false });
       }
     }
   };
