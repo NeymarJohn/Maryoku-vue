@@ -775,7 +775,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 }
 
 .event-info {
-  margin : 3em auto;
+  margin : 1em auto;
 
   .info-item {
     margin-bottom : 1em;
@@ -796,8 +796,10 @@ $tooltip-border-color: $blue-grey-200 !default;
         font-family: "Roboto", "Helvetica", "Arial", sans-serif;
         font-weight: 300;
         font-size : 14px;
-        padding : 0 !important;
         width : 100%;
+        height: auto;
+        min-height: auto;
+        padding: 12px !important;
       }
 
       &:not(.editable) {
