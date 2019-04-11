@@ -743,8 +743,10 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
   }
   .event-images-list {
-    align-content : flex-start;
-    justify-content: flex-start;
+    align-content : center;
+    justify-content: center;
+
+    margin-top: 2rem;
 
     .md-card {
       padding : 0;
@@ -782,7 +784,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 }
 
 .event-info {
-  margin : 3em auto;
+  margin : 2em auto;
 
   .info-item {
     margin-bottom : 1em;
@@ -793,6 +795,7 @@ $tooltip-border-color: $blue-grey-200 !default;
       margin: 0 0 5px;
       font-size: 13px;
       padding-left : 0;
+      text-align: center;
     }
 
     .md-has-textarea {
@@ -803,8 +806,9 @@ $tooltip-border-color: $blue-grey-200 !default;
         font-family: "Roboto", "Helvetica", "Arial", sans-serif;
         font-weight: 300;
         font-size : 14px;
-        padding : 0 !important;
         width : 100%;
+        height: auto;
+        padding: 12px !important;
       }
 
       &:not(.editable) {
@@ -934,6 +938,22 @@ $tooltip-border-color: $blue-grey-200 !default;
 
   #event-link {
     pointer-events: none;
+  }
+}
+
+.event-confirmation {
+  .number-of-users {
+    color : #3c4858;
+  }
+  .confirmation-section {
+    h4 {
+        display : inline-block;
+        margin-right : 0.5em;
+    }
+
+    .md-button {
+      margin-top: 2em;
+    }
   }
 }
 @import 'vue-image-lightbox/dist/vue-image-lightbox.min.css';

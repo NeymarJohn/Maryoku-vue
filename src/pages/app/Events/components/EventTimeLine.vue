@@ -1,401 +1,399 @@
 <template>
-    <div class="md-layout">
-        <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
-        <md-card class="time-line-blocks md-layout-item md-size-30">
-            <md-card-header class="md-card-header-icon md-card-header-warning">
-                <div class="card-icon">
-                    <md-icon>extension</md-icon>
+  <div class="md-layout">
+    <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
+    <md-card class="time-line-blocks md-layout-item md-size-30">
+      <md-card-header class="md-card-header-icon md-card-header-warning">
+        <div class="card-icon">
+          <md-icon>extension</md-icon>
+        </div>
+        <h4 class="title2">Building Blocks</h4>
+      </md-card-header>
+      <md-card-content class="md-layout time-line-blocks_items">
+
+        <h5 class="section-desc">
+          You can drag and drop the blocks to complete your timeline project.
+        </h5>
+        <div v-for="(block,index) in blocksList" :key="block.id" class="md-layout-item md-size-100">
+
+          <drag :transfer-data="{ block }" class="time-line-blocks_item "
+                :style="`background: ` + block.color">
+            <md-icon>{{block.icon}}</md-icon>
+            <h5>{{block.buildingBlockType}}</h5>
+          </drag>
+
+        </div>
+
+      </md-card-content>
+    </md-card>
+    <div class="md-layout-item md-size-70 time-line-section">
+      <h4>Timeline</h4>
+      <md-button class="md-info md-sm preview-event" @click="previewEvent">
+        Preview
+      </md-button>
+
+      <drop @drop="handleDrop">
+        <draggable :list="timelineItems" class="time-line-blocks_selected-items">
+
+          <div v-for="(item,index) in timelineItems" :key="index"
+               class="time-line-blocks_selected-items_item time-line-item">
+            <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">{{item.icon}}
+            </md-icon>
+            <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit' ">
+              <md-card-content class="md-layout">
+                <div class="md-layout-item md-size-50">
+                  <md-field >
+                    <label>From Time</label>
+                    <md-select v-model="item.startTime"
+                    >
+                      <md-option v-for="hour in hoursArray"
+                                 :key="hour"
+                                 :value="hour">
+                        {{ hour }}
+                      </md-option>
+                    </md-select>
+                  </md-field>
                 </div>
-                <h4 class="title2">Building Blocks</h4>
-            </md-card-header>
-            <md-card-content class="md-layout time-line-blocks_items">
-
-                <h5 class="section-desc">
-                    You can drag and drop the blocks to complete your timeline project.
-                </h5>
-                <div v-for="(block,index) in blocksList" :key="block.id" class="md-layout-item md-size-100">
-
-                    <drag :transfer-data="{ block }" class="time-line-blocks_item "
-                          :style="`background: ` + block.color">
-                        <md-icon>{{block.icon}}</md-icon>
-                        <h5>{{block.buildingBlockType}}</h5>
-                    </drag>
-
+                <div class="md-layout-item md-size-50">
+                  <md-field >
+                    <label>To Time</label>
+                    <md-select v-model="item.endTime"
+                    >
+                      <md-option v-for="hour in hoursArray"
+                                 :key="hour"
+                                 :value="hour">
+                        {{ hour }}
+                      </md-option>
+                    </md-select>
+                  </md-field>
                 </div>
+                <div class="md-layout-item md-size-100">
+                  <md-field >
+                    <label>Title</label>
+                    <md-input
+                      v-model="item.title"
+                      type="text"
+                    ></md-input>
+                  </md-field>
+                </div>
+                <div class="md-layout-item md-size-100">
+                  <md-field>
+                    <label>Description</label>
+                    <md-input
+                      v-model="item.description"
+                      type="text"
+                    ></md-input>
+                  </md-field>
+                </div>
+              </md-card-content>
+              <md-card-actions md-alignment="left">
+                <md-button class="md-info" v-if="!item.dateCreated"
+                           @click="saveTimelineItem(item,index)">Save
+                </md-button>
+                <md-button class="md-info" v-else @click="updateTimelineItem(item)">Edit
+                </md-button>
+              </md-card-actions>
 
-            </md-card-content>
-        </md-card>
-        <div class="md-layout-item md-size-70 time-line-section">
-            <h4>Timeline</h4>
-            <md-button class="md-info md-sm preview-event" @click="previewEvent">
-                Preview
-            </md-button>
+            </md-card>
 
-            <drop @drop="handleDrop">
-                <draggable :list="timelineItems" class="time-line-blocks_selected-items">
-
-                    <div v-for="(item,index) in timelineItems" :key="index"
-                         class="time-line-blocks_selected-items_item time-line-item">
-                        <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">{{item.icon}}
-                        </md-icon>
-                        <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit' ">
-                            <md-card-content class="md-layout">
-                                <div class="md-layout-item md-size-50">
-                                    <md-field >
-                                        <label>From Time</label>
-                                        <md-select v-model="item.startTime"
-                                        >
-                                            <md-option v-for="hour in hoursArray"
-                                                       :key="hour"
-                                                       :value="hour">
-                                                {{ hour }}
-                                            </md-option>
-                                        </md-select>
-                                    </md-field>
-                                </div>
-                                <div class="md-layout-item md-size-50">
-                                    <md-field >
-                                        <label>To Time</label>
-                                        <md-select v-model="item.endTime"
-                                        >
-                                            <md-option v-for="hour in hoursArray"
-                                                       :key="hour"
-                                                       :value="hour">
-                                                {{ hour }}
-                                            </md-option>
-                                        </md-select>
-                                    </md-field>
-                                </div>
-                                <div class="md-layout-item md-size-100">
-                                    <md-field >
-                                        <label>Title</label>
-                                        <md-input
-                                                v-model="item.title"
-                                                type="text"
-                                        ></md-input>
-                                    </md-field>
-                                </div>
-                                <div class="md-layout-item md-size-100">
-                                    <md-field>
-                                        <label>Description</label>
-                                        <md-input
-                                                v-model="item.description"
-                                                type="text"
-                                        ></md-input>
-                                    </md-field>
-                                </div>
-                            </md-card-content>
-                            <md-card-actions md-alignment="left">
-                                <md-button class="md-info" v-if="!item.dateCreated"
-                                           @click="saveTimelineItem(item,index)">Save
-                                </md-button>
-                                <md-button class="md-info" v-else @click="updateTimelineItem(item)">Edit
-                                </md-button>
-                            </md-card-actions>
-
-                        </md-card>
-
-                        <md-card class="block-info" v-else-if="!item.mode || item.mode === 'saved' ">
-                            <div class="card-actions">
-                                <md-button class="md-info md-sm md-just-icon md-simple md-round"
-                                           @click="modifyItem(index)">
-                                    <md-icon>create</md-icon>
-                                </md-button>
-                                <md-button class="md-danger md-sm md-just-icon md-simple md-round"
-                                           @click="removeItem(item)">
-                                    <md-icon>delete_outline</md-icon>
-                                </md-button>
-                            </div>
-                            <div class="item-title-and-time">
+            <md-card class="block-info" v-else-if="!item.mode || item.mode === 'saved' ">
+              <div class="card-actions">
+                <md-button class="md-info md-sm md-just-icon md-simple md-round"
+                           @click="modifyItem(index)">
+                  <md-icon>create</md-icon>
+                </md-button>
+                <md-button class="md-danger md-sm md-just-icon md-simple md-round"
+                           @click="removeItem(item)">
+                  <md-icon>delete_outline</md-icon>
+                </md-button>
+              </div>
+              <div class="item-title-and-time">
                                 <span class="item-time" :style="`background : ` + item.color">
                                     {{ item.startTime }} - {{item.endTime}}
                                 </span>
-                                <span class="item-title">
+                <span class="item-title">
                                     {{item.title }}
                                 </span>
-                            </div>
-                            <p class="item-desc">
-                                {{ item.description }}
-                            </p>
-                        </md-card>
+              </div>
+              <p class="item-desc">
+                {{ item.description }}
+              </p>
+            </md-card>
 
-                    </div>
+          </div>
 
-                    <div class="time-line-blocks_selected-items_item">
-                        <md-icon class="time-line-blocks_icon">add</md-icon>
-                        <md-card class="drag-here">
-                            Drag and drop a building block here
-                        </md-card>
-                    </div>
-                </draggable>
-            </drop>
-        </div>
+          <div class="time-line-blocks_selected-items_item">
+            <md-icon class="time-line-blocks_icon">add</md-icon>
+            <md-card class="drag-here">
+              Drag and drop a building block here
+            </md-card>
+          </div>
+        </draggable>
+      </drop>
     </div>
+  </div>
 
 </template>
 <script>
-    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-    import Calendar from "@/models/Calendar";
-    import CalendarEvent from "@/models/CalendarEvent";
-    import EventComponent from "@/models/EventComponent";
-    import EventTimelineItem from '@/models/EventTimelineItem';
-    import moment from 'moment';
-    import swal from "sweetalert2";
-    import {SlideYDownTransition} from "vue2-transitions";
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import Calendar from "@/models/Calendar";
+  import CalendarEvent from "@/models/CalendarEvent";
+  import EventComponent from "@/models/EventComponent";
+  import EventTimelineItem from '@/models/EventTimelineItem';
+  import moment from 'moment';
+  import swal from "sweetalert2";
+  import {SlideYDownTransition} from "vue2-transitions";
 
-    import VueElementLoading from 'vue-element-loading';
-    import auth from '@/auth';
-    import EventBlocks from "../components/NewEventBlocks";
-    import draggable from 'vuedraggable';
-    import {Drag, Drop} from 'vue-drag-drop';
-    import _ from 'underscore';
+  import VueElementLoading from 'vue-element-loading';
+  import auth from '@/auth';
+  import EventBlocks from "../components/NewEventBlocks";
+  import draggable from 'vuedraggable';
+  import {Drag, Drop} from 'vue-drag-drop';
+  import _ from 'underscore';
 
-    export default {
-        name: 'event-building-blocks',
-        components: {
-            VueElementLoading,
-            EventBlocks,
-            draggable, Drag, Drop,
-            SlideYDownTransition
+  export default {
+    name: 'event-building-blocks',
+    components: {
+      VueElementLoading,
+      EventBlocks,
+      draggable, Drag, Drop,
+      SlideYDownTransition
+    },
+    props: {
+      event: Object,
+      eventComponents: [Array, Function]
+
+    },
+    data: () => ({
+      auth: auth,
+      isLoading: true,
+      blocksList: [
+        {
+          id: 1,
+          buildingBlockType: 'setup',
+          icon: 'place',
+          color: '#f44336'
         },
-        props: {
-            event: Object,
-            eventComponents: [Array, Function]
-
+        {
+          id: 2,
+          buildingBlockType: 'activity',
+          icon: 'notifications_active',
+          color: '#4caf50'
         },
-        data: () => ({
-            auth: auth,
-            isLoading: true,
-            blocksList: [
-                {
-                    id: 1,
-                    buildingBlockType: 'setup',
-                    icon: 'place',
-                    color: '#f44336'
-                },
-                {
-                    id: 2,
-                    buildingBlockType: 'activity',
-                    icon: 'notifications_active',
-                    color: '#4caf50'
-                },
-                {
-                    id: 3,
-                    buildingBlockType: 'meal',
-                    icon: 'restaurant',
-                    color: '#00bcd4'
-                },
-                {
-                    id: 4,
-                    buildingBlockType: 'DISCUSSION',
-                    icon: 'sms',
-                    color: '#ff9800'
-                },
-                {
-                    id: 5,
-                    buildingBlockType: 'TRANSPORTATION',
-                    icon: 'train',
-                    color: '#f44336'
-                },
-                {
-                    id: 6,
-                    buildingBlockType: 'RELAXATION',
-                    icon: 'weekend',
-                    color: '#4caf50'
-                },
-                {
-                    id: 7,
-                    buildingBlockType: 'ADD YOUR OWN',
-                    icon: 'add',
-                    color: '#00bcd4'
-                }
-            ],
-            timelineItems: [],
-            hoursArray: []
-
-        }),
-        methods: {
-            /**
-             * Handle drop block to time line items
-             * @param data
-             * @param event
-             */
-            handleDrop(data, event) {
-                if ( data ) {
-                    let block = Object.assign({}, data.block);
-                    block.mode = 'edit';
-                    this.timelineItems.push(Object.assign({}, data.block));
-                } else {
-                    this.updateTimelineITemsOrder();
-                }
-
-            },
-
-            removeItem(item) {
-
-                this.isLoading = true;
-
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-                let event = new CalendarEvent({id: this.event.id});
-
-                let timelineItem = new EventTimelineItem({id: item.id}).for(calendar, event);
-
-                timelineItem.delete().then(result => {
-                    this.getTimelineItems();
-                }).catch(error => {
-                    console.log(error);
-                })
-            },
-            modifyItem(index) {
-                this.$set(this.timelineItems[index], 'mode', 'edit');
-            },
-            previewEvent() {
-                this.$router.push({path: `/events/` + this.event.id})
-
-            },
-            getTimelineItems() {
-
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-                let event = new CalendarEvent({id: this.event.id});
-
-                new EventTimelineItem().for(calendar, event).get().then(res => {
-                    this.timelineItems = _.sortBy(res, function(item){ return item.order});
-                    console.log(this.timelineItems);
-                    this.isLoading = false;
-                })
-            },
-            saveTimelineItem(item, index) {
-                this.isLoading = true;
-
-                if ( !item.startTime || !item.endTime ||
-                     ( !item.title && !item.description ) ) {
-                    this.isLoading = false;
-
-                    this.$notify(
-                        {
-                            message: 'From time, To time and ( Title or Description ) id Required',
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'warning'
-                        })
-
-                    return;
-                }
-
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-                let event = new CalendarEvent({id: this.event.id});
-                let order = ++index;
-
-                new EventTimelineItem({
-                    event: {id: event.id},
-                    title: item.title,
-                    buildingBlockType: item.buildingBlockType,
-                    description: item.description,
-                    startTime: item.startTime,
-                    endTime: item.endTime,
-                    order: order,
-                    icon: item.icon,
-                    color: item.color
-                }).for(calendar, event).save()
-                    .then(res => {
-
-                        this.getTimelineItems();
-
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    })
-
-            },
-            updateTimelineItem(item) {
-                this.isLoading = true;
-
-                if ( !item.startTime || !item.endTime ||
-                    ( !item.title && !item.description ) ) {
-                    this.isLoading = false;
-
-                    this.$notify(
-                        {
-                            message: 'From time, To time and ( Title or Description ) id Required',
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'warning'
-                        })
-
-                    return;
-                }
-
-
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-                let event = new CalendarEvent({id: this.event.id});
-
-                let timelineItem = new EventTimelineItem({id: item.id}).for(calendar, event);
-
-
-                timelineItem.title = item.title;
-                timelineItem.description = item.description;
-                timelineItem.startTimeMillis = item.startTimeMillis;
-                timelineItem.endTimeMillis = item.endTimeMillis;
-
-                timelineItem.save().then(res => {
-                    this.getTimelineItems();
-
-                }).catch(error => {
-                    console.log(error)
-                })
-            },
-            updateTimelineITemsOrder() {
-
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-                let event = new CalendarEvent({id: this.event.id});
-
-                let new_order = 1;
-
-                this.timelineItems.forEach(item => {
-
-                    let timelineItem = new EventTimelineItem({id: item.id}).for(calendar, event);
-
-                    timelineItem.order = new_order;
-
-                    timelineItem.save().then(res => {
-
-                        this.$notify(
-                            {
-                                message: "Timeline Items order modified successfully",
-                                horizontalAlign: 'center',
-                                verticalAlign: 'top',
-                                type: 'success'
-                            });
-
-
-
-                    }).catch(error => {
-                        console.log(error)
-                    })
-
-                    new_order+=1;
-
-
-                })
-
-
-            }
-
+        {
+          id: 3,
+          buildingBlockType: 'meal',
+          icon: 'restaurant',
+          color: '#00bcd4'
         },
-        created() {
-            [...Array(12).keys()].map(x => x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined);
-            [...Array(12).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`));
-            [...Array(8).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`));
-
-            this.hoursArray.push();
-
+        {
+          id: 4,
+          buildingBlockType: 'DISCUSSION',
+          icon: 'sms',
+          color: '#ff9800'
         },
-        mounted() {
+        {
+          id: 5,
+          buildingBlockType: 'TRANSPORTATION',
+          icon: 'train',
+          color: '#f44336'
+        },
+        {
+          id: 6,
+          buildingBlockType: 'RELAXATION',
+          icon: 'weekend',
+          color: '#4caf50'
+        },
+        {
+          id: 7,
+          buildingBlockType: 'ADD YOUR OWN',
+          icon: 'add',
+          color: '#00bcd4'
+        }
+      ],
+      timelineItems: [],
+      hoursArray: []
+
+    }),
+    methods: {
+      /**
+       * Handle drop block to time line items
+       * @param data
+       * @param event
+       */
+      handleDrop(data, event) {
+        if ( data ) {
+          let block = Object.assign({}, data.block);
+          block.mode = 'edit';
+          this.timelineItems.push(Object.assign({}, data.block));
+        } else {
+          this.updateTimelineITemsOrder();
+        }
+
+      },
+
+      removeItem(item) {
+
+        this.isLoading = true;
+
+        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
+
+        let timelineItem = new EventTimelineItem({id: item.id}).for(calendar, event);
+
+        timelineItem.delete().then(result => {
+          this.getTimelineItems();
+        }).catch(error => {
+          console.log(error);
+        })
+      },
+      modifyItem(index) {
+        this.$set(this.timelineItems[index], 'mode', 'edit');
+      },
+      previewEvent() {
+        this.$router.push({path: `/events/` + this.event.id})
+
+      },
+      getTimelineItems() {
+
+        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
+
+        new EventTimelineItem().for(calendar, event).get().then(res => {
+          this.timelineItems = _.sortBy(res, function(item){ return item.order});
+          console.log(this.timelineItems);
+          this.isLoading = false;
+        })
+      },
+      saveTimelineItem(item, index) {
+        this.isLoading = true;
+
+        if ( !item.startTime || !item.endTime ||
+          ( !item.title && !item.description ) ) {
+          this.isLoading = false;
+
+          this.$notify(
+            {
+              message: 'From time, To time and ( Title or Description ) id Required',
+              horizontalAlign: 'center',
+              verticalAlign: 'top',
+              type: 'warning'
+            })
+
+          return;
+        }
+
+        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
+        let order = ++index;
+
+        new EventTimelineItem({
+          event: {id: event.id},
+          title: item.title,
+          buildingBlockType: item.buildingBlockType,
+          description: item.description,
+          startTime: item.startTime,
+          endTime: item.endTime,
+          order: order,
+          icon: item.icon,
+          color: item.color
+        }).for(calendar, event).save()
+          .then(res => {
 
             this.getTimelineItems();
 
+          })
+          .catch(error => {
+            console.log(error);
+          })
+
+      },
+      updateTimelineItem(item) {
+        this.isLoading = true;
+
+        if ( !item.startTime || !item.endTime ||
+          ( !item.title && !item.description ) ) {
+          this.isLoading = false;
+
+          this.$notify(
+            {
+              message: 'From time, To time and ( Title or Description ) id Required',
+              horizontalAlign: 'center',
+              verticalAlign: 'top',
+              type: 'warning'
+            })
+
+          return;
         }
+
+
+        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
+
+        let timelineItem = new EventTimelineItem({id: item.id}).for(calendar, event);
+
+
+        timelineItem.title = item.title;
+        timelineItem.description = item.description;
+        timelineItem.startTimeMillis = item.startTimeMillis;
+        timelineItem.endTimeMillis = item.endTimeMillis;
+
+        timelineItem.save().then(res => {
+          this.getTimelineItems();
+
+        }).catch(error => {
+          console.log(error)
+        })
+      },
+      updateTimelineITemsOrder() {
+
+        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
+
+        let new_order = 1;
+        const timelineItemsForUpdate = [];
+        this.timelineItems.forEach(item => {
+          timelineItemsForUpdate.push({ id: item.id, order: new_order});
+          new_order+=1;
+        });
+
+        let timelineItem = new EventTimelineItem({id: 'updateMultiple', timelineItems: timelineItemsForUpdate}).for(calendar, event);
+
+        timelineItem.order = new_order;
+
+        timelineItem.save().then(res => {
+
+          this.$notify(
+            {
+              message: "Timeline Items order modified successfully",
+              horizontalAlign: 'center',
+              verticalAlign: 'top',
+              type: 'success'
+            });
+
+
+
+        }).catch(error => {
+          console.log(error)
+        })
+
+
+      }
+
+    },
+    created() {
+      [...Array(12).keys()].map(x => x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined);
+      [...Array(12).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`));
+      [...Array(8).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`));
+
+      this.hoursArray.push();
+
+    },
+    mounted() {
+
+      this.getTimelineItems();
+
     }
+  }
 </script>
 <style lang="scss">
 

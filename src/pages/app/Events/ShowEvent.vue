@@ -16,8 +16,10 @@
             <div class="event-title-date">
               <h4>{{calendarEvent.occasion}}</h4>
 
-              <div class="event-date">{{date}}</div>
+              <div class="event-date">{{getEventDate(calendarEvent.eventStartMillis)}}</div>
             </div>
+
+            <event-confirmation :event="calendarEvent"></event-confirmation>
 
             <event-tabs :event="calendarEvent" :readonly="readonly"></event-tabs>
 
@@ -63,6 +65,7 @@
     import EventImages from "./components/EventBlocks/EventImages.vue"
     import EventQuestionsAnswers from "./components/EventBlocks/EventQuestionsAnswers.vue"
     import EventTimeLineItems from "./components/EventBlocks/EventTimelineItems.vue"
+    import EventConfirmation from "./components/EventBlocks/EventConfirmation.vue"
 
 
     export default {
@@ -76,7 +79,8 @@
             EventTabs,
             EventImages,
             EventQuestionsAnswers,
-            EventTimeLineItems
+            EventTimeLineItems,
+            EventConfirmation
         },
 
         data() {
@@ -84,12 +88,6 @@
                 auth: auth,
                 calendarEvent: {},
                 isLoading: false,
-                footerLink: [
-                    { title: "HOME" },
-                    { title: "COMPANY" },
-                    { title: "PORTFOLIO" },
-                    { title: "BLOG" }
-                ],
                 readonly : true
             };
         },

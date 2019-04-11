@@ -3,7 +3,7 @@
     <md-card>
       <md-card-header>
         <h4 class="title">Questions & Answers
-          <md-button class="md-info md-sm edit-event-component"  v-if="!readonly"  @click="showQuestionsAnswersModal">
+          <md-button class="md-info md-sm edit-event-component pull-right"  v-if="!readonly"  @click="showQuestionsAnswersModal">
             Edit
           </md-button>
         </h4>

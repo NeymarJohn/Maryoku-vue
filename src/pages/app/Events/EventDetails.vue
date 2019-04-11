@@ -23,16 +23,11 @@
               <div class="md-layout-item md-size-50">
 
                 <div class="event-title-date">
-                  <md-field>
-                    <md-input v-model="calendarEvent.occasion" />
-                  </md-field>
+                  <h4>
+                    {{calendarEvent.occasion}}
+                  </h4>
 
-                  <md-datepicker v-model="date" :value="new Date(calendarEvent.eventStartMillis)">
-                    <label></label>
-                  </md-datepicker>
-                  <md-button class="md-info md-sm" @click="editTitleDate">
-                    Edit
-                  </md-button>
+                  <div class="event-date">{{getEventDate(calendarEvent.eventStartMillis)}}</div>
                 </div>
 
                 <event-tabs :event="calendarEvent" ></event-tabs>
@@ -103,60 +98,8 @@ export default {
     return {
       auth: auth,
       calendarEvent: {},
-      percentage: 0,
-      totalRemainingBudget: 0,
       seriesData: [],
       isLoading: false,
-      footerLink: [
-        { title: "HOME" },
-        { title: "COMPANY" },
-        { title: "PORTFOLIO" },
-        { title: "BLOG" }
-      ],
-      questionsAndAnswersList : [
-          {
-              title : 'Question 1 : what if'
-          },
-          {
-              title : 'Question 2'
-          },
-          {
-              title : 'Question 3'
-          }
-      ],
-      timelineItems : [
-          {
-              id : 1,
-              type : 'setup',
-              icon : 'place',
-              color : '#f44336',
-              from : '8:00 AM',
-              to : '4:00 PM',
-              title : 'title 1',
-              description : 'description here'
-          },
-          {
-              id : 2,
-              type : 'activity',
-              icon : 'notifications_active',
-              color : '#4caf50',
-              from : '8:00 AM',
-              to : '4:00 PM',
-              title : 'title 2',
-              description : 'description here'
-          },
-          {
-              id: 3,
-              type : 'meal',
-              icon : 'restaurant',
-              color : '#00bcd4',
-              from : '8:00 AM',
-              to : '4:00 PM',
-              title : 'title 3',
-              description : 'description here'
-          }
-      ],
-        newEventStartTime : null
     };
   },
     created(){
@@ -216,26 +159,7 @@ export default {
               });
 
       },
-      editTitleDate() {
-
-          let editedEvent = new CalendarEvent({id: this.calendarEvent.id});
-
-          editedEvent = this.calendarEvent;
-          editedEvent.occasion = this.calendarEvent.occasion;
-          editedEvent.eventStartMillis = this.newEventStartTime !== null ? this.newEventStartTime : this.calendarEvent.eventStartMillis
-
-          editedEvent.save().then(response => {
-
-              console.log('Event Saved');
-
-          })
-              .catch((error) => {
-                  console.log(error);
-
-              });
-      },
       publishEvent() {
-        console.log('i am here');
           this.setPublishEventModal({ showModal: true });
       }
   },
@@ -263,7 +187,6 @@ export default {
           },
           set(value) {
               let eventStartTime = new Date(value).getTime();
-              this.$set(this,'newEventStartTime',eventStartTime)
           }
       },
   },
