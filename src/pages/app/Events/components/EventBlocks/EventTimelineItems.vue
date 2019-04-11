@@ -1,7 +1,7 @@
 <template>
     <div class=" time-line-section">
         <h4>Timeline
-            <md-button class="md-info md-sm edit-timeline-btn" @click="editTimeLineItems">
+            <md-button class="md-info md-sm edit-timeline-btn pull-right" @click="editTimeLineItems">
                 Edit
             </md-button>
         </h4>
