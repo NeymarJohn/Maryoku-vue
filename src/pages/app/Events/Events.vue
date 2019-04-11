@@ -2,9 +2,9 @@
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
 
-    <div class="md-layout-item md-size-100 text-right">
+    <!--<div class="md-layout-item md-size-100 text-right">
       <md-button class="button-event-creatig" @click="openEventModal()">Create New Event</md-button>
-    </div>
+    </div>-->
     <div class="md-layout-item md-size-100">
       <md-card>
         <md-card-header class="md-card-header-icon md-card-header-rose">
@@ -111,30 +111,30 @@
       this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
 
     },
-   computed:{      
-       ...mapGetters({       
+   computed:{
+       ...mapGetters({
         upcomingEvents:'user/getUpcomingEvents'
-      })    
+      })
     },
-    mounted() {     
+    mounted() {
       this.auth.currentUser(this, true, function() {
-        this.$store.dispatch("user/getUserFromApi");       
+        this.$store.dispatch("user/getUserFromApi");
       }.bind(this))
 
         if ( this.$route.params.mode && this.$route.params.mode == 'create-event') {
             this.openEventModal();
         }
-   
-       
+
+
     },
-    updated(){      
+    updated(){
     }
   ,
     data() {
       return {
         auth: auth,
         product3: "static/img/shutterstock_289440710.png",
-        recentEvents: [],        
+        recentEvents: [],
         isLoading: false,
       };
     },
