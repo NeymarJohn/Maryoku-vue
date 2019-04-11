@@ -3,7 +3,7 @@
     <div class="md-layout-item md-size-100">
 
       <tabs
-        :tab-name="['My Profile', 'My Company']"
+        :tab-name="['My Profile', 'My Company', 'My Team']"
         color-button="info"
         plain>
         <template slot="tab-pane-1">
@@ -87,6 +87,21 @@
                   </div>
                 </md-card-content>
               </md-card>
+            </div>
+          </div>
+        </template>
+        <template slot="tab-pane-3">
+          <div class="md-layout">
+            <div class="md-layout-item md-size-30">
+              <personal-information :user-info="auth.user"></personal-information>
+              <holidays-celebrate></holidays-celebrate>
+            </div>
+            <div class="md-layout-item md-size-35">
+              <dietary-constraints></dietary-constraints>
+              <my-special-dates :birthDate="auth.user.me.birthday" :workingSince="auth.user.me.companyStartDate" :key="auth.user.me" ></my-special-dates>
+            </div>
+            <div class="md-layout-item md-size-35">
+              <my-events :events="upCommingEvents"  ></my-events>
             </div>
           </div>
         </template>
