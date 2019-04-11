@@ -4,14 +4,14 @@
 
     <div class="md-layout-item md-size-100">
       <md-card class="event-details">
-        <md-card-content class="md-layout" v-if="calendarEvent.id">
+        <md-card-content class="md-layout event-details_content" v-if="calendarEvent.id">
 
           <!-- Event Banner -->
           <event-banner :event="calendarEvent" :readonly="readonly"></event-banner>
           <!-- ./Event Banner -->
 
           <!-- Event Info -->
-          <div class="md-layout-item md-size-50">
+          <div class="md-layout-item md-size-50 md-small-size-100">
 
             <div class="event-title-date">
               <h4>{{calendarEvent.occasion}}</h4>
@@ -21,21 +21,46 @@
 
             <event-confirmation :event="calendarEvent"></event-confirmation>
 
-            <event-tabs :event="calendarEvent" :readonly="readonly"></event-tabs>
+            <event-tabs :event="calendarEvent" :readonly="readonly" v-if="!isMobile"></event-tabs>
 
-            <event-images :event="calendarEvent" :readonly="readonly"></event-images>
+            <event-images :event="calendarEvent" :readonly="readonly" v-if="!isMobile"></event-images>
 
-            <event-questions-answers :event="calendarEvent" :readonly="readonly"></event-questions-answers>
+            <event-questions-answers :event="calendarEvent" :readonly="readonly" v-if="!isMobile"></event-questions-answers>
 
           </div>
           <!-- ./Event Info -->
 
           <!-- Event TimeLine -->
-          <div class="md-layout-item md-size-50">
+          <div class="md-layout-item md-size-50 md-small-size-100" v-if="!isMobile">
             <event-time-line-items :event="calendarEvent" :readonly="readonly"></event-time-line-items>
           </div>
           <!-- ./Event Timeline -->
 
+
+          <!-- Mobile Tabs -->
+          <div class="md-layout-item md-size-100 event-details-tabs" v-if="isMobile">
+            <tabs
+                    :tab-name="['DETAILS', 'IMAGES', 'TIMELINE']"
+                    color-button="warning">
+
+              <!-- here you can add your content for tab-content -->
+              <template slot="tab-pane-1">
+
+                <event-tabs :event="calendarEvent" :readonly="readonly"></event-tabs>
+
+                <event-questions-answers :event="calendarEvent" :readonly="readonly"></event-questions-answers>
+
+              </template>
+              <template slot="tab-pane-2">
+                <event-images :event="calendarEvent" :readonly="readonly"></event-images>
+              </template>
+              <template slot="tab-pane-3">
+                <event-time-line-items :event="calendarEvent" :readonly="readonly"></event-time-line-items>
+
+              </template>
+            </tabs>
+          </div>
+          <!-- ./Mobile Tabs -->
         </md-card-content>
       </md-card>
     </div>
@@ -57,6 +82,7 @@
     //COMPONENTS
     import { AnimatedNumber } from "@/components";
     import Icon from "@/components/Icon/Icon.vue";
+    import { Tabs } from "@/components";
     import { Collapse } from "@/components";
 
     // EVENT COMPONENTs
@@ -75,6 +101,7 @@
             AnimatedNumber,
             Icon,
             Collapse,
+            Tabs,
             EventBanner,
             EventTabs,
             EventImages,
@@ -88,7 +115,8 @@
                 auth: auth,
                 calendarEvent: {},
                 isLoading: false,
-                readonly : true
+                readonly : true,
+                isMobile : window.innerWidth <= 500 ? true : false
             };
         },
         created(){

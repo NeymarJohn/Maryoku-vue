@@ -1031,3 +1031,112 @@ $tooltip-border-color: $blue-grey-200 !default;
   text-align: left !important;
   margin-top: 12px !important;
 }
+
+@media screen and (max-width : 500px) {
+  .event-details {
+    &_content.md-card-content {
+      padding : 15px 8px;
+
+      .event-title-date {
+        h4 {
+          font-size: 25px;
+          margin : 8px 0 5px;
+        }
+        .event-date {
+          font-size: 19px;
+        }
+      }
+      .event-confirmation {
+        position : relative;
+
+        .number-of-users {
+          position : absolute;
+          right : 0;
+          top : -2em;
+        }
+        .confirmation-section {
+          h4 {
+            font-size: 1.5rem;
+          }
+
+          .md-button {
+            min-width: 1px;
+            .md-ripple {
+              padding: 0.5em 0.8em !important;
+              font-size: 18px;
+              width: 70px;
+            }
+          }
+        }
+      }
+
+    }
+  }
+
+  .event-details-tabs {
+    padding : 0;
+
+    .md-card-content {
+      padding : 0;
+    }
+    .md-card-tabs .md-list {
+      margin-left : 0 !important;
+      padding-left : 0 !important;
+      box-shadow: none;
+      width: 100% !important;
+
+      .md-list-item {
+        margin-left : 0;
+        width : 33%;
+
+        .md-list-item-button {
+          border-radius: 100px;
+          font-size: 13px;
+        }
+      }
+    }
+
+    .info-item  {
+      .md-button {
+        font-size: 14px;
+        font-weight: 500;
+        color: #555555 !important;
+        background: none !important;
+        box-shadow: none;
+        text-align: left;
+        padding: 0px 12px;
+      }
+
+      .md-has-textarea {
+        .md-textarea {
+          padding :0 !important;
+          overflow: hidden;
+          min-height: 1px;
+          background: #fff;
+        }
+      }
+    }
+    .questions-answers-list {
+      text-align: left;
+    }
+
+    .md-card-tabs {
+      margin-top : 2em;
+    }
+    .event-images-list {
+      justify-content: flex-start;
+      .md-card {
+        margin :  0 2% 4px 0;
+        min-width: 48%;
+        max-width: 48%;
+        flex: 0 1 48%;
+      }
+    }
+
+    .time-line-section {
+      h4 {
+        display: none;
+      }
+    }
+  }
+}
