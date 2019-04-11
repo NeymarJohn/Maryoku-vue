@@ -149,9 +149,6 @@
   .md-field>.md-icon~.md-input {
     margin: 0;
   }
-  .modal-container {
-    max-width: 990px !important;
-  }
 </style>
 <style lang="scss">
     .modal-z-index {

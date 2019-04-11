@@ -346,7 +346,7 @@ let appPages = {
     },
     {
       path: "/events/:id",
-      name: "ShowEvent",
+      name: "EventDetails",
       component: EventDetails,
       meta: {title: 'Event Details', gtm: "Event Details"},
     },
@@ -406,7 +406,13 @@ let appPages = {
       path: "/notes",
       name: "Notes",
       component: Notes
-    }
+    },
+      {
+          path: "/event/:id/publish",
+          name: "ShowEvent",
+          component: ShowEvent,
+          meta: {title: 'Event', gtm: "Event"},
+      }
   ]
 };
 const appCurrentInfo={

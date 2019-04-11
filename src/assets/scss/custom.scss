@@ -675,10 +675,17 @@ $tooltip-border-color: $blue-grey-200 !default;
 
   .event-title-date {
 
-    .md-input {
+    .md-input ,h4 {
       font-size: 40px;
       font-weight: 500;
       margin : 20px 0 17px;
+    }
+
+    .event-date {
+      font-size: 25px;
+      color : #999 !important;
+      -webkit-text-fill-color: #999 !important;
+      font-weight: 400;
     }
 
     .md-datepicker {
@@ -736,10 +743,8 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
   }
   .event-images-list {
-    align-content : center;
-    justify-content: center;
-
-    margin-top: 2rem;
+    align-content : flex-start;
+    justify-content: flex-start;
 
     .md-card {
       padding : 0;
@@ -777,7 +782,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 }
 
 .event-info {
-  margin : 2em auto;
+  margin : 3em auto;
 
   .info-item {
     margin-bottom : 1em;
@@ -798,10 +803,8 @@ $tooltip-border-color: $blue-grey-200 !default;
         font-family: "Roboto", "Helvetica", "Arial", sans-serif;
         font-weight: 300;
         font-size : 14px;
+        padding : 0 !important;
         width : 100%;
-        height: auto;
-        min-height: auto;
-        padding: 12px !important;
       }
 
       &:not(.editable) {
@@ -836,7 +839,7 @@ $tooltip-border-color: $blue-grey-200 !default;
   margin-left : 15px !important;
 }
 
-.event_questions-answers-modal , .event_header-image-modal{
+.event_questions-answers-modal , .event_header-image-modal , .event-modal{
 
   .modal-header {
     h4 {
@@ -918,8 +921,21 @@ $tooltip-border-color: $blue-grey-200 !default;
       margin : 10% auto;
     }
   }
+
+  .modal-container {
+    max-width: 990px;
+  }
 }
 
+.event_publish-modal {
+  p {
+    font-size: 15px;
+  }
+
+  #event-link {
+    pointer-events: none;
+  }
+}
 @import 'vue-image-lightbox/dist/vue-image-lightbox.min.css';
 
 

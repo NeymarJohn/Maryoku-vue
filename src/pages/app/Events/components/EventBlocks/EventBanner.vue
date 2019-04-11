@@ -1,13 +1,13 @@
 <template>
     <div class="md-layout-item md-size-100 event-details_banner" :style="`background-image : url(`+ bannerURL  +`)`">
-        <div class="update-banner-form">
+        <div class="update-banner-form" v-if="!readonly">
             <md-button  class="md-info md-sm" @click="uploadImage">
                 UPDATE IMAGE
             </md-button>
             <input type="file" style="display: none;" ref="inputFile" accept="image/gif, image/jpg, image/png" @change="onFilePicked">
         </div>
 
-        <edit-header-image :event="event" rel="editHeaderModal"></edit-header-image>
+        <edit-header-image  v-if="!readonly" :event="event" rel="editHeaderModal"></edit-header-image>
     </div>
 </template>
 <script>
@@ -25,7 +25,11 @@
         EditHeaderImage
     },
     props: {
-        event
+        event,
+        readonly : {
+            type : Boolean,
+            default : false
+        }
     },
     data: () => ({
 //        bannerURL : this.event.eventPage.headerId ? '/static/img/page-headers/' + this.event.eventPage.headerId : 'https://bit.ly/2TWGILO', // default image for banner

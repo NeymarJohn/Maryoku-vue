@@ -3,7 +3,7 @@
     <md-card>
       <md-card-header>
         <h4 class="title">Questions & Answers
-          <md-button class="md-info md-sm edit-event-component pull-right"   @click="showQuestionsAnswersModal">
+          <md-button class="md-info md-sm edit-event-component"  v-if="!readonly"  @click="showQuestionsAnswersModal">
             Edit
           </md-button>
         </h4>
@@ -20,7 +20,7 @@
       </md-card-content>
     </md-card>
 
-    <edit-questions-and-answers :event="event" rel="questionsAnswersModal"></edit-questions-and-answers>
+    <edit-questions-and-answers v-if="!readonly" :event="event" rel="questionsAnswersModal"></edit-questions-and-answers>
   </div>
 </template>
 <script>
@@ -42,7 +42,11 @@
       EditQuestionsAndAnswers
     },
     props: {
-      event
+      event,
+      readonly : {
+          type : Boolean,
+          default : false
+      }
     },
     data: () => ({
       showModal : false,

@@ -1,7 +1,7 @@
 <template>
     <div class=" time-line-section">
         <h4>Timeline
-            <md-button class="md-info md-sm edit-timeline-btn pull-right" @click="editTimeLineItems">
+            <md-button class="md-info md-sm edit-timeline-btn" v-if="!readonly" @click="editTimeLineItems">
                 Edit
             </md-button>
         </h4>
@@ -51,7 +51,11 @@
         Tabs
     },
     props: {
-        event : Object
+        event : Object,
+        readonly : {
+            type : Boolean,
+            default : false
+        }
     },
     data: () => ({
         auth: auth,

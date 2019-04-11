@@ -4,7 +4,7 @@
 
     <!-- Publish Event Button -->
     <div class="md-layout-item text-right">
-      <md-button class="md-info publish-event">
+      <md-button class="md-info publish-event" @click="publishEvent">
         Publish Event
       </md-button>
     </div>
@@ -54,6 +54,8 @@
       </md-card>
     </div>
 
+    <publish-event-modal :event="calendarEvent" rel="publishEventModal"></publish-event-modal>
+
   </div>
 </template>
 
@@ -79,6 +81,8 @@ import EventTabs from "./components/EventBlocks/EventTabs.vue"
 import EventImages from "./components/EventBlocks/EventImages.vue"
 import EventQuestionsAnswers from "./components/EventBlocks/EventQuestionsAnswers.vue"
 import EventTimeLineItems from "./components/EventBlocks/EventTimelineItems.vue"
+import PublishEventModal from './components/EventBlocks/Modals/PublishEvent.vue';
+
 
 export default {
   components: {
@@ -91,7 +95,8 @@ export default {
       EventTabs,
       EventImages,
       EventQuestionsAnswers,
-      EventTimeLineItems
+      EventTimeLineItems,
+      PublishEventModal
   },
 
   data() {
@@ -165,7 +170,8 @@ export default {
   methods: {
     ...mapMutations("EventPlannerVuex", [
         "setEventPageData",
-        "setEventPageProperty"
+        "setEventPageProperty",
+        "setPublishEventModal",
     ]),
     getEvent() {
         this.auth.currentUser(this, true, function() {
@@ -227,13 +233,15 @@ export default {
                   console.log(error);
 
               });
-
-
+      },
+      publishEvent() {
+        console.log('i am here');
+          this.setPublishEventModal({ showModal: true });
       }
   },
   computed: {
       ...mapState('EventPlannerVuex', [
-          'eventPage',
+          'eventPage'
       ]),
     pieChart() {
       return {

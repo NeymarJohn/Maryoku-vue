@@ -29,7 +29,7 @@
               </div>
             </div>
           <div>
-              <md-button class="md-button md-small md-theme-default"  @click="openEventModal()" style="margin-top : 1em;">
+              <md-button class="md-button md-small md-rose md-sm"  @click="openEventModal()" style="margin-top : 1em;">
                   Edit Event Info <md-icon class="company-logo">create</md-icon>
               </md-button>
 

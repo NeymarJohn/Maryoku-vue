@@ -6,21 +6,20 @@
     <md-card v-for="(image,index) in event.eventPage.images" :key="index" class="md-layout-item md-size-25">
       <md-card-media>
         <div class="event-images_image-item" :style="`background-image : url(`+`${serverUrl}/1/eventPageImages/${image.id}`+`)`">
-          <md-button class="md-info md-sm" @click="removeEventImage(index)">
+          <md-button class="md-info md-sm" @click="removeEventImage(index)" v-if="!readonly">
             DELETE
           </md-button>
         </div>
       </md-card-media>
     </md-card>
 
-    <md-card v-for="(n,index) in (3 - event.eventPage.images.length)" :key="index + 1000"  class="md-layout-item md-size-33 default-image-box" :style="`cursor: pointer; background: url('/static/img/default${index+1}.jpg') center center no-repeat; background-size: cover;`">
-      <div class="" @click="uploadEventImage" style="color: black; text-shadow: 0 0 3px #fff; font-size: 18px; font-weight: 500;">
-        <md-icon style="color: black; text-shadow: 0 0 3px #fff; font-size: 24px; font-weight: 500;">add_to_photos</md-icon>
-        Add image
+    <md-card v-if="!readonly" v-for="(n,index) in (3 - event.eventPage.images.length)" :key="index + 1000"  class="md-layout-item md-size-25 default-image-box">
+      <div class="" @click="uploadEventImage">
+        Add Images here
       </div>
     </md-card>
 
-    <div class="update-banner-form">
+    <div class="update-banner-form" v-if="!readonly">
       <input type="file" style="display: none;" ref="eventFile" accept="image/gif, image/jpg, image/png" @change="onEventFilePicked">
     </div>
   </div>
@@ -43,7 +42,11 @@
 
     },
     props: {
-      event
+      event,
+        readonly : {
+          type : Boolean,
+          default : false
+        }
     },
     data: () => ({
       auth: auth,

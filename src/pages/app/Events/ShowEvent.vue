@@ -1,213 +1,196 @@
 <template>
   <div class="md-layout">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" isFullScreen/>
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
 
     <div class="md-layout-item md-size-100">
-      <event-actions-show :event="event"></event-actions-show>
+      <md-card class="event-details">
+        <md-card-content class="md-layout" v-if="calendarEvent.id">
+
+          <!-- Event Banner -->
+          <event-banner :event="calendarEvent" :readonly="readonly"></event-banner>
+          <!-- ./Event Banner -->
+
+          <!-- Event Info -->
+          <div class="md-layout-item md-size-50">
+
+            <div class="event-title-date">
+              <h4>{{calendarEvent.occasion}}</h4>
+
+              <div class="event-date">{{date}}</div>
+            </div>
+
+            <event-tabs :event="calendarEvent" :readonly="readonly"></event-tabs>
+
+            <event-images :event="calendarEvent" :readonly="readonly"></event-images>
+
+            <event-questions-answers :event="calendarEvent" :readonly="readonly"></event-questions-answers>
+
+          </div>
+          <!-- ./Event Info -->
+
+          <!-- Event TimeLine -->
+          <div class="md-layout-item md-size-50">
+            <event-time-line-items :event="calendarEvent" :readonly="readonly"></event-time-line-items>
+          </div>
+          <!-- ./Event Timeline -->
+
+        </md-card-content>
+      </md-card>
     </div>
 
-    <div class="md-layout-item md-size-30 md-small-size-100 scrollable-container">
-      <event-info :occasionOptions="occasionsArray" :event="event" v-bind:readonly="true"></event-info>
-    </div>
-
-    <div class="md-layout-item md-size-70 md-small-size-100 scrollable-container mt-small-20">
-
-
-      <time-line plain :type="'simple'" class="mt-0">
-
-          <event-card-component v-for="(component, index) in event.components"
-                                :key="'event-card-component-' + index"
-                                v-if="$store.state.vendorsList && component"
-                                :componentObject="component"
-                                :componentIndex="index"
-                                :readonly="true">
-          </event-card-component>
-
-      </time-line>
-
-    </div>
   </div>
 </template>
 
 <script>
+    //MAIN MODULES
+    import ChartComponent from "@/components/Cards/ChartComponent";
+    import auth from "@/auth";
+    import moment from "moment";
+    import VueElementLoading from "vue-element-loading";
+    import Calendar from '@/models/Calendar';
+    import CalendarEvent from '@/models/CalendarEvent';
+    import EventPlannerVuexModule from "./EventPlanner.vuex";
+    import {mapState, mapMutations,mapGetters, mapActions} from 'vuex';
 
-  import EventHeaderForm from './components/EventHeaderForm.vue';
-  import EventInfo from './components/EventInfo.vue';
-  import EventCardComponent from './components/EventCardComponent.vue';
-  import Calendar from '@/models/Calendar';
-  import CalendarEvent from '@/models/CalendarEvent';
-  import CalendarEventImage from '@/models/CalendarEventImage';
-  import Occasion from '@/models/Occasion';
-  import EventComponent from '@/models/EventComponent';
-  import Vendors from '@/models/Vendors';
-  import { mapGetters } from 'vuex'
-  import moment from 'moment';
-  import EventActionsShow from './components/EventActionsShow';
-  import VueElementLoading from 'vue-element-loading';
-  import { TimeLine, TimeLineItem } from "@/components";
-  import auth from '@/auth';
+    //COMPONENTS
+    import { AnimatedNumber } from "@/components";
+    import Icon from "@/components/Icon/Icon.vue";
+    import { Collapse } from "@/components";
 
-  export default {
-    components: {
-      EventHeaderForm,
-      EventInfo,
-      EventCardComponent,
-      VueElementLoading,
-      TimeLine,
-      TimeLineItem,
-      EventActionsShow
-    },
-    data: () => ({
-      auth: auth,
-      uploadedImages: [],
-      isModalLoading: false,
-      responsive: false,
-      calendarId: null,
-      occasionsArray: null,
-      componentsList: null,
-      event: {},
-      calendar: {},
-      readOnly: true,
-      isLoading: true,
-    }),
+    // EVENT COMPONENTs
+    import EventBanner from "./components/EventBlocks/EventBanner.vue"
+    import EventTabs from "./components/EventBlocks/EventTabs.vue"
+    import EventImages from "./components/EventBlocks/EventImages.vue"
+    import EventQuestionsAnswers from "./components/EventBlocks/EventQuestionsAnswers.vue"
+    import EventTimeLineItems from "./components/EventBlocks/EventTimelineItems.vue"
 
-    methods: {
-      openImageGallery() {
-        this.$refs.galleryModal.toggleModal(true);
-      },
-      onResponsiveInverted() {
-        if (window.innerWidth < 768) {
-          this.responsive = true;
-        } else {
-          this.responsive = false;
-        }
-      },
 
-      sentProposalRequest() {
-        let routeData = this.$router.resolve({ path: "/events/proposal" });
-        window.open(routeData.href, '_blank');
-      },
-      getEventData() {
-        CalendarEvent.custom(`${process.env.SERVER_URL}/1/calendars/${this.$store.state.calendarId}/events/${this.$route.params.id}`).get().then(event => {
-          this.event = event[0];
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isLoading = false;
-        });
-      }
-    },
-    computed: {
-      ...mapGetters({
-        myState: 'getMyState'
-      }),
-      components() {
-        return this.event.components;
-      }
-    },
-    mounted() {
-      // hack to always scroll top
-      document.getElementsByClassName('main-panel')[0].scrollTop = 0;
-      this.onResponsiveInverted();
-      window.addEventListener("resize", this.onResponsiveInverted);
-    },
-    beforeDestroy() {
-      window.removeEventListener("resize", this.onResponsiveInverted);
-    },
-    watch: {
-      event: {
-        handler: function(event, oldVal) {
-          if (event.id != oldVal.id)  {
-            this.isModalLoading = true;
-            CalendarEventImage.custom(`${process.env.SERVER_URL}/1/calendars/${this.$store.state.calendarId}/events/${event.id}/images/`).get().then(images => {
-              this.uploadedImages = images.map((image) => { return {'src': `${process.env.SERVER_URL}${image.href}`, 'thumb': `${process.env.SERVER_URL}/${image.href}`}});
-              this.isModalLoading = false;
-            })
-            .catch((error) => {
-              this.isModalLoading = false;
-              console.log(error);
-            });
-          }
+    export default {
+        components: {
+            VueElementLoading,
+            ChartComponent,
+            AnimatedNumber,
+            Icon,
+            Collapse,
+            EventBanner,
+            EventTabs,
+            EventImages,
+            EventQuestionsAnswers,
+            EventTimeLineItems
+        },
+
+        data() {
+            return {
+                auth: auth,
+                calendarEvent: {},
+                isLoading: false,
+                footerLink: [
+                    { title: "HOME" },
+                    { title: "COMPANY" },
+                    { title: "PORTFOLIO" },
+                    { title: "BLOG" }
+                ],
+                readonly : true
+            };
+        },
+        created(){
+            this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
 
         },
-      },
-    },
-    created() {
-      this.auth.currentUser(this, true, function(){
-        let calendar = '';
+        mounted() {
+            this.getEvent();
 
-        if (this.$store.state.calendarId === null) {
-          calendar = Calendar.get().then(calendars => {
-            if (calendars.length === 0) {
-              return;
+        },
+        methods: {
+            ...mapMutations("EventPlannerVuex", [
+                "setEventPageData",
+                "setEventPageProperty",
+                "setPublishEventModal",
+            ]),
+            getEvent() {
+                this.auth.currentUser(this, true, function() {
+                    let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+
+                    _calendar.calendarEvents().find(this.$route.params.id).then(event => {
+                        this.calendarEvent = event.for(_calendar);
+                        this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
+                        this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
+                        this.seriesData = [(100 - this.percentage), this.percentage];
+
+                        if ( event.eventPage == null ) {
+                            this.setEventPageData();
+                        }
+
+                    });
+
+                }.bind(this));
+            },
+            getEventDate(eventStartMillis) {
+
+                let x = new Date(eventStartMillis);
+
+                return x.getDate() + '-' + x.getMonth() + '-' + x.getFullYear();
+
+            },
+            setEventPageData() {
+
+                let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let editedEvent = new CalendarEvent({id: this.calendarEvent.id});
+
+                editedEvent = this.calendarEvent;
+                editedEvent.eventPage = this.eventPage;
+
+                editedEvent.save().then(response => {
+                    console.log(response);
+
+                })
+                    .catch((error) => {
+                        console.log(error);
+
+                    });
+
             }
-            this.$store.state.calendarId = calendars[0].id;
-            this.getEventData();
-          })
-            .catch((error) => {
-              console.log(error);
-              this.isLoading = false;
-            });
-        } else {
-          this.getEventData()
-        }
-
-
-        let vendorsList = Vendors.get().then((vendorsList) => {
-          this.$store.state.vendorsList = vendorsList;
-        });
-
-        let components = '';
-
-        if (this.$store.state.componentsList === null) {
-          components = EventComponent.get().then((componentsList) => {
-            this.$store.state.componentsList = componentsList;
-          });
-        }
-
-        Promise.all([vendorsList, calendar, components]).then(() => {
-          this.isLoading = false;
-        })
-          .catch((error) => {
-            console.log(error);
-            this.isLoading = false;
-          });
-      }.bind(this));
-    },
-  };
+        },
+        computed: {
+            ...mapState('EventPlannerVuex', [
+                'eventPage'
+            ]),
+            pieChart() {
+                return {
+                    data: {
+                        labels: [" ", " "], // should be empty to remove text from chart
+                        series: this.seriesData
+                    },
+                    options: {
+                        padding: 0,
+                        height: 120,
+                        donut: true,
+                        donutWidth: 12
+                    }
+                };
+            },
+            date: {
+                get() {
+                    return this.calendarEvent.eventStartMillis ? new Date(this.calendarEvent.eventStartMillis) :  null
+                },
+                set(value) {
+                    let eventStartTime = new Date(value).getTime();
+                    this.$set(this,'newEventStartTime',eventStartTime)
+                }
+            },
+        },
+        filters: {
+            formatDate: function (date) {
+                return moment(date).format('Do, MMM');
+            },
+            formatTime: function(date) {
+                return moment(date).format('h:00 A')
+            },
+            formatDuration: function(startDate, endDate) {
+                return moment(endDate).diff(startDate, 'hours')
+            }
+        },
+        watch: {
+        },
+    };
 </script>
-
-<style lang="scss">
-  .read-only {
-    pointer-events: none;
-  }
-  .no-margin-container {
-    margin-top: -33px;
-  }
-  .margin-footer {
-    //margin-bottom: 50px;
-  }
-  .scrollable-container {
-    height: calc(100vh - 72px);
-    overflow: auto;
-    padding-top: 1px;
-    margin-top: 20px;
-
-    .md-card {
-      margin: 10px 0;
-    }
-  }
-  .mt-0 {
-    .timeline.timeline-simple {
-      margin-top: 0;
-    }
-  }
-  @media (max-width: 960px) {
-    .mt-small-20 {
-      margin-top: 20px;
-    }
-    .scrollable-container {
-      height: auto;
-    }
-  }
-</style>

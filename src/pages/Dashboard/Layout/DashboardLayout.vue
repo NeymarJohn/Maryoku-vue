@@ -25,14 +25,17 @@
         <!--<sidebar-item :link="{name: 'Yearly Planner', icon: 'calendar_today', path: '/yearly-plan'}">
         </sidebar-item>-->
 
-        <li class="nav-item router-link-active">
-          <md-button class="md-button md-purple" @click="openEventModal()">
-            <md-icon>event</md-icon>
-            <span>Create New Event</span>
-          </md-button>
-        </li>
-        <sidebar-item :link="{name: 'Events List',  icon: 'event', path: '/events'}"></sidebar-item>
-        <sidebar-item :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>
+        <sidebar-item :link="{name: 'Events', icon: 'local_play'}">
+
+          <li class="nav-item router-link-active">
+            <md-button class="md-button button-event-creatig " @click="openEventModal()">
+              <md-icon>event</md-icon>
+              <span>Create New Event</span>
+            </md-button>
+          </li>
+          <sidebar-item :link="{name: 'Events List',  icon: 'event', path: '/events'}"></sidebar-item>
+          <sidebar-item :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>
+        </sidebar-item>
 
         <li class="menu-divider"></li>
 
