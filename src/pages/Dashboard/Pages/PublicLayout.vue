@@ -1,64 +1,8 @@
 <template>
-  <div class="full-page" :class="{'nav-open': $sidebar.showSidebar}">
-    <md-toolbar md-elevation="0" class="md-transparent md-toolbar-absolute">
-      <div class="md-toolbar-row md-offset">
-        <div class="md-toolbar-section-start">
-          <!--<h3 class="md-title">{{$route.name}}</h3>-->
-          <h3 class="md-title"><a href="https://www.262days.com"><img src="static/img/262Logo2.png"/></a> </h3>
-        </div>
-        <div class="md-toolbar-section-end">
-          <md-button class="md-just-icon md-simple md-round md-toolbar-toggle" :class="{toggled: $sidebar.showSidebar}" @click="toggleSidebar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </md-button>
-        </div>
-      </div>
-    </md-toolbar>
-    <div class="wrapper wrapper-full-page" @click="toggleSidebarPage">
-      <div class="page-header header-filter" :class="setPageClass" filter-color="black" :style="setBgImage">
-        <div class="container md-offset">
-          <zoom-center-transition :duration="pageTransitionDuration" mode="out-in">
-            <router-view></router-view>
-          </zoom-center-transition>
-        </div>
-        <footer class="footer">
-          <div class="container md-offset">
-            <nav>
-              <ul>
-                <!--<li>
-                  <router-link :to="{path:'/dashboard'}">Home</router-link>
-                </li>-->
-                <li>
-                  <a href="https://www.262days.com/our-story">
-                    Our Story
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.262days.com/terms">
-                    Terms of Use
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.262days.com/privacy">
-                    Privacy
-                  </a>
-                </li>
-
-                <!--<li>
-                    <a href="https://www.262days.com/blog">
-                        Blog
-                    </a>
-                </li>-->
-              </ul>
-            </nav>
-            <div class="copyright text-center">
-              &copy; <a href="https://www.262days.com" target="_blank">262 Days Ltd</a> &middot; All rights reserved
-            </div>
-          </div>
-        </footer>
-      </div>
-    </div>
+  <div class="full-page" style="padding: 24px;">
+    <zoom-center-transition :duration="pageTransitionDuration" mode="out-in">
+      <router-view></router-view>
+    </zoom-center-transition>
   </div>
 </template>
 <script>
@@ -146,21 +90,6 @@
       this.onResponsiveInverted();
       window.addEventListener("resize", this.onResponsiveInverted);
     },
-    beforeDestroy() {
-      this.closeMenu();
-      window.removeEventListener("resize", this.onResponsiveInverted);
-    },
-    beforeRouteUpdate(to, from, next) {
-      // Close the mobile menu first then transition to next page
-      if (this.showMenu) {
-        this.closeMenu();
-        setTimeout(() => {
-          next();
-        }, this.menuTransitionDuration);
-      } else {
-        next();
-      }
-    }
   };
 </script>
 <style lang="scss" scoped>

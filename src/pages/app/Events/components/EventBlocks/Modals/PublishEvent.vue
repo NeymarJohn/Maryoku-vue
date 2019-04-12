@@ -52,15 +52,14 @@
         },
         data: () => ({
             auth: auth,
-            publishUrl : '',
-            serverUrl: 'http://0.0.0.0:3000/'
+            publishUrl : ''
         }),
 
         created() {
 
         },
         mounted() {
-            setTimeout(()=>{this.publishUrl = this.serverUrl + 'events/#/event/' + this.event.id + '/publish'},400);
+            setTimeout(()=>{this.publishUrl = `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/events/${this.event.id}/public`},400);
 
         },
         methods: {

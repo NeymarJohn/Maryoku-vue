@@ -65,15 +65,8 @@
     methods: {
 
         getTimelineItems() {
-
-            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-            let event = new CalendarEvent({id: this.event.id});
-
-            new EventTimelineItem().for(calendar, event).get().then(res => {
-                this.timelineItems = _.sortBy(res, function(item){ return item.order});
-                this.isLoading = false;
-
-            })
+          this.timelineItems = _.sortBy(this.event.timelineItems, function(item){ return item.order});
+          this.isLoading = false;
         },
         editTimeLineItems() {
             this.$router.push({ path: `/events/`+ this.event.id + '/edit/timeline' });

@@ -1,5 +1,6 @@
 import DashboardLayout from "@/pages/Dashboard/Layout/DashboardLayout.vue";
 import AuthLayout from "@/pages/Dashboard/Pages/AuthLayout.vue";
+import PublicLayout from "@/pages/Dashboard/Pages/PublicLayout.vue";
 
 import Home from "@/pages/app/Home.vue";
 import Me from "@/pages/app/Me.vue";
@@ -276,6 +277,20 @@ let authPages = {
   ]
 };
 
+let publicPages = {
+  path: "/",
+  component: PublicLayout,
+  name: "Public",
+  children: [
+    {
+      path: "/events/:id/public",
+      name: "ShowEvent",
+      component: ShowEvent,
+      meta: {auth: false, title: 'Event', gtm: "Event"},
+    }
+  ]
+};
+
 let appPages = {
   path: "/app",
   component: DashboardLayout,
@@ -406,13 +421,7 @@ let appPages = {
       path: "/notes",
       name: "Notes",
       component: Notes
-    },
-      {
-          path: "/event/:id/publish",
-          name: "ShowEvent",
-          component: ShowEvent,
-          meta: {title: 'Event', gtm: "Event"},
-      }
+    }
   ]
 };
 const appCurrentInfo={
@@ -474,6 +483,7 @@ const routes = [
   appCurrentInfo,
   authPages,
   appPages,
+  publicPages,
   /*{
     path: "/",
     component: DashboardLayout,

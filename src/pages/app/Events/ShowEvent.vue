@@ -134,22 +134,18 @@
                 "setPublishEventModal",
             ]),
             getEvent() {
-                this.auth.currentUser(this, true, function() {
-                    let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+              new CalendarEvent().find(this.$route.params.id).then(event => {
+                console.log(JSON.stringify({id: event.calendar.id}));
+                this.calendarEvent = event.for(new Calendar({id: event.calendar.id}));
+                this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
+                this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
+                this.seriesData = [(100 - this.percentage), this.percentage];
 
-                    _calendar.calendarEvents().find(this.$route.params.id).then(event => {
-                        this.calendarEvent = event.for(_calendar);
-                        this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
-                        this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
-                        this.seriesData = [(100 - this.percentage), this.percentage];
+                if ( event.eventPage == null ) {
+                  this.setEventPageData();
+                }
 
-                        if ( event.eventPage == null ) {
-                            this.setEventPageData();
-                        }
-
-                    });
-
-                }.bind(this));
+              });
             },
             getEventDate(eventStartMillis) {
 
@@ -160,7 +156,6 @@
             },
             setEventPageData() {
 
-                let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
                 let editedEvent = new CalendarEvent({id: this.calendarEvent.id});
 
                 editedEvent = this.calendarEvent;
