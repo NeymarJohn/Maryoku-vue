@@ -378,6 +378,12 @@ let appPages = {
         meta: {title: 'Current Event', gtm: "Event Edit"},
     },
     {
+        path: "/events/:id/edit/invitees-management",
+        name: "InviteesManagement",
+        component: CurrentEvents,
+        meta: {title: 'Invitees Management', gtm: "Event Edit"},
+    },
+    {
       path: "/yearly-plan",
       name: "YearlyPlan",
       component: YearlyPlan,

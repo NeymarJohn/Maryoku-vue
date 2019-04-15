@@ -1,5 +1,5 @@
 <template>
-  <div class="full-page mt-4">
+  <div class="full-page">
     <zoom-center-transition :duration="pageTransitionDuration" mode="out-in">
       <router-view></router-view>
     </zoom-center-transition>

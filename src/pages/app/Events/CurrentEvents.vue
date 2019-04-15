@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
-    <div class="md-layout-item md-xlarge-size-20 md-large-size-30 md-small-size-40">
+    <div class="md-layout-item md-xlarge-size-20 md-large-size-25 md-small-size-40">
       <md-card class="md-card-profile">
         <div class="logo-block">
           <div class="event-planer-logo">
@@ -23,7 +23,7 @@
                   </md-button>
               </div>
               <div class="company-control-logo">
-                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default" :class="{selected: routeName === 'EditTimeLine'}" @click="goToComponent('/edit/timeline')">
+                  <md-button class="md-button md-just-icon md-simple md-round md-theme-default" :class="{selected: routeName === 'EditTimeLine' || routeName === 'InviteesManagement'}" @click="goToComponent('/edit/invitees-management')">
                     <md-icon class="company-logo">person</md-icon>
                   </md-button>
               </div>
@@ -117,7 +117,7 @@
         </md-card-content>
       </md-card>
     </div>
-      <div v-if="event && routeName === 'EditEvent'" class="md-layout-item md-size-70 block-flex" >
+      <div v-if="event && routeName === 'EditEvent'" class="md-layout-item block-flex" >
           <event-building-blocks   :event="event" :event-components="selectedComponents" @go-to-building-blocks="resetTab"></event-building-blocks>
       </div>
 
@@ -125,9 +125,14 @@
         <!--proposals-->
     <!--</div>-->
 
-      <div v-else-if="event &&  routeName === 'EditTimeLine' " class="md-layout-item md-size-70 block-flex">
+      <div v-else-if="event &&  routeName === 'EditTimeLine' " class="md-layout-item block-flex">
           <event-time-line :event="event" :event-components="selectedComponents"></event-time-line>
       </div>
+
+      <div v-else-if="event &&  routeName === 'InviteesManagement' " class="md-layout-item block-flex">
+          <invitees-management :event="event" :event-components="selectedComponents"></invitees-management>
+      </div>
+
 
 
       <!-- New Event Modal -->
@@ -161,6 +166,7 @@ import EventElements from './EventElements.vue'
 import EventBlocks from "./components/NewEventBlocks";
 import EventBuildingBlocks from "./components/EventBuildingBlocks";
 import EventTimeLine from "./components/EventTimeLine.vue";
+import InviteesManagement from "./components/EventBlocks/InviteesManagement.vue";
 
 
 
@@ -175,7 +181,9 @@ export default {
     EventElements,
     EventBlocks,
       EventModal,
-      EventTimeLine
+      EventTimeLine,
+      InviteesManagement
+
   },
 
   data() {

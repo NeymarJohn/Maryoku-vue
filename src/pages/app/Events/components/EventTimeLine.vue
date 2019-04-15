@@ -251,7 +251,6 @@
       },
       previewEvent() {
         this.$router.push({path: `/events/` + this.event.id})
-
       },
       getTimelineItems() {
 
