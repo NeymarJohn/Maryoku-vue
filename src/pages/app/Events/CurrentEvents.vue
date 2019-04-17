@@ -139,6 +139,9 @@
       <event-modal @refresh-events="refreshEvents" :currentEvent="calendarEvent" ref="eventModal"></event-modal>
       <!-- ./New Event Modal -->
 
+      <sticky-budget :event="event"></sticky-budget>
+
+
   </div>
 
 
@@ -166,7 +169,8 @@ import EventElements from './EventElements.vue'
 import EventBlocks from "./components/NewEventBlocks";
 import EventBuildingBlocks from "./components/EventBuildingBlocks";
 import EventTimeLine from "./components/EventTimeLine.vue";
-import InviteesManagement from "./components/EventBlocks/InviteesManagement.vue";
+    import InviteesManagement from "./components/EventBlocks/InviteesManagement.vue";
+    import StickyBudget from "./components/StickyBudget.vue";
 
 
 
@@ -182,7 +186,8 @@ export default {
     EventBlocks,
       EventModal,
       EventTimeLine,
-      InviteesManagement
+      InviteesManagement,
+      StickyBudget
 
   },
 

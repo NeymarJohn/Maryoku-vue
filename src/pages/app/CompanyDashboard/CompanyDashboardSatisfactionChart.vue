@@ -8,7 +8,7 @@
         Attendants Satisfaction Rate
 
         <md-field class="pull-right" style="max-width: 120px; margin: 0; border: none;" md-inline>
-          <md-select v-model="filterMonth" name="filterMonth" id="filterMonth" @md-selected="filterMonthChanged($event)">
+          <md-select v-model="filterMonth" name="filterMonth" id="filterMonth">
             <md-option value="01">January</md-option>
             <md-option value="02">February</md-option>
             <md-option value="03">March</md-option>
@@ -40,7 +40,7 @@
     </md-card-content>
     <md-card-actions style="justify-content: center;">
       <h4 class="title" style="font-weight: 500; text-align: center;">
-        {{avgAttendanceSatisfaction}}% <small style="font-size: 0.95rem; color: #7c7c7c;">average attendance satisfaction this year</small>
+        84% <small style="font-size: 0.95rem; color: #7c7c7c;">average attendance satisfaction this year</small>
       </h4>
 
     </md-card-actions>
@@ -48,7 +48,6 @@
 </template>
 <script>
   import auth from "@/auth";
-  import moment from "moment";
   import VueElementLoading from 'vue-element-loading';
   import {
 
@@ -60,12 +59,30 @@
     },
     props: {
       satisfactionRatesPerYearMonth: {
-        type: Object
+        type: Object,
+        default: ()=>{return {};}
       }
     },
     watch: {
       satisfactionRatesPerYearMonth(newVal, oldVal){
-        this.updateItems();
+        this.loading = false;
+        let keys = Object.keys(newVal["2019"]);
+        if (keys.length > 0){
+          for (const key of keys) {
+            let contents = newVal["2019"][key];
+            let contentsArray = [];
+            let types = Object.keys(contents);
+            for (const type of types){
+              contentsArray.push({text: type, value: contents[type]})
+            }
+            this.itemsPerMonth[key] = contentsArray;
+          }
+        }
+
+        let value = this.itemsPerMonth[this.filterMonth];
+        if (value){
+          this.items = value;
+        }
       }
     },
     data() {
@@ -75,57 +92,8 @@
         items: [],
         itemsPerMonth: {},
         amount2: 20,
-        avgAttendanceSatisfaction: 0,
-        filterMonth: (moment().month()+1).padStart(2,"0"),
-        filterYear: moment().year()
+        filterMonth: "03"
       };
-    },
-    methods: {
-      filterMonthChanged(e){
-        this.loading = true;
-        this.updateItems();
-      },
-      updateItems(){
-        if (this.satisfactionRatesPerYearMonth && this.satisfactionRatesPerYearMonth[this.filterYear]) {
-          let keys = Object.keys(this.satisfactionRatesPerYearMonth[this.filterYear]);
-          if (keys.length > 0) {
-            for (const key of keys) {
-              let contents = this.satisfactionRatesPerYearMonth[this.filterYear][key];
-              let contentsArray = [];
-              let types = Object.keys(contents);
-              for (const type of types) {
-                contentsArray.push({
-                  text: type,
-                  value: contents[type]
-                })
-              }
-              this.itemsPerMonth[key] = contentsArray;
-            }
-          }
-
-          let value = this.itemsPerMonth[this.filterMonth];
-          if (value) {
-            this.items = value;
-
-            let totalValues = 0;
-            let countValues = 0;
-
-            this.items.forEach((item)=>{
-              totalValues += item.value;
-              countValues += 1;
-            });
-
-            this.avgAttendanceSatisfaction = totalValues / countValues;
-
-          } else {
-            this.items = [];
-
-            this.avgAttendanceSatisfaction = 0;
-          }
-
-          this.loading = false;
-        }
-      }
     }
   };
 </script>

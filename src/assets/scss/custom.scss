@@ -1157,6 +1157,180 @@ $tooltip-border-color: $blue-grey-200 !default;
 .no-padding {
   padding: 0 !important;
 }
+
+.sticky-budget {
+  width: 90%;
+  right: 1em;
+  position: fixed;
+  bottom : 0;
+  background: white;
+  z-index: 9999999999999999;
+  padding: 0.3em;
+  border-radius: 4px;
+  box-shadow: 0px -2px 2px 0 rgba(153, 153, 153, 0.14), 0px -1px 5px 0 rgba(153, 153, 153, 0.12);
+
+  >.md-layout >.md-layout-item {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+
+    .section-content {
+      width: 100%;
+    }
+  }
+  .md-gutter{
+    >.md-layout-item {
+      font-size: 15px;
+      font-weight: 300;
+      color: #000000;
+      line-height: 30px;
+    }
+  }
+
+  .building-blocks-list {
+    border-radius: 5px;
+    box-shadow: 0px -4px 20px 0 rgba(0, 0, 0, 0.14);
+    background: linear-gradient(to right, #26c6da, #00acc1);
+    width : 100%;
+
+    .md-gutter{
+      margin: 0;
+
+      >.md-layout-item {
+        font-size: 14px;
+        font-weight: 400;
+        color: #fff;
+
+        &.title-text {
+          width : 30%;
+        }
+      }
+
+      &.gutter-header {
+        background: rgba(255,255,255,0.15);
+        margin-bottom: 0.7em;
+        position: relative;
+        >.md-layout-item {
+          text-transform: uppercase;
+          font-weight: 600;
+        }
+
+        .edit-blocks {
+          position : absolute;
+          right : 0;
+          min-height: auto;
+          height: auto;
+
+          .md-ripple {
+            padding : 0 !important;
+          }
+
+          .md-icon {
+            color : #fff !important;
+          }
+        }
+      }
+    }
+  }
+
+  .budgets-charts {
+
+    position: relative;
+
+    &_list {
+      width: 100%;
+    }
+    .ct-series-b .ct-slice-donut {
+      stroke: #eee;
+    }
+
+    .md-gutter{
+      margin-bottom : 0.7em;
+      .md-caption {
+        padding-left : 0;
+      }
+
+    }
+
+
+  }
+
+  .line-chart-section {
+    h4.title {
+      font-size: 18px;
+      margin : 0;
+    }
+
+    p.category {
+      margin : 0;
+      font-size: 14px;
+      color : #999;
+    }
+
+    .md-card {
+      margin-bottom: 0;
+
+      [class*=md-card-header-] {
+        margin : 0;
+      }
+
+      .md-card-content {
+        padding : 0;
+      }
+
+      .md-card-actions {
+        display : none;
+      }
+    }
+  }
+
+  .event-info {
+    padding : 0;
+    list-style: none;
+    margin : 0;
+    text-decoration: none;
+
+    li {
+      display: inline-block;
+      margin-right : 1.5em;
+
+      .md-icon {
+        margin-right: 0.2em;
+      }
+    }
+
+    &.budget-info {
+      text-align: right;
+
+      li {
+        border-radius: 5px;
+        background-color: rgba(21, 130, 98, 0.1);
+        font-size: 15px;
+        padding : 5px 10px;
+
+        .md-icon {
+          margin-left: 0.2em;
+          margin-right: 0;
+        }
+
+        .budget-title, .budget-value {
+          color : #000;
+          font-size : 15px;
+          display: inline-block;
+        }
+        .budget-title {
+          margin-right: 1em;
+        }
+
+        .budget-value {
+          &.red-value {
+            color: #ff0000;
+          }
+        }
+      }
+    }
+  }
+}
 @media screen and (max-width : 500px) {
   .event-details {
     &_content.md-card-content {
