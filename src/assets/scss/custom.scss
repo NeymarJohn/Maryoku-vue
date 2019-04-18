@@ -1180,10 +1180,19 @@ $tooltip-border-color: $blue-grey-200 !default;
   }
   .md-gutter{
     >.md-layout-item {
-      font-size: 15px;
+      font-size: 12px;
       font-weight: 300;
       color: #000000;
       line-height: 30px;
+      padding-right : 0;
+
+      @media (max-width : 1440px) and (min-width : 1367px) {
+        font-size: 13px;
+      }
+
+      @media (min-width : 1450px) {
+        font-size: 15px;
+      }
     }
   }
 
@@ -1293,6 +1302,11 @@ $tooltip-border-color: $blue-grey-200 !default;
     li {
       display: inline-block;
       margin-right : 1.5em;
+      font-size : 14px;
+
+      @media (min-width : 1450px) {
+        font-size: 15px;
+      }
 
       .md-icon {
         margin-right: 0.2em;
@@ -1305,7 +1319,6 @@ $tooltip-border-color: $blue-grey-200 !default;
       li {
         border-radius: 5px;
         background-color: rgba(21, 130, 98, 0.1);
-        font-size: 15px;
         padding : 5px 10px;
 
         .md-icon {
@@ -1315,7 +1328,6 @@ $tooltip-border-color: $blue-grey-200 !default;
 
         .budget-title, .budget-value {
           color : #000;
-          font-size : 15px;
           display: inline-block;
         }
         .budget-title {
@@ -1331,6 +1343,7 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
   }
 }
+
 @media screen and (max-width : 500px) {
   .event-details {
     &_content.md-card-content {

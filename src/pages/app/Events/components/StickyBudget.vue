@@ -1,11 +1,10 @@
 <template>
        <div class="sticky-budget" v-if="event">
            <div class="md-layout">
-               <div class="md-layout-item"
-
+               <div class="md-layout-item "
                     :class="[
-                    {'md-size-25': expanded},
-                    {'md-size-15': !expanded}]"
+                    {'md-large-size-20  md-xlarge-size-25': expanded},
+                    {'md-large-size-20  md-xlarge-size-15': !expanded}]"
                >
                     <div class="section-content">
                         <md-button class="md-info" @click="toggleExpanded">
@@ -13,37 +12,36 @@
                         </md-button>
                         <div v-if="expanded">
                             <div class="md-layout md-gutter">
-                                <div class="md-layout-item md-caption title-text">Event Name</div>
-                                <div class="md-layout-item md-size-40 md-caption title-text">{{event.occasion}}</div>
+                                <div class="md-layout-item md-large-size-50 md-caption title-text">Event Name</div>
+                                <div class="md-layout-item md-large-size-50 md-caption title-text">{{event.occasion}}</div>
                             </div>
                             <div class="md-layout md-gutter">
-                                <div class="md-layout-item md-caption title-text">Event Type</div>
-                                <div class="md-layout-item md-size-40 md-caption title-text">{{event.eventType}} </div>
+                                <div class="md-layout-item md-large-size-50 md-caption title-text">Event Type</div>
+                                <div class="md-layout-item md-large-size-50  md-caption title-text">{{event.eventType}} </div>
                             </div>
 
                             <div class="md-layout md-gutter">
-                                <div class="md-layout-item md-caption title-text">Date</div>
-                                <div class="md-layout-item md-size-40 md-caption title-text">
+                                <div class="md-layout-item md-large-size-50 md-caption title-text">Date</div>
+                                <div class="md-layout-item md-large-size-50 md-caption title-text">
                                     {{event.eventStartMillis | formatDate}}
                                 </div>
                             </div>
                             <div class="md-layout md-gutter">
-                                <div class="md-layout-item md-caption title-text">Participants</div>
-                                <div class="md-layout-item md-size-40 md-caption title-text">{{event.numberOfParticipants}} + Spouses</div>
+                                <div class="md-layout-item md-large-size-50 md-caption title-text">Participants</div>
+                                <div class="md-layout-item md-large-size-50 md-caption title-text">{{event.numberOfParticipants}} + Spouses</div>
                             </div>
                             <div class="md-layout md-gutter">
-                                <div class="md-layout-item md-caption title-text">Location</div>
-                                <div class="md-layout-item md-size-40 md-caption title-text">{{event.location}}</div>
+                                <div class="md-layout-item md-large-size-50 md-caption title-text">Location</div>
+                                <div class="md-layout-item md-large-size-50 md-caption title-text">{{event.location}}</div>
                             </div>
                             <div class="md-layout md-gutter">
-                                <div class="md-layout-item md-caption title-text">Time & Duration:</div>
-                                <div class="md-layout-item md-size-40 md-caption title-text">{{event.eventStartMillis | formatTime}} {{event.eventStartMillis | formatDuration(event.eventEndMillis)}} Hours</div>
+                                <div class="md-layout-item md-large-size-50 md-caption title-text">Time & Duration:</div>
+                                <div class="md-layout-item md-large-size-50 md-caption title-text">{{event.eventStartMillis | formatTime}} {{event.eventStartMillis | formatDuration(event.eventEndMillis)}} Hours</div>
                             </div>
                         </div>
-
                     </div>
                </div>
-               <div class="md-layout-item md-size-20" v-if="buildingBlocksList.length && expanded">
+               <div class="md-layout-item md-large-size-25  md-xlarge-size-25" v-if="buildingBlocksList.length && expanded">
                    <div class="building-blocks-list md-info">
                        <div class="md-layout md-gutter gutter-header">
                            <div class="md-layout-item md-caption title-text">Items</div>
@@ -87,7 +85,7 @@
                        <animated-number class="percentage" ref="percentageNumber" style="text-align: center;" :value="percentage" suffix="%"></animated-number>
                    </div>
                </div>
-               <div class="md-layout-item md-size-25" v-if="expanded">
+               <div class="md-layout-item md-large-size-25  md-xlarge-size-20" v-if="expanded">
                 <div class="section-content line-chart-section">
 
                     <h4 class="title">Exceeding Budget</h4>
@@ -116,7 +114,7 @@
                 </div>
                </div>
 
-               <div class="md-layout-item md-size-55" v-if="!expanded">
+               <div class="md-layout-item md-large-size-45 md-xlarge-size-55" v-if="!expanded">
                    <u class="event-info">
                        <li class="event-info_item">
                            <md-icon>calendar_today</md-icon>  {{event.eventStartMillis | formatDate}}, {{event.eventStartMillis | formatTime}}
@@ -130,8 +128,8 @@
                    </u>
                </div>
 
-               <div class="md-layout-item md-size-25" v-if="!expanded">
-                   <u class="event-info budget-info">
+               <div class="md-layout-item md-large-size-35  md-xlarge-size-25" v-if="!expanded">
+                   <ul class="event-info budget-info">
                        <li class="event-info_item">
                            <div class="budget-title">Per participant</div>
                            <div class="budget-value pull-right">$15</div>
@@ -140,7 +138,7 @@
                            <div class="budget-title">Remaining Budget</div>
                            <div class="budget-value red-value pull-right">-$540</div>
                        </li>
-                   </u>
+                   </ul>
                </div>
            </div>
       </div>
@@ -177,7 +175,7 @@
         seriesData: [],
         calendarEvent : {},
         buildingBlocksList : [],
-        expanded : true,
+        expanded : false,
         expandButtonText : 'HIDE FULL EVENT DETAILS',
         expandButtonIcon  : 'arrow_downward'
     }),
