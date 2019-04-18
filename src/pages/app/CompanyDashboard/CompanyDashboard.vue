@@ -38,13 +38,11 @@
     data() {
       return {
         auth: auth,
-        statistics: {numberOfEventsPerYear : {}},
+        statistics: {numberOfEventsPerYear : {}, satisfactionRatesPerYearMonth: {}, participantsPerEventPerYearMonthEventType: {}},
         currentYear: moment().year().toString()
       };
     },
     mounted() {
-      console.log("*** Test 123");
-
       this.auth.currentUser(this, true, () => {
         new Customer({id: this.auth.user.customer.id})
           .statistics()
