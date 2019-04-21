@@ -3,6 +3,7 @@ import Calendar from './Calendar';
 import CalendarEventInspiration from './CalendarEventInspiration';
 import CalendarEventImage from './CalendarEventImage';
 import EventTimelineItem from './EventTimelineItem';
+import EventInteraction from './EventInteraction';
 
 export default class CalendarEvent extends Model {
   resource() {
@@ -27,5 +28,9 @@ export default class CalendarEvent extends Model {
 
   timelineItems(){
     return this.hasMany(EventTimelineItem)
+  }
+
+  interactions(){
+    return this.hasMany(EventInteraction)
   }
 }

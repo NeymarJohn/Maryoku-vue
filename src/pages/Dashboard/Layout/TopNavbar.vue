@@ -1,7 +1,7 @@
 <template>
   <md-toolbar
     md-elevation="0"
-    class="md-transparent"
+    class="md-transparent" style="background-color: white !important;"
     :class="{'md-toolbar-absolute md-white md-fixed-top': $route.meta.navbarAbsolute}">
     <div class="md-toolbar-row">
       <div class="md-toolbar-section-start">
