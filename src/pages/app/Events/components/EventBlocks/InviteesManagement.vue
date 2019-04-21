@@ -104,7 +104,7 @@
                                 </div>
                                 <div class="md-layout">
                                     <div class="interaction-images">
-                                        <ul class="images-list">
+                                        <ul class="images-list"> 
                                             <li class="list-item">
                                                 <div class="image-item" style="background-image: url(https://bit.ly/2v5L5dO)"></div>
                                             </li>
@@ -175,11 +175,7 @@
                     </div>
                     <div class="md-layout-item md-size-50">
                         <div class="preview-section">
-                            <div class="preview-item" style="background-image: url(https://bit.ly/2v5L5dO)">
-
-                              <iframe src="/static/img/interactions/interaction-1.html"></iframe>
-
-                            </div>
+                            <div class="preview-item" style="background-image: url(https://bit.ly/2v5L5dO)"></div>
                             <md-field>
                                 <label>Title</label>
                                 <md-input ></md-input>
@@ -254,7 +250,7 @@
 
     },
     created() {
-
+      
     },
     mounted() {
 

@@ -26,7 +26,6 @@ import TimeLine from "./Timeline/TimeLine.vue";
 import TimeLineItem from "./Timeline/TimeLineItem.vue";
 import ButtonTimeLineItem from "./Timeline/ButtonTimeLineItem.vue";
 import Tabs from "./Tabs.vue";
-import NavTabs from "./NavTabs.vue";
 import Collapse from "./Collapse.vue";
 import Slider from "./Slider.vue";
 import SimpleWizard from "./Wizard/Wizard.vue";
@@ -64,7 +63,6 @@ export {
   TimeLineItem,
   ButtonTimeLineItem,
   Tabs,
-  NavTabs,
   Slider,
   SimpleWizard,
   WizardTab,

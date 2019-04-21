@@ -65,9 +65,7 @@
   }
 
   .active.md-list-item.md-rose .md-list-item-button{
-    //@include tabs-color($brand-rose);
-    box-shadow: none;
-    border-radius: 0;
+    @include tabs-color($brand-rose);
   }
   .active.md-list-item.md-primary .md-list-item-button{
     @include tabs-color($brand-primary);

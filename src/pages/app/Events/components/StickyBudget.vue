@@ -3,12 +3,12 @@
            <div class="md-layout">
                <div class="md-layout-item "
                     :class="[
-                    {'md-large-size-20  md-xlarge-size-25': expanded},
+                    {'md-large-size-30  md-xlarge-size-35': expanded},
                     {'md-large-size-20  md-xlarge-size-15': !expanded}]"
                >
                     <div class="section-content">
-                        <md-button class="md-info" @click="toggleExpanded">
-                            <md-icon>{{expandButtonIcon}}</md-icon> {{expandButtonText}}
+                        <md-button class="md-info md-just-icon" @click="toggleExpanded">
+                            <md-icon>{{expandButtonIcon}}</md-icon>
                         </md-button>
                         <div v-if="expanded">
                             <div class="md-layout md-gutter">
@@ -41,7 +41,7 @@
                         </div>
                     </div>
                </div>
-               <div class="md-layout-item md-large-size-25  md-xlarge-size-25" v-if="buildingBlocksList.length && expanded">
+               <div class="md-layout-item md-large-size-30  md-xlarge-size-30" v-if="buildingBlocksList.length && expanded">
                    <div class="building-blocks-list md-info">
                        <div class="md-layout md-gutter gutter-header">
                            <div class="md-layout-item md-caption title-text">Items</div>
@@ -56,7 +56,7 @@
                        </div>
                    </div>
                </div>
-               <div class="md-layout-item md-size-30 budgets-charts" v-if="expanded">
+               <div class="md-layout-item md-size-40 budgets-charts" v-if="expanded">
                    <div class="budgets-charts_list">
                        <div class="md-layout md-gutter">
                            <div class="md-layout-item md-size-80  title-text">Total budget for the event</div>
@@ -84,34 +84,6 @@
                                style="grid-column: 1; grid-row: 1; color:#eeeeee"/>
                        <animated-number class="percentage" ref="percentageNumber" style="text-align: center;" :value="percentage" suffix="%"></animated-number>
                    </div>
-               </div>
-               <div class="md-layout-item md-large-size-25  md-xlarge-size-20" v-if="expanded">
-                <div class="section-content line-chart-section">
-
-                    <h4 class="title">Exceeding Budget</h4>
-                    <p class="category">
-                        Last Campaign Performance
-                    </p>
-
-                    <chart-card
-                            :chart-data="dataCompletedTasksChart.data"
-                            :chart-options="dataCompletedTasksChart.options"
-                            chart-type="Line"
-                            chart-inside-header
-                            background-color="blue">
-                        <md-button class="md-simple md-info md-just-icon" slot="first-button">
-                            <md-icon>refresh</md-icon>
-                            <md-tooltip md-direction="bottom">Refresh</md-tooltip>
-                        </md-button>
-                        <md-button class="md-simple md-just-icon" slot="second-button">
-                            <md-icon >edit</md-icon>
-                            <md-tooltip md-direction="bottom">Change Date</md-tooltip>
-                        </md-button>
-
-
-                    </chart-card>
-
-                </div>
                </div>
 
                <div class="md-layout-item md-large-size-45 md-xlarge-size-55" v-if="!expanded">
@@ -176,8 +148,8 @@
         calendarEvent : {},
         buildingBlocksList : [],
         expanded : false,
-        expandButtonText : 'HIDE FULL EVENT DETAILS',
-        expandButtonIcon  : 'arrow_downward'
+        expandButtonText : 'VIEW FULL EVENT DETAILS',
+        expandButtonIcon  : 'arrow_upward'
     }),
     methods: {
         getEvent() {
