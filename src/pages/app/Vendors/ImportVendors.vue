@@ -16,47 +16,47 @@
             <md-card-content style="min-height: 60px;">
               <div class="md-layout">
                 <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33 btn-area">
-                  <button class="md-button md-lg md-theme-default" v-model="step1" v-bind:class="{ active: step1 }" v-on:click="showUploadFile">
+                  <button class="md-button md-lg md-theme-default" v-bind:class="{ active: currentStep === 1 }" v-on:click="goToStep(1)">
                     <span class="fa fa-upload"></span><br>Upload File</button>
-                  <button class="md-button md-lg md-theme-default"  v-model="step2" v-bind:class="{ active: step2 }" v-on:click="showAssign">
+                  <button class="md-button md-lg md-theme-default" v-bind:class="{ active: currentStep === 2 }" v-on:click="goToStep(2)">
                     <span class="fa fa-edit"></span><br>Assign Column</button>
-                  <button class="md-button md-lg md-theme-default"  v-model="step3" v-bind:class="{ active: step3 }" v-on:click="showResults">
+                  <button class="md-button md-lg md-theme-default" v-bind:class="{ active: currentStep === 3 }" v-on:click="goToStep(3)">
                     <span class="fa fa-list-alt"></span><br>View Results</button>
                 </div>
                 <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-66">
-                  <div class="step1" v-if="step1">
+                  <div class="step1" v-if="currentStep === 1">
                     <vue-element-loading :active="csvUploading" spinner="ring" color="#FF547C"/>
                     <p>
                       Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits.
                     </p>
                     <div class="main-upload-box">
-                      <div class="upload-option">
-                        <md-icon>file_upload</md-icon>
-                        <span>Upload from CSV file</span>
-                      </div>
-                      <div class="upload-box">
-                        <span>Select File to upload</span>
-                        <div class="upload-box_btn form-group">
-                          <label for="csv_file" class="control-label col-sm-3 text-right">Browse</label>
-                          <div class="col-sm-9">
-                            <input type="file" id="csv_file" @change="sendCSVFile" name="csv_file" class="form-control">
+                      <drop @drop="handleDrop">
+                        <draggable>
+                          <div class="upload-option">
+                            <div>Drag File Here</div>
+                            <span>or</span>
                           </div>
-                        </div>
+                          <div class="upload-box">
+                            <div class="upload-box_btn form-group">
+                              <label for="csv_file" class="control-label col-sm-3 text-right">Browse</label>
+                              <div class="col-sm-9">
+                                <input type="file" id="csv_file" @change="(e) => sendCSVFile(e.target.files[0])" name="csv_file" class="form-control">
+                              </div>
+                            </div>
 
-                      </div>
+                          </div>
+                        </draggable>
+                      </drop>
                     </div>
                   </div>
-                  <div class="step2" v-if="step2">
-                    <p>
-                      Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits.
-                    </p>
+                  <div class="step2" v-if="currentStep === 2">
                     <div class="table-section">
-                      <table class="border-table" v-if="parseCSV">
-                      <thead>
-                        <tr style="border-top: none;">
-                          <th
+                      <md-table class="border-table" v-if="parseCSV">
+                        <md-table-row style="border-top: none;">
+                          <md-table-head
                             v-if="column !== ''"
                             v-for="(column, index) in parseCSV.columns"
+                            :key="index"
                             @click="sortBy(index)"
                             :class="{ active: sortKey == index }">
                             <md-field>
@@ -68,24 +68,19 @@
                                   :key="index">
                                   {{ item.displayName }}
                                 </md-option>
-
                               </md-select>
                             </md-field>
-
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="(row, rowIndex) in parseCSV.rows">
-                          <td v-for="(column, columnIndex) in parseCSV.columns">
+                          </md-table-head>
+                          </md-table-row>
+                        <md-table-row v-for="(row, rowIndex) in parseCSV.rows" :key="rowIndex">
+                          <md-table-cell v-for="(column, columnIndex) in parseCSV.columns" :key="columnIndex">
                             {{ row[column] }}
-                          </td>
-                        </tr>
-                      </tbody>
-                  </table>
+                          </md-table-cell>
+                        </md-table-row>
+                      </md-table>
                     </div>
                   </div>
-                  <div class="step3" v-if="step3">
+                  <div class="step3" v-if="currentStep === 3">
                     <p>
                       Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits.
                     </p>
@@ -98,13 +93,10 @@
             </md-card-content>
             <div class="md-layout">
               <div class="md-layout-item md-medium-size-100 md-xsmall-size-100">
-                <button class="md-button next-btn" v-on:click="showAssign" v-if="step1">
+                <button class="md-button next-btn" v-if="currentStep !== 3" v-on:click="goToStep(currentStep + 1)">
                   NEXT
                 </button>
-                <button class="md-button next-btn" v-on:click="showResults" v-if="step2">
-                  NEXT
-                </button>
-                <button class="md-button next-btn" v-on:click="closeModal" v-if="step3">
+                <button class="md-button next-btn"  v-if="currentStep === 3" v-on:click="closeModal">
                   FINISH
                 </button>
               </div>
@@ -125,12 +117,16 @@
   import swal from "sweetalert2";
   import VueElementLoading from 'vue-element-loading';
   import Button from "../../../components/Button/ControlPanel";
+  import draggable from 'vuedraggable';
+  import {Drop, Drag} from 'vue-drag-drop';
+
   export default {
     components:{
       Button,
       Modal,
       GlobalSalesTable,
-      VueElementLoading
+      VueElementLoading,
+      draggable, Drag, Drop,
     },
     data () {
       return {
@@ -273,9 +269,10 @@
         sortOrders: {},
         sortKey: '',
         rawCSVFile: null,
-        step1:true,
-        step2:false,
-        step3:false,
+        currentStep: 1
+        // step1:true,
+        // step2:false,
+        // step3:false,
       };
     },
     created () {
@@ -289,11 +286,8 @@
     methods: {
       ...mapMutations('vendorsVuex', ['setFileToState']),
       closeModal(){
-        this.$set(this,'step1',true);
-        this.$set(this,'step2',false);
-        this.$set(this,'step3',false);
+        this.goToStep(1);
         this.uploadModalOpen = false;
-        this.$emit('vendorImported')
       },
       noticeModalHide: function () {
         this.uploadModalOpen = false;
@@ -355,7 +349,7 @@
       },
       setCSV(event, id) {
       },
-      async sendCSVFile() {
+      async sendCSVFile(file) {
         this.csvUploading = true;
         let reader = new FileReader();
         let _this = this;
@@ -382,7 +376,7 @@
                 verticalAlign: 'top',
                 type: 'success'
             })
-            _this.showAssign();
+            _this.goToStep(2);
           })
             .catch((error) => {
               _this.csvUploading = false
@@ -396,7 +390,7 @@
               console.log(error);
             });
         };
-        reader.readAsDataURL(document.getElementById('csv_file').files[0]);
+        reader.readAsDataURL(file);
       },
       backToVendor(){
 
@@ -411,25 +405,22 @@
 //          this.$router.push('/vendors');
 
       },
-      showUploadFile(){
-        this.$set(this,'step1',true);
-        this.$set(this,'step2',false);
-        this.$set(this,'step3',false);
+      goToStep(step) {
+        if (step === 3) {
+          this.updateVendorsFile().then( isUpdated => {
+            if (isUpdated) {
+              this.$set(this,'currentStep', step);
+              this.$emit('vendorImported')
+            }
+          })
+        } else {
+          this.$set(this,'currentStep', step);
+        }
       },
-      showAssign(){
-        this.$set(this,'step1',false);
-        this.$set(this,'step2',true);
-        this.$set(this,'step3',false);
-      },
-      showResults(){
-        this.updateVendorsFile().then( isUpdated => {
-          if (isUpdated) {
-            this.$set(this,'step1',false);
-            this.$set(this,'step2',false);
-            this.$set(this,'step3',true);
-          }
-        })
+      handleDrop(data, event) {
+        this.sendCSVFile(event.dataTransfer.files[0])
       }
+
     }
   };
 </script>
