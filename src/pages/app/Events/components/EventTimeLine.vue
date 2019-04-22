@@ -259,6 +259,7 @@
 
         new EventTimelineItem().for(calendar, event).get().then(res => {
           this.timelineItems = _.sortBy(res, function(item){ return item.order});
+          console.log(this.timelineItems);
           this.isLoading = false;
         })
       },

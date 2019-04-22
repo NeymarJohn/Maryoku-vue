@@ -73,7 +73,7 @@
                 </div>
             </md-card>
 
-            <md-card class="md-layout-item md-size-100" v-if="interactionsList">
+            <md-card class="md-layout-item md-size-100">
                 <md-card-header class="md-card-header-icon md-card-header-rose">
                     <div class="card-icon">
                         <md-icon>contacts</md-icon>
@@ -96,8 +96,8 @@
                                     </label>
                                     <div class="md-layout-item">
                                         <md-field>
-                                            <md-select v-model="item.id" name="select" >
-                                                <md-option v-for="(option, index) in interactionsList"  :key="index"  :value="option.id" >{{ option.title }}</md-option>
+                                            <md-select v-model="item.interaction" name="select" >
+                                                <md-option v-for="(option, index) in interactionsList"  :key="index"  :value="option.value" >{{ option.title }}</md-option>
                                             </md-select>
                                         </md-field>
                                     </div>
@@ -136,7 +136,7 @@
                                                 Send Date
                                             </label>
                                             <md-field style="width:62%;">
-                                                <md-input type="text" v-model="item.sendOnDate"></md-input>
+                                                <md-input type="text" v-model="item.startDate"></md-input>
                                             </md-field>
                                         </div>
                                     </div>
@@ -146,7 +146,7 @@
                                                 Days to send before the event
                                             </label>
                                             <md-field style="width:22%;">
-                                                <md-input type="number" v-model="item.sendDaysBeforeEvent"></md-input>
+                                                <md-input type="number" v-model="item.daysBefore"></md-input>
 
                                             </md-field>
                                         </div>
@@ -165,7 +165,7 @@
                                 <div class="md-layout-item">
                                     <md-field>
                                         <md-select v-model="selected_interaction" name="select" >
-                                            <md-option v-for="(option, index) in interactionsList"  :key="index"  :value="JSON.stringify(option)" >{{ option.title }}</md-option>
+                                            <md-option v-for="(option, index) in interactionsList"  :key="index"  :value="option.value" >{{ option.title }}</md-option>
                                         </md-select>
                                     </md-field>
                                 </div>
@@ -205,11 +205,9 @@
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import Calendar from "@/models/Calendar"
-  import CalendarEvent from "@/models/CalendarEvent"
   import EventComponent from "@/models/EventComponent";
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
-  import EventInteraction from "@/models/EventInteraction";
 
   export default {
     name: 'invitees-management',
@@ -227,9 +225,23 @@
         nature_group: null,
         send_rsvp : false,
         when_set_email : null,
-        audienceList : [],
-        interactions : [],
-        interactionsList : null
+        audienceList : [
+            {
+                title : 'All Employees',
+                value : 'all'
+            }
+        ],
+        interactionsList : [
+            {
+                title : 'Save the Date',
+                value : 1
+            },
+            {
+                title : 'Coming Soon',
+                value : 2
+            }
+        ],
+        interactions : []
     }),
     methods: {
       goToComponent (route = null) {
@@ -237,7 +249,7 @@
           location.reload();
       },
         selectInteraction(event) {
-
+          console.log(event.target.value);
         }
 
     },
@@ -245,31 +257,20 @@
 
     },
     mounted() {
-        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-        let event = new CalendarEvent({id: this.event.id});
 
-        new EventInteraction().get().then(res => {
-            this.interactionsList = res;
-        })
     },
     computed: {
 
     },
       watch:{
-          selected_interaction(option) {
-              let item = JSON.parse(option);
-              console.log(option);
-              console.log(item);
+          selected_interaction(value) {
+              console.log(value);
               this.interactions.push({
-                  id : item.id,
-                  title : item.title,
-                  templateId : null,
-                  sendOnDate : null,
-                  sendDaysBeforeEvent : 0,
-                  event : { id : this.event.id}
-              });
-
-              console.log(this.interactions);
+                  interaction : value,
+                  image : null,
+                  startDate : null,
+                  daysBefore : 0
+              })
           }
       }
   }
