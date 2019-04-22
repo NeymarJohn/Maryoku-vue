@@ -15,13 +15,13 @@
             </md-card-header>
             <md-card-content style="min-height: 60px;">
               <div class="md-layout">
-                <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33 btn-area">
-                  <button class="md-button md-lg md-theme-default" v-bind:class="{ active: currentStep === 1 }" v-on:click="goToStep(1)">
-                    <span class="fa fa-upload"></span><br>Upload File</button>
-                  <button class="md-button md-lg md-theme-default" v-bind:class="{ active: currentStep === 2 }" v-on:click="goToStep(2)">
-                    <span class="fa fa-edit"></span><br>Assign Column</button>
-                  <button class="md-button md-lg md-theme-default" v-bind:class="{ active: currentStep === 3 }" v-on:click="goToStep(3)">
-                    <span class="fa fa-list-alt"></span><br>View Results</button>
+                <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33 state-area">
+                  <div class="md-lg md-theme-default" v-bind:class="{ active: currentStep === 1 }">
+                    <span class="fa fa-upload"></span><br>Upload File</div>
+                  <div class="md-lg md-theme-default" v-bind:class="{ active: currentStep === 2 }">
+                    <span class="fa fa-edit"></span><br>Assign Column</div>
+                  <div class="md-lg md-theme-default" v-bind:class="{ active: currentStep === 3 }">
+                    <span class="fa fa-list-alt"></span><br>View Results</div>
                 </div>
                 <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-66">
                   <div class="step1" v-if="currentStep === 1">
@@ -532,19 +532,19 @@
       }
     }
   }
-  .btn-area{
-    button{
-      &.active{
-        background: #00bcd4 !important;
+  .state-area{
+    .md-theme-default{
+      &.active {
+        background: #00bcd4;
+        color: #fff
       }
-      &:focus {
-        background: #00bcd4 !important;
-      }
+      cursor: default;
+      text-align: center;
       box-shadow: none;
-      background: transparent !important;
+      background: transparent;
       padding: 20px;
       width: 75%;
-      color: #959595 !important;
+      color: #959595;
       span{
         padding: 0 0 15px 0;
       }
