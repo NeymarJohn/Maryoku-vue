@@ -1,34 +1,37 @@
 <template>
   <div class="md-layout-item md-size-50 wizard-pos">
-    <modal v-if="uploadModalOpen" @close="noticeModalHide" container-class="modal-container-wizard md">
+    <modal v-if="uploadModalOpen" @close="noticeModalHide" container-class="modal-container-wizard lg">
       <template slot="body">
         <div class="md-layout-item">
           <md-card>
-            <md-card-header class="md-card-header-text md-card-header-blue">
-              <div class="card-text sm">
+            <md-card-header class="md-card-header-icon md-card-header-blue">
+              <div class="card-icon" style="padding: 12px;">
                 <i class="fa fa-upload"></i>
               </div>
-              <h5 class="title">
+              <h4 class="title profile-title">
                 <span>Upload Vendors</span>
                 <button class="btn-position" @click="closeModal"><i class="md-icon md-icon-font md-theme-defaul">close</i></button>
-              </h5>
+              </h4>
             </md-card-header>
-            <md-card-content style="min-height: 60px;">
+            <md-card-content style="min-height: 60px; padding: 48px;">
               <div class="md-layout">
-                <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33 state-area">
-                  <div class="md-lg md-theme-default" v-bind:class="{ active: currentStep === 1 }">
+                <div class="md-layout-item md-size-20 state-area">
+                  <div class=" md-lg md-theme-default" style="border-radius: 6px;" v-bind:class="{ active: currentStep === 1 }">
                     <span class="fa fa-upload"></span><br>Upload File</div>
-                  <div class="md-lg md-theme-default" v-bind:class="{ active: currentStep === 2 }">
-                    <span class="fa fa-edit"></span><br>Assign Column</div>
-                  <div class="md-lg md-theme-default" v-bind:class="{ active: currentStep === 3 }">
+                  <div class="md-lg md-theme-default" style="border-radius: 6px;" v-bind:class="{ active: currentStep === 2 }">
+                    <span class="fa fa-edit"></span><br>Assign Columns</div>
+                  <div class="md-lg md-theme-default" style="border-radius: 6px;" v-bind:class="{ active: currentStep === 3 }">
                     <span class="fa fa-list-alt"></span><br>View Results</div>
                 </div>
-                <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-66">
-                  <div class="step1" v-if="currentStep === 1">
+                <div class="md-layout-item md-size-80">
+                  <div class="step1" v-if="currentStep === 1" style="text-align: center;">
                     <vue-element-loading :active="csvUploading" spinner="ring" color="#FF547C"/>
-                    <p>
-                      Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits.
-                    </p>
+                    <h3 class="title">
+                      Start by uploading a CSV file containing your list of vendors
+                    </h3>
+                    <h5>
+                      Don't worry about format and columns <br/> in the next step you will have the chance to easily assign column names.
+                    </h5>
                     <div class="main-upload-box">
                       <drop @drop="handleDrop">
                         <draggable>
@@ -49,8 +52,12 @@
                       </drop>
                     </div>
                   </div>
-                  <div class="step2" v-if="currentStep === 2">
+                  <div class="step2" v-if="currentStep === 2" style="text-align: center;">
                     <div class="table-section">
+                      <h3 class="title">Great, now you can assign columns names to the columns from your file</h3>
+                      <h5>
+                        Each column header has a dropdown list of possible columns to assign, choose the one that reflects your data as much as possible.
+                      </h5>
                       <md-table class="border-table" v-if="parseCSV">
                         <md-table-row style="border-top: none;">
                           <md-table-head
@@ -71,7 +78,7 @@
                               </md-select>
                             </md-field>
                           </md-table-head>
-                          </md-table-row>
+                        </md-table-row>
                         <md-table-row v-for="(row, rowIndex) in parseCSV.rows" :key="rowIndex">
                           <md-table-cell v-for="(column, columnIndex) in parseCSV.columns" :key="columnIndex">
                             {{ row[column] }}
@@ -81,9 +88,8 @@
                     </div>
                   </div>
                   <div class="step3" v-if="currentStep === 3">
-                    <p>
-                      Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits.
-                    </p>
+                    <h3>Awesome, your vendors list is uploaded</h3>
+                    <h5>You can review the results of the process here.</h5>
                     <p>Rows processed: {{ finalResult.processed }} </p>
                     <p>Total: {{ finalResult.total }}</p>
                     <p>Duplicates: {{ finalResult.duplicates }}</p>
@@ -91,16 +97,18 @@
                 </div>
               </div>
             </md-card-content>
-            <div class="md-layout">
-              <div class="md-layout-item md-medium-size-100 md-xsmall-size-100">
-                <button class="md-button next-btn" v-if="currentStep !== 3" v-on:click="goToStep(currentStep + 1)">
-                  NEXT
-                </button>
-                <button class="md-button next-btn"  v-if="currentStep === 3" v-on:click="closeModal">
-                  FINISH
-                </button>
+            <md-card-actions v-if="currentStep > 1">
+              <div class="md-layout">
+                <div class="md-layout-item md-medium-size-100 md-xsmall-size-100">
+                  <button class="md-button next-btn" v-if="currentStep === 2" v-on:click="goToStep(currentStep + 1)">
+                    NEXT
+                  </button>
+                  <button class="md-button next-btn"  v-if="currentStep === 3" v-on:click="closeModal">
+                    FINISH
+                  </button>
+                </div>
               </div>
-            </div>
+            </md-card-actions>
           </md-card>
         </div>
       </template>
@@ -371,10 +379,10 @@
             });
             _this.csvUploading = false
             this.$notify({
-                message: 'Vendor file is uploaded successfully' ,
-                horizontalAlign: 'center',
-                verticalAlign: 'top',
-                type: 'success'
+              message: 'Vendor file is uploaded successfully' ,
+              horizontalAlign: 'center',
+              verticalAlign: 'top',
+              type: 'success'
             })
             _this.goToStep(2);
           })
@@ -516,22 +524,7 @@
   .header-position {
     position: relative;
   }
-  .title{
-    span{
-      color: #919191;
-      font-weight: normal;
-      padding: 10px;
-      font-size: 14px;
-    }
-    button{
-      padding: 0;
-      top: 0;
-      right: 0;
-      i{
-        color: #c2c2c2;
-      }
-    }
-  }
+
   .state-area{
     .md-theme-default{
       &.active {
