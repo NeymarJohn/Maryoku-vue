@@ -245,9 +245,17 @@
 
     },
     mounted() {
+
         let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
 
+        // Get Event Interactions
+        new EventInteraction().for(calendar,event).get().then(res => {
+
+            console.log('Interactions', res);
+        })
+
+        // Get List of available interactions
         new EventInteraction().get().then(res => {
             this.interactionsList = res;
         })
@@ -258,18 +266,29 @@
       watch:{
           selected_interaction(option) {
               let item = JSON.parse(option);
-              console.log(option);
-              console.log(item);
-              this.interactions.push({
+
+              let new_interaction = {
                   id : item.id,
                   title : item.title,
                   templateId : null,
                   sendOnDate : null,
                   sendDaysBeforeEvent : 0,
                   event : { id : this.event.id}
-              });
+              }
 
-              console.log(this.interactions);
+              this.interactions.push(new_interaction);
+
+              // Save event interaction
+              let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+              let event = new CalendarEvent({id: this.event.id});
+
+              new EventInteraction(new_interaction).for(calendar,event).save().then(res => {
+                  console.log('saved successfully');
+                  console.log(res);
+              })
+                  .catch(error => {
+                      console.log('Error while saving ', error);
+                  })
           }
       }
   }

@@ -1,16 +1,16 @@
 <template>
     <div class="md-layout">
-        <md-card v-if="!selectedBlock" class="proposals-management" >
+        <md-card v-if="!selectedBlock" class="proposals-management">
             <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
-            <!--<md-card-header class="md-card-header-icon md-card-header-warning">
+            <md-card-header class="md-card-header-icon md-card-header-warning">
                 <div class="card-icon">
                     <md-icon>mail_outline</md-icon>
                 </div>
                 <h4 class="title2">Proposal Management</h4>
-            </md-card-header>-->
+            </md-card-header>
             <md-card-content class="md-layout proposals-management_items" v-if="buildingBlocksList.length">
 
-                <div v-for="(block,index) in buildingBlocksList" :key="block.id" class="md-layout-item md-xlarge-size-20 md-large-size-25 md-small-size-40">
+                <div v-for="(block,index) in buildingBlocksList" :key="block.id" class="md-layout-item md-size-50">
                     <md-card class="proposals-management_item">
                         <md-card-header class="md-card-header-text card-success card-header" :style="`background-color:`+block.color">
                             <md-card-header-text>
@@ -127,7 +127,7 @@
         }
     },
     created() {
-
+      
     },
     mounted() {
         this.isLoading = false;
