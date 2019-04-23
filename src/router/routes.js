@@ -365,17 +365,23 @@ let appPages = {
       component: EventDetails,
       meta: {title: 'Event Details', gtm: "Event Details"},
     },
-    {
-        path: "/events/:id/edit",
-        name: "EditEvent",
-        component: CurrentEvents,
-        meta: {title: 'Current Event', gtm: "Event Edit"},
-    },
+      {
+          path: "/events/:id/edit",
+          name: "EditEvent",
+          component: CurrentEvents,
+          meta: {title: 'Event Details', gtm: "Event Edit"},
+      },
+      {
+          path: "/events/:id/edit/building-blocks",
+          name: "EditBuildingBlocks",
+          component: CurrentEvents,
+          meta: {title: 'Building Blocks', gtm: "Building Blocks"},
+      },
     {
         path: "/events/:id/edit/timeline",
         name: "EditTimeLine",
         component: CurrentEvents,
-        meta: {title: 'Current Event', gtm: "Event Edit"},
+        meta: {title: 'Event Timeline', gtm: "Event Timeline"},
     },
     {
         path: "/events/:id/edit/invitees-management",

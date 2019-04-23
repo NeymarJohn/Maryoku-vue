@@ -2,18 +2,11 @@
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
 
-    <nav-tabs
-      :tab-name="['Event Details', 'Building blocks', 'Timeline', 'Budget', 'Invitees Management']"
-      color-button="rose"
-      plain >
-      <template slot="tab-pane-1">
-        <div class="md-layout">
-          Tab1
-        </div>
-      </template>
-    </nav-tabs>
+    <!-- Event Components Routes -->
+    <event-page-routes  v-if="event" :event="event"></event-page-routes>
+    <!-- ./Event Components Routes -->
 
-    <div class="md-layout-item md-xlarge-size-20 md-large-size-25 md-small-size-40">
+    <div class="md-layout-item md-xlarge-size-20 md-large-size-25 md-small-size-40" v-if="routeName === 'EditEvent'">
       <md-card class="md-card-profile">
         <div class="logo-block">
           <div class="event-planer-logo">
@@ -129,13 +122,11 @@
         </md-card-content>
       </md-card>
     </div>
-    <div v-if="event && routeName === 'EditEvent'" class="md-layout-item block-flex" >
+
+
+    <div v-if="event && routeName === 'EditBuildingBlocks'" class="md-layout-item block-flex" >
       <event-building-blocks   :event="event" :event-components="selectedComponents" @go-to-building-blocks="resetTab"></event-building-blocks>
     </div>
-
-    <!--<div v-else-if="selectedTab('proposals')" class="md-layout-item md-size-70 block-flex">-->
-    <!--proposals-->
-    <!--</div>-->
 
     <div v-else-if="event &&  routeName === 'EditTimeLine' " class="md-layout-item block-flex">
       <event-time-line :event="event" :event-components="selectedComponents"></event-time-line>
@@ -151,7 +142,7 @@
     <event-modal @refresh-events="refreshEvents" :currentEvent="calendarEvent" ref="eventModal"></event-modal>
     <!-- ./New Event Modal -->
 
-    <sticky-budget :event="event"></sticky-budget>
+    <sticky-budget :event="event" v-if="routeName !== 'EditEvent'"></sticky-budget>
 
 
   </div>
@@ -183,6 +174,7 @@
   import EventTimeLine from "./components/EventTimeLine.vue";
   import InviteesManagement from "./components/EventBlocks/InviteesManagement.vue";
   import StickyBudget from "./components/StickyBudget.vue";
+  import EventPageRoutes from "./components/EventPageRoutes.vue";
 
   export default {
     components: {
@@ -197,7 +189,8 @@
       EventModal,
       EventTimeLine,
       InviteesManagement,
-      StickyBudget
+      StickyBudget,
+        EventPageRoutes
     },
 
     data() {
