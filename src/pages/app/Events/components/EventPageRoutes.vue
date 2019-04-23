@@ -7,15 +7,11 @@
                    </li>
 
                    <li class="md-list-item">
-                       <md-button :class="{active: routeName === 'EditBuildingBlocks'}" @click="goToComponent('/edit/building-blocks')">Building blocks</md-button>
+                       <md-button :class="{active: routeName === 'EditBuildingBlocks'}" @click="goToComponent('/edit/building-blocks')">Budget &amp; Proposals</md-button>
                    </li>
 
                    <li class="md-list-item">
                        <md-button :class="{active: routeName === 'EditTimeLine'}" @click="goToComponent('/edit/timeline')">Timeline</md-button>
-                   </li>
-
-                   <li class="md-list-item">
-                       <md-button class="">Budget</md-button>
                    </li>
 
                    <li class="md-list-item">
