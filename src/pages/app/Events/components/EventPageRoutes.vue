@@ -7,7 +7,7 @@
                    </li>
 
                    <li class="md-list-item">
-                       <md-button :class="{active: routeName === 'EditBuildingBlocks'}" @click="goToComponent('/edit/building-blocks')">Budget & Proposals</md-button>
+                       <md-button :class="{active: routeName === 'EditBuildingBlocks'}" @click="goToComponent('/edit/building-blocks')">Budget &amp; Proposals</md-button>
                    </li>
 
                    <li class="md-list-item">
@@ -15,7 +15,7 @@
                    </li>
 
                    <li class="md-list-item">
-                       <md-button :class="{active: routeName === 'InviteesManagement'}" @click="goToComponent('/edit/invitees-management')">Invitees Managemen</md-button>
+                       <md-button :class="{active: routeName === 'InviteesManagement'}" @click="goToComponent('/edit/invitees-management')">Invitees Management</md-button>
                    </li>
                </ul>
            </div>

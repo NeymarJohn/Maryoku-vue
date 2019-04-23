@@ -35,7 +35,7 @@
             <div class="">
               <p class="card-category">Showing {{ pagination.from }} to {{ pagination.limit < pagination.total ? pagination.limit : pagination.total }} of {{ pagination.total }} records</p>
             </div>
-            <pagination class="pagination-no-border pagination-success"
+            <pagination class="pagination-no-border pagination-info"
                         @input="pageChanged($event)"
                         v-model="pagination.page"
                         :per-page="pagination.limit"

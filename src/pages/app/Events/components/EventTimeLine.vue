@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
-    <md-card class="time-line-blocks md-layout-item md-size-30">
+    <md-card class="time-line-blocks md-layout-item md-xlarge-size-15 md-large-size-20 md-small-size-30">
       <md-card-header class="md-card-header-icon md-card-header-warning">
         <div class="card-icon">
           <md-icon>extension</md-icon>
@@ -25,7 +25,7 @@
 
       </md-card-content>
     </md-card>
-    <div class="md-layout-item md-size-70 time-line-section">
+    <div class="md-layout-item md-size-50 time-line-section mx-auto">
       <h4>Timeline</h4>
       <md-button class="md-info md-sm preview-event" @click="previewEvent">
         Preview
