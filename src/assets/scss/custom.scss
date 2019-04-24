@@ -1112,6 +1112,11 @@ $tooltip-border-color: $blue-grey-200 !default;
     padding : 0 1em;
     margin-bottom : 1em;
 
+    .md-input {
+      max-width: 100%;
+    }
+
+
   }
   .md-form-label {
     text-align: left !important;
@@ -1130,16 +1135,20 @@ $tooltip-border-color: $blue-grey-200 !default;
 
       li {
         margin-right : 0.5em;
+
         .image-item {
           width : 86.7px !important;
           height: 58px;
           background-repeat: no-repeat;
           background-position: center;
           background-size: cover !important;
-        }
+          opacity: 0.5;
 
-        input {
-          max-width: 100%;
+          &.selected {
+            border : 3px solid $brand-rose;
+            opacity: 1;
+
+          }
         }
       }
     }
@@ -1382,6 +1391,10 @@ $tooltip-border-color: $blue-grey-200 !default;
       }
     }
   }
+}
+
+iframe{
+  max-width : 100%;
 }
 @media screen and (max-width : 500px) {
   .event-details {
