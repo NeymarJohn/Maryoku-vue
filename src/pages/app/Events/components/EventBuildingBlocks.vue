@@ -1,52 +1,58 @@
 <template>
     <div class="md-layout">
-        <md-card v-if="!selectedBlock" class="proposals-management" >
+        <div v-if="!selectedBlock" class="proposals-management" >
             <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
-            <!--<md-card-header class="md-card-header-icon md-card-header-warning">
-                <div class="card-icon">
-                    <md-icon>mail_outline</md-icon>
-                </div>
-                <h4 class="title2">Proposal Management</h4>
-            </md-card-header>-->
             <md-card-content class="md-layout proposals-management_items" v-if="buildingBlocksList.length">
 
-                <div v-for="(block,index) in buildingBlocksList" :key="block.id" class="md-layout-item md-xlarge-size-20 md-large-size-25 md-small-size-40">
+                <div class="md-layout-item md-size-100">
+                    <h3>Select services and set budget</h3>
+
+                    <p>
+                        We've added relevant services according to you'r event attributes. You can add new ones or remove existing.
+                    </p>
+                </div>
+
+                <div v-for="(block,index) in buildingBlocksList" :key="block.id" class="md-layout-item md-xlarge-size-30 md-large-size-33 md-small-size-40">
                     <md-card class="proposals-management_item">
-                        <md-card-header class="md-card-header-text card-success card-header" :style="`background-color:`+block.color">
-                            <md-card-header-text>
-                                <div class="md-title">{{block.value}}</div>
-                                <div class="md-actions">
-                                    <md-button class="md-button md-dense md-sm ">
-                                        <md-icon>attach_file</md-icon>
-                                    </md-button>
-                                    <md-button class="md-button md-dense md-sm ">
-                                        <md-icon>sms</md-icon>
-                                    </md-button>
-                                    <md-button class="md-button md-dense md-sm">
-                                        <md-icon>delete_outline</md-icon>
-                                    </md-button>
-                                </div>
-                            </md-card-header-text>
+                        <md-card-header class="md-card-header-icon md-card-header-warning">
+                            <div class="card-icon">
+                                <md-icon>{{block.icon}}</md-icon>
+                            </div>
+                            <h4 class="title2">{{block.value}}</h4>
+                            <md-card-actions md-alignment="right" class="item-actions">
+                                <md-button class="md-button md-simple md-sm">
+                                    <md-icon>delete_outline</md-icon>
+                                </md-button>
+                            </md-card-actions>
+
                         </md-card-header>
 
                         <md-card-content>
                             <div class="item-content">
-                                <div class="personals-number"> 0 Personals</div>
-                                <ul class="item-info">
+                                <ul class="item-info" v-if="!block.edit">
                                     <li>
                                         <div class="">Allocated Budget</div>
-                                        <div> - </div>
-                                    </li>
-                                    <li>
-                                        <div class="">Best Proposal</div>
-                                        <div>-</div>
+                                        <div>
+                                            <md-button class="md-button md-simple md-sm edit-block" @click="editBudget(index)">
+                                                <md-icon>edit</md-icon>
+                                            </md-button>
+                                            <span>{{block.budget ? '$' + block.budget : '$0.0'}}</span>
+                                        </div>
                                     </li>
                                 </ul>
+                                <div class="item-info-form md-layout" v-if="block.edit">
+                                    <md-field class="md-layout-item md-size-70">
+                                        <md-input type="number" placeholder="Example : $1400" v-model="block.budget"></md-input>
+                                    </md-field>
+                                    <div class="md-layout-item md-size-30 ">
+                                        <md-button class="md-info md-sm" @click="setBudget(block.budget,index)">Set Budget</md-button>
+                                    </div>
+                                </div>
                             </div>
                         </md-card-content>
 
-                        <md-card-actions md-alignment="right">
-                            <md-button @click="selectBlock(block.id)">Manage proposals</md-button>
+                        <md-card-actions md-alignment="right" v-if="!block.edit">
+                            <md-button class="md-success md-sm" @click="selectBlock(block.id)">Create Inquiry</md-button>
                         </md-card-actions>
                     </md-card>
 
@@ -85,7 +91,7 @@
                     </li>
                 </ul>
             </div>
-        </md-card>
+        </div>
         <div class="md-layout-item md-size-100" v-else>
             <event-blocks :event="event" :event-components="eventComponents" @go-to-building-blocks="resetSelectedBlock"></event-blocks>
         </div>
@@ -124,6 +130,15 @@
         },
         resetSelectedBlock(){
             this.$set(this,'selectedBlock',null);
+        },
+        editBudget(index){
+
+            this.buildingBlocksList[index].edit = this.buildingBlocksList[index].edit ? !this.buildingBlocksList[index].edit : true;
+            this.$forceUpdate();
+
+        },
+        setBudget(budget,index){
+            this.editBudget(index);
         }
     },
     created() {
@@ -135,6 +150,7 @@
         let event = EventComponent.get()
             .then(res=> {
                 this.$set(this,'buildingBlocksList',res);
+                console.log('buildingBlocksList ', res);
             })
             .catch(error => {
                 console.log('Error ', error);

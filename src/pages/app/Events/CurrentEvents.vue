@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout">
+  <div class="md-layout edit-event-details">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
 
     <!-- Event Components Routes -->
@@ -20,38 +20,30 @@
           </div>
           <md-card-content v-if="event">
             <div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item">
-                  <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
+              <div class="md-layout event-info-section">
+                <div class="md-layout-item md-size-100">
+                  <div class="md-layout-item  title-text">Date</div>
+                  <div class="md-layout-item md-size-100 md-caption ">{{calendarEvent.eventStartMillis | formatDate}}, {{calendarEvent.eventStartMillis | formatTime}} ({{calendarEvent.eventStartMillis | formatDuration(calendarEvent.eventEndMillis)}} hrs) </div>
                 </div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-caption title-text">Event Occasion</div>
-                <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.occasion}}</div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-caption title-text">Start Time</div>
-                <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.eventStartMillis | formatTime}}</div>
+
+                <div class="md-layout-item md-size-50">
+                  <div class="md-layout-item  title-text">Participants</div>
+                  <div class="md-layout-item md-size-100 md-caption ">{{calendarEvent.numberOfParticipants}} + spouses </div>
+                </div>
+
+                <div class="md-layout-item md-size-50">
+                  <div class="md-layout-item  title-text">Geography</div>
+                  <div class="md-layout-item md-size-100 md-caption ">{{calendarEvent.location}} </div>
+                </div>
+
+                <div class="md-layout-item md-size-100">
+                  <md-button class="md-sm md-simple md-rose">
+                    <md-icon>cached</md-icon> Recurring weekly
+                  </md-button>
+                </div>
+
               </div>
 
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-caption title-text">Duration</div>
-                <div class="md-layout-item md-size-40 md-caption title-text">
-                  {{calendarEvent.eventStartMillis | formatDuration(calendarEvent.eventEndMillis)}} Hours
-                </div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-caption title-text">Geography</div>
-                <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.location}}</div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-caption title-text">Participants</div>
-                <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.numberOfParticipants}}</div>
-              </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item md-caption title-text">Participant Type</div>
-                <div class="md-layout-item md-size-40 md-caption title-text">{{calendarEvent.participantsType}}</div>
-              </div>
 
               <div class="md-layout md-gutter">
                 <div class="md-layout-item">
@@ -63,7 +55,7 @@
                   <h5 class="title-budget-main">Total remaining budget</h5>
                   <h4
                           class="title"
-                          style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152, 0.8);">
+                          style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
                     <div class="title-budget-prise title">
                       <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
                     </div>
@@ -108,7 +100,7 @@
       <div class="md-layout-item md-xlarge-size-80 md-large-size-75 md-small-size-60">
         <md-card class="manage-vendors">
           <md-card-content class="md-layout">
-            <div class="md-layout-item md-size-70">
+            <div class="md-layout-item md-size-60">
               <h4>Manage Vendor Proposals</h4>
 
               <p>
@@ -125,17 +117,57 @@
                 Manage inquiries &amp; proposals
               </md-button>
             </div>
-            <div class="md-layout-item md-size-30">
-              <iframe width="560" height="315" src="https://www.youtube.com/embed/ygte40FNSpU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="md-layout-item md-size-40">
+              <iframe width="560" height="415" src="https://www.youtube.com/embed/ygte40FNSpU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
           </md-card-content>
         </md-card>
+
+        <div class="edit-event-boxes md-layout">
+          <md-card class="md-layout-item md-size-30">
+              <md-card-content>
+                <h4>Event Timeline</h4>
+                <p>
+                  Organize the event in a beautiful timeline.
+                </p>
+                <md-button class="md-rose md-simple got-to-component-btn" @click="goToComponent('/edit/timeline')">
+                  Edit Event Timeline <md-icon>arrow_forward</md-icon>
+                </md-button>
+              </md-card-content>
+          </md-card>
+
+          <md-card class="md-layout-item md-size-30">
+            <md-card-content>
+              <h4>Invitees Management</h4>
+
+              <p>
+                Select invitees, send scheduled RSVP and messages.
+              </p>
+
+              <md-button class="md-rose md-simple got-to-component-btn" @click="goToComponent('/edit/invitees-management')">
+                Manage Invitees <md-icon>arrow_forward</md-icon>
+              </md-button>
+            </md-card-content>
+          </md-card>
+
+          <md-card class="md-layout-item md-size-30">
+            <md-card-content>
+              <h4>Publish Event Details</h4>
+              <p>
+                Create a beautiful event page
+                and send to invitees.
+              </p>
+
+              <md-button class="md-rose md-simple got-to-component-btn" @click="goToComponent('')">
+                Edit Event page <md-icon>arrow_forward</md-icon>
+              </md-button>
+            </md-card-content>
+          </md-card>
+        </div>
       </div>
     </template>
 
-
-
-    <div v-if="event && routeName === 'EditBuildingBlocks'" class="md-layout-item block-flex" >
+    <div v-else-if="event && routeName === 'EditBuildingBlocks'" class="md-layout-item block-flex" >
       <event-building-blocks   :event="event" :event-components="selectedComponents" @go-to-building-blocks="resetTab"></event-building-blocks>
     </div>
 
@@ -147,17 +179,13 @@
       <invitees-management :event="event" :event-components="selectedComponents"></invitees-management>
     </div>
 
-
-
     <!-- New Event Modal -->
     <event-modal @refresh-events="refreshEvents" :currentEvent="calendarEvent" ref="eventModal"></event-modal>
     <!-- ./New Event Modal -->
 
     <sticky-budget :event="event" v-if="routeName !== 'EditEvent'"></sticky-budget>
 
-
   </div>
-
 
 </template>
 
@@ -301,7 +329,7 @@
     },
     filters: {
       formatDate: function (date) {
-        return moment(date).format('Do, MMM');
+        return moment(date).format('MMM Do YYYY ');
       },
       formatTime: function(date) {
         return moment(date).format('h:00 A')

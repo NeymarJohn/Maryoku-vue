@@ -1,10 +1,13 @@
 <template>
        <div class="manage-proposals md-layout">
         <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
+
            <div class="md-layout-item md-size-100">
-               <md-button class="md-button md-info md-theme-default auto-width" @click="goBack">
-                   Go back to Building Blocks
-               </md-button>
+               <h3 @click="goBack" > <md-icon>arrow_back</md-icon> Send inquiry and manage proposals</h3>
+
+               <p>
+                   Send out one inquiry to all vendors and we'll organize all the proposals for you to choose the best one.
+               </p>
            </div>
 
            <div class="md-layout-item md-size-40">

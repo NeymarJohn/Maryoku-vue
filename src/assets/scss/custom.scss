@@ -214,68 +214,31 @@ $tooltip-border-color: $blue-grey-200 !default;
 
   .proposals-management_items {
     align-content : flex-start;
+    justify-content: space-between;
   }
 
   .proposals-management_item {
     margin-bottom : 0;
+  }
 
-    .md-actions {
+  .md-card-header {
+    position: relative;
+    border-bottom : 1px solid #eeeeee;
+    border-radius: 0 !important;
 
+    .item-actions {
+      position : absolute;
+      right: 0;
+      top: 12px;
+      border: none;
+      margin: 0;
 
       .md-button {
-        min-width : 1px;
-        background: none !important;
-        box-shadow: none;
-        margin : 0;
-
+        min-width: auto;
         .md-ripple {
-          padding : 0 !important;
-          background: none;
-
-          i {
-            width : auto;
-            height : auto;
-            line-height:inherit;
-          }
+          padding: 0 !important;
         }
       }
-    }
-
-    .card-header {
-      margin : 0;
-      padding: 3px 10px;
-      border-bottom-left-radius: 0 !important;
-      border-bottom-right-radius: 0 !important;
-
-      &.card-success {
-        background: $brand-success;
-      }
-
-      &.card-info {
-        background: $brand-info;
-      }
-
-    }
-
-    [class*=md-card-header-] {
-      margin : 0;
-      position: relative;
-      display: flex;
-      flex: 1;
-      justify-content: space-between;
-
-      .md-title {
-        font-size: 18px;
-        color : #fff;
-        margin :0 !important;
-        font-weight: 500;
-      }
-    }
-
-
-
-    .md-card-content {
-      padding: 6px 0;
     }
   }
 
@@ -299,26 +262,27 @@ $tooltip-border-color: $blue-grey-200 !default;
         justify-content: space-between;
         font-weight: bold;
         font-size: 12px;
+
+        .edit-block {
+          min-width: auto;
+          .md-ripple {
+            padding: 0 !important;
+          }
+        }
       }
     }
   }
 
-  .md-card-actions {
-    .md-button {
-      min-width : 1px;
-      background: none !important;
-      box-shadow: none;
-      margin : 0 auto;
-
-      .md-ripple {
-        padding : 0 !important;
-        background: none;
-        color: #21c998;
-        font-weight: bold;
-        font-size: 11px;
-        text-transform: capitalize;
-      }
+  .item-info-form {
+    .md-field {
+      margin-top : 0;
+      padding-left:0;
     }
+  }
+
+  .md-card-actions {
+    border-top : none;
+    padding: 0;
   }
 
   &_add-block {
@@ -1103,6 +1067,10 @@ $tooltip-border-color: $blue-grey-200 !default;
     background-position: center;
     background-size: cover !important;
   }
+
+  .md-textarea {
+    padding-left :0 !important;
+  }
 }
 .interactions-list {
 
@@ -1361,7 +1329,7 @@ $tooltip-border-color: $blue-grey-200 !default;
     ul.md-list {
       background-color: white !important;
       margin-top: -15px;
-      width: 110%;
+      width: 105%;
       margin-left: -55px;
       padding-left: 55px;
       margin-bottom: 0px;
@@ -1395,6 +1363,52 @@ $tooltip-border-color: $blue-grey-200 !default;
 
 iframe{
   max-width : 100%;
+}
+
+.edit-event-boxes {
+  justify-content: space-between;
+}
+
+.edit-event-details {
+
+  .event-info-section {
+    .md-layout-item {
+      padding : 0;
+      text-align: left;
+
+      .md-caption {
+        text-align: left;
+        color : #000;
+        font-weight: 500;
+      }
+
+      .md-button {
+        margin : 1em 0 0;
+
+        .md-ripple {
+          padding : 0 !important;
+        }
+      }
+    }
+  }
+  .manage-vendors {
+    ol {
+      margin : 3em 0;
+      padding : 0 14px;
+
+      li {
+        &:not(last) {
+          margin-bottom : 2.5em;
+        }
+      }
+    }
+  }
+
+  .got-to-component-btn {
+    .md-ripple {
+      padding : 0 !important;
+    }
+  }
 }
 @media screen and (max-width : 500px) {
   .event-details {
