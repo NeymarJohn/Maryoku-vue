@@ -10,10 +10,10 @@
           </div>
 
           <div class="table table-stats vendors-actions-list">
-            <md-button class="md-info" @click="openInviteModal">
+            <md-button name="vendors-add-vendor" class="md-info" @click="openInviteModal">
               Add Vendor
             </md-button>
-            <md-button @click="openUploadModal" class="md-info">
+            <md-button name="vendors-upload-vendors" @click="openUploadModal" class="md-info">
               Upload Excel File
             </md-button>
           </div>

@@ -27,7 +27,7 @@
     </md-card>
     <div class="md-layout-item md-size-50 time-line-section mx-auto">
       <h4>Timeline</h4>
-      <md-button class="md-info md-sm preview-event" @click="previewEvent">
+      <md-button name="event-planner-tab-timeline-preview" class="md-info md-sm preview-event" @click="previewEvent">
         Preview
       </md-button>
 
@@ -86,10 +86,10 @@
                 </div>
               </md-card-content>
               <md-card-actions md-alignment="left">
-                <md-button class="md-info" v-if="!item.dateCreated"
+                <md-button name="event-planner-tab-timeline-item-save" class="md-info" v-if="!item.dateCreated"
                            @click="saveTimelineItem(item,index)">Save
                 </md-button>
-                <md-button class="md-info" v-else @click="updateTimelineItem(item)">Edit
+                <md-button name="event-planner-tab-timeline-item-edit" class="md-info" v-else @click="updateTimelineItem(item)">Edit
                 </md-button>
               </md-card-actions>
 
@@ -97,11 +97,11 @@
 
             <md-card class="block-info" v-else-if="!item.mode || item.mode === 'saved' ">
               <div class="card-actions">
-                <md-button class="md-info md-sm md-just-icon md-simple md-round"
+                <md-button name="event-planner-tab-timeline-item-edit" class="md-info md-sm md-just-icon md-simple md-round"
                            @click="modifyItem(index)">
                   <md-icon>create</md-icon>
                 </md-button>
-                <md-button class="md-danger md-sm md-just-icon md-simple md-round"
+                <md-button name="event-planner-tab-timeline-item-delete" class="md-danger md-sm md-just-icon md-simple md-round"
                            @click="removeItem(item)">
                   <md-icon>delete_outline</md-icon>
                 </md-button>

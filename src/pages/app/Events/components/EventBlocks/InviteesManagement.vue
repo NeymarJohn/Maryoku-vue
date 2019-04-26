@@ -1,9 +1,9 @@
 <template>
   <div class="invitees-management">
-    <md-button class="md-info" @click="goToComponent('/edit/timeline')">
+    <md-button name="event-planner-tab-invitees-management-create-timeline" class="md-info" @click="goToComponent('/edit/timeline')">
       Create Timeline
     </md-button>
-    <md-button class="md-info" @click="goToComponent('')">
+    <md-button name="event-planner-tab-invitees-management-event-page" class="md-info" @click="goToComponent('')">
       Event Page
     </md-button>
 
@@ -28,7 +28,7 @@
               </md-field>
             </div>
             <div class="md-layout-item md-size-40">
-              <md-button class="md-success md-sm" @click="goToComponent('')">
+              <md-button name="event-planner-tab-invitees-management-add-custom-group" class="md-success md-sm" @click="goToComponent('')">
                 ADD AND SELECT CUSTOM GROUP
               </md-button>
             </div>
@@ -175,7 +175,7 @@
                 <label>Your Message</label>
                 <md-textarea v-model="selectedInteraction.line3"></md-textarea>
               </md-field>
-              <md-button class="md-success pull-right" @click="editInteraction(selectedInteraction)">
+              <md-button name="event-planner-tab-invitees-management-interaction-save" class="md-success pull-right" @click="editInteraction(selectedInteraction)">
                 Save
               </md-button>
             </div>

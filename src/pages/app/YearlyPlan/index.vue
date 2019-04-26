@@ -2,7 +2,7 @@
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
     <div class="md-layout-item md-size-100 text-right">
-      <md-button class="md-success text-success" @click="routeToNewEvent()">
+      <md-button name="yearly-plan-create-event" class="md-success text-success" @click="routeToNewEvent()">
         <md-icon>add_circle</md-icon>
         Create New Event
       </md-button>
@@ -163,7 +163,7 @@
             </div>
 
             <div class="md-layout-item md-size-5">
-              <md-button class="md-info md-just-icon md-round" :disabled="!filtersChanged" @click="selectYear"><md-icon >refresh</md-icon></md-button>
+              <md-button name="yearly-plan-refresh-filters" class="md-info md-just-icon md-round" :disabled="!filtersChanged" @click="selectYear"><md-icon >refresh</md-icon></md-button>
             </div>
           </div>
 

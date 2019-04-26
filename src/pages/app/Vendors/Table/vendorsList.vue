@@ -18,13 +18,13 @@
                         {{item.avgScore}}%
                     </md-table-cell>
                     <md-table-cell class="vendors-table_item-actions">
-                        <md-button class="md-button md-success md-sm md-theme-default auto-width md-just-icon" @click="selectVendor(item)">
+                        <md-button :name="`vendors-list-select-vendor-${vendorsList.indexOf(item)}`" class="md-button md-success md-sm md-theme-default auto-width md-just-icon" @click="selectVendor(item)">
                             <md-icon>edit</md-icon>
                         </md-button>
-                        <md-button class="md-button md-info md-sm md-theme-default auto-width md-just-icon" @click="openPopover(vendorsList.indexOf(item))">
+                        <md-button :name="`vendors-list-rank-vendor-${vendorsList.indexOf(item)}`" class="md-button md-info md-sm md-theme-default auto-width md-just-icon" @click="openPopover(vendorsList.indexOf(item))">
                           <md-icon>star</md-icon>
                         </md-button>
-                        <md-button class="md-button md-rose md-sm md-theme-default auto-width" @click.native="deleteVendor(item.id)">
+                        <md-button :name="`vendors-list-delete-vendor-${vendorsList.indexOf(item)}`" class="md-button md-rose md-sm md-theme-default auto-width" @click.native="deleteVendor(item.id)">
                             <md-icon>delete</md-icon>
                         </md-button>
                     </md-table-cell>

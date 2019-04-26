@@ -1,7 +1,7 @@
 <template>
   <ul class="pagination" :class="paginationClass">
     <li class="page-item prev-page" :class="{'disabled': value === 1, 'no-arrows': noArrows}">
-      <a class="page-link" aria-label="Previous" @click="prevPage">
+      <a name="pagination-page-prev" class="page-link" aria-label="Previous" @click="prevPage">
         <i class="fas fa-angle-double-left"></i>
       </a>
     </li>
@@ -9,10 +9,10 @@
         v-for="item in range(minPage, maxPage)"
         :key="item"
         :class="{active: value === item}">
-      <a class="page-link" @click="changePage(item)">{{item}}</a>
+      <a :name="`pagination-page-${item}`" class="page-link" @click="changePage(item)">{{item}}</a>
     </li>
     <li class="page-item page-pre next-page" :class="{ 'disabled': value === totalPages, 'no-arrows': noArrows}">
-      <a class="page-link" aria-label="Next" @click="nextPage">
+      <a name="pagination-page-next" class="page-link" aria-label="Next" @click="nextPage">
         <i class="fas fa-angle-double-right"></i>
       </a>
     </li>
