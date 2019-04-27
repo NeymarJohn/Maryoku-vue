@@ -69,6 +69,7 @@
                     <ul class="dropdown-menu dropdown-menu-right">
                       <li><router-link name="user-top-menu-my-profile" :to="{path: '/settings'}">My Profile</router-link></li>
                       <li><router-link name="user-top-menu-account-settings" :to="{path: '/company-form'}">Account Settings</router-link></li>
+                      <li><router-link name="user-top-menu-my-profile" :to="{path: '/team'}">Manage Team</router-link></li>
                       <li class="divider"></li>
                       <li><router-link name="user-top-menu-sign-out" :to="{path: '/signout'}">Sign Out</router-link></li>
                     </ul>
