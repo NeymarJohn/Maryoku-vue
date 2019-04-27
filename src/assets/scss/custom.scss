@@ -487,11 +487,9 @@ $tooltip-border-color: $blue-grey-200 !default;
     border-radius: 3px;
     color : #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.21);
-    cursor: grab;
 
     &:active {
       transform: rotate(2deg);
-      cursor: grabbing;
     }
 
     .md-icon {
@@ -532,21 +530,16 @@ $tooltip-border-color: $blue-grey-200 !default;
       .drag-here {
         border-radius: 10px;
         background-color: #e4e4e4;
-        font-size: 18px;
+        font-size: 16px;
         opacity: 0.87;
         text-align: center;
-        color: $grey-700;
+        color: rgba(149, 149, 149, 0.87);
         padding : 10px;
-        font-weight: 400;
+
       }
 
       &.time-line-item {
         position: relative;
-        cursor: grab;
-
-        &:active {
-          cursor: grabbing;
-        }
 
         &:after {
           content : '';
@@ -606,6 +599,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
       .block-info {
         position : relative;
+
         .card-actions {
           position: absolute;
           right : 0;

@@ -3,19 +3,19 @@
            <div class="md-card-tabs md-card-plain">
                <ul class="md-list nav-tabs">
                    <li class="md-list-item">
-                       <md-button name="event-planner-tab-event-details" :class="{active: routeName === 'EditEvent'}" @click="goToComponent('/edit')">Event Details</md-button>
+                       <md-button :class="{active: routeName === 'EditEvent'}" @click="goToComponent('/edit')">Event Details</md-button>
                    </li>
 
                    <li class="md-list-item">
-                       <md-button name="event-planner-tab-budget" :class="{active: routeName === 'EditBuildingBlocks'}" @click="goToComponent('/edit/building-blocks')">Budget &amp; Proposals</md-button>
+                       <md-button :class="{active: routeName === 'EditBuildingBlocks'}" @click="goToComponent('/edit/building-blocks')">Budget &amp; Proposals</md-button>
                    </li>
 
                    <li class="md-list-item">
-                       <md-button name="event-planner-tab-timeline" :class="{active: routeName === 'EditTimeLine'}" @click="goToComponent('/edit/timeline')">Timeline</md-button>
+                       <md-button :class="{active: routeName === 'EditTimeLine'}" @click="goToComponent('/edit/timeline')">Timeline</md-button>
                    </li>
 
                    <li class="md-list-item">
-                       <md-button name="event-planner-tab-invitees" :class="{active: routeName === 'InviteesManagement'}" @click="goToComponent('/edit/invitees-management')">Invitees Management</md-button>
+                       <md-button :class="{active: routeName === 'InviteesManagement'}" @click="goToComponent('/edit/invitees-management')">Invitees Management</md-button>
                    </li>
                </ul>
            </div>

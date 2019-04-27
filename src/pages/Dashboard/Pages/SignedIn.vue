@@ -39,16 +39,12 @@
         });*/
 
         let me = that.auth.user.me;
-        try {
-          heap.identify(that.auth.user.email);
-        } catch (e) {console.error(e);}
-
         if (!me.customer.onboarded){
           that.$router.push({path: '/company-form'});
         } else if (!me.onboarded) {
           that.$router.push({path: '/me-form'});
         } else {
-          that.$router.push({ path: '/' });
+          that.$router.push({ path: '/' });          
         }
       });
     },

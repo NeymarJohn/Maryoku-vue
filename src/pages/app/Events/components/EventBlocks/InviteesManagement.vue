@@ -1,9 +1,9 @@
 <template>
   <div class="invitees-management">
-    <md-button name="event-planner-tab-invitees-management-create-timeline" class="md-info" @click="goToComponent('/edit/timeline')">
+    <md-button class="md-info" @click="goToComponent('/edit/timeline')">
       Create Timeline
     </md-button>
-    <md-button name="event-planner-tab-invitees-management-event-page" class="md-info" @click="goToComponent('')">
+    <md-button class="md-info" @click="goToComponent('')">
       Event Page
     </md-button>
 
@@ -28,7 +28,7 @@
               </md-field>
             </div>
             <div class="md-layout-item md-size-40">
-              <md-button name="event-planner-tab-invitees-management-add-custom-group" class="md-success md-sm" @click="goToComponent('')">
+              <md-button class="md-success md-sm" @click="goToComponent('')">
                 ADD AND SELECT CUSTOM GROUP
               </md-button>
             </div>
@@ -87,9 +87,8 @@
             </p>
 
             <!-- Interactions List -->
-            <!-- TODO:list all interactions -->
-            <div class="interactions-list" v-if="interactions.length">
-              <div class="interactions-list_item" v-for="(item,index) in interactions" :key="index">
+            <div class="interactions-list" v-if="interactionsList.length">
+              <div class="interactions-list_item" v-for="(item,index) in interactionsList" :key="index">
                 <div class="md-layout">
                   <label class="md-layout-item md-size-30 md-form-label">
                     Interaction
@@ -160,7 +159,13 @@
             <div class="preview-section">
               <div class="preview-item" :style="`background-image: url(/static/img/page-headers/${selectedImage})`">
 
-                <iframe src="/static/img/interactions/interaction-1.html"></iframe>
+                <!--<iframe src="/static/img/interactions/interaction-1.html"></iframe>-->
+
+                <div class="interaction-title">
+                  {{selectedInteraction.line1}}
+                </div>
+                <div class="interaction-date">{{selectedInteraction.line2}}</div>
+                <div class="interaction-desc">{{selectedInteraction.line3}}</div>
 
               </div>
               <md-field>
@@ -175,7 +180,7 @@
                 <label>Your Message</label>
                 <md-textarea v-model="selectedInteraction.line3"></md-textarea>
               </md-field>
-              <md-button name="event-planner-tab-invitees-management-interaction-save" class="md-success pull-right" @click="editInteraction(selectedInteraction)">
+              <md-button class="md-success pull-right" @click="editInteraction(selectedInteraction)">
                 Save
               </md-button>
             </div>
@@ -289,13 +294,21 @@
       // Get Event Interactions
       new EventInteraction().for(calendar,event).get().then(res => {
 
-        this.interactions = res;
+          console.log('Event Interactions ',res);
+
+
+          this.interactions = res;
 
       })
 
       // Get List of available interactions
       new EventInteraction().get().then(res => {
+
+          console.log(res);
+
           this.interactionsList = res;
+
+
       })
     },
     computed: {
