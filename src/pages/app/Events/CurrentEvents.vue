@@ -14,7 +14,7 @@
               <md-icon class="company-logo">date_range</md-icon>
             </div>
             <div class="event-title">Event Details</div>
-            <md-button class="md-button md-simple md-just-icon md-sm"  @click="openEventModal()" style="margin-top : 1em;">
+            <md-button name="event-planner-event-details-edit" class="md-button md-simple md-just-icon md-sm"  @click="openEventModal()" style="margin-top : 1em;">
               <md-icon class="company-logo">create</md-icon>
             </md-button>
           </div>
@@ -113,7 +113,7 @@
                 <li>Get proposals and choose the best offers</li>
               </ol>
 
-              <md-button class="md-info">
+              <md-button name="event-planner-tab-event-details-banner-manage-proposals" class="md-info">
                 Manage inquiries &amp; proposals
               </md-button>
             </div>
@@ -130,7 +130,7 @@
                 <p>
                   Organize the event in a beautiful timeline.
                 </p>
-                <md-button class="md-rose md-simple got-to-component-btn" @click="goToComponent('/edit/timeline')">
+                <md-button name="event-planner-tab-event-details-banner-timeline" class="md-rose md-simple got-to-component-btn" @click="goToComponent('/edit/timeline')">
                   Edit Event Timeline <md-icon>arrow_forward</md-icon>
                 </md-button>
               </md-card-content>
@@ -144,7 +144,7 @@
                 Select invitees, send scheduled RSVP and messages.
               </p>
 
-              <md-button class="md-rose md-simple got-to-component-btn" @click="goToComponent('/edit/invitees-management')">
+              <md-button name="event-planner-tab-event-details-banner-invitees" class="md-rose md-simple got-to-component-btn" @click="goToComponent('/edit/invitees-management')">
                 Manage Invitees <md-icon>arrow_forward</md-icon>
               </md-button>
             </md-card-content>
@@ -158,7 +158,7 @@
                 and send to invitees.
               </p>
 
-              <md-button class="md-rose md-simple got-to-component-btn" @click="goToComponent('')">
+              <md-button name="event-planner-tab-event-details-banner-event-page" class="md-rose md-simple got-to-component-btn" @click="goToComponent('')">
                 Edit Event page <md-icon>arrow_forward</md-icon>
               </md-button>
             </md-card-content>

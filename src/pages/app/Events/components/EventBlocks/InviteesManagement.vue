@@ -1,9 +1,9 @@
 <template>
   <div class="invitees-management">
-    <md-button class="md-info" @click="goToComponent('/edit/timeline')">
+    <md-button name="event-planner-tab-invitees-management-create-timeline" class="md-info" @click="goToComponent('/edit/timeline')">
       Create Timeline
     </md-button>
-    <md-button class="md-info" @click="goToComponent('')">
+    <md-button name="event-planner-tab-invitees-management-event-page" class="md-info" @click="goToComponent('')">
       Event Page
     </md-button>
 
@@ -28,7 +28,7 @@
               </md-field>
             </div>
             <div class="md-layout-item md-size-40">
-              <md-button class="md-success md-sm" @click="goToComponent('')">
+              <md-button name="event-planner-tab-invitees-management-add-custom-group" class="md-success md-sm" @click="goToComponent('')">
                 ADD AND SELECT CUSTOM GROUP
               </md-button>
             </div>
@@ -90,24 +90,18 @@
             <div class="interactions-list" v-if="interactionsList.length">
               <div class="interactions-list_item" v-for="(item,index) in interactionsList" :key="index">
                 <div class="md-layout">
-                  <label class="md-layout-item md-size-30 md-form-label">
-                    Interaction
-                  </label>
                   <div class="md-layout-item">
-                    <md-field>
-                      <md-select v-model="item.templateId" name="select" >
-                        <md-option v-for="(option, index) in interactionsList"  :key="index"  :value="option.id">{{ option.title }}</md-option>
-                      </md-select>
-                    </md-field>
+
+                    <h4 class="interaction-title"> <md-checkbox v-model="item.checked" @change="checkItem(item)"></md-checkbox>  {{item.title}}</h4>
                   </div>
                 </div>
                 <div class="md-layout">
-                  <div class="interaction-images">
+                  <div class="interaction-images md-layout-item md-size-100">
                     <ul class="images-list">
-                      <li class="list-item" v-for="(image,index) in interactionImages" >
-                        <div class="image-item" :style="`background-image: url(/static/img/page-headers/${image.fullFileName})`"
-                             :class="{selected : selectedInteraction && selectedImage == image.fullFileName}"
-                              @click="selectInteraction(item,image.fullFileName)"></div>
+                      <li class="list-item" v-for="(image,index) in item.options" >
+                        <div class="image-item" :style="`background-image: url(/static/img/interactions/${image}.png)`"
+                             :class="{selected : selectedInteraction && selectedImage == image || item.templateImage == image}"
+                              @click="selectInteraction(item,image)"></div>
                       </li>
                     </ul>
                   </div>
@@ -138,49 +132,33 @@
             </div>
             <!-- ./Interactions List -->
 
-            <!-- Add New Interaction -->
-            <div class="add-interaction-section">
-              <div class="md-layout">
-                <label class="md-layout-item md-size-30 md-form-label">
-                  Add an interaction
-                </label>
-                <div class="md-layout-item">
-                  <md-field>
-                    <md-select v-model="selected_interaction" name="select" >
-                      <md-option v-for="(option, index) in interactionsList"  :key="index"  :value="JSON.stringify(option)" >{{ option.title }}</md-option>
-                    </md-select>
-                  </md-field>
-                </div>
-              </div>
-            </div>
-            <!-- ./Add New Interaction -->
           </div>
           <div class="md-layout-item md-size-50" v-if="selectedImage">
             <div class="preview-section">
-              <div class="preview-item" :style="`background-image: url(/static/img/page-headers/${selectedImage})`">
+              <div class="preview-item" :style="`background-image: url(/static/img/interactions/${selectedImage}.png)`">
 
                 <!--<iframe src="/static/img/interactions/interaction-1.html"></iframe>-->
 
-                <div class="interaction-title">
+                <h2 class="interaction-title">
                   {{selectedInteraction.line1}}
-                </div>
-                <div class="interaction-date">{{selectedInteraction.line2}}</div>
-                <div class="interaction-desc">{{selectedInteraction.line3}}</div>
+                </h2>
+                <h4 class="interaction-date">{{selectedInteraction.line2}}</h4>
+                <p class="interaction-desc">{{selectedInteraction.line3}}</p>
 
               </div>
               <md-field>
                 <label>Title</label>
-                <md-input v-model="selectedInteraction.line1"></md-input>
+                <md-input v-model="selectedInteraction.line1" type="text"></md-input>
               </md-field>
               <md-field>
                 <label>Date</label>
-                <md-input v-model="selectedInteraction.line2"></md-input>
+                <md-input v-model="selectedInteraction.line2" type="text"></md-input>
               </md-field>
               <md-field>
                 <label>Your Message</label>
-                <md-textarea v-model="selectedInteraction.line3"></md-textarea>
+                <md-textarea v-model="selectedInteraction.line3" type="text"></md-textarea>
               </md-field>
-              <md-button class="md-success pull-right" @click="editInteraction(selectedInteraction)">
+              <md-button name="event-planner-tab-invitees-management-interaction-save" class="md-success pull-right" @click="editInteraction(selectedInteraction)">
                 Save
               </md-button>
             </div>
@@ -199,6 +177,7 @@
   import auth from '@/auth';
   import EventInteraction from "@/models/EventInteraction";
   import moment from 'moment';
+  import _ from "underscore";
 
 
   // Get dummy images from EventPageHeaderImage
@@ -242,16 +221,21 @@
           this.selectedImage = image;
       },
         editInteraction(item) {
-            let interaction = new EventInteraction({id : item.id});
 
-            interaction.templateId = item.templateId;
+            // Edit event interaction
+            let interaction = new EventInteraction({id : item.hashed_id});
+
+            interaction.templateId = item.id;
+            interaction.title = item.title;
             interaction.templateImage = item.templateImage;
             interaction.sendOnDate = this.getEventStartInMillis(item.sendOnDate);
-            0
             interaction.sendDaysBeforeEvent = item.sendDaysBeforeEvent;
             interaction.line1 = item.line1;
             interaction.line2 = item.line2;
             interaction.line3 = item.line3;
+
+            interaction.templateImage = this.selectedImage;
+            interaction.event = { id : this.event.id};
 
             interaction.save().then(resp=> {
 
@@ -266,6 +250,8 @@
                 .catch(error=> {
                     console.log(error);
                 })
+
+
         },
         getInteractionImages() {
 
@@ -278,6 +264,61 @@
         getEventStartInMillis(sendDate) {
             let eventStartTime = new Date(sendDate).getTime();
             return eventStartTime;
+        },
+        checkEventInteraction(interactionId,index){
+
+          let interaction = _.findWhere(this.interactions,{templateId : interactionId});
+
+          if (interaction) {
+              this.interactionsList[index].sendOnDate = new Date(interaction.sendOnDate);
+              this.interactionsList[index].sendDaysBeforeEvent = interaction.sendDaysBeforeEvent;
+              this.interactionsList[index].line1 = interaction.line1;
+              this.interactionsList[index].line2 = interaction.line2;
+              this.interactionsList[index].line3 = interaction.line3;
+              this.interactionsList[index].checked = true;
+              this.interactionsList[index].hashed_id = interaction.id;
+              return true;
+          } else {
+              return false;
+          }
+        },
+        checkItem (item) {
+
+            if ( item.checked && !item.hashed_id ) {
+                this.saveInteraction(item);
+            } else {
+                this.deleteInteraction(item);
+            }
+
+
+
+        },
+        saveInteraction(item) {
+
+            let new_interaction = {
+                title : item.title,
+                templateId : item.id,
+                templateImage : '',
+                sendOnDate : null,
+                sendDaysBeforeEvent : 0,
+                event : { id : this.event.id}
+            }
+
+
+            // Save event interaction
+            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+
+            new EventInteraction(new_interaction).for(calendar,event).save().then(res => {
+
+                console.log('interaction saved successfully');
+            })
+                .catch(error => {
+                    console.log('Error while saving ', error);
+                })
+        },
+        deleteInteraction(item) {
+
         }
 
     },
@@ -288,28 +329,29 @@
     },
     mounted() {
 
+        let _self = this;
+
       let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
       let event = new CalendarEvent({id: this.event.id});
 
       // Get Event Interactions
       new EventInteraction().for(calendar,event).get().then(res => {
 
-          console.log('Event Interactions ',res);
-
-
           this.interactions = res;
 
+          // Get List of available interactions
+          new EventInteraction().get().then(res => {
+
+              _self.interactionsList = res;
+
+              _self.interactionsList.forEach(function(item,index){
+                  _self.checkEventInteraction(item.id,index);
+              })
+          })
+
       })
 
-      // Get List of available interactions
-      new EventInteraction().get().then(res => {
 
-          console.log(res);
-
-          this.interactionsList = res;
-
-
-      })
     },
     computed: {
 

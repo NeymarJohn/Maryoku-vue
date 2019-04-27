@@ -19,24 +19,24 @@
         <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
         </sidebar-item>-->
 
-        <sidebar-item :link="{name: 'Dashboard', icon: 'dashboard', path: '/company'}">
+        <sidebar-item name="left-menu-dashboard" :link="{name: 'Dashboard', icon: 'dashboard', path: '/company'}">
         </sidebar-item>
 
         <!--<sidebar-item :link="{name: 'Yearly Planner', icon: 'calendar_today', path: '/yearly-plan'}">
         </sidebar-item>-->
 
         <li class="nav-item router-link-active">
-          <md-button class="md-button md-purple" @click="openEventModal()">
+          <md-button name="left-menu-create-event" class="md-button md-purple" @click="openEventModal()">
             <md-icon>event</md-icon>
             <span>Create New Event</span>
           </md-button>
         </li>
-        <sidebar-item :link="{name: 'Events List',  icon: 'event', path: '/events'}"></sidebar-item>
-        <sidebar-item :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>
+        <sidebar-item name="left-menu-events-list" :link="{name: 'Events List',  icon: 'event', path: '/events'}"></sidebar-item>
+        <sidebar-item name="left-menu-yearly-plan" :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>
 
         <li class="menu-divider"></li>
 
-        <sidebar-item :link="{name: 'Vendors List', icon: 'group', path: '/vendors'}">
+        <sidebar-item name="left-menu-vendors-list" :link="{name: 'Vendors List', icon: 'group', path: '/vendors'}">
         </sidebar-item>
 
         <!--<sidebar-item :link="{name: 'My Vendors', icon: 'contacts', path: '/vendors'}">

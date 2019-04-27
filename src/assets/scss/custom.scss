@@ -487,9 +487,11 @@ $tooltip-border-color: $blue-grey-200 !default;
     border-radius: 3px;
     color : #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.21);
+    cursor: grab;
 
     &:active {
       transform: rotate(2deg);
+      cursor: grabbing;
     }
 
     .md-icon {
@@ -530,16 +532,21 @@ $tooltip-border-color: $blue-grey-200 !default;
       .drag-here {
         border-radius: 10px;
         background-color: #e4e4e4;
-        font-size: 16px;
+        font-size: 18px;
         opacity: 0.87;
         text-align: center;
-        color: rgba(149, 149, 149, 0.87);
+        color: $grey-700;
         padding : 10px;
-
+        font-weight: 400;
       }
 
       &.time-line-item {
         position: relative;
+        cursor: grab;
+
+        &:active {
+          cursor: grabbing;
+        }
 
         &:after {
           content : '';
@@ -599,7 +606,6 @@ $tooltip-border-color: $blue-grey-200 !default;
 
       .block-info {
         position : relative;
-
         .card-actions {
           position: absolute;
           right : 0;
@@ -1066,6 +1072,22 @@ $tooltip-border-color: $blue-grey-200 !default;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover !important;
+    color : #fff;
+    text-shadow: 0 2px 13px rgba(0,0,0,.3);
+    text-align: center;
+    display: flex;
+    flex : 1;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+
+    .interaction-title {
+      font-weight: bold;
+      margin : 0;
+    }
+    .interaction-date {
+        margin : 0 0 0;
+    }
   }
 
   .md-textarea {
@@ -1083,9 +1105,12 @@ $tooltip-border-color: $blue-grey-200 !default;
     .md-input {
       max-width: 100%;
     }
-
-
+    .interaction-title {
+      margin : 0;
+      font-weight: 500;
+    }
   }
+
   .md-form-label {
     text-align: left !important;
   }
@@ -1096,10 +1121,10 @@ $tooltip-border-color: $blue-grey-200 !default;
 
     ul {
       display: flex;
-      flex : 1;
       flex-direction: row;
       list-style: none;
       padding : 0;
+      overflow-x: auto;
 
       li {
         margin-right : 0.5em;
@@ -1409,6 +1434,10 @@ iframe{
       padding : 0 !important;
     }
   }
+}
+
+.md-layout-item {
+  max-width: 100%;
 }
 @media screen and (max-width : 500px) {
   .event-details {

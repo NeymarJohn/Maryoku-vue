@@ -12,7 +12,7 @@
                     </p>
                 </div>
 
-                <div v-for="(block,index) in buildingBlocksList" :key="block.id" class="md-layout-item md-xlarge-size-30 md-large-size-33 md-small-size-40">
+                <div v-for="(block,index) in buildingBlocksList" v-if="!block.childComponents" :key="block.id" class="md-layout-item md-xlarge-size-30 md-large-size-33 md-small-size-40">
                     <md-card class="proposals-management_item">
                         <md-card-header class="md-card-header-icon md-card-header-warning">
                             <div class="card-icon">
@@ -20,7 +20,7 @@
                             </div>
                             <h4 class="title2">{{block.value}}</h4>
                             <md-card-actions md-alignment="right" class="item-actions">
-                                <md-button class="md-button md-simple md-sm">
+                                <md-button name="event-planner-tab-budget-building-block-delete" class="md-button md-simple md-sm">
                                     <md-icon>delete_outline</md-icon>
                                 </md-button>
                             </md-card-actions>
@@ -33,7 +33,7 @@
                                     <li>
                                         <div class="">Allocated Budget</div>
                                         <div>
-                                            <md-button class="md-button md-simple md-sm edit-block" @click="editBudget(index)">
+                                            <md-button name="event-planner-tab-budget-building-block-allocated-budget-edit" class="md-button md-simple md-sm edit-block" @click="editBudget(index)">
                                                 <md-icon>edit</md-icon>
                                             </md-button>
                                             <span>{{block.budget ? '$' + block.budget : '$0.0'}}</span>
@@ -45,14 +45,14 @@
                                         <md-input type="number" placeholder="Example : $1400" v-model="block.budget"></md-input>
                                     </md-field>
                                     <div class="md-layout-item md-size-30 ">
-                                        <md-button class="md-info md-sm" @click="setBudget(block.budget,index)">Set Budget</md-button>
+                                        <md-button name="event-planner-tab-budget-building-block-set-budget" class="md-info md-sm" @click="setBudget(block.budget,index)">Set Budget</md-button>
                                     </div>
                                 </div>
                             </div>
                         </md-card-content>
 
                         <md-card-actions md-alignment="right" v-if="!block.edit">
-                            <md-button class="md-success md-sm" @click="selectBlock(block.id)">Create Inquiry</md-button>
+                            <md-button name="event-planner-tab-budget-building-block-create-inquiry" class="md-success md-sm" @click="selectBlock(block.id)">Create Inquiry</md-button>
                         </md-card-actions>
                     </md-card>
 

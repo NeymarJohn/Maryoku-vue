@@ -20,6 +20,9 @@ export default {
     const that = this;
     setTimeout(() => {
       this.auth.logout(this);
+      try {
+        heap.resetIdentity();
+      } catch (e) { console.error(e);}
     },1500)
   },
   data() {

@@ -11,7 +11,7 @@
       <md-card-content class="md-layout time-line-blocks_items">
 
         <h5 class="section-desc">
-          You can drag and drop the blocks to complete your timeline project.
+          Create a timeline of your event by dragging timeline items.
         </h5>
         <div v-for="(block,index) in blocksList" :key="block.id" class="md-layout-item md-size-100">
 
@@ -25,13 +25,13 @@
 
       </md-card-content>
     </md-card>
-    <div class="md-layout-item md-size-50 time-line-section mx-auto">
+    <div class="md-layout-item md-xlarge-size-50 md-large-size-50 md-small-size-60 time-line-section mx-auto">
       <h4>Timeline</h4>
-      <md-button class="md-info md-sm preview-event" @click="previewEvent">
+      <md-button name="event-planner-tab-timeline-preview" class="md-info md-sm preview-event" @click="previewEvent">
         Preview
       </md-button>
 
-      <drop @drop="handleDrop">
+      <drop @drop="handleDrop" style="height: 100%;">
         <draggable :list="timelineItems" class="time-line-blocks_selected-items">
 
           <div v-for="(item,index) in timelineItems" :key="index"
@@ -86,10 +86,13 @@
                 </div>
               </md-card-content>
               <md-card-actions md-alignment="left">
-                <md-button class="md-info" v-if="!item.dateCreated"
+                <md-button name="event-planner-tab-timeline-item-save" class="md-info" v-if="!item.dateCreated"
                            @click="saveTimelineItem(item,index)">Save
                 </md-button>
-                <md-button class="md-info" v-else @click="updateTimelineItem(item)">Edit
+                <md-button name="event-planner-tab-timeline-item-edit" class="md-info" v-else @click="updateTimelineItem(item)">Edit
+                </md-button>
+                <md-button name="event-planner-tab-timeline-item-save" class="md-danger md-simple"
+                           @click="cancelTimelineItem(item,index)">Cancel
                 </md-button>
               </md-card-actions>
 
@@ -97,11 +100,11 @@
 
             <md-card class="block-info" v-else-if="!item.mode || item.mode === 'saved' ">
               <div class="card-actions">
-                <md-button class="md-info md-sm md-just-icon md-simple md-round"
+                <md-button name="event-planner-tab-timeline-item-edit" class="md-info md-sm md-just-icon md-simple md-round"
                            @click="modifyItem(index)">
                   <md-icon>create</md-icon>
                 </md-button>
-                <md-button class="md-danger md-sm md-just-icon md-simple md-round"
+                <md-button name="event-planner-tab-timeline-item-delete" class="md-danger md-sm md-just-icon md-simple md-round"
                            @click="removeItem(item)">
                   <md-icon>delete_outline</md-icon>
                 </md-button>
@@ -121,11 +124,23 @@
 
           </div>
 
-          <div class="time-line-blocks_selected-items_item">
+          <div class="time-line-blocks_selected-items_item" v-if="!timelineItems.length">
+            <div class="drag-here">
+              <p>
+                <img src="/static/img/drag_drop.png" alt="drag and drop"/>
+              </p>
+              <p>
+                Start building your event timeline by dropping timeline items here
+              </p>
+            </div>
+          </div>
+
+          <div class="time-line-blocks_selected-items_item" v-if="timelineItems.length">
             <md-icon class="time-line-blocks_icon">add</md-icon>
-            <md-card class="drag-here">
-              Drag and drop a building block here
-            </md-card>
+            <div class="drag-here">
+              Continue building your event timeline by dropping more timeline items here
+              <div class="small">You can change the order of items by dragging them to the right place</div>
+            </div>
           </div>
         </draggable>
       </drop>
@@ -261,6 +276,13 @@
           this.timelineItems = _.sortBy(res, function(item){ return item.order});
           this.isLoading = false;
         })
+      },
+      cancelTimelineItem(item, index){
+        if (item.dateCreated){
+          this.$set(this.timelineItems[index], 'mode', 'saved');
+        } else {
+          this.timelineItems.splice(index, 1);
+        }
       },
       saveTimelineItem(item, index) {
         this.isLoading = true;

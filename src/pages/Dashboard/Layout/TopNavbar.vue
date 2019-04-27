@@ -58,7 +58,7 @@
               <a href="#" class="md-list-item-router md-list-item-container md-button-clean dropdown">
                 <div class="md-list-item-content">
                   <drop-down direction="down">
-                    <md-button slot="title" class="md-button md-simple" data-toggle="dropdown">
+                    <md-button name="user-top-menu" slot="title" class="md-button md-simple" data-toggle="dropdown">
                       <!--<md-icon>email</md-icon>
                       <span class="notification">5</span>
                       <p class="hidden-lg hidden-md">Notifications</p>-->
@@ -67,10 +67,11 @@
                       </div>
                     </md-button>
                     <ul class="dropdown-menu dropdown-menu-right">
-                      <li><router-link :to="{path: '/settings'}">My Profile</router-link></li>
-                      <li><router-link :to="{path: '/company-form'}">Account Settings</router-link></li>
+                      <li><router-link name="user-top-menu-my-profile" :to="{path: '/settings'}">My Profile</router-link></li>
+                      <li><router-link name="user-top-menu-account-settings" :to="{path: '/company-form'}">Account Settings</router-link></li>
+                      <li><router-link name="user-top-menu-my-profile" :to="{path: '/team'}">Manage Team</router-link></li>
                       <li class="divider"></li>
-                      <li><router-link :to="{path: '/signout'}">Sign Out</router-link></li>
+                      <li><router-link name="user-top-menu-sign-out" :to="{path: '/signout'}">Sign Out</router-link></li>
                     </ul>
                   </drop-down>
                 </div>
