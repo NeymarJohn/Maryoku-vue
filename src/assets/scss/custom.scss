@@ -542,6 +542,11 @@ $tooltip-border-color: $blue-grey-200 !default;
 
       &.time-line-item {
         position: relative;
+        cursor: grab;
+
+        &:active {
+          cursor: grabbing;
+        }
 
         &:after {
           content : '';
@@ -601,7 +606,6 @@ $tooltip-border-color: $blue-grey-200 !default;
 
       .block-info {
         position : relative;
-
         .card-actions {
           position: absolute;
           right : 0;
