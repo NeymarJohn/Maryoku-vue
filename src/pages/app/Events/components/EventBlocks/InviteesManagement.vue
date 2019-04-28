@@ -92,7 +92,7 @@
                 <div class="md-layout">
                   <div class="md-layout-item">
 
-                    <h4 class="interaction-title"> <md-checkbox v-model="item.checked" @change="checkItem(item)"></md-checkbox>  {{item.title}}</h4>
+                    <h4 class="interaction-title"> <md-checkbox v-model="item.enabled" @change="checkItem(item)"></md-checkbox>  {{item.title}}</h4>
                   </div>
                 </div>
                 <div class="md-layout">
@@ -100,7 +100,7 @@
                     <ul class="images-list">
                       <li class="list-item" v-for="(image,index) in item.options" >
                         <div class="image-item" :style="`background-image: url(/static/img/interactions/${image}.png)`"
-                             :class="{selected : selectedInteraction && selectedImage == image || item.templateImage == image}"
+                             :class="{selected : (selectedInteraction && selectedInteraction.id == item.id && selectedInteraction.templateImage == image) || item.templateImage == image}"
                               @click="selectInteraction(item,image)"></div>
                       </li>
                     </ul>
@@ -216,6 +216,7 @@
 
           if ( !this.selectedInteraction || (this.selectedInteraction && this.selectedInteraction.id !== item.id) ) {
               this.selectedInteraction = item;
+              this.selectedInteraction.templateImage = image;
           }
 
           this.selectedImage = image;
@@ -275,8 +276,8 @@
               this.interactionsList[index].line1 = interaction.line1;
               this.interactionsList[index].line2 = interaction.line2;
               this.interactionsList[index].line3 = interaction.line3;
-              this.interactionsList[index].checked = true;
               this.interactionsList[index].hashed_id = interaction.id;
+              this.interactionsList[index].enabled = interaction.enabled ? interaction.enabled : false;
               return true;
           } else {
               return false;
@@ -284,24 +285,24 @@
         },
         checkItem (item) {
 
-            if ( item.checked && !item.hashed_id ) {
+            if ( item.enabled && !item.hashed_id ) {
                 this.saveInteraction(item);
+            } else if ( item.enabled && item.hashed_id ) {
+                this.EnableDisableInteraction(item, true);
             } else {
-                this.deleteInteraction(item);
+                this.EnableDisableInteraction(item, false);
             }
-
-
-
         },
         saveInteraction(item) {
 
             let new_interaction = {
                 title : item.title,
                 templateId : item.id,
-                templateImage : '',
+                templateImage : this.selectedInteraction.templateImage,
                 sendOnDate : null,
                 sendDaysBeforeEvent : 0,
-                event : { id : this.event.id}
+                event : { id : this.event.id},
+                enabled : true
             }
 
 
@@ -317,8 +318,18 @@
                     console.log('Error while saving ', error);
                 })
         },
-        deleteInteraction(item) {
+        EnableDisableInteraction(item, status) {
+            // Edit event interaction
+            let interaction = new EventInteraction({id : item.hashed_id});
 
+            interaction.enabled = status;
+            interaction.save().then(resp=> {
+
+                this.$forceUpdate();
+            })
+                .catch(error=> {
+                    console.log(error);
+                })
         }
 
     },
@@ -338,6 +349,8 @@
       new EventInteraction().for(calendar,event).get().then(res => {
 
           this.interactions = res;
+
+          console.log(res);
 
           // Get List of available interactions
           new EventInteraction().get().then(res => {
