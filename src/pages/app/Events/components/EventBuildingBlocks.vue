@@ -101,6 +101,7 @@
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import Calendar from "@/models/Calendar";
+  import CalendarEvent from "@/models/CalendarEvent"
   import EventComponent from "@/models/EventComponent";
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
@@ -147,14 +148,26 @@
     mounted() {
         this.isLoading = false;
 
-        let event = EventComponent.get()
+        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
+
+        EventComponent.get()
             .then(res=> {
                 this.$set(this,'buildingBlocksList',res);
+            })
+            .catch(error => {
+                console.log('Error ', error);
+            })
+
+        new EventComponent().for(calendar, event).get()
+            .then(res=> {
+
                 console.log('buildingBlocksList ', res);
             })
             .catch(error => {
                 console.log('Error ', error);
             })
+
     }
   }
 </script>

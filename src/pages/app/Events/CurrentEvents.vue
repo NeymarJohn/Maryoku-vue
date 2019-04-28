@@ -61,7 +61,7 @@
                     </div>
                   </h4>
 
-                  <div class="budget-pie-container" style="display: grid;margin: 18px;">
+                  <div style="display: grid;margin: 18px; 0;">
                     <chart-component
                             :chart-data="pieChart.data"
                             :chart-options="pieChart.options"
@@ -474,6 +474,20 @@
   }
   .copyright-block {
     justify-content: space-between;
+  }
+  .md-card-profile {
+    .ct-series-b .ct-point,
+    .ct-series-b .ct-line,
+    .ct-series-b .ct-bar,
+    .ct-series-b .ct-slice-donut {
+      stroke: #21c998;
+    }
+    .ct-series-a .ct-point,
+    .ct-series-a .ct-line,
+    .ct-series-a .ct-bar,
+    .ct-series-a .ct-slice-donut {
+      stroke: #ebebeb;
+    }
   }
 
 </style>
