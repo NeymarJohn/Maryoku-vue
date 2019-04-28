@@ -25,7 +25,7 @@
 
       </md-card-content>
     </md-card>
-    <div class="md-layout-item md-xlarge-size-50 md-large-size-50 md-small-size-60 time-line-section mx-auto">
+    <div class="md-layout-item md-xlarge-size-50 md-large-size-50 md-small-size-60 time-line-section mr-auto">
       <h4>Timeline</h4>
       <md-button name="event-planner-tab-timeline-preview" class="md-info md-sm preview-event" @click="previewEvent">
         Preview
