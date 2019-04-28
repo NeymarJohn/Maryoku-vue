@@ -1439,6 +1439,38 @@ iframe{
 .md-layout-item {
   max-width: 100%;
 }
+
+.add-building-blocks-list {
+  list-style: none;
+  padding : 0;
+
+  >li {
+    margin-bottom: 1.1em;
+    padding-bottom : 1.1em;
+    border-bottom : 1px solid #efefef;
+  }
+
+  .block-icon {
+    padding: 0.7em;
+    border-radius: 4px;
+    margin-right: 0.5em;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+  }
+
+  span {
+    font-weight: 500;
+  }
+
+  .child-components-list {
+    list-style: none;
+    padding : 0;
+
+    li {
+      margin-bottom: 1.1em;
+    }
+
+  }
+}
 @media screen and (max-width : 500px) {
   .event-details {
     &_content.md-card-content {
@@ -1615,5 +1647,23 @@ iframe{
     color: black !important;
     border-bottom: 3px solid #FF547C;
     border-radius: 0;
+  }
+}
+
+
+.budget-pie-container {
+  .ct-series-b .ct-point,
+  .ct-series-b .ct-line,
+  .ct-series-b .ct-bar,
+  .ct-series-b .ct-slice-donut,
+  .ct-series-a .ct-pie {
+    stroke: #21c998 !important;
+  }
+  .ct-series-a .ct-point,
+  .ct-series-a .ct-line,
+  .ct-series-a .ct-bar,
+  .ct-series-a .ct-slice-donut,
+  .ct-series-a .ct-pie {
+    stroke: #ebebeb !important;
   }
 }

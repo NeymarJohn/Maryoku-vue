@@ -1,21 +1,40 @@
 <template>
     <div class="event_header-image-modal">
         <div class="md-layout">
-            <modal v-if="editHeaderModal">
+            <modal v-if="addBuildingBlockModal">
                 <template slot="header">
                     <div class="md-layout d-flex items-left" >
-                        <h4>Update Header
+                        <h4>Add Building Block
                         </h4>
                     </div>
                     <md-button class="md-simple md-just-icon md-round modal-default-button" @click="closeModal">
                         <md-icon>clear</md-icon>
                     </md-button>
                 </template>
-                <template slot="body" v-if="headerImages">
+                <template slot="body" v-if="categoryBuildingBlocks">
 
+                    <ul class="add-building-blocks-list text-left">
+                        <li v-for="(item,index) in categoryBuildingBlocks" :key="index" >
+                            <template v-if="!item.childComponents">
+                                <md-icon class="block-icon" :style="`background : ${item.color}; color : #fff;`">{{item.icon}}</md-icon> <span>{{item.value}}</span>
+                            </template>
+                            <template v-else-if="item.childComponents">
+                                <h4>{{item.value}}</h4>
+                                <template >
+                                    <ul class="child-components-list">
+                                        <li v-for="(item1,index1) in item.childComponents" :key="index1" >
+                                            <md-icon class="block-icon" :style="`background : ${item1.color}; color : #fff;`">{{item1.icon}}</md-icon> <span>{{item1.title}} </span>
+
+                                            <md-button class="md-success md-just-icon pull-right md-sm md-simple" @click="addBuildingBlock(item1)"><md-icon class="">add</md-icon></md-button>
+                                        </li>
+                                    </ul>
+                                </template>
+                            </template>
+                        </li>
+                    </ul>
                 </template>
                 <template slot="footer">
-                    <md-button class="md-success move-right" @click="saveHeaderImage">
+                    <md-button class="md-success move-right" >
                         Add
                     </md-button>
                 </template>
@@ -42,74 +61,52 @@
       Modal,
     },
     props: {
-      event : Object
-
+      event : Object,
+      categoryBuildingBlocks : Array
     },
     data: () => ({
       auth: auth,
-      headerImages : null,
-        selectedImage : null,
-        imagePreview : null
+
     }),
 
     created() {
-
-        this.getHeaderImages()
-
+        console.log(this.categoryBuildingBlocks);
     },
     mounted() {
 
+
     },
     methods: {
-        ...mapMutations('EventPlannerVuex', ['setHeaderModal']),
+        ...mapMutations('EventPlannerVuex', ['setBuildingBlockModal']),
         closeModal(){
-          this.setHeaderModal({ showModal: false });
+          this.setBuildingBlockModal({ showModal: false });
       },
-        getHeaderImages() {
+        addBuildingBlock(item){
 
-            new EventPageHeaderImage().get().then(headerImages => {
-                // iterate through header images
+            let new_block = {
+                componentId : item.id,
+                todos : "",
+                values : "",
+                vendors : ""
+            }
 
-                this.headerImages = headerImages;
-            });
-        },
-        saveHeaderImage() {
+            // Save event interaction
+            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
 
-            let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-            let editedEvent = new CalendarEvent({id: this.event.id});
+            new EventComponent(new_block).for(calendar, event).save().then(res => {
 
-            editedEvent = this.event;
-            editedEvent.eventPage.headerImage = this.selectedImage;
-
-
-
-            editedEvent.save().then(response => {
-                this.closeModal();
-
+                console.log('block saved successfully');
             })
-                .catch((error) => {
-                    console.log(error);
-
-                });
-
-        },
-        selectImage(selectedImage) {
-
-            this.selectedImage = selectedImage;
-
-        },
-        previewImage(selectedImage) {
-            this.imagePreview = selectedImage;
-
-        },
-        closePreviewModal() {
-            this.imagePreview = null;
+                .catch(error => {
+                    console.log('Error while saving ', error);
+                })
 
         }
     },
       computed : {
           ...mapState('EventPlannerVuex', [
-              'editHeaderModal',
+              'addBuildingBlockModal',
           ])
       }
   };
