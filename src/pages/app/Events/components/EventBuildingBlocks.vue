@@ -59,7 +59,7 @@
                 </div>
 
                 <!-- Add Block -->
-                <div class="md-layout-item md-size-50">
+                <div class="md-layout-item md-xlarge-size-30 md-large-size-33 md-small-size-40">
                     <md-card class="proposals-management_add-block">
                         <md-card-content>
                             <md-icon>add</md-icon>

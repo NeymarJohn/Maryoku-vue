@@ -277,6 +277,7 @@
               this.interactionsList[index].line2 = interaction.line2;
               this.interactionsList[index].line3 = interaction.line3;
               this.interactionsList[index].hashed_id = interaction.id;
+              this.interactionsList[index].templateImage = interaction.templateImage;
               this.interactionsList[index].enabled = interaction.enabled ? interaction.enabled : false;
               return true;
           } else {
