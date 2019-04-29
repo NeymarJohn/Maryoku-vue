@@ -102,7 +102,7 @@
                                         </h4>
                                     </div>
                                 </div>
-                                <div class="md-layout">
+                                <div class="md-layout" v-if="item.enabled">
                                     <div class="interaction-images md-layout-item md-size-100">
 
                                         <ul class="images-list">
@@ -115,7 +115,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="md-layout">
+                                <div class="md-layout" v-if="item.enabled">
                                     <div class="md-layout-item md-size-50 no-padding">
                                         <div class="send-date-field">
                                             <label class="md-form-label">
@@ -297,7 +297,7 @@
                 let new_interaction = {
                     title: item.title,
                     templateId: item.id,
-                    templateImage: this.selectedInteraction.templateImage,
+                    templateImage: this.selectedInteraction ? this.selectedInteraction.templateImage : '',
                     sendOnDate: null,
                     sendDaysBeforeEvent: 0,
                     event: {id: this.event.id},
@@ -319,8 +319,18 @@
             EnableDisableInteraction(item, status) {
                 // Edit event interaction
                 let interaction = new EventInteraction({id: item.hashed_id});
-
                 interaction.enabled = status;
+                interaction.templateId = item.id;
+                interaction.title = item.title;
+                interaction.templateImage = item.templateImage;
+                interaction.sendOnDate = this.getEventStartInMillis(item.sendOnDate);
+                interaction.sendDaysBeforeEvent = item.sendDaysBeforeEvent;
+                interaction.line1 = this.line1;
+                interaction.line2 = this.line2;
+                interaction.line3 = this.line3;
+                interaction.templateImage = this.selectedInteraction ? this.selectedInteraction.templateImage : '';
+                interaction.event = {id: this.event.id};
+
                 interaction.save().then(resp => {
 
                     this.$forceUpdate();

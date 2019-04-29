@@ -102,6 +102,7 @@
         <!-- ./Add Building Block Modal -->
     </div>
 
+
 </template>
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
@@ -171,7 +172,6 @@
             EventComponent.get()
                 .then(res=> {
                     this.$set(this,'categoryBuildingBlocks',res);
-                    console.log('categoryBuildingBlocks',res);
 
                 })
                 .catch(error => {
@@ -180,11 +180,33 @@
         },
         getBlockIcon(blockId) {
             let block = _.findWhere(this.categoryBuildingBlocks, {id: blockId});
-            return block.icon;
+            if ( block ) {
+                return block.icon;
+            } else {
+
+                let test = _.filter(this.categoryBuildingBlocks, function(value){
+                    if ( value.childComponents ) {
+                        block = _.findWhere(value.childComponents, {id: blockId});
+                        if ( block ) {
+                            return block.icon
+                        }
+                    }
+                });
+
+                console.log('item categoryBuildingBlocks ',test);
+
+                //block = _.findWhere(this.categoryBuildingBlocks.childComponents, {id: blockId});
+                return '';
+            }
         },
         getBlockTitle(blockId) {
             let block = _.findWhere(this.categoryBuildingBlocks, {id: blockId});
-            return block.value;
+            if ( block ) {
+                return block.value;
+            } else {
+                block = _.findWhere(this.categoryBuildingBlocks.childComponents, {id: blockId});
+                return '';
+            }
         },
         showAddBuildingBlocksModal() {
              this.setBuildingBlockModal({ showModal: true });
