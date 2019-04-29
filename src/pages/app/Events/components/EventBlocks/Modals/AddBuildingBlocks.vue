@@ -83,16 +83,17 @@
       },
         addBuildingBlock(item){
 
+          // Save event interaction
+          let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+          let event = new CalendarEvent({id: this.event.id});
+
             let new_block = {
                 componentId : item.id,
                 todos : "",
                 values : "",
-                vendors : ""
+                vendors : "",
+                calendarEvent: { id: event.id}
             }
-
-            // Save event interaction
-            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-            let event = new CalendarEvent({id: this.event.id});
 
             new EventComponent(new_block).for(calendar, event).save().then(res => {
 
