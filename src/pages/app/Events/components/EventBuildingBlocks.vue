@@ -16,9 +16,9 @@
                     <md-card class="proposals-management_item">
                         <md-card-header class="md-card-header-icon md-card-header-warning">
                             <div class="card-icon">
-                                <md-icon>{{getBlockIcon(block.componentId)}}</md-icon>
+                                <md-icon>{{block.icon}}</md-icon>
                             </div>
-                            <h4 class="title2">{{getBlockTitle(block.componentId)}}</h4>
+                            <h4 class="title2">{{block.componentId}}</h4>
                             <md-card-actions md-alignment="right" class="item-actions">
                                 <md-button name="event-planner-tab-budget-building-block-delete" class="md-button md-simple md-sm">
                                     <md-icon>delete_outline</md-icon>
@@ -171,6 +171,7 @@
         getCategoryBlocks() {
             EventComponent.get()
                 .then(res=> {
+                    console.log('getCategoryBlocks',res);
                     this.$set(this,'categoryBuildingBlocks',res);
 
                 })

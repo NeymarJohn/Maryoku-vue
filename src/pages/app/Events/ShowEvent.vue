@@ -17,9 +17,11 @@
               <h4>{{calendarEvent.occasion}}</h4>
 
               <div class="event-date">{{getEventDate(calendarEvent.eventStartMillis)}}</div>
-            </div>
 
-            <event-confirmation :event="calendarEvent"></event-confirmation>
+              <div class="number-of-users">
+                12 people are coming
+              </div>
+            </div>
 
             <event-tabs :event="calendarEvent" :readonly="readonly" v-if="!isMobile"></event-tabs>
 

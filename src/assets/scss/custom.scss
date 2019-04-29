@@ -641,9 +641,11 @@ $tooltip-border-color: $blue-grey-200 !default;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
+    position: relative;
   }
 
   .event-title-date {
+    position: relative;
 
     .md-input ,h4 {
       font-size: 40px;
@@ -668,6 +670,12 @@ $tooltip-border-color: $blue-grey-200 !default;
         font-weight: 400;
       }
     }
+
+    .number-of-users {
+      color : #3c4858;
+      margin-top: 1em;
+    }
+
   }
 
   .md-card-tabs {
@@ -912,17 +920,19 @@ $tooltip-border-color: $blue-grey-200 !default;
 }
 
 .event-confirmation {
-  .number-of-users {
-    color : #3c4858;
-  }
+
+  position : absolute;
+  bottom : 1em;
+  left : 1em;
+  background: rgba(255, 255, 255, 0.8);
+  padding : 1em 1em 0.6em;
+  border-radius: 3px;
+
   .confirmation-section {
     h4 {
         display : inline-block;
-        margin-right : 0.5em;
-    }
-
-    .md-button {
-      margin-top: 2em;
+        margin :0 0.5em 0 0;
+        line-height: 2;
     }
   }
 }
@@ -1486,24 +1496,14 @@ iframe{
         }
       }
       .event-confirmation {
-        position : relative;
-
-        .number-of-users {
-          position : absolute;
-          right : 0;
-          top : -2em;
-        }
         .confirmation-section {
-          h4 {
-            font-size: 1.5rem;
-          }
 
           .md-button {
             min-width: 1px;
             .md-ripple {
               padding: 0.5em 0.8em !important;
-              font-size: 18px;
-              width: 70px;
+              font-size: 13px;
+              width: 65px;
             }
           }
         }

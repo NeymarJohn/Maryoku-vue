@@ -16,14 +16,21 @@
                     <ul class="add-building-blocks-list text-left">
                         <li v-for="(item,index) in categoryBuildingBlocks" :key="index" >
                             <template v-if="!item.childComponents">
-                                <md-icon class="block-icon" :style="`background : ${item.color}; color : #fff;`">{{item.icon}}</md-icon> <span>{{item.value}}</span>
+                                <md-button :class="`md-${item.color} md-sm md-just-icon`">
+                                    <md-icon >{{item.icon}}</md-icon>
+                                </md-button>
+                                <span>{{item.value}}</span>
                             </template>
                             <template v-else-if="item.childComponents">
                                 <h4>{{item.value}}</h4>
                                 <template >
                                     <ul class="child-components-list">
                                         <li v-for="(item1,index1) in item.childComponents" :key="index1" >
-                                            <md-icon class="block-icon" :style="`background : ${item1.color}; color : #fff;`">{{item1.icon}}</md-icon> <span>{{item1.title}} </span>
+
+                                            <md-button :class="`md-${item1.color} md-sm md-just-icon`">
+                                                <md-icon>{{item1.icon}}</md-icon>
+                                            </md-button>
+                                            <span>{{item1.title}} </span>
 
                                             <md-button class="md-success md-just-icon pull-right md-sm md-simple" @click="addBuildingBlock(item1)"><md-icon class="">add</md-icon></md-button>
                                         </li>

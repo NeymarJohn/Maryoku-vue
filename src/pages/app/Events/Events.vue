@@ -222,7 +222,13 @@
       },
       refreshEvents() {
         this.getCalendarEvents();
-      }
+      },
+        routeToNewEvent() {
+            //this.$router.push({ path: `/events` , name  : 'Events', params : { mode : 'create-event'} });
+            this.setEventModal({ showModal: true });
+            this.setModalSubmitTitle("Save");
+            this.setEditMode({ editMode: false });
+        },
     },
     filters: {
       moment: function (date) {

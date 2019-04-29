@@ -7,6 +7,8 @@
             <input type="file" style="display: none;" ref="inputFile" accept="image/gif, image/jpg, image/png" @change="onFilePicked">
         </div>
 
+        <event-confirmation :event="event" v-if="readonly"></event-confirmation>
+
         <edit-header-image  v-if="!readonly" :event="event" rel="editHeaderModal"></edit-header-image>
     </div>
 </template>
@@ -18,11 +20,14 @@
   import auth from '@/auth';
 
   import EditHeaderImage from './Modals/EditHeaderImage.vue';
+  import EventConfirmation from "./EventConfirmation.vue";
+
 
   export default {
     name: 'event-banner',
     components: {
-        EditHeaderImage
+        EditHeaderImage,
+        EventConfirmation
     },
     props: {
         event,

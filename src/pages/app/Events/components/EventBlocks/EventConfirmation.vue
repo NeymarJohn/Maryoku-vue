@@ -1,9 +1,5 @@
 <template>
     <div class="event-confirmation">
-        <div class="number-of-users">
-            12 people are coming
-        </div>
-
         <div class="confirmation-section">
             <h4>Are you coming?</h4>
             <md-button class="md-info md-sm">
