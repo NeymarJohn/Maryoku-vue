@@ -259,6 +259,10 @@
       this.getEvent();
       if (this.components.length === 0) {
         this.$store.dispatch("event/getComponents");
+        this.$store.dispatch("event/getCategories", this.auth.user.defaultCalendarId);
+        this.$store.dispatch("event/getEventTypes", this.auth.user.defaultCalendarId);
+        this.$store.dispatch("event/getCurrencies");
+        this.$store.dispatch("event/getEventThemes");
       }
     },
     methods: {
