@@ -119,6 +119,10 @@
     mounted() {
       this.auth.currentUser(this, true, function() {
         this.$store.dispatch("user/getUserFromApi");
+        this.$store.dispatch("event/getCategories", this.auth.user.defaultCalendarId);
+        this.$store.dispatch("event/getEventTypes", this.auth.user.defaultCalendarId);
+        this.$store.dispatch("event/getCurrencies");
+        this.$store.dispatch("event/getEventThemes");
       }.bind(this))
 
         if ( this.$route.params.mode && this.$route.params.mode == 'create-event') {

@@ -64,7 +64,9 @@
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import Calendar from "@/models/Calendar"
+  import CalendarEvent from "@/models/CalendarEvent"
   import EventComponent from "@/models/EventComponent";
+  import EventComponentValue from "@/models/EventComponentValue";
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
   import ManageProposals from './EventBlocks/ManageProposals.vue';
@@ -113,7 +115,13 @@
 
     },
     created() {
-      
+      let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+      let event = new CalendarEvent({id: this.event.id});
+      let selected_block = new EventComponent({id : block.id});
+
+      new EventComponentValue().for(calendar, event, selected_block).get().then(values => {
+
+      });
     },
     mounted() {
         this.isLoading = false;
@@ -169,7 +177,7 @@
             &:active i,
             &:active:focus,
             &:active:focus i,
-            &:active:hover{  
+            &:active:hover{
               color:#3c4858!important;
             }
             .caret{
@@ -192,7 +200,7 @@
                         padding: 13px;
                         width: 100%;
                         text-align: left;
-                        background-color: rgba($color: #000000, $alpha: 0.05)!important;    
+                        background-color: rgba($color: #000000, $alpha: 0.05)!important;
                         &.selected{
                             background-color: #ffd966!important;
                         }
@@ -209,7 +217,7 @@
             margin: 0;
             padding: 0;
             margin-right: 5%;
-            overflow: hidden; 
+            overflow: hidden;
             box-shadow:none;
             -webkit-box-shadow:none;
             min-width: 230px;
