@@ -64,9 +64,7 @@
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import Calendar from "@/models/Calendar"
-  import CalendarEvent from "@/models/CalendarEvent"
   import EventComponent from "@/models/EventComponent";
-  import EventComponentValue from "@/models/EventComponentValue";
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
   import ManageProposals from './EventBlocks/ManageProposals.vue';
@@ -115,13 +113,7 @@
 
     },
     created() {
-      let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-      let event = new CalendarEvent({id: this.event.id});
-      let selected_block = new EventComponent({id : block.id});
 
-      new EventComponentValue().for(calendar, event, selected_block).get().then(values => {
-
-      });
     },
     mounted() {
         this.isLoading = false;
