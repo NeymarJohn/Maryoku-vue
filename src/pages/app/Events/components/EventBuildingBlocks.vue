@@ -14,17 +14,16 @@
 
                 <div v-for="(block,index) in buildingBlocksList" v-if="!block.childComponents" :key="block.id" class="md-layout-item md-xlarge-size-30 md-large-size-33 md-small-size-40">
                     <md-card class="proposals-management_item">
-                        <md-card-header class="md-card-header-icon md-card-header-warning">
+                        <md-card-header :class="`md-card-header-icon md-card-header-${block.color}`">
                             <div class="card-icon">
                                 <md-icon>{{block.icon}}</md-icon>
                             </div>
                             <h4 class="title2">{{block.componentId}}</h4>
                             <md-card-actions md-alignment="right" class="item-actions">
-                                <md-button name="event-planner-tab-budget-building-block-delete" class="md-button md-simple md-sm">
+                                <md-button name="event-planner-tab-budget-building-block-delete" class="md-button md-simple md-sm" @click="deleteBlock(block.id)">
                                     <md-icon>delete_outline</md-icon>
                                 </md-button>
                             </md-card-actions>
-
                         </md-card-header>
 
                         <md-card-content>
@@ -36,23 +35,23 @@
                                             <md-button name="event-planner-tab-budget-building-block-allocated-budget-edit" class="md-button md-simple md-sm edit-block" @click="editBudget(index)">
                                                 <md-icon>edit</md-icon>
                                             </md-button>
-                                            <span>{{block.budget ? '$' + block.budget : '$0.0'}}</span>
+                                            <span>{{block.calendarEvent.allocatedBudget ? '$' + block.calendarEvent.allocatedBudget : '$0.0'}}</span>
                                         </div>
                                     </li>
                                 </ul>
                                 <div class="item-info-form md-layout" v-if="block.edit">
                                     <md-field class="md-layout-item md-size-70">
-                                        <md-input type="number" placeholder="Example : $1400" v-model="block.budget"></md-input>
+                                        <md-input type="number" placeholder="Example : $1400" v-model="block.calendarEvent.allocatedBudget"></md-input>
                                     </md-field>
                                     <div class="md-layout-item md-size-30 ">
-                                        <md-button name="event-planner-tab-budget-building-block-set-budget" class="md-info md-sm" @click="setBudget(block.budget,index)">Set Budget</md-button>
+                                        <md-button name="event-planner-tab-budget-building-block-set-budget" class="md-info md-sm" @click="setBudget(block,index)">Set Budget</md-button>
                                     </div>
                                 </div>
                             </div>
                         </md-card-content>
 
                         <md-card-actions md-alignment="right" v-if="!block.edit">
-                            <md-button name="event-planner-tab-budget-building-block-create-inquiry" class="md-success md-sm" @click="selectBlock(block.id)">Create Inquiry</md-button>
+                            <md-button name="event-planner-tab-budget-building-block-create-inquiry" class="md-success md-sm" @click="selectBlock(block)">Create Inquiry</md-button>
                         </md-card-actions>
                     </md-card>
 
@@ -93,12 +92,12 @@
             </div>
         </div>
         <div class="md-layout-item md-size-100" v-else>
-            <event-blocks :event="event" :event-components="eventComponents" @go-to-building-blocks="resetSelectedBlock"></event-blocks>
+            <event-blocks :event="event" :event-components="eventComponents" :selectedBlock="selectedBlock" @go-to-building-blocks="resetSelectedBlock"></event-blocks>
         </div>
 
 
         <!-- Add Building Block Modal -->
-        <add-building-block-modal :event="event" :categoryBuildingBlocks="categoryBuildingBlocks" rel="addBuildingBlockModal"></add-building-block-modal>
+        <add-building-block-modal :event="event" :categoryBuildingBlocks="categoryBuildingBlocks" rel="addBuildingBlockModal" @BlockAdded="getEventBuildingBlocks()"></add-building-block-modal>
         <!-- ./Add Building Block Modal -->
     </div>
 
@@ -106,6 +105,7 @@
 </template>
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import swal from "sweetalert2";
   import Calendar from "@/models/Calendar";
   import CalendarEvent from "@/models/CalendarEvent"
   import EventComponent from "@/models/EventComponent";
@@ -139,8 +139,8 @@
         ...mapMutations("EventPlannerVuex", [
             "setBuildingBlockModal"
         ]),
-        selectBlock(blockId) {
-            this.$set(this,'selectedBlock',blockId);
+        selectBlock(block) {
+            this.$set(this,'selectedBlock',block);
         },
         resetSelectedBlock(){
             this.$set(this,'selectedBlock',null);
@@ -151,8 +151,68 @@
             this.$forceUpdate();
 
         },
-        setBudget(budget,index){
+        setBudget(block,index){
+
             this.editBudget(index);
+
+            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+            let selected_block = new EventComponent({id : block.id});
+
+            selected_block.calendarEvent = block.calendarEvent;
+            selected_block.componentId = block.componentId;
+            selected_block.icon = block.icon;
+            selected_block.color = block.color;
+            selected_block.todos = block.todos;
+            selected_block.values = block.values;
+            selected_block.vendors = block.vendors;
+
+            selected_block.for(calendar,event).save().then(resp => {
+
+                console.log('budget saved successfully');
+
+                this.$notify(
+                    {
+                        message: 'Budget modified successfully!',
+                        horizontalAlign: 'center',
+                        verticalAlign: 'top',
+                        type: 'success'
+                    })
+
+                this.$forceUpdate();
+            })
+                .catch(error => {
+                    console.log(error);
+                })
+
+        },
+        deleteBlock(blockId){
+
+            swal({
+                title: "Are you sure?",
+                text: `You won't be able to revert this!`,
+                showCancelButton: true,
+                confirmButtonClass: "md-button md-success",
+                cancelButtonClass: "md-button md-danger",
+                confirmButtonText: "Yes, delete it!",
+                buttonsStyling: false
+            }).then(result => {
+                if (result.value) {
+
+                    let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                    let event = new CalendarEvent({id: this.event.id});
+                    let selected_block = new EventComponent({id : blockId});
+
+                    selected_block.for(calendar,event).delete().then(resp => {
+                        this.getEventBuildingBlocks()();
+                        this.$forceUpdate();
+                    })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                }
+            });
+
         },
         getEventBuildingBlocks() {
 
@@ -178,36 +238,6 @@
                 .catch(error => {
                     console.log('Error ', error);
                 })
-        },
-        getBlockIcon(blockId) {
-            let block = _.findWhere(this.categoryBuildingBlocks, {id: blockId});
-            if ( block ) {
-                return block.icon;
-            } else {
-
-                let test = _.filter(this.categoryBuildingBlocks, function(value){
-                    if ( value.childComponents ) {
-                        block = _.findWhere(value.childComponents, {id: blockId});
-                        if ( block ) {
-                            return block.icon
-                        }
-                    }
-                });
-
-                console.log('item categoryBuildingBlocks ',test);
-
-                //block = _.findWhere(this.categoryBuildingBlocks.childComponents, {id: blockId});
-                return '';
-            }
-        },
-        getBlockTitle(blockId) {
-            let block = _.findWhere(this.categoryBuildingBlocks, {id: blockId});
-            if ( block ) {
-                return block.value;
-            } else {
-                block = _.findWhere(this.categoryBuildingBlocks.childComponents, {id: blockId});
-                return '';
-            }
         },
         showAddBuildingBlocksModal() {
              this.setBuildingBlockModal({ showModal: true });

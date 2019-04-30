@@ -12,11 +12,11 @@
 
            <div class="md-layout-item md-size-40">
                <md-card >
-                   <md-card-header class="md-card-header-icon md-card-header-rose">
+                   <md-card-header :class="`md-card-header-icon md-card-header-${selectedBlock.color}`">
                        <div class="card-icon">
-                           <md-icon>mail_outline</md-icon>
+                           <md-icon>{{selectedBlock.icon}}</md-icon>
                        </div>
-                       <h4 class="title2">Catering</h4>
+                       <h4 class="title2" style="text-transform: capitalize;">{{selectedBlock.componentId}}</h4>
                    </md-card-header>
 
                    <md-card-content class="md-layout blocks-list">
@@ -56,7 +56,7 @@
            </div>
 
            <div class="md-layout-item md-size-60">
-                <manage-proposals></manage-proposals>
+                <manage-proposals :selectedBlock="selectedBlock"></manage-proposals>
            </div>
 
       </div>
@@ -76,7 +76,7 @@
         ManageProposals
     },
     props: {
-
+        selectedBlock : Object
     },
     data: () => ({
         auth: auth,

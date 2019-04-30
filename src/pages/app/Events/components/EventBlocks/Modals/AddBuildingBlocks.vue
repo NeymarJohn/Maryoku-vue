@@ -20,6 +20,9 @@
                                     <md-icon >{{item.icon}}</md-icon>
                                 </md-button>
                                 <span>{{item.value}}</span>
+
+                                <md-button class="md-success md-just-icon pull-right md-sm md-simple" @click="addBuildingBlock(item)"><md-icon class="">add</md-icon></md-button>
+
                             </template>
                             <template v-else-if="item.childComponents">
                                 <h4>{{item.value}}</h4>
@@ -105,6 +108,9 @@
             new EventComponent(new_block).for(calendar, event).save().then(res => {
 
                 console.log('block saved successfully');
+                this.setBuildingBlockModal({ showModal: false });
+                this.$emit("BlockAdded", res);
+
             })
                 .catch(error => {
                     console.log('Error while saving ', error);
