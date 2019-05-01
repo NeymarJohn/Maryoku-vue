@@ -1,5 +1,6 @@
 <template>
     <div class="md-layout">
+        <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
         <div v-if="!selectedBlock" class="proposals-management" >
             <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
             <md-card-content class="md-layout proposals-management_items" v-if="categoryBuildingBlocks.length">
@@ -151,34 +152,6 @@
             this.$forceUpdate();
 
         },
-        deleteBlock(blockId){
-
-            swal({
-                title: "Are you sure?",
-                text: `You won't be able to revert this!`,
-                showCancelButton: true,
-                confirmButtonClass: "md-button md-success",
-                cancelButtonClass: "md-button md-danger",
-                confirmButtonText: "Yes, delete it!",
-                buttonsStyling: false
-            }).then(result => {
-                if (result.value) {
-
-                    let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-                    let event = new CalendarEvent({id: this.event.id});
-                    let selected_block = new EventComponent({id : blockId});
-
-                    selected_block.for(calendar,event).delete().then(resp => {
-                        this.getEventBuildingBlocks()();
-                        this.$forceUpdate();
-                    })
-                        .catch(error => {
-                            console.log(error);
-                        })
-                }
-            });
-
-        },
         setBudget(block,index){
 
             this.editBudget(index);
@@ -212,6 +185,34 @@
                 .catch(error => {
                     console.log(error);
                 })
+
+        },
+        deleteBlock(blockId){
+
+            swal({
+                title: "Are you sure?",
+                text: `You won't be able to revert this!`,
+                showCancelButton: true,
+                confirmButtonClass: "md-button md-success",
+                cancelButtonClass: "md-button md-danger",
+                confirmButtonText: "Yes, delete it!",
+                buttonsStyling: false
+            }).then(result => {
+                if (result.value) {
+
+                    let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                    let event = new CalendarEvent({id: this.event.id});
+                    let selected_block = new EventComponent({id : blockId});
+
+                    selected_block.for(calendar,event).delete().then(resp => {
+                        this.getEventBuildingBlocks();
+                        this.$forceUpdate();
+                    })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                }
+            });
 
         },
         getEventBuildingBlocks() {

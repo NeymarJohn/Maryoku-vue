@@ -1,5 +1,6 @@
 <template>
     <div class="invitees-management">
+        <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
         <md-button name="event-planner-tab-invitees-management-create-timeline" class="md-info"
                    @click="goToComponent('/edit/timeline')">
             Create Timeline
@@ -231,6 +232,7 @@
                 this.line3 = item.line3;
             },
             editInteraction(item) {
+                this.isLoading = true;
 
                 // Edit event interaction
                 let interaction = new EventInteraction({id: item.hashed_id});
@@ -248,6 +250,9 @@
 
                 interaction.save()
                     .then(resp => {
+
+                        this.isLoading = false;
+
                         this.$notify(
                             {
                                 message: 'Changes saved successfully',
@@ -293,6 +298,7 @@
                 }
             },
             saveInteraction(item) {
+                this.isLoading = true;
 
                 let new_interaction = {
                     title: item.title,
@@ -310,7 +316,8 @@
 
                 new EventInteraction(new_interaction).for(calendar, event).save().then(res => {
 
-                    console.log('interaction saved successfully');
+                    this.isLoading = false;
+
                 })
                     .catch(error => {
                         console.log('Error while saving ', error);
@@ -318,6 +325,8 @@
             },
             EnableDisableInteraction(item, status) {
                 // Edit event interaction
+                this.isLoading = true;
+
                 let interaction = new EventInteraction({id: item.hashed_id});
                 interaction.enabled = status;
                 interaction.templateId = item.id;
@@ -332,11 +341,12 @@
                 interaction.event = {id: this.event.id};
 
                 interaction.save().then(resp => {
-
+                    this.isLoading = false;
                     this.$forceUpdate();
                 })
                     .catch(error => {
                         console.log(error);
+
                     })
             }
 
@@ -344,6 +354,8 @@
         created() {
         },
         mounted() {
+            this.isLoading = false;
+
             let _self = this;
             let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
             let event = new CalendarEvent({id: this.event.id});

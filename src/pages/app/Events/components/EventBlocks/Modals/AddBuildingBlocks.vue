@@ -80,7 +80,7 @@
     }),
 
     created() {
-        console.log(this.categoryBuildingBlocks);
+
     },
     mounted() {
 
@@ -106,8 +106,6 @@
             }
 
             new EventComponent(new_block).for(calendar, event).save().then(res => {
-
-                console.log('block saved successfully');
                 this.setBuildingBlockModal({ showModal: false });
                 this.$emit("BlockAdded", res);
 

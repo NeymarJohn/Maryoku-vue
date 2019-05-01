@@ -26,7 +26,7 @@
                                <md-field >
                                    <label>Requirement Description</label>
                                    <md-input
-                                           v-model="block.req_desc"
+                                           v-model="block.title"
                                            type="text"
                                    ></md-input>
                                </md-field>
@@ -36,20 +36,21 @@
                                <md-field >
                                    <label >Priority</label>
                                    <md-select v-model="block.priority" name="select">
-                                       <md-option v-for="(option, index) in prioritisList"  :key="index"  :value="option.value">{{ option.value }}</md-option>
+                                       <md-option v-for="(option, index) in prioritiesList"  :key="index"  :value="option.value">{{ option.value }}</md-option>
                                    </md-select>
                                </md-field>
                            </div>
 
                            <div class="md-layout-item md-size-50 block-actions">
-                               <md-button  class="md-info md-sm"  >Edit</md-button>
+                               <md-button  class="md-info md-sm"  @click="editValue(block)">Edit</md-button>
+                               <md-button  class="md-danger md-sm"  @click="deleteValue(block.id)">Delete</md-button>
                            </div>
                        </div>
 
                    </md-card-content>
 
                    <md-card-actions md-alignment="right">
-                       <md-button class="md-info"  @click="addBlock">Add Field</md-button>
+                       <md-button class="md-info"  @click="addNewValue">Add Field</md-button>
                        <md-button class="md-info" >Save</md-button>
                    </md-card-actions>
                </md-card>
@@ -64,10 +65,13 @@
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import Calendar from "@/models/Calendar"
+  import CalendarEvent from "@/models/CalendarEvent";
   import EventComponent from "@/models/EventComponent";
+  import EventComponentValue from "@/models/EventComponentValue";
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
   import ManageProposals from './EventBlocks/ManageProposals.vue';
+  import swal from "sweetalert2";
 
   export default {
     name: 'event-blocks',
@@ -76,18 +80,14 @@
         ManageProposals
     },
     props: {
-        selectedBlock : Object
+        selectedBlock : Object,
+        event : Object
     },
     data: () => ({
         auth: auth,
         isLoading:true,
-        eventBlocks : [
-            {
-                req_desc: "Set-up, service and clean up",
-                priority : "Preferred"
-            }
-        ],
-        prioritisList : [
+        eventBlocks : [],
+        prioritiesList : [
             {
                 label : 'Preferred',
                 value : 'Preferred'
@@ -95,28 +95,106 @@
             {
                 label : 'Nice to have',
                 value : 'Nice to have'
+            },
+            {
+                label : 'Must have',
+                value : 'Must have'
             }
         ]
     }),
     methods: {
-
-        addBlock(){
-            this.eventBlocks.push({
-                req_desc: "",
-                priority : ""
-            })
-        },
         goBack() {
             this.$emit('go-to-building-blocks',{})
+        },
+        getBuildingBlockValues(){
+            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+            let selected_block = new EventComponent({id : this.selectedBlock.id});
+
+            new EventComponentValue().for(calendar, event, selected_block).get().then(values => {
+                this.eventBlocks = values;
+            });
+        },
+        addNewValue(){
+
+            this.$parent.isLoading = true;
+
+            let new_value = {
+                eventComponent: { id: this.selectedBlock.id }
+            }
+
+            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+            let selected_block = new EventComponent({id : this.selectedBlock.id});
+
+            new EventComponentValue(new_value).for(calendar, event, selected_block).save().then(res => {
+
+                this.$parent.isLoading = false;
+                this.getBuildingBlockValues();
+            });
+        },
+        deleteValue(valueId){
+            swal({
+                title: "Are you sure?",
+                text: `You won't be able to revert this!`,
+                showCancelButton: true,
+                confirmButtonClass: "md-button md-success",
+                cancelButtonClass: "md-button md-danger",
+                confirmButtonText: "Yes, delete it!",
+                buttonsStyling: false
+            }).then(result => {
+                if (result.value) {
+
+                    this.$parent.isLoading = true;
+                    let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                    let event = new CalendarEvent({id: this.event.id});
+                    let selected_block = new EventComponent({id : this.selectedBlock.id});
+
+                    let value = new EventComponentValue({id : valueId});
+
+                    value.for(calendar,event,selected_block).delete().then(resp => {
+                        this.getBuildingBlockValues();
+                        this.$parent.isLoading = false;
+                        this.$forceUpdate();
+                    })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                }
+            });
+
+        },
+        editValue(item){
+
+            this.$parent.isLoading = true;
+
+            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+            let selected_block = new EventComponent({id : this.selectedBlock.id});
+            let value = new EventComponentValue({id : item.id});
+
+            value.title = item.title;
+            value.priority = item.priority;
+
+            value.for(calendar,event,selected_block).save().then(resp => {
+                this.$parent.isLoading = false;
+            })
+                .catch(error => {
+                    console.log(error);
+                    this.$parent.isLoading = false;
+
+                })
         }
 
 
     },
     created() {
-
+      
     },
     mounted() {
         this.isLoading = false;
+        this.getBuildingBlockValues();
+
     },
     computed: {
 
@@ -169,7 +247,7 @@
             &:active i,
             &:active:focus,
             &:active:focus i,
-            &:active:hover{
+            &:active:hover{  
               color:#3c4858!important;
             }
             .caret{
@@ -192,7 +270,7 @@
                         padding: 13px;
                         width: 100%;
                         text-align: left;
-                        background-color: rgba($color: #000000, $alpha: 0.05)!important;
+                        background-color: rgba($color: #000000, $alpha: 0.05)!important;    
                         &.selected{
                             background-color: #ffd966!important;
                         }
@@ -209,7 +287,7 @@
             margin: 0;
             padding: 0;
             margin-right: 5%;
-            overflow: hidden;
+            overflow: hidden; 
             box-shadow:none;
             -webkit-box-shadow:none;
             min-width: 230px;
