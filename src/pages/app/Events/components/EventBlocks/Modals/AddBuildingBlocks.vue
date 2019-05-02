@@ -97,6 +97,9 @@
           let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
           let event = new CalendarEvent({id: this.event.id});
 
+            this.$parent.isLoading = true;
+
+
             let new_block = {
                 componentId : item.id,
                 todos : "",
@@ -106,8 +109,11 @@
             }
 
             new EventComponent(new_block).for(calendar, event).save().then(res => {
+                this.$parent.isLoading = false;
+
                 this.setBuildingBlockModal({ showModal: false });
                 this.$emit("BlockAdded", res);
+
 
             })
                 .catch(error => {

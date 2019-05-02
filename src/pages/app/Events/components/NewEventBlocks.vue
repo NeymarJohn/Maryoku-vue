@@ -189,7 +189,7 @@
 
     },
     created() {
-      
+
     },
     mounted() {
         this.isLoading = false;
@@ -247,7 +247,7 @@
             &:active i,
             &:active:focus,
             &:active:focus i,
-            &:active:hover{  
+            &:active:hover{
               color:#3c4858!important;
             }
             .caret{
@@ -270,7 +270,7 @@
                         padding: 13px;
                         width: 100%;
                         text-align: left;
-                        background-color: rgba($color: #000000, $alpha: 0.05)!important;    
+                        background-color: rgba($color: #000000, $alpha: 0.05)!important;
                         &.selected{
                             background-color: #ffd966!important;
                         }
@@ -287,7 +287,7 @@
             margin: 0;
             padding: 0;
             margin-right: 5%;
-            overflow: hidden; 
+            overflow: hidden;
             box-shadow:none;
             -webkit-box-shadow:none;
             min-width: 230px;

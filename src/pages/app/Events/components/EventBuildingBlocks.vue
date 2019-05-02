@@ -2,7 +2,6 @@
     <div class="md-layout">
         <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
         <div v-if="!selectedBlock" class="proposals-management" >
-            <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
             <md-card-content class="md-layout proposals-management_items" v-if="categoryBuildingBlocks.length">
 
                 <div class="md-layout-item md-size-100">
@@ -36,13 +35,13 @@
                                             <md-button name="event-planner-tab-budget-building-block-allocated-budget-edit" class="md-button md-simple md-sm edit-block" @click="editBudget(index)">
                                                 <md-icon>edit</md-icon>
                                             </md-button>
-                                            <span>{{block.calendarEvent.allocatedBudget ? '$' + block.calendarEvent.allocatedBudget : '$0.0'}}</span>
+                                            <span>{{block.allocatedBudget ? '$' + block.allocatedBudget : '$0.0'}}</span>
                                         </div>
                                     </li>
                                 </ul>
                                 <div class="item-info-form md-layout" v-if="block.edit">
                                     <md-field class="md-layout-item md-size-70">
-                                        <md-input type="number" placeholder="Example : $1400" v-model="block.calendarEvent.allocatedBudget"></md-input>
+                                        <md-input type="number" placeholder="Example : $1400" v-model="block.allocatedBudget"></md-input>
                                     </md-field>
                                     <div class="md-layout-item md-size-30 ">
                                         <md-button name="event-planner-tab-budget-building-block-set-budget" class="md-info md-sm" @click="setBudget(block,index)">Set Budget</md-button>
@@ -152,9 +151,40 @@
             this.$forceUpdate();
 
         },
+        deleteBlock(blockId){
+
+            swal({
+                title: "Are you sure?",
+                text: `You won't be able to revert this!`,
+                showCancelButton: true,
+                confirmButtonClass: "md-button md-success",
+                cancelButtonClass: "md-button md-danger",
+                confirmButtonText: "Yes, delete it!",
+                buttonsStyling: false
+            }).then(result => {
+                if (result.value) {
+                    this.isLoading = true;
+
+                    let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                    let event = new CalendarEvent({id: this.event.id});
+                    let selected_block = new EventComponent({id : blockId});
+
+                    selected_block.for(calendar,event).delete().then(resp => {
+                        this.isLoading = false;
+                        this.getEventBuildingBlocks();
+                        this.$forceUpdate();
+                    })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                }
+            });
+
+        },
         setBudget(block,index){
 
             this.editBudget(index);
+            this.isLoading = true;
 
             let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
             let event = new CalendarEvent({id: this.event.id});
@@ -167,11 +197,11 @@
             selected_block.todos = block.todos;
             selected_block.values = block.values;
             selected_block.vendors = block.vendors;
+            selected_block.allocatedBudget = block.allocatedBudget;
 
             selected_block.for(calendar,event).save().then(resp => {
 
-                console.log('budget saved successfully');
-
+                this.isLoading = false;
                 this.$notify(
                     {
                         message: 'Budget modified successfully!',
@@ -185,34 +215,6 @@
                 .catch(error => {
                     console.log(error);
                 })
-
-        },
-        deleteBlock(blockId){
-
-            swal({
-                title: "Are you sure?",
-                text: `You won't be able to revert this!`,
-                showCancelButton: true,
-                confirmButtonClass: "md-button md-success",
-                cancelButtonClass: "md-button md-danger",
-                confirmButtonText: "Yes, delete it!",
-                buttonsStyling: false
-            }).then(result => {
-                if (result.value) {
-
-                    let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-                    let event = new CalendarEvent({id: this.event.id});
-                    let selected_block = new EventComponent({id : blockId});
-
-                    selected_block.for(calendar,event).delete().then(resp => {
-                        this.getEventBuildingBlocks();
-                        this.$forceUpdate();
-                    })
-                        .catch(error => {
-                            console.log(error);
-                        })
-                }
-            });
 
         },
         getEventBuildingBlocks() {
