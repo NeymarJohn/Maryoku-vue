@@ -67,6 +67,10 @@
       </md-card>
     </div>
 
+    <!-- Sign up Modal -->
+    <sign-up-modal v-if="calendarEvent" :event="calendarEvent"></sign-up-modal>
+    <!-- ./Sign up Modal -->
+
   </div>
 </template>
 
@@ -94,6 +98,7 @@
     import EventQuestionsAnswers from "./components/EventBlocks/EventQuestionsAnswers.vue"
     import EventTimeLineItems from "./components/EventBlocks/EventTimelineItems.vue"
     import EventConfirmation from "./components/EventBlocks/EventConfirmation.vue"
+    import SignUpModal from "./components/EventBlocks/Modals/SignUp.vue";
 
 
     export default {
@@ -109,7 +114,8 @@
             EventImages,
             EventQuestionsAnswers,
             EventTimeLineItems,
-            EventConfirmation
+            EventConfirmation,
+            SignUpModal
         },
 
         data() {
@@ -134,10 +140,11 @@
                 "setEventPageData",
                 "setEventPageProperty",
                 "setPublishEventModal",
+                "setSignUpModal"
             ]),
             getEvent() {
               new CalendarEvent().find(this.$route.params.id).then(event => {
-                console.log(JSON.stringify({id: event.calendar.id}));
+
                 this.calendarEvent = event.for(new Calendar({id: event.calendar.id}));
                 this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
                 this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
@@ -164,7 +171,6 @@
                 editedEvent.eventPage = this.eventPage;
 
                 editedEvent.save().then(response => {
-                    console.log(response);
 
                 })
                     .catch((error) => {

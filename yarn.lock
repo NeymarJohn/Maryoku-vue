@@ -8435,11 +8435,6 @@ promise-inflight@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
 
-promise-polyfill@^8.1.0:
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.1.0.tgz#30059da54d1358ce905ac581f287e184aedf995d"
-  integrity sha512-OzSf6gcCUQ01byV4BgwyUCswlaQQ6gzXc23aLQWhicvfX9kfsUiUhgt3CCQej8jDnl8/PhGF31JdHX2/MzF3WA==
-
 proto-list@~1.2.1:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/proto-list/-/proto-list-1.2.4.tgz#212d5bfe1318306a420f6402b8e26ff39647a849"
@@ -10492,13 +10487,6 @@ vue-template-compiler@2.5.17:
 vue-template-es2015-compiler@^1.5.3, vue-template-es2015-compiler@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.6.0.tgz#dc42697133302ce3017524356a6c61b7b69b4a18"
-
-vue2-slideout-panel@^2.2.3:
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/vue2-slideout-panel/-/vue2-slideout-panel-2.2.3.tgz#e01a8c1483da7b02ce11e1ec7782df055cc9ccf8"
-  integrity sha512-pTS793kE050C6iTdNXAinVTniMRf3PFxqQ/qhPe42NFPnEouBxIZoX4N4BQk2TG9i181jwjz6QuXskAAbmb8pA==
-  dependencies:
-    promise-polyfill "^8.1.0"
 
 vue2-transitions@^0.2.3:
   version "0.2.3"
