@@ -124,23 +124,13 @@
       openMyProfile(){
         const panelInstance = this.$showPanel({
           component : UserProfile,
-          cssClass: 'w25 transition36',
+          cssClass: 'md-layout-item md-size-75 transition36',
           openOn: 'right',
           props: {
 
           }
         });
         window.currentPanel = panelInstance;
-        setTimeout(()=>{
-          const panelInstance2 = this.$showPanel({
-            component : DietaryConstraints,
-            cssClass: 'w25',
-            openOn: 'right',
-            props: {
-
-            }
-          });
-        }, 5000);
       },
       toggleSidebar() {
         this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
