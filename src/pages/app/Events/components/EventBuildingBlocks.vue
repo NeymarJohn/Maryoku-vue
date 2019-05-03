@@ -144,7 +144,7 @@
 
         const panelInstance = this.$showPanel({
           component : EventBlocks,
-          cssClass: 'w75 transition36',
+          cssClass: 'md-layout-item md-size-75 transition36',
           openOn: 'right',
           props: {
             event: this.event,
