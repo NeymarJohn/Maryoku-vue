@@ -7,7 +7,7 @@
             <input type="file" style="display: none;" ref="inputFile" accept="image/gif, image/jpg, image/png" @change="onFilePicked">
         </div>
 
-        <event-confirmation :event="event" v-if="readonly" @isGoing="showSignUp()" rel="signUpModal"></event-confirmation>
+        <event-confirmation :event="event" v-if="readonly"></event-confirmation>
 
         <edit-header-image  v-if="!readonly" :event="event" rel="editHeaderModal"></edit-header-image>
     </div>
@@ -41,8 +41,7 @@
     }),
     methods: {
         ...mapMutations("EventPlannerVuex", [
-            "setHeaderModal",
-            "setSignUpModal"
+            "setHeaderModal"
         ]),
         uploadImage() {
             //this.$refs.inputFile.click();
@@ -65,10 +64,6 @@
             }else{
                 this.alretExceedPictureSize = true
             }
-
-        },showSignUp(){
-
-            this.setSignUpModal({ showModal: true });
 
         }
 

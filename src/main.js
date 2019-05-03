@@ -20,6 +20,7 @@ import VueGmaps from 'vue-gmaps'
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import VTooltip from 'v-tooltip';
 import VueGtm from 'vue-gtm';
+import VueSlideoutPanel from 'vue2-slideout-panel';
 
 // router setup
 import routes from "./router/routes";
@@ -47,6 +48,9 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  if (window.currentPanel){
+    window.currentPanel.hide();
+  }
   if (to.meta.auth == null && !auth.user.authenticated){
     next('signin');
   } else {
@@ -96,6 +100,8 @@ Vue.use(VueGtm, {
   vueRouter: router, // Pass the router instance to automatically sync with router (optional)
   ignoredViews: [] // If router, you can exclude some routes name (case insensitive) (optional)
 });
+
+Vue.use(VueSlideoutPanel);
 
 Model.$http = axios;
 

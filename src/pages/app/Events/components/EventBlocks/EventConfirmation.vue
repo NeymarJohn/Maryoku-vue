@@ -2,10 +2,10 @@
     <div class="event-confirmation">
         <div class="confirmation-section">
             <h4>Are you coming?</h4>
-            <md-button class="md-info md-sm" @click="confirmGoing('yes')">
+            <md-button class="md-info md-sm">
                 Yes
             </md-button>
-            <md-button class="md-info md-sm" @click="confirmGoing('No')">
+            <md-button class="md-info md-sm">
                 No
             </md-button>
         </div>
@@ -13,6 +13,10 @@
 </template>
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import Calendar from "@/models/Calendar";
+  import CalendarEvent from "@/models/CalendarEvent";
+  import EventComponent from "@/models/EventComponent";
+  import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
 
   export default {
@@ -28,15 +32,15 @@
     }),
     methods: {
 
-        confirmGoing(is_going){
-            this.$emit('isGoing',is_going);
-        }
 
     },
     created() {
 
     },
     mounted() {
+
+    },
+    computed: {
 
     }
   }

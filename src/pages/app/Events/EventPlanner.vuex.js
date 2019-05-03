@@ -40,7 +40,6 @@ export default {
             editHeaderModal: false,
             publishEventModal: false,
             addBuildingBlockModal: false,
-            signUpModal: false,
         };
     },
 
@@ -68,9 +67,6 @@ export default {
         },
         setBuildingBlockModal(state, data) {
             state.addBuildingBlockModal = data.showModal;
-        },
-        setSignUpModal(state, data) {
-            state.signUpModal = data.showModal;
         },
         setModalSubmitTitle(state, data) {
             state.modalSubmitTitle = data;

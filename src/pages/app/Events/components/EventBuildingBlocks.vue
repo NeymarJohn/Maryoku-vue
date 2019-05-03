@@ -35,13 +35,13 @@
                                             <md-button name="event-planner-tab-budget-building-block-allocated-budget-edit" class="md-button md-simple md-sm edit-block" @click="editBudget(index)">
                                                 <md-icon>edit</md-icon>
                                             </md-button>
-                                            <span>{{block.calendarEvent.allocatedBudget ? '$' + block.calendarEvent.allocatedBudget : '$0.0'}}</span>
+                                            <span>{{block.allocatedBudget ? '$' + block.allocatedBudget : '$0.0'}}</span>
                                         </div>
                                     </li>
                                 </ul>
                                 <div class="item-info-form md-layout" v-if="block.edit">
                                     <md-field class="md-layout-item md-size-70">
-                                        <md-input type="number" placeholder="Example : $1400" v-model="block.calendarEvent.allocatedBudget"></md-input>
+                                        <md-input type="number" placeholder="Example : $1400" v-model="block.allocatedBudget"></md-input>
                                     </md-field>
                                     <div class="md-layout-item md-size-30 ">
                                         <md-button name="event-planner-tab-budget-building-block-set-budget" class="md-info md-sm" @click="setBudget(block,index)">Set Budget</md-button>
@@ -197,6 +197,7 @@
             selected_block.todos = block.todos;
             selected_block.values = block.values;
             selected_block.vendors = block.vendors;
+            selected_block.allocatedBudget = block.allocatedBudget;
 
             selected_block.for(calendar,event).save().then(resp => {
 

@@ -99,6 +99,7 @@
 
             this.$parent.isLoading = true;
 
+
             let new_block = {
                 componentId : item.id,
                 todos : "",
