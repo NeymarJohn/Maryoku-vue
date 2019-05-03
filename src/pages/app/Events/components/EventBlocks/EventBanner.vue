@@ -7,7 +7,7 @@
             <input type="file" style="display: none;" ref="inputFile" accept="image/gif, image/jpg, image/png" @change="onFilePicked">
         </div>
 
-        <event-confirmation :event="event" v-if="readonly"></event-confirmation>
+        <event-confirmation :event="event" v-if="readonly" @isGoing="showSignUp()" rel="signUpModal"></event-confirmation>
 
         <edit-header-image  v-if="!readonly" :event="event" rel="editHeaderModal"></edit-header-image>
     </div>
@@ -37,18 +37,18 @@
         }
     },
     data: () => ({
+        auth: auth,
 //        bannerURL : this.event.eventPage.headerId ? '/static/img/page-headers/' + this.event.eventPage.headerId : 'https://bit.ly/2TWGILO', // default image for banner
     }),
     methods: {
         ...mapMutations("EventPlannerVuex", [
-            "setHeaderModal"
+            "setHeaderModal",
+            "setSignUpModal",
+            "setDietaryConstraintsModal"
         ]),
         uploadImage() {
             //this.$refs.inputFile.click();
-
             this.setHeaderModal({ showModal: true });
-
-
         },
         onFilePicked(event) {
             let file = event.target.files || event.dataTransfer.files;
@@ -65,6 +65,15 @@
                 this.alretExceedPictureSize = true
             }
 
+        },showSignUp(){
+
+            console.log('auth => ',this.auth);
+
+            if ( this.auth.user.authenticated ) {
+                this.setDietaryConstraintsModal({showModal: true});
+            } else {
+                this.setSignUpModal({ showModal: true });
+            }
         }
 
     },

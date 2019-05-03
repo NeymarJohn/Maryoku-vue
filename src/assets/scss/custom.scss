@@ -1490,6 +1490,17 @@ iframe{
 
   }
 }
+
+.signup-modal {
+
+  h2 {
+    margin : 0;
+  }
+
+  .signup-btn {
+    margin-top : 3em;
+  }
+}
 @media screen and (max-width : 500px) {
   .event-details {
     &_content.md-card-content {
