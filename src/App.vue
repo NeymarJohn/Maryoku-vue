@@ -1,5 +1,8 @@
 <template>
-  <router-view></router-view>
+  <div>
+    <slideout-panel></slideout-panel>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
@@ -29,3 +32,8 @@
     }
   };
 </script>
+<style lang="scss">
+  .slideout {
+    width: 75% !important;
+  }
+</style>

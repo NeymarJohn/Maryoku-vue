@@ -67,7 +67,8 @@
                       </div>
                     </md-button>
                     <ul class="dropdown-menu dropdown-menu-right">
-                      <li><router-link name="user-top-menu-my-profile" :to="{path: '/settings'}">My Profile</router-link></li>
+                      <!--<li><router-link name="user-top-menu-my-profile" :to="{path: '/settings'}">My Profile</router-link></li>-->
+                      <li><a href="#" @click="openMyProfile">My Profile</a></li>
                       <li><router-link name="user-top-menu-account-settings" :to="{path: '/company-form'}">Account Settings</router-link></li>
                       <li><router-link name="user-top-menu-my-profile" :to="{path: '/team'}">Manage Team</router-link></li>
                       <li class="divider"></li>
@@ -92,6 +93,7 @@
 
 <script>
   import auth from '@/auth';
+  import UserProfile from '@/pages/app/Profile';
 
   export default {
     data() {
@@ -118,6 +120,16 @@
       }.bind(this),3000);
     },
     methods: {
+      openMyProfile(){
+        const panelInstance = this.$showPanel({
+          component : UserProfile,
+
+          openOn: 'right',
+          props: {
+
+          }
+        });
+      },
       toggleSidebar() {
         this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
       },
