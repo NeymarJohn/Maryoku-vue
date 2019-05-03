@@ -48,6 +48,9 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  if (window.currentPanel){
+    window.currentPanel.hide();
+  }
   if (to.meta.auth == null && !auth.user.authenticated){
     next('signin');
   } else {

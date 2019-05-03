@@ -94,6 +94,7 @@
 <script>
   import auth from '@/auth';
   import UserProfile from '@/pages/app/Profile';
+  import DietaryConstraints from '../../app/Profile/DietaryConstraints';
 
   export default {
     data() {
@@ -123,12 +124,23 @@
       openMyProfile(){
         const panelInstance = this.$showPanel({
           component : UserProfile,
-
+          cssClass: 'w25 transition36',
           openOn: 'right',
           props: {
 
           }
         });
+        window.currentPanel = panelInstance;
+        setTimeout(()=>{
+          const panelInstance2 = this.$showPanel({
+            component : DietaryConstraints,
+            cssClass: 'w25',
+            openOn: 'right',
+            props: {
+
+            }
+          });
+        }, 5000);
       },
       toggleSidebar() {
         this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
