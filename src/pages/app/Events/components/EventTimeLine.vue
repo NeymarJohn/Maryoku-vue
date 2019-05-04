@@ -42,12 +42,12 @@
               <md-card-content class="md-layout">
                 <div class="md-layout-item md-size-50">
                   <md-field >
-                    <input-mask placeholder="From Time e.g:08:00 AM" class="md-input"  v-model="item.startTime" mask="99:99 aa" maskChar=""></input-mask>
+                    <input-mask placeholder="From Time e.g:08:00 AM" class="md-input"  v-model="item.startTime" mask="99:99 aa" maskChar="_"></input-mask>
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-50">
                   <md-field >
-                    <input-mask placeholder="To Time e.g:10:00 PM" class="md-input"  v-model="item.endTime" mask="99:99 aa" maskChar=""></input-mask>
+                    <input-mask placeholder="To Time e.g:10:00 PM" class="md-input"  v-model="item.endTime" mask="99:99 aa" maskChar="_"></input-mask>
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-100">

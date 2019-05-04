@@ -86,7 +86,9 @@
         this.userInfo[fieldName] = val;
         let user = {id: this.userInfo.id};
         user[fieldName] = val;
+        this.isLoading = true;
         new Me(user).save().then(res => {
+          this.isLoading = false;
           this.$notify(
             {
               message: "Profile saved successfully",

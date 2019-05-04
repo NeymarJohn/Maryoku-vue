@@ -18,13 +18,13 @@
           <dietary-constraints :user-info="userInfo" :is-loading="isLoading"></dietary-constraints>
         </div>
         <div class="md-layout-item md-large-size-33 md-medium-size-50 md-small-size-100">
-          <my-events :events="upComingEvents"  ></my-events>
+          <my-events :user-info="userInfo" :is-loading="isLoading" :events="upComingEvents"  ></my-events>
         </div>
         <div class="md-layout-item md-large-size-33 md-medium-size-50 md-small-size-100">
-          <holidays-celebrate></holidays-celebrate>
+          <holidays-celebrate :user-info="userInfo" :is-loading="isLoading"></holidays-celebrate>
         </div>
         <div class="md-layout-item md-large-size-33 md-medium-size-50 md-small-size-100">
-          <my-special-dates :birthDate="userInfo.birthday" :workingSince="userInfo.companyStartDate" :key="userInfo" ></my-special-dates>
+          <my-special-dates :user-info="userInfo" :is-loading="isLoading"></my-special-dates>
         </div>
       </div>
     </div>

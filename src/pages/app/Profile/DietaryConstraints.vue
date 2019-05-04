@@ -113,8 +113,12 @@
             dietaryConstraints.push(this.dietaryIconsList[i].id);
           }
         }
+
+        this.isLoading = true;
+
         new Me({id: this.userInfo.id, dietaryConstraints: dietaryConstraints}).save().then(res =>{
           this.userInfo.dietaryConstraints = dietaryConstraints;
+          this.isLoading = false;
           this.$notify(
             {
               message: "Profile saved successfully",
