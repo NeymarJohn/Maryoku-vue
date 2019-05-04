@@ -10,7 +10,7 @@
       <md-card-content class="company-profile-section">
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
         <md-table>
-          <md-table-row v-for="(item, index) in specialDaysList">
+          <md-table-row v-for="(item, index) in specialDaysList" :key="index">
             <md-table-cell v-if="item.canDelete">
               <label-edit :text="item.title"  :field-name="`title__${index}`"  @text-updated-blur="valueChanged" @text-updated-enter="valueChanged"></label-edit>
             </md-table-cell>
