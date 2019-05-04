@@ -1,8 +1,8 @@
 <template>
   <md-toolbar
     md-elevation="0"
-    class="md-transparent" style="background-color: white !important;"
-    :class="{'md-toolbar-absolute md-white md-fixed-top': $route.meta.navbarAbsolute}">
+    class="md-transparent"
+    :class="{'md-toolbar-absolute md-white md-fixed-top': $route.meta.navbarAbsolute, 'navbar-white': $route.meta.opaque}">
     <div class="md-toolbar-row">
       <div class="md-toolbar-section-start">
         <h3 class="md-title" style="font-weight: 400;">{{$route.meta.title ? $route.meta.title : $route.name}}</h3>
@@ -68,8 +68,8 @@
                     </md-button>
                     <ul class="dropdown-menu dropdown-menu-right">
                       <!--<li><router-link name="user-top-menu-my-profile" :to="{path: '/settings'}">My Profile</router-link></li>-->
-                      <li><a href="#" name="user-top-menu-my-profile" @click="openMyProfile">My Profile</a></li>
-                      <li><a href="#" name="user-top-menu-account-settings" @click="openAccountSettings">Account Settings</a></li>
+                      <li><a href="javascript: void();" name="user-top-menu-my-profile" @click="openMyProfile">My Profile</a></li>
+                      <li><a href="javascript: void();" name="user-top-menu-account-settings" @click="openAccountSettings">Account Settings</a></li>
                       <li><router-link name="user-top-menu-my-profile" :to="{path: '/team'}">Manage Team</router-link></li>
                       <li class="divider"></li>
                       <li><router-link name="user-top-menu-sign-out" :to="{path: '/signout'}">Sign Out</router-link></li>
@@ -174,5 +174,9 @@
     img{
       width: 100%;
     }
+  }
+
+  .navbar-white {
+    background-color: white !important;
   }
 </style>

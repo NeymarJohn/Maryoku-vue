@@ -1,7 +1,5 @@
 <template>
   <div class="md-layout">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
-
     <!--<div class="md-layout-item md-size-100 text-right">
       <md-button class="button-event-creatig" @click="openEventModal()">Create New Event</md-button>
     </div>-->
@@ -14,6 +12,7 @@
           <h4 class="title">Upcoming Events</h4>
         </md-card-header>
         <md-card-content>
+          <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
           <md-table v-model="upcomingEvents" table-header-color="rose" class="table-striped table-hover right-align-actions" v-if="upcomingEvents.length">
             <md-table-row slot="md-table-row" slot-scope="{ item }" @click="routeToEvent(item.id, $event)" class="hover-row">
               <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
@@ -139,7 +138,7 @@
         auth: auth,
         product3: "static/img/shutterstock_289440710.png",
         recentEvents: [],
-        isLoading: false,
+        isLoading: true,
       };
     },
 
@@ -237,6 +236,11 @@
     filters: {
       moment: function (date) {
         return moment(date).format('MMMM Do, GGGG');
+      }
+    },
+    watch: {
+      upcomingEvents(newVal, oldVal){
+        this.isLoading = false;
       }
     }
   };

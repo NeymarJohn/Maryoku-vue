@@ -363,7 +363,7 @@ let appPages = {
       path: "/events/:id",
       name: "EventDetails",
       component: EventDetails,
-      meta: {title: 'Event Details', gtm: "Event Details"},
+      meta: {title: 'Event Details', gtm: "Event Details", opaque: true},
     },
       {
           path: "/events/:id/edit",
