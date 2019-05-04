@@ -111,9 +111,9 @@
           <div class="time-line-blocks_selected-items_item" v-if="!timelineItems.length">
             <div class="drag-here">
               <p>
-                <img src="/static/img/drag_drop.png" alt="drag and drop"/>
+                <img src="/static/img/drag_drop.png" alt="drag and drop" style="width: 62px;"/>
               </p>
-              <p>
+              <p style="font-style: italic; font-size: 18px;">
                 Start building your event timeline by dropping timeline items here
               </p>
             </div>
