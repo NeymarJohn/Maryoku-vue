@@ -61,9 +61,14 @@
 
   .slideout.h75{
     height: 75% !important;
+    padding-left: 89px;
   }
 
   .slideout.h100{
     height: 100% !important;
+  }
+
+  .slideout {
+    background-color: #EEEEEE !important;
   }
 </style>

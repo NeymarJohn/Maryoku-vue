@@ -68,8 +68,8 @@
                     </md-button>
                     <ul class="dropdown-menu dropdown-menu-right">
                       <!--<li><router-link name="user-top-menu-my-profile" :to="{path: '/settings'}">My Profile</router-link></li>-->
-                      <li><a href="#" @click="openMyProfile">My Profile</a></li>
-                      <li><router-link name="user-top-menu-account-settings" :to="{path: '/company-form'}">Account Settings</router-link></li>
+                      <li><a href="#" name="user-top-menu-my-profile" @click="openMyProfile">My Profile</a></li>
+                      <li><a href="#" name="user-top-menu-account-settings" @click="openAccountSettings">Account Settings</a></li>
                       <li><router-link name="user-top-menu-my-profile" :to="{path: '/team'}">Manage Team</router-link></li>
                       <li class="divider"></li>
                       <li><router-link name="user-top-menu-sign-out" :to="{path: '/signout'}">Sign Out</router-link></li>
@@ -93,8 +93,9 @@
 
 <script>
   import auth from '@/auth';
-  import UserProfile from '@/pages/app/Profile';
-  import DietaryConstraints from '../../app/Profile/DietaryConstraints';
+  import MyProfile from '@/pages/app/Profile/MyProfile';
+  import Team from '../../app/Team/Team';
+  import MyCompany from '../../app/Profile/MyCompany';
 
   export default {
     data() {
@@ -122,9 +123,25 @@
     },
     methods: {
       openMyProfile(){
+        window.currentPanel = this.$showPanel({
+          component: MyProfile,
+          cssClass: 'md-layout-item md-size-75 transition36 ',
+          openOn: 'right',
+          props: {}
+        });
+      },
+      openAccountSettings(){
+        window.currentPanel = this.$showPanel({
+          component: MyCompany,
+          cssClass: 'md-layout-item md-size-65 transition36 ',
+          openOn: 'right',
+          props: {}
+        });
+      },
+      openTeam(){
         const panelInstance = this.$showPanel({
-          component : UserProfile,
-          cssClass: 'md-layout-item md-size-75 transition36',
+          component : Team,
+          cssClass: 'md-layout-item md-size-75 transition36 ',
           openOn: 'right',
           props: {
 
