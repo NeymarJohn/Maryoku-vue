@@ -67,8 +67,6 @@
 
         },showSignUp(){
 
-            console.log('auth => ',this.auth);
-
             if ( this.auth.user.authenticated ) {
                 this.setDietaryConstraintsModal({showModal: true});
             } else {
@@ -88,5 +86,6 @@
             return this.event.eventPage.headerImage ? '/static/img/page-headers/' + this.event.eventPage.headerImage : 'https://bit.ly/2TWGILO';
         }
     }
+
   }
 </script>

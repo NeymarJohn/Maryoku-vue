@@ -72,7 +72,7 @@
     <!-- ./Sign up Modal -->
 
     <!-- Dietary Constraints Modal -->
-    <dietary-constraints-modal v-if="calendarEvent" :event="calendarEvent"></dietary-constraints-modal>
+    <dietary-constraints-modal v-if="calendarEvent" :event="calendarEvent" :isGoing="is_going_to_event"></dietary-constraints-modal>
     <!-- ./Dietary Constraints Modal -->
 
   </div>
@@ -188,7 +188,8 @@
         },
         computed: {
             ...mapState('EventPlannerVuex', [
-                'eventPage'
+                'eventPage',
+                'is_going_to_event'
             ]),
             pieChart() {
                 return {

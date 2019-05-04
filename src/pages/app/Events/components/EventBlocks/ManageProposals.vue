@@ -3,16 +3,28 @@
         <md-card-header class="md-card-header-text md-card-header-warning">
 
             <div class="card-text">
-                <h4 class="title" style="color: white;">Manage Proposals</h4>
+                <h4 class="title" style="color: white;">Manage Vendor's proposals</h4>
                 <div class="ct-label">Applicable vendors from your list</div>
             </div>
+
+            <div class="header-actions pull-right" style="margin-top : 1em;">
+                <md-button class="md-info" v-if="!selectedBlock.vendors">
+                    Add Vendors
+                </md-button>
+                <md-button class="md-default" v-if="!selectedBlock.vendors">
+                    Send
+                </md-button>
+            </div>
+
+
+
 
 
         </md-card-header>
 
         <md-card-content style="min-height: 60px;">
 
-            <md-table  v-model="proposals" table-header-color="orange" >
+            <md-table  v-if="selectedBlock.vendors" v-model="selectedBlock.vendors" table-header-color="orange" >
                 <md-table-row slot="md-table-row" slot-scope="{ item }" :key="proposals.indexOf(item)"   >
                     <md-table-cell md-label="Vendor Name"  > {{ item.title }}</md-table-cell>
                     <md-table-cell md-label="People">
@@ -32,10 +44,15 @@
                 </md-table-row>
             </md-table>
 
+            <template v-if="!selectedBlock.vendors">
+                <h5>Your vendors list is empty</h5>
+                <p>import your vendors and refresh this page after you're done</p>
+            </template>
+
 
         </md-card-content>
 
-        <md-card-actions md-alignment="right" >
+        <md-card-actions md-alignment="right" v-if="selectedBlock.vendors">
             <md-button class="md-info" >
                 Compare proposals
             </md-button>
@@ -58,7 +75,7 @@
         VueElementLoading,
     },
     props: {
-
+        selectedBlock : Object
     },
     data: () => ({
         auth: auth,
@@ -81,7 +98,7 @@
 
     },
     created() {
-      
+      console.log('selectedBlock ', this.selectedBlock);
     },
     mounted() {
         this.isLoading = false;

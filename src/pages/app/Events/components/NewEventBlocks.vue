@@ -42,15 +42,19 @@
                            </div>
 
                            <div class="md-layout-item md-size-50 block-actions">
-                               <md-button  class="md-info md-sm"  @click="editValue(block)">Edit</md-button>
-                               <md-button  class="md-danger md-sm"  @click="deleteValue(block.id)">Delete</md-button>
+                               <md-button  class="md-info md-sm md-just-icon md-simple"  @click="editValue(block)">
+                                   <md-icon>create</md-icon>
+                               </md-button>
+                               <md-button  class="md-danger md-sm md-just-icon md-simple"  @click="deleteValue(block.id)">
+                                   <md-icon>delete_outline</md-icon>
+                               </md-button>
                            </div>
                        </div>
 
                    </md-card-content>
 
                    <md-card-actions md-alignment="right">
-                       <md-button class="md-info"  @click="addNewValue">Add Field</md-button>
+                       <md-button class="md-info"  @click="addNewValue">Add Requirement</md-button>
                        <md-button class="md-info" >Save</md-button>
                    </md-card-actions>
                </md-card>

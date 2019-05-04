@@ -4,7 +4,7 @@
             <modal v-if="DietaryConstraintsModal">
                 <template slot="header">
                     <div class="md-layout d-flex text-center">
-                        <h2>I am going<br>to the event.
+                        <h2>I am {{isGoing === 'no' ? 'not' : ''}} going<br>to the event.
                         </h2>
                     </div>
                     <md-button class="md-simple md-just-icon md-round modal-default-button" @click="closeModal">
@@ -28,8 +28,7 @@
 
                     </div>
 
-
-                    <md-button class="md-info signup-btn md-round">
+                    <md-button class="md-info signup-btn md-round" @click="send()">
                         Send
                     </md-button>
 
@@ -55,7 +54,8 @@
             Modal,
         },
         props: {
-            event: Object
+            event: Object,
+            isGoing : [Boolean,String]
 
         },
         data: () => ({
@@ -103,8 +103,6 @@
         }),
 
         created() {
-
-
         },
         mounted() {
 
@@ -120,6 +118,9 @@
 
             toggleFlagSecondList(index){
                 this.dietaryIconOnSecondList[index].flagOn=!this.dietaryIconOnSecondList[index].flagOn
+            },
+            send(){
+                this.closeModal();
             }
         },
         computed: {

@@ -42,28 +42,12 @@
               <md-card-content class="md-layout">
                 <div class="md-layout-item md-size-50">
                   <md-field >
-                    <label>From Time</label>
-                    <md-select v-model="item.startTime"
-                    >
-                      <md-option v-for="hour in hoursArray"
-                                 :key="hour"
-                                 :value="hour">
-                        {{ hour }}
-                      </md-option>
-                    </md-select>
+                    <input-mask placeholder="From Time e.g:08:00 AM" class="md-input"  v-model="item.startTime" mask="99:99 aa" maskChar=""></input-mask>
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-50">
                   <md-field >
-                    <label>To Time</label>
-                    <md-select v-model="item.endTime"
-                    >
-                      <md-option v-for="hour in hoursArray"
-                                 :key="hour"
-                                 :value="hour">
-                        {{ hour }}
-                      </md-option>
-                    </md-select>
+                    <input-mask placeholder="To Time e.g:10:00 PM" class="md-input"  v-model="item.endTime" mask="99:99 aa" maskChar=""></input-mask>
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-100">
@@ -89,7 +73,7 @@
                 <md-button name="event-planner-tab-timeline-item-save" class="md-info" v-if="!item.dateCreated"
                            @click="saveTimelineItem(item,index)">Save
                 </md-button>
-                <md-button name="event-planner-tab-timeline-item-edit" class="md-info" v-else @click="updateTimelineItem(item)">Edit
+                <md-button name="event-planner-tab-timeline-item-edit" class="md-info" v-else @click="updateTimelineItem(item)">Save
                 </md-button>
                 <md-button name="event-planner-tab-timeline-item-save" class="md-danger md-simple"
                            @click="cancelTimelineItem(item,index)">Cancel
@@ -157,6 +141,8 @@
   import moment from 'moment';
   import swal from "sweetalert2";
   import {SlideYDownTransition} from "vue2-transitions";
+  import InputMask from 'vue-input-mask';
+
 
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
@@ -171,7 +157,8 @@
       VueElementLoading,
       EventBlocks,
       draggable, Drag, Drop,
-      SlideYDownTransition
+      SlideYDownTransition,
+        InputMask
     },
     props: {
       event: Object,
@@ -273,6 +260,7 @@
         let event = new CalendarEvent({id: this.event.id});
 
         new EventTimelineItem().for(calendar, event).get().then(res => {
+            console.log(res);
           this.timelineItems = _.sortBy(res, function(item){ return item.order});
           this.isLoading = false;
         })
@@ -354,8 +342,8 @@
 
         timelineItem.title = item.title;
         timelineItem.description = item.description;
-        timelineItem.startTimeMillis = item.startTimeMillis;
-        timelineItem.endTimeMillis = item.endTimeMillis;
+        timelineItem.startTime = item.startTime;
+        timelineItem.endTime = item.endTime;
 
         timelineItem.save().then(res => {
           this.getTimelineItems();

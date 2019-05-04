@@ -8438,7 +8438,6 @@ promise-inflight@^1.0.1:
 promise-polyfill@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.1.0.tgz#30059da54d1358ce905ac581f287e184aedf995d"
-  integrity sha512-OzSf6gcCUQ01byV4BgwyUCswlaQQ6gzXc23aLQWhicvfX9kfsUiUhgt3CCQej8jDnl8/PhGF31JdHX2/MzF3WA==
 
 proto-list@~1.2.1:
   version "1.2.4"
@@ -10062,7 +10061,6 @@ uiv@^0.14.4:
 underscore@^1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.1.tgz#06dce34a0e68a7babc29b365b8e74b8925203961"
-  integrity sha512-5/4etnCkd9c8gwgowi5/om/mYO5ajCaOgdzj/oW+0eQV9WxKBDZw5+ycmKmeaTXjInS/W0BzpGLo2xR2aBwZdg==
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"
@@ -10368,6 +10366,12 @@ vue-image-lightbox@^6.0.1:
     hammerjs "^2.0.8"
     vue-lazyload "^1.2.6"
 
+vue-input-mask@^0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/vue-input-mask/-/vue-input-mask-0.0.10.tgz#649131cfb02feb102df2acfff45cc291f67a3ef7"
+  dependencies:
+    vue "^2.4.4"
+
 vue-input-ui@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/vue-input-ui/-/vue-input-ui-0.1.2.tgz#7a4b74bb1f4a7c449112659a98159e1374fd8e1a"
@@ -10496,7 +10500,6 @@ vue-template-es2015-compiler@^1.5.3, vue-template-es2015-compiler@^1.6.0:
 vue2-slideout-panel@^2.2.3:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/vue2-slideout-panel/-/vue2-slideout-panel-2.2.3.tgz#e01a8c1483da7b02ce11e1ec7782df055cc9ccf8"
-  integrity sha512-pTS793kE050C6iTdNXAinVTniMRf3PFxqQ/qhPe42NFPnEouBxIZoX4N4BQk2TG9i181jwjz6QuXskAAbmb8pA==
   dependencies:
     promise-polyfill "^8.1.0"
 
@@ -10507,6 +10510,10 @@ vue2-transitions@^0.2.3:
 vue@2.5.17, vue@^2.5.11:
   version "2.5.17"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.17.tgz#0f8789ad718be68ca1872629832ed533589c6ada"
+
+vue@^2.4.4:
+  version "2.6.10"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
 
 vue@^2.5.21:
   version "2.6.6"

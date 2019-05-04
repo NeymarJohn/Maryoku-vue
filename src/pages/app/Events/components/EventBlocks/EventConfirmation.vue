@@ -5,7 +5,7 @@
             <md-button class="md-info md-sm" @click="confirmGoing('yes')">
                 Yes
             </md-button>
-            <md-button class="md-info md-sm" @click="confirmGoing('No')">
+            <md-button class="md-info md-sm" @click="confirmGoing('no')">
                 No
             </md-button>
         </div>
@@ -27,9 +27,11 @@
         auth : auth
     }),
     methods: {
-
+        ...mapMutations('EventPlannerVuex', ['setGoingToEvent']),
         confirmGoing(is_going){
-            this.$emit('isGoing',is_going);
+            this.setGoingToEvent({isGoing: is_going});
+
+            this.$emit('isGoing');
         }
 
     },

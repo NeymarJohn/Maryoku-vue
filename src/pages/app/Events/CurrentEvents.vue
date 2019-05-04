@@ -6,166 +6,164 @@
     <event-page-routes  v-if="event" :event="event"></event-page-routes>
     <!-- ./Event Components Routes -->
 
-    <template v-if="routeName === 'EditEvent'">
-      <div class="md-layout-item md-xlarge-size-20 md-large-size-25 md-small-size-40" >
-        <md-card class="md-card-profile">
-          <div class="logo-block">
-            <div class="event-planer-logo">
-              <md-icon class="company-logo">date_range</md-icon>
-            </div>
-            <div class="event-title">Event Details</div>
-            <md-button name="event-planner-event-details-edit" class="md-button md-simple md-just-icon md-sm"  @click="openEventModal()" style="margin-top : 1em;">
-              <md-icon class="company-logo">create</md-icon>
-            </md-button>
+    <div  v-if="routeName === 'EditEvent' || routeName === 'EditBuildingBlocks'" class="md-layout-item md-xlarge-size-20 md-large-size-25 md-small-size-40" >
+      <md-card class="md-card-profile">
+        <div class="logo-block">
+          <div class="event-planer-logo">
+            <md-icon class="company-logo">date_range</md-icon>
           </div>
-          <md-card-content v-if="event">
-            <div>
-              <div class="md-layout event-info-section">
-                <div class="md-layout-item md-size-100">
-                  <div class="md-layout-item  title-text">Date</div>
-                  <div class="md-layout-item md-size-100 md-caption ">{{calendarEvent.eventStartMillis | formatDate}}, {{calendarEvent.eventStartMillis | formatTime}} ({{calendarEvent.eventStartMillis | formatDuration(calendarEvent.eventEndMillis)}} hrs) </div>
-                </div>
-
-                <div class="md-layout-item md-size-50">
-                  <div class="md-layout-item  title-text">Participants</div>
-                  <div class="md-layout-item md-size-100 md-caption ">{{calendarEvent.numberOfParticipants}} + spouses </div>
-                </div>
-
-                <div class="md-layout-item md-size-50">
-                  <div class="md-layout-item  title-text">Geography</div>
-                  <div class="md-layout-item md-size-100 md-caption ">{{calendarEvent.location}} </div>
-                </div>
-
-                <div class="md-layout-item md-size-100">
-                  <md-button class="md-sm md-simple md-rose">
-                    <md-icon>cached</md-icon> Recurring weekly
-                  </md-button>
-                </div>
-
+          <div class="event-title">Event Details</div>
+          <md-button name="event-planner-event-details-edit" class="md-button md-simple md-just-icon md-sm"  @click="openEventModal()" style="margin-top : 1em;">
+            <md-icon class="company-logo">create</md-icon>
+          </md-button>
+        </div>
+        <md-card-content v-if="event">
+          <div>
+            <div class="md-layout event-info-section">
+              <div class="md-layout-item md-size-100">
+                <div class="md-layout-item  title-text">Date</div>
+                <div class="md-layout-item md-size-100 md-caption ">{{calendarEvent.eventStartMillis | formatDate}}, {{calendarEvent.eventStartMillis | formatTime}} ({{calendarEvent.eventStartMillis | formatDuration(calendarEvent.eventEndMillis)}} hrs) </div>
               </div>
 
-
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item">
-                  <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
-                </div>
+              <div class="md-layout-item md-size-50">
+                <div class="md-layout-item  title-text">Participants</div>
+                <div class="md-layout-item md-size-100 md-caption ">{{calendarEvent.numberOfParticipants}} + spouses </div>
               </div>
-              <div class="md-layout md-gutter">
-                <div class="md-layout-item">
-                  <h5 class="title-budget-main">Total remaining budget</h5>
-                  <h4
-                          class="title"
-                          style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
-                    <div class="title-budget-prise title">
-                      <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
-                    </div>
-                  </h4>
 
-                  <div class="budget-pie-container" style="display: grid;margin: 18px;">
-                    <chart-component
-                            :chart-data="pieChart.data"
-                            :chart-options="pieChart.options"
-                            chart-type="Pie"
-                            style="grid-column: 1; grid-row: 1; color:red"/>
-                    <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
-                  </div>
-                </div>
+              <div class="md-layout-item md-size-50">
+                <div class="md-layout-item  title-text">Geography</div>
+                <div class="md-layout-item md-size-100 md-caption ">{{calendarEvent.location}} </div>
+              </div>
+
+              <div class="md-layout-item md-size-100">
+                <md-button class="md-sm md-simple md-rose">
+                  <md-icon>cached</md-icon> Recurring weekly
+                </md-button>
+              </div>
+
+            </div>
+
+
+            <div class="md-layout md-gutter">
+              <div class="md-layout-item">
+                <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
               </div>
             </div>
             <div class="md-layout md-gutter">
               <div class="md-layout-item">
-                <div>
-                  <div class="md-caption title-text">Remaining budget per employee</div>
-                  <!-- TODO Need calculate with components -->
-                  <div class="md-caption title-text title-budget-prise">$0</div>
-                </div>
-                <div>
-                  <div class="md-caption title-text">Budget per employee</div>
-                  <div class="md-caption title-text title-budget-prise">
-                    <animated-number ref="budgetPerPersonNumber" :value="calendarEvent.budgetPerPerson" prefix="$"></animated-number>
+                <h5 class="title-budget-main">Total remaining budget</h5>
+                <h4
+                        class="title"
+                        style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
+                  <div class="title-budget-prise title">
+                    <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
                   </div>
-                </div>
-                <div>
-                  <div class="md-caption title-text">Total budget for the event</div>
-                  <div class="md-caption title-text title-budget-prise">
-                    <animated-number ref="totalBudgetNumber" :value="calendarEvent.totalBudget" prefix="$"></animated-number>
-                  </div>
+                </h4>
+
+                <div class="budget-pie-container" style="display: grid;margin: 18px;">
+                  <chart-component
+                          :chart-data="pieChart.data"
+                          :chart-options="pieChart.options"
+                          chart-type="Pie"
+                          style="grid-column: 1; grid-row: 1; color:red"/>
+                  <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
                 </div>
               </div>
             </div>
+          </div>
+          <div class="md-layout md-gutter">
+            <div class="md-layout-item">
+              <div>
+                <div class="md-caption title-text">Remaining budget per employee</div>
+                <!-- TODO Need calculate with components -->
+                <div class="md-caption title-text title-budget-prise">$0</div>
+              </div>
+              <div>
+                <div class="md-caption title-text">Budget per employee</div>
+                <div class="md-caption title-text title-budget-prise">
+                  <animated-number ref="budgetPerPersonNumber" :value="calendarEvent.budgetPerPerson" prefix="$"></animated-number>
+                </div>
+              </div>
+              <div>
+                <div class="md-caption title-text">Total budget for the event</div>
+                <div class="md-caption title-text title-budget-prise">
+                  <animated-number ref="totalBudgetNumber" :value="calendarEvent.totalBudget" prefix="$"></animated-number>
+                </div>
+              </div>
+            </div>
+          </div>
+        </md-card-content>
+      </md-card>
+    </div>
+
+    <div  v-if="routeName === 'EditEvent'" class="md-layout-item md-xlarge-size-80 md-large-size-75 md-small-size-60">
+      <md-card class="manage-vendors">
+        <md-card-content class="md-layout">
+          <div class="md-layout-item md-size-60">
+            <h4>Manage Vendor Proposals</h4>
+
+            <p>
+              Save planning time by sending quote requests and easily compare them to get the best deals.
+            </p>
+
+            <ol>
+              <li>Select desired services for the event</li>
+              <li>Create and send inquiries to your vendors</li>
+              <li>Get proposals and choose the best offers</li>
+            </ol>
+
+            <md-button name="event-planner-tab-event-details-banner-manage-proposals" class="md-info">
+              Manage inquiries &amp; proposals
+            </md-button>
+          </div>
+          <div class="md-layout-item md-size-40">
+            <iframe width="560" height="415" src="https://www.youtube.com/embed/ygte40FNSpU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+        </md-card-content>
+      </md-card>
+
+      <div class="edit-event-boxes md-layout">
+        <md-card class="md-layout-item md-size-30">
+          <md-card-content>
+            <h4>Event Timeline</h4>
+            <p>
+              Organize the event in a beautiful timeline.
+            </p>
+            <md-button name="event-planner-tab-event-details-banner-timeline" class="md-rose md-simple got-to-component-btn" @click="goToComponent('/edit/timeline')">
+              Edit Event Timeline <md-icon>arrow_forward</md-icon>
+            </md-button>
+          </md-card-content>
+        </md-card>
+
+        <md-card class="md-layout-item md-size-30">
+          <md-card-content>
+            <h4>Invitees Management</h4>
+
+            <p>
+              Select invitees, send scheduled RSVP and messages.
+            </p>
+
+            <md-button name="event-planner-tab-event-details-banner-invitees" class="md-rose md-simple got-to-component-btn" @click="goToComponent('/edit/invitees-management')">
+              Manage Invitees <md-icon>arrow_forward</md-icon>
+            </md-button>
+          </md-card-content>
+        </md-card>
+
+        <md-card class="md-layout-item md-size-30">
+          <md-card-content>
+            <h4>Publish Event Details</h4>
+            <p>
+              Create a beautiful event page
+              and send to invitees.
+            </p>
+
+            <md-button name="event-planner-tab-event-details-banner-event-page" class="md-rose md-simple got-to-component-btn" @click="goToComponent('')">
+              Edit Event page <md-icon>arrow_forward</md-icon>
+            </md-button>
           </md-card-content>
         </md-card>
       </div>
-
-      <div class="md-layout-item md-xlarge-size-80 md-large-size-75 md-small-size-60">
-        <md-card class="manage-vendors">
-          <md-card-content class="md-layout">
-            <div class="md-layout-item md-size-60">
-              <h4>Manage Vendor Proposals</h4>
-
-              <p>
-                Save planning time by sending quote requests and easily compare them to get the best deals.
-              </p>
-
-              <ol>
-                <li>Select desired services for the event</li>
-                <li>Create and send inquiries to your vendors</li>
-                <li>Get proposals and choose the best offers</li>
-              </ol>
-
-              <md-button name="event-planner-tab-event-details-banner-manage-proposals" class="md-info">
-                Manage inquiries &amp; proposals
-              </md-button>
-            </div>
-            <div class="md-layout-item md-size-40">
-              <iframe width="560" height="415" src="https://www.youtube.com/embed/ygte40FNSpU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-          </md-card-content>
-        </md-card>
-
-        <div class="edit-event-boxes md-layout">
-          <md-card class="md-layout-item md-size-30">
-              <md-card-content>
-                <h4>Event Timeline</h4>
-                <p>
-                  Organize the event in a beautiful timeline.
-                </p>
-                <md-button name="event-planner-tab-event-details-banner-timeline" class="md-rose md-simple got-to-component-btn" @click="goToComponent('/edit/timeline')">
-                  Edit Event Timeline <md-icon>arrow_forward</md-icon>
-                </md-button>
-              </md-card-content>
-          </md-card>
-
-          <md-card class="md-layout-item md-size-30">
-            <md-card-content>
-              <h4>Invitees Management</h4>
-
-              <p>
-                Select invitees, send scheduled RSVP and messages.
-              </p>
-
-              <md-button name="event-planner-tab-event-details-banner-invitees" class="md-rose md-simple got-to-component-btn" @click="goToComponent('/edit/invitees-management')">
-                Manage Invitees <md-icon>arrow_forward</md-icon>
-              </md-button>
-            </md-card-content>
-          </md-card>
-
-          <md-card class="md-layout-item md-size-30">
-            <md-card-content>
-              <h4>Publish Event Details</h4>
-              <p>
-                Create a beautiful event page
-                and send to invitees.
-              </p>
-
-              <md-button name="event-planner-tab-event-details-banner-event-page" class="md-rose md-simple got-to-component-btn" @click="goToComponent('')">
-                Edit Event page <md-icon>arrow_forward</md-icon>
-              </md-button>
-            </md-card-content>
-          </md-card>
-        </div>
-      </div>
-    </template>
+    </div>
 
     <div v-else-if="event && routeName === 'EditBuildingBlocks'" class="md-layout-item block-flex" >
       <event-building-blocks   :event="event" :event-components="selectedComponents" @go-to-building-blocks="resetTab"></event-building-blocks>
@@ -183,7 +181,7 @@
     <event-modal @refresh-events="refreshEvents" :currentEvent="calendarEvent" ref="eventModal"></event-modal>
     <!-- ./New Event Modal -->
 
-    <sticky-budget :event="event" v-if="routeName !== 'EditEvent'"></sticky-budget>
+    <sticky-budget :event="event" v-if="routeName !== 'EditEvent' && routeName !== 'EditBuildingBlocks'"></sticky-budget>
 
   </div>
 

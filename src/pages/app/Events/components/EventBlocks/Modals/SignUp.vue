@@ -41,6 +41,15 @@
                         Sign up
                     </md-button>
 
+
+                    <h4 class="mt-3">or sign up using Google / Linkedin</h4>
+                    <md-button class="md-just-icon-social md-google" @click="authenticate('google')">
+                        <i class="fab fa-google-plus-g" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
+                    </md-button>
+                    <md-button class="md-just-icon-social md-circle md-linkedin" @click="authenticate('linkedin')">
+                        <i class="fab fa-linkedin" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
+                    </md-button>
+
                 </template>
             </modal>
         </div>
@@ -104,6 +113,11 @@
             closeModal() {
                 this.setSignUpModal({showModal: false});
             },
+            authenticate(provider) {
+                this.loading = true;
+                const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`);
+                document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?callback=${callback}`;
+            },
             signup(){
                 this.$parent.isLoading = true;
 
@@ -117,6 +131,9 @@
 
                                 //show Dietary Constraints Modal
                                 this.setDietaryConstraintsModal({showModal : true});
+
+                                this.$parent.isLoading = false;
+
 
                             }, (failure) => {
 
