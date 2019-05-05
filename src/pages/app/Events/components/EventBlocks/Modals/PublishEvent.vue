@@ -59,7 +59,7 @@
 
         },
         mounted() {
-            setTimeout(()=>{this.publishUrl = `${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/events/${this.event.id}/public`},400);
+            setTimeout(()=>{this.publishUrl = `${document.location.protocol}//${document.location.hostname}${document.location.port ? ':'+document.location.port : ''}/#/events/${this.event.id}/public`},400);
 
         },
         methods: {

@@ -67,7 +67,7 @@
           this.$notify(
             {
               message: "Profile saved successfully",
-              horizontalAlign: 'center',
+              horizontalAlign: 'right',
               verticalAlign: 'top',
               type: 'success'
             })
