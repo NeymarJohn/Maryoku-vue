@@ -108,7 +108,8 @@
                        </li>
                        <li class="event-info_item">
                            <div class="budget-title">Remaining Budget</div>
-                           <div class="budget-value red-value pull-right">-$540</div>
+                           <div class="budget-value pull-right">${{totalRemainingBudget}}</div>
+                           <!--<div class="budget-value red-value pull-right">${{calendarEvent.totalBudget}}</div>-->
                        </li>
                    </ul>
                </div>
@@ -192,6 +193,8 @@
             .catch(error => {
                 console.log('Error ', error);
             })
+
+        console.log('calendarEvent => ',this.calendarEvent);
 
     },
     computed: {

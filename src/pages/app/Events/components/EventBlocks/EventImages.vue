@@ -5,11 +5,12 @@
 
     <md-card v-for="(image,index) in event.eventPage.images" :key="index" class="md-layout-item md-size-25">
       <md-card-media>
-        <div class="event-images_image-item" :style="`background-image : url(`+`${serverUrl}/1/eventPageImages/${image.id}`+`)`">
-          <md-button class="md-info md-sm" @click="removeEventImage(index)" v-if="!readonly">
-            DELETE
-          </md-button>
+        <div class="event-images_image-item" :style="`background-image : url(`+`${serverUrl}/1/eventPageImages/${image.id}`+`)`" @click="previewImage(image.id)">
+
         </div>
+        <md-button class="md-info md-sm delete-event-image" @click="removeEventImage(index)" v-if="!readonly">
+          DELETE
+        </md-button>
       </md-card-media>
     </md-card>
 
@@ -23,6 +24,15 @@
     <div class="update-banner-form" v-if="!readonly">
       <input type="file" style="display: none;" ref="eventFile" accept="image/gif, image/jpg, image/png" @change="onEventFilePicked">
     </div>
+
+
+    <div class="preview-image" v-if="imagePreview">
+      <md-button class="md-simple md-just-icon md-round" @click="closePreviewModal">
+        <md-icon>clear</md-icon>
+      </md-button>
+      <img :src="`${serverUrl}/1/eventPageImages/${imagePreview}`" class="event-image-item">
+    </div>
+
   </div>
 </template>
 <script>
@@ -52,7 +62,8 @@
     data: () => ({
       auth: auth,
       eventImages : [],
-      serverUrl: process.env.SERVER_URL
+      serverUrl: process.env.SERVER_URL,
+        imagePreview : null
 
     }),
     methods: {
@@ -120,6 +131,14 @@
           .catch((error) => {
             console.log(error);
           });
+      },
+      previewImage(image){
+          this.imagePreview = image;
+      }
+      ,
+      closePreviewModal() {
+          this.imagePreview = null;
+
       }
 
     },

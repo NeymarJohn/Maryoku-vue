@@ -13,7 +13,7 @@
         <collapse :collapse="events" icon="keyboard_arrow_down" color-collapse="warning" >
 
           <template v-for="(item,index) in events" :slot="`md-collapse-pane-${index+1}`">
-              <event-details :key="item.id" :titleCollaps="eventTitleFromCollaps" :where="eventLocation" :when="item.eventStartMillis" :dressCode="eventDressCode"></event-details>
+              <event-details :titleCollaps="eventTitleFromCollaps" :where="eventLocation" :when="item.eventStartMillis" :dressCode="eventDressCode"></event-details>
           </template>
         </collapse>
       </md-card-content>

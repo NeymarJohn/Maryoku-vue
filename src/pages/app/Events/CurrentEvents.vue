@@ -76,7 +76,7 @@
               <div>
                 <div class="md-caption title-text">Remaining budget per employee</div>
                 <!-- TODO Need calculate with components -->
-                <div class="md-caption title-text title-budget-prise">$0</div>
+                <div class="md-caption title-text title-budget-prise">${{totalRemainingBudget}}</div>
               </div>
               <div>
                 <div class="md-caption title-text">Budget per employee</div>
@@ -113,11 +113,16 @@
             </ol>
 
             <md-button name="event-planner-tab-event-details-banner-manage-proposals" class="md-info">
-              Manage inquiries &amp; proposals
+              Upload Vendors
             </md-button>
+
+            <md-button name="event-planner-tab-event-details-banner-manage-proposals" class="md-info">
+              Select Services
+            </md-button>
+
           </div>
-          <div class="md-layout-item md-size-40">
-            <iframe width="560" height="415" src="https://www.youtube.com/embed/ygte40FNSpU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <div class="md-layout-item md-size-40 promotion-video">
+            <iframe  src="https://www.youtube.com/embed/ygte40FNSpU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
         </md-card-content>
       </md-card>
@@ -252,6 +257,7 @@
 
       this.routeName = this.$route.name;
 
+
     },
     mounted() {
       this.getEvent();
@@ -262,6 +268,8 @@
         this.$store.dispatch("event/getCurrencies");
         this.$store.dispatch("event/getEventThemes");
       }
+
+
     },
     methods: {
       ...mapMutations("EventPlannerVuex", [
@@ -284,6 +292,19 @@
             this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
             this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
             this.seriesData = [(100 - this.percentage), this.percentage];
+              console.log('calendarEvent => ',this.calendarEvent);
+
+
+              if ( this.$route.newEvent ) {
+                  this.$notify(
+                      {
+                          message: 'Well done! You have successfully created'+ this.calendarEvent.title +' event',
+                          horizontalAlign: 'center',
+                          verticalAlign: 'top',
+                          type: 'success'
+                      })
+              }
+
           });
         }.bind(this));
       },

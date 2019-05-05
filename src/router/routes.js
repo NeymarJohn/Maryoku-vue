@@ -369,7 +369,7 @@ let appPages = {
           path: "/events/:id/edit",
           name: "EditEvent",
           component: CurrentEvents,
-          meta: {title: 'Event Details', gtm: "Event Edit", opaque: true},
+          meta: {title: 'Event Details', gtm: "Event Edit", opaque: true}
       },
       {
           path: "/events/:id/edit/building-blocks",

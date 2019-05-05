@@ -1,17 +1,12 @@
 <template>
   <div class="vlabeledit">
     <div class="vlabeledit-label" :class="{'vlabeledit-empty' : this.vlabel === empty}" @click="onLabelClick" v-if="!edit">{{vlabel}}</div>
-    <input type="text" v-if="edit && !mask" v-model="label" v-on:blur="updateTextBlur" ref="labeledit" :placeholder="vplaceholder" class="vlabeledit-input" @keyup.enter="updateTextEnter"/>
-    <input-mask type="text" v-if="edit && mask" :mask="mask" maskChar="_" v-model="label" v-on:blur="updateTextBlur" ref="labeledit" :placeholder="vplaceholder" class="vlabeledit-input" @keyup.enter="updateTextEnter"/>
+    <input type="text" v-if="edit" v-model="label" v-on:blur="updateTextBlur" ref="labeledit" :placeholder="vplaceholder" class="vlabeledit-input" @keyup.enter="updateTextEnter"/>
   </div>
 </template>
 <script>
-  import InputMask from 'vue-input-mask';
   export default{
     name: 'LabelEdit',
-    components: {
-      InputMask
-    },
     data: function(){
       return {
         edit: false, // define whether it is in edit mode or not
@@ -19,7 +14,7 @@
         empty: 'Click to set', // empty place holder .. replace with your own localization for default
       }
     },
-    props: ['text','placeholder', 'required', 'fieldName', 'mask'], // parent should provide :text or :placeholder
+    props: ['text','placeholder', 'required', 'fieldName'], // parent should provide :text or :placeholder
     methods: {
       initText: function(){
         if(this.text==''||this.text==undefined){

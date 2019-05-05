@@ -17,7 +17,7 @@
               <my-special-dates :birthDate="auth.user.me.birthday" :workingSince="auth.user.me.companyStartDate" :key="auth.user.me" ></my-special-dates>
             </div>
             <div class="md-layout-item md-size-35">
-              <my-events :events="upComingEvents"  ></my-events>
+              <my-events :events="upCommingEvents"  ></my-events>
             </div>
           </div>
         </template>
@@ -179,7 +179,7 @@
 
     computed: {
       ...mapGetters({
-        upComingEvents: 'user/getUpcomingEvents',
+        upCommingEvents: 'user/getUpcomingEvents',
         // user:'user/getUser'
       }),
 

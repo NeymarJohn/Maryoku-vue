@@ -42,12 +42,12 @@
               <md-card-content class="md-layout">
                 <div class="md-layout-item md-size-50">
                   <md-field >
-                    <input-mask placeholder="From Time e.g:08:00 AM" class="md-input"  v-model="item.startTime" mask="99:99 aa" maskChar="_"></input-mask>
+                    <input-mask placeholder="From Time e.g:08:00 AM" class="md-input"  v-model="item.startTime" mask="99:99 aa" maskChar=""></input-mask>
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-50">
                   <md-field >
-                    <input-mask placeholder="To Time e.g:10:00 PM" class="md-input"  v-model="item.endTime" mask="99:99 aa" maskChar="_"></input-mask>
+                    <input-mask placeholder="To Time e.g:10:00 PM" class="md-input"  v-model="item.endTime" mask="99:99 aa" maskChar=""></input-mask>
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-100">
@@ -111,9 +111,9 @@
           <div class="time-line-blocks_selected-items_item" v-if="!timelineItems.length">
             <div class="drag-here">
               <p>
-                <img src="/static/img/drag_drop.png" alt="drag and drop" style="width: 62px;"/>
+                <img src="/static/img/drag_drop.png" alt="drag and drop"/>
               </p>
-              <p style="font-style: italic; font-size: 18px;">
+              <p>
                 Start building your event timeline by dropping timeline items here
               </p>
             </div>

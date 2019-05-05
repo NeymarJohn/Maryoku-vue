@@ -737,6 +737,7 @@ $tooltip-border-color: $blue-grey-200 !default;
       min-width: 28%;
       max-width: 28%;
       flex: 0 1 28%;
+      position: relative;
 
       .event-images_image-item {
         height: 111px;
@@ -745,6 +746,12 @@ $tooltip-border-color: $blue-grey-200 !default;
         background-position: center center;
         background-size : cover !important;
         background-repeat: no-repeat;
+      }
+
+      .delete-event-image {
+        position : absolute;
+        top : 0.3em;
+        left : 0.5em;
       }
     }
 
@@ -886,28 +893,33 @@ $tooltip-border-color: $blue-grey-200 !default;
 
   }
 }
+.preview-image {
+  position : fixed;
+  top : 0;
+  bottom : 0;
+  left : 0;
+  right : 0;
+  z-index : 9999999999999;
+  background: #00000094;
+  text-align: center;
+  padding: 0 10%;
 
-.event_header-image-modal {
-  .preview-image {
-    position : fixed;
-    top : 0;
-    bottom : 0;
-    left : 0;
-    right : 0;
-    z-index : 9999999999999;
-    background: #00000094;
-    text-align: center;
-    padding: 0 10%;
+  .md-button {
+    position: absolute;
+    right: 9%;
+    top: 9%;
+  }
+  img {
+    margin : 10% auto;
 
-    .md-button {
-      position: absolute;
-      right: 9%;
-      top: 9%;
-    }
-    img {
-      margin : 10% auto;
+    &.event-image-item {
+      width : 60%;
+      max-width: 100%;
     }
   }
+}
+.event_header-image-modal {
+
 
   .modal-container {
     max-width: 990px;
@@ -1409,11 +1421,6 @@ iframe{
   justify-content: space-between;
 }
 
-.alert-transparent-info   {
-  padding: 32px 12px !important;
-  text-align: center;
-}
-
 .edit-event-details {
 
   .event-info-section {
@@ -1445,6 +1452,15 @@ iframe{
         &:not(last) {
           margin-bottom : 2.5em;
         }
+      }
+    }
+
+    .promotion-video {
+
+      iframe {
+        height: 280px;
+        width: 100%;
+        margin-top: 1.6em;
       }
     }
   }

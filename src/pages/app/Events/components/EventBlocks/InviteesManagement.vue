@@ -10,7 +10,7 @@
         </md-button>
 
         <div class="md-layout">
-            <!--<md-card class="md-layout-item md-size-65">
+            <md-card class="md-layout-item md-size-65" style="display: none;">
                 <md-card-header class="md-card-header-icon md-card-header-rose">
                     <div class="card-icon">
                         <md-icon>contacts</md-icon>
@@ -53,7 +53,7 @@
                 </md-card-content>
             </md-card>
 
-            <md-card class="md-layout-item rsvp-card">
+            <md-card class="md-layout-item rsvp-card" style="display: none;">
                 <div class="rsvp-card_icon">
                     <md-icon>notifications</md-icon>
                 </div>
@@ -76,7 +76,7 @@
                         <md-radio v-model="when_set_email" :value="2">Send email 3 days before the event</md-radio>
                     </div>
                 </div>
-            </md-card>-->
+            </md-card>
 
             <md-card class="md-layout-item md-size-100" v-if="interactionsList">
                 <md-card-header class="md-card-header-icon md-card-header-rose">
