@@ -18,7 +18,7 @@
 
       <md-card-content style="text-align: center; height: 100%;">
         <md-switch class="md-switch-info multiple pull-right text-left margin-bottom_30" v-model="budgetType">
-          {{!budgetType ? 'Budget per Employee' : 'Total Budget'}}
+          <span style="font-weight: 600;">{{!budgetType ? 'Budget per Employee' : 'Total Budget'}}</span>
         </md-switch>
 
         <div v-if="!budgetType">
@@ -29,13 +29,13 @@
                 <animated-number ref="remainingBudgetPerEmployeeNumber" :value="remainingBudgetPerEmployee" prefix="$"></animated-number>
               </h4>
             </div>
-            <hr style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
+            <hr style="border-top: 1px solid rgba(94, 95, 95, 0.1); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
           </div>
 
           <div style="padding: 16px;"></div>
 
           <div class="text-left">
-            <h5 style="font-size: 0.95rem !important; font-weight: 600; padding: 0; margin: 0; color: rgb(225, 234,239);">Annual budget per employee</h5>
+            <h5 style="font-size: 0.95rem !important; padding: 0; margin: 0; color: #959595;">Annual budget per employee</h5>
             <div class="d-flex flex-wrap justify-beetwen items-center-v">
               <md-field v-show="this.editAnnualBudgetPerEmployee" :class="[{'md-error': errors.has('annualBudgetPerEmployee')}]">
                 <md-input v-model="annualBudgetPerEmployee"
@@ -63,19 +63,43 @@
                 </md-button>
               </div>
             </div>
-            <hr v-show="!this.editAnnualBudgetPerEmployee" style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
+            <hr v-show="!this.editAnnualBudgetPerEmployee" style="border-top: 1px solid rgba(94, 95, 95, 0.1); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
           </div>
 
           <div style="padding: 16px;"></div>
 
-          <div>
-            <div style="text-align: left;">
-              <h5 style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Number of employees</h5>
+          <div class="text-left">
+            <h5 style="font-size: 0.95rem !important; padding: 0; margin: 0; color: #959595;">Number of employees</h5>
+            <div class="d-flex flex-wrap justify-beetwen items-center-v">
+              <md-field v-show="editNumberOfEmployees" :class="[{'md-error': errors.has('numberOfEmployees')}]">
+                <md-input v-model="numberOfEmployees"
+                          data-vv-name="numberOfEmployees"
+                          v-validate= "modelValidations.numberOfEmployees" style="width: 10px;"/>
+                <span class="md-error" v-if="errors.has('numberOfEmployees')">The field is required</span>
+              </md-field>
+
               <h4 style="font-size: 0.95rem; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
-                <animated-number ref="numberOfEmployees" :value="auth.user.customer.numberOfEmployees"></animated-number>
+                <animated-number ref="numberOfEmployees" :value="numberOfEmployees"></animated-number>
               </h4>
+
+              <div v-show="!editNumberOfEmployees">
+                <md-button class="md-icon-button md-simple" @click="openEditNumberOfEmployees()">
+                  <md-icon>edit</md-icon>
+                </md-button>
+              </div>
+
+              <div v-show="editNumberOfEmployees" class="d-flex ml-auto mr-0">
+                <md-button class="md-icon-button md-simple" @click="resetField()">
+                  <md-icon class="text-red">clear</md-icon>
+                </md-button>
+
+                <md-button class="md-icon-button md-simple" @click="saveBudgeData()">
+                  <md-icon class="text-success">check</md-icon>
+                </md-button>
+              </div>
+
             </div>
-            <hr style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
+            <hr v-show="!editNumberOfEmployees" style="border-top: 1px solid rgba(94, 95, 95, 0.1); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
           </div>
           <div style="padding: 16px;"></div>
         </div>
@@ -90,7 +114,7 @@
           <div style="padding: 16px;"></div>
 
           <div style="text-align: left;">
-            <h5 style="font-size: 0.95rem !important; font-weight: 600; padding: 0; margin: 0; color: rgb(225, 234,239);">Total annual budget</h5>
+            <h5 style="font-size: 0.95rem !important; padding: 0; margin: 0; color: #959595;">Total annual budget</h5>
 
             <div class="d-flex flex-wrap justify-beetwen items-center-v">
               <md-field v-show="this.editAnnualBudget" :class="[{'md-error': errors.has('annualBudget')}]">
@@ -117,17 +141,17 @@
               </div>
             </div>
 
-            <hr v-show="!this.editAnnualBudget" style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
+            <hr v-show="!this.editAnnualBudget" style="border-top: 1px solid rgba(94, 95, 95, 0.1); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
           </div>
           <div style="padding: 16px;"></div>
           <div>
             <div style="text-align: left;">
-              <h5 style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; color: rgb(225, 234,239);">Total events</h5>
+              <h5 style="font-size: 0.95rem !important; padding: 0; margin: 0; color: #959595;">Total events</h5>
               <h4 style="font-size: 0.95rem; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
                 <animated-number ref="totalEventsNumber" :value="countEvents"></animated-number>
               </h4>
             </div>
-            <hr style="border-top: 1px solid rgb(84, 102, 115); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
+            <hr style="border-top: 1px solid rgba(94, 95, 95, 0.1); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
           </div>
         </div>
       </md-card-content>
@@ -172,8 +196,13 @@
         budgetType: false,
         statisticData: {},
         editAnnualBudgetPerEmployee: false,
+        editNumberOfEmployees: false,
         editAnnualBudget: false,
         annualBudgetPerEmployee: {
+          type: Number,
+          default: 0
+        },
+        numberOfEmployees: {
           type: Number,
           default: 0
         },
@@ -211,6 +240,11 @@
             min_value: 1,
             max_value: 1000000,
           },
+          numberOfEmployees: {
+            required: true,
+            min_value: 1,
+            max_value: 1000000,
+          },
         },
       }
     },
@@ -226,6 +260,8 @@
         let calendarId = this.auth.user.defaultCalendarId;
         let calendar = await Calendar.params({year: this.$route.params.year}).find(calendarId);
         calendar.annualBudget = Number(this.annualBudget);
+        calendar.customer.numberOfEmployees = Number(this.numberOfEmployees);
+        this.auth.user.customer.numberOfEmployees = Number(this.numberOfEmployees);
         calendar.annualBudgetPerEmployee = Number(this.annualBudgetPerEmployee);
 
 
@@ -239,6 +275,7 @@
       },
       queryBudgetInfo(){
         if (this.statistics) {
+          this.numberOfEmployees = this.auth.user.customer.numberOfEmployees | numeral('0,0');
           this.annualBudget = this.statistics.annualBudget | numeral('0,0');
           this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee | numeral('0,0');
           this.totalRemainingBudget = this.statistics.annualBudget - this.statistics.annualBudgetAllocated;
@@ -256,10 +293,14 @@
         this.annualBudget = this.annualBudgetCache;
         this.annualBudgetPerEmployee = this.annualBudgetPerEmployeeCache;
         this.editAnnualBudgetPerEmployee = false;
+        this.editNumberOfEmployees = false;
         this.editAnnualBudget = false;
       },
       openEditAnnualBudgetPerEmployee(){
         this.editAnnualBudgetPerEmployee = true;
+      },
+      openEditNumberOfEmployees(){
+        this.editNumberOfEmployees = true;
       },
       openEditAnnualBudget(){
         this.editAnnualBudget = true;
