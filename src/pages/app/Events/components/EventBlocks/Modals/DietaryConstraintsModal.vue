@@ -4,8 +4,7 @@
             <modal v-if="DietaryConstraintsModal">
                 <template slot="header">
                     <div class="md-layout d-flex text-center">
-                        <h2>I am {{isGoing === 'no' ? 'not' : ''}} going<br>to the event.
-                        </h2>
+                        <h2>Click on the relevant dietary constraints</h2>
                     </div>
                     <md-button class="md-simple md-just-icon md-round modal-default-button" @click="closeModal">
                         <md-icon>clear</md-icon>
@@ -13,7 +12,7 @@
                 </template>
                 <template slot="body">
                     <div class="md-layout" style="margin-top:5%">
-                        <div class="md-layout-item" v-for="(item,index) in dietaryIconOnFirstList" >
+                        <div class="md-layout-item dietary-item" v-for="(item,index) in dietaryIconOnFirstList" >
                             <img :src="`static/img/dietary/${item.on}.png`" @click="toggleFlagFirstList(index)" v-if="item.flagOn">
                             <img :src="`static/img/dietary/${item.off}.png`" @click="toggleFlagFirstList(index)" v-if="!item.flagOn">
                         </div>
@@ -21,7 +20,7 @@
                     </div>
 
                     <div class="md-layout"   style="margin-top:5%">
-                        <div class="md-layout-item" v-for="(item,index) in dietaryIconOnSecondList" >
+                        <div class="md-layout-item dietary-item" v-for="(item,index) in dietaryIconOnSecondList" >
                             <img :src="`static/img/dietary/${item.on}.png`" @click="toggleFlagSecondList(index)" v-if="item.flagOn">
                             <img :src="`static/img/dietary/${item.off}.png`" @click="toggleFlagSecondList(index)" v-if="!item.flagOn">
                         </div>

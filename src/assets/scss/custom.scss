@@ -1640,14 +1640,24 @@ iframe{
     .event-confirmation {
       .confirmation-section {
         h4 {
-          font-size: 1.3rem;
+          font-size: 1.2rem;
         }
         .md-button .md-ripple {
-          font-size: 15px;
+          font-size: 14px;
           width: 60px;
         }
 
       }
+    }
+  }
+
+  .signup-modal {
+    h2 {
+      font-size: 1.6rem;
+    }
+
+    .md-layout-item.dietary-item {
+      padding : 0;
     }
   }
 }
@@ -1660,8 +1670,8 @@ iframe{
           font-size: 1rem;
         }
         .md-button .md-ripple {
-          font-size: 15px;
-          width: 50px;
+          font-size: 13px;
+          width: 45px;
         }
 
       }
