@@ -1481,36 +1481,39 @@ iframe{
   max-width: 100%;
 }
 
-.adding-building-blocks-panel {
+.add-building-blocks-list {
+  list-style: none;
+  padding : 0;
 
-  .block-item {
-    width : 100%;
-    padding : 8px 10px;
-
-    &.main-block {
-      margin-top : 1em;
-
-    }
-    .md-icon {
-      margin-right : 0.4em;
-    }
+  >li {
+    margin-bottom: 1.1em;
+    padding-bottom : 1.1em;
+    border-bottom : 1px solid #efefef;
   }
 
-  h4 {
-    margin-bottom : 0.4em;
+  .block-icon {
+    padding: 0.7em;
+    border-radius: 4px;
+    margin-right: 0.5em;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.2);
   }
 
-  .draggable-area {
-    position: fixed;
-    width: 40%;
-    color: #fff;
-    padding: 6% 0;
-    background: rgba(0, 0, 0, 0.4);
-    right: 40%;
-    top: 30%;
-    text-align: center;
-    border: 2px dashed #fff;
-    border-radius: 3px;
+  span {
+    font-weight: 500;
+    margin-top: 1em;
+    display: inline-block;
+    font-size: 14px;
+    margin-left: 0.5em;
+  }
+
+  .child-components-list {
+    list-style: none;
+    padding : 0;
+
+    li {
+      margin-bottom: 1.1em;
+    }
+
   }
 }
 
@@ -1640,24 +1643,14 @@ iframe{
     .event-confirmation {
       .confirmation-section {
         h4 {
-          font-size: 1.2rem;
+          font-size: 1.3rem;
         }
         .md-button .md-ripple {
-          font-size: 14px;
+          font-size: 15px;
           width: 60px;
         }
 
       }
-    }
-  }
-
-  .signup-modal {
-    h2 {
-      font-size: 1.6rem;
-    }
-
-    .md-layout-item.dietary-item {
-      padding : 0;
     }
   }
 }
@@ -1670,8 +1663,8 @@ iframe{
           font-size: 1rem;
         }
         .md-button .md-ripple {
-          font-size: 13px;
-          width: 45px;
+          font-size: 15px;
+          width: 50px;
         }
 
       }
