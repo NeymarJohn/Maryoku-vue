@@ -2,11 +2,10 @@
     <div class="md-layout">
         <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
         <div v-if="!selectedBlock" class="proposals-management" >
-            <md-card-content class="md-layout proposals-management_items" v-if="categoryBuildingBlocks.length">
+            <md-card-content class="md-layout proposals-management_items">
 
                 <div class="md-layout-item md-size-100">
                     <h3>Select services and set budget</h3>
-
                     <p>
                         We've added relevant services according to you'r event attributes. You can add new ones or remove existing.
                     </p>
@@ -95,10 +94,6 @@
             <event-blocks :event="event" :event-components="eventComponents" :selectedBlock="selectedBlock" @go-to-building-blocks="resetSelectedBlock"></event-blocks>
         </div>
 
-
-        <!-- Add Building Block Modal -->
-        <add-building-block-modal :event="event" :categoryBuildingBlocks="categoryBuildingBlocks" rel="addBuildingBlockModal" @BlockAdded="getEventBuildingBlocks()"></add-building-block-modal>
-        <!-- ./Add Building Block Modal -->
     </div>
 
 
@@ -225,38 +220,43 @@
             new EventComponent().for(calendar, event).get()
                 .then(res=> {
                     this.$set(this,'buildingBlocksList',res);
-                    console.log('buildingBlocksList',res);
-                })
-                .catch(error => {
-                    console.log('Error ', error);
-                })
-        },
-        getCategoryBlocks() {
-            EventComponent.get()
-                .then(res=> {
-                    console.log('getCategoryBlocks',res);
-                    this.$set(this,'categoryBuildingBlocks',res);
-
                 })
                 .catch(error => {
                     console.log('Error ', error);
                 })
         },
         showAddBuildingBlocksModal() {
-             this.setBuildingBlockModal({ showModal: true });
+            window.currentPanel = this.$showPanel({
+                component: AddBuildingBlockModal,
+                cssClass: 'md-layout-item md-size-35 transition36 ',
+                openOn: 'right',
+                props: {event : this.event}
+            });
+             //this.setBuildingBlockModal({ showModal: true });
         }
     },
     created() {
 
     },
     mounted() {
+        let _self = this;
         this.isLoading = false;
 
         // Get default event building blocks
         this.getEventBuildingBlocks();
 
-        // Get all building blocks for selected category
-        this.getCategoryBlocks();
+        this.$bus.$on('BlockAdded', function () {
+            _self.$notify(
+                {
+                    message: 'New Building Block added successfully',
+                    horizontalAlign: 'center',
+                    verticalAlign: 'top',
+                    type: 'success'
+                })
+            _self.getEventBuildingBlocks();
+        })
+
+
     }
   }
 </script>

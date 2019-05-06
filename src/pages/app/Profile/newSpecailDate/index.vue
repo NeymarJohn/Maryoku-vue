@@ -1,7 +1,7 @@
 <template>
  <div>
-    <div class="md-layout mb16"  v-for="(item,index) in DateList " :key="index">
-    
+    <div class="md-layout mb16"  v-for="(item,index) in DateList " :key="item.id">
+
         <div class="md-layout-item md-size-30" style="padding-right:0px; padding-left:0px;">
             <md-field style="width:100%">
                 <label>title</label>
@@ -27,13 +27,13 @@
         @md-cancel="onCancel"
         @md-confirm="confirmDelete" />
     </div>
- </div>    
+ </div>
 </template>
 
 <script>
     export default {
         components:{
-            
+
         },
         data() {
             return {
@@ -51,12 +51,12 @@
         },
         methods:{
             saveItem(index){
-                this.DateList[index].editable = true                
+                this.DateList[index].editable = true
             },
             deleteItem(index){
                 this.dialogFlag = !this.dialogFlag
                  this.indexItem = index
-               
+
             },
             disagreeRemoveItem(){
                 this.dialogFlag = false
@@ -78,5 +78,5 @@
     input{
         width: 100%
     }
-    
+
 </style>

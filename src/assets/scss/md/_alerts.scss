@@ -26,6 +26,13 @@
       @include alert-icon-color($brand-info);
     }
 
+  &.alert-plain{
+    @include alert-color(lighten($white,5%));
+    @include alert-icon-color($brand-info);
+    color: $brand-info;
+    border-radius: 8px;
+  }
+
     &.alert-danger{
       @include alert-color(lighten($brand-danger,5%));
       @include alert-icon-color($brand-danger);

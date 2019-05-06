@@ -1421,6 +1421,11 @@ iframe{
   justify-content: space-between;
 }
 
+.alert-transparent-info   {
+  padding: 32px 12px !important;
+  text-align: center;
+}
+
 .edit-event-details {
 
   .event-info-section {
@@ -1476,39 +1481,36 @@ iframe{
   max-width: 100%;
 }
 
-.add-building-blocks-list {
-  list-style: none;
-  padding : 0;
+.adding-building-blocks-panel {
 
-  >li {
-    margin-bottom: 1.1em;
-    padding-bottom : 1.1em;
-    border-bottom : 1px solid #efefef;
-  }
+  .block-item {
+    width : 100%;
+    padding : 8px 10px;
 
-  .block-icon {
-    padding: 0.7em;
-    border-radius: 4px;
-    margin-right: 0.5em;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.2);
-  }
+    &.main-block {
+      margin-top : 1em;
 
-  span {
-    font-weight: 500;
-    margin-top: 1em;
-    display: inline-block;
-    font-size: 14px;
-    margin-left: 0.5em;
-  }
-
-  .child-components-list {
-    list-style: none;
-    padding : 0;
-
-    li {
-      margin-bottom: 1.1em;
     }
+    .md-icon {
+      margin-right : 0.4em;
+    }
+  }
 
+  h4 {
+    margin-bottom : 0.4em;
+  }
+
+  .draggable-area {
+    position: fixed;
+    width: 40%;
+    color: #fff;
+    padding: 6% 0;
+    background: rgba(0, 0, 0, 0.4);
+    right: 40%;
+    top: 30%;
+    text-align: center;
+    border: 2px dashed #fff;
+    border-radius: 3px;
   }
 }
 
