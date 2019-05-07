@@ -84,7 +84,7 @@
 
             <md-card class="block-info" v-else-if="!item.mode || item.mode === 'saved' ">
               <div class="card-actions">
-                <h5 class="item-time" style="display: inline-block; margin-top: 10px;" :style="`background : ` + item.color">{{ item.startTime }} - {{item.endTime}}</h5>
+                <span class="item-time" style="display: inline-block; margin-top: 14px;" :style="`background : ` + item.color">{{ item.startTime }} - {{item.endTime}}</span>
                 <md-button name="event-planner-tab-timeline-item-edit" class="md-info md-sm md-just-icon md-simple md-round"
                            @click="modifyItem(index)">
                   <md-icon>create</md-icon>
@@ -95,9 +95,9 @@
                 </md-button>
               </div>
               <div class="item-title-and-time">
-                <h5 class="title">
+                <span class="item-title" style="font-weight: 500; margin-top: 6px; display: inline-block;" v-if="item.title">
                   {{item.title }}
-                </h5>
+                </span>
               </div>
               <p class="item-desc">
                 {{ item.description }}
