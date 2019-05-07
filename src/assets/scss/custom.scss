@@ -380,6 +380,11 @@ $tooltip-border-color: $blue-grey-200 !default;
       text-align: right;
       margin-top : 1em;
     }
+
+    .md-textarea {
+      padding-left : 0 !important;
+      min-height: 60px !important;
+    }
   }
 }
 
@@ -1115,10 +1120,42 @@ $tooltip-border-color: $blue-grey-200 !default;
     .interaction-date {
         margin : 0 0 0;
     }
+
+
+
   }
 
   .md-textarea {
     padding-left :0 !important;
+  }
+}
+
+.preview-section {
+  ul.images-list {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    padding : 0;
+    overflow-x: auto;
+
+    li {
+      margin-right : 0.5em;
+
+      .image-item {
+        width : 86.7px !important;
+        height: 58px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover !important;
+        opacity: 0.5;
+
+        &.selected {
+          border : 3px solid $brand-rose;
+          opacity: 1;
+
+        }
+      }
+    }
   }
 }
 .interactions-list {
@@ -1128,6 +1165,10 @@ $tooltip-border-color: $blue-grey-200 !default;
     border-radius: 5px;
     padding : 0 1em;
     margin-bottom : 1em;
+
+    &.selected_interaction {
+      border-color : $brand-rose;
+    }
 
     .md-input {
       max-width: 100%;
@@ -1146,7 +1187,7 @@ $tooltip-border-color: $blue-grey-200 !default;
     overflow-x: auto;
     padding : 0 1em;
 
-    ul {
+    ul.images-list {
       display: flex;
       flex-direction: row;
       list-style: none;
@@ -1481,39 +1522,36 @@ iframe{
   max-width: 100%;
 }
 
-.add-building-blocks-list {
-  list-style: none;
-  padding : 0;
+.adding-building-blocks-panel {
 
-  >li {
-    margin-bottom: 1.1em;
-    padding-bottom : 1.1em;
-    border-bottom : 1px solid #efefef;
-  }
+  .block-item {
+    width : 100%;
+    padding : 8px 10px;
 
-  .block-icon {
-    padding: 0.7em;
-    border-radius: 4px;
-    margin-right: 0.5em;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.2);
-  }
+    &.main-block {
+      margin-top : 1em;
 
-  span {
-    font-weight: 500;
-    margin-top: 1em;
-    display: inline-block;
-    font-size: 14px;
-    margin-left: 0.5em;
-  }
-
-  .child-components-list {
-    list-style: none;
-    padding : 0;
-
-    li {
-      margin-bottom: 1.1em;
     }
+    .md-icon {
+      margin-right : 0.4em;
+    }
+  }
 
+  h4 {
+    margin-bottom : 0.4em;
+  }
+
+  .draggable-area {
+    position: fixed;
+    width: 40%;
+    color: #fff;
+    padding: 6% 0;
+    background: rgba(0, 0, 0, 0.4);
+    right: 40%;
+    top: 30%;
+    text-align: center;
+    border: 2px dashed #fff;
+    border-radius: 3px;
   }
 }
 
@@ -1527,6 +1565,11 @@ iframe{
     margin-top : 3em;
   }
 }
+
+.invitees-group-list {
+  margin-top : 0;
+}
+
 @media screen and (max-width : 500px) {
   .event-details {
     &_content.md-card-content {
@@ -1643,14 +1686,24 @@ iframe{
     .event-confirmation {
       .confirmation-section {
         h4 {
-          font-size: 1.3rem;
+          font-size: 1.2rem;
         }
         .md-button .md-ripple {
-          font-size: 15px;
+          font-size: 14px;
           width: 60px;
         }
 
       }
+    }
+  }
+
+  .signup-modal {
+    h2 {
+      font-size: 1.6rem;
+    }
+
+    .md-layout-item.dietary-item {
+      padding : 0;
     }
   }
 }
@@ -1663,8 +1716,8 @@ iframe{
           font-size: 1rem;
         }
         .md-button .md-ripple {
-          font-size: 15px;
-          width: 50px;
+          font-size: 13px;
+          width: 45px;
         }
 
       }
