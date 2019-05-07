@@ -68,7 +68,7 @@
     height: 100% !important;
   }
 
-  .slideout {
+  .slideout.bg-grey {
     background-color: #EEEEEE !important;
   }
 </style>
