@@ -10,7 +10,7 @@
                 <filters-panel @filters-changed-event="refreshEvents"></filters-panel>
               </td>
               <td style="width: 20%;min-width: 20%;max-width: 20%; padding-left: 15px;">
-                <md-button class="md-success" @click="openEventModal()" style="width: 100%; height: 100%; margin-left: -6px; margin-top: 5px; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
+                <md-button class="md-success" @click="openEventSidePanel()" style="width: 100%; height: 100%; margin-left: -6px; margin-top: 5px; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
               </td>
             </tr>
           </table>
@@ -38,7 +38,7 @@
                               <td v-for="monthDay in monthRow" style="width: 14.2%; min-width: 14.2%; max-width: 14.2%;">
                                 <template v-if="monthDay !== 0">
                                   <template v-if="monthDay.hasEvents">
-                                    <md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" style="background-color: #bdbdbd !important;" class="md-grey md-just-icon md-round md-md">
+                                    <md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" class="md-simple month-day-button md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                     </md-button>
                                     <md-button v-else-if="monthDay.events.editables.length" @click="openEditEventModal(true, monthDay.events.editables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-just-icon md-round md-md" v-bind:style="`background-color: ${colorWithCategory(monthDay.events.editables[0].category)}`">
@@ -47,7 +47,7 @@
                                         {{monthDay.events.editables.length}}
                                       </span>
                                     </md-button>
-                                    <md-button v-else-if="monthDay.events.nonEditables.length" @click="openEditEventModal(true, monthDay.events.nonEditables[0])" :ref="`month-day-${monthDay.dayInMonth}`" style="background-color: #bdbdbd !important;" class="md-grey md-just-icon md-round md-md">
+                                    <md-button v-else-if="monthDay.events.nonEditables.length" @click="openEditEventModal(true, monthDay.events.nonEditables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="month-day-button md-simple md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                       <span v-if="monthDay.events.nonEditables.length > 1" class="count">
                                         {{monthDay.events.nonEditables.length}}
@@ -55,7 +55,7 @@
                                     </md-button>
                                   </template>
                                   <template v-else>
-                                    <md-button :ref="`month-day-${monthDay.dayInMonth}`" @click="openEventModal(fullDateWithDay(monthDay.dayInMonth))" class="md-simple md-round  md-just-icon md-md">
+                                    <md-button :ref="`month-day-${monthDay.dayInMonth}`" @click="openEventSidePanel(fullDateWithDay(monthDay.dayInMonth))" class="md-simple md-round  md-just-icon md-md">
                                       {{monthDay.dayInMonth}}
                                     </md-button>
                                   </template>
@@ -132,6 +132,7 @@
   import FiltersPanel from './FiltersPanel';
   import MonthSelectPanel from './MonthSelectPanel';
   import MonthEventsPanel from './MonthEventsPanel';
+  import EventSidePanel from '../Events/EventSidePanel';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import AnnualPlannerVuexModule from './AnnualPlanner.vuex';
 
@@ -316,12 +317,20 @@
 
         return calendarEventsMap;
       },
-      openEventModal(currentDate) {
-        this.setEventModal({ showModal: true });
-        this.setModalSubmitTitle('Save');
-        this.setEditMode({ editMode: false });
-        this.setNumberOfParticipants({numberOfParticipants: this.auth.user.customer.numberOfEmployees});
-        this.setEventDate({date: currentDate ? currentDate : null});
+      openEventSidePanel(currentDate){
+
+        window.currentPanel = this.$showPanel({
+          component: EventSidePanel,
+          cssClass: 'md-layout-item md-size-50 transition36 ',
+          openOn: 'right',
+          props: {
+            editMode: false,
+            showModal: true,
+            numberOfParticipants: this.auth.user.customer.numberOfEmployees,
+            modalSubmitTitle: 'Save',
+            date: currentDate ? currentDate : null
+          }
+        });
       },
       openEditEventModal: function (show, item) {
         if (!item.editable){
@@ -360,6 +369,10 @@
 <style scope>
   .md-button.md-just-icon {
     overflow: visible;
+  }
+  .md-simple.month-day-button {
+    color: #000 !important;
+    font-weight: bold;
   }
   .md-button .md-button-content .count {
     position: absolute;
