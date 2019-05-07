@@ -13,7 +13,6 @@
         <p>
           Drag & Drop building blocks to your working panel to add new services or products to your event
         </p>
-        <vue-element-loading :active="!isLoaded" spinner="ring" color="#FF547C"/>
         <div class="md-layout" style="overflow: auto; max-height: 80vh;">
           <div v-for="(item,index) in categoryBuildingBlocks" :key="index" class="md-layout-item md-size-80 mx-auto">
             <drag :class="`md-button md-${item.color} block-item`"
