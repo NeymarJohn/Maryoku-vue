@@ -208,7 +208,7 @@
         showAddBuildingBlocksModal() {
             window.currentPanel = this.$showPanel({
                 component: AddBuildingBlockModal,
-                cssClass: 'md-layout-item md-size-35 transition36 bg-grey',
+                cssClass: 'md-layout-item md-size-35 transition36 ',
                 openOn: 'right',
                 props: {event : this.event}
             });

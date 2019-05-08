@@ -3,16 +3,11 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
     <md-card style="padding: 0; margin: 0; height: 100%; min-height: 100%;">
-      <md-card-header class="md-card-header-icon md-card-header-green">
-        <div class="card-icon">
-          <md-icon>star</md-icon>
-        </div>
-        <h4>Events</h4>
-      </md-card-header>
-
       <md-card-content style="text-align: center; padding: 0; margin: 0; height: 100%;min-height: 100%; overflow: hidden;">
 
-        <hr style="margin-top: 4px; margin-left: 18px; margin-right: 18px; border-color: lightgray; border-top: none; border-left: none; border-right: none;" class="divider"/>
+        <md-button class="md-simple md-round year-button disabled" style="font-size: 18px !important; font-weight: 500; padding: 8px; margin-top: 8px;">Events</md-button>
+
+        <hr style="margin-top: 0; margin-left: 18px; margin-right: 18px; border-color: lightgray; border-top: none; border-left: none; border-right: none;" class="divider"/>
 
         <!--<md-list class="md-triple-line md-dense" style="overflow: auto; height: 88%; min-height: 88%;">
 

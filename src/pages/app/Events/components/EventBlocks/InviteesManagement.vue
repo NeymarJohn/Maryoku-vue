@@ -199,7 +199,6 @@
     import moment from 'moment';
     import _ from "underscore";
 
-
     // Get dummy images from EventPageHeaderImage
     import EventPageHeaderImage from '@/models/EventPageHeaderImage';
 
