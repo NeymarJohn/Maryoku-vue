@@ -125,7 +125,7 @@
       openMyProfile(){
         window.currentPanel = this.$showPanel({
           component: MyProfile,
-          cssClass: 'md-layout-item md-size-75 transition36 ',
+          cssClass: 'md-layout-item md-size-75 transition36 bg-grey',
           openOn: 'right',
           props: {}
         });
@@ -133,7 +133,7 @@
       openAccountSettings(){
         window.currentPanel = this.$showPanel({
           component: MyCompany,
-          cssClass: 'md-layout-item md-size-65 transition36 ',
+          cssClass: 'md-layout-item md-size-65 transition36  bg-grey',
           openOn: 'right',
           props: {}
         });
@@ -141,7 +141,7 @@
       openTeam(){
         const panelInstance = this.$showPanel({
           component : Team,
-          cssClass: 'md-layout-item md-size-75 transition36 ',
+          cssClass: 'md-layout-item md-size-75 transition36 bg-grey',
           openOn: 'right',
           props: {
 

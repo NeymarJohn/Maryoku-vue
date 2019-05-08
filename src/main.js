@@ -107,6 +107,18 @@ Vue.use(VueGtm, {
 
 Vue.use(VueSlideoutPanel);
 
+Vue.directive('focus', {
+  inserted: function (el) {
+    el.focus();
+  }
+});
+
+Vue.directive('select-all', {
+  inserted: function (el) {
+    el.setSelectionRange(el.value.length, el.value.length);
+  }
+});
+
 Model.$http = axios;
 
 Number.prototype.padStart = function(size, theChar)  {

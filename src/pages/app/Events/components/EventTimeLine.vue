@@ -84,6 +84,7 @@
 
             <md-card class="block-info" v-else-if="!item.mode || item.mode === 'saved' ">
               <div class="card-actions">
+                <span class="item-time" style="display: inline-block; margin-top: 14px;" :style="`background : ` + item.color">{{ item.startTime }} - {{item.endTime}}</span>
                 <md-button name="event-planner-tab-timeline-item-edit" class="md-info md-sm md-just-icon md-simple md-round"
                            @click="modifyItem(index)">
                   <md-icon>create</md-icon>
@@ -94,12 +95,9 @@
                 </md-button>
               </div>
               <div class="item-title-and-time">
-                                <span class="item-time" :style="`background : ` + item.color">
-                                    {{ item.startTime }} - {{item.endTime}}
-                                </span>
-                <span class="item-title">
-                                    {{item.title }}
-                                </span>
+                <span class="item-title" style="font-weight: 500; margin-top: 6px; display: inline-block;" v-if="item.title">
+                  {{item.title }}
+                </span>
               </div>
               <p class="item-desc">
                 {{ item.description }}
@@ -158,7 +156,7 @@
       EventBlocks,
       draggable, Drag, Drop,
       SlideYDownTransition,
-        InputMask
+      InputMask
     },
     props: {
       event: Object,
@@ -260,7 +258,7 @@
         let event = new CalendarEvent({id: this.event.id});
 
         new EventTimelineItem().for(calendar, event).get().then(res => {
-            console.log(res);
+          console.log(res);
           this.timelineItems = _.sortBy(res, function(item){ return item.order});
           this.isLoading = false;
         })
