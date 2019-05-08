@@ -209,9 +209,7 @@
       currentEvent : {
         type : Object,
         default : null
-      },
-      modalSubmitTitle: String
-
+      }
     },
     data: () => ({
       auth: auth,
@@ -260,10 +258,11 @@
       this.hoursArray.push();
     },
     computed: {
-      ...mapState('EventPlannerVuex', [
+      ...mapState('AnnualPlannerVuex', [
         'eventData',
         'eventModalOpen',
         'modalTitle',
+        'modalSubmitTitle',
         'editMode',
       ]),
       ...mapGetters({
@@ -402,7 +401,7 @@
       });
     },
     methods: {
-      ...mapMutations('EventPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
+      ...mapMutations('AnnualPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
       toogleTitle(){
         this.editTitle = !this.editTitle;
       },
@@ -494,7 +493,7 @@
             event.for(_calendar).delete().then(result => {
               this.$parent.isLoading = false;
               this.closePanel();
-              this.$emit("refresh-events");
+              this.refreshEvents();
             }).catch(() => {
               this.$parent.isLoading = false;
             });
