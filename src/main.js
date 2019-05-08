@@ -28,10 +28,6 @@ import routes from "./router/routes";
 // store setup
 import store from "./store";
 
-var VueEventBus = require('vue-event-bus')
-Vue.use(VueEventBus)
-
-
 // plugin setup
 Vue.use(VueRouter);
 Vue.use(DashboardPlugin);
@@ -106,18 +102,6 @@ Vue.use(VueGtm, {
 });
 
 Vue.use(VueSlideoutPanel);
-
-Vue.directive('focus', {
-  inserted: function (el) {
-    el.focus();
-  }
-});
-
-Vue.directive('select-all', {
-  inserted: function (el) {
-    el.setSelectionRange(el.value.length, el.value.length);
-  }
-});
 
 Model.$http = axios;
 

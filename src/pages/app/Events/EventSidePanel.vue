@@ -5,31 +5,34 @@
         <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon"><md-icon>arrow_back</md-icon></md-button>
       </h4>
     </div>
-    <div class="md-layout-item md-size-95" style="max-height: 90vh; ">
+    <div class="md-layout-item md-size-95" style="max-height: 90vh;">
       <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
-        Create Event
+          <div class="md-layout d-flex items-center-g">
+            <div class="md-layout-item md-size-auto md-small-size-100 d-flex items-center-v text-center">
+              <md-field v-show="this.editTitle" :class="[{'md-error': errors.has('title')}]">
+                <label>Event title</label>
+                <md-input v-model="title"
+                          data-vv-name="title"
+                          v-validate= "modelValidations.title"
+                          required
+                />
+                <span class="md-error" v-if="errors.has('title')">The event title is required</span>
+              </md-field>
 
-        <a href="javascript: void(null);" v-if="this.editMode" @click="openEventPlanner" class="text-info md-info small pull-right" style="line-height: 51px;">
-          <md-icon class="text-info">event_note</md-icon> Open in Event Planner <md-icon class="text-info">arrow_right</md-icon>
-        </a>
+              <h4 class="modal-title" v-show="!this.editTitle">
+                <span v-if="title">{{title}}</span>
+              </h4>
+              <md-button class="md-simple md-just-icon md-round fa fa-edit" @click="toogleTitle">
+                <md-icon>edit</md-icon>
+              </md-button>
+            </div>
+          </div>
       </h4>
 
-      <div class="md-layout" style="overflow: auto; max-height: 90vh; margin-top: 24px;">
-        <div class="md-layout-item mx-auto">
+      <div class="md-layout" style="overflow: auto; max-height: 90vh; margin-left: -15px;">
+        <div style="flex: 0 0 auto; width: 100%;">
           <form>
             <div class="md-layout mb16">
-              <div class="md-layout-item md-size-100">
-                <md-field :class="[{'md-error': errors.has('title')}]">
-                  <label>Event title</label>
-                  <md-input v-model="title"
-                            data-vv-name="title"
-                            v-validate= "modelValidations.title"
-                            required
-                            v-focus v-select-all
-                  />
-                  <span class="md-error" v-if="errors.has('title')">The event title is required</span>
-                </md-field>
-              </div>
               <div class="md-layout-item md-small-size-100">
                 <md-autocomplete v-model="occasion"
                                  data-vv-name="occasion"
@@ -158,17 +161,6 @@
                   <span class="md-error" v-if="errors.has('numberOfParticipants')">The event participants is required and should be in range of 1 - 10 000</span>
                 </md-field>
               </div>
-              <div class="md-layout-item md-size-100" style="margin-top: 24px;">
-                <div class="pull-right">
-                  <md-button class="md-success" @click="validateEvent">
-                    {{modalSubmitTitle}}
-                  </md-button>
-
-                  <md-button v-if="this.editMode" class="md-danger md-just-icon" @click="showDeleteAlert">
-                    <md-icon class="md-theme-warning" style="font-size: 1.5rem !important;">delete </md-icon>
-                  </md-button>
-                </div>
-              </div>
               <!--<div class="md-layout-item md-small-size-100">
                   <md-field :class="[{'md-error': errors.has('currency')}]" class="select-with-icon">
                       <label>Currency</label>
@@ -186,7 +178,21 @@
                   </md-field>
               </div>-->
             </div>
+
           </form>
+        </div>
+        <div>
+          <md-button v-if="this.editMode" class="md-simple move-left md-just-icon" @click="showDeleteAlert">
+            <md-icon class="md-theme-warning" style="font-size: 1.5rem !important;">delete </md-icon>
+          </md-button>
+
+          <md-button v-if="this.editMode" @click="openEventPlanner" class="md-success">
+            Open in Event Planner
+          </md-button>
+
+          <md-button class="md-success move-right" @click="validateEvent">
+            {{modalSubmitTitle}}
+          </md-button>
         </div>
       </div>
     </div>
@@ -209,8 +215,7 @@
       currentEvent : {
         type : Object,
         default : null
-      },
-      modalSubmitTitle: String
+      }
 
     },
     data: () => ({
@@ -260,10 +265,11 @@
       this.hoursArray.push();
     },
     computed: {
-      ...mapState('EventPlannerVuex', [
+      ...mapState('AnnualPlannerVuex', [
         'eventData',
         'eventModalOpen',
         'modalTitle',
+        'modalSubmitTitle',
         'editMode',
       ]),
       ...mapGetters({
@@ -402,7 +408,7 @@
       });
     },
     methods: {
-      ...mapMutations('EventPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
+      ...mapMutations('AnnualPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
       toogleTitle(){
         this.editTitle = !this.editTitle;
       },
@@ -494,7 +500,7 @@
             event.for(_calendar).delete().then(result => {
               this.$parent.isLoading = false;
               this.closePanel();
-              this.$emit("refresh-events");
+              this.refreshEvents();
             }).catch(() => {
               this.$parent.isLoading = false;
             });
@@ -649,4 +655,4 @@
 
 <!--<script>-->
 
-<!--import {LabelEdit} from '@/components';-->
+  <!--import {LabelEdit} from '@/components';-->

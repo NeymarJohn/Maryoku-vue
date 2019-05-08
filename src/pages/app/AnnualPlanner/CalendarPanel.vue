@@ -10,7 +10,7 @@
                 <filters-panel @filters-changed-event="refreshEvents"></filters-panel>
               </td>
               <td style="width: 20%;min-width: 20%;max-width: 20%; padding-left: 15px;">
-                <md-button class="md-success" @click="openEventSidePanel()" style="width: 100%; height: 100%; margin-left: -6px; margin-top: 5px; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
+                <md-button class="md-success" @click="openNewEventModal()" style="width: 100%; height: 100%; margin-left: -6px; margin-top: 5px; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
               </td>
             </tr>
           </table>
@@ -55,7 +55,7 @@
                                     </md-button>
                                   </template>
                                   <template v-else>
-                                    <md-button :ref="`month-day-${monthDay.dayInMonth}`" @click="openEventSidePanel(fullDateWithDay(monthDay.dayInMonth))" class="md-simple md-round  md-just-icon md-md">
+                                    <md-button :ref="`month-day-${monthDay.dayInMonth}`" @click="openNewEventModal(fullDateWithDay(monthDay.dayInMonth))" class="md-simple md-round  md-just-icon md-md">
                                       {{monthDay.dayInMonth}}
                                     </md-button>
                                   </template>
@@ -104,13 +104,6 @@
         </td>
       </tr>
     </table>
-      <event-modal
-              @refresh-events="refreshEvents"
-              :year="this.year"
-              :month="this.month"
-              :occasions-options="this.occasionsArray"
-              ref="eventModal">
-      </event-modal>
   </div>
 </template>
 
@@ -317,27 +310,32 @@
 
         return calendarEventsMap;
       },
-      openEventSidePanel(currentDate){
-
+      openEventSidePanel() {
         window.currentPanel = this.$showPanel({
           component: EventSidePanel,
-          cssClass: 'md-layout-item md-size-40 transition36 ',
+          cssClass: 'md-layout-item md-size-50 transition36 ',
           openOn: 'right',
           props: {
-            editMode: false,
-            showModal: true,
-            numberOfParticipants: this.auth.user.customer.numberOfEmployees,
-            modalSubmitTitle: 'Save',
-            date: currentDate ? currentDate : null
+            refreshEvents: this.refreshEvents,
+            year: this.year,
+            month: this.month,
+            occasionsOptions: this.occasionsArray,
           }
         });
+      },
+      openNewEventModal(currentDate){
+        this.setModalSubmitTitle('Save');
+        this.setEditMode({ editMode: false });
+        this.setNumberOfParticipants({numberOfParticipants: this.auth.user.customer.numberOfEmployees});
+        this.setEventDate({date: currentDate ? currentDate : null});
+        this.openEventSidePanel()
       },
       openEditEventModal: function (show, item) {
         if (!item.editable){
           item.occasion = item.title;
         }
-
-        this.setEventModalAndEventData({showModal: show, eventData: item});
+        this.setEventModalAndEventData({eventData: item});
+        this.openEventSidePanel()
       },
       fullDateWithDay(day) {
         return moment().date(day).month(this.month-1).year(this.year);

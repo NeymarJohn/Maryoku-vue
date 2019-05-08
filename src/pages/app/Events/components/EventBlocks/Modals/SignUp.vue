@@ -4,7 +4,7 @@
             <modal v-if="signUpModal">
                 <template slot="header">
                     <div class="md-layout d-flex text-center">
-                        <h2>I am {{isGoing === 'no' ? 'not' : ''}} going<br>to the event.
+                        <h2>I am going<br>to the event.
                         </h2>
                     </div>
                     <md-button class="md-simple md-just-icon md-round modal-default-button" @click="closeModal">
@@ -72,9 +72,7 @@
             Modal,
         },
         props: {
-            event: Object,
-            isGoing : [Boolean,String]
-
+            event: Object
 
         },
         data: () => ({

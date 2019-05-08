@@ -68,7 +68,7 @@
     </div>
 
     <!-- Sign up Modal -->
-    <sign-up-modal v-if="calendarEvent" :event="calendarEvent" :isGoing="is_going_to_event"></sign-up-modal>
+    <sign-up-modal v-if="calendarEvent" :event="calendarEvent"></sign-up-modal>
     <!-- ./Sign up Modal -->
 
     <!-- Dietary Constraints Modal -->

@@ -25,10 +25,10 @@
                            <div class="md-layout-item md-size-100">
                                <md-field >
                                    <label>Requirement Description</label>
-                                   <md-textarea
+                                   <md-input
                                            v-model="block.title"
                                            type="text"
-                                   ></md-textarea>
+                                   ></md-input>
                                </md-field>
                            </div>
 
