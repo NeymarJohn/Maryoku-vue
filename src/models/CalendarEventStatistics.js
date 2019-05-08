@@ -1,7 +1,7 @@
 import Model from './Model';
 import CalendarEvent from './CalendarEvent';
 
-export default class CalendarEventImage extends Model {
+export default class CalendarEventStatistics extends Model {
   resource () {
     return 'statistics'
   }
