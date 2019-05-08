@@ -10335,6 +10335,10 @@ vue-eslint-parser@^3.2.1:
     esquery "^1.0.1"
     lodash "^4.17.10"
 
+vue-event-bus@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/vue-event-bus/-/vue-event-bus-1.0.2.tgz#1badd6c3ec6c5f33675d08b9b486123cf0fd5296"
+
 vue-fraction-grid@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/vue-fraction-grid/-/vue-fraction-grid-1.1.0.tgz#9ea053ecdffcd4fd2aa450c8aeee5763e037cc1d"

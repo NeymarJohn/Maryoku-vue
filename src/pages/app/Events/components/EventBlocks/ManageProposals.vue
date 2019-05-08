@@ -1,66 +1,67 @@
 <template>
-    <md-card>
-        <md-card-header class="md-card-header-text md-card-header-warning">
+    <div>
+        <md-card>
+            <md-card-header class="md-card-header-text md-card-header-warning">
 
-            <div class="card-text">
-                <h4 class="title" style="color: white;">Manage Vendor's proposals</h4>
-                <div class="ct-label">Applicable vendors from your list</div>
-            </div>
+                <div class="card-text">
+                    <h4 class="title" style="color: white;">Manage Vendor's proposals</h4>
+                    <div class="ct-label">Applicable vendors from your list</div>
+                </div>
 
-            <div class="header-actions pull-right" style="margin-top : 1em;">
-                <md-button class="md-info" v-if="!selectedBlock.vendors">
-                    Add Vendors
+                <div class="header-actions pull-right" style="margin-top : 1em;">
+                    <md-button class="md-info" v-if="!selectedBlock.vendors.length" @click="openUploadModal">
+                        Add Vendors
+                    </md-button>
+                    <md-button class="md-default" v-if="!selectedBlock.vendors.length">
+                        Send
+                    </md-button>
+                </div>
+
+            </md-card-header>
+
+            <md-card-content style="min-height: 60px;">
+
+                <md-table  v-if="selectedBlock.vendors.length" v-model="selectedBlock.vendors" table-header-color="orange" >
+                    <md-table-row slot="md-table-row" slot-scope="{ item }" :key="proposals.indexOf(item)"   >
+                        <md-table-cell md-label="Vendor Name"  > {{ item.title }}</md-table-cell>
+                        <md-table-cell md-label="People">
+                            ${{item.price}}
+                        </md-table-cell>
+                        <md-table-cell md-label="Average Score">
+                            {{item.requirements}}%
+                        </md-table-cell>
+                        <md-table-cell class="vendors-table_item-actions">
+                            <md-button class="md-button md-info md-sm md-theme-default auto-width md-just-icon" >
+                                VIEW
+                            </md-button>
+                            <md-button class="md-button md-info md-sm md-theme-default auto-width md-just-icon">
+                                SET AS WINNING PROPOSAL
+                            </md-button>
+                        </md-table-cell>
+                    </md-table-row>
+                </md-table>
+
+                <template v-if="!selectedBlock.vendors.length">
+                    <h5>Your vendors list is empty</h5>
+                    <p>import your vendors and refresh this page after you're done</p>
+                </template>
+
+
+            </md-card-content>
+
+            <md-card-actions md-alignment="right" v-if="selectedBlock.vendors.length">
+                <md-button class="md-info" >
+                    Compare proposals
                 </md-button>
-                <md-button class="md-default" v-if="!selectedBlock.vendors">
-                    Send
+                <md-button class="md-info">
+                    Give me proposals
                 </md-button>
-            </div>
+            </md-card-actions>
+        </md-card>
 
+        <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
+    </div>
 
-
-
-
-        </md-card-header>
-
-        <md-card-content style="min-height: 60px;">
-
-            <md-table  v-if="selectedBlock.vendors" v-model="selectedBlock.vendors" table-header-color="orange" >
-                <md-table-row slot="md-table-row" slot-scope="{ item }" :key="proposals.indexOf(item)"   >
-                    <md-table-cell md-label="Vendor Name"  > {{ item.title }}</md-table-cell>
-                    <md-table-cell md-label="People">
-                        ${{item.price}}
-                    </md-table-cell>
-                    <md-table-cell md-label="Average Score">
-                        {{item.requirements}}%
-                    </md-table-cell>
-                    <md-table-cell class="vendors-table_item-actions">
-                        <md-button class="md-button md-info md-sm md-theme-default auto-width md-just-icon" >
-                            VIEW
-                        </md-button>
-                        <md-button class="md-button md-info md-sm md-theme-default auto-width md-just-icon">
-                            SET AS WINNING PROPOSAL
-                        </md-button>
-                    </md-table-cell>
-                </md-table-row>
-            </md-table>
-
-            <template v-if="!selectedBlock.vendors">
-                <h5>Your vendors list is empty</h5>
-                <p>import your vendors and refresh this page after you're done</p>
-            </template>
-
-
-        </md-card-content>
-
-        <md-card-actions md-alignment="right" v-if="selectedBlock.vendors">
-            <md-button class="md-info" >
-                Compare proposals
-            </md-button>
-            <md-button class="md-info">
-                Give me proposals
-            </md-button>
-        </md-card-actions>
-    </md-card>
 </template>
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
@@ -69,10 +70,14 @@
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
 
+  import UploadVendorsModal from '../../../Vendors/ImportVendors';
+
+
   export default {
     name: 'event-blocks',
     components: {
         VueElementLoading,
+        UploadVendorsModal
     },
     props: {
         selectedBlock : Object
@@ -94,7 +99,9 @@
         ]
     }),
     methods: {
-
+        openUploadModal(){
+            this.$refs.uploadModal.toggleModal(true);
+        }
 
     },
     created() {

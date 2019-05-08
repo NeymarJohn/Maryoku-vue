@@ -313,7 +313,7 @@
       openEventSidePanel() {
         window.currentPanel = this.$showPanel({
           component: EventSidePanel,
-          cssClass: 'md-layout-item md-size-50 transition36 ',
+          cssClass: 'md-layout-item md-size-40 transition36 ',
           openOn: 'right',
           props: {
             refreshEvents: this.refreshEvents,

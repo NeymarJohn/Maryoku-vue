@@ -1,57 +1,49 @@
 <template>
-    <div class="event_header-image-modal">
-        <div class="md-layout">
-            <modal v-if="addBuildingBlockModal">
-                <template slot="header">
-                    <div class="md-layout d-flex items-left" >
-                        <h4>Add Building Block
-                        </h4>
-                    </div>
-                    <md-button class="md-simple md-just-icon md-round modal-default-button" @click="closeModal">
-                        <md-icon>clear</md-icon>
-                    </md-button>
-                </template>
-                <template slot="body" v-if="categoryBuildingBlocks">
+  <div class="adding-building-blocks-panel">
+    <div class="md-layout" style="max-height: 50vh;">
+      <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
+        <h4 class="md-title">
+          <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon"><md-icon>arrow_back</md-icon></md-button>
+        </h4>
+      </div>
+      <div class="md-layout-item md-size-95" style="max-height: 50vh;">
+        <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
+          Add Building Block
+        </h4>
+        <p>
+          Drag & Drop building blocks to your working panel to add new services or products to your event
+        </p>
+        <div class="md-layout" style="overflow: auto; max-height: 80vh;">
+          <div v-for="(item,index) in categoryBuildingBlocks" :key="index" class="md-layout-item md-size-80 mx-auto">
+            <drag :class="`md-button md-${item.color} block-item`"
+                  :transfer-data="{ item }"
+                  v-if="!item.childComponents">
 
-                    <ul class="add-building-blocks-list text-left">
-                        <li v-for="(item,index) in categoryBuildingBlocks" :key="index" >
-                            <template v-if="!item.childComponents">
-                                <md-button :class="`md-${item.color} md-sm md-just-icon`">
-                                    <md-icon >{{item.icon}}</md-icon>
-                                </md-button>
-                                <span>{{item.value}}</span>
-
-                                <md-button class="md-success md-just-icon pull-right md-sm md-simple" @click="addBuildingBlock(item)"><md-icon class="">add</md-icon></md-button>
-
-                            </template>
-                            <template v-else-if="item.childComponents">
-                                <h4>{{item.value}}</h4>
-                                <template >
-                                    <ul class="child-components-list">
-                                        <li v-for="(item1,index1) in item.childComponents" :key="index1" >
-
-                                            <md-button :class="`md-${item1.color} md-sm md-just-icon`">
-                                                <md-icon>{{item1.icon}}</md-icon>
-                                            </md-button>
-                                            <span>{{item1.title}} </span>
-
-                                            <md-button class="md-success md-just-icon pull-right md-sm md-simple" @click="addBuildingBlock(item1)"><md-icon class="">add</md-icon></md-button>
-                                        </li>
-                                    </ul>
-                                </template>
-                            </template>
-                        </li>
-                    </ul>
-                </template>
-                <template slot="footer">
-                    <md-button class="md-success move-right" >
-                        Add
-                    </md-button>
-                </template>
-            </modal>
+              <md-icon>{{item.icon}}</md-icon>
+              {{item.value}}
+            </drag>
+            <template v-else-if="item.childComponents">
+              <h4>{{item.value}}</h4>
+              <div v-for="(item1,index1) in item.childComponents" :key="index1">
+                <drag :class="`md-button md-${item1.color} block-item`"
+                      :transfer-data="{ item1 }">
+                  <md-icon>{{item1.icon}}</md-icon>
+                  {{item1.title}}
+                </drag>
+              </div>
+            </template>
+          </div>
         </div>
-
+      </div>
     </div>
+
+    <drop @drop="handleDrop" class="draggable-area" v-if="isLoaded">
+      <p>
+        <img src="/static/img/drag_drop_white.png" alt="drag and drop" style="width: 52px;"/>
+      </p>
+      <p style="font-size : 20px; margin: 0;">Drag building blocks here</p>
+    </drop>
+  </div>
 </template>
 <script>
   import auth from '@/auth';
@@ -63,19 +55,24 @@
   import EventComponent from "@/models/EventComponent";
 
   import swal from "sweetalert2";
-  import { error } from 'util';
+  import {error} from 'util';
   import moment from 'moment';
+  import draggable from 'vuedraggable';
+  import {Drag, Drop} from 'vue-drag-drop';
+  import VueElementLoading from 'vue-element-loading';
 
   export default {
     components: {
-      Modal,
+      draggable, Drag, Drop,VueElementLoading
+
     },
     props: {
-      event : Object,
-      categoryBuildingBlocks : Array
+      event: Object,
     },
     data: () => ({
       auth: auth,
+      categoryBuildingBlocks: [],
+      isLoaded : false
 
     }),
 
@@ -84,55 +81,86 @@
     },
     mounted() {
 
+      this.getCategoryBlocks();
 
     },
     methods: {
-        ...mapMutations('EventPlannerVuex', ['setBuildingBlockModal']),
-        closeModal(){
-          this.setBuildingBlockModal({ showModal: false });
+      ...mapMutations('EventPlannerVuex', ['setBuildingBlockModal']),
+      closeModal() {
+        this.setBuildingBlockModal({showModal: false});
       },
-        addBuildingBlock(item){
+      closePanel(){
+        this.$emit("closePanel");
+      },
+      addBuildingBlock(item) {
 
-          // Save event interaction
-          let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-          let event = new CalendarEvent({id: this.event.id});
-
-            this.$parent.isLoading = true;
-
-            let new_block = {
-                componentId : item.id,
-                todos : "",
-                values : "",
-                vendors : "",
-                calendarEvent: { id: event.id}
-            }
-
-            new EventComponent(new_block).for(calendar, event).save().then(res => {
-                this.$parent.isLoading = false;
-
-                this.setBuildingBlockModal({ showModal: false });
-                this.$emit("BlockAdded", res);
+        // Save event interaction
+        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
 
 
-            })
-                .catch(error => {
-                    console.log('Error while saving ', error);
-                })
+        let new_block = {
+          componentId: item.id,
+          todos: "",
+          values: "",
+          vendors: "",
+          calendarEvent: {id: event.id}
+        }
+
+        new EventComponent(new_block).for(calendar, event).save().then(res => {
+          this.$parent.isLoading = false;
+
+          this.setBuildingBlockModal({showModal: false});
+          this.$emit("closePanel", {});
+          this.$bus.$emit('BlockAdded');
+
+        })
+          .catch(error => {
+            console.log('Error while saving ', error);
+          })
+
+      },
+      getCategoryBlocks() {
+        EventComponent.get()
+          .then(res => {
+            setTimeout( ()=>{
+              this.isLoaded = true;
+            } ,500);
+
+            this.$set(this, 'categoryBuildingBlocks', res);
+
+          })
+          .catch(error => {
+            console.log('Error ', error);
+          })
+      },
+      handleDrop(data, event) {
+
+        this.$parent.isLoading = true;
+
+        let block = data.item ? data.item : data.item1;
+
+        if (block) {
+          this.addBuildingBlock(block);
+        } else {
+          this.$parent.isLoading = false;
 
         }
-    },
-      computed : {
-          ...mapState('EventPlannerVuex', [
-              'addBuildingBlockModal',
-          ])
+
       }
+    },
+    computed: {
+      ...mapState('EventPlannerVuex', [
+        'addBuildingBlockModal',
+      ])
+    }
   };
 </script>
 <style lang="scss" scope>
   .md-datepicker {
     .md-icon.md-date-icon {
       display: none;
-      &~label {
+      & ~ label {
         left: 0;
       }
     }
@@ -144,48 +172,60 @@
       width: 100%;
     }
   }
-  .md-field>.md-icon~.md-input {
+
+  .md-field > .md-icon ~ .md-input {
     margin: 0;
   }
 </style>
 <style lang="scss">
-    .modal-z-index {
-        z-index: 5;
-    }
-    .large-z-index {
-        z-index: 6;
-        position: relative;
-    }
-    .move-center {
-        margin: 0 auto!important;;
-    }
-    .move-left {
-      margin-left: 0!important;
-      margin-right: auto!important;
-    }
-    .move-right {
-      margin-right: 0!important;
-      margin-left: auto!important;
-    }
-    .text-center {
-      text-align: center;
-    }
-    .d-flex {
-      display: flex;
-    }
-    .items-center-v {
-      align-items: center;
-    }
-    .items-center-g {
-      justify-content: center;
-    }
-    .justify-beetwen {
-      justify-content: space-between
-    }
-    .md-field .md-error {
-      text-align: left;
-    }
-    .swal2-container {
-      z-index: 10000;
-    }
+  .modal-z-index {
+    z-index: 5;
+  }
+
+  .large-z-index {
+    z-index: 6;
+    position: relative;
+  }
+
+  .move-center {
+    margin: 0 auto !important;;
+  }
+
+  .move-left {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+  }
+
+  .move-right {
+    margin-right: 0 !important;
+    margin-left: auto !important;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .d-flex {
+    display: flex;
+  }
+
+  .items-center-v {
+    align-items: center;
+  }
+
+  .items-center-g {
+    justify-content: center;
+  }
+
+  .justify-beetwen {
+    justify-content: space-between
+  }
+
+  .md-field .md-error {
+    text-align: left;
+  }
+
+  .swal2-container {
+    z-index: 10000;
+  }
 </style>
