@@ -363,7 +363,7 @@
             showManageGroupSection(){
                 window.currentPanel = this.$showPanel({
                     component: ManageInviteesGroups,
-                    cssClass: 'md-layout-item md-size-45 transition36 bg-grey',
+                    cssClass: 'md-layout-item md-size-35 transition36 bg-grey',
                     openOn: 'right',
                     props: {event : this.event}
                 });

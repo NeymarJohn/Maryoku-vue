@@ -242,6 +242,7 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
     .title2 {
       text-transform: capitalize;
+      padding-right: 1.4em;
     }
   }
 
@@ -383,7 +384,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
     .md-textarea {
       padding-left : 0 !important;
-      min-height: 60px !important;
+      min-height: auto !important;
     }
   }
 }
@@ -1571,12 +1572,62 @@ iframe{
 }
 
 .manage-groups-panel {
+
+  h5 {
+    span {
+      color : $brand-rose;
+    }
+  }
   .md-button {
     .md-ripple {
       padding : 12px 8px !important;
     }
+
+    &.upload-members-btn {
+      margin : 2px;
+
+      .md-ripple {
+        padding : 0 !important;
+        text-transform: none;
+        font-size : 15px;
+      }
+    }
+  }
+
+  .md-card-header {
+    position : relative;
+
+    .card-actions {
+      position : absolute;
+      top : 1.5em;
+      right : 0.5em;
+    }
+  }
+
+  .members-list {
+    .member-item {
+      display: flex;
+      flex : 1;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom : 1em;
+      padding-bottom : 1em;
+      position : relative;
+      &:not(last){
+        border-bottom : 1px solid #efefef;
+      }
+
+      .member-checkbox {
+        position : absolute;
+        left: -40px;
+        top: 7px;
+        margin: 0;
+      }
+    }
   }
 }
+
+
 @media screen and (max-width : 500px) {
   .event-details {
     &_content.md-card-content {
