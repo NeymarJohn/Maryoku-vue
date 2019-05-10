@@ -33,7 +33,7 @@
                                 Save
                             </md-button>
                             <md-button name="event-planner-tab-invitees-management-manage-groups"
-                                       class="md-info" @click="showManageGroupSection()">
+                                       class="md-info" @click="goToComponent('')">
                                 Manage Groups
                             </md-button>
                         </div>
@@ -199,9 +199,10 @@
     import moment from 'moment';
     import _ from "underscore";
 
+
     // Get dummy images from EventPageHeaderImage
     import EventPageHeaderImage from '@/models/EventPageHeaderImage';
-    import ManageInviteesGroups from './Modals/ManageInviteesGroups.vue';
+
 
     export default {
         name: 'invitees-management',
@@ -359,14 +360,6 @@
                         console.log(error);
 
                     })
-            },
-            showManageGroupSection(){
-                window.currentPanel = this.$showPanel({
-                    component: ManageInviteesGroups,
-                    cssClass: 'md-layout-item md-size-35 transition36 bg-grey',
-                    openOn: 'right',
-                    props: {event : this.event}
-                });
             }
 
         },

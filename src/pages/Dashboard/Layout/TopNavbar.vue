@@ -5,8 +5,7 @@
     :class="{'md-toolbar-absolute md-white md-fixed-top': $route.meta.navbarAbsolute, 'navbar-white': $route.meta.opaque}">
     <div class="md-toolbar-row">
       <div class="md-toolbar-section-start">
-        <h3 class="md-title" style="font-weight: 400;">
-          {{$route.meta.title ? $route.meta.title : $route.name}}</h3>
+        <h3 class="md-title" style="font-weight: 400;">{{$route.meta.title ? $route.meta.title : $route.name}}</h3>
       </div>
       <div class="md-toolbar-section-end">
         <md-button class="md-just-icon md-round md-simple md-toolbar-toggle" :class="{toggled: $sidebar.showSidebar}" @click="toggleSidebar">
@@ -102,7 +101,6 @@
     data() {
       return {
         auth,
-        topBarTitle: null,
         avatar: "",
         selectedEmployee: "",
         employees: [
@@ -122,10 +120,6 @@
         console.log("avatar: " + this.auth.user.avatar);
         this.avatar = this.auth.user.avatar != null ? this.auth.user.avatar : "static/img/placeholder.jpg";
       }.bind(this),3000);
-
-      this.$root.$on("set-title", (title) => {
-        this.topBarTitle = title;
-      });
     },
     methods: {
       openMyProfile(){

@@ -55,7 +55,7 @@
 
                    <md-card-actions md-alignment="right">
                        <md-button class="md-info"  @click="addNewValue">Add Requirement</md-button>
-                       <md-button class="md-info" @click="saveAllValues">Save</md-button>
+                       <md-button class="md-info" >Save</md-button>
                    </md-card-actions>
                </md-card>
            </div>
@@ -123,8 +123,6 @@
 
             this.$parent.isLoading = true;
 
-            this.saveAllValues();
-
             let new_value = {
                 eventComponent: { id: this.selectedBlock.id }
             }
@@ -190,12 +188,6 @@
                     this.$parent.isLoading = false;
 
                 })
-        },
-        saveAllValues () {
-            let _self = this;
-            this.eventBlocks.forEach(block => {
-                _self.editValue(block);
-            })
         }
 
 

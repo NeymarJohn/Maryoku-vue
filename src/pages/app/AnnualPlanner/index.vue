@@ -4,10 +4,10 @@
 
     <table style="width: 100%; height: 100%; ">
       <tr>
-        <td style="width: 15%; height: 100%;" >
+        <td style="width: 18%; height: 100%;" >
           <budget-panel @month-count="monthCount" :statistics="statisticsData" :month="Number(currentMonth)" :year="Number(currentYear)"></budget-panel>
         </td>
-        <td style="width: 85%; height: 100%;">
+        <td style="width: 82%; height: 100%;">
           <calendar-panel @month-count="monthCount" :month="Number(currentMonth)" :year="Number(currentYear)" :firstDayOfTheWeek="firstDayOfTheWeek" :month-counts="monthCounts"></calendar-panel>
         </td>
       </tr>

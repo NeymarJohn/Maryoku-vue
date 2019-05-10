@@ -360,34 +360,34 @@ let appPages = {
       meta: {title: 'Create New Event'},
     },
     {
-      path: "/events/:id/edit",
+      path: "/events/:id",
       name: "EventDetails",
       component: EventDetails,
-      meta: {title: 'Event Planner / Event Page', gtm: "Event Details", opaque: false},
+      meta: {title: 'Event Details', gtm: "Event Details", opaque: true},
     },
       {
-          path: "/events/:id/edit/details",
+          path: "/events/:id/edit",
           name: "EditEvent",
           component: CurrentEvents,
-          meta: {title: 'Event Planner / Event Details', gtm: "Event Edit", opaque: true}
+          meta: {title: 'Event Details', gtm: "Event Edit", opaque: true}
       },
       {
           path: "/events/:id/edit/building-blocks",
           name: "EditBuildingBlocks",
           component: CurrentEvents,
-          meta: {title: 'Event Planner / Building Blocks', gtm: "Building Blocks", opaque: true},
+          meta: {title: 'Building Blocks', gtm: "Building Blocks", opaque: true},
       },
     {
         path: "/events/:id/edit/timeline",
         name: "EditTimeLine",
         component: CurrentEvents,
-        meta: {title: 'Event Planner / Timeline', gtm: "Event Timeline", opaque: true},
+        meta: {title: 'Event Timeline', gtm: "Event Timeline", opaque: true},
     },
     {
         path: "/events/:id/edit/invitees-management",
         name: "InviteesManagement",
         component: CurrentEvents,
-        meta: {title: 'Event Planner / Invitees Management', gtm: "Event Edit", opaque: true},
+        meta: {title: 'Invitees Management', gtm: "Event Edit", opaque: true},
     },
     {
       path: "/yearly-plan",

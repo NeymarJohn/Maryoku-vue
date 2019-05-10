@@ -250,7 +250,7 @@
         this.$set(this.timelineItems[index], 'mode', 'edit');
       },
       previewEvent() {
-        this.$router.push({name: 'EventDetails', params: {id : this.event.id}});
+        this.$router.push({path: `/events/` + this.event.id})
       },
       getTimelineItems() {
 

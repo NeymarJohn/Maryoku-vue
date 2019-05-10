@@ -17,11 +17,11 @@
       </md-card-header>
 
       <md-card-content style="text-align: center; height: 100%;">
-        <md-switch class="md-switch-info multiple pull-right text-left margin-bottom_30" v-model="budgetType">
-          <span style="font-weight: 600;">{{!budgetType ? 'Budget per Employee' : 'Total Budget'}}</span>
+        <md-switch class="md-switch-info multiple text-left margin-bottom_30" style="padding-bottom: 20px;" v-model="budgetType">
+          <span style="font-weight: 600; font-size: 16px;">{{!budgetType ? 'Budget per Employee' : 'Total Budget'}}</span>
         </md-switch>
 
-        <div v-if="!budgetType">
+        <div v-show="!budgetType">
           <div>
             <div style="text-align: left;">
               <h5 style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0;">Remaining budget per employee</h5>
@@ -103,7 +103,7 @@
           </div>
           <div style="padding: 16px;"></div>
         </div>
-        <div v-if="budgetType">
+        <div v-show="budgetType">
           <div>
             <h5 style="font-size: 0.95rem !important; font-weight: 600; padding: 0; margin: 0;" class="text-left">Total remaining budget</h5>
             <h4 class="title text-left" style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
@@ -117,31 +117,31 @@
             <h5 style="font-size: 0.95rem !important; padding: 0; margin: 0; color: #959595;">Total annual budget</h5>
 
             <div class="d-flex flex-wrap justify-beetwen items-center-v">
-              <md-field v-show="this.editAnnualBudget" :class="[{'md-error': errors.has('annualBudget')}]">
-                <md-input v-model="annualBudget"
-                          data-vv-name="annualBudget"
-                          v-validate= "modelValidations.annualBudget" style="width: 10px;"/>
-                <span class="md-error" v-if="errors.has('annualBudgetPerEmployee')">The field is required</span>
-              </md-field>
-              <h4 v-show="!this.editAnnualBudget" style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; rgb(125,192,217);">
+              <!--<md-field v-show="this.editAnnualBudget" :class="[{'md-error': errors.has('annualBudget')}]">-->
+                <!--<md-input v-model="annualBudget"-->
+                          <!--data-vv-name="annualBudget"-->
+                          <!--v-validate= "modelValidations.annualBudget" style="width: 10px;"/>-->
+                <!--<span class="md-error" v-if="errors.has('annualBudgetPerEmployee')">The field is required</span>-->
+              <!--</md-field>-->
+              <h4 style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; rgb(125,192,217);">
                 <animated-number ref="annualBudgetNumber" :value="this.annualBudget" prefix="$"></animated-number>
               </h4>
-              <div v-show="!this.editAnnualBudget">
-                <md-button class="md-icon-button md-simple" @click="openEditAnnualBudget()">
-                  <md-icon>edit</md-icon>
-                </md-button>
-              </div>
-              <div v-show="this.editAnnualBudget" class="d-flex ml-auto mr-0">
-                <md-button class="md-icon-button md-simple" @click="resetField()">
-                  <md-icon class="text-red">clear</md-icon>
-                </md-button>
-                <md-button class="md-icon-button md-simple" @click="saveBudgeData()">
-                  <md-icon class="text-success">check</md-icon>
-                </md-button>
-              </div>
+              <!--<div v-show="!this.editAnnualBudget">-->
+                <!--<md-button class="md-icon-button md-simple" @click="openEditAnnualBudget()">-->
+                  <!--<md-icon>edit</md-icon>-->
+                <!--</md-button>-->
+              <!--</div>-->
+              <!--<div v-show="this.editAnnualBudget" class="d-flex ml-auto mr-0">-->
+                <!--<md-button class="md-icon-button md-simple" @click="resetField()">-->
+                  <!--<md-icon class="text-red">clear</md-icon>-->
+                <!--</md-button>-->
+                <!--<md-button class="md-icon-button md-simple" @click="saveBudgeData()">-->
+                  <!--<md-icon class="text-success">check</md-icon>-->
+                <!--</md-button>-->
+              <!--</div>-->
             </div>
 
-            <hr v-show="!this.editAnnualBudget" style="border-top: 1px solid rgba(94, 95, 95, 0.1); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
+            <hr style="border-top: 1px solid rgba(94, 95, 95, 0.1); border-left: none; border-right: none; border-bottom: 1px solid rgb(84, 102, 115);">
           </div>
           <div style="padding: 16px;"></div>
           <div>
@@ -197,7 +197,7 @@
         statisticData: {},
         editAnnualBudgetPerEmployee: false,
         editNumberOfEmployees: false,
-        editAnnualBudget: false,
+        // editAnnualBudget: false,
         annualBudgetPerEmployee: {
           type: Number,
           default: 0
@@ -294,7 +294,7 @@
         this.annualBudgetPerEmployee = this.annualBudgetPerEmployeeCache;
         this.editAnnualBudgetPerEmployee = false;
         this.editNumberOfEmployees = false;
-        this.editAnnualBudget = false;
+        // this.editAnnualBudget = false;
       },
       openEditAnnualBudgetPerEmployee(){
         this.editAnnualBudgetPerEmployee = true;
@@ -302,9 +302,9 @@
       openEditNumberOfEmployees(){
         this.editNumberOfEmployees = true;
       },
-      openEditAnnualBudget(){
-        this.editAnnualBudget = true;
-      },
+      // openEditAnnualBudget(){
+      //   this.editAnnualBudget = true;
+      // },
     },
     computed: {
       pieChart() {
