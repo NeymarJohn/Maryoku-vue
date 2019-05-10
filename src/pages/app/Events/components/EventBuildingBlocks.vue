@@ -185,6 +185,9 @@
                         type: 'success'
                     })
 
+                this.$bus.$emit('RefreshStatistics');
+
+
                 this.$forceUpdate();
             })
                 .catch(error => {

@@ -1,8 +1,8 @@
 <template>
     <div class="md-layout-item md-size-100 event-details_banner" :style="`background-image : url(`+ bannerURL  +`)`">
-        <div class="update-banner-form" v-if="!readonly">
-            <md-button  class="md-info md-sm" @click="uploadImage">
-                UPDATE IMAGE
+        <div class="update-banner-form" v-if="!readonly" style="position: relative; top: 50%; text-align: center;">
+            <md-button  class="md-info" @click="uploadImage">
+                Select Header Image
             </md-button>
             <input type="file" style="display: none;" ref="inputFile" accept="image/gif, image/jpg, image/png" @change="onFilePicked">
         </div>

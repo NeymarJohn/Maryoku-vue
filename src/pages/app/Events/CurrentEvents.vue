@@ -205,6 +205,7 @@
   import VueElementLoading from "vue-element-loading";
   import Calendar from '@/models/Calendar';
   import CalendarEvent from '@/models/CalendarEvent';
+  import CalendarEventStatistics from '@/models/CalendarEventStatistics';
   import {mapState, mapMutations,mapGetters, mapActions} from 'vuex';
 
   //COMPONENTS
@@ -260,6 +261,8 @@
 
     },
     mounted() {
+        let _self = this;
+
       this.getEvent();
       if (this.components.length === 0) {
         this.$store.dispatch("event/getComponents");
@@ -268,6 +271,13 @@
         this.$store.dispatch("event/getCurrencies");
         this.$store.dispatch("event/getEventThemes");
       }
+
+
+
+        this.$bus.$on('RefreshStatistics', function () {
+            _self.getCalendarEventStatistics(_self.calendarEvent);
+        })
+
 
 
     },
@@ -285,14 +295,16 @@
           let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
           _calendar.calendarEvents().find(this.$route.params.id).then(event => {
-            this.event = event;
+
+              this.event = event;
             this.eventId = event.id;
             this.calendarEvent = event;
             this.selectedComponents = event.components;
-            this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
-            this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
-            this.seriesData = [(100 - this.percentage), this.percentage];
-              console.log('calendarEvent => ',this.calendarEvent);
+//            this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
+//            this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
+//            this.seriesData = [(100 - this.percentage), this.percentage];
+
+            this.getCalendarEventStatistics(event);
 
 
               if ( this.$route.newEvent ) {
@@ -329,7 +341,23 @@
       goToComponent (route) {
         this.$router.push({ path: `/events/`+ this.event.id + route });
         location.reload();
-      }
+      },
+        getCalendarEventStatistics(evt){
+
+            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+
+            new CalendarEventStatistics().for(calendar, event).get()
+                .then(resp => {
+                    this.totalRemainingBudget = evt.totalBudget - resp[0].totalAllocatedBudget;
+                    this.percentage = 100 - ((resp[0].totalAllocatedBudget / evt.totalBudget) * 100).toFixed(2);
+                    this.seriesData = [(100 - this.percentage), this.percentage];
+
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        }
     },
     computed: {
       ...mapGetters({

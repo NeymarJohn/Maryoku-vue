@@ -1,44 +1,44 @@
 <template>
-    <div class="event_header-image-modal">
-        <div class="md-layout">
-            <modal v-if="editHeaderModal">
-                <template slot="header">
-                    <div class="md-layout d-flex items-left" >
-                        <h4>Update Header
-                        </h4>
-                    </div>
-                    <md-button class="md-simple md-just-icon md-round modal-default-button" @click="closeModal">
-                        <md-icon>clear</md-icon>
-                    </md-button>
-                </template>
-                <template slot="body" v-if="headerImages">
+  <div class="event_header-image-modal">
+    <div class="md-layout">
+      <modal v-if="editHeaderModal">
+        <template slot="header">
+          <div class="md-layout d-flex items-left" >
+            <h4>Update Header
+            </h4>
+          </div>
+          <md-button class="md-simple md-just-icon md-round modal-default-button" @click="closeModal">
+            <md-icon>clear</md-icon>
+          </md-button>
+        </template>
+        <template slot="body" v-if="headerImages">
 
-                    <div class="header-images-list md-layout">
-                        <div class="header-images-list_item md-layout-item md-size-33" v-for="(image,index) in headerImages">
-                            <img :src="`/static/img/page-headers/${image.fullFileName}`" :class="{selected : selectedImage == image.cutFileName}" @click="selectImage(image.cutFileName)"/>
-                            <md-button class="md-simple md-just-icon md-round" @click="previewImage(image.cutFileName)">
-                                <md-icon>visibility</md-icon>
-                            </md-button>
-                        </div>
-                    </div>
+          <div class="header-images-list md-layout">
+            <div class="header-images-list_item md-layout-item md-size-33" v-for="(image,index) in headerImages">
+              <img :src="`/static/img/page-headers/${image.fullFileName}`" :class="{selected : selectedImage == image.cutFileName}" @click="selectImage(image.cutFileName)"/>
+              <md-button class="md-simple md-just-icon md-round" @click="previewImage(image.cutFileName)">
+                <md-icon>visibility</md-icon>
+              </md-button>
+            </div>
+          </div>
 
 
-                </template>
-                <template slot="footer">
-                    <md-button class="md-success move-right" @click="saveHeaderImage">
-                        Save
-                    </md-button>
-                </template>
-            </modal>
-        </div>
-
-        <div class="preview-image" v-if="imagePreview">
-            <md-button class="md-simple md-just-icon md-round" @click="closePreviewModal">
-                <md-icon>clear</md-icon>
-            </md-button>
-            <img :src="`/static/img/page-headers/${imagePreview}`">
-        </div>
+        </template>
+        <template slot="footer">
+          <md-button class="md-success move-right" @click="saveHeaderImage">
+            Save
+          </md-button>
+        </template>
+      </modal>
     </div>
+
+    <div class="preview-image" v-if="imagePreview">
+      <md-button class="md-simple md-just-icon md-round" @click="closePreviewModal">
+        <md-icon>clear</md-icon>
+      </md-button>
+      <img :src="`/static/img/page-headers/${imagePreview}`">
+    </div>
+  </div>
 </template>
 <script>
   import auth from '@/auth';
@@ -64,70 +64,68 @@
     data: () => ({
       auth: auth,
       headerImages : null,
-        selectedImage : null,
-        imagePreview : null
+      selectedImage : null,
+      imagePreview : null
     }),
 
     created() {
 
-        this.getHeaderImages()
+      this.getHeaderImages()
 
     },
     mounted() {
 
     },
     methods: {
-        ...mapMutations('EventPlannerVuex', ['setHeaderModal']),
-        closeModal(){
-          this.setHeaderModal({ showModal: false });
+      ...mapMutations('EventPlannerVuex', ['setHeaderModal']),
+      closeModal(){
+        this.setHeaderModal({ showModal: false });
       },
-        getHeaderImages() {
+      getHeaderImages() {
 
-            new EventPageHeaderImage().get().then(headerImages => {
-                // iterate through header images
+        new EventPageHeaderImage().get().then(headerImages => {
+          // iterate through header images
 
-                this.headerImages = headerImages;
-            });
-        },
-        saveHeaderImage() {
+          this.headerImages = headerImages;
+        });
+      },
+      saveHeaderImage() {
 
-            let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-            let editedEvent = new CalendarEvent({id: this.event.id});
+        let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let editedEvent = new CalendarEvent({id: this.event.id});
 
-            editedEvent = this.event;
-            editedEvent.eventPage.headerImage = this.selectedImage;
+        editedEvent = this.event;
+        editedEvent.eventPage.headerImage = this.selectedImage;
 
 
 
-            editedEvent.save().then(response => {
-                this.closeModal();
+        editedEvent.save().then(response => {
+          this.closeModal();
 
-            })
-                .catch((error) => {
-                    console.log(error);
+        }).catch((error) => {
+          console.log(error);
+        });
 
-                });
+      },
+      selectImage(selectedImage) {
 
-        },
-        selectImage(selectedImage) {
+        this.selectedImage = selectedImage;
 
-            this.selectedImage = selectedImage;
+      },
+      previewImage(selectedImage) {
+        this.imagePreview = selectedImage;
 
-        },
-        previewImage(selectedImage) {
-            this.imagePreview = selectedImage;
+      },
+      closePreviewModal() {
+        this.imagePreview = null;
 
-        },
-        closePreviewModal() {
-            this.imagePreview = null;
-
-        }
-    },
-      computed : {
-          ...mapState('EventPlannerVuex', [
-              'editHeaderModal',
-          ])
       }
+    },
+    computed : {
+      ...mapState('EventPlannerVuex', [
+        'editHeaderModal',
+      ])
+    }
   };
 </script>
 <style lang="scss" scope>
@@ -151,43 +149,43 @@
   }
 </style>
 <style lang="scss">
-    .modal-z-index {
-        z-index: 5;
-    }
-    .large-z-index {
-        z-index: 6;
-        position: relative;
-    }
-    .move-center {
-        margin: 0 auto!important;;
-    }
-    .move-left {
-      margin-left: 0!important;
-      margin-right: auto!important;
-    }
-    .move-right {
-      margin-right: 0!important;
-      margin-left: auto!important;
-    }
-    .text-center {
-      text-align: center;
-    }
-    .d-flex {
-      display: flex;
-    }
-    .items-center-v {
-      align-items: center;
-    }
-    .items-center-g {
-      justify-content: center;
-    }
-    .justify-beetwen {
-      justify-content: space-between
-    }
-    .md-field .md-error {
-      text-align: left;
-    }
-    .swal2-container {
-      z-index: 10000;
-    }
+  .modal-z-index {
+    z-index: 5;
+  }
+  .large-z-index {
+    z-index: 6;
+    position: relative;
+  }
+  .move-center {
+    margin: 0 auto!important;;
+  }
+  .move-left {
+    margin-left: 0!important;
+    margin-right: auto!important;
+  }
+  .move-right {
+    margin-right: 0!important;
+    margin-left: auto!important;
+  }
+  .text-center {
+    text-align: center;
+  }
+  .d-flex {
+    display: flex;
+  }
+  .items-center-v {
+    align-items: center;
+  }
+  .items-center-g {
+    justify-content: center;
+  }
+  .justify-beetwen {
+    justify-content: space-between
+  }
+  .md-field .md-error {
+    text-align: left;
+  }
+  .swal2-container {
+    z-index: 10000;
+  }
 </style>

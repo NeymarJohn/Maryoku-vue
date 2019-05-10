@@ -1,6 +1,6 @@
 <template>
     <div>
-        <md-card>
+        <md-card >
             <md-card-header class="md-card-header-text md-card-header-warning">
 
                 <div class="card-text">
@@ -9,10 +9,10 @@
                 </div>
 
                 <div class="header-actions pull-right" style="margin-top : 1em;">
-                    <md-button class="md-info" v-if="!selectedBlock.vendors.length" @click="openUploadModal">
+                    <md-button class="md-info" v-if="!selectedBlock.vendors" @click="openUploadModal">
                         Add Vendors
                     </md-button>
-                    <md-button class="md-default" v-if="!selectedBlock.vendors.length">
+                    <md-button class="md-default" v-if="!selectedBlock.vendors">
                         Send
                     </md-button>
                 </div>
@@ -21,7 +21,7 @@
 
             <md-card-content style="min-height: 60px;">
 
-                <md-table  v-if="selectedBlock.vendors.length" v-model="selectedBlock.vendors" table-header-color="orange" >
+                <md-table  v-if="selectedBlock.vendors" v-model="selectedBlock.vendors" table-header-color="orange" >
                     <md-table-row slot="md-table-row" slot-scope="{ item }" :key="proposals.indexOf(item)"   >
                         <md-table-cell md-label="Vendor Name"  > {{ item.title }}</md-table-cell>
                         <md-table-cell md-label="People">
@@ -41,7 +41,7 @@
                     </md-table-row>
                 </md-table>
 
-                <template v-if="!selectedBlock.vendors.length">
+                <template v-if="!selectedBlock.vendors">
                     <h5>Your vendors list is empty</h5>
                     <p>import your vendors and refresh this page after you're done</p>
                 </template>
@@ -49,7 +49,7 @@
 
             </md-card-content>
 
-            <md-card-actions md-alignment="right" v-if="selectedBlock.vendors.length">
+            <md-card-actions md-alignment="right" v-if="selectedBlock.vendors">
                 <md-button class="md-info" >
                     Compare proposals
                 </md-button>

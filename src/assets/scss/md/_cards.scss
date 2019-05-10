@@ -435,26 +435,26 @@
     }
   }
 
-  .md-card-header-primary .card-icon,
-  .md-card-header-primary .card-text,
-  .md-card-header-primary:not(.md-card-header-icon):not(.md-card-header-text),
+  .md-card-header-primary .card-icon,.md-card-header-purple .card-icon,
+  .md-card-header-primary .card-text,.md-card-header-purple .card-text,
+  .md-card-header-primary:not(.md-card-header-icon):not(.md-card-header-text),.md-card-header-purple:not(.md-card-header-icon):not(.md-card-header-text),
   [data-background-color="purple"],
-  .md-tabs.md-primary .md-tabs-navigation{
+  .md-tabs.md-primary .md-tabs-navigation,.md-tabs.md-purple .md-tabs-navigation{
     background: linear-gradient(60deg, $purple-400, $purple-600);
   }
 
-  .md-card-header-blue .card-icon,
-  .md-card-header-blue .card-text,
-  .md-card-header-blue:not(.md-card-header-icon):not(.md-card-header-text),
-  [data-background-color="blue"],
+  .md-card-header-blue .card-icon,.md-card-header-info .card-icon,
+  .md-card-header-blue .card-text,.md-card-header-info .card-text,
+  .md-card-header-blue:not(.md-card-header-icon):not(.md-card-header-text),.md-card-header-info:not(.md-card-header-icon):not(.md-card-header-text),
+  [data-background-color="blue"],[data-background-color="info"],
   .md-tabs.md-info .md-tabs-navigation{
     background: linear-gradient(60deg, $cyan-400, $cyan-600);
   }
 
-  .md-card-header-green .card-icon,
-  .md-card-header-green .card-text,
-  .md-card-header-green:not(.md-card-header-icon):not(.md-card-header-text),
-  [data-background-color="green"],
+  .md-card-header-green .card-icon,.md-card-header-success .card-icon,
+  .md-card-header-green .card-text,.md-card-header-success .card-text,
+  .md-card-header-green:not(.md-card-header-icon):not(.md-card-header-text),.md-card-header-success:not(.md-card-header-icon):not(.md-card-header-text),
+  [data-background-color="green"],[data-background-color="success"],
   .md-tabs.md-success .md-tabs-navigation{
     background: linear-gradient(60deg, $green-400, $green-600);
   }
@@ -502,7 +502,7 @@
   }
 
   [data-background-color="purple"],
-  .md-tabs.md-primary .md-tabs-navigation,
+  .md-tabs.md-primary .md-tabs-navigation,.md-tabs.md-purple .md-tabs-navigation,
   .md-card-header-danger .card-icon,
   .md-card-header-danger:not(.md-card-header-icon):not(.md-card-header-text),
   .md-card-header-danger .card-text{
@@ -525,19 +525,19 @@
     @include shadow-big-color($brand-warning);
   }
 
-  [data-background-color="blue"],
+  [data-background-color="blue"],[data-background-color="info"],
   .md-tabs.md-info .md-tabs-navigation,
-  .md-card-header-blue .card-icon,
-  .md-card-header-blue:not(.md-card-header-icon):not(.md-card-header-text),
-  .md-card-header-blue .card-text{
+  .md-card-header-blue .card-icon,.md-card-header-info .card-icon,
+  .md-card-header-blue:not(.md-card-header-icon):not(.md-card-header-text),.md-card-header-info:not(.md-card-header-icon):not(.md-card-header-text),
+  .md-card-header-blue .card-text,.md-card-header-info .card-text{
     @include shadow-big-color($brand-info);
   }
 
-  [data-background-color="green"],
+  [data-background-color="green"],[data-background-color="success"],
   .md-tabs.md-success .md-tabs-navigation,
-  .md-card-header-green .card-icon,
-  .md-card-header-green:not(.md-card-header-icon):not(.md-card-header-text),
-  .md-card-header-green .card-text{
+  .md-card-header-green .card-icon,.md-card-header-success .card-icon,
+  .md-card-header-green:not(.md-card-header-icon):not(.md-card-header-text),.md-card-header-success:not(.md-card-header-icon):not(.md-card-header-text),
+  .md-card-header-green .card-text,.md-card-header-success .card-text{
     @include shadow-big-color($brand-success);
   }
 

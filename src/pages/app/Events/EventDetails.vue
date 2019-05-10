@@ -3,8 +3,11 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
 
     <!-- Publish Event Button -->
-    <div class="md-layout-item text-right">
-      <md-button class="md-info publish-event" @click="publishEvent">
+    <div class="md-layout-item">
+      <md-button class="md-info publish-event" @click="goBack">
+        <md-icon>arrow_left</md-icon>Back
+      </md-button>
+      <md-button class="md-info publish-event pull-right" @click="publishEvent">
         Publish Event
       </md-button>
     </div>
@@ -130,6 +133,8 @@ export default {
                     this.setEventPageData();
                 }
 
+                this.$root.$emit("set-title",{title: event.title, link:"/edit"});
+
             });
 
         }.bind(this));
@@ -161,7 +166,10 @@ export default {
       },
       publishEvent() {
           this.setPublishEventModal({ showModal: true });
-      }
+      },
+    goBack(){
+      this.$router.push({ name  : 'EditEvent', params : { id : this.calendarEvent.id} });
+    }
   },
   computed: {
       ...mapState('EventPlannerVuex', [

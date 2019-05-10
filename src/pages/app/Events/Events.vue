@@ -221,7 +221,7 @@
         return (event.eventEndMillis - event.eventStartMillis) / 3600000
       },
       routeToEvent(eventId) {
-        this.$router.push({ path: `/events/${eventId}/edit`});
+        this.$router.push({ name:"EditEvent", params:{id: eventId}});
       },
       refreshEvents() {
         this.getCalendarEvents();

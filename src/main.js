@@ -60,6 +60,7 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
+  router.app.$root.$emit("set-title",null);
 });
 
 router.afterEach((to, from) => {
