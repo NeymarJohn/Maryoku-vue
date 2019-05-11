@@ -37,7 +37,7 @@
           <div class="text-left">
             <h5 style="font-size: 0.95rem !important; padding: 0; margin: 0; color: #959595;">Annual budget per employee</h5>
             <div class="d-flex flex-wrap justify-beetwen items-center-v">
-              <label-edit v-show="editAnnualBudgetPerEmployee" :text="annualBudgetPerEmployee" field-name="annualBudgetPerEmployee"  @text-updated-blur="saveBudgeData" @text-updated-enter="saveBudgeData"></label-edit>
+              <label-edit :required="true" v-show="editAnnualBudgetPerEmployee" :text="annualBudgetPerEmployee" field-name="annualBudgetPerEmployee"  @text-updated-blur="saveBudgeData" @text-updated-enter="saveBudgeData" @no-change="closeEditMode"></label-edit>
               <h4 v-show="!editAnnualBudgetPerEmployee" style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
                 <animated-number ref="annualBudgetPerEmployeeNumber" :value="this.annualBudgetPerEmployee" prefix="$"></animated-number>
               </h4>
@@ -56,7 +56,7 @@
           <div class="text-left">
             <h5 style="font-size: 0.95rem !important; padding: 0; margin: 0; color: #959595;">Number of employees</h5>
             <div class="d-flex flex-wrap justify-beetwen items-center-v">
-              <label-edit v-show="editNumberOfEmployees" :text="this.numberOfEmployees" field-name="numberOfEmployees"  @text-updated-blur="saveBudgeData" @text-updated-enter="saveBudgeData"></label-edit>
+              <label-edit :required="true" v-show="editNumberOfEmployees" :text="this.numberOfEmployees" field-name="numberOfEmployees"  @text-updated-blur="saveBudgeData" @text-updated-enter="saveBudgeData" @no-change="closeEditMode"></label-edit>
               <h4 v-show="!editNumberOfEmployees" style="font-size: 0.95rem; font-weight: 500; padding: 0; margin: 0; color: rgb(125,192,217);">
                 <animated-number ref="numberOfEmployees" :value="this.numberOfEmployees"></animated-number>
               </h4>
@@ -85,7 +85,7 @@
             <h5 style="font-size: 0.95rem !important; padding: 0; margin: 0; color: #959595;">Total annual budget</h5>
 
             <div class="d-flex flex-wrap justify-beetwen items-center-v">
-              <label-edit v-show="this.editAnnualBudget" :text="annualBudget" field-name="annualBudget"  @text-updated-blur="saveBudgeData" @text-updated-enter="saveBudgeData"></label-edit>
+              <label-edit :required="true" v-show="this.editAnnualBudget" :text="annualBudget" field-name="annualBudget"  @text-updated-blur="saveBudgeData" @text-updated-enter="saveBudgeData" @no-change="closeEditMode"></label-edit>
 
               <h4 v-show="!this.editAnnualBudget" style="font-size: 0.95rem !important; font-weight: 500; padding: 0; margin: 0; rgb(125,192,217);">
                 <animated-number ref="annualBudgetNumber" :value="this.annualBudget" prefix="$"></animated-number>
@@ -234,9 +234,15 @@
 
 
         calendar.save().then(response => {
+          // const fieldName = this.fieldName;
           this.$emit("month-count");
           this.queryBudgetInfo();
-          this.resetField();
+          // if (this.fieldName !== 'annualBudget' && response.annualBudget !== this.annualBudgetCache) {
+          //   this.saveBudgeData(this.annualBudgetCache, 'annualBudget');
+          //   this.annualBudgetPerEmployee = response.annualBudgetPerEmployee | numeral('0,0');
+          //   this.fieldName = fieldName;
+          // }
+          this.closeEditMode();
         }).catch(error => {
           console.error(error);
           this.resetField();
@@ -269,12 +275,22 @@
 
         this.isLoading = false;
       },
-      resetField() {
-        this.annualBudget = this.annualBudgetCache;
-        this.annualBudgetPerEmployee = this.annualBudgetPerEmployeeCache;
+      closeEditMode(val = undefined, fieldName = undefined) {
+        if (fieldName == 'annualBudget') {
+          this.annualBudget = Number(val);
+        } else if (fieldName == 'numberOfEmployees') {
+          this.numberOfEmployees = Number(val);
+        } else if (fieldName == 'annualBudgetPerEmployee') {
+          this.annualBudgetPerEmployee = Number(val);
+        }
         this.editAnnualBudgetPerEmployee = false;
         this.editNumberOfEmployees = false;
         this.editAnnualBudget = false;
+      },
+      resetField() {
+        this.annualBudget = this.annualBudgetCache;
+        this.annualBudgetPerEmployee = this.annualBudgetPerEmployeeCache;
+        this.closeEditMode();
       },
       openEditAnnualBudgetPerEmployee(){
         this.editAnnualBudgetPerEmployee = true;

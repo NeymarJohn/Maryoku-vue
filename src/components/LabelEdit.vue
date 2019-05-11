@@ -37,19 +37,27 @@
       updateTextBlur: function(){
         // update the edit mode to false .. display div label text
         this.edit = false;
-        if (this.label === this.text) return;
+        if (this.label === this.text) {
+          this.$emit('no-change',this.text, this.fieldName);
+          return;
+        }
         // emit text updated callback
         if (this.required && this.label === ''){
           this.label = this.text;
+          this.$emit('no-change',this.text, this.fieldName);
         } else {
           this.$emit('text-updated-blur',this.label, this.fieldName);
         }
       },
       updateTextEnter: function(){
         this.edit = false;
-        if (this.label === this.text) return;
+        if (this.label === this.text) {
+          this.$emit('no-change',this.text, this.fieldName);
+          return;
+        }
         if (this.required && this.label === ''){
           this.label = this.text;
+          this.$emit('no-change',this.text, this.fieldName);
         } else {
           this.$emit('text-updated-enter',this.label, this.fieldName);
         }
