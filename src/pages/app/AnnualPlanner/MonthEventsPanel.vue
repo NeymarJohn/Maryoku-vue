@@ -42,16 +42,16 @@
           <md-list class="md-triple-line md-dense" style="overflow: auto; height: 98%; width: 100%; max-width: 100%; min-height: 88%;">
 
             <template v-for="date in dates">
-              <md-list-item  v-for="calendarEvent in calendarEvents[date].editables" :key="calendarEvent.id" style="cursor: pointer;">
-                <md-button @click="openEditEventModal(true, calendarEvent)" class="md-just-icon md-md md-round"  v-bind:style="`background-color: ${colorWithCategory(calendarEvent.category)}`" style="margin-right: 8px;">{{date.substr(6,2)}}</md-button>
+              <md-list-item @click="openEditEventModal(calendarEvent)" v-for="calendarEvent in calendarEvents[date].editables" :key="calendarEvent.id" style="cursor: pointer;">
+                <md-button class="md-just-icon md-md md-round"  v-bind:style="`background-color: ${colorWithCategory(calendarEvent.category)}`" style="margin-right: 8px;">{{date.substr(6,2)}}</md-button>
                 <div class="md-list-item-text" style="white-space: normal;">
                   <span style="font-weight: 500;">{{calendarEvent.title}}</span>
                   <span class="small text-gray">{{calendarEvent.eventStartMillis | formatDate}}</span>
                 </div>
               </md-list-item>
 
-              <md-list-item v-if="calendarEvents[date] !== undefined" v-for="calendarEvent in calendarEvents[date].nonEditables" :key="calendarEvent.id" style="cursor: pointer;">
-                <md-button @click="openEditEventModal(true, calendarEvent)" class="md-just-icon md-md md-round" style="background-color: #bdbdbd !important; margin-right: 8px;">{{date.substr(6,2)}}</md-button>
+              <md-list-item @click="openEditEventModal(calendarEvent)" v-if="calendarEvents[date] !== undefined" v-for="calendarEvent in calendarEvents[date].nonEditables" :key="calendarEvent.id" style="cursor: pointer;">
+                <md-button class="md-simple month-day-button md-just-icon md-md md-round" style="margin-right: 8px;">{{date.substr(6,2)}}</md-button>
                 <div class="md-list-item-text" style="white-space: normal;">
                   <span style="font-weight: 500;">{{calendarEvent.title}}</span>
                   <span class="small text-gray">{{calendarEvent.eventStartMillis | formatDate}}</span>
@@ -86,6 +86,9 @@
       calendarEvents: {
         type: Object
       },
+      openEditEventModal: {
+        type: Function
+      },
     },
     data() {
       return {
@@ -106,13 +109,12 @@
     },
     methods: {
       ...mapActions('AnnualPlannerVuex', ['setEventModalAndEventData']),
-      openEditEventModal: function (show, item) {
-        if (!item.editable){
-          item.occasion = item.title;
-        }
-
-        this.setEventModalAndEventData({showModal: show, eventData: item});
-      },
+      // openEditEventModal: function (show, item) {
+      //   if (!item.editable){
+      //     item.occasion = item.title;
+      //   }
+      //   this.setEventModalAndEventData({eventData: item});
+      // },
       colorWithCategory(category) {
         let filterCategories = this.categories.filter(c => c.item === category);
         return filterCategories[0] != null ? `${filterCategories[0].color}!important;` : '';
@@ -136,5 +138,8 @@
   };
 </script>
 <style lang="scss">
-
+  .md-simple.month-day-button {
+    color: #000 !important;
+    font-weight: bold;
+  }
 </style>

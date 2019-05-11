@@ -41,13 +41,13 @@
                                     <md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" class="md-simple month-day-button md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                     </md-button>
-                                    <md-button v-else-if="monthDay.events.editables.length" @click="openEditEventModal(true, monthDay.events.editables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-just-icon md-round md-md" v-bind:style="`background-color: ${colorWithCategory(monthDay.events.editables[0].category)}`">
+                                    <md-button v-else-if="monthDay.events.editables.length" @click="openEditEventModal(monthDay.events.editables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-just-icon md-round md-md" v-bind:style="`background-color: ${colorWithCategory(monthDay.events.editables[0].category)}`">
                                       {{monthDay.dayInMonth}}
                                       <span v-if="monthDay.events.editables.length > 1" class="count">
                                         {{monthDay.events.editables.length}}
                                       </span>
                                     </md-button>
-                                    <md-button v-else-if="monthDay.events.nonEditables.length" @click="openEditEventModal(true, monthDay.events.nonEditables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="month-day-button md-simple md-just-icon md-round md-md">
+                                    <md-button v-else-if="monthDay.events.nonEditables.length" @click="openEditEventModal(monthDay.events.nonEditables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="month-day-button md-simple md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                       <span v-if="monthDay.events.nonEditables.length > 1" class="count">
                                         {{monthDay.events.nonEditables.length}}
@@ -88,7 +88,7 @@
                 <table style="width: 100%; height: 100%;">
                   <tr style="height: 95%;">
                     <td>
-                      <month-events-panel :calendar-events="calendarEvents"></month-events-panel>
+                      <month-events-panel :openEditEventModal="openEditEventModal" :calendar-events="calendarEvents"></month-events-panel>
                     </td>
                   </tr>
                   <tr style="height: 5%;">
@@ -330,7 +330,7 @@
         this.setEventDate({date: currentDate ? currentDate : null});
         this.openEventSidePanel()
       },
-      openEditEventModal: function (show, item) {
+      openEditEventModal: function (item) {
         if (!item.editable){
           item.occasion = item.title;
         }
