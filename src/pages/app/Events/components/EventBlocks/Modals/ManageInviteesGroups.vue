@@ -116,16 +116,6 @@
         },
         mounted() {
 
-            new EventInvitee().get()
-                .then(resp => {
-
-                    console.log('All EventInvitee =>',resp);
-
-                })
-                .catch(error=>{
-                    console.log(error);
-                })
-
 
             this.getGroups()
 
@@ -142,8 +132,6 @@
                             let group = new EventInviteeGroup({id : item.id});
                             new EventInvitee().for(group).get()
                                 .then(resp => {
-
-                                    console.log('EventInvitee =>',resp);
 
                                 })
                                 .catch(error=>{
@@ -180,6 +168,7 @@
                 this.selectedGroup = group;
 
                 this.adding = true;
+                console.log('selectedGroup => ',this.selectedGroup);
                 this.$forceUpdate();
 
 
@@ -199,7 +188,6 @@
 
                         console.log('save =>',resp);
                         this.adding = false;
-                        this.getGroups();
 
 
                     })
