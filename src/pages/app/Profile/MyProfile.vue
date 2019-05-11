@@ -40,6 +40,10 @@
   import {LabelEdit} from '@/components';
   import Me from '@/models/Me';
   import auth from '@/auth';
+
+  import EventInviteeGroup from '@/models/EventInviteeGroup';
+  import EventInvitee from '@/models/EventInvitee';
+
   import {
     mapGetters
   } from 'vuex';
@@ -67,6 +71,11 @@
 
     },
     mounted() {
+      new EventInviteeGroup({title:"ABC Group for event"}).save().then(res => {
+        console.log(JSON.stringify(res));
+      });
+
+
       this.isLoading = true;
       new Me().get().then(me => {
         this.userInfo = me[0];
