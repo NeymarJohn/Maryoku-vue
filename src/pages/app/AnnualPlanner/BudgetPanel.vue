@@ -255,7 +255,7 @@
           this.numberOfEmployees = this.auth.user.customer.numberOfEmployees | numeral('0,0');
           this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee | numeral('0,0');
 
-
+debugger
           this.totalRemainingBudget = this.statistics.annualBudget - this.statistics.annualBudgetAllocated;
           this.remainingBudgetPerEmployee = this.statistics.annualBudgetPerEmployee - this.statistics.annualBudgetPerEmployeeAllocated;
           this.countEvents = this.statistics.numberOfEvents;
