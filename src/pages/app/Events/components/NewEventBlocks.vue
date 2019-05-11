@@ -28,6 +28,7 @@
                                    <md-textarea
                                            v-model="block.title"
                                            type="text"
+                                           :rows="block.title ? parseInt(block.title.length / 33) + 1 : 2"
                                    ></md-textarea>
                                </md-field>
                            </div>
@@ -76,12 +77,14 @@
   import auth from '@/auth';
   import ManageProposals from './EventBlocks/ManageProposals.vue';
   import swal from "sweetalert2";
+  import {LabelEdit} from '@/components';
 
   export default {
     name: 'event-blocks',
     components: {
         VueElementLoading,
-        ManageProposals
+        ManageProposals,
+        LabelEdit
     },
     props: {
         selectedBlock : Object,

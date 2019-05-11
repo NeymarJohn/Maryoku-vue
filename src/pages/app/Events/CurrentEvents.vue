@@ -296,6 +296,8 @@
 
           _calendar.calendarEvents().find(this.$route.params.id).then(event => {
 
+              console.log('Event ==>',event);
+
               this.event = event;
             this.eventId = event.id;
             this.calendarEvent = event;
@@ -306,16 +308,6 @@
 
             this.getCalendarEventStatistics(event);
 
-
-              if ( this.$route.newEvent ) {
-                  this.$notify(
-                      {
-                          message: 'Well done! You have successfully created'+ this.calendarEvent.title +' event',
-                          horizontalAlign: 'center',
-                          verticalAlign: 'top',
-                          type: 'success'
-                      })
-              }
 
           });
         }.bind(this));
