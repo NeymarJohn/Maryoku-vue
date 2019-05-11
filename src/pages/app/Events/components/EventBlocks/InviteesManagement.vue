@@ -40,6 +40,15 @@
                     </div>
                     <!--<div class="md-layout">-->
                         <!--<div class="md-layout-item md-size-100">-->
+                            <!--<h3>Select existing group or</h3>-->
+                            <!--<md-button class="md-success"> Create new Group </md-button>-->
+                        <!--</div>-->
+                        <!--<div class="md-layout-item md-size-100">-->
+
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="md-layout">-->
+                        <!--<div class="md-layout-item md-size-100">-->
                             <!--<label>What is the nature of the group?</label>-->
                         <!--</div>-->
                         <!--<div class="md-layout-item md-size-100">-->
