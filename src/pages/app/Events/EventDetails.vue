@@ -112,17 +112,6 @@ export default {
   mounted() {
     this.getEvent();
 
-      if ( this.$route.newEvent ) {
-          this.$notify(
-              {
-                  message: 'Well done! You have successfully created'+ this.calendarEvent.title +' event',
-                  horizontalAlign: 'center',
-                  verticalAlign: 'top',
-                  type: 'success'
-              })
-      }
-
-
   },
   methods: {
     ...mapMutations("EventPlannerVuex", [

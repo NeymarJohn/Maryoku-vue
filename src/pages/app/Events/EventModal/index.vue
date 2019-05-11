@@ -537,7 +537,7 @@
             this.$parent.isLoading = false;
             this.closeModal();
             //this.$emit("refresh-events");
-            this.$router.push({ path: `/events/`+response.id +`/edit`, params : {newEvent : true} })
+            this.$router.push({ path: `/events/`+response.id +`/edit` })
 
           })
             .catch((error) => {

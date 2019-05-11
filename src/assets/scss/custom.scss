@@ -383,20 +383,9 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 
     .md-textarea {
-      height: auto;
       padding-left : 0 !important;
       min-height: auto !important;
     }
-
-    .vlabeledit-input {
-      width: 100%;
-      height: auto;
-      border-color : #000;
-      border-radius: 3px;
-      padding : 4px;
-    }
-
-
   }
 }
 
@@ -1005,7 +994,7 @@ $tooltip-border-color: $blue-grey-200 !default;
   }
 }
 
-.company-profile-section {
+.company-profile-section, .budget-panel {
   .vlabeledit {
 
     .vlabeledit-label {
@@ -1040,7 +1029,12 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
   }
 }
-
+.budget-panel {
+  .vlabeledit {
+    width: 100%;
+    height: 34px;
+  }
+}
 .profile-title {
   text-align: left !important;
   margin-top: 12px !important;
@@ -1590,6 +1584,9 @@ iframe{
     }
   }
   .md-button {
+    .md-ripple {
+      padding : 12px 8px !important;
+    }
 
     &.upload-members-btn {
       margin : 2px;
@@ -1601,18 +1598,10 @@ iframe{
       }
     }
   }
-  .adding-members {
-    h5 {
-      margin-top : 0;
-    }
-  }
 
   .md-card-header {
     position : relative;
 
-    .title2 {
-      font-weight: bold;
-    }
     .card-actions {
       position : absolute;
       top : 1.5em;
@@ -1639,31 +1628,6 @@ iframe{
         top: 7px;
         margin: 0;
       }
-    }
-  }
-
-  .group {
-    position: relative;
-    h4 {
-      margin : 0;
-    }
-    .card-actions {
-      position : absolute;
-      top : 0;
-      right : 0;
-
-      .md-button {
-        height: auto;
-        .md-ripple {
-          padding : 0 !important;
-        }
-      }
-    }
-    .vlabeledit-input {
-      border : 1px solid #000;
-      border-radius: 3px;
-      padding : 5px;
-      font-size: 1.125rem;
     }
   }
 }
