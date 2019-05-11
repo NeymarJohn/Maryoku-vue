@@ -280,7 +280,7 @@
           for (var dayIdx = 0; dayIdx < 7; dayIdx++) { // 7 days
             if (currentMoment.date() === 1 && currentMoment.month() === currentMonth && currentMoment.year() === currentYear) {
               if (currentMoment.weekday() === dayIdx){
-                row.push({dayInMonth: currentMoment.date(), hasEvents: this.selectedDay(currentMoment).hasEvents});
+                row.push({dayInMonth: currentMoment.date(), ...this.selectedDay(currentMoment)});
                 currentMoment = currentMoment.add(1, 'day');
               } else {
                 row.push(0);
