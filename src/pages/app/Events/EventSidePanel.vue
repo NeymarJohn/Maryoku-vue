@@ -142,9 +142,11 @@
             <div class="md-layout mb16">
               <div class="md-layout-item md-small-size-100">
                 <md-field>
-                  <label>Budget</label>
+                  <label>Budget Per Participant</label>
                   <md-input v-model="totalBudget"
-                            data-vv-name="totalBudget"/>
+                            data-vv-name="totalBudget"
+                            v-validate= "modelValidations.statis"
+                            required/>
                 </md-field>
               </div>
               <div class="md-layout-item md-small-size-100">
@@ -524,7 +526,7 @@
           this.$parent.isLoading = false;
           this.closePanel();
           //this.$emit("refresh-events");
-          this.$router.push({ path: `/events/`+response.id +`/edit` })
+          this.$router.push({ name: 'EventDetails', params: {id: reponse.id} })
 
         })
           .catch((error) => {
