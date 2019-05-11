@@ -364,26 +364,26 @@
     }
   };
 </script>
-<style scope>
+<style lang="scss" >
   .md-button.md-just-icon {
     overflow: visible;
   }
   .md-simple.month-day-button {
     color: #000 !important;
     font-weight: bold;
+    border: 1px dashed lightgray;
   }
   .md-button .md-button-content .count {
     position: absolute;
     top: -5px;
-    right: -20px;
-    min-width: 20px;
-    border-radius: 10px;
-    font-size: 13px;
-    line-height: 20px;
-    background-color: red;
+    right: -12px;
+    min-width: 16px;
+    border-radius: 8px;
+    font-size: 10px;
+    line-height: 16px;
+    background-color: #FF547C;
+    color: white;
   }
-</style>
-<style lang="scss">
   .md-grey {
     background-color: #e0e0e0;
   }

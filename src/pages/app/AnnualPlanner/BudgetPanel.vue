@@ -120,6 +120,7 @@
   import VueElementLoading from 'vue-element-loading';
   import ChartComponent from '@/components/Cards/ChartComponent';
   import Calendar from '@/models/Calendar';
+  import Customer from '@/models/Customer';
   import numeral from 'numeral';
 
   import {
@@ -219,6 +220,7 @@
         this.fieldName = fieldName;
         if (fieldName == 'annualBudget') {
           this.annualBudget = Number(val);
+          this.annualBudgetPerEmployee = this.annualBudget / this.numberOfEmployees
         } else if (fieldName == 'numberOfEmployees') {
           this.numberOfEmployees = Number(val);
         } else if (fieldName == 'annualBudgetPerEmployee') {
@@ -226,27 +228,30 @@
         }
 
         let calendarId = this.auth.user.defaultCalendarId;
-        let calendar = await Calendar.params({year: this.$route.params.year}).find(calendarId);
-        calendar.annualBudget = Number(this.annualBudget);
-        calendar.customer.numberOfEmployees = Number(this.numberOfEmployees);
+        let calendar = new Calendar({id: calendarId, annualBudgetPerEmployee:  Number(this.annualBudgetPerEmployee)});
+        let customer = new Customer({id: this.auth.user.customer.id, numberOfEmployees: Number(this.numberOfEmployees)});
+
         this.auth.user.customer.numberOfEmployees = Number(this.numberOfEmployees);
-        calendar.annualBudgetPerEmployee = Number(this.annualBudgetPerEmployee);
 
+        customer.save().then(response => {
+          calendar.save().then(response => {
+            // const fieldName = this.fieldName;
+            this.$emit("month-count");
+            this.queryBudgetInfo();
+            // if (this.fieldName !== 'annualBudget' && response.annualBudget !== this.annualBudgetCache) {
+            //   this.saveBudgeData(this.annualBudgetCache, 'annualBudget');
+            //   this.annualBudgetPerEmployee = response.annualBudgetPerEmployee | numeral('0,0');
+            //   this.fieldName = fieldName;
+            // }
+            this.closeEditMode();
+          }).catch(error => {
+            console.error(error);
+            this.resetField();
 
-        calendar.save().then(response => {
-          // const fieldName = this.fieldName;
-          this.$emit("month-count");
-          this.queryBudgetInfo();
-          // if (this.fieldName !== 'annualBudget' && response.annualBudget !== this.annualBudgetCache) {
-          //   this.saveBudgeData(this.annualBudgetCache, 'annualBudget');
-          //   this.annualBudgetPerEmployee = response.annualBudgetPerEmployee | numeral('0,0');
-          //   this.fieldName = fieldName;
-          // }
-          this.closeEditMode();
+          });
         }).catch(error => {
           console.error(error);
           this.resetField();
-
         });
       },
       queryBudgetInfo(){
