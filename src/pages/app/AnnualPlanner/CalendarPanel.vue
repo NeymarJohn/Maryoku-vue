@@ -38,10 +38,10 @@
                               <td v-for="monthDay in monthRow" style="width: 14.2%; min-width: 14.2%; max-width: 14.2%;">
                                 <template v-if="monthDay !== 0">
                                   <template v-if="monthDay.hasEvents">
-                                    <md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" class="md-simple month-day-button md-just-icon md-round md-md">
-                                      {{monthDay.dayInMonth}}
-                                    </md-button>
-                                    <md-button v-else-if="monthDay.events.editables.length" @click="openEditEventModal(monthDay.events.editables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-just-icon md-round md-md" v-bind:style="`background-color: ${colorWithCategory(monthDay.events.editables[0].category)}`">
+                                    <!--<md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" class="md-simple month-day-button md-just-icon md-round md-md">-->
+                                      <!--{{monthDay.dayInMonth}}-->
+                                    <!--</md-button>-->
+                                    <md-button v-if="monthDay.events.editables.length" @click="openEditEventModal(monthDay.events.editables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="md-just-icon md-round md-md" v-bind:style="`background-color: ${colorWithCategory(monthDay.events.editables[0].category)}`">
                                       {{monthDay.dayInMonth}}
                                       <span v-if="monthDay.events.editables.length > 1" class="count">
                                         {{monthDay.events.editables.length}}

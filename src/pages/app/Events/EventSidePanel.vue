@@ -526,7 +526,7 @@
           this.$parent.isLoading = false;
           this.closePanel();
           //this.$emit("refresh-events");
-          this.$router.push({ name: 'EventDetails', params: {id: reponse.id} })
+          this.$router.push({ name: 'EventDetails', params: {id: response.id} })
 
         })
           .catch((error) => {
