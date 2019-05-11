@@ -148,6 +148,7 @@
     },
     data() {
       return {
+        fieldName: '',
         ready: false,
         auth: auth,
         isLoading: true,
@@ -215,13 +216,12 @@
     },
     methods: {
       async saveBudgeData (val, fieldName) {
+        this.fieldName = fieldName;
         if (fieldName == 'annualBudget') {
           this.annualBudget = Number(val);
-        }
-        if (fieldName == 'numberOfEmployees') {
+        } else if (fieldName == 'numberOfEmployees') {
           this.numberOfEmployees = Number(val);
-        }
-        if (fieldName == 'annualBudgetPerEmployee') {
+        } else if (fieldName == 'annualBudgetPerEmployee') {
           this.annualBudgetPerEmployee = Number(val);
         }
 
@@ -245,9 +245,14 @@
       },
       queryBudgetInfo(){
         if (this.statistics) {
-          this.numberOfEmployees = this.auth.user.customer.numberOfEmployees | numeral('0,0');
           this.annualBudget = this.statistics.annualBudget | numeral('0,0');
           this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee | numeral('0,0');
+          if (!this.fieldName || this.fieldName === 'numberOfEmployees')
+            this.numberOfEmployees = this.auth.user.customer.numberOfEmployees | numeral('0,0');
+          else if (this.fieldName === 'annualBudgetPerEmployee') {
+            this.annualBudget = this.annualBudgetCache;
+            this.numberOfEmployees = parseInt(this.annualBudget / this.annualBudgetPerEmployee);
+          }
           this.totalRemainingBudget = this.statistics.annualBudget - this.statistics.annualBudgetAllocated;
           this.remainingBudgetPerEmployee = this.statistics.annualBudgetPerEmployee - this.statistics.annualBudgetPerEmployeeAllocated;
           this.countEvents = this.statistics.numberOfEvents;
