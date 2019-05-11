@@ -237,7 +237,12 @@
           calendar.save().then(response => {
             // const fieldName = this.fieldName;
             this.$emit("month-count");
-            // this.queryBudgetInfo();
+            this.queryBudgetInfo();
+            // if (this.fieldName !== 'annualBudget' && response.annualBudget !== this.annualBudgetCache) {
+            //   this.saveBudgeData(this.annualBudgetCache, 'annualBudget');
+            //   this.annualBudgetPerEmployee = response.annualBudgetPerEmployee | numeral('0,0');
+            //   this.fieldName = fieldName;
+            // }
             this.closeEditMode();
           }).catch(error => {
             console.error(error);
@@ -251,11 +256,19 @@
       },
       queryBudgetInfo(){
         if (this.statistics) {
-          this.annualBudget = this.statistics.annualBudget | numeral('0,0');
-          this.numberOfEmployees = this.auth.user.customer.numberOfEmployees | numeral('0,0');
-          this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee | numeral('0,0');
+          this.annualBudget = this.fieldName !== 'annualBudget' && this.annualBudgetCache ?
+            this.annualBudgetCache
+            :
+            this.statistics.annualBudget | numeral('0,0');
 
 
+          if (!this.fieldName || this.fieldName === 'numberOfEmployees' || this.fieldName === 'annualBudget') {
+            this.numberOfEmployees = this.auth.user.customer.numberOfEmployees | numeral('0,0');
+            this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee | numeral('0,0');
+          }
+          else if (this.fieldName === 'annualBudgetPerEmployee') {
+            this.numberOfEmployees = parseInt(this.annualBudget / this.annualBudgetPerEmployee);
+          }
           this.totalRemainingBudget = this.statistics.annualBudget - this.statistics.annualBudgetAllocated;
           this.remainingBudgetPerEmployee = this.statistics.annualBudgetPerEmployee - this.statistics.annualBudgetPerEmployeeAllocated;
           this.countEvents = this.statistics.numberOfEvents;
