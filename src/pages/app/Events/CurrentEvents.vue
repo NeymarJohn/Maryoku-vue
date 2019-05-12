@@ -186,7 +186,7 @@
     <event-modal @refresh-events="refreshEvents" :currentEvent="calendarEvent" ref="eventModal"></event-modal>
     <!-- ./New Event Modal -->
 
-    <sticky-budget :event="event" v-if="routeName !== 'EditEvent' && routeName !== 'EditBuildingBlocks'"></sticky-budget>
+    <!--<sticky-budget :event="event" v-if="routeName !== 'EditEvent' && routeName !== 'EditBuildingBlocks'"></sticky-budget>-->
 
   </div>
 
@@ -216,7 +216,7 @@
   import EventBuildingBlocks from "./components/EventBuildingBlocks";
   import EventTimeLine from "./components/EventTimeLine.vue";
   import InviteesManagement from "./components/EventBlocks/InviteesManagement.vue";
-  import StickyBudget from "./components/StickyBudget.vue";
+
   import EventPageRoutes from "./components/EventPageRoutes.vue";
   import MdCardContent from "../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue";
 
@@ -234,7 +234,7 @@
       EventModal,
       EventTimeLine,
       InviteesManagement,
-      StickyBudget,
+
         EventPageRoutes
     },
 

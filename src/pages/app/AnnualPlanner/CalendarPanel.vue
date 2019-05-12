@@ -55,7 +55,7 @@
                                     </md-button>
                                   </template>
                                   <template v-else>
-                                    <md-button :ref="`month-day-${monthDay.dayInMonth}`" @click="openNewEventModal(fullDateWithDay(monthDay.dayInMonth))" class="md-simple md-round  md-just-icon md-md">
+                                    <md-button :ref="`month-day-${monthDay.dayInMonth}`" @click="openNewEventModal(fullDateWithDay(monthDay.dayInMonth))" class="md-white md-round  md-just-icon md-md">
                                       {{monthDay.dayInMonth}}
                                     </md-button>
                                   </template>
