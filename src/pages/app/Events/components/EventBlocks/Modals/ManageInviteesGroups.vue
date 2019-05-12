@@ -1,56 +1,59 @@
 <template>
     <div class="manage-groups-panel">
         <div class="md-layout" style="max-height: 100vh;">
-            <div class="md-layout-item md-size-100">
-                <h4>Manage Group : <b>Top Management</b>
-                </h4>
-            </div>
             <div class="md-layout">
-                <div class="md-layout-item md-size-100">
-                    <h5>Add members to '<span>Top Management</span>' group manually
-                    <br>
-                    or <md-button class="md-simple md-info upload-members-btn">Upload members from file</md-button>
-                    </h5>
-                </div>
-                <div class="md-layout-item md-size-100">
+
+                <div class="md-layout-item md-size-50">
+                    <h4 class="section-title"><b>Manage Groups</b></h4>
                     <md-card>
                         <md-card-header class="md-card-header-text">
-                            <h4 class="title2">Member List</h4>
+                            <h4 class="title2">Groups</h4>
                             <div class="card-actions pull-right">
                                 <!--<md-button class="md-info" @click="removeMember">Remove</md-button>-->
                                 <md-button class="md-info md-sm" @click="addMember">Create Group</md-button>
                             </div>
                         </md-card-header>
-                        <md-card-content>
+                        <md-card-content class="groups-list">
                             <!-- Groups -->
-                            <div class="group" v-for="(group,index) in groups" :key="index" v-if="!adding">
+                            <div class="group" v-for="(group,index) in selectedEventGroups" :key="index">
                                 <h4>
                                     <label-edit :text="group.title"  :field-name="index"  @text-updated-blur="groupTitleChanged" @text-updated-enter="groupTitleChanged"></label-edit>
                                 </h4>
 
                                 <div class="card-actions pull-right">
                                     <md-button class="md-danger md-sm md-just-icon md-simple" @click="removeGroup(group.id)"><md-icon>delete_outline</md-icon></md-button>
-                                    <md-button class="md-success md-sm md-just-icon md-simple" @click="addInvitee(group)"><md-icon>group_add</md-icon></md-button>
+                                    <md-button class="md-success md-sm md-just-icon md-simple" @click="ManageInvitees(group)"><md-icon>group_add</md-icon></md-button>
                                 </div>
-                                <ul class="members-list">
-                                    <li class="member-item" v-for="(item,index) in group.invitees" :key="index">
-                                        <md-checkbox v-model="item.selected" class="member-checkbox"></md-checkbox>
-                                        <div class="member-name">{{item.fullName}}</div>
-                                        <div class="member-email">{{item.emailAddress}}</div>
-                                    </li>
-                                </ul>
 
                             </div>
                             <!-- ./Groups -->
-                            <!--<ul class="members-list" v-if="!adding">-->
-                                <!--<li class="member-item" v-for="(item,index) in members" :key="index">-->
-                                    <!--<md-checkbox v-model="item.selected" class="member-checkbox"></md-checkbox>-->
-                                    <!--<div class="member-name">{{item.name}}</div>-->
-                                    <!--<div class="member-email">{{item.email}}</div>-->
-                                <!--</li>-->
-                            <!--</ul>-->
+                        </md-card-content>
+                    </md-card>
+                </div>
+                <div class="md-layout-item md-size-50" v-if="groupInvitees.length">
+                    <h5>Add members to '<span>{{selectedGroup.title}}</span>' group manually
+                        <br>
+                        or <md-button class="md-simple md-info upload-members-btn">Upload members from file</md-button>
+                    </h5>
+                    <md-card>
+                        <md-card-header class="md-card-header-text">
+                            <h4 class="title2">Member List</h4>
+                            <div class="card-actions pull-right" v-if="!adding">
+                                <md-button class="md-danger md-sm" @click="removeMember">Remove</md-button>
+                                <md-button class="md-info md-sm" @click="addInvitee">Add Invitee</md-button>
+                            </div>
+                        </md-card-header>
+                        <md-card-content>
+                            <!-- Groups -->
+                            <ul class="members-list"  v-if="!adding">
+                                <li class="member-item" v-for="(item,index) in groupInvitees" :key="index">
+                                    <md-checkbox v-model="item.selected" class="member-checkbox"></md-checkbox>
+                                    <div class="member-name">{{item.fullName}}</div>
+                                    <div class="member-email">{{item.emailAddress}}</div>
+                                </li>
+                            </ul>
 
-                            <div class="adding-members" v-if="adding">
+                            <div class="adding-members" v-else-if="adding">
                                 <h5>Add invitee to {{selectedGroup.title}}</h5>
                                 <md-field class="md-layout-item" >
                                     <label>User Name</label>
@@ -68,6 +71,7 @@
 
                         </md-card-content>
                     </md-card>
+
                 </div>
             </div>
         </div>
@@ -96,7 +100,8 @@
             LabelEdit
         },
         props: {
-
+            event : Object,
+            selectedEventGroups : Array
         },
         data: () => ({
             auth: auth,
@@ -107,7 +112,8 @@
             newUser : '',
             newValue : '',
             groups : [],
-            selectedGroup : null
+            selectedGroup : null,
+            groupInvitees : []
 
         }),
 
@@ -127,7 +133,7 @@
                 })
 
 
-            this.getGroups()
+            this.getGroups();
 
         },
         methods: {
@@ -136,21 +142,6 @@
                     .then(resp => {
                         console.log('EventInviteeGroup =>',resp);
                         this.groups  = resp;
-
-                        resp.forEach(item => {
-
-                            let group = new EventInviteeGroup({id : item.id});
-                            new EventInvitee().for(group).get()
-                                .then(resp => {
-
-                                    console.log('EventInvitee =>',resp);
-
-                                })
-                                .catch(error=>{
-                                    console.log(error);
-                                })
-
-                        })
                     })
                     .catch(error=>{
                         console.log(error);
@@ -172,16 +163,59 @@
 
             },
             removeMember () {
+                swal({
+                    title: "Are you sure?",
+                    text: `You won't be able to revert this!`,
+                    showCancelButton: true,
+                    confirmButtonClass: "md-button md-success",
+                    cancelButtonClass: "md-button md-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    buttonsStyling: false
+                }).then(result => {
+                    if (result.value) {
+                        this.members = _.reject(this.groupInvitees,function(member){return member.selected == true;});
 
-                this.members = _.reject(this.members,function(member){return member.selected == true;})
+                        this.members.forEach(member => {
+
+                            let invitee = new EventInvitee({id : member.id}).for(this.selectedGroup);
+
+                            invitee.delete()
+                                .then(resp => {
+                                    console.log('invitee deleted =>',resp);
+                                    this.getGroupInvitees(this.selectedGroup);
+                                })
+                                .catch(error=>{
+                                    console.log(error);
+                                })
+                        })
+                    }
+                });
+
             },
-            addInvitee(group) {
+            ManageInvitees(group) {
 
                 this.selectedGroup = group;
 
-                this.adding = true;
-                this.$forceUpdate();
+                //get invitees for selected groups
+                this.getGroupInvitees(group);
 
+
+
+            },
+            getGroupInvitees(group){
+                let selected_group = new EventInviteeGroup({id : group.id});
+
+                new EventInvitee().for(selected_group).get()
+                    .then(resp => {
+                        this.groupInvitees = resp
+
+                    })
+                    .catch(error=>{
+                        console.log(error);
+                    })
+            },
+            addInvitee(){
+                this.adding = true;
 
             },
             cancel(){
@@ -199,8 +233,7 @@
 
                         console.log('save =>',resp);
                         this.adding = false;
-                        this.getGroups();
-
+                        this.getGroupInvitees(this.selectedGroup);
 
                     })
                     .catch(error=>{

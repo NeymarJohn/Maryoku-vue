@@ -81,7 +81,7 @@
               <div>
                 <div class="md-caption title-text">Budget per employee</div>
                 <div class="md-caption title-text title-budget-prise">
-                  <animated-number ref="budgetPerPersonNumber" :value="calendarEvent.budgetPerPerson" prefix="$"></animated-number>
+                  <animated-number ref="budgetPerPersonNumber" :value="budgetPerEmployee" prefix="$"></animated-number>
                 </div>
               </div>
               <div>
@@ -250,7 +250,8 @@
         seriesData: [],
         isLoading: false,
         event : null,
-        routeName : null
+        routeName : null,
+          budgetPerEmployee : 0
       };
     },
     created(){
@@ -273,12 +274,9 @@
       }
 
 
-
         this.$bus.$on('RefreshStatistics', function () {
             _self.getCalendarEventStatistics(_self.calendarEvent);
         })
-
-
 
     },
     methods: {
@@ -324,7 +322,7 @@
       openEventModal() {
         this.setEventData(this.event);
         this.setEventModal({ showModal: true });
-        this.setModalSubmitTitle("Edit");
+        this.setModalSubmitTitle("Save");
         this.setEditMode({ editMode: true });
       },
       refreshEvents() {
@@ -344,6 +342,7 @@
                     this.totalRemainingBudget = evt.totalBudget - resp[0].totalAllocatedBudget;
                     this.percentage = 100 - ((resp[0].totalAllocatedBudget / evt.totalBudget) * 100).toFixed(2);
                     this.seriesData = [(100 - this.percentage), this.percentage];
+                    this.budgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants;
 
                 })
                 .catch(error => {

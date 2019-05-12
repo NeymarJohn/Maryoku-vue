@@ -239,6 +239,7 @@
   import EventInteraction from "@/models/EventInteraction";
   import moment from 'moment';
   import _ from "underscore";
+  import EventInviteeGroup from "@/models/EventInviteeGroup";
 
   // Get dummy images from EventPageHeaderImage
   import EventPageHeaderImage from '@/models/EventPageHeaderImage';
@@ -268,9 +269,7 @@
       line3: "",
       interactionsImagesList : [],
       templateImage : null,
-      possibleEventGroupsList: [
-        { id: 'group-a', title: "Group A"}, { id: 'group-b', title: "Group B"}
-      ],
+      possibleEventGroupsList: [],
       selectedEventGroups: [
       ]
     }),
@@ -415,13 +414,34 @@
           })
       },
       showManageGroupSection(){
-        window.currentPanel = this.$showPanel({
-          component: ManageInviteesGroups,
-          cssClass: 'md-layout-item md-size-35 transition36 bg-grey',
-          openOn: 'right',
-          props: {event : this.event}
-        });
-      }
+
+          if ( !this.selectedEventGroups.length) {
+              this.$notify(
+                  {
+                      message: 'You have to select at least one group!',
+                      horizontalAlign: 'center',
+                      verticalAlign: 'top',
+                      type: 'warning'
+                  })
+          } else {
+              window.currentPanel = this.$showPanel({
+                  component: ManageInviteesGroups,
+                  cssClass: 'md-layout-item md-size-75 transition36 bg-grey',
+                  openOn: 'right',
+                  props: {event : this.event,selectedEventGroups : this.selectedEventGroups}
+              });
+          }
+
+      },
+        getEventInviteeGroup(){
+            new EventInviteeGroup().get()
+                .then(resp => {
+                    this.possibleEventGroupsList  = resp;
+                })
+                .catch(error=>{
+                    console.log(error);
+                })
+        }
 
     },
     created() {
@@ -450,6 +470,9 @@
         })
 
       })
+
+        //get event invitees groups
+        this.getEventInviteeGroup();
 
     },
     computed: {},
