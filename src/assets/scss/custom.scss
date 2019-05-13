@@ -1115,6 +1115,10 @@ $tooltip-border-color: $blue-grey-200 !default;
       text-align: left;
     }
   }
+}
+
+.preview-section {
+  padding: 3em 1em;
 
   .preview-item {
     height: 300px;
@@ -1135,7 +1139,7 @@ $tooltip-border-color: $blue-grey-200 !default;
       margin : 0;
     }
     .interaction-date {
-        margin : 0 0 0;
+      margin : 0 0 0;
     }
 
 
@@ -1145,9 +1149,7 @@ $tooltip-border-color: $blue-grey-200 !default;
   .md-textarea {
     padding-left :0 !important;
   }
-}
 
-.preview-section {
   ul.images-list {
     display: flex;
     flex-direction: row;
@@ -1611,9 +1613,12 @@ iframe{
   }
   .groups-list {
     .group {
-      margin-bottom : 1em;
-      padding-bottom : 1em;
+      padding: 1em;
       border-bottom : 1px solid #efefef;
+
+      &.selected {
+        background: #efefef;
+      }
     }
   }
   .adding-members {
@@ -1664,7 +1669,7 @@ iframe{
     }
     .card-actions {
       position : absolute;
-      top : 0;
+      top : 0.8em;
       right : 0;
 
       .md-button {

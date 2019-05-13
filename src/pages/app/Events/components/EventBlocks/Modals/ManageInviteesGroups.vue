@@ -15,7 +15,7 @@
                         </md-card-header>
                         <md-card-content class="groups-list">
                             <!-- Groups -->
-                            <div class="group" v-for="(group,index) in selectedEventGroups" :key="index">
+                            <div class="group" v-for="(group,index) in selectedEventGroups" :key="index" :class="{selected : selectedGroup && selectedGroup.id === group.id}">
                                 <h4>
                                     <label-edit :text="group.title"  :field-name="index"  @text-updated-blur="groupTitleChanged" @text-updated-enter="groupTitleChanged"></label-edit>
                                 </h4>
@@ -122,40 +122,29 @@
         },
         mounted() {
 
-            new EventInvitee().get()
-                .then(resp => {
-
-                    console.log('All EventInvitee =>',resp);
-
-                })
-                .catch(error=>{
-                    console.log(error);
-                })
-
-
-            this.getGroups();
-
         },
         methods: {
-            getGroups(){
-                new EventInviteeGroup().get()
-                    .then(resp => {
-                        console.log('EventInviteeGroup =>',resp);
-                        this.groups  = resp;
-                    })
-                    .catch(error=>{
-                        console.log(error);
-                    })
-            },
+
             addMember() {
+                //define new group
                 let newGroup = {
                     title:"New Group",
-
                 }
+
+                //save new group
                 new EventInviteeGroup(newGroup).save()
                     .then(resp => {
-                        console.log('group created =>',resp);
-                        this.getGroups();
+                        this.$notify(
+                            {
+                                message: 'Group created successfully',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'success'
+                            })
+
+                        this.selectedEventGroups.push(resp);
+                        this.saveInviteeGroups();
+
                     })
                     .catch(error=>{
                         console.log(error);
@@ -181,7 +170,15 @@
 
                             invitee.delete()
                                 .then(resp => {
-                                    console.log('invitee deleted =>',resp);
+
+                                    this.$notify(
+                                        {
+                                            message: 'Invitees deleted successfully',
+                                            horizontalAlign: 'center',
+                                            verticalAlign: 'top',
+                                            type: 'success'
+                                        })
+
                                     this.getGroupInvitees(this.selectedGroup);
                                 })
                                 .catch(error=>{
@@ -228,11 +225,20 @@
                     emailAddress:this.newValue
                 }
 
+                // add invitee to the selected group
                 new EventInvitee(invitee).for(this.selectedGroup).save()
                     .then(resp => {
+                        this.$notify(
+                            {
+                                message: 'Invitee added successfully',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'success'
+                            })
 
-                        console.log('save =>',resp);
                         this.adding = false;
+
+                        //refresh invitees group list
                         this.getGroupInvitees(this.selectedGroup);
 
                     })
@@ -248,7 +254,14 @@
 
                 group.save()
                     .then(resp => {
-                        console.log('saved');
+
+                        this.$notify(
+                            {
+                                message: 'Group modified successfully',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'success'
+                            })
                     })
                     .catch(error=>{
                         console.log(error);
@@ -270,8 +283,6 @@
 
                         group.delete()
                             .then(resp => {
-                                console.log('deleted');
-
                                 this.$notify({
                                     message: 'Group removed successfully!',
                                     horizontalAlign: 'center',
@@ -279,7 +290,9 @@
                                     type: 'success',
                                 });
 
-                                this.getGroups();
+                                this.selectedEventGroups.splice(_.findIndex(this.selectedEventGroups, (g) => {
+                                    return g.id === id
+                                }), 1);
 
                             })
                             .catch(error=>{
@@ -289,7 +302,31 @@
                 });
 
 
-            }
+            },
+        saveInviteeGroups() {
+
+            let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+
+            let selectedGroupsIds = [];
+
+            this.selectedEventGroups.forEach(group => {
+                selectedGroupsIds.push({id : group.id, title : group.title});
+            });
+
+            event = this.event;
+            event.inviteeGroups = selectedGroupsIds.length  ? selectedGroupsIds : null;
+
+            event.for(_calendar).save()
+                .then(resp => {
+                    console.log('Group added to event');
+
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+
+        }
 
         },
         computed: {

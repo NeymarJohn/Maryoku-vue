@@ -179,8 +179,8 @@
                     </form>
                 </template>
                 <template slot="footer">
-                    <md-button v-if="this.editMode" class="md-simple move-left md-just-icon" @click="showDeleteAlert">
-                        <md-icon class="md-theme-warning" style="font-size: 1.5rem !important;">delete </md-icon>
+                    <md-button v-if="this.editMode" class="md-danger move-left" @click="showDeleteAlert">
+                        Delete
                     </md-button>
 
                     <md-button v-if="this.editMode" @click="openEventPlanner" class="md-success">
