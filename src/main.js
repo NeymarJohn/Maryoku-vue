@@ -21,6 +21,7 @@ import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import VTooltip from 'v-tooltip';
 import VueGtm from 'vue-gtm';
 import VueSlideoutPanel from 'vue2-slideout-panel';
+import Tawk from 'vue-tawk';
 
 // router setup
 import routes from "./router/routes";
@@ -107,6 +108,10 @@ Vue.use(VueGtm, {
 });
 
 Vue.use(VueSlideoutPanel);
+
+Vue.use(Tawk, {
+  tawkSrc: 'https://embed.tawk.to/5cd93e082846b90c57ae3644/default'
+});
 
 Vue.directive('focus', {
   inserted: function (el) {

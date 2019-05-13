@@ -21,7 +21,11 @@ export default {
     setTimeout(() => {
       this.auth.logout(this);
       try {
-        heap.resetIdentity();
+        window.heap.resetIdentity();
+      } catch (e) { console.error(e);}
+
+      try {
+        this.$Tawk.$endChat();
       } catch (e) { console.error(e);}
     },1500)
   },
