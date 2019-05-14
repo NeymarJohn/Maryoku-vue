@@ -48,18 +48,27 @@ const router = new VueRouter({
   routes, // short for routes: routes
   linkExactActiveClass: "nav-item active",
   scrollBehavior (to, from, savedPosition) {
-  return { x: 0, y: 0 }
-}
+    return { x: 0, y: 0 }
+  }
 });
 
 router.beforeEach((to, from, next) => {
   if (window.currentPanel){
     window.currentPanel.hide();
   }
-  if (to.meta.auth == null && !auth.user.authenticated){
-    next('signin');
+
+  let tenantId = document.location.hostname.replace(".262days.com","");
+  router.app.$http.defaults.headers.common.gorm_tenantid = tenantId;
+  Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
+
+  if ((tenantId.startsWith("dev") || tenantId.startsWith("app")) && to.name !== "GetStarted"){
+    next('get-started');
   } else {
-    next();
+    if (to.meta.auth == null && !auth.user.authenticated) {
+      next('signin');
+    } else {
+      next();
+    }
   }
   router.app.$root.$emit("set-title",null);
 });

@@ -65,8 +65,9 @@ export default {
   methods: {
     authenticate(provider) {
       this.loading = true;
+      let tenantId = document.location.hostname.replace(".262days.com","");
       const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`);
-      document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?callback=${callback}`;
+      document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
     },
     signup(){
       this.loading = true;

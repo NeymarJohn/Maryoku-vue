@@ -385,7 +385,7 @@
                     component: ManageInviteesGroups,
                     cssClass: 'md-layout-item md-size-75 transition36 bg-grey',
                     openOn: 'right',
-                    props: {event: this.event, selectedEventGroups: this.selectedEventGroups}
+                    props: {event: this.event}
                 });
 
             },
