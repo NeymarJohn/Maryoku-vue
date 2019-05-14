@@ -19,6 +19,12 @@
       let tenantId = document.location.hostname.replace(".262days.com","");
       this.$http.defaults.headers.common.gorm_tenantid = tenantId;
       Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
+
+
+      let date = new Date();
+      date.setTime(date.getTime() + (3650*24*60*60*1000));
+      let expires = "; expires=" + date.toUTCString();
+      document.cookie = "gorm.tenantId=" + (tenantId || "")  + expires + "; path=/; domain=.262days.com;";
     },
     mounted(){
       let before = new Date();

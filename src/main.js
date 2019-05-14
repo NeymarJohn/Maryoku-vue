@@ -61,7 +61,7 @@ router.beforeEach((to, from, next) => {
   router.app.$http.defaults.headers.common.gorm_tenantid = tenantId;
   Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
 
-  if ((tenantId.startsWith("dev") || tenantId.startsWith("app")) && to.name !== "GetStarted"){
+  if ((tenantId.startsWith("dev") || tenantId.startsWith("app") || tenantId.startsWith("localhost")) && to.name !== "GetStarted"){
     next('get-started');
   } else {
     if (to.meta.auth == null && !auth.user.authenticated) {

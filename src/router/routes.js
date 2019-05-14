@@ -263,12 +263,6 @@ let authPages = {
       meta: {auth: false, title: 'Sign Out', gtm: "SignOut"}
     },
     {
-      path: "/get-started",
-      name: "GetStarted",
-      component: Onboarding,
-      meta: {auth: false, title: 'Get Started', gtm: "GetStarted"}
-    },
-    {
       path: "/signedin",
       name: "SignedIn",
       component: SignedIn,
@@ -287,7 +281,13 @@ let publicPages = {
       name: "ShowEvent",
       component: ShowEvent,
       meta: {auth: false, title: 'Event', gtm: "Event"},
-    }
+    },
+    {
+      path: "/get-started",
+      name: "GetStarted",
+      component: Onboarding,
+      meta: {auth: false, title: 'Get Started', gtm: "GetStarted"}
+    },
   ]
 };
 
