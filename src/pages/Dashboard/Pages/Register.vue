@@ -1,8 +1,8 @@
 <template>
   <div class="md-layout">
     <div class="md-layout-item">
+      <h2 class="title text-center" style="text-align: center;">Welcome, lets start by creating your workspace</h2>
       <signup-card>
-        <h2 class="title text-center" slot="title">Register</h2>
         <div class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 ml-auto" slot="content-left">
           <div class="info info-horizontal" v-for="item in contentLeft" :key="item.title">
               <div :class="`icon ${item.colorIcon}`">
@@ -58,26 +58,26 @@ export default {
       contentLeft: [
         {
           colorIcon: "icon-success",
-          icon: "timeline",
-          title: "Marketing",
+          icon: "color_lens",
+          title: "Get Inspired",
           description:
-            "We've created the marketing campaign of the website. It was a very interesting collaboration."
+            "Why struggle to find good ideas for your company's next event, when you can simply browse through other companies' events, see what worked for them and adjust those ideas to your needs."
         },
 
         {
           colorIcon: "icon-danger",
-          icon: "code",
-          title: "Fully Coded in HTML5",
+          icon: "calendar_today",
+          title: "Plan Ahead",
           description:
-            "We've developed the website with HTML5 and CSS3. The client has access to the code using GitHub."
+            "Making the best of your annual budget is so much easier when you have visibility over all year occasions combined with insights on industry benchmark."
         },
 
         {
           colorIcon: "icon-info",
-          icon: "group",
-          title: "Built Audience",
+          icon: "developer_board",
+          title: "Work Less",
           description:
-            "There is also a Fully Customizable CMS Admin Dashboard for this product."
+            "Stop spending hours on phone calls, emails, quotes and invoices. Locate ranked suppliers and have them work for you."
         }
       ],
       inputs: [

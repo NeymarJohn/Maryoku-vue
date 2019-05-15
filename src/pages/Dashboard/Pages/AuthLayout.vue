@@ -30,17 +30,17 @@
                   <router-link :to="{path:'/dashboard'}">Home</router-link>
                 </li>-->
                 <li>
-                  <a href="https://www.262days.com/our-story">
+                  <a href="https://www.262days.com/our-story" target="_blank">
                     Our Story
                   </a>
                 </li>
                 <li>
-                  <a href="https://www.262days.com/terms">
+                  <a href="https://www.262days.com/terms" target="_blank">
                     Terms of Use
                   </a>
                 </li>
                 <li>
-                  <a href="https://www.262days.com/privacy">
+                  <a href="https://www.262days.com/privacy" target="_blank">
                     Privacy
                   </a>
                 </li>
@@ -94,6 +94,7 @@
           Pricing: "static/img/bg-pricing.jpg",
           Login: "static/img/shutterstock_495639391.png",
           Register: "static/img/shutterstock_495639391.png",
+          CreateWorkspace: "static/img/shutterstock_495639391.png",
           SignIn: "static/img/shutterstock_732491308.png",
           SignOut: "static/img/shutterstock_732491308.png",
           GetStarted: "static/img/shutterstock_732491308.png",

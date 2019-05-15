@@ -61,8 +61,8 @@ router.beforeEach((to, from, next) => {
   router.app.$http.defaults.headers.common.gorm_tenantid = tenantId;
   Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
 
-  if ((tenantId.startsWith("dev") || tenantId.startsWith("app") || tenantId.startsWith("localhost")) && to.name !== "GetStarted"){
-    next('get-started');
+  if ((tenantId.startsWith("dev") || tenantId.startsWith("app") || tenantId.startsWith("localhost")) && to.name !== "CreateWorkspace"){
+    next('create-workspace');
   } else {
     if (to.meta.auth == null && !auth.user.authenticated) {
       next('signin');
@@ -119,7 +119,8 @@ Vue.use(VueGtm, {
 Vue.use(VueSlideoutPanel);
 
 Vue.use(Tawk, {
-  tawkSrc: 'https://embed.tawk.to/5cd93e082846b90c57ae3644/default'
+  tawkSrc: 'https://embed.tawk.to/5cd93e082846b90c57ae3644/default',
+  enabled: false
 });
 
 Vue.directive('focus', {

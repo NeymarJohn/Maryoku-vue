@@ -3,7 +3,7 @@
     <div class="md-layout-item md-size-100" style="text-align: center;">
       <img src="static/img/262Logo2.png" class="text-center" />
       <h2 class="title text-center" slot="title" style="text-align: center;">
-        Create your workspace
+        Not found
       </h2>
     </div>
     <div class="md-layout-item md-size-50 mx-auto">
@@ -11,7 +11,7 @@
         <md-card-header></md-card-header>
         <md-card-content>
           <h2 class="title text-center" style="text-align: center;">
-            Welcome, let's get you started ...
+            You've reached a non-
           </h2>
         </md-card-content>
       </md-card>

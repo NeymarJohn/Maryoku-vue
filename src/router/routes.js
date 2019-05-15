@@ -97,6 +97,7 @@ const Calendar = () => import("@/pages/Dashboard/Calendar.vue");
 // Charts
 const Charts = () => import("@/pages/Dashboard/Charts.vue");
 import Widgets from "@/pages/Dashboard/Widgets.vue";
+import CreateWorkspace from '@/pages/Dashboard/Pages/CreateWorkspace';
 
 let componentsMenu = {
   path: "/components",
@@ -267,6 +268,12 @@ let authPages = {
       name: "SignedIn",
       component: SignedIn,
       meta: {auth: false, title: 'Signed In', gtm: "SignedIn"}
+    },
+    {
+      path: "/create-workspace",
+      name: "CreateWorkspace",
+      component: CreateWorkspace,
+      meta: {auth: false, title: 'Create Workspace', gtm: "CreateWorkspace"}
     }
   ]
 };
@@ -287,7 +294,7 @@ let publicPages = {
       name: "GetStarted",
       component: Onboarding,
       meta: {auth: false, title: 'Get Started', gtm: "GetStarted"}
-    },
+    }
   ]
 };
 
