@@ -12,7 +12,7 @@ const API_URL = `${HOSTNAME}`;
 const REGISTRATION_URL = `${API_URL}/1/register`;
 const SESSION_URL = `${API_URL}/api/login`;
 const CURRENT_USER_URL = `${API_URL}/1/me`;
-const LOGOUT_USER_URL = `${API_URL}/api/logout`;
+const LOGOUT_USER_URL = `${API_URL}/1/logout`;
 
 const TOKEN_KEY = "manage_id_token";
 
