@@ -129,8 +129,8 @@
         email: '',
         phoneNumber: '',
         formattedNumber: '',
-        birthday: null,
-        firstDayAtWork: null,
+        birthday: 0,
+        firstDayAtWork: 0,
         isError:false,
         touched: {
           email: false,
