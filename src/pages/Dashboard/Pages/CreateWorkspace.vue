@@ -81,6 +81,19 @@ export default {
 
       this.$validator.validateAll().then(isValid => {
         if (isValid){
+
+          let tenantId = document.location.hostname.replace(".262days.com","");
+          tenantId = tenantId.length > 0 ? "_"+tenantId : '';
+
+          new Tenant({id: this.workspace + tenantId}).save().then(res => {
+            if (res.status){
+              this.loading = true;
+              document.location.href=`${document.location.protocol}//${this.workspace}.${document.location.hostname}:${document.location.port}`;
+            } else {
+              this.error = "Failed"
+            }
+          });
+
           /*this.auth.signupOrSignin(this, this.email, this.password, (data) => {
             this.auth.login(this, {username: this.email, password: this.password}, (success) => {
               this.$router.push({ path: '/signedin', query: {token: success.access_token} });
