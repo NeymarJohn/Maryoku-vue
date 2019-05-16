@@ -53,6 +53,22 @@
                   <span class="md-error" v-if="errors.has('eventType')">The event eventType is required</span>
                 </md-field>
               </div>
+              <div class="md-layout-item md-small-size-100">
+                <md-field :class="[{'md-error': errors.has('participantsType')}]" class="select-with-icon">
+                  <label>Invitee Type</label>
+                  <md-select v-model="participantsType"
+                             data-vv-name="participantsType"
+                             v-validate= "modelValidations.participantsType"
+                             required>
+                          <md-option v-for="(option, index) in InviteeTypes"
+                               :key="index"
+                               :value="option">
+                      {{ option }}
+                    </md-option>
+                  </md-select>
+                  <span class="md-error" v-if="errors.has('participantsType')">The event Invitee Type is required</span>
+                </md-field>
+              </div>
               <!--<div class="md-layout-item md-small-size-100">-->
                 <!--<md-field :class="[{'md-error': errors.has('category')}]" class="select-with-icon">-->
                   <!--<label>Category</label>-->
@@ -181,6 +197,7 @@
       durationArray: [...Array(12).keys()].map(x =>  ++x),
       dateValid: true,
       editTitle: false,
+      InviteeTypes: ["Employees Only","Employees and spouse","Employees and families", "Employees children"],
       modelValidations: {
         title: {
           required: true,
@@ -206,6 +223,9 @@
           required: true,
         },
         eventType: {
+          required: true,
+        },
+        participantsType: {
           required: true,
         },
         category: {
@@ -337,6 +357,15 @@
           this.setEventProperty({key: 'eventType', actualValue: value});
         }
       },
+      participantsType: {
+        get() {
+          return this.eventData.participantsType
+        },
+        set(value) {
+          console.log(value)
+          this.setEventProperty({key: 'participantsType', actualValue: value});
+        }
+      },
       category: {
         get() {
           return this.eventData.category
@@ -373,6 +402,7 @@
         this.totalBudget = "";
         this.currency = "";
         this.eventType = null;
+        this.participantsType = null;
         this.category = null;
       },
       getError(fieldName) {
@@ -399,8 +429,9 @@
         editedEvent.status = this.eventData.status;
         editedEvent.currency = this.currency;
         editedEvent.eventType = this.eventType;
+        editedEvent.participantsType = this.participantsType;
         editedEvent.category = this.category;
-        editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+       // editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
           this.closePanel();
@@ -468,9 +499,10 @@
           status: this.eventData.status,
           currency: this.currency,
           eventType: this.eventType,
+          participantsType: this.participantsType,
           category: this.category,
           edittable: true,
-          participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+        //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         }).for(_calendar).save().then(response => {
           console.log('new event => ' , response.id);
           this.$parent.isLoading = false;
