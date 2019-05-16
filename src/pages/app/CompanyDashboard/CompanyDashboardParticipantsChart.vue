@@ -106,8 +106,8 @@
             this.items = [];
           }
 
-          this.loading = false;
         }
+        this.loading = false;
       }
     }
   };
