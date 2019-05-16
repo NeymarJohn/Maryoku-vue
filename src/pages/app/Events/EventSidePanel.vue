@@ -8,10 +8,6 @@
     <div class="md-layout-item md-size-95" style="max-height: 90vh; ">
       <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
         Create Event
-
-        <a href="javascript: void(null);" v-if="this.editMode" @click="openEventPlanner" class="text-info md-info small pull-right" style="line-height: 51px;">
-          <md-icon class="text-info">event_note</md-icon> Open in Event Planner <md-icon class="text-info">arrow_right</md-icon>
-        </a>
       </h4>
 
       <div class="md-layout" style="overflow: auto; max-height: 90vh; margin-top: 24px;">
@@ -42,24 +38,6 @@
                 </md-autocomplete>
               </div>
               <div class="md-layout-item md-small-size-100">
-                <md-field :class="[{'md-error': errors.has('theme')}]" class="select-with-icon">
-                  <label>Theme</label>
-                  <md-select v-model="theme"
-                             data-vv-name="theme"
-                             v-validate= "modelValidations.category"
-                             required>
-                    <md-option v-for="event in eventThemes"
-                               :key="event.id"
-                               :value="event.id">
-                      {{ event.title }}
-                    </md-option>
-                  </md-select>
-                  <span class="md-error" v-if="errors.has('theme')">The event category is required</span>
-                </md-field>
-              </div>
-            </div>
-            <div class="md-layout mb16">
-              <div class="md-layout-item md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('eventType')}]" class="select-with-icon">
                   <label>Event Type</label>
                   <md-select v-model="eventType"
@@ -75,22 +53,22 @@
                   <span class="md-error" v-if="errors.has('eventType')">The event eventType is required</span>
                 </md-field>
               </div>
-              <div class="md-layout-item md-small-size-100">
-                <md-field :class="[{'md-error': errors.has('category')}]" class="select-with-icon">
-                  <label>Category</label>
-                  <md-select v-model="category"
-                             data-vv-name="category"
-                             v-validate= "modelValidations.category"
-                             required>
-                    <md-option v-for="option in categories"
-                               :key="option.id"
-                               :value="option.item">
-                      {{ option.item }}
-                    </md-option>
-                  </md-select>
-                  <span class="md-error" v-if="errors.has('category')">The event category is required</span>
-                </md-field>
-              </div>
+              <!--<div class="md-layout-item md-small-size-100">-->
+                <!--<md-field :class="[{'md-error': errors.has('category')}]" class="select-with-icon">-->
+                  <!--<label>Category</label>-->
+                  <!--<md-select v-model="category"-->
+                             <!--data-vv-name="category"-->
+                             <!--v-validate= "modelValidations.category"-->
+                             <!--required>-->
+                    <!--<md-option v-for="option in categories"-->
+                               <!--:key="option.id"-->
+                               <!--:value="option.item">-->
+                      <!--{{ option.item }}-->
+                    <!--</md-option>-->
+                  <!--</md-select>-->
+                  <!--<span class="md-error" v-if="errors.has('category')">The event category is required</span>-->
+                <!--</md-field>-->
+              <!--</div>-->
             </div>
             <div class="md-layout mb16">
               <div class="md-layout-item md-size-100 md-small-size-100">
@@ -171,22 +149,6 @@
                   </md-button>
                 </div>
               </div>
-              <!--<div class="md-layout-item md-small-size-100">
-                  <md-field :class="[{'md-error': errors.has('currency')}]" class="select-with-icon">
-                      <label>Currency</label>
-                      <md-select v-model="currency"
-                                 data-vv-name="currency"
-                                 v-validate= "modelValidations.currency"
-                      >
-                          <md-option v-for="option in currencies"
-                                     :key="option.id"
-                                     :value="option.value">
-                              {{ option.value }}
-                          </md-option>
-                      </md-select>
-                      <span class="md-error" v-if="errors.has('currency')">The event currency is required</span>
-                  </md-field>
-              </div>-->
             </div>
           </form>
         </div>
@@ -270,8 +232,7 @@
       ...mapGetters({
         categories: 'event/getCategoriesList',
         currencies: 'event/getCurrenciesList',
-        eventTypes: 'event/getEventTypesList',
-        eventThemes: 'event/getEventThemesList'
+        eventTypes: 'event/getEventTypesList'
       }),
       occasionsList: {
         get: function() {
@@ -302,14 +263,6 @@
         },
         set(value) {
           this.setEventProperty({key: 'occasion', actualValue: value});
-        }
-      },
-      theme: {
-        get() {
-          return this.eventData.theme;
-        },
-        set(value) {
-          this.setEventProperty({key: 'theme', actualValue: value});
         }
       },
       occasionCache: {
@@ -410,7 +363,6 @@
       clearForm() {
         this.id = null;
         this.occasion = "";
-        this.theme = "";
         this.occasionCache = "";
         this.title = "New Event";
         this.date = null;
@@ -440,7 +392,6 @@
 
         editedEvent.title = this.title;
         editedEvent.occasion = this.occasion;
-        editedEvent.theme = this.theme
         editedEvent.eventStartMillis = this.getEventStartInMillis();
         editedEvent.eventEndMillis = this.getEventEndInMillis();
         editedEvent.numberOfParticipants = this.numberOfParticipants;
@@ -510,7 +461,6 @@
           calendar: {id: calendarId},
           title: this.title,
           occasion: this.occasion,
-          theme: this.theme,
           eventStartMillis: this.getEventStartInMillis(),
           eventEndMillis: this.getEventEndInMillis(),
           numberOfParticipants: this.numberOfParticipants,

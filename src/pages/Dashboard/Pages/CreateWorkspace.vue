@@ -83,7 +83,7 @@ export default {
         if (isValid){
 
           let tenantId = document.location.hostname.replace(".262days.com","");
-          tenantId = tenantId.length > 0 ? "_"+tenantId : '';
+          tenantId = tenantId.length > 0 && tenantId === 'dev' ? "_"+tenantId : '';
 
           new Tenant({id: this.workspace + tenantId}).save().then(res => {
             if (res.status){
@@ -127,7 +127,7 @@ export default {
         this.t = setTimeout(function(){
           this.loading = true;
           let tenantId = document.location.hostname.replace(".262days.com","");
-          tenantId = tenantId.length > 0 ? "_"+tenantId : '';
+          tenantId = tenantId.length > 0 && tenantId === 'dev' ? "_"+tenantId : '';
 
           new Tenant().find(this.workspace + tenantId).then(res =>{
             if (res.status){
