@@ -88,7 +88,7 @@ export default {
           new Tenant({id: this.workspace + tenantId}).save().then(res => {
             if (res.status){
               this.loading = true;
-              document.location.href=`${document.location.protocol}//${this.workspace}.${document.location.hostname}:${document.location.port}`;
+              document.location.href=`${document.location.protocol}//${this.workspace}${tenantId}.262days.com:${document.location.port}`;
             } else {
               this.error = "Failed"
             }
