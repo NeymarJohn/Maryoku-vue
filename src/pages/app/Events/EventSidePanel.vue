@@ -362,7 +362,6 @@
           return this.eventData.participantsType
         },
         set(value) {
-          console.log(value)
           this.setEventProperty({key: 'participantsType', actualValue: value});
         }
       },
