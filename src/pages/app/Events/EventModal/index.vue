@@ -33,7 +33,7 @@
                             <div class="md-layout-item md-small-size-100">
                               <md-autocomplete v-model="occasion"
                                                 data-vv-name="occasion"
-                                                :md-options="occasionList"
+                                                :md-options="occasionsList"
                                                 @md-opened="mdOpened"
                                                 class="change-icon-order select-with-icon mb16"
                                                 :class="[{'md-error': errors.has('occasion')}]">
@@ -200,8 +200,7 @@
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import CalendarEvent from '@/models/CalendarEvent';
   import {Modal} from "@/components";
-  import Calendar from "@/models/Calendar";
-  import Occasion from "@/models/Occasion";
+  import Calendar from "@/models/Calendar"
   import swal from "sweetalert2";
   import { error } from 'util';
   import moment from 'moment';
@@ -257,7 +256,6 @@
           required: true,
         },
       },
-        occasionList : []
     }),
 
     created() {
@@ -409,18 +407,6 @@
       this.$root.$on('submitForm', () => {
         this.validateEvent();
       });
-
-        let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-
-
-        new Occasion().for(_calendar).get()
-            .then(resp =>{
-                this.occasionList = resp.map((val) => val.title);
-            })
-            .catch(error =>{
-                console.log('error =>> ', error);
-            });
-
     },
     methods: {
       ...mapMutations('EventPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),

@@ -7,7 +7,7 @@
     </div>
     <div class="md-layout-item md-size-95" style="max-height: 90vh; ">
       <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
-        Create Event
+        {{this.editMode ? "Edit Event" : "Create Event" }}
       </h4>
 
       <div class="md-layout" style="overflow: auto; max-height: 90vh; margin-top: 24px;">
