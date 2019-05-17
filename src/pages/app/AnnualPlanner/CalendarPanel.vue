@@ -335,7 +335,6 @@
           item.occasion = item.title;
         }
         this.setEventModalAndEventData({eventData: item});
-        this.setModalSubmitTitle('Save');
         this.openEventSidePanel()
       },
       fullDateWithDay(day) {

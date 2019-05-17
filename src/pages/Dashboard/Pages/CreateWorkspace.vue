@@ -83,12 +83,12 @@ export default {
         if (isValid){
 
           let tenantId = document.location.hostname.replace(".262days.com","");
-          tenantId = tenantId.length > 0 && tenantId === 'dev' ? "_"+tenantId : '';
+          tenantId = tenantId.length > 0 ? "_"+tenantId : '';
 
           new Tenant({id: this.workspace + tenantId}).save().then(res => {
             if (res.status){
               this.loading = true;
-              document.location.href=`${document.location.protocol}//${this.workspace}${tenantId}.262days.com:${document.location.port}`;
+              document.location.href=`${document.location.protocol}//${this.workspace}.${document.location.hostname}:${document.location.port}`;
             } else {
               this.error = "Failed"
             }
@@ -127,7 +127,7 @@ export default {
         this.t = setTimeout(function(){
           this.loading = true;
           let tenantId = document.location.hostname.replace(".262days.com","");
-          tenantId = tenantId.length > 0 && tenantId === 'dev' ? "_"+tenantId : '';
+          tenantId = tenantId.length > 0 ? "_"+tenantId : '';
 
           new Tenant().find(this.workspace + tenantId).then(res =>{
             if (res.status){
