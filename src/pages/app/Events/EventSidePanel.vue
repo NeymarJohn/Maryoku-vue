@@ -429,7 +429,7 @@
         editedEvent.currency = this.currency;
         editedEvent.eventType = this.eventType;
         editedEvent.participantsType = this.participantsType;
-        editedEvent.category = this.category;
+        editedEvent.category = this.occasion;
        // editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
@@ -499,7 +499,7 @@
           currency: this.currency,
           eventType: this.eventType,
           participantsType: this.participantsType,
-          category: this.category,
+          category: this.occasion,
           edittable: true,
         //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         }).for(_calendar).save().then(response => {
