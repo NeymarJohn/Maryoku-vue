@@ -8,10 +8,6 @@
     <div class="md-layout-item md-size-95" style="max-height: 90vh; ">
       <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
         Create Event
-
-        <a href="javascript: void(null);" v-if="this.editMode" @click="openEventPlanner" class="text-info md-info small pull-right" style="line-height: 51px;">
-          <md-icon class="text-info">event_note</md-icon> Open in Event Planner <md-icon class="text-info">arrow_right</md-icon>
-        </a>
       </h4>
 
       <div class="md-layout" style="overflow: auto; max-height: 90vh; margin-top: 24px;">
@@ -42,24 +38,6 @@
                 </md-autocomplete>
               </div>
               <div class="md-layout-item md-small-size-100">
-                <md-field :class="[{'md-error': errors.has('theme')}]" class="select-with-icon">
-                  <label>Theme</label>
-                  <md-select v-model="theme"
-                             data-vv-name="theme"
-                             v-validate= "modelValidations.category"
-                             required>
-                    <md-option v-for="event in eventThemes"
-                               :key="event.id"
-                               :value="event.id">
-                      {{ event.title }}
-                    </md-option>
-                  </md-select>
-                  <span class="md-error" v-if="errors.has('theme')">The event category is required</span>
-                </md-field>
-              </div>
-            </div>
-            <div class="md-layout mb16">
-              <div class="md-layout-item md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('eventType')}]" class="select-with-icon">
                   <label>Event Type</label>
                   <md-select v-model="eventType"
@@ -76,21 +54,37 @@
                 </md-field>
               </div>
               <div class="md-layout-item md-small-size-100">
-                <md-field :class="[{'md-error': errors.has('category')}]" class="select-with-icon">
-                  <label>Category</label>
-                  <md-select v-model="category"
-                             data-vv-name="category"
-                             v-validate= "modelValidations.category"
+                <md-field :class="[{'md-error': errors.has('participantsType')}]" class="select-with-icon">
+                  <label>Invitee Type</label>
+                  <md-select v-model="participantsType"
+                             data-vv-name="participantsType"
+                             v-validate= "modelValidations.participantsType"
                              required>
-                    <md-option v-for="option in categories"
-                               :key="option.id"
-                               :value="option.item">
-                      {{ option.item }}
+                          <md-option v-for="(option, index) in InviteeTypes"
+                               :key="index"
+                               :value="option">
+                      {{ option }}
                     </md-option>
                   </md-select>
-                  <span class="md-error" v-if="errors.has('category')">The event category is required</span>
+                  <span class="md-error" v-if="errors.has('participantsType')">The event Invitee Type is required</span>
                 </md-field>
               </div>
+              <!--<div class="md-layout-item md-small-size-100">-->
+                <!--<md-field :class="[{'md-error': errors.has('category')}]" class="select-with-icon">-->
+                  <!--<label>Category</label>-->
+                  <!--<md-select v-model="category"-->
+                             <!--data-vv-name="category"-->
+                             <!--v-validate= "modelValidations.category"-->
+                             <!--required>-->
+                    <!--<md-option v-for="option in categories"-->
+                               <!--:key="option.id"-->
+                               <!--:value="option.item">-->
+                      <!--{{ option.item }}-->
+                    <!--</md-option>-->
+                  <!--</md-select>-->
+                  <!--<span class="md-error" v-if="errors.has('category')">The event category is required</span>-->
+                <!--</md-field>-->
+              <!--</div>-->
             </div>
             <div class="md-layout mb16">
               <div class="md-layout-item md-size-100 md-small-size-100">
@@ -171,22 +165,6 @@
                   </md-button>
                 </div>
               </div>
-              <!--<div class="md-layout-item md-small-size-100">
-                  <md-field :class="[{'md-error': errors.has('currency')}]" class="select-with-icon">
-                      <label>Currency</label>
-                      <md-select v-model="currency"
-                                 data-vv-name="currency"
-                                 v-validate= "modelValidations.currency"
-                      >
-                          <md-option v-for="option in currencies"
-                                     :key="option.id"
-                                     :value="option.value">
-                              {{ option.value }}
-                          </md-option>
-                      </md-select>
-                      <span class="md-error" v-if="errors.has('currency')">The event currency is required</span>
-                  </md-field>
-              </div>-->
             </div>
           </form>
         </div>
@@ -219,6 +197,7 @@
       durationArray: [...Array(12).keys()].map(x =>  ++x),
       dateValid: true,
       editTitle: false,
+      InviteeTypes: ["Employees Only","Employees and spouse","Employees and families", "Employees children"],
       modelValidations: {
         title: {
           required: true,
@@ -246,6 +225,9 @@
         eventType: {
           required: true,
         },
+        participantsType: {
+          required: true,
+        },
         category: {
           required: true,
         },
@@ -270,8 +252,7 @@
       ...mapGetters({
         categories: 'event/getCategoriesList',
         currencies: 'event/getCurrenciesList',
-        eventTypes: 'event/getEventTypesList',
-        eventThemes: 'event/getEventThemesList'
+        eventTypes: 'event/getEventTypesList'
       }),
       occasionsList: {
         get: function() {
@@ -302,14 +283,6 @@
         },
         set(value) {
           this.setEventProperty({key: 'occasion', actualValue: value});
-        }
-      },
-      theme: {
-        get() {
-          return this.eventData.theme;
-        },
-        set(value) {
-          this.setEventProperty({key: 'theme', actualValue: value});
         }
       },
       occasionCache: {
@@ -384,6 +357,14 @@
           this.setEventProperty({key: 'eventType', actualValue: value});
         }
       },
+      participantsType: {
+        get() {
+          return this.eventData.participantsType
+        },
+        set(value) {
+          this.setEventProperty({key: 'participantsType', actualValue: value});
+        }
+      },
       category: {
         get() {
           return this.eventData.category
@@ -410,7 +391,6 @@
       clearForm() {
         this.id = null;
         this.occasion = "";
-        this.theme = "";
         this.occasionCache = "";
         this.title = "New Event";
         this.date = null;
@@ -421,6 +401,7 @@
         this.totalBudget = "";
         this.currency = "";
         this.eventType = null;
+        this.participantsType = null;
         this.category = null;
       },
       getError(fieldName) {
@@ -440,7 +421,6 @@
 
         editedEvent.title = this.title;
         editedEvent.occasion = this.occasion;
-        editedEvent.theme = this.theme
         editedEvent.eventStartMillis = this.getEventStartInMillis();
         editedEvent.eventEndMillis = this.getEventEndInMillis();
         editedEvent.numberOfParticipants = this.numberOfParticipants;
@@ -448,8 +428,9 @@
         editedEvent.status = this.eventData.status;
         editedEvent.currency = this.currency;
         editedEvent.eventType = this.eventType;
-        editedEvent.category = this.category;
-        editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+        editedEvent.participantsType = this.participantsType;
+        editedEvent.category = this.occasion;
+       // editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
           this.closePanel();
@@ -510,7 +491,6 @@
           calendar: {id: calendarId},
           title: this.title,
           occasion: this.occasion,
-          theme: this.theme,
           eventStartMillis: this.getEventStartInMillis(),
           eventEndMillis: this.getEventEndInMillis(),
           numberOfParticipants: this.numberOfParticipants,
@@ -518,9 +498,10 @@
           status: this.eventData.status,
           currency: this.currency,
           eventType: this.eventType,
-          category: this.category,
+          participantsType: this.participantsType,
+          category: this.occasion,
           edittable: true,
-          participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+        //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         }).for(_calendar).save().then(response => {
           console.log('new event => ' , response.id);
           this.$parent.isLoading = false;

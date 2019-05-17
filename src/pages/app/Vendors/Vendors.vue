@@ -96,7 +96,7 @@
     },
     created() {
       this.auth.currentUser(this, true, function(){
-        this.fetchData(1);
+        this.fetchData(0);
       }.bind(this));
     },
     methods: {

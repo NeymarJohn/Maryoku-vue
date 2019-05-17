@@ -122,9 +122,9 @@
 
             this.avgAttendanceSatisfaction = 0;
           }
-
-          this.loading = false;
         }
+
+        this.loading = false;
       }
     }
   };

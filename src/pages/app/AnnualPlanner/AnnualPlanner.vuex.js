@@ -26,6 +26,7 @@ export default {
             totalBudget: "",
             currency: "",
             eventType: null,
+            participantsType : null,
             category: null,
           },
           eventModalOpen: false,
@@ -58,6 +59,7 @@ export default {
         state.eventData['totalBudget'] = data.eventData.totalBudget;
         state.eventData['currency'] = data.eventData.currency;
         state.eventData['eventType'] = data.eventData.eventType;
+        state.eventData['participantsType'] = data.eventData.participantsType;
         state.eventData['date'] = data.eventData.eventStartMillis;
         state.eventData['category'] = data.eventData.category;
         state.eventData['time'] = moment(data.eventData.eventStartMillis).format('h:00 A');
