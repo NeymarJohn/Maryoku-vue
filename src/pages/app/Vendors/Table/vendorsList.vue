@@ -17,21 +17,16 @@
                     <md-table-cell md-label="Average Score">
                         {{item.avgScore}}%
                     </md-table-cell>
-                    <md-table-cell class="vendors-table_item-actions" v-if="mode == 'listing'">
+                    <md-table-cell class="vendors-table_item-actions">
                         <md-button :name="`vendors-list-select-vendor-${vendorsList.indexOf(item)}`" class="md-button md-success md-sm md-theme-default auto-width md-just-icon" @click="selectVendor(item)">
                             <md-icon>edit</md-icon>
                         </md-button>
                         <md-button :name="`vendors-list-rank-vendor-${vendorsList.indexOf(item)}`" class="md-button md-info md-sm md-theme-default auto-width md-just-icon" @click="openPopover(vendorsList.indexOf(item))">
-                            <md-icon>star</md-icon>
+                          <md-icon>star</md-icon>
                         </md-button>
                         <md-button :name="`vendors-list-delete-vendor-${vendorsList.indexOf(item)}`" class="md-button md-rose md-sm md-theme-default auto-width" @click.native="deleteVendor(item.id)">
                             <md-icon>delete</md-icon>
                         </md-button>
-                    </md-table-cell>
-                    <md-table-cell class="vendors-table_item-actions" v-if="mode == 'manageBlock'">
-                        <!--<md-button v-if="isSelected(item.id)" :name="`vendors-list-delete-vendor-${vendorsList.indexOf(item)}`" class="md-button md-success md-sm md-theme-default auto-width" @click.native="addVendor(item)">-->
-                            <!--<md-icon>add</md-icon>-->
-                        <!--</md-button>-->
                     </md-table-cell>
 
 
@@ -72,11 +67,6 @@
     import TagsModal from './TagsModal';
     import ClickOutside from 'vue-click-outside'
 
-    import Calendar from "@/models/Calendar";
-    import CalendarEvent from "@/models/CalendarEvent";
-    import EventComponent from "@/models/EventComponent";
-    import EventComponentVendor from "@/models/EventComponentVendor";
-
     export default {
         components: {
             Modal,
@@ -104,22 +94,9 @@
                 default: () => {
                     return {};
                 }
-            },
-            mode : String,
-            selectedBlock : {
-                type : Object,
-                default : null
-            },
-            event : {
-                type : Object,
-                default : null
             }
         },
       created() {
-
-            if ( this.event && this.selectedBlock ) {
-                this.getBlockVendors();
-            }
 
       },
         data() {
@@ -133,8 +110,6 @@
               ratings: [1, 2, 3, 4, 5],
               index : 0,
               selectedVendor: undefined,
-              blockVendors : []
-
 
             }
         },
@@ -217,30 +192,6 @@
            },
             resetSelectedVendor(data){
                this.$set(this,'selectedVendor',data);
-            },
-            addVendor(data) {
-                this.$emit('add-vendor',data);
-            },
-            getBlockVendors() {
-
-//                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-//                let event = new CalendarEvent({id: this.event.id});
-//                let selected_block = new EventComponent({id : this.selectedBlock.id});
-//
-//                new EventComponentVendor().for(calendar, event, selected_block).get()
-//                    .then(resp => {
-//                        this.blockVendors = resp;
-//                        console.log('blockVendors =>',this.blockVendors)
-//                    })
-//                    .catch(error => {
-//
-//                        console.log('error =>',error)
-//
-//                    })
-            },
-            isSelected(vendorId) {
-                let isSelected = _.find(this.blockVendors,function(vendor){  vendor.id == vendorId });
-                console.log(isSelected);
             }
         }
     };

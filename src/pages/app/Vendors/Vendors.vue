@@ -28,7 +28,6 @@
                   @select-vendor="onSelectVendor"
                   @close-vendor="onCloseVendorForm"
                   :vendorsList="vendorsList"
-                  mode="listing"
                   ref="VendorsTable">
 
           </vendors-table>
@@ -97,7 +96,7 @@
     },
     created() {
       this.auth.currentUser(this, true, function(){
-        this.fetchData(0);
+        this.fetchData(1);
       }.bind(this));
     },
     methods: {
@@ -118,6 +117,7 @@
           this.updatePagination(vendors[0].model)
           this.loadingData = false;
 
+            this.onCloseVendorForm();
 
             this.vendorsList.map((item, index) => {
             this.tooltipModels.push({

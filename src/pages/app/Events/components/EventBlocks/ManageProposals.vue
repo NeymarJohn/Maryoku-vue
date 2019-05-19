@@ -9,10 +9,10 @@
                 </div>
 
                 <div class="header-actions pull-right" style="margin-top : 1em;">
-                    <md-button class="md-info"   @click="manageBlockVendors">
+                    <md-button class="md-info" v-if="!selectedBlock.vendors" @click="openUploadModal">
                         Add Vendors
                     </md-button>
-                    <md-button class="md-default"  >
+                    <md-button class="md-default" v-if="!selectedBlock.vendors">
                         Send
                     </md-button>
                 </div>
@@ -21,30 +21,27 @@
 
             <md-card-content style="min-height: 60px;">
 
-
-                <md-table  v-if="vendorsList" v-model="vendorsList"  table-header-color="orange" class="vendors-table">
-                    <md-table-row slot="md-table-row" slot-scope="{ item }" :key="vendorsList.indexOf(item)"   >
-                        <md-table-cell md-label="Vendor Name"  > {{ item.name }}</md-table-cell>
-                        <md-table-cell md-label="Recommended by">
-                            <img :src="item.company_logo" width="20" style="width: 100px !important;">
+                <md-table  v-if="selectedBlock.vendors" v-model="selectedBlock.vendors" table-header-color="orange" >
+                    <md-table-row slot="md-table-row" slot-scope="{ item }" :key="proposals.indexOf(item)"   >
+                        <md-table-cell md-label="Vendor Name"  > {{ item.title }}</md-table-cell>
+                        <md-table-cell md-label="People">
+                            ${{item.price}}
                         </md-table-cell>
-                        <md-table-cell md-label="Inquiry Sent">
-                            {{item.inquiry_sent}}
+                        <md-table-cell md-label="Average Score">
+                            {{item.requirements}}%
                         </md-table-cell>
-                        <md-table-cell md-label="Last Proposal"  > {{ item.last_proposal }}</md-table-cell>
                         <md-table-cell class="vendors-table_item-actions">
-                            <md-button v-if="!item.is_sent" class="md-button md-info md-sm md-theme-default auto-width md-just-icon" >
-                                View Proposals
+                            <md-button class="md-button md-info md-sm md-theme-default auto-width md-just-icon" >
+                                VIEW
                             </md-button>
-                            <md-button v-else="item.is_sent" class="md-button md-default md-sm md-theme-default auto-width md-just-icon">
-                                Inquiry Sent
+                            <md-button class="md-button md-info md-sm md-theme-default auto-width md-just-icon">
+                                SET AS WINNING PROPOSAL
                             </md-button>
                         </md-table-cell>
                     </md-table-row>
-
                 </md-table>
 
-                <template v-if="!vendorsList">
+                <template v-if="!selectedBlock.vendors">
                     <h5>Your vendors list is empty</h5>
                     <p>import your vendors and refresh this page after you're done</p>
                 </template>
@@ -74,19 +71,16 @@
   import auth from '@/auth';
 
   import UploadVendorsModal from '../../../Vendors/ImportVendors';
-  import ManageBlockVendors from './Modals/ManageBlockVendors.vue';
 
 
   export default {
     name: 'event-blocks',
     components: {
         VueElementLoading,
-        UploadVendorsModal,
-        ManageBlockVendors
+        UploadVendorsModal
     },
     props: {
-        selectedBlock : Object,
-        event : Object
+        selectedBlock : Object
     },
     data: () => ({
         auth: auth,
@@ -102,49 +96,16 @@
                 price : '1,901',
                 requirements : 98
             }
-        ],
-        vendorsList : [
-            {
-                id : 1123487654,
-                name : "Pete's Coffee",
-                company_logo : 'https://bit.ly/2Qcsg27',
-                inquiry_sent : '11/1/2019',
-                last_proposal : '11/17/2019 08:30',
-                is_sent : false
-            },
-            {
-                id : 45665445667,
-                name : "Mash",
-                company_logo : 'https://bit.ly/2Qcsg27',
-                inquiry_sent : '11/2/2019',
-                last_proposal : '11/14/2019 08:30',
-                is_sent : false
-            },
-            {
-                id : 1233214567,
-                name : "Hotel California",
-                company_logo : 'https://bit.ly/2Qcsg27',
-                inquiry_sent : '11/2/2019',
-                last_proposal : '11/14/2019 08:30',
-                is_sent : true
-            }
         ]
     }),
     methods: {
         openUploadModal(){
             this.$refs.uploadModal.toggleModal(true);
-        },
-        manageBlockVendors() {
-            window.currentPanel = this.$showPanel({
-                component: ManageBlockVendors,
-                cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
-                openOn: 'right',
-                props: {event : this.event, selectedBlock : this.selectedBlock}
-            });
         }
 
     },
     created() {
+      console.log('selectedBlock ', this.selectedBlock);
     },
     mounted() {
         this.isLoading = false;

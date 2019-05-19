@@ -12,8 +12,6 @@
   import auth from "@/auth";
   import SockJS from 'sockjs-client'; //NEW: SockJS & Stomp instead of socket.io
   import Stomp from 'stompjs';
-  import TenantUser from '@/models/TenantUser';
-  import Model from '@/models/Model';
 
   export default {
     components: {
@@ -22,35 +20,13 @@
     methods: {
     },
     created() {
-      const givenToken = this.$route.query.token;
-      this.auth.setToken(givenToken);
-      this.auth.setHeaders(this);
+      const that = this;
+      const givenToken = that.$route.query.token;
+      that.auth.setToken(givenToken);
+      that.auth.setHeaders(this);
+      that.auth.currentUser(that, true, function() {
 
-      let tenantId = document.location.hostname.replace(".262days.com","");
-      let isPrimeTenant = tenantId === 'dev' || tenantId === 'app';
-      if (isPrimeTenant) {
-
-        this.$cookies.set('at', givenToken, '1m', '', '262days.com', true);
-        new TenantUser().find(givenToken).then(res => {
-          if (res.status){
-            if (res.tenantIds.length === 1) {
-              this.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
-              Model.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
-              document.location.href = `${document.location.protocol}//${res.tenantIds[0]}.${document.location.hostname}:${document.location.port}/#/signedin?token=${givenToken}`;
-            } else {
-              this.$router.push({name: 'ChooseWorkspace'});
-            }
-          } else {
-            this.$router.push({name: 'CreateWorkspace'});
-          }
-        });
-
-      } else {
-
-        const that = this;
-        that.auth.currentUser(that, true, function () {
-
-          /*const socket = new SockJS(`${process.env.SERVER_URL}/stomp`);
+        /*const socket = new SockJS(`${process.env.SERVER_URL}/stomp`);
         const client = Stomp.over(socket);
 
         client.connect({}, () => {
@@ -62,31 +38,26 @@
           console.error('unable to connect : ' + error);
         });*/
 
-          let me = that.auth.user.me;
-          try {
-            window.heap.identify(that.auth.user.email);
-          } catch (e) {
-            console.error(e);
-          }
+        let me = that.auth.user.me;
+        try {
+          window.heap.identify(that.auth.user.email);
+        } catch (e) {console.error(e);}
 
-          try {
-            that.$Tawk.$updateChatUser({
-              name: that.auth.user.displayName,
-              email: that.auth.user.email
-            });
-          } catch (e) {
-            console.error(e);
-          }
+        try {
+          that.$Tawk.$updateChatUser({
+            name: that.auth.user.displayName,
+            email: that.auth.user.email
+          });
+        } catch (e) {console.error(e);}
 
-          if (!me.customer.onboarded) {
-            that.$router.push({ path: '/company-form' });
-          } else if (!me.onboarded) {
-            that.$router.push({ path: '/me-form' });
-          } else {
-            that.$router.push({ path: '/' });
-          }
-        });
-      }
+        if (!me.customer.onboarded){
+          that.$router.push({path: '/company-form'});
+        } else if (!me.onboarded) {
+          that.$router.push({path: '/me-form'});
+        } else {
+          that.$router.push({ path: '/' });
+        }
+      });
     },
     data() {
       return {

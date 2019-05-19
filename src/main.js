@@ -22,8 +22,6 @@ import VTooltip from 'v-tooltip';
 import VueGtm from 'vue-gtm';
 import VueSlideoutPanel from 'vue2-slideout-panel';
 import Tawk from 'vue-tawk';
-import VueCookies from 'vue-cookies';
-
 
 // router setup
 import routes from "./router/routes";
@@ -59,7 +57,7 @@ router.beforeEach((to, from, next) => {
     window.currentPanel.hide();
   }
 
-  /*let tenantId = document.location.hostname.replace(".262days.com","");
+  let tenantId = document.location.hostname.replace(".262days.com","");
   router.app.$http.defaults.headers.common.gorm_tenantid = tenantId;
   Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
 
@@ -71,13 +69,6 @@ router.beforeEach((to, from, next) => {
     } else {
       next();
     }
-  }*/
-  let tenantId = document.location.hostname.replace(".262days.com","");
-  let isPrimeTenant = tenantId === 'dev' || tenantId === 'app';
-  if ((isPrimeTenant && to.path !== '/signin' && to.path !== '/signedin') || (to.meta.auth == null && !auth.user.authenticated)) {
-    next('signin');
-  } else {
-    next();
   }
   router.app.$root.$emit("set-title",null);
 });
@@ -131,8 +122,6 @@ Vue.use(Tawk, {
   tawkSrc: 'https://embed.tawk.to/5cd93e082846b90c57ae3644/default',
   enabled: false
 });
-
-Vue.use(VueCookies);
 
 Vue.directive('focus', {
   inserted: function (el) {

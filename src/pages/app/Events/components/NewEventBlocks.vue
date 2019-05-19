@@ -62,7 +62,7 @@
            </div>
 
            <div class="md-layout-item md-size-60">
-                <manage-proposals :selectedBlock="selectedBlock" :event="event"></manage-proposals>
+                <manage-proposals :selectedBlock="selectedBlock"></manage-proposals>
            </div>
 
       </div>
@@ -73,7 +73,6 @@
   import CalendarEvent from "@/models/CalendarEvent";
   import EventComponent from "@/models/EventComponent";
   import EventComponentValue from "@/models/EventComponentValue";
-  import EventComponentVendor from "@/models/EventComponentVendor";
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
   import ManageProposals from './EventBlocks/ManageProposals.vue';
@@ -210,20 +209,6 @@
     mounted() {
         this.isLoading = false;
         this.getBuildingBlockValues();
-
-        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-        let event = new CalendarEvent({id: this.event.id});
-        let selected_block = new EventComponent({id : this.selectedBlock.id});
-
-        new EventComponentVendor().for(calendar, event, selected_block).get()
-            .then(resp => {
-                console.log('EventComponentVendor =>',resp)
-            })
-            .catch(error => {
-
-                console.log('EventComponentVendor error =>',error)
-
-            })
 
     },
     computed: {

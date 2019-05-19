@@ -249,7 +249,7 @@
                   eventsMap[eventDateStamp].editables.push(new CalendarEvent(event));
                 } else {
                   eventsMap[eventDateStamp].nonEditables.push(new CalendarEvent(event));
-                  occasionsArray.push({id: event.eventStartMillis, value: event.title});
+                  occasionsArray.push({id: event.eventStartMillis, value: event.title,  category: event.category});
                 }
               });
             }
