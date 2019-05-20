@@ -98,12 +98,12 @@ export default {
     const givenToken = this.$route.query.token;
     this.auth.setToken(givenToken);
     this.auth.currentUser(this, true);
-    let tenantId = document.location.hostname.replace(".262days.com","");
+    /*let tenantId = document.location.hostname.replace(".262days.com","");
     new Tenant().find(tenantId).then(res =>{
       if (!res.status){
         this.$router.push({name:"CreateWorkspace"});
       }
-    });
+    });*/
   },
   watch: {
     email() {

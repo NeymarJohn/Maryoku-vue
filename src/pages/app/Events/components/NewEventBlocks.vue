@@ -108,7 +108,8 @@
                 label : 'Must have',
                 value : 'Must have'
             }
-        ]
+        ],
+        blockVendors : []
     }),
     methods: {
         goBack() {
@@ -210,20 +211,6 @@
     mounted() {
         this.isLoading = false;
         this.getBuildingBlockValues();
-
-        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-        let event = new CalendarEvent({id: this.event.id});
-        let selected_block = new EventComponent({id : this.selectedBlock.id});
-
-        new EventComponentVendor().for(calendar, event, selected_block).get()
-            .then(resp => {
-                console.log('EventComponentVendor =>',resp)
-            })
-            .catch(error => {
-
-                console.log('EventComponentVendor error =>',error)
-
-            })
 
     },
     computed: {

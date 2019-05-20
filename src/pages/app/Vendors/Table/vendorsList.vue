@@ -29,8 +29,12 @@
                         </md-button>
                     </md-table-cell>
                     <md-table-cell class="vendors-table_item-actions" v-if="mode == 'manageBlock'">
-                        <md-button  :name="`vendors-list-delete-vendor-${vendorsList.indexOf(item)}`" class="md-button md-success md-sm md-theme-default auto-width" @click.native="addVendor(item)">
+                        <md-button  v-if="!isSelected(item.id)" :name="`vendors-list-delete-vendor-${vendorsList.indexOf(item)}`" class="md-button md-success md-sm md-theme-default auto-width" @click.native="addVendor(item)">
                             <md-icon>add</md-icon>
+                        </md-button>
+
+                        <md-button  v-else-if="isSelected(item.id)" :name="`vendors-list-delete-vendor-${vendorsList.indexOf(item)}`" class="md-button md-danger md-sm md-theme-default auto-width" @click.native="removeVendor(item)">
+                            <md-icon>delete</md-icon>
                         </md-button>
                     </md-table-cell>
 
@@ -71,11 +75,13 @@
     import RankingModal from './RankingModal';
     import TagsModal from './TagsModal';
     import ClickOutside from 'vue-click-outside'
+    import auth from '@/auth';
 
     import Calendar from "@/models/Calendar";
     import CalendarEvent from "@/models/CalendarEvent";
     import EventComponent from "@/models/EventComponent";
     import EventComponentVendor from "@/models/EventComponentVendor";
+    import _ from "underscore";
 
     export default {
         components: {
@@ -124,6 +130,7 @@
       },
         data() {
             return {
+                auth : auth,
               tagsModalOpen: false,
               openPopup: false,
               openPopupTags: false,
@@ -139,6 +146,8 @@
             }
         },
         mounted(){
+
+            this.getBlockVendors();
 
         },
         methods: {
@@ -221,26 +230,28 @@
             addVendor(data) {
                 this.$emit('add-vendor',data);
             },
+            removeVendor(data){
+              this.$emit('remove-vendor',data);
+            },
             getBlockVendors() {
 
-//                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-//                let event = new CalendarEvent({id: this.event.id});
-//                let selected_block = new EventComponent({id : this.selectedBlock.id});
-//
-//                new EventComponentVendor().for(calendar, event, selected_block).get()
-//                    .then(resp => {
-//                        this.blockVendors = resp;
-//                        console.log('blockVendors =>',this.blockVendors)
-//                    })
-//                    .catch(error => {
-//
-//                        console.log('error =>',error)
-//
-//                    })
+                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let event = new CalendarEvent({id: this.event.id});
+                let selected_block = new EventComponent({id : this.selectedBlock.id});
+
+                new EventComponentVendor().for(calendar, event, selected_block).get()
+                    .then(resp => {
+                        this.blockVendors = resp;
+                    })
+                    .catch(error => {
+
+                        console.log('error =>',error)
+
+                    })
             },
             isSelected(vendorId) {
-                let isSelected = _.find(this.blockVendors,function(vendor){  vendor.id == vendorId });
-                console.log(isSelected);
+                let isSelected = _.find(this.blockVendors,function(vendor){ return vendor.vendorId === vendorId });
+                return isSelected ? true : false;
             }
         }
     };

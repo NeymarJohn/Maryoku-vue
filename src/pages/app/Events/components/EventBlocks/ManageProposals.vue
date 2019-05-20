@@ -9,7 +9,7 @@
                 </div>
 
                 <div class="header-actions pull-right" style="margin-top : 1em;">
-                    <md-button class="md-info"   @click="manageBlockVendors">
+                    <md-button class="md-info" @click="manageBlockVendors">
                         Add Vendors
                     </md-button>
                     <md-button class="md-default"  >
@@ -22,21 +22,21 @@
             <md-card-content style="min-height: 60px;">
 
 
-                <md-table  v-if="vendorsList" v-model="vendorsList"  table-header-color="orange" class="vendors-table">
-                    <md-table-row slot="md-table-row" slot-scope="{ item }" :key="vendorsList.indexOf(item)"   >
-                        <md-table-cell md-label="Vendor Name"  > {{ item.name }}</md-table-cell>
+                <md-table  v-if="blockVendors" v-model="blockVendors"  table-header-color="orange" class="vendors-table">
+                    <md-table-row slot="md-table-row" slot-scope="{ item }" :key="blockVendors.indexOf(item)"   >
+                        <md-table-cell md-label="Vendor Name"  > {{ item.vendor.vendorDisplayName }}</md-table-cell>
                         <md-table-cell md-label="Recommended by">
-                            <img :src="item.company_logo" width="20" style="width: 100px !important;">
+                            <img :src="`https://bit.ly/2Qcsg27`" width="20" style="width: 100px !important;">
                         </md-table-cell>
                         <md-table-cell md-label="Inquiry Sent">
-                            {{item.inquiry_sent}}
+                            {{ `11/1/2019` }}
                         </md-table-cell>
-                        <md-table-cell md-label="Last Proposal"  > {{ item.last_proposal }}</md-table-cell>
+                        <md-table-cell md-label="Last Proposal"  > {{ `11/17/2019 08:30` }}</md-table-cell>
                         <md-table-cell class="vendors-table_item-actions">
-                            <md-button v-if="!item.is_sent" class="md-button md-info md-sm md-theme-default auto-width md-just-icon" >
+                            <md-button v-if="true" class="md-button md-info md-sm md-theme-default auto-width md-just-icon" @click="viewProposals(item)">
                                 View Proposals
                             </md-button>
-                            <md-button v-else="item.is_sent" class="md-button md-default md-sm md-theme-default auto-width md-just-icon">
+                            <md-button v-if="true" class="md-button md-default md-sm md-theme-default auto-width md-just-icon">
                                 Inquiry Sent
                             </md-button>
                         </md-table-cell>
@@ -44,7 +44,7 @@
 
                 </md-table>
 
-                <template v-if="!vendorsList">
+                <template v-if="!blockVendors.length">
                     <h5>Your vendors list is empty</h5>
                     <p>import your vendors and refresh this page after you're done</p>
                 </template>
@@ -52,7 +52,7 @@
 
             </md-card-content>
 
-            <md-card-actions md-alignment="right" v-if="selectedBlock.vendors">
+            <md-card-actions md-alignment="right" v-if="blockVendors.length">
                 <md-button class="md-info" >
                     Compare proposals
                 </md-button>
@@ -68,21 +68,24 @@
 </template>
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-  import Calendar from "@/models/Calendar"
+  import Calendar from "@/models/Calendar";
+  import CalendarEvent from "@/models/CalendarEvent";
   import EventComponent from "@/models/EventComponent";
+  import EventComponentVendor from "@/models/EventComponentVendor";
   import VueElementLoading from 'vue-element-loading';
   import auth from '@/auth';
 
   import UploadVendorsModal from '../../../Vendors/ImportVendors';
   import ManageBlockVendors from './Modals/ManageBlockVendors.vue';
-
+    import ViewProposals from "./Modals/ViewProposals.vue";
 
   export default {
     name: 'event-blocks',
     components: {
         VueElementLoading,
         UploadVendorsModal,
-        ManageBlockVendors
+        ManageBlockVendors,
+        ViewProposals
     },
     props: {
         selectedBlock : Object,
@@ -91,44 +94,7 @@
     data: () => ({
         auth: auth,
         isLoading:true,
-        proposals : [
-            {
-                title : 'Dakota Rice',
-                price : '1,901',
-                requirements : 98
-            },
-            {
-                title : 'Dakota Rice',
-                price : '1,901',
-                requirements : 98
-            }
-        ],
-        vendorsList : [
-            {
-                id : 1123487654,
-                name : "Pete's Coffee",
-                company_logo : 'https://bit.ly/2Qcsg27',
-                inquiry_sent : '11/1/2019',
-                last_proposal : '11/17/2019 08:30',
-                is_sent : false
-            },
-            {
-                id : 45665445667,
-                name : "Mash",
-                company_logo : 'https://bit.ly/2Qcsg27',
-                inquiry_sent : '11/2/2019',
-                last_proposal : '11/14/2019 08:30',
-                is_sent : false
-            },
-            {
-                id : 1233214567,
-                name : "Hotel California",
-                company_logo : 'https://bit.ly/2Qcsg27',
-                inquiry_sent : '11/2/2019',
-                last_proposal : '11/14/2019 08:30',
-                is_sent : true
-            }
-        ]
+        blockVendors : []
     }),
     methods: {
         openUploadModal(){
@@ -141,113 +107,46 @@
                 openOn: 'right',
                 props: {event : this.event, selectedBlock : this.selectedBlock}
             });
+        },
+        getBlockVendors() {
+
+            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+            let selected_block = new EventComponent({id : this.selectedBlock.id});
+
+            new EventComponentVendor().for(calendar, event, selected_block).get()
+                .then(resp => {
+                    this.blockVendors = resp;
+                })
+                .catch(error => {
+
+                    console.log('EventComponentVendor error =>',error)
+
+                })
+        },
+        viewProposals(item) {
+            window.currentPanel = this.$showPanel({
+                component: ViewProposals,
+                cssClass: 'md-layout-item md-size-45 transition36 bg-grey',
+                openOn: 'right',
+                props: {event : this.event, vendor : item}
+            });
         }
 
     },
     created() {
-        console.log('Selected Block => ', this.selectedBlock);
     },
     mounted() {
         this.isLoading = false;
+        this.getBlockVendors();
+
+        this.$bus.$on('VendorAdded',()=>{
+            this.getBlockVendors();
+        });
+
     },
     computed: {
 
     }
   }
 </script>
-<style lang="scss">
-    .mt-auto {
-        margin-top: auto;
-    }
-    .light-theme {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
-        .md-list {
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-        .md-tab {
-            padding-top: 0;
-            .md-list {
-                padding-top: 0;
-                flex-wrap: wrap;
-            }
-        }
-        .md-list.md-theme-default .md-list-item-container:not(.md-list-item-default):not([disabled]):hover {
-            background: none;
-        }
-        .md-list-item-content{
-            font-size: 12.5px;
-            color: #6a6869;
-            cursor: pointer;
-            flex-direction: column;
-            .image-block {
-                margin-bottom: 10px;
-            }
-        }
-        .md-content {
-            width: 100%;
-        }
-        .md-button {
-            height: 50px;
-            color:#3c4858!important;
-            i,
-            &:hover,
-            &:hover i,
-            &:focus,
-            &:focus i,
-            &:active,
-            &:active i,
-            &:active:focus,
-            &:active:focus i,
-            &:active:hover{  
-              color:#3c4858!important;
-            }
-            .caret{
-                width: auto;
-                min-width: 0;
-                margin-right: 0;
-                margin-left: auto;
-            }
-            .md-ripple {
-                padding: 0!important;
-                .md-button-content {
-                    display: flex;
-                    justify-content: flex-start;
-                    align-items: center;
-                    width: 100%;
-                    height:100%;
-                    .item {
-                        display: flex;
-                        align-items: center;
-                        padding: 13px;
-                        width: 100%;
-                        text-align: left;
-                        background-color: rgba($color: #000000, $alpha: 0.05)!important;    
-                        &.selected{
-                            background-color: #ffd966!important;
-                        }
-                    }
-                }
-            }
-        }
-        .md-list {
-            display: flex;
-            flex-direction: row;
-        }
-        .md-tabs-navigation {
-            flex-direction: column;
-            margin: 0;
-            padding: 0;
-            margin-right: 5%;
-            overflow: hidden; 
-            box-shadow:none;
-            -webkit-box-shadow:none;
-            min-width: 230px;
-            max-width: 230px;
-            margin-left: 0!important;
-            flex: 1 1 230px;
-        }
-    }
-</style>

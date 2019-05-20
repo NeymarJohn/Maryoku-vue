@@ -16,9 +16,6 @@
       }
     },
     created() {
-      let tenantId = document.location.hostname.replace(".262days.com","");
-      this.$http.defaults.headers.common.gorm_tenantid = tenantId;
-      Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
     },
     mounted(){
       let before = new Date();

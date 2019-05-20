@@ -413,13 +413,13 @@
         let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
 
 
-        new Occasion().for(_calendar).get()
-            .then(resp =>{
-                this.occasionList = resp.map((val) => val.title);
-            })
-            .catch(error =>{
-                console.log('error =>> ', error);
-            });
+//        new Occasion().for(_calendar).get()
+//            .then(resp =>{
+//                this.occasionList = resp.map((val) => val.title);
+//            })
+//            .catch(error =>{
+//                console.log('error =>> ', error);
+//            });
 
     },
     methods: {

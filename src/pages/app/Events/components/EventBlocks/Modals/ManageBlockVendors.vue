@@ -26,6 +26,7 @@
                                     v-if="vendorsList"
                                     :tooltipModels="tooltipModels"
                                     @add-vendor="onSelectVendor"
+                                    @remove-vendor="onRemoveVendor"
                                     :vendorsList="vendorsList"
                                     :selectedBlock="selectedBlock"
                                     :event="event"
@@ -121,6 +122,7 @@
 
             closePanel(){
                 this.$emit("closePanel");
+                this.$bus.$emit('VendorAdded');
             },
             fetchData(page) {
                 this.loadingData = true;
@@ -189,33 +191,68 @@
                 let event = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id : this.selectedBlock.id});
 
-                console.log(data);
-
                 let vendor = {};
                 vendor.vendorId = data.id;
-//                vendor.id = data.id;
-//                vendor.vendorAddressLine1 = data.vendorAddressLine1;
-//                vendor.vendorCategory = data.vendorCategory;
-//                vendor.vendorContactPerson = data.vendorContactPerson;
-//                vendor.vendorDisplayName = data.vendorDisplayName;
-//                vendor.vendorMainEmail = data.vendorMainEmail;
-//                vendor.vendorMainPhoneNumber = data.vendorMainPhoneNumber;
-//                vendor.vendorWebsite = data.vendorWebsite;
-//                vendor.voters = data.voters;
-//                vendor.avgScore = data.avgScore;
 
                 new EventComponentVendor(vendor).for(calendar, event, selected_block).save()
                     .then(resp => {
-                        console.log('EventComponentVendor saved =>',resp)
+                        this.$notify(
+                            {
+                                message: 'Vendor added successfully',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'success'
+                            })
+
                     })
                     .catch(error => {
 
-                        console.log('EventComponentVendor error =>',error)
+                        console.log('EventComponentVendor error =>',error);
+
+                        this.$notify(
+                            {
+                                message: 'Error while trying to add vendor, try again!',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'danger'
+                            })
 
                     })
 
             },openUploadModal(){
                 this.$refs.uploadModal.toggleModal(true);
+            },
+            onRemoveVendor(data){
+                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let event = new CalendarEvent({id: this.event.id});
+                let selected_block = new EventComponent({id : this.selectedBlock.id});
+
+                let vendor = new EventComponentVendor({id : data.id});
+
+                vendor.for(calendar, event, selected_block).delete()
+                    .then(resp => {
+                        this.$notify(
+                            {
+                                message: 'Vendor deleted successfully',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'success'
+                            })
+
+                    })
+                    .catch(error => {
+
+                        console.log('EventComponentVendor error =>',error);
+
+                        this.$notify(
+                            {
+                                message: 'Error while trying to delete vendor, try again!',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'danger'
+                            })
+
+                    })
             }
         },
         computed: {

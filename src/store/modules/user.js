@@ -272,12 +272,15 @@ const actions={
 
                   let _calendar = new Calendar({id: res[0].defaultCalendarId});
 
-                  _calendar.calendarEvents().get().then(events => {                   
+                  _calendar.calendarEvents().get().then(events => {
                    let upcomingEvents = events.reduce(function (result, element) {
-                      if (element.status.toLowerCase() !== 'done') {
-                        result.push(element);
-                      }
-                      return result;
+                       // TODO : Eyal, Please notice that the status not returned
+                      // if (element.status && element.status.toLowerCase() !== 'done') {
+                      //   result.push(element);
+                      // }
+                       result.push(element);
+
+                       return result;
                     }, []);
                     commit('setUpcomingEvents',upcomingEvents)
                 })  
