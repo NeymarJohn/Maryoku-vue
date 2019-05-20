@@ -267,10 +267,26 @@ $tooltip-border-color: $blue-grey-200 !default;
         font-weight: bold;
         font-size: 12px;
 
-        .edit-block {
-          min-width: auto;
-          .md-ripple {
-            padding: 0 !important;
+        //.edit-block {
+        //  min-width: auto;
+        //  .md-ripple {
+        //    padding: 0 !important;
+        //  }
+        //}
+
+        .budget-field {
+          flex : 1;
+          display: flex;
+          justify-content: flex-end;
+
+          .vlabeledit-input {
+            width : auto !important;
+            max-width: 40px !important;
+          }
+
+
+          &:hover {
+
           }
         }
       }

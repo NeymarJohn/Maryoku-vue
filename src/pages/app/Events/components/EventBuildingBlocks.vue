@@ -30,11 +30,8 @@
                                 <ul class="item-info" v-if="!block.edit">
                                     <li>
                                         <div class="">Allocated Budget</div>
-                                        <div>
-                                            <md-button name="event-planner-tab-budget-building-block-allocated-budget-edit" class="md-button md-simple md-sm edit-block" @click="editBudget(index)">
-                                                <md-icon>edit</md-icon>
-                                            </md-button>
-                                            <span>{{block.allocatedBudget ? '$' + block.allocatedBudget : '$0.0'}}</span>
+                                        <div class="budget-field">
+                                            $<label-edit :text="block.allocatedBudget"  :field-name="index"  @text-updated-blur="blockBudgetChanged" @text-updated-enter="blockBudgetChanged"></label-edit>
                                         </div>
                                     </li>
                                 </ul>
@@ -89,13 +86,15 @@
   import EventBlocks from "../components/NewEventBlocks";
   import AddBuildingBlockModal from "../components/EventBlocks/Modals/AddBuildingBlocks.vue"
   import _ from "underscore";
+  import {LabelEdit} from '@/components';
 
   export default {
     name: 'event-building-blocks',
     components: {
         VueElementLoading,
         EventBlocks,
-        AddBuildingBlockModal
+        AddBuildingBlockModal,
+        LabelEdit
     },
     props: {
         event: Object,
@@ -216,6 +215,50 @@
                 props: {event : this.event}
             });
              //this.setBuildingBlockModal({ showModal: true });
+        },
+        blockBudgetChanged(val,index) {
+
+
+            let block = this.buildingBlocksList[index];
+
+            console.log(block);
+
+            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+            let selected_block = new  EventComponent({id : block.id});
+
+            selected_block.calendarEvent = block.calendarEvent;
+            selected_block.componentId = block.componentId;
+            selected_block.icon = block.icon;
+            selected_block.color = block.color;
+            selected_block.todos = block.todos;
+            selected_block.values = block.values;
+            selected_block.vendors = block.vendors;
+            selected_block.allocatedBudget = val;
+
+            this.buildingBlocksList[index].allocatedBudget = val;
+
+
+            selected_block.for(calendar,event).save().then(resp => {
+
+                this.isLoading = false;
+                this.$notify(
+                    {
+                        message: 'Budget modified successfully!',
+                        horizontalAlign: 'center',
+                        verticalAlign: 'top',
+                        type: 'success'
+                    })
+
+                this.$bus.$emit('RefreshStatistics');
+
+
+                this.$forceUpdate();
+            })
+                .catch(error => {
+                    console.log(error);
+                })
+
         }
     },
     created() {

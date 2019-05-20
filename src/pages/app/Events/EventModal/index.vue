@@ -410,16 +410,8 @@
         this.validateEvent();
       });
 
-        let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-
-
-//        new Occasion().for(_calendar).get()
-//            .then(resp =>{
-//                this.occasionList = resp.map((val) => val.title);
-//            })
-//            .catch(error =>{
-//                console.log('error =>> ', error);
-//            });
+      // Get Occasion List
+      this.getOccasionList();
 
     },
     methods: {
@@ -593,6 +585,19 @@
       openEventPlanner() {
         this.$router.push({ name: 'EditEvent', params: {id: this.id }});
       },
+        getOccasionList() {
+            if ( this.auth.user.defaultCalendarId ) {
+                let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+
+                new Occasion().for(_calendar).get()
+                    .then(resp =>{
+                        this.occasionList = resp.map((val) => val.title);
+                    })
+                    .catch(error =>{
+                        console.log('error =>> ', error);
+                    });
+            }
+        }
     },
     watch: {
     }
