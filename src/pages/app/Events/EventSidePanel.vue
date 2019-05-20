@@ -7,7 +7,7 @@
     </div>
     <div class="md-layout-item md-size-95" style="max-height: 90vh; ">
       <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
-        {{this.editMode ? "Edit Event" : "Create Event" }}
+        Create Event
       </h4>
 
       <div class="md-layout" style="overflow: auto; max-height: 90vh; margin-top: 24px;">
@@ -418,6 +418,7 @@
       updateEvent() {
         let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
         let editedEvent = new CalendarEvent({id: this.eventData.id});
+
         editedEvent.title = this.title;
         editedEvent.occasion = this.occasion;
         editedEvent.eventStartMillis = this.getEventStartInMillis();
@@ -428,7 +429,7 @@
         editedEvent.currency = this.currency;
         editedEvent.eventType = this.eventType;
         editedEvent.participantsType = this.participantsType;
-        editedEvent.category = this.occasionsOptions[this.occasionsList.indexOf(this.occasion)].category;
+        editedEvent.category = this.occasion;
        // editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
@@ -498,7 +499,7 @@
           currency: this.currency,
           eventType: this.eventType,
           participantsType: this.participantsType,
-          category: this.occasionsOptions[this.occasionsList.indexOf(this.occasion)].category,
+          category: this.occasion,
           edittable: true,
         //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         }).for(_calendar).save().then(response => {
