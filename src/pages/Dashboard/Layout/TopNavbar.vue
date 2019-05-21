@@ -86,28 +86,28 @@
               </a>
             </li>-->
             <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventInvitees" class="md-simple" style="margin-top: 6px;" @click="uploadVendors">
+              <md-button v-if="topBarEventInvitees" class="md-simple md-lg" style="margin-top: 6px;" @click="uploadVendors">
                 <md-icon>cloud_upload</md-icon>
                 <span>Upload Vendors</span>
               </md-button>
             </li>
             <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventProposals" class="md-simple" style="margin-top: 6px;" @click="manageInviteeGroups">
+              <md-button v-if="topBarEventProposals" class="md-simple md-lg" style="margin-top: 6px;" @click="manageInviteeGroups">
                 <md-icon>group</md-icon>
                 <span>Set Invitees Groups</span>
               </md-button>
             </li>
             <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventProposals" class="md-simple" style="margin-top: 6px;" @click="manageInteractions">
+              <md-button v-if="topBarEventProposals" class="md-simple md-lg" style="margin-top: 6px;" @click="manageInteractions">
                 <md-icon>mail</md-icon>
                 <span>Automate Interactions</span>
               </md-button>
             </li>
             <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventInvitees" class="md-button md-info" style="margin-top: 6px;" @click="manageInvitees">
+              <md-button v-if="topBarEventInvitees" class="md-button md-info" style="margin-top: 12px;" @click="manageInvitees">
                 <span>Manage Invitees</span>
               </md-button>
-              <md-button v-if="topBarEventProposals" class="md-button md-info" style="margin-top: 6px;" @click="manageProposals">
+              <md-button v-if="topBarEventProposals" class="md-button md-info" style="margin-top: 12px;" @click="manageProposals">
                 <span>Manage Budget &amp; Proposals</span>
               </md-button>
             </li>
