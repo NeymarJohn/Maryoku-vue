@@ -534,6 +534,8 @@
             .catch((error) => {
               console.log(error);
               this.$parent.isLoading = false;
+              this.closeModal();
+              this.$emit("refresh-events");
             });
       },
       getEventStartInMillis() {
