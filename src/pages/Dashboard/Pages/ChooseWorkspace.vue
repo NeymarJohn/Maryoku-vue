@@ -1,57 +1,14 @@
 <template>
   <div class="md-layout" style="text-align: center;">
-    <h2 class="title text-center" style="text-align: center;width: 100%;">Welcome, lets create your workspace</h2>
+    <h2 class="title text-center" style="text-align: center;width: 100%;">Hi, choose your workspace</h2>
     <div class="md-layout-item md-size-50 mx-auto">
       <signup-card>
-        <!--<div class="md-layout-item md-size-50 md-medium-size-50 md-small-size-100 ml-auto" slot="content-left">
-          <div class="info info-horizontal" v-for="item in contentLeft" :key="item.title">
-              <div :class="`icon ${item.colorIcon}`">
-                <md-icon>{{ item.icon }}</md-icon>
-              </div>
-              <div class="description">
-                <h4 class="info-title">{{ item.title }}</h4>
-                <p class="description">
-                  {{ item.description }}
-                </p>
-              </div>
-          </div>
-        </div>-->
         <div class="md-layout-item md-size-100 md-medium-size-100 md-small-size-100 mr-auto " slot="content-right" style="padding: 24px;">
           <vue-element-loading :active="loading" spinner="ring" color="#FF547C"/>
           <div>&nbsp;</div>
-          <!--<div class="social-line text-center">
-            <md-button class="md-just-icon-social md-google" @click="authenticate('google')">
-              <i class="fab fa-google-plus-g" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
-            </md-button>
-            <md-button class="md-just-icon-social md-circle md-linkedin" @click="authenticate('linkedin')">
-              <i class="fab fa-linkedin" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
-            </md-button>
-            &lt;!&ndash;<md-button class="md-just-icon md-round md-facebook">
-              <i class="fab fa-facebook-f"></i>
-            </md-button>&ndash;&gt;
-            <h4 class="mt-3">or sign up with your work email address</h4>
-          </div>-->
-          <!--<md-field :class="[
-          {'md-valid': !errors.has('email') && touched.email},
-          {'md-error': errors.has('email')}]">
-            <label>Your <strong>Work</strong> Email Address</label>
-            <md-input v-model="email" type="email" data-vv-name="email" required v-validate="modelValidations.email"></md-input>
-          </md-field>-->
-          <md-field :class="[
-          {'md-valid': !errors.has('workspace') && touched.workspace},
-          {'md-error': errors.has('workspace')},
-          {'extra-margin' : error}]">
-            <label>Workspace Name</label>
-            <span class="md-prefix">https://</span>
-            <md-input v-focus v-model="workspace" type="text" data-vv-name="workspace" required @keyup="checkWorkspace"></md-input>
-            <span class="md-suffix">.262days.com</span>
-            <div class='md-error' v-if="!workspaceValid" style="text-align: center; width: 100%;font-size: 0.9rem; padding-top: 18px;">{{error}}</div>
-          </md-field>
-
-          <div><md-checkbox v-model="terms" ></md-checkbox> I agree to 262Days <a href="https://www.262days.com/terms" target="_blank">Terms of Use</a> and <a href="https://www.262days.com/privacy" target="_blank">Privacy Policy</a></div>
-          <div class="button-container">
-            <md-button @click="signup" class="md-success md-round mt-4" slot="footer" :disabled="!terms || !workspaceValid">Continue</md-button>
-          </div>
+          <md-list>
+            <md-list-item>abc</md-list-item>
+          </md-list>
         </div>
       </signup-card>
 
@@ -82,13 +39,13 @@ export default {
       this.$validator.validateAll().then(isValid => {
         if (isValid){
 
-          /*let tenantId = document.location.hostname.replace(".262days.com","");
-          tenantId = tenantId.length > 0 && tenantId === 'dev' ? "_"+tenantId : '';*/
-          let tenantIdExt = document.location.hostname === 'dev.262days.com' ? '.dev' : '';
-          new Tenant({id: this.workspace}).save().then(res => {
+          let tenantId = document.location.hostname.replace(".262days.com","");
+          tenantId = tenantId.length > 0 && tenantId === 'dev' ? "_"+tenantId : '';
+
+          new Tenant({id: this.workspace + tenantId}).save().then(res => {
             if (res.status){
               this.loading = true;
-              document.location.href=`${document.location.protocol}//${this.workspace}${tenantIdExt}.262days.com:${document.location.port}/#/signedin?token=${res.token}`;
+              document.location.href=`${document.location.protocol}//${this.workspace}${tenantId}.262days.com:${document.location.port}`;
             } else {
               this.error = "Failed"
             }
@@ -126,10 +83,10 @@ export default {
 
         this.t = setTimeout(function(){
           this.loading = true;
-          /*let tenantId = document.location.hostname.replace(".262days.com","");
+          let tenantId = document.location.hostname.replace(".262days.com","");
           tenantId = tenantId.length > 0 && tenantId === 'dev' ? "_"+tenantId : '';
-*/
-          new Tenant().find(this.workspace).then(res =>{
+
+          new Tenant().find(this.workspace + tenantId).then(res =>{
             if (res.status){
               this.workspaceValid = false;
               this.error = 'This workspace is already taken, try another name';

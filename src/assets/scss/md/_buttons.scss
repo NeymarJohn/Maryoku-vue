@@ -26,6 +26,10 @@
     padding: 12px 30px;
   }
 
+  &:not(.md-just-icon):not(.md-btn-fab):not(.md-icon-button):not(.md-toolbar-toggle).md-tiny .md-ripple{
+    padding: 6px 12px;
+  }
+
   &:not(.md-just-icon) .md-button-content i{
     font-size: 1.1rem !important;
     height: 17px;

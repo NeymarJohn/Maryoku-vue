@@ -51,94 +51,7 @@
               </md-field>
             </div>
           </div>
-
-          <!-- Workspace domain -->
-          <div class="md-layout" style="display: none;">
-            <label class="md-layout-item md-size-35 md-form-label">
-              Workspace Domain
-            </label>
-            <div class="md-layout-item md-size-65">
-              <md-field>
-                <md-input v-model="workspace_domain" type="text"></md-input>
-                <span class="md-suffix">.262days.com</span>
-              </md-field>
-            </div>
-          </div>
-
-          <!-- Company logo -->
-
-          <div class="md-layout" style="display: none;">
-            <label class="md-layout-item md-size-35 md-form-label">
-              Company logo
-            </label>
-            <div class="md-layout-item md-size-65">
-              <md-field>
-                <input type="file" ref="inputFile" v-on="$listeners" @change="onFileChange"/>
-                <md-input v-model="logo_name" type="text" disabled></md-input>
-                <span class="md-suffix"><md-button class="md-simple md-rose" style="padding: 0; margin: 0; text-align: right;" @click.native="openPicker">Browse</md-button></span>
-              </md-field>
-            </div>
-          </div>
-
-          <!-- Office Address -->
-          <div class="md-layout" style="display: none;">
-            <label class="md-layout-item md-size-35 md-form-label">
-              Main Office Address
-            </label>
-            <div class="md-layout-item">
-              <md-field>
-                <!--<md-input v-model="main_office_adddress" type="text"></md-input>-->
-                <places
-                  style="border: none; padding: 0;"
-                  v-model="main_office_adddress.label"
-                  @change="val => { main_office_adddress.data = val }"
-                  :options="{ countries: ['US','IL'] }">
-                </places>
-              </md-field>
-            </div>
-          </div>
-
-          <!-- Number of employees -->
-
-          <div class="md-layout" style="display: none;">
-            <label class="md-layout-item md-size-35 md-form-label">
-              Number of employees
-            </label>
-            <div class="md-layout-item">
-              <md-field>
-                <md-input v-model="number_of_employees" type="number"></md-input>
-              </md-field>
-            </div>
-          </div>
-
-          <!-- Industry -->
-          <div class="md-layout" style="display: none;">
-            <label class="md-layout-item md-size-35 md-form-label">
-              Industry
-            </label>
-            <div class="md-layout-item">
-              <md-field>
-                <md-select v-model="industry" name="industry" id="industry">
-                  <md-option v-for="industryItem in industryList" :key="industryItem" :value="industryItem">{{industryItem}}</md-option>
-                </md-select>
-              </md-field>
-            </div>
-          </div>
-
-          <!-- Website -->
-          <div class="md-layout" style="display: none;">
-            <label class="md-layout-item md-size-35 md-form-label">
-              Website
-            </label>
-            <div class="md-layout-item">
-              <md-field>
-                <md-input v-model="website" type="text"></md-input>
-              </md-field>
-            </div>
-          </div>
-
         </div>
-
         <div class="md-layout-item md-size-5" slot="content-right"></div>
 
         <div class="md-layout-item md-size-100" style="text-align: right; padding-top: 48px;" slot="footer">
@@ -321,7 +234,7 @@
         this.moveon();
       },
       moveon(){
-        this.$router.push({name: 'AnnualPlanner'});
+        this.$router.push({name: 'MeForm'});
       },
       openPicker(){
         this.$refs.inputFile.click();

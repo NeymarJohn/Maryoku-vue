@@ -9,7 +9,7 @@
     <div :id="`tooltipContent_${theDate}`" class="tooltip-custom-editable" style="text-align: center;">
       <md-list class="md-double-line">
         <md-list-item class="md-inset" v-for="calendarEvent in calendarEvents.editables" :key="calendarEvent.id">
-          <md-button class="md-just-icon md-round md-sm md-rose " style="text-align: center; padding: 0; font-size: 10px;" :to="{name: 'EditEvent', params: {id: calendarEvent.id }}">
+          <md-button class="md-just-icon md-round md-sm md-rose " style="text-align: center; padding: 0; font-size: 10px;" :to="{name: 'EditBuildingBlocks', params: {id: calendarEvent.id }}">
             <i class="fa fa-edit"></i>
           </md-button>
           <div class="md-list-item-text md-list-action">

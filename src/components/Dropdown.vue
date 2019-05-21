@@ -4,7 +4,7 @@
        {'dropdown': direction === 'down'},
        {'dropup': direction ==='up'}
       ]"
-    @click="toggleDropDown"
+    @click="toggleDropDown" @mouseover="hoverToggleDropDown" @mouseout="hoverToggleDropDown"
     v-click-outside="closeDropDown">
       <slot name="title">
         <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
@@ -30,7 +30,11 @@ export default {
       default: false
     },
     title: String,
-    icon: String
+    icon: String,
+    hover: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -39,10 +43,21 @@ export default {
   },
   methods: {
     toggleDropDown() {
-      if (this.multiLevel) {
-        this.isOpen = true;
-      } else {
-        this.isOpen = !this.isOpen;
+      if (!this.hover) {
+        if (this.multiLevel) {
+          this.isOpen = true;
+        } else {
+          this.isOpen = !this.isOpen;
+        }
+      }
+    },
+    hoverToggleDropDown() {
+      if (this.hover) {
+        if (this.multiLevel) {
+          this.isOpen = true;
+        } else {
+          this.isOpen = !this.isOpen;
+        }
       }
     },
     closeDropDown() {

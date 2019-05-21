@@ -568,7 +568,7 @@
         this.occasion = this.occasion.substring(0, this.occasion.length -1)
       },
       openEventPlanner() {
-        this.$router.push({ name: 'EditEvent', params: {id: this.id }});
+        this.$router.push({ name: 'EditBuildingBlocks', params: {id: this.id }});
       },
     },
     watch: {

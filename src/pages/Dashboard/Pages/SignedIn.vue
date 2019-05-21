@@ -26,28 +26,40 @@
       this.auth.setToken(givenToken);
       this.auth.setHeaders(this);
 
+      const that = this;
+
       let tenantId = document.location.hostname.replace(".262days.com","");
       let isPrimeTenant = tenantId === 'dev' || tenantId === 'app';
       if (isPrimeTenant) {
 
         this.$cookies.set('at', givenToken, '1m', '', '262days.com', true);
+
         new TenantUser().find(givenToken).then(res => {
           if (res.status){
             if (res.tenantIds.length === 1) {
-              this.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
+              that.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
               Model.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
               document.location.href = `${document.location.protocol}//${res.tenantIds[0]}.${document.location.hostname}:${document.location.port}/#/signedin?token=${givenToken}`;
             } else {
-              this.$router.push({name: 'ChooseWorkspace'});
+              that.$router.push({name: 'ChooseWorkspace'});
             }
           } else {
-            this.$router.push({name: 'CreateWorkspace'});
+            that.$router.push({name: 'CreateWorkspace'});
           }
         });
 
       } else {
 
-        const that = this;
+        let tenantId = document.location.hostname.replace( ".dev.262days.com","");
+        tenantId = tenantId.replace(".262days.com","");
+
+        if (tenantId === "cheerz" && document.location.hostname.endsWith("dev.262days.com")){
+          tenantId = "cheerz_dev";
+        }
+
+        that.$http.defaults.headers.common.gorm_tenantid = tenantId;
+        Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
+
         that.auth.currentUser(that, true, function () {
 
           /*const socket = new SockJS(`${process.env.SERVER_URL}/stomp`);

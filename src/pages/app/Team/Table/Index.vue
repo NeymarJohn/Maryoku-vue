@@ -1,5 +1,5 @@
 <template>
-     <md-table 
+     <md-table
             @md-selected="onSelect"
             v-model="teamMembers"
             table-header-color="rose"
@@ -135,8 +135,8 @@
         }).then(async (result) => {
           if (result.value) {
             let notifySuccessMessage = 'Team member deleted successfully!';
-              
-            this.deleteMember(teamMember);         
+
+            this.deleteMember(teamMember);
             this.$emit("membersRefresh");
 
             this.$notify(
@@ -145,7 +145,7 @@
                 horizontalAlign: 'center',
                 verticalAlign: 'top',
                 type: 'success'
-              })   
+              })
           }
         })
       },
@@ -167,14 +167,14 @@
             })
 
             this.$emit("membersRefresh");
-            
+
             this.$notify(
               {
                 message: 'Team members deleted successfully!',
                 horizontalAlign: 'center',
                 verticalAlign: 'top',
                 type: 'success'
-              })   
+              })
 
             this.selected = [];
           }
@@ -182,14 +182,14 @@
       },
       async deleteMember(teamMember) {
         let team = await Teams.first();
-        let member = await team.members().find(teamMember.id);
+        let member = await TeamMembers.find(teamMember.id);
 
         member.for(team).delete().then(response => {
           let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
           this.teamMembers.splice(teamMemberIndex)
         }).catch(error => {
           console.log(error)
-        });     
+        });
       }
     }
   };

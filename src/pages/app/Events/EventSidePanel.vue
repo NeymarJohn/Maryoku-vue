@@ -507,7 +507,7 @@
           this.$parent.isLoading = false;
           this.closePanel();
           //this.$emit("refresh-events");
-          this.$router.push({ name: 'EditEvent', params: {id: response.id} })
+          this.$router.push({ name: 'EditBuildingBlocks', params: {id: response.id} })
 
         })
           .catch((error) => {
@@ -547,7 +547,7 @@
         this.occasion = this.occasion.substring(0, this.occasion.length -1)
       },
       openEventPlanner() {
-        this.$router.push({ name: 'EditEvent', params: {id: this.id }});
+        this.$router.push({ name: 'EditBuildingBlocks', params: {id: this.id }});
       },
       closePanel(){
         this.setEventModal(false);

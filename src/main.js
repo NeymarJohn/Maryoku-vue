@@ -74,7 +74,7 @@ router.beforeEach((to, from, next) => {
   }*/
   let tenantId = document.location.hostname.replace(".262days.com","");
   let isPrimeTenant = tenantId === 'dev' || tenantId === 'app';
-  if ((isPrimeTenant && to.path !== '/signin' && to.path !== '/signedin') || (to.meta.auth == null && !auth.user.authenticated)) {
+  if ((isPrimeTenant && to.path !== '/signin' && to.path !== '/signedin' && to.path !== '/create-workspace' && to.path !== '/choose-workspace') || (to.meta.auth == null && !auth.user.authenticated)) {
     next('signin');
   } else {
     next();

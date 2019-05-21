@@ -94,7 +94,7 @@
 
                                 <span class="md-error" v-if="errors.has('email')">{{ errors.first('email') }}</span>
                             </md-field>
-                        </div> 
+                        </div>
 
                         <div class="md-layout-item md-size-95 md-small-size-100">
                             <md-field :class="[
@@ -332,12 +332,18 @@
                 if (this.editMode) {
                   this.updateTeamMember();
                 } else {
+                  console.log("Send invitation: closing modal.");
                   this.setInviteModal(false);
                   Teams.first().then((team) => {
+                    console.log("Send invitation: first team: ");
+                    console.log(JSON.stringify(team));
                     this.emailArray.forEach((item, index) => {
+                      console.log("Send invitation: email: " + JSON.stringify(item));
                     let member = Object.assign({}, this.teamMemberData, {emailAddress: item, username: item});
                       if (member) {
+                        console.log("Send invitation: saving team member ");
                         team.members().attach(member).then(() => {
+                          console.log("Send invitation: member attached ");
                           member = {};
                           this.$emit('membersRefresh');
                           this.resetForm();

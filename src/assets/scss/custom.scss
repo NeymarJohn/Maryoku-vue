@@ -1907,3 +1907,12 @@ iframe{
     stroke: #ebebeb !important;
   }
 }
+
+
+.event-top-bar .md-button .md-button-content {
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}

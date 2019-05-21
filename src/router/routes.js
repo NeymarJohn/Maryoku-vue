@@ -98,6 +98,10 @@ const Calendar = () => import("@/pages/Dashboard/Calendar.vue");
 const Charts = () => import("@/pages/Dashboard/Charts.vue");
 import Widgets from "@/pages/Dashboard/Widgets.vue";
 import CreateWorkspace from '@/pages/Dashboard/Pages/CreateWorkspace';
+import ChooseWorkspace from '@/pages/Dashboard/Pages/ChooseWorkspace';
+
+import GetStarted from '@/pages/app/GetStarted';
+import EmptyLayout from '../pages/Dashboard/Pages/EmptyLayout';
 
 let componentsMenu = {
   path: "/components",
@@ -274,6 +278,12 @@ let authPages = {
       name: "CreateWorkspace",
       component: CreateWorkspace,
       meta: {auth: false, title: 'Create Workspace', gtm: "CreateWorkspace"}
+    },
+    {
+      path: "/choose-workspace",
+      name: "ChooseWorkspace",
+      component: ChooseWorkspace,
+      meta: {auth: false, title: 'Choose Workspace', gtm: "ChooseWorkspace"}
     }
   ]
 };
@@ -289,12 +299,26 @@ let publicPages = {
       component: ShowEvent,
       meta: {auth: false, title: 'Event', gtm: "Event"},
     },
-    {
+    /*{
       path: "/get-started",
       name: "GetStarted",
       component: Onboarding,
       meta: {auth: false, title: 'Get Started', gtm: "GetStarted"}
-    }
+    },*/
+  ]
+};
+
+let emptyLayoutPages = {
+  path: "/",
+  component: EmptyLayout,
+  name: "Empty",
+  children: [
+    {
+      path: "/get-started",
+      name: "GetStarted",
+      component: GetStarted,
+      meta: {auth: true, title: 'Get Started', gtm: "GetStarted"}
+    },
   ]
 };
 
@@ -370,31 +394,31 @@ let appPages = {
       path: "/events/:id/edit",
       name: "EventDetails",
       component: EventDetails,
-      meta: {title: 'Event Planner / Event Page', gtm: "Event Details", opaque: false},
+      meta: {title: 'Event Page', gtm: "Event Details", opaque: false},
     },
       {
           path: "/events/:id/edit/details",
           name: "EditEvent",
           component: CurrentEvents,
-          meta: {title: 'Event Planner / Event Details', gtm: "Event Edit", opaque: true}
+          meta: {title: 'Event Details', gtm: "Event Edit", opaque: false}
       },
       {
           path: "/events/:id/edit/building-blocks",
           name: "EditBuildingBlocks",
           component: CurrentEvents,
-          meta: {title: 'Event Planner / Building Blocks', gtm: "Building Blocks", opaque: true},
+          meta: {title: 'Building Blocks', gtm: "Building Blocks", opaque: false},
       },
     {
         path: "/events/:id/edit/timeline",
         name: "EditTimeLine",
         component: CurrentEvents,
-        meta: {title: 'Event Planner / Timeline', gtm: "Event Timeline", opaque: true},
+        meta: {title: 'Timeline', gtm: "Event Timeline", opaque: false},
     },
     {
         path: "/events/:id/edit/invitees-management",
         name: "InviteesManagement",
         component: CurrentEvents,
-        meta: {title: 'Event Planner / Invitees Management', gtm: "Event Edit", opaque: true},
+        meta: {title: 'Invitees Management', gtm: "Event Edit", opaque: false},
     },
     {
       path: "/yearly-plan",
@@ -503,6 +527,7 @@ const routes = [
   authPages,
   appPages,
   publicPages,
+  emptyLayoutPages,
   /*{
     path: "/",
     component: DashboardLayout,

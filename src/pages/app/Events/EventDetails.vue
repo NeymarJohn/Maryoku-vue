@@ -179,7 +179,7 @@ export default {
           this.setPublishEventModal({ showModal: true });
       },
     goBack(){
-      this.$router.push({ name  : 'EditEvent', params : { id : this.calendarEvent.id} });
+      this.$router.push({ name  : 'EditBuildingBlocks', params : { id : this.calendarEvent.id} });
     }
   },
   computed: {

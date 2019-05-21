@@ -194,7 +194,7 @@
           phoneNumber: this.formattedNumber,
           companyStartDate: this.firstDayAtWork,
         }).save().then((response) => {
-          this.$router.push({name: 'AnnualPlanner'});
+          this.$router.push({name: 'GetStarted'});
         });
       },
       back() {

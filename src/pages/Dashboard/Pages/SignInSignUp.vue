@@ -72,24 +72,24 @@ export default {
     },
     signup(){
       this.loading = true;
-
+      let that = this;
       this.$validator.validateAll().then(isValid => {
         if (isValid){
-          this.auth.signupOrSignin(this, this.email, this.password, (data) => {
-            this.auth.login(this, {username: this.email, password: this.password}, (success) => {
-              this.$router.push({ path: '/signedin', query: {token: success.access_token} });
+          that.auth.signupOrSignin(that, this.email, that.password, (data) => {
+            that.auth.login(that, {username: that.email, password: that.password}, (success) => {
+              that.$router.push({ path: '/signedin', query: {token: success.access_token} });
             }, (failure) => {
-              this.loading = false;
+              that.loading = false;
               if (failure.response.status === 401){
-                this.error = 'Sorry, wrong password, try again.';
+                that.error = 'Sorry, wrong password, try again.';
               } else {
-                this.error = 'Temporary failure, try again later';
+                that.error = 'Temporary failure, try again later';
                 console.log(JSON.stringify(failure.response));
               }
             } );
           })
         } else {
-          this.loading = false;
+          that.loading = false;
         }
       });
     }

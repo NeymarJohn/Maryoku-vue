@@ -358,7 +358,7 @@
                 // Edit event interaction
                 this.isLoading = true;
 
-                let interaction = new EventInteraction({id: item.hashed_id});
+                let interaction = new EventInteraction({id: item.hashed_id}).for(new Calendar({id: this.auth.user.defaultCalendarId}), this.event);
                 interaction.enabled = status;
                 interaction.templateId = item.id;
                 interaction.title = item.title;

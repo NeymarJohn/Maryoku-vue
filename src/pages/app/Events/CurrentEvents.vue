@@ -3,12 +3,17 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
 
     <!-- Event Components Routes -->
-    <event-page-routes  v-if="event" :event="event"></event-page-routes>
+    <!--<event-page-routes  v-if="event" :event="event"></event-page-routes>-->
     <!-- ./Event Components Routes -->
 
     <div  v-if="routeName === 'EditEvent' || routeName === 'EditBuildingBlocks'" class="md-layout-item md-xlarge-size-20 md-large-size-25 md-small-size-40" >
       <md-card class="md-card-profile">
-        <div class="logo-block">
+        <md-card-header class="md-card-header-icon md-card-header-blue">
+          <div class="card-icon">
+            <md-icon>timeline</md-icon>
+          </div>
+        </md-card-header>
+        <!--<div class="logo-block">
           <div class="event-planer-logo">
             <md-icon class="company-logo">date_range</md-icon>
           </div>
@@ -16,10 +21,10 @@
           <md-button name="event-planner-event-details-edit" class="md-button md-simple md-just-icon md-sm"  @click="openEventModal()" style="margin-top : 1em;">
             <md-icon class="company-logo">create</md-icon>
           </md-button>
-        </div>
+        </div>-->
         <md-card-content v-if="event">
           <div>
-            <div class="md-layout event-info-section">
+            <!--<div class="md-layout event-info-section">
               <div class="md-layout-item md-size-100">
                 <div class="md-layout-item  title-text">Date</div>
                 <div class="md-layout-item md-size-100 md-caption ">{{calendarEvent.eventStartMillis | formatDate}}, {{calendarEvent.eventStartMillis | formatTime}} ({{calendarEvent.eventStartMillis | formatDuration(calendarEvent.eventEndMillis)}} hrs) </div>
@@ -41,20 +46,20 @@
                 </md-button>
               </div>
 
-            </div>
+            </div>-->
 
 
-            <div class="md-layout md-gutter">
+            <!--<div class="md-layout md-gutter">
               <div class="md-layout-item">
                 <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
               </div>
-            </div>
+            </div>-->
             <div class="md-layout md-gutter">
               <div class="md-layout-item">
                 <h5 class="title-budget-main">Total remaining budget</h5>
                 <h4
-                        class="title"
-                        style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
+                  class="title"
+                  style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
                   <div class="title-budget-prise title">
                     <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
                   </div>
@@ -62,10 +67,10 @@
 
                 <div class="budget-pie-container" style="display: grid;margin: 18px;">
                   <chart-component
-                          :chart-data="pieChart.data"
-                          :chart-options="pieChart.options"
-                          chart-type="Pie"
-                          style="grid-column: 1; grid-row: 1; color:red"/>
+                    :chart-data="pieChart.data"
+                    :chart-options="pieChart.options"
+                    chart-type="Pie"
+                    style="grid-column: 1; grid-row: 1; color:red"/>
                   <animated-number class="percentage" ref="percentageNumber" :value="percentage" suffix="%"></animated-number>
                 </div>
               </div>
@@ -101,7 +106,6 @@
         <md-card-content class="md-layout">
           <div class="md-layout-item md-size-60">
             <h4>Manage Vendor Proposals</h4>
-
             <p>
               Save planning time by sending quote requests and easily compare them to get the best deals.
             </p>
@@ -222,8 +226,8 @@
 
   export default {
     components: {
-        MdCardContent,
-        NavTabs,
+      MdCardContent,
+      NavTabs,
       EventBuildingBlocks,
       VueElementLoading,
       ChartComponent,
@@ -235,7 +239,7 @@
       EventTimeLine,
       InviteesManagement,
 
-        EventPageRoutes
+      EventPageRoutes
     },
 
     data() {
@@ -251,7 +255,7 @@
         isLoading: false,
         event : null,
         routeName : null,
-          budgetPerEmployee : 0
+        budgetPerEmployee : 0
       };
     },
     created(){
@@ -262,7 +266,7 @@
 
     },
     mounted() {
-        let _self = this;
+      let _self = this;
 
       this.getEvent();
       if (this.components.length === 0) {
@@ -274,9 +278,9 @@
       }
 
 
-        this.$bus.$on('RefreshStatistics', function () {
-            _self.getCalendarEventStatistics(_self.calendarEvent);
-        })
+      this.$bus.$on('RefreshStatistics', function () {
+        _self.getCalendarEventStatistics(_self.calendarEvent);
+      })
 
     },
     methods: {
@@ -294,9 +298,9 @@
 
           _calendar.calendarEvents().find(this.$route.params.id).then(event => {
 
-              console.log('Event ==>',event);
+            console.log('Event ==>',event);
 
-              this.event = event;
+            this.event = event;
             this.eventId = event.id;
             this.calendarEvent = event;
             this.selectedComponents = event.components;
@@ -306,7 +310,7 @@
 
             this.getCalendarEventStatistics(event);
 
-
+            this.$root.$emit("set-title",this.event.title, this.event.id, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement');
           });
         }.bind(this));
       },
@@ -332,23 +336,23 @@
         this.$router.push({ path: `/events/`+ this.event.id + route });
         location.reload();
       },
-        getCalendarEventStatistics(evt){
+      getCalendarEventStatistics(evt){
 
-            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-            let event = new CalendarEvent({id: this.event.id});
+        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
 
-            new CalendarEventStatistics().for(calendar, event).get()
-                .then(resp => {
-                    this.totalRemainingBudget = evt.totalBudget - resp[0].totalAllocatedBudget;
-                    this.percentage = 100 - ((resp[0].totalAllocatedBudget / evt.totalBudget) * 100).toFixed(2);
-                    this.seriesData = [(100 - this.percentage), this.percentage];
-                    this.budgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants;
+        new CalendarEventStatistics().for(calendar, event).get()
+          .then(resp => {
+            this.totalRemainingBudget = evt.totalBudget - resp[0].totalAllocatedBudget;
+            this.percentage = 100 - ((resp[0].totalAllocatedBudget / evt.totalBudget) * 100).toFixed(2);
+            this.seriesData = [(100 - this.percentage), this.percentage];
+            this.budgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants;
 
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        }
+          })
+          .catch(error => {
+            console.log(error);
+          })
+      }
     },
     computed: {
       ...mapGetters({

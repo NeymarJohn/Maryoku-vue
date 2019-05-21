@@ -60,6 +60,11 @@ export default {
     Model.$http.defaults.headers.common.Authorization = this.getAuthHeader().Authorization;
   },
 
+  setTenantHeaders(context) {
+    context.$http.defaults.headers.common.gorm_tenantid = this.resolveTenantId();
+    Model.$http.defaults.headers.common.gorm_tenantid = this.resolveTenantId();
+  },
+
   unsetToken() {
     window.localStorage.removeItem(TOKEN_KEY);
     this.user = {
@@ -68,6 +73,9 @@ export default {
   },
 
   currentUser(context, required, cb) {
+
+    this.setTenantHeaders(context);
+
     if (!this.user.authenticated || this.user.id === undefined){
       context.$http.get(CURRENT_USER_URL, { headers: this.getAuthHeader() })
         .then((resp) => {
@@ -106,7 +114,8 @@ export default {
           }
         })
         .catch(
-          () => {
+          (e) => {
+            console.error(e);
             this.unsetToken();
             if (required) {
               context.$router.push({path:'/signin'});
@@ -126,7 +135,7 @@ export default {
         window.localStorage.removeItem(TOKEN_KEY);
         this.user = {
           authenticated: false
-        }
+        };
         context.$http.defaults.headers.Authorization = null;
         context.$router.push({ path: '/signin' });
       }, error => {
@@ -153,5 +162,15 @@ export default {
     }
     return {};
   },
+  resolveTenantId(){
+    let tenantId = document.location.hostname.replace(".dev.262days.com","");
+    tenantId = tenantId.replace(".262days.com","");
+
+    if (document.location.hostname.startsWith("app") || document.location.hostname.startsWith("dev")){
+      tenantId = "DEFAULT";
+    }
+
+    return tenantId;
+  }
 
 };
