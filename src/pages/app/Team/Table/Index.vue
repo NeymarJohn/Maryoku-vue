@@ -38,7 +38,7 @@
       <md-table-cell md-label="Role">{{ item.role }}</md-table-cell>
       <md-table-cell md-label="Permissions">{{ item.permissions }}</md-table-cell>
       <md-table-cell md-label="Actions">
-        <md-button v-if="currentUserId !== item.id" class="md-raised md-primary md-icon-button" @click.native="deleteTeamMember(item)">
+        <md-button v-if="currentUserId !== item.id" class="md-raised md-primary md-icon-button" @click="deleteTeamMember(item)">
           <md-icon>delete</md-icon>
           <md-tooltip md-direction="top">Delete</md-tooltip>
         </md-button>
@@ -57,6 +57,7 @@
   import Teams from "@/models/Teams";
   import TeamMembers from "@/models/TeamMembers";
   import indexVuexModule from "@/store/index";
+  import auth from '@/auth';
 
   export default {
     components: {
@@ -83,6 +84,7 @@
     },
     data() {
       return {
+        auth: auth,
         selected: [],
         hideBtn: false,
         openPopover: false,
@@ -136,7 +138,7 @@
           if (result.value) {
             let notifySuccessMessage = 'Team member deleted successfully!';
 
-            this.deleteMember(teamMember);
+            this.deleteMember(this.teamMembers.findIndex(obj => obj.id === teamMember.id), teamMember);
             this.$emit("membersRefresh");
 
             this.$notify(
@@ -163,7 +165,7 @@
             let notifySuccessMessage = 'Team member deleted successfully!';
 
             this.selected.forEach((item, index) => {
-              this.deleteMember(item);
+              this.deleteMember(index, item);
             })
 
             this.$emit("membersRefresh");
@@ -180,15 +182,21 @@
           }
         })
       },
-      async deleteMember(teamMember) {
-        let team = await Teams.first();
-        let member = await TeamMembers.find(teamMember.id);
+      deleteMember(teamMemberIndex, teamMember) {
+        /*let team = await Teams.first();
+        let member = await new TeamMembers().for(team).find(teamMember.id);
 
         member.for(team).delete().then(response => {
           let teamMemberIndex = this.teamMembers.findIndex(obj => obj.id === teamMember.id)
           this.teamMembers.splice(teamMemberIndex)
         }).catch(error => {
           console.log(error)
+        });*/
+
+        new TeamMembers(teamMember).for(new Teams({id: this.auth.user.defaultGroupId})).delete().then(res=>{
+          this.teamMembers.splice(teamMemberIndex);
+        }).catch(error => {
+          console.log(error);
         });
       }
     }
