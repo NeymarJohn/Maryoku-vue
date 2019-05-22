@@ -8,7 +8,7 @@
           <div>&nbsp;</div>
           <md-list>
             <md-list-item v-for="tenant in tenantIds" :key="tenant">
-              <a :href="tenantUrl(tenant)">{{tenantUrl(tenant)}}</a>
+              <a :href="tenantUrl(tenant)">{{tenant}}</a>
             </md-list-item>
           </md-list>
         </div>
@@ -50,8 +50,10 @@ export default {
               this.loading = true;
               document.location.href=`${document.location.protocol}//${this.workspace}${tenantId}.262days.com:${document.location.port}`;
             } else {
-              this.error = "Failed"
+              this.$router.push({name: "SignIn"});
             }
+          }).catch(()=>{
+            this.$router.push({name: "SignIn"});
           });
 
           /*this.auth.signupOrSignin(this, this.email, this.password, (data) => {
@@ -108,7 +110,7 @@ export default {
       if (hostname.startsWith("app.262days.com")){
         hostname = '262days.com';
       }
-      return `${document.location.protocol}//${tenant}.${hostname}:${document.location.port}`;
+      return `${document.location.protocol}//${tenant}.${hostname}:${document.location.port}/#/signedin?token=${this.auth.getToken()}`;
     }
   },
   created() {

@@ -35,8 +35,8 @@
         </div>
       <md-table-cell md-label="Name">{{ item.firstName }} {{item.lastName}}</md-table-cell>
       <md-table-cell md-label="Email">{{ item.emailAddress }}</md-table-cell>
-      <md-table-cell md-label="Role">{{ item.role }}</md-table-cell>
-      <md-table-cell md-label="Permissions">{{ item.permissions }}</md-table-cell>
+      <md-table-cell md-label="Role">{{ availableRoleIdToTitle(item.role) }}</md-table-cell>
+      <md-table-cell md-label="Permissions">{{ permissionTitles(item.permissions) }}</md-table-cell>
       <md-table-cell md-label="Actions">
         <md-button v-if="currentUserId !== item.id" class="md-raised md-primary md-icon-button" @click="deleteTeamMember(item)">
           <md-icon>delete</md-icon>
@@ -58,6 +58,7 @@
   import TeamMembers from "@/models/TeamMembers";
   import indexVuexModule from "@/store/index";
   import auth from '@/auth';
+  import _ from 'underscore';
 
   export default {
     components: {
@@ -80,7 +81,9 @@
         default: () => {
           return {};
         }
-      }
+      },
+      availableRoles: Array,
+      availablePermissions: Array
     },
     data() {
       return {
@@ -88,8 +91,11 @@
         selected: [],
         hideBtn: false,
         openPopover: false,
-        currentUserId: indexVuexModule.state.event.currentUser.id,
+        currentUserId: auth.user.id,
       }
+    },
+    mounted(){
+      this.currentUserId = this.auth.user.id;
     },
     methods: {
       ...mapActions('teamVuex', ['setInviteModalAndTeamMember']),
@@ -125,7 +131,7 @@
       changeRollAndPermission(){
 
       },
-      async deleteTeamMember(teamMember){
+      deleteTeamMember(teamMember){
         swal({
           title: 'Are you sure?',
           text: "You won't be able to revert this!",
@@ -151,7 +157,7 @@
           }
         })
       },
-      async deleteAllTeamMember(teamMember){
+      deleteAllTeamMember(teamMember){
         swal({
           title: 'Are you sure?',
           text: "You won't be able to revert this!",
@@ -198,6 +204,19 @@
         }).catch(error => {
           console.log(error);
         });
+      },
+      availableRoleIdToTitle(roleId){
+        return _.findWhere(this.availableRoles, {id: roleId}).title;
+      },
+      permissionTitles(permissions){
+        let permissionsArray = permissions.split(",");
+        let permissionsTitles = [];
+
+        permissionsArray.forEach((permission)=>{
+          permissionsTitles.push(_.findWhere(this.availablePermissions, {it: permission}).title);
+        });
+
+        return permissionsTitles.join(", ");
       }
     }
   };
