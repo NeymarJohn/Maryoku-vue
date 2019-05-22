@@ -7,21 +7,13 @@
             <md-icon>person_add</md-icon>
             Invite
           </md-button>
-          <md-button class="md-just-icon md-purple" @click="fetchData(pagination.from)">
-            <md-icon>refresh</md-icon>
-          </md-button>
         </div>
       </div>
-      <md-card class="md-card-plain" v-if="!teamMembers">
-        <md-card-content>
-
-        </md-card-content>
-      </md-card>
-      <md-card class="" v-else>
+      <md-card>
         <md-card-content style="min-height: 60px;">
           <vue-element-loading :active="teamMembersLoading" spinner="ring" color="#FF547C"/>
-          <team-table :available-permissions="permissions" :available-roles="roles" :team-id="team.id" :teamMembers="teamMembers" @membersRefresh="fetchData(pagination.from)"></team-table>
-          <md-card-actions md-alignment="space-between" v-if="!(teamMembers.length <= pagination.limit && teamMembers.length <= pagination.total)">
+          <team-table :team-id="team.id" :teamMembers="teamMembers" @membersRefresh="fetchData(pagination.from)"></team-table>
+          <md-card-actions md-alignment="space-between">
             <div class="">
               <p class="card-category">Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</p>
             </div>
@@ -35,7 +27,7 @@
         </md-card-content>
       </md-card>
     </div>
-    <invite-modal :available-roles="roles" :available-permissions="permissions" @membersRefresh="fetchData(pagination.from)" :team="team" ref="inviteModal"></invite-modal>
+    <invite-modal @membersRefresh="fetchData(pagination.from)" :team="team" ref="inviteModal"></invite-modal>
   </div>
 </template>
 
@@ -63,21 +55,6 @@
         team: {},
         teamMembers: [],
         teamMembersLoading: true,
-        roles: [
-          { id: 'co_producer', title: 'Co-Producer'},
-          { id: 'manager', title: 'Manager'},
-          { id: 'team_leader', title: 'Team Leader'},
-          { id: 'employee', title: 'Employee'},
-          { id: 'guest', title: 'Guest'}
-        ],
-        permissions: [
-          { id: 'sign_off', title: 'Sign-Off'},
-          { id: 'edit', title: 'Edit'},
-          { id: 'create', title: 'Create'},
-          { id: 'request_budget', title: 'Request Budget'},
-          { id: 'view', title: 'View'},
-          { id: 'vote', title: 'Vote'}
-        ]
       }
     },
     created() {
@@ -108,12 +85,12 @@
         new Teams({id: this.auth.user.defaultGroupId}).members().page(page)
           .limit(this.pagination.limit).get().then(members => {
 
-          /*let result = members[0].results.filter(function(item, pos){
+          let result = members[0].results.filter(function(item, pos){
             return item.id != currentUserId;
-          });*/
+          });
 
-          this.teamMembers = members[0].results;
-          this.updatePagination(members[0].model);
+          this.teamMembers = result;
+          this.updatePagination(members[0].model)
           this.teamMembersLoading = false;
         });
       },
