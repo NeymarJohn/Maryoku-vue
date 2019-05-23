@@ -45,7 +45,7 @@
                     <md-textarea v-model="selectedInteraction.line3" type="text"></md-textarea>
                 </md-field>
                 <md-button name="event-planner-tab-invitees-management-interaction-save"
-                           class="event-planner-tab-invitees-management-interaction-save md-success pull-right" @click="editInteractionDesign()">
+                           class="md-success pull-right" @click="editInteractionDesign()">
                     Save
                 </md-button>
             </div>

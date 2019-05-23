@@ -45,6 +45,8 @@ export default {
         state.teamMemberData['id'] = data.teamMember['id']
         state.teamMemberData['emailAddress'] = data.teamMember['emailAddress']
         state.teamMemberData['role'] = data.teamMember['role']
+        state.teamMemberData['firstName'] = data.teamMember['firstName']
+        state.teamMemberData['lastName'] = data.teamMember['lastName']
         
         if (data.teamMember['permissions']) {
           state.teamMemberData['permissions'] = data.teamMember['permissions'].split(',')

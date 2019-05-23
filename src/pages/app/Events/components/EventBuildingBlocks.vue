@@ -19,7 +19,7 @@
                             </div>
                             <h4 class="title2">{{block.componentId}}</h4>
                             <md-card-actions md-alignment="right" class="item-actions">
-                                <md-button name="event-planner-tab-budget-building-block-delete" class="event-planner-tab-budget-building-block-delete md-button md-simple md-sm" @click="deleteBlock(block.id)">
+                                <md-button name="event-planner-tab-budget-building-block-delete" class="md-button md-simple md-sm" @click="deleteBlock(block.id)">
                                     <md-icon>delete_outline</md-icon>
                                 </md-button>
                             </md-card-actions>
@@ -40,14 +40,14 @@
                                         <md-input type="number" placeholder="Example : $1400" v-model="block.allocatedBudget"></md-input>
                                     </md-field>
                                     <div class="md-layout-item md-size-30 ">
-                                        <md-button name="event-planner-tab-budget-building-block-set-budget" class="event-planner-tab-budget-building-block-set-budget md-info md-sm" @click="setBudget(block,index)">Set Budget</md-button>
+                                        <md-button name="event-planner-tab-budget-building-block-set-budget" class="md-info md-sm" @click="setBudget(block,index)">Set Budget</md-button>
                                     </div>
                                 </div>
                             </div>
                         </md-card-content>
 
                         <md-card-actions md-alignment="right" v-if="!block.edit">
-                            <md-button name="event-planner-tab-budget-building-block-create-inquiry" class="event-planner-tab-budget-building-block-create-inquiry md-success md-sm" @click="selectBlock(block)">Create Inquiry</md-button>
+                            <md-button name="event-planner-tab-budget-building-block-create-inquiry" class="md-success md-sm" @click="selectBlock(block)">Create Inquiry</md-button>
                         </md-card-actions>
                     </md-card>
 

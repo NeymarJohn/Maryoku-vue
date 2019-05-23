@@ -25,7 +25,7 @@
               </div>
 
               <div class="md-layout-item md-small-size-100">
-                <md-datepicker v-model="form.dueDateMillis" name="todo-date" md-immediately class="todo-date mb16">
+                <md-datepicker v-model="form.dueDateMillis" name="todo-date" md-immediately class="mb16">
                   <label>Due Date</label>
                 </md-datepicker>
               </div>
