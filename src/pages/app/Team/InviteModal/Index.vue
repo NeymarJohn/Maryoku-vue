@@ -428,6 +428,9 @@ export default {
       member.emailAddress = this.teamMemberData.emailAddress;
       member.role = this.teamMemberData.role;
       member.permissions = this.teamMemberData.permissions;
+      debugger
+      member.firstName = this.teamMemberData.firstName;
+      member.lastName = this.teamMemberData.lastName;
       this.setInviteModal(false);
 
       await member
@@ -441,12 +444,11 @@ export default {
             verticalAlign: "top",
             type: "success"
           });
+          this.closePanel()
         })
         .catch(error => {
           console.log(error);
         });
-
-      this.resetForm();
     }
   },
   watch: {
