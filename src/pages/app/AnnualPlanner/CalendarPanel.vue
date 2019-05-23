@@ -46,18 +46,12 @@
                                       <span v-if="monthDay.events.editables.length > 1" class="count">
                                         {{monthDay.events.editables.length}}
                                       </span>
-                                      <md-tooltip>
-                                        <div v-for="item in monthDay.events.editables" :key="item.id" class="title text-left" v-bind:style="`color: ${colorWithCategory(item.category)}`"><md-icon v-bind:style="`color: ${colorWithCategory(item.category)}`">event</md-icon> {{item.title}}</div>
-                                      </md-tooltip>
                                     </md-button>
                                     <md-button v-else-if="monthDay.events && monthDay.events.nonEditables && monthDay.events.nonEditables.length" @click="openEditEventModal(monthDay.events.nonEditables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="month-day-button md-simple md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                       <span v-if="monthDay.events.nonEditables.length > 1" class="count">
                                         {{monthDay.events.nonEditables.length}}
                                       </span>
-                                      <md-tooltip>
-                                        <div v-for="item in monthDay.events.nonEditables" :key="item.id" class="title text-left text-gray"><md-icon class="text-gray">event</md-icon> {{item.title}}</div>
-                                      </md-tooltip>
                                     </md-button>
                                   </template>
                                   <template v-else>
@@ -81,8 +75,8 @@
                     <td style="padding-top: 15px; padding-right: 15px;">
                       <md-card style="padding: 0; margin: 0; height: 100%; ">
                         <md-card-content style="text-align: center;">
-                          <md-button v-for="category in categories" class="md-simple md-xs" v-bind:style="`color: ${category.color} !important;`" :key="category.id">
-                            <i class="fa fa-square" style="margin-right: 5px;" v-bind:style="`color: ${category.color} !important;`"></i> {{category.item}}
+                          <md-button v-for="category in categories" class="md-simple md-xs" v-bind:style="`color: ${category.color}!important;`" :key="category.id">
+                            <i class="fa fa-square" style="margin-right: 5px;" v-bind:style="`color: ${category.color}!important;`"></i> {{category.item}}
                           </md-button>
                         </md-card-content>
                       </md-card>
@@ -255,7 +249,7 @@
                   eventsMap[eventDateStamp].editables.push(new CalendarEvent(event));
                 } else {
                   eventsMap[eventDateStamp].nonEditables.push(new CalendarEvent(event));
-                  occasionsArray.push({id: event.eventStartMillis, value: event.title});
+                  occasionsArray.push({id: event.eventStartMillis, value: event.title,  category: event.category});
                 }
               });
             }
@@ -321,7 +315,6 @@
           component: EventSidePanel,
           cssClass: 'md-layout-item md-size-40 transition36 ',
           openOn: 'right',
-          disableBgClick: true,
           props: {
             refreshEvents: this.refreshEvents,
             year: this.year,
@@ -350,7 +343,7 @@
       },
       colorWithCategory(category) {
         let filterCategories = this.categories.filter(c => c.item === category);
-        return filterCategories[0] != null ? `${filterCategories[0].color} !important;` : '';
+        return filterCategories[0] != null ? `${filterCategories[0].color}!important;` : '';
       },
     },
     computed: {
