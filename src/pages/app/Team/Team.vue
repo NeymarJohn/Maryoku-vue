@@ -151,7 +151,6 @@ export default {
     },
     openEditTeamInviteSidePanel(showModal, teamMember) {
       // this.setInviteModalAndTeamMember({showModal: show, teamMember: item})
-      this.setEditMode({ editMode: true });
 
       window.currentPanel = this.$showPanel({
         component: InviteModal,
