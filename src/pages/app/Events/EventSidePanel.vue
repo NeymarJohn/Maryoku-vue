@@ -7,7 +7,7 @@
     </div>
     <div class="md-layout-item md-size-95" style="max-height: 90vh; ">
       <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
-        Create Event
+        {{this.editMode ? "Edit Event" : "Create Event" }}
       </h4>
 
       <div class="md-layout" style="overflow: auto; max-height: 90vh; margin-top: 24px;">
@@ -418,7 +418,6 @@
       updateEvent() {
         let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
         let editedEvent = new CalendarEvent({id: this.eventData.id});
-
         editedEvent.title = this.title;
         editedEvent.occasion = this.occasion;
         editedEvent.eventStartMillis = this.getEventStartInMillis();
@@ -429,7 +428,7 @@
         editedEvent.currency = this.currency;
         editedEvent.eventType = this.eventType;
         editedEvent.participantsType = this.participantsType;
-        editedEvent.category = this.occasion;
+        editedEvent.category = this.occasionsOptions[this.occasionsList.indexOf(this.occasion)].category;
        // editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
@@ -486,7 +485,7 @@
       createEvent() {
         let calendarId = this.auth.user.defaultCalendarId
         let _calendar = new Calendar({ id: calendarId});
-
+        let catIndex = this.occasionsList.indexOf(this.occasion)
         let newEvent = new CalendarEvent({
           calendar: {id: calendarId},
           title: this.title,
@@ -499,7 +498,7 @@
           currency: this.currency,
           eventType: this.eventType,
           participantsType: this.participantsType,
-          category: this.occasion,
+          category: catIndex > -1 ?  this.occasionsOptions[catIndex].category : "CompanyDays",
           edittable: true,
         //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         }).for(_calendar).save().then(response => {
@@ -507,7 +506,7 @@
           this.$parent.isLoading = false;
           this.closePanel();
           //this.$emit("refresh-events");
-          this.$router.push({ name: 'EditBuildingBlocks', params: {id: response.id} })
+          this.$router.push({ name: 'EditEvent', params: {id: response.id} })
 
         })
           .catch((error) => {
@@ -547,7 +546,7 @@
         this.occasion = this.occasion.substring(0, this.occasion.length -1)
       },
       openEventPlanner() {
-        this.$router.push({ name: 'EditBuildingBlocks', params: {id: this.id }});
+        this.$router.push({ name: 'EditEvent', params: {id: this.id }});
       },
       closePanel(){
         this.setEventModal(false);

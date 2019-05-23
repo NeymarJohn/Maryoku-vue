@@ -79,6 +79,7 @@
         </template>
       </product-card>
     </div>
+    <event-modal @refresh-events="refreshEvents" ref="eventModal"></event-modal>
   </div>
 </template>
 
@@ -150,15 +151,9 @@
         "setNumberOfParticipants"
       ]),
       openEventModal() {
+        this.setEventModal({ showModal: true });
         this.setModalSubmitTitle("Save");
         this.setEditMode({ editMode: false });
-
-          window.currentPanel = this.$showPanel({
-              component: EventModal,
-              cssClass: 'md-layout-item md-size-45 transition36 bg-grey',
-              openOn: 'right',
-              props: {}
-          });
       },
       // getCalendarEvents() {
       //   console.log(this.$store.state.user.defaultCalendarId)

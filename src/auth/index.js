@@ -162,16 +162,9 @@ export default {
     }
     return {};
   },
-  getToken() {
-    return window.localStorage.getItem(TOKEN_KEY);
-  },
   resolveTenantId(){
     let tenantId = document.location.hostname.replace(".dev.262days.com","");
     tenantId = tenantId.replace(".262days.com","");
-
-    if (tenantId === "cheerz" && document.location.hostname.endsWith("dev.262days.com")){
-      tenantId = "cheerz_dev";
-    }
 
     if (document.location.hostname.startsWith("app") || document.location.hostname.startsWith("dev")){
       tenantId = "DEFAULT";

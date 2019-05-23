@@ -186,6 +186,10 @@
       <invitees-management :event="event" :event-components="selectedComponents"></invitees-management>
     </div>
 
+    <!-- New Event Modal -->
+    <event-modal @refresh-events="refreshEvents" :currentEvent="calendarEvent" ref="eventModal"></event-modal>
+    <!-- ./New Event Modal -->
+
     <!--<sticky-budget :event="event" v-if="routeName !== 'EditEvent' && routeName !== 'EditBuildingBlocks'"></sticky-budget>-->
 
   </div>
