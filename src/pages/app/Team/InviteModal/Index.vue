@@ -428,7 +428,6 @@ export default {
       member.emailAddress = this.teamMemberData.emailAddress;
       member.role = this.teamMemberData.role;
       member.permissions = this.teamMemberData.permissions;
-      debugger
       member.firstName = this.teamMemberData.firstName;
       member.lastName = this.teamMemberData.lastName;
       this.setInviteModal(false);
