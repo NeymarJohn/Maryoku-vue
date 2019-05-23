@@ -19,24 +19,24 @@
         <!--<sidebar-item :link="{name: 'Community', icon: 'people', path: '/community-new'}">
         </sidebar-item>-->
 
-        <sidebar-item name="left-menu-dashboard" :link="{name: 'Dashboard', icon: 'dashboard', path: '/company'}">
-        </sidebar-item>
+        <!--<sidebar-item name="left-menu-dashboard" :link="{name: 'Dashboard', icon: 'dashboard', path: '/company'}">
+        </sidebar-item>-->
 
         <!--<sidebar-item :link="{name: 'Yearly Planner', icon: 'calendar_today', path: '/yearly-plan'}">
         </sidebar-item>-->
 
         <li class="nav-item router-link-active">
-          <md-button name="left-menu-create-event" class="md-button md-purple" @click="openEventModal()">
+          <md-button name="left-menu-create-event" class="left-menu-create-event md-button md-purple" @click="openEventModal()" :disabled="createEventModalOpen">
             <md-icon>event</md-icon>
             <span>Create New Event</span>
           </md-button>
         </li>
-        <sidebar-item name="left-menu-events-list" :link="{name: 'Events List',  icon: 'event', path: '/events'}"></sidebar-item>
-        <sidebar-item name="left-menu-yearly-plan" :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>
+        <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Events List',  icon: 'event', path: '/events'}"></sidebar-item>
+        <sidebar-item name="left-menu-yearly-plan" class="left-menu-yearly-plan" :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>
 
         <li class="menu-divider"></li>
 
-        <sidebar-item name="left-menu-vendors-list" :link="{name: 'Vendors List', icon: 'group', path: '/vendors'}">
+        <sidebar-item name="left-menu-vendors-list" class="left-menu-vendors-list" :link="{name: 'Vendors List', icon: 'group', path: '/vendors'}">
         </sidebar-item>
 
         <!--<sidebar-item :link="{name: 'My Vendors', icon: 'contacts', path: '/vendors'}">
@@ -167,96 +167,121 @@
   </div>
 </template>
 <script>
-/* eslint-disable no-new */
-import PerfectScrollbar from "perfect-scrollbar";
-import "perfect-scrollbar/css/perfect-scrollbar.css";
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  /* eslint-disable no-new */
+  import PerfectScrollbar from "perfect-scrollbar";
+  import "perfect-scrollbar/css/perfect-scrollbar.css";
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import Calendar from '@/models/Calendar';
+  import CalendarEvent from '@/models/CalendarEvent';
 
-import EventModal from "../../app/Events/EventModal/";
-import EventPlannerVuexModule from '../../app/Events/EventPlanner.vuex';
+  import EventModal from "../../app/Events/EventModal/";
+  import EventPlannerVuexModule from '../../app/Events/EventPlanner.vuex';
 
-function hasElement(className) {
-  return document.getElementsByClassName(className).length > 0;
-}
-
-function initScrollbar(className) {
-  if (hasElement(className)) {
-    new PerfectScrollbar(`.${className}`);
-  } else {
-    // try to init it later in case this component is loaded async
-    setTimeout(() => {
-      initScrollbar(className);
-    }, 100);
+  function hasElement(className) {
+    return document.getElementsByClassName(className).length > 0;
   }
-}
 
-import TopNavbar from "./TopNavbar.vue";
-import ContentFooter from "./ContentFooter.vue";
-import MobileMenu from "./Extra/MobileMenu.vue";
-import UserMenu from "./Extra/UserMenu.vue";
-import { ZoomCenterTransition } from "vue2-transitions";
-import auth from "src/auth";
-
-export default {
-  components: {
-    TopNavbar,
-    ContentFooter,
-    MobileMenu,
-    UserMenu,
-    ZoomCenterTransition
-  },
-  data() {
-    return {
-      auth: auth
+  function initScrollbar(className) {
+    if (hasElement(className)) {
+      new PerfectScrollbar(`.${className}`);
+    } else {
+      // try to init it later in case this component is loaded async
+      setTimeout(() => {
+        initScrollbar(className);
+      }, 100);
     }
-  },
-  methods: {
-      ...mapMutations("EventPlannerVuex", [
-          "setEventModal",
-          "setEditMode",
-          "setModalSubmitTitle",
-          "setEventModalAndEventData",
-          "setNumberOfParticipants"
-      ]),
-    toggleSidebar() {
-      if (this.$sidebar.showSidebar) {
-        this.$sidebar.displaySidebar(false);
-      }
-    },openEventModal() {
-          this.$router.push({ path: `/events` , name  : 'Events', params : { mode : 'create-event'} });
-          this.setEventModal({ showModal: true });
-          this.setModalSubmitTitle("Save");
-          this.setEditMode({ editMode: false });
-      }
+  }
 
-  },
-    created(){
-        this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
+  import TopNavbar from "./TopNavbar.vue";
+  import ContentFooter from "./ContentFooter.vue";
+  import MobileMenu from "./Extra/MobileMenu.vue";
+  import UserMenu from "./Extra/UserMenu.vue";
+  import { ZoomCenterTransition } from "vue2-transitions";
+  import auth from "src/auth";
+  import EventSidePanel from '@/pages/app/Events/EventSidePanel';
+
+  export default {
+    components: {
+      TopNavbar,
+      ContentFooter,
+      MobileMenu,
+      UserMenu,
+      ZoomCenterTransition
     },
-  mounted() {
-    /*  NEET CODE REVIEW !!!!!!!!!!!!!!!!!!!!*/
+    data() {
+      return {
+        auth: auth,
+        event : null,
+        createEventModalOpen: false
+      }
+    },
+    methods: {
+      ...mapMutations("EventPlannerVuex", [
+        "setEventModal",
+        "setEditMode",
+        "setModalSubmitTitle",
+        "setEventModalAndEventData",
+        "setNumberOfParticipants"
+      ]),
+      toggleSidebar() {
+        if (this.$sidebar.showSidebar) {
+          this.$sidebar.displaySidebar(false);
+        }
+      },openEventModal() {
+        this.setModalSubmitTitle("Create");
+        let now = new Date();
+        window.currentPanel = this.$showPanel({
+          component: EventSidePanel,
+          cssClass: 'md-layout-item md-size-40 transition36 ',
+          openOn: 'right',
+          disableBgClick: true,
+          props: {
+            refreshEvents: null,
+            year: now.getFullYear(),
+            month: now.getMonth(),
+            occasionsOptions: this.occasionsArray,
+          }
+        });
 
-    // this.auth.currentUser(this, true, function(){
-    //   let docClasses = document.body.classList;
-    //   let isWindows = navigator.platform.startsWith("Win");
-    //   if (isWindows) {
-    //     // if we are on windows OS we activate the perfectScrollbar function
-    //     initScrollbar("sidebar");
-    //     initScrollbar("sidebar-wrapper");
-    //     initScrollbar("main-panel");
 
-    //     docClasses.add("perfect-scrollbar-on");
-    //   } else {
-    //     docClasses.add("perfect-scrollbar-off");
-    //   }
-    // });
+      }
+
+    },
+    created(){
+      this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
+      this.$root.$on("create-event-panel-closed", () => {
+        this.createEventModalOpen = false;
+      });
+      this.$root.$on("create-event-panel-open", () => {
+        this.createEventModalOpen = true;
+      });
+    },
+    mounted() {
+
+
+      /*  NEET CODE REVIEW !!!!!!!!!!!!!!!!!!!!*/
+
+      // this.auth.currentUser(this, true, function(){
+      //   let docClasses = document.body.classList;
+      //   let isWindows = navigator.platform.startsWith("Win");
+      //   if (isWindows) {
+      //     // if we are on windows OS we activate the perfectScrollbar function
+      //     initScrollbar("sidebar");
+      //     initScrollbar("sidebar-wrapper");
+      //     initScrollbar("main-panel");
+
+      //     docClasses.add("perfect-scrollbar-on");
+      //   } else {
+      //     docClasses.add("perfect-scrollbar-off");
+      //   }
+      // });
 
       console.log('state ',this.$store.state);
-  },
+    },
     computed:{
 
     }
-};
+  };
 </script>
 <style lang="scss">
   .menu-divider {
@@ -264,29 +289,29 @@ export default {
     margin-top: 10px;
     background-color: rgba(0,0,0,.12);
   }
-$scaleSize: 0.95;
-@keyframes zoomIn95 {
-  from {
-    opacity: 0;
-    transform: scale3d($scaleSize, $scaleSize, $scaleSize);
+  $scaleSize: 0.95;
+  @keyframes zoomIn95 {
+    from {
+      opacity: 0;
+      transform: scale3d($scaleSize, $scaleSize, $scaleSize);
+    }
+    to {
+      opacity: 1;
+    }
   }
-  to {
-    opacity: 1;
+  .main-panel .zoomIn {
+    animation-name: zoomIn95;
   }
-}
-.main-panel .zoomIn {
-  animation-name: zoomIn95;
-}
-@keyframes zoomOut95 {
-  from {
-    opacity: 1;
+  @keyframes zoomOut95 {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+      transform: scale3d($scaleSize, $scaleSize, $scaleSize);
+    }
   }
-  to {
-    opacity: 0;
-    transform: scale3d($scaleSize, $scaleSize, $scaleSize);
+  .main-panel .zoomOut {
+    animation-name: zoomOut95;
   }
-}
-.main-panel .zoomOut {
-  animation-name: zoomOut95;
-}
 </style>
