@@ -180,6 +180,7 @@
   import swal from "sweetalert2";
   import { error } from 'util';
   import moment from 'moment';
+  import _ from "underscore";
 
   export default {
     props: {
@@ -428,7 +429,10 @@
         editedEvent.currency = this.currency;
         editedEvent.eventType = this.eventType;
         editedEvent.participantsType = this.participantsType;
-        editedEvent.category = this.occasionsOptions[this.occasionsList.indexOf(this.occasion)].category;
+        let catObject = _.find(this.occasionsOptions, (el => el.value === editedEvent.occasion)) || {category: "CompanyDays"};
+        // this.occasionsOptions[catIndex].category
+        this.category = catObject.category;
+        editedEvent.category = catObject.category;
        // editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
@@ -507,7 +511,6 @@
           this.closePanel();
           //this.$emit("refresh-events");
           this.$router.push({ name: 'EditEvent', params: {id: response.id} })
-
         })
           .catch((error) => {
             console.log(error);
