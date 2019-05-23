@@ -1,204 +1,197 @@
 <template>
-  <div>
-    <div class="md-layout">
-      <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
-        <h4 class="md-title">
-          <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
-            <md-icon>arrow_back</md-icon>
-          </md-button>
-        </h4>
-      </div>
-      <div class="">
-        <div class="header-position">
-          <div class="md-layout" style="text-align:center">
-            <div class="md-layout-item md-size-80 md-small-size-100 mx-auto">
-              <h4
-                class="md-title title color-success"
-                style="margin-bottom: 0; line-height: 51px;"
-              >{{modalTitle}}</h4>
-
-              <span
-                v-if="!this.editMode"
-                class="md-subheading"
-              >Type in comma separated list of emails, then choose a role and permission to invite members of your team</span>
-            </div>
+  <div class="md-layout" style="max-height: 100vh;">
+    <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
+      <h4 class="md-title">
+        <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
+          <md-icon>arrow_back</md-icon>
+        </md-button>
+      </h4>
+    </div>
+    <div class="md-layout-item md-size-95" style="max-height: 90vh; ">
+      <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
+        {{modalTitle}}
+      </h4>
+      <div class="md-layout" style="overflow: auto; max-height: 90vh; margin-top: 24px;">
+        <div class="md-layout-item mx-auto">
+          <div>
+            <span v-if="!this.editMode" class="md-subheading" style="margin-bottom: 24px;">
+              Type in comma separated list of emails, then choose a role and permission to invite members of your team
+            </span>
           </div>
+          <div>
+            <div class="md-layout">
+              <div class="md-layout-item md-small-size-100">
+                <div class="md-layout-item md-size-95 md-small-size-100">
+                  <div class="grid-col">
+                    <md-field
+                      style="margin-right: 10px; width: 97%;"
+                      :class="[
+                    {'md-valid': !errors.has('firstName') && touched.firstName},
+                    {'md-error': errors.has('firstName')}]"
+                    >
+                      <label>First Name</label>
+                      <md-input
+                        ref="focusable"
+                        v-model="first_name"
+                        data-vv-name="firstName"
+                        type="text"
+                        autofocus
+                        name="firstName"
+                        required
+                        v-validate="modelValidations.firstName"
+                      ></md-input>
+                      <slide-y-down-transition>
+                        <md-icon class="error" v-show="errors.has('firstName')">close</md-icon>
+                      </slide-y-down-transition>
+                      <slide-y-down-transition>
+                        <md-icon
+                          class="success"
+                          v-show="!errors.has('firstName') && touched.firstName"
+                        >done</md-icon>
+                      </slide-y-down-transition>
+                    </md-field>
+                    <md-field
+                      :class="[
+                    {'md-valid': !errors.has('lastName') && touched.lastName},
+                    {'md-error': errors.has('lastName')}]"
+                    >
+                      <label>Last Name</label>
+                      <md-input
+                        v-model="last_name"
+                        data-vv-name="lastName"
+                        type="text"
+                        name="lastName"
+                        required
+                        v-validate="modelValidations.lastName"
+                      ></md-input>
+                      <slide-y-down-transition>
+                        <md-icon class="error" v-show="errors.has('lastName')">close</md-icon>
+                      </slide-y-down-transition>
+                      <slide-y-down-transition>
+                        <md-icon
+                          class="success"
+                          v-show="!errors.has('lastName') && touched.lastName"
+                        >done</md-icon>
+                      </slide-y-down-transition>
+                    </md-field>
+                  </div>
+                </div>
+                <div class="md-layout-item md-size-95 md-small-size-100 mb25">
+                  <md-field
+                    class="height-auto"
+                    :class="[
+                            {'md-valid': !errors.has('email') && touched.email},
+                            {'md-error': errors.has('email')}]"
+                  >
+                    <label>Email</label>
+                    <md-textarea
+                      v-if="!this.editMode"
+                      v-model="emailAddress"
+                      data-vv-name="email"
+                      type="email"
+                      name="email"
+                      required
+                      rows="3"
+                      v-validate="modelValidations.email"
+                    ></md-textarea>
+                    <md-input
+                      v-else
+                      v-model="emailAddress"
+                      data-vv-name="email"
+                      type="email"
+                      name="email"
+                      required
+                      v-validate="modelValidations.email"
+                    ></md-input>
+                    <slide-y-down-transition>
+                      <md-icon class="error" v-show="errors.has('email')">close</md-icon>
+                    </slide-y-down-transition>
+                    <slide-y-down-transition>
+                      <md-icon class="success" v-show="!errors.has('email') && touched.email">done</md-icon>
+                    </slide-y-down-transition>
 
-          <button class="btn-position" @click="closeModal">X</button>
-        </div>
-        <div>
-          <div class="md-layout">
-            <div class="md-layout-item md-small-size-100">
-              <div class="md-layout-item md-size-95 md-small-size-100">
-                <div class="grid-col">
-                  <md-field
-                    style="margin-right: 10px; width: 97%;"
-                    :class="[
-                  {'md-valid': !errors.has('firstName') && touched.firstName},
-                  {'md-error': errors.has('firstName')}]"
-                  >
-                    <label>First Name</label>
-                    <md-input
-                      ref="focusable"
-                      v-model="first_name"
-                      data-vv-name="firstName"
-                      type="text"
-                      autofocus
-                      name="firstName"
-                      required
-                      v-validate="modelValidations.firstName"
-                    ></md-input>
-                    <slide-y-down-transition>
-                      <md-icon class="error" v-show="errors.has('firstName')">close</md-icon>
-                    </slide-y-down-transition>
-                    <slide-y-down-transition>
-                      <md-icon
-                        class="success"
-                        v-show="!errors.has('firstName') && touched.firstName"
-                      >done</md-icon>
-                    </slide-y-down-transition>
+                    <span class="md-error" v-if="errors.has('email')">{{ errors.first('email') }}</span>
                   </md-field>
+                </div>
+
+                <div class="md-layout-item md-size-95 md-small-size-100">
                   <md-field
                     :class="[
-                  {'md-valid': !errors.has('lastName') && touched.lastName},
-                  {'md-error': errors.has('lastName')}]"
+                            {'md-valid': !errors.has('role') && touched.role},
+                            {'md-error': errors.has('role')}]"
                   >
-                    <label>Last Name</label>
-                    <md-input
-                      v-model="last_name"
-                      data-vv-name="lastName"
-                      type="text"
-                      name="lastName"
+                    <label for="select">Role</label>
+                    <md-select
                       required
-                      v-validate="modelValidations.lastName"
-                    ></md-input>
+                      v-model="member_role"
+                      name="select"
+                      data-vv-name="role"
+                      v-validate="modelValidations.role"
+                    >
+                      <md-option value="co_producer">Co-Producer</md-option>
+                      <md-option value="manager">Manager</md-option>
+                      <md-option value="team_leader">Team Leader</md-option>
+                      <md-option value="employee">Employee</md-option>
+                      <md-option value="Guest">Guest</md-option>
+                    </md-select>
                     <slide-y-down-transition>
-                      <md-icon class="error" v-show="errors.has('lastName')">close</md-icon>
+                      <md-icon class="error" v-show="errors.has('role')">close</md-icon>
+                    </slide-y-down-transition>
+                    <slide-y-down-transition>
+                      <md-icon class="success" v-show="!errors.has('role') && touched.role">done</md-icon>
+                    </slide-y-down-transition>
+                    <span class="md-error" v-if="errors.has('role')">{{ errors.first('role') }}</span>
+                  </md-field>
+                </div>
+                <div class="md-layout-item md-size-95 md-small-size-100">
+                  <md-field
+                    :class="[
+                            {'md-valid': !errors.has('permissions') && touched.permissions},
+                            {'md-error': errors.has('permissions')}]"
+                  >
+                    <label for="select">Permissions</label>
+                    <md-select
+                      required
+                      v-model="permission"
+                      data-vv-name="permissions"
+                      v-validate="modelValidations.permissions"
+                      id="permissions"
+                      name="select"
+                      multiple
+                    >
+                      <md-option value="sign_off">Sign-Off</md-option>
+                      <md-option value="edit">Edit</md-option>
+                      <md-option value="create">Create</md-option>
+                      <md-option value="request_budget">Request Budget</md-option>
+                      <md-option value="View">View</md-option>
+                      <md-option value="Vote">Vote</md-option>
+                    </md-select>
+                    <slide-y-down-transition>
+                      <md-icon class="error" v-show="errors.has('permissions')">close</md-icon>
                     </slide-y-down-transition>
                     <slide-y-down-transition>
                       <md-icon
                         class="success"
-                        v-show="!errors.has('lastName') && touched.lastName"
+                        v-show="!errors.has('permissions') && touched.permissions"
                       >done</md-icon>
                     </slide-y-down-transition>
+                    <span
+                      class="md-error"
+                      v-if="errors.has('permissions')"
+                    >{{ errors.first('permissions') }}</span>
                   </md-field>
                 </div>
               </div>
-              <div class="md-layout-item md-size-95 md-small-size-100 mb25">
-                <md-field
-                  class="height-auto"
-                  :class="[
-                          {'md-valid': !errors.has('email') && touched.email},
-                          {'md-error': errors.has('email')}]"
-                >
-                  <label>Email</label>
-                  <md-textarea
-                    v-if="!this.editMode"
-                    v-model="emailAddress"
-                    data-vv-name="email"
-                    type="email"
-                    name="email"
-                    required
-                    rows="3"
-                    v-validate="modelValidations.email"
-                  ></md-textarea>
-                  <md-input
-                    v-else
-                    v-model="emailAddress"
-                    data-vv-name="email"
-                    type="email"
-                    name="email"
-                    required
-                    v-validate="modelValidations.email"
-                  ></md-input>
-                  <slide-y-down-transition>
-                    <md-icon class="error" v-show="errors.has('email')">close</md-icon>
-                  </slide-y-down-transition>
-                  <slide-y-down-transition>
-                    <md-icon class="success" v-show="!errors.has('email') && touched.email">done</md-icon>
-                  </slide-y-down-transition>
-
-                  <span class="md-error" v-if="errors.has('email')">{{ errors.first('email') }}</span>
-                </md-field>
-              </div>
-
-              <div class="md-layout-item md-size-95 md-small-size-100">
-                <md-field
-                  :class="[
-                          {'md-valid': !errors.has('role') && touched.role},
-                          {'md-error': errors.has('role')}]"
-                >
-                  <label for="select">Role</label>
-                  <md-select
-                    required
-                    v-model="member_role"
-                    name="select"
-                    data-vv-name="role"
-                    v-validate="modelValidations.role"
-                  >
-                    <md-option value="co_producer">Co-Producer</md-option>
-                    <md-option value="manager">Manager</md-option>
-                    <md-option value="team_leader">Team Leader</md-option>
-                    <md-option value="employee">Employee</md-option>
-                    <md-option value="Guest">Guest</md-option>
-                  </md-select>
-                  <slide-y-down-transition>
-                    <md-icon class="error" v-show="errors.has('role')">close</md-icon>
-                  </slide-y-down-transition>
-                  <slide-y-down-transition>
-                    <md-icon class="success" v-show="!errors.has('role') && touched.role">done</md-icon>
-                  </slide-y-down-transition>
-                  <span class="md-error" v-if="errors.has('role')">{{ errors.first('role') }}</span>
-                </md-field>
-              </div>
-              <div class="md-layout-item md-size-95 md-small-size-100">
-                <md-field
-                  :class="[
-                          {'md-valid': !errors.has('permissions') && touched.permissions},
-                          {'md-error': errors.has('permissions')}]"
-                >
-                  <label for="select">Permissions</label>
-                  <md-select
-                    required
-                    v-model="permission"
-                    data-vv-name="permissions"
-                    v-validate="modelValidations.permissions"
-                    id="permissions"
-                    name="select"
-                    multiple
-                  >
-                    <md-option value="sign_off">Sign-Off</md-option>
-                    <md-option value="edit">Edit</md-option>
-                    <md-option value="create">Create</md-option>
-                    <md-option value="request_budget">Request Budget</md-option>
-                    <md-option value="View">View</md-option>
-                    <md-option value="Vote">Vote</md-option>
-                  </md-select>
-                  <slide-y-down-transition>
-                    <md-icon class="error" v-show="errors.has('permissions')">close</md-icon>
-                  </slide-y-down-transition>
-                  <slide-y-down-transition>
-                    <md-icon
-                      class="success"
-                      v-show="!errors.has('permissions') && touched.permissions"
-                    >done</md-icon>
-                  </slide-y-down-transition>
-                  <span
-                    class="md-error"
-                    v-if="errors.has('permissions')"
-                  >{{ errors.first('permissions') }}</span>
-                </md-field>
-              </div>
             </div>
           </div>
-        </div>
-        <div>
-          <md-button class="move-left md-rose md-simple" @click="closeModal">Close</md-button>
-          <md-button
-            native-type="validated"
-            class="md-success"
-            @click="sendInvitatio"
-          >{{ modalSubmitTitle }}</md-button>
+          <div>
+                <md-button class="move-left md-rose md-simple" @click="closeModal">Close</md-button>
+                <md-button
+                  native-type="validated"
+                  class="md-success"
+                  @click="sendInvitatio"
+                >{{ modalSubmitTitle }}</md-button>
+              </div>
         </div>
       </div>
     </div>
