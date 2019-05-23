@@ -171,6 +171,8 @@
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+import Calendar from '@/models/Calendar';
+import CalendarEvent from '@/models/CalendarEvent';
 
 import EventModal from "../../app/Events/EventModal/";
 import EventPlannerVuexModule from '../../app/Events/EventPlanner.vuex';
@@ -207,7 +209,8 @@ export default {
   },
   data() {
     return {
-      auth: auth
+      auth: auth,
+        event : null
     }
   },
   methods: {
@@ -223,10 +226,17 @@ export default {
         this.$sidebar.displaySidebar(false);
       }
     },openEventModal() {
-          this.$router.push({ path: `/events` , name  : 'Events', params : { mode : 'create-event'} });
-          this.setEventModal({ showModal: true });
-          this.setModalSubmitTitle("Save");
-          this.setEditMode({ editMode: false });
+          //this.$router.push({ path: `/events` , name  : 'Events', params : { mode : 'create-event'} });
+          this.setModalSubmitTitle("Create");
+
+          window.currentPanel = this.$showPanel({
+              component: EventModal,
+              cssClass: 'md-layout-item md-size-45 transition36 bg-grey',
+              openOn: 'right',
+              props: {}
+          });
+
+
       }
 
   },
@@ -234,6 +244,8 @@ export default {
         this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
     },
   mounted() {
+
+
     /*  NEET CODE REVIEW !!!!!!!!!!!!!!!!!!!!*/
 
     // this.auth.currentUser(this, true, function(){
