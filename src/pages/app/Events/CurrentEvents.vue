@@ -81,18 +81,20 @@
               <div>
                 <div class="md-caption title-text">Remaining budget per employee</div>
                 <!-- TODO Need calculate with components -->
-                <div class="md-caption title-text title-budget-prise">${{totalRemainingBudget}}</div>
+                <div class="md-caption title-text title-budget-prise">
+                  <animated-number ref="budgetPerPersonNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
+                </div>
               </div>
               <div>
                 <div class="md-caption title-text">Budget per employee</div>
                 <div class="md-caption title-text title-budget-prise">
-                  <animated-number ref="budgetPerPersonNumber" :value="budgetPerEmployee" prefix="$"></animated-number>
+                  <animated-number ref="budgetPerPersonNumber" :value="calendarEvent.budgetPerPerson" prefix="$"></animated-number>
                 </div>
               </div>
               <div>
                 <div class="md-caption title-text">Total budget for the event</div>
                 <div class="md-caption title-text title-budget-prise">
-                  <animated-number ref="totalBudgetNumber" :value="calendarEvent.totalBudget" prefix="$"></animated-number>
+                  <animated-number ref="totalBudgetNumber" :value="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants" prefix="$"></animated-number>
                 </div>
               </div>
             </div>
@@ -185,10 +187,6 @@
     <div v-else-if="event &&  routeName === 'InviteesManagement' " class="md-layout-item block-flex">
       <invitees-management :event="event" :event-components="selectedComponents"></invitees-management>
     </div>
-
-    <!-- New Event Modal -->
-    <event-modal @refresh-events="refreshEvents" :currentEvent="calendarEvent" ref="eventModal"></event-modal>
-    <!-- ./New Event Modal -->
 
     <!--<sticky-budget :event="event" v-if="routeName !== 'EditEvent' && routeName !== 'EditBuildingBlocks'"></sticky-budget>-->
 
@@ -343,10 +341,10 @@
 
         new CalendarEventStatistics().for(calendar, event).get()
           .then(resp => {
-            this.totalRemainingBudget = evt.totalBudget - resp[0].totalAllocatedBudget;
+            this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget;//evt.totalBudget - resp[0].totalAllocatedBudget;
             this.percentage = 100 - ((resp[0].totalAllocatedBudget / evt.totalBudget) * 100).toFixed(2);
             this.seriesData = [(100 - this.percentage), this.percentage];
-            this.budgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants;
+            this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
 
           })
           .catch(error => {

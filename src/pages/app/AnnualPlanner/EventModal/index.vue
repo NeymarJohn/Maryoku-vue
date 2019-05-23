@@ -454,7 +454,7 @@
         editedEvent.status = this.eventData.status;
         editedEvent.currency = this.currency;
         editedEvent.eventType = this.eventType;
-        editedEvent.category = this.category;
+        editedEvent.category = "CompanyDays";
         editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
@@ -523,7 +523,7 @@
           status: this.eventData.status,
           currency: this.currency,
           eventType: this.eventType,
-          category: this.category,
+          category: "CompanyDays",
           edittable: true,
           participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         }).for(_calendar).save().then(response => {

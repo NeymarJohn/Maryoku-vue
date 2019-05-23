@@ -7,7 +7,9 @@
           <vue-element-loading :active="loading" spinner="ring" color="#FF547C"/>
           <div>&nbsp;</div>
           <md-list>
-            <md-list-item>abc</md-list-item>
+            <md-list-item v-for="tenant in tenantIds" :key="tenant">
+              <a :href="tenantUrl(tenant)">{{tenant}}</a>
+            </md-list-item>
           </md-list>
         </div>
       </signup-card>
@@ -20,6 +22,7 @@ import { SignupCard } from "@/components";
 import auth from "@/auth";
 import VueElementLoading from 'vue-element-loading';
 import Tenant from '@/models/Tenant';
+import TenantUser from '@/models/TenantUser';
 
 export default {
   components: {
@@ -47,8 +50,10 @@ export default {
               this.loading = true;
               document.location.href=`${document.location.protocol}//${this.workspace}${tenantId}.262days.com:${document.location.port}`;
             } else {
-              this.error = "Failed"
+              this.$router.push({name: "SignIn"});
             }
+          }).catch(()=>{
+            this.$router.push({name: "SignIn"});
           });
 
           /*this.auth.signupOrSignin(this, this.email, this.password, (data) => {
@@ -98,18 +103,30 @@ export default {
           });
         }.bind(this), 500);
       }
+    },
+    tenantUrl(tenant){
+      //${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=
+      let hostname = document.location.hostname;
+      if (hostname.startsWith("app.262days.com")){
+        hostname = '262days.com';
+      }
+      return `${document.location.protocol}//${tenant}.${hostname}:${document.location.port}/#/signedin?token=${this.auth.getToken()}`;
     }
   },
   created() {
-    //const givenToken = this.$route.query.token;
-    //this.auth.setToken(givenToken);
-    //this.auth.currentUser(this, true);
-    /*let tenantId = document.location.hostname.replace(".262days.com","");
-    new Tenant().find(tenantId).then(res =>{
-      if (!res.status){
-        this.$router.push({name:"CreateWorkspace"});
+
+  },
+  mounted(){
+    this.loading = true;
+    new TenantUser().find(this.auth.getToken()).then(res => {
+      if (res.status){
+        this.tenantIds = res.tenantIds;
+      } else {
+        that.$router.push({name: 'CreateWorkspace'});
       }
-    });*/
+
+      this.loading = false;
+    });
   },
   watch: {
     email() {
@@ -121,6 +138,7 @@ export default {
   },
   data() {
     return {
+      tenantIds: [],
       error: '',
       workspace: '',
       loading: false,
