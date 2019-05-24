@@ -8,8 +8,7 @@
           <div>&nbsp;</div>
           <md-list>
             <md-list-item v-for="tenant in tenantIds" :key="tenant">
-              <md-list-item>abc</md-list-item>
-              <a :href="tenantUrl(tenant)">{{tenant}}</a>
+              <md-list-item><a :href="tenantUrl(tenant)">{{tenant}}</a></md-list-item>
             </md-list-item>
           </md-list>
         </div>

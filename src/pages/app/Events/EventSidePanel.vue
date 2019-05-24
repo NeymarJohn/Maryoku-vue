@@ -491,9 +491,9 @@
         });
       },
       createEvent() {
-        let calendarId = this.auth.user.defaultCalendarId
+        let calendarId = this.auth.user.defaultCalendarId;
         let _calendar = new Calendar({ id: calendarId});
-        let catObject = _.find(this.occasionsOptions, (el => el.value === editedEvent.occasion)) || {category: "CompanyDays"};
+        let catObject = _.find(this.occasionsOptions, (el => el.value === this.eventData.occasion)) || {category: "CompanyDays"};
         this.category = catObject.category;
 
         let newEvent = new CalendarEvent({
