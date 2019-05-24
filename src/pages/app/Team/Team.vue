@@ -48,6 +48,7 @@ import teamVuexModule from "./team.vuex";
 import VueElementLoading from "vue-element-loading";
 import { Pagination } from "@/components";
 import { paginationMixin } from "@/mixins/pagination";
+
 export default {
   components: {
     InviteModal,

@@ -56,6 +56,7 @@ import Teams from "@/models/Teams";
 import TeamMembers from "@/models/TeamMembers";
 import indexVuexModule from "@/store/index";
 import auth from '@/auth';
+import _ from 'underscore';
 
 export default {
   components: {
