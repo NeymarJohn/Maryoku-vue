@@ -121,11 +121,11 @@ export default {
         .limit(this.pagination.limit)
         .get()
         .then(members => {
-          let result = members[0].results.filter(function(item, pos) {
+          /*let result = members[0].results.filter(function(item, pos) {
             return item.id != currentUserId;
-          });
+          });*/
 
-          this.teamMembers = result;
+          this.teamMembers = members[0].results;
           this.updatePagination(members[0].model);
           this.teamMembersLoading = false;
         });
