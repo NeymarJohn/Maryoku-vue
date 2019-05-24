@@ -1,7 +1,7 @@
 <template>
     <div class="invitees-management">
         <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
-        <md-button name="event-planner-tab-invitees-management-event-page" class="event-planner-tab-invitees-management-event-page md-info" @click="goToComponent('')">
+        <md-button name="event-planner-tab-invitees-management-event-page" class="md-info" @click="goToComponent('')">
             Event Page
         </md-button>
 
@@ -16,7 +16,7 @@
                     </md-card-header>
                     <md-card-content>
                         <md-button name="event-planner-tab-invitees-management-manage-groups"
-                                   class="event-planner-tab-invitees-management-manage-groups md-info pull-right md-sm" @click="showManageGroupSection()">
+                                   class="md-info pull-right md-sm" @click="showManageGroupSection()">
                             Manage Groups
                         </md-button>
 

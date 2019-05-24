@@ -115,7 +115,7 @@
               <a href="#" class="md-list-item-router md-list-item-container md-button-clean dropdown">
                 <div class="md-list-item-content">
                   <drop-down direction="down" :hover="true">
-                    <md-button name="user-top-menu" slot="title" class="user-top-menu md-button md-simple" data-toggle="dropdown">
+                    <md-button name="user-top-menu" slot="title" class="md-button md-simple" data-toggle="dropdown">
                       <!--<md-icon>email</md-icon>
                       <span class="notification">5</span>
                       <p class="hidden-lg hidden-md">Notifications</p>-->
@@ -125,11 +125,11 @@
                     </md-button>
                     <ul class="dropdown-menu dropdown-menu-right">
                       <!--<li><router-link name="user-top-menu-my-profile" :to="{path: '/settings'}">My Profile</router-link></li>-->
-                      <li><a href="javascript: void(null);" name="user-top-menu-my-profile" class="user-top-menu-my-profile" @click="openMyProfile">My Profile</a></li>
-                      <li><a href="javascript: void(null);" name="user-top-menu-account-settings" class="user-top-menu-account-settings" @click="openAccountSettings">My Company</a></li>
-                      <li><router-link name="user-top-menu-my-profile" class="user-top-menu-my-profile" :to="{path: '/team'}">Manage Team</router-link></li>
+                      <li><a href="javascript: void(null);" name="user-top-menu-my-profile" @click="openMyProfile">My Profile</a></li>
+                      <li><a href="javascript: void(null);" name="user-top-menu-account-settings" @click="openAccountSettings">My Company</a></li>
+                      <li><router-link name="user-top-menu-my-profile" :to="{path: '/team'}">Manage Team</router-link></li>
                       <li class="divider"></li>
-                      <li><router-link name="user-top-menu-sign-out" class="user-top-menu-sign-out" :to="{path: '/signout'}">Sign Out</router-link></li>
+                      <li><router-link name="user-top-menu-sign-out" :to="{path: '/signout'}">Sign Out</router-link></li>
                     </ul>
                   </drop-down>
                 </div>

@@ -7,7 +7,7 @@
     </div>
     <div class="md-layout-item md-size-95" style="max-height: 90vh; ">
       <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
-        {{this.editMode ? "Edit Event" : "Create Event" }}
+        Create Event
       </h4>
 
       <div class="md-layout" style="overflow: auto; max-height: 90vh; margin-top: 24px;">
@@ -180,8 +180,6 @@
   import swal from "sweetalert2";
   import { error } from 'util';
   import moment from 'moment';
-  import _ from "underscore";
-  import AnnualPlannerVuexModule from '../AnnualPlanner/AnnualPlanner.vuex';
 
   export default {
     props: {
@@ -237,8 +235,6 @@
     }),
 
     created() {
-      this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule);
-
       [...Array(12).keys()].map(x => x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined);
       [...Array(12).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`));
       [...Array(8).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`));
@@ -386,8 +382,6 @@
       this.$root.$on('submitForm', () => {
         this.validateEvent();
       });
-
-      this.$root.$emit("create-event-panel-open");
     },
     methods: {
       ...mapMutations('AnnualPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
@@ -424,6 +418,7 @@
       updateEvent() {
         let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
         let editedEvent = new CalendarEvent({id: this.eventData.id});
+
         editedEvent.title = this.title;
         editedEvent.occasion = this.occasion;
         editedEvent.eventStartMillis = this.getEventStartInMillis();
@@ -434,9 +429,7 @@
         editedEvent.currency = this.currency;
         editedEvent.eventType = this.eventType;
         editedEvent.participantsType = this.participantsType;
-        let catObject = _.find(this.occasionsOptions, (el => el.value === editedEvent.occasion)) || {category: "CompanyDays"};
-        this.category = catObject.category;
-        editedEvent.category = catObject.category;
+        editedEvent.category = this.occasion;
        // editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
@@ -491,10 +484,8 @@
         });
       },
       createEvent() {
-        let calendarId = this.auth.user.defaultCalendarId;
+        let calendarId = this.auth.user.defaultCalendarId
         let _calendar = new Calendar({ id: calendarId});
-        let catObject = _.find(this.occasionsOptions, (el => el.value === this.eventData.occasion)) || {category: "CompanyDays"};
-        this.category = catObject.category;
 
         let newEvent = new CalendarEvent({
           calendar: {id: calendarId},
@@ -508,7 +499,7 @@
           currency: this.currency,
           eventType: this.eventType,
           participantsType: this.participantsType,
-          category: this.category,
+          category: this.occasion,
           edittable: true,
         //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         }).for(_calendar).save().then(response => {
@@ -517,6 +508,7 @@
           this.closePanel();
           //this.$emit("refresh-events");
           this.$router.push({ name: 'EditBuildingBlocks', params: {id: response.id} })
+
         })
           .catch((error) => {
             console.log(error);
@@ -562,7 +554,6 @@
         this.editTitle = false;
         this.clearForm();
         this.$emit("closePanel");
-        this.$root.$emit("create-event-panel-closed");
       }
     },
     watch: {

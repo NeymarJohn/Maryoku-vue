@@ -19,7 +19,7 @@
                             </div>
                             <h4 class="title2">{{block.componentId}}</h4>
                             <md-card-actions md-alignment="right" class="item-actions">
-                                <md-button name="event-planner-tab-budget-building-block-delete" class="event-planner-tab-budget-building-block-delete md-button md-simple md-sm" @click="deleteBlock(block.id)">
+                                <md-button name="event-planner-tab-budget-building-block-delete" class="md-button md-simple md-sm" @click="deleteBlock(block.id)">
                                     <md-icon>delete_outline</md-icon>
                                 </md-button>
                             </md-card-actions>
@@ -40,14 +40,14 @@
                                         <md-input type="number" placeholder="Example : $1400" v-model="block.allocatedBudget"></md-input>
                                     </md-field>
                                     <div class="md-layout-item md-size-30 ">
-                                        <md-button name="event-planner-tab-budget-building-block-set-budget" class="event-planner-tab-budget-building-block-set-budget md-info md-sm" @click="setBudget(block,index)">Set Budget</md-button>
+                                        <md-button name="event-planner-tab-budget-building-block-set-budget" class="md-info md-sm" @click="setBudget(block,index)">Set Budget</md-button>
                                     </div>
                                 </div>
                             </div>
                         </md-card-content>
 
                         <md-card-actions md-alignment="right" v-if="!block.edit">
-                            <md-button name="event-planner-tab-budget-building-block-create-inquiry" class="event-planner-tab-budget-building-block-create-inquiry md-success md-sm" @click="selectBlock(block)">Create Inquiry</md-button>
+                            <md-button name="event-planner-tab-budget-building-block-create-inquiry" class="md-success md-sm" @click="selectBlock(block)">Create Inquiry</md-button>
                         </md-card-actions>
                     </md-card>
 
@@ -66,6 +66,42 @@
                 <!-- ./Add Block -->
 
             </md-card-content>
+
+
+            <md-card>
+                <md-card-header class="md-card-header-icon md-card-header-info">
+                    <div class="card-icon">
+                        <md-icon>assignment</md-icon>
+                    </div>
+                    <h4 class="title">Event Building Blocks</h4>
+                </md-card-header>
+                <md-card-content>
+                    <md-table v-model="tableData" table-header-color="blue" class="event-building-blocks_table">
+                        <md-table-row slot="md-table-row" slot-scope="{ item }" :class="{parent : item.is_parent}">
+                            <md-table-cell md-label="Expanse" >{{ item.componentId }}</md-table-cell>
+                            <md-table-cell md-label="Requirements">
+                                <template v-if="!item.is_parent">
+                                    {{`${item.requirements.length} selected`}} <md-button class="md-danger md-simple md-sm md-just-icon"><md-icon>edit</md-icon></md-button>
+                                </template>
+                            </md-table-cell>
+                            <md-table-cell md-label="Allocated budget">{{ `$${item.allocatedBudget}` }}</md-table-cell>
+                            <md-table-cell md-label="Actual cost">
+                                <template v-if="item.is_wining">
+                                    <md-button class="md-success md-simple actual-cost" >{{ `$${item.wininig.budget}`}} <md-button class="md-success md-simple md-sm md-just-icon wining-budget"><md-icon>open_in_new</md-icon></md-button></md-button>
+                                </template>
+                                <template v-else-if="item.values && item.values.length" >
+                                    <md-button class="md-sm md-info">Review proposals ({{item.values.length}})</md-button>
+                                </template>
+                                <template v-else-if="!item.is_parent">
+                                    <div class="waiting-label">Waiting for proposals</div>
+                                </template>
+                            </md-table-cell>
+                            <md-table-cell md-label="Comments">{{ item.comments }}</md-table-cell>
+                        </md-table-row>
+                    </md-table>
+                </md-card-content>
+            </md-card>
+
         </div>
         <div class="md-layout-item md-size-100" v-else>
             <event-blocks :event="event" :event-components="eventComponents" :selectedBlock="selectedBlock" @go-to-building-blocks="resetSelectedBlock"></event-blocks>
@@ -106,7 +142,165 @@
         isLoading:true,
         buildingBlocksList : [],
         selectedBlock : null,
-        categoryBuildingBlocks : []
+        categoryBuildingBlocks : [],
+        tableData: [
+            {
+                is_parent : true,
+                componentId : 'Food',
+                allocatedBudget : 1700
+            },
+            {
+                componentId: 'Carting',
+                requirements: [],
+                allocatedBudget: 1000,
+                is_wining: true,
+                values : [
+                    {
+                        title : ''
+                    },
+                    {
+                        title : ''
+                    }
+                ],
+                wininig : {
+                    id: 123343123,
+                    budget : 1200
+                }
+            },
+            {
+                componentId: 'Bar',
+                requirements: [
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    },
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    },
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    },
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    }
+                ],
+                allocatedBudget: 500,
+                is_wining: false,
+                values : [
+                    {
+                        title : ''
+                    },
+                    {
+                        title : ''
+                    }
+                ]
+            },
+            {
+                componentId: 'Coffee',
+                requirements: [
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    },
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    },
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    },
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    }
+                ],
+                allocatedBudget: 200,
+                is_wining: false,
+                values : []
+            },
+            {
+                is_parent : true,
+                componentId : 'Venue',
+                allocatedBudget : 1700
+            },
+            {
+                componentId: 'Carting',
+                requirements: [],
+                allocatedBudget: 1000,
+                is_wining: true,
+                values : [
+                    {
+                        title : ''
+                    },
+                    {
+                        title : ''
+                    }
+                ],
+                wininig : {
+                    id: 123343123,
+                    budget : 1200
+                }
+            },
+            {
+                componentId: 'Bar',
+                requirements: [
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    },
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    },
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    },
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    }
+                ],
+                allocatedBudget: 500,
+                is_wining: false,
+                values : [
+                    {
+                        title : ''
+                    },
+                    {
+                        title : ''
+                    }
+                ]
+            },
+            {
+                componentId: 'Coffee',
+                requirements: [
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    },
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    },
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    },
+                    {
+                        title :  'title here',
+                        priority : 'Must Have'
+                    }
+                ],
+                allocatedBudget: 200,
+                is_wining: false,
+                values : []
+            }
+        ],
 
     }),
     methods: {
