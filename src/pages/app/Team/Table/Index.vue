@@ -55,6 +55,7 @@ import swal from "sweetalert2";
 import Teams from "@/models/Teams";
 import TeamMembers from "@/models/TeamMembers";
 import indexVuexModule from "@/store/index";
+import auth from '@/auth';
 
 export default {
   components: {
