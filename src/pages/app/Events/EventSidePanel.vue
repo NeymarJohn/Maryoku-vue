@@ -180,6 +180,7 @@
   import swal from "sweetalert2";
   import { error } from 'util';
   import moment from 'moment';
+  import _ from "underscore";
 
   export default {
     props: {
@@ -382,6 +383,8 @@
       this.$root.$on('submitForm', () => {
         this.validateEvent();
       });
+
+      this.$root.$emit("create-event-panel-open");
     },
     methods: {
       ...mapMutations('AnnualPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
@@ -428,7 +431,9 @@
         editedEvent.currency = this.currency;
         editedEvent.eventType = this.eventType;
         editedEvent.participantsType = this.participantsType;
-        editedEvent.category = this.occasionsOptions[this.occasionsList.indexOf(this.occasion)].category;
+        let catObject = _.find(this.occasionsOptions, (el => el.value === editedEvent.occasion)) || {category: "CompanyDays"};
+        this.category = catObject.category;
+        editedEvent.category = catObject.category;
        // editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
@@ -485,7 +490,9 @@
       createEvent() {
         let calendarId = this.auth.user.defaultCalendarId
         let _calendar = new Calendar({ id: calendarId});
-        let catIndex = this.occasionsList.indexOf(this.occasion)
+        let catObject = _.find(this.occasionsOptions, (el => el.value === editedEvent.occasion)) || {category: "CompanyDays"};
+        this.category = catObject.category;
+
         let newEvent = new CalendarEvent({
           calendar: {id: calendarId},
           title: this.title,
@@ -498,7 +505,7 @@
           currency: this.currency,
           eventType: this.eventType,
           participantsType: this.participantsType,
-          category: catIndex > -1 ?  this.occasionsOptions[catIndex].category : "CompanyDays",
+          category: this.category,
           edittable: true,
         //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         }).for(_calendar).save().then(response => {
@@ -506,8 +513,7 @@
           this.$parent.isLoading = false;
           this.closePanel();
           //this.$emit("refresh-events");
-          this.$router.push({ name: 'EditEvent', params: {id: response.id} })
-
+          this.$router.push({ name: 'EditBuildingBlocks', params: {id: response.id} })
         })
           .catch((error) => {
             console.log(error);
@@ -546,13 +552,14 @@
         this.occasion = this.occasion.substring(0, this.occasion.length -1)
       },
       openEventPlanner() {
-        this.$router.push({ name: 'EditEvent', params: {id: this.id }});
+        this.$router.push({ name: 'EditBuildingBlocks', params: {id: this.id }});
       },
       closePanel(){
         this.setEventModal(false);
         this.editTitle = false;
         this.clearForm();
         this.$emit("closePanel");
+        this.$root.$emit("create-event-panel-closed");
       }
     },
     watch: {

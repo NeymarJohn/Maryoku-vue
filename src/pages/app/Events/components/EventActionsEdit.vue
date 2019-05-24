@@ -3,7 +3,7 @@
     <div class="flex-end">
       <label style="display: none;">Status: </label>
       <md-field class="status-select" style="display: none;">
-        <md-select v-model="status" name="event-status" @md-selected="changeFormStatus($event)">
+        <md-select v-model="status" name="event-status" class="event-status" @md-selected="changeFormStatus($event)">
           <md-option value="draft">Draft</md-option>
           <md-option value="approved">Approved</md-option>
           <md-option value="execution">Execution</md-option>

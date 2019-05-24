@@ -33,8 +33,8 @@
       </div>
       <md-table-cell md-label="Name">{{ item.firstName }} {{item.lastName}}</md-table-cell>
       <md-table-cell md-label="Email">{{ item.emailAddress }}</md-table-cell>
-      <md-table-cell md-label="Role">{{ item.role }}</md-table-cell>
-      <md-table-cell md-label="Permissions">{{ item.permissions }}</md-table-cell>
+      <md-table-cell md-label="Role">{{ availableRoleIdToTitle(item.role) }}</md-table-cell>
+      <md-table-cell md-label="Permissions">{{ permissionTitles(item.permissions) }}</md-table-cell>
       <md-table-cell md-label="Actions">
         <md-button @click.native="toggleEditModal(true, item)" class="md-info md-just-icon md-round">
           <md-icon>edit</md-icon>
