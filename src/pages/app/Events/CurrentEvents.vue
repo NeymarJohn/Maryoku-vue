@@ -81,18 +81,20 @@
               <div>
                 <div class="md-caption title-text">Remaining budget per employee</div>
                 <!-- TODO Need calculate with components -->
-                <div class="md-caption title-text title-budget-prise">${{totalRemainingBudget}}</div>
+                <div class="md-caption title-text title-budget-prise">
+                  <animated-number ref="budgetPerPersonNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
+                </div>
               </div>
               <div>
                 <div class="md-caption title-text">Budget per employee</div>
                 <div class="md-caption title-text title-budget-prise">
-                  <animated-number ref="budgetPerPersonNumber" :value="budgetPerEmployee" prefix="$"></animated-number>
+                  <animated-number ref="budgetPerPersonNumber" :value="calendarEvent.budgetPerPerson" prefix="$"></animated-number>
                 </div>
               </div>
               <div>
                 <div class="md-caption title-text">Total budget for the event</div>
                 <div class="md-caption title-text title-budget-prise">
-                  <animated-number ref="totalBudgetNumber" :value="calendarEvent.totalBudget" prefix="$"></animated-number>
+                  <animated-number ref="totalBudgetNumber" :value="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants" prefix="$"></animated-number>
                 </div>
               </div>
             </div>
@@ -116,11 +118,11 @@
               <li>Get proposals and choose the best offers</li>
             </ol>
 
-            <md-button name="event-planner-tab-event-details-banner-manage-proposals" class="md-info">
+            <md-button name="event-planner-tab-event-details-banner-manage-proposals" class="event-planner-tab-event-details-banner-manage-proposals md-info">
               Upload Vendors
             </md-button>
 
-            <md-button name="event-planner-tab-event-details-banner-manage-proposals" class="md-info">
+            <md-button name="event-planner-tab-event-details-banner-manage-proposals" class="event-planner-tab-event-details-banner-manage-proposals md-info">
               Select Services
             </md-button>
 
@@ -138,7 +140,7 @@
             <p>
               Organize the event in a beautiful timeline.
             </p>
-            <md-button name="event-planner-tab-event-details-banner-timeline" class="md-rose md-simple got-to-component-btn" @click="goToComponent('/edit/timeline')">
+            <md-button name="event-planner-tab-event-details-banner-timeline" class="event-planner-tab-event-details-banner-timeline md-rose md-simple got-to-component-btn" @click="goToComponent('/edit/timeline')">
               Edit Event Timeline <md-icon>arrow_forward</md-icon>
             </md-button>
           </md-card-content>
@@ -152,7 +154,7 @@
               Select invitees, send scheduled RSVP and messages.
             </p>
 
-            <md-button name="event-planner-tab-event-details-banner-invitees" class="md-rose md-simple got-to-component-btn" @click="goToComponent('/edit/invitees-management')">
+            <md-button name="event-planner-tab-event-details-banner-invitees" class="event-planner-tab-event-details-banner-invitees md-rose md-simple got-to-component-btn" @click="goToComponent('/edit/invitees-management')">
               Manage Invitees <md-icon>arrow_forward</md-icon>
             </md-button>
           </md-card-content>
@@ -166,7 +168,7 @@
               and send to invitees.
             </p>
 
-            <md-button name="event-planner-tab-event-details-banner-event-page" class="md-rose md-simple got-to-component-btn" @click="goToComponent('')">
+            <md-button name="event-planner-tab-event-details-banner-event-page" class="event-planner-tab-event-details-banner-event-page md-rose md-simple got-to-component-btn" @click="goToComponent('')">
               Edit Event page <md-icon>arrow_forward</md-icon>
             </md-button>
           </md-card-content>
@@ -339,10 +341,10 @@
 
         new CalendarEventStatistics().for(calendar, event).get()
           .then(resp => {
-            this.totalRemainingBudget = evt.totalBudget - resp[0].totalAllocatedBudget;
+            this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget;//evt.totalBudget - resp[0].totalAllocatedBudget;
             this.percentage = 100 - ((resp[0].totalAllocatedBudget / evt.totalBudget) * 100).toFixed(2);
             this.seriesData = [(100 - this.percentage), this.percentage];
-            this.budgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants;
+            this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
 
           })
           .catch(error => {

@@ -43,7 +43,7 @@
                             <div class="upload-box_btn form-group">
                               <label for="csv_file" class="control-label col-sm-3 text-right">Browse</label>
                               <div class="col-sm-9">
-                                <input type="file" id="csv_file" @change="(e) => sendCSVFile(e.target.files[0])" name="csv_file" class="form-control">
+                                <input type="file" id="csv_file" @change="(e) => sendCSVFile(e.target.files[0])" name="csv_file" class="csv_file form-control">
                               </div>
                             </div>
 
