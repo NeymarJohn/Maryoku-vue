@@ -127,7 +127,7 @@
     AnimatedNumber,
     LabelEdit
   } from "@/components";
-  import ChartCard from '../../../../../two62-manage/src/components/UIComponents/Cards/ChartCard';
+
 
   export default {
     name: 'budget-panel',
