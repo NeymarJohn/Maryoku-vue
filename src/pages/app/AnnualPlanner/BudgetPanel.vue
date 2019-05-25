@@ -2,7 +2,7 @@
   <div style="height: 100%; margin: 0; padding: 0;">
     <md-card class="budget-panel" style="height: 100%; margin: 0; padding: 0;">
       <md-card-header class="md-card-header-icon md-card-header-blue">
-        <div class="card-icon" style="margin-right: 0;">
+        <div class="card-text" style="margin-right: 0; width: 100% !important;">
           <div style="position:relative;">
             <div style="display: grid;margin-top: 18px;">
               <chart-component
@@ -127,6 +127,7 @@
     AnimatedNumber,
     LabelEdit
   } from "@/components";
+
 
   export default {
     name: 'budget-panel',
