@@ -11,10 +11,6 @@
   margin-bottom: 16px;
 }
 
-.md-input {
-  box-shadow: none !important;
-}
-
 
 /* Tooltips  v-tooltip */
 
@@ -1715,6 +1711,49 @@ iframe{
   justify-content: space-between;
 }
 
+.event-building-blocks {
+  &_table {
+
+    .parent {
+      font-weight: bold;
+      background-color: #efefef;
+
+      .md-table-cell {
+        height: 30px !important;
+      }
+    }
+    .md-button:not(.md-just-icon) {
+      width: auto !important;
+      font-weight: bold;
+      .md-ripple {
+        font-size: 14px;
+        text-transform: initial;
+      }
+    }
+    .md-just-icon {
+      .md-ripple {
+        padding : 0 8px !important;
+      }
+      &.wining-budget {
+        margin-left : 0.3em;
+      }
+    }
+
+    .actual-cost {
+      width: auto;
+      font-weight: bold;
+      padding-left : 0 !important;
+      .md-ripple {
+        padding-left : 0 !important;
+        font-size: 15px;
+      }
+    }
+
+    .waiting-label {
+      font-weight: bold;
+    }
+  }
+}
 @media screen and (max-width : 500px) {
   .event-details {
     &_content.md-card-content {
