@@ -132,7 +132,6 @@
   export default {
     name: 'budget-panel',
     components: {
-      ChartCard,
       VueElementLoading,
       ChartComponent,
       AnimatedNumber,
