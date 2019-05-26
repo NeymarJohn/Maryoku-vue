@@ -37,9 +37,7 @@
         new TenantUser().find(givenToken).then(res => {
           if (res.status){
             if (res.tenantIds.length === 1) {
-              that.$http.defaults.headers.common['gorm-tenantid'] = res.tenantIds[0];
               that.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
-              Model.$http.defaults.headers.common['gorm-tenantid'] = res.tenantIds[0];
               Model.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
               document.location.href = `${document.location.protocol}//${res.tenantIds[0]}.${document.location.hostname}:${document.location.port}/#/signedin?token=${givenToken}`;
             } else {
@@ -59,9 +57,7 @@
           tenantId = "cheerz_dev";
         }
 
-        that.$http.defaults.headers.common['gorm-tenantid'] = tenantId;
         that.$http.defaults.headers.common.gorm_tenantid = tenantId;
-        Model.$http.defaults.headers.common['gorm-tenantid'] = tenantId;
         Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
 
         that.auth.currentUser(that, true, function () {

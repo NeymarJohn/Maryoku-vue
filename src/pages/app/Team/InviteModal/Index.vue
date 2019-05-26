@@ -35,6 +35,7 @@
                         type="text"
                         autofocus
                         name="firstName"
+                        required
                         v-validate="modelValidations.firstName"
                       ></md-input>
                       <slide-y-down-transition>
@@ -58,6 +59,7 @@
                         data-vv-name="lastName"
                         type="text"
                         name="lastName"
+                        required
                         v-validate="modelValidations.lastName"
                       ></md-input>
                       <slide-y-down-transition>
@@ -231,10 +233,12 @@ export default {
       emailArray: [],
       modelValidations: {
         firstName: {
-
+          required: true,
+          min: 2
         },
         lastName: {
-
+          required: true,
+          min: 2
         },
         email: {
           required: true
