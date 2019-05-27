@@ -6,40 +6,31 @@
             <md-card-content class="md-layout proposals-management_items">
 
                 <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33">
-                    <stats-card header-color="rose">
-                        <template slot="header">
-                            <div class="card-icon">
-                                <md-icon class="">local_atm</md-icon>
-                            </div>
+                    <md-card class="info-card">
+                        <div class="card-content">
                             <p class="category">Allocated budget</p>
-                            <h3 class="title">+<animated-number :value="event.allocatedBudget"></animated-number>
+                            <h3 class="title"><animated-number :value="event.allocatedBudget"></animated-number>
                             </h3>
-                        </template>
-                    </stats-card>
+                        </div>
+                    </md-card>
                 </div>
                 <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33">
-                    <stats-card header-color="green">
-                        <template slot="header">
-                            <div class="card-icon">
-                                <md-icon class="">attach_money</md-icon>
-                            </div>
+                    <md-card class="info-card">
+                        <div class="card-content">
                             <p class="category">Actual cost</p>
-                            <h3 class="title">+<animated-number :value="245"></animated-number>
+                            <h3 class="title"><animated-number :value="245"></animated-number>
                             </h3>
-                        </template>
-                    </stats-card>
+                        </div>
+                    </md-card>
                 </div>
                 <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33">
-                    <stats-card header-color="warning">
-                        <template slot="header">
-                            <div class="card-icon">
-                                <md-icon class="">polymer</md-icon>
-                            </div>
+                    <md-card class="info-card">
+                        <div class="card-content">
                             <p class="category">Diff</p>
-                            <h3 class="title">+<animated-number :value="245"></animated-number>
+                            <h3 class="title"><animated-number :value="245"></animated-number>
                             </h3>
-                        </template>
-                    </stats-card>
+                        </div>
+                    </md-card>
                 </div>
                 <div class="md-layout-item md-size-100" style="display : none;">
                     <h3>Select services and set budget</h3>
@@ -48,45 +39,43 @@
                     </p>
                 </div>
 
-            <md-card>
-                <md-card-header class="md-card-header-icon md-card-header-info">
-                    <div class="card-icon">
-                        <md-icon>assignment</md-icon>
-                    </div>
-                    <h4 class="title">Event Building Blocks</h4>
-                </md-card-header>
-                <md-card-content>
-                    <md-table v-model="eventBuildingBlocks" table-header-color="blue" class="event-building-blocks_table">
-                        <md-table-row slot="md-table-row" slot-scope="{ item }" :class="{parent : item.is_parent}" class="blocks-list_item">
-                            <md-table-cell md-label="Expanse" >{{ item.componentId }}</md-table-cell>
-                            <md-table-cell md-label="Requirements">
-                                <template v-if="!item.is_parent">
-                                    {{`${item.values.length} selected`}} <md-button class="md-danger md-simple md-sm md-just-icon" @click="addRequirements(item)"><md-icon>edit</md-icon></md-button>
-                                </template>
-                            </md-table-cell>
-                            <md-table-cell md-label="Allocated budget">
-                                $<label-edit :text="item.allocatedBudget"  :field-name="item.componentId"  @text-updated-blur="blockBudgetChanged" @text-updated-enter="blockBudgetChanged"></label-edit>
-                            </md-table-cell>
-                            <md-table-cell md-label="Actual cost">
-                                <template v-if="item.is_wining">
-                                    <md-button class="md-success md-simple actual-cost" >{{ `$${item.wininig.budget}`}} <md-button class="md-success md-simple md-sm md-just-icon wining-budget"><md-icon>open_in_new</md-icon></md-button></md-button>
-                                </template>
-                                <template v-else-if="item.values && item.values.length" >
-                                    <md-button class="md-sm md-info" @click="reviewProposals(item)">Review proposals ({{item.values.length}})</md-button>
-                                </template>
-                                <template v-else-if="!item.is_parent">
-                                    <div class="waiting-label" @click="reviewProposals(item)">Waiting for proposals</div>
-                                </template>
-                            </md-table-cell>
-                            <md-table-cell md-label="Comments">{{ item.comments }}</md-table-cell>
-                            <md-table-cell md-label="Actions">
-                                <md-button class="md-rose md-sm md-just-icon" @click="deleteBlock(item.id)"><md-icon>delete_outline</md-icon></md-button>
-                            </md-table-cell>
-                        </md-table-row>
-                    </md-table>
-                    <md-button class="md-default md-simple add-new-block-btn" @click="showAddBuildingBlocksModal()" style="width:100%; font-weight: bold">Add new block +</md-button>
-                </md-card-content>
-            </md-card>
+                <div class="md-layout-item md-size-100">
+                    <md-card style="margin-top : 0;">
+                        <md-card-content>
+                            <md-table v-model="eventBuildingBlocks" table-header-color="blue" class="event-building-blocks_table">
+                                <md-table-row slot="md-table-row" slot-scope="{ item }" :class="{parent : item.is_parent}" class="blocks-list_item">
+                                    <md-table-cell md-label="Expanse" >{{ item.componentId }}</md-table-cell>
+                                    <md-table-cell md-label="Requirements">
+                                        <template v-if="!item.is_parent">
+                                            {{`${item.values.length} selected`}} <md-button class="md-danger md-simple md-sm md-just-icon" @click="addRequirements(item)"><md-icon>edit</md-icon></md-button>
+                                        </template>
+                                    </md-table-cell>
+                                    <md-table-cell md-label="Allocated budget">
+                                        $<label-edit :text="item.allocatedBudget"  :field-name="item.componentId"  @text-updated-blur="blockBudgetChanged" @text-updated-enter="blockBudgetChanged"></label-edit>
+                                    </md-table-cell>
+                                    <md-table-cell md-label="Actual cost">
+                                        <template v-if="item.is_wining">
+                                            <md-button class="md-success md-simple actual-cost" >{{ `$${item.wininig.budget}`}} <md-button class="md-success md-simple md-sm md-just-icon wining-budget"><md-icon>open_in_new</md-icon></md-button></md-button>
+                                        </template>
+                                        <template v-else-if="item.values && item.values.length" >
+                                            <md-button class="md-sm md-info" @click="reviewProposals(item)">Review proposals ({{item.values.length}})</md-button>
+                                        </template>
+                                        <template v-else-if="!item.is_parent">
+                                            <div class="waiting-label" @click="reviewProposals(item)">Waiting for proposals</div>
+                                        </template>
+                                    </md-table-cell>
+                                    <md-table-cell md-label="Comments">{{ item.comments }}</md-table-cell>
+                                    <md-table-cell md-label="Actions">
+                                        <md-button class="md-rose md-sm md-just-icon" @click="deleteBlock(item.id)"><md-icon>delete_outline</md-icon></md-button>
+                                    </md-table-cell>
+                                </md-table-row>
+                            </md-table>
+                            <md-button class="md-default md-simple add-new-block-btn" @click="showAddBuildingBlocksModal()" style="width:100%; font-weight: bold">Add new block +</md-button>
+                        </md-card-content>
+                    </md-card>
+                </div>
+
+
                 </md-card-content>
         </div>
 
