@@ -57,8 +57,8 @@
                                         <template v-if="item.is_wining">
                                             <md-button class="md-success md-simple actual-cost" >{{ `$${item.wininig.budget}`}} <md-button class="md-success md-simple md-sm md-just-icon wining-budget"><md-icon>open_in_new</md-icon></md-button></md-button>
                                         </template>
-                                        <template v-else-if="item.values && item.values.length" >
-                                            <md-button class="md-sm md-info" @click="reviewProposals(item)">Review proposals ({{item.values.length}})</md-button>
+                                        <template v-else-if="item.vendors && item.vendors.length" >
+                                            <md-button class="md-sm md-info" @click="reviewProposals(item)">Review proposals ({{item.vendors.length}})</md-button>
                                         </template>
                                         <template v-else-if="!item.is_parent">
                                             <div class="waiting-label" @click="reviewProposals(item)">Waiting for proposals</div>

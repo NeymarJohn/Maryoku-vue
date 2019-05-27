@@ -1,13 +1,46 @@
 <template>
     <div class="adding-building-blocks-panel">
+        <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
         <div class="md-layout">
-            <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
+            <h4 class="md-title md-layout-item md-size-100" style="margin-bottom: 0; line-height: 51px; width:100%;">
                 <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon"><md-icon>arrow_back</md-icon></md-button>
                 Requirements List
+
+                <div class="pull-right">
+                    <md-button class="md-info"  @click="addNewValue">Add Requirement</md-button>
+                    <md-button class="md-info" @click="saveAllValues">Save</md-button>
+                </div>
+
             </h4>
             <div class="md-layout-item md-size-100">
-                <md-card>
+                <md-card >
+
                     <md-card-content>
+                        <md-table v-if="eventBlocks.length"  v-model="eventBlocks"  table-header-color="orange" class="requirements-table">
+                            <md-table-row slot="md-table-row" slot-scope="{ item }" :key="eventBlocks.indexOf(item)"   >
+                                <md-table-cell md-label="Description"  >
+                                    <label-edit :text="item.title"  :field-name="item.id"  @text-updated-blur="requirementChanged" @text-updated-enter="requirementChanged"></label-edit>
+                                </md-table-cell>
+                                <md-table-cell md-label="Priority">
+                                    <label-edit :text="item.priority"  :field-name="item.id"  @text-updated-blur="priorityChanged" @text-updated-enter="priorityChanged"></label-edit>
+
+                                </md-table-cell>
+
+                                <md-table-cell md-label="Actions">
+                                    <md-button  class="md-danger md-sm md-just-icon"  @click="deleteValue(item.id)">
+                                        <md-icon>delete_outline</md-icon>
+                                    </md-button>
+                                </md-table-cell>
+
+                            </md-table-row>
+
+           </md-table>
+                        <div v-else>
+                            No Requirements
+                        </div>
+                    </md-card-content>
+
+                    <md-card-content style="display: none;">
                         <div class="blocks-list_item md-layout" v-for="(block,index) in eventBlocks">
                             <div class="md-layout-item md-size-100">
                                 <md-field >
@@ -28,26 +61,11 @@
                                     </md-select>
                                 </md-field>
                             </div>
-
-                            <div class="md-layout-item md-size-50 block-actions">
-                                <md-button  class="md-info md-sm md-just-icon md-simple"  @click="editValue(block)">
-                                    <md-icon>create</md-icon>
-                                </md-button>
-                                <md-button  class="md-danger md-sm md-just-icon md-simple"  @click="deleteValue(block.id)">
-                                    <md-icon>delete_outline</md-icon>
-                                </md-button>
-                            </div>
                         </div>
                     </md-card-content>
                 </md-card>
-            </div>
-            <div class="md-layout-item md-size-100">
-                <div class="pull-right">
-                    <md-button class="md-info"  @click="addNewValue">Add Requirement</md-button>
-                    <md-button class="md-info" @click="saveAllValues">Save</md-button>
-                </div>
-            </div>
 
+            </div>
         </div>
 
     </div>
@@ -66,10 +84,14 @@
     import _ from "underscore";
     import MdCardContent from "../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue";
 
+    import {LabelEdit} from '@/components';
+
+
     export default {
         components: {
             MdCardContent,
             VueElementLoading,
+            LabelEdit
         },
         props: {
             event: Object,
@@ -77,7 +99,7 @@
         },
         data: () => ({
             auth: auth,
-            isLoaded : false,
+            isLoading : false,
             eventBlocks : [],
             prioritiesList : [
                 {
@@ -101,7 +123,6 @@
         mounted() {
 
             this.getBuildingBlockValues();
-
         },
         methods: {
             closePanel(){
@@ -118,7 +139,7 @@
             },
             addNewValue(){
 
-                this.$parent.isLoading = true;
+                this.isLoading = true;
 
                 this.saveAllValues();
 
@@ -132,8 +153,16 @@
 
                 new EventComponentValue(new_value).for(calendar, event, selected_block).save().then(res => {
 
-                    this.$parent.isLoading = false;
+                    this.isLoading = false;
                     this.getBuildingBlockValues();
+
+                    this.$notify(
+                        {
+                            message: 'Requirement added successfully',
+                            horizontalAlign: 'center',
+                            verticalAlign: 'top',
+                            type: 'success'
+                        })
                 });
             },
             deleteValue(valueId){
@@ -148,7 +177,7 @@
                 }).then(result => {
                     if (result.value) {
 
-                        this.$parent.isLoading = true;
+                        this.isLoading = true;
                         let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
                         let event = new CalendarEvent({id: this.event.id});
                         let selected_block = new EventComponent({id : this.selectedBlock.id});
@@ -157,10 +186,26 @@
 
                         value.for(calendar,event,selected_block).delete().then(resp => {
                             this.getBuildingBlockValues();
-                            this.$parent.isLoading = false;
+                            this.isLoading = false;
                             this.$forceUpdate();
+                            this.$notify(
+                                {
+                                    message: 'Requirement deleted successfully',
+                                    horizontalAlign: 'center',
+                                    verticalAlign: 'top',
+                                    type: 'success'
+                                })
                         })
                             .catch(error => {
+
+                                this.$notify(
+                                    {
+                                        message: 'Error while trying to delete this requirement',
+                                        horizontalAlign: 'center',
+                                        verticalAlign: 'top',
+                                        type: 'danger'
+                                    })
+
                                 console.log(error);
                             })
                     }
@@ -169,7 +214,7 @@
             },
             editValue(item){
 
-                this.$parent.isLoading = true;
+                this.isLoading = true;
 
                 let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
@@ -180,11 +225,26 @@
                 value.priority = item.priority;
 
                 value.for(calendar,event,selected_block).save().then(resp => {
-                    this.$parent.isLoading = false;
+                    this.isLoading = false;
+
+                    this.$notify(
+                        {
+                            message: 'Requirement modified successfully',
+                            horizontalAlign: 'center',
+                            verticalAlign: 'top',
+                            type: 'success'
+                        })
                 })
                     .catch(error => {
                         console.log(error);
-                        this.$parent.isLoading = false;
+                        this.isLoading = false;
+                        this.$notify(
+                            {
+                                message: 'Error while trying to modify this requirement',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'danger'
+                            })
 
                     })
             },
@@ -193,7 +253,101 @@
                 this.eventBlocks.forEach(block => {
                     _self.editValue(block);
                 })
-            }
+            },
+            requirementChanged(val,index) {
+
+                if (!val.length ) {
+                    return
+                }
+
+                this.isLoading = true;
+
+                let item = _.find(this.eventBlocks,function(item){ return item.id == index; });
+
+                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let event = new CalendarEvent({id: this.event.id});
+                let selected_block = new EventComponent({id : this.selectedBlock.id});
+                let value = new EventComponentValue({id : item.id});
+
+                value.title = val;
+
+                value.for(calendar,event,selected_block).save().then(resp => {
+                    this.isLoading = false;
+                    console.log('requirement saved');
+
+                    this.$notify(
+                        {
+                            message: 'Requirement saved successfully',
+                            horizontalAlign: 'center',
+                            verticalAlign: 'top',
+                            type: 'success'
+                        })
+
+                })
+                    .catch(error => {
+                        console.log(error);
+                        this.isLoading = false;
+
+                        this.$notify(
+                            {
+                                message: 'Error while trying to modify this requirement',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'danger'
+                            })
+
+                    })
+
+            },
+            priorityChanged(val,index) {
+
+                if (!val.length ) {
+                    return
+                }
+
+                this.isLoading = true;
+
+
+                let item = _.find(this.eventBlocks,function(item){ return item.id == index; });
+
+                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let event = new CalendarEvent({id: this.event.id});
+                let selected_block = new EventComponent({id : this.selectedBlock.id});
+                let value = new EventComponentValue({id : item.id});
+
+
+                value.priority = val;
+
+                value.for(calendar,event,selected_block).save().then(resp => {
+                    this.isLoading = false;
+                    console.log('requirement saved');
+
+
+                    this.$notify(
+                        {
+                            message: 'Requirement saved successfully',
+                            horizontalAlign: 'center',
+                            verticalAlign: 'top',
+                            type: 'success'
+                        })
+
+                })
+                    .catch(error => {
+                        console.log(error);
+                        this.isLoading = false;
+
+                        this.$notify(
+                            {
+                                message: 'Error while trying to modify this requirement',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'danger'
+                            })
+
+
+                    })
+
+            },
         },
         computed: {
 

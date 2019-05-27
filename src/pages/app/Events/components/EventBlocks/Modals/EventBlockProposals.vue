@@ -1,5 +1,6 @@
 <template>
     <div class="adding-building-blocks-panel">
+        <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
         <div class="md-layout" >
 
             <div class="md-layout-item md-size-100">
@@ -119,15 +120,20 @@
             },
             getBlockVendors() {
 
+                this.isLoading = true;
+
                 let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id : this.selectedBlock.id});
 
                 new EventComponentVendor().for(calendar, event, selected_block).get()
                     .then(resp => {
+                        this.isLoading = false;
+
                         this.blockVendors = resp;
                     })
                     .catch(error => {
+                        this.isLoading = false;
 
                         console.log('EventComponentVendor error =>',error)
 

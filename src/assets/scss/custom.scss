@@ -235,7 +235,7 @@ $tooltip-border-color: $blue-grey-200 !default;
   .md-card {
 
     .card-content {
-      text-align: left;
+      text-align: center;
       padding: 1em;
       p.category {
         margin : 0;
@@ -1760,6 +1760,14 @@ iframe{
 
     .waiting-label {
       font-weight: bold;
+    }
+  }
+}
+
+.requirements-table {
+  .md-button.md-just-icon {
+    .md-ripple {
+      padding : 0 !important;
     }
   }
 }
