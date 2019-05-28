@@ -156,7 +156,7 @@
               </div>
               <div class="md-layout-item md-size-100" style="margin-top: 24px;">
                 <div class="pull-right">
-                  <md-button class="md-success" @click="validateEvent">
+                  <md-button class="md-success create-new-event-panel-submit-button" @click="validateEvent">
                     {{modalSubmitTitle}}
                   </md-button>
 

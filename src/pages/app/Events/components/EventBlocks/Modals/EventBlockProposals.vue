@@ -12,7 +12,7 @@
                         <md-button class="md-info" @click="manageBlockVendors">
                             Add Vendors
                         </md-button>
-                        <md-button class="md-default"  >
+                        <md-button class="md-default event-building-blocks-proposals-send"  >
                             Send
                         </md-button>
                     </div>

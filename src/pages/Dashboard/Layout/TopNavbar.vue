@@ -86,7 +86,7 @@
               </a>
             </li>-->
             <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventInvitees" class="md-simple md-lg" style="margin-top: 6px;" @click="uploadVendors">
+              <md-button v-if="topBarEventInvitees" class="md-simple md-lg top-nav-bar-upload-vendors-button" style="margin-top: 6px;" @click="uploadVendors">
                 <md-icon>cloud_upload</md-icon>
                 <span>Upload Vendors</span>
               </md-button>

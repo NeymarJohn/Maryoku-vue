@@ -10,7 +10,7 @@
                 <filters-panel @filters-changed-event="refreshEvents"></filters-panel>
               </td>
               <td style="width: 20%;min-width: 20%;max-width: 20%; padding-left: 15px;">
-                <md-button class="md-success" @click="openNewEventModal()" style="width: 100%; height: 100%; margin-left: -6px; margin-top: 5px; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
+                <md-button class="md-success annual-planner-create-new-event-button" @click="openNewEventModal()" style="width: 100%; height: 100%; margin-left: -6px; margin-top: 5px; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
               </td>
             </tr>
           </table>

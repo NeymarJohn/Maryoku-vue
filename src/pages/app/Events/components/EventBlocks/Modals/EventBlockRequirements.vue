@@ -7,8 +7,8 @@
                 Requirements List
 
                 <div class="pull-right">
-                    <md-button class="md-info"  @click="addNewValue">Add Requirement</md-button>
-                    <md-button class="md-info" @click="saveAllValues">Save</md-button>
+                    <md-button class="md-info event-building-blocks-requirements-add"  @click="addNewValue">Add Requirement</md-button>
+                    <md-button class="md-info event-building-blocks-requirements-save" @click="saveAllValues">Save</md-button>
                 </div>
 
             </h4>
@@ -27,7 +27,7 @@
                                 </md-table-cell>
 
                                 <md-table-cell md-label="Actions">
-                                    <md-button  class="md-danger md-sm md-just-icon"  @click="deleteValue(item.id)">
+                                    <md-button  class="md-danger md-sm md-just-icon event-building-blocks-requirements-delete"  @click="deleteValue(item.id)">
                                         <md-icon>delete_outline</md-icon>
                                     </md-button>
                                 </md-table-cell>

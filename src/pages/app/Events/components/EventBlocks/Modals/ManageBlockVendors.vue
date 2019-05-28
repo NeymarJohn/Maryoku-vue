@@ -12,7 +12,7 @@
                     Manage Block Vendors
 
                     <div class="header-actions pull-right" style="margin-top:0.5em;">
-                        <md-button class="md-info"   @click="openUploadModal">
+                        <md-button class="md-info event-building-blocks-upload-vendors-button"   @click="openUploadModal">
                             Upload Vendors
                         </md-button>
                     </div>

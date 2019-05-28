@@ -10,7 +10,7 @@
                             <h4 class="title2">Groups</h4>
                             <div class="card-actions pull-right">
                                 <!--<md-button class="md-info" @click="removeMember">Remove</md-button>-->
-                                <md-button class="md-info md-sm" @click="addMember">Create Group</md-button>
+                                <md-button class="md-info md-sm event-planner-tab-invitees-management-create-group" @click="addMember">Create Group</md-button>
                             </div>
                         </md-card-header>
                         <md-card-content class="groups-list">
