@@ -15,9 +15,8 @@
             :team-id="team.id"
             :teamMembers="teamMembers"
             @membersRefresh="fetchData(pagination.from)"
-            :openEditTeamInviteSidePanel="openEditTeamInviteSidePanel"
-          ></team-table>
-          <md-card-actions md-alignment="space-between" v-if="!(teamMembers.length <= pagination.limit && teamMembers.length <= pagination.total)">
+            :openEditTeamInviteSidePanel="openEditTeamInviteSidePanel"></team-table>
+          <md-card-actions md-alignment="space-between" v-if="pagination.limit < pagination.total">
             <div>
               <p
                 class="card-category"
