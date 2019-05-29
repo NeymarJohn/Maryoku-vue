@@ -401,7 +401,8 @@
             event.for(_calendar).delete().then(result => {
               this.$parent.isLoading = false;
               this.closePanel();
-              this.refreshEvents();
+              //this.refreshEvents();
+              location.reload();
             }).catch(() => {
               this.$parent.isLoading = false;
             });

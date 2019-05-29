@@ -87,7 +87,10 @@
 
         },
         mounted() {
-
+          if (!this.selectedInteraction.templateImage){
+            alert(JSON.stringify(this.selectedInteraction.options[0]));
+            this.selectTemplateImage(this.selectedInteraction.options[0]);
+          }
         },
         methods: {
             cancel(){

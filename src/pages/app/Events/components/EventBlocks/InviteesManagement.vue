@@ -390,6 +390,14 @@
 
             },
             editInteractionDesign(item){
+              if (!item.line1){
+                item.line1 = this.event.title;
+              }
+
+              if (!item.line2){
+                item.line2 = moment(this.event.eventStartMillis).format("YYYY-MM-DD H:mm A");
+              }
+
                 window.currentPanel = this.$showPanel({
                     component: EditInteractionDesign,
                     cssClass: 'md-layout-item md-size-45 transition36 bg-grey',
