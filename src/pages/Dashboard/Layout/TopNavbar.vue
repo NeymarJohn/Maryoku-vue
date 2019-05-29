@@ -98,7 +98,7 @@
               </md-button>
             </li>
             <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventProposals" class="md-simple md-lg" style="margin-top: 6px;" @click="manageInteractions">
+              <md-button v-if="topBarEventProposals" class="md-simple md-lg" style="margin-top: 6px;" @click="timeline">
                 <md-icon>mail</md-icon>
                 <span>Timeline</span>
               </md-button>
@@ -255,6 +255,10 @@
       },
       eventPage(){
         this.$router.push({name: 'EventDetails', params: {id: this.topBarEventId}});
+        document.location.reload();
+      },
+      timeline(){
+        this.$router.push({name: 'EditTimeLine', params: {id: this.topBarEventId}});
         document.location.reload();
       }
     }
