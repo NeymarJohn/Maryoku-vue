@@ -345,6 +345,7 @@
             this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2);
             this.seriesData = [(100 - this.percentage), this.percentage];
             this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
+            this.allocatedBudget = resp.totalAllocatedBudget;
 
           })
           .catch(error => {
