@@ -178,6 +178,7 @@
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import CalendarEvent from '@/models/CalendarEvent';
   import Calendar from "@/models/Calendar"
+  import Occasion from "@/models/Occasion"
   import swal from "sweetalert2";
   import { error } from 'util';
   import moment from 'moment';
@@ -205,6 +206,7 @@
     },
     data: () => ({
       isLoading: false,
+      occasionsList: [],
       auth: auth,
       hoursArray: [],
       durationArray: [...Array(12).keys()].map(x =>  ++x),
@@ -265,23 +267,11 @@
         currencies: 'event/getCurrenciesList',
         eventTypes: 'event/getEventTypesList'
       }),
-      occasionsList: {
-        get: function() {
-          if (!this.occasionsOptions) {
-            return [];
-          }
-
-          let occasionList = this.occasionsOptions.map((val) => val.value);
-
-          if (this.occasionCache) {
-            occasionList.push(this.occasionCache)
-          }
-
-          return occasionList;
-        }
-      },
     },
     mounted() {
+
+      this.getOccasionList();
+
       this.$root.$on('statusChange', (newStatus) => {
         this.status = newStatus;
       });
@@ -485,6 +475,19 @@
         this.clearForm();
         this.$emit("closePanel");
         this.$root.$emit("create-event-panel-closed");
+      },
+      getOccasionList() {
+        if ( this.auth.user.defaultCalendarId ) {
+          let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+
+          new Occasion().for(_calendar).get()
+            .then(resp =>{
+              this.occasionsList = resp.map((val) => val.title);
+            })
+            .catch(error =>{
+              console.log('error =>> ', error);
+            });
+        }
       }
     },
     watch: {
