@@ -342,7 +342,7 @@
         new CalendarEventStatistics().for(calendar, event).get()
           .then(resp => {
             this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget;//evt.totalBudget - resp[0].totalAllocatedBudget;
-            this.percentage = 100 - ((resp[0].totalAllocatedBudget / evt.totalBudget) * 100).toFixed(2);
+            this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2);
             this.seriesData = [(100 - this.percentage), this.percentage];
             this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
 

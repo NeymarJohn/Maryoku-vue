@@ -156,6 +156,9 @@
                 </md-field>
               </div>
               <div class="md-layout-item md-size-100" style="margin-top: 24px;">
+                <md-button v-if="!this.editMode" @click="openEventPlanner" class="md-simple md-info">
+                  &lt; Open in Event Planner
+                </md-button>
                 <div class="pull-right">
                   <md-button class="md-success create-new-event-panel-submit-button" @click="validateEvent">
                     {{modalSubmitTitle}}
