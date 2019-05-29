@@ -92,15 +92,15 @@
               </md-button>
             </li>
             <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventProposals" class="md-simple md-lg" style="margin-top: 6px;" @click="manageInviteeGroups">
+              <md-button v-if="topBarEventProposals" class="md-simple md-lg" style="margin-top: 6px;" @click="eventPage">
                 <md-icon>group</md-icon>
-                <span>Set Invitees Groups</span>
+                <span>Event Page</span>
               </md-button>
             </li>
             <li class="md-list-item" v-if="topBarEventId">
               <md-button v-if="topBarEventProposals" class="md-simple md-lg" style="margin-top: 6px;" @click="manageInteractions">
                 <md-icon>mail</md-icon>
-                <span>Automate Interactions</span>
+                <span>Timeline</span>
               </md-button>
             </li>
             <li class="md-list-item" v-if="topBarEventId">
@@ -242,7 +242,7 @@
         document.location.reload();
       },
       uploadVendors(){
-        this.$router.push({name: 'EditBuildingBlocks', params: {id: this.topBarEventId}});
+        this.$router.push({name: 'Vendors'});
         document.location.reload();
       },
       manageInviteeGroups(){
@@ -251,6 +251,10 @@
       },
       manageInteractions(){
         this.$router.push({name: 'EditBuildingBlocks', params: {id: this.topBarEventId}});
+        document.location.reload();
+      },
+      eventPage(){
+        this.$router.push({name: 'EventDetails', params: {id: this.topBarEventId}});
         document.location.reload();
       }
     }

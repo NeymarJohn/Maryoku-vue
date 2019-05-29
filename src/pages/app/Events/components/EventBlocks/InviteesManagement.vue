@@ -1,12 +1,12 @@
 <template>
     <div class="invitees-management">
         <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
-        <md-button name="event-planner-tab-invitees-management-event-page" class="event-planner-tab-invitees-management-event-page md-info" @click="goToComponent('')">
+        <!--<md-button name="event-planner-tab-invitees-management-event-page" class="event-planner-tab-invitees-management-event-page md-info" @click="goToComponent('')">
             Event Page
-        </md-button>
+        </md-button>-->
 
         <div class="md-layout">
-            <div class="md-layout-item md-size-30">
+            <div class="md-layout-item md-size-30" style="display: none;">
                 <md-card>
                     <md-card-header class="md-card-header-icon md-card-header-warning">
                         <div class="card-icon">
