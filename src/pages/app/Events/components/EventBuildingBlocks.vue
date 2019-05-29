@@ -18,7 +18,7 @@
                     <md-card class="info-card">
                         <div class="card-content">
                             <p class="category">Actual cost</p>
-                            <h3 class="title"><animated-number :value="0"></animated-number>
+                            <h3 class="title"><animated-number :value="245"></animated-number>
                             </h3>
                         </div>
                     </md-card>
@@ -27,7 +27,7 @@
                     <md-card class="info-card">
                         <div class="card-content">
                             <p class="category">Diff</p>
-                            <h3 class="title"><animated-number :value="0"></animated-number>
+                            <h3 class="title"><animated-number :value="245"></animated-number>
                             </h3>
                         </div>
                     </md-card>
@@ -321,6 +321,8 @@
 
             new EventComponent().for(calendar, event).get()
                 .then(res=> {
+
+                    console.log(' event blocks ', res);
 
                     this.$set(this,'eventBuildingBlocks',res);
                 })

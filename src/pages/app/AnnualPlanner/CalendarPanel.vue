@@ -50,7 +50,7 @@
                                         <div v-for="item in monthDay.events.editables" :key="item.id" class="title text-left" v-bind:style="`color: ${colorWithCategory(item.category)}`"><md-icon v-bind:style="`color: ${colorWithCategory(item.category)}`">event</md-icon> {{item.title}}</div>
                                       </md-tooltip>
                                     </md-button>
-                                    <md-button v-else-if="monthDay.events && monthDay.events.nonEditables && monthDay.events.nonEditables.length" @click="openOccasionEventModal(monthDay.events.nonEditables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="month-day-button md-simple md-just-icon md-round md-md">
+                                    <md-button v-else-if="monthDay.events && monthDay.events.nonEditables && monthDay.events.nonEditables.length" @click="openEditEventModal(monthDay.events.nonEditables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="month-day-button md-simple md-just-icon md-round md-md">
                                       {{monthDay.dayInMonth}}
                                       <span v-if="monthDay.events.nonEditables.length > 1" class="count">
                                         {{monthDay.events.nonEditables.length}}
@@ -316,16 +316,13 @@
 
         return calendarEventsMap;
       },
-      openEventSidePanel(options) {
+      openEventSidePanel() {
         window.currentPanel = this.$showPanel({
           component: EventSidePanel,
           cssClass: 'md-layout-item md-size-40 transition36 ',
           openOn: 'right',
           disableBgClick: true,
           props: {
-            modalSubmitTitle: options.modalSubmitTitle,
-            editMode: options.editMode,
-            eventData: options.eventData,
             refreshEvents: this.refreshEvents,
             year: this.year,
             month: this.month,
@@ -338,7 +335,7 @@
         this.setEditMode({ editMode: false });
         this.setNumberOfParticipants({numberOfParticipants: this.auth.user.customer.numberOfEmployees});
         this.setEventDate({date: currentDate ? currentDate : null});
-        this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: false, eventData: {date: currentDate ? currentDate : new Date(), numberOfParticipants: this.auth.user.customer.numberOfEmployees} })
+        this.openEventSidePanel()
       },
       openEditEventModal: function (item) {
         if (!item.editable){
@@ -346,21 +343,13 @@
         }
         this.setEventModalAndEventData({eventData: item});
         this.setModalSubmitTitle('Save');
-        this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: true, eventData: item })
-      },
-      openOccasionEventModal: function (item) {
-        if (!item.editable){
-          item.occasion = item.title;
-        }
-        this.setEventModalAndEventData({eventData: item});
-        this.setModalSubmitTitle('Save');
-        this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: false, eventData: item })
+        this.openEventSidePanel()
       },
       fullDateWithDay(day) {
         return moment().date(day).month(this.month-1).year(this.year);
       },
       colorWithCategory(category) {
-        let filterCategories = this.categories.filter(c => c.id === category);
+        let filterCategories = this.categories.filter(c => c.item === category);
         return filterCategories[0] != null ? `${filterCategories[0].color} !important;` : '';
       },
     },

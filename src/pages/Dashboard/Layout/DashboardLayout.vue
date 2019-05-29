@@ -236,9 +236,6 @@
           openOn: 'right',
           disableBgClick: true,
           props: {
-            modalSubmitTitle: 'Save',
-            editMode: false,
-            eventData: {date: new Date(), numberOfParticipants: this.auth.user.customer.numberOfEmployees},
             refreshEvents: null,
             year: now.getFullYear(),
             month: now.getMonth(),

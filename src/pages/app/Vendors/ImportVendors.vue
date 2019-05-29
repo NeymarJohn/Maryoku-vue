@@ -58,7 +58,7 @@
                       <h5>
                         Each column header has a dropdown list of possible columns to assign, choose the one that reflects your data as much as possible.
                       </h5>
-                      <md-table class="border-table" v-if="parseCSV" style="max-width: 800px; overflow: auto;">
+                      <md-table class="border-table" v-if="parseCSV">
                         <md-table-row style="border-top: none;">
                           <md-table-head
                             v-if="column !== ''"

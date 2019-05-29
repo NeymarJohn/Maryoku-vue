@@ -4,9 +4,9 @@
 
     <!-- Publish Event Button -->
     <div class="md-layout-item">
-      <!--<md-button class="md-info event-planner-event-page-go-back" @click="goBack">
+      <md-button class="md-info event-planner-event-page-go-back" @click="goBack">
         <md-icon>arrow_left</md-icon>Back
-      </md-button>-->
+      </md-button>
       <md-button class="md-info event-planner-event-page-publish-event pull-right" @click="publishEvent">
         Publish Event
       </md-button>
@@ -144,8 +144,7 @@ export default {
                     this.setEventPageData();
                 }
 
-                //this.$root.$emit("set-title",{title: event.title, link:"/edit"});
-              this.$root.$emit("set-title",event.title, event.id, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement');
+                this.$root.$emit("set-title",{title: event.title, link:"/edit"});
 
             });
 
