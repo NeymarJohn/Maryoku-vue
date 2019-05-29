@@ -1,5 +1,6 @@
 <template>
   <div class="md-layout" style="max-height: 100vh;">
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
     <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
       <h4 class="md-title">
         <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon"><md-icon>arrow_back</md-icon></md-button>
@@ -17,7 +18,7 @@
               <div class="md-layout-item md-size-100">
                 <md-field :class="[{'md-error': errors.has('title')}]">
                   <label>Event title</label>
-                  <md-input v-model="title"
+                  <md-input v-model="eventData.title"
                             data-vv-name="title"
                             v-validate= "modelValidations.title"
                             required
@@ -27,7 +28,7 @@
                 </md-field>
               </div>
               <div class="md-layout-item md-small-size-100">
-                <md-autocomplete v-model="occasion"
+                <md-autocomplete v-model="eventData.occasion"
                                  data-vv-name="occasion"
                                  :md-options="occasionsList"
                                  @md-opened="mdOpened"
@@ -40,7 +41,7 @@
               <div class="md-layout-item md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('eventType')}]" class="select-with-icon">
                   <label>Event Type</label>
-                  <md-select v-model="eventType"
+                  <md-select v-model="eventData.eventType"
                              data-vv-name="eventType"
                              v-validate= "modelValidations.eventType"
                              required>
@@ -56,7 +57,7 @@
               <div class="md-layout-item md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('participantsType')}]" class="select-with-icon">
                   <label>Invitee Type</label>
-                  <md-select v-model="participantsType"
+                  <md-select v-model="eventData.participantsType"
                              data-vv-name="participantsType"
                              v-validate= "modelValidations.participantsType"
                              required>
@@ -89,7 +90,7 @@
             <div class="md-layout mb16">
               <div class="md-layout-item md-size-100 md-small-size-100">
                 <md-datepicker
-                  v-model="date"
+                  v-model="eventData.date"
                   data-vv-name="date"
                   ref="datePicker"
                   v-validate= "modelValidations.date"
@@ -102,7 +103,7 @@
               <div class="md-layout-item md-size-50 md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('time')}]" class="">
                   <label>Start Time</label>
-                  <md-select v-model="time"
+                  <md-select v-model="eventData.time"
                              data-vv-name="time"
                              v-validate= "modelValidations.time"
                              required>
@@ -119,7 +120,7 @@
               <div class="md-layout-item md-size-50 md-small-size-100">
                 <md-field :class="[{'md-error': errors.has('duration')}]" class="">
                   <label>Duration</label>
-                  <md-select v-model="duration"
+                  <md-select v-model="eventData.duration"
                              data-vv-name="duration"
                              v-validate= "modelValidations.duration"
                              required>
@@ -137,9 +138,9 @@
               <div class="md-layout-item md-small-size-100">
                 <md-field>
                   <label>Budget Per Participant</label>
-                  <md-input v-model="totalBudget"
-                            data-vv-name="totalBudget"
-                            v-validate= "modelValidations.statis"
+                  <md-input v-model="eventData.budgetPerPerson"
+                            data-vv-name="budgetPerPerson"
+                            v-validate= "modelValidations.budgetPerPerson"
                             required/>
                 </md-field>
               </div>
@@ -147,7 +148,7 @@
                 <md-field :class="[{'md-error': errors.has('numberOfParticipants')}]">
                   <label>Number of Participants</label>
                   <md-input type="text"
-                            v-model="numberOfParticipants"
+                            v-model="eventData.numberOfParticipants"
                             data-vv-name="numberOfParticipants"
                             v-validate= "modelValidations.numberOfParticipants"
                             required/>
@@ -182,8 +183,12 @@
   import moment from 'moment';
   import _ from "underscore";
   import AnnualPlannerVuexModule from '../AnnualPlanner/AnnualPlanner.vuex';
+  import VueElementLoading from 'vue-element-loading';
 
   export default {
+    components:{
+      VueElementLoading,
+    },
     props: {
       year: Number,
       month : Number,
@@ -199,6 +204,7 @@
 
     },
     data: () => ({
+      isLoading: false,
       auth: auth,
       hoursArray: [],
       durationArray: [...Array(12).keys()].map(x =>  ++x),
@@ -224,10 +230,10 @@
           max_value: 10000,
         },
         status: {
-          required: true,
+          required: false,
         },
         currency: {
-          required: true,
+          required: false,
         },
         eventType: {
           required: true,
@@ -236,7 +242,7 @@
           required: true,
         },
         category: {
-          required: true,
+          required: false,
         },
       },
     }),
@@ -274,110 +280,6 @@
           return occasionList;
         }
       },
-      id: {
-        get() {
-          return this.eventData.id;
-        },
-        set(value) {
-          this.setEventProperty({key: 'id', actualValue: value});
-        }
-      },
-      occasion: {
-        get() {
-          return this.eventData.occasion
-        },
-        set(value) {
-          this.setEventProperty({key: 'occasion', actualValue: value});
-        }
-      },
-      occasionCache: {
-        get() {
-          return this.eventData.occasionCache
-        },
-        set(value) {
-          this.setEventProperty({key: 'occasionCache', actualValue: value});
-        }
-      },
-      title: {
-        get() {
-          return this.eventData.title
-        },
-        set(value) {
-          this.setEventProperty({key: 'title', actualValue: value});
-        }
-      },
-      date: {
-        get() {
-          return this.eventData.date ? new Date(this.eventData.date) :  null
-        },
-        set(value) {
-          this.setEventProperty({key: 'date', actualValue: value});
-        }
-      },
-      time: {
-        get() {
-          return this.eventData.time ? this.eventData.time : ""
-        },
-        set(value) {
-          this.setEventProperty({key: 'time', actualValue: value});
-        }
-      },
-      duration: {
-        get() {
-          return this.eventData.duration;
-        },
-        set(value) {
-          this.setEventProperty({key: 'duration', actualValue: value});
-        }
-      },
-      numberOfParticipants: {
-        get() {
-          return this.eventData.numberOfParticipants
-        },
-        set(value) {
-          this.setEventProperty({key: 'numberOfParticipants', actualValue: value});
-        }
-      },
-      totalBudget: {
-        get() {
-          return this.eventData.totalBudget
-        },
-        set(value) {
-          this.setEventProperty({key: 'totalBudget', actualValue: value});
-        }
-      },
-      currency: {
-        get() {
-          return this.eventData.currency
-        },
-        set(value) {
-          this.setEventProperty({key: 'currency', actualValue: value});
-        }
-      },
-      eventType: {
-        get() {
-          return this.eventData.eventType
-        },
-        set(value) {
-          this.setEventProperty({key: 'eventType', actualValue: value});
-        }
-      },
-      participantsType: {
-        get() {
-          return this.eventData.participantsType
-        },
-        set(value) {
-          this.setEventProperty({key: 'participantsType', actualValue: value});
-        }
-      },
-      category: {
-        get() {
-          return this.eventData.category
-        },
-        set(value) {
-          this.setEventProperty({key: 'category', actualValue: value});
-        }
-      },
     },
     mounted() {
       this.$root.$on('statusChange', (newStatus) => {
@@ -389,6 +291,15 @@
       });
 
       this.$root.$emit("create-event-panel-open");
+
+      if (this.eventData.eventStartMillis){
+        this.eventData.date = new Date(this.eventData.eventStartMillis);
+        this.eventData.time = moment(new Date(this.eventData.eventStartMillis).getTime()).format('H:mm A');
+      }
+
+      if (this.eventData.eventStartMillis && this.eventData.eventEndMillis){
+        this.eventData.duration = (this.eventData.eventEndMillis - this.eventData.eventStartMillis) / 1000 / 60/ 60;
+      }
     },
     methods: {
       ...mapMutations('AnnualPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
@@ -423,6 +334,8 @@
         }
       },
       updateEvent() {
+        this.$parent.isLoading = true;
+        this.isLoading = true;
         let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
         let editedEvent = new CalendarEvent({id: this.eventData.id});
         editedEvent.title = this.title;
@@ -442,25 +355,29 @@
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
           this.closePanel();
-
+          this.isLoading = false;
           location.reload();
         })
           .catch((error) => {
             console.log(error);
+            this.isLoading = false;
             this.$parent.isLoading = false;
           });
 
       },
       validateEvent() {
+        this.isLoading = true;
         this.validateTitle();
         this.$validator.validateAll().then(isValid => {
           if ((this.dateValid = this.validateDate()) && isValid) {
             this.$parent.isLoading = true;
+            this.isLoading = true;
             this.setEventModal(false);
             this.editMode ? this.updateEvent() : this.createEvent();
           } else {
             this.showNotify();
           }
+          this.isLoading = false;
         });
       },
       showDeleteAlert(e, ev) {
@@ -492,6 +409,7 @@
         });
       },
       createEvent() {
+        this.isLoading = true;
         let calendarId = this.auth.user.defaultCalendarId;
         let _calendar = new Calendar({ id: calendarId});
         let catObject = _.find(this.occasionsOptions, (el => el.value === this.eventData.occasion)) || {category: "CompanyDays"};
@@ -499,40 +417,42 @@
 
         let newEvent = new CalendarEvent({
           calendar: {id: calendarId},
-          title: this.title,
-          occasion: this.occasion,
+          title: this.eventData.title,
+          occasion: this.eventData.occasion,
           eventStartMillis: this.getEventStartInMillis(),
           eventEndMillis: this.getEventEndInMillis(),
-          numberOfParticipants: this.numberOfParticipants,
-          totalBudget: this.totalBudget,
-          status: this.eventData.status,
-          currency: this.currency,
-          eventType: this.eventType,
-          participantsType: this.participantsType,
-          category: this.category,
-          edittable: true,
+          numberOfParticipants: this.eventData.numberOfParticipants,
+          budgetPerPerson: this.eventData.budgetPerPerson,
+          status: 'draft',
+          currency: this.eventData.currency,
+          eventType: this.eventData.eventType,
+          participantsType: this.eventData.participantsType,
+          category: !this.eventData.editable ? 'Holidays' : 'CompanyDays',
+          editable: true,
         //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         }).for(_calendar).save().then(response => {
           console.log('new event => ' , response.id);
           this.$parent.isLoading = false;
           this.closePanel();
-          //this.$emit("refresh-events");
-          this.$router.push({ name: 'EditBuildingBlocks', params: {id: response.id} })
+          this.isLoading = false;
+          //this.$router.push({ name: 'EditBuildingBlocks', params: {id: response.id} })
+          location.reload();
         })
           .catch((error) => {
             console.log(error);
+            this.isLoading = false;
             this.$parent.isLoading = false;
           });
       },
       getEventStartInMillis() {
-        if (this.date && this.time) {
-          let eventStartTime = new Date(this.date).getTime() + (this.convertHoursToMillis(moment(this.time, 'HH:mm a').format('H')));
+        if (this.eventData.date && this.eventData.time) {
+          let eventStartTime = new Date(this.eventData.date).getTime() + (this.convertHoursToMillis(moment(this.eventData.time, 'HH:mm a').format('H')));
           return eventStartTime;
         }
       },
       getEventEndInMillis() {
-        if (this.date && this.time && this.duration) {
-          let eventEndTime = this.getEventStartInMillis() + this.convertDurationToMillis(this.duration);
+        if (this.eventData.date && this.eventData.time && this.eventData.duration) {
+          let eventEndTime = this.getEventStartInMillis() + this.convertDurationToMillis(this.eventData.duration);
           return eventEndTime;
         }
       },
@@ -552,8 +472,8 @@
         });
       },
       mdOpened:function() {
-        this.occasion += " ";
-        this.occasion = this.occasion.substring(0, this.occasion.length -1)
+        this.eventData.occasion += " ";
+        this.eventData.occasion = this.eventData.occasion.substring(0, this.eventData.occasion.length -1)
       },
       openEventPlanner() {
         this.$router.push({ name: 'EditBuildingBlocks', params: {id: this.id }});
