@@ -32,7 +32,7 @@
                                  :md-options="occasionsList"
                                  @md-opened="mdOpened"
                                  class="change-icon-order select-with-icon mb16"
-                                 :class="[{'md-error': errors.has('occasion')}]">
+                                 :class="[{'md-error': errors.has('occasion')}]" value="">
                   <label>Occasion</label>
                   <span class="md-error" v-if="errors.has('occasion')">This field is required</span>
                 </md-autocomplete>
@@ -191,7 +191,12 @@
       currentEvent : {
         type : Object,
         default : null
-      }
+      },
+      modalSubmitTitle: String,
+      editMode: Boolean,
+      modalTitle: String,
+      eventData: Object
+
     },
     data: () => ({
       auth: auth,
@@ -247,11 +252,7 @@
     },
     computed: {
       ...mapState('AnnualPlannerVuex', [
-        'eventData',
-        'eventModalOpen',
-        'modalTitle',
-        'modalSubmitTitle',
-        'editMode',
+        'eventModalOpen'
       ]),
       ...mapGetters({
         categories: 'event/getCategoriesList',
@@ -266,7 +267,7 @@
 
           let occasionList = this.occasionsOptions.map((val) => val.value);
 
-          if (this.occasionCache !== "") {
+          if (this.occasionCache) {
             occasionList.push(this.occasionCache)
           }
 

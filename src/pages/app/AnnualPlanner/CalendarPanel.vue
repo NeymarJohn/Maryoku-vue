@@ -316,13 +316,16 @@
 
         return calendarEventsMap;
       },
-      openEventSidePanel() {
+      openEventSidePanel(options) {
         window.currentPanel = this.$showPanel({
           component: EventSidePanel,
           cssClass: 'md-layout-item md-size-40 transition36 ',
           openOn: 'right',
           disableBgClick: true,
           props: {
+            modalSubmitTitle: options.modalSubmitTitle,
+            editMode: options.editMode,
+            eventData: options.eventData,
             refreshEvents: this.refreshEvents,
             year: this.year,
             month: this.month,
@@ -335,7 +338,7 @@
         this.setEditMode({ editMode: false });
         this.setNumberOfParticipants({numberOfParticipants: this.auth.user.customer.numberOfEmployees});
         this.setEventDate({date: currentDate ? currentDate : null});
-        this.openEventSidePanel()
+        this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: false, eventData: {date: currentDate ? currentDate : new Date(), numberOfParticipants: this.auth.user.customer.numberOfEmployees} })
       },
       openEditEventModal: function (item) {
         if (!item.editable){
@@ -343,7 +346,7 @@
         }
         this.setEventModalAndEventData({eventData: item});
         this.setModalSubmitTitle('Save');
-        this.openEventSidePanel()
+        this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: true, eventData: item })
       },
       fullDateWithDay(day) {
         return moment().date(day).month(this.month-1).year(this.year);
