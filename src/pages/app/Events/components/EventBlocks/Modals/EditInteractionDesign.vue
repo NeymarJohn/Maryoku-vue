@@ -88,8 +88,8 @@
         },
         mounted() {
           if (!this.selectedInteraction.templateImage){
-            alert(JSON.stringify(this.selectedInteraction.options[0]));
-            this.selectTemplateImage(this.selectedInteraction.options[0]);
+            alert(JSON.stringify(this.selectedInteraction.options[3]));
+            this.selectTemplateImage(this.selectedInteraction.options[3]);
           }
         },
         methods: {
