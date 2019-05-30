@@ -116,7 +116,7 @@
       //   this.setEventModalAndEventData({eventData: item});
       // },
       colorWithCategory(category) {
-        let filterCategories = this.categories.filter(c => c.item === category);
+        let filterCategories = this.categories.filter(c => c.id === category);
         return filterCategories[0] != null ? `${filterCategories[0].color}!important;` : '';
       }
     },
