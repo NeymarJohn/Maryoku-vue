@@ -156,7 +156,7 @@
                 </md-field>
               </div>
               <div class="md-layout-item md-size-100" style="margin-top: 24px;">
-                <md-button v-if="!this.editMode" @click="openEventPlanner" class="md-simple md-info">
+                <md-button v-if="this.editMode" @click="openEventPlanner" class="md-simple md-info">
                   &lt; Open in Event Planner
                 </md-button>
                 <div class="pull-right">
