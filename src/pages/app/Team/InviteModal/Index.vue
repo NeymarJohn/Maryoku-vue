@@ -80,16 +80,15 @@
                             {'md-error': errors.has('email')}]"
                   >
                     <label>Email</label>
-                    <md-textarea
+                    <md-input
                       v-if="!this.editMode"
                       v-model="emailAddress"
                       data-vv-name="email"
                       type="email"
                       name="email"
                       required
-                      rows="3"
                       v-validate="modelValidations.email"
-                    ></md-textarea>
+                    />
                     <md-input
                       v-else
                       v-model="emailAddress"

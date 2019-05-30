@@ -22,9 +22,9 @@
             <md-button class="md-just-icon-social md-google" @click="authenticate('google')">
               <i class="fab fa-google-plus-g" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
             </md-button>
-            <!--<md-button class="md-just-icon-social md-circle md-linkedin" @click="authenticate('linkedin')">
+            <md-button class="md-just-icon-social md-circle md-linkedin" @click="authenticate('linkedin')">
               <i class="fab fa-linkedin" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
-            </md-button>-->
+            </md-button>
             <!--<md-button class="md-just-icon md-round md-facebook">
               <i class="fab fa-facebook-f"></i>
             </md-button>-->

@@ -49,6 +49,7 @@
                     <p>import your vendors and refresh this page after you're done</p>
                 </template>
 
+
             </md-card-content>
 
             <md-card-actions md-alignment="right" v-if="blockVendors.length">
@@ -76,7 +77,7 @@
 
   import UploadVendorsModal from '../../../Vendors/ImportVendors';
   import ManageBlockVendors from './Modals/ManageBlockVendors.vue';
-  import ViewProposals from "./Modals/ViewProposals.vue";
+    import ViewProposals from "./Modals/ViewProposals.vue";
 
   export default {
     name: 'event-blocks',

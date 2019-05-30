@@ -1,6 +1,5 @@
 <template>
     <div class="adding-building-blocks-panel">
-        <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
         <div class="md-layout" style="max-height: 50vh;">
             <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
                 <h4 class="md-title">
@@ -12,7 +11,7 @@
                     Manage Block Vendors
 
                     <div class="header-actions pull-right" style="margin-top:0.5em;">
-                        <md-button class="md-info event-building-blocks-upload-vendors-button"   @click="openUploadModal">
+                        <md-button class="md-info"   @click="openUploadModal">
                             Upload Vendors
                         </md-button>
                     </div>
@@ -97,7 +96,7 @@
         },
         data: () => ({
             auth: auth,
-            isLoading : false,
+            isLoaded : false,
             vendorsList : null,
             pagination : {
                 limit : 10,
@@ -127,15 +126,10 @@
             },
             fetchData(page) {
                 this.loadingData = true;
-                this.isLoading = true;
-
 
                 Vendors.page(page)
                     .limit(this.pagination.limit)
                     .get().then(vendors => {
-
-                    this.isLoading = false;
-
 
                     this.vendorsList = vendors[0].results;
                     this.pagination.total = this.vendorsList.length;
@@ -193,10 +187,6 @@
                 });
             },onSelectVendor(data) {
 
-
-                this.isLoading = true;
-
-
                 let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id : this.selectedBlock.id});
@@ -206,10 +196,6 @@
 
                 new EventComponentVendor(vendor).for(calendar, event, selected_block).save()
                     .then(resp => {
-
-                        this.isLoading = false;
-
-
                         this.$notify(
                             {
                                 message: 'Vendor added successfully',
@@ -220,8 +206,6 @@
 
                     })
                     .catch(error => {
-                        this.isLoading = false;
-
 
                         console.log('EventComponentVendor error =>',error);
 
@@ -239,9 +223,6 @@
                 this.$refs.uploadModal.toggleModal(true);
             },
             onRemoveVendor(data){
-
-                this.isLoading = true;
-
                 let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id : this.selectedBlock.id});
@@ -250,7 +231,6 @@
 
                 vendor.for(calendar, event, selected_block).delete()
                     .then(resp => {
-                        this.isLoading = false;
                         this.$notify(
                             {
                                 message: 'Vendor deleted successfully',
@@ -261,9 +241,6 @@
 
                     })
                     .catch(error => {
-
-                        this.isLoading = false;
-
 
                         console.log('EventComponentVendor error =>',error);
 

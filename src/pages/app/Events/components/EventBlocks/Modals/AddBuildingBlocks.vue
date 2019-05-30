@@ -15,19 +15,19 @@
         </p>
         <div class="md-layout" style="overflow: auto; max-height: 80vh;">
           <div v-for="(item,index) in categoryBuildingBlocks" :key="index" class="md-layout-item md-size-80 mx-auto">
-            <drag :class="`md-button md-${item.color} block-item text-center`"
+            <drag :class="`md-button md-${item.color} block-item`"
                   :transfer-data="{ item }"
                   v-if="!item.childComponents">
 
-              <!--<md-icon>{{item.icon}}</md-icon>-->
+              <md-icon>{{item.icon}}</md-icon>
               {{item.value}}
             </drag>
             <template v-else-if="item.childComponents">
               <h4>{{item.value}}</h4>
               <div v-for="(item1,index1) in item.childComponents" :key="index1">
-                <drag :class="`md-button md-${item1.color} block-item text-center`"
+                <drag :class="`md-button md-${item1.color} block-item`"
                       :transfer-data="{ item1 }">
-                  <!--<md-icon>{{item1.icon}}</md-icon>-->
+                  <md-icon>{{item1.icon}}</md-icon>
                   {{item1.title}}
                 </drag>
               </div>
