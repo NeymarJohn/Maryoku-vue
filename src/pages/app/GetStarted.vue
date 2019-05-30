@@ -2,7 +2,7 @@
   <div class="md-layout get-started">
     <div class="md-layout-item md-size-100 mx-auto">
       <div class="md-layout" style="justify-content: center; top: 25%; position: absolute; width: 90%;">
-        <div class="md-layout-item md-size-20">
+        <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-20">
           <md-card>
             <md-card-content style="text-align: center;">
               <img src="/static/img/calendar.png" style="width: 120px;">
@@ -14,7 +14,7 @@
           </md-card>
         </div>
 
-        <div class="md-layout-item md-size-20">
+        <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-20">
           <md-card style="min-height: 400px;">
             <md-card-content style="text-align: center;">
               <img src="/static/img/paperandpen.png" style="width: 120px;">
@@ -25,7 +25,7 @@
             </md-card-content>
           </md-card>
         </div>
-        <div class="md-layout-item md-size-20">
+        <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-20">
           <md-card style="min-height: 400px;">
             <md-card-content style="text-align: center;">
               <img src="/static/img/tools.png" style="width: 120px;">

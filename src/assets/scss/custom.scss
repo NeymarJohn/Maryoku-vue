@@ -230,13 +230,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
   .info-card {
     margin : 0.9em 0 25px;
-
-    .category {
-      color : $orange-500;
-      font-weight: bold;
-    }
   }
-
 
   .md-card {
 
@@ -387,32 +381,6 @@ $tooltip-border-color: $blue-grey-200 !default;
   }
 }
 
-.requirements-list {
-  list-style : none;
-  padding-left :0;
-
-  .list-item {
-    display: inline-block;
-    margin-right : 0.3em;
-  }
-  .md-button {
-    padding : 0.4em 1em;
-  }
-}
-
-.drag-area {
-  text-align: center;
-  border : 1px dashed #c2c1c1;
-  padding: 0.5em;
-  border-radius: 4px;
-  margin-top: 1em;
-
-  p {
-    font-size : 16px;
-    margin: 0;
-    font-weight: bold;
-  }
-}
 .add-new-block-btn {
   border : 1px dashed #c2c1c1;
 }
