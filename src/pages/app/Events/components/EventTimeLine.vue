@@ -150,7 +150,7 @@
   import _ from 'underscore';
 
   export default {
-    name: 'event-building-blocks',
+    name: 'event-time-line',
     components: {
       VueElementLoading,
       EventBlocks,
@@ -395,7 +395,7 @@
 
     },
     mounted() {
-
+      this.$root.$emit("set-title",this.event.title, this.event.id, this.routeName === 'EditBuildingBlocks',true);
       this.getTimelineItems();
 
     }
