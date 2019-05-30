@@ -470,7 +470,7 @@
         this.eventData.occasion = this.eventData.occasion.substring(0, this.eventData.occasion.length -1)
       },
       openEventPlanner() {
-        this.$router.push({ name: 'EditBuildingBlocks', params: {id: this.id }});
+        this.$router.push({ name: 'EditBuildingBlocks', params: {id: this.eventData.id }});
       },
       closePanel(){
         this.setEventModal(false);
