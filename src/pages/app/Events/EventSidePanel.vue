@@ -156,7 +156,7 @@
                 </md-field>
               </div>
               <div class="md-layout-item md-size-100" style="margin-top: 24px;">
-                <md-button v-if="this.editMode" @click="openEventPlanner" class="md-simple md-info">
+                <md-button v-if="!this.editMode" @click="openEventPlanner" class="md-simple md-info">
                   &lt; Open in Event Planner
                 </md-button>
                 <div class="pull-right">
@@ -470,7 +470,7 @@
         this.eventData.occasion = this.eventData.occasion.substring(0, this.eventData.occasion.length -1)
       },
       openEventPlanner() {
-        this.$router.push({ name: 'EditBuildingBlocks', params: {id: this.eventData.id }});
+        this.$router.push({ name: 'EditBuildingBlocks', params: {id: this.id }});
       },
       closePanel(){
         this.setEventModal(false);

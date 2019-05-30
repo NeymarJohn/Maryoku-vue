@@ -23,10 +23,10 @@
                 <!--<md-button @click="viewEvent(item)" class="md-raised md-info md-icon-button">
                   <md-icon>visibility</md-icon>
                 </md-button>-->
-                <md-button @click="editEvent($event, item)" class="md-info md-just-icon md-round">
+                <md-button @click="editEvent($event, item)" class="md-raised md-info md-icon-button">
                   <md-icon>edit</md-icon>
                 </md-button>
-                <md-button @click="showDeleteAlert($event, item)" class="md-primary md-just-icon md-round">
+                <md-button @click="showDeleteAlert($event, item)" class="md-raised md-primary md-icon-button">
                   <md-icon>close</md-icon>
                 </md-button>
 

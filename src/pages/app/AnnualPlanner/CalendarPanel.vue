@@ -94,7 +94,7 @@
                 <table style="width: 100%; height: 100%;">
                   <tr style="height: 95%;">
                     <td>
-                      <month-events-panel :open-edit-event-modal="openEditEventModal" :open-occasion-event-modal="openOccasionEventModal" :calendar-events="calendarEvents"></month-events-panel>
+                      <month-events-panel :openEditEventModal="openEditEventModal" :calendar-events="calendarEvents"></month-events-panel>
                     </td>
                   </tr>
                   <tr style="height: 5%;">

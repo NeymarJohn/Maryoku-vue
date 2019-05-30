@@ -145,7 +145,7 @@ export default {
                 }
 
                 //this.$root.$emit("set-title",{title: event.title, link:"/edit"});
-              this.$root.$emit("set-title",event.title, event.id, this.routeName === 'EditBuildingBlocks',true);
+              this.$root.$emit("set-title",event.title, event.id, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement');
 
             });
 

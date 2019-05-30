@@ -236,7 +236,7 @@
                 this.isLoading = true;
 
 
-                let item = data.item;
+                //let item = data.item;
                 item.eventComponent = {id: this.selectedBlock.id};
 
 
