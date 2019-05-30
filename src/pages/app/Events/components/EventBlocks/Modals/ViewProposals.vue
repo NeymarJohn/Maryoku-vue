@@ -8,12 +8,12 @@
             </div>
             <div class="md-layout-item md-size-95" style="max-height: 50vh;">
                 <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
-                    Proposals
+                    Proposals List
                 </h4>
 
                 <div class="md-layout" style="overflow: auto; max-height: 80vh;">
 
-                    <div class="proposal-item" v-for="(proposal,index) in proposals" :key="index" v-if="(proposalsToDisplay == 1 && index == 0) || proposalsToDisplay == proposals.length">
+                    <div class="proposal-item md-layout-item md-size-100" v-for="(proposal,index) in proposals" :key="index" v-if="(proposalsToDisplay == 1 && index == 0) || proposalsToDisplay == proposals.length">
                         <h4 class="proposal-title"> {{proposal.title}} </h4>
                         <md-card>
                             <md-card-content>
@@ -40,7 +40,7 @@
                     </div>
 
 
-                    <div class="proposals-actions">
+                    <div class="md-layout-item md-size-100 proposals-actions">
                         <md-button class="md-info"> compare proposals </md-button>
                         <md-button class="md-default" @click="viewAllProposals" v-if="proposalsToDisplay == 1"> View all proposals </md-button>
                     </div>

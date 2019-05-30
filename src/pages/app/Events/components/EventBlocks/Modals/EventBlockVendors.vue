@@ -6,7 +6,7 @@
             <div class="md-layout-item md-size-100">
                 <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
                     <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon"><md-icon>arrow_back</md-icon></md-button>
-                    Proposals List
+                    Vendors List
 
                     <div class="header-actions pull-right">
                         <md-button class="md-info" @click="manageBlockVendors">

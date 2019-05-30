@@ -1,82 +1,94 @@
 <template>
-    <div class="md-layout">
+    <div class="md-layout" style="padding: 0; margin: 0;">
         <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
-        <div  class="proposals-management" >
+        <div class="md-layout-item mx-auto">
+          <md-card  class="proposals-management md-card-plain" >
 
             <md-card-content class="md-layout proposals-management_items">
 
-                <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33">
-                    <md-card class="info-card">
-                        <div class="card-content">
-                            <p class="category">Allocated budget</p>
-                            <h3 class="title"><animated-number :value="event.allocatedBudget"></animated-number>
-                            </h3>
-                        </div>
-                    </md-card>
-                </div>
-                <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33">
-                    <md-card class="info-card">
-                        <div class="card-content">
-                            <p class="category">Actual cost</p>
-                            <h3 class="title"><animated-number :value="0"></animated-number>
-                            </h3>
-                        </div>
-                    </md-card>
-                </div>
-                <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-33">
-                    <md-card class="info-card">
-                        <div class="card-content">
-                            <p class="category">Diff</p>
-                            <h3 class="title"><animated-number :value="0"></animated-number>
-                            </h3>
-                        </div>
-                    </md-card>
-                </div>
-                <div class="md-layout-item md-size-100" style="display : none;">
-                    <h3>Select services and set budget</h3>
-                    <p>
-                        We've added relevant services according to you'r event attributes. You can add new ones or remove existing.
-                    </p>
-                </div>
+              <div class="md-layout-item md-medium-size-30 md-xsmall-size-100 md-size-33">
+                <md-card class="info-card">
+                  <div class="card-content">
+                    <p class="category">Allocated budget</p>
+                    <h3 class="title">$<animated-number :value="event.allocatedBudget"></animated-number>
+                    </h3>
+                  </div>
+                </md-card>
+              </div>
+              <div class="md-layout-item md-medium-size-30 md-xsmall-size-100 md-size-33">
+                <md-card class="info-card">
+                  <div class="card-content">
+                    <p class="category">Actual cost</p>
+                    <h3 class="title">$<animated-number :value="0"></animated-number>
+                    </h3>
+                  </div>
+                </md-card>
+              </div>
+              <div class="md-layout-item md-medium-size-30 md-xsmall-size-100 md-size-33">
+                <md-card class="info-card">
+                  <div class="card-content">
+                    <p class="category">Diff</p>
+                    <h3 class="title">$<animated-number :value="0"></animated-number>
+                    </h3>
+                  </div>
+                </md-card>
+              </div>
 
-                <div class="md-layout-item md-size-100">
-                    <md-card style="margin-top : 0;">
-                        <md-card-content>
-                            <md-table v-model="eventBuildingBlocks" table-header-color="blue" class="event-building-blocks_table">
-                                <md-table-row slot="md-table-row" slot-scope="{ item }" :class="{parent : item.is_parent}" class="blocks-list_item">
-                                    <md-table-cell md-label="Expanse" >{{ item.componentId }}</md-table-cell>
-                                    <md-table-cell md-label="Requirements">
-                                        <template v-if="!item.is_parent">
-                                            {{`${item.values.length} selected`}} <md-button class="md-danger md-simple md-sm md-just-icon" @click="addRequirements(item)"><md-icon>edit</md-icon></md-button>
-                                        </template>
-                                    </md-table-cell>
-                                    <md-table-cell md-label="Allocated budget">
-                                        $<label-edit :text="item.allocatedBudget"  :field-name="item.componentId"  @text-updated-blur="blockBudgetChanged" @text-updated-enter="blockBudgetChanged"></label-edit>
-                                    </md-table-cell>
-                                    <md-table-cell md-label="Actual cost">
-                                        <template v-if="item.is_wining">
-                                            <md-button class="md-success md-simple actual-cost" >{{ `$${item.wininig.budget}`}} <md-button class="md-success md-simple md-sm md-just-icon wining-budget"><md-icon>open_in_new</md-icon></md-button></md-button>
-                                        </template>
-                                        <template v-else-if="item.vendors && item.vendors.length" >
-                                            <md-button class="md-sm md-info" @click="reviewProposals(item)">Review proposals ({{item.vendors.length}})</md-button>
-                                        </template>
-                                        <template v-else-if="!item.is_parent">
-                                            <div class="waiting-label" @click="reviewProposals(item)">Waiting for proposals</div>
-                                        </template>
-                                    </md-table-cell>
-                                    <md-table-cell md-label="Comments">{{ item.comments }}</md-table-cell>
-                                    <md-table-cell md-label="Actions">
-                                        <md-button class="md-rose md-sm md-just-icon" @click="deleteBlock(item.id)"><md-icon>delete_outline</md-icon></md-button>
-                                    </md-table-cell>
-                                </md-table-row>
-                            </md-table>
-                            <md-button class="md-default md-simple add-new-block-btn" @click="showAddBuildingBlocksModal()" style="width:100%; font-weight: bold">Add new block +</md-button>
-                        </md-card-content>
-                    </md-card>
-                </div>
+              <div class="md-layout-item md-size-100">
+                <md-card>
+
+                  <md-card-header class="md-card-header-text md-card-header-warning">
+
+                    <div class="card-text">
+                      <h4 class="title" style="color: white;">Manage Proposals</h4>
+                      <div class="ct-label">Set requirements</div>
+                    </div>
 
 
-                </md-card-content>
+                  </md-card-header>
+
+                  <md-card-content>
+                    <md-table v-model="eventBuildingBlocks" table-header-color="orange" class="event-building-blocks_table" style="max-width: 100%; overflow: auto;">
+                      <md-table-row slot="md-table-row" slot-scope="{ item }" :class="{parent : item.is_parent}" class="blocks-list_item">
+                        <md-table-cell md-label="Expanse" >{{ item.componentId }}</md-table-cell>
+                        <md-table-cell md-label="Requirements">
+                          <template v-if="!item.is_parent && item.values.length">
+                            {{`${item.values.length} selected`}} <md-button class="md-danger md-simple md-sm md-just-icon" @click="addRequirements(item)"><md-icon>edit</md-icon></md-button>
+                          </template>
+                          <template v-else-if="!item.is_parent && !item.values.length">
+                            <md-button class="md-info md-sm" @click="addRequirements(item)">Set requirements</md-button>
+                          </template>
+                        </md-table-cell>
+                        <md-table-cell md-label="Allocated budget">
+                          $<label-edit :text="item.allocatedBudget"  :field-name="item.componentId"  @text-updated-blur="blockBudgetChanged" @text-updated-enter="blockBudgetChanged"></label-edit>
+                        </md-table-cell>
+                        <md-table-cell md-label="Actual cost">
+                          <template v-if="item.winningProposalId">
+                            <md-button class="md-success md-simple actual-cost" >{{ `$${item.wininig.budget}`}} <md-button class="md-success md-simple md-sm md-just-icon wining-budget"><md-icon>open_in_new</md-icon></md-button></md-button>
+                          </template>
+                          <template v-else-if="item.proposals && item.proposals.length" >
+                            <md-button class="md-sm md-info" @click="reviewProposals(item)">Review proposals ({{item.proposals.length}})</md-button>
+                          </template>
+                          <template v-else-if="!item.proposals.length && !item.vendors.length" >
+                            <md-button class="md-sm md-default" @click="reviewProposals(item)">Get Offers <md-icon>near_me</md-icon></md-button>
+                          </template>
+                          <template v-else-if="!item.proposals.length && item.vendors.length">
+                            <div class="waiting-label" @click="reviewVendors(item)">Waiting for proposals</div>
+                          </template>
+                        </md-table-cell>
+                        <md-table-cell md-label="Comments">{{ item.comments }}</md-table-cell>
+                        <md-table-cell md-label="Actions">
+                          <md-button class="md-rose md-sm md-just-icon" @click="deleteBlock(item.id)"><md-icon>delete_outline</md-icon></md-button>
+                        </md-table-cell>
+                      </md-table-row>
+                    </md-table>
+                    <md-button class="md-default md-simple add-new-block-btn" @click="showAddBuildingBlocksModal()" style="width:100%; font-weight: bold">Add new block +</md-button>
+                  </md-card-content>
+                </md-card>
+              </div>
+
+            </md-card-content>
+          </md-card>
         </div>
 
     </div>
@@ -94,7 +106,8 @@
   import EventBlocks from "../components/NewEventBlocks";
   import AddBuildingBlockModal from "../components/EventBlocks/Modals/AddBuildingBlocks.vue";
   import EventBlockRequirements from "../components/EventBlocks/Modals/EventBlockRequirements.vue";
-  import EventBlockProposals from "../components/EventBlocks/Modals/EventBlockProposals.vue";
+  import EventBlockVendors from "./EventBlocks/Modals/EventBlockVendors.vue";
+  import ViewProposals from "./EventBlocks/Modals/ViewProposals.vue";
   import _ from "underscore";
   import {LabelEdit,AnimatedNumber,StatsCard,ChartCard} from '@/components';
 
@@ -322,6 +335,8 @@
             new EventComponent().for(calendar, event).get()
                 .then(res=> {
 
+                    console.log(' event blocks ', res);
+
                     this.$set(this,'eventBuildingBlocks',res);
                 })
                 .catch(error => {
@@ -388,7 +403,15 @@
         },
         reviewProposals(item) {
             window.currentPanel = this.$showPanel({
-                component: EventBlockProposals,
+                component: ViewProposals,
+                cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
+                openOn: 'right',
+                props: {event : this.event , selectedBlock : item}
+            });
+        },
+        reviewVendors(item) {
+            window.currentPanel = this.$showPanel({
+                component: EventBlockVendors,
                 cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
                 openOn: 'right',
                 props: {event : this.event , selectedBlock : item}
