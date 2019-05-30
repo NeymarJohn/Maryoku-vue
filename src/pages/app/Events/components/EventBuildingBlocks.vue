@@ -10,7 +10,7 @@
                 <md-card class="info-card">
                   <div class="card-content">
                     <p class="category">Allocated budget</p>
-                    <h3 class="title">$<animated-number :value="event.allocatedBudget"></animated-number>
+                    <h3 class="title">$<animated-number :value="event.statistics.totalAllocatedBudget"></animated-number>
                     </h3>
                   </div>
                 </md-card>
