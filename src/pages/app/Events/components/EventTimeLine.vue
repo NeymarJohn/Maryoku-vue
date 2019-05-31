@@ -84,13 +84,13 @@
 
             <md-card class="block-info" v-else-if="!item.mode || item.mode === 'saved' ">
               <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C"/>
-              <div class="card-actions">
-                <span class="item-time" style="display: inline-block; margin-top: 14px;" :style="`background : ` + item.color">{{ item.startTime }} - {{item.endTime}}</span>
-                <md-button name="event-planner-tab-timeline-item-edit" class="event-planner-tab-timeline-item-edit md-info md-sm md-just-icon md-simple md-round"
+              <div class="card-actions" style="padding: 12px;">
+                <span class="item-time md-xs" style="display: inline-block; margin-top: 3px; padding: 2px 12px !important; margin-right: 0; font-size: 1.8vmin;" :style="`background : ` + item.color">{{ item.startTime }} - {{item.endTime}}</span>
+                <md-button name="event-planner-tab-timeline-item-edit" class="event-planner-tab-timeline-item-edit md-info md-xs md-just-icon md-round"
                            @click="modifyItem(index)">
                   <md-icon>create</md-icon>
                 </md-button>
-                <md-button name="event-planner-tab-timeline-item-delete" class="event-planner-tab-timeline-item-delete md-danger md-sm md-just-icon md-simple md-round"
+                <md-button name="event-planner-tab-timeline-item-delete" class="event-planner-tab-timeline-item-delete md-danger md-xs md-just-icon md-round"
                            @click="removeItem(item)">
                   <md-icon>delete_outline</md-icon>
                 </md-button>
@@ -234,7 +234,7 @@
           }
           this.timelineItems.push(Object.assign({}, block));
         } else {
-          this.updateTimelineITemsOrder();
+          setTimeout(this.updateTimelineITemsOrder, 100);
         }
 
       },
