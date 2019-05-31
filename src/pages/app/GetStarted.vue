@@ -50,7 +50,9 @@
 
     },
     mounted(){
-      this.$auth.currentUser(this, false, null);
+      this.$auth.currentUser(this, false, () =>{
+
+      });
     },
     methods: {
       openEventModal() {
