@@ -14,7 +14,7 @@
           <md-card class="block-info" >
 
             <div class="card-actions">
-              <span class="item-time" style="display: inline-block; margin-top: 14px;" :style="`background : ` + item.color">{{ item.startTime }} - {{item.endTime}}</span>
+              <span class="item-time" style="display: inline-block; margin: 14px; padding: 2px 12px !important; margin-right: 0; font-size: 1.7vmin;" :style="`background : ` + item.color">{{ item.startTime }} - {{item.endTime}}</span>
             </div>
             <div class="item-title-and-time">
                 <span class="item-title" style="font-weight: 500; margin-top: 6px; display: inline-block;" v-if="item.title">

@@ -7,7 +7,7 @@
       <!--<md-button class="md-info event-planner-event-page-go-back" @click="goBack">
         <md-icon>arrow_left</md-icon>Back
       </md-button>-->
-      <md-button class="md-info event-planner-event-page-publish-event pull-right" @click="publishEvent">
+      <md-button class="md-info event-planner-event-page-publish-event" @click="publishEvent">
         Publish Event
       </md-button>
     </div>

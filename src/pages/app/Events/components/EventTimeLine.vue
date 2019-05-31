@@ -85,7 +85,7 @@
             <md-card class="block-info" v-else-if="!item.mode || item.mode === 'saved' ">
               <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C"/>
               <div class="card-actions" style="padding: 12px;">
-                <span class="item-time md-xs" style="display: inline-block; margin-top: 3px; padding: 2px 12px !important; margin-right: 0; font-size: 1.8vmin;" :style="`background : ` + item.color">{{ item.startTime }} - {{item.endTime}}</span>
+                <span class="item-time md-xs" style="display: inline-block; margin-top: 3px; padding: 2px 12px !important; margin-right: 0; font-size: 1.7vmin;" :style="`background : ` + item.color">{{ item.startTime }} - {{item.endTime}}</span>
                 <md-button name="event-planner-tab-timeline-item-edit" class="event-planner-tab-timeline-item-edit md-info md-xs md-just-icon md-round"
                            @click="modifyItem(index)">
                   <md-icon>create</md-icon>
