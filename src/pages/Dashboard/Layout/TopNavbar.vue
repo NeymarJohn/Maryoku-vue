@@ -166,7 +166,7 @@
 </template>
 
 <script>
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import MyProfile from '@/pages/app/Profile/MyProfile';
   import Team from '../../app/Team/Team';
   import MyCompany from '../../app/Profile/MyCompany';
@@ -183,7 +183,6 @@
     },
     data() {
       return {
-        auth,
         topBarTitle: null,
         topBarEventId: null,
         topBarEventDate: null,
@@ -208,8 +207,8 @@
     },
     mounted() {
       setTimeout(function(){
-        console.log("avatar: " + this.auth.user.avatar);
-        this.avatar = this.auth.user.avatar != null ? this.auth.user.avatar : "static/img/placeholder.jpg";
+        console.log("avatar: " + this.$auth.user.avatar);
+        this.avatar = this.$auth.user.avatar != null ? this.$auth.user.avatar : "static/img/placeholder.jpg";
       }.bind(this),3000);
 
       this.$root.$on("set-title", (eventData, invitees, proposals) => {

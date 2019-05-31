@@ -81,7 +81,7 @@
   import CustomerFile from '@/models/CustomerFile';
   import Customer from '@/models/Customer';
   import Me from '@/models/Me';
-  import auth from '@/auth';
+  // import auth from '@/auth';
 
   //COMPONENTS
   import InputText from '@/components/Inputs/InputText.vue'
@@ -107,7 +107,7 @@
     },
     data(){
       return{
-        auth: auth,
+        // auth: auth,
         loading: false,
 
         companyName:'',
@@ -172,14 +172,14 @@
       }
     },
     mounted:function(){
-      this.auth.currentUser(this, true, () => {
+      this.$auth.currentUser(this, true, () => {
         this.$store.dispatch("user/getIndustry");
 
-        let user = this.auth.user;
+        let user = this.$auth.user;
         this.fullName = user.displayName;
         this.email = user.email;
 
-        let customer = this.auth.user.customer;
+        let customer = this.$auth.user.customer;
         this.companyName = customer.name;
         /*this.main_office_adddress = {
           label: `${customer.mainAddressLine1 || ''} ${customer.mainAddressLine2 || ''} ${customer.mainAddressCity || ''} ${customer.mainAddressStateRegion || ''} ${customer.mainAddressCountry || ''} ${customer.mainAddressZip || ''}`,
@@ -205,19 +205,19 @@
         this.$validator.validateAll().then(isValid => {
           if (isValid){
             new Customer({
-              id: this.auth.user.me.customer.id,
+              id: this.$auth.user.me.customer.id,
               onboarded: true,
               name: this.companyName
             }).save().then(res => {
               new Me({
-                id: this.auth.user.id,
+                id: this.$auth.user.id,
                 onboarded: true,
                 emailAddress: this.email,
                 displayName: this.fullName
               }).save().then((response) => {
                 Me.get().then(me => {
-                  that.auth.user.me = me;
-                  that.auth.user.customer = me.customer;
+                  that.$auth.user.me = me;
+                  that.$auth.user.customer = me.customer;
                   this.moveon();
                 });
               });
@@ -227,8 +227,8 @@
       },
       skip() {
         this.loading = true;
-        new Customer({id: this.auth.user.me.customer.id, onboarded: true}).save().then(res => {
-          new Me({id: this.auth.user.id, onboarded: true}).save().then((response) => {
+        new Customer({id: this.$auth.user.me.customer.id, onboarded: true}).save().then(res => {
+          new Me({id: this.$auth.user.id, onboarded: true}).save().then((response) => {
           });
         });
         this.moveon();

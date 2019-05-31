@@ -46,7 +46,7 @@
   import CalendarEvent from "@/models/CalendarEvent";
   import EventComponent from "@/models/EventComponent";
   import VueElementLoading from 'vue-element-loading';
-  import auth from '@/auth';
+  // import auth from '@/auth';
 
   //COMPONENTS
   import { Tabs } from "@/components";
@@ -76,7 +76,7 @@
             this.$parent.isLoading = true;
 
 
-            let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
             let editedEvent = new CalendarEvent({id: this.event.id});
 
             editedEvent = this.event;

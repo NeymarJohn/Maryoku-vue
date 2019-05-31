@@ -38,7 +38,7 @@
   import EventTimelineItem from '@/models/EventTimelineItem';
 
   import VueElementLoading from 'vue-element-loading';
-  import auth from '@/auth';
+  // import auth from '@/auth';
 
   //COMPONENTS
   import { Tabs } from "@/components";
@@ -58,7 +58,7 @@
       }
     },
     data: () => ({
-      auth: auth,
+      // auth: auth,
       timelineItems : [],
 
     }),

@@ -1,5 +1,5 @@
 import NProgress from 'nprogress';
-import auth from 'src/auth';
+// import auth from 'src/auth';
 
 const progressShowDelay = 100;
 let routeResolved = false;

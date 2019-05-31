@@ -41,7 +41,7 @@
   </md-card>
 </template>
 <script>
-  import auth from "@/auth";
+  // import auth from '@/auth';
   import moment from "moment";
   import VueElementLoading from 'vue-element-loading';
   import {
@@ -65,7 +65,7 @@
     },
     data() {
       return {
-        auth: auth,
+        // auth: auth,
         loading: true,
         items: [],
         itemsPerMonth: {},

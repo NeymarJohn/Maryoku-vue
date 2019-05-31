@@ -60,7 +60,7 @@
 <script>
 //MAIN MODULES
 import ChartComponent from "@/components/Cards/ChartComponent";
-import auth from "@/auth";
+// import auth from '@/auth';
 import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import Calendar from '@/models/Calendar';
@@ -99,7 +99,7 @@ export default {
 
   data() {
     return {
-      auth: auth,
+      // auth: auth,
       calendarEvent: {},
       seriesData: [],
       isLoading: false,
@@ -130,8 +130,8 @@ export default {
         "setPublishEventModal",
     ]),
     getEvent() {
-        this.auth.currentUser(this, true, function() {
-            let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        this.$auth.currentUser(this, true, function() {
+            let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
 
             _calendar.calendarEvents().find(this.$route.params.id).then(event => {
                 this.calendarEvent = event.for(_calendar);
@@ -159,7 +159,7 @@ export default {
       },
       setEventPageData() {
 
-          let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+          let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
           let editedEvent = new CalendarEvent({id: this.calendarEvent.id});
 
           editedEvent = this.calendarEvent;

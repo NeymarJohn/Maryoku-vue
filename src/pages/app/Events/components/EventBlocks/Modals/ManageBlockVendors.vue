@@ -60,7 +60,7 @@
     </div>
 </template>
 <script>
-    import auth from '@/auth';
+    // import auth from '@/auth';
     import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
     import CalendarEvent from '@/models/CalendarEvent';
     import Calendar from "@/models/Calendar";
@@ -96,7 +96,7 @@
 
         },
         data: () => ({
-            auth: auth,
+            // auth: auth,
             isLoading : false,
             vendorsList : null,
             pagination : {
@@ -111,7 +111,7 @@
         mixins: [paginationMixin],
 
         created() {
-            this.auth.currentUser(this, true, function(){
+            this.$auth.currentUser(this, true, function(){
                 this.fetchData(0);
             }.bind(this));
         },
@@ -197,7 +197,7 @@
                 this.isLoading = true;
 
 
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id : this.selectedBlock.id});
 
@@ -242,7 +242,7 @@
 
                 this.isLoading = true;
 
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id : this.selectedBlock.id});
 

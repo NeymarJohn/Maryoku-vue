@@ -96,7 +96,7 @@
   //MODELS
   import VueElementLoading from 'vue-element-loading';
   import Me from '@/models/Me';
-  import auth from '@/auth';
+  // import auth from '@/auth';
 
   //COMPONENTS
   import InputText from '@/components/Inputs/InputText.vue'
@@ -122,7 +122,7 @@
     },
     data(){
       return{
-        auth: auth,
+        // auth: auth,
         loading: false,
 
         full_name: '',
@@ -147,8 +147,8 @@
       }
     },
     mounted:function(){
-      this.auth.currentUser(this, true, () => {
-        let user = this.auth.user;
+      this.$auth.currentUser(this, true, () => {
+        let user = this.$auth.user;
         this.full_name = user.displayName;
         this.email_address = user.username;
 
@@ -165,7 +165,7 @@
       next() {
         this.loading = true;
         alert("SAVE ME!!!");
-        new Me({id: this.auth.user.id, onboarded: true}).save().then((response) => {
+        new Me({id: this.$auth.user.id, onboarded: true}).save().then((response) => {
           this.$router.push({name: 'AnnualPlanner'});
         });
       },
@@ -175,7 +175,7 @@
       },
       skip() {
         this.loading = true;
-        new Me({id: this.auth.user.id, onboarded: true}).save().then((response) => {
+        new Me({id: this.$auth.user.id, onboarded: true}).save().then((response) => {
           this.$router.push({name: 'AnnualPlanner'});
         });
       },

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import VueElementLoading from 'vue-element-loading';
   import ChartComponent from '@/components/Cards/ChartComponent';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
@@ -52,7 +52,7 @@
     data() {
       return {
         ready: false,
-        auth: auth,
+        // auth: auth,
         isLoading: true,
         monthRows: [],
         currentMonthName: '',
@@ -72,9 +72,9 @@
       this.isLoading = true;
 
       if (this.categories.length == 0 || this.eventTypes.length == 0 || this.currencies.length == 0) {
-        this.auth.currentUser(this, true, function() {
-          this.$store.dispatch("event/getCategories", this.auth.user.defaultCalendarId);
-          this.$store.dispatch("event/getEventTypes", this.auth.user.defaultCalendarId);
+        this.$auth.currentUser(this, true, function() {
+          this.$store.dispatch("event/getCategories", this.$auth.user.defaultCalendarId);
+          this.$store.dispatch("event/getEventTypes", this.$auth.user.defaultCalendarId);
           this.$store.dispatch("event/getCurrencies");
           this.$store.dispatch("event/getEventThemes")
         }.bind(this))
@@ -82,8 +82,8 @@
     },
     methods: {
       monthCount() {
-        this.auth.currentUser(this, true, function() {
-          Calendar.params({year: this.$route.params.year}).find(this.auth.user.defaultCalendarId).then(function(calendar){
+        this.$auth.currentUser(this, true, function() {
+          Calendar.params({year: this.$route.params.year}).find(this.$auth.user.defaultCalendarId).then(function(calendar){
             this.firstDayOfTheWeek = calendar.firstDayOfWeek;
             this.monthCounts = calendar.monthCounts;
 

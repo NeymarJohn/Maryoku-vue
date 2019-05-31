@@ -56,7 +56,7 @@
     </div>
 </template>
 <script>
-    import auth from '@/auth';
+    // import auth from '@/auth';
     import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
     import CalendarEvent from '@/models/CalendarEvent';
     import {Modal} from "@/components";
@@ -78,7 +78,7 @@
 
         },
         data: () => ({
-            auth: auth,
+            // auth: auth,
             error:'',
             email: null,
             password: null,
@@ -125,8 +125,8 @@
 
                 this.$validator.validateAll().then(isValid => {
                     if (isValid){
-                        this.auth.signupOrSignin(this, this.email, this.password, (data) => {
-                            this.auth.login(this, {username: this.email, password: this.password}, (success) => {
+                        this.$auth.signupOrSignin(this, this.email, this.password, (data) => {
+                            this.$auth.login(this, {username: this.email, password: this.password}, (success) => {
                                 //this.$router.push({ path: '/signedin', query: {token: success.access_token} });
                                 //hide singup modal
                                 this.closeModal();

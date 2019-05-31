@@ -120,7 +120,7 @@
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import Calendar from "@/models/Calendar"
   import EventComponent from "@/models/EventComponent";
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import moment from "moment";
   import ChartComponent from "@/components/Cards/ChartComponent";
   import {
@@ -139,7 +139,7 @@
         event
     },
     data: () => ({
-        auth: auth,
+        // auth: auth,
         selectedComponents: [],
         currentTab: 'blocks',
         eventId: null,
@@ -154,8 +154,8 @@
     }),
     methods: {
         getEvent() {
-            this.auth.currentUser(this, true, function() {
-                let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            this.$auth.currentUser(this, true, function() {
+                let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
 
                 _calendar.calendarEvents().find(this.$route.params.id).then(event => {
                     this.eventId = event.id;

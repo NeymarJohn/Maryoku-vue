@@ -14,7 +14,7 @@
   </div>
 </template>
 <script>
-  import auth from "@/auth";
+  // import auth from '@/auth';
   import CompanyDashboardInfo from "./CompanyDashboardInfo";
   import CompanyDashboardEventsChart from "./CompanyDashboardEventsChart";
   import CompanyDashboardEventTypesChart from "./CompanyDashboardEventTypesChart";
@@ -37,14 +37,14 @@
     },
     data() {
       return {
-        auth: auth,
+        // auth: auth,
         statistics: {numberOfEventsPerYear : {}, satisfactionRatesPerYearMonth: {}, participantsPerEventPerYearMonthEventType: {}},
         currentYear: moment().year().toString()
       };
     },
     mounted() {
-      this.auth.currentUser(this, true, () => {
-        new Customer({id: this.auth.user.customer.id})
+      this.$auth.currentUser(this, true, () => {
+        new Customer({id: this.$auth.user.customer.id})
           .statistics()
           .get()
           .then(res=>{

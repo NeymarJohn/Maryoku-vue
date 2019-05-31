@@ -58,7 +58,7 @@
 </template>
 <script>
 import { CollapseTransition } from "vue2-transitions";
-import auth from 'src/auth';
+// import auth from 'src/auth';
 
 export default {
   components: {
@@ -92,7 +92,7 @@ export default {
       this.isClosed = !this.isClosed;
     },
     signout(e){
-      this.auth.logout(this);
+      this.$auth.logout(this);
     },
     gotoMyProfile() {
       //this.$router.push('/pages/user');

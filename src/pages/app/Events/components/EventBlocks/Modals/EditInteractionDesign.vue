@@ -54,7 +54,7 @@
     </div>
 </template>
 <script>
-    import auth from '@/auth';
+    // import auth from '@/auth';
     import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
     import CalendarEvent from '@/models/CalendarEvent';
     import EventPageHeaderImage from '@/models/EventPageHeaderImage';

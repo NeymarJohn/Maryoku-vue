@@ -68,7 +68,7 @@
   import Vendors from "@/models/Vendors";
   import VendorCategories from "@/models/VendorCategories";
   import VueElementLoading from 'vue-element-loading';
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import { paginationMixin } from '@/mixins/pagination'
 
 
@@ -84,7 +84,7 @@
     mixins: [paginationMixin],
     data() {
       return {
-        auth: auth,
+        // auth: auth,
         vendorsList: [],
         tooltipModels: [],
         loadingData: true,
@@ -96,7 +96,7 @@
       }
     },
     created() {
-      this.auth.currentUser(this, true, function(){
+      this.$auth.currentUser(this, true, function(){
         this.fetchData(0);
       }.bind(this));
     },

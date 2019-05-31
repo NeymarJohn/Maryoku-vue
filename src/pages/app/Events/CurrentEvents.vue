@@ -202,7 +202,7 @@
 
   //MAIN MODULES
   import ChartComponent from "@/components/Cards/ChartComponent";
-  import auth from "@/auth";
+  // import auth from '@/auth';
   import moment from "moment";
   import VueElementLoading from "vue-element-loading";
   import Calendar from '@/models/Calendar';
@@ -242,7 +242,7 @@
 
     data() {
       return {
-        auth: auth,
+        // auth: auth,
         calendarEvent: {},
         selectedComponents: [],
         currentTab: 'blocks',
@@ -270,8 +270,8 @@
       this.getEvent();
       if (this.components.length === 0) {
         this.$store.dispatch("event/getComponents");
-        this.$store.dispatch("event/getCategories", this.auth.user.defaultCalendarId);
-        this.$store.dispatch("event/getEventTypes", this.auth.user.defaultCalendarId);
+        this.$store.dispatch("event/getCategories", this.$auth.user.defaultCalendarId);
+        this.$store.dispatch("event/getEventTypes", this.$auth.user.defaultCalendarId);
         this.$store.dispatch("event/getCurrencies");
         this.$store.dispatch("event/getEventThemes");
       }
@@ -295,8 +295,8 @@
         "setEventData"
       ]),
       getEvent() {
-        this.auth.currentUser(this, true, function() {
-          let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        this.$auth.currentUser(this, true, function() {
+          let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
 
           _calendar.calendarEvents().find(this.$route.params.id).then(event => {
 
@@ -340,7 +340,7 @@
       },
       getCalendarEventStatistics(evt){
 
-        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
 
         new CalendarEventStatistics().for(calendar, event).get()
@@ -427,7 +427,7 @@
     grid-row: 1;
     margin-top: auto;
     margin-bottom: auto;
-    font-size: 2.5rem;
+    font-size: 4vmin;
     font-weight: 700;
     color: #515151;
   }

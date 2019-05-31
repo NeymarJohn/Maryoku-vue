@@ -17,7 +17,7 @@
   import Calendar from "@/models/Calendar"
   import EventComponent from "@/models/EventComponent";
   import VueElementLoading from 'vue-element-loading';
-  import auth from '@/auth';
+  // import auth from '@/auth';
 
   import EditHeaderImage from './Modals/EditHeaderImage.vue';
   import EventConfirmation from "./EventConfirmation.vue";
@@ -37,7 +37,7 @@
         }
     },
     data: () => ({
-        auth: auth,
+        // auth: auth,
 //        bannerURL : this.event.eventPage.headerId ? '/static/img/page-headers/' + this.event.eventPage.headerId : 'https://bit.ly/2TWGILO', // default image for banner
     }),
     methods: {
@@ -67,7 +67,7 @@
 
         },showSignUp(){
 
-            if ( this.auth.user.authenticated ) {
+            if ( this.$auth.user.authenticated ) {
                 this.setDietaryConstraintsModal({showModal: true});
             } else {
                 this.setSignUpModal({ showModal: true });

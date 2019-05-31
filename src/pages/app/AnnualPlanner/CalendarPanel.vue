@@ -114,7 +114,7 @@
 </template>
 
 <script>
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import EventModal from './EventModal/';
   import VueElementLoading from 'vue-element-loading';
   import ChartComponent from '@/components/Cards/ChartComponent';
@@ -169,7 +169,7 @@
     data() {
       return {
         ready: false,
-        auth: auth,
+        // auth: auth,
         isLoading: true,
         monthRows: [],
         currentMonthName: '',
@@ -199,7 +199,7 @@
       ...mapActions('AnnualPlannerVuex', ['setEventModalAndEventData']),
 
       exportToExcel() {
-        let calendarId = this.auth.user.defaultCalendarId;
+        let calendarId = this.$auth.user.defaultCalendarId;
 
         window.open(
           `${process.env.SERVER_URL}/1/calendars/${calendarId}/export/${this.year}`
@@ -234,8 +234,8 @@
             countries: this.selectedCountries ? storage.countries : [],
             categories: this.selectedCategories ? storage.categories : []
           }};
-        let calendarId = this.auth.user.defaultCalendarId;
-        this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.auth.getAuthHeader() })
+        let calendarId = this.$auth.user.defaultCalendarId;
+        this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.$auth.getAuthHeader() })
           .then((response) => {
             let eventsMap = {};
             let occasionsArray = [];
@@ -336,9 +336,9 @@
       openNewEventModal(currentDate){
         this.setModalSubmitTitle('Save');
         this.setEditMode({ editMode: false });
-        this.setNumberOfParticipants({numberOfParticipants: this.auth.user.customer.numberOfEmployees});
+        this.setNumberOfParticipants({numberOfParticipants: this.$auth.user.customer.numberOfEmployees});
         this.setEventDate({date: currentDate ? currentDate : null});
-        this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: false, eventData: {date: currentDate ? currentDate : new Date(), numberOfParticipants: this.auth.user.customer.numberOfEmployees} })
+        this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: false, eventData: {date: currentDate ? currentDate : new Date(), numberOfParticipants: this.$auth.user.customer.numberOfEmployees} })
       },
       openEditEventModal: function (item) {
         if (!item.editable){

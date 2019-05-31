@@ -2,7 +2,7 @@
   <div class="md-layout get-started">
     <div class="md-layout-item md-size-100 mx-auto">
       <div class="md-layout" style="justify-content: center; top: 25%; position: absolute; width: 90%;">
-        <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-20">
+        <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-25">
           <md-card style="min-height: 440px;">
             <md-card-content style="text-align: center;">
               <img src="/static/img/calendar.png" style="width: 120px;">
@@ -14,7 +14,7 @@
           </md-card>
         </div>
 
-        <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-20">
+        <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-25">
           <md-card style="min-height: 440px;">
             <md-card-content style="text-align: center;">
               <img src="/static/img/paperandpen.png" style="width: 120px;">
@@ -25,7 +25,7 @@
             </md-card-content>
           </md-card>
         </div>
-        <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-20">
+        <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-25">
           <md-card style="min-height: 440px;">
             <md-card-content style="text-align: center;">
               <img src="/static/img/tools.png" style="width: 120px;">
@@ -42,16 +42,39 @@
   </div>
 </template>
 <script>
+
+  import EventSidePanel from '@/pages/app/Events/EventSidePanel';
+
   export default {
     data() {
 
     },
+    mounted(){
+      this.$auth.currentUser(this, false, null);
+    },
     methods: {
       openEventModal() {
-        this.$router.push({ path: `/events` , name  : 'Events', params : { mode : 'create-event'} });
+        /*this.$router.push({ path: `/events` , name  : 'Events', params : { mode : 'create-event'} });
         this.setEventModal({ showModal: true });
         this.setModalSubmitTitle("Save");
-        this.setEditMode({ editMode: false });
+        this.setEditMode({ editMode: false });*/
+
+        let now = new Date();
+        window.currentPanel = this.$showPanel({
+          component: EventSidePanel,
+          cssClass: 'md-layout-item md-size-40 transition36 ',
+          openOn: 'right',
+          disableBgClick: false,
+          props: {
+            modalSubmitTitle: 'Save',
+            editMode: false,
+            sourceEventData: {date: new Date(), numberOfParticipants: this.$auth.user.customer.numberOfEmployees},
+            refreshEvents: null,
+            year: now.getFullYear(),
+            month: now.getMonth(),
+            occasionsOptions: this.occasionsArray,
+          }
+        });
       },
       openYearPlanner() {
         this.$router.push({ path: `/planner`});

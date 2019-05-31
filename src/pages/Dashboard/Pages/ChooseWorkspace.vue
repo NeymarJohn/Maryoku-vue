@@ -19,7 +19,7 @@
 </template>
 <script>
   import { SignupCard } from "@/components";
-  import auth from "@/auth";
+  // import auth from '@/auth';
   import VueElementLoading from 'vue-element-loading';
   import Tenant from '@/models/Tenant';
   import TenantUser from '@/models/TenantUser';
@@ -56,8 +56,8 @@
               this.$router.push({name: "SignIn"});
             });
 
-            /*this.auth.signupOrSignin(this, this.email, this.password, (data) => {
-              this.auth.login(this, {username: this.email, password: this.password}, (success) => {
+            /*this.$auth.signupOrSignin(this, this.email, this.password, (data) => {
+              this.$auth.login(this, {username: this.email, password: this.password}, (success) => {
                 this.$router.push({ path: '/signedin', query: {token: success.access_token} });
               }, (failure) => {
                 this.loading = false;
@@ -110,13 +110,13 @@
         if (hostname.startsWith("app.262days.com")){
           hostname = '262days.com';
         }
-        return `${document.location.protocol}//${tenant}.${hostname}:${document.location.port}/#/signedin?token=${this.auth.getToken()}`;
+        return `${document.location.protocol}//${tenant}.${hostname}:${document.location.port}/#/signedin?token=${this.$auth.getToken()}`;
       }
     },
     created() {
       //const givenToken = this.$route.query.token;
-      //this.auth.setToken(givenToken);
-      //this.auth.currentUser(this, true);
+      //this.$auth.setToken(givenToken);
+      //this.$auth.currentUser(this, true);
       /*let tenantId = document.location.hostname.replace(".262days.com","");
       new Tenant().find(tenantId).then(res =>{
         if (!res.status){
@@ -126,7 +126,7 @@
     },
     mounted() {
       this.loading = true;
-      new TenantUser().find(this.auth.getToken()).then(res => {
+      new TenantUser().find(this.$auth.getToken()).then(res => {
         if (res.status){
           this.tenantIds = res.tenantIds;
         } else {
@@ -153,7 +153,7 @@
         terms: false,
         workspaceValid: true,
         serverURL: process.env.SERVER_URL,
-        auth: auth,
+        // auth: auth,
         touched: {
           workspace: false
         },

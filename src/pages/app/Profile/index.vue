@@ -148,7 +148,7 @@
   import {LabelEdit} from '@/components';
   import { EditProfileForm, UserCard } from "@/pages";
 
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import {
     mapGetters
   } from 'vuex';
@@ -171,7 +171,7 @@
     },
     data() {
       return {
-        auth: auth,
+        // auth: auth,
         chips: []
       }
 
@@ -186,7 +186,7 @@
     },
     mounted() {
       // TODO : user state should be reviewed
-      this.auth.currentUser(this, true, () => {
+      this.$auth.currentUser(this, true, () => {
         this.$store.dispatch("user/getUserFromApi");
       })
     },
@@ -203,7 +203,7 @@
         reader.onload = e => {
           this.loaded = false;
           return new CustomerFile({customerFile: e.target.result}).save().then(result => {
-            let customer = this.auth.user.customer;
+            let customer = this.$auth.user.customer;
             customer.logoFileId = result.id;
             new Customer({id: customer.id, logoFileId: result.id}).save();
             this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
@@ -219,7 +219,7 @@
       },
       removeImage: function(type) {
         this.loaded = false;
-        let customer = this.auth.user.customer;
+        let customer = this.$auth.user.customer;
         new CustomerFile({id: customer.logoFileId}).delete().then(res => {
           this.loaded = true;
           customer.logoFileId = null;

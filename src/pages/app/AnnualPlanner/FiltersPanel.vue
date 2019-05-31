@@ -55,7 +55,7 @@
 </template>
 
 <script>
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import Calendar from '@/models/Calendar';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import AnnualPlannerVuexModule from './AnnualPlanner.vuex';
@@ -76,7 +76,7 @@
 
       return {
         ready: false,
-        auth: auth,
+        // auth: auth,
         isLoading: true,
         eventTypes: [],
         selectedCategories: [],
@@ -100,9 +100,9 @@
     },
     methods: {
       filterBaseData() {
-        this.auth.currentUser(this, true, function() {
+        this.$auth.currentUser(this, true, function() {
 
-          let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+          let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
 
           _calendar.metadata().get().then(metadatas => {
 

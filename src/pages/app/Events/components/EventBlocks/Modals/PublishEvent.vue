@@ -31,7 +31,7 @@
     </div>
 </template>
 <script>
-    import auth from '@/auth';
+    // import auth from '@/auth';
     import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
     import CalendarEvent from '@/models/CalendarEvent';
     import {Modal} from "@/components";
@@ -51,7 +51,7 @@
 
         },
         data: () => ({
-            auth: auth,
+            // auth: auth,
             publishUrl : ''
         }),
 

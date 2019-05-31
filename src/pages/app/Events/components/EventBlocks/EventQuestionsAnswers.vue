@@ -28,7 +28,7 @@
   import Calendar from "@/models/Calendar"
   import EventComponent from "@/models/EventComponent";
   import VueElementLoading from 'vue-element-loading';
-  import auth from '@/auth';
+  // import auth from '@/auth';
 
   import { Collapse } from "@/components";
 

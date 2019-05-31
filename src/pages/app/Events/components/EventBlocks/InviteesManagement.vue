@@ -207,7 +207,7 @@
     import CalendarEvent from "@/models/CalendarEvent"
     import EventComponent from "@/models/EventComponent";
     import VueElementLoading from 'vue-element-loading';
-    import auth from '@/auth';
+    // import auth from '@/auth';
     import EventInteraction from "@/models/EventInteraction";
     import moment from 'moment';
     import _ from "underscore";
@@ -227,7 +227,7 @@
             event
         },
         data: () => ({
-            auth: auth,
+            // auth: auth,
             isLoading: true,
             selected_audience: null,
             nature_group: null,
@@ -342,7 +342,7 @@
                 }
 
                 // Save event interaction
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
 
                 new EventInteraction(new_interaction).for(calendar, event).save().then(res => {
@@ -358,7 +358,7 @@
                 // Edit event interaction
                 this.isLoading = true;
 
-                let interaction = new EventInteraction({id: item.hashed_id}).for(new Calendar({id: this.auth.user.defaultCalendarId}), this.event);
+                let interaction = new EventInteraction({id: item.hashed_id}).for(new Calendar({id: this.$auth.user.defaultCalendarId}), this.event);
                 interaction.enabled = status;
                 interaction.templateId = item.id;
                 interaction.title = item.title;
@@ -416,7 +416,7 @@
             },
             saveInviteeGroups() {
 
-                let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
 
                 let selectedGroupsIds = [];
@@ -445,7 +445,7 @@
 
             },
             getEventInteractions(){
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
                 new EventInteraction().for(calendar, event).get().then(res => {
 

@@ -40,7 +40,7 @@
   import EventComponent from "@/models/EventComponent";
   import CalendarEventPageImage from "@/models/CalendarEventPageImage"
   import VueElementLoading from 'vue-element-loading';
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import swal from "sweetalert2";
 
 
@@ -58,7 +58,7 @@
         }
     },
     data: () => ({
-      auth: auth,
+      // auth: auth,
       eventImages : [],
       serverUrl: process.env.SERVER_URL,
         imagePreview : null,
@@ -102,7 +102,7 @@
         this.isLoading = true;
 
         reader.onload = e => {
-          const calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+          const calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
           const event = new CalendarEvent({id: this.event.id});
           return new CalendarEventPageImage({featuredImageFile : e.target.result}).for(calendar, event).save().then(result => {
             this.event.eventPage.images.push({id: result.id});
@@ -118,7 +118,7 @@
       },
 
       removeEventImage(index){
-        const calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        const calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         const event = new CalendarEvent({id: this.event.id});
 
         this.isLoading = true;

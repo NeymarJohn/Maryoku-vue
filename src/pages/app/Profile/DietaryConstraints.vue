@@ -33,7 +33,7 @@
 
 <script>
   import VueElementLoading from 'vue-element-loading';
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import Me from '@/models/Me';
   import {
     Collapse
@@ -54,7 +54,7 @@
     },
     data(){
       return{
-        auth: auth,
+        // auth: auth,
         showOnIcoff:true,
         showOffIcoff:false,
         dietaryIconsList:[

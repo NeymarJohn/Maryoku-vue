@@ -20,7 +20,7 @@
   </chart-card>
 </template>
 <script>
-  import auth from "@/auth";
+  // import auth from '@/auth';
   import Chartist from "chartist";
   import {
     ChartCard
@@ -59,7 +59,7 @@
     },
     data() {
       return {
-        auth: auth,
+        // auth: auth,
         loading: true,
         colouredLineChart: {
           data: {

@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-import auth from "@/auth";
+// import auth from '@/auth';
 export default {
   components: {
 
@@ -19,7 +19,7 @@ export default {
   created() {
     const that = this;
     setTimeout(() => {
-      this.auth.logout(this);
+      this.$auth.logout(this);
       try {
         window.heap.resetIdentity();
       } catch (e) { console.error(e);}

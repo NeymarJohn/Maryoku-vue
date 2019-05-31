@@ -106,7 +106,7 @@
     </div>
 </template>
 <script>
-    import auth from '@/auth';
+    // import auth from '@/auth';
     import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
     import CalendarEvent from '@/models/CalendarEvent';
     import Calendar from "@/models/Calendar";
@@ -135,7 +135,7 @@
             selectedBlock: Object
         },
         data: () => ({
-            auth: auth,
+            // auth: auth,
             isLoading: false,
             eventBlocks: [],
             prioritiesList: [
@@ -195,7 +195,7 @@
                 this.$emit("closePanel");
             },
             getBuildingBlockValues() {
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id: this.selectedBlock.id});
 
@@ -214,7 +214,7 @@
                     eventComponent: {id: this.selectedBlock.id}
                 }
 
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id: this.selectedBlock.id});
 
@@ -240,7 +240,7 @@
                 item.eventComponent = {id: this.selectedBlock.id};
 
 
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let eventObject = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id: this.selectedBlock.id});
 
@@ -273,7 +273,7 @@
                     if (result.value) {
 
                         this.isLoading = true;
-                        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                         let event = new CalendarEvent({id: this.event.id});
                         let selected_block = new EventComponent({id: this.selectedBlock.id});
 
@@ -311,7 +311,7 @@
 
                 this.isLoading = true;
 
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id: this.selectedBlock.id});
                 let value = new EventComponentValue({id: item.id});
@@ -363,7 +363,7 @@
                     return item.id == index;
                 });
 
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id: this.selectedBlock.id});
                 let value = new EventComponentValue({id: item.id});
@@ -414,7 +414,7 @@
                     return item.id == index;
                 });
 
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id: this.selectedBlock.id});
                 let value = new EventComponentValue({id: item.id});
@@ -467,7 +467,7 @@
                     return item.id == index;
                 });
 
-                let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id: this.selectedBlock.id});
                 let value = new EventComponentValue({id: item.id});

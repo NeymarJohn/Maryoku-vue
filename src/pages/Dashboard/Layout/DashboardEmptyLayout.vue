@@ -173,7 +173,7 @@ import ContentFooter from "./ContentFooter.vue";
 import MobileMenu from "./Extra/MobileMenu.vue";
 import UserMenu from "./Extra/UserMenu.vue";
 import { ZoomCenterTransition } from "vue2-transitions";
-import auth from "src/auth";
+// import auth from "src/auth";
 
 export default {
   components: {
@@ -196,7 +196,7 @@ export default {
     }
   },
   mounted() {
-    this.auth.currentUser(this, true, function(){
+    this.$auth.currentUser(this, true, function(){
       let docClasses = document.body.classList;
       let isWindows = navigator.platform.startsWith("Win");
       if (isWindows) {

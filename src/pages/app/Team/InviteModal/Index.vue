@@ -192,7 +192,7 @@
 </template>
 
 <script>
-import auth from "@/auth";
+// import auth from '@/auth';
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import { Modal, SimpleWizard, WizardTab } from "@/components";
 import swal from "sweetalert2";
@@ -219,7 +219,7 @@ export default {
   },
   data() {
     return {
-      auth: auth,
+      // auth: auth,
       greenSuccess: false,
       touched: {
         //                firstName: false,
@@ -418,7 +418,7 @@ export default {
       });
     },
     async updateTeamMember() {
-      let team = new Teams({ id: this.auth.user.defaultGroupId });
+      let team = new Teams({ id: this.$auth.user.defaultGroupId });
       let member = await team.members().find(this.editMode);
 
       member.emailAddress = this.teamMemberData.emailAddress;

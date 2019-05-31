@@ -19,7 +19,7 @@
   </div>
 </template>
 <script>
-import auth from "@/auth";
+// import auth from '@/auth';
 export default {
   components: {
 
@@ -30,8 +30,8 @@ export default {
     const that = this;
     /*setTimeout(() => {
       const givenToken = that.$route.query.token;
-      that.auth.setToken(givenToken);
-      that.auth.currentUser(that, true);
+      that.$auth.setToken(givenToken);
+      that.$auth.currentUser(that, true);
     },2500)*/
   },
   data() {

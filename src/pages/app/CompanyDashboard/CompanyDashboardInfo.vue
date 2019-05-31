@@ -45,7 +45,7 @@
   </md-card>
 </template>
 <script>
-  import auth from "@/auth";
+  // import auth from '@/auth';
   import {LabelEdit} from '@/components';
   import CustomerFile from '@/models/CustomerFile';
   import Customer from '@/models/Customer';
@@ -59,7 +59,7 @@
     },
     data() {
       return {
-        auth: auth,
+        // auth: auth,
         loaded: false,
         logoButtonsVisible: false,
         companyProfile: {
@@ -77,8 +77,8 @@
       };
     },
     mounted(){
-      this.auth.currentUser(this, true, () => {
-        let customer = this.auth.user.customer;
+      this.$auth.currentUser(this, true, () => {
+        let customer = this.$auth.user.customer;
         this.companyProfile.id = customer.id;
         this.companyProfile.name = customer.name;
         this.mainAddress = { onelineAddress: customer.mainAddress ? customer.mainAddress.onelineAddress : '' };
@@ -102,7 +102,7 @@
         this.saveCompanyDetails();
       },
       saveCompanyDetails() {
-        let customer = this.auth.user.customer;
+        let customer = this.$auth.user.customer;
         new Customer(this.companyProfile).save().then(res=>{
           /*this.$notify(
             {
@@ -125,7 +125,7 @@
         reader.onload = e => {
           this.loaded = false;
           return new CustomerFile({customerFile: e.target.result}).save().then(result => {
-            let customer = this.auth.user.customer;
+            let customer = this.$auth.user.customer;
             customer.logoFileId = result.id;
             new Customer({id: customer.id, logoFileId: result.id}).save();
             this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
@@ -141,7 +141,7 @@
       },
       removeImage: function(type) {
         this.loaded = false;
-        let customer = this.auth.user.customer;
+        let customer = this.$auth.user.customer;
         new CustomerFile({id: customer.logoFileId}).delete().then(res => {
           this.loaded = true;
           customer.logoFileId = null;

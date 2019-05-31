@@ -39,7 +39,7 @@
   import HolidaysCelebrate from './HolidaysCelebrate.vue';
   import {LabelEdit} from '@/components';
   import Me from '@/models/Me';
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import {
     mapGetters
   } from 'vuex';
@@ -56,7 +56,7 @@
     },
     data() {
       return {
-        auth: auth,
+        // auth: auth,
         upComingEvents: [],
         userInfo: {},
         isLoading: false,

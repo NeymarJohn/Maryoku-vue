@@ -72,7 +72,7 @@
   import EventComponent from "@/models/EventComponent";
   import EventComponentVendor from "@/models/EventComponentVendor";
   import VueElementLoading from 'vue-element-loading';
-  import auth from '@/auth';
+  // import auth from '@/auth';
 
   import UploadVendorsModal from '../../../Vendors/ImportVendors';
   import ManageBlockVendors from './Modals/ManageBlockVendors.vue';
@@ -91,7 +91,7 @@
         event : Object
     },
     data: () => ({
-        auth: auth,
+        // auth: auth,
         isLoading:true,
         blockVendors : []
     }),
@@ -109,7 +109,7 @@
         },
         getBlockVendors() {
 
-            let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
             let event = new CalendarEvent({id: this.event.id});
             let selected_block = new EventComponent({id : this.selectedBlock.id});
 

@@ -54,7 +54,7 @@
 </template>
 <script>
 import { SignupCard } from "@/components";
-import auth from "@/auth";
+// import auth from '@/auth';
 import VueElementLoading from 'vue-element-loading';
 import Tenant from '@/models/Tenant';
 
@@ -75,8 +75,8 @@ export default {
       let that = this;
       this.$validator.validateAll().then(isValid => {
         if (isValid){
-          that.auth.signupOrSignin(that, this.email, that.password, (data) => {
-            that.auth.login(that, {username: that.email, password: that.password}, (success) => {
+          that.$auth.signupOrSignin(that, this.email, that.password, (data) => {
+            that.$auth.login(that, {username: that.email, password: that.password}, (success) => {
               that.$router.push({ path: '/signedin', query: {token: success.access_token} });
             }, (failure) => {
               that.loading = false;
@@ -96,8 +96,8 @@ export default {
   },
   created() {
     const givenToken = this.$route.query.token;
-    this.auth.setToken(givenToken);
-    this.auth.currentUser(this, true);
+    this.$auth.setToken(givenToken);
+    this.$auth.currentUser(this, true);
     /*let tenantId = document.location.hostname.replace(".262days.com","");
     new Tenant().find(tenantId).then(res =>{
       if (!res.status){
@@ -122,7 +122,7 @@ export default {
       email: null,
       password: null,
       serverURL: process.env.SERVER_URL,
-      auth: auth,
+      // auth: auth,
       touched: {
         email: false,
         password: false

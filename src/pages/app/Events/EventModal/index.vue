@@ -186,7 +186,7 @@
     </div>
 </template>
 <script>
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import CalendarEvent from '@/models/CalendarEvent';
   import {Modal} from "@/components";
@@ -211,7 +211,7 @@
 
     },
     data: () => ({
-      auth: auth,
+      // auth: auth,
       hoursArray: [],
       durationArray: [...Array(12).keys()].map(x =>  ++x),
       dateValid: true,
@@ -443,7 +443,7 @@
         }
       },
       updateEvent() {
-        let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let editedEvent = new CalendarEvent({id: this.eventData.id});
 
         editedEvent.title = this.title;
@@ -497,7 +497,7 @@
           if (result.value) {
             this.$parent.isLoading = true;
 
-            let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
             let event = new CalendarEvent({id: this.eventData.id});
 
             event.for(_calendar).delete().then(result => {
@@ -511,7 +511,7 @@
         });
       },
       createEvent() {
-        let calendarId = this.auth.user.defaultCalendarId
+        let calendarId = this.$auth.user.defaultCalendarId
         let _calendar = new Calendar({ id: calendarId});
 
         let newEvent = new CalendarEvent({
@@ -577,8 +577,8 @@
         this.$router.push({ name: 'EditBuildingBlocks', params: {id: this.id }});
       },
         getOccasionList() {
-            if ( this.auth.user.defaultCalendarId ) {
-                let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            if ( this.$auth.user.defaultCalendarId ) {
+                let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
 
                 new Occasion().for(_calendar).get()
                     .then(resp =>{

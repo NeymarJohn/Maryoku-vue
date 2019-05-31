@@ -55,7 +55,7 @@ import swal from "sweetalert2";
 import Teams from "@/models/Teams";
 import TeamMembers from "@/models/TeamMembers";
 import indexVuexModule from "@/store/index";
-import auth from '@/auth';
+// import auth from '@/auth';
 import _ from 'underscore';
 
 export default {
@@ -90,7 +90,7 @@ export default {
   },
   data() {
     return {
-      auth: auth,
+      // auth: auth,
       selected: [],
       hideBtn: false,
       openPopover: false

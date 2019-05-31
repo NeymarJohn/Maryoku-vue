@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-  import auth from "@/auth";
+  // import auth from '@/auth';
   import SockJS from 'sockjs-client'; //NEW: SockJS & Stomp instead of socket.io
   import Stomp from 'stompjs';
   import TenantUser from '@/models/TenantUser';
@@ -23,8 +23,8 @@
     },
     created() {
       const givenToken = this.$route.query.token;
-      this.auth.setToken(givenToken);
-      this.auth.setHeaders(this);
+      this.$auth.setToken(givenToken);
+      this.$auth.setHeaders(this);
 
       const that = this;
 
@@ -64,31 +64,31 @@
         Model.$http.defaults.headers.common['gorm-tenantid'] = tenantId;
         Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
 
-        that.auth.currentUser(that, true, function () {
+        that.$auth.currentUser(that, true, function () {
 
           /*const socket = new SockJS(`${process.env.SERVER_URL}/stomp`);
         const client = Stomp.over(socket);
 
         client.connect({}, () => {
-          client.subscribe(`/topic/${that.auth.user.id}`, () => {
+          client.subscribe(`/topic/${that.$auth.user.id}`, () => {
             alert('Your session timed out.');
-            that.auth.logout(that);
+            that.$auth.logout(that);
           });
         }, (error) => {
           console.error('unable to connect : ' + error);
         });*/
 
-          let me = that.auth.user.me;
+          let me = that.$auth.user.me;
           try {
-            window.heap.identify(that.auth.user.email);
+            window.heap.identify(that.$auth.user.email);
           } catch (e) {
             console.error(e);
           }
 
           try {
             that.$Tawk.$updateChatUser({
-              name: that.auth.user.displayName,
-              email: that.auth.user.email
+              name: that.$auth.user.displayName,
+              email: that.$auth.user.email
             });
           } catch (e) {
             console.error(e);

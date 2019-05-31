@@ -58,7 +58,7 @@
   </chart-card>
 </template>
 <script>
-  import auth from "@/auth";
+  // import auth from '@/auth';
   import Chartist from "chartist";
   import moment from "moment";
   import VueElementLoading from 'vue-element-loading';
@@ -147,7 +147,7 @@
     },
     data() {
       return {
-        auth: auth,
+        // auth: auth,
         loading: true,
         displayByYearOrMonth: false,
         byYearData: { labels: [], series: [[]]},

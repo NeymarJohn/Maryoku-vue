@@ -60,7 +60,7 @@
 </template>
 <script>
 import { SignupCard } from "@/components";
-import auth from "@/auth";
+// import auth from '@/auth';
 import VueElementLoading from 'vue-element-loading';
 import Tenant from '@/models/Tenant';
 
@@ -94,8 +94,8 @@ export default {
             }
           });
 
-          /*this.auth.signupOrSignin(this, this.email, this.password, (data) => {
-            this.auth.login(this, {username: this.email, password: this.password}, (success) => {
+          /*this.$auth.signupOrSignin(this, this.email, this.password, (data) => {
+            this.$auth.login(this, {username: this.email, password: this.password}, (success) => {
               this.$router.push({ path: '/signedin', query: {token: success.access_token} });
             }, (failure) => {
               this.loading = false;
@@ -145,8 +145,8 @@ export default {
   },
   created() {
     //const givenToken = this.$route.query.token;
-    //this.auth.setToken(givenToken);
-    //this.auth.currentUser(this, true);
+    //this.$auth.setToken(givenToken);
+    //this.$auth.currentUser(this, true);
     /*let tenantId = document.location.hostname.replace(".262days.com","");
     new Tenant().find(tenantId).then(res =>{
       if (!res.status){
@@ -171,7 +171,7 @@ export default {
       terms: false,
       workspaceValid: true,
       serverURL: process.env.SERVER_URL,
-      auth: auth,
+      // auth: auth,
       touched: {
         workspace: false
       },

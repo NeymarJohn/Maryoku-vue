@@ -25,7 +25,7 @@
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import Calendar from "@/models/Calendar"
   import EventComponent from "@/models/EventComponent";
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import moment from "moment";
 
 
@@ -38,7 +38,7 @@
         event
     },
     data: () => ({
-        auth: auth,
+        // auth: auth,
         routeName : null
     }),
     methods: {

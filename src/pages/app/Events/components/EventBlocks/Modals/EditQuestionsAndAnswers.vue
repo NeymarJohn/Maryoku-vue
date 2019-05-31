@@ -41,7 +41,7 @@
     </div>
 </template>
 <script>
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import CalendarEvent from '@/models/CalendarEvent';
   import {Modal} from "@/components";
@@ -61,7 +61,7 @@
 
     },
     data: () => ({
-      auth: auth,
+      // auth: auth,
         questionsList : [],
         questionTemplate : {
           question : '',
@@ -82,7 +82,7 @@
           this.setQuestionsAnswersModal({ showModal: false });
       },
         saveQuestoinsList() {
-            let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
             let editedEvent = new CalendarEvent({id: this.event.id});
 
             editedEvent = this.event;

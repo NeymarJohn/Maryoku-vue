@@ -243,7 +243,7 @@
 </template>
 
 <script>
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import Calendar from '@/models/Calendar';
   import CalendarEvent from '@/models/CalendarEvent';
   import CalendarMetadata from '@/models/CalendarMetadata';
@@ -267,7 +267,7 @@
 
       return {
         ready: false,
-        auth: auth,
+        // auth: auth,
         isLoading: true,
         filtersChanged: false,
         selectedYear: this.$route.params.year || new Date().getFullYear(),
@@ -299,10 +299,10 @@
     mounted(){
       this.ready = false;
       this.filtersChanged = false;
-      //this.$store.state.calendarId = this.auth.user.defaultCalendarId;
-      this.auth.currentUser(this, true, function() {
+      //this.$store.state.calendarId = this.$auth.user.defaultCalendarId;
+      this.$auth.currentUser(this, true, function() {
 
-        let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
 
         _calendar.metadata().get().then(metadatas => {
 
@@ -338,8 +338,8 @@
             countries: this.selectedCountries,
             eventTypes: this.selectedEventTypes
           }};
-        let calendarId = this.auth.user.defaultCalendarId;
-        this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.auth.getAuthHeader() })
+        let calendarId = this.$auth.user.defaultCalendarId;
+        this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.$auth.getAuthHeader() })
           .then(response => response.data)
           .then((json) => {
             let eventsMap = {};

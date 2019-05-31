@@ -143,7 +143,7 @@
 
 
   import VueElementLoading from 'vue-element-loading';
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import EventBlocks from "../components/NewEventBlocks";
   import draggable from 'vuedraggable';
   import {Drag, Drop} from 'vue-drag-drop';
@@ -164,7 +164,7 @@
 
     },
     data: () => ({
-      auth: auth,
+      // auth: auth,
       isLoading: true,
       blocksList: [
         {
@@ -235,7 +235,7 @@
 
         this.isLoading = true;
 
-        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
 
         let timelineItem = new EventTimelineItem({id: item.id}).for(calendar, event);
@@ -254,7 +254,7 @@
       },
       getTimelineItems() {
 
-        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
 
         new EventTimelineItem().for(calendar, event).get().then(res => {
@@ -288,7 +288,7 @@
           return;
         }
 
-        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
         let order = ++index;
 
@@ -332,7 +332,7 @@
         }
 
 
-        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
 
         let timelineItem = new EventTimelineItem({id: item.id}).for(calendar, event);
@@ -352,7 +352,7 @@
       },
       updateTimelineITemsOrder() {
 
-        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
 
         let new_order = 1;

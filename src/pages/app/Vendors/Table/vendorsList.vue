@@ -75,7 +75,7 @@
   import RankingModal from './RankingModal';
   import TagsModal from './TagsModal';
   import ClickOutside from 'vue-click-outside'
-  import auth from '@/auth';
+  // import auth from '@/auth';
 
   import Calendar from "@/models/Calendar";
   import CalendarEvent from "@/models/CalendarEvent";
@@ -130,7 +130,7 @@
     },
     data() {
       return {
-        auth : auth,
+        /*auth : auth,*/
         tagsModalOpen: false,
         openPopup: false,
         openPopupTags: false,
@@ -235,7 +235,7 @@
       },
       getBlockVendors() {
 
-        let calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         if (this.event) {
           let event = new CalendarEvent({ id: this.event.id });
           let selected_block = new EventComponent({ id: this.selectedBlock.id });

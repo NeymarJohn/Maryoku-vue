@@ -13,7 +13,7 @@
 </template>
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-  import auth from '@/auth';
+  // import auth from '@/auth';
 
   export default {
     name: 'event-confirmation',

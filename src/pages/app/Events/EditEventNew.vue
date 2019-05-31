@@ -24,7 +24,7 @@
   import Vue from 'vue';
   import { TimeLine, TimeLineItem, PricingCard } from "@/components";
   import EventActionsEdit from './components/EventActionsEdit';
-  import auth from '@/auth';
+  // import auth from '@/auth';
 
   export default {
     components: {
@@ -37,7 +37,7 @@
       PricingCard,
     },
     data: () => ({
-      auth: auth,
+      // auth: auth,
       responsive: false,
       calendarId: null,
       occasionsArray: null,
@@ -215,7 +215,7 @@
       window.removeEventListener("resize", this.onResponsiveInverted);
     },
     created() {
-      this.auth.currentUser(this, true, function(){
+      this.$auth.currentUser(this, true, function(){
         let calendar = '';
 
         if (this.$store.state.calendarId === null) {

@@ -116,7 +116,7 @@
 </template>
 
 <script>
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import VueElementLoading from 'vue-element-loading';
   import ChartComponent from '@/components/Cards/ChartComponent';
   import Calendar from '@/models/Calendar';
@@ -152,7 +152,7 @@
       return {
         fieldName: '',
         ready: false,
-        auth: auth,
+        // auth: auth,
         isLoading: true,
         budgetType: false,
         statisticData: {},
@@ -228,11 +228,11 @@
           this.annualBudgetPerEmployee = Number(val);
         }
 
-        let calendarId = this.auth.user.defaultCalendarId;
+        let calendarId = this.$auth.user.defaultCalendarId;
         let calendar = new Calendar({id: calendarId, annualBudgetPerEmployee:  Number(this.annualBudgetPerEmployee)});
-        let customer = new Customer({id: this.auth.user.customer.id, numberOfEmployees: Number(this.numberOfEmployees)});
+        let customer = new Customer({id: this.$auth.user.customer.id, numberOfEmployees: Number(this.numberOfEmployees)});
 
-        this.auth.user.customer.numberOfEmployees = Number(this.numberOfEmployees);
+        this.$auth.user.customer.numberOfEmployees = Number(this.numberOfEmployees);
 
         customer.save().then(response => {
           calendar.save().then(response => {
@@ -253,7 +253,7 @@
       queryBudgetInfo(){
         if (this.statistics) {
           this.annualBudget = this.statistics.annualBudget | numeral('0,0');
-          this.numberOfEmployees = this.auth.user.customer.numberOfEmployees | numeral('0,0');
+          this.numberOfEmployees = this.$auth.user.customer.numberOfEmployees | numeral('0,0');
           this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee | numeral('0,0');
 
           this.totalRemainingBudget = this.statistics.annualBudget - this.statistics.annualBudgetAllocated;
@@ -344,7 +344,7 @@
     grid-row: 1;
     margin-top: auto;
     margin-bottom: auto;
-    font-size: 1.5rem;
+    font-size: 4vmin;
     font-weight: 700;
     color: #fff;
   }

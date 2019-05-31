@@ -79,7 +79,7 @@
     </div>
 </template>
 <script>
-    import auth from '@/auth';
+    // import auth from '@/auth';
     import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
     import CalendarEvent from '@/models/CalendarEvent';
     import EventPageHeaderImage from '@/models/EventPageHeaderImage';
@@ -104,7 +104,7 @@
             selectedEventGroups : Array
         },
         data: () => ({
-            auth: auth,
+            // auth: auth,
             isLoaded : false,
             membersList : [],
             members : [],
@@ -305,7 +305,7 @@
             },
         saveInviteeGroups() {
 
-            let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
+            let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
             let event = new CalendarEvent({id: this.event.id});
 
             let selectedGroupsIds = [];

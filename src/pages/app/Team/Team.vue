@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import auth from "@/auth";
+// import auth from '@/auth';
 import InviteModal from "./InviteModal/";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import TeamTable from "./Table";
@@ -58,7 +58,7 @@ export default {
   mixins: [paginationMixin],
   data() {
     return {
-      auth: auth,
+      // auth: auth,
       team: {},
       teamMembers: [],
       teamMembersLoading: true,
@@ -83,7 +83,7 @@ export default {
   created() {
     this.$store.registerModule("teamVuex", teamVuexModule);
 
-    this.auth.currentUser(
+    this.$auth.currentUser(
       this,
       true,
       function() {
@@ -114,8 +114,8 @@ export default {
           console.log(error)
         });*/
 
-      let currentUserId = this.auth.user.id;
-      new Teams({ id: this.auth.user.defaultGroupId })
+      let currentUserId = this.$auth.user.id;
+      new Teams({ id: this.$auth.user.defaultGroupId })
         .members()
         .page(page)
         .limit(this.pagination.limit)

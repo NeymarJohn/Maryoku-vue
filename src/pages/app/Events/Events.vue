@@ -83,7 +83,7 @@
 </template>
 
 <script>
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import {
     Tabs,
     ProductCard
@@ -115,10 +115,10 @@
       })
     },
     mounted() {
-      this.auth.currentUser(this, true, function() {
+      this.$auth.currentUser(this, true, function() {
         this.$store.dispatch("user/getUserFromApi");
-        this.$store.dispatch("event/getCategories", this.auth.user.defaultCalendarId);
-        this.$store.dispatch("event/getEventTypes", this.auth.user.defaultCalendarId);
+        this.$store.dispatch("event/getCategories", this.$auth.user.defaultCalendarId);
+        this.$store.dispatch("event/getEventTypes", this.$auth.user.defaultCalendarId);
         this.$store.dispatch("event/getCurrencies");
         this.$store.dispatch("event/getEventThemes");
       }.bind(this))
@@ -134,7 +134,7 @@
   ,
     data() {
       return {
-        auth: auth,
+        // auth: auth,
         product3: "static/img/shutterstock_289440710.png",
         recentEvents: [],
         isLoading: true,

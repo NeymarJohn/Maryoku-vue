@@ -160,6 +160,10 @@ String.prototype.padStart = function(size, theChar) {
   return s;
 };
 
+Object.defineProperty(Vue.prototype, '$auth', {
+  get () { return auth; }
+});
+
 /* eslint-disable no-new */
 new Vue({
   el: "#app",

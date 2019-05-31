@@ -31,7 +31,7 @@
 </template>
 
 <script>
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import VueElementLoading from 'vue-element-loading';
 
 
@@ -48,7 +48,7 @@
     data() {
       return {
         ready: false,
-        auth: auth,
+        // auth: auth,
         isLoading: true,
         months: this.$moment.months(),
       }

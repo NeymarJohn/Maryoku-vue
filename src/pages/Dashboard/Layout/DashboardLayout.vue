@@ -197,7 +197,7 @@
   import MobileMenu from "./Extra/MobileMenu.vue";
   import UserMenu from "./Extra/UserMenu.vue";
   import { ZoomCenterTransition } from "vue2-transitions";
-  import auth from "src/auth";
+  // import auth from "src/auth";
   import EventSidePanel from '@/pages/app/Events/EventSidePanel';
 
   export default {
@@ -210,7 +210,7 @@
     },
     data() {
       return {
-        auth: auth,
+        // auth: auth,
         event : null,
         createEventModalOpen: false
       }
@@ -238,7 +238,7 @@
           props: {
             modalSubmitTitle: 'Save',
             editMode: false,
-            sourceEventData: {date: new Date(), numberOfParticipants: this.auth.user.customer.numberOfEmployees},
+            sourceEventData: {date: new Date(), numberOfParticipants: this.$auth.user.customer.numberOfEmployees},
             refreshEvents: null,
             year: now.getFullYear(),
             month: now.getMonth(),
@@ -264,7 +264,7 @@
 
       /*  NEET CODE REVIEW !!!!!!!!!!!!!!!!!!!!*/
 
-      // this.auth.currentUser(this, true, function(){
+      // this.$auth.currentUser(this, true, function(){
       //   let docClasses = document.body.classList;
       //   let isWindows = navigator.platform.startsWith("Win");
       //   if (isWindows) {

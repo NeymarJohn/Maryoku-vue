@@ -134,7 +134,7 @@
   import CalendarEvent from '@/models/CalendarEvent'
   import EventComponent from '@/models/EventComponent'
   import VueElementLoading from 'vue-element-loading'
-  import auth from '@/auth'
+  // import auth from '@/auth';
   import EventBlocks from '../components/NewEventBlocks'
   import AddBuildingBlockModal from '../components/EventBlocks/Modals/AddBuildingBlocks.vue'
   import EventBlockRequirements from '../components/EventBlocks/Modals/EventBlockRequirements.vue'
@@ -160,7 +160,7 @@
 
     },
     data: () => ({
-      auth: auth,
+      // auth: auth,
       isLoading: true,
       eventBuildingBlocks: []
 
@@ -183,7 +183,7 @@
           if (result.value) {
             this.isLoading = true
 
-            let calendar = new Calendar({id: this.auth.user.defaultCalendarId})
+            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
             let event = new CalendarEvent({id: this.event.id})
             let selected_block = new EventComponent({id: blockId})
 
@@ -201,7 +201,7 @@
       },
       getEventBuildingBlocks () {
 
-        let calendar = new Calendar({id: this.auth.user.defaultCalendarId})
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
         let event = new CalendarEvent({id: this.event.id})
 
         new EventComponent().for(calendar, event).get()
@@ -229,7 +229,7 @@
           return item.componentId == index
         })
 
-        let calendar = new Calendar({id: this.auth.user.defaultCalendarId})
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
         let event = new CalendarEvent({id: this.event.id})
         let selected_block = new EventComponent({id: block.id})
 

@@ -81,7 +81,7 @@
 <script>
     //MAIN MODULES
     import ChartComponent from "@/components/Cards/ChartComponent";
-    import auth from "@/auth";
+    // import auth from '@/auth';
     import moment from "moment";
     import VueElementLoading from "vue-element-loading";
     import Calendar from '@/models/Calendar';
@@ -126,7 +126,7 @@
 
         data() {
             return {
-                auth: auth,
+                // auth: auth,
                 calendarEvent: {},
                 isLoading: false,
                 readonly : true,

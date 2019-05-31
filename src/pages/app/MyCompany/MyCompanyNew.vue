@@ -509,7 +509,7 @@
   //MAIN MODULES
   import {mapGetters, mapMutations, mapState} from 'vuex';
   import Chart from 'chart.js';
-  import auth from '@/auth';
+  // import auth from '@/auth';
    import swal from "sweetalert2";
 
   //COMPONENTS
@@ -572,14 +572,14 @@ const currentYear=new Date().getFullYear()
           this.$store.dispatch("user/getIndustry");
         }
 
-        this.auth.currentUser(this, true, function() {
+        this.$auth.currentUser(this, true, function() {
           this.$store.dispatch("user/getUserFromApi");
-          this.customerLogoUrl = this.auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';
+          this.customerLogoUrl = this.$auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.$auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';
         }.bind(this))
     },
     data() {
       return {
-        auth: auth,
+        // auth: auth,
         inputFocus: false,
         editing: {
           numberOfEmployees: false,

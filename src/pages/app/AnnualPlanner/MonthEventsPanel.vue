@@ -69,7 +69,7 @@
 </template>
 
 <script>
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import VueElementLoading from 'vue-element-loading';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import AnnualPlannerVuexModule from './AnnualPlanner.vuex';
@@ -97,7 +97,7 @@
       return {
         formData: null,
         ready: false,
-        auth: auth,
+        // auth: auth,
         isLoading: true,
         months: this.$moment.months(),
         dates: Object.keys(this.calendarEvents),

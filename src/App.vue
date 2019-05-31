@@ -6,13 +6,13 @@
 </template>
 
 <script>
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import Model from '@/models/Model';
 
   export default {
     data(){
       return {
-        auth: auth
+        //auth: auth
       }
     },
     created() {
@@ -27,7 +27,7 @@
       window.focusEventListener = window.addEventListener('focus', function(){
         const now = new Date();
         if ((now.getTime() - before.getTime()) >= 300000) {
-          that.auth.currentUser(that,true);
+          that.$auth.currentUser(that,true);
         } else {
           before = new Date();
         }

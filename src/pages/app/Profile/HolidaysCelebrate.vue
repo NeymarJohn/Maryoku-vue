@@ -20,7 +20,7 @@
 </template>
 <script>
   import VueElementLoading from 'vue-element-loading';
-  import auth from '@/auth';
+  // import auth from '@/auth';
   import Me from '@/models/Me';
   import _ from "underscore";
 
@@ -37,7 +37,7 @@
     },
     data(){
       return{
-        auth: auth,
+        // auth: auth,
         holidayGroups: [
           { id: "christian", title: "Christian", flagOn: false },
           { id: "islam", title: "Islam", flagOn: false },
