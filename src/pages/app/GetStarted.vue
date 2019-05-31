@@ -2,8 +2,8 @@
   <div class="md-layout get-started">
     <div class="md-layout-item md-size-100 mx-auto">
       <div class="md-layout" style="justify-content: center; top: 25%; position: absolute; width: 90%;">
-        <div class="md-layout-item md-size-20">
-          <md-card>
+        <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-20">
+          <md-card style="min-height: 440px;">
             <md-card-content style="text-align: center;">
               <img src="/static/img/calendar.png" style="width: 120px;">
               <h4 class="get-started-card-title">Create Your First Event</h4>
@@ -14,8 +14,8 @@
           </md-card>
         </div>
 
-        <div class="md-layout-item md-size-20">
-          <md-card style="min-height: 400px;">
+        <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-20">
+          <md-card style="min-height: 440px;">
             <md-card-content style="text-align: center;">
               <img src="/static/img/paperandpen.png" style="width: 120px;">
               <h4 class="get-started-card-title">Plan Your Year</h4>
@@ -25,8 +25,8 @@
             </md-card-content>
           </md-card>
         </div>
-        <div class="md-layout-item md-size-20">
-          <md-card style="min-height: 400px;">
+        <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-20">
+          <md-card style="min-height: 440px;">
             <md-card-content style="text-align: center;">
               <img src="/static/img/tools.png" style="width: 120px;">
               <h4 class="get-started-card-title">Manage Vendors</h4>
@@ -74,7 +74,7 @@
   }
 
   .get-started-card-description {
-    min-height: 80px;
+    min-height: 100px;
     font-size: 16px;
     font-weight: 300;
     color: #777;

@@ -1,8 +1,6 @@
 <template>
   <div class="event-images-list md-layout">
-
-
-
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
     <md-card v-for="(image,index) in event.eventPage.images" :key="index" class="md-layout-item md-size-25">
       <md-card-media>
         <div class="event-images_image-item" :style="`background-image : url(`+`${serverUrl}/1/eventPageImages/${image.id}`+`)`" @click="previewImage(image.id)">
@@ -50,7 +48,7 @@
   export default {
     name: 'event-images',
     components: {
-
+      VueElementLoading
     },
     props: {
       event,
@@ -63,7 +61,8 @@
       auth: auth,
       eventImages : [],
       serverUrl: process.env.SERVER_URL,
-        imagePreview : null
+        imagePreview : null,
+      isLoading : false
 
     }),
     methods: {
@@ -100,7 +99,7 @@
         let reader = new FileReader();
         let vm = this;
 
-        this.$parent.isLoading = true;
+        this.isLoading = true;
 
         reader.onload = e => {
           const calendar = new Calendar({id: this.auth.user.defaultCalendarId});
@@ -108,7 +107,7 @@
           return new CalendarEventPageImage({featuredImageFile : e.target.result}).for(calendar, event).save().then(result => {
             this.event.eventPage.images.push({id: result.id});
 
-            this.$parent.isLoading = false;
+            this.isLoading = false;
 
           })
             .catch((error) => {
@@ -121,11 +120,15 @@
       removeEventImage(index){
         const calendar = new Calendar({id: this.auth.user.defaultCalendarId});
         const event = new CalendarEvent({id: this.event.id});
+
+        this.isLoading = true;
+
+
         return new CalendarEventPageImage({id : this.event.eventPage.images[index].id}).for(calendar, event).delete().then(result => {
 
           this.event.eventPage.images.splice(index,1);
 
-          this.$parent.isLoading = false;
+          this.isLoading = false;
 
         })
           .catch((error) => {

@@ -1,6 +1,6 @@
 <template>
     <div class="md-layout-item md-size-100 event-details_banner" :style="`background-image : url(`+ bannerURL  +`)`">
-        <div class="update-banner-form" v-if="!readonly" style="position: relative; top: 50%; text-align: center;">
+        <div class="update-banner-form" v-if="!readonly" style="position: absolute; bottom: 1em; left : 1em;">
             <md-button  class="md-info" @click="uploadImage">
                 Select Header Image
             </md-button>

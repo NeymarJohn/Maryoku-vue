@@ -50,7 +50,7 @@
                 </div>
               </md-list-item>
 
-              <md-list-item @click="openEditEventModal(calendarEvent)" v-if="calendarEvents[date] !== undefined" v-for="calendarEvent in calendarEvents[date].nonEditables" :key="calendarEvent.id" style="cursor: pointer;">
+              <md-list-item @click="openOccasionEventModal(calendarEvent)" v-if="calendarEvents[date] !== undefined" v-for="calendarEvent in calendarEvents[date].nonEditables" :key="calendarEvent.id" style="cursor: pointer;">
                 <md-button class="md-simple month-day-button md-just-icon md-md md-round" style="margin-right: 8px;">{{date.substr(6,2)}}</md-button>
                 <div class="md-list-item-text" style="white-space: normal;">
                   <span style="font-weight: 500;">{{calendarEvent.title}}</span>
@@ -89,6 +89,9 @@
       openEditEventModal: {
         type: Function
       },
+      openOccasionEventModal: {
+        type: Function
+      },
     },
     data() {
       return {
@@ -116,7 +119,7 @@
       //   this.setEventModalAndEventData({eventData: item});
       // },
       colorWithCategory(category) {
-        let filterCategories = this.categories.filter(c => c.item === category);
+        let filterCategories = this.categories.filter(c => c.id === category);
         return filterCategories[0] != null ? `${filterCategories[0].color}!important;` : '';
       }
     },

@@ -79,14 +79,14 @@
           <div class="md-layout md-gutter">
             <div class="md-layout-item">
               <div>
-                <div class="md-caption title-text">Remaining budget per employee</div>
+                <div class="md-caption title-text">Remaining budget per participant</div>
                 <!-- TODO Need calculate with components -->
                 <div class="md-caption title-text title-budget-prise">
-                  <animated-number ref="budgetPerPersonNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
+                  <animated-number ref="budgetPerPersonNumber" :value="remainingBudgetPerEmployee" prefix="$"></animated-number>
                 </div>
               </div>
               <div>
-                <div class="md-caption title-text">Budget per employee</div>
+                <div class="md-caption title-text">Budget per participant</div>
                 <div class="md-caption title-text title-budget-prise">
                   <animated-number ref="budgetPerPersonNumber" :value="calendarEvent.budgetPerPerson" prefix="$"></animated-number>
                 </div>
@@ -176,7 +176,7 @@
       </div>
     </div>
 
-    <div v-else-if="event && routeName === 'EditBuildingBlocks'" class="md-layout-item block-flex" >
+    <div v-else-if="event && routeName === 'EditBuildingBlocks'" class="md-layout-item block-flex md-xlarge-size-80 md-large-size-75 md-small-size-60" >
       <event-building-blocks   :event="event" :event-components="selectedComponents" @go-to-building-blocks="resetTab"></event-building-blocks>
     </div>
 
@@ -249,6 +249,7 @@
         eventId: null,
         percentage: 0,
         totalRemainingBudget: 0,
+        remainingBudgetPerEmployee: 0,
         seriesData: [],
         isLoading: false,
         event : null,
@@ -342,9 +343,11 @@
         new CalendarEventStatistics().for(calendar, event).get()
           .then(resp => {
             this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget;//evt.totalBudget - resp[0].totalAllocatedBudget;
-            this.percentage = 100 - ((resp[0].totalAllocatedBudget / evt.totalBudget) * 100).toFixed(2);
+            this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants;//evt.totalBudget - resp[0].totalAllocatedBudget;
+            this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2);
             this.seriesData = [(100 - this.percentage), this.percentage];
             this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
+            this.allocatedBudget = resp.totalAllocatedBudget;
 
           })
           .catch(error => {
