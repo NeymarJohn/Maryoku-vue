@@ -9,10 +9,25 @@
           <md-button slot="title" class="md-button md-simple md-rose dropdown-toggle md-tiny" data-toggle="dropdown" style="border-radius: 3px 3px 0 0; text-transform: capitalize; font-size: 18px !important; font-weight: 400 !important;">
             {{topBarTitle}}
           </md-button>
-          <ul class="dropdown-menu" style="margin-top: 5px; border-radius: 0 3px 3px 3px !important; ">
+          <div  class="dropdown-menu" style="margin-top: 5px; border-radius: 0 3px 3px 3px !important; padding: 24px;min-width: 480px;max-width: 580px;">
+            <h4 class="" style="font-weight: 500; padding: 0 0 12px 0; margin: 0;">
+              {{topBarTitle}}
+              <md-button class="md-info md-icon-button md-round md-dense md-xs pull-right" @click="editEventDetails"><md-icon>edit</md-icon></md-button>
+            </h4>
+            <table style="width: 100%; margin-left: 8px;" cellpadding="1" cellspacing="1">
+              <tr><th colspan="2">Date</th></tr>
+              <tr><td colspan="2">{{topBarEventDate}}</td></tr>
+              <tr><th>Participants</th> <th>Geography</th></tr>
+              <tr><td>{{topBarEventParticipants}}</td><td>{{topBarEventLocation}}</td></tr>
+            </table>
+          </div>
+          <ul class="dropdown-menu" style="display:none; margin-top: 5px; border-radius: 0 3px 3px 3px !important; ">
             <li>
-              <div class="md-layout md-gutter" style="min-width: 480px; padding: 12px;">
+              <div class="md-layout" style="min-width: 480px; padding: 12px;">
                 <div class="md-layout event-info-section">
+                  <div class="md-layout-item md-size-100">
+                    <h4 class="" style="font-weight: 500; padding: 0; margin: 0;">{{topBarTitle}}</h4>
+                  </div>
                   <div class="md-layout-item md-size-100">
                     <div class="md-layout-item  title-text">Date</div>
                     <div class="md-layout-item md-size-100 md-caption ">May 29th 2019 , 9:00 AM (6 hrs) </div>
@@ -28,11 +43,11 @@
                     <div class="md-layout-item md-size-100 md-caption "> </div>
                   </div>
 
-                  <div class="md-layout-item md-size-100">
+                  <!--<div class="md-layout-item md-size-100">
                     <md-button class="md-sm md-simple md-rose">
                       <md-icon>cached</md-icon> Recurring weekly
                     </md-button>
-                  </div>
+                  </div>-->
 
                 </div>
               </div>
@@ -157,6 +172,7 @@
   import Popper from 'vue-popperjs';
   import 'vue-popperjs/dist/vue-popper.css';
   import EventInfo from '../../app/Events/components/EventInfo';
+  import EventSidePanel from '@/pages/app/Events/EventSidePanel';
 
   export default {
     components: {
@@ -168,8 +184,12 @@
         auth,
         topBarTitle: null,
         topBarEventId: null,
+        topBarEventDate: null,
+        topBarEventParticipants: "",
+        topBarEventLocation: "",
         topBarEventInvitees: false,
         topBarEventProposals: false,
+        topBarEvent: null,
         avatar: "",
         selectedEmployee: "",
         employees: [
@@ -190,14 +210,33 @@
         this.avatar = this.auth.user.avatar != null ? this.auth.user.avatar : "static/img/placeholder.jpg";
       }.bind(this),3000);
 
-      this.$root.$on("set-title", (title, eventId, invitees, proposals) => {
-        this.topBarTitle = title;
-        this.topBarEventId = eventId;
+      this.$root.$on("set-title", (eventData, invitees, proposals) => {
+        this.topBarTitle = eventData.title;
+        this.topBarEvent = eventData;
+        this.topBarEventId = eventData.id;
         this.topBarEventInvitees = invitees;
         this.topBarEventProposals = proposals;
+        this.topBarEventParticipants = eventData.numberOfParticipants;
+        this.topBarEventDate = this.$moment(eventData.eventStartMillis).format('YYYY-MM-DD H:mm a');
+        this.topBarEventLocation = eventData.location || 'Unknown';
       });
     },
     methods: {
+      editEventDetails(){
+        window.currentPanel = this.$showPanel({
+          component: EventSidePanel,
+          cssClass: 'md-layout-item md-size-40 transition36 ',
+          openOn: 'right',
+          disableBgClick: true,
+          props: {
+            modalSubmitTitle: 'Save',
+            editMode: true,
+            sourceEventData: this.topBarEvent,
+            year: this.$route.params.year,
+            month: this.$route.params.month
+          }
+        });
+      },
       openMyProfile(){
         window.currentPanel = this.$showPanel({
           component: MyProfile,

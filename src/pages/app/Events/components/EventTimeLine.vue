@@ -395,7 +395,7 @@
 
     },
     mounted() {
-      this.$root.$emit("set-title",this.event.title, this.event.id, this.routeName === 'EditBuildingBlocks',true);
+      this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
       this.getTimelineItems();
 
     }

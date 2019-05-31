@@ -47,7 +47,7 @@
                                         {{monthDay.events.editables.length}}
                                       </span>
                                       <md-tooltip>
-                                        <div v-for="item in monthDay.events.editables" :key="item.id" class="title text-left" v-bind:style="`color: ${colorWithCategory(item.category)}`"><md-icon v-bind:style="`color: ${colorWithCategory(item.category)}`">event</md-icon> {{item.title}}</div>
+                                        <div v-for="item in monthDay.events.editables" :key="item.id" class="title text-left text-overflow" v-bind:style="`color: ${colorWithCategory(item.category)}`"><md-icon v-bind:style="`color: ${colorWithCategory(item.category)}`">event</md-icon> {{item.title}}</div>
                                       </md-tooltip>
                                     </md-button>
                                     <md-button v-else-if="monthDay.events && monthDay.events.nonEditables && monthDay.events.nonEditables.length" @click="openOccasionEventModal(monthDay.events.nonEditables[0])" :ref="`month-day-${monthDay.dayInMonth}`" class="month-day-button md-simple md-just-icon md-round md-md">
@@ -325,7 +325,7 @@
           props: {
             modalSubmitTitle: options.modalSubmitTitle,
             editMode: options.editMode,
-            eventData: options.eventData,
+            sourceEventData: options.eventData,
             refreshEvents: this.refreshEvents,
             year: this.year,
             month: this.month,
@@ -428,5 +428,12 @@
 
   .vue-tooltip.tooltip-custom-editable .tooltip-arrow {
     border-color: #03a9f4;
+  }
+
+  .text-overflow {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 </style>

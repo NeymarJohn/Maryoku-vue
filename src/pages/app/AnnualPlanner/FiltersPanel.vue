@@ -94,7 +94,9 @@
       this.ready = true;
       this.isLoading = false;
 
-      this.filterBaseData();
+      this.$root.$on('calendar-refresh-events',this.filterBaseData);
+
+      //this.filterBaseData();
     },
     methods: {
       filterBaseData() {

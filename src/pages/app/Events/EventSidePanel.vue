@@ -204,11 +204,12 @@
       modalSubmitTitle: String,
       editMode: Boolean,
       modalTitle: String,
-      eventData: Object
+      sourceEventData: Object
 
     },
     data: () => ({
       isLoading: false,
+      eventData: {},
       occasionsList: [],
       auth: auth,
       hoursArray: [],
@@ -253,6 +254,46 @@
     }),
 
     created() {
+      if (this.editMode) {
+
+        this.eventData = {
+          id: this.sourceEventData.id,
+          title: this.sourceEventData.title,
+          occasion: this.sourceEventData.occasion,
+          date: new Date(this.sourceEventData.eventStartMillis),
+          numberOfParticipants: this.sourceEventData.numberOfParticipants,
+          budgetPerPerson: this.sourceEventData.budgetPerPerson,
+          status: this.sourceEventData.status,
+          currency: this.sourceEventData.currency,
+          eventType: this.sourceEventData.eventType,
+          participantsType: this.sourceEventData.participantsType,
+          category: this.sourceEventData.category
+        };
+
+        if (this.sourceEventData.eventStartMillis) {
+          this.eventData.date = new Date(this.sourceEventData.eventStartMillis);
+          this.eventData.time = moment(new Date(this.sourceEventData.eventStartMillis).getTime())
+            .format('H:mm A');
+        }
+
+        if (this.sourceEventData.eventStartMillis && this.sourceEventData.eventEndMillis) {
+          this.eventData.duration = (this.sourceEventData.eventEndMillis - this.sourceEventData.eventStartMillis) / 1000 / 60 / 60;
+        }
+      } else {
+        this.eventData = {
+          title: this.sourceEventData.title,
+          occasion: this.sourceEventData.occasion,
+          date: new Date(this.sourceEventData.eventStartMillis),
+          numberOfParticipants: this.sourceEventData.numberOfParticipants,
+          budgetPerPerson: this.sourceEventData.budgetPerPerson,
+          status: this.sourceEventData.status,
+          currency: this.sourceEventData.currency,
+          eventType: this.sourceEventData.eventType,
+          participantsType: this.sourceEventData.participantsType,
+          category: this.sourceEventData.category
+        };
+      }
+
       this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule);
 
       [...Array(12).keys()].map(x => x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined);
@@ -284,15 +325,6 @@
       });
 
       this.$root.$emit("create-event-panel-open");
-
-      if (this.eventData.eventStartMillis){
-        this.eventData.date = new Date(this.eventData.eventStartMillis);
-        this.eventData.time = moment(new Date(this.eventData.eventStartMillis).getTime()).format('H:mm A');
-      }
-
-      if (this.eventData.eventStartMillis && this.eventData.eventEndMillis){
-        this.eventData.duration = (this.eventData.eventEndMillis - this.eventData.eventStartMillis) / 1000 / 60/ 60;
-      }
     },
     methods: {
       ...mapMutations('AnnualPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
@@ -300,20 +332,20 @@
         this.editTitle = !this.editTitle;
       },
       clearForm() {
-        this.id = null;
-        this.occasion = "";
-        this.occasionCache = "";
-        this.title = "New Event";
-        this.date = null;
-        this.time = "";
-        this.duration = "";
-        this.numberOfParticipants = "";
-        this.status = "draft";
-        this.totalBudget = "";
-        this.currency = "";
-        this.eventType = null;
-        this.participantsType = null;
-        this.category = null;
+        this.eventData = {
+          id: null,
+          occasion: "",
+          title: "New Event",
+          date: null,
+          time: "",
+          duration: "",
+          numberOfParticipants: 0,
+          status: 'draft',
+          currency: 'USD',
+          eventType: 'Party',
+          participantsType: 'Employees Only',
+          category: 'CompanyDays'
+        };
       },
       getError(fieldName) {
         return this.errors.first(fieldName);
@@ -330,26 +362,18 @@
         this.$parent.isLoading = true;
         this.isLoading = true;
         let _calendar = new Calendar({id: this.auth.user.defaultCalendarId});
-        let editedEvent = new CalendarEvent({id: this.eventData.id});
-        editedEvent.title = this.title;
-        editedEvent.occasion = this.occasion;
+        let editedEvent = new CalendarEvent(this.eventData);
         editedEvent.eventStartMillis = this.getEventStartInMillis();
         editedEvent.eventEndMillis = this.getEventEndInMillis();
-        editedEvent.numberOfParticipants = this.numberOfParticipants;
-        editedEvent.totalBudget = this.totalBudget;
-        editedEvent.status = this.eventData.status;
-        editedEvent.currency = this.currency;
-        editedEvent.eventType = this.eventType;
-        editedEvent.participantsType = this.participantsType;
+
         let catObject = _.find(this.occasionsOptions, (el => el.value === editedEvent.occasion)) || {category: "CompanyDays"};
-        this.category = catObject.category;
-        editedEvent.category = catObject.category;
+        this.eventData.category = catObject.category;
        // editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
         editedEvent.for(_calendar).save().then(response => {
           this.$parent.isLoading = false;
           this.closePanel();
           this.isLoading = false;
-          location.reload();
+          this.$root.$emit('calendar-refresh-events');
         })
           .catch((error) => {
             console.log(error);
@@ -394,8 +418,7 @@
             event.for(_calendar).delete().then(result => {
               this.$parent.isLoading = false;
               this.closePanel();
-              //this.refreshEvents();
-              location.reload();
+              this.$root.$emit('calendar-refresh-events');
             }).catch(() => {
               this.$parent.isLoading = false;
             });
@@ -429,8 +452,7 @@
           this.$parent.isLoading = false;
           this.closePanel();
           this.isLoading = false;
-          //this.$router.push({ name: 'EditBuildingBlocks', params: {id: response.id} })
-          location.reload();
+          this.$root.$emit('calendar-refresh-events');
         })
           .catch((error) => {
             console.log(error);

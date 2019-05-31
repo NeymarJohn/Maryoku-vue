@@ -26,7 +26,7 @@
                 <md-button @click="editEvent($event, item)" class="md-info md-just-icon md-round">
                   <md-icon>edit</md-icon>
                 </md-button>
-                <md-button @click="showDeleteAlert($event, item)" class="md-primary md-just-icon md-round">
+                <md-button @click="showDeleteAlert($event, item)" class="md-danger md-just-icon md-round">
                   <md-icon>close</md-icon>
                 </md-button>
 

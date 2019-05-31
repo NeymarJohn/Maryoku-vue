@@ -279,8 +279,11 @@
 
       this.$bus.$on('RefreshStatistics', function () {
         _self.getCalendarEventStatistics(_self.calendarEvent);
-      })
+      });
 
+      this.$root.$on("calendar-refresh-events",()=>{
+        this.getEvent();
+      });
     },
     methods: {
       ...mapMutations("EventPlannerVuex", [
@@ -309,7 +312,7 @@
 
             this.getCalendarEventStatistics(event);
 
-            this.$root.$emit("set-title",this.event.title, this.event.id, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement');
+            this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement');
           });
         }.bind(this));
       },
