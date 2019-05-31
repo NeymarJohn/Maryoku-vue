@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout get-started">
     <div class="md-layout-item md-size-100 mx-auto">
-      <div class="md-layout" style="justify-content: center; top: 25%; position: absolute; width: 90%;">
+      <div class="md-layout" style="justify-content: center; top: 25%; position: absolute; width: 95%;">
         <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-25">
           <md-card style="min-height: 440px;">
             <md-card-content style="text-align: center;">
