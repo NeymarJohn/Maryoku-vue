@@ -33,16 +33,16 @@
 
       <drop @drop="handleDrop" style="height: 100%;">
         <draggable :list="timelineItems" class="time-line-blocks_selected-items">
-
           <div v-for="(item,index) in timelineItems" :key="index"
                class="time-line-blocks_selected-items_item time-line-item">
             <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">{{item.icon}}
             </md-icon>
             <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit' ">
+              <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C"/>
               <md-card-content class="md-layout">
                 <div class="md-layout-item md-size-50">
                   <md-field >
-                    <input-mask placeholder="From Time e.g:08:00 AM" class="md-input"  v-model="item.startTime" mask="99:99 aa" maskChar="_"></input-mask>
+                    <input-mask v-focus placeholder="From Time e.g:08:00 AM" class="md-input"  v-model="item.startTime" mask="99:99 aa" maskChar="_"></input-mask>
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-50">
@@ -83,6 +83,7 @@
             </md-card>
 
             <md-card class="block-info" v-else-if="!item.mode || item.mode === 'saved' ">
+              <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C"/>
               <div class="card-actions">
                 <span class="item-time" style="display: inline-block; margin-top: 14px;" :style="`background : ` + item.color">{{ item.startTime }} - {{item.endTime}}</span>
                 <md-button name="event-planner-tab-timeline-item-edit" class="event-planner-tab-timeline-item-edit md-info md-sm md-just-icon md-simple md-round"
@@ -171,43 +172,43 @@
           id: 1,
           buildingBlockType: 'setup',
           icon: 'place',
-          color: '#f44336'
+          color: '#ff9800'
         },
         {
           id: 2,
           buildingBlockType: 'activity',
           icon: 'notifications_active',
-          color: '#4caf50'
+          color: '#e91e63'
         },
         {
           id: 3,
           buildingBlockType: 'meal',
           icon: 'restaurant',
-          color: '#00bcd4'
+          color: '#9c27b0'
         },
         {
           id: 4,
           buildingBlockType: 'DISCUSSION',
           icon: 'sms',
-          color: '#ff9800'
+          color: '#673ab7'
         },
         {
           id: 5,
           buildingBlockType: 'TRANSPORTATION',
           icon: 'train',
-          color: '#f44336'
+          color: '#3f51b5'
         },
         {
           id: 6,
           buildingBlockType: 'RELAXATION',
           icon: 'weekend',
-          color: '#4caf50'
+          color: '#2196f3'
         },
         {
           id: 7,
           buildingBlockType: 'ADD YOUR OWN',
           icon: 'add',
-          color: '#00bcd4'
+          color: '#009688'
         }
       ],
       timelineItems: [],
@@ -224,7 +225,14 @@
         if ( data ) {
           let block = Object.assign({}, data.block);
           block.mode = 'edit';
-          this.timelineItems.push(Object.assign({}, data.block));
+          block.startTime = '08:00 am';
+          block.endTime = '09:00 am';
+          block.isItemLoading = false;
+          if (this.timelineItems.length > 0){
+            block.startTime = this.$moment(this.timelineItems[this.timelineItems.length-1].endTime, 'HH:mm A').format('HH:mm A');
+            block.endTime = this.$moment(this.timelineItems[this.timelineItems.length-1].endTime, 'HH:mm A').add(1, 'hour').format('HH:mm A');
+          }
+          this.timelineItems.push(Object.assign({}, block));
         } else {
           this.updateTimelineITemsOrder();
         }
@@ -233,7 +241,7 @@
 
       removeItem(item) {
 
-        this.isLoading = true;
+        item.isItemLoading = true;
 
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
@@ -261,6 +269,7 @@
           console.log(res);
           this.timelineItems = _.sortBy(res, function(item){ return item.order});
           this.isLoading = false;
+          this.timelineItems.forEach((item)=>{item.isItemLoading = false;})
         })
       },
       cancelTimelineItem(item, index){
@@ -271,11 +280,11 @@
         }
       },
       saveTimelineItem(item, index) {
-        this.isLoading = true;
+        item.isItemLoading = true;
 
         if ( !item.startTime || !item.endTime ||
           ( !item.title && !item.description ) ) {
-          this.isLoading = false;
+          item.isItemLoading = false;
 
           this.$notify(
             {
@@ -314,11 +323,11 @@
 
       },
       updateTimelineItem(item) {
-        this.isLoading = true;
+        item.isItemLoading = true;
 
         if ( !item.startTime || !item.endTime ||
           ( !item.title && !item.description ) ) {
-          this.isLoading = false;
+          item.isItemLoading = false;
 
           this.$notify(
             {
@@ -351,7 +360,7 @@
         })
       },
       updateTimelineITemsOrder() {
-
+        this.isLoading = true;
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
 
@@ -368,14 +377,14 @@
 
         timelineItem.save().then(res => {
 
-          this.$notify(
+          /*this.$notify(
             {
               message: "Timeline Items order modified successfully",
               horizontalAlign: 'center',
               verticalAlign: 'top',
               type: 'success'
-            });
-
+            });*/
+          this.isLoading = false;
 
 
         }).catch(error => {
@@ -396,6 +405,7 @@
     },
     mounted() {
       this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
+      this.isLoading = true;
       this.getTimelineItems();
 
     }

@@ -23,6 +23,7 @@ import VueGtm from 'vue-gtm';
 import VueSlideoutPanel from 'vue2-slideout-panel';
 import Tawk from 'vue-tawk';
 import VueCookies from 'vue-cookies';
+import { VueStars } from "vue-stars"
 
 
 // router setup
@@ -116,6 +117,7 @@ Vue.use(vSelectMenu, { language: "en"});
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
 Vue.use(VueFractionGrid);
 Vue.component('vue-phone-number-input', VuePhoneNumberInput);
+Vue.component("vue-stars", VueStars);
 
 Vue.use(VueGtm, {
   id: 'GTM-5FH68TF', // Your GTM ID

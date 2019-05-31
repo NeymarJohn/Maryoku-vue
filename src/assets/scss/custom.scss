@@ -147,14 +147,7 @@ $tooltip-border-color: $blue-grey-200 !default;
   }
   &_item-actions {
     >.md-table-cell-container {
-      flex: 1;
-      display: flex;
-      justify-content: space-around;
-      .md-button  {
-        >div[class^="md-"]{
-          padding : 0 !important;
-        }
-      }
+      text-align: right;
     }
   }
   .star-rating__star {

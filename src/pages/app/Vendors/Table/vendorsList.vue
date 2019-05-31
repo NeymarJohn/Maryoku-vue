@@ -4,27 +4,34 @@
       <md-table v-model="vendorsList" table-header-color="orange" class="vendors-table">
         <md-table-row slot="md-table-row" slot-scope="{ item }" :key="vendorsList.indexOf(item)"   :class="{selected:item.id === selectedVendor}" class="vendors-table_item">
           <md-table-cell md-label="Vendor Name"  > {{ item.vendorDisplayName }}</md-table-cell>
-          <md-table-cell md-label="Ranking">
-            <label class="star-rating__star labeled"
-                   v-for="rating in ratings"
-                   :class="{'is-selected' : ((item.rank >= rating) && item.rank != null)}"
-            >
-              ★</label>
+          <md-table-cell md-label="Rank">
+            <vue-stars
+              :name="item.id"
+              active-color="#ffdd00"
+              inactive-color="#999999"
+              shadow-color="#ffff00"
+              hover-color="#dddd00"
+              :max="5"
+              :value="item.rank"
+              :readonly="false"
+              char="★"
+              inactive-char=""
+              class=""/>
           </md-table-cell>
-          <md-table-cell md-label="People">
+          <!--<md-table-cell md-label="People">
             {{item.voters}}
           </md-table-cell>
           <md-table-cell md-label="Average Score">
             {{item.avgScore}}%
-          </md-table-cell>
+          </md-table-cell>-->
           <md-table-cell class="vendors-table_item-actions" v-if="mode == 'listing'">
-            <md-button :name="`vendors-list-select-vendor-${vendorsList.indexOf(item)}`" class="md-warning md-just-icon md-round" @click="selectVendor(item)">
+            <!--<md-button :name="`vendors-list-rank-vendor-${vendorsList.indexOf(item)}`" class="md-warning md-just-icon md-round" @click="openPopover(vendorsList.indexOf(item))">
+              <md-icon>star</md-icon>
+            </md-button>-->
+            <md-button :name="`vendors-list-select-vendor-${vendorsList.indexOf(item)}`" class="md-info md-just-icon md-round" @click="selectVendor(item)">
               <md-icon>edit</md-icon>
             </md-button>
-            <md-button :name="`vendors-list-rank-vendor-${vendorsList.indexOf(item)}`" class="md-info md-just-icon md-round" @click="openPopover(vendorsList.indexOf(item))">
-              <md-icon>star</md-icon>
-            </md-button>
-            <md-button :name="`vendors-list-delete-vendor-${vendorsList.indexOf(item)}`" class="md-rose md-just-icon md-round" @click.native="deleteVendor(item.id)">
+            <md-button :name="`vendors-list-delete-vendor-${vendorsList.indexOf(item)}`" class="md-danger md-just-icon md-round" @click.native="deleteVendor(item.id)">
               <md-icon>delete</md-icon>
             </md-button>
           </md-table-cell>
