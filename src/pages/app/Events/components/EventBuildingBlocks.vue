@@ -247,13 +247,13 @@
         selected_block.for(calendar, event).save().then(resp => {
 
           this.isLoading = false
-          this.$notify(
+          /*this.$notify(
             {
               message: 'Budget modified successfully!',
               horizontalAlign: 'center',
               verticalAlign: 'top',
               type: 'success'
-            })
+            })*/
 
           this.$bus.$emit('RefreshStatistics')
 
@@ -303,13 +303,13 @@
       this.getEventBuildingBlocks()
 
       this.$bus.$on('BlockAdded', function () {
-        _self.$notify(
+        /*_self.$notify(
           {
             message: 'New Building Block added successfully',
             horizontalAlign: 'center',
             verticalAlign: 'top',
             type: 'success'
-          })
+          })*/
         _self.getEventBuildingBlocks()
       })
 

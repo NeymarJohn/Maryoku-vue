@@ -177,7 +177,7 @@
     </div>
 
     <div v-else-if="event && routeName === 'EditBuildingBlocks'" class="md-layout-item block-flex md-xlarge-size-80 md-large-size-75 md-small-size-60" >
-      <event-building-blocks   :event="event" :event-components="selectedComponents" @go-to-building-blocks="resetTab"></event-building-blocks>
+      <event-building-blocks   :event.sync="event" :event-components="selectedComponents" @go-to-building-blocks="resetTab"></event-building-blocks>
     </div>
 
     <div v-else-if="event &&  routeName === 'EditTimeLine' " class="md-layout-item block-flex">

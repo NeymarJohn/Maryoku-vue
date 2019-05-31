@@ -15,10 +15,14 @@
           <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
           <md-table v-model="upcomingEvents" table-header-color="rose" class="table-striped table-hover right-align-actions" v-if="upcomingEvents.length">
             <md-table-row slot="md-table-row" slot-scope="{ item }" @click="routeToEvent(item.id, $event)" class="hover-row">
-              <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
+              <md-table-cell md-label="Event Name" >{{ item.title }}</md-table-cell>
               <md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>
+              <md-table-cell md-label="Event Type">{{ item.eventType }}</md-table-cell>
               <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
-              <md-table-cell md-label="Status">{{ item.status }}</md-table-cell>
+              <md-table-cell md-label="Created By" style="text-transform: capitalize;" v-if="item.owner.id !== $auth.user.id">{{ item.owner.displayName }}</md-table-cell>
+              <md-table-cell md-label="Created By" style="text-transform: capitalize;" v-else>You</md-table-cell>
+              <md-table-cell md-label="# Participants" >{{item.numberOfParticipants}}</md-table-cell>
+              <md-table-cell md-label="Budget Per Participant" >$ {{item.budgetPerPerson}}</md-table-cell>
               <md-table-cell md-label="Actions">
                 <!--<md-button @click="viewEvent(item)" class="md-raised md-info md-icon-button">
                   <md-icon>visibility</md-icon>
