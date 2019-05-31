@@ -10,10 +10,12 @@
             {{topBarTitle}}
           </md-button>
           <div  class="dropdown-menu" style="margin-top: 5px; border-radius: 0 3px 3px 3px !important; padding: 24px;min-width: 480px;max-width: 580px;">
-            <h4 class="" style="font-weight: 500; padding: 0 0 12px 0; margin: 0;">
-              {{topBarTitle}}
+            <div>
+              <h4 class="" style="font-weight: 500; padding: 0 0 12px 0; margin: 0; display: inline;">
+                {{topBarTitle}}
+              </h4>
               <md-button class="md-info md-icon-button md-round md-dense md-xs pull-right" @click="editEventDetails"><md-icon>edit</md-icon></md-button>
-            </h4>
+            </div>
             <table style="width: 100%; margin-left: 8px;" cellpadding="1" cellspacing="1">
               <tr><th colspan="2">Date</th></tr>
               <tr><td colspan="2">{{topBarEventDate}}</td></tr>
@@ -211,14 +213,18 @@
       }.bind(this),3000);
 
       this.$root.$on("set-title", (eventData, invitees, proposals) => {
-        this.topBarTitle = eventData.title;
-        this.topBarEvent = eventData;
-        this.topBarEventId = eventData.id;
-        this.topBarEventInvitees = invitees;
-        this.topBarEventProposals = proposals;
-        this.topBarEventParticipants = eventData.numberOfParticipants;
-        this.topBarEventDate = this.$moment(eventData.eventStartMillis).format('YYYY-MM-DD H:mm a');
-        this.topBarEventLocation = eventData.location || 'Unknown';
+        if (eventData){
+          this.topBarTitle = eventData.title;
+          this.topBarEvent = eventData;
+          this.topBarEventId = eventData.id;
+          this.topBarEventInvitees = invitees;
+          this.topBarEventProposals = proposals;
+          this.topBarEventParticipants = eventData.numberOfParticipants;
+          this.topBarEventDate = this.$moment(eventData.eventStartMillis).format('YYYY-MM-DD H:mm a');
+          this.topBarEventLocation = eventData.location || 'Unknown';
+        } else {
+          this.topBarTitle = null;
+        }
       });
     },
     methods: {
