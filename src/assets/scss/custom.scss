@@ -529,6 +529,19 @@ $tooltip-border-color: $blue-grey-200 !default;
   }
 }
 
+.md-switch-rose {
+  &.md-checked {
+    .md-switch-thumb {
+      border: 1px solid #FF547C !important;
+    }
+
+    .md-switch-container {
+      background-color: #FF547C !important;
+      margin: auto;
+    }
+  }
+}
+
 /**
  * Event TimeLine
  */
@@ -765,7 +778,7 @@ $tooltip-border-color: $blue-grey-200 !default;
       }
     }
     .tab-content {
-     text-align: left;
+      text-align: left;
     }
   }
   .questions-answers-list {
@@ -1014,9 +1027,9 @@ $tooltip-border-color: $blue-grey-200 !default;
 
   .confirmation-section {
     h4 {
-        display : inline-block;
-        margin :0 0.5em 0 0;
-        line-height: 2;
+      display : inline-block;
+      margin :0 0.5em 0 0;
+      line-height: 2;
     }
   }
 }
@@ -2004,4 +2017,58 @@ iframe{
 
 .text-center {
   text-align: center;
+}
+
+.interactions-list {
+  .md-table-content {
+    thead {
+      display: none !important;
+    }
+
+    .md-table-row:not(:last-child) td {
+      border-bottom-color: #ddd !important;
+      border-top: 0 solid;
+      border-bottom: 1px solid;
+    }
+  }
+
+  .visible-row {
+    .md-table-cell {
+      vertical-align: top;
+    }
+    .md-switch-container {
+      margin-top: 9px;
+    }
+  }
+  .md-switch-container {
+    margin: auto;
+    margin-top: 6px;
+  }
+}
+
+.interaction-preview {
+  .interaction-options-list {
+    max-width: 100%;
+    max-height: 10vmin;
+    overflow-x: auto;
+    display: flex;
+    margin: 0 0 8px 0;
+  }
+  .interaction-option-image {
+    width: 10vmin;
+    display: inline;
+    border: 2px solid white;
+    opacity: 0.5;
+    transform: scale(0.8);
+
+    &.selected {
+      border: 2px solid $brand-rose;
+      opacity: 1;
+      transform: scale(1.0);
+    }
+
+    &:hover{
+      border: 2px solid $brand-info;
+    }
+  }
 }

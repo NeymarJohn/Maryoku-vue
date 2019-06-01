@@ -185,7 +185,7 @@
     </div>
 
     <div v-else-if="event &&  routeName === 'InviteesManagement' " class="md-layout-item block-flex">
-      <invitees-management :event="event" :event-components="selectedComponents"></invitees-management>
+      <invitees-management-v2 :event-data.sync="event" :event-components="selectedComponents"></invitees-management-v2>
     </div>
 
     <!--<sticky-budget :event="event" v-if="routeName !== 'EditEvent' && routeName !== 'EditBuildingBlocks'"></sticky-budget>-->
@@ -218,6 +218,7 @@
   import EventBuildingBlocks from "./components/EventBuildingBlocks";
   import EventTimeLine from "./components/EventTimeLine.vue";
   import InviteesManagement from "./components/EventBlocks/InviteesManagement.vue";
+  import InviteesManagementV2 from "./components/EventBlocks/InviteesManagementV2.vue";
 
   import EventPageRoutes from "./components/EventPageRoutes.vue";
   import MdCardContent from "../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue";
@@ -236,8 +237,8 @@
       EventModal,
       EventTimeLine,
       InviteesManagement,
-
-      EventPageRoutes
+      EventPageRoutes,
+      InviteesManagementV2
     },
 
     data() {
@@ -252,7 +253,7 @@
         remainingBudgetPerEmployee: 0,
         seriesData: [],
         isLoading: false,
-        event : null,
+        event : {},
         routeName : null,
         budgetPerEmployee : 0
       };

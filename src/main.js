@@ -8,6 +8,7 @@ import auth from './auth';
 
 // Plugins
 import App from "./App.vue";
+import VueElementLoading from 'vue-element-loading';
 import Chartist from "chartist";
 import ChartistTooltipPlugin from "chartist-plugin-tooltip";
 import Tooltip from 'vue-directive-tooltip';
@@ -120,6 +121,7 @@ Vue.use(VueFractionGrid);
 Vue.component('vue-phone-number-input', VuePhoneNumberInput);
 Vue.component("vue-stars", VueStars);
 Vue.component("vue-load-image", VueLoadImage);
+Vue.component("vue-element-loading", VueElementLoading);
 
 Vue.use(VueGtm, {
   id: 'GTM-5FH68TF', // Your GTM ID
