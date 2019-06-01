@@ -65,8 +65,7 @@
         }
     },
     data: () => ({
-        editMode : false,
-        auth : auth
+        editMode : false
     }),
     methods: {
         toggleEditMode() {
@@ -83,7 +82,7 @@
             editedEvent.eventPage.meetingPlaceDescription = this.event.eventPage.meetingPlaceDescription;
             editedEvent.eventPage.whenToArrive = this.event.eventPage.whenToArrive;
             editedEvent.eventPage.whatYouNeedToKnow = this.event.eventPage.whatYouNeedToKnow;
-
+            delete editedEvent['owner'];
             editedEvent.save().then(response => {
 
                 this.toggleEditMode();

@@ -69,40 +69,42 @@
                   </md-field>
                 </div>
               </md-card-content>
-              <md-card-actions md-alignment="left">
-                <md-button name="event-planner-tab-timeline-item-save" class="event-planner-tab-timeline-item-save md-info" v-if="!item.dateCreated"
-                           @click="saveTimelineItem(item,index)">Save
-                </md-button>
-                <md-button name="event-planner-tab-timeline-item-edit" class="event-planner-tab-timeline-item-edit md-info" v-else @click="updateTimelineItem(item)">Save
-                </md-button>
+              <md-card-actions md-alignment="right" style="border: none;">
                 <md-button name="event-planner-tab-timeline-item-save" class="event-planner-tab-timeline-item-save md-danger md-simple"
                            @click="cancelTimelineItem(item,index)">Cancel
+                </md-button>
+                <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-save" class="event-planner-tab-timeline-item-save md-info" v-if="!item.dateCreated"
+                           @click="saveTimelineItem(item,index)">Save
+                </md-button>
+                <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-edit" class="event-planner-tab-timeline-item-edit md-info" v-else @click="updateTimelineItem(item)">Save
                 </md-button>
               </md-card-actions>
 
             </md-card>
 
-            <md-card class="block-info" v-else-if="!item.mode || item.mode === 'saved' ">
+            <md-card class="block-info" v-if="!item.mode || item.mode === 'saved' ">
               <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C"/>
-              <div class="card-actions" style="padding: 12px;">
-                <span class="item-time md-xs" style="display: inline-block; margin-top: 3px; padding: 2px 12px !important; margin-right: 0; font-size: 1.7vmin;" :style="`background : ` + item.color">{{ item.startTime }} - {{item.endTime}}</span>
-                <md-button name="event-planner-tab-timeline-item-edit" class="event-planner-tab-timeline-item-edit md-info md-xs md-just-icon md-round"
-                           @click="modifyItem(index)">
-                  <md-icon>create</md-icon>
-                </md-button>
-                <md-button name="event-planner-tab-timeline-item-delete" class="event-planner-tab-timeline-item-delete md-danger md-xs md-just-icon md-round"
-                           @click="removeItem(item)">
-                  <md-icon>delete_outline</md-icon>
-                </md-button>
-              </div>
-              <div class="item-title-and-time">
-                <span class="item-title" style="font-weight: 500; margin-top: 6px; display: inline-block;" v-if="item.title">
+              <md-card-content style="min-height: 80px;">
+                <div class="card-actions" style="width: 100%; text-align: right;">
+                  <span class="item-time md-xs pull-left" style="display: inline-block; margin-top: 3px; padding: 2px 12px !important; margin-right: 0; font-size: 1.6vmin;" :style="`background : ` + item.color">{{ item.startTime }} - {{item.endTime}}</span>
+                  <md-button name="event-planner-tab-timeline-item-edit" class="event-planner-tab-timeline-item-edit md-info md-xs md-just-icon md-round"
+                             @click="modifyItem(index)">
+                    <md-icon>edit</md-icon>
+                  </md-button>
+                  <md-button name="event-planner-tab-timeline-item-delete" class="event-planner-tab-timeline-item-delete md-danger md-xs md-just-icon md-round"
+                             @click="removeItem(item)">
+                    <md-icon>delete_outline</md-icon>
+                  </md-button>
+                </div>
+                <div class="item-title-and-time" style="padding-top: 32px !important; padding-left: 4px;">
+                <span class="item-title" style="font-weight: 500; display: inline-block;" v-if="item.title">
                   {{item.title }}
                 </span>
-              </div>
-              <p class="item-desc">
-                {{ item.description }}
-              </p>
+                  <p class="item-desc">
+                    {{ item.description }}
+                  </p>
+                </div>
+              </md-card-content>
             </md-card>
 
           </div>
@@ -241,7 +243,7 @@
 
       removeItem(item) {
 
-        item.isItemLoading = true;
+        this.setItemLoading(item, true, false);
 
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
@@ -280,11 +282,10 @@
         }
       },
       saveTimelineItem(item, index) {
-        item.isItemLoading = true;
+        this.setItemLoading(item, true, true);
 
         if ( !item.startTime || !item.endTime ||
           ( !item.title && !item.description ) ) {
-          item.isItemLoading = false;
 
           this.$notify(
             {
@@ -323,11 +324,12 @@
 
       },
       updateTimelineItem(item) {
-        item.isItemLoading = true;
+
+        this.setItemLoading(item, true, true);
 
         if ( !item.startTime || !item.endTime ||
           ( !item.title && !item.description ) ) {
-          item.isItemLoading = false;
+          this.$set(item, 'isItemLoading', false);
 
           this.$notify(
             {
@@ -392,6 +394,16 @@
         })
 
 
+      },
+      setItemLoading(item, loading, force){
+        this.$set(item, 'isItemLoading', loading);
+        if (force) {
+          this.$set(item, 'mode', 'saved');
+          this.$set(item, 'mode', 'edit');
+        } else {
+          this.$set(item, 'mode', 'edit');
+          this.$set(item, 'mode', 'saved');
+        }
       }
 
     },
