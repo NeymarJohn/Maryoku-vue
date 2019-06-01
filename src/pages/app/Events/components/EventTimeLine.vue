@@ -310,6 +310,8 @@
               type: 'warning'
             })
 
+          this.setItemLoading(item, false, true);
+
           return;
         }
 
@@ -354,6 +356,7 @@
               type: 'warning'
             })
 
+          this.setItemLoading(item, false, true);
           return;
         }
 
