@@ -99,8 +99,8 @@
                   </tr>
                   <tr style="height: 5%;">
                     <td style="padding-top: 15px;">
-                      <md-button class="md-grey md-sm disabled" disabled="disabled" style="width: 99%; height: 45%; margin-top: 0; font-weight: 500;">Import Events</md-button>
-                      <md-button class="md-success md-sm" style="width: 99%; height: 45%; margin-top: 0; font-weight: 500;" @click="exportToExcel">Export To Excel</md-button>
+                      <md-button class="md-success md-sm" style="width: 99%; height: 100%; margin-top: 0; font-weight: 500;" @click="exportToExcel">Export To Excel</md-button>
+                      <md-button class="md-grey md-sm disabled" disabled="disabled" style="visibility: hidden; width: 99%; height: 45%; margin-top: 0; font-weight: 500;">Import Events</md-button>
                     </td>
                   </tr>
                 </table>
