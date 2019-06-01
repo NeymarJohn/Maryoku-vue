@@ -24,7 +24,7 @@ import VueSlideoutPanel from 'vue2-slideout-panel';
 import Tawk from 'vue-tawk';
 import VueCookies from 'vue-cookies';
 import { VueStars } from "vue-stars"
-
+import VueLoadImage from 'vue-load-image';
 
 // router setup
 import routes from "./router/routes";
@@ -32,8 +32,8 @@ import routes from "./router/routes";
 // store setup
 import store from "./store";
 
-var VueEventBus = require('vue-event-bus')
-Vue.use(VueEventBus)
+var VueEventBus = require('vue-event-bus');
+Vue.use(VueEventBus);
 
 
 // plugin setup
@@ -58,6 +58,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (window.currentPanel){
     window.currentPanel.hide();
+    window.currentPanel = null;
   }
 
   /*let tenantId = document.location.hostname.replace(".262days.com","");
@@ -118,6 +119,7 @@ Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
 Vue.use(VueFractionGrid);
 Vue.component('vue-phone-number-input', VuePhoneNumberInput);
 Vue.component("vue-stars", VueStars);
+Vue.component("vue-load-image", VueLoadImage);
 
 Vue.use(VueGtm, {
   id: 'GTM-5FH68TF', // Your GTM ID

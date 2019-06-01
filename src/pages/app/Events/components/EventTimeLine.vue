@@ -174,43 +174,43 @@
           id: 1,
           buildingBlockType: 'setup',
           icon: 'place',
-          color: '#ff9800'
+          color: '#f44336'
         },
         {
           id: 2,
           buildingBlockType: 'activity',
           icon: 'notifications_active',
-          color: '#e91e63'
+          color: '#4caf50'
         },
         {
           id: 3,
           buildingBlockType: 'meal',
           icon: 'restaurant',
-          color: '#9c27b0'
+          color: '#00bcd4'
         },
         {
           id: 4,
           buildingBlockType: 'DISCUSSION',
           icon: 'sms',
-          color: '#673ab7'
+          color: '#ff9800'
         },
         {
           id: 5,
           buildingBlockType: 'TRANSPORTATION',
           icon: 'train',
-          color: '#3f51b5'
+          color: '#f44336'
         },
         {
           id: 6,
           buildingBlockType: 'RELAXATION',
           icon: 'weekend',
-          color: '#2196f3'
+          color: '#4caf50'
         },
         {
           id: 7,
           buildingBlockType: 'ADD YOUR OWN',
           icon: 'add',
-          color: '#009688'
+          color: '#00bcd4'
         }
       ],
       timelineItems: [],
@@ -243,18 +243,33 @@
 
       removeItem(item) {
 
-        this.setItemLoading(item, true, false);
-
-        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-        let event = new CalendarEvent({id: this.event.id});
-
-        let timelineItem = new EventTimelineItem({id: item.id}).for(calendar, event);
-
-        timelineItem.delete().then(result => {
-          this.getTimelineItems();
-        }).catch(error => {
-          console.log(error);
+        swal({
+          title: "Are you sure want to delete this item?",
+          showCancelButton: true,
+          confirmButtonClass: "md-button md-success",
+          cancelButtonClass: "md-button md-danger",
+          confirmButtonText: "Yes, remove it!",
+          buttonsStyling: false
         })
+          .then(result => {
+            if(result.value === true) {
+              this.setItemLoading(item, true, false);
+
+              let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+              let event = new CalendarEvent({id: this.event.id});
+
+              let timelineItem = new EventTimelineItem({id: item.id}).for(calendar, event);
+
+              timelineItem.delete().then(result => {
+                this.getTimelineItems();
+              }).catch(error => {
+                console.log(error);
+              })
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          });
       },
       modifyItem(index) {
         this.$set(this.timelineItems[index], 'mode', 'edit');

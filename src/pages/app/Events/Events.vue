@@ -31,7 +31,7 @@
                   <md-icon>edit</md-icon>
                 </md-button>
                 <md-button @click="showDeleteAlert($event, item)" class="md-danger md-just-icon md-round">
-                  <md-icon>close</md-icon>
+                  <md-icon>delete_outline</md-icon>
                 </md-button>
 
                <!-- <div class="float-right"><md-icon>share</md-icon></div>-->

@@ -55,6 +55,7 @@
     "vue-image-lightbox": "^6.0.1",
     "vue-input-mask": "^0.0.10",
     "vue-lazyload": "^1.2.6",
+    "vue-load-image": "^0.1.7",
     "vue-material": "1.0.0-beta-10.2",
     "vue-moment": "^4.0.0",
     "vue-notifyjs": "^0.4.3",

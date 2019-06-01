@@ -96,8 +96,31 @@
     }
   };
 </script>
-<style lang="scss" scopd>
+<style lang="scss" scoped>
+  @import '@/assets/scss/md/_colors.scss';
+
   .modal-container {
     max-width: 50% !important;
+  }
+  .md-tooltip {
+    z-index: 9999 !important;
+    background: $purple-500 !important;
+    color: $white !important;
+
+    &[x-placement="top"]:after {
+      border-bottom-color: $purple-500 !important;
+    }
+
+    &[x-placement="bottom"]:after {
+      border-bottom-color: $purple-500 !important;
+    }
+
+    &[x-placement="right"]:after {
+      border-bottom-color: $purple-500 !important;
+    }
+
+    &[x-placement="left"]:after {
+      border-bottom-color: $purple-500 !important;
+    }
   }
 </style>

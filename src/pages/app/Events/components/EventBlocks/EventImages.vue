@@ -3,8 +3,7 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
     <md-card v-for="(image,index) in event.eventPage.images" :key="index" class="md-layout-item md-size-25">
       <md-card-media>
-        <div class="event-images_image-item" :style="`background-image : url(`+`${serverUrl}/1/eventPageImages/${image.id}`+`)`" @click="previewImage(image.id)">
-
+        <div class="event-images_image-item" style="margin: auto;" :style="`background-image : url(`+`${serverUrl}/1/eventPageImages/${image.id}`+`)`" @click="previewImage(image.id)">
         </div>
         <md-button class="md-info md-sm delete-event-image" @click="removeEventImage(index)" v-if="!readonly">
           DELETE
