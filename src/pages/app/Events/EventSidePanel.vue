@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout" style="max-height: 100vh;">
-    <vue-element-loading :active.sync="isLoading" spinner="ring" color="#FF547C"/>
+    <vue-element-loading :active="working" spinner="ring" color="#FF547C"/>
     <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
       <h4 class="md-title">
         <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon"><md-icon>arrow_back</md-icon></md-button>
@@ -208,7 +208,7 @@
 
     },
     data: () => ({
-      isLoading: false,
+      working: false,
       eventData: {},
       occasionsList: [],
       // auth: auth,
@@ -359,42 +359,46 @@
         }
       },
       updateEvent() {
-        this.$parent.isLoading = true;
-        this.isLoading = true;
-        let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-        let editedEvent = new CalendarEvent(this.eventData);
-        editedEvent.eventStartMillis = this.getEventStartInMillis();
-        editedEvent.eventEndMillis = this.getEventEndInMillis();
+        //this.$parent.isLoading = true;
+        this.working = true;
 
-        let catObject = _.find(this.occasionsOptions, (el => el.value === editedEvent.occasion)) || {category: "CompanyDays"};
-        this.eventData.category = catObject.category;
-       // editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
-        editedEvent.for(_calendar).save().then(response => {
-          this.$parent.isLoading = false;
-          this.closePanel();
-          this.isLoading = false;
-          this.$root.$emit('calendar-refresh-events');
-        })
-          .catch((error) => {
-            console.log(error);
-            this.isLoading = false;
-            this.$parent.isLoading = false;
-          });
+        setTimeout(()=>{
+          this.working = true;
+          let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+          let editedEvent = new CalendarEvent(this.eventData);
+          editedEvent.eventStartMillis = this.getEventStartInMillis();
+          editedEvent.eventEndMillis = this.getEventEndInMillis();
+
+          let catObject = _.find(this.occasionsOptions, (el => el.value === editedEvent.occasion)) || {category: "CompanyDays"};
+          this.eventData.category = catObject.category;
+          // editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+          editedEvent.for(_calendar).save().then(response => {
+            //this.$parent.isLoading = false;
+            this.closePanel();
+            this.working = false;
+            this.$root.$emit('calendar-refresh-events');
+          })
+            .catch((error) => {
+              console.log(error);
+              this.working = false;
+              //this.$parent.isLoading = false;
+            });
+        },100);
 
       },
       validateEvent() {
-        this.isLoading = true;
+        this.working = true;
         this.validateTitle();
         this.$validator.validateAll().then(isValid => {
           if ((this.dateValid = this.validateDate()) && isValid) {
-            this.$parent.isLoading = true;
-            this.isLoading = true;
+            //this.$parent.isLoading = true;
+            this.working = true;
             this.setEventModal(false);
             this.editMode ? this.updateEvent() : this.createEvent();
           } else {
             this.showNotify();
           }
-          this.isLoading = false;
+          this.working = false;
         });
       },
       showDeleteAlert(e, ev) {
@@ -410,55 +414,59 @@
           buttonsStyling: false
         }).then(result => {
           if (result.value) {
-            this.$parent.isLoading = true;
-
+            //this.$parent.isLoading = true;
+            this.working = true;
             let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
             let event = new CalendarEvent({id: this.eventData.id});
 
             event.for(_calendar).delete().then(result => {
-              this.$parent.isLoading = false;
+              //this.$parent.isLoading = false;
               this.closePanel();
               this.$root.$emit('calendar-refresh-events');
             }).catch(() => {
-              this.$parent.isLoading = false;
+              //this.$parent.isLoading = false;
+              this.working = false;
             });
           }
         });
       },
       createEvent() {
-        this.isLoading = true;
-        let calendarId = this.$auth.user.defaultCalendarId;
-        let _calendar = new Calendar({ id: calendarId});
-        let catObject = _.find(this.occasionsOptions, (el => el.value === this.eventData.occasion)) || {category: "CompanyDays"};
-        this.category = catObject.category;
+        this.working = true;
+        setTimeout(()=>{
+          this.working = true;
+          let calendarId = this.$auth.user.defaultCalendarId;
+          let _calendar = new Calendar({ id: calendarId});
+          let catObject = _.find(this.occasionsOptions, (el => el.value === this.eventData.occasion)) || {category: "CompanyDays"};
+          this.category = catObject.category;
 
-        let newEvent = new CalendarEvent({
-          calendar: {id: calendarId},
-          title: this.eventData.title,
-          occasion: this.eventData.occasion,
-          eventStartMillis: this.getEventStartInMillis(),
-          eventEndMillis: this.getEventEndInMillis(),
-          numberOfParticipants: this.eventData.numberOfParticipants,
-          budgetPerPerson: this.eventData.budgetPerPerson,
-          status: 'draft',
-          currency: this.eventData.currency,
-          eventType: this.eventData.eventType,
-          participantsType: this.eventData.participantsType,
-          category: !this.eventData.editable ? 'Holidays' : 'CompanyDays',
-          editable: true,
-        //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
-        }).for(_calendar).save().then(response => {
-          console.log('new event => ' , response.id);
-          this.$parent.isLoading = false;
-          this.closePanel();
-          this.isLoading = false;
-          this.$root.$emit('calendar-refresh-events');
-        })
-          .catch((error) => {
-            console.log(error);
-            this.isLoading = false;
-            this.$parent.isLoading = false;
-          });
+          let newEvent = new CalendarEvent({
+            calendar: {id: calendarId},
+            title: this.eventData.title,
+            occasion: this.eventData.occasion,
+            eventStartMillis: this.getEventStartInMillis(),
+            eventEndMillis: this.getEventEndInMillis(),
+            numberOfParticipants: this.eventData.numberOfParticipants,
+            budgetPerPerson: this.eventData.budgetPerPerson,
+            status: 'draft',
+            currency: this.eventData.currency,
+            eventType: this.eventData.eventType,
+            participantsType: this.eventData.participantsType,
+            category: !this.eventData.editable ? 'Holidays' : 'CompanyDays',
+            editable: true,
+            //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+          }).for(_calendar).save().then(response => {
+            console.log('new event => ' , response.id);
+            //this.$parent.isLoading = false;
+            this.closePanel();
+            this.working = false;
+            this.$root.$emit('calendar-refresh-events');
+          })
+            .catch((error) => {
+              console.log(error);
+              this.working = false;
+              //this.$parent.isLoading = false;
+            });
+        },100);
       },
       getEventStartInMillis() {
         if (this.eventData.date && this.eventData.time) {
