@@ -23,7 +23,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
 .tooltip {
   display: block !important;
-  z-index: 10000;
+  z-index: 9999;
 
   .tooltip-inner {
     background: $tooltip-background-color;
@@ -2004,4 +2004,26 @@ iframe{
 
 .text-center {
   text-align: center;
+}
+
+.md-tooltip {
+  z-index: 9999 !important;
+  background: $purple-500 !important;
+  color: $white !important;
+
+  &[x-placement="top"]:after {
+    border-bottom-color: $purple-500 !important;
+  }
+
+  &[x-placement="bottom"]:after {
+    border-bottom-color: $purple-500 !important;
+  }
+
+  &[x-placement="right"]:after {
+    border-bottom-color: $purple-500 !important;
+  }
+
+  &[x-placement="left"]:after {
+    border-bottom-color: $purple-500 !important;
+  }
 }
