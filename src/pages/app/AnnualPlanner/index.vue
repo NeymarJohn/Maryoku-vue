@@ -66,6 +66,8 @@
     },
     created() {
       this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule);
+
+      this.checkSelectedYearMonth();
     },
     mounted(){
       this.ready = false;

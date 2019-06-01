@@ -434,7 +434,7 @@ let appPages = {
     },
     {
       path: "/planner/:year",
-      name: "AnnualPlannerYEar",
+      name: "AnnualPlannerYear",
       component: AnnualPlanner,
       meta: {title: "Planner", gtm: "Planner"}
     },
