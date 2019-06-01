@@ -96,7 +96,7 @@
 
       this.$root.$on('calendar-refresh-events',this.filterBaseData);
 
-      //this.filterBaseData();
+      this.filterBaseData();
     },
     methods: {
       filterBaseData() {

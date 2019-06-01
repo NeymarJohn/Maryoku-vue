@@ -106,8 +106,7 @@
     },
     data() {
       return {
-        serverURL: process.env.SERVER_URL,
-        auth: auth
+        serverURL: process.env.SERVER_URL
       };
     }
   };
