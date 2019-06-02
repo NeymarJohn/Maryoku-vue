@@ -11,7 +11,7 @@
               <div class="card-content">
                 <p class="category">Allocated budget</p>
                 <h3 class="title">$
-                  <animated-number :value="event.statistics.totalAllocatedBudget"></animated-number>
+                  <animated-number :value="allocatedBudget"></animated-number>
                 </h3>
               </div>
             </md-card>
@@ -165,6 +165,7 @@
     data: () => ({
       // auth: auth,
       isLoading: true,
+      allocatedBudget: 0,
       eventBuildingBlocks: []
 
     }),
@@ -210,9 +211,16 @@
         new EventComponent().for(calendar, event).get()
           .then(res => {
 
-            console.log(' event blocks ', res)
+            console.log(' event blocks ', res);
 
-            this.$set(this, 'eventBuildingBlocks', res)
+            this.$set(this, 'eventBuildingBlocks', res);
+
+            let allocatedBudget = 0;
+            this.eventBuildingBlocks.forEach(item=>{
+              allocatedBudget += Number(item.allocatedBudget);
+            });
+
+            this.allocatedBudget = allocatedBudget;
           })
           .catch(error => {
             console.log('Error ', error)
@@ -229,38 +237,36 @@
       blockBudgetChanged (val, index) {
 
         let block = _.find(this.eventBuildingBlocks, function (item) {
-          return item.componentId == index
-        })
+          return item.componentId == index;
+        });
 
-        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-        let event = new CalendarEvent({id: this.event.id})
-        let selected_block = new EventComponent({id: block.id})
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
+        let selected_block = new EventComponent({id: block.id});
 
-        selected_block.calendarEvent = block.calendarEvent
-        selected_block.componentId = block.componentId
-        selected_block.icon = block.icon
-        selected_block.color = block.color
-        selected_block.todos = block.todos
-        selected_block.values = block.values
-        selected_block.vendors = block.vendors
+        selected_block.calendarEvent = block.calendarEvent;
+        selected_block.componentId = block.componentId;
+        selected_block.icon = block.icon;
+        selected_block.color = block.color;
+        selected_block.todos = block.todos;
+        selected_block.values = block.values;
+        selected_block.vendors = block.vendors;
         selected_block.allocatedBudget = val;
 
-        block.allocatedBudget = val
+        block.allocatedBudget = val;
 
         selected_block.for(calendar, event).save().then(resp => {
 
-          this.isLoading = false
-          /*this.$notify(
-            {
-              message: 'Budget modified successfully!',
-              horizontalAlign: 'center',
-              verticalAlign: 'top',
-              type: 'success'
-            })*/
+          this.isLoading = false;
+          this.$bus.$emit('RefreshStatistics');
+          this.$forceUpdate();
 
-          this.$bus.$emit('RefreshStatistics')
+          let allocatedBudget = 0;
+          this.eventBuildingBlocks.forEach(item=>{
+            allocatedBudget += Number(item.allocatedBudget);
+          });
 
-          this.$forceUpdate()
+          this.allocatedBudget = allocatedBudget;
         })
           .catch(error => {
             console.log(error)

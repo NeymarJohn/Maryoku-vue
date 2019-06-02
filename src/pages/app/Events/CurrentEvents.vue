@@ -352,7 +352,7 @@
             this.seriesData = [(100 - this.percentage), this.percentage];
             this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
             this.allocatedBudget = resp.totalAllocatedBudget;
-
+            this.event.statistics['allocatedBudget'] = this.allocatedBudget;
           })
           .catch(error => {
             console.log(error);
