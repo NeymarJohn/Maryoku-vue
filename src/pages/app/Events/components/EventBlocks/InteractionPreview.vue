@@ -81,12 +81,12 @@
     methods: {
       updatePreview(val) {
         var ifrm = document.getElementById('kfrm');
-        if (ifrm) {
+        if (ifrm && val) {
           ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
 
           if (ifrm) {
 
-            this.$http.get(`/static/img/interactions/${val.templateImage || val.options[1]}.html`).then(res=>{
+            this.$http.get(`/static/img/interactions/${val.templateImage || val.options[0]}.html`).then(res=>{
 
               let content = res.data;
               content = content.replace("{{{line1}}}",val.line1);

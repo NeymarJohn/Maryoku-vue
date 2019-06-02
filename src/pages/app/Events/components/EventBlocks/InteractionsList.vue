@@ -7,7 +7,7 @@
             <h4 class="title" style="color: white;">Manage Interactions</h4>
           </div>
         </md-card-header>
-        <md-card-content>
+        <md-card-content style="min-height: 100%;">
           <vue-element-loading :active="working" spinner="ring" color="#FF547C"/>
           <md-table :md-card="false"  v-model="possibleInteractionsList" >
             <md-table-row slot="md-table-row" slot-scope="{ item, index }" :class="{'visible-row':item.editMode,'not-visible-row':!item.editMode}" @click="editInteraction(item)">
@@ -102,8 +102,9 @@
           new EventInteraction().for(new Calendar({id: this.$auth.user.defaultCalendarId}),this.eventData).get().then(interactions=>{
             interactions.forEach(interaction=>{
               this.possibleInteractionsList.forEach(possibleInteraction=>{
+                possibleInteraction.event = {id: this.eventData.id};
                 if (possibleInteraction.templateId === interaction.templateId){
-                  possibleInteraction.enabled = true;
+                  Object.assign(possibleInteraction, interaction);
                 }
               });
             });
@@ -118,6 +119,8 @@
     },
     methods: {
       editInteraction(item){
+        if (item.editMode) return;
+
         this.possibleInteractionsList.forEach((interaction)=>{
           interaction.editMode = false;
         });
@@ -131,16 +134,12 @@
       saveInteraction(item){
         console.log(JSON.stringify(item));
         this.working = true;
-        if (item.id) { //Existing
-
-        } else {
-          new EventInteraction(item).for(new Calendar({id: this.$auth.user.defaultCalendarId}),this.eventData).save().then(res=>{
-            this.working = false;
-          }).catch((e)=>{
-            console.error(e);
-            this.working = false;
-          });
-        }
+        new EventInteraction(item).for(new Calendar({id: this.$auth.user.defaultCalendarId}),this.eventData).save().then(res=>{
+          this.working = false;
+        }).catch((e)=>{
+          console.error(e);
+          this.working = false;
+        });
       }
     }
   }
