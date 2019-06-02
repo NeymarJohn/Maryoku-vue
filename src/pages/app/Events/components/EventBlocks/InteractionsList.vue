@@ -20,7 +20,7 @@
                   <md-card class="md-card-plain md-gutter" style="margin: 0; padding: 0;">
                     <md-card-content style="padding: 12px 0;">
                       <div class="md-layout">
-                        <div class="md-layout-item md-size-45">
+                        <div class="md-layout-item md-medium-size-100 md-size-45">
                           <md-field>
                             <label>Send on specific date</label>
                             <md-input v-model="item.sendOnDate"
@@ -28,10 +28,10 @@
                                       v-focus/>
                           </md-field>
                         </div>
-                        <div class="md-layout-item md-size-10" style="margin-top: auto; margin-bottom: auto; font-weight: 500;">
+                        <div class="md-layout-item md-medium-size-100 md-size-10" style="margin-top: auto; margin-bottom: auto; font-weight: 500;">
                           OR
                         </div>
-                        <div class="md-layout-item md-size-45">
+                        <div class="md-layout-item md-medium-size-100 md-size-45">
                           <md-field>
                             <label>Days before the event</label>
                             <md-input v-model="item.sendDaysBeforeEvent"
@@ -39,7 +39,7 @@
                           </md-field>
                         </div>
                         <div class="md-layout-item md-size-100">
-                          <md-checkbox v-model="item.include_link"
+                          <md-checkbox v-model="item.includePageLink"
                                        :id="`include-${index}`"></md-checkbox>
                           <!--<label style=" margin:  14px 16px 14px 0" :for="`include-${index}`">Include a link to the <a :href="`/#/events/${eventData ? eventData.id : ''}/public`">event public page</a>?</label>-->
                           <label style=" margin:  14px 16px 14px 0" :for="`include-${index}`">Include a link to the event public page?</label>
@@ -54,9 +54,9 @@
                   <md-icon>edit</md-icon>
                   <md-tooltip md-direction="top">Set timing and preview</md-tooltip>
                 </md-button>
-                <!--<md-button class="md-simple md-round md-purple md-just-icon" v-if="item.editMode" @click="editInteraction(item)">
-                  <md-icon>close</md-icon>
-                </md-button>-->
+                <md-button class="md-success md-tiny" style="width: auto !important; margin: 8px;" v-if="item.editMode" @click="saveInteraction(item)">
+                  Save
+                </md-button>
               </md-table-cell>
             </md-table-row>
           </md-table>
@@ -64,7 +64,7 @@
       </md-card>
     </div>
     <div class="md-layout-item md-size-55">
-      <interaction-preview :interactionData="visibleInteraction"></interaction-preview>
+      <interaction-preview :interactionData="visibleInteraction" :event-data="eventData"></interaction-preview>
     </div>
   </div>
 </template>
@@ -123,8 +123,24 @@
         });
         item.editMode = true;
         this.visibleInteraction = item;
-        Object.assign(this.visibleInteraction, {line1: this.eventData.title, line2: this.$moment(this.eventData.eventStartMillis), line3: 'ccc'});
+        if (!item.id){ //Existing
+          Object.assign(this.visibleInteraction, {templateImage: item.options[0],sendDaysBeforeEvent: 15, line1: this.eventData.title, line2: this.$moment(this.eventData.eventStartMillis).format('MM-DD-YYYY, H:mm A'), line3: ''});
+        }
         this.$forceUpdate();
+      },
+      saveInteraction(item){
+        console.log(JSON.stringify(item));
+        this.working = true;
+        if (item.id) { //Existing
+
+        } else {
+          new EventInteraction(item).for(new Calendar({id: this.$auth.user.defaultCalendarId}),this.eventData).save().then(res=>{
+            this.working = false;
+          }).catch((e)=>{
+            console.error(e);
+            this.working = false;
+          });
+        }
       }
     }
   }

@@ -220,7 +220,6 @@
 
       },
       onChange:function(selectedIndustry){
-        alert(2);
         this.industry = selectedIndustry;
       },
       validFunc:function(ctx,required){

@@ -82,7 +82,7 @@
             this.copyDone = false;
           },2500);
         } catch (err) {
-          alert('Oops, unable to copy');
+          //alert('Oops, unable to copy');
         }
 
         window.getSelection().removeAllRanges();

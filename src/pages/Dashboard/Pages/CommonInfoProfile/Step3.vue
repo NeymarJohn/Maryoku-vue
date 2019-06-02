@@ -164,7 +164,6 @@
     methods: {
       next() {
         this.loading = true;
-        alert("SAVE ME!!!");
         new Me({id: this.$auth.user.id, onboarded: true}).save().then((response) => {
           this.$router.push({name: 'AnnualPlanner'});
         });
@@ -192,7 +191,6 @@
 
       },
       onChange:function(selectedIndustry){
-        alert(2);
         this.industry = selectedIndustry;
       },
       validFunc:function(ctx,required){
