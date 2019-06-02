@@ -436,8 +436,11 @@
     mounted() {
       this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
       this.isLoading = true;
-      this.getTimelineItems();
-
+    },
+    watch: {
+      event(newVal, oldVal){
+        this.getTimelineItems();
+      }
     }
   }
 </script>

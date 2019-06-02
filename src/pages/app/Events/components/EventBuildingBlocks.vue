@@ -29,7 +29,7 @@
           <div class="md-layout-item md-medium-size-30 md-xsmall-size-100 md-size-33">
             <md-card class="info-card">
               <div class="card-content">
-                <p class="category">Diff</p>
+                <p class="category">Gap</p>
                 <h3 class="title">$
                   <animated-number :value="0"></animated-number>
                 </h3>
@@ -57,12 +57,16 @@
                     <md-table-cell md-label="Expanse">{{ item.title }}</md-table-cell>
 
                     <md-table-cell md-label="Requirements">
-                      <template v-if="!item.is_parent && item.values.length">
-                        {{`${item.values.length} selected`}}
-                        <md-button class="md-danger md-simple md-sm md-just-icon" @click="addRequirements(item)">
-                          <md-icon>edit</md-icon>
+                      <div v-if="!item.is_parent && item.values.length" style="cursor: pointer; text-align: center;vertical-align: middle;">
+                        <md-button class="md-simple md-sm requirements-cell-button">
+                          {{`${item.values.length} selected`}}
+                          <md-icon class="text-danger">edit</md-icon>
                         </md-button>
-                      </template>
+                        <!--<span>{{`${item.values.length} selected`}}</span>
+                        <md-button class="md-danger md-simple md-tiny md-just-icon pull-right" @click="addRequirements(item)">
+                          <md-icon>edit</md-icon>
+                        </md-button>-->
+                      </div>
                       <template v-else-if="!item.is_parent && !item.values.length">
                         <md-button class="md-info md-sm" @click="addRequirements(item)">Set requirements</md-button>
                       </template>
@@ -329,5 +333,12 @@
   }
 </script>
 <style lang="scss">
-
+  .requirements-cell-button {
+    &.md-icon:hover {
+      visibility: hidden;
+    }
+    &.md-icon:hover {
+      visibility: visible;
+    }
+  }
 </style>
