@@ -253,7 +253,7 @@
         remainingBudgetPerEmployee: 0,
         seriesData: [],
         isLoading: false,
-        event : {},
+        event : {statistics: {}},
         routeName : null,
         budgetPerEmployee : 0
       };

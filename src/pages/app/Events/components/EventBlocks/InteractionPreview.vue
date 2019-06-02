@@ -2,7 +2,7 @@
   <div class="md-layout interaction-preview">
     <div class="md-layout-item">
       <md-card style="min-height: 50%;">
-        <md-card-header class="md-card-header-text md-card-header-blue">
+        <md-card-header class="md-card-header-text md-card-header-warning">
           <div class="card-text">
             <h4 class="title" style="color: white;">
               {{interactionData.title}}

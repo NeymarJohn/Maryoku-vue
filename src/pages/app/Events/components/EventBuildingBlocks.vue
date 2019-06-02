@@ -155,7 +155,10 @@
       ChartCard
     },
     props: {
-      event: Object,
+      event: {
+        type: Object,
+        default: ()=>{return { statistics: {}}}
+      },
       eventComponents: [Array, Function]
 
     },
@@ -201,8 +204,8 @@
       },
       getEventBuildingBlocks () {
 
-        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-        let event = new CalendarEvent({id: this.event.id})
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
 
         new EventComponent().for(calendar, event).get()
           .then(res => {
@@ -299,9 +302,6 @@
 
       console.log(this.event)
 
-      // Get default event building blocks
-      this.getEventBuildingBlocks()
-
       this.$bus.$on('BlockAdded', function () {
         /*_self.$notify(
           {
@@ -313,6 +313,12 @@
         _self.getEventBuildingBlocks()
       })
 
+    },
+    watch: {
+      event(newVal, oldVal){
+        // Get default event building blocks
+        this.getEventBuildingBlocks();
+      }
     }
   }
 </script>

@@ -1242,6 +1242,8 @@ $tooltip-border-color: $blue-grey-200 !default;
 }
 .interactions-list {
 
+  margin-top: 24px;
+
   &_item {
     border : 1px solid #efefef;
     border-radius: 5px;
@@ -2056,6 +2058,7 @@ iframe{
   }
   .interaction-option-image {
     width: 10vmin;
+    height: 10vmin;
     display: inline;
     border: 2px solid white;
     opacity: 0.5;

@@ -1,8 +1,8 @@
 <template>
   <div class="md-layout interactions-list">
-    <div class="md-layout-item md-size-45">
+    <div class="md-layout-item md-medium-size-45 md-size-35">
       <md-card style="min-height: 50%;">
-        <md-card-header class="md-card-header-text md-card-header-blue">
+        <md-card-header class="md-card-header-text md-card-header-warning">
           <div class="card-text">
             <h4 class="title" style="color: white;">Manage Interactions</h4>
           </div>
@@ -63,7 +63,7 @@
         </md-card-content>
       </md-card>
     </div>
-    <div class="md-layout-item md-size-55">
+    <div class="md-layout-item md-medium-size-55 md-size-65">
       <interaction-preview :interactionData.sync="visibleInteraction" :event-data="eventData"></interaction-preview>
     </div>
   </div>
@@ -130,7 +130,7 @@
         item.editMode = true;
         this.visibleInteraction = item;
         if (!item.id){ //Existing
-          Object.assign(this.visibleInteraction, {templateImage: item.options[0],sendDaysBeforeEvent: 15, line1: this.eventData.title, line2: this.$moment(this.eventData.eventStartMillis).format('MM-DD-YYYY, H:mm A'), line3: ''});
+          Object.assign(this.visibleInteraction, {templateImage: item.options[0],sendDaysBeforeEvent: 15, line1: item.title, line2: this.$moment(this.eventData.eventStartMillis).format('MM-DD-YYYY, H:mm A'), line3: this.eventData.title});
         }
         this.$forceUpdate();
       },
