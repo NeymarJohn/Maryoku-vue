@@ -54,7 +54,7 @@
                   <md-icon>edit</md-icon>
                   <md-tooltip md-direction="top">Set timing and preview</md-tooltip>
                 </md-button>
-                <md-button class="md-success md-tiny" style="width: auto !important; margin: 8px;" v-if="item.editMode" @click="saveInteraction(item)">
+                <md-button class="md-success md-tiny" style="width: auto !important; margin: 8px;" v-if="item.editMode" @click="saveInteraction(item)" :disabled="working">
                   Save
                 </md-button>
               </md-table-cell>

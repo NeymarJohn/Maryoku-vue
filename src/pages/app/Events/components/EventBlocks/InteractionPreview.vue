@@ -9,7 +9,7 @@
               <small style="display: block;">Preview</small>
             </h4>
           </div>
-          <md-button class="md-success md-sm pull-right" style="margin: 16px 6px;" @click="saveInteraction">Save</md-button>
+          <md-button class="md-success md-sm pull-right" style="margin: 16px 6px;" @click="saveInteraction" :disabled="working">Save</md-button>
         </md-card-header>
         <md-card-content>
           <vue-element-loading :active="working" spinner="ring" color="#FF547C" />
@@ -109,16 +109,12 @@
       saveInteraction(){
         console.log(JSON.stringify(this.interactionData));
         this.working = true;
-        if (item.id) { //Existing
-
-        } else {
-          new EventInteraction(item).for(new Calendar({id: this.$auth.user.defaultCalendarId}),this.eventData).save().then(res=>{
-            this.working = false;
-          }).catch((e)=>{
-            console.error(e);
-            this.working = false;
-          });
-        }
+        new EventInteraction(this.interactionData).for(new Calendar({id: this.$auth.user.defaultCalendarId}),this.eventData).save().then(res=>{
+          this.working = false;
+        }).catch((e)=>{
+          console.error(e);
+          this.working = false;
+        });
       }
     },
     watch: {
