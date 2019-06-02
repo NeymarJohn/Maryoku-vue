@@ -11,7 +11,7 @@
       <md-card>
         <md-card-content style="min-height: 60px;">
           <vue-element-loading :active="teamMembersLoading" spinner="ring" color="#FF547C"/>
-          <team-table  :current-user-id="auth.user.id" :available-permissions="permissions" :available-roles="roles"
+          <team-table  :current-user-id="$auth.user.id" :available-permissions="permissions" :available-roles="roles"
             :team-id="team.id"
             :teamMembers="teamMembers"
             @membersRefresh="fetchData(pagination.from)"
