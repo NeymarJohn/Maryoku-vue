@@ -54,7 +54,7 @@
                           style="max-width: 100%; overflow: auto;">
                   <md-table-row slot="md-table-row" slot-scope="{ item }" :class="{parent : item.is_parent}"
                                 class="blocks-list_item">
-                    <md-table-cell md-label="Expanse">{{ item.componentId }}</md-table-cell>
+                    <md-table-cell md-label="Expanse">{{ item.title }}</md-table-cell>
 
                     <md-table-cell md-label="Requirements">
                       <template v-if="!item.is_parent && item.values.length">
