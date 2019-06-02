@@ -12,7 +12,7 @@
           <md-table :md-card="false"  v-model="possibleInteractionsList" >
             <md-table-row slot="md-table-row" slot-scope="{ item, index }" :class="{'visible-row':item.editMode,'not-visible-row':!item.editMode}" @click="editInteraction(item)">
               <md-table-cell class="text-center">
-                <md-switch class="md-switch-rose" style="margin: auto;"  v-model="item.enabled"></md-switch>
+                <md-switch class="md-switch-rose" style="margin: auto;"  v-model="item.enabled" @change="enable($event, item)"></md-switch>
               </md-table-cell>
               <md-table-cell >
                 <h5 class="" style="margin: 0; padding-top: 4px;">{{ item.title }}</h5>
@@ -64,7 +64,7 @@
       </md-card>
     </div>
     <div class="md-layout-item md-size-55">
-      <interaction-preview :interactionData="visibleInteraction" :event-data="eventData"></interaction-preview>
+      <interaction-preview :interactionData.sync="visibleInteraction" :event-data="eventData"></interaction-preview>
     </div>
   </div>
 </template>
@@ -99,10 +99,13 @@
         new EventInteraction().get().then(res=>{
           this.possibleInteractionsList = res;
 
+          this.possibleInteractionsList.forEach(possibleInteraction=>{
+            possibleInteraction.event = {id: this.eventData.id};
+          });
+
           new EventInteraction().for(new Calendar({id: this.$auth.user.defaultCalendarId}),this.eventData).get().then(interactions=>{
             interactions.forEach(interaction=>{
               this.possibleInteractionsList.forEach(possibleInteraction=>{
-                possibleInteraction.event = {id: this.eventData.id};
                 if (possibleInteraction.templateId === interaction.templateId){
                   Object.assign(possibleInteraction, interaction);
                 }
@@ -140,6 +143,10 @@
           console.error(e);
           this.working = false;
         });
+      },
+      enable(e, item){
+        item.enabled = e;
+        this.$forceUpdate();
       }
     }
   }
