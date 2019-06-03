@@ -47,7 +47,7 @@
 
         </md-card-content>
       </md-card>
-      <md-card class="md-card-plain">
+      <md-card class="md-card-plain" v-else>
         <md-card-content>
           <div class="text-center">
             <img src="/static/img/calendar.png" style="width: 120px;"/>

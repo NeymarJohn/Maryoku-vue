@@ -20,20 +20,21 @@
                   <md-card class="md-card-plain md-gutter" style="margin: 0; padding: 0;">
                     <md-card-content style="padding: 12px 0;">
                       <div class="md-layout">
-                        <div class="md-layout-item md-medium-size-100 md-size-45">
+                        <div class="md-layout-item md-size-65">
                           <md-field>
-                            <label>Send on specific date</label>
+                            <label>Send this interaction</label>
+                            <md-select v-model="item.sendDateOption" name="sendDateOption" id="sendDateOption">
+                              <md-option value="sendOnDate">On a specific date</md-option>
+                              <md-option value="daysBeforeEvent">Days before the event</md-option>
+                            </md-select>
+                          </md-field></div>
+                        <div class="md-layout-item md-size-35">
+                          <md-field v-if="item.sendDateOption === 'sendOnDate'">
                             <md-input v-model="item.sendOnDate"
                                       data-vv-name="sendOnDate"
                                       v-focus/>
                           </md-field>
-                        </div>
-                        <div class="md-layout-item md-medium-size-100 md-size-10" style="margin-top: auto; margin-bottom: auto; font-weight: 500;">
-                          OR
-                        </div>
-                        <div class="md-layout-item md-medium-size-100 md-size-45">
-                          <md-field>
-                            <label>Days before the event</label>
+                          <md-field v-if="item.sendDateOption === 'daysBeforeEvent'">
                             <md-input v-model="item.sendDaysBeforeEvent"
                                       data-vv-name="sendDaysBeforeEvent"/>
                           </md-field>
