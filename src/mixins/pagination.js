@@ -9,7 +9,7 @@ export const paginationMixin = {
       pagination: {
         limit: PaginationConstants.ROWS_PER_PAGE,
         page: 1,
-        total: 0,
+        total: 1,
         from: 1,
         to: PaginationConstants.ROWS_PER_PAGE
       },
@@ -21,8 +21,8 @@ export const paginationMixin = {
     },
     updatePagination(data) {
       this.pagination.total = data.total;
-      this.pagination.from = data.page; //((data.page - 1) * data.limit) + 1;
-      this.pagination.to = data.page + 1; //(data.page * PaginationConstants.ROWS_PER_PAGE) - (PaginationConstants.ROWS_PER_PAGE - data.count);
+      this.pagination.from = ((data.page - 1) * data.limit) + 1;
+      this.pagination.to = (data.page * PaginationConstants.ROWS_PER_PAGE) - (PaginationConstants.ROWS_PER_PAGE - data.count);
     }
   }
 }

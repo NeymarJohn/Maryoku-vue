@@ -20,21 +20,20 @@
                   <md-card class="md-card-plain md-gutter" style="margin: 0; padding: 0;">
                     <md-card-content style="padding: 12px 0;">
                       <div class="md-layout">
-                        <div class="md-layout-item md-size-65">
+                        <div class="md-layout-item md-size-100">
                           <md-field>
-                            <label>Send this interaction</label>
-                            <md-select v-model="item.sendDateOption" name="sendDateOption" id="sendDateOption">
-                              <md-option value="sendOnDate">On a specific date</md-option>
-                              <md-option value="daysBeforeEvent">Days before the event</md-option>
-                            </md-select>
-                          </md-field></div>
-                        <div class="md-layout-item md-size-35">
-                          <md-field v-if="item.sendDateOption === 'sendOnDate'">
+                            <label>Send on specific date</label>
                             <md-input v-model="item.sendOnDate"
                                       data-vv-name="sendOnDate"
                                       v-focus/>
                           </md-field>
-                          <md-field v-if="item.sendDateOption === 'daysBeforeEvent'">
+                        </div>
+                        <div class="md-layout-item md-size-100" style="margin-top: auto; margin-bottom: auto; font-weight: 500;">
+                          OR
+                        </div>
+                        <div class="md-layout-item md-size-100">
+                          <md-field>
+                            <label>Days before the event</label>
                             <md-input v-model="item.sendDaysBeforeEvent"
                                       data-vv-name="sendDaysBeforeEvent"/>
                           </md-field>
@@ -104,20 +103,15 @@
             possibleInteraction.event = {id: this.eventData.id};
           });
 
-          let firstEnabledInteraction = null;
           new EventInteraction().for(new Calendar({id: this.$auth.user.defaultCalendarId}),this.eventData).get().then(interactions=>{
             interactions.forEach(interaction=>{
               this.possibleInteractionsList.forEach(possibleInteraction=>{
                 if (possibleInteraction.templateId === interaction.templateId){
                   Object.assign(possibleInteraction, interaction);
-
-                  if (possibleInteraction.enabled && !firstEnabledInteraction){
-                    firstEnabledInteraction = possibleInteraction;
-                  }
                 }
               });
             });
-            this.editInteraction(firstEnabledInteraction || this.possibleInteractionsList[0]);
+            this.editInteraction(this.possibleInteractionsList[0]);
             this.working = false;
           });
         }).catch((e)=>{

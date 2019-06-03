@@ -17,7 +17,7 @@
         </md-button>
       </div>
     </div>
-    <md-table-row slot="md-table-row" slot-scope="{ item }" > <!--md-selectable="multiple" md-auto-select-->
+    <md-table-row slot="md-table-row" slot-scope="{ item }" md-selectable="multiple" md-auto-select>
       <div class="popup-box" v-click-outside="closePopup" v-if="openPopover" md-direction="left">
         <div class="header-position">
           <h3 class="title">Tagging</h3>
@@ -209,7 +209,7 @@ export default {
         let permissionsTitles = [];
 
         permissionsArray.forEach((permission)=>{
-          let availablePermission = _.findWhere(this.availablePermissions, {id: permission});
+          let availablePermission = _.findWhere(this.availablePermissions, {it: permission});
           if (availablePermission) {
             permissionsTitles.push(availablePermission.title);
           }

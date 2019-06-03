@@ -338,7 +338,7 @@
         this.setEditMode({ editMode: false });
         this.setNumberOfParticipants({numberOfParticipants: this.$auth.user.customer.numberOfEmployees});
         this.setEventDate({date: currentDate ? currentDate : null});
-        this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: false, eventData: {eventStartMillis: currentDate ? currentDate.getTime() : new Date().getTime(), numberOfParticipants: this.$auth.user.customer.numberOfEmployees} })
+        this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: false, eventData: {date: currentDate ? currentDate : new Date(), numberOfParticipants: this.$auth.user.customer.numberOfEmployees} })
       },
       openEditEventModal: function (item) {
         if (!item.editable){
@@ -357,7 +357,7 @@
         this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: false, eventData: item })
       },
       fullDateWithDay(day) {
-        return moment().date(day).month(this.month-1).year(this.year).toDate();
+        return moment().date(day).month(this.month-1).year(this.year);
       },
       colorWithCategory(category) {
         let filterCategories = this.categories.filter(c => c.id === category);

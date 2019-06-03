@@ -70,7 +70,7 @@
           props: {
             modalSubmitTitle: 'Save',
             editMode: false,
-            sourceEventData: {eventStartMillis: new Date().getTime(), numberOfParticipants: this.$auth.user.customer.numberOfEmployees},
+            sourceEventData: {date: new Date(), numberOfParticipants: this.$auth.user.customer.numberOfEmployees},
             refreshEvents: null,
             year: now.getFullYear(),
             month: now.getMonth(),

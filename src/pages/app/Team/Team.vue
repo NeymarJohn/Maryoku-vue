@@ -117,7 +117,7 @@ export default {
       let currentUserId = this.$auth.user.id;
       new Teams({ id: this.$auth.user.defaultGroupId })
         .members()
-        .page(Number(page))
+        .page(page)
         .limit(this.pagination.limit)
         .get()
         .then(members => {
@@ -134,7 +134,7 @@ export default {
     openTeamInviteSidePanel() {
       this.resetForm();
       this.setMemberProperty({ key: "role", actualValue: "co_producer" });
-      this.setMemberProperty({ key: "permissions", actualValue: ["view"] });
+      this.setMemberProperty({ key: "permissions", actualValue: ["sign_off"] });
 
       // this.setInviteModal({ showModal: true })
       this.setEditMode({ editMode: false });
@@ -144,23 +144,23 @@ export default {
         cssClass: "md-layout-item md-size-40 transition36 ",
         openOn: "right",
         props: {
-          membersRefresh: () => this.fetchData(this.pagination.page),
-          team: this.team,
-          availablePermissions: this.permissions
+          membersRefresh: () => this.fetchData(this.pagination.from),
+          team: this.team
         }
       });
     },
     openEditTeamInviteSidePanel(showModal, teamMember) {
       // this.setInviteModalAndTeamMember({showModal: show, teamMember: item})
+
       window.currentPanel = this.$showPanel({
         component: InviteModal,
         cssClass: "md-layout-item md-size-40 transition36 ",
         openOn: "right",
         props: {
 
-          membersRefresh: () => this.fetchData(this.pagination.page),
+          membersRefresh: () => this.fetchData(this.pagination.from),
           team: teamMember,
-          availablePermissions: this.permissions
+
         }
       });
     },

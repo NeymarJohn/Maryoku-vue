@@ -9,7 +9,7 @@
           <md-button slot="title" class="md-button md-simple md-rose dropdown-toggle md-tiny" data-toggle="dropdown" style="border-radius: 3px 3px 0 0; text-transform: capitalize; font-size: 18px !important; font-weight: 400 !important;">
             {{topBarTitle}}
           </md-button>
-          <div  class="dropdown-menu" style="margin-top: 5px; border-radius: 0 5px 5px 5px !important; padding: 24px;min-width: 480px;max-width: 580px;">
+          <div  class="dropdown-menu" style="margin-top: 5px; border-radius: 0 3px 3px 3px !important; padding: 24px;min-width: 480px;max-width: 580px;">
             <div>
               <h4 class="" style="font-weight: 500; padding: 0 0 12px 0; margin: 0; display: inline;">
                 {{topBarTitle}}

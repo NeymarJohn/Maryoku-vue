@@ -84,7 +84,7 @@
                     <!-- Actual Cost -->
                     <md-table-cell md-label="Actual cost">
                       <template v-if="item.winningProposalId">
-                        <md-button class="md-success md-simple actual-cost">{{ `$${item.winningProposalId}`}}
+                        <md-button class="md-success md-simple actual-cost">{{ `$${item.winingProposal.cost}`}}
                           <md-button class="md-success md-simple md-sm md-just-icon wining-budget">
                             <md-icon>open_in_new</md-icon>
                           </md-button>
@@ -168,7 +168,7 @@
     },
     data: () => ({
       // auth: auth,
-      isLoading: false,
+      isLoading: true,
       allocatedBudget: 0,
       eventBuildingBlocks: []
 
@@ -199,13 +199,6 @@
               this.isLoading = false
               this.getEventBuildingBlocks()
               this.$forceUpdate()
-
-              let allocatedBudget = 0;
-              this.eventBuildingBlocks.forEach(item=>{
-                allocatedBudget += Number(item.allocatedBudget);
-              });
-
-              this.allocatedBudget = allocatedBudget;
             })
               .catch(error => {
                 console.log(error)
@@ -215,8 +208,6 @@
 
       },
       getEventBuildingBlocks () {
-
-        this.isLoading = true;
 
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
@@ -234,8 +225,6 @@
             });
 
             this.allocatedBudget = allocatedBudget;
-
-            this.isLoading = false;
           })
           .catch(error => {
             console.log('Error ', error)
@@ -266,18 +255,9 @@
         selected_block.todos = block.todos;
         selected_block.values = block.values;
         selected_block.vendors = block.vendors;
-        if (val){
-          if (val.toString().toLowerCase() === 'click to set'){
-            selected_block.allocatedBudget = null;
-            block.allocatedBudget = null;
-          } else {
-            selected_block.allocatedBudget = val;
-            block.allocatedBudget = val;
-          }
-        } else {
-          selected_block.allocatedBudget = null;
-          block.allocatedBudget = null;
-        }
+        selected_block.allocatedBudget = val;
+
+        block.allocatedBudget = val;
 
         selected_block.for(calendar, event).save().then(resp => {
 
@@ -287,9 +267,7 @@
 
           let allocatedBudget = 0;
           this.eventBuildingBlocks.forEach(item=>{
-            if (item.allocatedBudget) {
-              allocatedBudget += Number(item.allocatedBudget);
-            }
+            allocatedBudget += Number(item.allocatedBudget);
           });
 
           this.allocatedBudget = allocatedBudget;
@@ -329,13 +307,21 @@
 
     },
     mounted () {
+      let _self = this
+      this.isLoading = false
 
-      this.isLoading = true;
-      console.log(this.event);
+      console.log(this.event)
 
-      this.$bus.$on('BlockAdded', ()=>{
-        this.getEventBuildingBlocks()
-      });
+      this.$bus.$on('BlockAdded', function () {
+        /*_self.$notify(
+          {
+            message: 'New Building Block added successfully',
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'success'
+          })*/
+        _self.getEventBuildingBlocks()
+      })
 
     },
     watch: {

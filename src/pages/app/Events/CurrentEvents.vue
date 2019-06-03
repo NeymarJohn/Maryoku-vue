@@ -428,7 +428,7 @@
     grid-row: 1;
     margin-top: auto;
     margin-bottom: auto;
-    font-size: 3vmin;
+    font-size: 4vmin;
     font-weight: 700;
     color: #515151;
   }
