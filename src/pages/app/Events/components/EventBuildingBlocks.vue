@@ -199,6 +199,13 @@
               this.isLoading = false
               this.getEventBuildingBlocks()
               this.$forceUpdate()
+
+              let allocatedBudget = 0;
+              this.eventBuildingBlocks.forEach(item=>{
+                allocatedBudget += Number(item.allocatedBudget);
+              });
+
+              this.allocatedBudget = allocatedBudget;
             })
               .catch(error => {
                 console.log(error)
@@ -255,9 +262,18 @@
         selected_block.todos = block.todos;
         selected_block.values = block.values;
         selected_block.vendors = block.vendors;
-        selected_block.allocatedBudget = val;
-
-        block.allocatedBudget = val;
+        if (val){
+          if (val.toString().toLowerCase() === 'click to set'){
+            selected_block.allocatedBudget = null;
+            block.allocatedBudget = null;
+          } else {
+            selected_block.allocatedBudget = val;
+            block.allocatedBudget = val;
+          }
+        } else {
+          selected_block.allocatedBudget = null;
+          block.allocatedBudget = null;
+        }
 
         selected_block.for(calendar, event).save().then(resp => {
 
@@ -267,7 +283,9 @@
 
           let allocatedBudget = 0;
           this.eventBuildingBlocks.forEach(item=>{
-            allocatedBudget += Number(item.allocatedBudget);
+            if (item.allocatedBudget) {
+              allocatedBudget += Number(item.allocatedBudget);
+            }
           });
 
           this.allocatedBudget = allocatedBudget;
