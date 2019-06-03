@@ -104,15 +104,20 @@
             possibleInteraction.event = {id: this.eventData.id};
           });
 
+          let firstEnabledInteraction = null;
           new EventInteraction().for(new Calendar({id: this.$auth.user.defaultCalendarId}),this.eventData).get().then(interactions=>{
             interactions.forEach(interaction=>{
               this.possibleInteractionsList.forEach(possibleInteraction=>{
                 if (possibleInteraction.templateId === interaction.templateId){
                   Object.assign(possibleInteraction, interaction);
+
+                  if (possibleInteraction.enabled && !firstEnabledInteraction){
+                    firstEnabledInteraction = possibleInteraction;
+                  }
                 }
               });
             });
-            this.editInteraction(this.possibleInteractionsList[0]);
+            this.editInteraction(firstEnabledInteraction || this.possibleInteractionsList[0]);
             this.working = false;
           });
         }).catch((e)=>{

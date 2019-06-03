@@ -439,6 +439,7 @@
     },
     watch: {
       event(newVal, oldVal){
+        this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
         this.getTimelineItems();
       }
     }
