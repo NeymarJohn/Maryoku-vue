@@ -436,6 +436,10 @@ $tooltip-border-color: $blue-grey-200 !default;
     .vlabeledit {
       display: inline-block;
       margin-left: 0.3em;
+
+      &:hover {
+        cursor: pointer;
+      }
     }
 
     .vlabeledit-input {
