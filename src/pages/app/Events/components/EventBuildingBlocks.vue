@@ -168,7 +168,7 @@
     },
     data: () => ({
       // auth: auth,
-      isLoading: true,
+      isLoading: false,
       allocatedBudget: 0,
       eventBuildingBlocks: []
 
@@ -216,6 +216,8 @@
       },
       getEventBuildingBlocks () {
 
+        this.isLoading = true;
+
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
 
@@ -232,6 +234,8 @@
             });
 
             this.allocatedBudget = allocatedBudget;
+
+            this.isLoading = false;
           })
           .catch(error => {
             console.log('Error ', error)
@@ -325,21 +329,13 @@
 
     },
     mounted () {
-      let _self = this
-      this.isLoading = false
 
-      console.log(this.event)
+      this.isLoading = true;
+      console.log(this.event);
 
-      this.$bus.$on('BlockAdded', function () {
-        /*_self.$notify(
-          {
-            message: 'New Building Block added successfully',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'success'
-          })*/
-        _self.getEventBuildingBlocks()
-      })
+      this.$bus.$on('BlockAdded', ()=>{
+        this.getEventBuildingBlocks()
+      });
 
     },
     watch: {

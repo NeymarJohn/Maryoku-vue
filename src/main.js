@@ -26,6 +26,8 @@ import Tawk from 'vue-tawk';
 import VueCookies from 'vue-cookies';
 import { VueStars } from "vue-stars"
 import VueLoadImage from 'vue-load-image';
+import Multiselect from 'vue-multiselect';
+import 'vue-multiselect/dist/vue-multiselect.min.css';
 
 // router setup
 import routes from "./router/routes";
@@ -122,6 +124,7 @@ Vue.component('vue-phone-number-input', VuePhoneNumberInput);
 Vue.component("vue-stars", VueStars);
 Vue.component("vue-load-image", VueLoadImage);
 Vue.component("vue-element-loading", VueElementLoading);
+Vue.component('multiselect', Multiselect);
 
 Vue.use(VueGtm, {
   id: 'GTM-5FH68TF', // Your GTM ID
