@@ -1,6 +1,6 @@
 <template>
   <div class="vlabeledit">
-    <div class="vlabeledit-label" :class="{'vlabeledit-empty' : this.vlabel === empty}" @click="onLabelClick" v-if="!edit">{{vlabel}}</div>
+    <div class="vlabeledit-label" :class="{'vlabeledit-empty' : this.vlabel === empty}" @click="onLabelClick" v-if="!edit">{{vlabel}} <md-icon class="pull-right text-gray small md-sm vlabeledit-label-icon">edit</md-icon></div>
     <input type="text" v-if="edit && !mask" v-model="label" v-on:blur="updateTextBlur" ref="labeledit" :placeholder="vplaceholder" class="vlabeledit-input" @keyup.enter="updateTextEnter"/>
     <input-mask type="text" v-if="edit && mask" :mask="mask" maskChar="_" v-model="label" v-on:blur="updateTextBlur" ref="labeledit" :placeholder="vplaceholder" class="vlabeledit-input" @keyup.enter="updateTextEnter"/>
   </div>
@@ -32,6 +32,9 @@
       onLabelClick: function(){
         this.edit = true;
         this.label = this.text;
+        setTimeout(()=>{
+          this.$refs.labeledit.select();
+        },100);
       },
       // trigger when textbox got lost focus
       updateTextBlur: function(){
@@ -107,5 +110,8 @@
 <style>
   .vlabeledit-empty {
     color: #ccc !important;
+  }
+  .vlabeledit-label-icon{
+    font-size: 16px !important;
   }
 </style>

@@ -12,7 +12,7 @@
         </template>
         <template slot="body">
           <p class="text-left">
-            Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits.
+            You can copy this link and send it to your event participants
           </p>
 
           <md-field v-if="event">

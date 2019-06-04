@@ -37,8 +37,8 @@
           <div class="text-left">
             <h5 style="font-size: 15px !important; font-weight: 300; padding: 0; margin: 0; color: #959595;">Annual budget per employee</h5>
             <div class="d-flex flex-wrap justify-beetwen items-center-v">
-              <label-edit :required="true" v-show="editAnnualBudgetPerEmployee" :text="annualBudgetPerEmployee" field-name="annualBudgetPerEmployee"  @text-updated-blur="saveBudgeData" @text-updated-enter="saveBudgeData" @no-change="closeEditMode"></label-edit>
-              <h4 v-show="!editAnnualBudgetPerEmployee" style="font-size: 25px !important; font-weight: 500; padding: 0; margin: 0; color: rgba(9, 170, 192, 0.8);">
+              <label-edit :required="true" :text="annualBudgetPerEmployee" field-name="annualBudgetPerEmployee"  @text-updated-blur="saveBudgeData" @text-updated-enter="saveBudgeData" @no-change="closeEditMode"></label-edit>
+              <!--<h4 v-show="!editAnnualBudgetPerEmployee" style="font-size: 25px !important; font-weight: 500; padding: 0; margin: 0; color: rgba(9, 170, 192, 0.8);">
                 <animated-number ref="annualBudgetPerEmployeeNumber" :value="this.annualBudgetPerEmployee" prefix="$"></animated-number>
               </h4>
 
@@ -46,7 +46,7 @@
                 <md-button class="md-icon-button md-simple" @click="openEditAnnualBudgetPerEmployee()">
                   <md-icon>edit</md-icon>
                 </md-button>
-              </div>
+              </div>-->
             </div>
             <hr style="border-top: 1px solid rgba(94, 95, 95, 0.1); border-left: none; border-right: none; border-bottom: 1px solid rgba(94, 95, 95, 0.1);">
           </div>
@@ -56,16 +56,16 @@
           <div class="text-left">
             <h5 style="font-size: 15px !important; font-weight: 300; padding: 0; margin: 0; color: #959595;">Number of employees</h5>
             <div class="d-flex flex-wrap justify-beetwen items-center-v">
-              <label-edit :required="true" v-show="editNumberOfEmployees" :text="this.numberOfEmployees" field-name="numberOfEmployees"  @text-updated-blur="saveBudgeData" @text-updated-enter="saveBudgeData" @no-change="closeEditMode"></label-edit>
-              <h4 v-show="!editNumberOfEmployees" style="font-size: 25px; font-weight: 500; padding: 0; margin: 0; color: rgba(9, 170, 192, 0.8);">
+              <label-edit :required="true" :text="this.numberOfEmployees" field-name="numberOfEmployees"  @text-updated-blur="saveBudgeData" @text-updated-enter="saveBudgeData" @no-change="closeEditMode"></label-edit>
+              <!--<h4 v-show="!editNumberOfEmployees" style="font-size: 25px; font-weight: 500; padding: 0; margin: 0; color: rgba(9, 170, 192, 0.8);">
                 <animated-number ref="numberOfEmployees" :value="this.numberOfEmployees"></animated-number>
-              </h4>
+              </h4>-->
 
-              <div v-show="!editNumberOfEmployees">
+              <!--<div v-show="!editNumberOfEmployees">
                 <md-button class="md-icon-button md-simple" @click="openEditNumberOfEmployees()">
                   <md-icon>edit</md-icon>
                 </md-button>
-              </div>
+              </div>-->
             </div>
               <hr style="border-top: 1px solid rgba(94, 95, 95, 0.1); border-left: none; border-right: none; border-bottom: 1px solid rgba(94, 95, 95, 0.1);">
           </div>
@@ -85,16 +85,16 @@
             <h5 style="font-size: 15px !important; font-weight: 300; padding: 0; margin: 0; color: #959595;">Total annual budget</h5>
 
             <div class="d-flex flex-wrap justify-beetwen items-center-v">
-              <label-edit :required="true" v-show="this.editAnnualBudget" :text="annualBudget" field-name="annualBudget"  @text-updated-blur="saveBudgeData" @text-updated-enter="saveBudgeData" @no-change="closeEditMode"></label-edit>
+              <label-edit :required="true" :text="annualBudget" field-name="annualBudget"  @text-updated-blur="saveBudgeData" @text-updated-enter="saveBudgeData" @no-change="closeEditMode"></label-edit>
 
-              <h4 v-show="!this.editAnnualBudget" style="font-size: 25px !important; font-weight: 500; padding: 0; margin: 0; color: rgba(9, 170, 192, 0.8);">
+              <!--<h4 v-show="!this.editAnnualBudget" style="font-size: 25px !important; font-weight: 500; padding: 0; margin: 0; color: rgba(9, 170, 192, 0.8);">
                 <animated-number ref="annualBudgetNumber" :value="this.annualBudget" prefix="$"></animated-number>
               </h4>
               <div v-show="!this.editAnnualBudget">
                 <md-button class="md-icon-button md-simple" @click="openEditAnnualBudget()">
                   <md-icon>edit</md-icon>
                 </md-button>
-              </div>
+              </div>-->
             </div>
 
               <hr style="border-top: 1px solid rgba(94, 95, 95, 0.1); border-left: none; border-right: none; border-bottom: 1px solid rgba(94, 95, 95, 0.1);">
@@ -159,34 +159,13 @@
         editAnnualBudgetPerEmployee: false,
         editNumberOfEmployees: false,
         editAnnualBudget: false,
-        annualBudgetPerEmployee: {
-          type: Number,
-          default: 0
-        },
-        numberOfEmployees: {
-          type: Number,
-          default: 0
-        },
-        annualBudget: {
-          type: Number,
-          default: 0
-        },
-        countEvents: {
-          type: Number,
-          default: 0
-        },
-        totalRemainingBudget: {
-          type: Number,
-          default: 0
-        },
-        percentage: {
-          type: Number,
-          default: 0
-        },
-        remainingBudgetPerEmployee: {
-          type: Number,
-          default: 0
-        },
+        annualBudgetPerEmployee: 0,
+        numberOfEmployees: 0,
+        annualBudget: 0,
+        countEvents: 0,
+        totalRemainingBudget: 0,
+        percentage: 0,
+        remainingBudgetPerEmployee: 0,
         seriesData: [],
         annualBudgetCache: null,
         annualBudgetPerEmployeeCache: null,
@@ -344,7 +323,7 @@
     grid-row: 1;
     margin-top: auto;
     margin-bottom: auto;
-    font-size: 4vmin;
+    font-size: 3vmin;
     font-weight: 700;
     color: #fff;
   }
@@ -391,6 +370,26 @@
     .ct-series-a .ct-bar,
     .ct-series-a .ct-slice-donut {
       opacity: 0.27;
+    }
+
+    .vlabeledit-input {
+      font-size: 25px !important;
+      font-weight: 500;
+      padding: 1px 4px !important;
+      margin: 0px;
+      color: rgba(9, 170, 192, 0.8);
+    }
+
+    .vlabeledit-label {
+      font-size: 25px !important;
+      font-weight: 500;
+      padding: 4px !important;
+      margin: 0px;
+      color: rgba(9, 170, 192, 0.8);
+    }
+
+    .vlabeledit-empty {
+      font-size: 14px !important;
     }
   }
 </style>

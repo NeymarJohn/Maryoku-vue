@@ -17,7 +17,7 @@
         </md-button>
       </div>
     </div>
-    <md-table-row slot="md-table-row" slot-scope="{ item }" md-selectable="multiple" md-auto-select>
+    <md-table-row slot="md-table-row" slot-scope="{ item }" > <!--md-selectable="multiple" md-auto-select-->
       <div class="popup-box" v-click-outside="closePopup" v-if="openPopover" md-direction="left">
         <div class="header-position">
           <h3 class="title">Tagging</h3>
@@ -35,6 +35,8 @@
       <md-table-cell md-label="Email">{{ item.emailAddress }}</md-table-cell>
       <md-table-cell md-label="Role">{{ availableRoleIdToTitle(item.role) }}</md-table-cell>
       <md-table-cell md-label="Permissions">{{ permissionTitles(item.permissions) }}</md-table-cell>
+      <md-table-cell md-label="Last Login" v-if="item.invitationStatus === 'pending'">{{ item.invitationStatus }}</md-table-cell>
+      <md-table-cell md-label="Last Login" v-else>{{ item.lastLogin | moment }}</md-table-cell>
       <md-table-cell md-label="Actions">
         <md-button @click.native="toggleEditModal(true, item)" class="md-info md-just-icon md-round">
           <md-icon>edit</md-icon>
@@ -57,6 +59,7 @@ import TeamMembers from "@/models/TeamMembers";
 import indexVuexModule from "@/store/index";
 // import auth from '@/auth';
 import _ from 'underscore';
+import moment from 'moment';
 
 export default {
   components: {
@@ -95,6 +98,11 @@ export default {
       hideBtn: false,
       openPopover: false
     };
+  },
+  filters: {
+    moment: function (date) {
+      return moment(date).format('MMMM Do, GGGG');
+    }
   },
   methods: {
     ...mapActions("teamVuex", ["setInviteModalAndTeamMember"]),
@@ -209,7 +217,7 @@ export default {
         let permissionsTitles = [];
 
         permissionsArray.forEach((permission)=>{
-          let availablePermission = _.findWhere(this.availablePermissions, {it: permission});
+          let availablePermission = _.findWhere(this.availablePermissions, {id: permission});
           if (availablePermission) {
             permissionsTitles.push(availablePermission.title);
           }

@@ -3,8 +3,9 @@
     <!--<div class="md-layout-item md-size-100 text-right">
       <md-button class="button-event-creatig" @click="openEventModal()">Create New Event</md-button>
     </div>-->
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
     <div class="md-layout-item md-size-100">
-      <md-card>
+      <md-card v-if="upcomingEvents.length">
         <md-card-header class="md-card-header-icon md-card-header-rose">
           <div class="card-icon">
             <md-icon>assignment</md-icon>
@@ -13,7 +14,7 @@
         </md-card-header>
         <md-card-content>
           <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
-          <md-table v-model="upcomingEvents" table-header-color="rose" class="table-striped table-hover right-align-actions" v-if="upcomingEvents.length">
+          <md-table v-model="upcomingEvents" table-header-color="rose" class="table-striped table-hover right-align-actions">
             <md-table-row slot="md-table-row" slot-scope="{ item }" @click="routeToEvent(item.id, $event)" class="hover-row">
               <md-table-cell md-label="Event Name" >{{ item.title }}</md-table-cell>
               <md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>
@@ -34,17 +35,31 @@
                   <md-icon>delete_outline</md-icon>
                 </md-button>
 
-               <!-- <div class="float-right"><md-icon>share</md-icon></div>-->
+                <!-- <div class="float-right"><md-icon>share</md-icon></div>-->
               </md-table-cell>
             </md-table-row>
           </md-table>
-          <div class="empty-table text-danger text-center" v-else>
+          <!--<div class="empty-table text-danger text-center" v-else>
             No events yet,
             <span class="text-link" @click="routeToNewEvent()">
               create one now
             </span>
-          </div>
+          </div>-->
 
+        </md-card-content>
+      </md-card>
+      <md-card class="md-card-plain" v-else>
+        <md-card-content>
+          <div class="text-center">
+            <img src="/static/img/calendar.png" style="width: 120px;"/>
+            <h4>You do not have any events planned yet</h4>
+            <md-button class="md-info" @click="routeToNewEvent">
+              <md-icon>event</md-icon> Create New Event
+            </md-button>
+            <md-button class="md-rose" @click="routeToPlanner">
+              Browse Year Planner <md-icon>arrow_right</md-icon>
+            </md-button>
+          </div>
         </md-card-content>
       </md-card>
     </div>
@@ -56,9 +71,9 @@
     </div>
 
     <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33 card-link"
-      v-for="event in recentEvents"
-      :key="event.id"
-      @click="routeToEvent(event.id)">
+         v-for="event in recentEvents"
+         :key="event.id"
+         @click="routeToEvent(event.id)">
 
       <product-card header-animation="true">
         <img class="img" slot="imageHeader" :src="imageHref(event.coverImage)">
@@ -93,6 +108,8 @@
     ProductCard
   } from "@/components";
 
+  import EventSidePanel from '@/pages/app/Events/EventSidePanel';
+
 
   import EventModal from "./EventModal/";
   import { mapMutations,mapGetters } from "vuex";
@@ -113,8 +130,8 @@
       this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
 
     },
-   computed:{
-       ...mapGetters({
+    computed:{
+      ...mapGetters({
         upcomingEvents:'user/getUpcomingEvents'
       })
     },
@@ -127,15 +144,15 @@
         this.$store.dispatch("event/getEventThemes");
       }.bind(this))
 
-        if ( this.$route.params.mode && this.$route.params.mode == 'create-event') {
-            this.openEventModal();
-        }
+      if ( this.$route.params.mode && this.$route.params.mode == 'create-event') {
+        this.openEventModal();
+      }
 
 
     },
     updated(){
     }
-  ,
+    ,
     data() {
       return {
         // auth: auth,
@@ -157,12 +174,12 @@
         this.setModalSubmitTitle("Save");
         this.setEditMode({ editMode: false });
 
-          window.currentPanel = this.$showPanel({
-              component: EventModal,
-              cssClass: 'md-layout-item md-size-45 transition36 bg-grey',
-              openOn: 'right',
-              props: {}
-          });
+        window.currentPanel = this.$showPanel({
+          component: EventModal,
+          cssClass: 'md-layout-item md-size-45 transition36 bg-grey',
+          openOn: 'right',
+          props: {}
+        });
       },
       // getCalendarEvents() {
       //   console.log(this.$store.state.user.defaultCalendarId)
@@ -232,15 +249,27 @@
       routeToEvent(eventId) {
         this.$router.push({ name:"EditBuildingBlocks", params:{id: eventId}});
       },
+      routeToPlanner() {
+        this.$router.push({ name:"AnnualPlanner"});
+      },
       refreshEvents() {
         this.getCalendarEvents();
       },
-        routeToNewEvent() {
-            //this.$router.push({ path: `/events` , name  : 'Events', params : { mode : 'create-event'} });
-            this.setEventModal({ showModal: true });
-            this.setModalSubmitTitle("Save");
-            this.setEditMode({ editMode: false });
-        },
+      routeToNewEvent() {
+        window.currentPanel = this.$showPanel({
+          component: EventSidePanel,
+          cssClass: 'md-layout-item md-size-40 transition36 ',
+          openOn: 'right',
+          disableBgClick: true,
+          props: {
+            modalSubmitTitle: 'Save',
+            editMode: false,
+            sourceEventData: {eventStartMillis: new Date().getTime(), numberOfParticipants: this.$auth.user.customer.numberOfEmployees},
+            refreshEvents: null,
+            occasionsOptions: null
+          }
+        });
+      },
     },
     filters: {
       moment: function (date) {

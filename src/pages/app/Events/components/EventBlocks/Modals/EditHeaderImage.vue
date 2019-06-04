@@ -4,7 +4,7 @@
       <modal v-if="editHeaderModal">
         <template slot="header">
           <div class="md-layout d-flex items-left" >
-            <h4>Update Header
+            <h4>Select Header Image
             </h4>
           </div>
           <md-button class="md-simple md-just-icon md-round modal-default-button" @click="closeModal">
@@ -12,12 +12,13 @@
           </md-button>
         </template>
         <template slot="body" v-if="headerImages">
-
+          <vue-element-loading :active="working" spinner="ring" color="#FF547C" is-full-screen/>
           <div class="header-images-list md-layout">
             <div class="header-images-list_item md-layout-item md-size-33" v-for="(image,index) in headerImages">
               <img :src="`/static/img/page-headers/${image.fullFileName}`" :class="{selected : selectedImage == image.cutFileName}" @click="selectImage(image.cutFileName)"/>
               <md-button class="md-simple md-just-icon md-round" @click="previewImage(image.cutFileName)">
-                <md-icon>visibility</md-icon>
+                <md-icon >visibility</md-icon>
+                <md-tooltip>Preview</md-tooltip>
               </md-button>
             </div>
           </div>
@@ -25,7 +26,7 @@
 
         </template>
         <template slot="footer">
-          <md-button class="md-success move-right" @click="saveHeaderImage">
+          <md-button class="md-success move-right" @click="saveHeaderImage" :disabled="working">
             Save
           </md-button>
         </template>
@@ -63,6 +64,7 @@
     },
     data: () => ({
       // auth: auth,
+      working: false,
       headerImages : null,
       selectedImage : null,
       imagePreview : null
@@ -91,19 +93,21 @@
       },
       saveHeaderImage() {
 
+        this.working = true;
+
         let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let editedEvent = new CalendarEvent({id: this.event.id});
 
         editedEvent = this.event;
         editedEvent.eventPage.headerImage = this.selectedImage;
 
+        this.closeModal();
 
-
-        editedEvent.save().then(response => {
-          this.closeModal();
-
+        new CalendarEvent({id: editedEvent.id, eventPage: { id: editedEvent.eventPage.id,headerImage: this.selectedImage}}).for(_calendar).save().then(response => {
+          this.working = false;
         }).catch((error) => {
           console.log(error);
+          this.working = false;
         });
 
       },
