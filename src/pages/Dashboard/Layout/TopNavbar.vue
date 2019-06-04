@@ -103,34 +103,40 @@
               </a>
             </li>-->
             <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventInvitees" class="md-simple md-lg top-nav-bar-upload-vendors-button" style="margin-top: 6px;" @click="uploadVendors">
+              <md-button v-if="topBarEventInvitees" class="md-simple md-md top-nav-bar-upload-vendors-button" style="margin-top: 12px;" @click="uploadVendors">
                 <md-icon>cloud_upload</md-icon>
                 <span>Upload Vendors</span>
               </md-button>
             </li>
             <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventProposals" class="md-simple md-lg" style="margin-top: 6px;" @click="inviteesManagement">
+              <md-button v-if="topBarEventProposals" class="md-simple md-md" style="margin-top: 12px;" @click="manageGroups">
+                <md-icon>group</md-icon>
+                <span>Manage Groups</span>
+              </md-button>
+            </li>
+            <li class="md-list-item" v-if="topBarEventId">
+              <md-button v-if="topBarEventProposals" class="md-simple md-md" style="margin-top: 12px;" @click="inviteesManagement">
                 <md-icon>email</md-icon>
                 <span>Automated Interactions</span>
               </md-button>
             </li>
             <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventProposals" class="md-simple md-lg" style="margin-top: 6px;" @click="eventPage">
-                <md-icon>group</md-icon>
+              <md-button v-if="topBarEventProposals" class="md-simple md-md" style="margin-top: 12px;" @click="eventPage">
+                <md-icon>web_asset</md-icon>
                 <span>Event Page</span>
               </md-button>
             </li>
             <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventProposals" class="md-simple md-lg" style="margin-top: 6px;" @click="timeline">
+              <md-button v-if="topBarEventProposals" class="md-simple md-md" style="margin-top: 12px;" @click="timeline">
                 <md-icon>mail</md-icon>
                 <span>Timeline</span>
               </md-button>
             </li>
             <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventInvitees" class="md-button md-info" style="margin-top: 12px;" @click="manageInvitees">
+              <md-button v-if="topBarEventInvitees" class="md-button md-info" style="margin-top: 6px;" @click="manageInvitees">
                 <span>Manage Invitees</span>
               </md-button>
-              <md-button v-if="topBarEventProposals" class="md-button md-info" style="margin-top: 12px;" @click="manageProposals">
+              <md-button v-if="topBarEventProposals" class="md-button md-info" style="margin-top: 6px;" @click="manageProposals">
                 <span>Manage Budget &amp; Proposals</span>
               </md-button>
             </li>
@@ -309,6 +315,10 @@
       },
       inviteesManagement(){
         this.$router.push({name: 'InviteesManagement', params: {id: this.topBarEventId}});
+        document.location.reload();
+      },
+      manageGroups(){
+        this.$router.push({name: 'EventGroups', params: {id: this.topBarEventId}});
         document.location.reload();
       },
       timeline(){

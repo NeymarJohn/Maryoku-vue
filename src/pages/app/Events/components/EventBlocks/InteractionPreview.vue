@@ -10,6 +10,7 @@
             </h4>
           </div>
           <md-button class="md-success md-sm pull-right" style="margin: 16px 6px;" @click="saveInteraction" :disabled="working">Save</md-button>
+          <md-button class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="saveInteraction" :disabled="working">Send Test Mail</md-button>
         </md-card-header>
         <md-card-content>
           <vue-element-loading :active="working" spinner="ring" color="#FF547C" />
@@ -41,7 +42,7 @@
               </md-field>
               <md-field>
                 <label>Your message</label>
-                <md-textarea v-model="interactionData.line3"
+                <md-input v-model="interactionData.line3"
                              data-vv-name="line3"
                              @keyup.native="updatePreview(interactionData)"/>
               </md-field>

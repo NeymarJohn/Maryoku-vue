@@ -22,6 +22,7 @@ import VendorsSuggested from "@/pages/app/Community/vendors-suggested/index.vue"
 
 import Events from "@/pages/app/Events/Events.vue";
 import CurrentEvents from "@/pages/app/Events/CurrentEvents.vue";
+import EventGroups from "@/pages/app/Events/components/EventGroups.vue";
 import NewEvent from "@/pages/app/Events/NewEvent.vue";
 import EditEvent from "@/pages/app/Events/EditEvent.vue";
 import EventDetails from "@/pages/app/Events/EventDetails.vue";
@@ -419,6 +420,12 @@ let appPages = {
         name: "InviteesManagement",
         component: CurrentEvents,
         meta: {title: 'Invitees Management', gtm: "Event Edit", opaque: false},
+    },
+    {
+      path: "/events/:id/edit/event-groups",
+      name: "EventGroups",
+      component: EventGroups,
+      meta: {title: 'Event Groups', gtm: "Event Groups", opaque: false},
     },
     {
       path: "/yearly-plan",
