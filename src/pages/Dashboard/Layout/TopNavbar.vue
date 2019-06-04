@@ -109,6 +109,12 @@
               </md-button>
             </li>
             <li class="md-list-item" v-if="topBarEventId">
+              <md-button v-if="topBarEventProposals" class="md-simple md-lg" style="margin-top: 6px;" @click="inviteesManagement">
+                <md-icon>email</md-icon>
+                <span>Automated Interactions</span>
+              </md-button>
+            </li>
+            <li class="md-list-item" v-if="topBarEventId">
               <md-button v-if="topBarEventProposals" class="md-simple md-lg" style="margin-top: 6px;" @click="eventPage">
                 <md-icon>group</md-icon>
                 <span>Event Page</span>
@@ -299,6 +305,10 @@
       },
       eventPage(){
         this.$router.push({name: 'EventDetails', params: {id: this.topBarEventId}});
+        document.location.reload();
+      },
+      inviteesManagement(){
+        this.$router.push({name: 'InviteesManagement', params: {id: this.topBarEventId}});
         document.location.reload();
       },
       timeline(){
