@@ -74,23 +74,36 @@
             </div>
 
             <div class="md-layout-item md-size-100" style="margin-bottom: 16px;">
-              <md-field
+              <md-field v-if="!this.editMode"
                 class="height-auto"
                 :class="[
                             {'md-valid': !errors.has('email') && touched.email},
                             {'md-error': errors.has('email')}]">
                 <label>One or more email addresses</label>
                 <md-textarea
-                  v-if="!this.editMode"
                   v-model="emailAddress"
                   data-vv-name="email"
                   type="email"
                   name="email"
                   required
                   rows="5"
-                  v-validate="modelValidations.email" v-focus></md-textarea>
+                  v-validate="modelValidations.email" v-focus placeholder="john@example.com,brad@example.com"></md-textarea>
+                <slide-y-down-transition>
+                  <md-icon class="error" v-show="errors.has('email')">close</md-icon>
+                </slide-y-down-transition>
+                <slide-y-down-transition>
+                  <md-icon class="success" v-show="!errors.has('email') && touched.email">done</md-icon>
+                </slide-y-down-transition>
+
+                <span class="md-error" v-if="errors.has('email')">{{ errors.first('email') }}</span>
+              </md-field>
+              <md-field v-if="this.editMode"
+                        class="height-auto"
+                        :class="[
+                            {'md-valid': !errors.has('email') && touched.email},
+                            {'md-error': errors.has('email')}]">
+                <label>Email address</label>
                 <md-input
-                  v-else
                   v-model="emailAddress"
                   data-vv-name="email"
                   type="email"
