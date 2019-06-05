@@ -19,7 +19,7 @@
         empty: 'Click to set', // empty place holder .. replace with your own localization for default
       }
     },
-    props: ['text','placeholder', 'required', 'fieldName', 'mask'], // parent should provide :text or :placeholder
+    props: ['text','placeholder', 'required', 'fieldName', 'mask', 'scope'], // parent should provide :text or :placeholder
     methods: {
       initText: function(){
         if(this.text==''||this.text==undefined){
@@ -39,30 +39,34 @@
       // trigger when textbox got lost focus
       updateTextBlur: function(){
         // update the edit mode to false .. display div label text
+        if (!this.edit) return;
+
         this.edit = false;
         if (this.label === this.text) {
-          this.$emit('no-change',this.text, this.fieldName);
+          this.$emit('no-change',this.text, this.fieldName, this.scope);
           return;
         }
         // emit text updated callback
         if (this.required && this.label === ''){
           this.label = this.text;
-          this.$emit('no-change',this.text, this.fieldName);
+          this.$emit('no-change',this.text, this.fieldName, this.scope);
         } else {
-          this.$emit('text-updated-blur',this.label, this.fieldName);
+          this.$emit('text-updated-blur',this.label, this.fieldName, this.scope);
         }
       },
       updateTextEnter: function(){
+        if (!this.edit) return;
+
         this.edit = false;
         if (this.label === this.text) {
-          this.$emit('no-change',this.text, this.fieldName);
+          this.$emit('no-change',this.text, this.fieldName, this.scope);
           return;
         }
         if (this.required && this.label === ''){
           this.label = this.text;
-          this.$emit('no-change',this.text, this.fieldName);
+          this.$emit('no-change',this.text, this.fieldName, this.scope);
         } else {
-          this.$emit('text-updated-enter',this.label, this.fieldName);
+          this.$emit('text-updated-enter',this.label, this.fieldName, this.scope);
         }
       }
     },
@@ -107,11 +111,49 @@
     }
   }
 </script>
-<style>
+<style lang="scss" scoped>
   .vlabeledit-empty {
     color: #ccc !important;
   }
-  .vlabeledit-label-icon{
-    font-size: 16px !important;
+
+  .vlabeledit {
+
+    .vlabeledit-input {
+      border: 1px solid lightgray;
+      border-radius: 5px;
+      padding: 3px;
+      width: 100%;
+      height: 100%;
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    .vlabeledit-label {
+      cursor: pointer;
+      padding: 3px;
+      border: 1px solid transparent;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      font-size: 16px;
+      line-height: 24px;
+      width: 100%;
+
+      &:hover {
+        border: 1px solid lightgray;
+        border-radius: 5px;
+
+        .vlabeledit-label-icon{
+          visibility: visible;
+        }
+      }
+
+      .vlabeledit-label-icon{
+        font-size: 16px !important;
+        visibility: hidden;
+      }
+    }
   }
 </style>

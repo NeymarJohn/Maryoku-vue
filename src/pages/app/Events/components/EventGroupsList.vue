@@ -6,17 +6,21 @@
           <div class="card-text">
             <h4 class="title" style="color: white;">Manage Groups</h4>
           </div>
+          <md-button v-if="groupsList.length" class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="createNewGroup" :disabled="working">Add Group</md-button>
         </md-card-header>
         <md-card-content style="min-height: 100%;">
           <vue-element-loading :active="working" spinner="ring" color="#FF547C"/>
+
           <md-table :md-card="false"  v-model="groupsList" >
-            <md-table-row slot="md-table-row" slot-scope="{ item, index }" :class="{'visible-row':item.editMode,'not-visible-row':!item.editMode}" @click="editInteraction(item)">
-              <md-table-cell class="text-center">
-                <md-switch class="md-switch-rose" style="margin: auto;"  v-model="item.enabled" @change="enable($event, item)"></md-switch>
+            <md-table-row slot="md-table-row" slot-scope="{ item, index }" :class="{'visible-row':visibleGroup && item.id === visibleGroup.id,'not-visible-row':visibleGroup && item.id !== visibleGroup.id}" @click="groupDetails(item)">
+
+              <md-table-cell class="text-center" style="width: 5%; vertical-align: middle;">
+                <md-switch class="md-switch-rose" style="margin: auto;"  v-model="item.enabled" @change="changeGroupSelection($event, item)"></md-switch>
               </md-table-cell>
-              <md-table-cell >
-                <h5 class="" style="margin: 0; padding-top: 4px;">{{ item.title }}</h5>
-                <div class="timing-form" v-if="item.editMode">
+
+              <md-table-cell style="vertical-align: middle;">
+                <label-edit style="margin-top: 8px;" :scope="item" :text="item.title" field-name="title"  @text-updated-blur="groupNameChanged" @text-updated-enter="groupNameChanged"></label-edit>
+                <!--<div class="timing-form" v-if="item.editMode">
                   <md-card class="md-card-plain md-gutter" style="margin: 0; padding: 0;">
                     <md-card-content style="padding: 12px 0;">
                       <div class="md-layout">
@@ -42,25 +46,38 @@
                         <div class="md-layout-item md-size-100">
                           <md-checkbox v-model="item.includePageLink"
                                        :id="`include-${index}`"></md-checkbox>
-                          <!--<label style=" margin:  14px 16px 14px 0" :for="`include-${index}`">Include a link to the <a :href="`/#/events/${eventData ? eventData.id : ''}/public`">event public page</a>?</label>-->
+                          &lt;!&ndash;<label style=" margin:  14px 16px 14px 0" :for="`include-${index}`">Include a link to the <a :href="`/#/events/${eventData ? eventData.id : ''}/public`">event public page</a>?</label>&ndash;&gt;
                           <label style=" margin:  14px 16px 14px 0" :for="`include-${index}`">Include a link to the event public page?</label>
                         </div>
                       </div>
                     </md-card-content>
                   </md-card>
-                </div>
+                </div>-->
               </md-table-cell>
-              <md-table-cell class="text-right">
-                <md-button class="md-round md-warning md-just-icon" v-if="!item.editMode" @click="editInteraction(item)">
-                  <md-icon>edit</md-icon>
-                  <md-tooltip md-direction="top">Set timing and preview</md-tooltip>
-                </md-button>
-                <md-button class="md-success md-tiny" style="width: auto !important; margin: 8px;" v-if="item.editMode" @click="saveInteraction(item)" :disabled="working">
+              <md-table-cell style="vertical-align: middle;">
+                <div style="margin-top: 4px;" v-if="item.invitees">{{item.invitees.length}} <md-icon>group</md-icon></div>
+              </md-table-cell>
+              <md-table-cell class="text-right"  style="width: 80px; vertical-align: middle;">
+                <md-button style="margin-top: 8px;" class="md-success md-sm" v-if="item.id === 'new'" @click="saveGroup(item)">
                   Save
+                </md-button>
+                <md-button style="margin-top: 8px;" class="md-round md-danger md-just-icon" v-if="item.id !== 'new'" @click="deleteGroup(item)">
+                  <md-icon>delete</md-icon>
+                </md-button>
+                <md-button style="margin-top: 8px;" class="md-round md-info md-just-icon" v-if="item.id !== 'new'" @click="groupDetails(item)">
+                  <md-icon>chevron_right</md-icon>
+                  <md-tooltip md-direction="bottom">Manage group members</md-tooltip>
                 </md-button>
               </md-table-cell>
             </md-table-row>
           </md-table>
+
+          <div class="text-center" v-if="!groupsList.length">
+            <h4>You do not have any groups yet</h4>
+            <md-button class="md-info" @click="createNewGroup">
+              <md-icon>event</md-icon> Create New Group
+            </md-button>
+          </div>
         </md-card-content>
       </md-card>
     </div>
@@ -73,10 +90,15 @@
   import EventInteraction from '@/models/EventInteraction';
   import EventGroupDetails from './EventGroupDetails';
   import Calendar from '@/models/Calendar';
+  import EventInviteeGroup from '@/models/EventInviteeGroup';
+  import LabelEdit from '../../../../components/LabelEdit';
+  import _ from 'underscore';
+  import swal from "sweetalert2";
 
   export default {
     name: 'event-groups-list',
     components: {
+      LabelEdit,
       EventGroupDetails
     },
     props: {
@@ -89,32 +111,102 @@
       return {
         working: false,
         groupsList: [],
-        visibleGroup: { title: ''}
+        visibleGroup: null
       };
     },
     mounted(){
       this.working = true;
+      if (this.eventData){
+        this.refreshList();
+      }
     },
     watch: {
       eventData(newVal, oldVal){
-
+        this.refreshList();
       }
     },
     methods: {
+      refreshList(){
+        this.working = true;
+        new EventInviteeGroup().get().then(res=>{
+          this.groupsList = res;
+          this.working = false;
+          if (this.groupsList.length) {
+            this.groupDetails(this.groupsList[0]);
+          }
+        });
+      },
+      createNewGroup(){
+        if (!this.groupsList.length || this.groupsList[0].id !== 'new'){
+          this.groupsList.unshift({id: 'new',title:'',selected: false});
+        }
+      },
+      saveGroup(item){
+        new EventInviteeGroup(item).save().then(res=>{
+          //this.working = false;
+          this.groupsList.unshift(res.item);
+          this.groupDetails(res.item);
+        });
+      },
+      deleteGroup(item){
+        swal({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!"
+        }).then(async result => {
+          if (result.value) {
+            if (this.visibleGroup && this.visibleGroup.id === item.id){
+              this.visibleGroup = null;
+            }
+            new EventInviteeGroup(item).delete().then(res=>{
+              let index = _.findIndex(this.groupsList, (g)=>{ return g.id === item.id});
+              this.groupsList.splice(index,1);
+            });
+          }
+        });
+      },
+      groupDetails(item){
+        this.visibleGroup = item;
+      },
+      groupNameChanged(val, fieldName,item) {
+        item[fieldName] = val;
 
-    }
+        if (item.id === 'new') {
+          item.id = null;
+          delete item['id'];
+          this.groupsList.shift();
+        }
+        this.saveGroup(item);
+      },
+      changeGroupSelection($event, item){
+
+      }
+    },
   }
 </script>
 <style lang="scss" scoped>
   @import '@/assets/scss/md/_colors.scss';
   .visible-row {
-    h5 {
-      font-weight: 500;
-      color: $pink-262;
-    }
     background-color: $grey-50;
   }
   .not-visible-row {
     cursor: pointer;
   }
+
+  .md-table-content {
+    thead {
+      display: none !important;
+    }
+
+    .md-table-row:not(:last-child) td {
+      border-bottom-color: #ddd !important;
+      border-top: 0 solid ;
+      border-bottom: 1px solid ;
+    }
+  }
+
 </style>

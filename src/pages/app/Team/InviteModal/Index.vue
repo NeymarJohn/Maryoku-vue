@@ -514,6 +514,7 @@
 </script>
 <style lang="scss" scoped>
   @import '@/assets/scss/md/_colors.scss';
+
   .mt-0 {
     margin-top: 0;
   }

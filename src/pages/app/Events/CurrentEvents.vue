@@ -188,6 +188,9 @@
       <invitees-management-v2 :event-data.sync="event" :event-components="selectedComponents"></invitees-management-v2>
     </div>
 
+    <div v-else-if="event &&  routeName === 'EventGroups' " class="md-layout-item block-flex">
+      <event-groups :event-data.sync="event" ></event-groups>
+    </div>
     <!--<sticky-budget :event="event" v-if="routeName !== 'EditEvent' && routeName !== 'EditBuildingBlocks'"></sticky-budget>-->
 
   </div>
@@ -219,6 +222,7 @@
   import EventTimeLine from "./components/EventTimeLine.vue";
   import InviteesManagement from "./components/EventBlocks/InviteesManagement.vue";
   import InviteesManagementV2 from "./components/EventBlocks/InviteesManagementV2.vue";
+  import EventGroups from "./components/EventGroups.vue";
 
   import EventPageRoutes from "./components/EventPageRoutes.vue";
   import MdCardContent from "../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue";
@@ -238,7 +242,8 @@
       EventTimeLine,
       InviteesManagement,
       EventPageRoutes,
-      InviteesManagementV2
+      InviteesManagementV2,
+      EventGroups
     },
 
     data() {

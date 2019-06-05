@@ -169,4 +169,16 @@
   .not-visible-row {
     cursor: pointer;
   }
+
+  .md-table-content {
+    thead {
+      display: none !important;
+    }
+
+    .md-table-row:not(:last-child) td {
+      border-bottom-color: #ddd !important;
+      border-top: 0 solid ;
+      border-bottom: 1px solid ;
+    }
+  }
 </style>

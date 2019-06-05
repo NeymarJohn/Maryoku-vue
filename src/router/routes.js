@@ -424,7 +424,7 @@ let appPages = {
     {
       path: "/events/:id/edit/event-groups",
       name: "EventGroups",
-      component: EventGroups,
+      component: CurrentEvents,
       meta: {title: 'Event Groups', gtm: "Event Groups", opaque: false},
     },
     {
