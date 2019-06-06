@@ -160,7 +160,7 @@
         }).then(async result => {
           if (result.value) {
             if (this.visibleGroup && this.visibleGroup.id === item.id){
-              this.visibleGroup = null;
+              this.visibleGroup = this.groupsList.length ? this.groupsList[0] : null;
             }
             new EventInviteeGroup(item).delete().then(res=>{
               let index = _.findIndex(this.groupsList, (g)=>{ return g.id === item.id});

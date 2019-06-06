@@ -9,7 +9,7 @@
               <small style="display: block;">Details</small>
             </h4>
           </div>
-          <md-button class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="addInvitee" :disabled="working">Add Invitee</md-button>
+          <md-button class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="addInvitee" :disabled="working || noActions">Add Invitee</md-button>
         </md-card-header>
         <md-card-content>
           <vue-element-loading :active="working" spinner="ring" color="#FF547C" />
@@ -43,14 +43,14 @@
                   </md-table-cell>
                   <md-table-cell md-label="" style="width: 20%;" class="text-right">
                     <div style="white-space: nowrap;">
-                      <md-button class="md-success md-sm" style="width: auto;" @click="saveInvitee(item)" v-if="item.id === 'new'">
+                      <md-button class="md-success md-sm" style="width: auto;" :disabled="noActions" @click="saveInvitee(item)" v-if="item.id === 'new'">
                         Save
                       </md-button>
                       <md-button class="md-danger md-simple md-sm" style="width: auto;" @click="cancelAddInvitee(item)" v-if="item.id === 'new'">
                         Cancel
                       </md-button>
                     </div>
-                    <md-button class="md-danger md-round md-just-icon" @click="removeInvitee(item)" v-if="item.id !== 'new'">
+                    <md-button class="md-danger md-round md-just-icon" :disabled="noActions" @click="removeInvitee(item)" v-if="item.id !== 'new'">
                       <md-icon>delete</md-icon>
                       <md-tooltip md-direction="bottom">Remove from this group</md-tooltip>
                     </md-button>
@@ -102,6 +102,7 @@
     data(){
       return {
         working: true,
+        noActions: false,
         allInvitees: [],
         availableInvitees: []
       };
@@ -123,27 +124,34 @@
         this.groupData.invitees.shift();
       },
       saveInvitee(item){
+        this.noActions = true;
         if (item.id === 'new'){
           item.id = null;
           delete item['id'];
-
+          alert(JSON.stringify(this.groupData));
           new EventInvitee(item).for(this.groupData).save().then(res=>{
             this.groupData.invitees.shift();
             this.groupData.invitees.push(res);
             this.updateAvailableInvitees();
+          }).finally(()=>{
+            this.noActions = false;
           });
         } else {
           new EventInvitee(item).for(this.groupData).save().then(res=>{
             this.groupData.invitees.push(res);
             this.updateAvailableInvitees();
+          }).finally(()=>{
+            this.noActions = false;
           });
         }
       },
       removeInvitee(item){
+        this.noActions = true;
         new EventInvitee(item).for(this.groupData).delete().then(res=>{
           let index = _.findIndex(this.groupData.invitees,(i)=>{return i.id === item.id});
           this.groupData.invitees.splice(index,1);
           this.updateAvailableInvitees();
+          this.noActions = false;
         });
       },
       selectInvitee(item){

@@ -10665,6 +10665,11 @@ vue-popperjs@^2.0.3:
   dependencies:
     popper.js "^1.14.7"
 
+vue-promise-btn@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/vue-promise-btn/-/vue-promise-btn-2.0.2.tgz#1ac95896015f63f8850541f8be06fa9a5322ce5d"
+  integrity sha512-6TrBpKz2xGqomkXYAgn8XWNZwSc2AAJr7CGFusn02AANZwjwNLvADs01cnxLrea5zD5RFgKASBvesjxMJGvR/w==
+
 vue-resize@^0.4.5:
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/vue-resize/-/vue-resize-0.4.5.tgz#4777a23042e3c05620d9cbda01c0b3cc5e32dcea"
