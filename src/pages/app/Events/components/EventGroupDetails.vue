@@ -33,20 +33,20 @@
               <md-table v-model="groupData.invitees" class="table-striped table-hover">
                 <md-table-row slot="md-table-row" slot-scope="{ item }" :key="item.id">
                   <md-table-cell md-label="Email Address" style="width: 40%;">
-                    <label-edit  :scope="item" :text="item.emailAddress" field-name="emailAddress"  @text-updated-blur="inviteeDetailsChanged" @text-updated-enter="inviteeDetailsChanged"></label-edit>
+                    <label-edit tabindex="1"  :scope="item" :text="item.emailAddress" field-name="emailAddress"  @text-updated-blur="inviteeDetailsChanged" @text-updated-enter="inviteeDetailsChanged"></label-edit>
                   </md-table-cell>
                   <md-table-cell md-label="First Name" style="width: 20%;">
-                    <label-edit :scope="item" :text="item.firstName" field-name="firstName"  @text-updated-blur="inviteeDetailsChanged" @text-updated-enter="inviteeDetailsChanged"></label-edit>
+                    <label-edit tabindex="2" :scope="item" :text="item.firstName" field-name="firstName"  @text-updated-blur="inviteeDetailsChanged" @text-updated-enter="inviteeDetailsChanged"></label-edit>
                   </md-table-cell>
                   <md-table-cell md-label="Last Name" style="width: 20%;">
-                    <label-edit :scope="item"  :text="item.lastName" field-name="lastName"  @text-updated-blur="inviteeDetailsChanged" @text-updated-enter="inviteeDetailsChanged"></label-edit>
+                    <label-edit tabindex="2" :scope="item"  :text="item.lastName" field-name="lastName"  @text-updated-blur="inviteeDetailsChanged" @text-updated-enter="inviteeDetailsChanged"></label-edit>
                   </md-table-cell>
                   <md-table-cell md-label="" style="width: 20%;" class="text-right">
                     <div style="white-space: nowrap;">
-                      <md-button class="md-success md-sm" style="width: auto;" :disabled="noActions" @click="saveInvitee(item)" v-if="item.id === 'new'">
+                      <md-button tabindex="4" class="md-success md-sm" style="width: auto;" :disabled="noActions" @click="saveInvitee(item)" v-if="item.id === 'new'">
                         Save
                       </md-button>
-                      <md-button class="md-danger md-simple md-sm" style="width: auto;" @click="cancelAddInvitee(item)" v-if="item.id === 'new'">
+                      <md-button tabindex="5" class="md-danger md-simple md-sm" style="width: auto;" @click="cancelAddInvitee(item)" v-if="item.id === 'new'">
                         Cancel
                       </md-button>
                     </div>
@@ -63,7 +63,7 @@
 
           <!--<div class="text-center" v-if="!allInvitees.length && !groupData.invitees && !groupData.invitees.length">
             <h4>You do not have any invitees yet</h4>
-            <md-button class="md-info" @click="addInvitee">
+            <md-button class="md-info" @click="addMember">
               <md-icon>person</md-icon> Add Invitee
             </md-button>
             <md-button class="md-purple" @click="assignMembers">
@@ -84,7 +84,7 @@
   import Calendar from '@/models/Calendar';
   import GroupMembersPanel from './GroupMembersPanel';
   import EventInvitee from '@/models/EventInvitee';
-  import LabelEdit from '../../../../components/LabelEdit';
+  import LabelEdit from '@/components/LabelEdit';
   import _  from 'underscore';
 
   export default {
@@ -113,17 +113,17 @@
       }
     },
     methods: {
-      addInvitee(){
+      addMember(){
         if (this.groupData.invitees.length && this.groupData.invitees[0].id === 'new') return;
 
         this.groupData.invitees.unshift({id:'new',firstName:null,lastName:null,emailAddress: null});
       },
-      cancelAddInvitee(){
+      cancelAddMember(){
         if (this.groupData.invitees.length && this.groupData.invitees[0].id !== 'new') return;
 
         this.groupData.invitees.shift();
       },
-      saveInvitee(item){
+      saveMember(item){
         this.noActions = true;
         if (item.id === 'new'){
           item.id = null;
@@ -132,30 +132,30 @@
           new EventInvitee(item).for(this.groupData).save().then(res=>{
             this.groupData.invitees.shift();
             this.groupData.invitees.push(res);
-            this.updateAvailableInvitees();
+            this.updateAvailableMembers();
           }).finally(()=>{
             this.noActions = false;
           });
         } else {
           new EventInvitee(item).for(this.groupData).save().then(res=>{
             this.groupData.invitees.push(res);
-            this.updateAvailableInvitees();
+            this.updateAvailableMembers();
           }).finally(()=>{
             this.noActions = false;
           });
         }
       },
-      removeInvitee(item){
+      removeMember(item){
         this.noActions = true;
         new EventInvitee(item).for(this.groupData).delete().then(res=>{
           let index = _.findIndex(this.groupData.invitees,(i)=>{return i.id === item.id});
           this.groupData.invitees.splice(index,1);
-          this.updateAvailableInvitees();
+          this.updateAvailableMembers();
           this.noActions = false;
         });
       },
-      selectInvitee(item){
-        this.saveInvitee(item);
+      selectMember(item){
+        this.saveMember(item);
       },
       assignMembers(){
         window.currentPanel = this.$showPanel({
@@ -172,10 +172,10 @@
       saveGroup(){
 
       },
-      inviteeDetailsChanged(val, fieldName, item) {
+      memberDetailsChanged(val, fieldName, item) {
         item[fieldName] = val;
       },
-      updateAvailableInvitees(){
+      updateAvailableMembers(){
         this.availableInvitees = _.filter(this.allInvitees,(i)=>{ return  !_.findWhere(this.groupData.invitees,{id: i.id} )});
       }
     },
@@ -186,7 +186,7 @@
         }
         new EventInvitee().get().then(res =>{
           this.allInvitees = res;
-          this.updateAvailableInvitees();
+          this.updateAvailableMembers();
           this.working = false;
         })
       }

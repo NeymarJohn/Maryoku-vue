@@ -16,6 +16,7 @@ import MyCompanyProfile from "@/pages/app/MyCompany/MyCompanyProfile.vue";
 import MyCompanySettings from "@/pages/app/MyCompany/MyCompanySettings.vue";
 
 import Team from "@/pages/app/Team/Team.vue";
+import Members from "@/pages/app/Members/Members.vue";
 import Community from "@/pages/app/Community.vue";
 import CommunityNew from "@/pages/app/Community/Community-new.vue";
 import VendorsSuggested from "@/pages/app/Community/vendors-suggested/index.vue";
@@ -355,7 +356,7 @@ let appPages = {
     {
       path: "/team",
       name: "Team",
-      component: Team,
+      component: Members,
       meta: {gtm: "Team"}
     },
     {

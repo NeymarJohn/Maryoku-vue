@@ -28,6 +28,7 @@ import { VueStars } from "vue-stars"
 import VueLoadImage from 'vue-load-image';
 import Multiselect from 'vue-multiselect';
 import 'vue-multiselect/dist/vue-multiselect.min.css';
+import lsWatcher from 'vue-storage-watcher';
 
 // router setup
 import routes from "./router/routes";
@@ -120,6 +121,8 @@ Vue.use(VTooltip)
 Vue.use(vSelectMenu, { language: "en"});
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
 Vue.use(VueFractionGrid);
+Vue.use(lsWatcher, { prefix: 'two62_' });
+
 Vue.component('vue-phone-number-input', VuePhoneNumberInput);
 Vue.component("vue-stars", VueStars);
 Vue.component("vue-load-image", VueLoadImage);

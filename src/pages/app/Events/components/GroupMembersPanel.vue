@@ -80,7 +80,7 @@
       closePanel(){
         this.$emit("closePanel");
       },
-      addInvitee(){
+      addMember(){
         this.allInvitees.unshift({
           id: 'new',
           firstName: null,

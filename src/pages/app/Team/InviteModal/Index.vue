@@ -153,7 +153,7 @@
               <div style="margin-top: 8px;">
                 <label>Permissions</label>
                 <md-field>
-                  <multiselect :close-on-select="false" v-model="permission" tag-placeholder="Add permission" placeholder="Add permissions" label="title" track-by="id" :searchable="false" :options="availablePermissions" :multiple="true" :taggable="true" >
+                  <multiselect :hide-selected="true" :close-on-select="false" v-model="permission" tag-placeholder="Add permission" placeholder="Add permissions" label="title" track-by="id" :searchable="false" :options="availablePermissions" :multiple="true" :taggable="true" >
 
                     <template slot="tag" slot-scope="{option}" style="padding: 12px;">
                       <md-chip style="background-color: #FF547C !important; color: #fff; font-weight: 500; font-size: 14px; text-align: left;" :md-deletable="true" @md-delete="removePermission(option)">{{option.title}}</md-chip>

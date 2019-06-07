@@ -2219,3 +2219,28 @@ iframe{
     }
   }
 }
+
+.member-group-details {
+
+  .groups-button {
+
+    .md-button .md-ripple {
+      padding: 0 !important;
+    }
+  }
+
+  .md-content._md.md-show {
+    height: auto !important;
+  }
+
+  .tooltip-inner {
+    word-break: break-all;
+    width: 500px;
+    text-align: center;
+  }
+
+  /* Apply this to the text inside the tooltip */
+  .span-white-space {
+    white-space: normal;
+  }
+}

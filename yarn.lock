@@ -10665,11 +10665,6 @@ vue-popperjs@^2.0.3:
   dependencies:
     popper.js "^1.14.7"
 
-vue-promise-btn@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/vue-promise-btn/-/vue-promise-btn-2.0.2.tgz#1ac95896015f63f8850541f8be06fa9a5322ce5d"
-  integrity sha512-6TrBpKz2xGqomkXYAgn8XWNZwSc2AAJr7CGFusn02AANZwjwNLvADs01cnxLrea5zD5RFgKASBvesjxMJGvR/w==
-
 vue-resize@^0.4.5:
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/vue-resize/-/vue-resize-0.4.5.tgz#4777a23042e3c05620d9cbda01c0b3cc5e32dcea"
@@ -10688,6 +10683,13 @@ vue-stars@^1.2.1:
   integrity sha512-0ycAuWadHZtliJGC747pGXjq8VxLZXLjyPbGT6llUoTar3MafvrNeTxjqkSQqpxSLYjxa75YDCgxXkfz0XX8cQ==
   dependencies:
     vue "^2.6.10"
+
+vue-storage-watcher@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/vue-storage-watcher/-/vue-storage-watcher-1.3.0.tgz#fefa853f9c7b0b3ace7dffd0db4315dee83dfbb3"
+  integrity sha512-EXbicIMZQOwqk0sDJ3Vx+mI5n8FG+haKhgH6SrsTkcXjcTIwWYPr/CGeg/oRknkkYGQ5WcwZrf3snfUortd/kQ==
+  dependencies:
+    vue "^2.5.21"
 
 vue-style-loader@^3.0.0, vue-style-loader@^3.0.1:
   version "3.1.2"

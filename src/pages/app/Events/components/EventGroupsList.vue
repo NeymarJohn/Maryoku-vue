@@ -91,7 +91,7 @@
   import EventGroupDetails from './EventGroupDetails';
   import Calendar from '@/models/Calendar';
   import EventInviteeGroup from '@/models/EventInviteeGroup';
-  import LabelEdit from '../../../../components/LabelEdit';
+  import LabelEdit from '@/components/LabelEdit';
   import _ from 'underscore';
   import swal from "sweetalert2";
 
