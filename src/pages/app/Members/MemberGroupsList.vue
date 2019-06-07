@@ -18,7 +18,8 @@
             <md-table-row slot="md-table-row" slot-scope="{ item, index }" :class="{'visible-row':visibleGroup && item.id === visibleGroup.id,'not-visible-row':visibleGroup && item.id !== visibleGroup.id}" @click="groupDetails(item)">
 
               <md-table-cell md-label="Name" style="vertical-align: middle;">
-                <label-edit style="margin-top: 8px;" :scope="item" :text="item.name" field-name="name"  @text-updated-blur="groupNameChanged" @text-updated-enter="groupNameChanged"></label-edit>
+                <label-edit v-if="item.id !== 'all'" style="margin-top: 8px;" :scope="item" :text="item.name" field-name="name"  @text-updated-blur="groupNameChanged" @text-updated-enter="groupNameChanged"></label-edit>
+                <h5 v-else style="font-weight: 500;" class="text-rose">{{item.name}}</h5>
               </md-table-cell>
 
               <md-table-cell style="vertical-align: middle; white-space: nowrap;">
@@ -136,7 +137,7 @@
         if (!teams){
           new Team().get().then(res=>{
             this.groupsList = res;
-            this.groupsList.unshift({id:'all', name: 'All', builtIn: true});
+            this.groupsList.unshift({id:'all', name: 'All members', builtIn: true});
             this.$ls.set("teams",res, 1000 * 60 * 10);
             this.groupDetails(this.groupsList[0]);
             this.working = false;
@@ -222,7 +223,7 @@
 <style lang="scss" scoped>
   @import '@/assets/scss/md/_colors.scss';
   .visible-row {
-    background-color: $grey-50;
+    background-color: $yellow-100 !important;
   }
   .not-visible-row {
     cursor: pointer;
