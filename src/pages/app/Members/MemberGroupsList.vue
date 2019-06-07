@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout members-group-list">
     <div class="md-layout-item md-medium-size-35 md-size-30">
-      <md-card style="min-height: 50%;">
+      <md-card style="height: 83vmin;">
         <md-card-header class="md-card-header-text md-card-header-warning">
           <div class="card-text">
             <h4 class="title" style="color: white;">Manage Groups</h4>
@@ -11,10 +11,10 @@
           </md-button>
           <md-button v-if="groupsList.length" class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="createNewGroup" :disabled="working">Add Group</md-button>
         </md-card-header>
-        <md-card-content style="min-height: 100%;">
+        <md-card-content>
           <vue-element-loading :active="working" spinner="ring" color="#FF547C"/>
 
-          <md-table :md-card="false"  v-model="groupsList" table-header-color="orange">
+          <md-table :md-fixed-header="true" :md-height="550" :md-card="false"  v-model="groupsList" table-header-color="orange" >
             <md-table-row slot="md-table-row" slot-scope="{ item, index }" :class="{'visible-row':visibleGroup && item.id === visibleGroup.id,'not-visible-row':visibleGroup && item.id !== visibleGroup.id}" @click="groupDetails(item)">
 
               <md-table-cell md-label="Name" style="vertical-align: middle;">

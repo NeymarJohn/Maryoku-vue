@@ -9,15 +9,23 @@
               <small style="display: block;">Details</small>
             </h4>
           </div>
-          <md-button class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="addMember" :disabled="working || noActions">Invite Member</md-button>
+          <md-button class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="addMember" :disabled="working || noActions">Invite Members</md-button>
         </md-card-header>
         <md-card-content>
           <vue-element-loading :active="working" spinner="ring" color="#FF547C" />
 
           <div class="md-layout md-gutter" style="margin: 0;">
             <div class="md-layout-item md-size-100" v-if="groupData.id !== 'all'">
-              <md-field>
+              <md-field style="border: none;">
                 <multiselect :reset-after="true" @select="selectMember" :close-on-select="false" :preserve-search="true" placeholder="Search members" label="emailAddress" track-by="id" :searchable="true" :options="availableMembers" :multiple="true" >
+                  <template slot="option" slot-scope="props">
+                    <div class="md-menu-item" v-if="props.option.firstName || props.option.lastName">
+                      {{ props.option.firstName }} {{ props.option.lastName }} <span class="text-gray">&nbsp;({{ props.option.emailAddress }})</span>
+                    </div>
+                    <div class="md-menu-item" v-else>
+                      {{ props.option.emailAddress }}
+                    </div>
+                  </template>
                   <template slot="tag" slot-scope="{option}">
                     <span style="display: none;"></span>
                   </template>
@@ -28,7 +36,7 @@
               </md-field>
             </div>
 
-            <div class="md-layout-item md-size-100" style="margin-top: 8px;">
+            <div class="md-layout-item md-size-100" style="margin-top: 8px;" v-if="groupData.members.length">
 
               <md-table v-model="groupData.members" class="table-striped table-hover">
                 <md-table-row slot="md-table-row" slot-scope="{ item }" :key="item.id">
@@ -73,6 +81,10 @@
                 </md-table-row>
               </md-table>
 
+            </div>
+            <div class="md-layout-item md-size-100 text-center" style="margin-top: 8px;" v-if="!groupData.members.length">
+              <md-icon>arrow_upward</md-icon>
+              <h4>Search members and add them to this group</h4>
             </div>
           </div>
 

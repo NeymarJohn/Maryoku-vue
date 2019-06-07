@@ -153,7 +153,7 @@
           :link="{name: 'Calendar', icon: 'date_range', path: '/calendar'}"></sidebar-item>-->
       </template>
     </side-bar>
-    <div class="main-panel" style="height: 100%;">
+    <div class="main-panel" style="height: 50%;">
       <top-navbar></top-navbar>
 
       <div :class="{content: !$route.meta.hideContent}" @click="toggleSidebar">
