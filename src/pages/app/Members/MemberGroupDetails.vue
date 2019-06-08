@@ -9,7 +9,7 @@
               <small style="display: block;">Details</small>
             </h4>
           </div>
-          <md-button class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="addMember" :disabled="working || noActions">Invite Members</md-button>
+          <md-button class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="inviteMembers" :disabled="working || noActions">Invite Members</md-button>
         </md-card-header>
         <md-card-content>
           <vue-element-loading :active="working" spinner="ring" color="#FF547C" />
@@ -101,10 +101,12 @@
   import Team from '@/models/Teams';
   import LabelEdit from '@/components/LabelEdit';
   import _  from 'underscore';
+  import swal from "sweetalert2";
+  import MemberEditorPanel from './MemberEditorPanel';
 
   export default {
     name: 'member-group-details',
-    components: { LabelEdit },
+    components: { LabelEdit, MemberEditorPanel },
     props: {
       groupData: {
         type: Object
@@ -129,6 +131,25 @@
       refreshList(force){
         this.working = false;
         this.updateAvailableMembers();
+      },
+      inviteMembers(){
+        window.currentPanel = this.$showPanel({
+          component: MemberEditorPanel,
+          cssClass: "md-layout-item md-size-40 transition36 ",
+          openOn: "right",
+          props: {
+            team: this.groupData,
+            teamMember: { id: 'new', permissions: []},
+            permissionsList: this.permissionsList,
+            rolesList: this.rolesList
+          }
+        });
+        this.$root.$on("member-added",(item)=>{
+          if (this.groupData.id ==='all'){
+            this.groupData.members.unshift(item);
+            this.saveGroup();
+          }
+        });
       },
       addMember(){
         if (this.groupData.members.length && this.groupData.members[0].id === 'new') return;
@@ -163,13 +184,37 @@
         }
       },
       removeMember(item){
-        this.noActions = true;
-        new TeamMember(item).for(new Team(this.groupData)).delete().then(res=>{
-          let index = _.findIndex(this.groupData.members,(i)=>{return i.id === item.id});
-          this.groupData.members.splice(index,1);
-          this.saveGroup();
-          this.updateAvailableMembers();
-          this.noActions = false;
+
+        swal({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, delete it!"
+        }).then(async result => {
+          if (result.value) {
+            this.noActions = true;
+            if (this.groupData.id === 'all'){ // Delete this team member
+              new TeamMember(item).delete().then(res=>{
+                let index = _.findIndex(this.groupData.members,(i)=>{return i.id === item.id});
+                this.groupData.members.splice(index,1);
+                this.$emit('group-member-removed', item);
+                this.saveGroup();
+                this.updateAvailableMembers();
+                this.noActions = false;
+              });
+            } else { // Remove from this group
+              new TeamMember(item).for(new Team(this.groupData)).delete().then(res=>{
+                let index = _.findIndex(this.groupData.members,(i)=>{return i.id === item.id});
+                this.groupData.members.splice(index,1);
+                this.saveGroup();
+                this.updateAvailableMembers();
+                this.noActions = false;
+              });
+            }
+          }
         });
       },
       selectMember(item){

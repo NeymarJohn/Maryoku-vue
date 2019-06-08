@@ -51,7 +51,7 @@
       </md-card>
     </div>
     <div class="md-layout-item md-medium-size-65 md-size-70">
-      <member-group-details @group-members-changed="updateGroup" :group-data.sync="visibleGroup" :all-members.sync="allMembers" :roles-list="rolesList" :permissions-list="permissionsList"></member-group-details>
+      <member-group-details @group-members-changed="updateGroup" @group-member-removed="updateGroups" :group-data.sync="visibleGroup" :all-members.sync="allMembers" :roles-list="rolesList" :permissions-list="permissionsList"></member-group-details>
     </div>
   </div>
 </template>
@@ -161,15 +161,36 @@
           this.groupDetails(res.item);
         });
       },
+      updateGroups(item){
+        if (this.visibleGroup.id === 'all'){
+          this.groupsList.forEach((g)=>{
+            let index = _.findIndex(g.members, (m)=>{ return m.id === item.id; });
+            if (index > -1){
+              g.members.splice(index,1);
+            }
+          });
+
+          this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
+        }
+      },
       updateGroup(item){
-        new Team(item).save().then(res=>{
+        if (item.id !== 'all'){
+          new Team(item).save().then(res=>{
+            let itemIndex = _.findIndex(this.groupsList, (g)=>{ return g.id === item.id; });
+            if (itemIndex > -1){
+              this.groupsList[itemIndex] = item;
+            }
+            this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
+            this.groupDetails(item);
+          });
+        } else {
           let itemIndex = _.findIndex(this.groupsList, (g)=>{ return g.id === item.id; });
           if (itemIndex > -1){
             this.groupsList[itemIndex] = item;
           }
           this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
           this.groupDetails(item);
-        });
+        }
       },
       deleteGroup(item){
         if (item.builtIn) return;
@@ -223,7 +244,7 @@
 <style lang="scss" scoped>
   @import '@/assets/scss/md/_colors.scss';
   .visible-row {
-    background-color: $yellow-100 !important;
+    background-color: $yellow-50 !important;
   }
   .not-visible-row {
     cursor: pointer;
