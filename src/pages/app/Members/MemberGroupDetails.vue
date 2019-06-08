@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout member-group-details" v-if="groupData">
     <div class="md-layout-item">
-      <md-card style="min-height: 50%;">
+      <md-card style="height: 83vmin;">
         <md-card-header class="md-card-header-text md-card-header-warning">
           <div class="card-text">
             <h4 class="title" style="color: white;">
@@ -15,6 +15,7 @@
           <vue-element-loading :active="working" spinner="ring" color="#FF547C" />
 
           <div class="md-layout md-gutter" style="margin: 0;">
+
             <div class="md-layout-item md-size-100" v-if="groupData.id !== 'all'">
               <md-field style="border: none;">
                 <multiselect :reset-after="true" @select="selectMember" :close-on-select="false" :preserve-search="true" placeholder="Search members" label="emailAddress" track-by="id" :searchable="true" :options="availableMembers" :multiple="true" >
@@ -38,22 +39,26 @@
 
             <div class="md-layout-item md-size-100" style="margin-top: 8px;" v-if="groupData.members.length">
 
-              <md-table v-model="groupData.members" class="table-striped table-hover">
+              <md-table :md-fixed-header="true" :md-height="550" :md-card="false" v-model="groupData.members" class="table-striped table-hover">
                 <md-table-row slot="md-table-row" slot-scope="{ item }" :key="item.id">
                   <md-table-cell md-label="First Name">
-                    <label-edit tabindex="2" :scope="item" :text="item.firstName" field-name="firstName" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>
+                    <label-edit tabindex="2" empty="" :scope="item" :text="item.firstName" field-name="firstName" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>
                   </md-table-cell>
                   <md-table-cell md-label="Last Name">
-                    <label-edit tabindex="2" :scope="item" :text="item.lastName" field-name="lastName" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>
+                    <label-edit tabindex="2" empty="" :scope="item" :text="item.lastName" field-name="lastName" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>
                   </md-table-cell>
-                  <md-table-cell md-label="Email Address">
+                  <md-table-cell md-label="Email Address" style="max-width: 120px;">
                     <label-edit tabindex="1" :scope="item" :text="item.emailAddress" field-name="emailAddress" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>
                   </md-table-cell>
                   <md-table-cell md-label="Groups">
-                    <div>
-                      {{item.groups.length}} groups
-                      <md-tooltip md-direction="bottom">{{item.groups}}</md-tooltip>
-                    </div>
+                    <drop-down direction="down">
+                      <md-button slot="title" class="groups-button md-simple md-rounded dropdown-toggle" style="width: auto;" data-toggle="dropdown">
+                        {{item.groups.length}} groups
+                      </md-button>
+                      <ul class="dropdown-menu">
+                        <li v-for="group in item.groups" @click="selectGroup(group)"><a href="javascript:void(null);">{{group.name}}</a></li>
+                      </ul>
+                    </drop-down>
                   </md-table-cell>
                   <md-table-cell md-label="Role">
                     {{availableRoleIdToTitle(item.role)}}
@@ -175,7 +180,7 @@
             this.noActions = false;
           });
         } else {
-          new TeamMember(item).for(new Team(this.groupData)).save().then(res=>{
+          new TeamMember(item).save().then(res=>{
             this.groupData.members.push(res);
             this.saveGroup();
             this.updateAvailableMembers();
@@ -223,8 +228,15 @@
       saveGroup(){
         this.$emit('group-members-changed', this.groupData);
       },
+      selectGroup(group){
+        this.$emit('group-selected', group);
+      },
       memberDetailsChanged(val, fieldName, item) {
         item[fieldName] = val;
+        new TeamMember(item).save().then(res=>{
+          this.saveGroup();
+          this.noActions = false;
+        });
       },
       updateAvailableMembers(){
         this.availableMembers = _.filter(this.allMembers,(i)=>{ return  !_.findWhere(this.groupData.members,{id: i.id} )});

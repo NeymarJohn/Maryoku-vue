@@ -164,7 +164,7 @@
       font-weight: 500;
       color: $pink-262;
     }
-    background-color: $grey-50;
+    background-color: $yellow-50;
   }
   .not-visible-row {
     cursor: pointer;

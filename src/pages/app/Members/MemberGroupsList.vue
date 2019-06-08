@@ -15,7 +15,7 @@
           <vue-element-loading :active="working" spinner="ring" color="#FF547C"/>
 
           <md-table :md-fixed-header="true" :md-height="550" :md-card="false"  v-model="groupsList" table-header-color="orange" >
-            <md-table-row slot="md-table-row" slot-scope="{ item, index }" :class="{'visible-row':visibleGroup && item.id === visibleGroup.id,'not-visible-row':visibleGroup && item.id !== visibleGroup.id}" @click="groupDetails(item)">
+            <md-table-row  slot="md-table-row" slot-scope="{ item, index }" :class="{'visible-row':visibleGroup && item.id === visibleGroup.id,'not-visible-row':visibleGroup && item.id !== visibleGroup.id}" @click="groupDetails(item)">
 
               <md-table-cell md-label="Name" style="vertical-align: middle;">
                 <label-edit v-if="item.id !== 'all'" style="margin-top: 8px;" :scope="item" :text="item.name" field-name="name"  @text-updated-blur="groupNameChanged" @text-updated-enter="groupNameChanged"></label-edit>
@@ -51,7 +51,7 @@
       </md-card>
     </div>
     <div class="md-layout-item md-medium-size-65 md-size-70">
-      <member-group-details @group-members-changed="updateGroup" @group-member-removed="updateGroups" :group-data.sync="visibleGroup" :all-members.sync="allMembers" :roles-list="rolesList" :permissions-list="permissionsList"></member-group-details>
+      <member-group-details @group-selected="selectGroup" @group-members-changed="updateGroup" @group-member-removed="updateGroups" :group-data.sync="visibleGroup" :all-members.sync="allMembers" :roles-list="rolesList" :permissions-list="permissionsList"></member-group-details>
     </div>
   </div>
 </template>
@@ -221,6 +221,9 @@
           item.members = this.allMembers;
         }
         this.visibleGroup = item;
+      },
+      selectGroup(item){
+        this.visibleGroup = _.findWhere(this.groupsList, {id: item.id});
       },
       groupNameChanged(val, fieldName,item) {
         item[fieldName] = val;

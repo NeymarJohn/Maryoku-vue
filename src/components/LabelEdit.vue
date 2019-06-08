@@ -16,10 +16,17 @@
       return {
         edit: false, // define whether it is in edit mode or not
         label: '', // v-bind data model for input text
-        empty: 'Click to set', // empty place holder .. replace with your own localization for default
       }
     },
-    props: ['text','placeholder', 'required', 'fieldName', 'mask', 'scope'], // parent should provide :text or :placeholder
+    props: {
+      text: String,
+      placeholder: String,
+      required: Boolean,
+      fieldName: String,
+      mask: String,
+      scope: Object,
+      empty: { type: String, default: 'Click to set' }
+    }, // parent should provide :text or :placeholder
     methods: {
       initText: function(){
         if(this.text==''||this.text==undefined){

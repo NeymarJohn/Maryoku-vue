@@ -318,7 +318,7 @@
         document.location.reload();
       },
       manageGroups(){
-        this.$router.push({name: 'EventGroups', params: {id: this.topBarEventId}});
+        this.$router.push({name: 'EventInvitees', params: {id: this.topBarEventId}});
         document.location.reload();
       },
       timeline(){
