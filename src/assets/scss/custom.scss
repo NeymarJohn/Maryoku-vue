@@ -966,12 +966,16 @@ $tooltip-border-color: $blue-grey-200 !default;
 
     .md-button {
       position: absolute;
-      top : 0;
-      right : 0.5em;
+      top : 0.5em;
+      right : 1em;
       height: auto;
 
       .md-icon.md-theme-default.md-icon-font {
         color : #fff !important;
+      }
+
+      .md-icon {
+        font-size: 32px !important;
       }
     }
 
@@ -2026,17 +2030,7 @@ iframe{
 }
 
 .interactions-list {
-  .md-table-content {
-    thead {
-      display: none !important;
-    }
 
-    .md-table-row:not(:last-child) td {
-      border-bottom-color: #ddd !important;
-      border-top: 0 solid;
-      border-bottom: 1px solid;
-    }
-  }
 
   .visible-row {
     .md-table-cell {
@@ -2126,6 +2120,282 @@ iframe{
       background: $brand-primary;
       outline: none;
       color: white !important;
+    }
+    &--highlight:after {
+      content: attr(data-select);
+      background: $brand-primary;
+      color: white;
+    }
+    &--selected {
+      background: $green-500;
+      color: #fff !important;
+      font-weight: bold;
+    }
+    &--selected:after {
+      content: attr(data-selected);
+      color: #fefefe;
+    }
+    &--selected.multiselect__option--highlight {
+      background: $pink-262;
+      color: #fff;
+    }
+    &--selected.multiselect__option--highlight:after {
+      background: $pink-262;
+      content: attr(data-deselect);
+      color: #fff;
+    }
+  }
+}
+
+.event-group-details {
+  .multiselect__content-wrapper {
+    border: 0;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    margin-top: -2px;
+  }
+
+  .multiselect__content {
+    padding: 8px 4px;
+  }
+
+  .multiselect__tags {
+    border: none !important;
+    padding: 12px;
+  }
+
+  .multiselect__tags-wrap {
+
+  }
+
+  .multiselect__element {
+    padding: 4px 4px;
+  }
+
+  .multiselect__option {
+    font-size: $mdb-dropdown-font-size;
+    padding: 10px 1.5rem;
+    margin: 0 5px;
+    text-transform: none;
+    color: $gray-dark !important;
+    border-radius: $border-radius-small;
+    display: flex;
+    font-weight: 400;
+    line-height: 1.428571;
+    align-items: center;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus {
+      @include shadow-8dp();
+    }
+
+    &--highlight {
+      background: $brand-primary;
+      outline: none;
+      color: white !important;
+    }
+    &--highlight:after {
+      content: attr(data-select);
+      background: $brand-primary;
+      color: white;
+    }
+    &--selected {
+      background: $green-500;
+      color: #fff !important;
+      font-weight: bold;
+    }
+    &--selected:after {
+      content: attr(data-selected);
+      color: #fefefe;
+    }
+    &--selected.multiselect__option--highlight {
+      background: $pink-262;
+      color: #fff;
+    }
+    &--selected.multiselect__option--highlight:after {
+      background: $pink-262;
+      content: attr(data-deselect);
+      color: #fff;
+    }
+  }
+}
+
+.member-group-details {
+
+  .md-ripple {
+    padding : 0 !important;
+  }
+
+  .groups-button {
+
+    .md-button .md-ripple {
+      padding: 0 !important;
+    }
+  }
+
+  .md-content._md.md-show {
+    height: auto !important;
+  }
+
+  .tooltip-inner {
+    word-break: break-all;
+    width: 500px;
+    text-align: center;
+  }
+
+  /* Apply this to the text inside the tooltip */
+  .span-white-space {
+    white-space: normal;
+  }
+
+  .multiselect__content-wrapper {
+    border: 0;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    margin-top: -2px;
+  }
+
+  .multiselect__content {
+    padding: 8px 4px;
+  }
+
+  .multiselect__tags {
+    border: none !important;
+    padding: 12px;
+  }
+
+  .multiselect__tags-wrap {
+
+  }
+
+  .multiselect__element {
+    padding: 4px 4px;
+  }
+
+  .multiselect__option {
+    font-size: $mdb-dropdown-font-size;
+    padding: 10px 1.5rem;
+    margin: 0 5px;
+    text-transform: none;
+    color: $gray-dark !important;
+    border-radius: $border-radius-small;
+    display: flex;
+    font-weight: 400;
+    line-height: 1.428571;
+    align-items: center;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus {
+      @include shadow-8dp();
+    }
+
+    &--highlight {
+      background: $brand-primary;
+      outline: none;
+      color: white !important;
+    }
+    &--highlight:after {
+      content: attr(data-select);
+      background: $brand-primary;
+      color: white;
+    }
+    &--selected {
+      background: $green-500;
+      color: #fff !important;
+      font-weight: bold;
+    }
+    &--selected:after {
+      content: attr(data-selected);
+      color: #fefefe;
+    }
+    &--selected.multiselect__option--highlight {
+      background: $pink-262;
+      color: #fff;
+    }
+    &--selected.multiselect__option--highlight:after {
+      background: $pink-262;
+      content: attr(data-deselect);
+      color: #fff;
+    }
+  }
+}
+
+.event-invitees {
+
+  .md-ripple {
+    padding : 0 !important;
+  }
+
+  .groups-button {
+
+    .md-button .md-ripple {
+      padding: 0 !important;
+    }
+  }
+
+  .md-content._md.md-show {
+    height: auto !important;
+  }
+
+  .tooltip-inner {
+    word-break: break-all;
+    width: 500px;
+    text-align: center;
+  }
+
+  /* Apply this to the text inside the tooltip */
+  .span-white-space {
+    white-space: normal;
+  }
+
+  .multiselect__content-wrapper {
+    border: 0;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    margin-top: -2px;
+  }
+
+  .multiselect__content {
+    padding: 8px 4px;
+  }
+
+  .multiselect__tags {
+    border: none !important;
+    padding: 12px;
+  }
+
+  .multiselect__tags-wrap {
+
+  }
+
+  .multiselect__element {
+    padding: 4px 4px;
+  }
+
+  .multiselect__option {
+    font-size: $mdb-dropdown-font-size;
+    padding: 10px 1.5rem;
+    margin: 0 5px;
+    text-transform: none;
+    color: $gray-dark !important;
+    border-radius: $border-radius-small;
+    display: flex;
+    font-weight: 400;
+    line-height: 1.428571;
+    align-items: center;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus {
+      @include shadow-8dp();
+    }
+
+    &--highlight {
+      background: $brand-primary;
+      outline: none;
+      color: white !important;
+      .md-icon {
+        color: white !important;
+      }
     }
     &--highlight:after {
       content: attr(data-select);

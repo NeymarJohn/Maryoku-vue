@@ -188,6 +188,9 @@
       <invitees-management-v2 :event-data.sync="event" :event-components="selectedComponents"></invitees-management-v2>
     </div>
 
+    <div v-else-if="event &&  routeName === 'EventInvitees' " class="md-layout-item block-flex">
+      <event-invitees :event-data.sync="event" ></event-invitees>
+    </div>
     <!--<sticky-budget :event="event" v-if="routeName !== 'EditEvent' && routeName !== 'EditBuildingBlocks'"></sticky-budget>-->
 
   </div>
@@ -219,6 +222,7 @@
   import EventTimeLine from "./components/EventTimeLine.vue";
   import InviteesManagement from "./components/EventBlocks/InviteesManagement.vue";
   import InviteesManagementV2 from "./components/EventBlocks/InviteesManagementV2.vue";
+  import EventInvitees from "./components/EventInvitees.vue";
 
   import EventPageRoutes from "./components/EventPageRoutes.vue";
   import MdCardContent from "../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue";
@@ -238,7 +242,8 @@
       EventTimeLine,
       InviteesManagement,
       EventPageRoutes,
-      InviteesManagementV2
+      InviteesManagementV2,
+      EventInvitees
     },
 
     data() {
@@ -313,7 +318,7 @@
 
             this.getCalendarEventStatistics(event);
 
-            this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement');
+            this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees');
           });
         }.bind(this));
       },

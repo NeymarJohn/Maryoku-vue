@@ -16,12 +16,14 @@ import MyCompanyProfile from "@/pages/app/MyCompany/MyCompanyProfile.vue";
 import MyCompanySettings from "@/pages/app/MyCompany/MyCompanySettings.vue";
 
 import Team from "@/pages/app/Team/Team.vue";
+import Members from "@/pages/app/Members/Members.vue";
 import Community from "@/pages/app/Community.vue";
 import CommunityNew from "@/pages/app/Community/Community-new.vue";
 import VendorsSuggested from "@/pages/app/Community/vendors-suggested/index.vue";
 
 import Events from "@/pages/app/Events/Events.vue";
 import CurrentEvents from "@/pages/app/Events/CurrentEvents.vue";
+import EventGroups from "@/pages/app/Events/components/EventInvitees.vue";
 import NewEvent from "@/pages/app/Events/NewEvent.vue";
 import EditEvent from "@/pages/app/Events/EditEvent.vue";
 import EventDetails from "@/pages/app/Events/EventDetails.vue";
@@ -354,7 +356,7 @@ let appPages = {
     {
       path: "/team",
       name: "Team",
-      component: Team,
+      component: Members,
       meta: {gtm: "Team"}
     },
     {
@@ -419,6 +421,12 @@ let appPages = {
         name: "InviteesManagement",
         component: CurrentEvents,
         meta: {title: 'Invitees Management', gtm: "Event Edit", opaque: false},
+    },
+    {
+      path: "/events/:id/edit/event-invitees",
+      name: "EventInvitees",
+      component: CurrentEvents,
+      meta: {title: 'Event Invitees', gtm: "Event Invitees", opaque: false},
     },
     {
       path: "/yearly-plan",

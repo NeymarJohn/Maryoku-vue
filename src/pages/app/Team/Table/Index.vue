@@ -31,11 +31,24 @@
           <md-button class="btn-success md-success">Submit</md-button>
         </div>
       </div>
-      <md-table-cell md-label="Name">{{ item.firstName }} {{item.lastName}}</md-table-cell>
-      <md-table-cell md-label="Email">{{ item.emailAddress }}</md-table-cell>
-      <md-table-cell md-label="Role">{{ availableRoleIdToTitle(item.role) }}</md-table-cell>
-      <md-table-cell md-label="Permissions">{{ permissionTitles(item.permissions) }}</md-table-cell>
-      <md-table-cell md-label="Actions">
+      <md-table-cell md-label="First Name" style="width: 10%;">
+        <label-edit tabindex="1"  :scope="item" :text="item.firstName" field-name="firstName"  @text-updated-blur="teamMemberDetailsChanged" @text-updated-enter="teamMemberDetailsChanged"></label-edit>
+      </md-table-cell>
+      <md-table-cell md-label="Last Name" style="width: 10%;">
+        <label-edit tabindex="1"  :scope="item" :text="item.lastName" field-name="lastName"  @text-updated-blur="teamMemberDetailsChanged" @text-updated-enter="teamMemberDetailsChanged"></label-edit>
+      </md-table-cell>
+      <md-table-cell md-label="Email" style="width: 25%;">
+        <label-edit tabindex="1"  :scope="item" :text="item.emailAddress" field-name="emailAddress"  @text-updated-blur="teamMemberDetailsChanged" @text-updated-enter="teamMemberDetailsChanged"></label-edit>
+      </md-table-cell>
+      <md-table-cell md-label="Role" style="width: 10%;">
+        <label-edit tabindex="1"  :scope="item" :text="availableRoleIdToTitle(item.role)" field-name="role"  @text-updated-blur="teamMemberDetailsChanged" @text-updated-enter="teamMemberDetailsChanged"></label-edit>
+      </md-table-cell>
+      <md-table-cell md-label="Permissions" style="width: 25%;">
+        {{ permissionTitles(item.permissions) }}
+      </md-table-cell>
+      <md-table-cell md-label="Last Login" v-if="item.invitationStatus === 'pending'" style="width: 10%;">{{ item.invitationStatus }}</md-table-cell>
+      <md-table-cell md-label="Last Login" v-else style="width: 10%;">{{ item.lastLogin | moment }}</md-table-cell>
+      <md-table-cell md-label="Actions" style="width: 10%;">
         <md-button @click.native="toggleEditModal(true, item)" class="md-info md-just-icon md-round">
           <md-icon>edit</md-icon>
         </md-button>
@@ -49,7 +62,7 @@
 </template>
 
 <script>
-import { Modal, SimpleWizard, WizardTab } from "@/components";
+import { Modal, SimpleWizard, WizardTab, LabelEdit } from "@/components";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import swal from "sweetalert2";
 import Teams from "@/models/Teams";
@@ -57,12 +70,14 @@ import TeamMembers from "@/models/TeamMembers";
 import indexVuexModule from "@/store/index";
 // import auth from '@/auth';
 import _ from 'underscore';
+import moment from 'moment';
 
 export default {
   components: {
     Modal,
     SimpleWizard,
-    WizardTab
+    WizardTab,
+    LabelEdit
   },
   props: {
     currentUserId: String,
@@ -96,8 +111,16 @@ export default {
       openPopover: false
     };
   },
+  filters: {
+    moment: function (date) {
+      return moment(date).format('MMMM Do, GGGG');
+    }
+  },
   methods: {
     ...mapActions("teamVuex", ["setInviteModalAndTeamMember"]),
+    teamMemberDetailsChanged(val, fieldName, item){
+
+    },
     onSelect(items) {
       this.selected = items;
     },
