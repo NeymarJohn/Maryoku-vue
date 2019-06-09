@@ -1,4 +1,3 @@
-import Vue from 'Vue';
 import Model from './Model'
 import TeamMember from './TeamMember'
 

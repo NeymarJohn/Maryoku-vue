@@ -40,7 +40,7 @@
 
                         <div class="md-layout-item md-size-100" style="margin-top: 8px;" v-if="groupData.members.length">
 
-                            <md-table :md-fixed-header="true" :md-height="550" :md-card="false" v-model="groupData.members" class="table-striped table-hover">
+                            <md-table :md-fixed-header="true" :md-height="groupData.id === 'all' ? 550 : 480" :md-card="false" v-model="groupData.members" class="table-striped table-hover">
                                 <md-table-row slot="md-table-row" slot-scope="{ item }" :key="item.id">
                                     <md-table-cell md-label="First Name">
                                         <label-edit tabindex="2" empty="" :scope="item" :text="item.firstName" field-name="firstName" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>
