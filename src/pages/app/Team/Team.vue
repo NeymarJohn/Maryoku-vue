@@ -42,7 +42,7 @@
 import InviteModal from "./InviteModal/";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import TeamTable from "./Table";
-import Team from "@/models/Team";
+import Teams from "@/models/Teams";
 import teamVuexModule from "./team.vuex";
 import VueElementLoading from "vue-element-loading";
 import { Pagination } from "@/components";
@@ -104,7 +104,7 @@ export default {
     ]),
     fetchData(page) {
       this.teamMembersLoading = true;
-      /*Team.get().then(teams => {
+      /*Teams.get().then(teams => {
           this.team = teams[0];
           teams[0].members().get().then(members => {
             this.teamMembers = members;
@@ -115,7 +115,7 @@ export default {
         });*/
 
       let currentUserId = this.$auth.user.id;
-      new Team({ id: this.$auth.user.defaultGroupId })
+      new Teams({ id: this.$auth.user.defaultGroupId })
         .members()
         .page(Number(page))
         .limit(this.pagination.limit)

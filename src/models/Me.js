@@ -1,5 +1,5 @@
 import Model from './Model'
-import TeamMember from './TeamMember'
+import TeamMembers from './TeamMembers'
 
 export default class Me extends Model {
     resource() {

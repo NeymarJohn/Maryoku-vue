@@ -89,6 +89,7 @@
   import CompanyDashboardInfo from "../CompanyDashboard/CompanyDashboardInfo.vue";
   import {LabelEdit} from '@/components';
 
+  // import auth from '@/auth';
   export default {
     components: {
       VueElementLoading,
@@ -97,6 +98,7 @@
     },
     data() {
       return {
+        auth: auth
       }
 
     },

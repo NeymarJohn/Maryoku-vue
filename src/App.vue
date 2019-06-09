@@ -62,10 +62,6 @@
     height: 50% !important;
   }
 
-  .slideout.h65{
-      height: 65% !important;
-  }
-
   .slideout.h75{
     height: 75% !important;
     padding-left: 89px;

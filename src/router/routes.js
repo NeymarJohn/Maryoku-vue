@@ -420,7 +420,7 @@ let appPages = {
         path: "/events/:id/edit/invitees-management",
         name: "InviteesManagement",
         component: CurrentEvents,
-        meta: {title: 'Automated Interactions', gtm: "Event Edit", opaque: false},
+        meta: {title: 'Invitees Management', gtm: "Event Edit", opaque: false},
     },
     {
       path: "/events/:id/edit/event-invitees",

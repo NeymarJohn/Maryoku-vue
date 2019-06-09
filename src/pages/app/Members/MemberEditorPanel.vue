@@ -185,8 +185,8 @@
   import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
   import { Modal, SimpleWizard, WizardTab } from "@/components";
   import swal from "sweetalert2";
-  import Team from "@/models/Team";
-  import TeamMember from "@/models/TeamMember";
+  import Team from "@/models/Teams";
+  import TeamMember from "@/models/TeamMembers";
   import { SlideYDownTransition } from "vue2-transitions";
   import _ from 'underscore';
 

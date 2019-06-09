@@ -67,7 +67,7 @@
                             @click="sortBy(index)"
                             :class="{ active: sortKey == index }">
                             <md-field>
-                              <md-select id="remove-border" v-model="parseCSV.columns[index].value"  name="select">
+                              <md-select id="remove-border" v-model="databaseVendorColumns[index].value"  name="select">
                                 <md-option
                                   v-if="item !== ''"
                                   v-for="(item, index) in databaseVendorColumns"
@@ -368,13 +368,14 @@
             _this.parseCSV = result;
             _this.parseCSV.newColumns = [];
             _this.parseCSV.columns.map((item, index) => {
-              if (item !== '' && !item.toString().toLowerCase().startsWith("unknown")) {
-                let mapping = {};
-                _this.databaseVendorColumns[index].value = item;
+              if (item !== '') {
+                let mapping = {}
+                _this.databaseVendorColumns[index].value = item
 
-                _this.parseCSV.newColumns.push(mapping);
+                _this.parseCSV.newColumns.push(mapping)
 
               }
+
             });
             _this.csvUploading = false
             this.$notify({

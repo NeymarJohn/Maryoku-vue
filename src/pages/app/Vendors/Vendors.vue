@@ -5,7 +5,7 @@
         <md-card-header class="md-card-header-text md-card-header-warning">
 
           <div class="card-text">
-            <h4 class="title" style="color: white;">Vendors Pool</h4>
+            <h4 class="title" style="color: white;">Vendors List</h4>
             <div class="ct-label">See all vendors uploaded below</div>
           </div>
 

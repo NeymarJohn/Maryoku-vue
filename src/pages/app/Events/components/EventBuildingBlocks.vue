@@ -215,17 +215,18 @@
       },
       getEventBuildingBlocks () {
 
+          if ( !this.event.id ) return;
+
         this.isLoading = true;
 
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
 
+
         new EventComponent().for(calendar, event).get()
           .then(res => {
 
             this.$set(this, 'eventBuildingBlocks', res);
-            console.log(res);
-
             let allocatedBudget = 0;
             this.eventBuildingBlocks.forEach(item=>{
               allocatedBudget += Number(item.allocatedBudget);
@@ -324,10 +325,11 @@
       }
     },
     created () {
-        this.getEventBuildingBlocks();
 
     },
     mounted () {
+
+        this.getEventBuildingBlocks();
 
       this.$bus.$on('BlockAdded', ()=>{
         this.getEventBuildingBlocks()

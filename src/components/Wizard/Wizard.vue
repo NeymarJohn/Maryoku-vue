@@ -2,7 +2,7 @@
   <div class="wizard-container">
     <form @submit.prevent>
       <!--        You can switch " data-color="primary" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
-      <md-card class="md-card-wizard active md-card-plain" data-color="rose">
+      <md-card class="md-card-wizard active" data-color="rose">
         <md-card-header v-if="removeHeader">
           <slot  name="header">
             <h3 class="card-title">{{title}}</h3>
