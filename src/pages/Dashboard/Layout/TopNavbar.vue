@@ -108,12 +108,12 @@
                 <span>Upload Vendors</span>
               </md-button>
             </li>
-            <li class="md-list-item" v-if="topBarEventId">
+            <!--<li class="md-list-item" v-if="topBarEventId">
               <md-button v-if="topBarEventProposals" class="md-simple md-md" style="margin-top: 12px;" @click="manageGroups">
                 <md-icon>group</md-icon>
                 <span>Manage Groups</span>
               </md-button>
-            </li>
+            </li>-->
             <li class="md-list-item" v-if="topBarEventId">
               <md-button v-if="topBarEventProposals" class="md-simple md-md" style="margin-top: 12px;" @click="inviteesManagement">
                 <md-icon>email</md-icon>
@@ -156,7 +156,7 @@
                       <!--<li><router-link name="user-top-menu-my-profile" :to="{path: '/settings'}">My Profile</router-link></li>-->
                       <li><a href="javascript: void(null);" name="user-top-menu-my-profile" class="user-top-menu-my-profile" @click="openMyProfile">My Profile</a></li>
                       <li><a href="javascript: void(null);" name="user-top-menu-account-settings" class="user-top-menu-account-settings" @click="openAccountSettings">My Company</a></li>
-                      <li><router-link name="user-top-menu-my-profile" class="user-top-menu-my-profile" :to="{path: '/team'}">Manage Team</router-link></li>
+                      <li><router-link name="user-top-menu-my-profile" class="user-top-menu-my-profile" :to="{name: 'Team'}">Manage Team</router-link></li>
                       <li class="divider"></li>
                       <li><router-link name="user-top-menu-sign-out" class="user-top-menu-sign-out" :to="{path: '/signout'}">Sign Out</router-link></li>
                     </ul>
@@ -290,7 +290,7 @@
         }
       },
       manageInvitees(){
-        this.$router.push({name: 'InviteesManagement', params: {id: this.topBarEventId}});
+        this.$router.push({name: 'EventInvitees', params: {id: this.topBarEventId}});
         document.location.reload();
       },
       manageProposals(){

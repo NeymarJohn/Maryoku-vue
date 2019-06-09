@@ -65,8 +65,8 @@
 import { Modal, SimpleWizard, WizardTab, LabelEdit } from "@/components";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import swal from "sweetalert2";
-import Teams from "@/models/Teams";
-import TeamMembers from "@/models/TeamMembers";
+import Teams from "@/models/Team";
+import TeamMember from "@/models/TeamMember";
 import indexVuexModule from "@/store/index";
 // import auth from '@/auth';
 import _ from 'underscore';

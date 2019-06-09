@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout interactions-list">
+  <div class="md-layout interactions-list md-gutter">
     <div class="md-layout-item md-medium-size-45 md-size-35">
       <md-card style="min-height: 50%;">
         <md-card-header class="md-card-header-text md-card-header-warning">
