@@ -103,6 +103,10 @@
             this.$auth.currentUser(this, true, ()=>{
                 this.refreshList(false);
             });
+
+            this.$root.$on('refresh-members', (force)=>{
+                this.refreshList(force);
+            });
             //this.refreshList();
         },
         watch: {

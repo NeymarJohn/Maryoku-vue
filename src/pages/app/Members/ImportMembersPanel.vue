@@ -63,11 +63,20 @@
                                     <div class="md-alert md-alert-warning">
                                         Each column header has a dropdown list of possible columns to assign, choose the one that reflects your data as much as possible.
                                     </div>
-
-
-                                    <md-table class="border-table" v-if="parseCSV" style="max-width: 600px; overflow: auto;">
-                                        <md-table-row style="border-top: none;">
-                                            <md-table-head
+                                    <div class="divider" style="padding: 12px;"></div>
+                                    <md-table class="border-table" v-if="parseCSV" style="max-width: 65vmax; overflow: auto;">
+                                        <md-table-row class="md-danger" style="background-color: lightgray;">
+                                            <md-table-head class="text-rose text-center"
+                                                v-if="column !== ''"
+                                                v-for="(column, index) in parseCSV.columns"
+                                                :key="index"
+                                                @click="sortBy(index)"
+                                                :class="{ active: sortKey === index }">
+                                                {{column}}
+                                            </md-table-head>
+                                        </md-table-row>
+                                        <md-table-row>
+                                            <md-table-head class="text-center"
                                                 v-if="column !== ''"
                                                 v-for="(column, index) in parseCSV.columns"
                                                 :key="index"
@@ -86,16 +95,6 @@
                                                 </md-field>
                                             </md-table-head>
                                         </md-table-row>
-                                        <md-table-row>
-                                            <md-table-head
-                                                v-if="column !== ''"
-                                                v-for="(column, index) in parseCSV.columns"
-                                                :key="index"
-                                                @click="sortBy(index)"
-                                                :class="{ active: sortKey === index }">
-                                                {{column}}
-                                            </md-table-head>
-                                        </md-table-row>
                                         <md-table-row v-for="(row, rowIndex) in parseCSV.rows" :key="rowIndex">
                                             <md-table-cell v-for="(column, columnIndex) in parseCSV.columns" :key="columnIndex">
                                                 {{ row[column] }}
@@ -108,7 +107,7 @@
                         <template slot="tab-pane-3">
                             <div class="md-layout">
                                 <div class="md-layout-item md-size-100">
-                                    <h3>Awesome, your vendors list is uploaded</h3>
+                                    <h3>Awesome, your new members were uploaded</h3>
                                     <h5>You can review the results of the process here.</h5>
                                     <p>Rows processed: {{ finalResult.processed }} </p>
                                     <p>Total: {{ finalResult.total }}</p>
@@ -260,6 +259,9 @@
                     return false
                 }
                 this.finalResult = await membersFile.save();
+
+                this.$root.$emit('refresh-members', true);
+
                 return true
 
             },
