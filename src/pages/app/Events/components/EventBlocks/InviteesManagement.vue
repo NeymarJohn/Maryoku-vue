@@ -478,9 +478,6 @@
             //Set Selected Groups to selected groups tags field
             this.selectedEventGroups = this.event.inviteeGroups ? this.event.inviteeGroups : [];
 
-            console.log('Event => ',this.event);
-
-
         },
         computed: {},
         watch: {}

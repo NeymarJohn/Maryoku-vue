@@ -278,8 +278,6 @@
       //     docClasses.add("perfect-scrollbar-off");
       //   }
       // });
-
-      console.log('state ',this.$store.state);
     },
     computed:{
 

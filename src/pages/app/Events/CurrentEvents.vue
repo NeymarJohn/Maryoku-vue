@@ -306,8 +306,6 @@
 
           _calendar.calendarEvents().find(this.$route.params.id).then(event => {
 
-            console.log('Event ==>',event);
-
             this.event = event;
             this.eventId = event.id;
             this.calendarEvent = event;

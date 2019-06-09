@@ -159,7 +159,6 @@
 
                 _calendar.calendarEvents().find(this.$route.params.id).then(event => {
                     this.eventId = event.id;
-                    console.log('event =>  ',event);
                     this.calendarEvent = event;
                     this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
                     this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
