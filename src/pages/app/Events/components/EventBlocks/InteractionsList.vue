@@ -25,7 +25,7 @@
                             <label>Send this interaction</label>
                             <md-select v-model="item.sendDateOption" name="sendDateOption" id="sendDateOption">
                               <md-option value="sendOnDate">On a specific date</md-option>
-                              <md-option value="sendDaysBeforeEvent">Days before the event</md-option>
+                              <md-option value="daysBeforeEvent">Days before the event</md-option>
                             </md-select>
                           </md-field></div>
                         <div class="md-layout-item md-size-35">
@@ -34,16 +34,16 @@
                                       data-vv-name="sendOnDate"
                                       v-focus/>
                           </md-field>
-                          <md-field v-if="item.sendDateOption === 'sendDaysBeforeEvent'">
+                          <md-field v-if="item.sendDateOption === 'daysBeforeEvent'">
                             <md-input v-model="item.sendDaysBeforeEvent"
-                                      data-vv-name="sendDaysBeforeEvent" v-focus/>
+                                      data-vv-name="sendDaysBeforeEvent"/>
                           </md-field>
                         </div>
                         <div class="md-layout-item md-size-100">
                           <md-checkbox v-model="item.includePageLink"
                                        :id="`include-${index}`"></md-checkbox>
                           <!--<label style=" margin:  14px 16px 14px 0" :for="`include-${index}`">Include a link to the <a :href="`/#/events/${eventData ? eventData.id : ''}/public`">event public page</a>?</label>-->
-                          <label style=" margin:  14px 16px 14px 0; font-size: 12px;" :for="`include-${index}`">Include a link to the event public page?</label>
+                          <label style=" margin:  14px 16px 14px 0" :for="`include-${index}`">Include a link to the event public page?</label>
                         </div>
                       </div>
                     </md-card-content>
@@ -164,21 +164,9 @@
       font-weight: 500;
       color: $pink-262;
     }
-    background-color: $yellow-50;
+    background-color: $grey-50;
   }
   .not-visible-row {
     cursor: pointer;
-  }
-
-  .md-table-content {
-    thead {
-      display: none !important;
-    }
-
-    .md-table-row:not(:last-child) td {
-      border-bottom-color: #ddd !important;
-      border-top: 0 solid ;
-      border-bottom: 1px solid ;
-    }
   }
 </style>

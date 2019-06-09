@@ -1,6 +1,6 @@
 <template>
   <div class="vlabeledit">
-    <div tabindex="1" class="vlabeledit-label" :class="{'vlabeledit-empty' : this.vlabel === empty}" @click="onLabelClick" v-if="!edit">{{vlabel}} <md-icon class="pull-right text-gray small md-sm vlabeledit-label-icon">edit</md-icon></div>
+    <div class="vlabeledit-label" :class="{'vlabeledit-empty' : this.vlabel === empty}" @click="onLabelClick" v-if="!edit">{{vlabel}} <md-icon class="pull-right text-gray small md-sm vlabeledit-label-icon">edit</md-icon></div>
     <input type="text" v-if="edit && !mask" v-model="label" v-on:blur="updateTextBlur" ref="labeledit" :placeholder="vplaceholder" class="vlabeledit-input" @keyup.enter="updateTextEnter"/>
     <input-mask type="text" v-if="edit && mask" :mask="mask" maskChar="_" v-model="label" v-on:blur="updateTextBlur" ref="labeledit" :placeholder="vplaceholder" class="vlabeledit-input" @keyup.enter="updateTextEnter"/>
   </div>
@@ -16,17 +16,10 @@
       return {
         edit: false, // define whether it is in edit mode or not
         label: '', // v-bind data model for input text
+        empty: 'Click to set', // empty place holder .. replace with your own localization for default
       }
     },
-    props: {
-      text: String,
-      placeholder: String,
-      required: Boolean,
-      fieldName: String,
-      mask: String,
-      scope: Object,
-      empty: { type: String, default: 'Click to set' }
-    }, // parent should provide :text or :placeholder
+    props: ['text','placeholder', 'required', 'fieldName', 'mask'], // parent should provide :text or :placeholder
     methods: {
       initText: function(){
         if(this.text==''||this.text==undefined){
@@ -46,34 +39,30 @@
       // trigger when textbox got lost focus
       updateTextBlur: function(){
         // update the edit mode to false .. display div label text
-        if (!this.edit) return;
-
         this.edit = false;
         if (this.label === this.text) {
-          this.$emit('no-change',this.text, this.fieldName, this.scope);
+          this.$emit('no-change',this.text, this.fieldName);
           return;
         }
         // emit text updated callback
         if (this.required && this.label === ''){
           this.label = this.text;
-          this.$emit('no-change',this.text, this.fieldName, this.scope);
+          this.$emit('no-change',this.text, this.fieldName);
         } else {
-          this.$emit('text-updated-blur',this.label, this.fieldName, this.scope);
+          this.$emit('text-updated-blur',this.label, this.fieldName);
         }
       },
       updateTextEnter: function(){
-        if (!this.edit) return;
-
         this.edit = false;
         if (this.label === this.text) {
-          this.$emit('no-change',this.text, this.fieldName, this.scope);
+          this.$emit('no-change',this.text, this.fieldName);
           return;
         }
         if (this.required && this.label === ''){
           this.label = this.text;
-          this.$emit('no-change',this.text, this.fieldName, this.scope);
+          this.$emit('no-change',this.text, this.fieldName);
         } else {
-          this.$emit('text-updated-enter',this.label, this.fieldName, this.scope);
+          this.$emit('text-updated-enter',this.label, this.fieldName);
         }
       }
     },
@@ -118,49 +107,11 @@
     }
   }
 </script>
-<style lang="scss" scoped>
+<style>
   .vlabeledit-empty {
     color: #ccc !important;
   }
-
-  .vlabeledit {
-
-    .vlabeledit-input {
-      border: 1px solid lightgray;
-      border-radius: 5px;
-      padding: 3px;
-      width: 100%;
-      height: 100%;
-      font-size: 16px;
-      line-height: 24px;
-    }
-
-    .vlabeledit-label {
-      cursor: pointer;
-      padding: 3px;
-      border: 1px solid transparent;
-
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-
-      font-size: 16px;
-      line-height: 24px;
-      width: 100%;
-
-      &:hover {
-        border: 1px solid lightgray;
-        border-radius: 5px;
-
-        .vlabeledit-label-icon{
-          visibility: visible;
-        }
-      }
-
-      .vlabeledit-label-icon{
-        font-size: 16px !important;
-        visibility: hidden;
-      }
-    }
+  .vlabeledit-label-icon{
+    font-size: 16px !important;
   }
 </style>

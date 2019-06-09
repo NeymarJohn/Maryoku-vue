@@ -211,14 +211,14 @@
                         console.log(error);
                     })
             },
-            addMember(){
+            addInvitee(){
                 this.adding = true;
 
             },
             cancel(){
                 this.adding = false;
             },
-            saveMember() {
+            saveInvitee() {
 
                 let invitee = {
                     fullName:this.newUser,

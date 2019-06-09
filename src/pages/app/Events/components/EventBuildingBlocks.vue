@@ -84,7 +84,7 @@
                     <!-- Actual Cost -->
                     <md-table-cell md-label="Actual cost">
                       <template v-if="item.winningProposalId">
-                        <md-button class="md-success md-simple actual-cost">{{ `$${item.winningProposalId}`}}
+                        <md-button class="md-success md-simple actual-cost">{{ `$${item.winingProposal.cost}`}}
                           <md-button class="md-success md-simple md-sm md-just-icon wining-budget">
                             <md-icon>open_in_new</md-icon>
                           </md-button>

@@ -76,7 +76,7 @@
           return;
         }
 
-        if (file[0].size <= 5000000){ // 5mb
+        if (file[0].size <= 1500000){
 
           this.createImage(file[0]);
 

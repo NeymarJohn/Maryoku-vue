@@ -27,9 +27,9 @@
     </md-card>
     <div class="md-layout-item md-xlarge-size-50 md-large-size-55 md-small-size-65 time-line-section mr-auto" style="margin-left: 48px;">
       <h4>Timeline</h4>
-      <!--<md-button name="event-planner-tab-timeline-preview" class="event-planner-tab-timeline-preview md-info md-sm preview-event" @click="previewEvent">
+      <md-button name="event-planner-tab-timeline-preview" class="event-planner-tab-timeline-preview md-info md-sm preview-event" @click="previewEvent">
         Preview
-      </md-button>-->
+      </md-button>
 
       <drop @drop="handleDrop" style="height: 100%;">
         <draggable :list="timelineItems" class="time-line-blocks_selected-items">

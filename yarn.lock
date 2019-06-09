@@ -10684,13 +10684,6 @@ vue-stars@^1.2.1:
   dependencies:
     vue "^2.6.10"
 
-vue-storage-watcher@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/vue-storage-watcher/-/vue-storage-watcher-1.3.0.tgz#fefa853f9c7b0b3ace7dffd0db4315dee83dfbb3"
-  integrity sha512-EXbicIMZQOwqk0sDJ3Vx+mI5n8FG+haKhgH6SrsTkcXjcTIwWYPr/CGeg/oRknkkYGQ5WcwZrf3snfUortd/kQ==
-  dependencies:
-    vue "^2.5.21"
-
 vue-style-loader@^3.0.0, vue-style-loader@^3.0.1:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-3.1.2.tgz#6b66ad34998fc9520c2f1e4d5fa4091641c1597a"

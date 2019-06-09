@@ -70,7 +70,7 @@
     }),
 
     created() {
-        this.questionsList = this.event.eventPage.qnas || [];
+        this.questionsList = this.event.eventPage.qnas;
 
     },
     mounted() {
@@ -83,15 +83,12 @@
       },
         saveQuestoinsList() {
             let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-            let editedEvent = new CalendarEvent({
-              id: this.event.id,
-              eventPage: {
-                id: this.event.eventPage.id,
-                qnas: this.questionsList
-              }
-            });
+            let editedEvent = new CalendarEvent({id: this.event.id});
 
-            editedEvent.for(_calendar).save().then(response => {
+            editedEvent = this.event;
+            editedEvent.eventPage.qnas = this.questionsList;
+
+            editedEvent.save().then(response => {
                 this.closeModal();
             })
                 .catch((error) => {

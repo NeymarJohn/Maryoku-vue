@@ -36,7 +36,7 @@
 
         <li class="menu-divider"></li>
 
-        <sidebar-item name="left-menu-vendors-list" class="left-menu-vendors-list" :link="{name: 'Vendors Pool', icon: 'contacts', path: '/vendors'}">
+        <sidebar-item name="left-menu-vendors-list" class="left-menu-vendors-list" :link="{name: 'Vendors List', icon: 'group', path: '/vendors'}">
         </sidebar-item>
 
         <!--<sidebar-item :link="{name: 'My Vendors', icon: 'contacts', path: '/vendors'}">
@@ -153,7 +153,7 @@
           :link="{name: 'Calendar', icon: 'date_range', path: '/calendar'}"></sidebar-item>-->
       </template>
     </side-bar>
-    <div class="main-panel" style="height: 50%;">
+    <div class="main-panel" style="height: 100%;">
       <top-navbar></top-navbar>
 
       <div :class="{content: !$route.meta.hideContent}" @click="toggleSidebar">

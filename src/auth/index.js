@@ -77,10 +77,7 @@ export default {
   currentUser(context, required, cb) {
 
     this.setTenantHeaders(context);
-    let user = context.$ls.get("user");
-    if (user){
-      this.user = user;
-    }
+
     if (!this.user.authenticated || this.user.id === undefined){
       context.$http.get(CURRENT_USER_URL, { headers: this.getAuthHeader() })
         .then((resp) => {
@@ -101,7 +98,7 @@ export default {
 
           this.setHeaders(context);
 
-          context.$ls.set("user", this.user, 1000 * 60 * 10);
+
           /*if(!resp.data.onboarded){
 
             if(resp.data.onboardingPath==="OM"){
@@ -127,8 +124,6 @@ export default {
             }
           })
     } else {
-      this.setHeaders(context);
-
       if (cb !== undefined){
         cb();
       }
