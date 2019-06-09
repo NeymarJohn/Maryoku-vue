@@ -19,7 +19,7 @@
       }
     },
     props: {
-      text: [String, Number],
+      text: String,
       placeholder: String,
       required: Boolean,
       fieldName: String,

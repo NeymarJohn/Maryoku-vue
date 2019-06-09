@@ -191,7 +191,8 @@
                 }, (error) => {
                     console.log(error)
                 });
-            },onSelectVendor(data) {
+            },
+            onSelectVendor(data) {
 
 
                 this.isLoading = true;
@@ -235,7 +236,8 @@
 
                     })
 
-            },openUploadModal(){
+            },
+            openUploadModal(){
                 this.$refs.uploadModal.toggleModal(true);
             },
             onRemoveVendor(data){

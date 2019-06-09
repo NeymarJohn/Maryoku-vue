@@ -58,9 +58,9 @@
 
                     <md-table-cell md-label="Requirements">
                       <div v-if="!item.is_parent && item.values.length" style="cursor: pointer; text-align: center;vertical-align: middle;">
-                        <md-button class="md-simple md-sm requirements-cell-button">
+                        <md-button class="md-simple md-sm requirements-cell-button" @click="addRequirements(item)">
                           {{`${item.values.length} selected`}}
-                          <md-icon class="text-danger">edit</md-icon>
+                          <md-icon class="text-danger" >edit</md-icon>
                         </md-button>
                         <!--<span>{{`${item.values.length} selected`}}</span>
                         <md-button class="md-danger md-simple md-tiny md-just-icon pull-right" @click="addRequirements(item)">
@@ -73,9 +73,8 @@
                     </md-table-cell>
 
                     <!-- Allocated budget -->
-                    <md-table-cell md-label="Allocated budget">
-                      $
-                      <label-edit :text="item.allocatedBudget" :field-name="item.componentId"
+                    <md-table-cell md-label="Allocated budget" class="allocated-budget">
+                      <span class="dollar-sign">$</span><label-edit :text="item.allocatedBudget.toString()" :field-name="item.componentId"
                                   @text-updated-blur="blockBudgetChanged"
                                   @text-updated-enter="blockBudgetChanged"></label-edit>
                     </md-table-cell>
@@ -83,24 +82,24 @@
 
                     <!-- Actual Cost -->
                     <md-table-cell md-label="Actual cost">
-                      <template v-if="item.winningProposalId">
-                        <md-button class="md-success md-simple actual-cost">{{ `$${item.winningProposalId}`}}
+                      <template v-if="item.winningProposalId && item.proposalsState == 'wining-proposal'">
+                        <md-button class="md-success md-simple actual-cost">{{ `$${item.winingProposal.cost}`}}
                           <md-button class="md-success md-simple md-sm md-just-icon wining-budget">
                             <md-icon>open_in_new</md-icon>
                           </md-button>
                         </md-button>
                       </template>
-                      <template v-else-if="item.proposals && item.proposals.length">
+                      <template v-else-if="item.proposalsState == 'show-proposals'">
                         <md-button class="md-sm md-info" @click="reviewProposals(item)">Manage proposals
                           ({{item.proposals.length}})
                         </md-button>
                       </template>
-                      <template v-else-if="!item.proposals.length && !item.vendors.length">
-                        <md-button class="md-sm md-default" @click="reviewProposals(item)">Get Offers
+                      <template v-else-if="item.proposalsState == 'get-offers'">
+                        <md-button class="md-sm md-default" @click="reviewVendors(item)">Get Offers
                           <md-icon>near_me</md-icon>
                         </md-button>
                       </template>
-                      <template v-else-if="!item.proposals.length && item.vendors.length">
+                      <template v-else-if="item.proposalsState == 'waiting-for-proposals'">
                         <div class="waiting-label" @click="reviewVendors(item)">Waiting for proposals</div>
                       </template>
                     </md-table-cell>
@@ -224,9 +223,8 @@
         new EventComponent().for(calendar, event).get()
           .then(res => {
 
-            console.log(' event blocks ', res);
-
             this.$set(this, 'eventBuildingBlocks', res);
+            console.log(res);
 
             let allocatedBudget = 0;
             this.eventBuildingBlocks.forEach(item=>{
@@ -305,7 +303,7 @@
           component: EventBlockRequirements,
           cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
           openOn: 'right',
-          props: {event: this.event, selectedBlock: item}
+          props: {event: this.event, selectedBlock: item , predefinedRequirements : item.predefinedRequirements}
         })
       },
       reviewProposals (item) {
@@ -319,19 +317,17 @@
       reviewVendors (item) {
         window.currentPanel = this.$showPanel({
           component: EventBlockVendors,
-          cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
+          cssClass: 'md-layout-item md-size-90 transition36 bg-grey',
           openOn: 'right',
-          props: {event: this.event, selectedBlock: item}
+          props: {event: this.event, selectedBlock: item, getOffers : true}
         })
       }
     },
     created () {
+        this.getEventBuildingBlocks();
 
     },
     mounted () {
-
-      this.isLoading = true;
-      console.log(this.event);
 
       this.$bus.$on('BlockAdded', ()=>{
         this.getEventBuildingBlocks()

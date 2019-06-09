@@ -10,21 +10,20 @@
 
                 <div class="pull-right">
                     <md-button class="md-info event-building-blocks-requirements-add" @click="addNewValue">
-                        Add Requirement
-                    </md-button>
-                    <md-button class="md-info event-building-blocks-requirements-save" @click="saveAllValues">Save
+                        Add New Requirement
                     </md-button>
                 </div>
 
             </h4>
             <div class="md-layout-item md-size-100">
 
-                <ul class="requirements-list">
+                <ul class="requirements-list" v-if="predefinedRequirements">
 
-                    <li class="list-item" v-for="(item,index) in requirementsList">
-                        <drag
-                                :class="`md-button md-${item.color}`"
-                                :transfer-data="{ item }"> {{item.title}} <md-icon>add_circle_outline</md-icon></drag>
+                    <li class="list-item" v-for="(item,index) in predefinedRequirements">
+                        <div
+                                :class="`md-button ${item.color}`"
+                                @click="handleDrop(item)"
+                                > {{item.title}} <md-icon>add_circle_outline</md-icon></div>
                     </li>
 
 
@@ -34,31 +33,79 @@
                     <md-card-content>
                         <md-table v-if="eventBlocks.length" v-model="eventBlocks" table-header-color="orange"
                                   class="requirements-table">
-                            <md-table-row slot="md-table-row" slot-scope="{ item }" :key="eventBlocks.indexOf(item)">
+                            <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="eventBlocks.indexOf(item)" :class="{'visible-row':item.editMode,'not-visible-row':!item.editMode}">
                                 <md-table-cell md-label="Title">
-                                    <label-edit :text="item.title" :field-name="item.id"
-                                                @text-updated-blur="requirementChanged"
-                                                @text-updated-enter="requirementChanged"></label-edit>
+                                    {{item.title}}
+
+                                    <div v-if="item.editMode">
+
+                                        <md-field >
+                                            <md-input
+                                                    v-model="item.title"
+                                                    type="text"
+                                            ></md-input>
+                                        </md-field>
+
+                                    </div>
+
                                 </md-table-cell>
                                 <md-table-cell md-label="Description">
-                                    <label-edit :text="item.comment" :field-name="item.id"
-                                                @text-updated-blur="descriptionChanged"
-                                                @text-updated-enter="descriptionChanged"></label-edit>
+                                    {{item.comment ? item.comment : 'No Description'}}
+
+                                    <div v-if="item.editMode">
+                                        <md-field >
+                                            <md-textarea
+                                                    v-model="item.comment"
+                                                    placeholder="Add Description here"
+                                                    type="text"
+                                                    :rows="item.comment ? parseInt(item.comment.length / 33) + 1 : 2"
+                                            ></md-textarea>
+                                        </md-field>
+                                    </div>
+
                                 </md-table-cell>
                                 <md-table-cell md-label="Priority">
-                                    <label-edit :text="item.priority" :field-name="item.id"
-                                                @text-updated-blur="priorityChanged"
-                                                @text-updated-enter="priorityChanged"></label-edit>
+                                    {{item.priority}}
+
+                                    <div v-if="item.editMode">
+
+                                        <md-field >
+                                            <md-select v-model="item.priority" name="select">
+                                                <md-option v-for="(option, index) in prioritiesList"  :key="index"  :value="option.value">{{ option.value }}</md-option>
+                                            </md-select>
+                                        </md-field>
+                                    </div>
+
 
                                 </md-table-cell>
 
                                 <md-table-cell md-label="Actions">
-                                    <md-button
-                                            class="md-danger md-sm md-just-icon event-building-blocks-requirements-delete"
-                                            @click="deleteValue(item.id)">
-                                        <md-icon>delete_outline</md-icon>
-                                    </md-button>
+                                    <div v-if="!item.editMode">
+                                        <md-button
+                                                class="md-info md-sm md-just-icon"
+                                                @click="editItem(item)">
+                                            <md-icon>edit</md-icon>
+                                        </md-button>
+                                        <md-button
+                                                class="md-danger md-sm md-just-icon event-building-blocks-requirements-delete"
+                                                @click="deleteValue(item.id)">
+                                            <md-icon>delete_outline</md-icon>
+                                        </md-button>
+                                    </div>
+
+                                    <div  v-if="item.editMode">
+
+                                        <md-button  class="md-success md-sm edit-requirement"  @click="editValue(item)">
+                                            Save
+                                        </md-button>
+                                        <md-button  class="md-default md-sm md-just-icon"  @click="cancelEdit(item)">
+                                            <md-icon>close</md-icon>
+                                        </md-button>
+                                    </div>
+
+
                                 </md-table-cell>
+
 
                             </md-table-row>
 
@@ -67,9 +114,6 @@
                             No Requirements
                         </div>
 
-                        <drop @drop="handleDrop" class="drag-area">
-                            <p >Drag Item here</p>
-                        </drop>
 
                     </md-card-content>
 
@@ -132,7 +176,11 @@
         },
         props: {
             event: Object,
-            selectedBlock: Object
+            selectedBlock: Object,
+            predefinedRequirements : {
+                type : Array,
+                default : null
+            }
         },
         data: () => ({
             // auth: auth,
@@ -151,37 +199,7 @@
                     label: 'Must have',
                     value: 'Must have'
                 }
-            ],
-            requirementsList : [
-                {
-                    id : 1,
-                    title : 'Smoking Area',
-                    color : 'rose',
-                    priority : 'Must Have',
-                    comment : '',
-                    propertyId : null,
-                    value : null
-                },
-                {
-                    id : 2,
-                    title : 'Reception Area',
-                    color : 'primary',
-                    priority : 'Must Have',
-                    comment : '',
-                    propertyId : null,
-                    value : null
-                },
-                {
-                    id : 3,
-                    title : 'Cleaning services',
-                    color : 'warning',
-                    priority : 'Must Have',
-                    comment : '',
-                    propertyId : null,
-                    value : null
-                }
             ]
-
         }),
 
         created() {
@@ -201,7 +219,8 @@
 
                 new EventComponentValue().for(calendar, event, selected_block).get().then(values => {
                     this.eventBlocks = values;
-                    console.log('event requirements ', values);
+                    this.isLoading = false;
+
                 });
             },
             addNewValue() {
@@ -232,13 +251,12 @@
                         })
                 });
             },
-            handleDrop(data, event){
+            handleDrop(data){
                 this.isLoading = true;
 
-
-                let item = data.item;
+                let item = {};
+                item.title = data.title;
                 item.eventComponent = {id: this.selectedBlock.id};
-
 
                 let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let eventObject = new CalendarEvent({id: this.event.id});
@@ -318,6 +336,7 @@
 
                 value.title = item.title;
                 value.priority = item.priority;
+                value.comment = item.comment;
 
                 value.for(calendar, event, selected_block).save().then(resp => {
                     this.isLoading = false;
@@ -351,163 +370,17 @@
                     _self.editValue(block);
                 })
             },
-            requirementChanged(val, index) {
-
-                if (!val.length) {
-                    return
-                }
-
-                this.isLoading = true;
-
-                let item = _.find(this.eventBlocks, function (item) {
-                    return item.id == index;
+            editItem(item) {
+                this.eventBlocks.forEach((interaction)=>{
+                    interaction.editMode = false;
                 });
-
-                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-                let event = new CalendarEvent({id: this.event.id});
-                let selected_block = new EventComponent({id: this.selectedBlock.id});
-                let value = new EventComponentValue({id: item.id});
-
-                value.title = val;
-
-                value.for(calendar, event, selected_block).save().then(resp => {
-                    this.isLoading = false;
-
-                    this.$notify(
-                        {
-                            message: 'Requirement saved successfully',
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'success'
-                        })
-                    this.getBuildingBlockValues();
-
-
-                })
-                    .catch(error => {
-                        console.log(error);
-                        this.isLoading = false;
-
-                        this.$notify(
-                            {
-                                message: 'Error while trying to modify this requirement',
-                                horizontalAlign: 'center',
-                                verticalAlign: 'top',
-                                type: 'danger'
-                            })
-                        this.getBuildingBlockValues();
-
-                    })
-
-
+                item.editMode = true;
+                this.$forceUpdate();
             },
-            priorityChanged(val, index) {
-
-                if (!val.length) {
-                    return
-                }
-
-                this.isLoading = true;
-
-
-                let item = _.find(this.eventBlocks, function (item) {
-                    return item.id == index;
-                });
-
-                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-                let event = new CalendarEvent({id: this.event.id});
-                let selected_block = new EventComponent({id: this.selectedBlock.id});
-                let value = new EventComponentValue({id: item.id});
-
-
-                value.priority = val;
-
-                value.for(calendar, event, selected_block).save().then(resp => {
-                    this.isLoading = false;
-
-
-                    this.$notify(
-                        {
-                            message: 'Requirement saved successfully',
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'success'
-                        })
-                    this.getBuildingBlockValues();
-
-
-                })
-                    .catch(error => {
-                        console.log(error);
-                        this.isLoading = false;
-
-                        this.$notify(
-                            {
-                                message: 'Error while trying to modify this requirement',
-                                horizontalAlign: 'center',
-                                verticalAlign: 'top',
-                                type: 'danger'
-                            })
-
-                        this.getBuildingBlockValues();
-
-                    })
-
-            },
-            descriptionChanged(val, index) {
-
-                if (!val.length) {
-                    return
-                }
-
-                this.isLoading = true;
-
-
-                let item = _.find(this.eventBlocks, function (item) {
-                    return item.id == index;
-                });
-
-                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-                let event = new CalendarEvent({id: this.event.id});
-                let selected_block = new EventComponent({id: this.selectedBlock.id});
-                let value = new EventComponentValue({id: item.id});
-
-
-                value.comment = val;
-
-                value.for(calendar, event, selected_block).save().then(resp => {
-                    this.isLoading = false;
-                    console.log('requirement saved');
-
-
-                    this.$notify(
-                        {
-                            message: 'Requirement saved successfully',
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'success'
-                        })
-                    this.getBuildingBlockValues();
-
-
-                })
-                    .catch(error => {
-                        console.log(error);
-                        this.isLoading = false;
-
-                        this.$notify(
-                            {
-                                message: 'Error while trying to modify this requirement',
-                                horizontalAlign: 'center',
-                                verticalAlign: 'top',
-                                type: 'danger'
-                            })
-                        this.getBuildingBlockValues();
-
-
-                    })
-
-            },
+            cancelEdit(item){
+                item.editMode = false;
+                this.$forceUpdate();
+            }
         },
         computed: {}
     };

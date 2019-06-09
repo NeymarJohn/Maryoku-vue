@@ -13,39 +13,15 @@
 
                 <div class="md-layout" style="overflow: auto; max-height: 80vh;">
 
-                  <div class="proposals-list md-layout-item md-size-100">
-                    <md-card>
-                      <md-card-content>
-                        <md-table v-model="proposalsList" table-header-color="blue" class="vendors-table">
-                          <md-table-row slot="md-table-row" slot-scope="{ item }" :key="proposalsList.indexOf(item)"  class="vendors-table_item">
-                            <md-table-cell md-label="Time Stamp"  > {{ getProposalDate(item.dateCreated) }}</md-table-cell>
-                            <md-table-cell md-label="Total Bid">
-                              ${{item.cost}}
-                            </md-table-cell>
-                            <md-table-cell md-label="Alignment With Requirements">
-                              {{item.alignment_with_requirements}}
-                            </md-table-cell>
-                            <md-table-cell class="vendors-table_item-actions" >
-                              <md-button  class="md-button md-rose md-sm md-theme-default auto-width" @click="setAsWining(item)">
-                                Set as wining
-                              </md-button>
-                            </md-table-cell>
-
-                          </md-table-row>
-                        </md-table>
-                      </md-card-content>
-                    </md-card>
-                  </div>
-
-                    <div class="proposal-item md-layout-item md-size-100" style="display : none;" v-for="(proposal,index) in proposals" :key="index" v-if="(proposalsToDisplay == 1 && index == 0) || proposalsToDisplay == proposals.length">
-                        <h4 class="proposal-title"> {{proposal.title}} </h4>
+                    <div class="proposal-item md-layout-item md-size-100" v-for="(proposal,index) in selectedBlock.vendors" :key="index" v-if="proposalsToDisplay >= index+1">
+                        <h4 class="proposal-title"> {{proposal.vendor.vendorDisplayName}} </h4>
                         <md-card>
                             <md-card-content>
-                                <md-table v-model="proposal.list" table-header-color="blue" class="vendors-table">
-                                    <md-table-row slot="md-table-row" slot-scope="{ item }" :key="proposal.list.indexOf(item)"  class="vendors-table_item">
-                                        <md-table-cell md-label="Time Stamp"  > {{ item.time_stamp }}</md-table-cell>
+                                <md-table v-model="proposal.proposals" table-header-color="blue" class="vendors-table">
+                                    <md-table-row slot="md-table-row" slot-scope="{ item }" :key="proposal.proposals.indexOf(item)"  class="vendors-table_item">
+                                        <md-table-cell md-label="Time Stamp"  > {{ getProposalDate(item.dateCreated) }}</md-table-cell>
                                         <md-table-cell md-label="Total Bid">
-                                            ${{item.total_bid}}
+                                            ${{item.cost}}
                                         </md-table-cell>
                                         <md-table-cell md-label="Alignment With Requirements">
                                             {{item.alignment_with_requirements}}
@@ -134,15 +110,12 @@
                 }
             ],
             proposalsToDisplay : 1,
-          proposalsList : []
         }),
 
         created() {
         },
         mounted() {
 
-          console.log('proposals => ', this.selectedBlock.proposals);
-          this.proposalsList = this.selectedBlock.proposals;
 
         },
         methods: {
@@ -183,7 +156,7 @@
 
             },
             viewAllProposals() {
-                this.proposalsToDisplay  = this.proposals.length;
+                this.proposalsToDisplay  = this.selectedBlock.vendors.length;
             },
           getProposalDate(eventStartMillis) {
 

@@ -318,7 +318,7 @@
 
             this.getCalendarEventStatistics(event);
 
-            this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees');
+            this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement');
           });
         }.bind(this));
       },
