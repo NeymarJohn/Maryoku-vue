@@ -140,6 +140,7 @@
           t = new Team().get();
           t.then(res=>{
             this.availableTeams = res;
+            this.availableTeams.unshift({id:'all', name: 'All members', builtIn: true});
             this.$ls.set("teams", this.availableTeams, 1000 * 60 * 10);
           });
         } else {
@@ -177,9 +178,9 @@
       updateAllOptions(){
         this.allOptions = [...this.availableTeams,...this.availableMembers];
         this.allOptions = _.filter(this.allOptions,(i)=>{
-          return  -1 === _.findIndex(this.eventInvitees, (e)=>{
+          return  i.id !== 'all'  && -1 === _.findIndex(this.eventInvitees, (e)=>{
             return e.person.id === i.id
-          } )
+          })
         });
       },
       selectMember(item){
