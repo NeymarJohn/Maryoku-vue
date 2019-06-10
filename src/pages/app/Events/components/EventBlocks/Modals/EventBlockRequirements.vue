@@ -32,7 +32,7 @@
                 </ul>
                 <md-card>
                     <md-card-content>
-                        <md-table v-if="eventBlocks.length" v-model="eventBlocks" table-header-color="orange"
+                        <md-table v-if="eventBlocks && eventBlocks.length" v-model="eventBlocks" table-header-color="orange"
                                   class="requirements-table">
                             <md-table-row slot="md-table-row" slot-scope="{ item, index }"
                                           :key="eventBlocks.indexOf(item)"
@@ -116,11 +116,11 @@
 
                         </md-table>
                         <div v-else>
-                            <md-table v-if="dummyList && dummyList.length" v-model="dummyList" table-header-color="orange"
+                            <md-table v-model="dummyList" table-header-color="orange"
                                       class="requirements-table">
-                                <md-table-row slot="md-table-row" slot-scope="{ item, index }"
+                                <md-table-row slot="md-table-row" style="opacity:0.4; background : #efefef;" slot-scope="{ item, index }"
                                               :key="dummyList.indexOf(item)"
-                                              >
+                                >
                                     <md-table-cell md-label="Title">
                                         {{item.title}}
                                     </md-table-cell>
@@ -197,7 +197,7 @@
             ],
             dummyList : [
                 {
-                    title : this.predefinedRequirements[0].title
+                    title : this.predefinedRequirements ? this.predefinedRequirements[0].title : 'No Title'
                 }
             ]
         }),
@@ -207,11 +207,13 @@
         mounted() {
 
             this.getBuildingBlockValues();
+
+            // put dummy item
+            this.dummyList[0].title = this.predefinedRequirements ? this.predefinedRequirements[0].title : 'No Title'
         },
         methods: {
             closePanel() {
                 this.$emit("closePanel");
-                this.$bus.$emit('BlockAdded');
             },
             getBuildingBlockValues() {
                 let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
