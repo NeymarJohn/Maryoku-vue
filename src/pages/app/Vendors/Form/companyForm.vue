@@ -167,7 +167,7 @@
                             <md-input v-model="contactPerson.phone_number"  :name="'phone_number_' + index" type="text"></md-input>
                         </md-field>
                     </div>
-                    <div class="delete-item" v-if="selected_vendor.vendorContactPerson.length > 1" @click="deleteContactPersonItem(index)">
+                    <div class="delete-item" v-if="selected_vendor.vendorContactPerson.length > 1 && selected_vendor.vendorContactPerson[0].email " @click="deleteContactPersonItem(index)">
                         <md-icon  class="md-theme-rose" > delete_outline</md-icon>
                     </div>
                 </div>
@@ -184,7 +184,7 @@
                             <md-field>
                                 <md-file v-model="attachment.path" />
                                 <div class="delete-item" @click="deleteAttachmentItem(index)">
-                                    <md-icon  class="md-theme-rose" > delete_outline</md-icon>
+                                    <md-icon v-if="selected_vendor.vendorAttachments.length > 0 && selected_vendor.vendorAttachments[0].path" class="md-theme-rose" > delete_outline</md-icon>
                                 </div>
                             </md-field>
 
