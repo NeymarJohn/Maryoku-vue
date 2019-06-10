@@ -481,7 +481,7 @@
   .table-section{
     width: 100%;
     max-height: 370px;
-    overflow: auto;
+   // overflow: auto;
   }
   .wizard-pos{
     position: relative;
