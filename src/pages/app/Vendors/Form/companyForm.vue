@@ -43,10 +43,10 @@
                         <label>Website</label>
                         <md-input v-model="selected_vendor.vendorWebsite"
                                   type="text"
-                                  required
+                                  
                                   data-vv-name="vendorWebsite"
                                   name="vendorWebsite"
-                                  v-validate="modelValidations.vendorWebsite"></md-input>
+                                  ></md-input>
 
                         <slide-y-down-transition>
                             <md-icon class="error" v-show="errors.has('vendorWebsite')">close</md-icon>
@@ -282,10 +282,7 @@ input[type=number]::-webkit-outer-spin-button {
                         required: true,
                         email: true
                     },
-                    vendorWebsite: {
-                        required: true,
-                        min: 5
-                    },
+
                     vendorMainPhoneNumber: {
                         required: true,
                         min: 5
