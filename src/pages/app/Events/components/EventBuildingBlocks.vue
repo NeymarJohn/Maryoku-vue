@@ -74,7 +74,7 @@
 
                     <!-- Allocated budget -->
                     <md-table-cell md-label="Allocated budget" class="allocated-budget">
-                      <span class="dollar-sign">$</span><label-edit :text="item.allocatedBudget.toString()" :field-name="item.componentId"
+                      <span class="dollar-sign">$</span><label-edit :text="item.allocatedBudget" :field-name="item.componentId"
                                   @text-updated-blur="blockBudgetChanged"
                                   @text-updated-enter="blockBudgetChanged"></label-edit>
                     </md-table-cell>
