@@ -153,7 +153,9 @@
                     type: 'success'
                   })
 
-                this.$bus.$emit('RefreshStatistics')
+                  this.$bus.$emit('RefreshStatistics');
+                  this.$bus.$emit('BlockAdded');
+                    this.closePanel();
 
                 this.$forceUpdate()
               })
