@@ -120,13 +120,17 @@
                 </div>
 
                 <div class="md-layout-item md-size-50">
-                    <md-field >
+                    <md-field :class="[{'md-error': errors.has('vendorCategory')}]" class="select-with-icon" >
                         <label for="category">Category</label>
-                        <md-select v-model="selected_vendor.vendorCategory" name="select">
-                            <md-option v-for="(option, index) in vendorCategory"  :key="index"  :value="option.id">{{ option.value }}</md-option>
+                        <md-select v-model="selected_vendor.vendorCategory" name="vendorCategory"
+                        data-vv-name="vendorCategory"
+                        v-validate= "modelValidations.vendorCategory"
+                         required >
+                            <md-option v-for="(option, index) in vendorCategory" 
+                             :key="index"  :value="option.id">{{ option.value }}</md-option>
                         </md-select>
-
-                    </md-field>
+                        <span class="md-error" v-if="errors.has('vendorCategory')">The Vendor Category is required</span>
+                    </md-field>                             
                 </div>
                 <div class="md-layout-item md-size-50" v-if="selected_vendor.vendorTagging">
                     <md-field>
@@ -284,6 +288,10 @@ input[type=number]::-webkit-outer-spin-button {
                     },
 
                     vendorMainPhoneNumber: {
+                        required: true,
+                        min: 5
+                    },
+                    vendorCategory: {
                         required: true,
                         min: 5
                     }
