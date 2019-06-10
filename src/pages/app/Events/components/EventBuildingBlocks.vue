@@ -90,12 +90,12 @@
 
                                         <!-- Actual Cost -->
                                         <md-table-cell md-label="Actual cost">
-                                            <template v-if="item.winningProposalId">
+                                            <template
+                                                    v-if="item.winningProposalId">
                                                 <md-button class="md-success md-simple actual-cost">
                                                     {{ `$${item.winingProposal.cost}`}}
                                                     <md-button
-                                                            class="md-success md-simple md-sm md-just-icon wining-budget"
-                                                            @click="reviewProposals(item)">
+                                                            class="md-success md-simple md-sm md-just-icon wining-budget">
                                                         <md-icon>open_in_new</md-icon>
                                                     </md-button>
                                                 </md-button>
@@ -107,14 +107,13 @@
                                                 </md-button>
                                             </template>
                                             <template v-else-if="item.proposalsState == 'get-offers'">
-                                                <md-button class="md-sm md-default"
-                                                           @click="reviewVendors(item, 'get-offers')">Get Offers
+                                                <md-button class="md-sm md-default" @click="reviewVendors(item)">
+                                                    Get Offers
                                                     <md-icon>near_me</md-icon>
                                                 </md-button>
                                             </template>
                                             <template v-else-if="item.proposalsState == 'waiting-for-proposals'">
-                                                <div class="waiting-label"
-                                                     @click="reviewVendors(item,'waiting-for-proposals')">
+                                                <div class="waiting-label" @click="reviewVendors(item)">
                                                     Waiting for proposals
                                                 </div>
                                             </template>
@@ -334,12 +333,12 @@
                     props: {event: this.event, selectedBlock: item}
                 })
             },
-            reviewVendors(item, caseStatus) {
+            reviewVendors(item) {
                 window.currentPanel = this.$showPanel({
                     component: EventBlockVendors,
                     cssClass: 'md-layout-item md-size-90 transition36 bg-grey',
                     openOn: 'right',
-                    props: {event: this.event, selectedBlock: item, caseStatus: caseStatus}
+                    props: {event: this.event, selectedBlock: item, getOffers: true}
                 })
             }
         },
