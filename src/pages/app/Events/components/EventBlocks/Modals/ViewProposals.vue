@@ -27,8 +27,11 @@
                                             {{item.alignment_with_requirements}}
                                         </md-table-cell>
                                         <md-table-cell class="vendors-table_item-actions" >
-                                            <md-button  class="md-button md-rose md-sm md-theme-default auto-width" @click="setAsWining(item)">
+                                            <md-button  v-if="item.id != winnerId" class="md-button md-rose md-sm md-theme-default auto-width" @click="setAsWining(item)">
                                                 Set as wining
+                                            </md-button>
+                                            <md-button  class="md-button md-success md-sm md-theme-default auto-width"  v-else>
+                                                <span><md-icon>check</md-icon></span>Winner
                                             </md-button>
                                         </md-table-cell>
 
@@ -72,7 +75,11 @@
         props: {
             event: Object,
             vendor : Object,
-            selectedBlock : Object
+            selectedBlock : Object,
+            winnerId : {
+                type : String,
+                default : null
+            }
         },
         data: () => ({
             // auth: auth,
@@ -146,7 +153,9 @@
                     type: 'success'
                   })
 
-                this.$bus.$emit('RefreshStatistics')
+                  this.$bus.$emit('RefreshStatistics');
+                  this.$bus.$emit('BlockAdded');
+                    this.closePanel();
 
                 this.$forceUpdate()
               })

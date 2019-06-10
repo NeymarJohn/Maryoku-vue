@@ -106,7 +106,7 @@
                                 <md-card-content>
                                     <div class="text-left">
                                         <h5>Invitation includes:</h5>
-                                        <md-radio v-for="(option, index) in InviteeTypes" v-model="eventData.participantsType" :value="option">{{option}}</md-radio>
+                                        <md-radio v-for="(option, index) in InviteeTypes" :key="index" v-model="eventData.participantsType" :value="option">{{option}}</md-radio>
                                     </div>
                                 </md-card-content>
                             </md-card>
