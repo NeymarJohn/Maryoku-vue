@@ -81,7 +81,7 @@
                                         <!-- Allocated budget -->
                                         <md-table-cell md-label="Allocated budget" class="allocated-budget">
                                             <span class="dollar-sign">$</span>
-                                            <label-edit :text="item.allocatedBudget.toString()"
+                                            <label-edit :text="item.allocatedBudget ? item.allocatedBudget.toString() : ''"
                                                         :field-name="item.componentId"
                                                         @text-updated-blur="blockBudgetChanged"
                                                         @text-updated-enter="blockBudgetChanged"></label-edit>
@@ -95,8 +95,7 @@
                                                 <md-button class="md-success md-simple actual-cost">
                                                     {{ `$${item.winingProposal.cost}`}}
                                                     <md-button
-                                                            class="md-success md-simple md-sm md-just-icon wining-budget"
-                                                            @click="reviewProposals(item,item.winningProposalId)">
+                                                            class="md-success md-simple md-sm md-just-icon wining-budget">
                                                         <md-icon>open_in_new</md-icon>
                                                     </md-button>
                                                 </md-button>
@@ -326,12 +325,12 @@
                     props: {event: this.event, selectedBlock: item, predefinedRequirements: item.predefinedRequirements}
                 })
             },
-            reviewProposals(item, winnerId = null) {
+            reviewProposals(item) {
                 window.currentPanel = this.$showPanel({
                     component: ViewProposals,
                     cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
                     openOn: 'right',
-                    props: {event: this.event, selectedBlock: item, winnerId : winnerId}
+                    props: {event: this.event, selectedBlock: item}
                 })
             },
             reviewVendors(item) {

@@ -7,17 +7,19 @@ export default class TeamMember extends Model {
 
     static fetch(ctx, force){
         return new Promise ((resolve, reject)=> {
+            const key = "teams.allMembers";
             if (force) {
-                ctx.$ls.remove("teams.allMembers");
+                ctx.$ls.remove(key);
             }
-            let teams = ctx.$ls.get("teams.allMembers");
-            if (!teams) {
+            let resource = ctx.$ls.get(key);
+            if (!resource) {
                 new TeamMember().get().then(res => {
-                    ctx.$ls.set("teams.allMembers",res, Model.DEFAULT_EXPIRATION_MILLIS);
+                    ctx.$ls.set(key,res, Model.DEFAULT_EXPIRATION_MILLIS);
                     resolve(res);
                 });
             } else {
-                resolve(teams);
+                ctx.$ls.set(key,resource, Model.DEFAULT_EXPIRATION_MILLIS);
+                resolve(resource);
             }
         });
     }

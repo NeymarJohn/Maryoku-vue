@@ -9,17 +9,17 @@
                     <md-button class="md-purple md-sm pull-right md-icon-button" style="margin: 16px 6px;" @click="refreshList(true)" :disabled="working || noActions">
                         <md-icon style="font-size: 11px;padding:0; margin: 0; height: 15px;">refresh</md-icon>
                     </md-button>
-                    <md-button v-if="groupsList.length" class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="createNewGroup" :disabled="working">Add Group</md-button>
+                    <md-button v-if="groupsList.length" class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="createNewGroup" :disabled="working">Create New Group</md-button>
                 </md-card-header>
                 <md-card-content>
                     <vue-element-loading :active="working" spinner="ring" color="#FF547C"/>
 
-                    <md-table :md-fixed-header="true" :md-height="550" :md-card="false"  v-model="groupsList" table-header-color="orange" >
+                    <md-table :md-fixed-header="true" :md-height="550" :md-card="false"  v-model="groupsList" table-header-color="orange"  class="table-striped table-hover">
                         <md-table-row  slot="md-table-row" slot-scope="{ item, index }" :class="{'visible-row':visibleGroup && item.id === visibleGroup.id,'not-visible-row':visibleGroup && item.id !== visibleGroup.id}" @click="groupDetails(item)">
 
                             <md-table-cell style="vertical-align: middle;">
                                 <label-edit v-if="item.id !== 'all'" style="margin-top: 8px;" :scope="item" :text="item.name" field-name="name"  @text-updated-blur="groupNameChanged" @text-updated-enter="groupNameChanged"></label-edit>
-                                <h5 v-else style="font-weight: 500;" class="text-rose">{{item.name}}</h5>
+                                <h5 v-else style="font-weight: 500;" class="">{{item.name}}</h5>
                             </md-table-cell>
 
                             <md-table-cell style="vertical-align: middle; white-space: nowrap;">
@@ -253,4 +253,7 @@
         }
     }
 
+    thead {
+        display: none;
+    }
 </style>

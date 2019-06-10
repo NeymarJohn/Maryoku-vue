@@ -3,18 +3,17 @@
              :class="[
       {'flex-column': flexColumn},
       {'nav-pills-icons': navPillsIcons},
-      {'md-card-plain': plain}
-    ]">
+      {'md-card-plain': plain}]">
         <!--<md-card-header>
           <slot name="header-title"></slot>
         </md-card-header>-->
-        <md-card-content>
+        <md-card-content class="clear-margins">
             <md-list class="nav-tabs"> <!--style="background-color: white !important; margin-top: -15px; width: 110%; margin-left: -55px; padding-left: 55px; margin-bottom:0; justify-content: flex-start;">-->
                 <md-list-item
                     v-for="(item, index) in tabName"
-                    @click="ignore"
+                    @click="ignore(tabName[index])"
                     :key="item"
-                    :disabled="!isActivePanel(tabName[index])"
+                    :disabled="navigationDisabled && !isActivePanel(tabName[index])"
                     :class="[
             {active: isActivePanel(tabName[index])},
             {[getColorButton(colorButton)]: isActivePanel(tabName[index])}]">
@@ -44,6 +43,7 @@
     export default {
         name: 'nav-tabs',
         props: {
+            navigationDisabled: Boolean,
             flexColumn: Boolean,
             navPillsIcons: Boolean,
             plain: Boolean,
@@ -69,7 +69,11 @@
         },
         computed: {},
         methods: {
-            ignore(){},
+            ignore(panel){
+                if (!this.navigationDisabled) {
+                    this.switchPanel(panel)
+                }
+            },
             switchPanel(panel) {
                 this.activePanel = panel;
             },
