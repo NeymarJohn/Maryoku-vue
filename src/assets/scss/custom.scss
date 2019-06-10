@@ -452,10 +452,12 @@ $tooltip-border-color: $blue-grey-200 !default;
 
     .allocated-budget {
       position: relative;
-      .dollar-sign {
-        position : absolute;
-        left: 3px;
-        top: 0.9em;
+      .md-table-cell-container {
+        flex: 1;
+        display: flex;
+        justify-content: flex-start;
+        align-content: center;
+        align-items: center;
       }
     }
 

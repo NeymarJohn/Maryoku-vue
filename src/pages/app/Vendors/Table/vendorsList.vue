@@ -236,9 +236,11 @@
       },
       addVendor(data) {
         this.$emit('add-vendor',data);
+        this.getBlockVendors();
       },
       removeVendor(data){
         this.$emit('remove-vendor',data);
+          this.getBlockVendors();
       },
       getBlockVendors() {
 

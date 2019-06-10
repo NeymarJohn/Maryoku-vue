@@ -181,9 +181,9 @@
         props: {
             selectedBlock : Object,
             event : Object,
-            getOffers : {
-                type : Boolean,
-                default : false
+            caseStatus : {
+                type : String,
+                default : null
             }
         },
         data: () => ({
@@ -207,6 +207,7 @@
             },
             closePanel(){
                 this.$emit("closePanel");
+                this.$bus.$emit('BlockAdded');
             },
             manageBlockVendors() {
                 this.addingVendors = true;
@@ -233,14 +234,12 @@
                     })
             },
             viewProposals(item) {
+                console.log(item);
                 this.selectedVendor = item;
                 this.addingVendors = false;
             },
             onSelectVendor(data) {
-
-
                 this.isLoading = true;
-
 
                 let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
@@ -263,6 +262,8 @@
                                 verticalAlign: 'top',
                                 type: 'success'
                             })
+
+                        this.$forceUpdate();
 
                     })
                     .catch(error => {
@@ -323,7 +324,6 @@
             fetchData(page) {
                 this.loadingData = true;
                 this.isLoading = true;
-
 
                 Vendors.page(page)
                     .limit(this.pagination.limit)
@@ -390,7 +390,7 @@
 
         },
         created() {
-            if ( this.getOffers ) {
+            if ( this.caseStatus == 'get-offers' ) {
                 this.addingVendors = true;
             }
 
