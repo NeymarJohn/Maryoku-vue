@@ -95,7 +95,8 @@
                                                 <md-button class="md-success md-simple actual-cost">
                                                     {{ `$${item.winingProposal.cost}`}}
                                                     <md-button
-                                                            class="md-success md-simple md-sm md-just-icon wining-budget">
+                                                            class="md-success md-simple md-sm md-just-icon wining-budget"
+                                                            @click="reviewProposals(item,item.winningProposalId)">
                                                         <md-icon>open_in_new</md-icon>
                                                     </md-button>
                                                 </md-button>
@@ -325,12 +326,12 @@
                     props: {event: this.event, selectedBlock: item, predefinedRequirements: item.predefinedRequirements}
                 })
             },
-            reviewProposals(item) {
+            reviewProposals(item, winnerId = null) {
                 window.currentPanel = this.$showPanel({
                     component: ViewProposals,
                     cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
                     openOn: 'right',
-                    props: {event: this.event, selectedBlock: item}
+                    props: {event: this.event, selectedBlock: item, winnerId : winnerId}
                 })
             },
             reviewVendors(item) {
