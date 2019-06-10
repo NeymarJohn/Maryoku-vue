@@ -1,9 +1,14 @@
 import Model from './Model';
 
 export default class EventInvitee extends Model {
-  resource() {
-    return 'invitees'
-  }
+    resource() {
+        return 'invitees'
+    }
+
+    static saveInvitees(ctx, resource){
+        const key = `event.${event.id}.invitees`;
+        ctx.$ls.set(key,resource, Model.DEFAULT_EXPIRATION_MILLIS);
+    }
 
     static fetch(ctx, calendar, event, force){
         return new Promise ((resolve, reject)=> {

@@ -9,26 +9,32 @@
                 <!-- here you can add your content for tab-content -->
                 <template slot="tab-pane-1">
                     <div class="md-layout">
-                        <div class="md-layout-item md-size-70">
-                            <md-card style="height: 73vmin;">
+                        <div class="md-layout-item md-medium-size-70 md-size-80">
+                            <md-card style="height: auto;">
                                 <md-card-header class="md-card-header-text md-card-header-warning clear-margins">
                                     <!--<div class="card-text">
                                         <h4 class="title" style="color: white;">
                                             Event invitees {{eventInvitees.length ? `(${eventInvitees.length})` : ''}}
                                         </h4>
                                     </div>-->
-                                    <!--<md-button class="md-purple md-sm pull-right md-icon-button" style="margin-top: 16px; margin-right: 12px;" @click="refreshList(true)" :disabled="working || noActions">
+                                    <span class="pull-left" style="margin-top: 16px; margin-left: 12px;">
+                                        <md-icon class="text-rose">near_me</md-icon> {{eventInvitees.length}}
+                                    </span>
+                                    <span class="pull-left" style="margin-top: 16px; margin-left: 12px;">
+                                        <md-icon class="text-rose">check_circle</md-icon> 25%
+                                    </span>
+                                    <md-button class="md-purple md-sm pull-right md-icon-button" style="margin-top: 16px; margin-right: 12px;" @click="refreshList(true)" :disabled="working || noActions">
                                         <md-icon style="font-size: 11px;padding:0; margin: 0; height: 15px;">refresh</md-icon>
-                                    </md-button>-->
+                                    </md-button>
                                     <md-button class="md-success md-sm pull-right" style="margin-top: 16px; margin-right: 12px;"  :disabled="working || noActions">Create new group</md-button>
                                 </md-card-header>
-                                <md-card-content class="clear-margins">
+                                <md-card-content class="">
                                     <vue-element-loading :active="working" spinner="ring" color="#FF547C"/>
                                     <div class="md-layout md-gutter" style="margin: 0;">
 
                                         <div class="md-layout-item md-size-100">
                                             <md-field style="border: none;" class="clear-margins">
-                                                <multiselect :reset-after="true" @select="selectMember" :close-on-select="false" :preserve-search="true" placeholder="" label="emailAddress" track-by="id" :searchable="true" :options="allOptions" :multiple="true" >
+                                                <multiselect :reset-after="true" @select="selectMember" :close-on-select="true" :preserve-search="true" placeholder="" label="emailAddress" track-by="id" :searchable="true" :options="allOptions" :multiple="true" >
                                                     <template slot="caret"><span></span></template>
                                                     <template slot="placeholder" class="text-center">
                                                         <md-icon>search</md-icon> Search groups and participants
@@ -42,6 +48,9 @@
                                                         <div v-if="option.type === 'person'">
                                                             <div class="md-menu-item" v-if="option.firstName || option.lastName">
                                                                 {{ option.firstName }} {{ option.lastName }} <span class="text-gray">&nbsp;({{ option.emailAddress }})</span>
+                                                            </div>
+                                                            <div class="md-menu-item" v-else-if="option.displayName">
+                                                                {{ option.displayName }} <span class="text-gray">&nbsp;({{ option.emailAddress }})</span>
                                                             </div>
                                                             <div class="md-menu-item" v-else>
                                                                 {{ option.emailAddress }}
@@ -59,87 +68,29 @@
                                         </div>
                                         <div class="md-layout-item md-size-100" v-if="eventInvitees.length">
 
-                                            <md-table class="text-left table-striped table-hover">
+                                            <md-table class="text-left " v-model="groups" >
                                                 <tr class="md-table-row md-table-head-container">
                                                     <th class="md-table-head" style="width: 50%;">Group</th>
-                                                    <th class="md-table-head" style="width: 25%;">Invited</th>
-                                                    <th class="md-table-head" style="width: 24%;">RSVP</th>
+                                                    <th class="md-table-head md-numeric md-xs" style="width: 25%;"><md-icon class="text-rose">near_me</md-icon></th>
+                                                    <th class="md-table-head md-numeric" style="width: 24%;"><md-icon class="text-rose">check_circle</md-icon></th>
                                                     <th class="md-table-head" style="width: 1%;"></th>
                                                 </tr>
                                                 <template v-for="item in groups">
-                                                    <tr class="md-table-row"  @click="expandGroup(item)">
+                                                    <tr class="md-table-row" style="cursor: pointer;"  @click="expandGroup(item)" :class="{'visible-row':item.expanded}">
                                                         <td class="md-table-cell">{{item.name}}</td>
-                                                        <td class="md-table-cell">8</td>
-                                                        <td class="md-table-cell">25% (4)</td>
-                                                        <td class="md-table-cell"><md-icon>arrow_drop_down</md-icon></td>
+                                                        <td class="md-table-cell md-numeric">{{item.members.length}}</td>
+                                                        <td class="md-table-cell md-numeric">{{groupStats(item)}}</td>
+                                                        <td class="md-table-cell">
+                                                            <md-icon v-if="!item.expanded">arrow_drop_down</md-icon>
+                                                            <md-icon v-if="item.expanded">arrow_drop_up</md-icon>
+                                                        </td>
                                                     </tr>
-                                                    <template v-for="member in item.members" v-if="item.expanded">
-                                                    <tr class="md-table-row">
-                                                        <td class="md-table-cell">{{member.emailAddress}}</td>
+                                                    <tr class="bg-white" v-if="item.expanded" :class="{'visible-row':item.expanded}">
+                                                        <td class="md-table-cell text-center" colspan="4" style="max-width: 1px; padding: 24px;">
+                                                            <event-invitee-group-details @unselect-member="unselectMember" :group.sync="item"></event-invitee-group-details>
+                                                        </td>
                                                     </tr>
-                                                    </template>
                                                 </template>
-                                            </md-table>
-
-                                            <!--<md-table :md-fixed-header="true" :md-height="480" :md-card="false" v-model="groups" class="text-left table-striped table-hover">
-                                                <md-table-row @click="expandGroup(item)" slot="md-table-row" slot-scope="{ item }" :key="item.id">
-                                                    <md-table-cell md-label="Group">
-                                                        {{item.name}}
-
-                                                        <md-table v-if="item.expanded">
-                                                            <md-table-row slot="md-table-row">
-                                                                <md-table-cell>abc</md-table-cell>
-                                                            </md-table-row>
-                                                        </md-table>
-
-                                                    </md-table-cell>
-                                                    <md-table-cell md-label="Expanded" >
-                                                        {{item.expanded}}
-                                                    </md-table-cell>
-                                                    <md-table-cell md-label="Invited" >
-                                                        8
-                                                    </md-table-cell>
-                                                    <md-table-cell md-label="RSVP" md-numeric >
-                                                        25% (4)
-                                                    </md-table-cell>
-                                                    <md-table-cell md-label="" class="text-right" md-numeric >
-                                                        <md-icon>arrow_drop_down</md-icon>
-                                                    </md-table-cell>
-                                                </md-table-row>
-                                            </md-table>-->
-
-                                            <md-table style="display: none;" :md-fixed-header="true" :md-height="480" :md-card="false" v-model="eventInvitees" class="table-striped table-hover">
-                                                <md-table-row slot="md-table-row" slot-scope="{ item }" :key="item.id">
-                                                    <md-table-cell md-label="First Name">
-                                                        <label-edit tabindex="2" empty="" :scope="item" :text="item.person.firstName" field-name="firstName" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>
-                                                    </md-table-cell>
-                                                    <md-table-cell md-label="Last Name">
-                                                        <label-edit tabindex="2" empty="" :scope="item" :text="item.person.lastName" field-name="lastName" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>
-                                                    </md-table-cell>
-                                                    <md-table-cell md-label="Email Address" style="max-width: 120px;">
-                                                        <label-edit tabindex="1" :scope="item" :text="item.person.emailAddress" field-name="emailAddress" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>
-                                                    </md-table-cell>
-                                                    <md-table-cell md-label="groups">
-                                                        {{item.person.groups.length}}
-                                                    </md-table-cell>
-                                                    <md-table-cell md-label="RSVP">
-                                                        <md-icon class="text-gray" title="Not invited yet">help_outline</md-icon>
-                                                        <!--<drop-down direction="down">
-                                                          <md-button slot="title" class="groups-button md-simple md-rounded dropdown-toggle" style="width: auto;" data-toggle="dropdown">
-                                                            {{item.person.groups.length}} groups
-                                                          </md-button>
-                                                          <ul class="dropdown-menu">
-                                                            <li v-for="group in item.person.groups" @click="selectGroup(group)"><a href="javascript:void(null);">{{group.name}}</a></li>
-                                                          </ul>
-                                                        </drop-down>-->
-                                                    </md-table-cell>
-                                                    <md-table-cell md-label="" style="width: 20%;" class="text-right">
-                                                        <md-button class="md-danger md-round md-just-icon" :disabled="noActions" @click="unselectMember(item)" v-if="item.id !== 'new'">
-                                                            <md-icon>delete</md-icon>
-                                                            <md-tooltip md-direction="bottom">Unselect from this event</md-tooltip>
-                                                        </md-button>
-                                                    </md-table-cell>
-                                                </md-table-row>
                                             </md-table>
                                         </div>
                                         <div class="md-layout-item md-size-100 text-center" style="margin-top: 8px;" v-if="!eventInvitees.length">
@@ -150,10 +101,13 @@
                                 </md-card-content>
                             </md-card>
                         </div>
-                        <div class="md-layout-item md-size-30">
+                        <div class="md-layout-item md-medium-size-30 md-size-20">
                             <md-card class="md-card-plain">
                                 <md-card-content>
-                                    <h4>8 Invitees | 25% RSVP</h4>
+                                    <div class="text-left">
+                                        <h5>Invitation includes:</h5>
+                                        <md-radio v-for="(option, index) in InviteeTypes" v-model="eventData.participantsType" :value="option">{{option}}</md-radio>
+                                    </div>
                                 </md-card-content>
                             </md-card>
                         </div>
@@ -177,6 +131,7 @@
     import VueElementLoading from 'vue-element-loading';
     import LabelEdit from '@/components/LabelEdit';
     import InteractionsList from '@/pages/app/Events/components/EventBlocks/InteractionsList';
+    import EventInviteeGroupDetails from '@/pages/app/Events/components/EventInviteeGroupDetails';
     import { NavTabs, Tabs } from '@/components';
     import _  from 'underscore';
 
@@ -186,7 +141,8 @@
             VueElementLoading,
             LabelEdit,
             InteractionsList,
-            NavTabs
+            NavTabs,
+            EventInviteeGroupDetails
         },
         props: {
             eventData: Object
@@ -199,7 +155,9 @@
             availableMembers: [],
             allOptions: [],
             eventInvitees: [],
-            groups: []
+            groups: [],
+            InviteeTypes: ["Employees Only","Employees and spouse","Employees and families", "Employees children"],
+
         }),
         methods: {
             refreshList(force){
@@ -216,25 +174,31 @@
                 });
             },
             updateGroups(){
-                this.eventInvitees.forEach((invitee)=>{
+                let updatedGroups = [];
+                let invitees = JSON.parse(JSON.stringify(this.eventInvitees));
+                invitees.forEach((invitee)=>{
                     let personGroups = invitee.person.groups;
-                    personGroups.forEach((personGroup)=>{
-                        personGroup.expanded = false;
-                        let group = _.findWhere(this.groups, {id: personGroup.id});
-                        if (!group){
-                            if (!group.members){
-                                group.members = [];
-                            }
-                            group.members.push(invitee);
-                        } else {
-                            if (!group.members){
-                                group.members = [];
-                            }
-                            group.members.push(invitee);
-                            this.groups.push(personGroup);
+                    let personGroup;
+                    if (personGroups.length > 0){
+                        personGroup = personGroups[0];
+                    } else {
+                        personGroup = {id: 'unknown', name: 'Unknown'};
+                    }
+
+                    let group = _.findWhere(updatedGroups, {id: personGroup.id});
+                    if (!group){
+                        group = personGroup;
+                        group.members = [];
+                        group.members.push(invitee);
+                        updatedGroups.push(group);
+                    } else {
+                        if (!group.members){
+                            group.members = [];
                         }
-                    });
+                        group.members.push(invitee);
+                    }
                 });
+                this.groups = updatedGroups;
             },
             loadTeams(force){
                 let t = Team.fetch(this,force);
@@ -269,6 +233,7 @@
                 });
             },
             selectMember(item){
+                this.working = true;
                 let p;
                 if (item.type === 'person'){
                     p = this.selectSingleMember(item);
@@ -287,6 +252,7 @@
                     });
                     Promise.all(promises).then(()=>{
                         this.updateAllOptions();
+                        this.updateGroups();
                         resolve();
                     });
                 });
@@ -303,18 +269,23 @@
                     i.then(res => {
                         this.eventInvitees.unshift(res.item);
                         this.updateAllOptions();
+                        this.updateGroups();
                     });
                 }
                 return i;
             },
             unselectMember(item){
+                this.working = true;
                 let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let calendarEvent = new CalendarEvent(this.eventData);
                 let i = new EventInvitee(item).for(calendar, calendarEvent).delete().then(res=>{
                     let index = _.findIndex(this.eventInvitees, (e)=>{ return e.id === item.id});
                     if (index > -1) {
                         this.eventInvitees.splice(index, 1);
+                        EventInvitee.saveInvitees(this, this.eventInvitees);
                         this.updateAllOptions();
+                        this.updateGroups();
+                        this.working = false;
                     }
                 });
             },
@@ -335,6 +306,9 @@
                     item.expanded = true;
                 }
                 this.$forceUpdate();
+            },
+            groupStats(group){
+                return '0%'
             }
         },
         created() {
@@ -360,7 +334,7 @@
     }
 </script>
 <style lang="scss" scoped>
-
+    @import '@/assets/scss/md/_colors.scss';
     .members-group {
         font-weight: 500;
         &:hover {
@@ -370,6 +344,13 @@
         }
     }
 
+    .visible-row {
+        background-color: $grey-50 !important;
+        font-weight: 500;
+    }
+    .not-visible-row {
+        cursor: pointer;
+    }
     /*.multiselect__element {
       &:hover {
         .md-icon {
