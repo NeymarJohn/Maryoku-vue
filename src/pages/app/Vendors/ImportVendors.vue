@@ -245,30 +245,30 @@
             value: ''
 
           }
-          ,{
-            displayName: 'Vendor Availability Options',
-            name: 'vendorAvailabilityOptions',
-            value: ''
+          // ,{
+          //   displayName: 'Vendor Availability Options',
+          //   name: 'vendorAvailabilityOptions',
+          //   value: ''
 
-          },
-          {
-            displayName: 'Vendor Cancellation Policy',
-            name: 'vendorCancellationPolicy',
-            value: ''
+          // },
+          // {
+          //   displayName: 'Vendor Cancellation Policy',
+          //   name: 'vendorCancellationPolicy',
+          //   value: ''
 
-          },
-          {
-            displayName: 'Vendor Refund Policy',
-            name: 'vendorRefundPolicy',
-            value: ''
+          // },
+          // {
+          //   displayName: 'Vendor Refund Policy',
+          //   name: 'vendorRefundPolicy',
+          //   value: ''
 
-          },
-          {
-            displayName: 'Vendor Logo Image',
-            name: 'vendorLogoImage',
-            value: ''
+          // },
+          // {
+          //   displayName: 'Vendor Logo Image',
+          //   name: 'vendorLogoImage',
+          //   value: ''
 
-          }
+          // }
         ],
         channel_fields: [],
         channel_entries: [],
