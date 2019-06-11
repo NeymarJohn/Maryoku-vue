@@ -114,12 +114,12 @@
                 <span>Manage Groups</span>
               </md-button>
             </li>-->
-            <!--<li class="md-list-item" v-if="topBarEventId">
+            <li class="md-list-item" v-if="topBarEventId">
               <md-button v-if="topBarEventProposals" class="md-simple md-md" style="margin-top: 12px;" @click="inviteesManagement">
                 <md-icon>email</md-icon>
                 <span>Automated Interactions</span>
               </md-button>
-            </li>-->
+            </li>
             <li class="md-list-item" v-if="topBarEventId">
               <md-button v-if="topBarEventProposals" class="md-simple md-md" style="margin-top: 12px;" @click="eventPage">
                 <md-icon>web_asset</md-icon>

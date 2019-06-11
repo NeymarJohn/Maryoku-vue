@@ -21,8 +21,7 @@
                         color-button="info"
                         flex-column
                         nav-pills-icons
-                        plain
-                        :navigation-disalbed="true">
+                        plain>
 
                         <!-- here you can add your content for tab-content -->
                         <template slot="tab-pane-1">
@@ -68,21 +67,21 @@
                                     <md-table class="border-table" v-if="parseCSV" style="max-width: 65vmax; overflow: auto;">
                                         <md-table-row class="md-danger" style="background-color: lightgray;">
                                             <md-table-head class="text-rose text-center"
-                                                           v-if="column !== ''"
-                                                           v-for="(column, index) in parseCSV.columns"
-                                                           :key="index"
-                                                           @click="sortBy(index)"
-                                                           :class="{ active: sortKey === index }">
+                                                v-if="column !== ''"
+                                                v-for="(column, index) in parseCSV.columns"
+                                                :key="index"
+                                                @click="sortBy(index)"
+                                                :class="{ active: sortKey === index }">
                                                 {{column}}
                                             </md-table-head>
                                         </md-table-row>
                                         <md-table-row>
                                             <md-table-head class="text-center"
-                                                           v-if="column !== ''"
-                                                           v-for="(column, index) in parseCSV.columns"
-                                                           :key="index"
-                                                           @click="sortBy(index)"
-                                                           :class="{ active: sortKey === index }">
+                                                v-if="column !== ''"
+                                                v-for="(column, index) in parseCSV.columns"
+                                                :key="index"
+                                                @click="sortBy(index)"
+                                                :class="{ active: sortKey === index }">
                                                 <md-field>
                                                     <md-select id="remove-border" v-model="mappedColumns[index].value"  name="select">
                                                         <md-option

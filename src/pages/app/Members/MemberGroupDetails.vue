@@ -52,7 +52,7 @@
                                         <label-edit tabindex="1" :scope="item" :text="item.emailAddress" field-name="emailAddress" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>
                                     </md-table-cell>
                                     <md-table-cell md-label="Groups">
-                                        <drop-down direction="down" :hover="true">
+                                        <drop-down direction="down">
                                             <md-button slot="title" class="groups-button md-simple md-rounded dropdown-toggle" style="width: auto;" data-toggle="dropdown">
                                                 {{item.groups.length}} groups
                                             </md-button>

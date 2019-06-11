@@ -174,7 +174,7 @@
         margin-top: 15px;
     }
     .bg-gray{
-        background-color: #F2F2F2 !important;
+        background-color: #F2F2F2!important;
     }
     .no-padding{
         padding-top: 0px!important;

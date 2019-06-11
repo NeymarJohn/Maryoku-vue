@@ -6,9 +6,6 @@
           <md-button class="md-success" @click="openTeamInviteSidePanel">
             <md-icon>person_add</md-icon>Invite
           </md-button>
-          <md-button name="vendors-upload-vendors" @click="openUploadModalSidePanel" class="vendors-upload-vendors md-info">
-              Upload Excel File
-          </md-button>
         </div>
       </div>
       <md-card>
@@ -37,7 +34,6 @@
       </md-card>
     </div>
     <!-- <invite-modal @membersRefresh="fetchData(pagination.from)" :team="team" ref="inviteModal"></invite-modal> -->
-        <!-- <upload-modal  ref="uploadModal"></upload-modal> -->
   </div>
 </template>
 
@@ -56,7 +52,6 @@ export default {
   components: {
     InviteModal,
     "team-table": TeamTable,
-  //  UploadModal,
     VueElementLoading,
     Pagination
   },
@@ -135,28 +130,7 @@ export default {
           this.teamMembersLoading = false;
         });
     },
-    // openUploadModal(){
-    //    // this.$refs.uploadModal.toggleModal(true);
-    // },
 
-openUploadModalSidePanel() {
-      this.resetForm();
-      this.setMemberProperty({ key: "role", actualValue: "co_producer" });
-      this.setMemberProperty({ key: "permissions", actualValue: ["sign_off"] });
-
-      // this.setInviteModal({ showModal: true })
-      this.setEditMode({ editMode: false });
-      this.setModalTitle("Invite your Team");
-      window.currentPanel = this.$showPanel({
-        component: UploadModal,
-        cssClass: "md-layout-item md-size-40 transition36 ",
-        openOn: "right",
-        props: {
-          membersRefresh: () => this.fetchData(this.pagination.from),
-          team: this.team
-        }
-      });
-    },
     openTeamInviteSidePanel() {
       this.resetForm();
       this.setMemberProperty({ key: "role", actualValue: "co_producer" });

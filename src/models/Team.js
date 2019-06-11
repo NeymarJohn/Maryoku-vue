@@ -28,19 +28,17 @@ export default class Team extends Model {
 
     static fetch(ctx, force){
         return new Promise ((resolve, reject)=> {
-            const key = "teams";
             if (force) {
-                ctx.$ls.remove(key);
+                ctx.$ls.remove("teams");
             }
-            let resource = ctx.$ls.get(key);
-            if (!resource) {
+            let teams = ctx.$ls.get("teams");
+            if (!teams) {
                 new Team().get().then(res => {
-                    ctx.$ls.set(key,res, Model.DEFAULT_EXPIRATION_MILLIS);
+                    ctx.$ls.set("teams",res, Model.DEFAULT_EXPIRATION_MILLIS);
                     resolve(res);
                 });
             } else {
-                ctx.$ls.set("teams",resource, Model.DEFAULT_EXPIRATION_MILLIS);
-                resolve(resource);
+                resolve(teams);
             }
         });
     }
