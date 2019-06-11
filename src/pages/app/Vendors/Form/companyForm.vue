@@ -43,10 +43,10 @@
                         <label>Website</label>
                         <md-input v-model="selected_vendor.vendorWebsite"
                                   type="text"
-                                  required
+                                  
                                   data-vv-name="vendorWebsite"
                                   name="vendorWebsite"
-                                  v-validate="modelValidations.vendorWebsite"></md-input>
+                                  ></md-input>
 
                         <slide-y-down-transition>
                             <md-icon class="error" v-show="errors.has('vendorWebsite')">close</md-icon>
@@ -120,13 +120,17 @@
                 </div>
 
                 <div class="md-layout-item md-size-50">
-                    <md-field >
+                    <md-field :class="[{'md-error': errors.has('vendorCategory')}]" class="select-with-icon" >
                         <label for="category">Category</label>
-                        <md-select v-model="selected_vendor.vendorCategory" name="select">
-                            <md-option v-for="(option, index) in vendorCategory"  :key="index"  :value="option.id">{{ option.value }}</md-option>
+                        <md-select v-model="selected_vendor.vendorCategory" name="vendorCategory"
+                        data-vv-name="vendorCategory"
+                        v-validate= "modelValidations.vendorCategory"
+                         required >
+                            <md-option v-for="(option, index) in vendorCategory" 
+                             :key="index"  :value="option.id">{{ option.value }}</md-option>
                         </md-select>
-
-                    </md-field>
+                        <span class="md-error" v-if="errors.has('vendorCategory')">The Vendor Category is required</span>
+                    </md-field>                             
                 </div>
                 <div class="md-layout-item md-size-50" v-if="selected_vendor.vendorTagging">
                     <md-field>
@@ -163,7 +167,7 @@
                             <md-input v-model="contactPerson.phone_number"  :name="'phone_number_' + index" type="text"></md-input>
                         </md-field>
                     </div>
-                    <div class="delete-item" v-if="selected_vendor.vendorContactPerson.length > 1" @click="deleteContactPersonItem(index)">
+                    <div class="delete-item" v-if="selected_vendor.vendorContactPerson.length > 1 && selected_vendor.vendorContactPerson[0].email " @click="deleteContactPersonItem(index)">
                         <md-icon  class="md-theme-rose" > delete_outline</md-icon>
                     </div>
                 </div>
@@ -180,7 +184,7 @@
                             <md-field>
                                 <md-file v-model="attachment.path" />
                                 <div class="delete-item" @click="deleteAttachmentItem(index)">
-                                    <md-icon  class="md-theme-rose" > delete_outline</md-icon>
+                                    <md-icon v-if="selected_vendor.vendorAttachments.length > 0 && selected_vendor.vendorAttachments[0].path" class="md-theme-rose" > delete_outline</md-icon>
                                 </div>
                             </md-field>
 
@@ -195,6 +199,14 @@
         </md-card>
     </div>
 </template>
+<style lang="scss">
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+</style>
+
 
 <script>
 
@@ -274,11 +286,12 @@
                         required: true,
                         email: true
                     },
-                    vendorWebsite: {
+
+                    vendorMainPhoneNumber: {
                         required: true,
                         min: 5
                     },
-                    vendorMainPhoneNumber: {
+                    vendorCategory: {
                         required: true,
                         min: 5
                     }

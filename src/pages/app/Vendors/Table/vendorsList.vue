@@ -25,9 +25,9 @@
             {{item.avgScore}}%
           </md-table-cell>-->
           <md-table-cell class="vendors-table_item-actions" v-if="mode == 'listing'">
-            <!--<md-button :name="`vendors-list-rank-vendor-${vendorsList.indexOf(item)}`" class="md-warning md-just-icon md-round" @click="openPopover(vendorsList.indexOf(item))">
+            <md-button :name="`vendors-list-rank-vendor-${vendorsList.indexOf(item)}`" class="md-warning md-just-icon md-round" @click="openPopover(vendorsList.indexOf(item))">
               <md-icon>star</md-icon>
-            </md-button>-->
+            </md-button>
             <md-button :name="`vendors-list-select-vendor-${vendorsList.indexOf(item)}`" class="md-info md-just-icon md-round" @click="selectVendor(item)">
               <md-icon>edit</md-icon>
             </md-button>
@@ -59,10 +59,12 @@
             </div>
             <div class="md-layout-item md-size-100 md-small-size-100">
               <label class="star-rating__star"
-                     v-for="rating in ratings"
+                     v-for="(rating, index) in ratings"
+                    :key="index"
+                     :class="{'is-selected' : ((item.rank >= rating) && item.rank != null)}" >
+                <input class="star-rating star-rating__checkbox"
                      @click="setRanking(item.id,rating)"
-                     :class="{'is-selected' : ((item.rank >= rating) && item.rank != null)}">
-                <input class="star-rating star-rating__checkbox" type="radio" :value="rating" :name="`market_ranking_`+item.id"
+                  type="radio" :value="rating" :name="`market_ranking_`+item.id"
                        v-model="item.rank">★</label>
             </div>
           </div>
@@ -159,6 +161,7 @@
     },
     methods: {
       async setRanking(id,ranking) {
+        console.log("sss")
         let vendor = await Vendors.find(id);
         vendor.rank = ranking;
         vendor.save();

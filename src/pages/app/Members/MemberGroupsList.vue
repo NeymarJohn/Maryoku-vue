@@ -9,17 +9,17 @@
                     <md-button class="md-purple md-sm pull-right md-icon-button" style="margin: 16px 6px;" @click="refreshList(true)" :disabled="working || noActions">
                         <md-icon style="font-size: 11px;padding:0; margin: 0; height: 15px;">refresh</md-icon>
                     </md-button>
-                    <md-button v-if="groupsList.length" class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="createNewGroup" :disabled="working">Add Group</md-button>
+                    <md-button v-if="groupsList.length" class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="createNewGroup" :disabled="working">Create New Group</md-button>
                 </md-card-header>
                 <md-card-content>
                     <vue-element-loading :active="working" spinner="ring" color="#FF547C"/>
 
-                    <md-table :md-fixed-header="true" :md-height="550" :md-card="false"  v-model="groupsList" table-header-color="orange" >
+                    <md-table :md-fixed-header="true" :md-height="550" :md-card="false"  v-model="groupsList" table-header-color="orange"  class="table-striped table-hover">
                         <md-table-row  slot="md-table-row" slot-scope="{ item, index }" :class="{'visible-row':visibleGroup && item.id === visibleGroup.id,'not-visible-row':visibleGroup && item.id !== visibleGroup.id}" @click="groupDetails(item)">
 
                             <md-table-cell style="vertical-align: middle;">
                                 <label-edit v-if="item.id !== 'all'" style="margin-top: 8px;" :scope="item" :text="item.name" field-name="name"  @text-updated-blur="groupNameChanged" @text-updated-enter="groupNameChanged"></label-edit>
-                                <h5 v-else style="font-weight: 500;" class="text-rose">{{item.name}}</h5>
+                                <h5 v-else style="font-weight: 500;" class="">{{item.name}}</h5>
                             </md-table-cell>
 
                             <md-table-cell style="vertical-align: middle; white-space: nowrap;">
@@ -51,7 +51,7 @@
             </md-card>
         </div>
         <div class="md-layout-item md-medium-size-65 md-size-70">
-            <member-group-details @group-selected="selectGroup" @group-members-changed="updateGroup" @group-member-removed="updateGroups" :group-data.sync="visibleGroup" :all-members.sync="allMembers" :roles-list="rolesList" :permissions-list="permissionsList"></member-group-details>
+            <member-group-details @group-selected="selectGroup" @group-members-changed="updateGroup" @group-member-removed="updateGroups" :groups-list.sync="groupsList" :group-data.sync="visibleGroup" :all-members.sync="allMembers" :roles-list="rolesList" :permissions-list="permissionsList"></member-group-details>
         </div>
     </div>
 </template>
@@ -89,12 +89,12 @@
                     { id: 'guest', title: 'Guest'}
                 ],
                 permissionsList: [
-                    { id: 'sign_off', title: 'Sign-Off'},
-                    { id: 'edit', title: 'Edit'},
-                    { id: 'create', title: 'Create'},
-                    { id: 'request_budget', title: 'Request Budget'},
-                    { id: 'view', title: 'View'},
-                    { id: 'vote', title: 'Vote'}
+                    { id: 'view', title: 'View', checked: false},
+                    { id: 'create', title: 'Create', checked: false},
+                    { id: 'edit', title: 'Edit', checked: false},
+                    { id: 'request_budget', title: 'Request Budget', checked: false},
+                    { id: 'sign_off', title: 'Sign-Off', checked: false},
+                    { id: 'vote', title: 'Vote', checked: false}
                 ]
             };
         },
@@ -253,4 +253,7 @@
         }
     }
 
+    thead {
+        display: none;
+    }
 </style>

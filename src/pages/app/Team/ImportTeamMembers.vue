@@ -1,7 +1,7 @@
 <template>
-  <div class="md-layout-item md-size-50 wizard-pos">
-    <modal v-if="uploadModalOpen" @close="noticeModalHide" container-class="modal-container-wizard lg">
-      <template slot="body">
+  <div class="">
+    <div @close="noticeModalHide" container-class=" lg">
+      <div slot="body">
         <div class="md-layout-item">
           <md-card>
             <md-card-header class="md-card-header-icon md-card-header-blue">
@@ -9,25 +9,26 @@
                 <i class="fa fa-upload"></i>
               </div>
               <h4 class="title profile-title">
-                <span>Upload Vendors</span>
+                <span>Upload Members</span>
                 <button class="btn-position" @click="closeModal"><i class="md-icon md-icon-font md-theme-defaul">close</i></button>
               </h4>
             </md-card-header>
-            <md-card-content style="min-height: 60px; padding: 48px;">
-              <div class="md-layout">
-                <div class="md-layout-item md-size-20 state-area">
+            <md-card-content style="min-height: 60px;">
+                <div class="md-layout-item state-area icons-div">
                   <div class=" md-lg md-theme-default" style="border-radius: 6px;" v-bind:class="{ active: currentStep === 1 }">
                     <span class="fa fa-upload"></span><br>Upload File</div>
                   <div class="md-lg md-theme-default" style="border-radius: 6px;" v-bind:class="{ active: currentStep === 2 }">
                     <span class="fa fa-edit"></span><br>Assign Columns</div>
                   <div class="md-lg md-theme-default" style="border-radius: 6px;" v-bind:class="{ active: currentStep === 3 }">
                     <span class="fa fa-list-alt"></span><br>View Results</div>
-                </div>
-                <div class="md-layout-item md-size-80">
+              </div>
+              <div class="md-layout">
+        
+                <div class="md-layout-item">
                   <div class="step1" v-if="currentStep === 1" style="text-align: center;">
                     <vue-element-loading :active="csvUploading" spinner="ring" color="#FF547C"/>
                     <h3 class="title">
-                      Start by uploading a CSV file containing your list of vendors
+                      Start by uploading a CSV file containing your list of Members
                     </h3>
                     <h5>
                       Don't worry about format and columns <br/> in the next step you will have the chance to easily assign column names.
@@ -58,7 +59,7 @@
                       <h5>
                         Each column header has a dropdown list of possible columns to assign, choose the one that reflects your data as much as possible.
                       </h5>
-                      <md-table class="border-table" v-if="parseCSV" style="max-width: 800px; overflow: auto;">
+                      <md-table class="border-table" v-if="parseCSV">
                         <md-table-row style="border-top: none;">
                           <md-table-head
                             v-if="column !== ''"
@@ -67,10 +68,10 @@
                             @click="sortBy(index)"
                             :class="{ active: sortKey == index }">
                             <md-field>
-                              <md-select id="remove-border" v-model="parseCSV.columns[index].value"  name="select">
+                              <md-select id="remove-border" v-model="databaseMemberColumns[index].value"  name="select">
                                 <md-option
                                   v-if="item !== ''"
-                                  v-for="(item, index) in databaseVendorColumns"
+                                  v-for="(item, index) in databaseMemberColumns"
                                   :value="item.name"
                                   :key="index">
                                   {{ item.displayName }}
@@ -88,7 +89,7 @@
                     </div>
                   </div>
                   <div class="step3" v-if="currentStep === 3">
-                    <h3>Awesome, your vendors list is uploaded</h3>
+                    <h3>Awesome, your Members list is uploaded</h3>
                     <h5>You can review the results of the process here.</h5>
                     <p>Rows processed: {{ finalResult.processed }} </p>
                     <p>Total: {{ finalResult.total }}</p>
@@ -111,15 +112,15 @@
             </md-card-actions>
           </md-card>
         </div>
-      </template>
-    </modal>
+      </div>
+    </div>
   </div>
 
 </template>
 <script>
   import Vendors from "@/models/Vendors";
   import VendorsFile from "@/models/VendorsFile";
-  import vendorsModule from "./vendors.vuex"
+  import vendorsModule from "../Vendors/vendors.vuex"
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import {GlobalSalesTable, Modal} from "@/components";
   import swal from "sweetalert2";
@@ -149,11 +150,11 @@
           duplicates: 0,
         },
         csvUploading: false,
-        databaseVendorColumns: [
+        databaseMemberColumns: [
           {
-            displayName: 'Vendor Display Name',
-            name: 'vendorDisplayName',
-            value: 'vendorDisplayName',
+            displayName: 'Member Display Name',
+            name: 'MemberDisplayName',
+            value: 'MemberDisplayName',
             mandatory: true
 
           },
@@ -165,28 +166,28 @@
 
           },
           {
-            displayName: 'Vendor Main Email',
-            name: 'vendorMainEmail',
-            value: 'vendorMainEmail',
+            displayName: 'Member Main Email',
+            name: 'MemberMainEmail',
+            value: 'MemberMainEmail',
             mandatory: true
 
           },
           {
-            displayName: 'Vendor Main Phone Number',
-            name: 'vendorMainPhoneNumber',
-            value: 'vendorMainPhoneNumber',
+            displayName: 'Member Main Phone Number',
+            name: 'MemberMainPhoneNumber',
+            value: 'MemberMainPhoneNumber',
             mandatory: true
 
           },
           {
-            displayName: 'Vendor Website',
-            name: 'vendorWebsite',
-            value: 'vendorWebsite',
+            displayName: 'Member Website',
+            name: 'MemberWebsite',
+            value: 'MemberWebsite',
 
           },
           {
-            displayName: 'Vendor Category',
-            name: 'vendorCategory',
+            displayName: 'Member Category',
+            name: 'MemberCategory',
             value: ''
           },
           {
@@ -196,79 +197,79 @@
 
           },
           {
-            displayName: 'Vendor Tax ID',
-            name: 'vendorTaxId',
+            displayName: 'Member Tax ID',
+            name: 'MemberTaxId',
             value: ''
 
           },
 
           {
-            displayName: 'Vendor Invoice Name',
-            name: 'vendorInvoiceName',
+            displayName: 'Member Invoice Name',
+            name: 'MemberInvoiceName',
             value: ''
 
           },
 
           {
-            displayName: 'Vendor Address Line 1',
-            name: 'vendorAddressLine1',
+            displayName: 'Member Address Line 1',
+            name: 'MemberAddressLine1',
             value: ''
 
           },
           {
-            displayName: 'Vendor Address Line 2',
-            name: 'vendorAddressLine2',
+            displayName: 'Member Address Line 2',
+            name: 'MemberAddressLine2',
             value: ''
 
           },
           {
-            displayName: 'Vendor City',
-            name: 'vendorCity',
+            displayName: 'Member City',
+            name: 'MemberCity',
             value: ''
 
           },
           {
-            displayName: 'Vendor Region',
-            name: 'vendorRegion',
+            displayName: 'Member Region',
+            name: 'MemberRegion',
             value: ''
 
           },
           {
-            displayName: 'Vendor Country',
-            name: 'vendorCountry',
+            displayName: 'Member Country',
+            name: 'MemberCountry',
             value: ''
 
           },
           {
-            displayName: 'Vendor Zip Code',
-            name: 'vendorZipCode',
+            displayName: 'Member Zip Code',
+            name: 'MemberZipCode',
             value: ''
 
           }
-          // ,{
-          //   displayName: 'Vendor Availability Options',
-          //   name: 'vendorAvailabilityOptions',
-          //   value: ''
+          ,{
+            displayName: 'Member Availability Options',
+            name: 'MemberAvailabilityOptions',
+            value: ''
 
-          // },
-          // {
-          //   displayName: 'Vendor Cancellation Policy',
-          //   name: 'vendorCancellationPolicy',
-          //   value: ''
+          },
+          {
+            displayName: 'Member Cancellation Policy',
+            name: 'MemberCancellationPolicy',
+            value: ''
 
-          // },
-          // {
-          //   displayName: 'Vendor Refund Policy',
-          //   name: 'vendorRefundPolicy',
-          //   value: ''
+          },
+          {
+            displayName: 'Member Refund Policy',
+            name: 'MemberRefundPolicy',
+            value: ''
 
-          // },
-          // {
-          //   displayName: 'Vendor Logo Image',
-          //   name: 'vendorLogoImage',
-          //   value: ''
+          },
+          {
+            displayName: 'Member Logo Image',
+            name: 'MemberLogoImage',
+            value: ''
 
-          // }
+          }
         ],
         channel_fields: [],
         channel_entries: [],
@@ -284,7 +285,7 @@
       };
     },
     created () {
-      this.$store.registerModule('vendorsVuex', vendorsModule);
+      this.$store.registerModule('MembersVuex', vendorsModule);
     },
     filters: {
       capitalize: function (str) {
@@ -292,7 +293,7 @@
       }
     },
     methods: {
-      ...mapMutations('vendorsVuex', ['setFileToState']),
+      ...mapMutations('MembersVuex', ['setFileToState']),
       closeModal(){
         this.goToStep(1);
         this.uploadModalOpen = false;
@@ -303,41 +304,41 @@
       toggleModal: function (show) {
         this.uploadModalOpen = show;
       },
-      updateVendorsFile: async function () {
+      updateMembersFile: async function () {
         if (!this.parseCSV.id) {
           return true;
         }
-        let vendorFile = await VendorsFile.find(this.parseCSV.id)
+        let MemberFile = await MembersFile.find(this.parseCSV.id)
         let columnsMapping = [];
         let mapping  = {}
         this.parseCSV.columns.map((item, index) => {
 
           if (item !== '') {
-            mapping[item] = this.databaseVendorColumns[index].value
+            mapping[item] = this.databaseMemberColumns[index].value
 
           }
         })
-        vendorFile.columnsMapping = mapping;
+        MemberFile.columnsMapping = mapping;
         //validate column mapping
         if(!this.validateColumnsMapping(mapping)){
           return false
         }
-        let finalResponse = await vendorFile.save();
+        let finalResponse = await MemberFile.save();
         this.finalResult = finalResponse;
         return true
 
       },
       validateColumnsMapping(mapping){
         let _this = this;
-        let vendorColumns = this.databaseVendorColumns;
+        let MemberColumns = this.databaseMemberColumns;
         let isValid = true;
-        for (let i = 0; i < vendorColumns.length; i++) {
+        for (let i = 0; i < MemberColumns.length; i++) {
 
-          if(vendorColumns[i].mandatory){
-            if (Object.values(mapping).indexOf(vendorColumns[i].name) === -1) {
+          if(MemberColumns[i].mandatory){
+            if (Object.values(mapping).indexOf(MemberColumns[i].name) === -1) {
               this.$notify(
                 {
-                  message: 'Field ' + vendorColumns[i].displayName + ' is mandatory.' ,
+                  message: 'Field ' + MemberColumns[i].displayName + ' is mandatory.' ,
                   horizontalAlign: 'center',
                   verticalAlign: 'top',
                   type: 'warning'
@@ -363,22 +364,24 @@
         let _this = this;
 
         reader.onload = e => {
-          let vendorsFile = new VendorsFile({vendorsFile: e.target.result});
-          vendorsFile.save().then(result => {
+         
+          let MembersFile = new VendorsFile({MembersFile: e.target.result});
+          MembersFile.save().then(result => {
             _this.parseCSV = result;
             _this.parseCSV.newColumns = [];
             _this.parseCSV.columns.map((item, index) => {
-              if (item !== '' && !item.toString().toLowerCase().startsWith("unknown")) {
-                let mapping = {};
-                _this.databaseVendorColumns[index].value = item;
+              if (item !== '') {
+                let mapping = {}
+                _this.databaseMemberColumns[index].value = item
 
-                _this.parseCSV.newColumns.push(mapping);
+                _this.parseCSV.newColumns.push(mapping)
 
               }
+
             });
             _this.csvUploading = false
             this.$notify({
-              message: 'Vendor file is uploaded successfully' ,
+              message: 'Member file is uploaded successfully' ,
               horizontalAlign: 'center',
               verticalAlign: 'top',
               type: 'success'
@@ -388,7 +391,7 @@
             .catch((error) => {
               _this.csvUploading = false
               this.$notify({
-                message: 'Vendor file is not uploaded, please try again' ,
+                message: 'Member file is not uploaded, please try again' ,
                 horizontalAlign: 'center',
                 verticalAlign: 'top',
                 type: 'warning'
@@ -399,25 +402,25 @@
         };
         reader.readAsDataURL(file);
       },
-      backToVendor(){
+      backToMember(){
 
         this.$notify(
           {
-            message: 'Vendor imported successfully' ,
+            message: 'Member imported successfully' ,
             horizontalAlign: 'center',
             verticalAlign: 'top',
             type: 'success'
           })
         this.uploadModalOpen = false;
-//          this.$router.push('/vendors');
+//          this.$router.push('/Members');
 
       },
       goToStep(step) {
         if (step === 3) {
-          this.updateVendorsFile().then( isUpdated => {
+          this.updateMembersFile().then( isUpdated => {
             if (isUpdated) {
               this.$set(this,'currentStep', step);
-              this.$emit('vendorImported')
+              this.$emit('MemberImported')
             }
           })
         } else {
@@ -481,7 +484,7 @@
   .table-section{
     width: 100%;
     max-height: 370px;
-   // overflow: auto;
+    overflow: auto;
   }
   .wizard-pos{
     position: relative;
@@ -541,6 +544,10 @@
         padding: 0 0 15px 0;
       }
     }
+  }
+  .icons-div{
+    display: flex;
+    padding: 12px;
   }
   .next-btn{
     background: #0caf50 !important;

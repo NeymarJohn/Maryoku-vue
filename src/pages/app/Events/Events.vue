@@ -24,7 +24,7 @@
               <md-table-cell md-label="Created By" style="text-transform: capitalize;" v-else>You</md-table-cell>
               <md-table-cell md-label="# Participants" >{{item.numberOfParticipants}}</md-table-cell>
               <md-table-cell md-label="Budget Per Participant" >$ {{item.budgetPerPerson}}</md-table-cell>
-              <md-table-cell md-label="Actions">
+              <md-table-cell md-label="Actions" style="white-space: nowrap;">
                 <!--<md-button @click="viewEvent(item)" class="md-raised md-info md-icon-button">
                   <md-icon>visibility</md-icon>
                 </md-button>-->
@@ -32,7 +32,7 @@
                   <md-icon>edit</md-icon>
                 </md-button>
                 <md-button @click="showDeleteAlert($event, item)" class="md-danger md-just-icon md-round">
-                  <md-icon>delete_outline</md-icon>
+                  <md-icon>delete</md-icon>
                 </md-button>
 
                 <!-- <div class="float-right"><md-icon>share</md-icon></div>-->

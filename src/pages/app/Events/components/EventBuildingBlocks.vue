@@ -81,7 +81,7 @@
                                         <!-- Allocated budget -->
                                         <md-table-cell md-label="Allocated budget" class="allocated-budget">
                                             <span class="dollar-sign">$</span>
-                                            <label-edit :text="item.allocatedBudget.toString()"
+                                            <label-edit :text="item.allocatedBudget ? item.allocatedBudget.toString() : ''"
                                                         :field-name="item.componentId"
                                                         @text-updated-blur="blockBudgetChanged"
                                                         @text-updated-enter="blockBudgetChanged"></label-edit>
@@ -232,9 +232,6 @@
                 })
 
             },
-            /**
-             * Get Event building blocks
-             */
             getEventBuildingBlocks() {
 
                 if (!this.event.id) return;
