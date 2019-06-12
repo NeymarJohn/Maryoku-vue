@@ -1583,6 +1583,10 @@ iframe{
 
 .edit-event-details {
 
+    .md-list-item-button {
+        border-radius: 0 !important;
+    }
+
     .event-info-section {
         .md-layout-item {
             padding : 0;

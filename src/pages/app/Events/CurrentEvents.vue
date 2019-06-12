@@ -123,8 +123,7 @@
                 <template slot="tab-pane-4">
                     <div class="md-layout">
                         <div class="md-layout-item md-size-100">
-                            <invitees-management-v2 :event-data.sync="event"
-                                                    :event-components="selectedComponents"></invitees-management-v2>
+                            <event-invitees :event-data.sync="event"></event-invitees>
                         </div>
                     </div>
 

@@ -8,7 +8,7 @@
           <slot name="header-title"></slot>
         </md-card-header>-->
         <md-card-content class="clear-margins">
-            <md-list class="nav-tabs"> <!--style="background-color: white !important; margin-top: -15px; width: 110%; margin-left: -55px; padding-left: 55px; margin-bottom:0; justify-content: flex-start;">-->
+            <md-list class="nav-tabs" style="box-shadow: none !important;"> <!--style="background-color: white !important; margin-top: -15px; width: 110%; margin-left: -55px; padding-left: 55px; margin-bottom:0; justify-content: flex-start;">-->
                 <md-list-item
                     v-for="(item, index) in tabName"
                     @click="ignore(tabName[index])"
