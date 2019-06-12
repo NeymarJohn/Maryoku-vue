@@ -17,9 +17,9 @@
                                             Event invitees
                                         </h4>
                                     </div>
-                                    <md-button class="md-purple md-md pull-right md-icon-button" style="margin-top: 16px; margin-right: 12px;" @click="refreshList(true)" :disabled="working || noActions">
+                                    <!--<md-button class="md-purple md-md pull-right md-icon-button" style="margin-top: 16px; margin-right: 12px;" @click="refreshList(true)" :disabled="working || noActions">
                                         <md-icon style="font-size: 12px;padding:0; margin: 0; height: 18px;">refresh</md-icon>
-                                    </md-button>
+                                    </md-button>-->
                                     <md-button class="md-info md-md pull-right" style="margin-top: 16px; margin-right: 12px;" v-if="!inviteesExpanded"  @click="toggleInviteesForm" :disabled="working || noActions">Add Invitees</md-button>
                                     <md-button class="md-success md-md pull-right" style="margin-top: 16px; margin-right: 12px;" v-if="inviteesExpanded" @click="toggleInviteesForm" :disabled="working || noActions">Done</md-button>
                                 </md-card-header>
