@@ -1,0 +1,464 @@
+<template>
+    <md-card class="md-card-profile">
+        <div class="logo-block">
+            <div class="event-planer-logo">
+                <md-icon class="company-logo">date_range</md-icon>
+            </div>
+            <div class="event-title">Event Details</div>
+            <md-button name="event-planner-event-details-edit"
+                       class="md-button md-simple md-just-icon md-sm" @click="openEventModal()"
+                       style="margin-top : 1em;">
+                <md-icon class="company-logo">create</md-icon>
+            </md-button>
+        </div>
+        <md-card-content v-if="event">
+            <div>
+                <div class="md-layout event-info-section">
+                    <div class="md-layout-item md-size-100">
+                        <div class="md-layout-item  title-text">Date</div>
+                        <div class="md-layout-item md-size-100 md-caption ">
+                            {{calendarEvent.eventStartMillis | formatDate}},
+                            {{calendarEvent.eventStartMillis | formatTime}}
+                            ({{calendarEvent.eventStartMillis |
+                            formatDuration(calendarEvent.eventEndMillis)}} hrs)
+                        </div>
+                    </div>
+
+                    <div class="md-layout-item md-size-50">
+                        <div class="md-layout-item  title-text">Participants</div>
+                        <div class="md-layout-item md-size-100 md-caption ">
+                            {{calendarEvent.numberOfParticipants}} + spouses
+                        </div>
+                    </div>
+
+                    <div class="md-layout-item md-size-50">
+                        <div class="md-layout-item  title-text">Geography</div>
+                        <div class="md-layout-item md-size-100 md-caption ">
+                            {{calendarEvent.location}}
+                        </div>
+                    </div>
+
+                    <div class="md-layout-item md-size-100">
+                        <md-button class="md-sm md-simple md-rose">
+                            <md-icon>cached</md-icon>
+                            Recurring weekly
+                        </md-button>
+                    </div>
+
+                </div>
+
+                <div class="md-layout md-gutter">
+                    <div class="md-layout-item">
+                        <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
+                    </div>
+                </div>
+                <div class="md-layout md-gutter">
+                    <div class="md-layout-item">
+                        <h5 class="title-budget-main">Remaining budget</h5>
+                        <h4
+                            class="title"
+                            style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
+                            <div class="title-budget-prise title"
+                                 v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants">
+                                <animated-number ref="totalRemainingBudgetNumber"
+                                                 :value="totalRemainingBudget"
+                                                 prefix="$"></animated-number>
+                                <small class="total-event-budget">/
+                                    ${{calendarEvent.budgetPerPerson *
+                                    calendarEvent.numberOfParticipants}}
+                                </small>
+                            </div>
+                        </h4>
+
+
+                        <h5 class="title-budget-main">Per employee</h5>
+                        <h4
+                            class="title"
+                            style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
+                            <div class="title-budget-prise title"
+                                 v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants">
+                                <animated-number ref="totalRemainingBudgetNumber"
+                                                 :value="remainingBudgetPerEmployee"
+                                                 prefix="$"></animated-number>
+                                <small class="total-event-budget">/
+                                    ${{calendarEvent.budgetPerPerson}}
+                                </small>
+                            </div>
+                        </h4>
+
+
+                        <div class="budget-pie-container"
+                             style="display: grid;margin: 3em 18px;">
+                            <chart-component
+                                :chart-data="pieChart.data"
+                                :chart-options="pieChart.options"
+                                chart-type="Pie"
+                                style="grid-column: 1; grid-row: 1; color:red"/>
+                            <animated-number class="percentage" ref="percentageNumber"
+                                             :value="percentage" suffix="%"></animated-number>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="md-layout md-gutter" style="display: none;">
+                <div class="md-layout-item">
+                    <div>
+                        <div class="md-caption title-text">Remaining budget per participant
+                        </div>
+                        <!-- TODO Need calculate with components -->
+                        <div class="md-caption title-text title-budget-prise">
+                            <animated-number ref="budgetPerPersonNumber"
+                                             :value="remainingBudgetPerEmployee"
+                                             prefix="$"></animated-number>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="md-caption title-text">Budget per participant</div>
+                        <div class="md-caption title-text title-budget-prise">
+                            <animated-number ref="budgetPerPersonNumber"
+                                             :value="calendarEvent.budgetPerPerson"
+                                             prefix="$"></animated-number>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="md-caption title-text">Total budget for the event</div>
+                        <div class="md-caption title-text title-budget-prise">
+                            <animated-number ref="totalBudgetNumber"
+                                             :value="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants"
+                                             prefix="$"></animated-number>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </md-card-content>
+    </md-card>
+
+</template>
+<script>
+    import EventModal from '../EventModal/';
+    import EventPlannerVuexModule from '../EventPlanner.vuex';
+    import moment from 'moment'
+
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+    import swal from 'sweetalert2'
+    import Calendar from '@/models/Calendar'
+    import CalendarEvent from '@/models/CalendarEvent'
+    import EventComponent from '@/models/EventComponent'
+    import ChartComponent from '@/components/Cards/ChartComponent'
+    import CalendarEventStatistics from '@/models/CalendarEventStatistics'
+
+    // import auth from '@/auth';
+    import _ from 'underscore'
+    import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
+    import Tab from 'uiv/src/components/tabs/Tab'
+    import EventSidePanel from '../EventSidePanel.vue'
+
+    export default {
+        name: 'event-details-sidebar',
+        components: {
+            Tab,
+            LabelEdit,
+            AnimatedNumber,
+            StatsCard,
+            ChartCard,
+            ChartComponent,
+            CalendarEventStatistics
+        },
+        props: {
+            event: {
+                type: Object,
+                default: () => {
+                    return {statistics: {}}
+                }
+            },
+        },
+        data: () => ({
+            calendarEvent: {},
+            selectedComponents: [],
+            eventId: null,
+            percentage: 0,
+            totalRemainingBudget: 0,
+            remainingBudgetPerEmployee: 0,
+            seriesData: [],
+            isLoading: false,
+            routeName: null,
+            budgetPerEmployee: 0
+
+        }),
+        methods: {
+            ...mapMutations('EventPlannerVuex', [
+                'setEventModal',
+                'setEditMode',
+                'setModalSubmitTitle',
+                'setEventModalAndEventData',
+                'setNumberOfParticipants',
+                'setEventData'
+            ]),
+            getEvent () {
+                this.$auth.currentUser(this, true, function () {
+                    let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+
+                    _calendar.calendarEvents().find(this.$route.params.id).then(event => {
+
+                        //this.event = event
+                        this.eventId = event.id
+                        this.calendarEvent = event
+                        this.selectedComponents = event.components;
+
+                        this.getCalendarEventStatistics(event)
+
+                        this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
+                    })
+                }.bind(this))
+            },
+            getCalendarEventStatistics (evt) {
+
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+                let event = new CalendarEvent({id: this.event.id})
+
+                new CalendarEventStatistics().for(calendar, event).get()
+                    .then(resp => {
+                        this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget//evt.totalBudget - resp[0].totalAllocatedBudget;
+                        this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants//evt.totalBudget - resp[0].totalAllocatedBudget;
+                        this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
+                        this.seriesData = [(100 - this.percentage), this.percentage]
+                        this.budgetPerEmployee = evt.budgetPerPerson//this.totalRemainingBudget / evt.numberOfParticipants;
+                        this.allocatedBudget = resp.totalAllocatedBudget
+                        this.event.statistics['allocatedBudget'] = this.allocatedBudget
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            },
+            openEventModal () {
+                window.currentPanel = this.$showPanel({
+                    component: EventSidePanel,
+                    cssClass: 'md-layout-item md-size-40 transition36 ',
+                    openOn: 'right',
+                    disableBgClick: true,
+                    props: {
+                        modalSubmitTitle: 'Save',
+                        editMode: true,
+                        sourceEventData: this.event
+                    }
+                })
+
+                this.setEventData(this.event)
+                this.setEventModal({showModal: true})
+                this.setModalSubmitTitle('Save')
+                this.setEditMode({editMode: true})
+            }
+        },
+        created() {
+            this.$store.registerModule('EventPlannerVuex', EventPlannerVuexModule)
+
+            this.routeName = this.$route.name
+        },
+        mounted() {
+            this.getEvent();
+
+            this.$bus.$on('RefreshStatistics', function () {
+                _self.getCalendarEventStatistics(_self.calendarEvent)
+            })
+
+            this.$root.$on('calendar-refresh-events', () => {
+                this.getEvent()
+            })
+
+
+        },
+        computed: {
+            ...mapGetters({
+                components: 'event/getComponentsList'
+            }),
+            pieChart () {
+                return {
+                    data: {
+                        labels: [' ', ' '], // should be empty to remove text from chart
+                        series: this.seriesData
+                    },
+                    options: {
+                        padding: 0,
+                        height: 156,
+                        donut: true,
+                        donutWidth: 15,
+                    }
+                }
+            }
+        },
+        filters: {
+            formatDate: function (date) {
+                return moment(date).format('MMM Do YYYY ')
+            },
+            formatTime: function (date) {
+                return moment(date).format('h:00 A')
+            },
+            formatDuration: function (startDate, endDate) {
+                return moment(endDate).diff(startDate, 'hours')
+            }
+        },
+    }
+</script>
+<style lang="scss" scoped>
+    .md-layout, .md-layout-item {
+        width: initial;
+    }
+    .control-main-block {
+        .company-control-logo {
+            margin-right: 8px;
+
+            &:last-child {
+                margin-right: 0;
+            }
+
+            i {
+                font-size: 24px !important;
+            }
+        }
+
+        .md-button.selected {
+            background-color: #eb3e79 !important;
+            border-color: #eb3e79 !important;;
+
+            i {
+                color: #fff !important;
+            }
+        }
+    }
+
+    .company-control-logo .md-button {
+        border: 2px solid #959595;
+    }
+
+    .percentage {
+        padding-bottom: 8px;
+        padding-left: 5px;
+        grid-column: 1;
+        grid-row: 1;
+        margin-top: auto;
+        margin-bottom: auto;
+        font-size: 3vmin;
+        font-weight: 700;
+        color: #515151;
+    }
+
+    .logo-block {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding: 0px 15px;
+        margin: -20px 0px 20px 0px;
+
+        .event-planer-logo {
+            background: #eb3e79;
+            width: 100%;
+            max-width: 64px;
+            height: 64px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+            margin-right: 10px;
+
+            .company-logo {
+                color: white !important;
+            }
+        }
+
+        .event-title {
+            white-space: nowrap;
+            font-family: "Roboto";
+            font-size: 1.125rem;
+            font-weight: 400;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: 1.33;
+            letter-spacing: normal;
+            text-align: left;
+            color: #000000;
+        }
+    }
+
+    .control-main-block {
+        display: flex;
+        justify-content: center;
+
+        .company-logo-block {
+            border: 2px solid #8b8b8b;
+            padding: 7px;
+            border-radius: 50%;
+            margin: 0px 5px;
+        }
+    }
+
+    .title-text {
+        font-family: "Roboto";
+        font-size: 12px;
+        font-weight: 400;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 2.2;
+        letter-spacing: normal;
+        text-align: left;
+        color: #959595;
+    }
+
+    .title-budget-main {
+        margin-top: 1.7em;
+        //margin-bottom: 1em;
+        font-family: "Roboto";
+        font-size: 15px;
+        font-weight: 500;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: 1.33;
+        letter-spacing: normal;
+        text-align: center;
+        color: #7a7a7a;
+    }
+
+    .title-budget-prise {
+        color: rgba(33, 200, 152, 0.8) !important;
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.2;
+        margin-bottom: 5px;
+    }
+
+    .title-budget-prise.title {
+        font-size: 1.45rem;
+        margin-bottom: 0;
+    }
+
+    .block-flex {
+        display: flex;
+    }
+
+    .button-event-creatig .md-ripple {
+        background-color: #00bcd4;
+    }
+
+    .footer-link-button .md-ripple {
+        color: #89229b;
+        background-color: rgba(240, 240, 240, 1);
+    }
+
+    .copyright {
+        color: #9c27b0;
+    }
+
+    .copyright-block {
+        justify-content: space-between;
+    }
+
+    .total-event-budget {
+        color: #000;
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    .percentage {
+        font-size: 2.5em;
+    }
+
+</style>

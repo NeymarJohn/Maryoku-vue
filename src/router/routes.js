@@ -1,4 +1,5 @@
 import DashboardLayout from "@/pages/Dashboard/Layout/DashboardLayout.vue";
+import EventLayout from "@/pages/Dashboard/Layout/EventLayout.vue";
 import AuthLayout from "@/pages/Dashboard/Pages/AuthLayout.vue";
 import PublicLayout from "@/pages/Dashboard/Pages/PublicLayout.vue";
 
@@ -325,156 +326,164 @@ let emptyLayoutPages = {
 };
 
 let appPages = {
-  path: "/app",
-  component: DashboardLayout,
-  name: "App",
-  children: [
-    {
-      path: "/me",
-      name: "Me",
-      component: Me,
-      meta: {gtm: "Me"}
-    },
-    {
-      path: "/settings",
-      name: "Settings",
-      component: Profile,
-      meta: {gtm: "Settings"}
-    },
-    {
-      path: "/company",
-      name: "CompanyDashboard",
-      component: CompanyDashboard,
-      meta: {title: "Company Dashboard", gtm: "CompanyDashboard"},
-    },
-    {
-      path: "/old-company",
-      name: "MyCompany",
-      component: MyCompanyNew,
-      meta: {title: "My Company", gtm: "MyCompany"},
-    },
-    {
-      path: "/team",
-      name: "Team",
-      component: Members,
-      meta: {gtm: "Team"}
-    },
-    {
-      path: "/community",
-      name: "Community",
-      component: Community
-    },
-      {
-          path: "/vendors-suggested",
-          name: "VendorsSuggested",
-          component: VendorsSuggested
-      },
-      {
-          path: "/community-new",
-          name: "Community-new",
-          component: CommunityNew
-      },
-    {
-      path: "/events",
-      name: "Events",
-      component: Events,
-      meta: {title: 'Our Events', gtm: "Events"},
-    },
-    {
-      path: "/events/proposal",
-      name: "EventProposal",
-      component: EventProposal,
-      meta: {title: 'Event Proposal'},
-    },
-    {
-      path: '/events/new',
-      name: 'NewEvent',
-      component: NewEvent,
-      meta: {title: 'Create New Event'},
-    },
-    {
-      path: "/events/:id/edit",
-      name: "EventDetails",
-      component: EventDetails,
-      meta: {title: 'Event Page', gtm: "Event Details", opaque: false},
-    },
-      {
-          path: "/events/:id/edit/details",
-          name: "EditEvent",
-          component: CurrentEvents,
-          meta: {title: 'Event Details', gtm: "Event Edit", opaque: false}
-      },
-      {
-          path: "/events/:id/edit/building-blocks",
-          name: "EditBuildingBlocks",
-          component: CurrentEvents,
-          meta: {title: 'Building Blocks', gtm: "Building Blocks", opaque: false},
-      },
-    {
-        path: "/events/:id/edit/timeline",
-        name: "EditTimeLine",
-        component: CurrentEvents,
-        meta: {title: 'Timeline', gtm: "Event Timeline", opaque: false},
-    },
-    {
-        path: "/events/:id/edit/invitees-management",
-        name: "InviteesManagement",
-        component: CurrentEvents,
-        meta: {title: 'Automated Interactions', gtm: "Event Edit", opaque: false},
-    },
-    {
-      path: "/events/:id/edit/event-invitees",
-      name: "EventInvitees",
-      component: CurrentEvents,
-      meta: {title: 'Event Invitees', gtm: "Event Invitees", opaque: false},
-    },
-    {
-      path: "/yearly-plan",
-      name: "YearlyPlan",
-      component: YearlyPlan,
-      meta: {title: "Yearly Plan"}
-    },
-    {
-      path: "/planner/:year/:month",
-      name: "AnnualPlannerYearMonth",
-      component: AnnualPlanner,
-      meta: {title: "Planner", gtm: "Planner"}
-    },
-    {
-      path: "/planner/:year",
-      name: "AnnualPlannerYear",
-      component: AnnualPlanner,
-      meta: {title: "Planner", gtm: "Planner"}
-    },
-    {
-      path: "/planner",
-      name: "AnnualPlanner",
-      component: AnnualPlanner,
-      meta: {title: "Planner", gtm: "Planner"}
-    },
-    {
-      path: "/vendors",
-      name: "Vendors",
-      component: Vendors,
-      meta: {gtm: "Vendors"}
-    },
-    {
-      path: "/import-vendors",
-      name: "ImportVendors",
-      component: ImportVendors
-    },
-    {
-      path: "/proposals",
-      name: "Proposals",
-      component: Proposals
-    },
-    {
-      path: "/notes",
-      name: "Notes",
-      component: Notes
-    }
-  ]
+    path: "/app",
+    component: DashboardLayout,
+    name: "App",
+    children: [
+        {
+            path: "/me",
+            name: "Me",
+            component: Me,
+            meta: {gtm: "Me"}
+        },
+        {
+            path: "/settings",
+            name: "Settings",
+            component: Profile,
+            meta: {gtm: "Settings"}
+        },
+        {
+            path: "/company",
+            name: "CompanyDashboard",
+            component: CompanyDashboard,
+            meta: {title: "Company Dashboard", gtm: "CompanyDashboard"},
+        },
+        {
+            path: "/old-company",
+            name: "MyCompany",
+            component: MyCompanyNew,
+            meta: {title: "My Company", gtm: "MyCompany"},
+        },
+        {
+            path: "/team",
+            name: "Team",
+            component: Members,
+            meta: {gtm: "Team"}
+        },
+        {
+            path: "/community",
+            name: "Community",
+            component: Community
+        },
+        {
+            path: "/vendors-suggested",
+            name: "VendorsSuggested",
+            component: VendorsSuggested
+        },
+        {
+            path: "/community-new",
+            name: "Community-new",
+            component: CommunityNew
+        },
+        {
+            path: "/yearly-plan",
+            name: "YearlyPlan",
+            component: YearlyPlan,
+            meta: {title: "Yearly Plan"}
+        },
+        {
+            path: "/planner/:year/:month",
+            name: "AnnualPlannerYearMonth",
+            component: AnnualPlanner,
+            meta: {title: "Planner", gtm: "Planner"}
+        },
+        {
+            path: "/planner/:year",
+            name: "AnnualPlannerYear",
+            component: AnnualPlanner,
+            meta: {title: "Planner", gtm: "Planner"}
+        },
+        {
+            path: "/planner",
+            name: "AnnualPlanner",
+            component: AnnualPlanner,
+            meta: {title: "Planner", gtm: "Planner"}
+        },
+        {
+            path: "/vendors",
+            name: "Vendors",
+            component: Vendors,
+            meta: {gtm: "Vendors"}
+        },
+        {
+            path: "/import-vendors",
+            name: "ImportVendors",
+            component: ImportVendors
+        },
+        {
+            path: "/proposals",
+            name: "Proposals",
+            component: Proposals
+        },
+        {
+            path: "/notes",
+            name: "Notes",
+            component: Notes
+        },
+        {
+            path: "/events/:id/edit",
+            name: "EventDetails",
+            component: EventDetails,
+            meta: {title: 'Event Page', gtm: "Event Details", opaque: false},
+        }
+    ]
 };
+let EventPages = {
+    path: "/app",
+    component: EventLayout,
+    name: "App",
+    children: [
+        {
+            path: "/events",
+            name: "Events",
+            component: Events,
+            meta: {title: 'Our Events', gtm: "Events"},
+        },
+        {
+            path: "/events/proposal",
+            name: "EventProposal",
+            component: EventProposal,
+            meta: {title: 'Event Proposal'},
+        },
+        {
+            path: '/events/new',
+            name: 'NewEvent',
+            component: NewEvent,
+            meta: {title: 'Create New Event'},
+        },
+        {
+            path: "/events/:id/edit/details",
+            name: "EditEvent",
+            component: CurrentEvents,
+            meta: {title: 'Event Details', gtm: "Event Edit", opaque: false}
+        },
+        {
+            path: "/events/:id/edit/building-blocks",
+            name: "EditBuildingBlocks",
+            component: CurrentEvents,
+            meta: {title: 'Building Blocks', gtm: "Building Blocks", opaque: false},
+        },
+        {
+            path: "/events/:id/edit/timeline",
+            name: "EditTimeLine",
+            component: CurrentEvents,
+            meta: {title: 'Timeline', gtm: "Event Timeline", opaque: false},
+        },
+        {
+            path: "/events/:id/edit/invitees-management",
+            name: "InviteesManagement",
+            component: CurrentEvents,
+            meta: {title: 'Automated Interactions', gtm: "Event Edit", opaque: false},
+        },
+        {
+            path: "/events/:id/edit/event-invitees",
+            name: "EventInvitees",
+            component: CurrentEvents,
+            meta: {title: 'Event Invitees', gtm: "Event Invitees", opaque: false},
+        }
+    ]
+};
+
 const appCurrentInfo={
   path: "/additional-form",
   name: "CommonInfoProfile",
@@ -536,6 +545,7 @@ const routes = [
   appPages,
   publicPages,
   emptyLayoutPages,
+    EventPages
   /*{
     path: "/",
     component: DashboardLayout,

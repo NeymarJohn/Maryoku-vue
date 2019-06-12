@@ -154,8 +154,9 @@
       </template>
     </side-bar>
     <div class="main-panel" style="height: 50%;">
-      <top-navbar></top-navbar>
-
+        <div class="top-navbar-section" style="background : #fff;">
+            <top-navbar></top-navbar>
+        </div>
       <div :class="{content: !$route.meta.hideContent}" @click="toggleSidebar">
         <zoom-center-transition :duration="200" mode="out-in">
           <!-- your content here -->
@@ -245,6 +246,8 @@
             occasionsOptions: this.occasionsArray,
           }
         });
+
+
       }
 
     },

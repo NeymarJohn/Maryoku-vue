@@ -43,7 +43,7 @@
                         <label>Website</label>
                         <md-input v-model="selected_vendor.vendorWebsite"
                                   type="text"
-
+                                  
                                   data-vv-name="vendorWebsite"
                                   name="vendorWebsite"
                                   ></md-input>
@@ -127,11 +127,11 @@
                         data-vv-name="vendorCategory"
                         v-validate= "modelValidations.vendorCategory"
                          required >
-                            <md-option v-for="(option, index) in categories"
+                            <md-option v-for="(option, index) in vendorCategory" 
                              :key="index"  :value="option.id">{{ option.value }}</md-option>
                         </md-select>
                         <span class="md-error" v-if="errors.has('vendorCategory')">The Vendor Category is required</span>
-                    </md-field>
+                    </md-field>                             
                 </div>
                 <div class="md-layout-item md-size-50" v-if="selected_vendor.vendorTagging">
                     <md-field>
@@ -200,10 +200,10 @@
     </div>
 </template>
 <style lang="scss">
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
 }
 </style>
 
@@ -229,8 +229,7 @@ input[type=number]::-webkit-outer-spin-button {
             creation_mode : {
                 type : Boolean,
                 default : false
-            },
-            categories: Array
+            }
 
         },
       created() {

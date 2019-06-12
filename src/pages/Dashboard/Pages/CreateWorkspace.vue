@@ -48,6 +48,7 @@
             <div class='md-error' v-if="!workspaceValid" style="text-align: center; width: 100%;font-size: 0.9rem; padding-top: 18px;">{{error}}</div>
           </md-field>
 
+          <div><md-checkbox v-model="terms" ></md-checkbox> I agree to 262Days <a href="https://www.262days.com/terms" target="_blank">Terms of Use</a> and <a href="https://www.262days.com/privacy" target="_blank">Privacy Policy</a></div>
           <div class="button-container">
             <md-button @click="signup" class="md-success md-round mt-4" slot="footer" :disabled="!terms || !workspaceValid">Continue</md-button>
           </div>

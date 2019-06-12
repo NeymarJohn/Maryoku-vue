@@ -5,7 +5,8 @@
     :class="{'md-toolbar-absolute md-white md-fixed-top': $route.meta.navbarAbsolute, 'navbar-white': $route.meta.opaque}">
     <div class="md-toolbar-row">
       <div class="md-toolbar-section-start event-top-bar">
-        <drop-down direction="down" v-if="topBarTitle" :has-caret="false" :hover="true">
+          <h3 v-if="topBarTitle" class="md-title">{{topBarTitle}}</h3>
+        <!--<drop-down direction="down" v-if="topBarTitle" :has-caret="false" :hover="true">
           <md-button slot="title" class="md-button md-simple md-rose dropdown-toggle md-tiny" data-toggle="dropdown" style="border-radius: 3px 3px 0 0; text-transform: capitalize; font-size: 18px !important; font-weight: 400 !important;">
             {{topBarTitle}}
           </md-button>
@@ -45,11 +46,11 @@
                     <div class="md-layout-item md-size-100 md-caption "> </div>
                   </div>
 
-                  <!--<div class="md-layout-item md-size-100">
+                  <div class="md-layout-item md-size-100">
                     <md-button class="md-sm md-simple md-rose">
                       <md-icon>cached</md-icon> Recurring weekly
                     </md-button>
-                  </div>-->
+                  </div>
 
                 </div>
               </div>
@@ -59,7 +60,7 @@
         <h3 class="md-title" style="font-weight: 400; padding-top: 14px; margin-left: -10px;">
           <md-icon class="text-rose" v-if="topBarTitle">arrow_right</md-icon>
           {{$route.meta.title ? $route.meta.title : $route.name}}
-        </h3>
+        </h3> -->
       </div>
       <div class="md-toolbar-section-end">
         <md-button class="md-just-icon md-round md-simple md-toolbar-toggle" :class="{toggled: $sidebar.showSidebar}" @click="toggleSidebar">
@@ -102,12 +103,16 @@
                 </div>
               </a>
             </li>-->
-            <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventInvitees" class="md-simple md-md top-nav-bar-upload-vendors-button" style="margin-top: 12px;" @click="uploadVendors">
-                <md-icon>cloud_upload</md-icon>
-                <span>Upload Vendors</span>
-              </md-button>
-            </li>
+
+
+<!--            <li class="md-list-item" v-if="topBarEventId">-->
+<!--              <md-button v-if="topBarEventInvitees" class="md-simple md-md top-nav-bar-upload-vendors-button" style="margin-top: 12px;" @click="uploadVendors">-->
+<!--                <md-icon>cloud_upload</md-icon>-->
+<!--                <span>Upload Vendors</span>-->
+<!--              </md-button>-->
+<!--            </li>-->
+
+
             <!--<li class="md-list-item" v-if="topBarEventId">
               <md-button v-if="topBarEventProposals" class="md-simple md-md" style="margin-top: 12px;" @click="manageGroups">
                 <md-icon>group</md-icon>
@@ -120,26 +125,30 @@
                 <span>Automated Interactions</span>
               </md-button>
             </li>-->
-            <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventProposals" class="md-simple md-md" style="margin-top: 12px;" @click="eventPage">
-                <md-icon>web_asset</md-icon>
-                <span>Event Page</span>
-              </md-button>
-            </li>
-            <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventProposals" class="md-simple md-md" style="margin-top: 12px;" @click="timeline">
-                <md-icon>mail</md-icon>
-                <span>Timeline</span>
-              </md-button>
-            </li>
-            <li class="md-list-item" v-if="topBarEventId">
-              <md-button v-if="topBarEventInvitees" class="md-button md-info" style="margin-top: 6px;" @click="manageInvitees">
-                <span>Manage Invitees</span>
-              </md-button>
-              <md-button v-if="topBarEventProposals" class="md-button md-info" style="margin-top: 6px;" @click="manageProposals">
-                <span>Manage Budget &amp; Proposals</span>
-              </md-button>
-            </li>
+
+
+<!--            <li class="md-list-item" v-if="topBarEventId">-->
+<!--              <md-button v-if="topBarEventProposals" class="md-simple md-md" style="margin-top: 12px;" @click="eventPage">-->
+<!--                <md-icon>web_asset</md-icon>-->
+<!--                <span>Event Page</span>-->
+<!--              </md-button>-->
+<!--            </li>-->
+<!--            <li class="md-list-item" v-if="topBarEventId">-->
+<!--              <md-button v-if="topBarEventProposals" class="md-simple md-md" style="margin-top: 12px;" @click="timeline">-->
+<!--                <md-icon>mail</md-icon>-->
+<!--                <span>Timeline</span>-->
+<!--              </md-button>-->
+<!--            </li>-->
+<!--            <li class="md-list-item" v-if="topBarEventId">-->
+<!--              <md-button v-if="topBarEventInvitees" class="md-button md-info" style="margin-top: 6px;" @click="manageInvitees">-->
+<!--                <span>Manage Invitees</span>-->
+<!--              </md-button>-->
+<!--              <md-button v-if="topBarEventProposals" class="md-button md-info" style="margin-top: 6px;" @click="manageProposals">-->
+<!--                <span>Manage Budget &amp; Proposals</span>-->
+<!--              </md-button>-->
+<!--            </li>-->
+
+
             <li class="md-list-item">
               <a href="#" class="md-list-item-router md-list-item-container md-button-clean dropdown">
                 <div class="md-list-item-content">

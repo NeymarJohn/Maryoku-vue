@@ -435,7 +435,7 @@
     },
     mounted() {
       this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
-      this.isLoading = true;
+      this.isLoading = false;
     },
     watch: {
       event(newVal, oldVal){

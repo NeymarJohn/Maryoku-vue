@@ -1537,7 +1537,7 @@ $tooltip-border-color: $blue-grey-200 !default;
             padding-left: 55px;
             margin-bottom: 0px;
             justify-content: flex-start;
-            box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+            box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.14);
 
             .md-list-item {
                 .md-button {
@@ -1570,6 +1570,10 @@ iframe{
 
 .edit-event-boxes {
     justify-content: space-between;
+
+    .md-layout-item {
+        margin : 0;
+    }
 }
 
 .alert-transparent-info   {
@@ -1624,6 +1628,25 @@ iframe{
     .got-to-component-btn {
         .md-ripple {
             padding : 0 !important;
+        }
+    }
+
+    .md-card-tabs {
+        background : none;
+        box-shadow : none;
+    }
+
+    .event-details-tabs {
+        width : 100%;
+
+        .md-card-tabs {
+            >.md-card-content {
+                padding-top: 0;
+            }
+        }
+        .md-list {
+            justify-content: flex-start !important;
+            box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.14);
         }
     }
 }
@@ -1963,10 +1986,8 @@ iframe{
             padding-left : 0 !important;
             box-shadow: none;
             width: 100% !important;
-
             .md-list-item {
                 margin-left : 0;
-                width : 33%;
 
                 .md-list-item-button {
                     border-radius: 100px;
