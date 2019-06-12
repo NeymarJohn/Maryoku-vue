@@ -5,7 +5,7 @@ export default class EventInvitee extends Model {
         return 'invitees'
     }
 
-    static saveInvitees(ctx, event, resource){
+    static saveInvitees(ctx, resource){
         const key = `event.${event.id}.invitees`;
         ctx.$ls.set(key,resource, Model.DEFAULT_EXPIRATION_MILLIS);
     }

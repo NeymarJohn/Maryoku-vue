@@ -3,7 +3,7 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
 
     <!-- Event Components Routes -->
-    <!--<event-page-routes  v-if="event" :event="event"></event-page-routes>-->
+<!--        <event-page-routes  v-if="event" :event="event"></event-page-routes>-->
     <!-- ./Event Components Routes -->
 
     <div  v-if="routeName === 'EditEvent' || routeName === 'EditBuildingBlocks'" class="md-layout-item md-xlarge-size-20 md-large-size-25 md-small-size-40" >
@@ -24,7 +24,7 @@
         </div>-->
         <md-card-content v-if="event">
           <div>
-            <!--<div class="md-layout event-info-section">
+            <div class="md-layout event-info-section">
               <div class="md-layout-item md-size-100">
                 <div class="md-layout-item  title-text">Date</div>
                 <div class="md-layout-item md-size-100 md-caption ">{{calendarEvent.eventStartMillis | formatDate}}, {{calendarEvent.eventStartMillis | formatTime}} ({{calendarEvent.eventStartMillis | formatDuration(calendarEvent.eventEndMillis)}} hrs) </div>
@@ -46,14 +46,14 @@
                 </md-button>
               </div>
 
-            </div>-->
+            </div>
 
 
-            <!--<div class="md-layout md-gutter">
+            <div class="md-layout md-gutter">
               <div class="md-layout-item">
                 <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
               </div>
-            </div>-->
+            </div>
             <div class="md-layout md-gutter">
               <div class="md-layout-item">
                 <h5 class="title-budget-main">Total remaining budget</h5>
@@ -168,7 +168,7 @@
               and send to invitees.
             </p>
 
-            <md-button name="event-planner-tab-event-details-banner-event-page" class="event-planner-tab-event-details-banner-event-page md-rose md-simple got-to-component-btn" @click="goToComponent('')">
+            <md-button name="event-planner-tab-event-details-banner-event-page" class="event-planner-tab-event-details-banner-event-page md-rose md-simple got-to-component-btn" @click="goToComponent('/edit')">
               Edit Event page <md-icon>arrow_forward</md-icon>
             </md-button>
           </md-card-content>
