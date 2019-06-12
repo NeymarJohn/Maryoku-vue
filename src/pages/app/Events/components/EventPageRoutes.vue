@@ -3,7 +3,7 @@
            <div class="md-card-tabs md-card-plain">
                <ul class="md-list nav-tabs">
                    <li class="md-list-item">
-                       <md-button name="event-planner-tab-event-details" class="event-planner-tab-event-details" :class="{active: routeName === 'EditEvent'}" @click="goToComponent('/edit/details')">Event Details</md-button>
+                       <md-button name="event-planner-tab-event-details" class="event-planner-tab-event-details" :class="{active: routeName === 'EditEvent'}" @click="goToComponent('/edit')">Event Details</md-button>
                    </li>
 
                    <li class="md-list-item">

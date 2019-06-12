@@ -51,7 +51,7 @@
             </md-card>
         </div>
         <div class="md-layout-item md-medium-size-65 md-size-70">
-            <member-group-details @group-selected="selectGroup" @group-members-changed="updateGroup" @group-member-removed="updateGroups" :group-data.sync="visibleGroup" :all-members.sync="allMembers" :roles-list="rolesList" :permissions-list="permissionsList"></member-group-details>
+            <member-group-details @group-selected="selectGroup" @group-members-changed="updateGroup" @group-member-removed="updateGroups" :groups-list.sync="groupsList" :group-data.sync="visibleGroup" :all-members.sync="allMembers" :roles-list="rolesList" :permissions-list="permissionsList"></member-group-details>
         </div>
     </div>
 </template>
@@ -89,12 +89,12 @@
                     { id: 'guest', title: 'Guest'}
                 ],
                 permissionsList: [
-                    { id: 'sign_off', title: 'Sign-Off'},
-                    { id: 'edit', title: 'Edit'},
-                    { id: 'create', title: 'Create'},
-                    { id: 'request_budget', title: 'Request Budget'},
-                    { id: 'view', title: 'View'},
-                    { id: 'vote', title: 'Vote'}
+                    { id: 'view', title: 'View', checked: false},
+                    { id: 'create', title: 'Create', checked: false},
+                    { id: 'edit', title: 'Edit', checked: false},
+                    { id: 'request_budget', title: 'Request Budget', checked: false},
+                    { id: 'sign_off', title: 'Sign-Off', checked: false},
+                    { id: 'vote', title: 'Vote', checked: false}
                 ]
             };
         },
@@ -150,7 +150,7 @@
                 });
             },
             updateGroups(item){
-                if (this.visibleGroup.id === 'all'){
+                /*if (this.visibleGroup.id === 'all'){
                     this.groupsList.forEach((g)=>{
                         let index = _.findIndex(g.members, (m)=>{ return m.id === item.id; });
                         if (index > -1){
@@ -159,7 +159,8 @@
                     });
 
                     this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
-                }
+                }*/
+                this.refreshList(true);
             },
             updateGroup(item){
                 if (item.id !== 'all'){

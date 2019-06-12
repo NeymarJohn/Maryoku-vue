@@ -9,34 +9,38 @@
                 <!-- here you can add your content for tab-content -->
                 <template slot="tab-pane-1">
                     <div class="md-layout">
-                        <div class="md-layout-item md-medium-size-70 md-size-80">
+                        <div class="md-layout-item md-medium-size-60 md-size-60">
                             <md-card style="height: auto;">
-                                <md-card-header class="md-card-header-text md-card-header-warning clear-margins">
-                                    <!--<div class="card-text">
+                                <md-card-header class="md-card-header-text md-card-header-warning">
+                                    <div class="card-text text-left">
                                         <h4 class="title" style="color: white;">
-                                            Event invitees {{eventInvitees.length ? `(${eventInvitees.length})` : ''}}
+                                            Event invitees
                                         </h4>
-                                    </div>-->
-                                    <span class="pull-left" style="margin-top: 16px; margin-left: 12px;">
-                                        <md-icon class="text-rose">near_me</md-icon> {{eventInvitees.length}}
-                                    </span>
-                                    <span class="pull-left" style="margin-top: 16px; margin-left: 12px;">
-                                        <md-icon class="text-rose">check_circle</md-icon> 25%
-                                    </span>
-                                    <md-button class="md-purple md-sm pull-right md-icon-button" style="margin-top: 16px; margin-right: 12px;" @click="refreshList(true)" :disabled="working || noActions">
-                                        <md-icon style="font-size: 11px;padding:0; margin: 0; height: 15px;">refresh</md-icon>
-                                    </md-button>
-                                    <md-button class="md-success md-sm pull-right" style="margin-top: 16px; margin-right: 12px;"  :disabled="working || noActions">Create new group</md-button>
+                                    </div>
+                                    <!--<md-button class="md-purple md-md pull-right md-icon-button" style="margin-top: 16px; margin-right: 12px;" @click="refreshList(true)" :disabled="working || noActions">
+                                        <md-icon style="font-size: 12px;padding:0; margin: 0; height: 18px;">refresh</md-icon>
+                                    </md-button>-->
+                                    <md-button class="md-info md-md pull-right" style="margin-top: 16px; margin-right: 12px;" v-if="!inviteesExpanded"  @click="toggleInviteesForm" :disabled="working || noActions">Add Invitees</md-button>
+                                    <md-button class="md-success md-md pull-right" style="margin-top: 16px; margin-right: 12px;" v-if="inviteesExpanded" @click="toggleInviteesForm" :disabled="working || noActions">Done</md-button>
                                 </md-card-header>
                                 <md-card-content class="">
                                     <vue-element-loading :active="working" spinner="ring" color="#FF547C"/>
+                                    <div class="md-layout" v-if="inviteesExpanded">
+                                        <div class="md-layout-item">
+                                            <md-button class="md-purple md-md" style="margin-top: 16px; margin-right: 12px;" @click="importInvitees" :disabled="working || noActions">Import from spreadsheet</md-button>
+                                            <md-button class="md-info md-md" style="margin-top: 16px; margin-right: 12px;" @click="invite" :disabled="working || noActions">Add manually</md-button>
+                                        </div>
+                                    </div>
                                     <div class="md-layout md-gutter" style="margin: 0;">
-
+                                        <h5>Select event invitees by selecting group members</h5>
                                         <div class="md-layout-item md-size-100">
                                             <md-field style="border: none;" class="clear-margins">
-                                                <multiselect :reset-after="true" @select="selectMember" :close-on-select="true" :preserve-search="true" placeholder="" label="emailAddress" track-by="id" :searchable="true" :options="allOptions" :multiple="true" >
+                                                <multiselect :show-no-results="false" :internalSearch="false" @search-change="searchOptions" :reset-after="true" @select="selectMember" :close-on-select="true" :preserve-search="true" placeholder="" label="emailAddress" track-by="id" :searchable="true" :options="allOptions" :multiple="true" >
+                                                    <template slot="clear" slot-scope="props">
+                                                        <div class="multiselect__clear" v-if="allOptions.length" @mousedown.prevent.stop="clearSearch(props.search)"></div>
+                                                    </template>
                                                     <template slot="caret"><span></span></template>
-                                                    <template slot="placeholder" class="text-center">
+                                                    <template slot="placeholder" class="pull-right">
                                                         <md-icon>search</md-icon> Search groups and participants
                                                     </template>
                                                     <template slot="option" slot-scope="{option}">
@@ -71,8 +75,8 @@
                                             <md-table class="text-left " v-model="groups" >
                                                 <tr class="md-table-row md-table-head-container">
                                                     <th class="md-table-head" style="width: 50%;">Group</th>
-                                                    <th class="md-table-head md-numeric md-xs" style="width: 25%;"><md-icon class="text-rose">near_me</md-icon></th>
-                                                    <th class="md-table-head md-numeric" style="width: 24%;"><md-icon class="text-rose">check_circle</md-icon></th>
+                                                    <th class="md-table-head md-numeric md-xs" style="width: 25%;">Invitees</th>
+                                                    <th class="md-table-head md-numeric" style="width: 24%;">RSVP</th>
                                                     <th class="md-table-head" style="width: 1%;"></th>
                                                 </tr>
                                                 <template v-for="item in groups">
@@ -101,12 +105,14 @@
                                 </md-card-content>
                             </md-card>
                         </div>
-                        <div class="md-layout-item md-medium-size-30 md-size-20">
+                        <div class="md-layout-item md-medium-size-40 md-size-40">
                             <md-card class="md-card-plain">
                                 <md-card-content>
                                     <div class="text-left">
                                         <h5>Invitation includes:</h5>
-                                        <md-radio v-for="(option, index) in InviteeTypes" :key="index" v-model="eventData.participantsType" :value="option">{{option}}</md-radio>
+                                        <div v-for="(option, index) in InviteeTypes" :key="index">
+                                            <md-radio v-model="eventData.participantsType" :value="option">{{option}}</md-radio>
+                                        </div>
                                     </div>
                                 </md-card-content>
                             </md-card>
@@ -132,6 +138,10 @@
     import LabelEdit from '@/components/LabelEdit';
     import InteractionsList from '@/pages/app/Events/components/EventBlocks/InteractionsList';
     import EventInviteeGroupDetails from '@/pages/app/Events/components/EventInviteeGroupDetails';
+
+    import MemberEditorPanel from '@/pages/app/Members/MemberEditorPanel';
+    import ImportMembersPanel from '@/pages/app/Members/ImportMembersPanel';
+
     import { NavTabs, Tabs } from '@/components';
     import _  from 'underscore';
 
@@ -142,7 +152,9 @@
             LabelEdit,
             InteractionsList,
             NavTabs,
-            EventInviteeGroupDetails
+            EventInviteeGroupDetails,
+            MemberEditorPanel,
+            ImportMembersPanel
         },
         props: {
             eventData: Object
@@ -156,16 +168,64 @@
             allOptions: [],
             eventInvitees: [],
             groups: [],
+            inviteesExpanded: false,
             InviteeTypes: ["Employees Only","Employees and spouse","Employees and families", "Employees children"],
+            rolesList: [
+                { id: 'ADMIN', title: 'Administrator'},
+                { id: 'co_producer', title: 'Co-Producer'},
+                { id: 'manager', title: 'Manager'},
+                { id: 'team_leader', title: 'Team Leader'},
+                { id: 'employee', title: 'Employee'},
+                { id: 'guest', title: 'Guest'}
+            ],
+            permissionsList: [
+                { id: 'view', title: 'View', checked: false},
+                { id: 'create', title: 'Create', checked: false},
+                { id: 'edit', title: 'Edit', checked: false},
+                { id: 'request_budget', title: 'Request Budget', checked: false},
+                { id: 'sign_off', title: 'Sign-Off', checked: false},
+                { id: 'vote', title: 'Vote', checked: false}
+            ]
 
         }),
         methods: {
+            toggleInviteesForm(){
+                this.inviteesExpanded = !this.inviteesExpanded;
+            },
+            importInvitees(){
+                window.currentPanel = this.$showPanel({
+                    component: ImportMembersPanel,
+                    cssClass: "md-layout-item md-size-100 h65 transition36",
+                    openOn: "bottom",
+                    props: {
+
+                    }
+                });
+            },
+            invite(){
+                let groupsWithoutAll = _.filter(this.availableTeams, (g)=>{ return g.id !== 'all'});
+                let groups = [];
+
+                if (groupsWithoutAll.length > 0){
+                    groups.push(groupsWithoutAll[0]);
+                }
+
+                window.currentPanel = this.$showPanel({
+                    component: MemberEditorPanel,
+                    cssClass: "md-layout-item md-size-40 transition36 ",
+                    openOn: "right",
+                    props: {
+                        team: this.groupData,
+                        teamMember: { id: 'new', permissions: "view", role: 'guest', groups: groups},
+                        permissionsList: this.permissionsList,
+                        canEditPermissions: false,
+                        rolesList: this.rolesList,
+                        groupsList: groupsWithoutAll
+                    }
+                });
+            },
             refreshList(force){
                 this.working = true;
-                if (force){
-                    this.$ls.remove("teams");
-                    this.$ls.remove("teams.allMembers");
-                }
                 let tasks = [this.loadTeams(force),this.loadAllMembers(force), this.loadEventInvitees(force)];
                 Promise.all(tasks).then(()=>{
                     this.updateAllOptions();
@@ -225,12 +285,32 @@
                 return e;
             },
             updateAllOptions(){
-                this.allOptions = [...this.availableTeams,...this.availableMembers];
+                this.allOptions = [...this.availableTeams];
                 this.allOptions = _.filter(this.allOptions,(i)=>{
                     return  i.id !== 'all'  && -1 === _.findIndex(this.eventInvitees, (e)=>{
                         return e.person.id === i.id
                     })
                 });
+            },
+            clearSearch(query){
+                this.updateAllOptions();
+            },
+            searchOptions(query){
+                if (query){
+                    let filteredGroups = _.filter(JSON.parse(JSON.stringify(this.allOptions)),(i)=>{
+                        let isGroupName = i.name.toLowerCase().startsWith(query.toLowerCase());
+                        let members = _.filter(i.members,(m)=>{
+                            return m.displayName.toLowerCase().startsWith(query.toLowerCase()) || m.emailAddress.toLowerCase().startsWith(query.toLowerCase());
+                        });
+                        if (members.length){
+                            i.members = members;
+                        }
+                        return isGroupName || members.length;
+                    });
+                    this.allOptions = [...filteredGroups];
+                } else {
+                    this.updateAllOptions();
+                }
             },
             selectMember(item){
                 this.working = true;
@@ -241,6 +321,7 @@
                     p = this.selectGroup(item);
                 }
                 p.then(()=>{
+                    EventInvitee.saveInvitees(this, this.eventData, this.eventInvitees);
                     this.working = false;
                 });
             },
@@ -282,7 +363,7 @@
                     let index = _.findIndex(this.eventInvitees, (e)=>{ return e.id === item.id});
                     if (index > -1) {
                         this.eventInvitees.splice(index, 1);
-                        EventInvitee.saveInvitees(this, this.eventInvitees);
+                        EventInvitee.saveInvitees(this, this.eventData, this.eventInvitees);
                         this.updateAllOptions();
                         this.updateGroups();
                         this.working = false;

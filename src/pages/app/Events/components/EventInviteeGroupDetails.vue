@@ -13,9 +13,9 @@
                 </template>
             </md-table-cell>
             <md-table-cell md-label="RSVP"><md-icon class="text-gray" title="Not invited yet">help_outline</md-icon></md-table-cell>
-            <md-table-cell md-label="" class="" md-numeric>
+            <md-table-cell md-label="" class="text-right" >
                 <md-button class="md-danger md-round md-just-icon" :disabled="noActions" @click="unselectMember(item)">
-                    <md-icon>delete</md-icon>
+                    <md-icon>remove</md-icon>
                     <md-tooltip md-direction="bottom">Unselect from this event</md-tooltip>
                 </md-button>
             </md-table-cell>

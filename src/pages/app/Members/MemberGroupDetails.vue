@@ -1,7 +1,7 @@
 <template>
     <div class="md-layout member-group-details" v-if="groupData">
         <div class="md-layout-item">
-            <md-card style="height: 83vmin;">
+            <md-card style="height: auto;">
                 <md-card-header class="md-card-header-text md-card-header-warning">
                     <div class="card-text">
                         <h4 class="title" style="color: white;">
@@ -10,7 +10,7 @@
                         </h4>
                     </div>
                     <md-button class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="inviteMembers" :disabled="working || noActions">Invite Members</md-button>
-                    <md-button class="md-purple md-sm pull-right" style="margin: 16px 6px;" @click="uploadMembers" :disabled="working || noActions">Upload members</md-button>
+                    <md-button class="md-purple md-sm pull-right" style="margin: 16px 6px;" @click="uploadMembers" :disabled="working || noActions">Import from spreadsheet</md-button>
                 </md-card-header>
                 <md-card-content>
                     <vue-element-loading :active="working" spinner="ring" color="#FF547C" />
@@ -40,26 +40,30 @@
 
                         <div class="md-layout-item md-size-100" style="margin-top: 8px;" v-if="groupData.members.length">
 
-                            <md-table :md-fixed-header="true" :md-height="groupData.id === 'all' ? 550 : 480" :md-card="false" v-model="groupData.members" class="table-striped table-hover">
+                            <md-table :md-fixed-header="false" :md-height="groupData.id === 'all' ? 550 : 480" :md-card="false" v-model="groupData.members" class="table-striped table-hover">
                                 <md-table-row slot="md-table-row" slot-scope="{ item }" :key="item.id">
-                                    <md-table-cell md-label="First Name">
+                                    <!--<md-table-cell md-label="First Name">
                                         <label-edit tabindex="2" empty="" :scope="item" :text="item.firstName" field-name="firstName" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>
-                                    </md-table-cell>
-                                    <md-table-cell md-label="Last Name">
-                                        <label-edit tabindex="2" empty="" :scope="item" :text="item.lastName" field-name="lastName" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>
+                                        {{item.firstName}}
+                                    </md-table-cell>-->
+                                    <md-table-cell md-label="Name">
+                                        <!--<label-edit tabindex="2" empty="" :scope="item" :text="item.lastName" field-name="lastName" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>-->
+                                        {{item.displayName}}
                                     </md-table-cell>
                                     <md-table-cell md-label="Email Address" style="max-width: 120px;">
-                                        <label-edit tabindex="1" :scope="item" :text="item.emailAddress" field-name="emailAddress" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>
+                                        <!--<label-edit tabindex="1" :scope="item" :text="item.emailAddress" field-name="emailAddress" @text-updated-blur="memberDetailsChanged" @text-updated-enter="memberDetailsChanged"></label-edit>-->
+                                        {{item.emailAddress}}
                                     </md-table-cell>
                                     <md-table-cell md-label="Groups">
-                                        <drop-down direction="down" :hover="true">
+                                        <!--<drop-down direction="down" :hover="true">
                                             <md-button slot="title" class="groups-button md-simple md-rounded dropdown-toggle" style="width: auto;" data-toggle="dropdown">
                                                 {{item.groups.length}} groups
                                             </md-button>
                                             <ul class="dropdown-menu">
                                                 <li v-for="group in item.groups" @click="selectGroup(group)"><a href="javascript:void(null);">{{group.name}}</a></li>
                                             </ul>
-                                        </drop-down>
+                                        </drop-down>-->
+                                        {{item.groups.length}} groups
                                     </md-table-cell>
                                     <md-table-cell md-label="Role">
                                         {{availableRoleIdToTitle(item.role)}}
@@ -70,7 +74,7 @@
                                             <md-tooltip md-direction="bottom">{{permissionTitles(item.permissions)}}</md-tooltip>
                                         </div>
                                     </md-table-cell>
-                                    <md-table-cell md-label="" style="width: 20%;" class="text-right">
+                                    <md-table-cell md-label="" style="white-space: nowrap; width: 20%;" class="text-right">
                                         <div style="white-space: nowrap;">
                                             <md-button tabindex="4" class="md-success md-sm" style="width: auto;" :disabled="noActions" @click="saveMember(item)" v-if="item.id === 'new'">
                                                 Save
@@ -79,6 +83,9 @@
                                                 Cancel
                                             </md-button>
                                         </div>
+                                        <md-button class="md-warning md-round md-just-icon" :disabled="noActions" @click="editMember(item)" v-if="item.id !== 'new'">
+                                            <md-icon>edit</md-icon>
+                                        </md-button>
                                         <md-button class="md-danger md-round md-just-icon" :disabled="noActions" @click="removeMember(item)" v-if="item.id !== 'new'">
                                             <md-icon>delete</md-icon>
                                             <md-tooltip md-direction="bottom">Remove from this group</md-tooltip>
@@ -120,7 +127,8 @@
             },
             allMembers: Array,
             rolesList: Array,
-            permissionsList: Array
+            permissionsList: Array,
+            groupsList: Array
         },
         data(){
             return {
@@ -140,21 +148,48 @@
                 this.updateAvailableMembers();
             },
             inviteMembers(){
+                let groupsWithoutAll = _.filter(this.groupsList, (g)=>{ return g.id !== 'all'});
+                let groups = [];
+
+                if (this.groupData.id !== 'all'){
+                    groups.push(this.groupData);
+                } else if (groupsWithoutAll.length > 0){
+                    groups.push(groupsWithoutAll[0]);
+                }
+
                 window.currentPanel = this.$showPanel({
                     component: MemberEditorPanel,
                     cssClass: "md-layout-item md-size-40 transition36 ",
                     openOn: "right",
                     props: {
                         team: this.groupData,
-                        teamMember: { id: 'new', permissions: []},
+                        teamMember: { id: 'new', permissions: "view", role: 'employee', groups: groups},
                         permissionsList: this.permissionsList,
-                        rolesList: this.rolesList
+                        rolesList: this.rolesList,
+                        groupsList: groupsWithoutAll
                     }
                 });
                 this.$root.$on("member-added",(item)=>{
                     if (this.groupData.id ==='all'){
                         this.groupData.members.unshift(item);
                         this.saveGroup();
+                    }
+                    this.$emit('group-member-removed', item);
+                });
+            },
+            editMember(member){
+                let groupsWithoutAll = _.filter(this.groupsList, (g)=>{ return g.id !== 'all'});
+                window.currentPanel = this.$showPanel({
+                    component: MemberEditorPanel,
+                    cssClass: "md-layout-item md-size-40 transition36 ",
+                    openOn: "right",
+                    props: {
+                        team: this.groupData,
+                        teamMember: member,
+                        editMode: true,
+                        permissionsList: this.permissionsList,
+                        rolesList: this.rolesList,
+                        groupsList: groupsWithoutAll
                     }
                 });
             },
@@ -183,7 +218,7 @@
                 if (item.id === 'new'){
                     item.id = null;
                     delete item['id'];
-                    alert(JSON.stringify(this.groupData));
+
                     new TeamMember(item).for(new Team(this.groupData)).save().then(res=>{
                         this.groupData.members.shift();
                         this.groupData.members.push(res);
@@ -220,12 +255,14 @@
                                 this.$emit('group-member-removed', item);
                                 this.saveGroup();
                                 this.updateAvailableMembers();
+                                this.working = true;
                                 this.noActions = false;
                             });
                         } else { // Remove from this group
                             new TeamMember(item).for(new Team(this.groupData)).delete().then(res=>{
                                 let index = _.findIndex(this.groupData.members,(i)=>{return i.id === item.id});
                                 this.groupData.members.splice(index,1);
+                                this.$emit('group-member-removed', item);
                                 this.saveGroup();
                                 this.updateAvailableMembers();
                                 this.noActions = false;

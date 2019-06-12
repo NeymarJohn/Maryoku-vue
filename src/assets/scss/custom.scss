@@ -408,11 +408,7 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 }
 .add-new-block-btn {
-    .md-ripple {
-        padding: 10px 0 !important;
-        text-align: left;
-        font-weight: normal;
-    }
+    border : 1px dashed #c2c1c1;
 }
 /**
  * Event Blocks
@@ -1788,74 +1784,13 @@ iframe{
 
 .event-building-blocks {
     &_table {
-        border-collapse: collapse;
-        border-spacing: 0;
-        th {
-            text-align: left;
-            color : #cccccc;
-            padding: 0.5em 0.4em;
-            font-weight: normal;
-            font-size: 12px;
-            &:not(:last-child){
-                border-right : 1px solid #e2e2e2;
-            }
-        }
-        tbody {
-            tr {
-                border-top : 1px solid #e2e2e2;
-                border-bottom : 1px solid #E2E2E2;
-                position: relative;
-                .event-block_actions {
-                    position : absolute;
-                    right  :-0.8em;
-                    display: none;
-                }
-                &:hover {
-                    .event-block_actions {
-                        display: block;
-                    }
-                }
-                td {
-                    padding : 0 0.4em;
-                    font-size: 14px;
-                    font-family: 'arial',sans-serif;
-
-                    &:not(:last-child){
-                        border-right : 1px solid #e2e2e2;
-                    }
-                }
-            }
-        }
-
-        .allocated-budget {
-            position: relative;
-            font-weight: normal;
-            .md-table-cell-container {
-                position : absolute;
-                flex: 1;
-                left: 3px;
-                display: flex;
-                top: 0.9em;
-                justify-content: flex-start;
-                align-content: center;
-                align-items: center;
-                .vlabeledit-label {
-                    font-size: 14px;
-                }
-            }
-
-            .remains-budget {
-                color : red;
-                position:absolute;
-                right : 0.5em;
-            }
-        }
 
         .parent {
             font-weight: bold;
             background-color: #efefef;
-            td {
-                font-size: 13px;
+
+            .md-table-cell {
+                height: 30px !important;
             }
         }
         .md-button:not(.md-just-icon) {
@@ -1877,11 +1812,10 @@ iframe{
 
         .actual-cost {
             width: auto;
-            text-align: center;
-            &.disabled {
-                opacity: 0.3;
-            }
+            font-weight: bold;
+            padding-left : 0 !important;
             .md-ripple {
+                padding-left : 0 !important;
                 font-size: 15px;
             }
         }
@@ -1889,7 +1823,6 @@ iframe{
         .waiting-label {
             font-weight: bold;
         }
-
     }
 }
 
@@ -1920,7 +1853,6 @@ iframe{
     }
 
 }
-
 @media screen and (max-width : 500px) {
     .event-details {
         &_content.md-card-content {
@@ -2529,6 +2461,11 @@ iframe{
             content: attr(data-deselect);
             color: #fff;
         }
+    }
+
+    .multiselect__placeholder {
+        display: block;
+        text-align: right;
     }
 }
 

@@ -158,12 +158,26 @@
 
           },
           {
-            displayName: 'Contact Person',
-            name: 'contactPerson',
-            value: 'contactPerson',
+            displayName: 'Contact Person Name',
+            name: 'contactPersonName',
+            value: 'contactPersonName',
             mandatory: true
 
           },
+            {
+                displayName: 'Contact Person Email',
+                name: 'contactPersonEmail',
+                value: 'contactPersonEmail',
+                mandatory: true
+
+            },
+            {
+                displayName: 'Contact Person Phone Number',
+                name: 'contactPersonPhone',
+                value: 'contactPersonPhone',
+                mandatory: true
+
+            },
           {
             displayName: 'Vendor Main Email',
             name: 'vendorMainEmail',

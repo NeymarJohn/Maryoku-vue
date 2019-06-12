@@ -1,11 +1,11 @@
 <template>
     <md-card class="md-card-plain import-members-panel" style="margin-left: 7%; padding-right: 5%; margin-top: -16px; overflow: visible;">
         <md-card-header class="md-card-header-text md-card-header-warning">
-            <div class="card-text">
+            <!--<div class="card-text">
                 <h4 class="title" style="color: white;">
                     Upload members
                 </h4>
-            </div>
+            </div>-->
             <md-button class="md-gray md-simple md-just-icon pull-right" style="margin-top: 32px; margin-right: 18px; margin-left: 12px;" @click="closePanel"><md-icon>close</md-icon></md-button>
             <div class="md-group pull-right" style="margin-top: 38px;">
                 <md-button class="md-button md-success md-sm" @click="closePanel" v-if="currentStep === 3" :disabled="working || noActions">Finish</md-button>
@@ -173,6 +173,27 @@
                         name: 'emailAddress',
                         value: 'emailAddress',
                         mandatory: true
+
+                    },
+                    {
+                        displayName: 'Group',
+                        name: 'group',
+                        value: 'group',
+                        mandatory: false
+
+                    },
+                    {
+                        displayName: 'Role',
+                        name: 'role',
+                        value: 'role',
+                        mandatory: false
+
+                    },
+                    {
+                        displayName: 'Permissions',
+                        name: 'permissions',
+                        value: 'permissions',
+                        mandatory: false
 
                     }
                 ],
