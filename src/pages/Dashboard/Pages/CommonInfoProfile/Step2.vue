@@ -23,7 +23,7 @@
                     </div>
 
                     <!-- Email Address -->
-                    <div class="md-layout">
+                    <!--<div class="md-layout">
                         <label class="md-layout-item md-size-35 md-form-label">
                             Email Address
                         </label>
@@ -32,7 +32,7 @@
                                 <md-input v-model="email" type="text" required data-vv-name="email" v-validate="modelValidations.email"></md-input>
                             </md-field>
                         </div>
-                    </div>
+                    </div>-->
 
                     <!-- Birthday -->
 
