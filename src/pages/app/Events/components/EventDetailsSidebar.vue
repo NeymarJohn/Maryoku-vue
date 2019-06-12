@@ -1,16 +1,5 @@
 <template>
     <md-card class="md-card-profile">
-        <!--<div class="logo-block">
-            <div class="event-planer-logo">
-                <md-icon class="company-logo">date_range</md-icon>
-            </div>
-            <div class="event-title">Event Details</div>
-            <md-button name="event-planner-event-details-edit"
-                       class="md-button md-simple md-just-icon md-sm" @click="openEventModal()"
-                       style="margin-top : 1em;">
-                <md-icon class="company-logo">create</md-icon>
-            </md-button>
-        </div>-->
         <md-card-header class="md-card-header-icon md-card-header-rose">
             <div class="card-icon" style="padding: 12px;">
                 <md-icon>date_range</md-icon>
@@ -20,16 +9,6 @@
                 <md-button class="md-sm md-simple md-just-icon pull-right clear-margins"  @click="openEventModal()"><md-icon class="company-logo">create</md-icon></md-button>
             </h4>
         </md-card-header>
-
-        <!--<md-card-header class="md-card-header-icon md-card-header-rose">
-            <div class="card-icon">
-                <md-icon class="company-logo">date_range</md-icon>
-            </div>
-            <h4 class="title" style="color: white;">
-                Event invitees
-            </h4>
-            <md-button class="md-info md-md md-simple md-just-icon pull-right" style="margin-top: 16px; margin-right: 12px;"  @click="openEventModal()"><md-icon class="company-logo">create</md-icon></md-button>
-        </md-card-header>-->
         <md-card-content v-if="event">
             <div>
                 <div class="md-layout event-info-section">

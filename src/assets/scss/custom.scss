@@ -1583,8 +1583,12 @@ iframe{
 
 .edit-event-details {
 
-    .md-list-item-button {
+    .event-details-tabs .md-list-item-button {
         border-radius: 0 !important;
+    }
+
+    .event-invitees .md-list-item-button {
+        border-radius: 5px !important;
     }
 
     .event-info-section {
