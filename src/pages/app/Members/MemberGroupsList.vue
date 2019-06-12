@@ -150,7 +150,7 @@
                 });
             },
             updateGroups(item){
-                if (this.visibleGroup.id === 'all'){
+                /*if (this.visibleGroup.id === 'all'){
                     this.groupsList.forEach((g)=>{
                         let index = _.findIndex(g.members, (m)=>{ return m.id === item.id; });
                         if (index > -1){
@@ -159,7 +159,8 @@
                     });
 
                     this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
-                }
+                }*/
+                this.refreshList(true);
             },
             updateGroup(item){
                 if (item.id !== 'all'){

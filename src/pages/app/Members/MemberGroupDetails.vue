@@ -85,7 +85,6 @@
                                         </div>
                                         <md-button class="md-warning md-round md-just-icon" :disabled="noActions" @click="editMember(item)" v-if="item.id !== 'new'">
                                             <md-icon>edit</md-icon>
-                                            <md-tooltip md-direction="bottom">Remove from this group</md-tooltip>
                                         </md-button>
                                         <md-button class="md-danger md-round md-just-icon" :disabled="noActions" @click="removeMember(item)" v-if="item.id !== 'new'">
                                             <md-icon>delete</md-icon>
@@ -175,6 +174,7 @@
                         this.groupData.members.unshift(item);
                         this.saveGroup();
                     }
+                    this.$emit('group-member-removed', item);
                 });
             },
             editMember(member){
@@ -218,7 +218,7 @@
                 if (item.id === 'new'){
                     item.id = null;
                     delete item['id'];
-                    alert(JSON.stringify(this.groupData));
+
                     new TeamMember(item).for(new Team(this.groupData)).save().then(res=>{
                         this.groupData.members.shift();
                         this.groupData.members.push(res);
@@ -255,12 +255,14 @@
                                 this.$emit('group-member-removed', item);
                                 this.saveGroup();
                                 this.updateAvailableMembers();
+                                this.working = true;
                                 this.noActions = false;
                             });
                         } else { // Remove from this group
                             new TeamMember(item).for(new Team(this.groupData)).delete().then(res=>{
                                 let index = _.findIndex(this.groupData.members,(i)=>{return i.id === item.id});
                                 this.groupData.members.splice(index,1);
+                                this.$emit('group-member-removed', item);
                                 this.saveGroup();
                                 this.updateAvailableMembers();
                                 this.noActions = false;

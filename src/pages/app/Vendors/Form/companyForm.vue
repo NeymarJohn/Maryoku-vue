@@ -84,6 +84,7 @@
                         <label>Address</label>
                         <md-input v-model="selected_vendor.vendorAddressLine1"
                                   type="email"
+                                   v-gmaps-searchbox:location=vm
                                   required
                                   data-vv-name="vendorAddressLine1"
                                   name="vendorAddressLine1"
@@ -175,7 +176,6 @@
                 <div class="md-layout-item md-size-100">
                     <md-button class="md-purple md-xs" @click="addContactPerson">+ Add contact person</md-button>
                 </div>
-
 
                 <div class="md-layout-item md-size-100">
 
@@ -273,6 +273,11 @@ input[type=number]::-webkit-outer-spin-button {
                 vendorCategory: [],
                 contactPersonList : [],
                 vendorAttachments : [],
+                             vm: {
+                    searchPlace: '',
+                    location: {}
+
+},
                 modelValidations: {
                     vendorDisplayName: {
                         required: true,

@@ -9,12 +9,12 @@
                 <!-- here you can add your content for tab-content -->
                 <template slot="tab-pane-1">
                     <div class="md-layout">
-                        <div class="md-layout-item md-medium-size-60 md-size-70">
+                        <div class="md-layout-item md-medium-size-60 md-size-60">
                             <md-card style="height: auto;">
                                 <md-card-header class="md-card-header-text md-card-header-warning">
                                     <div class="card-text text-left">
                                         <h4 class="title" style="color: white;">
-                                            Event invitees {{eventInvitees.length ? `(${eventInvitees.length})` : ''}}
+                                            Event invitees
                                         </h4>
                                     </div>
                                     <md-button class="md-purple md-md pull-right md-icon-button" style="margin-top: 16px; margin-right: 12px;" @click="refreshList(true)" :disabled="working || noActions">
@@ -105,7 +105,7 @@
                                 </md-card-content>
                             </md-card>
                         </div>
-                        <div class="md-layout-item md-medium-size-40 md-size-30">
+                        <div class="md-layout-item md-medium-size-40 md-size-40">
                             <md-card class="md-card-plain">
                                 <md-card-content>
                                     <div class="text-left">
@@ -218,6 +218,7 @@
                         team: this.groupData,
                         teamMember: { id: 'new', permissions: "view", role: 'guest', groups: groups},
                         permissionsList: this.permissionsList,
+                        canEditPermissions: false,
                         rolesList: this.rolesList,
                         groupsList: groupsWithoutAll
                     }

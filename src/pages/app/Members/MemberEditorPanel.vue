@@ -79,7 +79,7 @@
                                     type="email"
                                     name="email"
                                     required
-                                    rows="5"
+                                    rows="1"
                                     v-validate="modelValidations.email" v-focus placeholder="john@example.com,brad@example.com"></md-textarea>
                                 <slide-y-down-transition>
                                     <md-icon class="error" v-show="errors.has('email')">close</md-icon>
@@ -92,27 +92,6 @@
                             </md-field>
                         </div>
                         <div v-if="this.editMode" class="md-layout-item md-size-100" style="margin-bottom: 16px;">
-                            <md-field v-if="!this.editMode"
-                                      class="height-auto"
-                                      :class="[{'md-valid': !errors.has('email') && touched.email},{'md-error': errors.has('email')}]">
-                                <label>One or more email addresses</label>
-                                <md-textarea
-                                    v-model="teamMember.emailAddress"
-                                    data-vv-name="email"
-                                    type="email"
-                                    name="email"
-                                    required
-                                    rows="5"
-                                    v-validate="modelValidations.email" v-focus placeholder="john@example.com,brad@example.com"></md-textarea>
-                                <slide-y-down-transition>
-                                    <md-icon class="error" v-show="errors.has('email')">close</md-icon>
-                                </slide-y-down-transition>
-                                <slide-y-down-transition>
-                                    <md-icon class="success" v-show="!errors.has('email') && touched.email">done</md-icon>
-                                </slide-y-down-transition>
-
-                                <span class="md-error" v-if="errors.has('email')">{{ errors.first('email') }}</span>
-                            </md-field>
                             <md-field v-if="this.editMode"
                                       class="height-auto"
                                       :class="[{'md-valid': !errors.has('email') && touched.email},{'md-error': errors.has('email')}]">
@@ -135,7 +114,7 @@
                             </md-field>
                         </div>
 
-                        <div class="md-layout-item md-size-100" style="margin-bottom: 16px;">
+                        <div class="md-layout-item md-size-100" style="margin-bottom: 16px;" v-if="canEditPermissions">
                             <md-field
                                 :class="[{'md-valid': !errors.has('role') && touched.role},{'md-error': errors.has('role')}]">
                                 <label for="select">Role</label>
@@ -170,7 +149,7 @@
                             </md-field>
                         </div>
 
-                        <div class="md-layout-item md-size-100" style="margin-bottom: 16px;">
+                        <div class="md-layout-item md-size-100" style="margin-bottom: 16px;" v-if="canEditPermissions">
                             <div style="margin-top: 8px;">
                                 <label>Permissions</label>
                                 <!--<md-field>
@@ -246,6 +225,10 @@
                 type: Array,
                 default: ()=>{ return []}
             },
+            canEditPermissions: {
+                type: Boolean,
+                default: true
+            }
         },
         data() {
             return {
@@ -394,9 +377,18 @@
                                     let p = new TeamMember(member).save();
                                     promises.push(p);
                                     p.then((res) => {
-                                        console.log("Send invitation: member attached ");
-                                        members.push(res.item);
-                                        member = {};
+                                        let ps = [];
+                                        this.teamMember.groups.forEach(group=>{
+                                            let tg = new TeamMember(res.item).for(new Team(group)).save();
+                                            ps.push(tg);
+                                        });
+
+                                        Promise.all(ps).then(r=>{
+                                            console.log("Send invitation: member attached ");
+                                            res.item.groups = this.teamMember.groups;
+                                            members.push(res.item);
+                                            member = {};
+                                        });
                                     });
                                 }
                             });
