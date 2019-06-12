@@ -207,7 +207,7 @@
         props: {
             team: {
                 type: Object,
-                required: true
+                required: false
             },
             teamMember: {
                 type: Object,
