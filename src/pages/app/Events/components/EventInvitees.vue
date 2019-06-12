@@ -17,9 +17,9 @@
                                             Event invitees {{eventInvitees.length ? `(${eventInvitees.length})` : ''}}
                                         </h4>
                                     </div>
-                                    <!--<md-button class="md-purple md-md pull-right md-icon-button" style="margin-top: 16px; margin-right: 12px;" @click="refreshList(true)" :disabled="working || noActions">
+                                    <md-button class="md-purple md-md pull-right md-icon-button" style="margin-top: 16px; margin-right: 12px;" @click="refreshList(true)" :disabled="working || noActions">
                                         <md-icon style="font-size: 12px;padding:0; margin: 0; height: 18px;">refresh</md-icon>
-                                    </md-button>-->
+                                    </md-button>
                                     <md-button class="md-info md-md pull-right" style="margin-top: 16px; margin-right: 12px;" v-if="!inviteesExpanded"  @click="toggleInviteesForm" :disabled="working || noActions">Add Invitees</md-button>
                                     <md-button class="md-success md-md pull-right" style="margin-top: 16px; margin-right: 12px;" v-if="inviteesExpanded" @click="toggleInviteesForm" :disabled="working || noActions">Done</md-button>
                                 </md-card-header>
@@ -225,10 +225,6 @@
             },
             refreshList(force){
                 this.working = true;
-                if (force){
-                    this.$ls.remove("teams");
-                    this.$ls.remove("teams.allMembers");
-                }
                 let tasks = [this.loadTeams(force),this.loadAllMembers(force), this.loadEventInvitees(force)];
                 Promise.all(tasks).then(()=>{
                     this.updateAllOptions();
@@ -324,6 +320,7 @@
                     p = this.selectGroup(item);
                 }
                 p.then(()=>{
+                    EventInvitee.saveInvitees(this, this.eventData, this.eventInvitees);
                     this.working = false;
                 });
             },
@@ -365,7 +362,7 @@
                     let index = _.findIndex(this.eventInvitees, (e)=>{ return e.id === item.id});
                     if (index > -1) {
                         this.eventInvitees.splice(index, 1);
-                        EventInvitee.saveInvitees(this, this.eventInvitees);
+                        EventInvitee.saveInvitees(this, this.eventData, this.eventInvitees);
                         this.updateAllOptions();
                         this.updateGroups();
                         this.working = false;
