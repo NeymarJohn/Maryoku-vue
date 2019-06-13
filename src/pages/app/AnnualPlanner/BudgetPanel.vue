@@ -1,7 +1,7 @@
 <template>
     <div style="height: 100%; margin: 0; padding: 0;">
         <md-card class="budget-panel" style="height: 100%; margin: 0; padding: 0;">
-            <md-card-header class="md-card-header-icon md-card-header-blue">
+            <md-card-header class="md-card-header-icon" :class="[{'md-card-header-blue':percentage > 0},{'md-card-header-rose':percentage <= 0}]">
                 <div class="card-text" style="margin-right: 0; width: 100% !important;">
                     <div style="position:relative;">
                         <div style="display: grid;margin-top: 18px;">
@@ -25,7 +25,7 @@
                     <div>
                         <div style="text-align: left;">
                             <h5 style="font-size: 15px !important; font-weight: 300; padding: 0; margin: 0; color: #959595;">Remaining budget per employee</h5>
-                            <h4 style="font-size: 25px; font-weight: 500; padding: 0; margin: 0; color: rgba(9, 170, 192, 0.8);">
+                            <h4 class="text-danger" style="font-size: 25px; font-weight: 500; padding: 0; margin: 0;;" :class="[{'text-info':remainingBudgetPerEmployee > 0, 'text-danger':remainingBudgetPerEmployee <= 0}]">
                                 <animated-number ref="remainingBudgetPerEmployeeNumber" :value="remainingBudgetPerEmployee" prefix="$"></animated-number>
                             </h4>
                         </div>
@@ -74,7 +74,7 @@
                 <div v-show="budgetType">
                     <div>
                         <h5 style="font-size: 15px !important; font-weight: 300; padding: 0; margin: 0; color: #292929;" class="text-left">Total remaining budget</h5>
-                        <h4 class="title text-left" style="font-size: 39px; font-weight: 500; padding: 0; margin: 0; color: rgba(9, 170, 192, 0.8);">
+                        <h4 class="title text-left" style="font-size: 39px; font-weight: 500; padding: 0; margin: 0;" :class="[{'text-info':remainingBudgetPerEmployee > 0, 'text-danger':remainingBudgetPerEmployee <= 0}]">
                             <animated-number ref="totalRemainingBudgetNumber" :value="totalRemainingBudget" prefix="$"></animated-number>
                         </h4>
                     </div>
@@ -235,10 +235,10 @@
                     this.numberOfEmployees = this.$auth.user.customer.numberOfEmployees | numeral('0,0');
                     this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee | numeral('0,0');
 
-                    this.totalRemainingBudget = this.statistics.annualBudget - this.statistics.annualBudgetAllocated;
+                    this.totalRemainingBudget = this.statistics.annualBudget - (this.statistics.annualBudgetPerEmployeeAllocated*this.numberOfEmployees);//this.statistics.annualBudgetAllocated;
                     this.remainingBudgetPerEmployee = this.statistics.annualBudgetPerEmployee - this.statistics.annualBudgetPerEmployeeAllocated;
                     this.countEvents = this.statistics.numberOfEvents;
-                    this.percentage = 100 - ((this.statistics.annualBudgetAllocated / this.statistics.annualBudget) * 100).toFixed(2);
+                    this.percentage = (100-((this.statistics.annualBudgetPerEmployeeAllocated*this.numberOfEmployees) / this.statistics.annualBudget)*100).toFixed(2); //100 - ((this.statistics.annualBudgetAllocated / this.statistics.annualBudget) * 100).toFixed(2);
                     if (this.percentage > 0) {
                         this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-positive"}, {value: this.percentage, className:"budget-chart-slice-b-positive"}];
                     } else {
@@ -309,10 +309,10 @@
 
 <style scoped lang="scss">
     .md-card-content h4.title span {
-        color: rgba(9, 170, 192, 0.8);
+        //color: rgba(9, 170, 192, 0.8);
     }
     .md-card-content h4 span {
-        color: rgba(9, 170, 192, 0.8);
+        //color: rgba(9, 170, 192, 0.8);
     }
     .md-card-content h5{
         font-size: 1.2rem!important;
@@ -378,8 +378,7 @@
     }
 
     .budget-chart-slice-b-negative {
-        stroke: $pink-262;
-        opacity: 0.77;
+        stroke: #fff;
     }
     .budget-panel {
         /*.ct-series-b .ct-point,

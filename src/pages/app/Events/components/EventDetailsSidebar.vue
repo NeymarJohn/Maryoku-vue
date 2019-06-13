@@ -219,7 +219,13 @@
                         this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget//evt.totalBudget - resp[0].totalAllocatedBudget;
                         this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants//evt.totalBudget - resp[0].totalAllocatedBudget;
                         this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
-                        this.seriesData = [(100 - this.percentage), this.percentage]
+
+                        if (this.percentage > 0) {
+                            this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-positive"}, {value: this.percentage, className:"budget-chart-slice-b-positive"}];
+                        } else {
+                            this.seriesData =  [{value: 0.01, className: "budget-chart-slice-a-negative"},{value: 99.99, className: "budget-chart-slice-b-negative"}];
+                        }
+
                         this.budgetPerEmployee = evt.budgetPerPerson//this.totalRemainingBudget / evt.numberOfParticipants;
                         this.allocatedBudget = resp.totalAllocatedBudget
                         this.event.statistics['allocatedBudget'] = this.allocatedBudget
@@ -298,6 +304,26 @@
     }
 </script>
 <style lang="scss" scoped>
+    @import '@/assets/scss/md/_colors.scss';
+    .budget-chart-slice-a-positive {
+        opacity: 0.27;
+        stroke: #fff;
+    }
+
+    .budget-chart-slice-a-negative {
+        opacity: 0.27;
+        stroke: #fff;
+    }
+
+    .budget-chart-slice-b-positive {
+        stroke: #fff;
+    }
+
+    .budget-chart-slice-b-negative {
+        stroke: $pink-262;
+        opacity: 0.77;
+    }
+
     .md-layout, .md-layout-item {
         width: initial;
     }
@@ -416,7 +442,7 @@
     }
 
     .title-budget-prise {
-        color: rgba(33, 200, 152, 0.8) !important;
+        color: $red !important;
         font-size: 1.25rem;
         font-weight: bold;
         line-height: 1.2;
@@ -459,4 +485,7 @@
         font-size: 2.5em;
     }
 
+    .md-card-header-icon .card-icon .md-icon {
+        color: white !important;
+    }
 </style>
