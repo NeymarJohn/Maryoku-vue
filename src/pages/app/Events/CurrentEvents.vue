@@ -3,7 +3,7 @@
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
         <div class="event-details-tabs">
             <tabs
-                :tab-name="['EVENT DETAILS', 'BUDGET & PROPOSALS', 'TIMELINE', 'INVITEES MANAGEMENT','PUBLIC PAGE']"
+                :tab-name="['EVENT DETAILS', 'BUDGET & PROPOSALS', 'TIMELINE', 'INVITEES MANAGEMENT','EVENT PAGE']"
                 color-button="rose">
                 <!-- here you can add your content for tab-content -->
                 <template slot="tab-pane-1">
