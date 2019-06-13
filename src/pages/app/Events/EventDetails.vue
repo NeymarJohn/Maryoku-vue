@@ -83,6 +83,12 @@
 
 
     export default {
+        props : {
+            event : {
+                type : Object,
+                default : null
+            }
+        },
         components: {
             VueElementLoading,
             ChartComponent,
@@ -108,7 +114,12 @@
             this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
         },
         mounted() {
-            this.getEvent();
+
+            if ( this.event ) {
+                this.calendarEvent = this.event
+            } else {
+                this.getEvent();
+            }
         },
         methods: {
             ...mapMutations("EventPlannerVuex", [
