@@ -56,7 +56,7 @@
                         <h4
                             class="title"
                             style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
-                            <div class="title-budget-prise title"
+                            <div class="title" :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
                                  v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants">
                                 <animated-number ref="totalRemainingBudgetNumber"
                                                  :value="totalRemainingBudget"
@@ -73,7 +73,7 @@
                         <h4
                             class="title"
                             style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
-                            <div class="title-budget-prise title"
+                            <div class="title" :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
                                  v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants">
                                 <animated-number ref="totalRemainingBudgetNumber"
                                                  :value="remainingBudgetPerEmployee"
@@ -104,7 +104,7 @@
                         <div class="md-caption title-text">Remaining budget per participant
                         </div>
                         <!-- TODO Need calculate with components -->
-                        <div class="md-caption title-text title-budget-prise">
+                        <div class="md-caption title-text " :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]">
                             <animated-number ref="budgetPerPersonNumber"
                                              :value="remainingBudgetPerEmployee"
                                              prefix="$"></animated-number>
@@ -112,7 +112,7 @@
                     </div>
                     <div>
                         <div class="md-caption title-text">Budget per participant</div>
-                        <div class="md-caption title-text title-budget-prise">
+                        <div class="md-caption title-text " :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]">
                             <animated-number ref="budgetPerPersonNumber"
                                              :value="calendarEvent.budgetPerPerson"
                                              prefix="$"></animated-number>
@@ -226,8 +226,8 @@
                             this.seriesData =  [{value: 0.01, className: "budget-chart-slice-a-negative"},{value: 99.99, className: "budget-chart-slice-b-negative"}];
                         }
 
-                        this.budgetPerEmployee = evt.budgetPerPerson//this.totalRemainingBudget / evt.numberOfParticipants;
-                        this.allocatedBudget = resp.totalAllocatedBudget
+                        this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
+                        this.allocatedBudget = resp.totalAllocatedBudget;
                         this.event.statistics['allocatedBudget'] = this.allocatedBudget
                     })
                     .catch(error => {
@@ -305,24 +305,6 @@
 </script>
 <style lang="scss" scoped>
     @import '@/assets/scss/md/_colors.scss';
-    .budget-chart-slice-a-positive {
-        opacity: 0.27;
-        stroke: #fff;
-    }
-
-    .budget-chart-slice-a-negative {
-        opacity: 0.27;
-        stroke: #fff;
-    }
-
-    .budget-chart-slice-b-positive {
-        stroke: #fff;
-    }
-
-    .budget-chart-slice-b-negative {
-        stroke: $pink-262;
-        opacity: 0.77;
-    }
 
     .md-layout, .md-layout-item {
         width: initial;
@@ -442,7 +424,15 @@
     }
 
     .title-budget-prise {
-        color: $red !important;
+        color: $green !important;
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.2;
+        margin-bottom: 5px;
+    }
+
+    .title-budget-prise-negative {
+        color: $pink-262 !important;
         font-size: 1.25rem;
         font-weight: bold;
         line-height: 1.2;
