@@ -676,6 +676,7 @@ $tooltip-border-color: $blue-grey-200 !default;
                     box-shadow: 0px 1px 24px 0 rgba(0, 0, 0, 0.14);
                     padding : 10px 20px;
                     position: relative;
+                    text-align: left;
                     &:after {
                         content: '';
                         position: absolute;
@@ -725,6 +726,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
 .time-line-section {
     position :relative;
+    text-align: left;
 
     .preview-event {
         position : absolute;
@@ -1582,6 +1584,14 @@ iframe{
 }
 
 .edit-event-details {
+
+    .event-details-tabs .md-list-item-button {
+        border-radius: 0 !important;
+    }
+
+    .event-invitees .md-list-item-button {
+        border-radius: 5px !important;
+    }
 
     .event-info-section {
         .md-layout-item {
