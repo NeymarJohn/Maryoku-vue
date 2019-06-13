@@ -3,7 +3,7 @@
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
         <div class="event-details-tabs">
             <tabs
-                :tab-name="['EVENT DETAILS', 'BUDGET & PROPOSALS', 'TIMELINE', 'INVITEES MANAGEMENT']"
+                :tab-name="['EVENT DETAILS', 'BUDGET & PROPOSALS', 'TIMELINE', 'INVITEES MANAGEMENT','PUBLIC PAGE']"
                 color-button="rose">
                 <!-- here you can add your content for tab-content -->
                 <template slot="tab-pane-1">
@@ -123,11 +123,21 @@
                 <template slot="tab-pane-4">
                     <div class="md-layout">
                         <div class="md-layout-item md-size-100">
-                            <event-invitees :event-data.sync="event"></event-invitees>
+                            <invitees-management-v2 :event-data.sync="event"
+                                                    :event-components="selectedComponents"></invitees-management-v2>
                         </div>
                     </div>
-
                 </template>
+
+                <template slot="tab-pane-5">
+                    <div class="md-layout">
+                        <div class="md-layout-item md-size-100">
+                            <event-details :event-data.sync="event"
+                                                    :event-components="selectedComponents"></event-details>
+                        </div>
+                    </div>
+                </template>
+
             </tabs>
         </div>
 
@@ -163,6 +173,7 @@
     import InviteesManagementV2 from './components/EventBlocks/InviteesManagementV2.vue'
     import EventInvitees from './components/EventInvitees.vue'
     import EventDetailsSidebar from './components/EventDetailsSidebar'
+    import EventDetails from './EventDetails'
 
     import EventPageRoutes from './components/EventPageRoutes.vue'
     import MdCardContent
@@ -187,7 +198,8 @@
             InviteesManagementV2,
             EventInvitees,
             Tabs,
-            EventDetailsSidebar
+            EventDetailsSidebar,
+            EventDetails
         },
 
         data () {

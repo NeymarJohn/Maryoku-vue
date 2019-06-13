@@ -3,7 +3,7 @@
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
 
         <!-- Publish Event Button -->
-        <div class="md-layout-item">
+        <div class="md-layout-item text-left">
             <!--<md-button class="md-info event-planner-event-page-go-back" @click="goBack">
               <md-icon>arrow_left</md-icon>Back
             </md-button>-->

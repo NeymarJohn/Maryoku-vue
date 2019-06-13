@@ -56,11 +56,11 @@
               </div>
             </li>
           </ul>
-        </drop-down>-->
+        </drop-down>
         <h3 class="md-title" style="font-weight: 400; padding-top: 14px; margin-left: -10px;">
           <md-icon class="text-rose" v-if="topBarTitle">arrow_right</md-icon>
           {{$route.meta.title ? $route.meta.title : $route.name}}
-        </h3>
+        </h3> -->
       </div>
       <div class="md-toolbar-section-end">
         <md-button class="md-just-icon md-round md-simple md-toolbar-toggle" :class="{toggled: $sidebar.showSidebar}" @click="toggleSidebar">

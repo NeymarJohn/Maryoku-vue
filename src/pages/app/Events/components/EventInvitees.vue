@@ -1,5 +1,5 @@
 <template>
-    <div class="md-layout event-invitees" style="margin-top: 16px;">
+    <div class="md-layout event-invitees">
         <div class="md-layout-item md-size-100">
             <nav-tabs
                 :tab-name="['Invitees', 'Automated Interactions']"
