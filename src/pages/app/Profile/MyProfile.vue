@@ -57,14 +57,16 @@
     data() {
       return {
         // auth: auth,
-        upComingEvents: [],
         userInfo: {},
         isLoading: false,
       }
 
     },
-    computed: {
 
+    computed: {
+        ...mapGetters({
+            upComingEvents: 'user/getUpcomingEvents',
+        }),
     },
     mounted() {
       this.isLoading = true;
