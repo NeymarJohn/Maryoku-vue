@@ -32,7 +32,7 @@
                     </div>
                     <md-field :class="[{'md-valid': !errors.has('email') && touched.email},{'md-error': errors.has('email')}]">
                         <label>Email Address</label>
-                        <md-input v-model="email" type="email" data-vv-name="email" required v-validate="modelValidations.email"></md-input>
+                        <md-input v-model="email" type="email" data-vv-name="email" required v-validate="modelValidations.email" v-focus></md-input>
                     </md-field>
                     <md-field :class="[{'md-valid': !errors.has('password') && touched.password},{'md-error': errors.has('password')}]">
                         <label>Password</label>
@@ -44,7 +44,7 @@
                         By signing up you agree to our <br/> <a href="https://www.262days.com/terms" target="_blank" style="background-color: #f2f2f2;">Terms of Use</a> and <a href="https://www.262days.com/privacy" target="_blank" style="background-color: #f2f2f2;">Privacy Policy</a>
                     </div>
                     <div class="button-container">
-                        <md-button @click="signup" class="md-success md-round mt-4" slot="footer" :disabled="!terms">Continue</md-button>
+                        <md-button @click="signup" class="md-success md-round mt-4" slot="footer">Continue</md-button>
                     </div>
                 </div>
             </signup-card>
@@ -74,7 +74,7 @@
                 let that = this;
                 this.$validator.validateAll().then(isValid => {
                     if (isValid){
-                        that.$auth.signupOrSignin(that, this.email, that.password, (data) => {
+                        that.$auth.signupOrSignin(that, this.email, that.password, 'administrator', (data) => {
                             that.$auth.login(that, {username: that.email, password: that.password}, (success) => {
                                 that.$router.push({ path: '/signedin', query: {token: success.access_token} });
                             }, (failure) => {

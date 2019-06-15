@@ -45,59 +45,66 @@ Vue.use(VueRouter);
 Vue.use(DashboardPlugin);
 
 Vue.use(VueGmaps, {
-  key: process.env.GOOGLE_API_KEY|| 'AIzaSyA2vZszC43EeV_86cOpsODl0jqs7Eaj3fI',
-  libraries: ['places']
+    key: process.env.GOOGLE_API_KEY|| 'AIzaSyA2vZszC43EeV_86cOpsODl0jqs7Eaj3fI',
+    libraries: ['places']
 });
 
 
 // configure router
 const router = new VueRouter({
-  routes, // short for routes: routes
-  linkExactActiveClass: "nav-item active",
-  scrollBehavior (to, from, savedPosition) {
-    return { x: 0, y: 0 }
-  }
+    routes, // short for routes: routes
+    linkExactActiveClass: "nav-item active",
+    scrollBehavior (to, from, savedPosition) {
+        return { x: 0, y: 0 }
+    }
 });
 
 router.beforeEach((to, from, next) => {
-  if (window.currentPanel){
-    window.currentPanel.hide();
-    window.currentPanel = null;
-  }
-
-  /*let tenantId = document.location.hostname.replace(".262days.com","");
-  router.app.$http.defaults.headers.common.gorm_tenantid = tenantId;
-  Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
-
-  if ((tenantId.startsWith("dev") || tenantId.startsWith("app") || tenantId.startsWith("localhost")) && to.name !== "CreateWorkspace"){
-    next('create-workspace');
-  } else {
-    if (to.meta.auth == null && !auth.user.authenticated) {
-      next('signin');
-    } else {
-      next();
+    if (window.currentPanel){
+        window.currentPanel.hide();
+        window.currentPanel = null;
     }
-  }*/
-  let tenantId = document.location.hostname.replace(".262days.com","");
-  let isPrimeTenant = tenantId === 'dev' || tenantId === 'app';
-  if ((isPrimeTenant && to.path !== '/signin' && to.path !== '/signedin' && to.path !== '/create-workspace' && to.path !== '/choose-workspace') || (to.meta.auth == null && !auth.user.authenticated)) {
-    next('signin');
-  } else {
-    next();
-  }
-  //router.app.$root.$emit("set-title",null);
+
+    /*let tenantId = document.location.hostname.replace(".262days.com","");
+    router.app.$http.defaults.headers.common.gorm_tenantid = tenantId;
+    Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
+
+    if ((tenantId.startsWith("dev") || tenantId.startsWith("app") || tenantId.startsWith("localhost")) && to.name !== "CreateWorkspace"){
+      next('create-workspace');
+    } else {
+      if (to.meta.auth == null && !auth.user.authenticated) {
+        next('signin');
+      } else {
+        next();
+      }
+    }*/
+
+    let tenantId = document.location.hostname.replace(".262days.com","");
+    let isPrimeTenant = tenantId === 'dev' || tenantId === 'app';
+    if ((isPrimeTenant && to.path !== '/signout' && to.path !== '/signin' && to.path !== '/signedin' && to.path !== '/create-workspace' && to.path !== '/choose-workspace') || (to.meta.auth && !auth.user.authenticated)) {
+        next('signin');
+    } else {
+
+        if (auth.user.role === 'guest' && to.path !== '/my-events'){
+            next('my-events');
+            return;
+        }
+
+        next();
+    }
+    //router.app.$root.$emit("set-title",null);
     router.app.$root.$emit("set-title",null, false, false);
 });
 
 router.afterEach((to, from) => {
-  window.document.title = `${to.meta.title ? to.meta.title : to.name} @ 262 Days`;
+    window.document.title = `${to.meta.title ? to.meta.title : to.name} @ 262 Days`;
 });
 
 // global library setup
 Object.defineProperty(Vue.prototype, "$Chartist", {
-  get() {
-    return this.$root.Chartist;
-  }
+    get() {
+        return this.$root.Chartist;
+    }
 });
 
 /*axios.interceptors.response.use(function (response) {
@@ -112,11 +119,11 @@ Object.defineProperty(Vue.prototype, "$Chartist", {
 Vue.use(VueAxios, axios);
 Vue.use(require('vue-moment'));
 Vue.use(Tooltip, {
-  delay: 200,
-  placement: 'auto',
-  class: 'tooltip-custom', // ex: 'tooltip-custom tooltip-other-custom'
-  triggers: ['hover', 'focus'],
-  offset: 5
+    delay: 200,
+    placement: 'auto',
+    class: 'tooltip-custom', // ex: 'tooltip-custom tooltip-other-custom'
+    triggers: ['hover', 'focus'],
+    offset: 5
 });
 Vue.use(VTooltip)
 Vue.use(vSelectMenu, { language: "en"});
@@ -131,59 +138,59 @@ Vue.component("vue-element-loading", VueElementLoading);
 Vue.component('multiselect', Multiselect);
 
 Vue.use(VueGtm, {
-  id: 'GTM-5FH68TF', // Your GTM ID
-  enabled: true, // defaults to true. Plugin can be disabled by setting this to false for Ex: enabled: !!GDPR_Cookie (optional)
-  debug: true, // Whether or not display console logs debugs (optional)
-  vueRouter: router, // Pass the router instance to automatically sync with router (optional)
-  ignoredViews: [] // If router, you can exclude some routes name (case insensitive) (optional)
+    id: 'GTM-5FH68TF', // Your GTM ID
+    enabled: true, // defaults to true. Plugin can be disabled by setting this to false for Ex: enabled: !!GDPR_Cookie (optional)
+    debug: true, // Whether or not display console logs debugs (optional)
+    vueRouter: router, // Pass the router instance to automatically sync with router (optional)
+    ignoredViews: [] // If router, you can exclude some routes name (case insensitive) (optional)
 });
 
 Vue.use(VueSlideoutPanel);
 
 Vue.use(Tawk, {
-  tawkSrc: 'https://embed.tawk.to/5cd93e082846b90c57ae3644/default',
-  enabled: false
+    tawkSrc: 'https://embed.tawk.to/5cd93e082846b90c57ae3644/default',
+    enabled: false
 });
 
 Vue.use(VueCookies);
 
 Vue.directive('focus', {
-  inserted: function (el) {
-    el.focus();
-  }
+    inserted: function (el) {
+        el.focus();
+    }
 });
 
 Vue.directive('select-all', {
-  inserted: function (el) {
-    el.setSelectionRange(el.value.length, el.value.length);
-  }
+    inserted: function (el) {
+        el.setSelectionRange(el.value.length, el.value.length);
+    }
 });
 
 Model.$http = axios;
 
 Number.prototype.padStart = function(size, theChar)  {
-  var s = String(this);
-  while (s.length < (size || 2)) {s = "0" + s;}
-  return s;
+    var s = String(this);
+    while (s.length < (size || 2)) {s = "0" + s;}
+    return s;
 };
 
 String.prototype.padStart = function(size, theChar) {
-  var s = String(this);
-  while (s.length < (size || 2)) {s = theChar + s;}
-  return s;
+    var s = String(this);
+    while (s.length < (size || 2)) {s = theChar + s;}
+    return s;
 };
 
 Object.defineProperty(Vue.prototype, '$auth', {
-  get () { return auth; }
+    get () { return auth; }
 });
 
 /* eslint-disable no-new */
 new Vue({
-  el: "#app",
-  render: h => h(App),
-  router,
-  store,
-  data: {
-    Chartist: Chartist
-  }
+    el: "#app",
+    render: h => h(App),
+    router,
+    store,
+    data: {
+        Chartist: Chartist
+    }
 });

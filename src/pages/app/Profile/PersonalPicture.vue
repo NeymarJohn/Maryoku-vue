@@ -2,16 +2,34 @@
     <div class="picture-container">
         <div class="picture">
             <div v-if="!imageUrl">
-                <img :src="avatar" class="picture-src" title="">
+                <img class="avatar" title="" src="static/img/profile-picture.png"  />
             </div>
             <div v-else>
-                <img v-model="imageUrl" :src="imageUrl"/>
+                <img v-model="imageUrl" class="avatar" :src="imageUrl"/>
             </div>
             <input type="file" @change="onFileChange">
         </div>
         <h6 class="description">Choose Picture</h6>
     </div>
 </template>
+
+<style lang="scss">
+.avatar {
+    width: 50% !important;
+    border-radius: 50% !important;
+
+}
+.picture{
+    width: 100% !important;
+    max-width: 100%;
+    padding: 24px;
+}
+.picture-src { 
+    width: 100%;
+
+}
+</style>
+
 
 <script>
   import {LabelEdit} from '@/components';

@@ -13,25 +13,19 @@
                 </template>
                 <template slot="body">
 
-                    <md-field :class="[
-          {'md-valid': !errors.has('username') && touched.username},
-          {'md-error': errors.has('username')}]">
+                    <md-field :class="[{'md-valid': !errors.has('username') && touched.username},{'md-error': errors.has('username')}]">
                         <md-icon>face</md-icon>
                         <label>First Name</label>
                         <md-input v-model="username" data-vv-name="username" required v-validate="modelValidations.username"></md-input>
                     </md-field>
 
-                    <md-field :class="[
-          {'md-valid': !errors.has('email') && touched.email},
-          {'md-error': errors.has('email')}]">
+                    <md-field :class="[{'md-valid': !errors.has('email') && touched.email},{'md-error': errors.has('email')}]">
                         <md-icon>email</md-icon>
                         <label>Email</label>
                         <md-input type="email" v-model="email" data-vv-name="email" required v-validate="modelValidations.email"></md-input>
                     </md-field>
 
-                    <md-field :class="[
-          {'md-valid': !errors.has('password') && touched.password},
-          {'md-error': errors.has('password')}]">
+                    <md-field :class="[{'md-valid': !errors.has('password') && touched.password},{'md-error': errors.has('password')}]">
                         <md-icon>lock</md-icon>
                         <label>Password</label>
                         <md-input type="password" v-model="password" data-vv-name="password" required v-validate="modelValidations.password"></md-input>
@@ -46,9 +40,9 @@
                     <md-button class="md-just-icon-social md-google" @click="authenticate('google')">
                         <i class="fab fa-google-plus-g" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
                     </md-button>
-                    <md-button class="md-just-icon-social md-circle md-linkedin" @click="authenticate('linkedin')">
+                    <!--<md-button class="md-just-icon-social md-circle md-linkedin" @click="authenticate('linkedin')">
                         <i class="fab fa-linkedin" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
-                    </md-button>
+                    </md-button>-->
 
                 </template>
             </modal>
@@ -56,16 +50,8 @@
     </div>
 </template>
 <script>
-    // import auth from '@/auth';
-    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-    import CalendarEvent from '@/models/CalendarEvent';
-    import {Modal} from "@/components";
-    import Calendar from "@/models/Calendar";
-    import EventComponent from "@/models/EventComponent";
 
-    import swal from "sweetalert2";
-    import {error} from 'util';
-    import moment from 'moment';
+    import { Modal } from '@/components';
 
     export default {
         components: {
@@ -73,12 +59,12 @@
         },
         props: {
             event: Object,
-            isGoing : [Boolean,String]
-
+            isGoing : [Boolean,String],
+            signUpModal: false
 
         },
         data: () => ({
-            // auth: auth,
+
             error:'',
             email: null,
             password: null,
@@ -111,7 +97,6 @@
 
         },
         methods: {
-            ...mapMutations('EventPlannerVuex', ['setSignUpModal','setDietaryConstraintsModal']),
             closeModal() {
                 this.setSignUpModal({showModal: false});
             },
@@ -155,9 +140,7 @@
             }
         },
         computed: {
-            ...mapState('EventPlannerVuex', [
-                'signUpModal',
-            ])
+
         },watch: {
             email() {
                 this.touched.email = true;
@@ -196,8 +179,7 @@
     .modal-container {
         max-width: 400px;
     }
-</style>
-<style lang="scss">
+
     .modal-z-index {
         z-index: 5;
     }
