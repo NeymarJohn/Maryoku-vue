@@ -1,6 +1,6 @@
 <template>
     <div>
-      <div class="md-layout">
+      <div class="">
             <div class="md-layout-item md-size-10">
                  <div>
                     <md-icon style="font-size: 15px !important; padding-right: 1%;">room</md-icon>
@@ -13,29 +13,33 @@
                  </label>
             </div>
 
-            <div class="md-layout-item md-size-60" style="padding-left: 0px; padding-right: 0px; ">
+            <div class="md-layout-item" style="padding-left: 0px; padding-right: 0px; ">
                 <div class="md-layout">
                     <div>
                         {{eventDate}} - {{endHourDateEvent}}
                     </div>
-                   
                 </div>
                 <div class="md-layout md-gutter">
-                    <div class="md-layout-item md-size-10">
+                    <div class="md-layout-item md-size-20">
                         <div >
                             Attending
                         </div>
+                        
                     </div>
-                    <div class="md-layout-item md-size-25" style="margin-left: 12%;">
-                        <div style="width:50%; height: 100%;">
+                    <div class="md-layout-item md-size-60" style="margin-left: 12%;">
                             <button class="attending-button" ><span class="attending">Yes</span></button>
-                        </div>
+                            <button class="attending-button" ><span class="attending">No</span></button>
+                        <!-- <div style="width:50%; height: 100%;"> -->
+                          
+                            
+                        <!-- </div> -->
+                                      <!-- <div style="width:50%; height: 100%;"> -->
+                        
+                        <!-- </div> -->
                     </div>
                    
                     <div class="md-layout-item md-size-25">
-                        <div style="width:50%; height: 100%;">
-                            <button class="attending-button" ><span class="attending">No</span></button>
-                        </div>
+          
                     </div>
                    
                 </div>

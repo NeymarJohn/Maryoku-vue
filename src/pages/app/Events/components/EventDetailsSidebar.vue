@@ -56,7 +56,7 @@
                         <h4
                             class="title"
                             style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
-                            <div class="title-budget-prise title"
+                            <div class="title" :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
                                  v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants">
                                 <animated-number ref="totalRemainingBudgetNumber"
                                                  :value="totalRemainingBudget"
@@ -73,7 +73,7 @@
                         <h4
                             class="title"
                             style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
-                            <div class="title-budget-prise title"
+                            <div class="title" :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
                                  v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants">
                                 <animated-number ref="totalRemainingBudgetNumber"
                                                  :value="remainingBudgetPerEmployee"
@@ -104,7 +104,7 @@
                         <div class="md-caption title-text">Remaining budget per participant
                         </div>
                         <!-- TODO Need calculate with components -->
-                        <div class="md-caption title-text title-budget-prise">
+                        <div class="md-caption title-text " :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]">
                             <animated-number ref="budgetPerPersonNumber"
                                              :value="remainingBudgetPerEmployee"
                                              prefix="$"></animated-number>
@@ -112,7 +112,7 @@
                     </div>
                     <div>
                         <div class="md-caption title-text">Budget per participant</div>
-                        <div class="md-caption title-text title-budget-prise">
+                        <div class="md-caption title-text " :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]">
                             <animated-number ref="budgetPerPersonNumber"
                                              :value="calendarEvent.budgetPerPerson"
                                              prefix="$"></animated-number>
@@ -219,9 +219,15 @@
                         this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget//evt.totalBudget - resp[0].totalAllocatedBudget;
                         this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants//evt.totalBudget - resp[0].totalAllocatedBudget;
                         this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
-                        this.seriesData = [(100 - this.percentage), this.percentage]
-                        this.budgetPerEmployee = evt.budgetPerPerson//this.totalRemainingBudget / evt.numberOfParticipants;
-                        this.allocatedBudget = resp.totalAllocatedBudget
+
+                        if (this.percentage > 0) {
+                            this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-positive"}, {value: this.percentage, className:"budget-chart-slice-b-positive"}];
+                        } else {
+                            this.seriesData =  [{value: 0.01, className: "budget-chart-slice-a-negative"},{value: 99.99, className: "budget-chart-slice-b-negative"}];
+                        }
+
+                        this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
+                        this.allocatedBudget = resp.totalAllocatedBudget;
                         this.event.statistics['allocatedBudget'] = this.allocatedBudget
                     })
                     .catch(error => {
@@ -298,6 +304,8 @@
     }
 </script>
 <style lang="scss" scoped>
+    @import '@/assets/scss/md/_colors.scss';
+
     .md-layout, .md-layout-item {
         width: initial;
     }
@@ -416,7 +424,15 @@
     }
 
     .title-budget-prise {
-        color: rgba(33, 200, 152, 0.8) !important;
+        color: $green !important;
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.2;
+        margin-bottom: 5px;
+    }
+
+    .title-budget-prise-negative {
+        color: $pink-262 !important;
         font-size: 1.25rem;
         font-weight: bold;
         line-height: 1.2;
@@ -459,4 +475,7 @@
         font-size: 2.5em;
     }
 
+    .md-card-header-icon .card-icon .md-icon {
+        color: white !important;
+    }
 </style>
