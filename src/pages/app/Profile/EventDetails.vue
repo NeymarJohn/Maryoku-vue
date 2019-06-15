@@ -1,47 +1,26 @@
 <template>
     <div>
       <div class="">
-            <div class="md-layout-item md-size-10">
-                 <div>
-                    <md-icon style="font-size: 15px !important; padding-right: 1%;">room</md-icon>
-                </div>
-            </div>
-            <div class="md-layout-item md-size-30" style="padding-left: 0px; ">
-               
+
+              <div class="md-layout-item" style="padding-left: 0px; padding-right: 10px; text-align: right ">
                 <label>
+                    <md-icon style="font-size: 15px !important; padding-right: 1%;">room</md-icon>
                      Where
                  </label>
             </div>
-
             <div class="md-layout-item" style="padding-left: 0px; padding-right: 0px; ">
-                <div class="md-layout">
+                <div class="md-layout md-gutter" style="justify-content: flex-end">
                     <div>
                         {{eventDate}} - {{endHourDateEvent}}
                     </div>
                 </div>
-                <div class="md-layout md-gutter">
-                    <div class="md-layout-item md-size-20">
-                        <div >
-                            Attending
-                        </div>
-                        
-                    </div>
-                    <div class="md-layout-item md-size-60" style="margin-left: 12%;">
+                <div class="md-layout md-gutter" style="justify-content: flex-end">
+
+                    <div class="md-layout-item md-size-70" style="text-align: right; padding-right: 0;">
+                         Attending
                             <button class="attending-button" ><span class="attending">Yes</span></button>
                             <button class="attending-button" ><span class="attending">No</span></button>
-                        <!-- <div style="width:50%; height: 100%;"> -->
-                          
-                            
-                        <!-- </div> -->
-                                      <!-- <div style="width:50%; height: 100%;"> -->
-                        
-                        <!-- </div> -->
-                    </div>
-                   
-                    <div class="md-layout-item md-size-25">
-          
-                    </div>
-                   
+                    </div>                   
                 </div>
             </div>
         </div>
