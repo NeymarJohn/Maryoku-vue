@@ -1954,6 +1954,37 @@ iframe{
 
 }
 
+
+/* Vendor Proposals Style */
+.event-information-card {
+    &.md-card.md-theme-default.md-primary {
+        background: $brand-info;
+
+        .title {
+            color : #fff;
+        }
+    }
+
+    .title {
+        font-weight: 500;
+        margin : 0.6em 0 0;
+        font-size: 17px;
+    }
+
+    .info-item {
+        display: flex;
+        flex : 1;
+        flex-direction: row;
+        justify-content: space-between;
+        font-size: 18px;
+        margin-top : 1em;
+        font-weight: 400    ;
+        .md-icon {
+            font-size: 18px !important;
+            color : #fff;
+        }
+    }
+}
 @media screen and (max-width : 500px) {
     .event-details {
         &_content.md-card-content {
@@ -2133,7 +2164,7 @@ iframe{
 
 
 .budget-pie-container {
-    /*.ct-series-b .ct-point,
+    .ct-series-b .ct-point,
     .ct-series-b .ct-line,
     .ct-series-b .ct-bar,
     .ct-series-b .ct-slice-donut,
@@ -2146,25 +2177,6 @@ iframe{
     .ct-series-a .ct-slice-donut,
     .ct-series-a .ct-pie {
         stroke: #ebebeb !important;
-    }*/
-
-    .budget-chart-slice-a-positive {
-        opacity: 0.27;
-        stroke: #aaa;
-    }
-
-    .budget-chart-slice-a-negative {
-        opacity: 0.27;
-        stroke: #000;
-    }
-
-    .budget-chart-slice-b-positive {
-        stroke: $green;
-    }
-
-    .budget-chart-slice-b-negative {
-        stroke: $pink-262;
-        opacity: 0.77;
     }
 }
 

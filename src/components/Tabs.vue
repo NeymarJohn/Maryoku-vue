@@ -58,11 +58,6 @@ export default {
     };
   },
   computed: {},
-    mounted(){
-        this.$root.$on('event-planner-nav-switch-panel',(index)=>{
-            this.switchPanel(this.tabName[index]);
-        })
-    },
   methods: {
     switchPanel(panel) {
       this.activePanel = panel;

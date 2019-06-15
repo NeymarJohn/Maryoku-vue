@@ -30,6 +30,7 @@ import EditEvent from "@/pages/app/Events/EditEvent.vue";
 import EventDetails from "@/pages/app/Events/EventDetails.vue";
 import EditEventNew from "@/pages/app/Events/EditEventNew.vue";
 import ShowEvent from "@/pages/app/Events/ShowEvent.vue";
+import VendorProposals from "@/pages/app/Events/VendorProposals.vue";
 import EventProposal from "@/pages/app/Events/EventProposal.vue";
 import Notes from "@/pages/app/Notes.vue";
 import Proposals from "@/pages/app/Proposals.vue";
@@ -302,6 +303,12 @@ let publicPages = {
       component: ShowEvent,
       meta: {auth: false, title: 'Event', gtm: "Event"},
     },
+      {
+          path: "/vendor-proposals",
+          name: "VendorProposals",
+          component: VendorProposals,
+          meta: {auth: false, title: 'Vendor Proposals', gtm: "VendorProposals"},
+      },
     /*{
       path: "/get-started",
       name: "GetStarted",

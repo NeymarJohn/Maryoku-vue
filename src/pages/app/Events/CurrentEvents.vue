@@ -33,8 +33,7 @@
                                         </md-button>
 
                                         <md-button name="event-planner-tab-event-details-banner-manage-proposals"
-                                                   class="event-planner-tab-event-details-banner-manage-proposals md-info"
-                                                   @click="selectServices">
+                                                   class="event-planner-tab-event-details-banner-manage-proposals md-info">
                                             Select Services
                                         </md-button>
 
@@ -56,7 +55,7 @@
                                         </p>
                                         <md-button name="event-planner-tab-event-details-banner-timeline"
                                                    class="event-planner-tab-event-details-banner-timeline md-rose md-simple got-to-component-btn"
-                                                   @click="selectTimeline">
+                                                   @click="goToComponent('/edit/timeline')">
                                             Edit Event Timeline
                                             <md-icon>arrow_forward</md-icon>
                                         </md-button>
@@ -73,7 +72,7 @@
 
                                         <md-button name="event-planner-tab-event-details-banner-invitees"
                                                    class="event-planner-tab-event-details-banner-invitees md-rose md-simple got-to-component-btn"
-                                                   @click="selectInviteesManagement">
+                                                   @click="goToComponent('/edit/invitees-management')">
                                             Manage Invitees
                                             <md-icon>arrow_forward</md-icon>
                                         </md-button>
@@ -90,7 +89,7 @@
 
                                         <md-button name="event-planner-tab-event-details-banner-event-page"
                                                    class="event-planner-tab-event-details-banner-event-page md-rose md-simple got-to-component-btn"
-                                                   @click="selectEventPage">
+                                                   @click="goToComponent('/edit')">
                                             Edit Event page
                                             <md-icon>arrow_forward</md-icon>
                                         </md-button>
@@ -262,18 +261,6 @@
                         this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
                     })
                 }.bind(this))
-            },
-            selectServices(){
-              this.$root.$emit("event-planner-nav-switch-panel", 1);
-            },
-            selectTimeline(){
-                this.$root.$emit("event-planner-nav-switch-panel", 2);
-            },
-            selectInviteesManagement(){
-                this.$root.$emit("event-planner-nav-switch-panel", 3);
-            },
-            selectEventPage(){
-                this.$root.$emit("event-planner-nav-switch-panel", 4);
             },
             selectTab (tab) {
                 this.currentTab = tab
