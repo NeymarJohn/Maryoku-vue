@@ -13,7 +13,7 @@
 </template>
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-
+  // import auth from '@/auth';
 
   export default {
     name: 'event-confirmation',
@@ -24,15 +24,14 @@
         event,
     },
     data: () => ({
-
+        auth : auth
     }),
     methods: {
         ...mapMutations('EventPlannerVuex', ['setGoingToEvent']),
         confirmGoing(is_going){
-            /*this.setGoingToEvent({isGoing: is_going});
+            this.setGoingToEvent({isGoing: is_going});
 
-            this.$emit('isGoing');*/
-            this.$root.$emit("event-confirmation", is_going);
+            this.$emit('isGoing');
         }
 
     },

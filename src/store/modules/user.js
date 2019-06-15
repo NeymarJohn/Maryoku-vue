@@ -63,59 +63,59 @@ const getters={
     if(state.charts.numberOfEventsPerYear){
           const parse_data=[]
         const parse_label=[]
-        if(state.charts.numberOfEventsPerYear){ 
+        if(state.charts.numberOfEventsPerYear){
             const chart=state.charts.numberOfEventsPerYear
-            for(let key in chart){              
+            for(let key in chart){
               parse_label.push(key)
-              parse_data.push(chart[key]) 
+              parse_data.push(chart[key])
           }
-          
-          return{            
+
+          return{
             labels: parse_label,
             datasets: [{
               data: parse_data,
               pointBackgroundColor:'white',
-              pointStyle:'circle', 
+              pointStyle:'circle',
               borderColor: [
                 'white',
               ],
               borderWidth: 3
-            }]                     
+            }]
           }
         }else{
-          return{            
+          return{
             labels: [],
             datasets:[{
               label: '# of type Events',
               data: [],
               backgroundColor: '#25d0a2'
-      
-            }]          
+
+            }]
           }
         }
-      }      
+      }
     },
     getChartEventPerEmployee:(state)=>{
       const parse_data=[]
       const parse_month=[]
 
-      if(state.charts.eventCostPerEmployeePerYearMonth){          
-        const chart= state.charts.eventCostPerEmployeePerYearMonth          
+      if(state.charts.eventCostPerEmployeePerYearMonth){
+        const chart= state.charts.eventCostPerEmployeePerYearMonth
 
         for(let key in chart){
           const moths = key.split('__')
 
           parse_month.push(months_short[moths[1]-1])
-          parse_data.push(chart[key]) 
+          parse_data.push(chart[key])
         }
 
         if(parse_month.length<6&&parse_data.length<6){
-          return{               
+          return{
             labels: parse_month.sort(),
             datasets: [{
               data: parse_data.sort(),
               pointBackgroundColor:'white',
-              pointStyle:'circle', 
+              pointStyle:'circle',
               borderColor: [
                 'white',
               ],
@@ -126,7 +126,7 @@ const getters={
           const arrLenght=parse_data.length-6
           const dataCh=parse_data.sort().splice(arrLenght)
           const labemlCh=parse_month.sort().splice(arrLenght)
-            return{               
+            return{
               labels: labemlCh,
               datasets: [{
                 data: dataCh,
@@ -137,39 +137,39 @@ const getters={
                   '#26cfa0',
                 ],
               borderWidth: 1
-              }]          
-          }  
+              }]
+          }
         }
       }
   },
   getChartEventsPerCategory:(state)=>{
     const parse_data=[]
     const parse_label=[]
-  if(state.charts.eventsPerCategory){ 
+  if(state.charts.eventsPerCategory){
       const chart=state.charts.eventsPerCategory
       for(let key in chart){
         const moths= key.split('__')
         parse_label.push(key)
-        parse_data.push(chart[key]) 
+        parse_data.push(chart[key])
     }
-    return{            
+    return{
       labels: parse_label,
       datasets:[{
         label: '# of type Events',
         data: parse_data,
         backgroundColor: 'white'
 
-      }]          
+      }]
     }
   }else{
-    return{            
+    return{
       labels: [],
       datasets:[{
         label: '# of type Events',
         data: [],
         backgroundColor: '#25d0a2'
 
-      }]          
+      }]
     }
   }
   },
@@ -179,40 +179,40 @@ const getters={
       let listRete=null
       if(state.charts.participantsPerEventPerYearMonthEventType){
         const chart=state.charts.participantsPerEventPerYearMonthEventType
-        
-        let filterYear=null           
-         for(let key in chart){               
-          if(key==currentYear){                
-            filterYear=chart[key]                
-          }              
-      }        
+
+        let filterYear=null
+         for(let key in chart){
+          if(key==currentYear){
+            filterYear=chart[key]
+          }
+      }
        listRete= months.map((item,index)=>{
-     
-              
+
+
         for(let month in filterYear){
-          const currentObj=[]                             
+          const currentObj=[]
          if((month-1)==index){
-            const categori=filterYear[month]                          
-             for(let key in categori){                                    
+            const categori=filterYear[month]
+             for(let key in categori){
                  const obj={}
                  obj['typeEvent']=key
                  obj['total']=String(categori[key].Invited||0)
-                 obj['currentValue']=String(categori[key].Actual||0)                 
+                 obj['currentValue']=String(categori[key].Actual||0)
                  currentObj.push(obj)
              }
-         }else{          
+         }else{
            currentObj.push({typeEvent:'',total:'',currentValue:''})
            }
            return currentObj
-      
+
          }
-         
-         
-      
-      })        
-      } 
-         
-       return listRete 
+
+
+
+      })
+      }
+
+       return listRete
   },
   getChartSatisfactionRate:(state)=>{
     const currentYear=new Date().getFullYear()
@@ -220,20 +220,20 @@ const getters={
     let listRete=null
     if(state.charts.satisfactionRatesPerYearMonth){
       const chart=state.charts.satisfactionRatesPerYearMonth
-      let filterYear=null           
-       for(let key in chart){               
-        if(key==currentYear){                
-          filterYear=chart[key]                
-        }              
-    }    
-        
+      let filterYear=null
+       for(let key in chart){
+        if(key==currentYear){
+          filterYear=chart[key]
+        }
+    }
+
      listRete= months.map((item,index)=>{
-      
-      for(let month in filterYear){  
-        const currentObj=[]                   
+
+      for(let month in filterYear){
+        const currentObj=[]
        if((month-1)===index){
           const categori=filterYear[month]
-           for(let key in categori){                   
+           for(let key in categori){
                const obj={}
                obj['category']=key
                obj['total']='100'
@@ -245,22 +245,25 @@ const getters={
          currentObj.push(a)
          }
          return currentObj
-       } 
-    
-    })        
-    }       
-     
+       }
+
+    })
+    }
+
      return listRete
   }
 
-} 
+}
 //actions
 const actions={
    getUserFromApi({commit,state}, data){
-            Me.get()
+        Me.get()
             .then(res=>{
+                if (res[0] && (res[0].pictureUrl == '' || res[0].pictureUrl == 'none')) {
+                    res[0].pictureUrl = 'static/img/placeholder.jpg'
+                }
                 commit("setUser" , res[0])
-                commit('setCustomer',res[0].customer)                               
+                commit('setCustomer',res[0].customer)
                 Customer.find(res[0].customer.id)
                 .then(res=>commit)
                 .catch(e=>console.log(e, 'eto customer, error'))
@@ -283,12 +286,12 @@ const actions={
                        return result;
                     }, []);
                     commit('setUpcomingEvents',upcomingEvents)
-                })  
+                })
             }
-            
+
 
             )
-            .catch(e=>console.log(e))        
+            .catch(e=>console.log(e))
     },
     async getIndustry({commit,state}){
         Industry
@@ -424,7 +427,7 @@ const mutations= {
     },
     setUpcomingEvents(state,data){
       state.upcomingEvents=data
-    }    
+    }
 }
 
 export default {

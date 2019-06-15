@@ -12,6 +12,9 @@
 
       <div class="md-layout" style="overflow: auto; max-height: 90vh; margin-left: -15px;">
         <div class="md-layout-item md-large-size-33 md-medium-size-50 md-small-size-100">
+            <personal-picture :user-info="userInfo" :is-loading="isLoading"></personal-picture>
+        </div>
+        <div class="md-layout-item md-large-size-33 md-medium-size-50 md-small-size-100">
           <personal-information :user-info="userInfo" :is-loading="isLoading"></personal-information>
         </div>
         <div class="md-layout-item md-large-size-33 md-medium-size-50 md-small-size-100">
@@ -33,6 +36,7 @@
 <script>
   import VueElementLoading from 'vue-element-loading';
   import PersonalInformation from "./PersonalInformation.vue";
+  import PersonalPicture from "./PersonalPicture.vue";
   import MyEvents from "./MyEvents.vue";
   import DietaryConstraints from "./DietaryConstraints.vue";
   import MySpecialDates from "./MySpecialDates.vue";
@@ -48,6 +52,7 @@
     components: {
       VueElementLoading,
       PersonalInformation,
+      PersonalPicture,
       MyEvents,
       DietaryConstraints,
       MySpecialDates,
@@ -57,14 +62,16 @@
     data() {
       return {
         // auth: auth,
-        upComingEvents: [],
         userInfo: {},
         isLoading: false,
       }
 
     },
-    computed: {
 
+    computed: {
+        ...mapGetters({
+            upComingEvents: 'user/getUpcomingEvents',
+        }),
     },
     mounted() {
       this.isLoading = true;
