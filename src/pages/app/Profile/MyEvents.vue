@@ -9,7 +9,7 @@
       </md-card-header>
 
       <md-card-content>
-        <h6 v-if="events.length === 0">No events yet</h6>
+        <h6 v-if="emptyEvents">No events yet</h6>
         <collapse :collapse="events" icon="keyboard_arrow_down" color-collapse="warning" >
 
           <template v-for="(item,index) in events" :slot="`md-collapse-pane-${index+1}`">

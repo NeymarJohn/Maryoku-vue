@@ -11,20 +11,20 @@
             {{getTitle(item.title)}}
   
           </h5>
-<!-- 
+
           <div class="md-layout-item">
 
-          </div> -->
+          </div>
           <div class="md-layout-item" style=" padding-right: 0px;">
             <div class="md-layout">
-            
-              <div class="md-layout-item md-size-100" style="text-align:left;padding-right: 0px;padding-left: 0px; text-align: right">
-                   <md-icon style="margin-right: 0px; font-size: 15px !important;">{{icon}}</md-icon>
+              <div class="md-layout-item md-size-20" style="text-align:right;padding-right: 0px;padding-left: 0px;">
+                <md-icon style="margin-right: 0px; font-size: 15px !important;">{{icon}}</md-icon>
+              </div>
+              <div class="md-layout-item md-size-80" style="text-align:left;padding-right: 0px;padding-left: 0px;">
                 <span class="date-content">
                       {{new Date(item.eventStartMillis).toLocaleDateString("en-US", {  day: 'numeric',year: 'numeric', month: 'long'})}}
                       </span>
               </div>
-
             </div>
           </div>
   
