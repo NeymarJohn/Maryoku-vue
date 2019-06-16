@@ -1,26 +1,43 @@
 <template>
     <div>
-      <div class="">
-
-              <div class="md-layout-item" style="padding-left: 0px; padding-right: 10px; text-align: right ">
-                <label>
+      <div class="md-layout">
+            <div class="md-layout-item md-size-10">
+                 <div>
                     <md-icon style="font-size: 15px !important; padding-right: 1%;">room</md-icon>
+                </div>
+            </div>
+            <div class="md-layout-item md-size-30" style="padding-left: 0px; ">
+               
+                <label>
                      Where
                  </label>
             </div>
-            <div class="md-layout-item" style="padding-left: 0px; padding-right: 0px; ">
-                <div class="md-layout md-gutter" style="justify-content: flex-end">
+
+            <div class="md-layout-item md-size-60" style="padding-left: 0px; padding-right: 0px; ">
+                <div class="md-layout">
                     <div>
                         {{eventDate}} - {{endHourDateEvent}}
                     </div>
+                   
                 </div>
-                <div class="md-layout md-gutter" style="justify-content: flex-end">
-
-                    <div class="md-layout-item md-size-70" style="text-align: right; padding-right: 0;">
-                         Attending
+                <div class="md-layout md-gutter">
+                    <div class="md-layout-item md-size-10">
+                        <div >
+                            Attending
+                        </div>
+                    </div>
+                    <div class="md-layout-item md-size-25" style="margin-left: 12%;">
+                        <div style="width:50%; height: 100%;">
                             <button class="attending-button" ><span class="attending">Yes</span></button>
+                        </div>
+                    </div>
+                   
+                    <div class="md-layout-item md-size-25">
+                        <div style="width:50%; height: 100%;">
                             <button class="attending-button" ><span class="attending">No</span></button>
-                    </div>                   
+                        </div>
+                    </div>
+                   
                 </div>
             </div>
         </div>
@@ -37,9 +54,13 @@
     
     
         <div class="md-layout">
- 
-            <div class="md-layout-item md-size-70" style="padding-left: 10px; margin-right: 1%;">
-                      <md-icon style="font-size: 15px !important;">face</md-icon>
+            <div class="md-layout-item md-size-10" style="padding-right: 0px;">
+                
+                 <div>
+                    <md-icon style="font-size: 15px !important;">face</md-icon>
+                </div>
+            </div>
+            <div class="md-layout-item md-size-70" style="padding-left: 0px; margin-right: 1%;">
                <label>
                     Dress code
                 </label>
@@ -68,7 +89,7 @@
         </div>
        
     
-        <!-- <div class="md-layout">
+        <div class="md-layout">
             <div class="md-layout-item md-gutter ">
                 <div style="width:100%;height:100%">
                     <img src="https://www.w3schools.com/w3css/img_lights.jpg" title="">
@@ -105,7 +126,7 @@
                 </div>
                   
             </div>
-        </div> -->
+        </div>
     
     
     

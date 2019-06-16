@@ -25,9 +25,9 @@
                     <!-- Event Info -->
                     <div class="md-layout-item md-size-50">
 
-                        <div class="event-title-date text-left">
+                        <div class="event-title-date">
                             <h4>
-                                {{calendarEvent.title}}
+                                {{calendarEvent.occasion}}
                             </h4>
 
                             <div class="event-date">{{getEventDate(calendarEvent.eventStartMillis)}}</div>

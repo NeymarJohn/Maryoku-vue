@@ -7,7 +7,7 @@
             <input type="file" style="display: none;" ref="inputFile" accept="image/gif, image/jpg, image/png" @change="onFilePicked">
         </div>
 
-        <event-confirmation :user-response.sync="userResponse" :user-info.sync="userInfo" :event="event" v-if="readonly" @isGoing="showSignUp()" rel="signUpModal"></event-confirmation>
+        <event-confirmation :event="event" v-if="readonly" @isGoing="showSignUp()" rel="signUpModal"></event-confirmation>
 
         <edit-header-image  v-if="!readonly" :event="event" rel="editHeaderModal"></edit-header-image>
     </div>
@@ -34,9 +34,7 @@
         readonly : {
             type : Boolean,
             default : false
-        },
-        userInfo: Object,
-        userResponse: Object
+        }
     },
     data: () => ({
         // auth: auth,
