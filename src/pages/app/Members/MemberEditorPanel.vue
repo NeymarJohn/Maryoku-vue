@@ -69,18 +69,19 @@
                         </div>
 
                         <div v-if="!this.editMode" class="md-layout-item md-size-100" style="margin-bottom: 16px;">
+                            <label>One or more email addresses</label>
                             <md-field
                                       class="height-auto"
                                       :class="[{'md-valid': !errors.has('email') && touched.email},{'md-error': errors.has('email')}]">
-                                <label>One or more email addresses</label>
-                                <md-textarea
+
+                                <md-input
                                     v-model="teamMember.emailAddress"
                                     data-vv-name="email"
                                     type="email"
                                     name="email"
                                     required
                                     rows="1"
-                                    v-validate="modelValidations.email" v-focus placeholder="john@example.com,brad@example.com"></md-textarea>
+                                    v-validate="modelValidations.email" v-focus placeholder="john@example.com,brad@example.com"></md-input>
                                 <slide-y-down-transition>
                                     <md-icon class="error" v-show="errors.has('email')">close</md-icon>
                                 </slide-y-down-transition>
@@ -139,7 +140,7 @@
                         <div class="md-layout-item md-size-100" style="margin-bottom: 16px;" v-if="!editMode">
                             <label>Groups</label>
                             <md-field>
-                                <multiselect :hide-selected="true" :close-on-select="false" v-model="teamMember.groups" tag-placeholder="Select groups" placeholder="" label="name" track-by="id" :searchable="true" :options="groupsList" :multiple="true" :taggable="true" >
+                                <multiselect @tag="createNewGroup" tag-placeholder="Add this as new group" :hide-selected="true" :close-on-select="false" v-model="teamMember.groups" placeholder="" label="name" track-by="id" :searchable="true" :options="groupsList" :multiple="true" :taggable="true" >
 
                                     <template slot="tag" slot-scope="{option}" style="padding: 12px;">
                                         <md-chip style="background-color: #FF547C !important; color: #fff; font-weight: 500; font-size: 14px; text-align: left;" :md-deletable="true"  @md-delete="removeGroup(option)">{{option.name}}</md-chip>
@@ -285,6 +286,11 @@
 
         },
         methods: {
+            createNewGroup(groupName){
+                Team.save(this, {name: groupName }).then(team=>{
+                    this.groupsList.splice(1, 0 , team);
+                });
+            },
             getError(fieldName) {
                 return this.errors.first(fieldName);
             },
