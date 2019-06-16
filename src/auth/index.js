@@ -95,8 +95,10 @@ export default {
         let user = context.$ls.get("user");
         if (user){
             this.user = user;
+        } else {
+            this.user.authenticated = false;
         }
-        if (!this.user.authenticated || this.user.id === undefined){
+        if (!this.user.authenticated || this.user.id === undefined) {
             context.$http.get(CURRENT_USER_URL, {maxRedirects: 0, headers: this.getAuthHeader() })
                 .then((resp) => {
                     // context.user = { username: resp.data.username };

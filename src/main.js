@@ -85,7 +85,7 @@ router.beforeEach((to, from, next) => {
         next('signin');
     } else {
 
-        if (to.path !== '/signout' && auth.user.role === 'guest' && to.path !== '/my-events'){
+        if (to.name !== 'ShowEvent' && to.path !== '/signout' && auth.user.role === 'guest' && to.path !== '/my-events'){
             next('my-events');
             return;
         }
