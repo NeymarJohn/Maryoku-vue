@@ -53,6 +53,7 @@
         },
         data() {
             return {
+                serverURL: process.env.SERVER_URL,
                 working: false,
                 error:'',
                 email: null,
@@ -87,8 +88,8 @@
             },
             authenticate(provider) {
                 this.loading = true;
-                const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`);
-                document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?callback=${callback}`;
+                const callback = btoa(`${document.location.href}?token=`);
+                document.location.href = `${this.serverURL}/oauth/authenticate/${provider}?callback=${callback}`;
             },
             signup(){
                 this.working = true;

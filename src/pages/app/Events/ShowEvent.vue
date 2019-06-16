@@ -160,6 +160,14 @@
             };
         },
         created(){
+            const givenToken = this.$route.query.token;
+            if (givenToken) {
+                this.$auth.setToken(givenToken);
+                this.$auth.setHeaders(this);
+
+
+            }
+
             this.$root.$on("event-confirmation",(isGoing)=>{
                 if (this.user){
                     let inviteeResponse = { invitee: { id: this.invitee.id }, attending: isGoing };
@@ -255,6 +263,10 @@
                                     });
                             } else {
                                 this.isLoading = false;
+                            }
+                        }).catch(res => {
+                            if (res.response.data.status === 406){
+                                this.$router.push({path: '/signout'});
                             }
                         });
                     } else {
