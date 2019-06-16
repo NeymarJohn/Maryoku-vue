@@ -8,7 +8,7 @@
 
                 <!-- here you can add your content for tab-content -->
                 <template slot="tab-pane-1">
-                    <div class="md-layout">
+                    <div class="md-layout" style="margin-top: 21px;">
                         <div class="md-layout-item md-medium-size-60 md-size-60">
                             <md-card style="height: auto;">
                                 <md-card-header class="md-card-header-text md-card-header-warning">
