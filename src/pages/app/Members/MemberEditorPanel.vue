@@ -393,6 +393,7 @@
                                             console.log("Send invitation: member attached ");
                                             res.item.groups = this.teamMember.groups;
                                             members.push(res.item);
+                                            this.$root.$emit('member-added', res.item);
                                             member = {};
                                         });
                                     });
@@ -400,10 +401,6 @@
                             });
                             Promise.all(promises).then(()=>{
                                 this.closePanel();
-                                members.forEach((member)=>{
-                                    member.groups = [];
-                                    this.$root.$emit('member-added', member);
-                                });
                             });
                         }
                     } else {

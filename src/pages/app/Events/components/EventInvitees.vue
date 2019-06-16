@@ -404,8 +404,13 @@
             }
         },
         created() {
+
         },
         mounted() {
+            this.$root.$on("member-added", (member)=>{
+                this.selectSingleMember(member);
+                this.refreshList(true);
+            });
             this.working = true;
             this.$auth.currentUser(this, true, ()=>{
                 if (this.eventData && this.eventData.id){
