@@ -111,9 +111,10 @@
                 new EventComponent().get().then(res=>{
                     let list = [];
                     res.forEach((parentBuildingBlock)=>{
-                        parentBuildingBlock.childComponents.forEach((bb)=>{
+                        /*parentBuildingBlock.childComponents.forEach((bb)=>{
                             list.push({id: bb.id, value: bb.title});
-                        });
+                        });*/
+                        list.push({id: parentBuildingBlock.id, value: parentBuildingBlock.value});
                     });
                     this.buildingBlocksList = list;
                 });
