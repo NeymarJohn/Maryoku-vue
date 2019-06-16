@@ -3,7 +3,7 @@
         <div class="md-layout-item md-medium-size-55 md-size-45">
             <md-card style="min-height: 50%;">
                 <md-card-header class="md-card-header-text md-card-header-warning">
-                    <div class="card-text">
+                    <div class="card-text text-left">
                         <h4 class="title" style="color: white;">Interactions</h4>
                     </div>
                 </md-card-header>

@@ -84,6 +84,12 @@
                                                         <td class="md-table-cell">{{item.name}}</td>
                                                         <td class="md-table-cell md-numeric">{{item.members.length}}</td>
                                                         <td class="md-table-cell md-numeric">{{groupStats(item)}}</td>
+                                                        <td class="md-table-cell md-numeric">
+                                                            <md-button class="md-danger md-round md-xs md-just-icon" :disabled="noActions" @click="unselectMembers(item)">
+                                                                <md-icon>remove</md-icon>
+                                                                <md-tooltip md-direction="bottom">Unselect this group</md-tooltip>
+                                                            </md-button>
+                                                        </td>
                                                         <td class="md-table-cell">
                                                             <md-icon v-if="!item.expanded">arrow_drop_down</md-icon>
                                                             <md-icon v-if="item.expanded">arrow_drop_up</md-icon>
@@ -189,6 +195,11 @@
 
         }),
         methods: {
+            unselectMembers(group){
+                group.members.forEach((member)=>{
+                    this.unselectMember(member);
+                });
+            },
             toggleInviteesForm(){
                 this.inviteesExpanded = !this.inviteesExpanded;
             },
