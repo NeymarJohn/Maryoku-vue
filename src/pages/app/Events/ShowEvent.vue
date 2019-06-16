@@ -1,11 +1,11 @@
 <template>
     <div class="md-layout">
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
-        <div class="md-layout-item md-size-100">
+        <div class="md-layout-item md-size-100" v-if="user">
             <div class="pull-right">
                 <drop-down direction="down" :hover="true">
                     <md-button name="user-top-menu" slot="title" class="md-purple md-sm" data-toggle="dropdown">
-                        <md-icon>person</md-icon> {{user.displayName}}
+                        <md-icon>person</md-icon> {{user ? user.displayName : ''}}
                     </md-button>
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li><a href="javascript: void(null);" name="user-top-menu-my-profile" class="user-top-menu-my-profile" @click="openMyProfile">My Profile</a></li>
@@ -16,19 +16,22 @@
                 </drop-down>
             </div>
         </div>
+        <div v-if="!user">
+            &nbsp;
+        </div>
         <div class="md-layout-item md-size-100">
             <md-card class="event-details">
                 <md-card-content class="md-layout event-details_content" v-if="calendarEvent.id">
 
                     <!-- Event Banner -->
-                    <event-banner :event="calendarEvent" :readonly="readonly"></event-banner>
+                    <event-banner :user-response.sync="userResponse" :user-info.sync="user" :event.sync="calendarEvent" :readonly.sync="readonly"></event-banner>
                     <!-- ./Event Banner -->
 
                     <!-- Event Info -->
                     <div class="md-layout-item md-size-50 md-small-size-100">
 
                         <div class="event-title-date">
-                            <h4>{{calendarEvent.occasion}}</h4>
+                            <h4>{{calendarEvent.title}}</h4>
 
                             <div class="event-date">{{getEventDate(calendarEvent.eventStartMillis)}}</div>
 
@@ -97,13 +100,13 @@
     import ChartComponent from "@/components/Cards/ChartComponent";
 
     import MyProfile from '@/pages/app/Profile/MyProfile';
-    import Team from '@/pages/app/Team/Team';
-    import MyCompany from '@/pages/app/Profile/MyCompany';
+    import MyEventsPanel from '@/pages/app/Profile/MyEventsPanel';
 
     import moment from "moment";
     import VueElementLoading from "vue-element-loading";
     import Calendar from '@/models/Calendar';
     import CalendarEvent from '@/models/CalendarEvent';
+    import EventInvitee from '@/models/EventInvitee';
 
     //COMPONENTS
     import { AnimatedNumber } from "@/components";
@@ -120,6 +123,7 @@
     import EventConfirmation from "./components/EventBlocks/EventConfirmation.vue"
     import SignInSignUpPanel from "./SignInSignUpPanel.vue";
     import DietaryConstraintsModal from "./components/EventBlocks/Modals/DietaryConstraintsModal.vue";
+    import EventInviteeResponse from '../../../models/EventInviteeResponse';
 
 
     export default {
@@ -137,23 +141,42 @@
             EventTimeLineItems,
             EventConfirmation,
             SignInSignUpPanel,
-            DietaryConstraintsModal
+            DietaryConstraintsModal,
+            MyEventsPanel
         },
 
         data() {
             return {
                 user: null,
+                userResponse: null,
                 calendarEvent: {},
                 isLoading: false,
                 readonly : true,
                 shoWSignup: false,
                 isMobile : window.innerWidth <= 500,
-                avatar: "static/img/placeholder.jpg"
+                avatar: "static/img/placeholder.jpg",
+                invitee: {},
+                pendingResponse: null
             };
         },
         created(){
             this.$root.$on("event-confirmation",(isGoing)=>{
-                this.showSignupPanel(isGoing);
+                if (this.user){
+                    let inviteeResponse = { invitee: { id: this.invitee.id }, attending: isGoing };
+                    if (this.userResponse){
+                        Object.assign(inviteeResponse, this.userResponse);
+                        inviteeResponse.attending = isGoing;
+                        new EventInviteeResponse(inviteeResponse)
+                            .for(new Calendar({id: this.calendarEvent.calendar.id}), new CalendarEvent(this.calendarEvent))
+                            .save()
+                            .then(res=>{
+                                this.userResponse = res.item;
+                            });
+                    }
+                } else {
+                    this.pendingResponse = { attending: isGoing};
+                    this.showSignupPanel(isGoing);
+                }
             });
 
             this.$root.$on("signed-in",(token)=>{
@@ -161,44 +184,36 @@
                 this.$auth.currentUser(this, false, ()=>{
                     this.user = this.$auth.user;
                     this.avatar = this.user.avatar || "static/img/placeholder.jpg";
+                    this.getEvent();
                     this.isLoading = false;
                 });
             });
         },
         mounted() {
-            this.getEvent();
             this.$auth.currentUser(this, false, ()=>{
-                this.user = this.$auth.user;
-                this.avatar = this.user.avatar || "static/img/placeholder.jpg";
+                if (this.$auth.user.authenticated) {
+                    this.user = this.$auth.user;
+                    this.avatar = this.user.avatar || "static/img/placeholder.jpg";
+                }
+                this.getEvent();
             });
         },
         methods: {
             openMyProfile(){
                 window.currentPanel = this.$showPanel({
                     component: MyProfile,
-                    cssClass: 'md-layout-item md-size-75 transition36 bg-grey',
+                    cssClass: 'md-layout-item md-small-size-100 md-medium-size-65 md-size-50 transition36 bg-grey',
                     openOn: 'right',
                     props: {}
                 });
             },
-            openAccountSettings(){
+            openMyEvents(){
                 window.currentPanel = this.$showPanel({
-                    component: MyCompany,
-                    cssClass: 'md-layout-item md-size-65 transition36  bg-grey',
+                    component: MyEventsPanel,
+                    cssClass: 'md-layout-item md-small-size-100 md-medium-size-50 md-size-35 transition36  bg-grey',
                     openOn: 'right',
                     props: {}
                 });
-            },
-            openTeam(){
-                const panelInstance = this.$showPanel({
-                    component : Team,
-                    cssClass: 'md-layout-item md-size-75 transition36 bg-grey',
-                    openOn: 'right',
-                    props: {
-
-                    }
-                });
-                window.currentPanel = panelInstance;
             },
             showSignupPanel(isGoing){
                 window.currentPanel = this.$showPanel({
@@ -224,7 +239,27 @@
                         this.setEventPageData();
                     }
 
-                    this.isLoading = false;
+                    if (this.user){
+                        new EventInvitee().for(new Calendar({id: event.calendar.id}), this.calendarEvent).params({personId: this.user.id}).get().then(res=>{
+                            this.invitee = res[0];
+                            this.userResponse = res[0].inviteeResponse;
+
+                            if (this.pendingResponse){
+                                this.pendingResponse.invitee = this.invitee;
+                                new EventInviteeResponse(this.pendingResponse)
+                                    .for(new Calendar({id: this.calendarEvent.calendar.id}), new CalendarEvent(this.calendarEvent))
+                                    .save()
+                                    .then(res=>{
+                                        this.userResponse = res.item;
+                                        this.isLoading = false;
+                                    });
+                            } else {
+                                this.isLoading = false;
+                            }
+                        });
+                    } else {
+                        this.isLoading = false;
+                    }
 
                 });
             },

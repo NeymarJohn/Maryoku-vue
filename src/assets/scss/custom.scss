@@ -1060,7 +1060,19 @@ $tooltip-border-color: $blue-grey-200 !default;
             line-height: 2;
         }
     }
+
+    .event-confirmation-signin {
+        .md-button .md-button-content {
+            width: 100% !important;
+            text-align: center !important;
+        }
+    }
+
+    .velmld-parent {
+        position: absolute !important;
+    }
 }
+
 @import 'vue-image-lightbox/dist/vue-image-lightbox.min.css';
 
 
