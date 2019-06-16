@@ -122,6 +122,8 @@
                     .limit(this.pagination.limit)
                     .get().then(vendors => {
 
+                    console.log('vendors => ', vendors);
+
                     this.vendorsList = vendors[0].results;
 
                     this.updatePagination(vendors[0].model)

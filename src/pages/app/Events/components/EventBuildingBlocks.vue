@@ -1,23 +1,15 @@
 <template>
     <div class="md-layout" style="padding: 0; margin: 0;">
         <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
-        <div class="md-layout-item mx-auto event-building-blocks">
+        <div class="md-layout-item mx-auto">
             <md-card  >
-
-                <md-card-header  class="md-card-header-text md-card-header-warning">
-                    <div class="card-text">
-                        <h4 class="title" style="color: white;">
-                            Manage Budget
-                        </h4>
-                    </div>
-                </md-card-header>
 
                 <md-card-content class="md-layout">
 
                     <table style="width:100%;" class="table event-building-blocks_table" v-if="eventBuildingBlocksList.length">
                         <thead>
-                            <tr class="md-warning">
-                                <th> Expenses </th>
+                            <tr>
+                                <th> Expanse </th>
                                 <th>Requirements</th>
                                 <th>Allocated budget</th>
                                 <th>Actual cost</th>
@@ -67,9 +59,10 @@
                                 <td class="actual-cost">
                                     <template
                                         v-if="block.winningProposalId">
-                                        <md-button class="md-simple actual-cost md-sm" :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`" @click="reviewProposals(block,block.winningProposalId)">
+                                        <md-button class="md-success md-simple actual-cost md-sm" @click="reviewProposals(block,block.winningProposalId)">
                                             {{ `$${block.winingProposal.cost}`}}
                                             <md-icon >open_in_new</md-icon>
+
                                         </md-button>
                                     </template>
                                     <template v-else-if="block.proposalsState == 'show-proposals'">
@@ -252,8 +245,6 @@
                         });
 
                         this.allocatedBudget = allocatedBudget;
-
-                        console.log(this.eventBuildingBlocks);
 
                         this.isLoading = false;
                     })
