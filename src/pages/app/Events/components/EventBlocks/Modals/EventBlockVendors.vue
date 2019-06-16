@@ -9,37 +9,76 @@
                     Vendors List
 
                     <div class="header-actions pull-right">
-                        <md-button class="md-info" @click="manageBlockVendors">
+<!--                        <md-button class="md-info" @click="manageBlockVendors">-->
+<!--                            Manage Vendors-->
+<!--                        </md-button>-->
+                        <md-button class="md-info">
                             Manage Vendors
                         </md-button>
                         <md-button class="md-default event-building-blocks-proposals-send"  >
-                            Send
+                            Send All
                         </md-button>
                     </div>
 
                 </h4>
             </div>
 
-            <div class="md-layout-item md-size-50">
-                <md-card v-if="blockVendors.length">
+            <div class="md-layout-item md-size-100">
+                <md-card>
+
+                    <md-card-header  class="md-card-header-text md-card-header-warning">
+                        <div class="card-text">
+                            <h4 class="title" style="color: white;">
+                                Manage Block Vendors
+                            </h4>
+                        </div>
+                        <div class="header-actions pull-right" style="margin-top:0.5em;">
+                            <md-button class="md-info event-building-blocks-upload-vendors-button"   @click="openUploadModal">
+                                compare proposals
+                            </md-button>
+                        </div>
+                    </md-card-header>
+
                     <md-card-content>
+
                         <md-table  v-if="blockVendors" v-model="blockVendors"  table-header-color="orange" class="vendors-table">
                             <md-table-row slot="md-table-row" slot-scope="{ item }" :key="blockVendors.indexOf(item)"   >
-                                <md-table-cell md-label="Vendor Name"  > {{ item.vendor.vendorDisplayName }}</md-table-cell>
-                                <md-table-cell md-label="Recommended by">
-                                    <img :src="`https://bit.ly/2Qcsg27`" width="20" style="width: 100px !important;">
+                                <md-table-cell md-label="Vendor Name"  > {{ item.vendor ? item.vendor.vendorDisplayName : 'No Title'}}</md-table-cell>
+                                <md-table-cell md-label="Rank">
+                                    <vue-stars
+                                        :name="item.id"
+                                        active-color="#ffdd00"
+                                        inactive-color="#999999"
+                                        shadow-color="#ffff00"
+                                        hover-color="#dddd00"
+                                        :max="5"
+                                        :value="item.rank"
+                                        :readonly="false"
+                                        char="★"
+                                        inactive-char=""
+                                        class="disabled"/>
                                 </md-table-cell>
                                 <md-table-cell md-label="Inquiry Sent">
                                     {{ `11/1/2019` }}
                                 </md-table-cell>
-                                <md-table-cell md-label="Last Proposal"  > {{ `11/17/2019 08:30` }}</md-table-cell>
                                 <md-table-cell class="vendors-table_item-actions">
-                                    <md-button v-if="true" class="md-button md-info md-sm md-theme-default auto-width md-just-icon" @click="viewProposals(item)">
-                                        View Proposals
+
+                                    <md-button class="md-rose md-just-icon md-round">
+                                        <md-icon>remove</md-icon>
                                     </md-button>
-                                    <md-button v-if="true" class="md-button md-default md-sm md-theme-default auto-width md-just-icon">
-                                        Inquiry Sent
+
+                                    <md-button class="md-primary md-just-icon md-round md-simple" style="font-size: 20px;">
+                                        <md-icon>near_me</md-icon>
                                     </md-button>
+
+<!--                                    <md-button v-if="true" class="md-button md-info md-sm md-theme-default auto-width md-just-icon" @click="viewProposals(item)">-->
+<!--                                        View Proposals-->
+<!--                                    </md-button>-->
+<!--                                    <md-button v-if="true" class="md-button md-default md-sm md-theme-default auto-width md-just-icon">-->
+<!--                                        Inquiry Sent-->
+<!--                                    </md-button>-->
+
+
                                 </md-table-cell>
                             </md-table-row>
 
@@ -71,7 +110,7 @@
             <div class="md-layout-item md-size-50">
 
                 <!-- View proposals for selected vendor -->
-                <md-card v-if="selectedVendor">
+                <md-card v-if="selectedVendor && selectedVendor.vendor">
                     <md-card-header  class="md-card-header-text md-card-header-warning">
                         <div class="card-text">
                             <h4 class="title" style="color: white;">
@@ -234,7 +273,6 @@
                     })
             },
             viewProposals(item) {
-                console.log(item);
                 this.selectedVendor = item;
                 this.addingVendors = false;
             },
@@ -405,7 +443,6 @@
             this.$bus.$on('VendorAdded',()=>{
                 this.getBlockVendors();
             });
-
         },
         computed: {
 

@@ -13,7 +13,7 @@
 
                 <div class="md-layout" style="overflow: auto; max-height: 80vh;">
 
-                    <div class="proposal-item md-layout-item md-size-100" v-for="(proposal,index) in selectedBlock.vendors" :key="index" v-if="proposalsToDisplay >= index+1">
+                    <div class="proposal-item md-layout-item md-size-100" v-for="(proposal,index) in selectedBlock.vendors" :key="index" v-if="proposalsToDisplay >= index+1 && proposal.vendor">
                         <h4 class="proposal-title"> {{proposal.vendor.vendorDisplayName}} </h4>
                         <md-card>
                             <md-card-content>

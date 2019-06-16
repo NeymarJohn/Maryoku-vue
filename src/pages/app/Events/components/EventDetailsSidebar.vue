@@ -243,8 +243,7 @@
                     props: {
                         modalSubmitTitle: 'Save',
                         editMode: true,
-                        sourceEventData: this.event,
-                        openInPlannerOption: false
+                        sourceEventData: this.event
                     }
                 })
 

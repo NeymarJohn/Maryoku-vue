@@ -75,7 +75,6 @@
             year: now.getFullYear(),
             month: now.getMonth(),
             occasionsOptions: this.occasionsArray,
-              openInPlannerOption: false
           }
         });
       },

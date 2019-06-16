@@ -1832,12 +1832,14 @@ iframe{
 }
 
 .event-building-blocks {
+    text-align: left;
     &_table {
         border-collapse: collapse;
         border-spacing: 0;
+        margin-top : 1em;
         th {
             text-align: left;
-            color : #cccccc;
+            color : $brand-warning;
             padding: 0.5em 0.4em;
             font-weight: normal;
             font-size: 12px;
@@ -1966,6 +1968,164 @@ iframe{
 
 }
 
+
+/* Vendor Proposals Style */
+.event-information-card {
+    &.md-card.md-theme-default.md-primary {
+        background: $brand-info;
+
+        .title {
+            color : #fff;
+        }
+    }
+
+    .title {
+        font-weight: 500;
+        margin : 0.6em 0 0;
+        font-size: 17px;
+    }
+
+    .info-item {
+        display: flex;
+        flex : 1;
+        flex-direction: row;
+        justify-content: space-between;
+        font-size: 18px;
+        margin-top : 1em;
+        font-weight: 400    ;
+        .md-icon {
+            font-size: 18px !important;
+            color : #fff;
+        }
+    }
+}
+
+.vendor-proposals_requirements-list {
+    width : 100%;
+    border : 1px solid #d9d9d9;
+    border-radius: 5px;
+    margin-top : 3em;
+
+    .list-item {
+        &:not(:last-child) {
+            border-bottom : 1px solid #d9d9d9;
+        }
+
+        .requirement-title {
+            font-weight: 500;
+            padding-top : 1em;
+
+            .requirement-desc {
+                color : rgba(112, 112, 112, 0.87);
+                font-size: 13px;
+                font-weight: 400;
+                line-height: initial;
+                 margin: 1em 0;
+            }
+        }
+
+        .included-in-price {
+            display: flex;
+            flex : 1;
+            flex-direction: row;
+            padding-top : 0.5em;
+
+            .switch-btn {
+                .md-switch-container {
+                    margin  :0;
+                }
+            }
+            label {
+                margin-top : 10px;
+                font-weight: 500;
+            }
+        }
+        .actions-list {
+            padding-top : 1.4em;
+
+            .md-button {
+                margin : 0 0 1.4em;
+                .md-ripple {
+                    padding : 0 !important;
+                }
+            }
+        }
+    }
+}
+
+.vendor-proposals_cost-and-availability {
+
+    border : 1px solid #d9d9d9;
+    border-radius: 5px;
+    margin-top : 2em;
+    .items-costs-list {
+        display: flex;
+        flex : 1;
+        flex-direction: row;
+        justify-content: space-between;
+        padding : 2em 1em;
+
+        .item-cost {
+            &_title {
+             font-weight: 500;
+            }
+            &_cost-value {
+                display: flex;
+                flex : 1;
+                flex-direction: row;
+                justify-content: space-between;
+
+                >span {
+                    font-weight: 500;
+                    margin-right : 0.2em;
+                }
+
+                .input-field {
+                    display: flex;
+                    flex : 1;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    margin-left : 4px;
+                    border-bottom : 1px solid #d9d9d9;
+                    span.dollar-sign {
+                        margin-right : 0.2em;
+                    }
+                    .vlabeledit-label, .vlabeledit-input {
+                        padding : 0;
+                        font-size: 13px;
+                        color : rgba(251, 150, 0, 0.87) !important;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+    }
+
+    .availability-status {
+        border-left : 1px solid #d9d9d9;
+        padding-top : 2em;
+        .md-radio {
+            margin : 0 0.3em 1em 0;
+        }
+    }
+}
+
+.vendor-images-attachments {
+    display: flex;
+    flex : 1;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .event-information-card {
+        width : 48.5%;
+        margin-top : 0;
+    }
+}
+.vue-stars {
+    &.disabled {
+        pointer-events: none;
+    }
+}
 @media screen and (max-width : 500px) {
     .event-details {
         &_content.md-card-content {

@@ -8,7 +8,7 @@
 
                 <!-- here you can add your content for tab-content -->
                 <template slot="tab-pane-1">
-                    <div class="md-layout" style="margin-top: 21px;">
+                    <div class="md-layout">
                         <div class="md-layout-item md-medium-size-60 md-size-60">
                             <md-card style="height: auto;">
                                 <md-card-header class="md-card-header-text md-card-header-warning">
@@ -84,12 +84,6 @@
                                                         <td class="md-table-cell">{{item.name}}</td>
                                                         <td class="md-table-cell md-numeric">{{item.members.length}}</td>
                                                         <td class="md-table-cell md-numeric">{{groupStats(item)}}</td>
-                                                        <td class="md-table-cell md-numeric">
-                                                            <md-button class="md-danger md-round md-xs md-just-icon" :disabled="noActions" @click="unselectMembers(item)">
-                                                                <md-icon>remove</md-icon>
-                                                                <md-tooltip md-direction="bottom">Unselect this group</md-tooltip>
-                                                            </md-button>
-                                                        </td>
                                                         <td class="md-table-cell">
                                                             <md-icon v-if="!item.expanded">arrow_drop_down</md-icon>
                                                             <md-icon v-if="item.expanded">arrow_drop_up</md-icon>
@@ -195,11 +189,6 @@
 
         }),
         methods: {
-            unselectMembers(group){
-                group.members.forEach((member)=>{
-                    this.unselectMember(member);
-                });
-            },
             toggleInviteesForm(){
                 this.inviteesExpanded = !this.inviteesExpanded;
             },
@@ -362,7 +351,6 @@
                         this.eventInvitees.unshift(res.item);
                         this.updateAllOptions();
                         this.updateGroups();
-                        this.$forceUpdate();
                     });
                 }
                 return i;
@@ -405,19 +393,8 @@
             }
         },
         created() {
-
         },
         mounted() {
-            this.$root.$on("member-added", (member)=>{
-                this.availableMembers.push(member);
-                member.groups.forEach((g)=>{
-                    if (!_.findWhere(this.availableTeams, {id: g.id})){
-                        this.availableTeams.push(g);
-                    }
-                });
-                this.updateAllOptions();
-                this.selectSingleMember(member);
-            });
             this.working = true;
             this.$auth.currentUser(this, true, ()=>{
                 if (this.eventData && this.eventData.id){
