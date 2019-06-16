@@ -259,7 +259,8 @@
             editMode: true,
             sourceEventData: this.topBarEvent,
             year: this.$route.params.year,
-            month: this.$route.params.month
+            month: this.$route.params.month,
+              openInPlannerOption: false
           }
         });
       },
