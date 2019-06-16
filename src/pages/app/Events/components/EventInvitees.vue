@@ -362,6 +362,7 @@
                         this.eventInvitees.unshift(res.item);
                         this.updateAllOptions();
                         this.updateGroups();
+                        this.$forceUpdate();
                     });
                 }
                 return i;
@@ -408,8 +409,14 @@
         },
         mounted() {
             this.$root.$on("member-added", (member)=>{
+                this.availableMembers.push(member);
+                member.groups.forEach((g)=>{
+                    if (!_.findWhere(this.availableTeams, {id: g.id})){
+                        this.availableTeams.push(g);
+                    }
+                });
+                this.updateAllOptions();
                 this.selectSingleMember(member);
-                this.refreshList(true);
             });
             this.working = true;
             this.$auth.currentUser(this, true, ()=>{
