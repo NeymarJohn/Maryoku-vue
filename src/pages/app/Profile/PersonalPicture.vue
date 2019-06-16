@@ -8,7 +8,7 @@
       <div v-else>
         <img v-model="imageUrl" class="avatar" :src="imageUrl">
       </div>
-      <input type="file" @change="onFileChange">
+      <input type="file" accept="image/x-png,image/gif,image/jpeg" @change="onFileChange">
     </div>
     <div v-if="!imageUrl">
       <button class="description choose-button">Choose Picture</button>
