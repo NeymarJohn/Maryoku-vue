@@ -8,36 +8,25 @@ import MyCompany from '@/pages/app/MyCompany/MyCompany.vue';
 import MyCompanyNew from '@/pages/app/MyCompany/MyCompanyNew.vue';
 import CompanyDashboard from '@/pages/app/CompanyDashboard/CompanyDashboard.vue';
 
+import Team from '@/pages/app/Team/Team.vue';
+import Members from '@/pages/app/Members/Members.vue';
+import Community from '@/pages/app/Community.vue';
+import CommunityNew from '@/pages/app/Community/Community-new.vue';
+import VendorsSuggested from '@/pages/app/Community/vendors-suggested/index.vue';
 
-import MyCompanyDashboard from "@/pages/app/MyCompany/MyCompanyDashboard.vue";
-import MyCompanyBilling from "@/pages/app/MyCompany/MyCompanyBilling.vue";
-import MyCompanyApprovals from "@/pages/app/MyCompany/MyCompanyApprovals.vue";
-import MyCompanyProfile from "@/pages/app/MyCompany/MyCompanyProfile.vue";
-import MyCompanySettings from "@/pages/app/MyCompany/MyCompanySettings.vue";
-
-import Team from "@/pages/app/Team/Team.vue";
-import Members from "@/pages/app/Members/Members.vue";
-import Community from "@/pages/app/Community.vue";
-import CommunityNew from "@/pages/app/Community/Community-new.vue";
-import VendorsSuggested from "@/pages/app/Community/vendors-suggested/index.vue";
-
-import Events from "@/pages/app/Events/Events.vue";
-import CurrentEvents from "@/pages/app/Events/CurrentEvents.vue";
-import EventGroups from "@/pages/app/Events/components/EventInvitees.vue";
-import NewEvent from "@/pages/app/Events/NewEvent.vue";
-import EditEvent from "@/pages/app/Events/EditEvent.vue";
-import EventDetails from "@/pages/app/Events/EventDetails.vue";
-import EditEventNew from "@/pages/app/Events/EditEventNew.vue";
-import ShowEvent from "@/pages/app/Events/ShowEvent.vue";
-import VendorProposals from "@/pages/app/Events/VendorProposals.vue";
-import EventProposal from "@/pages/app/Events/EventProposal.vue";
-import Notes from "@/pages/app/Notes.vue";
-import Proposals from "@/pages/app/Proposals.vue";
-import Vendors from "@/pages/app/Vendors/Vendors.vue";
-import ImportVendors from "@/pages/app/Vendors/ImportVendors.vue";
-import YearlyPlan from "@/pages/app/YearlyPlan/index.vue";
-import AnnualPlanner from "@/pages/app/AnnualPlanner/index.vue";
-
+import Events from '@/pages/app/Events/Events.vue';
+import CurrentEvents from '@/pages/app/Events/CurrentEvents.vue';
+import NewEvent from '@/pages/app/Events/NewEvent.vue';
+import EditEvent from '@/pages/app/Events/EditEvent.vue';
+import EventDetails from '@/pages/app/Events/EventDetails.vue';
+import ShowEvent from '@/pages/app/Events/ShowEvent.vue';
+import EventProposal from '@/pages/app/Events/EventProposal.vue';
+import Notes from '@/pages/app/Notes.vue';
+import Proposals from '@/pages/app/Proposals.vue';
+import Vendors from '@/pages/app/Vendors/Vendors.vue';
+import ImportVendors from '@/pages/app/Vendors/ImportVendors.vue';
+import YearlyPlan from '@/pages/app/YearlyPlan/index.vue';
+import AnnualPlanner from '@/pages/app/AnnualPlanner/index.vue';
 
 // Dashboard pages
 import EmployeeMain from '@/pages/Dashboard/Pages/CommonInfoProfile/Employee.vue';
@@ -98,29 +87,17 @@ let authPages = {
 };
 
 let publicPages = {
-  path: "/",
-  component: PublicLayout,
-  name: "Public",
-  children: [
-    {
-      path: "/events/:id/public",
-      name: "ShowEvent",
-      component: ShowEvent,
-      meta: {auth: false, title: 'Event', gtm: "Event"},
-    },
-      {
-          path: "/vendor-proposals",
-          name: "VendorProposals",
-          component: VendorProposals,
-          meta: {auth: false, title: 'Vendor Proposals', gtm: "VendorProposals"},
-      },
-    /*{
-      path: "/get-started",
-      name: "GetStarted",
-      component: Onboarding,
-      meta: {auth: false, title: 'Get Started', gtm: "GetStarted"}
-    },*/
-  ]
+    path: "/",
+    component: PublicLayout,
+    name: "Public",
+    children: [
+        {
+            path: "/events/:id/public",
+            name: "ShowEvent",
+            component: ShowEvent,
+            meta: {auth: false, title: 'Event', gtm: "Event"},
+        },
+    ]
 };
 
 let emptyLayoutPages = {
