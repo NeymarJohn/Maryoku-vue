@@ -32,7 +32,7 @@
       </md-button>-->
 
       <drop @drop="handleDrop" style="height: 100%;">
-        <draggable :list="timelineItems" class="time-line-blocks_selected-items">
+        <draggable :list="timelineItems" class="time-line-blocks_selected-items" :options="{disabled : disabledDragging}">
           <div v-for="(item,index) in timelineItems" :key="index"
                class="time-line-blocks_selected-items_item time-line-item">
             <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">{{item.icon}}
@@ -214,7 +214,8 @@
         }
       ],
       timelineItems: [],
-      hoursArray: []
+      hoursArray: [],
+        disabledDragging : false
 
     }),
     methods: {
@@ -273,6 +274,7 @@
       },
       modifyItem(index) {
         this.$set(this.timelineItems[index], 'mode', 'edit');
+        this.disabledDragging = true;
       },
       previewEvent() {
         this.$router.push({name: 'EventDetails', params: {id : this.event.id}});
@@ -285,7 +287,9 @@
         new EventTimelineItem().for(calendar, event).get().then(res => {
           console.log(res);
           this.timelineItems = _.sortBy(res, function(item){ return item.order});
-          this.isLoading = false;
+            console.log(this.timelineItems);
+
+            this.isLoading = false;
           this.timelineItems.forEach((item)=>{item.isItemLoading = false;})
         })
       },
@@ -295,6 +299,8 @@
         } else {
           this.timelineItems.splice(index, 1);
         }
+          this.disabledDragging = false;
+
       },
       saveTimelineItem(item, index) {
         this.setItemLoading(item, true, true);
@@ -333,10 +339,14 @@
           .then(res => {
 
             this.getTimelineItems();
+              this.disabledDragging = false;
+
 
           })
           .catch(error => {
             console.log(error);
+              this.disabledDragging = false;
+
           })
 
       },
@@ -374,9 +384,13 @@
 
         timelineItem.save().then(res => {
           this.getTimelineItems();
+            this.disabledDragging = false;
+
 
         }).catch(error => {
           console.log(error)
+            this.disabledDragging = false;
+
         })
       },
       updateTimelineITemsOrder() {
@@ -436,6 +450,7 @@
     mounted() {
       this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
       this.isLoading = false;
+      this.getTimelineItems();
     },
     watch: {
       event(newVal, oldVal){
