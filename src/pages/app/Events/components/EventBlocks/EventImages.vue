@@ -6,7 +6,7 @@
         <div class="event-images_image-item" style="margin: auto;" :style="`background-image : url(`+`${serverUrl}/1/eventPageImages/${image.id}`+`)`" @click="previewImage(image.id)">
         </div>
         <md-button class="md-info md-sm delete-event-image" @click="removeEventImage(index)" v-if="!readonly">
-          DELETE
+          Replace
         </md-button>
       </md-card-media>
     </md-card>

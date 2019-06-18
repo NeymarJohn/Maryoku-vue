@@ -94,11 +94,6 @@ export default {
         this.setTenantHeaders(context);
         let user = context.$ls.get("user");
         if (user){
-
-            if (user.me && (user.me.pictureUrl == '' || user.me.pictureUrl == 'none')) {
-                user.me.pictureUrl = 'static/img/placeholder.jpg';
-                user.avatar = user.me.pictureUrl;
-            }
             this.user = user;
         } else {
             this.user.authenticated = false;

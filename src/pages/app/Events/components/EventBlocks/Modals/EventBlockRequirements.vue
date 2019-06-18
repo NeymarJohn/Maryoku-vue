@@ -6,7 +6,7 @@
                 <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
                     <md-icon>arrow_back</md-icon>
                 </md-button>
-                Requirements List
+                {{this.selectedBlock.title}} Requirements
 
                 <div class="pull-right">
                     <md-button class="md-info event-building-blocks-requirements-add" @click="addNewValue">
@@ -209,19 +209,27 @@
             this.getBuildingBlockValues();
 
             // put dummy item
-            this.dummyList[0].title = this.predefinedRequirements ? this.predefinedRequirements[0].title : 'No Title'
+            this.dummyList[0].title = this.predefinedRequirements ? this.predefinedRequirements[0].title : 'No Title';
+
+            console.log(this.selectedBlock);
         },
         methods: {
             closePanel() {
                 this.$emit("closePanel");
             },
-            getBuildingBlockValues() {
+            getBuildingBlockValues( newValueId = null) {
                 let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id: this.selectedBlock.id});
 
                 new EventComponentValue().for(calendar, event, selected_block).get().then(values => {
                     this.eventBlocks = values;
+                     if ( newValueId ) {
+
+                        let newValue = _.findWhere(this.eventBlocks,{id : newValueId});
+                        newValue.editMode = true;
+                        this.$forceUpdate();
+                    }
                     this.isLoading = false;
 
                 });
@@ -233,7 +241,8 @@
                 this.saveAllValues();
 
                 let new_value = {
-                    eventComponent: {id: this.selectedBlock.id}
+                    eventComponent: {id: this.selectedBlock.id},
+                    editMode : true
                 }
 
                 let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
@@ -244,14 +253,6 @@
 
                     this.isLoading = false;
                     this.getBuildingBlockValues();
-
-                    this.$notify(
-                        {
-                            message: 'Requirement added successfully',
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'success'
-                        })
                 });
             },
             handleDrop(data) {
@@ -260,6 +261,7 @@
                 let item = {};
                 item.title = data.title;
                 item.eventComponent = {id: this.selectedBlock.id};
+                item.editMode= true;
 
                 let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let eventObject = new CalendarEvent({id: this.event.id});
@@ -268,15 +270,7 @@
                 new EventComponentValue(item).for(calendar, eventObject, selected_block).save().then(res => {
 
                     this.isLoading = false;
-                    this.getBuildingBlockValues();
-
-                    this.$notify(
-                        {
-                            message: 'Requirement added successfully',
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'success'
-                        })
+                    this.getBuildingBlockValues(res.item.id);
                 });
 
 
