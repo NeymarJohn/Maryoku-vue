@@ -40,7 +40,7 @@
 </template>
 
 <script>
-export default {
+    export default {
   props: {
     flexColumn: Boolean,
     navPillsIcons: Boolean,
@@ -58,10 +58,18 @@ export default {
     };
   },
   computed: {},
+        created(){
+        },
     mounted(){
         this.$root.$on('event-planner-nav-switch-panel',(index)=>{
             this.switchPanel(this.tabName[index]);
         })
+
+        this.$bus.$on('goToTab',(value)=>{
+            this.activePanel = value
+        });
+
+
     },
   methods: {
     switchPanel(panel) {

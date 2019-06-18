@@ -31,7 +31,7 @@
   </div>
 </template>
 <script>
-  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import Calendar from "@/models/Calendar";
   import CalendarEvent from "@/models/CalendarEvent";
   import EventComponent from "@/models/EventComponent";
@@ -63,13 +63,15 @@
 
     }),
     methods: {
-
       getTimelineItems() {
         this.timelineItems = _.sortBy(this.event.timelineItems, function(item){ return item.order});
-        this.isLoading = false;
+          this.isLoading = false;
       },
       editTimeLineItems() {
-        this.$router.push({ path: `/events/`+ this.event.id + '/edit/timeline' });
+        this.$router.push({ path: `/events/`+ this.event.id + '/edit/details' });
+          this.$bus.$emit('goToTab','TIMELINE');
+
+
       }
 
 
@@ -80,7 +82,7 @@
 
     },
     mounted() {
-      setTimeout(this.getTimelineItems(),400)
+        setTimeout(this.getTimelineItems(),400)
     },
     computed: {
 

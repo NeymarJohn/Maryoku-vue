@@ -4,7 +4,8 @@
         <div class="event-details-tabs">
             <tabs
                 :tab-name="['EVENT DETAILS', 'BUDGET & PROPOSALS', 'TIMELINE', 'INVITEES MANAGEMENT','EVENT PAGE']"
-                color-button="rose">
+                color-button="rose"
+                :active-tab="$store.state.EventPlannerVuex.eventDetailsActiveTab">
                 <!-- here you can add your content for tab-content -->
                 <template slot="tab-pane-1">
                     <div class="md-layout">
@@ -216,13 +217,16 @@
                 isLoading: false,
                 event: {statistics: {}},
                 routeName: null,
-                budgetPerEmployee: 0
+                budgetPerEmployee: 0,
+                activeTab : 0
             }
         },
         created () {
-            this.$store.registerModule('EventPlannerVuex', EventPlannerVuexModule)
+            this.$store.registerModule('EventPlannerVuex', EventPlannerVuexModule  )
 
-            this.routeName = this.$route.name
+            this.routeName = this.$route.name;
+
+
 
         },
         mounted () {
@@ -330,6 +334,13 @@
             }
         },
         computed: {
+            ...mapState('EventPlannerVuex', [
+                'eventData',
+                'eventModalOpen',
+                'modalTitle',
+                'modalSubmitTitle',
+                'editMode'
+            ]),
             ...mapGetters({
                 components: 'event/getComponentsList'
             }),
