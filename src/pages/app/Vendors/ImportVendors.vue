@@ -67,8 +67,8 @@
                             @click="sortBy(index)"
                             :class="{ active: sortKey == index }">
                             <md-field>
-                              <md-select id="remove-border" class="no-underline" v-model="mappedColumns[index].value"
-
+                              <md-select id="remove-border" class="no-underline" v-model="parseCSV.columns[index].value" 
+                               
                                placeholder="Select Column Name"  name="select">
                                 <md-option
                                   v-if="item !== ''"
@@ -170,14 +170,14 @@
                 displayName: 'Contact Person Email',
                 name: 'contactPersonEmail',
                 value: 'contactPersonEmail',
-                mandatory: false
+                mandatory: true
 
             },
             {
                 displayName: 'Contact Person Phone Number',
                 name: 'contactPersonPhone',
                 value: 'contactPersonPhone',
-                mandatory: false
+                mandatory: true
 
             },
           {
@@ -198,36 +198,93 @@
             displayName: 'Vendor Website',
             name: 'vendorWebsite',
             value: 'vendorWebsite',
-              mandatory: false
+
           },
           {
             displayName: 'Vendor Category',
             name: 'vendorCategory',
-            value: 'vendorCategory',
-              mandatory: false
+            value: ''
           },
           {
             displayName: 'Product Category',
             name: 'productsCategory',
-            value: 'productsCategory',
-              mandatory: false
+            value: ''
+
+          },
+          {
+            displayName: 'Vendor Tax ID',
+            name: 'vendorTaxId',
+            value: ''
+
+          },
+
+          {
+            displayName: 'Vendor Invoice Name',
+            name: 'vendorInvoiceName',
+            value: ''
 
           },
 
           {
             displayName: 'Vendor Address Line 1',
             name: 'vendorAddressLine1',
-            value: 'vendorAddressLine1',
-              mandatory: false
+            value: ''
+
+          },
+          {
+            displayName: 'Vendor Address Line 2',
+            name: 'vendorAddressLine2',
+            value: ''
+
+          },
+          {
+            displayName: 'Vendor City',
+            name: 'vendorCity',
+            value: ''
+
+          },
+          {
+            displayName: 'Vendor Region',
+            name: 'vendorRegion',
+            value: ''
 
           },
           {
             displayName: 'Vendor Country',
             name: 'vendorCountry',
-            value: 'vendorCountry',
-              mandatory: false
+            value: ''
 
           },
+          {
+            displayName: 'Vendor Zip Code',
+            name: 'vendorZipCode',
+            value: ''
+
+          }
+          // ,{
+          //   displayName: 'Vendor Availability Options',
+          //   name: 'vendorAvailabilityOptions',
+          //   value: ''
+
+          // },
+          // {
+          //   displayName: 'Vendor Cancellation Policy',
+          //   name: 'vendorCancellationPolicy',
+          //   value: ''
+
+          // },
+          // {
+          //   displayName: 'Vendor Refund Policy',
+          //   name: 'vendorRefundPolicy',
+          //   value: ''
+
+          // },
+          // {
+          //   displayName: 'Vendor Logo Image',
+          //   name: 'vendorLogoImage',
+          //   value: ''
+
+          // }
         ],
         channel_fields: [],
         channel_entries: [],
@@ -236,8 +293,7 @@
         sortOrders: {},
         sortKey: '',
         rawCSVFile: null,
-        currentStep: 1,
-          mappedColumns: []
+        currentStep: 1
         // step1:true,
         // step2:false,
         // step3:false,
@@ -267,22 +323,21 @@
         if (!this.parseCSV.id) {
           return true;
         }
-        let vendorFile = await VendorsFile.find(this.parseCSV.id);
+        let vendorFile = await VendorsFile.find(this.parseCSV.id)
         let columnsMapping = [];
-        let mapping  = {};
+        let mapping  = {}
         this.parseCSV.columns.map((item, index) => {
 
-            if (item !== '' ) {
-                mapping[item] = this.mappedColumns[index].value
+          if (item !== '') {
+            mapping[item] = this.databaseVendorColumns[index].value
 
-            }
-        });
+          }
+        })
         vendorFile.columnsMapping = mapping;
         //validate column mapping
         if(!this.validateColumnsMapping(mapping)){
           return false
         }
-          this.csvUploading = true;
         let finalResponse = await vendorFile.save();
         this.finalResult = finalResponse;
         return true
@@ -329,20 +384,13 @@
             _this.parseCSV = result;
             _this.parseCSV.newColumns = [];
             _this.parseCSV.columns.map((item, index) => {
-              /*if (item !== '' && !item.toString().toLowerCase().startsWith("unknown")) {
+              if (item !== '' && !item.toString().toLowerCase().startsWith("unknown")) {
                 let mapping = {};
                 _this.databaseVendorColumns[index].value = item;
 
                 _this.parseCSV.newColumns.push(mapping);
 
-              }*/
-                if (item !== '') {
-                    let mapping = {};
-                    _this.databaseVendorColumns[index].value = item;
-                    _this.parseCSV.newColumns.push(mapping);
-
-                }
-                _this.mappedColumns.push({});
+              }
             });
             _this.csvUploading = false
             this.$notify({
@@ -383,7 +431,6 @@
       goToStep(step) {
         if (step === 3) {
           this.updateVendorsFile().then( isUpdated => {
-              this.csvUploading = false;
             if (isUpdated) {
               this.$set(this,'currentStep', step);
               this.$emit('vendorImported')

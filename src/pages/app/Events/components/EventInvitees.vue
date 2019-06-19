@@ -217,9 +217,9 @@
                 let groupsWithoutAll = _.filter(this.availableTeams, (g)=>{ return g.id !== 'all'});
                 let groups = [];
 
-                /*if (groupsWithoutAll.length > 0){
+                if (groupsWithoutAll.length > 0){
                     groups.push(groupsWithoutAll[0]);
-                }*/
+                }
 
                 window.currentPanel = this.$showPanel({
                     component: MemberEditorPanel,

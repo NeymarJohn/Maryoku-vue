@@ -259,7 +259,7 @@ export default {
     editEvent(ev, event) {
       if (ev.target.tagName === "I") {
         ev.stopPropagation();
-        this.$router.push({name: 'EditEvent', params: {id: event.id}});
+        this.$router.push(`/events/${event.id}/edit`);
       }
     },
     viewEvent(event) {

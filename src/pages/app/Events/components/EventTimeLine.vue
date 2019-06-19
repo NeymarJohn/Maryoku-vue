@@ -448,11 +448,9 @@
 
     },
     mounted() {
-      this.isLoading = true;
-      if (this.event && this.event.id){
-          this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
-          this.getTimelineItems();
-      }
+      this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
+      this.isLoading = false;
+      this.getTimelineItems();
     },
     watch: {
       event(newVal, oldVal){
