@@ -67,8 +67,8 @@
                             @click="sortBy(index)"
                             :class="{ active: sortKey == index }">
                             <md-field>
-                              <md-select id="remove-border" class="no-underline" v-model="parseCSV.columns[index].value" 
-                               
+                              <md-select id="remove-border" class="no-underline" v-model="parseCSV.columns[index].value"
+
                                placeholder="Select Column Name"  name="select">
                                 <md-option
                                   v-if="item !== ''"
@@ -211,41 +211,10 @@
             value: ''
 
           },
-          {
-            displayName: 'Vendor Tax ID',
-            name: 'vendorTaxId',
-            value: ''
-
-          },
-
-          {
-            displayName: 'Vendor Invoice Name',
-            name: 'vendorInvoiceName',
-            value: ''
-
-          },
 
           {
             displayName: 'Vendor Address Line 1',
             name: 'vendorAddressLine1',
-            value: ''
-
-          },
-          {
-            displayName: 'Vendor Address Line 2',
-            name: 'vendorAddressLine2',
-            value: ''
-
-          },
-          {
-            displayName: 'Vendor City',
-            name: 'vendorCity',
-            value: ''
-
-          },
-          {
-            displayName: 'Vendor Region',
-            name: 'vendorRegion',
             value: ''
 
           },
@@ -255,36 +224,6 @@
             value: ''
 
           },
-          {
-            displayName: 'Vendor Zip Code',
-            name: 'vendorZipCode',
-            value: ''
-
-          }
-          // ,{
-          //   displayName: 'Vendor Availability Options',
-          //   name: 'vendorAvailabilityOptions',
-          //   value: ''
-
-          // },
-          // {
-          //   displayName: 'Vendor Cancellation Policy',
-          //   name: 'vendorCancellationPolicy',
-          //   value: ''
-
-          // },
-          // {
-          //   displayName: 'Vendor Refund Policy',
-          //   name: 'vendorRefundPolicy',
-          //   value: ''
-
-          // },
-          // {
-          //   displayName: 'Vendor Logo Image',
-          //   name: 'vendorLogoImage',
-          //   value: ''
-
-          // }
         ],
         channel_fields: [],
         channel_entries: [],

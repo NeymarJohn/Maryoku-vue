@@ -7,7 +7,7 @@ export default class EventInvitee extends Model {
 
     static saveInvitees(ctx, event, resource){
         const key = `event.${event.id}.invitees`;
-        ctx.$ls.set(key,resource, Model.DEFAULT_EXPIRATION_MILLIS);
+        //ctx.$ls.set(key,resource, Model.DEFAULT_EXPIRATION_MILLIS);
     }
 
     static fetch(ctx, calendar, event, force){
@@ -19,11 +19,11 @@ export default class EventInvitee extends Model {
             let resource = ctx.$ls.get(key);
             if (!resource) {
                 new EventInvitee().for(calendar, event).get().then(res => {
-                    ctx.$ls.set(key,res, Model.DEFAULT_EXPIRATION_MILLIS);
+                    //ctx.$ls.set(key,res, Model.DEFAULT_EXPIRATION_MILLIS);
                     resolve(res);
                 });
             } else {
-                ctx.$ls.set(key,resource, Model.DEFAULT_EXPIRATION_MILLIS);
+                //ctx.$ls.set(key,resource, Model.DEFAULT_EXPIRATION_MILLIS);
                 resolve(resource);
             }
         });

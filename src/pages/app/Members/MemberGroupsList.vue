@@ -169,7 +169,7 @@
                         if (itemIndex > -1){
                             this.groupsList[itemIndex] = item;
                         }
-                        this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
+                        //this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
                         this.groupDetails(item);
                     });
                 } else {
@@ -177,7 +177,7 @@
                     if (itemIndex > -1){
                         this.groupsList[itemIndex] = item;
                     }
-                    this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
+                    //this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
                     this.groupDetails(item);
                 }
             },
@@ -200,7 +200,7 @@
                         new Team(item).delete().then(res=>{
                             let index = _.findIndex(this.groupsList, (g)=>{ return g.id === item.id});
                             this.groupsList.splice(index,1);
-                            this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
+                            //this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
                         });
                     }
                 });
