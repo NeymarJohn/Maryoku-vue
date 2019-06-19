@@ -67,7 +67,7 @@
                             @click="sortBy(index)"
                             :class="{ active: sortKey == index }">
                             <md-field>
-                              <md-select id="remove-border" class="no-underline" v-model="parseCSV.columns[index].value"
+                              <md-select id="remove-border" class="no-underline" v-model="mappedColumns[index].value"
 
                                placeholder="Select Column Name"  name="select">
                                 <md-option
@@ -237,7 +237,7 @@
         sortKey: '',
         rawCSVFile: null,
         currentStep: 1,
-          mappedColumns: {}
+          mappedColumns: []
         // step1:true,
         // step2:false,
         // step3:false,
@@ -267,21 +267,22 @@
         if (!this.parseCSV.id) {
           return true;
         }
-        let vendorFile = await VendorsFile.find(this.parseCSV.id)
+        let vendorFile = await VendorsFile.find(this.parseCSV.id);
         let columnsMapping = [];
-        let mapping  = {}
+        let mapping  = {};
         this.parseCSV.columns.map((item, index) => {
 
-          if (item !== '') {
-            mapping[item] = this.databaseVendorColumns[index].value
+            if (item !== '' ) {
+                mapping[item] = this.mappedColumns[index].value
 
-          }
-        })
+            }
+        });
         vendorFile.columnsMapping = mapping;
         //validate column mapping
         if(!this.validateColumnsMapping(mapping)){
           return false
         }
+          this.csvUploading = true;
         let finalResponse = await vendorFile.save();
         this.finalResult = finalResponse;
         return true
@@ -328,13 +329,20 @@
             _this.parseCSV = result;
             _this.parseCSV.newColumns = [];
             _this.parseCSV.columns.map((item, index) => {
-              if (item !== '' && !item.toString().toLowerCase().startsWith("unknown")) {
+              /*if (item !== '' && !item.toString().toLowerCase().startsWith("unknown")) {
                 let mapping = {};
                 _this.databaseVendorColumns[index].value = item;
 
                 _this.parseCSV.newColumns.push(mapping);
 
-              }
+              }*/
+                if (item !== '') {
+                    let mapping = {};
+                    _this.databaseVendorColumns[index].value = item;
+                    _this.parseCSV.newColumns.push(mapping);
+
+                }
+                _this.mappedColumns.push({});
             });
             _this.csvUploading = false
             this.$notify({
@@ -375,6 +383,7 @@
       goToStep(step) {
         if (step === 3) {
           this.updateVendorsFile().then( isUpdated => {
+              this.csvUploading = false;
             if (isUpdated) {
               this.$set(this,'currentStep', step);
               this.$emit('vendorImported')
