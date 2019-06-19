@@ -19,7 +19,7 @@ export default class Team extends Model {
             Team.fetch(ctx, false).then(teams=>{
                 new Team(team).save().then(res=>{
                     teams.push(res.item);
-                    //ctx.$ls.set("teams",teams, Model.DEFAULT_EXPIRATION_MILLIS);
+                    ctx.$ls.set("teams",teams, Model.DEFAULT_EXPIRATION_MILLIS);
                     resolve(res.item);
                 });
             });
@@ -35,11 +35,11 @@ export default class Team extends Model {
             let resource = ctx.$ls.get(key);
             if (!resource) {
                 new Team().get().then(res => {
-                    //ctx.$ls.set(key,res, Model.DEFAULT_EXPIRATION_MILLIS);
+                    ctx.$ls.set(key,res, Model.DEFAULT_EXPIRATION_MILLIS);
                     resolve(res);
                 });
             } else {
-                //ctx.$ls.set("teams",resource, Model.DEFAULT_EXPIRATION_MILLIS);
+                ctx.$ls.set("teams",resource, Model.DEFAULT_EXPIRATION_MILLIS);
                 resolve(resource);
             }
         });

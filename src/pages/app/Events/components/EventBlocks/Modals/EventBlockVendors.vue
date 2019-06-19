@@ -59,14 +59,14 @@
                                         class="disabled"/>
                                 </md-table-cell>
                                 <md-table-cell md-label="Inquiry Status">
-                                    <template v-if="item.rfpStatus == 'Ready to send'"
+                                    <template v-if="item.status == 'Ready to send'"
                                     >
                                         {{ `Ready to send` }}
                                     </template>
-                                    <template v-else-if="item.rfpStatus == 'Sent'">
+                                    <template v-else-if="item.status == 'Sent'">
                                         {{ `Sent on ` }} {{getVendorDate(item.vendor.dateCreated)}}
                                     </template>
-                                    <template v-else-if="item.rfpStatus == 'Ready to send'"></template>
+                                    <template v-else-if="item.status == 'Ready to send'"></template>
                                 </md-table-cell>
                                 <md-table-cell class="vendors-table_item-actions">
 
@@ -459,10 +459,9 @@
                 let event = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id : this.selectedBlock.id});
 
-                let vendor = new EventComponentVendor(item);
+                let vendor = new EventComponentVendor({id: item.id});
 
-
-                vendor.rfpStatus = 'Sent';
+                vendor.status = 'Sent';
 
                 vendor.for(calendar, event, selected_block).save()
                     .then(resp => {

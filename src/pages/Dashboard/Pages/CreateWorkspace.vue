@@ -49,7 +49,7 @@
           </md-field>
 
           <div class="button-container">
-            <md-button @click="signup" class="md-success md-round mt-4" slot="footer" :disabled="!workspaceValid">Continue</md-button>
+            <md-button @click="signup" class="md-success md-round mt-4" slot="footer" :disabled="!terms || !workspaceValid">Continue</md-button>
           </div>
         </div>
       </signup-card>

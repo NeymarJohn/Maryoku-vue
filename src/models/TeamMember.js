@@ -14,11 +14,11 @@ export default class TeamMember extends Model {
             let resource = ctx.$ls.get(key);
             if (!resource) {
                 new TeamMember().get().then(res => {
-                    //ctx.$ls.set(key,res, Model.DEFAULT_EXPIRATION_MILLIS);
+                    ctx.$ls.set(key,res, Model.DEFAULT_EXPIRATION_MILLIS);
                     resolve(res);
                 });
             } else {
-                //ctx.$ls.set(key,resource, Model.DEFAULT_EXPIRATION_MILLIS);
+                ctx.$ls.set(key,resource, Model.DEFAULT_EXPIRATION_MILLIS);
                 resolve(resource);
             }
         });
