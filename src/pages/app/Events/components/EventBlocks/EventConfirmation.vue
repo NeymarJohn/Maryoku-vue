@@ -32,11 +32,9 @@
         }),
         methods: {
             showSignIn(){
-                this.isLoading = true;
                 this.$root.$emit("event-confirmation", null);
             },
             confirmGoing(isGoing){
-                this.isLoading = true;
                 this.$root.$emit("event-confirmation", isGoing);
             }
 

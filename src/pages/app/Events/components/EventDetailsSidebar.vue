@@ -260,8 +260,6 @@
             this.routeName = this.$route.name
         },
         mounted() {
-            let _self = this;
-
             this.getEvent();
 
             this.$bus.$on('RefreshStatistics', function () {
