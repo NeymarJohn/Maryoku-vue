@@ -7,8 +7,8 @@
                 </div>
                 <h4 class="title2">{{selected_vendor.vendorDisplayName ? `${selected_vendor.vendorDisplayName}’s Company`: "Create New Vendor"}}</h4>
                 <md-card-actions md-alignment="right">
-                    <md-button v-if="creation_mode" class="md-success md-sm" @click="addVendor" >Create</md-button>
-                    <md-button v-else-if="!creation_mode" class="md-info md-sm" @click="saveVendor">Save</md-button>
+                    <md-button v-if="creationMode" class="md-success md-sm" @click="addVendor" >Create</md-button>
+                    <md-button v-else-if="!creationMode" class="md-info md-sm" @click="saveVendor">Save</md-button>
                 </md-card-actions>
             </md-card-header>
 
@@ -266,7 +266,6 @@ input[type=number]::-webkit-outer-spin-button {
         },
         mounted() {
 
-
         },
         data() {
             return {
@@ -279,6 +278,8 @@ input[type=number]::-webkit-outer-spin-button {
                     location: {}
 
 },
+                creationMode:  this.creation_mode,
+                selectedVendor:  this.selected_vendor,
                 modelValidations: {
                     vendorDisplayName: {
                         required: true,
@@ -372,8 +373,10 @@ input[type=number]::-webkit-outer-spin-button {
                     if(res){
                         let vendor = new Vendors({});
 
-                        vendor.attach(this.selected_vendor).then(() => {
+                        vendor.attach(this.selected_vendor).then((res) => {
                             this.$emit('vendorCreated')
+                            this.creationMode = false;
+                            this.selected_vendor.id= res.data.id
                             this.$notify(
                                 {
                                     message: 'Vendor created successfully!',
