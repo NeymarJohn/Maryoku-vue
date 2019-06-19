@@ -2,7 +2,7 @@
   <div>
     <md-card-content>
       <md-table v-model="vendorsList" table-header-color="orange" class="vendors-table">
-        <md-table-row slot="md-table-row" slot-scope="{ item }" :key="vendorsList.indexOf(item)"   :class="{selected:item.id === selectedVendor}" class="vendors-table_item">
+        <md-table-row slot="md-table-row" slot-scope="{ item }" :key="vendorsList.indexOf(item)"    @click="selectVendor(item)"  :class="{selected:item.id === selectedVendor}"    class="vendors-table_item hover-row">
           <md-table-cell md-label="Vendor Name"  > {{ item.vendorDisplayName }}</md-table-cell>
           <md-table-cell md-label="Rank">
             <vue-stars
