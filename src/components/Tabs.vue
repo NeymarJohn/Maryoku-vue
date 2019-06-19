@@ -44,10 +44,7 @@
   props: {
     flexColumn: Boolean,
     navPillsIcons: Boolean,
-    plain: {
-      type: Boolean,
-      default: true
-    },
+    plain: Boolean,
     tabName: Array,
     tabIcon: Array,
     colorButton: {

@@ -194,11 +194,9 @@
         mounted(){
             this.ready = true;
             this.isLoading = true;
-            this.queryInProgress = false;
         },
         methods: {
-            saveBudgeData (val, fieldName) {
-                this.isLoading = true;
+            async saveBudgeData (val, fieldName) {
                 this.fieldName = fieldName;
                 if (fieldName == 'annualBudget') {
                     this.annualBudget = Number(val);
@@ -209,20 +207,17 @@
                     this.annualBudgetPerEmployee = Number(val);
                 }
 
-                this.$auth.user.customer.numberOfEmployees = this.numberOfEmployees;
-                this.$ls.set("user", this.$auth.user, 1000 * 60 * 10);
-
                 let calendarId = this.$auth.user.defaultCalendarId;
                 let calendar = new Calendar({id: calendarId, annualBudgetPerEmployee:  Number(this.annualBudgetPerEmployee)});
                 let customer = new Customer({id: this.$auth.user.customer.id, numberOfEmployees: Number(this.numberOfEmployees)});
 
-                customer.save().then(customerResponse => {
-                    this.numberOfEmployees = customerResponse.item.numberOfEmployees;
+                this.$auth.user.customer.numberOfEmployees = Number(this.numberOfEmployees);
+
+                customer.save().then(response => {
                     calendar.save().then(response => {
                         // const fieldName = this.fieldName;
                         this.$emit("month-count");
                         // this.queryBudgetInfo();
-                        this.isLoading = false;
                         this.closeEditMode();
                     }).catch(error => {
                         console.error(error);
@@ -235,37 +230,34 @@
                 });
             },
             queryBudgetInfo(){
-                if (!this.queryInProgress){
-                    this.queryInProgress = true;
-                    if (this.statistics) {
-                        this.annualBudget = this.statistics.annualBudget | numeral('0,0');
-                        this.numberOfEmployees = this.$auth.user.customer.numberOfEmployees | numeral('0,0');
-                        this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee | numeral('0,0');
+                if (this.statistics) {
+                    this.annualBudget = this.statistics.annualBudget | numeral('0,0');
+                    this.numberOfEmployees = this.$auth.user.customer.numberOfEmployees | numeral('0,0');
+                    this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee | numeral('0,0');
 
-                        this.totalRemainingBudget = this.statistics.annualBudget - (this.statistics.annualBudgetPerEmployeeAllocated*this.numberOfEmployees);//this.statistics.annualBudgetAllocated;
-                        this.remainingBudgetPerEmployee = this.statistics.annualBudgetPerEmployee - this.statistics.annualBudgetPerEmployeeAllocated;
-                        this.countEvents = this.statistics.numberOfEvents;
-                        this.percentage = (100-((this.statistics.annualBudgetPerEmployeeAllocated*this.numberOfEmployees) / this.statistics.annualBudget)*100).toFixed(2); //100 - ((this.statistics.annualBudgetAllocated / this.statistics.annualBudget) * 100).toFixed(2);
-                        if (this.percentage > 0) {
-                            this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-positive"}, {value: this.percentage, className:"budget-chart-slice-b-positive"}];
-                        } else {
-                            this.seriesData =  [{value: 0.01, className: "budget-chart-slice-a-negative"},{value: 99.99, className: "budget-chart-slice-b-negative"}];
-                        }
-                        this.annualBudgetCache = this.annualBudget;
-                        this.annualBudgetPerEmployeeCache = this.annualBudgetPerEmployee;
+                    this.totalRemainingBudget = this.statistics.annualBudget - (this.statistics.annualBudgetPerEmployeeAllocated*this.numberOfEmployees);//this.statistics.annualBudgetAllocated;
+                    this.remainingBudgetPerEmployee = this.statistics.annualBudgetPerEmployee - this.statistics.annualBudgetPerEmployeeAllocated;
+                    this.countEvents = this.statistics.numberOfEvents;
+                    this.percentage = (100-((this.statistics.annualBudgetPerEmployeeAllocated*this.numberOfEmployees) / this.statistics.annualBudget)*100).toFixed(2); //100 - ((this.statistics.annualBudgetAllocated / this.statistics.annualBudget) * 100).toFixed(2);
+                    if (this.percentage > 0) {
+                        this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-positive"}, {value: this.percentage, className:"budget-chart-slice-b-positive"}];
+                    } else {
+                        this.seriesData =  [{value: 0.01, className: "budget-chart-slice-a-negative"},{value: 99.99, className: "budget-chart-slice-b-negative"}];
                     }
-                    this.queryInProgress = false;
+                    this.annualBudgetCache = this.annualBudget;
+                    this.annualBudgetPerEmployeeCache = this.annualBudgetPerEmployee;
                 }
+
                 this.isLoading = false;
             },
             closeEditMode(val = undefined, fieldName = undefined) {
-                /*if (fieldName == 'annualBudget') {
+                if (fieldName == 'annualBudget') {
                     this.annualBudget = Number(val);
                 } else if (fieldName == 'numberOfEmployees') {
                     this.numberOfEmployees = Number(val);
                 } else if (fieldName == 'annualBudgetPerEmployee') {
                     this.annualBudgetPerEmployee = Number(val);
-                }*/
+                }
                 this.editAnnualBudgetPerEmployee = false;
                 this.editNumberOfEmployees = false;
                 this.editAnnualBudget = false;

@@ -11,41 +11,54 @@
                     Proposals List
                 </h4>
 
-                <div class="md-layout" style="overflow: auto; max-height: 80vh;">
+                <div class="md-layout" style="overflow: auto; max-height: 80vh;" v-if="selectedBlock.proposals">
 
-                    <div class="proposal-item md-layout-item md-size-100" v-for="(proposal,index) in selectedBlock.vendors" :key="index" v-if="proposalsToDisplay >= index+1 && proposal.vendor">
-                        <h4 class="proposal-title"> {{proposal.vendor.vendorDisplayName}} </h4>
-                        <md-card>
-                            <md-card-content>
-                                <md-table v-model="proposal.proposals" table-header-color="blue" class="vendors-table">
-                                    <md-table-row slot="md-table-row" slot-scope="{ item }" :key="proposal.proposals.indexOf(item)"  class="vendors-table_item">
-                                        <md-table-cell md-label="Time Stamp"  > {{ getProposalDate(item.dateCreated) }}</md-table-cell>
-                                        <md-table-cell md-label="Total Bid">
-                                            ${{item.cost}}
-                                        </md-table-cell>
-                                        <md-table-cell md-label="Alignment With Requirements">
-                                            {{item.alignment_with_requirements}}
-                                        </md-table-cell>
-                                        <md-table-cell class="vendors-table_item-actions" >
-                                            <md-button  v-if="item.id != winnerId" class="md-button md-rose md-sm md-theme-default auto-width" @click="setAsWining(item)">
-                                                Set as wining
-                                            </md-button>
-                                            <md-button  class="md-button md-success md-sm md-theme-default auto-width"  v-else>
-                                                <span><md-icon>check</md-icon></span>Winner
-                                            </md-button>
-                                        </md-table-cell>
+                    <md-card>
 
-                                    </md-table-row>
-                                </md-table>
-                            </md-card-content>
+                        <md-card-header  class="md-card-header-text md-card-header-warning">
+                            <div class="card-text">
+                                <h4 class="title" style="color: white;">
+                                    Manage Proposals
+                                </h4>
+                                <p class="category">Applicable vendors from your list</p>
+                            </div>
+                        </md-card-header>
+                        <md-card-content>
+                            <md-table v-if="isThereProposals()" v-model="selectedBlock.proposals" table-header-color="orange" class="vendors-table">
+                                <md-table-row slot="md-table-row" slot-scope="{ item }" :key="selectedBlock.proposals.indexOf(item)"  class="vendors-table_item">
+                                    <md-table-cell md-label="Proposals"  style="text-transform: capitalize;"> {{ item.vendor ? item.vendor.vendorDisplayName : 'No Vendor Title' }}</md-table-cell>
+                                    <md-table-cell md-label="Price">
+                                        ${{item.cost}}
+                                    </md-table-cell>
+                                    <md-table-cell md-label="Requirements">
+                                        %{{item.percentRequirements}}
+                                    </md-table-cell>
+                                    <md-table-cell class="vendors-table_item-actions" >
 
-                        </md-card>
-                    </div>
+                                        <md-button class="md-button md-success md-sm md-theme-default auto-width" >
+                                            View
+                                        </md-button>
+
+                                        <md-button  v-if="item.id != winnerId" class="md-button md-rose md-sm md-theme-default auto-width" @click="setAsWining(item)">
+                                            Set as wining
+                                        </md-button>
+                                        <md-button  class="md-button md-success md-sm md-theme-default auto-width"  v-else>
+                                            <span><md-icon>check</md-icon></span>Winner
+                                        </md-button>
+                                    </md-table-cell>
+
+                                </md-table-row>
+                            </md-table>
+                            <template v-else>
+                                <h5>No Proposals assigned</h5>
+                            </template>
+                        </md-card-content>
+
+                    </md-card>
 
 
-                    <div class="md-layout-item md-size-100 proposals-actions">
+                    <div class="md-layout-item md-size-100 proposals-actions" v-if="isThereProposals()">
                         <md-button class="md-info"> compare proposals </md-button>
-                        <md-button class="md-default" @click="viewAllProposals" v-if="proposalsToDisplay == 1"> View all proposals </md-button>
                     </div>
 
 
@@ -84,45 +97,12 @@
         data: () => ({
             // auth: auth,
             isLoaded : false,
-            proposals : [
-                {
-                    title : "Pete's Coffee Proposal",
-                    list : [
-                        {
-                            time_stamp : '11/14/2019',
-                            total_bid : '910',
-                            alignment_with_requirements : 'high'
-                        },
-                        {
-                            time_stamp : '11/14/2019',
-                            total_bid : '910',
-                            alignment_with_requirements : 'high'
-                        }
-                    ]
-                },
-                {
-                    title : "Hotel California",
-                    list : [
-                        {
-                            time_stamp : '11/14/2019',
-                            total_bid : '910',
-                            alignment_with_requirements : 'high'
-                        },
-                        {
-                            time_stamp : '11/14/2019',
-                            total_bid : '910',
-                            alignment_with_requirements : 'high'
-                        }
-                    ]
-                }
-            ],
             proposalsToDisplay : 1,
         }),
 
         created() {
         },
         mounted() {
-
 
         },
         methods: {
@@ -174,6 +154,9 @@
             return x.getDate() + '-' + x.getMonth() + '-' + x.getFullYear();
 
           },
+            isThereProposals() {
+                return this.selectedBlock.proposals && this.selectedBlock.proposals.length;
+            }
         },
         computed: {
 
