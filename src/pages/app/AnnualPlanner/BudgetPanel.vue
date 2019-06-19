@@ -209,6 +209,9 @@
                     this.annualBudgetPerEmployee = Number(val);
                 }
 
+                this.$auth.user.customer.numberOfEmployees = this.numberOfEmployees;
+                this.$ls.set("user", this.$auth.user, 1000 * 60 * 10);
+
                 let calendarId = this.$auth.user.defaultCalendarId;
                 let calendar = new Calendar({id: calendarId, annualBudgetPerEmployee:  Number(this.annualBudgetPerEmployee)});
                 let customer = new Customer({id: this.$auth.user.customer.id, numberOfEmployees: Number(this.numberOfEmployees)});
