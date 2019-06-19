@@ -59,15 +59,17 @@
                         Each column header has a dropdown list of possible columns to assign, choose the one that reflects your data as much as possible.
                       </h5>
                       <md-table class="border-table" v-if="parseCSV" style="max-width: 800px; overflow: auto;">
-                        <md-table-row style="border-top: none;">
-                          <md-table-head
+                        <md-table-row style="border-top: none; padding-bottom: 0">
+                          <md-table-cell   style="padding-top: 0;border: 0;padding-bottom: 0"
                             v-if="column !== ''"
                             v-for="(column, index) in parseCSV.columns"
                             :key="index"
                             @click="sortBy(index)"
                             :class="{ active: sortKey == index }">
                             <md-field>
-                              <md-select id="remove-border" v-model="parseCSV.columns[index].value"  name="select">
+                              <md-select id="remove-border" class="no-underline" v-model="parseCSV.columns[index].value" 
+                               
+                               placeholder="Select Column Name"  name="select">
                                 <md-option
                                   v-if="item !== ''"
                                   v-for="(item, index) in databaseVendorColumns"
@@ -77,10 +79,10 @@
                                 </md-option>
                               </md-select>
                             </md-field>
-                          </md-table-head>
+                          </md-table-cell>
                         </md-table-row>
-                        <md-table-row v-for="(row, rowIndex) in parseCSV.rows" :key="rowIndex">
-                          <md-table-cell v-for="(column, columnIndex) in parseCSV.columns" :key="columnIndex">
+                        <md-table-row v-bind:class="{'no-border' : rowIndex == 0}" v-for="(row, rowIndex) in parseCSV.rows" :key="rowIndex">
+                          <md-table-cell v-bind:class="{'no-border' : rowIndex == 0}" v-for="(column, columnIndex) in parseCSV.columns" :key="columnIndex">
                             {{ row[column] }}
                           </md-table-cell>
                         </md-table-row>
@@ -537,7 +539,9 @@
   .header-position {
     position: relative;
   }
-
+  .no-border{
+        border: 0 !important;
+  }
   .state-area{
     .md-theme-default{
       &.active {
