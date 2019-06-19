@@ -170,14 +170,14 @@
                 displayName: 'Contact Person Email',
                 name: 'contactPersonEmail',
                 value: 'contactPersonEmail',
-                mandatory: true
+                mandatory: false
 
             },
             {
                 displayName: 'Contact Person Phone Number',
                 name: 'contactPersonPhone',
                 value: 'contactPersonPhone',
-                mandatory: true
+                mandatory: false
 
             },
           {
@@ -198,30 +198,34 @@
             displayName: 'Vendor Website',
             name: 'vendorWebsite',
             value: 'vendorWebsite',
-
+              mandatory: false
           },
           {
             displayName: 'Vendor Category',
             name: 'vendorCategory',
-            value: ''
+            value: 'vendorCategory',
+              mandatory: false
           },
           {
             displayName: 'Product Category',
             name: 'productsCategory',
-            value: ''
+            value: 'productsCategory',
+              mandatory: false
 
           },
 
           {
             displayName: 'Vendor Address Line 1',
             name: 'vendorAddressLine1',
-            value: ''
+            value: 'vendorAddressLine1',
+              mandatory: false
 
           },
           {
             displayName: 'Vendor Country',
             name: 'vendorCountry',
-            value: ''
+            value: 'vendorCountry',
+              mandatory: false
 
           },
         ],
@@ -232,7 +236,8 @@
         sortOrders: {},
         sortKey: '',
         rawCSVFile: null,
-        currentStep: 1
+        currentStep: 1,
+          mappedColumns: {}
         // step1:true,
         // step2:false,
         // step3:false,
