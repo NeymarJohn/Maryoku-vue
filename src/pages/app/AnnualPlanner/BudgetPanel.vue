@@ -245,7 +245,7 @@
                         this.totalRemainingBudget = this.statistics.annualBudget - (this.statistics.annualBudgetPerEmployeeAllocated*this.numberOfEmployees);//this.statistics.annualBudgetAllocated;
                         this.remainingBudgetPerEmployee = this.statistics.annualBudgetPerEmployee - this.statistics.annualBudgetPerEmployeeAllocated;
                         this.countEvents = this.statistics.numberOfEvents;
-                        this.percentage = ((this.remainingBudgetPerEmployee / this.annualBudgetPerEmployee)*100).toFixed(2); //100 - ((this.statistics.annualBudgetAllocated / this.statistics.annualBudget) * 100).toFixed(2);
+                        this.percentage = (100-((this.statistics.annualBudgetPerEmployeeAllocated*this.numberOfEmployees) / this.statistics.annualBudget)*100).toFixed(2); //100 - ((this.statistics.annualBudgetAllocated / this.statistics.annualBudget) * 100).toFixed(2);
                         if (this.percentage > 0) {
                             this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-positive"}, {value: this.percentage, className:"budget-chart-slice-b-positive"}];
                         } else {

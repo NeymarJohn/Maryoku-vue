@@ -8,12 +8,6 @@
                 </md-button>
                 {{this.selectedBlock.title}} Requirements
 
-                <div class="pull-right">
-                    <md-button class="md-info event-building-blocks-requirements-add" @click="addNewValue">
-                        Add New Requirement
-                    </md-button>
-                </div>
-
             </h4>
             <div class="md-layout-item md-size-100">
 
@@ -35,85 +29,58 @@
                         <md-table v-if="eventBlocks && eventBlocks.length" v-model="eventBlocks" table-header-color="orange"
                                   class="requirements-table">
                             <md-table-row slot="md-table-row" slot-scope="{ item, index }"
-                                          :key="eventBlocks.indexOf(item)"
-                                          :class="{'visible-row':item.editMode,'not-visible-row':!item.editMode}">
-                                <md-table-cell md-label="Title">
-                                    {{item.title}}
+                                          :key="eventBlocks.indexOf(item)" >
+                                <md-table-cell md-label="Requirement" class="requirement-title">
+                                    <div class="field-section">
+                                        <label-edit :text="item.title"
+                                                    :field-name="item.id.toString()"
+                                                    :scope="`title`"
+                                                    @text-updated-blur="editValue"
+                                                    @text-updated-enter="editValue"></label-edit>
 
-                                    <div v-if="item.editMode">
-
-                                        <md-field>
-                                            <md-input
-                                                    v-model="item.title"
-                                                    type="text"
-                                            ></md-input>
-                                        </md-field>
-
+                                        <md-button class="md-rose md-just-icon md-simple" @click="editItemDescription(item)">
+                                            <md-icon>comment</md-icon>
+                                        </md-button>
                                     </div>
 
-                                </md-table-cell>
-                                <md-table-cell md-label="Description">
-                                    {{item.comment ? item.comment : 'No Description'}}
 
-                                    <div v-if="item.editMode">
+                                    <div class="item-description-field" v-if="item.editMode">
                                         <md-field>
                                             <md-textarea
-                                                    v-model="item.comment"
-                                                    placeholder="Add Description here"
-                                                    type="text"
-                                                    :rows="item.comment ? parseInt(item.comment.length / 33) + 1 : 2"
+                                                v-model="item.comment"
+                                                placeholder="Add Description here"
+                                                type="text"
+                                                :rows="item.comment ? parseInt(item.comment.length / 33) + 1 : 2"
+                                                @change="itemChanged(item)"
                                             ></md-textarea>
                                         </md-field>
                                     </div>
 
                                 </md-table-cell>
-                                <md-table-cell md-label="Priority">
-                                    {{item.priority}}
 
-                                    <div v-if="item.editMode">
-
-                                        <md-field>
-                                            <md-select v-model="item.priority" name="select">
-                                                <md-option v-for="(option, index) in prioritiesList" :key="index"
-                                                           :value="option.value">{{ option.value }}
-                                                </md-option>
-                                            </md-select>
-                                        </md-field>
-                                    </div>
-
-
+                                <md-table-cell md-label="Amount" class="requirement-amount">
+                                    <span class="dollar-sign">$</span>
+                                    <label-edit :text="item.value"
+                                                :field-name="item.id.toString()"
+                                                :scope="`value`"
+                                                @text-updated-blur="editValue"
+                                                @text-updated-enter="editValue"></label-edit>
                                 </md-table-cell>
 
-                                <md-table-cell md-label="Actions">
-                                    <div v-if="!item.editMode">
-                                        <md-button
-                                                class="md-info md-sm md-just-icon"
-                                                @click="editItem(item)">
-                                            <md-icon>edit</md-icon>
-                                        </md-button>
-                                        <md-button
-                                                class="md-danger md-sm md-just-icon event-building-blocks-requirements-delete"
-                                                @click="deleteValue(item.id)">
-                                            <md-icon>delete_outline</md-icon>
-                                        </md-button>
-                                    </div>
+                                <md-table-cell md-label="Must Have?" class="requirement-must-have">
+                                    <md-checkbox v-model="item.mandatory" @change="mustHaveChanged(item)"></md-checkbox>
+                                </md-table-cell>
 
-                                    <div v-if="item.editMode">
-
-                                        <md-button class="md-success md-sm edit-requirement" @click="editValue(item)">
-                                            Save
-                                        </md-button>
-                                        <md-button class="md-default md-sm md-just-icon" @click="cancelEdit(item)">
-                                            <md-icon>close</md-icon>
-                                        </md-button>
-                                    </div>
-
-
+                                <md-table-cell md-label="">
+                                    <md-button
+                                        class="md-danger md-sm md-just-icon event-building-blocks-requirements-delete"
+                                        @click="deleteValue(item.id)">
+                                        <md-icon>delete_outline</md-icon>
+                                    </md-button>
                                 </md-table-cell>
 
 
                             </md-table-row>
-
                         </md-table>
                         <div v-else>
                             <md-table v-model="dummyList" table-header-color="orange"
@@ -136,6 +103,11 @@
                                 </md-table-row>
                             </md-table>
                         </div>
+                        <div class="pull-left">
+                            <md-button class="md-default md-simple add-new-requirements"  @click="addNewValue">
+                                Add New <md-icon>add</md-icon>
+                            </md-button>
+                        </div>
                     </md-card-content>
                 </md-card>
 
@@ -157,7 +129,7 @@
     import VueElementLoading from 'vue-element-loading';
     import _ from "underscore";
     import MdCardContent from "../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue";
-
+    import ClickOutside from 'vue-click-outside'
     import {LabelEdit} from '@/components';
     import draggable from 'vuedraggable';
     import {Drag, Drop} from 'vue-drag-drop';
@@ -167,7 +139,8 @@
             MdCardContent,
             VueElementLoading,
             LabelEdit,
-            draggable, Drag, Drop
+            draggable, Drag, Drop,
+            ClickOutside
         },
         props: {
             event: Object,
@@ -224,6 +197,7 @@
 
                 new EventComponentValue().for(calendar, event, selected_block).get().then(values => {
                     this.eventBlocks = values;
+                    console.log(values);
                      if ( newValueId ) {
 
                         let newValue = _.findWhere(this.eventBlocks,{id : newValueId});
@@ -322,8 +296,11 @@
                 });
 
             },
-            editValue(item) {
+            editRequirementItemProperty(property,val,item){
 
+                if ( !item ) {
+                    return;
+                }
                 this.isLoading = true;
 
                 let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
@@ -331,9 +308,7 @@
                 let selected_block = new EventComponent({id: this.selectedBlock.id});
                 let value = new EventComponentValue({id: item.id});
 
-                value.title = item.title;
-                value.priority = item.priority;
-                value.comment = item.comment;
+                value[property] = val ? val : false;
 
                 value.for(calendar, event, selected_block).save().then(resp => {
                     this.isLoading = false;
@@ -344,8 +319,9 @@
                             horizontalAlign: 'center',
                             verticalAlign: 'top',
                             type: 'success'
-                        })
+                        });
 
+                    this.cancelEdit(item);
                     this.getBuildingBlockValues();
                 })
                     .catch(error => {
@@ -360,6 +336,20 @@
                             })
 
                     })
+
+            },
+            /**
+             * Edit requirement item
+             * @{val} new value for the item property
+             * @{fieldName} the id for the item
+             * @{scope} property name to set the new value in it
+             * */
+            editValue(val, fieldName , scope) {
+
+                let item = _.findWhere(this.eventBlocks,{id : fieldName});
+
+                this.editRequirementItemProperty(scope,val,item);
+
             },
             saveAllValues() {
                 let _self = this;
@@ -367,16 +357,20 @@
                     _self.editValue(block);
                 })
             },
-            editItem(item) {
-                this.eventBlocks.forEach((interaction) => {
-                    interaction.editMode = false;
-                });
-                item.editMode = true;
+            editItemDescription(item) {
+
+                item.editMode = !item.editMode;
                 this.$forceUpdate();
             },
             cancelEdit(item) {
                 item.editMode = false;
                 this.$forceUpdate();
+            },
+            itemChanged (item) {
+                this.editRequirementItemProperty('comment',item.comment,item);
+            },
+            mustHaveChanged (item) {
+                this.editRequirementItemProperty('mandatory',item.mandatory,item);
             }
         },
         computed: {}

@@ -27,7 +27,7 @@
       required: Boolean,
       fieldName: String,
       mask: String,
-      scope: Object,
+      scope: [String,Object],
       empty: { type: String, default: 'Click to set' },
       numeric: Boolean
     }, // parent should provide :text or :placeholder

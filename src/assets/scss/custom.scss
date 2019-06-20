@@ -1969,8 +1969,50 @@ iframe{
         }
     }
 
-}
+    .requirement-amount {
+        .md-table-cell-container {
+            display: flex;
+            flex : 1;
+            flex-direction: row;
+            align-items: center;
+        }
 
+    }
+    .requirement-title {
+        .md-table-cell-container {
+            .field-section {
+                display: flex;
+                flex : 1;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+    }
+    .requirement-must-have {
+        .md-table-cell-container {
+            .md-checkbox {
+                margin : 5px 0;
+            }
+        }
+    }
+
+    .item-description-field {
+        background: white;
+        width: 200%;
+        border: 1px solid #909090;
+        border-radius: 4px;
+        margin-top: 0.5em;
+        .md-textarea {
+            min-height: 50px !important;
+        }
+    }
+
+}
+.add-new-requirements {
+    .md-ripple {
+        padding-left : 0 !important;
+    }
+}
 
 /* Vendor Proposals Style */
 .event-information-card {
