@@ -1,231 +1,232 @@
 <template>
-  <div class="adding-building-blocks-panel">
-    <div class="md-layout" style="max-height: 50vh;">
-      <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
-        <h4 class="md-title">
-          <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon"><md-icon>arrow_back</md-icon></md-button>
-        </h4>
-      </div>
-      <div class="md-layout-item md-size-95" style="max-height: 50vh;">
-        <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
-          Add Building Block
-        </h4>
-        <p>
-          Drag & Drop building blocks to your working panel to add new services or products to your event
-        </p>
-        <div class="md-layout" style="overflow: auto; max-height: 80vh;">
-          <div v-for="(item,index) in categoryBuildingBlocks" :key="index" class="md-layout-item md-size-80 mx-auto">
-            <drag :class="`md-button md-${item.color} block-item text-center`"
-                  :transfer-data="{ item }"
-                  v-if="!item.childComponents">
+    <div class="adding-building-blocks-panel">
+        <div class="md-layout" style="max-height: 50vh;">
+            <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
+                <h4 class="md-title">
+                    <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon"><md-icon>arrow_back</md-icon></md-button>
+                </h4>
+            </div>
+            <div class="md-layout-item md-size-95" style="max-height: 50vh;">
+                <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
+                    Add Building Block
+                </h4>
+                <p>
+                    Drag & Drop building blocks to your working panel to add new services or products to your event
+                </p>
+                <div class="md-layout" style="overflow: auto; max-height: 80vh;">
+                    <div v-for="(item,index) in categoryBuildingBlocks" :key="index" class="md-layout-item md-size-80 mx-auto">
+                        <drag :class="`md-button md-${item.color} block-item text-center`"
+                              :transfer-data="{ item }"
+                              v-if="!item.childComponents">
 
-              <!--<md-icon>{{item.icon}}</md-icon>-->
-              {{item.value}}
-            </drag>
-            <template v-else-if="item.childComponents">
-              <h4>{{item.value}}</h4>
-              <div v-for="(item1,index1) in item.childComponents" :key="index1">
-                <drag :class="`md-button md-${item1.color} block-item text-center`"
-                      :transfer-data="{ item1 }">
-                  <!--<md-icon>{{item1.icon}}</md-icon>-->
-                  {{item1.title}}
-                </drag>
-              </div>
-            </template>
-          </div>
+                            <!--<md-icon>{{item.icon}}</md-icon>-->
+                            {{item.value}}
+                        </drag>
+                        <template v-else-if="item.childComponents">
+                            <h4>{{item.value}}</h4>
+                            <div v-for="(item1,index1) in item.childComponents" :key="index1">
+                                <drag :class="`md-button md-${item1.color} block-item text-center`"
+                                      :transfer-data="{ item1 }">
+                                    <!--<md-icon>{{item1.icon}}</md-icon>-->
+                                    {{item1.title}}
+                                </drag>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <drop @drop="handleDrop" class="draggable-area" v-if="isLoaded">
-      <p>
-        <img src="/static/img/drag_drop_white.png" alt="drag and drop" style="width: 52px;"/>
-      </p>
-      <p style="font-size : 20px; margin: 0;">Drag building blocks here</p>
-    </drop>
-  </div>
+        <drop @drop="handleDrop" class="draggable-area" v-if="isLoaded">
+            <p>
+                <img src="/static/img/drag_drop_white.png" alt="drag and drop" style="width: 52px;"/>
+            </p>
+            <p style="font-size : 20px; margin: 0;">Drag building blocks here</p>
+        </drop>
+    </div>
 </template>
 <script>
-  // import auth from '@/auth';
-  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-  import CalendarEvent from '@/models/CalendarEvent';
-  import EventPageHeaderImage from '@/models/EventPageHeaderImage';
-  import {Modal} from "@/components";
-  import Calendar from "@/models/Calendar";
-  import EventComponent from "@/models/EventComponent";
+    // import auth from '@/auth';
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+    import CalendarEvent from '@/models/CalendarEvent';
+    import EventPageHeaderImage from '@/models/EventPageHeaderImage';
+    import {Modal} from "@/components";
+    import Calendar from "@/models/Calendar";
+    import EventComponent from "@/models/EventComponent";
 
-  import swal from "sweetalert2";
-  import {error} from 'util';
-  import moment from 'moment';
-  import draggable from 'vuedraggable';
-  import {Drag, Drop} from 'vue-drag-drop';
-  import VueElementLoading from 'vue-element-loading';
+    import swal from "sweetalert2";
+    import {error} from 'util';
+    import moment from 'moment';
+    import draggable from 'vuedraggable';
+    import {Drag, Drop} from 'vue-drag-drop';
+    import VueElementLoading from 'vue-element-loading';
 
-  export default {
-    components: {
-      draggable, Drag, Drop,VueElementLoading
+    export default {
+        components: {
+            draggable, Drag, Drop,VueElementLoading
 
-    },
-    props: {
-      event: Object,
-    },
-    data: () => ({
-      // auth: auth,
-      categoryBuildingBlocks: [],
-      isLoaded : false
+        },
+        props: {
+            event: Object,
+        },
+        data: () => ({
+            // auth: auth,
+            categoryBuildingBlocks: [],
+            isLoaded : false
 
-    }),
+        }),
 
-    created() {
+        created() {
 
-    },
-    mounted() {
+        },
+        mounted() {
 
-      this.getCategoryBlocks();
+            this.getCategoryBlocks();
 
-    },
-    methods: {
-      ...mapMutations('EventPlannerVuex', ['setBuildingBlockModal']),
-      closeModal() {
-        this.setBuildingBlockModal({showModal: false});
-      },
-      closePanel(){
-        this.$emit("closePanel");
-      },
-      addBuildingBlock(item) {
+        },
+        methods: {
+            ...mapMutations('EventPlannerVuex', ['setBuildingBlockModal']),
+            closeModal() {
+                this.setBuildingBlockModal({showModal: false});
+            },
+            closePanel(){
+                this.$emit("closePanel");
+            },
+            addBuildingBlock(item) {
 
-        // Save event interaction
-        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-        let event = new CalendarEvent({id: this.event.id});
+                // Save event interaction
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+                let event = new CalendarEvent({id: this.event.id});
 
 
-        let new_block = {
-          componentId: item.id,
-          todos: "",
-          values: "",
-          vendors: "",
-          calendarEvent: {id: event.id}
+                let new_block = {
+                    componentId: item.id,
+                    componentCategoryId: item.categoryId,
+                    todos: "",
+                    values: "",
+                    vendors: "",
+                    calendarEvent: {id: event.id}
+                }
+
+                new EventComponent(new_block).for(calendar, event).save().then(res => {
+                    this.$parent.isLoading = false;
+
+                    this.setBuildingBlockModal({showModal: false});
+                    this.$emit("closePanel", {});
+                    this.$bus.$emit('BlockAdded');
+
+                })
+                    .catch(error => {
+                        console.log('Error while saving ', error);
+                    })
+
+            },
+            getCategoryBlocks() {
+                EventComponent.get()
+                    .then(res => {
+                        setTimeout( ()=>{
+                            this.isLoaded = true;
+                        } ,500);
+
+                        this.$set(this, 'categoryBuildingBlocks', res);
+
+                    })
+                    .catch(error => {
+                        console.log('Error ', error);
+                    })
+            },
+            handleDrop(data, event) {
+
+                this.$parent.isLoading = true;
+
+                let block = data.item ? data.item : data.item1;
+
+                if (block) {
+                    this.addBuildingBlock(block);
+                } else {
+                    this.$parent.isLoading = false;
+
+                }
+
+            }
+        },
+        computed: {
+            ...mapState('EventPlannerVuex', [
+                'addBuildingBlockModal',
+            ])
         }
-
-        new EventComponent(new_block).for(calendar, event).save().then(res => {
-          this.$parent.isLoading = false;
-
-          this.setBuildingBlockModal({showModal: false});
-          this.$emit("closePanel", {});
-          this.$bus.$emit('BlockAdded');
-
-        })
-          .catch(error => {
-            console.log('Error while saving ', error);
-          })
-
-      },
-      getCategoryBlocks() {
-        EventComponent.get()
-          .then(res => {
-            setTimeout( ()=>{
-              this.isLoaded = true;
-            } ,500);
-
-            this.$set(this, 'categoryBuildingBlocks', res);
-
-          })
-          .catch(error => {
-            console.log('Error ', error);
-          })
-      },
-      handleDrop(data, event) {
-
-        this.$parent.isLoading = true;
-
-        let block = data.item ? data.item : data.item1;
-
-        if (block) {
-          this.addBuildingBlock(block);
-        } else {
-          this.$parent.isLoading = false;
-
-        }
-
-      }
-    },
-    computed: {
-      ...mapState('EventPlannerVuex', [
-        'addBuildingBlockModal',
-      ])
-    }
-  };
+    };
 </script>
 <style lang="scss" scope>
-  .md-datepicker {
-    .md-icon.md-date-icon {
-      display: none;
-      & ~ label {
-        left: 0;
-      }
+    .md-datepicker {
+        .md-icon.md-date-icon {
+            display: none;
+            & ~ label {
+                left: 0;
+            }
+        }
+        input {
+            margin-left: 0 !important;
+        }
+        &.md-field::before,
+        &.md-field::after {
+            width: 100%;
+        }
     }
-    input {
-      margin-left: 0 !important;
-    }
-    &.md-field::before,
-    &.md-field::after {
-      width: 100%;
-    }
-  }
 
-  .md-field > .md-icon ~ .md-input {
-    margin: 0;
-  }
+    .md-field > .md-icon ~ .md-input {
+        margin: 0;
+    }
 </style>
 <style lang="scss">
-  .modal-z-index {
-    z-index: 5;
-  }
+    .modal-z-index {
+        z-index: 5;
+    }
 
-  .large-z-index {
-    z-index: 6;
-    position: relative;
-  }
+    .large-z-index {
+        z-index: 6;
+        position: relative;
+    }
 
-  .move-center {
-    margin: 0 auto !important;;
-  }
+    .move-center {
+        margin: 0 auto !important;;
+    }
 
-  .move-left {
-    margin-left: 0 !important;
-    margin-right: auto !important;
-  }
+    .move-left {
+        margin-left: 0 !important;
+        margin-right: auto !important;
+    }
 
-  .move-right {
-    margin-right: 0 !important;
-    margin-left: auto !important;
-  }
+    .move-right {
+        margin-right: 0 !important;
+        margin-left: auto !important;
+    }
 
-  .text-center {
-    text-align: center;
-  }
+    .text-center {
+        text-align: center;
+    }
 
-  .d-flex {
-    display: flex;
-  }
+    .d-flex {
+        display: flex;
+    }
 
-  .items-center-v {
-    align-items: center;
-  }
+    .items-center-v {
+        align-items: center;
+    }
 
-  .items-center-g {
-    justify-content: center;
-  }
+    .items-center-g {
+        justify-content: center;
+    }
 
-  .justify-beetwen {
-    justify-content: space-between
-  }
+    .justify-beetwen {
+        justify-content: space-between
+    }
 
-  .md-field .md-error {
-    text-align: left;
-  }
+    .md-field .md-error {
+        text-align: left;
+    }
 
-  .swal2-container {
-    z-index: 10000;
-  }
+    .swal2-container {
+        z-index: 10000;
+    }
 </style>
