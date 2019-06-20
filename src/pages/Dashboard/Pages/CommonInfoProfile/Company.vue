@@ -170,7 +170,7 @@
         },
         mounted:function(){
             this.$auth.currentUser(this, true, () => {
-                this.$store.dispatch("user/getIndustry");
+                /*this.$store.dispatch("user/getIndustry");*/
 
                 let user = this.$auth.user;
                 this.fullName = user.displayName;
@@ -202,21 +202,24 @@
                 this.$validator.validateAll().then(isValid => {
                     if (isValid){
                         new Customer({
-                            id: this.$auth.user.me.customer.id,
+                            id: that.$auth.user.me.customer.id,
                             onboarded: true,
                             name: this.companyName,
                             numberOfEmployees: this.numberOfEmployees
                         }).save().then(res => {
+
+                            that.$auth.user.customer = res.item;
+                            that.$ls.set("user", that.$auth.user, 1000 * 60 * 10);
                             new Me({
-                                id: this.$auth.user.id,
+                                id: that.$auth.user.id,
                                 onboarded: true,
-                                emailAddress: this.email,
-                                displayName: this.fullName
+                                emailAddress: that.email,
+                                displayName: that.fullName
                             }).save().then((response) => {
+
                                 Me.get().then(me => {
                                     that.$auth.user.me = me;
-                                    that.$auth.user.customer = me.customer;
-                                    this.moveon();
+                                    that.moveon();
                                 });
                             });
                         });

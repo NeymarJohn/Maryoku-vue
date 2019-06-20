@@ -40,7 +40,7 @@ export default {
             });
     },
 
-    signupOrSignin(context, email, role, password, callback) {
+    signupOrSignin(context, email, password, role, callback) {
         context.$http.post(`${REGISTRATION_URL}`, {username: email, password: password, role: role}, {'ContentType' : 'application/json'})
             .then((resp) => {
                 if (callback){

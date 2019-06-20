@@ -212,6 +212,7 @@
             working: false,
             eventData: {},
             occasionsList: [],
+            occasionsForCategory: [],
             // auth: auth,
             hoursArray: [],
             durationArray: [...Array(12).keys()].map(x =>  ++x),
@@ -363,14 +364,14 @@
                 //this.$parent.isLoading = true;
                 this.working = true;
 
-                setTimeout(()=>{
+                this.$nextTick(()=>{
                     this.working = true;
                     let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                     let editedEvent = new CalendarEvent(this.eventData);
                     editedEvent.eventStartMillis = this.getEventStartInMillis();
                     editedEvent.eventEndMillis = this.getEventEndInMillis();
 
-                    let catObject = _.find(this.occasionsOptions, (el => el.value === editedEvent.occasion)) || {category: "CompanyDays"};
+                    let catObject = _.find(this.occasionsForCategory, (el => el.value === editedEvent.occasion)) || {category: "CompanyDays"};
                     this.eventData.category = catObject.category;
                     editedEvent.category = catObject.category;
                     // editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
@@ -385,7 +386,7 @@
                             this.working = false;
                             //this.$parent.isLoading = false;
                         });
-                },100);
+                });
 
             },
             validateEvent() {
@@ -438,7 +439,7 @@
                     this.working = true;
                     let calendarId = this.$auth.user.defaultCalendarId;
                     let _calendar = new Calendar({ id: calendarId});
-                    let catObject = _.find(this.occasionsOptions, (el => el.value === this.eventData.occasion)) || {category: "CompanyDays"};
+                    let catObject = _.find(this.occasionsForCategory, (el => el.value === this.eventData.occasion)) || {category: "CompanyDays"};
                     this.category = catObject.category;
 
                     let newEvent = new CalendarEvent({
@@ -518,6 +519,7 @@
                     new Occasion().for(_calendar).get()
                         .then(resp =>{
                             this.occasionsList = resp.map((val) => val.title);
+                            this.occasionsForCategory = resp.map((val)=>{return {value: val.title, category: val.category}});
                         })
                         .catch(error =>{
                             console.log('error =>> ', error);

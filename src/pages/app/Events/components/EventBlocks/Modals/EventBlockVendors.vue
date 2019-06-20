@@ -9,10 +9,7 @@
                     Vendors List
 
                     <div class="header-actions pull-right">
-<!--                        <md-button class="md-info" @click="manageBlockVendors">-->
-<!--                            Manage Vendors-->
-<!--                        </md-button>-->
-                        <md-button class="md-info">
+                        <md-button class="md-info" @click="manageVendors()">
                             Manage Vendors
                         </md-button>
                         <md-button class="md-default event-building-blocks-proposals-send"  >
@@ -34,7 +31,7 @@
                         </div>
                         <div class="header-actions pull-right" style="margin-top:0.5em;">
                             <md-button class="md-info event-building-blocks-upload-vendors-button"   @click="openUploadModal">
-                                compare proposals
+                                Proposal Comparison
                             </md-button>
                         </div>
                     </md-card-header>
@@ -59,18 +56,18 @@
                                         class="disabled"/>
                                 </md-table-cell>
                                 <md-table-cell md-label="Inquiry Status">
-                                    <template v-if="item.status == 'Ready to send'"
+                                    <template v-if="item.rfpStatus === 'Ready to send' || item.rfpStatus == null"
                                     >
                                         {{ `Ready to send` }}
                                     </template>
-                                    <template v-else-if="item.status == 'Sent'">
+                                    <template v-else-if="item.rfpStatus == 'Sent'">
                                         {{ `Sent on ` }} {{getVendorDate(item.vendor.dateCreated)}}
                                     </template>
-                                    <template v-else-if="item.status == 'Ready to send'"></template>
+                                    <template v-else-if="item.rfpStatus == 'Ready to send'"></template>
                                 </md-table-cell>
                                 <md-table-cell class="vendors-table_item-actions">
 
-                                    <md-button class="md-rose md-just-icon md-round" @click="onRemoveVendor(item)">
+                                    <md-button class="md-rose md-just-icon md-round" @click="onRemoveVendor(item)" v-if="item.rfpStatus == 'Ready to send' || item.rfpStatus == null">
                                         <md-icon>remove</md-icon>
                                     </md-button>
 
@@ -103,15 +100,6 @@
                     </md-card>
 
                 </template>
-
-                <div class="pull-right" v-if="blockVendors.length">
-                    <md-button class="md-info" >
-                        Compare proposals
-                    </md-button>
-                    <md-button class="md-info">
-                        Give me proposals
-                    </md-button>
-                </div>
             </div>
 
             <div class="md-layout-item md-size-50">
@@ -272,11 +260,9 @@
                     .then(resp => {
                         this.isLoading = false;
                         this.blockVendors = resp;
-                        console.log(this.blockVendors);
                     })
                     .catch(error => {
                         this.isLoading = false;
-
                         console.log('EventComponentVendor error =>',error)
 
                     })
@@ -346,7 +332,6 @@
                         let selected_block = new EventComponent({id : this.selectedBlock.id});
 
                         let vendor = new EventComponentVendor({id : data.id});
-
                         vendor.for(calendar, event, selected_block).delete()
                             .then(resp => {
                                 this.isLoading = false;
@@ -379,70 +364,6 @@
 
 
             },
-            fetchData(page) {
-                this.loadingData = true;
-                this.isLoading = true;
-
-                Vendors.page(page)
-                    .limit(this.pagination.limit)
-                    .get().then(vendors => {
-
-                    this.isLoading = false;
-
-                    this.vendorsList = vendors[0].results;
-                    this.pagination.total = this.vendorsList.length;
-
-                    this.updatePagination(vendors[0].model);
-                    this.loadingData = false;
-                    this.vendorsList.map((item, index) => {
-                        this.tooltipModels.push({
-                            value: false,
-                            textarea: '',
-                            rankingParameters: [
-                                {
-                                    name: 'Overal Experience',
-                                    parameterName: 'overal_experience',
-                                    value: ''
-                                },
-                                {
-                                    name: 'Cleanliness and Maintenance',
-                                    parameterName: 'cleanliness_and_maintenance',
-                                    value: ''
-
-                                },
-                                {
-                                    name: 'Accuracy',
-                                    parameterName: 'accuracy',
-                                    value: ''
-
-                                },
-                                {
-                                    name: 'Value for money',
-                                    parameterName: 'value_for_money',
-                                    value: ''
-
-                                }, {
-                                    name: 'Service',
-                                    parameterName: 'service',
-                                    value: ''
-
-                                },
-                                {
-                                    name: 'Location & Parking',
-                                    parameterName: 'location_parking',
-                                    value: ''
-
-                                },
-
-                            ],
-
-                        })
-                    });
-
-                }, (error) => {
-                    console.log(error)
-                });
-            },
             getVendorDate(eventStartMillis) {
 
                 let x = new Date(eventStartMillis);
@@ -451,17 +372,19 @@
 
             },
             sendVendor(item) {
-                console.log(item);
-
                 this.isLoading = true;
 
                 let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
                 let selected_block = new EventComponent({id : this.selectedBlock.id});
 
-                let vendor = new EventComponentVendor({id: item.id});
+                let vendor = new EventComponentVendor(item);
 
-                vendor.status = 'Sent';
+                vendor.id = item.id;
+                vendor.cost = item.cost;
+                vendor.vendor = item.vendor;
+                vendor.vendorId = item.vendorId;
+                vendor.rfpStatus = 'Sent';
 
                 vendor.for(calendar, event, selected_block).save()
                     .then(resp => {
@@ -475,6 +398,8 @@
                                 verticalAlign: 'top',
                                 type: 'success'
                             })
+
+                        this.getBlockVendors();
 
                         this.$forceUpdate();
 
@@ -492,6 +417,10 @@
                             })
 
                     })
+            },
+            manageVendors() {
+                this.$router.push({ path: `/vendors`});
+
             }
 
         },
@@ -499,16 +428,10 @@
             if ( this.caseStatus == 'get-offers' ) {
                 this.addingVendors = true;
             }
-
-            this.$auth.currentUser(this, true, function(){
-                this.fetchData(0);
-            }.bind(this));
         },
         mounted() {
             this.isLoading = false;
             this.getBlockVendors();
-            console.log(this.selectedBlock);
-
             this.$bus.$on('VendorAdded',()=>{
                 this.getBlockVendors();
             });

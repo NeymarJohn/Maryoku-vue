@@ -1653,7 +1653,7 @@ iframe{
     }
 
     .md-card-tabs {
-        background : none;
+        background : none !important;
         box-shadow : none;
     }
 
@@ -1870,6 +1870,9 @@ iframe{
                         border-right : 1px solid #e2e2e2;
                     }
                 }
+                &:not(.parent){
+                    height : 45px;
+                }
             }
         }
 
@@ -1877,11 +1880,8 @@ iframe{
             position: relative;
             font-weight: normal;
             .md-table-cell-container {
-                position : absolute;
                 flex: 1;
-                left: 3px;
                 display: flex;
-                top: 0.9em;
                 justify-content: flex-start;
                 align-content: center;
                 align-items: center;
@@ -1894,6 +1894,10 @@ iframe{
                 color : red;
                 position:absolute;
                 right : 0.5em;
+            }
+
+            &.required {
+                border : 2px solid $brand-danger;
             }
         }
 

@@ -1,6 +1,9 @@
 <template>
   <div class="vlabeledit">
-    <div tabindex="1" class="vlabeledit-label" :class="{'vlabeledit-empty' : this.vlabel === empty}" @click="onLabelClick" v-if="!edit">{{vlabel}} <md-icon class="pull-right text-gray small md-sm vlabeledit-label-icon">edit</md-icon></div>
+    <div tabindex="1" class="vlabeledit-label" :class="{'vlabeledit-empty' : this.vlabel === empty}" @click="onLabelClick" v-if="!edit">
+        <span v-if="numeric">{{vlabel | numeral('0,0')}}</span>
+        <span v-else>{{vlabel}}</span>
+        <md-icon class="pull-right text-gray small md-sm vlabeledit-label-icon">edit</md-icon></div>
     <input type="text" v-if="edit && !mask" v-model="label" v-on:blur="updateTextBlur" ref="labeledit" :placeholder="vplaceholder" class="vlabeledit-input" @keyup.enter="updateTextEnter"/>
     <input-mask type="text" v-if="edit && mask" :mask="mask" maskChar="_" v-model="label" v-on:blur="updateTextBlur" ref="labeledit" :placeholder="vplaceholder" class="vlabeledit-input" @keyup.enter="updateTextEnter"/>
   </div>
@@ -25,7 +28,8 @@
       fieldName: String,
       mask: String,
       scope: Object,
-      empty: { type: String, default: 'Click to set' }
+      empty: { type: String, default: 'Click to set' },
+      numeric: Boolean
     }, // parent should provide :text or :placeholder
     methods: {
       initText: function(){
