@@ -253,7 +253,7 @@
                     if (personGroups.length > 0){
                         personGroup = personGroups[0];
                     } else {
-                        personGroup = {id: 'unknown', name: 'Unknown'};
+                        personGroup = {id: 'unknown', name: 'All Employees'};
                     }
 
                     let group = _.findWhere(updatedGroups, {id: personGroup.id});
