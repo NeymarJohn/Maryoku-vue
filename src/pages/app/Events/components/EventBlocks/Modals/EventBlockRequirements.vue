@@ -154,20 +154,6 @@
             // auth: auth,
             isLoading: false,
             eventBlocks: [],
-            prioritiesList: [
-                {
-                    label: 'Preferred',
-                    value: 'Preferred'
-                },
-                {
-                    label: 'Nice to have',
-                    value: 'Nice to have'
-                },
-                {
-                    label: 'Must have',
-                    value: 'Must have'
-                }
-            ],
             dummyList : [
                 {
                     title : this.predefinedRequirements ? this.predefinedRequirements[0].title : 'No Title'
@@ -272,13 +258,6 @@
                             this.getBuildingBlockValues();
                             this.isLoading = false;
                             this.$forceUpdate();
-                            this.$notify(
-                                {
-                                    message: 'Requirement deleted successfully',
-                                    horizontalAlign: 'center',
-                                    verticalAlign: 'top',
-                                    type: 'success'
-                                })
                         })
                             .catch(error => {
 
@@ -313,13 +292,6 @@
                 value.for(calendar, event, selected_block).save().then(resp => {
                     this.isLoading = false;
 
-                    this.$notify(
-                        {
-                            message: 'Requirement modified successfully',
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'success'
-                        });
 
                     this.cancelEdit(item);
                     this.getBuildingBlockValues();

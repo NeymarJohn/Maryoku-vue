@@ -12,8 +12,8 @@
                         <md-button class="md-info" @click="manageVendors()">
                             Manage Vendors
                         </md-button>
-                        <md-button class="md-default event-building-blocks-proposals-send"  >
-                            <md-icon style="margin-right : 0.2em;margin-left: -0.5em;">near_me</md-icon> Send All
+                        <md-button class="md-info event-building-blocks-proposals-send" >
+                            <md-icon style="margin-right : 0.2em;margin-left: -0.5em;">near_me</md-icon> Send
                         </md-button>
                     </div>
 
@@ -28,11 +28,6 @@
                             <h4 class="title" style="color: white;">
                                 Manage Block Vendors
                             </h4>
-                        </div>
-                        <div class="header-actions pull-right" style="margin-top:0.5em;">
-                            <md-button class="md-info event-building-blocks-upload-vendors-button"   @click="openUploadModal">
-                                Proposal Comparison
-                            </md-button>
                         </div>
                     </md-card-header>
 
@@ -101,79 +96,6 @@
 
                 </template>
             </div>
-
-            <div class="md-layout-item md-size-50">
-
-                <!-- View proposals for selected vendor -->
-                <md-card v-if="selectedVendor && selectedVendor.vendor">
-                    <md-card-header  class="md-card-header-text md-card-header-warning">
-                        <div class="card-text">
-                            <h4 class="title" style="color: white;">
-                                {{selectedVendor.vendor.vendorDisplayName}}'s Proposals
-                            </h4>
-                        </div>
-                    </md-card-header>
-                    <md-card-content>
-                        <!--<md-table v-model="proposals" table-header-color="blue" class="vendors-table">-->
-                            <!--<md-table-row slot="md-table-row" slot-scope="{ item }" :key="proposal.indexOf(item)"  class="vendors-table_item">-->
-                                <!--<md-table-cell md-label="Time Stamp"  > {{   }}</md-table-cell>-->
-                                <!--<md-table-cell md-label="Total Bid">-->
-                                    <!--${{item.cost}}-->
-                                <!--</md-table-cell>-->
-                                <!--<md-table-cell md-label="Alignment With Requirements">-->
-                                    <!--{{item.alignment_with_requirements}}-->
-                                <!--</md-table-cell>-->
-
-                            <!--</md-table-row>-->
-                        <!--</md-table>-->
-                    </md-card-content>
-                </md-card>
-
-
-                <!-- Add vendors -->
-                <md-card v-if="addingVendors">
-                    <md-card-header  class="md-card-header-text md-card-header-warning">
-                        <div class="card-text">
-                            <h4 class="title" style="color: white;">
-                                Manage Block Vendors
-                            </h4>
-                        </div>
-                        <div class="header-actions pull-right" style="margin-top:0.5em;">
-                            <md-button class="md-info event-building-blocks-upload-vendors-button"   @click="openUploadModal">
-                                Upload Vendors
-                            </md-button>
-                        </div>
-                    </md-card-header>
-                    <md-card-content>
-                        <vendors-table
-                                v-if="vendorsList"
-                                :tooltipModels="tooltipModels"
-                                @add-vendor="onSelectVendor"
-                                @remove-vendor="onRemoveVendor"
-                                :vendorsList="vendorsList"
-                                :selectedBlock="selectedBlock"
-                                :event="event"
-                                mode="manageBlock"
-                                ref="VendorsTable">
-
-                        </vendors-table>
-
-                        <md-card-actions md-alignment="space-between" v-if="pagination.limit < pagination.total">
-                            <div class="">
-                                <p class="card-category">Showing {{ pagination.from }} to {{ pagination.limit < pagination.total ? pagination.limit : pagination.total }} of {{ pagination.total }} records</p>
-                            </div>
-                            <pagination class="pagination-no-border pagination-info"
-                                        @input="pageChanged($event)"
-                                        v-model="pagination.page"
-                                        :per-page="pagination.limit"
-                                        :total="pagination.total">
-                            </pagination>
-                        </md-card-actions>
-                    </md-card-content>
-                </md-card>
-            </div>
-
-
         </div>
 
         <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
@@ -315,52 +237,26 @@
 
             },
             onRemoveVendor(data){
-                swal({
-                    title: 'Are you sure you want to delete this vendor?',
-                    text: "You won't be able to revert this!",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then(async (result) => {
-                    if (result.value) {
-                        this.isLoading = true;
+                this.isLoading = true;
 
-                        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-                        let event = new CalendarEvent({id: this.event.id});
-                        let selected_block = new EventComponent({id : this.selectedBlock.id});
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+                let event = new CalendarEvent({id: this.event.id});
+                let selected_block = new EventComponent({id : this.selectedBlock.id});
 
-                        let vendor = new EventComponentVendor({id : data.id});
-                        vendor.for(calendar, event, selected_block).delete()
-                            .then(resp => {
-                                this.isLoading = false;
-                                this.$bus.$emit('VendorAdded');
-                                this.fetchData(0);
-                                this.$notify(
-                                    {
-                                        message: 'Vendor deleted successfully',
-                                        horizontalAlign: 'center',
-                                        verticalAlign: 'top',
-                                        type: 'success'
-                                    })
+                let vendor = new EventComponentVendor({id : data.id});
+                vendor.for(calendar, event, selected_block).delete()
+                    .then(resp => {
+                        this.isLoading = false;
+                        this.$bus.$emit('VendorAdded');
+                        this.fetchData(0);
 
-                            })
-                            .catch(error => {
+                    })
+                    .catch(error => {
 
-                                this.isLoading = false;
-                                this.$notify(
-                                    {
-                                        message: 'Error while trying to delete vendor, try again!',
-                                        horizontalAlign: 'center',
-                                        verticalAlign: 'top',
-                                        type: 'danger'
-                                    })
+                        this.isLoading = false;
 
-                            })
 
-                    }
-                })
+                    })
 
 
             },

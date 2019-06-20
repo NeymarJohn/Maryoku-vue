@@ -5,7 +5,7 @@
       <md-card-media>
         <div class="event-images_image-item" style="margin: auto;" :style="`background-image : url(`+`${serverUrl}/1/eventPageImages/${image.id}`+`)`" @click="previewImage(image.id)">
         </div>
-        <md-button class="md-info md-sm delete-event-image" @click="removeEventImage(index)" v-if="!readonly">
+        <md-button class="md-info md-sm delete-event-image" @click="uploadEventImage(index)" v-if="!readonly">
           Replace
         </md-button>
       </md-card-media>
@@ -61,13 +61,14 @@
       eventImages : [],
       serverUrl: process.env.SERVER_URL,
         imagePreview : null,
-      isLoading : false
+      isLoading : false,
+        selectedImage : null
 
     }),
     methods: {
-      uploadEventImage() {
+      uploadEventImage(imageId = null) {
         this.$refs.eventFile.click();
-
+        this.selectedImage = typeof imageId != 'object' ? imageId : null;
       },
 
       onEventFilePicked(event) {
@@ -103,15 +104,25 @@
         reader.onload = e => {
           const calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
           const event = new CalendarEvent({id: this.event.id});
-          return new CalendarEventPageImage({featuredImageFile : e.target.result}).for(calendar, event).save().then(result => {
-            this.event.eventPage.images.push({id: result.id});
+          if ( this.selectedImage != null ) {
+              this.removeEventImage(this.selectedImage);
+          }
 
-            this.isLoading = false;
+            return new CalendarEventPageImage({featuredImageFile : e.target.result}).for(calendar, event).save().then(result => {
+                vm.event.eventPage.images.push({id: result.id});
 
-          })
-            .catch((error) => {
-              console.log(error);
-            });
+                vm.isLoading = false;
+
+            })
+                .catch((error) => {
+                    vm.isLoading = false;
+
+                    console.log(error);
+                });
+
+
+
+
         };
         reader.readAsDataURL(file);
       },
@@ -141,7 +152,10 @@
       closePreviewModal() {
           this.imagePreview = null;
 
-      }
+      },
+        replaceImage(image) {
+
+        }
 
     },
     created() {
