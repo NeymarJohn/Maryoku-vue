@@ -359,10 +359,7 @@ input[type=number]::-webkit-outer-spin-button {
                     path : null
                 });
                 this.$forceUpdate()
-             //   if(this.selected_vendor.vendorAttachments.length > 1){
-                
-                
-               // }
+
                 setTimeout(() => {
         this.$refs['file-'+ (this.selected_vendor.vendorAttachments.length - 1) ][0].$children[0].$el.click()
 
