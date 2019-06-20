@@ -454,7 +454,7 @@
                         currency: this.eventData.currency,
                         eventType: this.eventData.eventType,
                         participantsType: this.eventData.participantsType,
-                        category: !this.eventData.editable ? 'Holidays' : 'CompanyDays',
+                        category: catObject.category, //!this.eventData.editable ? 'Holidays' : 'CompanyDays',
                         editable: true,
                         //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
                     }).for(_calendar).save().then(response => {
