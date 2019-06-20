@@ -150,7 +150,7 @@
                             </md-field>
                         </div>
 
-                        <div class="md-layout-item md-size-100" style="margin-bottom: 16px;" v-if="canEditPermissions">
+                        <div class="md-layout-item md-size-100" style="margin-bottom: 16px;" v-if="canEditPermissions && false">
                             <div style="margin-top: 8px;">
                                 <label>Permissions</label>
                                 <!--<md-field>
