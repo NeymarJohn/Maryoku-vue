@@ -182,7 +182,7 @@
                         <label>Attachments</label>
                         <div v-for="(attachment , index) in selected_vendor.vendorAttachments" :key="index" class="md-layout-item md-size-100 contact-person-list">
                             <md-field>
-                                <md-file v-model="attachment.path" />
+                                <md-file :ref="'file-'+index" v-model="attachment.path" />
                                 <div class="delete-item" @click="deleteAttachmentItem(index)">
                                     <md-icon v-if="selected_vendor.vendorAttachments.length > 0 && selected_vendor.vendorAttachments[0].path" class="md-theme-rose" > delete_outline</md-icon>
                                 </div>
@@ -358,7 +358,15 @@ input[type=number]::-webkit-outer-spin-button {
                 this.selected_vendor.vendorAttachments.push({
                     path : null
                 });
-                this.$forceUpdate();
+                this.$forceUpdate()
+             //   if(this.selected_vendor.vendorAttachments.length > 1){
+                
+                
+               // }
+                setTimeout(() => {
+        this.$refs['file-'+ (this.selected_vendor.vendorAttachments.length - 1) ][0].$children[0].$el.click()
+
+  }, 200);
             },
             /**
              * Delete item from attachments list
