@@ -12,12 +12,14 @@
 
                     <!-- Full Name -->
                     <div class="md-layout">
-                        <label class="md-layout-item md-size-35 md-form-label">
-                            Full Name
-                        </label>
                         <div class="md-layout-item">
                             <md-field>
-                                <md-input v-model="fullName" type="text" autofocus required data-vv-name="fullName" v-validate="modelValidations.fullName"></md-input>
+                                <label>First Name</label>
+                                <md-input v-focus v-model="firstName" type="text" autofocus required data-vv-name="firstName" v-validate="modelValidations.firstName"></md-input>
+                            </md-field>
+                            <md-field>
+                                <label>Last Name</label>
+                                <md-input v-model="lastName" type="text" autofocus required data-vv-name="lastName" v-validate="modelValidations.lastName"></md-input>
                             </md-field>
                         </div>
                     </div>
@@ -125,7 +127,8 @@
                 // auth: auth,
                 loading: false,
 
-                fullName: '',
+                firstName: '',
+                lastName: '',
                 email: '',
                 phoneNumber: '',
                 formattedNumber: '',
@@ -134,12 +137,17 @@
                 isError:false,
                 touched: {
                     email: false,
-                    fullName: false
+                    firstName: false,
+                    lastName: false
                 },
                 modelValidations: {
-                    fullName: {
+                    firstName: {
                         required: true,
-                        min: 3
+                        min: 2
+                    },
+                    lastName: {
+                        required: true,
+                        min: 2
                     },
                     email: {
                         required: true,
@@ -164,7 +172,8 @@
         mounted:function(){
             this.$auth.currentUser(this, true, () => {
                 let user = this.$auth.user;
-                this.fullName = user.displayName;
+                this.firstName = user.firstName;
+                this.lastName = user.lastName;
                 this.email = user.email;
                 /*this.phoneNumber = user.me.phoneNumber;
                 this.formattedNumber = user.me.phoneNumber;
@@ -189,7 +198,8 @@
                     id: this.$auth.user.id,
                     onboarded: true,
                     emailAddress: this.email,
-                    displayName: this.fullName,
+                    firstName: this.firstName,
+                    lastName: this.lastName,
                     birthday: this.birthday,
                     phoneNumber: this.formattedNumber,
                     companyStartDate: this.firstDayAtWork,
