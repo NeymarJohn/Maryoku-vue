@@ -169,8 +169,6 @@
 
             // put dummy item
             this.dummyList[0].title = this.predefinedRequirements ? this.predefinedRequirements[0].title : 'No Title';
-
-            console.log(this.selectedBlock);
         },
         methods: {
             closePanel() {
@@ -291,8 +289,6 @@
 
                 value.for(calendar, event, selected_block).save().then(resp => {
                     this.isLoading = false;
-
-
                     this.cancelEdit(item);
                     this.getBuildingBlockValues();
                 })

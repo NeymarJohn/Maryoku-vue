@@ -29,7 +29,7 @@
                                         </ol>
 
                                         <md-button name="event-planner-tab-event-details-banner-manage-proposals"
-                                                   class="event-planner-tab-event-details-banner-manage-proposals md-info">
+                                                   class="event-planner-tab-event-details-banner-manage-proposals md-info" @click="openUploadModal()">
                                             Upload Vendors
                                         </md-button>
 
@@ -142,6 +142,10 @@
             </tabs>
         </div>
 
+
+
+        <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
+
         <!--<sticky-budget :event="event" v-if="routeName !== 'EditEvent' && routeName !== 'EditBuildingBlocks'"></sticky-budget>-->
 
     </div>
@@ -180,6 +184,8 @@
     import MdCardContent
         from '../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue'
     import {Tabs} from '@/components'
+    import UploadVendorsModal from '../Vendors/ImportVendors';
+
 
     export default {
         components: {
@@ -200,7 +206,8 @@
             EventInvitees,
             Tabs,
             EventDetailsSidebar,
-            EventDetails
+            EventDetails,
+            UploadVendorsModal
         },
 
         data () {
@@ -331,6 +338,9 @@
                     .catch(error => {
                         console.log(error)
                     })
+            },
+            openUploadModal(){
+                this.$refs.uploadModal.toggleModal(true);
             }
         },
         computed: {
