@@ -181,7 +181,7 @@
                 <div class="md-layout-item md-size-100">
 
                         <label>Attachments</label>
-                        <div v-if="selected_vendor.vendorAttachments" v-for="(attachment , index) in selected_vendor.vendorAttachments" :key="index" class="md-layout-item md-size-100 contact-person-list">
+                        <div v-if="selected_vendor" v-for="(attachment , index) in selected_vendor.vendorAttachments" :key="index" class="md-layout-item md-size-100 contact-person-list">
                             <md-field>
                                 <md-file class="attachments-file" :ref="'file-'+index" v-model="attachment.path" />
                                 <div class="delete-item" @click="deleteAttachmentItem(index)">
@@ -379,7 +379,7 @@ input[type=number]::-webkit-outer-spin-button {
              */
             deleteAttachmentItem(index) {
                 this.selected_vendor.vendorAttachments.splice(index,1);
-                this.selected_vendor.vendorAttachments = [...this.selected_vendor.vendorAttachments];
+                this.selected_vendor = {...this.selected_vendor};
 
             },
             async addVendor() {
