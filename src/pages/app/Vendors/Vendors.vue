@@ -49,7 +49,8 @@
         </div>
 
         <div class="md-layout-item md-size-50" v-if="vendor_selected || add_vendor">
-            <company-form :categories.sync="buildingBlocksList" :selected_vendor="selected_vendor" :creation_mode="add_vendor" @vendorCreated="fetchData(1)"></company-form>
+            <company-form :categories.sync="buildingBlocksList" :selected_vendor="selected_vendor" :creation_mode="add_vendor" @vendorCreated="fetchData(1)" @selectVendor="onSelectVendor"
+            ></company-form>
         </div>
 
 

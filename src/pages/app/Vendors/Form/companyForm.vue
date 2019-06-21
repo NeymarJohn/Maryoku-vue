@@ -7,8 +7,8 @@
                 </div>
                 <h4 class="title2">{{selected_vendor.vendorDisplayName ? `${selected_vendor.vendorDisplayName}’s Company`: "Create New Vendor"}}</h4>
                 <md-card-actions md-alignment="right">
-                    <md-button v-if="creationMode" class="md-success md-sm" @click="addVendor" >Create</md-button>
-                    <md-button v-else-if="!creationMode" class="md-info md-sm" @click="saveVendor">Save</md-button>
+                    <md-button v-if="creation_mode" class="md-success md-sm" @click="addVendor" >Create</md-button>
+                    <md-button v-else-if="!creation_mode" class="md-info md-sm" @click="saveVendor">Save</md-button>
                 </md-card-actions>
             </md-card-header>
 
@@ -283,7 +283,6 @@ input[type=number]::-webkit-outer-spin-button {
                     searchPlace: '',
                     location: {}
                 },
-                creationMode:  this.creation_mode,
                 selectedVendor:  this.selected_vendor,
                 modelValidations: {
                     vendorDisplayName: {
@@ -366,9 +365,8 @@ input[type=number]::-webkit-outer-spin-button {
                 this.$forceUpdate()
 
                 setTimeout(() => {
-        this.$refs['file-'+ (this.selected_vendor.vendorAttachments.length - 1) ][0].$children[0].$el.click()
-
-  }, 200);
+                    this.$refs['file-'+ (this.selected_vendor.vendorAttachments.length - 1) ][0].$children[0].$el.click()
+              }, 200);
             },
             /**
              * Delete item from attachments list
@@ -385,8 +383,7 @@ input[type=number]::-webkit-outer-spin-button {
 
                         vendor.attach(this.selected_vendor).then((res) => {
                             this.$emit('vendorCreated')
-                            this.creationMode = false;
-                            this.selected_vendor.id= res.data.id
+                            this.$emit('selectVendor', res.data.item)
                             this.$notify(
                                 {
                                     message: 'Vendor created successfully!',
