@@ -125,6 +125,7 @@
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import {GlobalSalesTable, Modal} from "@/components";
   import swal from "sweetalert2";
+  import _ from 'underscore';
   import VueElementLoading from 'vue-element-loading';
   import Button from "../../../components/Button/ControlPanel";
   import draggable from 'vuedraggable';
@@ -288,6 +289,38 @@
         return true
 
       },
+      isDuplicateMapColumn() {
+          const mappedColumns = this.mappedColumns;
+          const duplicateArray = _.filter(
+              _.uniq(
+                  _.map(mappedColumns, function (item) {
+                      if (_.filter(mappedColumns, { value: item.value }).length > 1) {
+                          return item.value;
+                      }
+                      return false;
+                  })
+              ),
+              function (value) { return value; }
+          );
+
+          if (duplicateArray.length) {
+              for (let i = 0; i < this.databaseVendorColumns.length; i++) {
+                  if (duplicateArray[0] == this.databaseVendorColumns[i].name) {
+                      this.$notify(
+                          {
+                              message: 'Field ' + this.databaseVendorColumns[i].displayName + ' is already selected.' ,
+                              horizontalAlign: 'center',
+                              verticalAlign: 'top',
+                              type: 'warning'
+                          })
+                      break;
+                  }
+              }
+              return true;
+          } else {
+              return false;
+          }
+      },
       validateColumnsMapping(mapping){
         let _this = this;
         let vendorColumns = this.databaseVendorColumns;
@@ -309,6 +342,9 @@
           }
         }
 
+        if (isValid) {
+            isValid = !this.isDuplicateMapColumn();
+        }
         return isValid;
       },
       sortBy: function (key) {

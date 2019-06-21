@@ -215,6 +215,7 @@ input[type=number]::-webkit-outer-spin-button {
 .attachments-file {
     pointer-events: none;
     cursor: default;
+    padding-left: 8px;
 }
 </style>
 
