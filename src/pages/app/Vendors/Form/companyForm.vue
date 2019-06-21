@@ -181,9 +181,9 @@
                 <div class="md-layout-item md-size-100">
 
                         <label>Attachments</label>
-                        <div v-for="(attachment , index) in selected_vendor.vendorAttachments" :key="index" class="md-layout-item md-size-100 contact-person-list">
+                        <div v-if="selected_vendor.vendorAttachments" v-for="(attachment , index) in selected_vendor.vendorAttachments" :key="index" class="md-layout-item md-size-100 contact-person-list">
                             <md-field>
-                                <md-file :ref="'file-'+index" v-model="attachment.path" />
+                                <md-file class="attachments-file" :ref="'file-'+index" v-model="attachment.path" />
                                 <div class="delete-item" @click="deleteAttachmentItem(index)">
                                     <md-icon v-if="selected_vendor.vendorAttachments.length > 0 && selected_vendor.vendorAttachments[0].path" class="md-theme-rose" > delete_outline</md-icon>
                                 </div>
@@ -200,7 +200,7 @@
         </md-card>
     </div>
 </template>
-<style lang="scss" scoped>
+<style lang="scss" >
 input[type=number] {
     -moz-appearance: textfield;
 }
@@ -210,6 +210,11 @@ input[type=number]::-webkit-outer-spin-button {
     -moz-appearance: none;
     -webkit-appearance: none;
     margin: 0;
+}
+
+.attachments-file {
+    pointer-events: none;
+    cursor: default;
 }
 </style>
 
@@ -374,6 +379,8 @@ input[type=number]::-webkit-outer-spin-button {
              */
             deleteAttachmentItem(index) {
                 this.selected_vendor.vendorAttachments.splice(index,1);
+                this.selected_vendor.vendorAttachments = [...this.selected_vendor.vendorAttachments];
+
             },
             async addVendor() {
                 this.$validator.validateAll().then(res => {
