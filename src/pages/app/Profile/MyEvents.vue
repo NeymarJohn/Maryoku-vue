@@ -56,6 +56,7 @@
                 this.isLoading = true;
             } else {
                 this.events = this.userInfo.myEvents || [];
+                this.isLoading = false;
                 console.log(JSON.stringify(this.events, null, 4));
             }
         },
