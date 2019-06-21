@@ -28,9 +28,6 @@
             <md-button :name="`vendors-list-rank-vendor-${vendorsList.indexOf(item)}`" class="md-warning md-just-icon md-round" @click="openPopover(vendorsList.indexOf(item))">
               <md-icon>star</md-icon>
             </md-button>
-            <md-button :name="`vendors-list-select-vendor-${vendorsList.indexOf(item)}`" class="md-info md-just-icon md-round" @click="selectVendor(item)">
-              <md-icon>edit</md-icon>
-            </md-button>
             <md-button :name="`vendors-list-delete-vendor-${vendorsList.indexOf(item)}`" class="md-danger md-just-icon md-round" @click.native="deleteVendor(item.id)">
               <md-icon>delete</md-icon>
             </md-button>
@@ -453,5 +450,8 @@
       width: 68px;
       padding: 0px;
     }
+  }
+  .md-table-row.vendors-table_item {
+      cursor: pointer;
   }
 </style>

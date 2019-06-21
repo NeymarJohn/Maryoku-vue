@@ -81,11 +81,12 @@
                     <md-field :class="[
                           {'md-valid': !errors.has('vendorAddressLine1') && selected_vendor.vendorAddressLine1},
                           {'md-error': errors.has('vendorAddressLine1')}]">
-                        <label>Address</label>
+                        <!--<label>Address</label>-->
                         <md-input v-model="selected_vendor.vendorAddressLine1"
                                   type="email"
-                                   v-gmaps-searchbox:location=vm
+                                   v-gmaps-searchbox=vm
                                   required
+                                  placeholder="Address"
                                   data-vv-name="vendorAddressLine1"
                                   name="vendorAddressLine1"
                                   v-validate="modelValidations.vendorAddressLine1"></md-input>
@@ -199,11 +200,16 @@
         </md-card>
     </div>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
 }
 </style>
 
@@ -273,11 +279,10 @@ input[type=number]::-webkit-outer-spin-button {
                 vendorCategory: [],
                 contactPersonList : [],
                 vendorAttachments : [],
-                             vm: {
+                vm: {
                     searchPlace: '',
                     location: {}
-
-},
+                },
                 creationMode:  this.creation_mode,
                 selectedVendor:  this.selected_vendor,
                 modelValidations: {
