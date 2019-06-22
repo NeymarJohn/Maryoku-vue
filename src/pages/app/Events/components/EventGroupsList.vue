@@ -153,9 +153,9 @@
           title: "Are you sure?",
           text: "You won't be able to revert this!",
           type: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
+        showCancelButton: true,
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
           confirmButtonText: "Yes, delete it!"
         }).then(async result => {
           if (result.value) {

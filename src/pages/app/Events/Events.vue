@@ -232,8 +232,10 @@ export default {
         title: "Are you sure?",
         text: `You won't be able to revert this!`,
         showCancelButton: true,
-        confirmButtonClass: "md-button md-success",
-        cancelButtonClass: "md-button md-danger",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "md-button md-success confirm-btn-bg ",
+        cancelButtonClass: "md-button md-danger cancel-btn-bg",    
         confirmButtonText: "Yes, delete it!",
         buttonsStyling: false
       }).then(result => {
