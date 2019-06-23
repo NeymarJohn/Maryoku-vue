@@ -21,7 +21,7 @@
                                 <th>Requirements</th>
                                 <th>Allocated budget</th>
                                 <th>Actual cost</th>
-                                <th>Comments</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,17 +57,17 @@
                                     </template>
 
                                 </td>
-                                <td class="allocated-budget" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
+                                <td class="allocated-budget" style="width: 15%;" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
                                     <div class="md-table-cell-container" >
                                         <span class="dollar-sign">$</span>
-                                        <label-edit :text="block.allocatedBudget ? block.allocatedBudget.toString() : ''"
+                                        <label-edit style="width: 100%;" :text="block.allocatedBudget ? block.allocatedBudget.toString() : ''"
                                                     :field-name="block.componentId"
                                                     @text-updated-blur="blockBudgetChanged"
                                                     @text-updated-enter="blockBudgetChanged"></label-edit>
                                     </div>
 
                                 </td>
-                                <td class="actual-cost">
+                                <td class="actual-cost" style="width: 15%;">
                                     <template v-if="block.allocatedBudget">
                                         <template
                                             v-if="block.winningProposalId">
@@ -79,7 +79,7 @@
                                     </template>
 
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <template v-if="block.allocatedBudget">
                                         <template
                                             v-if="block.winningProposalId">
@@ -94,8 +94,8 @@
                                             </md-button>
                                         </template>
                                         <template v-else-if="block.proposalsState == 'get-offers'">
-                                            <md-button class="md-sm md-default" @click="reviewVendors(block)">
-                                                Get Offers
+                                            <md-button class="md-sm md-primary" @click="reviewVendors(block, category.title)">
+                                                Get Proposals
                                                 <md-icon>near_me</md-icon>
                                             </md-button>
                                         </template>
@@ -333,12 +333,27 @@
             },
 
             addRequirements(item) {
-                window.currentPanel = this.$showPanel({
-                    component: EventBlockRequirements,
-                    cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
-                    openOn: 'right',
-                    props: {event: this.event, selectedBlock: item, predefinedRequirements: item.predefinedRequirements}
-                })
+
+                if ( item.proposals.length ) {
+                    swal({
+                        text: `You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?`,
+                        showCancelButton: true,
+                        type: "warning",
+                        confirmButtonClass: "md-button md-success confirm-btn-bg ",
+                        cancelButtonClass: "md-button md-danger cancel-btn-bg",
+                        confirmButtonText: "Yes!",
+                        buttonsStyling: false
+                    }).then(result => {
+                        if (result.value) {
+                            this.showRequirementsSidepanel(item);
+                        }
+                    });
+                } else {
+
+                    this.showRequirementsSidepanel(item);
+                }
+
+
             },
             reviewProposals(item, winnerId = null) {
                 window.currentPanel = this.$showPanel({
@@ -348,12 +363,20 @@
                     props: {event: this.event, selectedBlock: item, winnerId : winnerId}
                 })
             },
-            reviewVendors(item) {
+            reviewVendors(item , categoryTitle) {
                 window.currentPanel = this.$showPanel({
                     component: EventBlockVendors,
                     cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
                     openOn: 'right',
-                    props: {event: this.event, selectedBlock: item, getOffers: true}
+                    props: {event: this.event, selectedBlock: item, getOffers: true , categoryTitle : categoryTitle}
+                })
+            },
+            showRequirementsSidepanel(item) {
+                window.currentPanel = this.$showPanel({
+                    component: EventBlockRequirements,
+                    cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
+                    openOn: 'right',
+                    props: {event: this.event, selectedBlock: item, predefinedRequirements: item.predefinedRequirements}
                 })
             }
         },

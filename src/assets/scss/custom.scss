@@ -855,6 +855,11 @@ $tooltip-border-color: $blue-grey-200 !default;
             .delete-event-image {
                 position : absolute;
                 top : 0.3em;
+                left : 3.5em;
+            }
+            .replace-event-image {
+                position : absolute;
+                top : 0.3em;
                 left : 0.5em;
             }
         }
@@ -1910,7 +1915,7 @@ iframe{
             }
         }
         .md-button:not(.md-just-icon) {
-            width: auto !important;
+            width: 100% !important;
             font-weight: bold;
             .md-ripple {
                 font-size: 14px;
