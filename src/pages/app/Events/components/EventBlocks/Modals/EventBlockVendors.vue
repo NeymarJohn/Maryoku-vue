@@ -66,7 +66,7 @@
                                         <md-icon>remove</md-icon>
                                     </md-button>
 
-                                    <md-button class="md-primary md-just-icon md-round md-simple" style="font-size: 20px;" @click="sendVendor(item)">
+                                    <md-button class="md-primary md-just-icon md-round" style="font-size: 20px;" @click="sendVendor(item)">
                                         <md-icon>near_me</md-icon>
                                     </md-button>
 

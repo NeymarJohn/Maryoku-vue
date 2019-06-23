@@ -238,6 +238,7 @@
                     title: "Are you sure?",
                     text: `You won't be able to revert this!`,
                     showCancelButton: true,
+                    
                     confirmButtonClass: "md-button md-success",
                     cancelButtonClass: "md-button md-danger",
                     confirmButtonText: "Yes, delete it!",
