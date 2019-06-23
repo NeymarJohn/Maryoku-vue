@@ -157,8 +157,8 @@ export default {
         text: "You won't be able to revert this!",
         type: "warning",
         showCancelButton: true,
- confirmButtonClass: "md-button md-success confirm-btn-bg btn-fill",
-        cancelButtonClass: "md-button md-danger cancel-btn-bg btn-fill",  
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
         confirmButtonText: "Yes, delete it!"
       }).then(async result => {
         if (result.value) {
@@ -182,8 +182,8 @@ export default {
         text: "You won't be able to revert this!",
         type: "warning",
         showCancelButton: true,
-        confirmButtonClass: "md-button md-success btn-fill",
-        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
         confirmButtonText: "Yes, delete it!"
       }).then(async result => {
         if (result.value) {

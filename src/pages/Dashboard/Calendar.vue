@@ -128,9 +128,8 @@ export default {
               <input type="text" id="md-input" class="md-input">
               </div>`,
             showCancelButton: true,
-            
-            confirmButtonClass: "md-button md-success confirm-btn-bg ",
-            cancelButtonClass: "md-button md-danger cancel-btn-bg",
+            confirmButtonClass: "md-button md-success",
+            cancelButtonClass: "md-button md-danger",
             buttonsStyling: false
           }).then(() => {
             var eventData;

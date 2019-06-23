@@ -1,14 +1,14 @@
 <template>
     <div class="md-layout members-group-list">
-        <div class="md-layout-item md-medium-size-40 md-size-35">
+        <div class="md-layout-item md-medium-size-35 md-size-30">
             <md-card style="height: 83vmin;">
                 <md-card-header class="md-card-header-text md-card-header-warning">
                     <div class="card-text">
                         <h4 class="title" style="color: white;">Manage Groups</h4>
                     </div>
-                    <!--<md-button class="md-purple md-sm pull-right md-icon-button" style="margin: 16px 6px;" @click="refreshList(true)" :disabled="working || noActions">
+                    <md-button class="md-purple md-sm pull-right md-icon-button" style="margin: 16px 6px;" @click="refreshList(true)" :disabled="working || noActions">
                         <md-icon style="font-size: 11px;padding:0; margin: 0; height: 15px;">refresh</md-icon>
-                    </md-button>-->
+                    </md-button>
                     <md-button v-if="groupsList.length" class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="createNewGroup" :disabled="working">Create New Group</md-button>
                 </md-card-header>
                 <md-card-content>
@@ -50,7 +50,7 @@
                 </md-card-content>
             </md-card>
         </div>
-        <div class="md-layout-item md-medium-size-60 md-size-65">
+        <div class="md-layout-item md-medium-size-65 md-size-70">
             <member-group-details @group-selected="selectGroup" @group-members-changed="updateGroup" @group-member-removed="updateGroups" :groups-list.sync="groupsList" :group-data.sync="visibleGroup" :all-members.sync="allMembers" :roles-list="rolesList" :permissions-list="permissionsList"></member-group-details>
         </div>
     </div>
@@ -187,10 +187,10 @@
                 swal({
                     title: "Are you sure?",
                     text: "You won't be able to revert this!",
-                 type: "warning",
-        showCancelButton: true,
- confirmButtonClass: "md-button md-success confirm-btn-bg btn-fill",
-        cancelButtonClass: "md-button md-danger cancel-btn-bg btn-fill",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
                     confirmButtonText: "Yes, delete it!"
                 }).then(async result => {
                     if (result.value) {

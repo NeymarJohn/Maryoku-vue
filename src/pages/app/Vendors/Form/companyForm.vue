@@ -178,14 +178,16 @@
                     <md-button class="md-purple md-xs" @click="addContactPerson">+ Add contact person</md-button>
                 </div>
 
-                <div class="md-layout-item md-size-100">
+                <div class="md-layout-item md-size-100 vendor_attachments-file">
 
                         <label>Attachments</label>
                         <div v-if="selected_vendor" v-for="(attachment , index) in selected_vendor.vendorAttachments" :key="index" class="md-layout-item md-size-100 contact-person-list">
                             <md-field>
                                 <md-file class="attachments-file" :ref="'file-'+index" v-model="attachment.path" />
-                                <div class="delete-item" @click="deleteAttachmentItem(index)">
-                                    <md-icon v-if="selected_vendor.vendorAttachments.length > 0 && selected_vendor.vendorAttachments[0].path" class="md-theme-rose" > delete_outline</md-icon>
+                                <div class="delete-item">
+                                    <md-button v-if="selected_vendor.vendorAttachments.length > 0 && selected_vendor.vendorAttachments[0].path" class="md-danger md-just-icon md-round" @click="deleteAttachmentItem(index)">
+                                        <md-icon>delete</md-icon>
+                                    </md-button>
                                 </div>
                             </md-field>
 
@@ -211,11 +213,28 @@ input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+.vendor_attachments-file {
 
-.attachments-file {
-    pointer-events: none;
-    cursor: default;
-    padding-left: 8px;
+    .attachments-file {
+        pointer-events: none;
+        cursor: default;
+        padding-left: 8px;
+    }
+
+    .delete-item {
+        left: 6px !important;
+
+        .md-button {
+            width: 24px;
+            margin: 0;
+            height: 24px;
+            min-width: auto;
+
+            .md-button-content .md-icon {
+                font-size: 18px !important;
+            }
+        }
+    }
 }
 </style>
 
