@@ -21,7 +21,7 @@
                                 <th>Requirements</th>
                                 <th>Allocated budget</th>
                                 <th>Actual cost</th>
-                                <th>Comments</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>

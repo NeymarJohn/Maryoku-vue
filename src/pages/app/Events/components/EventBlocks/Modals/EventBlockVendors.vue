@@ -325,6 +325,8 @@
             if ( this.caseStatus == 'get-offers' ) {
                 this.addingVendors = true;
             }
+
+            console.log(this.selectedBlock);
         },
         mounted() {
             this.isLoading = false;
