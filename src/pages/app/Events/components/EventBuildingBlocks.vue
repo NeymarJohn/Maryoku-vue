@@ -21,7 +21,7 @@
                                 <th>Requirements</th>
                                 <th>Allocated budget</th>
                                 <th>Actual cost</th>
-                                <th></th>
+                                <th>Comments</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -79,7 +79,7 @@
                                     </template>
 
                                 </td>
-                                <td class="text-center">
+                                <td>
                                     <template v-if="block.allocatedBudget">
                                         <template
                                             v-if="block.winningProposalId">
@@ -94,8 +94,8 @@
                                             </md-button>
                                         </template>
                                         <template v-else-if="block.proposalsState == 'get-offers'">
-                                            <md-button class="md-sm md-primary" @click="reviewVendors(block, category.title)">
-                                                Get Proposals
+                                            <md-button class="md-sm md-default" @click="reviewVendors(block)">
+                                                Get Offers
                                                 <md-icon>near_me</md-icon>
                                             </md-button>
                                         </template>
@@ -333,27 +333,12 @@
             },
 
             addRequirements(item) {
-
-                if ( item.proposals.length ) {
-                    swal({
-                        text: `You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?`,
-                        showCancelButton: true,
-                        type: "warning",
-                        confirmButtonClass: "md-button md-success confirm-btn-bg ",
-                        cancelButtonClass: "md-button md-danger cancel-btn-bg",
-                        confirmButtonText: "Yes!",
-                        buttonsStyling: false
-                    }).then(result => {
-                        if (result.value) {
-                            this.showRequirementsSidepanel(item);
-                        }
-                    });
-                } else {
-
-                    this.showRequirementsSidepanel(item);
-                }
-
-
+                window.currentPanel = this.$showPanel({
+                    component: EventBlockRequirements,
+                    cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
+                    openOn: 'right',
+                    props: {event: this.event, selectedBlock: item, predefinedRequirements: item.predefinedRequirements}
+                })
             },
             reviewProposals(item, winnerId = null) {
                 window.currentPanel = this.$showPanel({
@@ -363,20 +348,12 @@
                     props: {event: this.event, selectedBlock: item, winnerId : winnerId}
                 })
             },
-            reviewVendors(item , categoryTitle) {
+            reviewVendors(item) {
                 window.currentPanel = this.$showPanel({
                     component: EventBlockVendors,
                     cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
                     openOn: 'right',
-                    props: {event: this.event, selectedBlock: item, getOffers: true , categoryTitle : categoryTitle}
-                })
-            },
-            showRequirementsSidepanel(item) {
-                window.currentPanel = this.$showPanel({
-                    component: EventBlockRequirements,
-                    cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
-                    openOn: 'right',
-                    props: {event: this.event, selectedBlock: item, predefinedRequirements: item.predefinedRequirements}
+                    props: {event: this.event, selectedBlock: item, getOffers: true}
                 })
             }
         },

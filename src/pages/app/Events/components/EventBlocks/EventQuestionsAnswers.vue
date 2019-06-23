@@ -1,14 +1,13 @@
 <template>
   <div class="questions-answers-list">
-      <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
-      <md-card v-if="!editMode">
-        <md-card-header>
-            <h4 class="title">Questions & Answers
-              <md-button class="md-info md-sm edit-event-component pull-right"  v-if="!readonly"  @click="editMode = !editMode">
-                Edit
-              </md-button>
-            </h4>
-        </md-card-header>
+    <md-card>
+      <md-card-header>
+        <h4 class="title">Questions & Answers
+          <md-button class="md-info md-sm edit-event-component pull-right"  v-if="!readonly"  @click="showQuestionsAnswersModal">
+            Edit
+          </md-button>
+        </h4>
+      </md-card-header>
       <md-card-content v-if="qnas">
         <collapse
           :collapse="questionsAndAnswersList"
@@ -21,7 +20,7 @@
       </md-card-content>
     </md-card>
 
-    <edit-questions-and-answers v-if="!readonly && editMode" :event="event"></edit-questions-and-answers>
+    <edit-questions-and-answers v-if="!readonly" :event="event" rel="questionsAnswersModal"></edit-questions-and-answers>
   </div>
 </template>
 <script>
@@ -50,14 +49,17 @@
       }
     },
     data: () => ({
-      editMode : false,
+      showModal : false,
       headers : [],
-      qnas : [],
-        isLoading  : false,
-
+      qnas : []
     }),
     methods: {
-
+      ...mapMutations("EventPlannerVuex", [
+        "setQuestionsAnswersModal"
+      ]),
+      showQuestionsAnswersModal() {
+        this.setQuestionsAnswersModal({ showModal: true });
+      }
     },
     created() {
 
