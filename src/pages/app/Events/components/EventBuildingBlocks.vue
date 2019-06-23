@@ -79,7 +79,7 @@
                                     </template>
 
                                 </td>
-                                <td class="text-center">
+                                <td>
                                     <template v-if="block.allocatedBudget">
                                         <template
                                             v-if="block.winningProposalId">
