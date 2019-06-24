@@ -41,7 +41,9 @@
               that.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
               Model.$http.defaults.headers.common['gorm-tenantid'] = res.tenantIds[0];
               Model.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
-              document.location.href = `${document.location.protocol}//${res.tenantIds[0]}.${document.location.hostname}:${document.location.port}/#/signedin?token=${givenToken}`;
+              let hostname = document.location.hostname;
+              hostname = hostname.replace("app.","");
+              document.location.href = `${document.location.protocol}//${res.tenantIds[0]}.${hostname}:${document.location.port}/#/signedin?token=${givenToken}`;
             } else {
               that.$router.push({name: 'ChooseWorkspace'});
             }
