@@ -107,8 +107,7 @@
                         <label>Phone Number</label>
                         <md-input
                                   v-model="selected_vendor.vendorMainPhoneNumber"
-                                  type="text"
-                                  @keydown="onlyNumber"
+                                  type="number"
                                   required
                                   data-vv-name="vendorMainPhoneNumber"
                                   name="vendorMainPhoneNumber"
@@ -179,14 +178,14 @@
                     <md-button class="md-purple md-xs" @click="addContactPerson">+ Add contact person</md-button>
                 </div>
 
-                <div class="md-layout-item md-size-100 vendor_attachments-file">
+                <div class="md-layout-item md-size-100">
 
                         <label>Attachments</label>
                         <div v-if="selected_vendor" v-for="(attachment , index) in selected_vendor.vendorAttachments" :key="index" class="md-layout-item md-size-100 contact-person-list">
                             <md-field>
                                 <md-file class="attachments-file" :ref="'file-'+index" v-model="attachment.path" />
                                 <div class="delete-item" @click="deleteAttachmentItem(index)">
-                                    <md-icon class="md-theme-rose" > delete_outline</md-icon>
+                                    <md-icon v-if="selected_vendor.vendorAttachments.length > 0 && selected_vendor.vendorAttachments[0].path" class="md-theme-rose" > delete_outline</md-icon>
                                 </div>
                             </md-field>
 
@@ -213,26 +212,10 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0;
 }
 
-.vendor_attachments-file {
-
-    .attachments-file {
-        pointer-events: none;
-        cursor: default;
-        margin-right: 32px;
-    }
-
-    .md-field.md-has-file{
-
-        &:after, &:before, label {
-            margin-right: 32px;
-        }
-    }
-
-    .delete-item {
-        left: auto !important;
-        right: 0;
-        opacity: 1 !important;
-    }
+.attachments-file {
+    pointer-events: none;
+    cursor: default;
+    padding-left: 8px;
 }
 </style>
 
@@ -426,12 +409,6 @@ input[type=number]::-webkit-outer-spin-button {
                     }
 
                 });
-            },
-            onlyNumber(event) {
-                const key = event.keyCode ? event.keyCode : event.which;
-                if (!(event.ctrlKey || event.altKey || (47<key && key<58 && event.shiftKey==false) || (95<key && key<106) || (key==8) || (key==9) || (key>34 && key<41) || (key==46))) { // 46 is dot
-                    event.preventDefault();
-                }
             }
 
         }

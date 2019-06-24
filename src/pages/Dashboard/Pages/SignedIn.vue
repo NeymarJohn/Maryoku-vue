@@ -36,6 +36,14 @@
 
         new TenantUser().find(givenToken).then(res => {
           if (res.status){
+              this.$gtm.trackEvent({
+                  event: 'user_signed_in', // Event type [default = 'interaction'] (Optional)
+                  category: 'Users',
+                  action: 'signin',
+                  label: 'User Signed In',
+                  value: this.$auth.user.emailAddress,
+                  noninteraction: false // Optional
+              });
             if (res.tenantIds.length === 1) {
               that.$http.defaults.headers.common['gorm-tenantid'] = res.tenantIds[0];
               that.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
@@ -46,6 +54,14 @@
               that.$router.push({name: 'ChooseWorkspace'});
             }
           } else {
+              this.$gtm.trackEvent({
+                  event: 'new_registration', // Event type [default = 'interaction'] (Optional)
+                  category: 'User',
+                  action: 'register',
+                  label: 'New User Registered',
+                  value: this.$auth.user.emailAddress,
+                  noninteraction: false // Optional
+              });
             that.$router.push({name: 'CreateWorkspace'});
           }
         });
