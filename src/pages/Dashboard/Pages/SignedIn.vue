@@ -36,14 +36,6 @@
 
         new TenantUser().find(givenToken).then(res => {
           if (res.status){
-              this.$gtm.trackEvent({
-                  event: 'user_signed_in', // Event type [default = 'interaction'] (Optional)
-                  category: 'Users',
-                  action: 'signin',
-                  label: 'User Signed In',
-                  value: this.$auth.user.emailAddress,
-                  noninteraction: false // Optional
-              });
             if (res.tenantIds.length === 1) {
               that.$http.defaults.headers.common['gorm-tenantid'] = res.tenantIds[0];
               that.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
@@ -77,6 +69,15 @@
         Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
 
         that.$auth.currentUser(that, true, function () {
+
+            that.$gtm.trackEvent({
+                event: 'user_signed_in', // Event type [default = 'interaction'] (Optional)
+                category: 'Users',
+                action: 'signin',
+                label: 'User Signed In',
+                value: that.$auth.user.emailAddress,
+                noninteraction: false // Optional
+            });
 
           /*const socket = new SockJS(`${process.env.SERVER_URL}/stomp`);
         const client = Stomp.over(socket);
