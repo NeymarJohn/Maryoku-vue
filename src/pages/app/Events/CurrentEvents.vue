@@ -41,9 +41,9 @@
 
                                     </div>
                                     <div class="md-layout-item md-size-40 promotion-video">
-                                        <iframe src="https://www.youtube.com/embed/ygte40FNSpU" frameborder="0"
-                                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                                                allowfullscreen></iframe>
+                                        <iframe src="https://www.youtube.com/embed/vFL-bUMdVmw" frameborder="0"
+                                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                                        </iframe>
                                     </div>
                                 </md-card-content>
                             </md-card>
