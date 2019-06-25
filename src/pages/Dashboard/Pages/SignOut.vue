@@ -26,15 +26,6 @@
                 try {
                     this.$Tawk.$endChat();
                 } catch (e) { console.error(e);}
-
-                this.$gtm.trackEvent({
-                    event: 'user_signed_out', // Event type [default = 'interaction'] (Optional)
-                    category: 'Users',
-                    action: 'signout',
-                    label: 'User Signed Out',
-                    value: this.$auth.user.emailAddress,
-                    noninteraction: false // Optional
-                });
             },1500)
         },
         data() {

@@ -205,6 +205,10 @@
                 }
                 this.getEvent();
             });
+
+            this.$bus.$on('refreshEvent',()=> {
+                this.getEvent();
+            })
         },
         methods: {
             openMyProfile(){

@@ -44,7 +44,7 @@
                                         shadow-color="#ffff00"
                                         hover-color="#dddd00"
                                         :max="5"
-                                        :value="item.vendor.rank"
+                                        :value="item.vendor ? item.vendor.rank : 0"
                                         :readonly="false"
                                         char="★"
                                         inactive-char=""
@@ -56,7 +56,7 @@
                                         {{ `Ready to send` }}
                                     </template>
                                     <template v-else-if="item.rfpStatus == 'Sent'">
-                                        {{ `Sent on ` }} {{getVendorDate(item.vendor.dateCreated)}}
+                                        {{ `Sent on ` }} {{item.vendor ? getVendorDate(item.vendor.dateCreated) : 'N/A'}}
                                     </template>
                                     <template v-else-if="item.rfpStatus == 'Ready to send'"></template>
                                 </md-table-cell>
@@ -183,6 +183,7 @@
                     .then(resp => {
                         this.isLoading = false;
                         this.blockVendors = resp;
+                        console.log(resp);
                     })
                     .catch(error => {
                         this.isLoading = false;
