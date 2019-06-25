@@ -401,7 +401,22 @@
                 this.$forceUpdate();
             },
             groupStats(group){
-                return '0%'
+                let percent = 0;
+                let responses = 0;
+                let attending = 0;
+                let totalInvitees = this.eventInvitees.length;
+                this.eventInvitees.forEach((invitee)=>{
+                    if (invitee.inviteeResponse){
+                        responses++;
+                        if (invitee.inviteeResponse.attending){
+                            attending++;
+                        }
+                    }
+                });
+
+                percent = ((responses / totalInvitees) * 100).toFixed(2);
+
+                return `${percent}%`;
             }
         },
         created() {
