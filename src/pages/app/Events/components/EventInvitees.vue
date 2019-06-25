@@ -414,7 +414,7 @@
                     }
                 });
 
-                percent = ((responses / totalInvitees) * 100).toFixed(2);
+                percent = ((attending / totalInvitees) * 100).toFixed(2);
 
                 return `${percent}%`;
             }
