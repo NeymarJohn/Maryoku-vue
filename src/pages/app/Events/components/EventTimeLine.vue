@@ -236,6 +236,7 @@
             block.endTime = this.$moment(this.timelineItems[this.timelineItems.length-1].endTime, 'HH:mm A').add(1, 'hour').format('HH:mm A');
           }
           this.timelineItems.push(Object.assign({}, block));
+            this.disabledDragging = true;
         } else {
           setTimeout(this.updateTimelineITemsOrder, 100);
         }
