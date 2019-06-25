@@ -109,7 +109,11 @@
                                         </div>
                                     </div>
                                 </md-card-content>
+                                <md-card-actions>
+                                    <div class="text-left">{{eventInvitees.length}} / {{eventData.numberOfParticipants}} expected invitees</div>
+                                </md-card-actions>
                             </md-card>
+
                         </div>
                         <div class="md-layout-item md-medium-size-40 md-size-40">
                             <md-card class="md-card-plain">
