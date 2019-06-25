@@ -41,7 +41,7 @@
 
                                     </div>
                                     <div class="md-layout-item md-size-40 promotion-video">
-                                        <iframe src="https://www.youtube.com/embed/ualjiukVg68" frameborder="0"
+                                        <iframe src="https://www.youtube.com/embed/ualjiukVg68"  frameborder="0"
                                                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                                         </iframe>
                                     </div>
