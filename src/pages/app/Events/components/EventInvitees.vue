@@ -410,7 +410,8 @@
                 let attending = 0;
                 let totalInvitees = this.eventInvitees.length;
                 this.eventInvitees.forEach((invitee)=>{
-                    if (invitee.inviteeResponse){
+                    let theGroup = _.findWhere(invitee.groups, {id: group.id});
+                    if (theGroup && invitee.inviteeResponse){
                         responses++;
                         if (invitee.inviteeResponse.attending){
                             attending++;
