@@ -43,35 +43,35 @@
                                     <template v-if="block.allocatedBudget">
                                         <div v-if="!block.is_parent && block.values.length"
                                              style="cursor: pointer;">
-                                            <md-button class="md-simple md-sm requirements-cell-button"
+                                            <md-button class="md-simple md-xs requirements-cell-button"
                                                        @click="addRequirements(block)">
                                                 {{`${block.values.length} selected`}}
                                                 <md-icon class="text-danger">edit</md-icon>
                                             </md-button>
                                         </div>
                                         <template v-else-if="!block.is_parent && !block.values.length">
-                                            <md-button class="md-info md-sm" @click="addRequirements(block)">
+                                            <md-button class="md-info md-xs md-simple" @click="addRequirements(block)">
                                                 Set requirements
                                             </md-button>
                                         </template>
                                     </template>
 
                                 </td>
-                                <td class="allocated-budget" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
+                                <td class="allocated-budget" style="width: 15%;" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
                                     <div class="md-table-cell-container" >
                                         <span class="dollar-sign">$</span>
-                                        <label-edit :text="block.allocatedBudget ? block.allocatedBudget.toString() : ''"
+                                        <label-edit style="width: 100%;" :text="block.allocatedBudget ? block.allocatedBudget.toString() : ''"
                                                     :field-name="block.componentId"
                                                     @text-updated-blur="blockBudgetChanged"
                                                     @text-updated-enter="blockBudgetChanged"></label-edit>
                                     </div>
 
                                 </td>
-                                <td class="actual-cost">
+                                <td class="actual-cost" style="width: 15%;">
                                     <template v-if="block.allocatedBudget">
                                         <template
                                             v-if="block.winningProposalId">
-                                            <md-button class="md-simple actual-cost md-sm" :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`" >
+                                            <md-button class="md-simple actual-cost md-xs" :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`" >
                                                 {{ `$${block.winingProposal.cost}`}}
                                                 <md-icon >open_in_new</md-icon>
                                             </md-button>
@@ -83,29 +83,27 @@
                                     <template v-if="block.allocatedBudget">
                                         <template
                                             v-if="block.winningProposalId">
-                                            <md-button class="md-warning actual-cost md-sm" @click="reviewProposals(block,block.winningProposalId)">
+                                            <md-button class="md-warning actual-cost md-xs" @click="reviewProposals(block,block.winningProposalId)">
                                                 View Order
                                             </md-button>
                                         </template>
                                         <template v-else-if="block.proposalsState == 'show-proposals' || block.proposalsState == 'waiting-for-proposals'">
-                                            <md-button class="md-sm md-info" @click="reviewProposals(block)">
+                                            <md-button class="md-xs md-info" @click="reviewProposals(block)">
                                                 Manage proposals
                                                 ({{block.proposals.length}})
                                             </md-button>
                                         </template>
                                         <template v-else-if="block.proposalsState == 'get-offers'">
-                                            <md-button class="md-sm md-primary" @click="reviewVendors(block, category.title)">
+                                            <md-button class="md-xs md-primary" @click="reviewVendors(block, category.title)">
                                                 Get Proposals
                                                 <md-icon>near_me</md-icon>
                                             </md-button>
                                         </template>
+                                        <md-button class="md-danger md-xs md-round md-just-icon pull-right" style="padding: 0;" @click="deleteBlock(block.id)">
+                                            <md-icon>delete</md-icon>
+                                        </md-button>
                                     </template>
                                 </td>
-                                <div class="event-block_actions">
-                                    <md-button class="md-default md-sm md-just-icon md-simple" @click="deleteBlock(block.id)">
-                                        <md-icon>clear</md-icon>
-                                    </md-button>
-                                </div>
                             </tr>
                             <tr>
                                 <td>

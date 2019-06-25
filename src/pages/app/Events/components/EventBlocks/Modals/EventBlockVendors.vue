@@ -26,7 +26,7 @@
                     <md-card-header  class="md-card-header-text md-card-header-warning">
                         <div class="card-text">
                             <h4 class="title" style="color: white;">
-                                Manage Block Vendors
+                                Manage {{categoryTitle}}'s Vendors
                             </h4>
                         </div>
                     </md-card-header>

@@ -1868,6 +1868,7 @@ iframe{
                     }
                 }
                 td {
+                    text-align: center;
                     padding : 0 0.4em;
                     font-size: 14px;
                     font-family: 'arial',sans-serif;
@@ -1915,14 +1916,18 @@ iframe{
             }
         }
         .md-button:not(.md-just-icon) {
-            width: auto !important;
+            text-align: center;
+            width: 75% !important;
             font-weight: bold;
+            padding: 6px;
             .md-ripple {
-                font-size: 14px;
+                text-align: center;
+                font-size: 12px;
                 text-transform: initial;
             }
         }
         .md-just-icon {
+            margin-top: 8px;
             .md-ripple {
                 padding : 0 8px !important;
             }
