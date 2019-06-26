@@ -1917,7 +1917,7 @@ iframe{
         }
         .md-button:not(.md-just-icon) {
             text-align: center;
-            width: 65% !important;
+            width: 75% !important;
             font-weight: bold;
             padding: 6px;
             .md-ripple {
@@ -2616,24 +2616,6 @@ iframe{
     .md-switch-container {
         margin: auto;
         margin-top: 6px;
-    }
-
-    .interaction-fields {
-        .md-layout-item {
-            padding-left : 0;
-            text-align: left;
-
-            &.checkbox-section {
-                .md-checkbox {
-                    margin: 16px 8px 16px 0;
-                    float : left;
-                }
-                label {
-                    float : left;
-                }
-            }
-
-        }
     }
 }
 
