@@ -26,9 +26,9 @@
                       {{item.avgScore}}%
                     </md-table-cell>-->
                     <md-table-cell class="vendors-table_item-actions" v-if="mode == 'listing'">
-                        <md-button :name="`vendors-list-rank-vendor-${vendorsList.indexOf(item)}`" class="md-warning md-just-icon md-round" @click="openPopover(vendorsList.indexOf(item))">
+                        <!--<md-button :name="`vendors-list-rank-vendor-${vendorsList.indexOf(item)}`" class="md-warning md-just-icon md-round" @click="openPopover(vendorsList.indexOf(item))">
                             <md-icon>star</md-icon>
-                        </md-button>
+                        </md-button>-->
                         <md-button :name="`vendors-list-delete-vendor-${vendorsList.indexOf(item)}`" class="md-danger md-just-icon md-round" @click.native="deleteVendor(item.id)">
                             <md-icon>delete</md-icon>
                         </md-button>
