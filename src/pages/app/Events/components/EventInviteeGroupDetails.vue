@@ -12,11 +12,7 @@
                     {{item.person.emailAddress}}
                 </template>
             </md-table-cell>
-            <md-table-cell md-label="RSVP">
-                <md-icon class="text-gray" title="Not invited yet" v-if="!item.inviteeResponse">help_outline</md-icon>
-                <md-icon class="text-success" title="Attending" v-if="item.inviteeResponse && item.inviteeResponse.attending">done</md-icon>
-                <md-icon class="text-danger" title="Attending" v-if="item.inviteeResponse && !item.inviteeResponse.attending">close</md-icon>
-            </md-table-cell>
+            <md-table-cell md-label="RSVP"><md-icon class="text-gray" title="Not invited yet">help_outline</md-icon></md-table-cell>
             <md-table-cell md-label="" class="text-right" >
                 <md-button class="md-danger md-round md-just-icon" :disabled="noActions" @click="unselectMember(item)">
                     <md-icon>remove</md-icon>

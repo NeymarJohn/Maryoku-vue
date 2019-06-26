@@ -142,7 +142,7 @@
                 item.editMode = true;
                 this.visibleInteraction = item;
                 if (!item.id){ //Existing
-                    Object.assign(this.visibleInteraction, {templateImage: item.options[0],sendDaysBeforeEvent: 15, line1: item.title, line2: this.$moment(this.eventData.eventStartMillis).format('MM-DD-YYYY'), line3: this.eventData.title});
+                    Object.assign(this.visibleInteraction, {templateImage: item.options[0],sendDaysBeforeEvent: 15, line1: item.title, line2: this.$moment(this.eventData.eventStartMillis).format('MM-DD-YYYY, H:mm A'), line3: this.eventData.title});
                 }
                 this.$forceUpdate();
             },

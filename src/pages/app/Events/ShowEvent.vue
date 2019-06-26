@@ -2,7 +2,6 @@
     <div class="md-layout">
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
         <div class="md-layout-item md-size-100" v-if="user">
-            {{this.invitee ? this.invitee.id : 'null'}}
             <div class="pull-right">
                 <drop-down direction="down" :hover="true">
                     <md-button name="user-top-menu" slot="title" class="md-purple md-sm" data-toggle="dropdown">
@@ -176,13 +175,6 @@
                         Object.assign(inviteeResponse, this.userResponse);
                         inviteeResponse.attending = isGoing;
                         new EventInviteeResponse(inviteeResponse)
-                            .for(new Calendar({id: this.calendarEvent.calendar.id}), new CalendarEvent(this.calendarEvent))
-                            .save()
-                            .then(res=>{
-                                this.userResponse = res.item;
-                            });
-                    } else {
-                        new EventInviteeResponse({attending: isGoing, invitee: {id: this.invitee.id }})
                             .for(new Calendar({id: this.calendarEvent.calendar.id}), new CalendarEvent(this.calendarEvent))
                             .save()
                             .then(res=>{

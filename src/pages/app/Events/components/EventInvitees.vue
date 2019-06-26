@@ -109,11 +109,7 @@
                                         </div>
                                     </div>
                                 </md-card-content>
-                                <md-card-actions>
-                                    <div class="text-left">{{eventInvitees.length}} / {{eventData.numberOfParticipants}} expected invitees</div>
-                                </md-card-actions>
                             </md-card>
-
                         </div>
                         <div class="md-layout-item md-medium-size-40 md-size-40">
                             <md-card class="md-card-plain">
@@ -405,23 +401,7 @@
                 this.$forceUpdate();
             },
             groupStats(group){
-                let percent = 0;
-                let responses = 0;
-                let attending = 0;
-                let totalInvitees = this.eventInvitees.length;
-                this.eventInvitees.forEach((invitee)=>{
-                    let theGroup = _.findWhere(invitee.person.groups, {id: group.id});
-                    if (theGroup && invitee.inviteeResponse){
-                        responses++;
-                        if (invitee.inviteeResponse.attending){
-                            attending++;
-                        }
-                    }
-                });
-
-                percent = ((attending / totalInvitees) * 100).toFixed(2);
-
-                return `${percent}%`;
+                return '0%'
             }
         },
         created() {
