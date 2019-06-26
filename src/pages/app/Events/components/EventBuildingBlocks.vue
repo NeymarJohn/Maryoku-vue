@@ -93,7 +93,7 @@
                                                 ({{block.proposals.length}})
                                             </md-button>
                                         </template>
-                                        <template v-else-if="block.proposalsState == 'get-offers'">
+                                        <template v-else-if="block.proposalsState == 'get-offers' && block.values.length">
                                             <md-button class="md-xs md-primary" @click="reviewVendors(block, category.title)">
                                                 Get Proposals
                                                 <md-icon>near_me</md-icon>
