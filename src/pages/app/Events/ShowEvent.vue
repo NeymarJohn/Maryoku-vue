@@ -2,6 +2,7 @@
     <div class="md-layout">
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
         <div class="md-layout-item md-size-100" v-if="user">
+            {{this.invitee ? this.invitee.id : 'null'}}
             <div class="pull-right">
                 <drop-down direction="down" :hover="true">
                     <md-button name="user-top-menu" slot="title" class="md-purple md-sm" data-toggle="dropdown">
