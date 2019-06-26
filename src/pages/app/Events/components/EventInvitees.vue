@@ -408,8 +408,8 @@
                 let percent = 0;
                 let responses = 0;
                 let attending = 0;
-                let totalInvitees = this.eventInvitees.length;
-                this.eventInvitees.forEach((invitee)=>{
+                let totalInvitees = group.members ? group.members.length : 0;
+                /*this.eventInvitees.forEach((invitee)=>{
                     let theGroup = _.findWhere(invitee.person.groups, {id: group.id});
                     if (theGroup && invitee.inviteeResponse){
                         responses++;
@@ -417,11 +417,29 @@
                             attending++;
                         }
                     }
+                });*/
+                this.groups.forEach(aGroup => {
+                    if (aGroup.members){
+                        aGroup.members.forEach(member => {
+                            let invitee = _.find(this.eventInvitees, (invitee)=>{ return invitee.id === member.id});
+                            if (invitee){
+                                if (invitee.inviteeResponse){
+                                    responses++;
+                                    if (invitee.inviteeResponse.attending){
+                                        attending++;
+                                    }
+                                }
+                            }
+                        });
+                    }
                 });
 
                 percent = ((attending / totalInvitees) * 100).toFixed(2);
 
                 return `${percent}%`;
+            },
+            totalStats(){
+
             }
         },
         created() {
