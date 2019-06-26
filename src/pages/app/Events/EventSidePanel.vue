@@ -317,6 +317,7 @@
         mounted() {
 
             this.getOccasionList();
+            this.$store.dispatch("event/getEventTypes", this.$auth.user.defaultCalendarId);
 
             this.$root.$on('statusChange', (newStatus) => {
                 this.status = newStatus;
