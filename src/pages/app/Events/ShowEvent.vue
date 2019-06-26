@@ -260,9 +260,7 @@
                     }
 
                     if (this.user){
-                        alert(1);
                         new EventInvitee().for(new Calendar({id: event.calendar.id}), this.calendarEvent).params({personId: this.user.id}).get().then(res=>{
-                            alert(res[0].id);
                             this.invitee = res[0];
                             this.userResponse = res[0].inviteeResponse;
 
