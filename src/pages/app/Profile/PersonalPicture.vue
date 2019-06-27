@@ -59,7 +59,6 @@
 <script>
 import { LabelEdit } from "@/components";
 import Me from "@/models/Me";
-import TeamMembersFile from '@/models/TeamMembersFile';
 import swal from "sweetalert2";
 export default {
   components: {
@@ -127,37 +126,23 @@ export default {
       onCancel(){
         this.dialogConfirmFlag = false
       },
-      async sendImage(file) {
-                this.csvUploading = true;
-                let reader = new FileReader();
-                let _this = this;
+    createImage(file, type) {
+      let reader = new FileReader();
+      let vm = this;
 
-                reader.onload = e => {
-                    let membersFile = new TeamMembersFile({membersFile: e.target.result});
-                    membersFile.save().then(result => {
-                    this.$notify({
-                            message: 'Members file is uploaded successfully' ,
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'success'
-                        });
-                        this.currentStep++;
-                        this.$root.$emit('switch-panel', 1);
-                    }).catch((error) => {
-                        _this.csvUploading = false;
-                        this.$notify({
-                            message: 'Members file is not uploaded, please try again' ,
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'warning'
-                        });
-
-                        console.log(error);
-                    });
-                };
-                reader.readAsDataURL(file);
-            },
-    
+      reader.onload = e => {
+        this.loaded = false;
+        // return new CustomerFile({customerFile: e.target.result}).save().then(result => {
+        //     this.loaded = true;
+        // }) .catch((error) => {
+        //     console.log(error);
+        //     this.loaded = true;
+        // });
+        // const formData = new FormData();
+        // formData.append("images", file[0], file[0].name) // TODO :: send this object once we have api for userPorfile photo
+      };
+      reader.readAsDataURL(file);
+    },
     removeImage: function(type) {
        // sremoveImagehowRemoveConfirmDialog()
               swal({

@@ -165,7 +165,7 @@
             },
             closePanel(){
                 this.$emit("closePanel");
-                this.$bus.$emit('BlockAdded');
+                this.$bus.$emit('refreshBuildingBlock');
             },
             manageBlockVendors() {
                 this.addingVendors = true;
@@ -183,7 +183,6 @@
                     .then(resp => {
                         this.isLoading = false;
                         this.blockVendors = resp;
-                        console.log(resp);
                     })
                     .catch(error => {
                         this.isLoading = false;

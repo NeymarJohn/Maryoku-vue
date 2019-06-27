@@ -87,7 +87,7 @@
                                                 View Order
                                             </md-button>
                                         </template>
-                                        <template v-else-if="block.proposalsState == 'show-proposals' || block.proposalsState == 'waiting-for-proposals'">
+                                        <template v-else-if="(block.proposalsState == 'show-proposals' || block.proposalsState == 'waiting-for-proposals') &&  block.values.length">
                                             <md-button class="md-xs md-info" @click="reviewProposals(block)">
                                                 Manage proposals
                                                 ({{block.proposals.length}})
@@ -385,7 +385,7 @@
 
             this.getEventBuildingBlocks();
 
-            this.$bus.$on('BlockAdded', () => {
+            this.$bus.$on('refreshBuildingBlock', () => {
                 this.getEventBuildingBlocks()
             });
 

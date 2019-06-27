@@ -3036,3 +3036,9 @@ iframe{
     padding:0 !important;
     margin: 0 !important;
 }
+.members-group-list {
+    .md-table , .md-table-content , .md-card{
+        overflow : hidden;
+        max-width : 100%;
+    }
+}

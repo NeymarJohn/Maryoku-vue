@@ -134,9 +134,14 @@
                 </template>
             </nav-tabs>
         </div>
+
+        <import-members-panel   ref="importModalOpen"></import-members-panel>
+
+
     </div>
 </template>
 <script>
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
 
     import TeamMember from '@/models/TeamMember';
     import Team from '@/models/Team';
@@ -199,6 +204,7 @@
 
         }),
         methods: {
+            ...mapMutations('teams', ['setImportModal']),
             unselectMembers(group){
                 group.members.forEach((member)=>{
                     this.unselectMember(member);
@@ -208,14 +214,16 @@
                 this.inviteesExpanded = !this.inviteesExpanded;
             },
             importInvitees(){
-                window.currentPanel = this.$showPanel({
-                    component: ImportMembersPanel,
-                    cssClass: "md-layout-item md-size-100 h65 transition36",
-                    openOn: "bottom",
-                    props: {
 
-                    }
-                });
+                this.$refs.importModalOpen.toggleModal(true);
+                // window.currentPanel = this.$showPanel({
+                //     component: ImportMembersPanel,
+                //     cssClass: "md-layout-item md-size-100 h65 transition36",
+                //     openOn: "bottom",
+                //     props: {
+                //
+                //     }
+                // });
             },
             invite(){
                 let groupsWithoutAll = _.filter(this.availableTeams, (g)=>{ return g.id !== 'all'});

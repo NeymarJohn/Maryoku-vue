@@ -155,7 +155,6 @@
                 </div>
 
                 <div v-for="(contactPerson , index) in selected_vendor.vendorContactPerson" :key="index" class="md-layout-item md-size-100 contact-person-list">
-                 
                     <div class="md-layout-item md-size-33">
                         <md-field >
                             <md-input v-model="contactPerson.name" :name="'name_' + index" type="text"></md-input>
@@ -171,7 +170,7 @@
                             <md-input v-model="contactPerson.phone_number"  :name="'phone_number_' + index" type="text"></md-input>
                         </md-field>
                     </div>
-                <div class="delete-item" @click="deleteContactPersonItem(index)">
+                    <div class="delete-item" v-if="selected_vendor.vendorContactPerson.length > 1 && selected_vendor.vendorContactPerson[0].email " @click="deleteContactPersonItem(index)">
                         <md-icon  class="md-theme-rose" > delete_outline</md-icon>
                     </div>
                 </div>
@@ -289,13 +288,13 @@ input[type=number]::-webkit-outer-spin-button {
                 this.selected_vendor.vendorAttachments=[];
             }
 
-            
-             if (!this.selected_vendor.vendorTagging ) {
+
+            if ( !this.selected_vendor.vendorTagging ) {
                 this.selected_vendor.vendorTagging=[];
             }
         },
         mounted() {
-            
+
         },
         data() {
             return {
@@ -303,8 +302,6 @@ input[type=number]::-webkit-outer-spin-button {
                 vendorCategory: [],
                 contactPersonList : [],
                 vendorAttachments : [],
-                
-
                 vm: {
                     searchPlace: '',
                     location: {}
