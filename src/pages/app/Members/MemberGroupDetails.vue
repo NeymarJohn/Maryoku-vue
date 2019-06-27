@@ -107,9 +107,13 @@
                 </md-card-content>
             </md-card>
         </div>
+
+        <import-members-panel @vendorCreated=""  ref="importModalOpen"></import-members-panel>
     </div>
 </template>
 <script>
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+
     import TeamMember from '@/models/TeamMember';
     import Team from '@/models/Team';
     import LabelEdit from '@/components/LabelEdit';
@@ -120,7 +124,7 @@
 
     export default {
         name: 'member-group-details',
-        components: { LabelEdit, MemberEditorPanel },
+        components: { LabelEdit, MemberEditorPanel, ImportMembersPanel },
         props: {
             groupData: {
                 type: Object
@@ -143,6 +147,7 @@
             }
         },
         methods: {
+            ...mapMutations('teams', ['setImportModal']),
             refreshList(force){
                 this.working = false;
                 this.updateAvailableMembers();
@@ -194,14 +199,15 @@
                 });
             },
             uploadMembers(){
-                window.currentPanel = this.$showPanel({
-                    component: ImportMembersPanel,
-                    cssClass: "md-layout-item md-size-100 h65 transition36",
-                    openOn: "bottom",
-                    props: {
-
-                    }
-                });
+                this.$refs.importModalOpen.toggleModal(true);
+                // window.currentPanel = this.$showPanel({
+                //     component: ImportMembersPanel,
+                //     cssClass: "md-layout-item md-size-100 h65 transition36",
+                //     openOn: "bottom",
+                //     props: {
+                //
+                //     }
+                // });
             },
             addMember(){
                 if (this.groupData.members.length && this.groupData.members[0].id === 'new') return;
@@ -243,7 +249,7 @@
            type: "warning",
         showCancelButton: true,
  confirmButtonClass: "md-button md-success confirm-btn-bg btn-fill",
-        cancelButtonClass: "md-button md-danger cancel-btn-bg btn-fill",  
+        cancelButtonClass: "md-button md-danger cancel-btn-bg btn-fill",
                     confirmButtonText: "Yes, delete it!"
                 }).then(async result => {
                     if (result.value) {
@@ -317,6 +323,11 @@
                     this.refreshList(false);
                 }
             }
+        },
+        computed: {
+            ...mapState("teamVuex", [
+                "importModalOpen"
+            ]),
         }
     }
 </script>
