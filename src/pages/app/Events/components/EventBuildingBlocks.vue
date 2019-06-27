@@ -30,7 +30,8 @@
                                 <td>{{category.title}}</td>
                                 <td></td>
                                 <td class="allocated-budget">
-                                    ${{category.totalAllocatedBudget}}
+                                    <span class="dollar-sign">$</span>
+                                    {{category.totalAllocatedBudget}}
                                     <span class="remains-budget" v-if="category.remainsBudget">-${{parseInt(category.remainsBudget)}}</span>
                                 </td>
                                 <td class="actual-cost" :class="{disabled : category.totalActualCost==0}">${{category.totalActualCost}}</td>
