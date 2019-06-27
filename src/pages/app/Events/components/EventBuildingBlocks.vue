@@ -30,8 +30,7 @@
                                 <td>{{category.title}}</td>
                                 <td></td>
                                 <td class="allocated-budget">
-                                    <span class="dollar-sign">$</span>
-                                    {{category.totalAllocatedBudget}}
+                                    ${{category.totalAllocatedBudget}}
                                     <span class="remains-budget" v-if="category.remainsBudget">-${{parseInt(category.remainsBudget)}}</span>
                                 </td>
                                 <td class="actual-cost" :class="{disabled : category.totalActualCost==0}">${{category.totalActualCost}}</td>
@@ -88,7 +87,7 @@
                                                 View Order
                                             </md-button>
                                         </template>
-                                        <template v-else-if="(block.proposalsState == 'show-proposals' || block.proposalsState == 'waiting-for-proposals') &&  block.values.length">
+                                        <template v-else-if="block.proposalsState == 'show-proposals' || block.proposalsState == 'waiting-for-proposals'">
                                             <md-button class="md-xs md-info" @click="reviewProposals(block)">
                                                 Manage proposals
                                                 ({{block.proposals.length}})
@@ -386,7 +385,7 @@
 
             this.getEventBuildingBlocks();
 
-            this.$bus.$on('refreshBuildingBlock', () => {
+            this.$bus.$on('BlockAdded', () => {
                 this.getEventBuildingBlocks()
             });
 

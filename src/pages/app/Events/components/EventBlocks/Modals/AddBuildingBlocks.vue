@@ -113,7 +113,7 @@
 
                     this.setBuildingBlockModal({showModal: false});
                     this.$emit("closePanel", {});
-                    this.$bus.$emit('refreshBuildingBlock');
+                    this.$bus.$emit('BlockAdded');
 
                 })
                     .catch(error => {
