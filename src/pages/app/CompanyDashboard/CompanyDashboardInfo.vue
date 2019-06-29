@@ -126,11 +126,26 @@
           this.loaded = false;
           return new CustomerFile({customerFile: e.target.result}).save().then(result => {
             let customer = this.$auth.user.customer;
-            customer.logoFileId = result.id;
-            new Customer({id: customer.id, logoFileId: result.id}).save();
-            this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
-            this.companyProfile.logoFileId = customer.logoFileId;
-            this.loaded = true;
+
+            if (customer.logoFileId){
+                new CustomerFile({id: customer.logoFileId}).delete().then( deleteResult => {
+                    customer.logoFileId = result.id;
+                    new Customer({id: customer.id, logoFileId: result.id}).save();
+                    this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
+                    this.companyProfile.logoFileId = customer.logoFileId;
+                    this.$auth.user.customer.logoFileId = customer.logoFileId;
+                    this.$ls.set("user", this.$auth.user, 1000 * 60 * 10);
+                    this.loaded = true;
+                })
+            } else {
+                customer.logoFileId = result.id;
+                new Customer({id: customer.id, logoFileId: result.id}).save();
+                this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
+                this.companyProfile.logoFileId = customer.logoFileId;
+                this.$auth.user.customer.logoFileId = customer.logoFileId;
+                this.$ls.set("user", this.$auth.user, 1000 * 60 * 10);
+                this.loaded = true;
+            }
           })
             .catch((error) => {
               console.log(error);
