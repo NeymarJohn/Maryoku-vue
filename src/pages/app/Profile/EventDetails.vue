@@ -2,19 +2,18 @@
     <div>
       <div class="">
 
-              <div class="md-layout-item" style="padding-left: 0px; padding-right: 10px;">
+              <div class="md-layout-item" style="padding-left: 0px; padding-right: 10px; text-align: right ">
                 <label>
                     <md-icon style="font-size: 15px !important; padding-right: 1%;">room</md-icon>
-                     {{dressCode}} {{where}} 
+                     Where
                  </label>
             </div>
-            
             <div class="md-layout-item" style="padding-left: 0px; padding-right: 0px; ">
-                <!-- <div class="md-layout md-gutter" style="justify-content: flex-end">
+                <div class="md-layout md-gutter" style="justify-content: flex-end">
                     <div>
                         {{eventDate}} - {{endHourDateEvent}}
                     </div>
-                </div> -->
+                </div>
                 <div class="md-layout md-gutter" style="justify-content: flex-end">
 
                     <div class="md-layout-item md-size-70" style="text-align: right; padding-right: 0;">

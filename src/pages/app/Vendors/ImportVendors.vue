@@ -260,6 +260,7 @@
       },
       noticeModalHide: function () {
         this.uploadModalOpen = false;
+        this.csvUploading = false;
       },
       toggleModal: function (show) {
         this.uploadModalOpen = show;
@@ -424,6 +425,15 @@
               this.$set(this,'currentStep', step);
               this.$emit('vendorImported')
             }
+          }).catch((error) => {
+              this.csvUploading = false;
+              this.$notify(
+              {
+                  message: error.response.data.message ,
+                  horizontalAlign: 'center',
+                  verticalAlign: 'top',
+                  type: 'warning'
+              })
           })
         } else {
           this.$set(this,'currentStep', step);

@@ -204,7 +204,8 @@
 
             },
             categoryTitle(categoryId){
-                return _.findWhere(this.buildingBlocksList, {id: categoryId}).value;
+                const buildingBlock = _.findWhere(this.buildingBlocksList, {id: categoryId});
+                return buildingBlock ? buildingBlock.value : '';
             },
             deleteVendor(id){
                 swal({
