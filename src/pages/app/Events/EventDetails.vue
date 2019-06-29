@@ -120,6 +120,10 @@
             } else {
                 this.getEvent();
             }
+
+            this.$bus.$on('refreshEvent',()=> {
+                this.getEvent();
+            })
         },
         methods: {
             ...mapMutations("EventPlannerVuex", [
@@ -137,7 +141,7 @@
                         this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
                         this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
                         this.seriesData = [(100 - this.percentage), this.percentage];
-
+                        console.log('Event Data => ',event);
                         if ( event.eventPage == null ) {
                             this.setEventPageData();
                         }

@@ -180,6 +180,13 @@
                             .then(res=>{
                                 this.userResponse = res.item;
                             });
+                    } else {
+                        new EventInviteeResponse({attending: isGoing, invitee: {id: this.invitee.id }})
+                            .for(new Calendar({id: this.calendarEvent.calendar.id}), new CalendarEvent(this.calendarEvent))
+                            .save()
+                            .then(res=>{
+                                this.userResponse = res.item;
+                            });
                     }
                 } else {
                     this.pendingResponse = { attending: isGoing};
@@ -205,6 +212,10 @@
                 }
                 this.getEvent();
             });
+
+            this.$bus.$on('refreshEvent',()=> {
+                this.getEvent();
+            })
         },
         methods: {
             openMyProfile(){

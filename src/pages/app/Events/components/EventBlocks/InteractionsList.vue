@@ -19,7 +19,7 @@
                                 <div class="timing-form" v-if="item.editMode">
                                     <md-card class="md-card-plain md-gutter" style="margin: 0; padding: 0;">
                                         <md-card-content style="padding: 12px 0;">
-                                            <div class="md-layout">
+                                            <div class="md-layout interaction-fields">
                                                 <div class="md-layout-item md-size-65">
                                                     <md-field>
                                                         <label>Send this interaction</label>
@@ -39,7 +39,7 @@
                                                                   data-vv-name="sendDaysBeforeEvent" v-focus/>
                                                     </md-field>
                                                 </div>
-                                                <div class="md-layout-item md-size-100">
+                                                <div class="md-layout-item md-size-100 checkbox-section">
                                                     <md-checkbox v-model="item.includePageLink"
                                                                  :id="`include-${index}`"></md-checkbox>
                                                     <!--<label style=" margin:  14px 16px 14px 0" :for="`include-${index}`">Include a link to the <a :href="`/#/events/${eventData ? eventData.id : ''}/public`">event public page</a>?</label>-->
@@ -142,7 +142,7 @@
                 item.editMode = true;
                 this.visibleInteraction = item;
                 if (!item.id){ //Existing
-                    Object.assign(this.visibleInteraction, {templateImage: item.options[0],sendDaysBeforeEvent: 15, line1: item.title, line2: this.$moment(this.eventData.eventStartMillis).format('MM-DD-YYYY, H:mm A'), line3: this.eventData.title});
+                    Object.assign(this.visibleInteraction, {templateImage: item.options[0],sendDaysBeforeEvent: 15, line1: item.title, line2: this.$moment(this.eventData.eventStartMillis).format('MM-DD-YYYY'), line3: this.eventData.title});
                 }
                 this.$forceUpdate();
             },
@@ -169,7 +169,7 @@
         h5 {
             font-weight: 500;
         }
-        background-color: $yellow-50;
+        border : 1px solid $grey-300;
     }
     .not-visible-row {
         cursor: pointer;

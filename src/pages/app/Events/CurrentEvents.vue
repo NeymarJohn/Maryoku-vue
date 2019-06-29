@@ -7,7 +7,7 @@
                 color-button="rose"
                 :active-tab="$store.state.EventPlannerVuex.eventDetailsActiveTab">
                 <!-- here you can add your content for tab-content -->
-                <template slot="tab-pane-1">
+                <template slot="tab-pane-1" style="width: 100%;">
                     <div class="md-layout">
                         <div class="md-layout-item md-size-25">
                             <event-details-sidebar :event.sync="event"></event-details-sidebar>
@@ -41,9 +41,9 @@
 
                                     </div>
                                     <div class="md-layout-item md-size-40 promotion-video">
-                                        <iframe src="https://www.youtube.com/embed/ygte40FNSpU" frameborder="0"
-                                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                                                allowfullscreen></iframe>
+                                        <iframe src="https://www.youtube.com/embed/ualjiukVg68"  frameborder="0"
+                                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                                        </iframe>
                                     </div>
                                 </md-card-content>
                             </md-card>
@@ -101,7 +101,7 @@
                         </div>
                     </div>
                 </template>
-                <template slot="tab-pane-2">
+                <template slot="tab-pane-2" style="width: 100%;">
                     <div class="md-layout">
                         <div class="md-layout-item md-size-25">
                             <event-details-sidebar :event.sync="event"></event-details-sidebar>
@@ -113,7 +113,7 @@
                     </div>
 
                 </template>
-                <template slot="tab-pane-3">
+                <template slot="tab-pane-3" style="width: 100%;">
                     <div class="md-layout">
                         <div class="md-layout-item md-size-100">
                             <event-time-line :event="event" :event-components="selectedComponents"></event-time-line>
@@ -122,7 +122,7 @@
                     </div>
 
                 </template>
-                <template slot="tab-pane-4">
+                <template slot="tab-pane-4" style="width: 100%;">
                     <div class="md-layout">
                         <div class="md-layout-item md-size-100">
                             <event-invitees :event-data.sync="event"></event-invitees>
@@ -130,7 +130,7 @@
                     </div>
                 </template>
 
-                <template slot="tab-pane-5">
+                <template slot="tab-pane-5" style="width: 100%;">
                     <div class="md-layout">
                         <div class="md-layout-item md-size-100">
                             <event-details :event.sync="event"

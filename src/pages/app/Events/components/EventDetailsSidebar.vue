@@ -25,7 +25,7 @@
                     <div class="md-layout-item md-size-50">
                         <div class="md-layout-item  title-text">Participants</div>
                         <div class="md-layout-item md-size-100 md-caption ">
-                            {{calendarEvent.numberOfParticipants}} + spouses
+                            {{calendarEvent.numberOfParticipants}} {{inviteeType(calendarEvent)}}
                         </div>
                     </div>
 
@@ -192,6 +192,20 @@
                 'setNumberOfParticipants',
                 'setEventData'
             ]),
+            inviteeType(calendarEvent){
+                //"Employees Only","Employees and spouse","Employees and families", "Employees children"
+                let typeText = '';
+                let participantsType = calendarEvent.participantsType;
+                if (participantsType === 'Employees and spouse'){
+                    typeText = '+ spouses';
+                } else if (participantsType === 'Employees and families'){
+                    typeText = '+ families';
+                } else if (participantsType === 'Employees siblings'){
+                    typeText = '+ siblings';
+                }
+
+                return typeText;
+            },
             getEvent () {
                 this.$auth.currentUser(this, true, function () {
                     let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})

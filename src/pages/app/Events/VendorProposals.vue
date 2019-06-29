@@ -6,7 +6,7 @@
             <h3 class="title">Vendor's Name</h3>
         </div>
 
-        <div class="md-layout-item md-size-70">
+        <div class="md-layout-item md-size-70 md-small-size-100">
             <!-- Event Information Card -->
             <md-card class="md-primary event-information-card">
                 <md-card-content>
@@ -14,7 +14,7 @@
                         <div class="md-layout-item md-size-100">
                             <h4 class="title">Event information</h4>
                         </div>
-                        <div class="md-layout-item md-size-45">
+                        <div class="md-layout-item md-size-45 md-small-size-100">
                             <div class="info-item">
                                 <div class="">
                                     <md-icon>calendar_today</md-icon>
@@ -25,7 +25,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="md-layout-item md-size-45">
+                        <div class="md-layout-item md-size-45 md-small-size-100">
                             <div class="info-item">
                                 <div class="">
                                     <md-icon>place</md-icon>
@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="md-layout-item md-size-45">
+                        <div class="md-layout-item md-size-45 md-small-size-100">
                             <div class="info-item">
                                 <div class="">
                                     <md-icon>history</md-icon>
@@ -47,7 +47,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="md-layout-item md-size-45">
+                        <div class="md-layout-item md-size-45 md-small-size-100">
                             <div class="info-item">
                                 <div class="">
                                     <md-icon>person</md-icon>
@@ -74,15 +74,15 @@
                         <div class="md-layout-item md-size-100">
                             <div class="vendor-proposals_requirements-list">
                                 <div class="list-item md-layout" v-for="(item,index) in dietaryList" :key="index">
-                                    <div class="requirement-title md-layout-item md-size-50">
+                                    <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
                                         {{item.title}}: {{item.meals}} Meals
                                     </div>
-                                    <div class="included-in-price md-layout-item md-size-25">
+                                    <div class="included-in-price md-layout-item md-size-25 md-small-size-40">
 
                                         <md-switch class="md-switch-rose switch-btn"  v-model="item.included_in_price"></md-switch>
                                         <label :for="`include-${index}`">Included in price</label>
                                     </div>
-                                    <div class="actions-list md-layout-item md-size-25">
+                                    <div class="actions-list md-layout-item md-size-25 md-small-size-60">
                                         <md-button class="md-rose md-simple"><md-icon>block</md-icon> Item not available</md-button>
                                         <md-button class="md-primary md-simple"><md-icon>comment</md-icon> Add Comment</md-button>
                                     </div>
@@ -92,7 +92,7 @@
 
                         <div class="md-layout-item md-size-100">
                             <div class="vendor-proposals_cost-and-availability md-layout">
-                                <div class="md-layout-item md-size-75">
+                                <div class="md-layout-item md-size-75 md-small-size-100">
                                     <div class="items-costs-list">
                                         <div class="item-cost" v-for="(item,index) in dietaryList" :key="index">
                                             <div class="item-cost_title">
@@ -111,7 +111,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="md-layout-item md-size-25 availability-status">
+                                <div class="md-layout-item md-size-25 md-small-size-100 availability-status">
                                     <div>
                                         <md-radio v-model="available_to_deliver" :value="true"
                                                      :id="`available-1`" class="md-success"></md-radio>
@@ -143,7 +143,7 @@
                         <div class="md-layout-item md-size-100">
                             <div class="vendor-proposals_requirements-list">
                                 <div class="list-item md-layout" v-for="(item,index) in mustHaveList" :key="index">
-                                    <div class="requirement-title md-layout-item md-size-50">
+                                    <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
                                         {{item.title}}
 
                                         <div class="requirement-desc">
@@ -151,12 +151,12 @@
 
                                         </div>
                                     </div>
-                                    <div class="included-in-price md-layout-item md-size-25">
+                                    <div class="included-in-price md-layout-item md-size-25 md-small-size-40">
 
                                         <md-switch class="md-switch-rose switch-btn"  v-model="item.included_in_price"></md-switch>
                                         <label :for="`include-${index}`">Included in price</label>
                                     </div>
-                                    <div class="actions-list md-layout-item md-size-25">
+                                    <div class="actions-list md-layout-item md-size-25 md-small-size-60">
                                         <md-button class="md-rose md-simple"><md-icon>block</md-icon> Item not available</md-button>
                                         <md-button class="md-primary md-simple"><md-icon>comment</md-icon> Add Comment</md-button>
                                     </div>
@@ -179,7 +179,7 @@
                         <div class="md-layout-item md-size-100">
                             <div class="vendor-proposals_requirements-list">
                                 <div class="list-item md-layout" v-for="(item,index) in moreList" :key="index">
-                                    <div class="requirement-title md-layout-item md-size-50">
+                                    <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
                                         {{item.title}}
 
                                         <div class="requirement-desc">
@@ -187,12 +187,12 @@
 
                                         </div>
                                     </div>
-                                    <div class="included-in-price md-layout-item md-size-25">
+                                    <div class="included-in-price md-layout-item md-size-25 md-small-size-40">
 
                                         <md-switch class="md-switch-rose switch-btn"  v-model="item.included_in_price"></md-switch>
                                         <label :for="`include-${index}`">Included in price</label>
                                     </div>
-                                    <div class="actions-list md-layout-item md-size-25">
+                                    <div class="actions-list md-layout-item md-size-25 md-small-size-60">
                                         <md-button class="md-rose md-simple"><md-icon>block</md-icon> Item not available</md-button>
                                         <md-button class="md-primary md-simple"><md-icon>comment</md-icon> Add Comment</md-button>
                                     </div>
@@ -217,34 +217,23 @@
                             </div>
                         </div>
                         <div class="md-layout">
-                            <md-card v-for="(image,index) in vendorImages" :key="index" class="md-layout-item md-size-25">
-                                <md-card-media>
-                                    <div class="event-images_image-item" style="margin: auto;" :style="`background-image : url(`+`${serverUrl}/1/eventPageImages/${image.id}`+`)`" @click="previewImage(image.id)">
-                                    </div>
-                                    <md-button class="md-info md-sm delete-event-image" @click="removeEventImage(index)" v-if="!readonly">
-                                        DELETE
-                                    </md-button>
-                                </md-card-media>
-                            </md-card>
-
-                            <md-card v-for="(n,index) in (3 - vendorImages.length)" :key="index + 1000"  class="md-layout-item md-size-33 default-image-box" :style="`cursor: pointer; background: url('/static/img/default${index+1}.jpg') center center no-repeat; background-size: cover;`">
-                                <div class="" @click="uploadEventImage" style="color: black; text-shadow: 0 0 3px #fff; font-size: 18px; font-weight: 500;">
-                                    <md-icon style="color: black; text-shadow: 0 0 3px #fff; font-size: 24px; font-weight: 500;">add_to_photos</md-icon>
-                                    Add image
+                            <!-- List Vendor Images -->
+                            <div class="vendor-images-list">
+                                <div class="vendor-images-list_item"
+                                    :style="`background : url(https://bit.ly/2TWGILO) center center no-repeat`"
+                                >
+                                    <md-button class="md-primary md-sm">delete</md-button>
                                 </div>
-                            </md-card>
 
-                            <div class="update-banner-form">
-                                <input type="file" style="display: none;" ref="eventFile" accept="image/gif, image/jpg, image/png" @change="onEventFilePicked">
+                                <div class="vendor-images-list_item"
+                                     :style="`background : url(https://bit.ly/2TWGILO) center center no-repeat`"
+                                >
+                                    <md-button class="md-primary md-sm">delete</md-button>
+                                </div>
+
+                                <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image"><md-icon>add</md-icon></md-button>
                             </div>
-
-
-                            <div class="preview-image" v-if="imagePreview">
-                                <md-button class="md-simple md-just-icon md-round" @click="closePreviewModal">
-                                    <md-icon>clear</md-icon>
-                                </md-button>
-                                <img :src="`${serverUrl}/1/eventPageImages/${imagePreview}`" class="event-image-item">
-                            </div>
+                            <!-- ./List Vendor Images -->
                         </div>
                     </md-card-content>
 
@@ -261,33 +250,19 @@
                             </div>
                         </div>
                         <div class="md-layout">
-                            <md-card v-for="(image,index) in vendorImages" :key="index" class="md-layout-item md-size-25">
-                                <md-card-media>
-                                    <div class="event-images_image-item" style="margin: auto;" :style="`background-image : url(`+`${serverUrl}/1/eventPageImages/${image.id}`+`)`" @click="previewImage(image.id)">
-                                    </div>
-                                    <md-button class="md-info md-sm delete-event-image" @click="removeEventImage(index)" v-if="!readonly">
-                                        DELETE
-                                    </md-button>
-                                </md-card-media>
-                            </md-card>
-
-                            <md-card v-for="(n,index) in (3 - vendorImages.length)" :key="index + 1000"  class="md-layout-item md-size-33 default-image-box" :style="`cursor: pointer; background: url('/static/img/default${index+1}.jpg') center center no-repeat; background-size: cover;`">
-                                <div class="" @click="uploadEventImage" style="color: black; text-shadow: 0 0 3px #fff; font-size: 18px; font-weight: 500;">
-                                    <md-icon style="color: black; text-shadow: 0 0 3px #fff; font-size: 24px; font-weight: 500;">add_to_photos</md-icon>
-                                    Add image
+                            <div class="vendor-attachments-list">
+                                <div  class="vendor-attachments-list_item">
+                                    <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image"><md-icon>add</md-icon></md-button>
+                                    <div class="attachment-placeholder">Add <br>Insurance Papers </div>
                                 </div>
-                            </md-card>
-
-                            <div class="update-banner-form">
-                                <input type="file" style="display: none;" ref="eventFile" accept="image/gif, image/jpg, image/png" @change="onEventFilePicked">
-                            </div>
-
-
-                            <div class="preview-image" v-if="imagePreview">
-                                <md-button class="md-simple md-just-icon md-round" @click="closePreviewModal">
-                                    <md-icon>clear</md-icon>
-                                </md-button>
-                                <img :src="`${serverUrl}/1/eventPageImages/${imagePreview}`" class="event-image-item">
+                                <div  class="vendor-attachments-list_item">
+                                    <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image"><md-icon>add</md-icon></md-button>
+                                    <div class="attachment-placeholder">Add <br>License </div>
+                                </div>
+                                <div  class="vendor-attachments-list_item">
+                                    <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image"><md-icon>add</md-icon></md-button>
+                                    <div class="attachment-placeholder">Upload Other Documents </div>
+                                </div>
                             </div>
                         </div>
                     </md-card-content>
@@ -298,11 +273,74 @@
 
 
 
+            <!-- More Requirements -->
+            <md-card class="event-information-card notes-section">
+                <md-card-content>
+                    <div class="md-layout">
+                        <div class="md-layout-item md-size-100">
+                            <h4 class="title">Notes</h4>
+                        </div>
+
+                        <div class="md-layout-item md-size-100">
+                            <md-field>
+                                <md-textarea rows="5"></md-textarea>
+                            </md-field>
+                            <md-button class="md-primary pull-right md-sm">Save</md-button>
+                        </div>
+                    </div>
+                </md-card-content>
+            </md-card>
+            <!-- ./More Requirements -->
+
+
+
+
         </div>
-        <div class="md-layout-item md-size-30">
-            <md-card>
+        <div class="md-layout-item md-size-30 md-small-size-100">
+            <md-card class="bid-section">
                 <md-card-content >
-                    Hello
+
+                    <h3 class="text-center">You’re the 4th bidder</h3>
+                    <p class="text-center">Consider former proposals before placing your bid</p>
+
+                    <div class="cost-average">
+                        <div class="cost-average_item">
+                            <h5 class="">Lowest</h5>
+                            <div class="cost">$290</div>
+                        </div>
+                        <div class="cost-average_item arrow-item">
+                            <md-icon>arrow_right_alt</md-icon>
+                        </div>
+                        <div class="cost-average_item">
+                            <h5 class="">Highest</h5>
+                            <div class="cost">$1500</div>
+                        </div>
+                    </div>
+
+                    <div class="update-checkbox">
+                        <md-checkbox class="md-success">Update me if someone outbids my offer</md-checkbox>
+                    </div>
+
+                    <div class="offer-value">
+                        <div class="value-section upgrades-section ">
+                            <div class="title">Upgrades</div>
+                            <div class="cost text-right">$23</div>
+                        </div>
+                        <div class="value-section user-offer-section ">
+                            <div class="title">Your Offer</div>
+                            <div class="cost text-right">$5000</div>
+                        </div>
+                    </div>
+
+                    <div class="bid-button">
+                        <md-button class="md-success">
+                            Place Bid
+                        </md-button>
+                    </div>
+                    <div class="show-more-button">
+                        <md-button class="md-primary md-sm md-simple">Show me another event</md-button>
+                    </div>
+
                 </md-card-content>
             </md-card>
         </div>
@@ -429,63 +467,6 @@
         methods: {
 
             requirementCostChanges(val, index) {
-
-            },
-            uploadEventImage() {
-                this.$refs.eventFile.click();
-
-            },
-
-            onEventFilePicked(event) {
-                let file = event.target.files || event.dataTransfer.files;
-                if (!file.length) {
-                    return;
-                }
-
-                if (file[0].size <= 5000000){ // 5mb
-
-                    this.createImage(file[0]);
-
-                } else {
-
-                    this.alretExceedPictureSize = true
-
-                    this.$notify(
-                        {
-                            message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'warning'
-                        })
-
-                }
-
-            },
-            createImage(file, type) {
-                let reader = new FileReader();
-                let vm = this;
-
-                //this.isLoading = true;
-
-                reader.onload = e => {
-
-                    this.vendorImages.push({id: result.id});
-
-                };
-
-                reader.readAsDataURL(file);
-            },
-
-            removeEventImage(index){
-
-
-            },
-            previewImage(image){
-                this.imagePreview = image;
-            }
-            ,
-            closePreviewModal() {
-                this.imagePreview = null;
 
             }
         },

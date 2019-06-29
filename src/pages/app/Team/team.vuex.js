@@ -18,14 +18,15 @@ export default {
             country: 'none',
             city: 'none'
           },
-          inviteModalOpen: false,
+            inviteModalOpen: false,
+            importModalOpen: false,
           modalTitle: 'Invite your Team',
           modalSubmitTitle: 'Send Invitation',
           editMode: false
         };
     },
 
-    mutations: {       
+    mutations: {
       setMemberProperty(state, {key, actualValue}) {
         state.teamMemberData[key] = actualValue;
       },
@@ -47,7 +48,7 @@ export default {
         state.teamMemberData['role'] = data.teamMember['role']
         state.teamMemberData['firstName'] = data.teamMember['firstName']
         state.teamMemberData['lastName'] = data.teamMember['lastName']
-        
+
         if (data.teamMember['permissions']) {
           state.teamMemberData['permissions'] = data.teamMember['permissions'].split(',')
         }
@@ -62,7 +63,11 @@ export default {
           state.teamMemberData.emailAddress = null;
           state.teamMemberData.permissions = [];
           state.teamMemberData.role = null;
-      }
+      },
+        setImportModal(state, data) {
+            state.importModalOpen = data.showModal;
+
+        },
 
     },
 

@@ -109,7 +109,11 @@
                                         </div>
                                     </div>
                                 </md-card-content>
+                                <md-card-actions>
+                                    <div class="text-left">{{eventInvitees.length}} / {{eventData.numberOfParticipants}} expected invitees</div>
+                                </md-card-actions>
                             </md-card>
+
                         </div>
                         <div class="md-layout-item md-medium-size-40 md-size-40">
                             <md-card class="md-card-plain">
@@ -130,9 +134,14 @@
                 </template>
             </nav-tabs>
         </div>
+
+        <import-members-panel   ref="importModalOpen"></import-members-panel>
+
+
     </div>
 </template>
 <script>
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
 
     import TeamMember from '@/models/TeamMember';
     import Team from '@/models/Team';
@@ -175,7 +184,7 @@
             eventInvitees: [],
             groups: [],
             inviteesExpanded: false,
-            InviteeTypes: ["Employees Only","Employees and spouse","Employees and families", "Employees children"],
+            InviteeTypes: ["Employees Only","Employees and spouse","Employees and families", "Employees siblings"],
             rolesList: [
                 { id: 'ADMIN', title: 'Administrator'},
                 { id: 'co_producer', title: 'Co-Producer'},
@@ -195,6 +204,7 @@
 
         }),
         methods: {
+            ...mapMutations('teams', ['setImportModal']),
             unselectMembers(group){
                 group.members.forEach((member)=>{
                     this.unselectMember(member);
@@ -204,14 +214,16 @@
                 this.inviteesExpanded = !this.inviteesExpanded;
             },
             importInvitees(){
-                window.currentPanel = this.$showPanel({
-                    component: ImportMembersPanel,
-                    cssClass: "md-layout-item md-size-100 h65 transition36",
-                    openOn: "bottom",
-                    props: {
 
-                    }
-                });
+                this.$refs.importModalOpen.toggleModal(true);
+                // window.currentPanel = this.$showPanel({
+                //     component: ImportMembersPanel,
+                //     cssClass: "md-layout-item md-size-100 h65 transition36",
+                //     openOn: "bottom",
+                //     props: {
+                //
+                //     }
+                // });
             },
             invite(){
                 let groupsWithoutAll = _.filter(this.availableTeams, (g)=>{ return g.id !== 'all'});
@@ -401,7 +413,41 @@
                 this.$forceUpdate();
             },
             groupStats(group){
-                return '0%'
+                let percent = 0;
+                let responses = 0;
+                let attending = 0;
+                let totalInvitees = group.members ? group.members.length : 0;
+                /*this.eventInvitees.forEach((invitee)=>{
+                    let theGroup = _.findWhere(invitee.person.groups, {id: group.id});
+                    if (theGroup && invitee.inviteeResponse){
+                        responses++;
+                        if (invitee.inviteeResponse.attending){
+                            attending++;
+                        }
+                    }
+                });*/
+                this.groups.forEach(aGroup => {
+                    if (aGroup.members){
+                        aGroup.members.forEach(member => {
+                            let invitee = _.find(this.eventInvitees, (invitee)=>{ return invitee.id === member.id});
+                            if (invitee){
+                                if (invitee.inviteeResponse){
+                                    responses++;
+                                    if (invitee.inviteeResponse.attending){
+                                        attending++;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+
+                percent = ((attending / totalInvitees) * 100).toFixed(2);
+
+                return `${percent}%`;
+            },
+            totalStats(){
+
             }
         },
         created() {
