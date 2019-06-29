@@ -3042,16 +3042,3 @@ iframe{
         max-width : 100%;
     }
 }
-
-
-.left-menu-create-event {
-    &.md-button:not(.md-just-icon):not(.md-btn-fab):not(.md-icon-button):not(.md-toolbar-toggle) {
-        .md-ripple {
-            padding-left: 12px !important;
-            text-align: left;
-        }
-        .md-button-content {
-            width: 100%;
-        }
-    }
-}

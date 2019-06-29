@@ -19,7 +19,6 @@
             const that = this;
             setTimeout(() => {
                 this.$auth.logout(this);
-                this.$ls.remove("user");
                 try {
                     window.heap.resetIdentity();
                 } catch (e) { console.error(e);}
