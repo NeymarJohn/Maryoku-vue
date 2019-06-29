@@ -13,8 +13,8 @@
                 <h6 v-if="events.length === 0">No events yet</h6>
                 <collapse :collapse="events" icon="keyboard_arrow_down" color-collapse="warning" >
 
-                    <template v-for="(item,index) in events" :slot="`md-collapse-pane-${index+1}`">
-                        <event-details :key="item.id" :titleCollaps="eventTitleFromCollaps" :where="eventLocation" :when="item.eventStartMillis" :dressCode="eventDressCode"></event-details>
+                    <template v-for="(item,index) in events"   :slot="`md-collapse-pane-${index+1}`">
+                        <event-details :key="item.id" :titleCollaps="eventTitleFromCollaps" :where="item.location" :when="item.eventStartMillis" :dressCode="item.dressCode"></event-details>
                     </template>
                 </collapse>
             </md-card-content>
@@ -66,6 +66,7 @@
                 this.events = newVal.myEvents || [];
                 this.emptyEvents = this.events.length === 0;
                 this.isLoading = false;
+              
             }
         },
         methods: {
