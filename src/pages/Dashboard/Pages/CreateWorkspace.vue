@@ -124,7 +124,7 @@ export default {
         }
 
         this.t = setTimeout(function(){
-          this.loading = true;
+          //this.loading = true;
           /*let tenantId = document.location.hostname.replace(".262days.com","");
           tenantId = tenantId.length > 0 && tenantId === 'dev' ? "_"+tenantId : '';
 */
@@ -138,7 +138,7 @@ export default {
             }
             this.loading = false;
           });
-        }.bind(this), 500);
+        }.bind(this), 1000);
       }
     }
   },
