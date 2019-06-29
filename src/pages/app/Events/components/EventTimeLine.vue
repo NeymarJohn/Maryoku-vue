@@ -232,11 +232,10 @@
           block.endTime = '09:00 am';
           block.isItemLoading = false;
           if (this.timelineItems.length > 0){
-            block.startTime = this.$moment(this.timelineItems[this.timelineItems.length-1].endTime, 'H:mm A').format('H:mm A');
-            block.endTime = this.$moment(this.timelineItems[this.timelineItems.length-1].endTime, 'H:mm A').add(1, 'hour').format('H:mm A');
+            block.startTime = this.$moment(this.timelineItems[this.timelineItems.length-1].endTime, 'HH:mm A').format('HH:mm A');
+            block.endTime = this.$moment(this.timelineItems[this.timelineItems.length-1].endTime, 'HH:mm A').add(1, 'hour').format('HH:mm A');
           }
           this.timelineItems.push(Object.assign({}, block));
-            this.disabledDragging = true;
         } else {
           setTimeout(this.updateTimelineITemsOrder, 100);
         }

@@ -218,7 +218,7 @@
             durationArray: [...Array(12).keys()].map(x =>  ++x),
             dateValid: true,
             editTitle: false,
-            InviteeTypes: ["Employees Only","Employees and spouse","Employees and families", "Employees siblings"],
+            InviteeTypes: ["Employees Only","Employees and spouse","Employees and families", "Employees children"],
             modelValidations: {
                 title: {
                     required: true,
@@ -317,7 +317,6 @@
         mounted() {
 
             this.getOccasionList();
-            this.$store.dispatch("event/getEventTypes", this.$auth.user.defaultCalendarId);
 
             this.$root.$on('statusChange', (newStatus) => {
                 this.status = newStatus;

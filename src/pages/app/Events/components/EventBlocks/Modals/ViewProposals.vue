@@ -134,7 +134,7 @@
                   })
 
                   this.$bus.$emit('RefreshStatistics');
-                  this.$bus.$emit('refreshBuildingBlock');
+                  this.$bus.$emit('BlockAdded');
                     this.closePanel();
 
                 this.$forceUpdate()

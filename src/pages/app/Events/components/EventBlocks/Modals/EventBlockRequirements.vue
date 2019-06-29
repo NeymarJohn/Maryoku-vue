@@ -173,8 +173,6 @@
         methods: {
             closePanel() {
                 this.$emit("closePanel");
-                this.$bus.$emit('refreshBuildingBlock');
-
             },
             getBuildingBlockValues( newValueId = null) {
                 let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
@@ -183,6 +181,7 @@
 
                 new EventComponentValue().for(calendar, event, selected_block).get().then(values => {
                     this.eventBlocks = values;
+                    console.log(values);
                      if ( newValueId ) {
 
                         let newValue = _.findWhere(this.eventBlocks,{id : newValueId});
@@ -209,6 +208,7 @@
                 let selected_block = new EventComponent({id: this.selectedBlock.id});
 
                 new EventComponentValue(new_value).for(calendar, event, selected_block).save().then(res => {
+
                     this.isLoading = false;
                     this.getBuildingBlockValues();
                 });
@@ -238,7 +238,7 @@
                     title: "Are you sure?",
                     text: `You won't be able to revert this!`,
                     showCancelButton: true,
-
+                    
                     confirmButtonClass: "md-button md-success",
                     cancelButtonClass: "md-button md-danger",
                     confirmButtonText: "Yes, delete it!",
@@ -259,6 +259,7 @@
                             this.$forceUpdate();
                         })
                             .catch(error => {
+
                                 this.$notify(
                                     {
                                         message: 'Error while trying to delete this requirement',

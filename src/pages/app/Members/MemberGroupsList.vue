@@ -11,7 +11,7 @@
                     </md-button>-->
                     <md-button v-if="groupsList.length" class="md-info md-sm pull-right" style="margin: 16px 6px;" @click="createNewGroup" :disabled="working">Create New Group</md-button>
                 </md-card-header>
-                <md-card-content >
+                <md-card-content>
                     <vue-element-loading :active="working" spinner="ring" color="#FF547C"/>
 
                     <md-table :md-fixed-header="true" :md-height="550" :md-card="false"  v-model="groupsList" table-header-color="orange"  class="table-striped table-hover">

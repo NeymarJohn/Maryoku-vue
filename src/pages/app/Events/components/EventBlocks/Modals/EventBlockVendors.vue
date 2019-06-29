@@ -26,7 +26,7 @@
                     <md-card-header  class="md-card-header-text md-card-header-warning">
                         <div class="card-text">
                             <h4 class="title" style="color: white;">
-                                Manage {{categoryTitle}}'s Vendors
+                                Manage Block Vendors
                             </h4>
                         </div>
                     </md-card-header>
@@ -44,7 +44,7 @@
                                         shadow-color="#ffff00"
                                         hover-color="#dddd00"
                                         :max="5"
-                                        :value="item.vendor ? item.vendor.rank : 0"
+                                        :value="item.vendor.rank"
                                         :readonly="false"
                                         char="★"
                                         inactive-char=""
@@ -56,7 +56,7 @@
                                         {{ `Ready to send` }}
                                     </template>
                                     <template v-else-if="item.rfpStatus == 'Sent'">
-                                        {{ `Sent on ` }} {{item.vendor ? getVendorDate(item.vendor.dateCreated) : 'N/A'}}
+                                        {{ `Sent on ` }} {{getVendorDate(item.vendor.dateCreated)}}
                                     </template>
                                     <template v-else-if="item.rfpStatus == 'Ready to send'"></template>
                                 </md-table-cell>
@@ -165,7 +165,7 @@
             },
             closePanel(){
                 this.$emit("closePanel");
-                this.$bus.$emit('refreshBuildingBlock');
+                this.$bus.$emit('BlockAdded');
             },
             manageBlockVendors() {
                 this.addingVendors = true;

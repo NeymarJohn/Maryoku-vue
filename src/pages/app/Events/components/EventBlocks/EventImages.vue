@@ -125,19 +125,27 @@
 
                             console.log(error);
                         });
+
+
+
+
                 };
                 reader.readAsDataURL(file);
             },
+
             removeEventImage(index){
                 const calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 const event = new CalendarEvent({id: this.event.id});
 
                 this.isLoading = true;
 
+
                 return new CalendarEventPageImage({id : this.event.eventPage.images[index].id}).for(calendar, event).delete().then(result => {
 
                     this.event.eventPage.images.splice(index,1);
+
                     this.isLoading = false;
+
                 })
                     .catch((error) => {
                         console.log(error);
@@ -145,9 +153,14 @@
             },
             previewImage(image){
                 this.imagePreview = image;
-            },
+            }
+            ,
             closePreviewModal() {
                 this.imagePreview = null;
+
+            },
+            replaceImage(image) {
+
             }
 
         },

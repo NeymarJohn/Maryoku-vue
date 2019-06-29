@@ -1,6 +1,7 @@
 import Model from './Model'
+import VendorCategories from './VendorCategories'
 
-export default class TeamMembersFile extends Model {
+export default class VendorsFile extends Model {
   resource() {
     return 'teamMembersFile'
   }

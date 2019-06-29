@@ -29,8 +29,7 @@
                         @close-vendor="onCloseVendorForm"
                         :vendorsList="vendorsList"
                         mode="listing"
-                        ref="VendorsTable"
-                        :buildingBlocksList="buildingBlocksList">
+                        ref="VendorsTable">
 
                     </vendors-table>
                     <md-card-actions md-alignment="space-between" v-if="pagination.limit < pagination.total">

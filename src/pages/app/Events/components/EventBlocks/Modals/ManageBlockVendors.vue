@@ -124,8 +124,6 @@
             closePanel(){
                 this.$emit("closePanel");
                 this.$bus.$emit('VendorAdded');
-                this.$bus.$emit('refreshBuildingBlock');
-
             },
             fetchData(page) {
                 this.loadingData = true;
@@ -211,6 +209,8 @@
                     .then(resp => {
 
                         this.isLoading = false;
+
+
                         this.$notify(
                             {
                                 message: 'Vendor added successfully',

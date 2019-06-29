@@ -41,21 +41,11 @@
               that.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
               Model.$http.defaults.headers.common['gorm-tenantid'] = res.tenantIds[0];
               Model.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
-              let hostname = document.location.hostname;
-              hostname = hostname.replace("app.","");
-              document.location.href = `${document.location.protocol}//${res.tenantIds[0]}.${hostname}:${document.location.port}/#/signedin?token=${givenToken}`;
+              document.location.href = `${document.location.protocol}//${res.tenantIds[0]}.${document.location.hostname}:${document.location.port}/#/signedin?token=${givenToken}`;
             } else {
               that.$router.push({name: 'ChooseWorkspace'});
             }
           } else {
-              this.$gtm.trackEvent({
-                  event: 'new_registration', // Event type [default = 'interaction'] (Optional)
-                  category: 'User',
-                  action: 'register',
-                  label: 'New User Registered',
-                  value: this.$auth.user.emailAddress,
-                  noninteraction: false // Optional
-              });
             that.$router.push({name: 'CreateWorkspace'});
           }
         });
@@ -71,15 +61,6 @@
         Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
 
         that.$auth.currentUser(that, true, function () {
-
-            that.$gtm.trackEvent({
-                event: 'user_signed_in', // Event type [default = 'interaction'] (Optional)
-                category: 'Users',
-                action: 'signin',
-                label: 'User Signed In',
-                value: that.$auth.user.emailAddress,
-                noninteraction: false // Optional
-            });
 
           /*const socket = new SockJS(`${process.env.SERVER_URL}/stomp`);
         const client = Stomp.over(socket);
