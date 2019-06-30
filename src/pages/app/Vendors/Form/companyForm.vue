@@ -81,12 +81,12 @@
                     <md-field :class="[
                           {'md-valid': !errors.has('vendorAddressLine1') && selected_vendor.vendorAddressLine1},
                           {'md-error': errors.has('vendorAddressLine1')}]">
-                        <label>Address</label>
+                        <!--<label>Address</label>-->
                         <md-input v-model="selected_vendor.vendorAddressLine1"
                                   type="email"
                                    v-gmaps-searchbox=vm
                                   required
-                                  placeholder=""
+                                  placeholder="Address"
                                   data-vv-name="vendorAddressLine1"
                                   name="vendorAddressLine1"
                                   v-validate="modelValidations.vendorAddressLine1"></md-input>
@@ -155,7 +155,7 @@
                 </div>
 
                 <div v-for="(contactPerson , index) in selected_vendor.vendorContactPerson" :key="index" class="md-layout-item md-size-100 contact-person-list">
-
+                 
                     <div class="md-layout-item md-size-33">
                         <md-field >
                             <md-input v-model="contactPerson.name" :name="'name_' + index" type="text"></md-input>
@@ -171,7 +171,7 @@
                             <md-input v-model="contactPerson.phone_number"  :name="'phone_number_' + index" type="text"></md-input>
                         </md-field>
                     </div>
-                    <div class="delete-item" @click="deleteContactPersonItem(index)">
+                <div class="delete-item" @click="deleteContactPersonItem(index)">
                         <md-icon  class="md-theme-rose" > delete_outline</md-icon>
                     </div>
                 </div>
@@ -219,26 +219,22 @@ input[type=number]::-webkit-outer-spin-button {
     .attachments-file {
         pointer-events: none;
         cursor: default;
-        margin-right: 22px;
+        margin-right: 32px;
     }
 
     .md-field.md-has-file{
 
         &:after, &:before, label {
-            margin-right: 22px;
+            margin-right: 32px;
         }
     }
-}
-
-.contact-person-list {
 
     .delete-item {
         left: auto !important;
-        right: -8px;
+        right: 0;
         opacity: 1 !important;
     }
 }
-
 </style>
 
 
@@ -293,13 +289,13 @@ input[type=number]::-webkit-outer-spin-button {
                 this.selected_vendor.vendorAttachments=[];
             }
 
-
+            
              if (!this.selected_vendor.vendorTagging ) {
                 this.selected_vendor.vendorTagging=[];
             }
         },
         mounted() {
-
+            
         },
         data() {
             return {
@@ -307,7 +303,7 @@ input[type=number]::-webkit-outer-spin-button {
                 vendorCategory: [],
                 contactPersonList : [],
                 vendorAttachments : [],
-
+                
 
                 vm: {
                     searchPlace: '',

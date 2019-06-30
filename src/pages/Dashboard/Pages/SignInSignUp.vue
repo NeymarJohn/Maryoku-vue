@@ -74,8 +74,8 @@
                 let that = this;
                 this.$validator.validateAll().then(isValid => {
                     if (isValid){
-                        that.$auth.signupOrSignin(that, this.email, that.password, 'administrator', (data) => {
-                            that.$auth.login(that, {username: that.email, password: that.password}, (success) => {
+                        that.$auth.signupOrSignin(that, this.email.toString().toLowerCase(), that.password, 'administrator', (data) => {
+                            that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
                                 that.$router.push({ path: '/signedin', query: {token: success.access_token} });
                             }, (failure) => {
                                 that.loading = false;

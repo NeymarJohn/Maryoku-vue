@@ -1,7 +1,7 @@
 <template>
     <md-table md-card class="text-left table-hover clear-margins" table-header-color="orange" style="background-color: white !important;" v-model="group.members" :md-fixed-header="true" :md-height="300">
         <md-table-row slot="md-table-row" slot-scope="{ item }" :key="item.id">
-            <md-table-cell md-label="Invitee" style="padding-left: 12px;">
+            <md-table-cell md-label="Invitee" style="padding-left: 12px; max-width: 50%;">
                 <template v-if="item.person.firstName || item.person.lastName">
                     {{item.person.firstName}} {{item.person.lastName}} <small class="text-gray">({{item.person.emailAddress}})</small>
                 </template>

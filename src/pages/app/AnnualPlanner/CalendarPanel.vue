@@ -183,6 +183,7 @@
                 selectedCountries: true,
                 selectedCategories: true,
                 weekDays: [],
+                queryInProgress: false,
             }
         },
         created() {
@@ -192,7 +193,6 @@
             this.ready = true;
             this.isLoading = true;
             this.weekDays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-            this.selectYearMonth(this.year, this.month);
         },
         methods: {
             ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'setEditMode', 'setModalSubmitTitle', 'setEventModalAndEventData', 'setEventDate', 'setNumberOfParticipants']),
@@ -224,6 +224,8 @@
                 //console.log(`working with ${year} as year and ${month} as month, days in month: ${daysInMonth} , first date week day is: ${selectedMoment.weekday()}. `);
             },
             queryEvents() {
+                if (this.queryInProgress) return;
+                this.queryInProgress = true;
                 this.isLoading = true;
                 const storage = this.$store.state.AnnualPlannerVuex.filtersData;
 
@@ -266,6 +268,7 @@
                         this.generateRows(this.year, this.month);
 
                         this.isLoading = false;
+                        this.queryInProgress = false;
                         this.ready = true;
                     }).catch((error) => {
                     console.log(error);
