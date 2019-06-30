@@ -1902,10 +1902,6 @@ iframe{
                 position:absolute;
                 right : 0.5em;
             }
-
-            &.required {
-                border : 2px solid $brand-danger;
-            }
         }
 
         .parent {
