@@ -68,8 +68,8 @@
                                                     Each column header has a dropdown list of possible columns to assign, choose the one that reflects your data as much as possible.
                                                 </div>
                                                 <div class="divider" style="padding: 12px;"></div>
-                                                <md-table class="border-table" v-if="parseCSV" style="max-width: 65vmax; overflow: auto;">
-                                                    <md-table-row class="md-danger" style="background-color: lightgray;">
+                                                <md-table class="border-table" v-if="parseCSV" style="width: 55vmin; overflow: auto;">
+                                                    <!--<md-table-row class="md-danger" style="background-color: lightgray;">
                                                         <md-table-head class="text-rose text-center"
                                                                        v-if="column !== ''"
                                                                        v-for="(column, index) in parseCSV.columns"
@@ -78,7 +78,7 @@
                                                                        :class="{ active: sortKey === index }">
                                                             {{column}}
                                                         </md-table-head>
-                                                    </md-table-row>
+                                                    </md-table-row>-->
                                                     <md-table-row>
                                                         <md-table-head class="text-center"
                                                                        v-if="column !== ''"

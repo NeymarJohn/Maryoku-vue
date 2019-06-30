@@ -19,6 +19,7 @@ const TOKEN_KEY = "manage_id_token";
 
 export default {
     user: {
+        loading: false,
         authenticated: !!window.localStorage.getItem(TOKEN_KEY),
         me: {}
     },
@@ -90,7 +91,13 @@ export default {
     },
 
     currentUser(context, required, cb) {
-
+        if (this.user.loading) {
+            setTimeout(()=>{
+                this.currentUser(context, required, cb);
+            }, 1000);
+            return;
+        }
+        this.user.loading = true;
         this.setTenantHeaders(context);
         let user = context.$ls.get("user");
         if (user){
@@ -100,8 +107,10 @@ export default {
                 user.avatar = user.me.pictureUrl;
             }
             this.user = user;
+            this.user.loading = false;
         } else {
             this.user.authenticated = false;
+            this.user.loading = false;
         }
         if (!this.user.authenticated || this.user.id === undefined) {
             context.$http.get(CURRENT_USER_URL, {maxRedirects: 0, headers: this.getAuthHeader() })
@@ -140,6 +149,8 @@ export default {
                     if (cb !== undefined){
                         cb();
                     }
+
+                    this.user.loading = false;
                 })
                 .catch(
                     (e) => {
@@ -151,6 +162,8 @@ export default {
                         if (cb){
                             cb();
                         }
+
+                        this.user.loading = false;
                     })
         } else {
             this.setHeaders(context);
@@ -158,6 +171,7 @@ export default {
             if (cb !== undefined){
                 cb();
             }
+            this.user.loading = false;
         }
 
     },

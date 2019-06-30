@@ -455,14 +455,19 @@
         },
         mounted() {
             this.$root.$on("member-added", (member)=>{
-                this.availableMembers.push(member);
-                member.groups.forEach((g)=>{
-                    if (!_.findWhere(this.availableTeams, {id: g.id})){
-                        this.availableTeams.push(g);
-                    }
+                this.working = true;
+                this.$nextTick(()=>{
+                    this.availableMembers.push(member);
+                    member.groups.forEach((g)=>{
+                        if (!_.findWhere(this.availableTeams, {id: g.id})){
+                            this.availableTeams.push(g);
+                        }
+                    });
+                    this.updateAllOptions();
+                    this.selectSingleMember(member).then(r=>{
+                        this.working = false;
+                    });
                 });
-                this.updateAllOptions();
-                this.selectSingleMember(member);
             });
             this.working = true;
             this.$auth.currentUser(this, true, ()=>{
