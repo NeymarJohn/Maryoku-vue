@@ -226,53 +226,55 @@
             queryEvents() {
                 if (this.queryInProgress) return;
                 this.queryInProgress = true;
-                this.isLoading = true;
-                const storage = this.$store.state.AnnualPlannerVuex.filtersData;
+                setTimeout(()=>{
+                    this.isLoading = true;
+                    const storage = this.$store.state.AnnualPlannerVuex.filtersData;
 
-                let filters = { filters: {
-                        year: storage.year,
-                        month: storage.month,
-                        holidays: this.holidaysSelectDisplayed ? storage.holidays : [],
-                        countries: this.selectedCountries ? storage.countries : [],
-                        categories: this.selectedCategories ? storage.categories : []
-                    }};
-                let calendarId = this.$auth.user.defaultCalendarId;
-                this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.$auth.getAuthHeader() })
-                    .then((response) => {
-                        let eventsMap = {};
-                        let occasionsArray = [];
-                        if (response.data.events) {
-                            response.data.events.forEach(function(event){
-                                let eventStartMillis = event.eventStartMillis;
-                                let eventStartDate = new Date(eventStartMillis);
-                                let eventDateStamp = moment(eventStartDate).format('YYYYMMDD');
-                                if (eventsMap[eventDateStamp] === undefined){
-                                    eventsMap[eventDateStamp] = {
-                                        editables: [],
-                                        nonEditables: []
-                                    };
-                                }
+                    let filters = { filters: {
+                            year: storage.year,
+                            month: storage.month,
+                            holidays: this.holidaysSelectDisplayed ? storage.holidays : [],
+                            countries: this.selectedCountries ? storage.countries : [],
+                            categories: this.selectedCategories ? storage.categories : []
+                        }};
+                    let calendarId = this.$auth.user.defaultCalendarId;
+                    this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.$auth.getAuthHeader() })
+                        .then((response) => {
+                            let eventsMap = {};
+                            let occasionsArray = [];
+                            if (response.data.events) {
+                                response.data.events.forEach(function(event){
+                                    let eventStartMillis = event.eventStartMillis;
+                                    let eventStartDate = new Date(eventStartMillis);
+                                    let eventDateStamp = moment(eventStartDate).format('YYYYMMDD');
+                                    if (eventsMap[eventDateStamp] === undefined){
+                                        eventsMap[eventDateStamp] = {
+                                            editables: [],
+                                            nonEditables: []
+                                        };
+                                    }
 
-                                if (event.editable) {
-                                    eventsMap[eventDateStamp].editables.push(new CalendarEvent(event));
-                                } else {
-                                    eventsMap[eventDateStamp].nonEditables.push(new CalendarEvent(event));
-                                    occasionsArray.push({id: event.eventStartMillis, value: event.title,  category: event.category});
-                                }
-                            });
-                        }
+                                    if (event.editable) {
+                                        eventsMap[eventDateStamp].editables.push(new CalendarEvent(event));
+                                    } else {
+                                        eventsMap[eventDateStamp].nonEditables.push(new CalendarEvent(event));
+                                        occasionsArray.push({id: event.eventStartMillis, value: event.title,  category: event.category});
+                                    }
+                                });
+                            }
 
-                        occasionsArray.sort(function(a, b){return a.id-b.id});
-                        this.occasionsArray = occasionsArray;
-                        this.calendarEvents = eventsMap;
-                        this.generateRows(this.year, this.month);
+                            occasionsArray.sort(function(a, b){return a.id-b.id});
+                            this.occasionsArray = occasionsArray;
+                            this.calendarEvents = eventsMap;
+                            this.generateRows(this.year, this.month);
 
-                        this.isLoading = false;
-                        this.queryInProgress = false;
-                        this.ready = true;
-                    }).catch((error) => {
-                    console.log(error);
-                });
+                            this.isLoading = false;
+                            this.queryInProgress = false;
+                            this.ready = true;
+                        }).catch((error) => {
+                        console.log(error);
+                    });
+                }, 1500);
             },
             generateRows(year, month) {
                 let selectedMoment = moment().date(1).month(month-1).year(year);

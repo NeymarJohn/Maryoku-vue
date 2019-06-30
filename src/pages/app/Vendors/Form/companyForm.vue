@@ -81,12 +81,12 @@
                     <md-field :class="[
                           {'md-valid': !errors.has('vendorAddressLine1') && selected_vendor.vendorAddressLine1},
                           {'md-error': errors.has('vendorAddressLine1')}]">
-                        <!--<label>Address</label>-->
+                        <label>Address</label>
                         <md-input v-model="selected_vendor.vendorAddressLine1"
                                   type="email"
                                    v-gmaps-searchbox=vm
                                   required
-                                  placeholder="Address"
+                                  placeholder=""
                                   data-vv-name="vendorAddressLine1"
                                   name="vendorAddressLine1"
                                   v-validate="modelValidations.vendorAddressLine1"></md-input>
