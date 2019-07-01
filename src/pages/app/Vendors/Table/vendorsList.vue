@@ -206,8 +206,6 @@
             categoryTitle(categoryId){
                 let category = _.findWhere(this.buildingBlocksList, {id: categoryId});
                 return category ? category.value : categoryId;
-                const buildingBlock = _.findWhere(this.buildingBlocksList, {id: categoryId});
-                return buildingBlock ? buildingBlock.value : '';
             },
             deleteVendor(id){
                 swal({

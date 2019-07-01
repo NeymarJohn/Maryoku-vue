@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<html>
 <html xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%;">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>interaction</title>
+	<title>interaction-24</title>
 	<style type="text/css">
 		body {
 	      -webkit-text-size-adjust: 100%;
@@ -15,12 +16,11 @@
 	      line-height: 1.6;
 	      margin: 0;
 	      padding: 0;
-	      background: #2b9caa;
-	      color: #ffffff;
 		}
 
 		 h1, h2, h3, h4, h5 {
 	      margin: 20px 0 10px;
+	      color: #000;
 	      line-height: 1.2;
 	    }
 
@@ -36,45 +36,39 @@
 	      font-size: 16px;
 	      line-height: 1.4;
 	    }
-	    img{ max-width: 100%; }
 
 	    ul li,
 	    ol li {
 	      margin-left: 5px;
 	      list-style-position: inside;
 	    }
-	    div.main {
-	    	width: 100%; 
-	    	position: relative; 
-	    	background-size: contain; 
-	    	object-fit: contain; 
-	    	position: relative; /* border: 1px blue solid; */
-	    }
-	    div.title-header {
-	    	position: absolute; 
-	    	transform: translateX(-50%);
-	    	left: 50%;
-	    	top: 5%;
-	    	text-align: center;
-	    }
-	    @media(max-width: 425px){
+	   @media(max-width: 767px){
 	    	.main{
-	    		background-position:left center !important;
-	    		background-size: cover !important; 
+	    		background-size: cover !important;
+	    	}
+	    	.title-header{
+	    		width: 80% !important;
+	    	}
+	    	.bold{
+	    		font-size: 2rem !important;
+	    	}
+	    	.medium{
+	    		font-size: 1.5rem !important;
+	    	}
+	    	.normal{
+	    		font-size: 1.5rem !important;
 	    	}
 	    }
 
 	</style>
 </head>
 <body style="height:100%">
-	<div class="container" style="max-width:800px; width: 100%; height: 100%; margin: 0 auto;">
-		<div class="main">
-			<img src="https://marketing-image-production.s3.amazonaws.com/uploads/43a9ee86e7bc290bb516c703b278c8975d373806ff5d3bd540d899d02efa8dd7fd8ad21bd5a49cfe2dc019fa67b03bfeb57b0abc66b85b212d3743065958525f.png" alt="">
-			<div class="title-header">
-				<h1>{{{line1}}}</h1>
-				<h2>{{{line2}}}</h2>
-				<h3>{{{line3}}}</h3>
-				<h4>{{{button}}}</h4>
+	<div class="container" style="width: 100%; height: 100%">
+		<div class="main" style="width: 100%; height: 100%; position: relative; background: url('https://app.262days.com/static/img/interactions/interaction-24.png') center center no-repeat; background-size: contain; object-fit: contain;">
+			<div class="title-header" style=" position: absolute;width: 60%;top: 50%;transform: translateY(-50%);left: 0;right: 0;margin: 0 auto;text-align: center;">
+				<p class="bold" style=" font-family: Helvetica, Arial, sans-serif; font-size: 3rem; color: black !important; width: 100%; vertical-align: middle; margin-top: 0;">{{{line1}}}</p>
+				<p class="medium" style=" font-family: Helvetica, Arial, sans-serif; font-size: 2rem; color: black !important; width: 100%; vertical-align: middle;">{{{line2}}}</p>
+				<p class="normal" style=" font-family: Helvetica, Arial, sans-serif; font-size: 2.5rem; color: black !important; width: 100%; vertical-align: middle;">{{{line3}}}</p>
 			</div>
 		</div>
 	</div>

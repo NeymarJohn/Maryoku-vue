@@ -357,7 +357,7 @@
             reviewProposals(item, winnerId = null) {
                 window.currentPanel = this.$showPanel({
                     component: ViewProposals,
-                    cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
+                    cssClass: 'md-layout-item md-size-65 transition36',
                     openOn: 'right',
                     props: {event: this.event, selectedBlock: item, winnerId : winnerId}
                 })

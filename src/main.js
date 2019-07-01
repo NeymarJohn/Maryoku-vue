@@ -139,20 +139,18 @@ Vue.component('multiselect', Multiselect);
 
 Vue.use(VueGtm, {
     id: 'GTM-5FH68TF', // Your GTM ID
-    enabled: process.env.NODE_ENV === 'production', // defaults to true. Plugin can be disabled by setting this to false for Ex: enabled: !!GDPR_Cookie (optional)
-    debug: process.env.NODE_ENV !== 'production', // Whether or not display console logs debugs (optional)
+    enabled: true, // defaults to true. Plugin can be disabled by setting this to false for Ex: enabled: !!GDPR_Cookie (optional)
+    debug: true, // Whether or not display console logs debugs (optional)
     vueRouter: router, // Pass the router instance to automatically sync with router (optional)
     ignoredViews: [] // If router, you can exclude some routes name (case insensitive) (optional)
 });
 
 Vue.use(VueSlideoutPanel);
 
-if (process.env.NODE_ENV === 'production') {
-    Vue.use(Tawk, {
-        tawkSrc: 'https://embed.tawk.to/5cd93e082846b90c57ae3644/default',
-        enabled: true
-    });
-}
+Vue.use(Tawk, {
+    tawkSrc: 'https://embed.tawk.to/5cd93e082846b90c57ae3644/default',
+    enabled: false
+});
 
 Vue.use(VueCookies);
 
