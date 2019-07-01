@@ -5,9 +5,9 @@
         <img :src="companyProfile.companyLogo" style="object-fit: scale-down; padding: 4px; width: 100%; height: 100%;"/>
         <vue-element-loading :active="!loaded" :is-full-screen="false"/>
         <div v-show="logoButtonsVisible" style="margin-top: -15%; text-align: center;">
-          <md-button class="md-xs md-just-icon md-round md-info md-icon-button md-fileinput">
+          <md-button class="md-xs md-just-icon md-round md-info md-icon-button md-fileinput" @click="openLogoImageInput">
             <md-icon>edit</md-icon>
-            <input type="file" @change="onFileChange">
+            <input ref="logoImageInput" type="file" @change="onFileChange">
           </md-button>
           <md-button v-if="companyProfile.logoFileId" class="md-xs md-just-icon md-round md-danger md-icon-button"  @click="removeImage"><md-icon>close</md-icon></md-button>
         </div>
@@ -154,6 +154,9 @@
         };
         reader.readAsDataURL(file);
       },
+        openLogoImageInput(){
+            this.$refs.logoImageInput.click();
+        },
       removeImage: function(type) {
         this.loaded = false;
         let customer = this.$auth.user.customer;
