@@ -72,9 +72,9 @@
                                                                        placeholder="Select Column Name"  name="select">
                                                                 <md-option
                                                                     v-if="item !== ''"
-                                                                    v-for="(item, index) in databaseVendorColumns"
+                                                                    v-for="(item, index) in databaseVendorColumnsClone"
                                                                     :value="item.name"
-                                                                    :key="index">
+                                                                    :key="item.name">
                                                                     {{ item.displayName }}
                                                                 </md-option>
                                                             </md-select>
@@ -126,6 +126,7 @@
     import {GlobalSalesTable, Modal} from "@/components";
     import swal from "sweetalert2";
     import _ from 'underscore';
+    import * as lodash from "lodash";
     import VueElementLoading from 'vue-element-loading';
     import Button from "../../../components/Button/ControlPanel";
     import draggable from 'vuedraggable';
@@ -246,6 +247,7 @@
         },
         created () {
             this.$store.registerModule('vendorsVuex', vendorsModule);
+            this.databaseVendorColumnsClone = {...this.databaseVendorColumns};
         },
         filters: {
             capitalize: function (str) {
@@ -291,7 +293,10 @@
             },
             preventDuplication(event){
                 if(event){
-                    this.databaseVendorColumns = _.filter(this.databaseVendorColumns, (item) => { return item.name != event });
+                    this.databaseVendorColumnsClone = lodash.differenceWith(this.databaseVendorColumns, this.mappedColumns,
+                        ({ name }, {value}) => name === value
+                    );
+                    this.$forceUpdate();
                 }
             },
             validateColumnsMapping(mapping){
