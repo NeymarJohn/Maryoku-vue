@@ -18,10 +18,15 @@
                         </md-button>
                     </div>
 
-                </md-card-header>
+                </md-card-header>  
+                <md-switch class="md-switch-info pull-right text-right" 
+                style="padding: 0; margin: 12px;"
+                v-model="myVendors">
+                     My vendors 
+                </md-switch>
                 <md-card-content style="min-height: 60px;">
                     <vue-element-loading :active="loadingData" spinner="ring" color="#FF547C"/>
-
+    
                     <vendors-table
                         v-if="vendorsList"
                         :tooltipModels="tooltipModels"
@@ -96,7 +101,8 @@
                 selected_vendor : {},
                 add_vendor : false,
                 vendor_selected : false,
-                buildingBlocksList: []
+                buildingBlocksList: [],
+                myVendors: false
             }
         },
         created() {
