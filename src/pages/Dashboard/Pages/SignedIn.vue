@@ -94,20 +94,22 @@
         });*/
 
           let me = that.$auth.user.me;
-          try {
-            window.heap.identify(that.$auth.user.email);
-          } catch (e) {
-            console.error(e);
-          }
 
-          try {
-            that.$Tawk.$updateChatUser({
-              name: that.$auth.user.displayName,
-              email: that.$auth.user.email
-            });
-          } catch (e) {
-            console.error(e);
-          }
+            if (process.env.NODE_ENV === 'production') {
+                try {
+                    window.heap.identify(that.$auth.user.email);
+                } catch (e) {
+                    console.error(e);
+                }
+                try {
+                    that.$Tawk.$updateChatUser({
+                        name: that.$auth.user.displayName,
+                        email: that.$auth.user.email
+                    });
+                } catch (e) {
+                    console.error(e);
+                }
+            }
 
           if (!me.customer.onboarded) {
             that.$router.push({ path: '/company-form' });

@@ -6,7 +6,7 @@
           {[getColorCollapse(colorCollapse)]: true}]" v-for="(item, index) in collapse" :key="index">
       <div class="md-collapse-label" @click="toggle(index + 1)">
         <div class="md-layout " v-if="icon && item.eventStartMillis">
-          <h5 class="md-collapse-title md-layout-item">
+          <h5 class="md-collapse-title md-layout-item" :title="item.title">
             <!--md-size-40"-->
             {{getTitle(item.title)}}
   

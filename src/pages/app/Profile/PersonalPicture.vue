@@ -59,7 +59,7 @@
 <script>
 import { LabelEdit } from "@/components";
 import Me from "@/models/Me";
-import TeamMembersFile from '@/models/TeamMembersFile';
+import UserFile from '@/models/UserFile';
 import swal from "sweetalert2";
 export default {
   components: {
@@ -89,13 +89,13 @@ export default {
       if (file[0].size <= 500000) {
         let url = URL.createObjectURL(file[0]);
         this.imageUrl = url;
-        this.createImage(files[0]);
+        this.sendImage(file[0]);
       } else {
         this.alretExceedPictureSize = true;
       }
     },
     clearImg(){
-                        swal({
+            swal({
                     title: "Are you sure you want remove it?",
                     text: ``,
                     showCancelButton: true,
@@ -133,10 +133,10 @@ export default {
                 let _this = this;
 
                 reader.onload = e => {
-                    let membersFile = new TeamMembersFile({membersFile: e.target.result});
-                    membersFile.save().then(result => {
+                    let UserFile = new UserFile({userFile: e.target.result});
+                    UserFile.save().then(result => {
                     this.$notify({
-                            message: 'Members file is uploaded successfully' ,
+                            message: 'profile Picture is uploaded successfully' ,
                             horizontalAlign: 'center',
                             verticalAlign: 'top',
                             type: 'success'
@@ -146,7 +146,7 @@ export default {
                     }).catch((error) => {
                         _this.csvUploading = false;
                         this.$notify({
-                            message: 'Members file is not uploaded, please try again' ,
+                            message: 'profile Picture is not uploaded, please try again' ,
                             horizontalAlign: 'center',
                             verticalAlign: 'top',
                             type: 'warning'
