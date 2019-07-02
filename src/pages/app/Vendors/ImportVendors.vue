@@ -68,7 +68,7 @@
                                                                      :class="{ active: sortKey == index }">
                                                         <md-field>
                                                             <md-select id="remove-border" class="no-underline" v-model="mappedColumns[index].value"
-
+                                                                       @md-selected="preventDuplication($event)"
                                                                        placeholder="Select Column Name"  name="select">
                                                                 <md-option
                                                                     v-if="item !== ''"
@@ -289,36 +289,9 @@
                 return true
 
             },
-            isDuplicateMapColumn() {
-                const mappedColumns = this.mappedColumns;
-                const duplicateArray = _.filter(
-                    _.uniq(
-                        _.map(mappedColumns, function (item) {
-                            if (_.filter(mappedColumns, { value: item.value }).length > 1) {
-                                return item.value;
-                            }
-                            return false;
-                        })
-                    ),
-                    function (value) { return value; }
-                );
-
-                if (duplicateArray.length) {
-                    for (let i = 0; i < this.databaseVendorColumns.length; i++) {
-                        if (duplicateArray[0] == this.databaseVendorColumns[i].name) {
-                            this.$notify(
-                                {
-                                    message: 'Field ' + this.databaseVendorColumns[i].displayName + ' is already selected.' ,
-                                    horizontalAlign: 'center',
-                                    verticalAlign: 'top',
-                                    type: 'warning'
-                                })
-                            break;
-                        }
-                    }
-                    return true;
-                } else {
-                    return false;
+            preventDuplication(event){
+                if(event){
+                    this.databaseVendorColumns = _.filter(this.databaseVendorColumns, (item) => { return item.name != event });
                 }
             },
             validateColumnsMapping(mapping){
@@ -340,10 +313,6 @@
                             break;
                         }
                     }
-                }
-
-                if (isValid) {
-                    isValid = !this.isDuplicateMapColumn();
                 }
                 return isValid;
             },
