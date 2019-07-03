@@ -129,7 +129,6 @@
 
                 Vendors.page(page)
                     .limit(this.pagination.limit)
-                    .params({'vendorCategory': selectedCategoryId})
                     .get().then(vendors => {
 
                     this.vendorsList = vendors[0].results;
