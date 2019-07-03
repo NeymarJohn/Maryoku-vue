@@ -53,6 +53,7 @@
                                         </div>
                                     </div>
                                     <div class="step2" v-if="currentStep === 2" style="text-align: center;">
+                                        <vue-element-loading :active="csvUploading" spinner="ring" color="#FF547C"/>
                                         <div class="table-section">
                                             <h3 class="title">Great, now you can assign columns names to the columns from your file</h3>
                                             <h5>
@@ -248,6 +249,7 @@
         created () {
             this.$store.registerModule('vendorsVuex', vendorsModule);
             this.databaseVendorColumnsClone = {...this.databaseVendorColumns};
+            this.csvUploading = false;
         },
         filters: {
             capitalize: function (str) {
