@@ -18,15 +18,15 @@
                         </md-button>
                     </div>
 
-                </md-card-header>  
-                <md-switch class="md-switch-info pull-right text-right" 
+                </md-card-header>
+                <md-switch class="md-switch-info pull-right text-right"
                 style="padding: 0; margin: 12px;"
                 v-model="myVendors">
-                     My vendors 
+                     My vendors
                 </md-switch>
                 <md-card-content style="min-height: 60px;">
                     <vue-element-loading :active="loadingData" spinner="ring" color="#FF547C"/>
-    
+
                     <vendors-table
                         v-if="vendorsList"
                         :tooltipModels="tooltipModels"
@@ -129,6 +129,7 @@
 
                 Vendors.page(page)
                     .limit(this.pagination.limit)
+                    .params({'vendorCategory': selectedCategoryId})
                     .get().then(vendors => {
 
                     this.vendorsList = vendors[0].results;

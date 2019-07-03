@@ -41,7 +41,7 @@
                             <tr v-for="(block,index) in category.blocks">
                                 <td>{{block.title}}</td>
                                 <td>
-                                    <template v-if="block.allocatedBudget">
+                                    <template >
                                         <div v-if="!block.is_parent && block.values.length"
                                              style="cursor: pointer;">
                                             <md-button class="md-simple md-xs requirements-cell-button"

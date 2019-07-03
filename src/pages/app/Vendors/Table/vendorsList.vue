@@ -2,29 +2,29 @@
     <div>
         <md-card-content>
 
-              <md-table>
-      <md-table-row>
-        <md-table-head>Vendor Name</md-table-head>
-        <md-table-cell class="select-cat">
+            <md-table>
+                <md-table-row>
+                    <md-table-head>Vendor Name</md-table-head>
+                    <md-table-cell class="select-cat">
 
-        <md-field>
-                                                            <md-select id="remove-border" class="no-underline" 
-                                                                       placeholder="Select Category"  name="select">
-                                                        <md-option value="arial">Venue</md-option>
-            <md-option value="calibri">Food / Beverage</md-option>
-                                                            </md-select>
-                                                        </md-field>
-     
-        </md-table-cell>
-        <md-table-head class="md-table-heade-color">Rank</md-table-head>
-  
-      </md-table-row>
+                        <md-field>
+                            <md-select id="remove-border" class="no-underline"
+                                       placeholder="Select Category"  name="select">
+                                <md-option value="arial">Venue</md-option>
+                                <md-option value="calibri">Food / Beverage</md-option>
+                            </md-select>
+                        </md-field>
 
-      <md-table-row v-for="(vendor,index ) in vendorsList" :key="index"  @click="selectVendor(vendor)">
-      
-           <md-table-cell md-label="Vendor Name"> {{ vendor.vendorDisplayName }}</md-table-cell>
+                    </md-table-cell>
+                    <md-table-head class="md-table-header-color">Rank</md-table-head>
+
+                </md-table-row>
+
+                <md-table-row v-for="(vendor,index ) in vendorsList" :key="index" @click="selectVendor(vendor)" style="cursor: pointer;">
+
+                    <md-table-cell md-label="Vendor Name"> {{ vendor.vendorDisplayName }}</md-table-cell>
                     <md-table-cell md-label="Category" md-sort-by="vendorCategory" > {{ categoryTitle(vendor.vendorCategory) }}</md-table-cell>
-                                       <md-table-cell md-label="Rank">
+                    <md-table-cell md-label="Rank">
                         <!-- <vue-stars
                             :name="item.id"
                             active-color="#ffdd00"
@@ -37,7 +37,7 @@
                             char="★"
                             inactive-char=""
                             class=""/> -->
-                                <div class="md-layout-item md-size-100 md-small-size-100">
+                        <div class="md-layout-item md-size-100 md-small-size-100">
                             <label class="star-rating__star"
                                    v-for="(rating, ratingIndex) in ratings"
                                    :key="ratingIndex"
@@ -48,30 +48,30 @@
                                        v-model="vendor.rank">★</label>
                         </div>
                     </md-table-cell>
-                          <md-table-cell class="vendors-table_item-actions" v-if="mode == 'listing'">
+                    <md-table-cell class="vendors-table_item-actions" v-if="mode === 'listing'">
                         <!-- <md-button :name="`vendors-list-rank-vendor-${vendorsList.indexOf(item)}`" class="md-warning md-just-icon md-round" @click="openPopover(vendorsList.indexOf(item))">
                             <md-icon>star</md-icon>
                         </md-button> -->
-                        <md-button :name="`vendors-list-delete-vendor-${vendorsList.indexOf(vendor)}`" 
-                        class="md-danger md-just-icon md-round" @click.native="deleteVendor(vendor.id)">
+                        <md-button :name="`vendors-list-delete-vendor-${vendorsList.indexOf(vendor)}`"
+                                   class="md-danger md-just-icon md-round" @click.native="deleteVendor(vendor.id)">
                             <md-icon>delete</md-icon>
                         </md-button>
                     </md-table-cell>
-                    <md-table-cell class="vendors-table_item-actions" v-if="mode == 'manageBlock'">
+                    <md-table-cell class="vendors-table_item-actions" v-if="mode === 'manageBlock'">
                         <md-button  v-if="!isSelected(vendor.id)" :name="`vendors-list-delete-vendor-${vendorsList.indexOf(vendor)}`"
-                         class="md-button md-success md-sm md-theme-default auto-width" @click.native="addVendor(vendor)">
+                                    class="md-button md-success md-sm md-theme-default auto-width" @click.native="addVendor(vendor)">
                             <md-icon>add</md-icon>
                         </md-button>
 
                         <md-button  v-else-if="isSelected(vendor.id)" :name="`vendors-list-delete-vendor-${vendorsList.indexOf(vendor)}`" class="md-button md-danger md-sm md-theme-default auto-width"
-                         @click.native="removeVendor(vendor)">
+                                    @click.native="removeVendor(vendor)">
                             <md-icon>delete</md-icon>
                         </md-button>
                     </md-table-cell>
 
-      </md-table-row>
-    </md-table>
-         
+                </md-table-row>
+            </md-table>
+
         </md-card-content>
     </div>
 </template>
@@ -292,11 +292,11 @@
 
     }
     .md-table-head-label{
-            color: #ff9800 !important;
+        color: #ff9800 !important;
     }
     .select-cat{
-         color: #ff9800 !important;
-         border: 0 !important;
+        color: #ff9800 !important;
+        border: 0 !important;
     }
     .connected{
         right: 133px;

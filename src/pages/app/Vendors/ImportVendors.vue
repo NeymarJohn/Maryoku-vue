@@ -53,6 +53,7 @@
                                         </div>
                                     </div>
                                     <div class="step2" v-if="currentStep === 2" style="text-align: center;">
+                                        <vue-element-loading :active="csvUploading" spinner="ring" color="#FF547C"/>
                                         <div class="table-section">
                                             <h3 class="title">Great, now you can assign columns names to the columns from your file</h3>
                                             <h5>
@@ -153,84 +154,7 @@
                     duplicates: 0,
                 },
                 csvUploading: false,
-                databaseVendorColumns: [
-                    {
-                        displayName: 'Vendor Display Name',
-                        name: 'vendorDisplayName',
-                        value: 'vendorDisplayName',
-                        mandatory: true
-
-                    },
-                    {
-                        displayName: 'Contact Person Name',
-                        name: 'contactPersonName',
-                        value: 'contactPersonName',
-                        mandatory: true
-
-                    },
-                    {
-                        displayName: 'Contact Person Email',
-                        name: 'contactPersonEmail',
-                        value: 'contactPersonEmail',
-                        mandatory: false
-
-                    },
-                    {
-                        displayName: 'Contact Person Phone Number',
-                        name: 'contactPersonPhone',
-                        value: 'contactPersonPhone',
-                        mandatory: false
-
-                    },
-                    {
-                        displayName: 'Vendor Main Email',
-                        name: 'vendorMainEmail',
-                        value: 'vendorMainEmail',
-                        mandatory: true
-
-                    },
-                    {
-                        displayName: 'Vendor Main Phone Number',
-                        name: 'vendorMainPhoneNumber',
-                        value: 'vendorMainPhoneNumber',
-                        mandatory: true
-
-                    },
-                    {
-                        displayName: 'Vendor Website',
-                        name: 'vendorWebsite',
-                        value: 'vendorWebsite',
-                        mandatory: false
-                    },
-                    {
-                        displayName: 'Vendor Category',
-                        name: 'vendorCategory',
-                        value: 'vendorCategory',
-                        mandatory: false
-                    },
-                    /*{
-                      displayName: 'Product Category',
-                      name: 'productsCategory',
-                      value: 'productsCategory',
-                        mandatory: false
-
-                    },*/
-
-                    {
-                        displayName: 'Vendor Address Line 1',
-                        name: 'vendorAddressLine1',
-                        value: 'vendorAddressLine1',
-                        mandatory: false
-
-                    },
-                    {
-                        displayName: 'Vendor Country',
-                        name: 'vendorCountry',
-                        value: 'vendorCountry',
-                        mandatory: false
-
-                    },
-                ],
+                databaseVendorColumns: [],
                 channel_fields: [],
                 channel_entries: [],
                 parse_header: [],
@@ -247,6 +171,86 @@
         },
         created () {
             this.$store.registerModule('vendorsVuex', vendorsModule);
+            this.csvUploading = false;
+            this.databaseVendorColumns = [
+                {
+                    displayName: 'Vendor Display Name',
+                    name: 'vendorDisplayName',
+                    value: 'vendorDisplayName',
+                    mandatory: true
+
+                },
+                {
+                    displayName: 'Contact Person Name',
+                    name: 'contactPersonName',
+                    value: 'contactPersonName',
+                    mandatory: true
+
+                },
+                {
+                    displayName: 'Contact Person Email',
+                    name: 'contactPersonEmail',
+                    value: 'contactPersonEmail',
+                    mandatory: false
+
+                },
+                {
+                    displayName: 'Contact Person Phone Number',
+                    name: 'contactPersonPhone',
+                    value: 'contactPersonPhone',
+                    mandatory: false
+
+                },
+                {
+                    displayName: 'Vendor Main Email',
+                    name: 'vendorMainEmail',
+                    value: 'vendorMainEmail',
+                    mandatory: true
+
+                },
+                {
+                    displayName: 'Vendor Main Phone Number',
+                    name: 'vendorMainPhoneNumber',
+                    value: 'vendorMainPhoneNumber',
+                    mandatory: true
+
+                },
+                {
+                    displayName: 'Vendor Website',
+                    name: 'vendorWebsite',
+                    value: 'vendorWebsite',
+                    mandatory: false
+                },
+                {
+                    displayName: 'Vendor Category',
+                    name: 'vendorCategory',
+                    value: 'vendorCategory',
+                    mandatory: false
+                },
+                /*{
+                  displayName: 'Product Category',
+                  name: 'productsCategory',
+                  value: 'productsCategory',
+                    mandatory: false
+
+                },*/
+
+                {
+                    displayName: 'Vendor Address Line 1',
+                    name: 'vendorAddressLine1',
+                    value: 'vendorAddressLine1',
+                    mandatory: false
+
+                },
+                {
+                    displayName: 'Vendor Country',
+                    name: 'vendorCountry',
+                    value: 'vendorCountry',
+                    mandatory: false
+
+                },
+            ];
+
             this.databaseVendorColumnsClone = {...this.databaseVendorColumns};
         },
         filters: {
