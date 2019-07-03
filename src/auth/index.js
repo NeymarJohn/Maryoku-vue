@@ -73,14 +73,14 @@ export default {
     setHeaders(context){
         this.user.authenticated = true;
         context.$http.defaults.headers.common.Authorization = this.getAuthHeader().Authorization;
-        Model.$http.defaults.headers.common.Authorization = this.getAuthHeader().Authorization;
+        //Model.$http.defaults.headers.common.Authorization = this.getAuthHeader().Authorization;
     },
 
     setTenantHeaders(context) {
         context.$http.defaults.headers.common['gorm-tenantid'] = this.resolveTenantId();
         context.$http.defaults.headers.common.gorm_tenantid = this.resolveTenantId();
-        Model.$http.defaults.headers.common['gorm-tenantid'] = this.resolveTenantId();
-        Model.$http.defaults.headers.common.gorm_tenantid = this.resolveTenantId();
+        //Model.$http.defaults.headers.common['gorm-tenantid'] = this.resolveTenantId();
+        //Model.$http.defaults.headers.common.gorm_tenantid = this.resolveTenantId();
     },
 
     unsetToken() {

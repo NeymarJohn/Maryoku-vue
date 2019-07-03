@@ -134,7 +134,7 @@
                 </div>
                 <div class="md-layout-item md-size-50" v-if="selected_vendor.vendorTagging">
                     <md-field>
-                        <md-chips v-model="selected_vendor.vendorTagging" name="tagging" id="tagging" md-placeholder="Tagging" md-check-duplicated></md-chips>
+                        <md-chips v-model="selected_vendor.vendorTagging" class="md-info" name="tagging" id="tagging" md-placeholder="Tags" md-check-duplicated></md-chips>
                     </md-field>
                 </div>
 
@@ -316,7 +316,7 @@ input[type=number]::-webkit-outer-spin-button {
                         required: true,
                         min: 5
                     },
-         
+
                     vendorMainEmail: {
                         required: true,
                         email: true
