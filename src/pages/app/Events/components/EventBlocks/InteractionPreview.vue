@@ -93,6 +93,7 @@
               content = content.replace("{{{line1}}}",val.line1);
               content = content.replace("{{{line2}}}",val.line2);
               content = content.replace("{{{line3}}}",val.line3);
+              content = content.replace("{{{button}}}",'');
               ifrm.document.open();
               ifrm.document.write(content);
               ifrm.document.close();
