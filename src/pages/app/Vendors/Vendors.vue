@@ -21,6 +21,7 @@
                 </md-card-header>
                 <md-switch class="md-switch-info pull-right text-right"
                 style="padding: 0; margin: 12px;"
+                @change="fetchData(1)"
                 v-model="myVendors">
                      My vendors
                 </md-switch>
@@ -33,6 +34,7 @@
                         @select-vendor="onSelectVendor"
                         @close-vendor="onCloseVendorForm"
                         :vendorsList="vendorsList"
+                        :fetchVendors="fetchData"
                         mode="listing"
                         ref="VendorsTable"
                         :buildingBlocksList="buildingBlocksList">
@@ -113,7 +115,7 @@
         methods: {
             ...mapMutations('vendors', ['resetForm']),
 
-            fetchData(page) {
+            fetchData(page, catId = "") {
                 this.loadingData = true;
 
                 new EventComponent().get().then(res=>{
@@ -129,6 +131,8 @@
 
                 Vendors.page(page)
                     .limit(this.pagination.limit)
+                    .params({'vendorCategory':catId,
+                    'shared': !this.myVendors})
                     .get().then(vendors => {
 
                     this.vendorsList = vendors[0].results;
