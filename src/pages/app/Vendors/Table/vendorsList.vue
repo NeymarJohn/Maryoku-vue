@@ -8,10 +8,18 @@
                     <md-table-cell class="select-cat">
 
                         <md-field>
-                            <md-select id="remove-border" class="no-underline"
-                                       placeholder="Select Category"  name="select">
-                                <md-option value="arial">Venue</md-option>
-                                <md-option value="calibri">Food / Beverage</md-option>
+                            <md-select id="remove-border"  class="no-underline"
+                                       placeholder="Select Category"
+                                       @md-selected="fetchVendors(1, $event)"
+                                         name="select">
+                                              <md-option  
+                                value=""
+                                >all</md-option>
+                                <md-option v-for="(cat, index) in buildingBlocksList" 
+                                :key="index"
+                                :value="cat.id"
+                                v-model="cat.id"
+                                >{{cat.value}}</md-option>
                             </md-select>
                         </md-field>
 
@@ -118,6 +126,9 @@
                 default: () => {
                     return {};
                 }
+            },
+            fetchVendors: {
+                type: Function
             },
             item: {
                 type: Object,
