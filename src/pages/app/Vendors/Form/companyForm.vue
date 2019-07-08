@@ -78,14 +78,11 @@
                 </div>
 
                 <div class="md-layout-item md-size-50">
-                    <md-field :class="[
-                          {'md-valid': !errors.has('vendorAddressLine1') && selected_vendor.vendorAddressLine1},
-                          {'md-error': errors.has('vendorAddressLine1')}]">
+                    <md-field>
                         <label>Address</label>
                         <md-input v-model="selected_vendor.vendorAddressLine1"
                                   type="email"
                                    v-gmaps-searchbox=vm
-                                  required
                                   placeholder=""
                                   data-vv-name="vendorAddressLine1"
                                   name="vendorAddressLine1"
@@ -137,7 +134,7 @@
                 </div>
                 <div class="md-layout-item md-size-50" v-if="selected_vendor.vendorTagging">
                     <md-field>
-                        <md-chips v-model="selected_vendor.vendorTagging" name="tagging" id="tagging" md-placeholder="Tagging" md-check-duplicated></md-chips>
+                        <md-chips v-model="selected_vendor.vendorTagging" class="md-info" name="tagging" id="tagging" md-placeholder="Tags" md-check-duplicated></md-chips>
                     </md-field>
                 </div>
 
@@ -319,9 +316,7 @@ input[type=number]::-webkit-outer-spin-button {
                         required: true,
                         min: 5
                     },
-                    vendorAddressLine1: {
-                        required: true,
-                    },
+
                     vendorMainEmail: {
                         required: true,
                         email: true

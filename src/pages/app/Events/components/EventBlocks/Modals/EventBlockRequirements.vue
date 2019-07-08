@@ -1,7 +1,7 @@
 <template>
     <div class="adding-building-blocks-panel">
         <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
-        <div class="md-layout">
+        <div class="md-layout text-left">
             <h4 class="md-title md-layout-item md-size-100" style="margin-bottom: 0; line-height: 51px; width:100%;">
                 <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
                     <md-icon>arrow_back</md-icon>

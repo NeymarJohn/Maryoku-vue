@@ -17,6 +17,9 @@
                         color-button="default"
                         >
                         <template slot="tab-pane-1" style="width: 100%;">
+                            <event-block-requirements :event="event" :selectedBlock="selectedBlock" :predefinedRequirements="selectedBlock.predefinedRequirements"> </event-block-requirements>
+                        </template>
+                        <template slot="tab-pane-2" style="width: 100%;">
                             <div class="manage-proposals_proposals-list" v-if="selectedBlock.proposals">
                                 <div class="proposals-list_item" v-for="(proposal,index) in selectedBlock.proposals" :key="index">
                                     <div class="proposal-info text-left">
@@ -25,7 +28,7 @@
                                                 <label class="star-rating__star"
                                                        v-for="rating in ratings"
                                                        :class="{'is-selected' : ((proposal.cost >= rating) && proposal.cost != null)}"
-                                                       >
+                                                >
                                                     <input class="star-rating star-rating__checkbox" type="radio"
                                                            v-model="proposal.coste">★</label>
                                             </div>
@@ -52,9 +55,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </template>
-                        <template slot="tab-pane-2" style="width: 100%;">
-                            2
                         </template>
                         <template slot="tab-pane-3" style="width: 100%;">
                             3
@@ -132,12 +132,14 @@
     import VueElementLoading from 'vue-element-loading';
     import _ from "underscore";
     import ViewProposal from './ViewProposal.vue'
+    import EventBlockRequirements from '../Modals/EventBlockRequirements.vue'
 
 
     export default {
         components: {
             VueElementLoading,
-            Tabs
+            Tabs,
+            EventBlockRequirements
         },
         props: {
             event: Object,

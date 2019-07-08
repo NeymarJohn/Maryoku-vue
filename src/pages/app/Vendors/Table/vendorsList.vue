@@ -1,10 +1,37 @@
 <template>
     <div>
         <md-card-content>
-            <md-table v-model="vendorsList" table-header-color="orange" class="vendors-table">
-                <md-table-row slot="md-table-row" slot-scope="{ item }" :key="vendorsList.indexOf(item)"    @click="selectVendor(item)"  :class="{selected:item.id === selectedVendor}"    class="vendors-table_item hover-row">
-                    <md-table-cell md-label="Vendor Name"  > {{ item.vendorDisplayName }}</md-table-cell>
-                    <md-table-cell md-label="Category"  > {{ categoryTitle(item.vendorCategory) }}</md-table-cell>
+
+            <md-table>
+                <md-table-row>
+                    <md-table-head>Vendor Name</md-table-head>
+                    <md-table-cell class="select-cat">
+
+                        <md-field>
+                            <md-select id="remove-border"  class="no-underline"
+                                       placeholder="Select Category"
+                                       @md-selected="fetchVendors(1, $event)"
+                                         name="select">
+                                              <md-option  
+                                value=""
+                                >all</md-option>
+                                <md-option v-for="(cat, index) in buildingBlocksList" 
+                                :key="index"
+                                :value="cat.id"
+                                v-model="cat.id"
+                                >{{cat.value}}</md-option>
+                            </md-select>
+                        </md-field>
+
+                    </md-table-cell>
+                    <md-table-head class="md-table-header-color">Rank</md-table-head>
+
+                </md-table-row>
+
+                <md-table-row v-for="(vendor,index ) in vendorsList" :key="index" @click="selectVendor(vendor)" style="cursor: pointer;">
+
+                    <md-table-cell md-label="Vendor Name"> {{ vendor.vendorDisplayName }}</md-table-cell>
+                    <md-table-cell md-label="Category" md-sort-by="vendorCategory" > {{ categoryTitle(vendor.vendorCategory) }}</md-table-cell>
                     <md-table-cell md-label="Rank">
                         <!-- <vue-stars
                             :name="item.id"
@@ -18,70 +45,41 @@
                             char="★"
                             inactive-char=""
                             class=""/> -->
-                                <div class="md-layout-item md-size-100 md-small-size-100">
+                        <div class="md-layout-item md-size-100 md-small-size-100">
                             <label class="star-rating__star"
-                                   v-for="(rating, index) in ratings"
-                                   :key="index"
-                                   :class="{'is-selected' : ((item.rank >= rating) && item.rank != null)}" >
+                                   v-for="(rating, ratingIndex) in ratings"
+                                   :key="ratingIndex"
+                                   :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}" >
                                 <input class="star-rating star-rating__checkbox"
-                                       @click="setRanking(item.id,rating)"
-                                       type="radio" :value="rating" :name="`market_ranking_`+item.id"
-                                       v-model="item.rank">★</label>
+                                       @click="setRanking(vendor.id,rating)"
+                                       type="radio" :value="rating" :name="`market_ranking_`+vendor.id"
+                                       v-model="vendor.rank">★</label>
                         </div>
                     </md-table-cell>
-
-                    <!--<md-table-cell md-label="People">
-                      {{item.voters}}
-                    </md-table-cell>
-                    <md-table-cell md-label="Average Score">
-                      {{item.avgScore}}%
-                    </md-table-cell>-->
-                    <md-table-cell class="vendors-table_item-actions" v-if="mode == 'listing'">
+                    <md-table-cell class="vendors-table_item-actions" v-if="mode === 'listing'">
                         <!-- <md-button :name="`vendors-list-rank-vendor-${vendorsList.indexOf(item)}`" class="md-warning md-just-icon md-round" @click="openPopover(vendorsList.indexOf(item))">
                             <md-icon>star</md-icon>
                         </md-button> -->
-                        <md-button :name="`vendors-list-delete-vendor-${vendorsList.indexOf(item)}`" class="md-danger md-just-icon md-round" @click.native="deleteVendor(item.id)">
+                        <md-button :name="`vendors-list-delete-vendor-${vendorsList.indexOf(vendor)}`"
+                                   class="md-danger md-just-icon md-round" @click.native="deleteVendor(vendor.id)">
                             <md-icon>delete</md-icon>
                         </md-button>
                     </md-table-cell>
-                    <md-table-cell class="vendors-table_item-actions" v-if="mode == 'manageBlock'">
-                        <md-button  v-if="!isSelected(item.id)" :name="`vendors-list-delete-vendor-${vendorsList.indexOf(item)}`" class="md-button md-success md-sm md-theme-default auto-width" @click.native="addVendor(item)">
+                    <md-table-cell class="vendors-table_item-actions" v-if="mode === 'manageBlock'">
+                        <md-button  v-if="!isSelected(vendor.id)" :name="`vendors-list-delete-vendor-${vendorsList.indexOf(vendor)}`"
+                                    class="md-button md-success md-sm md-theme-default auto-width" @click.native="addVendor(vendor)">
                             <md-icon>add</md-icon>
                         </md-button>
 
-                        <md-button  v-else-if="isSelected(item.id)" :name="`vendors-list-delete-vendor-${vendorsList.indexOf(item)}`" class="md-button md-danger md-sm md-theme-default auto-width" @click.native="removeVendor(item)">
+                        <md-button  v-else-if="isSelected(vendor.id)" :name="`vendors-list-delete-vendor-${vendorsList.indexOf(vendor)}`" class="md-button md-danger md-sm md-theme-default auto-width"
+                                    @click.native="removeVendor(vendor)">
                             <md-icon>delete</md-icon>
                         </md-button>
                     </md-table-cell>
 
-
-
-                    <!-- Ranking Popup -->
-                    <div class="popup-box"
-                         v-click-outside="closeModal"
-                         v-if="tooltipModels[vendorsList.indexOf(item)] && tooltipModels[vendorsList.indexOf(item)].value && (openPopup)"
-                         :md-active.sync="tooltipModels[vendorsList.indexOf(item)] ? tooltipModels[vendorsList.indexOf(item)].value : tooltipModels[vendorsList.indexOf(item)]"
-                         md-direction="left">
-                        <div class="header-position">
-                            <h3 class="title">Ranking</h3>
-                            <button class="btn-position" @click="closeModal">X</button>
-                        </div>
-                        <div class="md-layout-item md-size-100 md-small-size-100">
-                            <label class="star-rating__star"
-                                   v-for="(rating, index) in ratings"
-                                   :key="index"
-                                   :class="{'is-selected' : ((item.rank >= rating) && item.rank != null)}" >
-                                <input class="star-rating star-rating__checkbox"
-                                       @click="setRanking(item.id,rating)"
-                                       type="radio" :value="rating" :name="`market_ranking_`+item.id"
-                                       v-model="item.rank">★</label>
-                        </div>
-                    </div>
-                    <!-- ./Ranking Popup -->
-
-
                 </md-table-row>
             </md-table>
+
         </md-card-content>
     </div>
 </template>
@@ -128,6 +126,9 @@
                 default: () => {
                     return {};
                 }
+            },
+            fetchVendors: {
+                type: Function
             },
             item: {
                 type: Object,
@@ -301,6 +302,13 @@
         position: relative;
 
     }
+    .md-table-head-label{
+        color: #ff9800 !important;
+    }
+    .select-cat{
+        color: #ff9800 !important;
+        border: 0 !important;
+    }
     .connected{
         right: 133px;
         z-index: 9999999999999;
@@ -356,10 +364,9 @@
 
         &__star {
             display: inline-block;
-            padding: 3px;
             vertical-align: middle;
             line-height: 1;
-            font-size: 1.5em;
+            font-size: 1.2em;
             color: #ABABAB;
             transition: color .2s ease-out;
 
@@ -408,6 +415,9 @@
         }
 
 
+    }
+    .md-table-sortable-icon{
+        right: 0;
     }
     .popup-box{
         box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);

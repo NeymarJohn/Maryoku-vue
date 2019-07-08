@@ -426,7 +426,7 @@
                         }
                     }
                 });*/
-                this.groups.forEach(aGroup => {
+                /*this.groups.forEach(aGroup => {
                     if (aGroup.members){
                         aGroup.members.forEach(member => {
                             let invitee = _.find(this.eventInvitees, (invitee)=>{ return invitee.id === member.id});
@@ -440,9 +440,22 @@
                             }
                         });
                     }
-                });
+                });*/
 
-                percent = ((attending / totalInvitees) * 100).toFixed(2);
+                if (group.members){
+                    group.members.forEach(member => {
+                        let invitee = _.find(this.eventInvitees, (invitee)=>{ return invitee.id === member.id});
+                        if (invitee){
+                            if (invitee.inviteeResponse){
+                                responses++;
+                                if (invitee.inviteeResponse.attending){
+                                    attending++;
+                                }
+                            }
+                        }
+                    });
+                }
+                percent = ((attending / totalInvitees) * 100).toFixed(0);
 
                 return `${percent}%`;
             },

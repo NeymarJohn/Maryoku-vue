@@ -32,11 +32,11 @@
                     </div>
                     <md-field :class="[{'md-valid': !errors.has('email') && touched.email},{'md-error': errors.has('email')}]">
                         <label>Email Address</label>
-                        <md-input v-model="email" type="email" data-vv-name="email" required v-validate="modelValidations.email" v-focus></md-input>
+                        <md-input v-model="email" type="email" data-vv-name="email" required v-validate="modelValidations.email" v-focus @keypress.enter="signup"></md-input>
                     </md-field>
                     <md-field :class="[{'md-valid': !errors.has('password') && touched.password},{'md-error': errors.has('password')}]">
                         <label>Password</label>
-                        <md-input v-model="password" type="password" data-vv-name="password" required v-validate="modelValidations.password"></md-input>
+                        <md-input v-model="password" type="password" data-vv-name="password" required v-validate="modelValidations.password" @keypress.enter="signup"></md-input>
                         <div class='md-error' style="text-align: center; width: 100%;">{{error}}</div>
                     </md-field>
 
