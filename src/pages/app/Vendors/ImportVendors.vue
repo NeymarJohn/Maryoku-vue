@@ -53,7 +53,6 @@
                                         </div>
                                     </div>
                                     <div class="step2" v-if="currentStep === 2" style="text-align: center;">
-                                        <vue-element-loading :active="csvUploading" spinner="ring" color="#FF547C"/>
                                         <div class="table-section">
                                             <h3 class="title">Great, now you can assign columns names to the columns from your file</h3>
                                             <h5>
@@ -69,13 +68,13 @@
                                                                      :class="{ active: sortKey == index }">
                                                         <md-field>
                                                             <md-select id="remove-border" class="no-underline" v-model="mappedColumns[index].value"
-                                                                       @md-selected="preventDuplication($event)"
+
                                                                        placeholder="Select Column Name"  name="select">
                                                                 <md-option
                                                                     v-if="item !== ''"
-                                                                    v-for="(item, index) in databaseVendorColumnsClone"
+                                                                    v-for="(item, index) in databaseVendorColumns"
                                                                     :value="item.name"
-                                                                    :key="item.name">
+                                                                    :key="index">
                                                                     {{ item.displayName }}
                                                                 </md-option>
                                                             </md-select>
@@ -127,7 +126,6 @@
     import {GlobalSalesTable, Modal} from "@/components";
     import swal from "sweetalert2";
     import _ from 'underscore';
-    import * as lodash from "lodash";
     import VueElementLoading from 'vue-element-loading';
     import Button from "../../../components/Button/ControlPanel";
     import draggable from 'vuedraggable';
@@ -154,7 +152,84 @@
                     duplicates: 0,
                 },
                 csvUploading: false,
-                databaseVendorColumns: [],
+                databaseVendorColumns: [
+                    {
+                        displayName: 'Vendor Display Name',
+                        name: 'vendorDisplayName',
+                        value: 'vendorDisplayName',
+                        mandatory: true
+
+                    },
+                    {
+                        displayName: 'Contact Person Name',
+                        name: 'contactPersonName',
+                        value: 'contactPersonName',
+                        mandatory: true
+
+                    },
+                    {
+                        displayName: 'Contact Person Email',
+                        name: 'contactPersonEmail',
+                        value: 'contactPersonEmail',
+                        mandatory: false
+
+                    },
+                    {
+                        displayName: 'Contact Person Phone Number',
+                        name: 'contactPersonPhone',
+                        value: 'contactPersonPhone',
+                        mandatory: false
+
+                    },
+                    {
+                        displayName: 'Vendor Main Email',
+                        name: 'vendorMainEmail',
+                        value: 'vendorMainEmail',
+                        mandatory: true
+
+                    },
+                    {
+                        displayName: 'Vendor Main Phone Number',
+                        name: 'vendorMainPhoneNumber',
+                        value: 'vendorMainPhoneNumber',
+                        mandatory: true
+
+                    },
+                    {
+                        displayName: 'Vendor Website',
+                        name: 'vendorWebsite',
+                        value: 'vendorWebsite',
+                        mandatory: false
+                    },
+                    {
+                        displayName: 'Vendor Category',
+                        name: 'vendorCategory',
+                        value: 'vendorCategory',
+                        mandatory: false
+                    },
+                    /*{
+                      displayName: 'Product Category',
+                      name: 'productsCategory',
+                      value: 'productsCategory',
+                        mandatory: false
+
+                    },*/
+
+                    {
+                        displayName: 'Vendor Address Line 1',
+                        name: 'vendorAddressLine1',
+                        value: 'vendorAddressLine1',
+                        mandatory: false
+
+                    },
+                    {
+                        displayName: 'Vendor Country',
+                        name: 'vendorCountry',
+                        value: 'vendorCountry',
+                        mandatory: false
+
+                    },
+                ],
                 channel_fields: [],
                 channel_entries: [],
                 parse_header: [],
@@ -171,87 +246,6 @@
         },
         created () {
             this.$store.registerModule('vendorsVuex', vendorsModule);
-            this.csvUploading = false;
-            this.databaseVendorColumns = [
-                {
-                    displayName: 'Vendor Display Name',
-                    name: 'vendorDisplayName',
-                    value: 'vendorDisplayName',
-                    mandatory: true
-
-                },
-                {
-                    displayName: 'Contact Person Name',
-                    name: 'contactPersonName',
-                    value: 'contactPersonName',
-                    mandatory: true
-
-                },
-                {
-                    displayName: 'Contact Person Email',
-                    name: 'contactPersonEmail',
-                    value: 'contactPersonEmail',
-                    mandatory: false
-
-                },
-                {
-                    displayName: 'Contact Person Phone Number',
-                    name: 'contactPersonPhone',
-                    value: 'contactPersonPhone',
-                    mandatory: false
-
-                },
-                {
-                    displayName: 'Vendor Main Email',
-                    name: 'vendorMainEmail',
-                    value: 'vendorMainEmail',
-                    mandatory: true
-
-                },
-                {
-                    displayName: 'Vendor Main Phone Number',
-                    name: 'vendorMainPhoneNumber',
-                    value: 'vendorMainPhoneNumber',
-                    mandatory: true
-
-                },
-                {
-                    displayName: 'Vendor Website',
-                    name: 'vendorWebsite',
-                    value: 'vendorWebsite',
-                    mandatory: false
-                },
-                {
-                    displayName: 'Vendor Category',
-                    name: 'vendorCategory',
-                    value: 'vendorCategory',
-                    mandatory: false
-                },
-                /*{
-                  displayName: 'Product Category',
-                  name: 'productsCategory',
-                  value: 'productsCategory',
-                    mandatory: false
-
-                },*/
-
-                {
-                    displayName: 'Vendor Address Line 1',
-                    name: 'vendorAddressLine1',
-                    value: 'vendorAddressLine1',
-                    mandatory: false
-
-                },
-                {
-                    displayName: 'Vendor Country',
-                    name: 'vendorCountry',
-                    value: 'vendorCountry',
-                    mandatory: false
-
-                },
-            ];
-
-            this.databaseVendorColumnsClone = {...this.databaseVendorColumns};
         },
         filters: {
             capitalize: function (str) {
@@ -295,12 +289,36 @@
                 return true
 
             },
-            preventDuplication(event){
-                if(event){
-                    this.databaseVendorColumnsClone = lodash.differenceWith(this.databaseVendorColumns, this.mappedColumns,
-                        ({ name }, {value}) => name === value
-                    );
-                    this.$forceUpdate();
+            isDuplicateMapColumn() {
+                const mappedColumns = this.mappedColumns;
+                const duplicateArray = _.filter(
+                    _.uniq(
+                        _.map(mappedColumns, function (item) {
+                            if (_.filter(mappedColumns, { value: item.value }).length > 1) {
+                                return item.value;
+                            }
+                            return false;
+                        })
+                    ),
+                    function (value) { return value; }
+                );
+
+                if (duplicateArray.length) {
+                    for (let i = 0; i < this.databaseVendorColumns.length; i++) {
+                        if (duplicateArray[0] == this.databaseVendorColumns[i].name) {
+                            this.$notify(
+                                {
+                                    message: 'Field ' + this.databaseVendorColumns[i].displayName + ' is already selected.' ,
+                                    horizontalAlign: 'center',
+                                    verticalAlign: 'top',
+                                    type: 'warning'
+                                })
+                            break;
+                        }
+                    }
+                    return true;
+                } else {
+                    return false;
                 }
             },
             validateColumnsMapping(mapping){
@@ -322,6 +340,10 @@
                             break;
                         }
                     }
+                }
+
+                if (isValid) {
+                    isValid = !this.isDuplicateMapColumn();
                 }
                 return isValid;
             },

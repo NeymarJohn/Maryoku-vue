@@ -1,3 +1,6 @@
+
+@import "./md/mixins/global";
+
 .md-field .md-error { // show md-error spans
     opacity: 1;
     margin-bottom: 6px;
@@ -534,8 +537,596 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 }
 
+.star-rating {
+
+    &__star {
+        display: inline-block;
+        padding: 3px;
+        vertical-align: middle;
+        line-height: 1;
+        font-size: 1.5em;
+        color: #ABABAB;
+        transition: color .2s ease-out;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &.is-selected {
+            color: #FFD700;
+        }
+    }
+
+    &__checkbox {
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+    }
+}
+
 .manage-proposals {
     align-content: flex-start;
+
+}
+
+.no-uppercase {
+    text-transform: none;
+}
+.manage-proposals-panel {
+
+
+    .title-section {
+
+        border-bottom : 1px solid #ccc;
+        padding-bottom : 0.5em;
+
+        .md-title {
+            display: inline-block;
+        }
+
+        .actions-list {
+            float : right;
+            margin-top : 2em;
+
+            .md-button {
+                width : 200px;
+
+                .md-ripple {
+                    font-size: 13px;
+                }
+
+                &.bold {
+                    .md-ripple {
+                        font-weight: bold;
+
+                    }
+                }
+            }
+
+        }
+    }
+
+    .star-rating {
+       display: inline-block;
+        margin-left : 1em;
+
+        &__star {
+            font-size : 1em;
+            padding : 0;
+        }
+    }
+
+    .tabs-section {
+        position : relative;
+        .md-card-content {
+            padding : 0;
+        }
+
+        .allocated-budget {
+            position: absolute;
+            right : 0;
+            top: 1em;
+            color: #000000;
+            font-size: 15px;
+            font-weight: 500;
+        }
+    }
+
+    .md-card-tabs.md-card-plain .md-list {
+        justify-content: left !important;
+        margin : 1em 0 2em !important;
+        padding : 0 !important;
+        width : 70% !important;
+        box-shadow: none;
+
+        .md-list-item {
+            margin-left : 0;
+            margin-right : -1px;
+            border : 1px solid #ccc;
+
+            &-button {
+                line-height: 11px;
+                border-radius: 0;
+                width: 11vw;
+                color : #ccc !important;
+
+            }
+
+            &.active {
+                .md-list-item-button {
+                    background-color: #ccc !important;
+                    color : #000 !important;
+                    box-shadow: none;
+                }
+            }
+
+
+        }
+    }
+
+    .manage-proposals {
+        &_proposals-list {
+            .proposals-list_item {
+                border : 1px solid #ccc;
+                display: flex;
+                flex : 1;
+                justify-content: space-between;
+                padding : 1em;
+                font-weight: 500;
+                margin-bottom : 2em;
+
+                .proposal-title-reviews {
+                    font-size: 17px;
+                }
+            }
+
+            .list-items {
+                list-style: none;
+                padding-left : 0;
+                margin : 0;
+
+                li {
+                    display: inline-block;
+                }
+            }
+
+            .proposal-property-list {
+                margin : 0.8em 0;
+                li {
+                    margin-right : 2em;
+                    .md-icon {
+                        font-size: 16px !important;
+                        font-weight: bolder;
+                        color: #000;
+                        width: auto;
+                        min-width: auto;
+                    }
+                }
+            }
+            .proposal-benefits-list {
+                color : $brand-success;
+            }
+
+            .proposal-actions {
+                .cost {
+                    font-size: 20px;
+                    margin-bottom : 33px;
+                }
+            }
+        }
+    }
+
+    .attachments-list {
+        &_items {
+            padding : 0;
+            margin : 0 0 0 -7px;
+            list-style: none;
+            li {
+                margin-bottom : 0.5em;
+                .md-icon {
+                    font-size: 16px !important;
+                }
+                a {
+                    color : #000;
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+
+    .proposal-message {
+        box-shadow : none;
+
+        .md-card-content {
+            padding : 0;
+            font-weight: 500;
+
+            h4 {
+                margin-top : 0;
+                font-weight: 500;
+            }
+        }
+
+        .attachments-list {
+
+            h6 {
+                margin-bottom : 0;
+                color : #b9b9b9;
+            }
+            &_items {
+                padding : 0;
+                margin : 0 0 0 -7px;
+                list-style: none;
+                li {
+                    margin-bottom : 0.5em;
+                }
+            }
+        }
+    }
+
+
+    .cost-pros-cons-section {
+        background: #efefef;
+        box-shadow: none;
+
+        .cost-info {
+            @include display-flex(row,space-between,center);
+            border-bottom : 1px solid #e4e4e4;
+            padding-bottom : 1em;
+
+            &_desc {
+                text-align: center;
+                width : 50%;
+                .cost {
+                    &-label {
+                        font-size: 13px;
+                        color : #aeaeae;
+                        font-weight: 500;
+                    }
+                    &-value {
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+
+        .proposal-pros-cons {
+            @include display-flex(row,space-between,center);
+            border-bottom : 1px solid #e4e4e4;
+            padding: 3em 0;
+            margin-bottom : 1em;
+
+            .section-content {
+                text-align: center;
+                width : 50%;
+                color : $brand-success;
+
+                .md-icon {
+                    color : $brand-success;
+                }
+                ul {
+                    list-style: none;
+                    margin : 0;
+                    padding : 0;
+                    font-size: 13px;
+                    li {
+                        margin-top : 0.5em;
+                        font-weight: 400;
+                    }
+                }
+            }
+
+        }
+
+        .need-help-section {
+            h6 {
+                margin : 0;
+                color : #9c9c9c;
+                text-transform: none;
+            }
+
+            .md-button {
+                text-transform: none;
+                .md-ripple {
+                    font-size: 15px;
+                    font-weight: 400;
+                }
+            }
+        }
+    }
+
+    .section-title {
+        h3 {
+            font-weight: 500;
+            font-size: 20px;
+        }
+    }
+
+    .included-list {
+        list-style: none;
+        padding : 0;
+        margin : 0;
+        li {
+            display: inline-block;
+            width : 22%;
+            margin-bottom : 1em;
+            font-weight: 500;
+            font-size: 13px;
+            .md-icon {
+                font-size: 15px !important;
+            }
+        }
+    }
+
+    .read-more {
+        min-width: inherit;
+        text-decoration: underline;
+        margin : 2px 0 0;
+        .md-ripple {
+            padding : 0 !important;
+            font-size : 14px;
+        }
+    }
+
+    .proposals-waiting-approval {
+        padding : 0;
+        margin : 0 0 2em;
+        list-style : none;
+        border : 1px solid #ccc;
+        border-radius: 8px;
+
+        li {
+            @include display-flex(row,space-between,center);
+            padding : 1em 2em;
+
+            .not-available-alert {
+                color : $brand-danger;
+            }
+            .proposal-title {
+                font-weight: bold;
+                font-size: 15px;
+                margin-bottom : 0.7em;
+            }
+            .proposal-desc {
+                font-weight: 400;
+                font-size: 14px;
+            }
+
+            &:not(:last-child) {
+                border-bottom : 1px solid #ccc;
+            }
+
+            .proposal-actions {
+                .md-button {
+                    width: 140px;
+                }
+            }
+        }
+    }
+
+
+    .proposal-summary {
+        padding : 0 1em;
+        margin : 0 0 2em;
+        list-style : none;
+        border : 1px solid #ccc;
+        border-radius: 8px;
+
+        >li {
+            @include display-flex(row,space-between,flex-start);
+            padding : 1em 0;
+
+            .proposal-title {
+                font-weight: bold;
+                font-size: 15px;
+                margin-bottom : 0.7em;
+            }
+            .proposal-desc {
+                font-weight: 400;
+                font-size: 14px;
+            }
+
+            &:not(:last-child) {
+                border-bottom : 1px solid #ccc;
+            }
+
+            .attachments-list {
+                width : 40%;
+                padding : 2em;
+            }
+
+            .about-us {
+                width : 60%;
+            }
+        }
+    }
+
+    .cost-breakdown-notes {
+        @include display-flex(row,space-between,initial);
+        margin-bottom : 2em;
+        .section-content {
+            background: #f2f2f2;
+
+            h4 {
+                margin : 0 auto 1em;
+                font-weight: 500;
+            }
+
+            &.cost-breakdown-section {
+                width:60%;
+                border-radius: 10px  0 0 10px;
+                border-right : 1px solid #e5e5e5;
+                padding : 1em 3em 1em 1em;
+
+
+                .md-table-content {
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+                }
+
+                .md-table-content , .md-content.md-theme-default {
+                    background: none;
+                    color : #000;
+
+                    .md-table-cell {
+                        height: 33px;
+                    }
+
+                    thead {
+                        .md-table-head-label {
+                            font-weight: 400;
+                            color : #6b6b6b;
+                        }
+                        tr {
+                            .md-table-head {
+                                &:last-child {
+                                    justify-content: flex-start;
+                                    text-align: left;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            &.notes-section {
+                width:40%;
+                border-radius: 0 10px 10px 0;
+                padding : 2em;
+
+                p {
+                    font-weight: 400;
+                    font-size: 14px;
+                }
+
+            }
+        }
+
+        .md-table-cell-container {
+            font-weight: 400;
+        }
+
+        .cost-cell {
+            .md-table-cell-container {
+                justify-content: flex-start;
+                width : 30px !important;
+                text-align: left;
+            }
+        }
+    }
+
+    .gallery-section {
+        margin-bottom : 2em;
+        position : relative;
+
+        .images-list {
+            list-style: none;
+            padding : 0;
+            margin : 0;
+            @include display-flex(row,flex-start,flex-start);
+            overflow: auto;
+        }
+
+        .image-item {
+            width: 320px;
+            display: inline-block;
+            vertical-align: top;
+            margin : 0;
+            border : 1px solid #6b6b6b;
+        }
+
+        .view-images {
+            position : absolute;
+            bottom : 1em;
+            left : 2em;
+            z-index : 1999;
+            background-color: #cccccc !important;
+            color : #000 !important;
+            border-radius: 0;
+            font-weight: 500;
+            .md-ripple {
+                font-size: 14px;
+            }
+        }
+
+        .vue-lb-container {
+            margin-left: 80px;
+            width: calc(100% - 80px);
+        }
+    }
+
+
+    .feedback-section {
+        margin-bottom: 2em;
+
+        .section-title {
+            @include display-flex(row,flex-start,flex-start);
+
+            h5{
+                margin : 0;
+                font-weight: 500;
+                font-size: 15px;
+            }
+            .star-rating {
+                margin: 0 0.5em;
+            }
+
+            .review-count {
+                font-weight: 500;
+                font-size: 13px;
+            }
+
+        }
+
+        .feedback-list-items {
+            list-style: none;
+            margin : 1em 0 0;
+        }
+
+        .feedback-item {
+            position : relative;
+            padding-left : 50px;
+            font-size: 14px;
+            font-weight: 400;
+            margin-bottom : 1em;
+
+            .item-thumbnail {
+                position : absolute;
+                left : 0;
+                top : 0;
+                border : 1px solid #b9b9b9;
+                width : 30px;
+                height : 30px;
+                border-radius: 100px;
+                text-align: center;
+                padding-top : 2px;
+                font-weight: 500;
+            }
+
+            .item-name {
+                @include display-flex(row,flex-start,flex-start);
+                h5 {
+                    font-size: 14px;
+                    font-weight: 500;
+                    margin: 3px 0 0;
+                }
+            }
+
+            .item-body {
+                p {
+                    margin : 0;
+                }
+            }
+
+            .date {
+                color : #666666;
+            }
+        }
+    }
 }
 
 .md-switch-info {

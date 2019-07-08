@@ -68,6 +68,12 @@
                                     <md-table-cell md-label="Role">
                                         {{availableRoleIdToTitle(item.role)}}
                                     </md-table-cell>
+                                    <md-table-cell md-label="Permissions" style="white-space: normal; word-wrap: break-word;">
+                                        <div v-if="item.permissions">
+                                            {{item.permissions.split(',').length}}
+                                            <md-tooltip md-direction="bottom">{{permissionTitles(item.permissions)}}</md-tooltip>
+                                        </div>
+                                    </md-table-cell>
                                     <md-table-cell md-label="" style="white-space: nowrap; width: 20%;" class="text-right">
                                         <div style="white-space: nowrap;">
                                             <md-button tabindex="4" class="md-success md-sm" style="width: auto;" :disabled="noActions" @click="saveMember(item)" v-if="item.id === 'new'">

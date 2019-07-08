@@ -41,7 +41,7 @@
                                                 </div>
                                                 <div class="md-layout-item md-size-100 checkbox-section">
                                                     <md-checkbox v-model="item.includePageLink"
-                                                                 :id="`include-${index}`" @md-change="this.$forceUpdate()"></md-checkbox>
+                                                                 :id="`include-${index}`"></md-checkbox>
                                                     <!--<label style=" margin:  14px 16px 14px 0" :for="`include-${index}`">Include a link to the <a :href="`/#/events/${eventData ? eventData.id : ''}/public`">event public page</a>?</label>-->
                                                     <label style=" margin:  14px 16px 14px 0; font-size: 12px;" :for="`include-${index}`">Include a link to the event public page?</label>
                                                 </div>
