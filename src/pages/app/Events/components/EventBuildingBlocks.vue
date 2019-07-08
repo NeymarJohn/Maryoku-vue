@@ -372,12 +372,12 @@
                     props: {event: this.event, selectedBlock: item, getOffers: true , categoryTitle : categoryTitle}
                 })
             },
-            showRequirementsSidepanel(item) {
+            showRequirementsSidepanel(item , winnerId = null) {
                 window.currentPanel = this.$showPanel({
-                    component: EventBlockRequirements,
-                    cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
+                    component: ViewProposals,
+                    cssClass: 'md-layout-item md-size-70 transition36',
                     openOn: 'right',
-                    props: {event: this.event, selectedBlock: item, predefinedRequirements: item.predefinedRequirements}
+                    props: {event: this.event, selectedBlock: item, winnerId : winnerId}
                 })
             }
         },
