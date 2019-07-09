@@ -1,5 +1,5 @@
 <template>
-    <div class="adding-building-blocks-panel">
+    <div class="manage-proposals-panel">
         <div class="md-layout" style="max-height: 50vh;">
             <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
                 <h4 class="md-title">
@@ -7,13 +7,69 @@
                 </h4>
             </div>
             <div class="md-layout-item md-size-95" style="max-height: 50vh;">
-                <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
-                    Proposals List
+                <h4 class="md-title" style="margin-bottom: 0; line-height: 51px; text-transform: capitalize;">
+                    Manage Proposals - {{selectedBlock.componentCategoryId}}
                 </h4>
+
+                <div class="tabs-section">
+                    <tabs
+                        :tab-name="['Requirements', 'Proposals (' + selectedBlock.proposals.length + ')', 'Comparison', 'Winner']"
+                        color-button="default"
+                        >
+                        <template slot="tab-pane-1" style="width: 100%;">
+                            <event-block-requirements :event="event" :selectedBlock="selectedBlock" :predefinedRequirements="selectedBlock.predefinedRequirements"> </event-block-requirements>
+                        </template>
+                        <template slot="tab-pane-2" style="width: 100%;">
+                            <div class="manage-proposals_proposals-list" v-if="selectedBlock.proposals">
+                                <div class="proposals-list_item" v-for="(proposal,index) in selectedBlock.proposals" :key="index">
+                                    <div class="proposal-info text-left">
+                                        <div class="proposal-title-reviews">{{ proposal.vendor ? proposal.vendor.vendorDisplayName : 'No Vendor Title' }}
+                                            <div class="star-rating">
+                                                <label class="star-rating__star"
+                                                       v-for="rating in ratings"
+                                                       :class="{'is-selected' : ((proposal.cost >= rating) && proposal.cost != null)}"
+                                                >
+                                                    <input class="star-rating star-rating__checkbox" type="radio"
+                                                           v-model="proposal.coste">★</label>
+                                            </div>
+                                        </div>
+                                        <div class="proposal-property-list">
+                                            <ul class="list-items">
+                                                <li> <md-icon>check</md-icon> Insurance</li>
+                                                <li> <md-icon>attach_money</md-icon> Net +30</li>
+                                            </ul>
+                                        </div>
+                                        <div class="proposal-benefits-list">
+                                            <ul class="list-items">
+                                                <li> Price within budget,</li>
+                                                <li> meets 90% of requirements,</li>
+                                                <li> low cost per guest.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="proposal-actions text-right">
+                                        <div class="cost">${{proposal.cost}}</div>
+
+                                        <md-button class="md-primary md-sm">Accept</md-button>
+                                        <md-button class="md-rose md-sm" @click="viewProposal(proposal)">View</md-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <template slot="tab-pane-3" style="width: 100%;">
+                            3
+                        </template>
+                        <template slot="tab-pane-4" style="width: 100%;">
+                            4
+                        </template>
+                    </tabs>
+
+                    <div class="allocated-budget">Allocated Budget : ${{selectedBlock.allocatedBudget}}</div>
+                </div>
 
                 <div class="md-layout" style="overflow: auto; max-height: 80vh;" v-if="selectedBlock.proposals">
 
-                    <md-card>
+                    <md-card style="display: none;">
 
                         <md-card-header  class="md-card-header-text md-card-header-warning">
                             <div class="card-text">
@@ -35,7 +91,7 @@
                                     </md-table-cell>
                                     <md-table-cell class="vendors-table_item-actions" >
 
-                                        <md-button class="md-button md-success md-sm md-theme-default auto-width" >
+                                        <md-button class="md-button md-success md-sm md-theme-default auto-width"  >
                                             View
                                         </md-button>
 
@@ -56,12 +112,6 @@
 
                     </md-card>
 
-
-                    <div class="md-layout-item md-size-100 proposals-actions" v-if="isThereProposals()">
-                        <md-button class="md-info"> compare proposals </md-button>
-                    </div>
-
-
                 </div>
             </div>
         </div>
@@ -74,16 +124,22 @@
     import CalendarEvent from '@/models/CalendarEvent';
     import Calendar from "@/models/Calendar";
     import EventComponent from "@/models/EventComponent";
+    import {Tabs} from '@/components'
 
     import swal from "sweetalert2";
     import {error} from 'util';
     import moment from 'moment';
     import VueElementLoading from 'vue-element-loading';
     import _ from "underscore";
+    import ViewProposal from './ViewProposal.vue'
+    import EventBlockRequirements from '../Modals/EventBlockRequirements.vue'
+
 
     export default {
         components: {
             VueElementLoading,
+            Tabs,
+            EventBlockRequirements
         },
         props: {
             event: Object,
@@ -98,9 +154,11 @@
             // auth: auth,
             isLoaded : false,
             proposalsToDisplay : 1,
+            ratings: [1, 2, 3, 4, 5],
         }),
 
         created() {
+            console.log(this.selectedBlock.proposals);
         },
         mounted() {
 
@@ -156,6 +214,14 @@
           },
             isThereProposals() {
                 return this.selectedBlock.proposals && this.selectedBlock.proposals.length;
+            },
+            viewProposal(proposal) {
+                window.currentPanel = this.$showPanel({
+                    component: ViewProposal,
+                    cssClass: 'md-layout-item md-size-70 transition36',
+                    openOn: 'right',
+                    props: {event: this.event, proposal: proposal}
+                })
             }
         },
         computed: {
