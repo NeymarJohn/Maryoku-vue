@@ -264,8 +264,6 @@
                             allocatedBudget += Number(item.allocatedBudget);
                         });
 
-                        console.log(this.eventBuildingBlocks);
-
                         this.allocatedBudget = allocatedBudget;
                         this.isLoading = false;
                     })
@@ -359,7 +357,7 @@
             reviewProposals(item, winnerId = null) {
                 window.currentPanel = this.$showPanel({
                     component: ViewProposals,
-                    cssClass: 'md-layout-item md-size-70 transition36',
+                    cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
                     openOn: 'right',
                     props: {event: this.event, selectedBlock: item, winnerId : winnerId}
                 })
@@ -372,12 +370,12 @@
                     props: {event: this.event, selectedBlock: item, getOffers: true , categoryTitle : categoryTitle}
                 })
             },
-            showRequirementsSidepanel(item , winnerId = null) {
+            showRequirementsSidepanel(item) {
                 window.currentPanel = this.$showPanel({
-                    component: ViewProposals,
-                    cssClass: 'md-layout-item md-size-70 transition36',
+                    component: EventBlockRequirements,
+                    cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
                     openOn: 'right',
-                    props: {event: this.event, selectedBlock: item, winnerId : winnerId}
+                    props: {event: this.event, selectedBlock: item, predefinedRequirements: item.predefinedRequirements}
                 })
             }
         },

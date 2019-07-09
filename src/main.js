@@ -5,7 +5,6 @@ import VueAxios from 'vue-axios';
 import { Model } from 'vue-api-query';
 import DashboardPlugin from "./material-dashboard";
 import auth from './auth';
-import VueLazyLoad from 'vue-lazyload'
 
 // Plugins
 import App from "./App.vue";
@@ -44,7 +43,6 @@ Vue.use(VueEventBus);
 // plugin setup
 Vue.use(VueRouter);
 Vue.use(DashboardPlugin);
-Vue.use(VueLazyLoad);
 
 Vue.use(VueGmaps, {
     key: process.env.GOOGLE_API_KEY|| 'AIzaSyAelc-zmvKBlcW78yPFeW9xrbnrJaT-MfA',

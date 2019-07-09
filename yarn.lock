@@ -10546,10 +10546,9 @@ vue-hot-reload-api@^2.2.0, vue-hot-reload-api@^2.3.0:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.3.tgz#2756f46cb3258054c5f4723de8ae7e87302a1ccf"
 
-vue-image-lightbox@^6.2.1:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/vue-image-lightbox/-/vue-image-lightbox-6.2.1.tgz#9c7e8aa0f65eb89444689c4ff8172b5670d2c3de"
-  integrity sha512-QezruRbIHzVrTFUbx/gaA5rEnXnrdyIjAgXqwlj+qwou4vP1BNAmeDmJHufXX4WQhAg792kNfo9fmhzLLKJBoQ==
+vue-image-lightbox@^6.0.1:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/vue-image-lightbox/-/vue-image-lightbox-6.2.0.tgz#f85f354e60cbe36fe5786b2cf672611ed44b39ff"
   dependencies:
     "@babel/runtime" "^7.4.3"
     babel-loader "^8.0.5"
