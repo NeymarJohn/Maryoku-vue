@@ -53,13 +53,11 @@ import ChooseWorkspace from '@/pages/Dashboard/Pages/ChooseWorkspace';
 
 import GetStarted from '@/pages/app/GetStarted';
 import EmptyLayout from '../pages/Dashboard/Pages/EmptyLayout';
-import MarketPlaceLayout from '../pages/Dashboard/Pages/MarketPlaceLayout';
 const SignInSignUp = () => import("@/pages/Dashboard/Pages/SignInSignUp.vue");
 const SignOut = () => import("@/pages/Dashboard/Pages/SignOut.vue");
 const SignedIn = () => import("@/pages/Dashboard/Pages/SignedIn.vue");
 
 import MyEvents from '@/pages/app/Guest/MyEvents.vue';
-import MarketPlace from '@/pages/app/MarketPlace/MarketPlace.vue';
 
 let authPages = {
     path: "/",
@@ -95,7 +93,7 @@ let authPages = {
             name: "ChooseWorkspace",
             component: ChooseWorkspace,
             meta: {auth: false, title: 'Choose Workspace', gtm: "ChooseWorkspace"}
-        },
+        }
     ]
 };
 
@@ -124,19 +122,6 @@ let publicPages = {
     },*/
   ]
 };
-let marketPlacePages = {
-  path: "/",
-  component: MarketPlaceLayout,
-  name: "Market",
-  children: [
-    {
-        path: "/market-place",
-        name: "MarketPlace",
-        component: MarketPlace,
-        meta: {auth: false, title: 'Choose Workspace', gtm: "MarketPlace"}
-    },
-  ]
-};
 
 let emptyLayoutPages = {
     path: "/",
@@ -155,7 +140,6 @@ let emptyLayoutPages = {
             component: MyEvents,
             meta: {auth: true, title: 'My Events', gtm: "MyEvents"}
         },
-  
     ]
 };
 
@@ -176,7 +160,6 @@ let appPages = {
             component: Profile,
             meta: {gtm: "Settings"}
         },
-
         {
             path: "/company",
             name: "CompanyDashboard",
@@ -375,8 +358,7 @@ const routes = [
     appPages,
     publicPages,
     emptyLayoutPages,
-    EventPages,
-    marketPlacePages
+    EventPages
 ];
 
 export default routes;
