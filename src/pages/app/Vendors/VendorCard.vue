@@ -1,6 +1,6 @@
 <template>
-  <div >
-    <md-card class="md-elevation">
+  <div :class="!grid && 'list'" >
+    <md-card class="md-elevation" :class="!grid && 'list'" >
       <md-card-header>
        <div class="md-title">{{vendor.vendorDisplayName}}</div>
       <div class="md-subhead">{{vendor.vendorCategory}}</div>
@@ -221,6 +221,10 @@ export default {
   }
   .md-title{
         min-height: 80px;
+  }
+  .list{
+    width: 100%;
+    min-width: 100% !important;
   }
 
 </style>
