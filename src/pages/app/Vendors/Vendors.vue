@@ -83,25 +83,22 @@
     </div>
     <div>
       <!--TODO : Filters Here-->
-      
     </div>
     <div>
       <!--TODO : Filters Here-->
-   <md-switch class="md-switch-info pull-right text-right"
-                style="padding: 0; margin: 12px;"
-                @change="fetchData(1)"
-                v-model="myVendors">
-                     My vendors
-                </md-switch>
-                  <md-switch class="md-switch-info pull-right text-right"
-                style="padding: 0; margin: 12px;"
-                @change="fetchData(1)"
-                v-model="grid">
-                    {{grid? 'Grid': 'List'}}
-                </md-switch>
-
+      <md-switch
+        class="md-switch-info pull-right text-right"
+        style="padding: 0; margin: 12px;"
+        @change="fetchData(1)"
+        v-model="myVendors"
+      >My vendors</md-switch>
+      <md-switch
+        class="md-switch-info pull-right text-right"
+        style="padding: 0; margin: 12px;"
+        @change="fetchData(1)"
+        v-model="grid"
+      >{{grid? 'Grid': 'List'}}</md-switch>
     </div>
-
 
     <div class="md-layout md-gutter">
       <div class="md-layout-item md-size-30 sidebar-filters">
@@ -229,7 +226,7 @@ export default {
       selected_vendor: {},
       add_vendor: false,
       vendor_selected: false,
-      grid: false,
+      grid: true,
       buildingBlocksList: [],
       myVendors: false,
       items: [
