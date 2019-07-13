@@ -229,6 +229,8 @@ export default {
           vendors => {
             this.vendorsList = vendors[0].results;
 
+            console.log(this.vendorsList);
+
             this.updatePagination(vendors[0].model);
             this.loadingData = false;
 

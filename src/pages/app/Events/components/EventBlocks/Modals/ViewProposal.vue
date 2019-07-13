@@ -44,11 +44,12 @@
                             <h4>Dear Rachel</h4>
                             <p>
                                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-<br>
-                                Thanks,
-<br>
-                                Peter Luger
                             </p>
+                            <div class="signature">
+                                Thanks,
+                                <br>
+                                Peter Luger
+                            </div>
                             <div class="attachments-list">
                                 <h6>Attachments</h6>
                                 <ul class="attachments-list_items">
@@ -76,7 +77,7 @@
 
                             <div class="proposal-pros-cons">
                                 <div class="section-content pros-section">
-                                    <md-icon>thumb_up_alt</md-icon>
+                                    <md-icon class="thumb-up">thumb_up_alt</md-icon>
                                     <ul class="list-items">
                                         <li>Price within budget</li>
                                         <li>Meets 90% of rqmts.</li>
@@ -85,7 +86,7 @@
                                     </ul>
                                 </div>
                                 <div class="section-content cons-section">
-                                    <md-icon>thumb_down_alt</md-icon>
+                                    <md-icon class="thumb-down">thumb_down_alt</md-icon>
                                     <ul class="list-items">
                                         <li>2 needed upgrades</li>
                                         <li>Strict cancellation policy</li>
@@ -133,7 +134,7 @@
                                 <div class="proposal-desc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. <md-button class="md-primary md-simple md-sm read-more no-uppercase">Read more</md-button></div>
                             </div>
                             <div class="proposal-actions">
-                                <md-button class="md-primary md-sm">Add ($220)</md-button>
+                                <md-button class="md-rose">Add ($220)</md-button>
                             </div>
                         </li>
 
@@ -143,7 +144,7 @@
                                 <div class="proposal-desc"><div class="not-available-alert">The item is not available</div></div>
                             </div>
                             <div class="proposal-actions">
-                                <md-button class="md-warning md-sm">Got it <md-icon>check</md-icon></md-button>
+                                <md-button class="md-success">Got it</md-button>
                             </div>
                         </li>
 
@@ -154,55 +155,62 @@
 
                 <div class="md-layout-item md-size-5"></div>
                 <div class="md-layout-item md-size-95 cost-breakdown-notes">
-                    <div class="section-content cost-breakdown-section">
-                        <h4>Cost breakdown</h4>
-
-                        <div class="section-content">
-                            <md-table v-model="cost_breakdown" class="table-plaint">
-                                <md-table-row slot="md-table-row" slot-scope="{ item }"  >
-                                    <md-table-cell md-label="Service">{{ item.service }}</md-table-cell>
-                                    <md-table-cell md-label="Per guest">${{ item.per_guest }}</md-table-cell>
-                                    <md-table-cell class="cost-cell" md-label="Cost" :class="getAlignClasses(item)">${{ item.cost }}</md-table-cell>
-                                </md-table-row>
-                            </md-table>
-                            <div class="table table-stats table-striped">
-                                <div class="td-price">
-                                    <div class="td-total">
-                                        Subtotal
-                                    </div>
-                                    <span class="td-value">
+                    <div class="section-title">
+                        <h3>Cost Breakdown</h3>
+                    </div>
+                    <div class="cost-breakdown-notes-sections">
+                        <div class="section-content cost-breakdown-section">
+                            <div class="section-content">
+                                <md-table v-model="cost_breakdown" class="table-plaint">
+                                    <md-table-row slot="md-table-row" slot-scope="{ item }"  >
+                                        <md-table-cell md-label="Service">{{ item.service }}</md-table-cell>
+                                        <md-table-cell md-label="Per guest">${{ item.per_guest }}</md-table-cell>
+                                        <md-table-cell class="cost-cell" md-label="Cost" :class="getAlignClasses(item)">${{ item.cost }}</md-table-cell>
+                                    </md-table-row>
+                                </md-table>
+                                <div class="table table-stats table-striped">
+                                    <div class="td-price">
+                                        <div class="td-total">
+                                            Subtotal
+                                        </div>
+                                        <span class="td-value">
                                         $1940
                                     </span>
-                                </div>
-                                <div class="td-price">
-                                    <div class="td-total">
-                                        Tax (3%)
                                     </div>
-                                    <span class="td-value">
+                                    <div class="td-price">
+                                        <div class="td-total">
+                                            Tax (3%)
+                                        </div>
+                                        <span class="td-value">
                                         $60
                                     </span>
-                                </div>
-                                <div class="td-price bold">
-                                    <div class="td-total">
-                                        Total
                                     </div>
-                                    <span class="td-value">
+                                    <div class="td-price bold">
+                                        <div class="td-total">
+                                            Total
+                                        </div>
+                                        <span class="td-value">
                                         $2000
                                     </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="section-content notes-section">
-                        <h4>Notes</h4>
-                        <p>
-                            Minimum no. of invitees: 180, cost per each extra invitee: $40.
-                        </p>
-                        <p>
-                            This offer is valid till July 1st 2019.
+                        <div class="section-content notes-section">
+                            <div>
+                                <h4>Notes</h4>
+                                <p>
+                                    Minimum no. of invitees: 180, cost per each extra invitee: $40.
+                                </p>
+                            </div>
 
-                        </p>
+                            <p class="danger-label">
+                                This offer is valid till July 1st 2019.
+
+                            </p>
+                        </div>
                     </div>
+
                 </div>
 
 
@@ -240,14 +248,6 @@
                 <div class="md-layout-item md-size-95 feedback-section">
                     <div class="section-title">
                         <h5>Feedback</h5>
-                        <div class="star-rating">
-                            <label class="star-rating__star"
-                                   v-for="rating in ratings"
-                                   :class="{'is-selected' : ((feedbackRating >= rating) && feedbackRating != null)}"
-                            >
-                                <input class="star-rating star-rating__checkbox" type="radio"
-                                       v-model="feedbackRating">★</label>
-                        </div>
                         <div class="review-count">(2)</div>
                     </div>
 

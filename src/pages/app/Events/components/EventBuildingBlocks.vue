@@ -359,7 +359,7 @@
             reviewProposals(item, winnerId = null) {
                 window.currentPanel = this.$showPanel({
                     component: ViewProposals,
-                    cssClass: 'md-layout-item md-size-70 transition36',
+                    cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
                     openOn: 'right',
                     props: {event: this.event, selectedBlock: item, winnerId : winnerId}
                 })
@@ -375,7 +375,7 @@
             showRequirementsSidepanel(item , winnerId = null) {
                 window.currentPanel = this.$showPanel({
                     component: ViewProposals,
-                    cssClass: 'md-layout-item md-size-70 transition36',
+                    cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
                     openOn: 'right',
                     props: {event: this.event, selectedBlock: item, winnerId : winnerId}
                 })
