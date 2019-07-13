@@ -94,7 +94,7 @@
               <span class="md-list-item-text md-headline">Category</span>
               <md-list slot="md-expand">
                 <md-list-item class="md-inset">All Categories</md-list-item>
-                <md-list-item v-for="(item,index) in items" :key="index" class="md-inset">Offsite</md-list-item>
+                <md-list-item v-for="(item,index) in buildingBlocksList" :key="index" class="md-inset">{{item.value}}</md-list-item>
               </md-list>
             </md-list-item>
             <md-list-item md-expand :md-expanded="true">
@@ -135,11 +135,38 @@
           </md-list>
         </div>
       </div>
-      <div class="md-layout-item">
-        <vendor-card v-for="(item,index) in vendorsList" :vendor="item" :key="index" />
-        <div></div>
-      </div>
+      <!-- <md-grid-list class="md-layout-item elevation-demo ">
+      
+      </md-grid-list> -->
+
+  <div class=" md-layout-item ">
+    <div class="elevation-demo">
+      <vendor-card class="" 
+         :grid="true" 
+         v-for="(item,index) in vendorsList" 
+         :vendor="item" 
+         :index="index" 
+         :key="index"
+           :tooltipModels="tooltipModels"
+                        @select-vendor="onSelectVendor"
+                        @close-vendor="onCloseVendorForm"
+                        :vendorsList="vendorsList"
+                        :fetchVendors="fetchData"
+                        mode="listing"
+                        ref="VendorsTable"
+                        :buildingBlocksList="buildingBlocksList"
+          />
+
     </div>
+
+  </div>
+    </div>
+               <pagination class="pagination-no-border pagination-info"
+                                    @input="pageChanged($event)"
+                                    v-model="pagination.page"
+                                    :per-page="pagination.limit"
+                                    :total="pagination.total">
+                        </pagination>
   </div>
 </template>
 
@@ -180,6 +207,7 @@ export default {
       selected_vendor: {},
       add_vendor: false,
       vendor_selected: false,
+      grid: false,
       buildingBlocksList: [],
       myVendors: false,
           items: [
@@ -228,8 +256,6 @@ export default {
         .then(
           vendors => {
             this.vendorsList = vendors[0].results;
-
-            console.log(this.vendorsList);
 
             this.updatePagination(vendors[0].model);
             this.loadingData = false;
@@ -312,6 +338,20 @@ export default {
   background-color: #26c6da;
   height: 100vh;
 }
+.md-content {
+    width: 100px;
+    height: 100px;
+    margin: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+ .elevation-demo {
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap;
+  }
 
 .get-started-card-title {
   font-weight: 400 !important;
