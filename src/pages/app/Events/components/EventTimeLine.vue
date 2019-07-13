@@ -259,13 +259,16 @@
 
                             timelineItem.delete().then(result => {
                                 this.getTimelineItems();
+                                this.$root.$emit("timeline-updated", this.timelineItems);
                             }).catch(error => {
                                 console.log(error);
+                                this.$root.$emit("timeline-updated", this.timelineItems);
                             })
                         }
                     })
                     .catch(err => {
-                        console.log(err)
+                        console.log(err);
+                        this.$root.$emit("timeline-updated", this.timelineItems);
                     });
             },
             modifyItem(index) {
@@ -286,7 +289,8 @@
                     console.log(this.timelineItems);
 
                     this.isLoading = false;
-                    this.timelineItems.forEach((item)=>{item.isItemLoading = false;})
+                    this.timelineItems.forEach((item)=>{item.isItemLoading = false;});
+                    this.event.timelineItems = this.timelineItems;
                 })
             },
             cancelTimelineItem(item, index){
@@ -336,13 +340,13 @@
 
                         this.getTimelineItems();
                         this.disabledDragging = false;
-                        this.$root.$emit("timeline-updated");
+                        this.$root.$emit("timeline-updated", this.timelineItems);
 
                     })
                     .catch(error => {
                         console.log(error);
                         this.disabledDragging = false;
-                        this.$root.$emit("timeline-updated");
+                        this.$root.$emit("timeline-updated", this.timelineItems);
                     })
 
             },
@@ -381,12 +385,12 @@
                 timelineItem.save().then(res => {
                     this.getTimelineItems();
                     this.disabledDragging = false;
-                    this.$root.$emit("timeline-updated");
+                    this.$root.$emit("timeline-updated", this.timelineItems);
 
                 }).catch(error => {
-                    console.log(error)
+                    console.log(error);
                     this.disabledDragging = false;
-                    this.$root.$emit("timeline-updated");
+                    this.$root.$emit("timeline-updated", this.timelineItems);
                 })
             },
             updateTimelineITemsOrder() {
@@ -397,6 +401,7 @@
                 let new_order = 1;
                 const timelineItemsForUpdate = [];
                 this.timelineItems.forEach(item => {
+                    item.order = new_order;
                     timelineItemsForUpdate.push({ id: item.id, order: new_order});
                     new_order+=1;
                 });
@@ -414,12 +419,13 @@
                         verticalAlign: 'top',
                         type: 'success'
                       });*/
+                    this.event.timelineItems = this.timelineItems;
                     this.isLoading = false;
-                    this.$root.$emit("timeline-updated");
+                    this.$root.$emit("timeline-updated", this.timelineItems);
 
                 }).catch(error => {
                     console.log(error);
-                    this.$root.$emit("timeline-updated");
+                    this.$root.$emit("timeline-updated", this.timelineItems);
                 })
 
 

@@ -68,6 +68,7 @@
             getTimelineItems() {
                 this.timelineItems = _.sortBy(this.event.timelineItems, function(item){ return item.order});
                 this.isLoading = false;
+                this.$forceUpdate();
             },
             editTimeLineItems() {
                 /*this.$router.push({ path: `/events/`+ this.event.id + '/edit/details' });
@@ -77,6 +78,7 @@
                     cssClass: 'md-layout-item md-size-85 transition36',
                     openOn: 'right',
                     disableBgClick: false,
+                    keepAlive: true,
                     props: {
                         event: this.event
                     }
@@ -93,8 +95,9 @@
         mounted() {
             setTimeout(this.getTimelineItems(),400)
 
-            this.$root.$on("timeline-updated", ()=>{
+            this.$root.$on("timeline-updated", (timelineItems)=>{
                 this.isLoading = true;
+                this.event.timelineItems = timelineItems;
                 this.getTimelineItems();
             });
         },
