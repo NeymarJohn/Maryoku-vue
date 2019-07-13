@@ -629,88 +629,39 @@ $tooltip-border-color: $blue-grey-200 !default;
 
         .allocated-budget {
             position: absolute;
-            right: 0;
-            top: 14px;
+            right : 0;
+            top: 1em;
             color: #000000;
             font-size: 15px;
             font-weight: 500;
-            width: 23%;
-            margin: 0;
-            height: 65px;
-
-            .md-card-content {
-                @include display-flex(column,center,center);
-            }
-
-            .budget {
-                color : $brand-success;
-                font-size: 20px;
-            }
         }
     }
 
     .md-card-tabs.md-card-plain .md-list {
-        justify-content: space-between !important;
+        justify-content: left !important;
         margin : 1em 0 2em !important;
         padding : 0 !important;
-        width : 75% !important;
+        width : 70% !important;
         box-shadow: none;
-        background: #fff;
 
         .md-list-item {
             margin-left : 0;
             margin-right : -1px;
-            width: 25%;
-            box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
-            border : none;
-
-            &:first-child {
-                border-radius: 5px 0 0 5px;
-
-                .md-list-item-container {
-                    border-radius: 5px 0 0 5px;
-                }
-            }
-
-            &:last-child {
-                border-radius: 0 5px 5px 0;
-
-                .md-list-item-container {
-                    border-radius: 0 5px 5px 0;
-                }
-            }
+            border : 1px solid #ccc;
 
             &-button {
                 line-height: 11px;
                 border-radius: 0;
-                width: 100%;
-                color : #8c8c8c !important;
-                padding : 0.4em 0;
-                background: #e1e1e1;
-                text-transform: capitalize;
-                font-size: 13px;
+                width: 11vw;
+                color : #ccc !important;
 
-                span {
-                    border : 1px solid #c6c6c6;
-                    border-radius: 50%;
-                    width : 35px;
-                    height : 35px;
-                    display: inline-block;
-                    text-align: center;
-                    padding-top : 10px;
-                    margin-right : 0.7em;
-
-                }
             }
 
             &.active {
                 .md-list-item-button {
-                    background-color: $orange-800 !important;
-                    color : #fff !important;
+                    background-color: #ccc !important;
+                    color : #000 !important;
                     box-shadow: none;
-                    span {
-                        border-color : #fff;
-                    }
                 }
             }
 
@@ -720,15 +671,8 @@ $tooltip-border-color: $blue-grey-200 !default;
 
     .manage-proposals {
         &_proposals-list {
-            h4 {
-                text-align: left;
-                margin : 0 0 1em;
-                font-weight: 500;
-            }
             .proposals-list_item {
-                border-radius: 6px;
-                box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
-                background-color: #ffffff;
+                border : 1px solid #ccc;
                 display: flex;
                 flex : 1;
                 justify-content: space-between;
@@ -758,33 +702,24 @@ $tooltip-border-color: $blue-grey-200 !default;
                     .md-icon {
                         font-size: 16px !important;
                         font-weight: bolder;
-                        color: $brand-warning;
+                        color: #000;
                         width: auto;
                         min-width: auto;
-                        margin-right : 0.5em;
                     }
                 }
             }
             .proposal-benefits-list {
                 color : $brand-success;
-                font-size: 13px;
             }
 
             .proposal-actions {
                 .cost {
                     font-size: 20px;
                     margin-bottom : 33px;
-                    color : $brand-success;
-
                 }
             }
         }
     }
-    .show-more-btn {
-        background-color : #a0a2a3 !important;
-    }
-
-
 
     .attachments-list {
         &_items {
@@ -815,16 +750,13 @@ $tooltip-border-color: $blue-grey-200 !default;
                 margin-top : 0;
                 font-weight: 500;
             }
-
-            p {
-                color : #707070;
-            }
         }
 
         .attachments-list {
 
             h6 {
-                margin-bottom : 0.6em;
+                margin-bottom : 0;
+                color : #b9b9b9;
             }
             &_items {
                 padding : 0;
@@ -832,11 +764,6 @@ $tooltip-border-color: $blue-grey-200 !default;
                 list-style: none;
                 li {
                     margin-bottom : 0.5em;
-                    width : 40%;
-                    display : inline-block;
-                    .md-icon {
-                        color : $red-A400;
-                    }
                 }
             }
         }
@@ -844,18 +771,13 @@ $tooltip-border-color: $blue-grey-200 !default;
 
 
     .cost-pros-cons-section {
-        background-color :  #f3f3f3 !important;
-        border: solid 1px #d8d8d8;
+        background: #efefef;
         box-shadow: none;
-
-        .md-card-content {
-            padding : 0;
-        }
 
         .cost-info {
             @include display-flex(row,space-between,center);
             border-bottom : 1px solid #e4e4e4;
-            padding : 1em 0;
+            padding-bottom : 1em;
 
             &_desc {
                 text-align: center;
@@ -863,35 +785,29 @@ $tooltip-border-color: $blue-grey-200 !default;
                 .cost {
                     &-label {
                         font-size: 13px;
-                        color : #000;
+                        color : #aeaeae;
                         font-weight: 500;
                     }
                     &-value {
                         font-weight: bold;
-                        color : $brand-success;
                     }
                 }
             }
         }
 
         .proposal-pros-cons {
-            @include display-flex(row,space-between,flex-start);
+            @include display-flex(row,space-between,center);
             border-bottom : 1px solid #e4e4e4;
-            padding: 1em 0;
+            padding: 3em 0;
             margin-bottom : 1em;
 
             .section-content {
                 text-align: center;
                 width : 50%;
-                color : #707070;
+                color : $brand-success;
 
                 .md-icon {
-                    &.thumb-up {
-                        color : $brand-success;
-                    }
-                    &.thumb-down {
-                        color : $red-A400;
-                    }
+                    color : $brand-success;
                 }
                 ul {
                     list-style: none;
@@ -943,7 +859,6 @@ $tooltip-border-color: $blue-grey-200 !default;
             font-size: 13px;
             .md-icon {
                 font-size: 15px !important;
-                color : $brand-warning;
             }
         }
     }
@@ -988,9 +903,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
             .proposal-actions {
                 .md-button {
-                    width: 100px;
-                    font-size: 13px;
-                    font-weight: 500;
+                    width: 140px;
                 }
             }
         }
@@ -1034,12 +947,8 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 
     .cost-breakdown-notes {
+        @include display-flex(row,space-between,initial);
         margin-bottom : 2em;
-
-        .cost-breakdown-notes-sections {
-            @include display-flex(row,space-between,initial);
-        }
-
         .section-content {
             background: #f2f2f2;
 
@@ -1050,23 +959,22 @@ $tooltip-border-color: $blue-grey-200 !default;
 
             &.cost-breakdown-section {
                 width:60%;
-                border-radius: 5px  0 0 5px;
-                border  : 1px solid #d8d8d8;
-                padding : 0;
+                border-radius: 10px  0 0 10px;
+                border-right : 1px solid #e5e5e5;
+                padding : 1em 3em 1em 1em;
+
 
                 .md-table-content {
                     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-                    margin-bottom : 0.7em;
-                }
-
-                .md-table-cell,.md-table-head {
-                    height: 45px;
-                    padding:  0.5em 1.2em;
                 }
 
                 .md-table-content , .md-content.md-theme-default {
                     background: none;
                     color : #000;
+
+                    .md-table-cell {
+                        height: 33px;
+                    }
 
                     thead {
                         .md-table-head-label {
@@ -1087,24 +995,12 @@ $tooltip-border-color: $blue-grey-200 !default;
             }
             &.notes-section {
                 width:40%;
-                border-radius: 0 5px 5px 0;
-                padding : 1em 2em;
-                border  : 1px solid #d8d8d8;
-                border-left : 0;
-                @include display-flex(column,space-between,initial);
-                >div {
-                    h4 {
-                        margin : 0;
-                    }
-                }
+                border-radius: 0 10px 10px 0;
+                padding : 2em;
+
                 p {
                     font-weight: 400;
                     font-size: 14px;
-                    margin : 0;
-
-                    &.danger-label {
-                        color : $red-A400;
-                    }
                 }
 
             }
@@ -1148,13 +1044,12 @@ $tooltip-border-color: $blue-grey-200 !default;
             bottom : 1em;
             left : 2em;
             z-index : 1999;
-            background: #fff !important;
+            background-color: #cccccc !important;
             color : #000 !important;
             border-radius: 0;
-            border : none;
             font-weight: 500;
             .md-ripple {
-                font-size: 16px;
+                font-size: 14px;
             }
         }
 
@@ -1172,9 +1067,12 @@ $tooltip-border-color: $blue-grey-200 !default;
             @include display-flex(row,flex-start,flex-start);
 
             h5{
-                margin : 0 0.5em 0 0;
+                margin : 0;
                 font-weight: 500;
                 font-size: 15px;
+            }
+            .star-rating {
+                margin: 0 0.5em;
             }
 
             .review-count {
@@ -1191,17 +1089,15 @@ $tooltip-border-color: $blue-grey-200 !default;
 
         .feedback-item {
             position : relative;
-            padding : 1em 1em 1em 60px;
+            padding-left : 50px;
             font-size: 14px;
             font-weight: 400;
             margin-bottom : 1em;
-            border  : 1px solid #d8d8d8;
-            border-radius: 5px;
 
             .item-thumbnail {
                 position : absolute;
-                left : 1em;
-                top : 1.5em;
+                left : 0;
+                top : 0;
                 border : 1px solid #b9b9b9;
                 width : 30px;
                 height : 30px;
@@ -1222,15 +1118,12 @@ $tooltip-border-color: $blue-grey-200 !default;
 
             .item-body {
                 p {
-                    margin : 0 0 0.5em;
-                    font-size: 13px;
-                    line-height: initial;
+                    margin : 0;
                 }
             }
 
             .date {
                 color : #666666;
-                font-size: 13px;
             }
         }
     }

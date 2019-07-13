@@ -13,7 +13,7 @@
 
                 <div class="tabs-section">
                     <tabs
-                        :tab-name="['<span>0</span> Requirements', '<span>' + selectedBlock.proposals.length + '</span> Proposals', '<span>0</span> Comparison', '<span>0</span> Winner']"
+                        :tab-name="['Requirements', 'Proposals (' + selectedBlock.proposals.length + ')', 'Comparison', 'Winner']"
                         color-button="default"
                         >
                         <template slot="tab-pane-1" style="width: 100%;">
@@ -21,7 +21,6 @@
                         </template>
                         <template slot="tab-pane-2" style="width: 100%;">
                             <div class="manage-proposals_proposals-list" v-if="selectedBlock.proposals">
-                                <h4>New or Updated</h4>
                                 <div class="proposals-list_item" v-for="(proposal,index) in selectedBlock.proposals" :key="index">
                                     <div class="proposal-info text-left">
                                         <div class="proposal-title-reviews">{{ proposal.vendor ? proposal.vendor.vendorDisplayName : 'No Vendor Title' }}
@@ -55,8 +54,6 @@
                                         <md-button class="md-rose md-sm" @click="viewProposal(proposal)">View</md-button>
                                     </div>
                                 </div>
-
-                                <md-button class="md-default show-more-btn"> Show more</md-button>
                             </div>
                         </template>
                         <template slot="tab-pane-3" style="width: 100%;">
@@ -67,7 +64,7 @@
                         </template>
                     </tabs>
 
-                    <md-card class="allocated-budget"> <md-card-content>Allocated Budget: <div class="budget">${{selectedBlock.allocatedBudget}}</div></md-card-content></md-card>
+                    <div class="allocated-budget">Allocated Budget : ${{selectedBlock.allocatedBudget}}</div>
                 </div>
 
                 <div class="md-layout" style="overflow: auto; max-height: 80vh;" v-if="selectedBlock.proposals">

@@ -17,7 +17,7 @@
           :class="[
             {active: isActivePanel(tabName[index])},
             {[getColorButton(colorButton)]: isActivePanel(tabName[index])}]">
-            <div v-html="tabName[index]"></div>
+            {{tabName[index]}}
             <md-icon v-if="navPillsIcons">{{tabIcon[index]}}</md-icon>
         </md-list-item>
       </md-list>

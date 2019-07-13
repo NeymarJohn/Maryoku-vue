@@ -100,10 +100,10 @@
                                                 <md-icon>near_me</md-icon>
                                             </md-button>
                                         </template>
-                                        <md-button class="md-danger md-xs md-round md-just-icon pull-right" style="padding: 0;" @click="deleteBlock(block.id)">
-                                            <md-icon>delete</md-icon>
-                                        </md-button>
                                     </template>
+                                    <md-button class="md-danger md-xs md-round md-just-icon pull-right" style="padding: 0;" @click="deleteBlock(block.id)">
+                                        <md-icon>delete</md-icon>
+                                    </md-button>
                                 </td>
                             </tr>
                             <tr>
@@ -359,7 +359,7 @@
             reviewProposals(item, winnerId = null) {
                 window.currentPanel = this.$showPanel({
                     component: ViewProposals,
-                    cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
+                    cssClass: 'md-layout-item md-size-70 transition36',
                     openOn: 'right',
                     props: {event: this.event, selectedBlock: item, winnerId : winnerId}
                 })
@@ -375,7 +375,7 @@
             showRequirementsSidepanel(item , winnerId = null) {
                 window.currentPanel = this.$showPanel({
                     component: ViewProposals,
-                    cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
+                    cssClass: 'md-layout-item md-size-70 transition36',
                     openOn: 'right',
                     props: {event: this.event, selectedBlock: item, winnerId : winnerId}
                 })
