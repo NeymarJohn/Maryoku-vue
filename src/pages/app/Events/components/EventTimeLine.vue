@@ -259,7 +259,6 @@
 
                             timelineItem.delete().then(result => {
                                 this.getTimelineItems();
-                                this.$root.$emit("timeline-updated", this.timelineItems);
                             }).catch(error => {
                                 console.log(error);
                                 this.$root.$emit("timeline-updated", this.timelineItems);
@@ -291,6 +290,7 @@
                     this.isLoading = false;
                     this.timelineItems.forEach((item)=>{item.isItemLoading = false;});
                     this.event.timelineItems = this.timelineItems;
+                    this.$root.$emit("timeline-updated", this.timelineItems);
                 })
             },
             cancelTimelineItem(item, index){
