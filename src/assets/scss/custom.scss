@@ -650,11 +650,12 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 
     .md-card-tabs.md-card-plain .md-list {
-        justify-content: flex-start !important;
+        justify-content: space-between !important;
         margin : 1em 0 2em !important;
         padding : 0 !important;
         width : 75% !important;
         box-shadow: none;
+        background: #fff;
 
         .md-list-item {
             margin-left : 0;
@@ -689,14 +690,6 @@ $tooltip-border-color: $blue-grey-200 !default;
                 text-transform: capitalize;
                 font-size: 13px;
 
-                .md-list-item-content {
-                    >div {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                    }
-                }
-
                 span {
                     border : 1px solid #c6c6c6;
                     border-radius: 50%;
@@ -706,13 +699,6 @@ $tooltip-border-color: $blue-grey-200 !default;
                     text-align: center;
                     padding-top : 10px;
                     margin-right : 0.7em;
-
-                    i {
-                        margin : 0;
-                        padding : 0;
-                        font-size: 24px !important;
-                        line-height: 12px;
-                    }
 
                 }
             }
