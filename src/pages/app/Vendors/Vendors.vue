@@ -84,21 +84,6 @@
     <div>
       <!--TODO : Filters Here-->
     </div>
-    <div>
-      <!--TODO : Filters Here-->
-      <md-switch
-        class="md-switch-info pull-right text-right"
-        style="padding: 0; margin: 12px;"
-        @change="fetchData(1)"
-        v-model="myVendors"
-      >My vendors</md-switch>
-      <md-switch
-        class="md-switch-info pull-right text-right"
-        style="padding: 0; margin: 12px;"
-        @change="fetchData(1)"
-        v-model="grid"
-      >{{grid? 'Grid': 'List'}}</md-switch>
-    </div>
 
     <div class="md-layout md-gutter">
       <div class="md-layout-item md-size-30 sidebar-filters">
@@ -109,11 +94,7 @@
               <span class="md-list-item-text md-headline">Category</span>
               <md-list slot="md-expand">
                 <md-list-item class="md-inset">All Categories</md-list-item>
-                <md-list-item
-                  v-for="(item,index) in buildingBlocksList"
-                  :key="index"
-                  class="md-inset"
-                >{{item.value}}</md-list-item>
+                <md-list-item v-for="(item,index) in items" :key="index" class="md-inset">Offsite</md-list-item>
               </md-list>
             </md-list-item>
             <md-list-item md-expand :md-expanded="true">
@@ -154,38 +135,11 @@
           </md-list>
         </div>
       </div>
-      <!-- <md-grid-list class="md-layout-item elevation-demo ">
-      
-      </md-grid-list>-->
-
       <div class="md-layout-item">
-        <div class="elevation-demo">
-          <vendor-card
-            class
-            :grid="grid"
-            v-for="(item,index) in vendorsList"
-            :vendor="item"
-            :index="index"
-            :key="index"
-            :tooltipModels="tooltipModels"
-            @select-vendor="onSelectVendor"
-            @close-vendor="onCloseVendorForm"
-            :vendorsList="vendorsList"
-            :fetchVendors="fetchData"
-            mode="listing"
-            ref="VendorsTable"
-            :buildingBlocksList="buildingBlocksList"
-          />
-        </div>
+        <vendor-card v-for="(item,index) in vendorsList" :vendor="item" :key="index" />
+        <div></div>
       </div>
     </div>
-    <pagination
-      class="pagination-no-border pagination-info"
-      @input="pageChanged($event)"
-      v-model="pagination.page"
-      :per-page="pagination.limit"
-      :total="pagination.total"
-    ></pagination>
   </div>
 </template>
 
@@ -226,10 +180,9 @@ export default {
       selected_vendor: {},
       add_vendor: false,
       vendor_selected: false,
-      grid: true,
       buildingBlocksList: [],
       myVendors: false,
-      items: [
+          items: [
         { message: "Foo" },
         { message: "Bar" },
         { message: "Bar" },
@@ -358,20 +311,6 @@ export default {
 .get-started {
   background-color: #26c6da;
   height: 100vh;
-}
-.md-content {
-  width: 100px;
-  height: 100px;
-  margin: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.elevation-demo {
-  padding: 16px;
-  display: flex;
-  flex-wrap: wrap;
 }
 
 .get-started-card-title {

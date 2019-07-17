@@ -27,8 +27,8 @@
                     </md-card>
                 </li>
             </ul>
-            <div v-else>
-                <img src="/static/img/timeline_example.png" style="opacity: 0.4;">
+            <div>
+                <img src="/static/img/timeline_example.png" style="opacity: 0.15;">
             </div>
         </div>
     </div>
