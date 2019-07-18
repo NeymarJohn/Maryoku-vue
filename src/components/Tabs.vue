@@ -9,7 +9,7 @@
       <slot name="header-title"></slot>
     </md-card-header>-->
     <md-card-content>
-      <md-list class="nav-tabs md-card" style="background-color: white !important; margin-top: -15px; width: 110%; margin-left: -55px; padding-left: 55px; margin-bottom:0; justify-content: center;">
+      <md-list class="nav-tabs md-card" style=" margin-top: -15px; width: 110%; margin-left: -55px; padding-left: 55px; margin-bottom:0; justify-content: center;">
         <md-list-item
           v-for="(item, index) in tabName"
           @click="switchPanel(tabName[index])"

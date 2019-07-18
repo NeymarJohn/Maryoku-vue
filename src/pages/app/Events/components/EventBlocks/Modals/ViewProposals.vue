@@ -13,7 +13,7 @@
 
                 <div class="tabs-section">
                     <tabs
-                        :tab-name="['<span>0</span> Requirements', '<span>' + selectedBlock.proposals.length + '</span> Proposals', '<span>0</span> Comparison', '<span>0</span> Winner']"
+                        :tab-name="['<span>'+requirementsLength+'</span> Requirements', '<span>' + selectedBlock.proposals.length + '</span> Proposals', '<span>0</span> Comparison', '<span>0</span> Winner']"
                         color-button="default"
                         >
                         <template slot="tab-pane-1" style="width: 100%;">
@@ -51,7 +51,7 @@
                                     <div class="proposal-actions text-right">
                                         <div class="cost">${{proposal.cost}}</div>
 
-                                        <md-button class="md-primary md-sm">Accept</md-button>
+                                        <md-button class="md-primary md-sm" @click="manageProposalsAccept(proposal)">Accept</md-button>
                                         <md-button class="md-rose md-sm" @click="viewProposal(proposal)">View</md-button>
                                     </div>
                                 </div>
@@ -135,14 +135,16 @@
     import VueElementLoading from 'vue-element-loading';
     import _ from "underscore";
     import ViewProposal from './ViewProposal.vue'
-    import EventBlockRequirements from '../Modals/EventBlockRequirements.vue'
+    import EventBlockRequirements from '../Modals/EventBlockRequirements.vue';
+    import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue';
 
 
     export default {
         components: {
             VueElementLoading,
             Tabs,
-            EventBlockRequirements
+            EventBlockRequirements,
+            ManageProposalsAccept
         },
         props: {
             event: Object,
@@ -158,12 +160,18 @@
             isLoaded : false,
             proposalsToDisplay : 1,
             ratings: [1, 2, 3, 4, 5],
+            requirementsLength : 0
         }),
 
         created() {
-            console.log(this.selectedBlock.proposals);
+
         },
         mounted() {
+
+            this.$bus.$on('refreshRequirementsLength',(data)=>{
+
+                this.$set(this,'requirementsLength',data);
+            });
 
         },
         methods: {
@@ -224,6 +232,14 @@
                     cssClass: 'md-layout-item md-size-70 transition36',
                     openOn: 'right',
                     props: {event: this.event, proposal: proposal}
+                })
+            },
+            manageProposalsAccept(proposal) {
+                window.currentPanel = this.$showPanel({
+                    component: ManageProposalsAccept,
+                    cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
+                    openOn: 'right',
+                    props: {event: this.event, selectedBlock: this.selectedBlock}
                 })
             }
         },

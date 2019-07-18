@@ -650,12 +650,11 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 
     .md-card-tabs.md-card-plain .md-list {
-        justify-content: space-between !important;
+        justify-content: flex-start !important;
         margin : 1em 0 2em !important;
         padding : 0 !important;
         width : 75% !important;
         box-shadow: none;
-        background: #fff;
 
         .md-list-item {
             margin-left : 0;
@@ -690,6 +689,14 @@ $tooltip-border-color: $blue-grey-200 !default;
                 text-transform: capitalize;
                 font-size: 13px;
 
+                .md-list-item-content {
+                    >div {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                }
+
                 span {
                     border : 1px solid #c6c6c6;
                     border-radius: 50%;
@@ -699,6 +706,13 @@ $tooltip-border-color: $blue-grey-200 !default;
                     text-align: center;
                     padding-top : 10px;
                     margin-right : 0.7em;
+
+                    i {
+                        margin : 0;
+                        padding : 0;
+                        font-size: 24px !important;
+                        line-height: 12px;
+                    }
 
                 }
             }
@@ -870,6 +884,13 @@ $tooltip-border-color: $blue-grey-200 !default;
                         font-weight: bold;
                         color : $brand-success;
                     }
+                }
+
+                &.full-width {
+                    padding : 0 1em;
+                    width : 100%;
+                    @include display-flex(row,space-between,center);
+
                 }
             }
         }
@@ -2304,6 +2325,10 @@ iframe{
         border-radius: 0 !important;
     }
 
+    .md-card-tabs.md-card-plain .md-card-header, .md-card-tabs.md-card-plain .md-list,.nav-tabs {
+        background-color: #fff !important;
+    }
+
     .event-invitees .md-list-item-button {
         border-radius: 5px !important;
     }
@@ -3020,6 +3045,94 @@ iframe{
         pointer-events: none;
     }
 }
+
+.md-card.acceptance-section {
+    .acceptance-section-header {
+        @include display-flex(row,space-between,center);
+        border-bottom : 1px solid #d7d7d7;
+        border-radius: 0 !important;
+        padding: 1.3em 3em;
+
+        .header-title {
+            @include display-flex(row,flex-start,center);
+
+            .md-title {
+                font-size: 25px;
+                font-weight: 400;
+            }
+        }
+        .header-actions {
+            .md-button {
+                font-size: 14px;
+            }
+        }
+    }
+    >.md-card-content {
+        padding: 1.3em 1em;
+    }
+}
+.proposal-payments {
+    padding : 0;
+
+}
+.proposal-payments-details {
+    list-style: none;
+    padding : 0;
+    margin : 0;
+
+    li {
+        display: inline-block;
+        width : 48%;
+        float : left;
+        margin-bottom : 2em;
+    }
+    .details {
+        &-label {
+            color: #707070;
+            font-size: 13px;
+
+        }
+        &-desc {
+            font-size: 15px;
+
+            .md-button {
+                margin : 3px 0 0;
+                .md-ripple {
+                    padding : 0 !important;
+                    justify-content: flex-start;
+                    font-size: 13px;
+                }
+            }
+
+        }
+    }
+}
+.payment-details_list-items {
+    list-style: none;
+    padding : 2em 1em;
+    margin : 0;
+    li {
+        @include display-flex(row,space-between,center);
+        margin-bottom : 0.5em;
+        font-weight: 400;
+        font-size: 14px;
+        color : #707070;
+
+    }
+}
+.payment-policy {
+    font-size: 12px;
+    .md-button {
+        margin : 3px 0 0;
+        .md-ripple {
+            padding : 0 !important;
+            justify-content: flex-start;
+            font-size: 12px;
+        }
+    }
+}
+
+
 @media screen and (max-width : 500px) {
     .event-details {
         &_content.md-card-content {
