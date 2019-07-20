@@ -231,7 +231,7 @@
                     component: ViewProposal,
                     cssClass: 'md-layout-item md-size-70 transition36',
                     openOn: 'right',
-                    props: {event: this.event, proposal: proposal}
+                    props: {event: this.event, proposal: proposal, selectedBlock : this.selectedBlock}
                 })
             },
             manageProposalsAccept(proposal) {

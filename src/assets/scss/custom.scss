@@ -3111,6 +3111,10 @@ iframe{
     list-style: none;
     padding : 2em 1em;
     margin : 0;
+
+    &.fee-tax-items {
+        padding : 1em 1em 0;
+    }
     li {
         @include display-flex(row,space-between,center);
         margin-bottom : 0.5em;
@@ -3118,6 +3122,56 @@ iframe{
         font-size: 14px;
         color : #707070;
 
+        &.fee-tax {
+            font-weight: 500;
+            font-size: 16px;
+
+            .details {
+                &-title {
+                    color : #000;
+                }
+
+                &-cost {
+                    color : $brand-primary
+                }
+            }
+        }
+
+    }
+}
+
+.bank-account-details {
+    width : 70%;
+    margin : 0 auto;
+}
+.payment-details {
+    .form-section {
+        margin-top : 2em;
+
+        .md-field {
+            flex-direction: column;
+        }
+        .md-field.md-theme-default label {
+            position: relative;
+            top: 0;
+            margin-bottom: 0.5em;
+            font-size: 13px !important;
+        }
+        .md-field .md-input, .md-field .md-textarea {
+            background: #fff;
+            padding: 5px !important;
+            border: 1px solid #d2d2d2;
+            border-radius: 5px;
+        }
+        .md-field.md-theme-default:after {
+            display: none;
+        }
+
+        .section-title {
+            margin : 0;
+            font-weight: 500;
+            font-size: 15px;
+        }
     }
 }
 .payment-policy {

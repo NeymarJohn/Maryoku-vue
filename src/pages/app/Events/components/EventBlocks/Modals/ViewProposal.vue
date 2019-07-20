@@ -27,7 +27,7 @@
                         <md-button class="md-rose md-sm md-simple no-uppercase">
                             <md-icon>compare</md-icon> Add to compare
                         </md-button>
-                        <md-button class="md-rose md-sm bold no-uppercase">
+                        <md-button class="md-rose md-sm bold no-uppercase" @click="manageProposalsAccept(proposal)">
                             Accept proposal
                         </md-button>
                     </div>
@@ -371,15 +371,17 @@
     import _ from 'underscore';
 
     import LightBox from 'vue-image-lightbox';
+    import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue';
 
 
     export default {
         components: {
-            VueElementLoading,LightBox
+            VueElementLoading,LightBox, ManageProposalsAccept
         },
         props: {
             event: Object,
             proposal: Object,
+            selectedBlock : Object
         },
         data: () => ({
             // auth: auth,
@@ -446,6 +448,14 @@
                     console.log('false');
                     this.viewImages = true;
                 }
+            },
+            manageProposalsAccept(proposal) {
+                window.currentPanel = this.$showPanel({
+                    component: ManageProposalsAccept,
+                    cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
+                    openOn: 'right',
+                    props: {event: this.event, selectedBlock: this.selectedBlock}
+                })
             }
         },
         computed: {}
