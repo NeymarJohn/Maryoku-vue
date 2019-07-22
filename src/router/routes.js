@@ -111,7 +111,7 @@ let publicPages = {
       meta: {auth: false, title: 'Event', gtm: "Event"},
     },
       {
-          path: "/vendor-proposals",
+          path: "/proposal-request/:id",
           name: "VendorProposals",
           component: VendorProposals,
           meta: {auth: false, title: 'Vendor Proposals', gtm: "VendorProposals"},
@@ -155,7 +155,7 @@ let emptyLayoutPages = {
             component: MyEvents,
             meta: {auth: true, title: 'My Events', gtm: "MyEvents"}
         },
-  
+
     ]
 };
 

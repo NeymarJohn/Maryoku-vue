@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
-    <div class="md-layout vendor-proposals">
+    <div class="md-layout vendor-proposals" v-if="proposalRequest">
         <div class="md-layout-item md-size-100">
             <h3 class="title">Vendor's Name</h3>
         </div>
@@ -21,7 +21,7 @@
                                     Start Date:
                                 </div>
                                 <div class="info-value">
-                                    December 20,2019
+                                    {{getEventDate(proposalRequest.eventData.eventStartMillis)}}
                                 </div>
                             </div>
                         </div>
@@ -32,7 +32,7 @@
                                     Location:
                                 </div>
                                 <div class="info-value">
-                                    135 West street, New York
+                                    {{proposalRequest.eventData.location}}
                                 </div>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                                     Participants:
                                 </div>
                                 <div class="info-value">
-                                    74 + Spouses
+                                    {{proposalRequest.eventData.numberOfParticipants}} + {{proposalRequest.eventData.participantsType}}
                                 </div>
                             </div>
                         </div>
@@ -64,7 +64,7 @@
             <!-- ./Event Information Card -->
 
             <!-- Dietary requirements -->
-            <md-card class="event-information-card">
+            <md-card class="event-information-card" style="display: none;">
                 <md-card-content>
                     <div class="md-layout">
                         <div class="md-layout-item md-size-100">
@@ -133,76 +133,43 @@
             <!-- ./Dietary requirements -->
 
             <!-- Must-Have Requirements -->
-            <md-card class="event-information-card">
-                <md-card-content>
-                    <div class="md-layout">
-                        <div class="md-layout-item md-size-100">
-                            <h4 class="title">Must-Have Requirements</h4>
-                        </div>
+            <template v-if="proposalRequestRequirements.length">
+                <md-card class="event-information-card" v-for="(item,index) in proposalRequestRequirements">
+                    <md-card-content>
+                        <div class="md-layout">
+                            <div class="md-layout-item md-size-100">
+                                <h4 class="title">{{item.title}} Requirements</h4>
+                            </div>
 
-                        <div class="md-layout-item md-size-100">
-                            <div class="vendor-proposals_requirements-list">
-                                <div class="list-item md-layout" v-for="(item,index) in mustHaveList" :key="index">
-                                    <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
-                                        {{item.title}}
+                            <div class="md-layout-item md-size-100">
+                                <div class="vendor-proposals_requirements-list">
+                                    <div class="list-item md-layout" v-for="(requirement,index) in item.requirements" :key="index">
+                                        <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
+                                            {{requirement.requirementTitle}}
 
-                                        <div class="requirement-desc">
-                                            {{item.desc}}
+                                            <div class="requirement-desc">
+                                                {{requirement.requirementValue}}
 
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="included-in-price md-layout-item md-size-25 md-small-size-40">
+                                        <div class="included-in-price md-layout-item md-size-25 md-small-size-40">
 
-                                        <md-switch class="md-switch-rose switch-btn"  v-model="item.included_in_price"></md-switch>
-                                        <label :for="`include-${index}`">Included in price</label>
-                                    </div>
-                                    <div class="actions-list md-layout-item md-size-25 md-small-size-60">
-                                        <md-button class="md-rose md-simple"><md-icon>block</md-icon> Item not available</md-button>
-                                        <md-button class="md-primary md-simple"><md-icon>comment</md-icon> Add Comment</md-button>
+                                            <md-switch class="md-switch-rose switch-btn"  v-model="requirement.includedInPrice"></md-switch>
+                                            <label :for="`include-${index}`">Included in price</label>
+                                        </div>
+                                        <div class="actions-list md-layout-item md-size-25 md-small-size-60">
+                                            <md-button class="md-rose md-simple" v-if="!requirement.itemNotAvailable"><md-icon>block</md-icon> Item not available</md-button>
+                                            <md-button class="md-primary md-simple"><md-icon>comment</md-icon> Add Comment</md-button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </md-card-content>
-            </md-card>
+                    </md-card-content>
+                </md-card>
+            </template>
+
             <!-- ./Must-Have Requirements -->
-
-            <!-- More Requirements -->
-            <md-card class="event-information-card">
-                <md-card-content>
-                    <div class="md-layout">
-                        <div class="md-layout-item md-size-100">
-                            <h4 class="title">More Requirements</h4>
-                        </div>
-
-                        <div class="md-layout-item md-size-100">
-                            <div class="vendor-proposals_requirements-list">
-                                <div class="list-item md-layout" v-for="(item,index) in moreList" :key="index">
-                                    <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
-                                        {{item.title}}
-
-                                        <div class="requirement-desc">
-                                            {{item.desc}}
-
-                                        </div>
-                                    </div>
-                                    <div class="included-in-price md-layout-item md-size-25 md-small-size-40">
-
-                                        <md-switch class="md-switch-rose switch-btn"  v-model="item.included_in_price"></md-switch>
-                                        <label :for="`include-${index}`">Included in price</label>
-                                    </div>
-                                    <div class="actions-list md-layout-item md-size-25 md-small-size-60">
-                                        <md-button class="md-rose md-simple"><md-icon>block</md-icon> Item not available</md-button>
-                                        <md-button class="md-primary md-simple"><md-icon>comment</md-icon> Add Comment</md-button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </md-card-content>
-            </md-card>
-            <!-- ./More Requirements -->
 
 
             <div class="vendor-images-attachments">
@@ -352,6 +319,9 @@
     //MAIN MODULES
     import ChartComponent from "@/components/Cards/ChartComponent";
     import VueElementLoading from "vue-element-loading";
+    import ProposalRequest from '@/models/ProposalRequest';
+    import ProposalRequestComment from '@/models/ProposalRequestComment';
+
 
     //COMPONENTS
     import Icon from "@/components/Icon/Icon.vue";
@@ -454,19 +424,65 @@
                 vendorImages : [],
                 serverUrl: process.env.SERVER_URL,
                 imagePreview : null,
+                proposalRequest : null,
+                proposalRequestRequirements : []
             };
         },
         created(){
 
+             ProposalRequest.find(this.$route.params.id)
+                .then(resp => {
+                    console.log(' Response   -->>>  ',resp);
+                    this.$set(this,'proposalRequest',resp);
+
+                    this.proposalRequestRequirements = _.chain(resp.requirements).groupBy('requirementPriority').map(function(value, key) {
+
+                        return {
+                            title: key,
+                            requirements: value
+                        }
+
+
+                    })
+                        .value();
+
+                    console.log(this.proposalRequestRequirements);
+
+                })
+                .catch(error=>{
+                    console.log(' error   -->>>  ',error);
+                })
+
+
+            // ProposalRequestComment.find(this.$route.params.id)
+            //     .then(resp => {
+            //         console.log(' Response2   -->>>  ',resp);
+            //     })
+            //     .catch(error=>{
+            //         console.log(error);
+            //     })
 
         },
         mounted() {
+
+
 
 
         },
         methods: {
 
             requirementCostChanges(val, index) {
+
+            },
+            getEventDate(eventStartMillis) {
+
+                let x = new Date(eventStartMillis);
+
+                const monthNames = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+
+                return monthNames[x.getMonth()]+ ' ' + x.getDate() +  ',' + x.getFullYear();
 
             }
         },
