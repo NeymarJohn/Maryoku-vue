@@ -267,20 +267,20 @@
             <md-card class="bid-section">
                 <md-card-content >
 
-                    <h3 class="text-center">You’re the 4th bidder</h3>
+                    <h3 class="text-center">You’re the {{proposalRequest.bidderRank}}th bidder</h3>
                     <p class="text-center">Consider former proposals before placing your bid</p>
 
                     <div class="cost-average">
                         <div class="cost-average_item">
                             <h5 class="">Lowest</h5>
-                            <div class="cost">$290</div>
+                            <div class="cost">${{proposalRequest.bidRange.low}}</div>
                         </div>
                         <div class="cost-average_item arrow-item">
                             <md-icon>arrow_right_alt</md-icon>
                         </div>
                         <div class="cost-average_item">
                             <h5 class="">Highest</h5>
-                            <div class="cost">$1500</div>
+                            <div class="cost">${{proposalRequest.bidRange.high}}</div>
                         </div>
                     </div>
 
