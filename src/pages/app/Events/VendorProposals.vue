@@ -134,7 +134,7 @@
 
             <!-- Must-Have Requirements -->
             <template v-if="proposalRequestRequirements.length">
-                <md-card class="event-information-card" v-for="(item,index) in proposalRequestRequirements">
+                <md-card class="event-information-card" v-for="(item,index) in proposalRequestRequirements" :key="index">
                     <md-card-content>
                         <div class="md-layout">
                             <div class="md-layout-item md-size-100">
@@ -187,18 +187,14 @@
                             <!-- List Vendor Images -->
                             <div class="vendor-images-list">
                                 <div class="vendor-images-list_item"
-                                    :style="`background : url(https://bit.ly/2TWGILO) center center no-repeat`"
+                                     v-for="(image,index) in proposalRequestImages" :key="index"
+                                    :style="`background : url(${serverUrl}/1/proposal-requests/${proposalRequest.id}/images/${image.id}) center center no-repeat`"
                                 >
-                                    <md-button class="md-primary md-sm">delete</md-button>
+                                    <md-button class="md-primary md-sm" @click="deleteImage(image.id,index)">delete</md-button>
                                 </div>
 
-                                <div class="vendor-images-list_item"
-                                     :style="`background : url(https://bit.ly/2TWGILO) center center no-repeat`"
-                                >
-                                    <md-button class="md-primary md-sm">delete</md-button>
-                                </div>
-
-                                <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image"><md-icon>add</md-icon></md-button>
+                                <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image" @click="uploadEventImage" ><md-icon>add</md-icon></md-button>
+                                <input type="file" style="display: none;" ref="eventFile" accept="image/gif, image/jpg, image/png" @change="onEventFilePicked">
                             </div>
                             <!-- ./List Vendor Images -->
                         </div>
@@ -259,28 +255,25 @@
             </md-card>
             <!-- ./More Requirements -->
 
-
-
-
         </div>
         <div class="md-layout-item md-size-30 md-small-size-100">
             <md-card class="bid-section">
                 <md-card-content >
 
-                    <h3 class="text-center">You’re the 4th bidder</h3>
+                    <h3 class="text-center">You’re the {{proposalRequest.bidderRank}}th bidder</h3>
                     <p class="text-center">Consider former proposals before placing your bid</p>
 
                     <div class="cost-average">
                         <div class="cost-average_item">
                             <h5 class="">Lowest</h5>
-                            <div class="cost">$290</div>
+                            <div class="cost">${{proposalRequest.bidRange.low}}</div>
                         </div>
                         <div class="cost-average_item arrow-item">
                             <md-icon>arrow_right_alt</md-icon>
                         </div>
                         <div class="cost-average_item">
                             <h5 class="">Highest</h5>
-                            <div class="cost">$1500</div>
+                            <div class="cost">${{proposalRequest.bidRange.high}}</div>
                         </div>
                     </div>
 
@@ -321,6 +314,7 @@
     import VueElementLoading from "vue-element-loading";
     import ProposalRequest from '@/models/ProposalRequest';
     import ProposalRequestComment from '@/models/ProposalRequestComment';
+    import ProposalRequestImage from '@/models/ProposalRequestImage';
 
 
     //COMPONENTS
@@ -425,14 +419,15 @@
                 serverUrl: process.env.SERVER_URL,
                 imagePreview : null,
                 proposalRequest : null,
-                proposalRequestRequirements : []
+                proposalRequestRequirements : [],
+                proposalRequestImages : [],
+                alretExceedPictureSize : false
             };
         },
         created(){
 
              ProposalRequest.find(this.$route.params.id)
                 .then(resp => {
-                    console.log(' Response   -->>>  ',resp);
                     this.$set(this,'proposalRequest',resp);
 
                     this.proposalRequestRequirements = _.chain(resp.requirements).groupBy('requirementPriority').map(function(value, key) {
@@ -446,12 +441,14 @@
                     })
                         .value();
 
-                    console.log(this.proposalRequestRequirements);
+                    console.log(this.proposalRequest);
 
                 })
                 .catch(error=>{
-                    console.log(' error   -->>>  ',error);
+                    console.log(' error here   -->>>  ',error);
                 })
+
+            this.getImages();
 
 
             // ProposalRequestComment.find(this.$route.params.id)
@@ -464,6 +461,8 @@
 
         },
         mounted() {
+
+
 
 
 
@@ -483,6 +482,94 @@
                 ];
 
                 return monthNames[x.getMonth()]+ ' ' + x.getDate() +  ',' + x.getFullYear();
+
+            },
+            uploadEventImage(imageId = null) {
+                this.selectedImage = typeof imageId != 'object' ? imageId : null;
+                this.$refs.eventFile.click();
+            },
+
+            onEventFilePicked(event) {
+                let file = event.target.files || event.dataTransfer.files;
+                if (!file.length) {
+                    return;
+                }
+
+                if (file[0].size <= 5000000){ // 5mb
+
+                    this.createImage(file[0]);
+
+                } else {
+
+                    this.alretExceedPictureSize = true
+                    this.$notify(
+                        {
+                            message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
+                            horizontalAlign: 'center',
+                            verticalAlign: 'top',
+                            type: 'warning'
+                        })
+
+                }
+
+            },
+            createImage(file, type) {
+                let reader = new FileReader();
+                let vm = this;
+
+                this.isLoading = true;
+
+                reader.onload = e => {
+
+                    const proposalRequest = new ProposalRequest({id: this.proposalRequest.id});
+
+                    return new ProposalRequestImage({vendorProposalFile : e.target.result}).for(proposalRequest).save().then(result => {
+
+                        console.log('i am here' , result);
+                        this.isLoading = false;
+                        this.proposalRequestImages.push({id : result.id});
+
+
+                    })
+                        .catch((error) => {
+                            this.isLoading = false;
+                            console.log('Error');
+                            console.log(error);
+                        });
+                };
+                reader.readAsDataURL(file);
+            },
+            getImages() {
+
+                const proposalRequest = new ProposalRequest({id: this.$route.params.id});
+
+                new ProposalRequestImage().for(proposalRequest).get()
+                    .then(imagesList => {
+                        this.$set(this,'proposalRequestImages',imagesList);
+                        console.log(imagesList)
+                    })
+                    .catch((error) => {
+                        console.log(' ProposalRequestImage Error');
+
+
+                        console.log(error);
+                    });
+            },
+            deleteImage(imageId,index) {
+                const proposalRequest = new ProposalRequest({id: this.$route.params.id});
+
+                this.isLoading = true;
+
+                return new ProposalRequestImage({id : imageId}).for(proposalRequest).delete().then(result => {
+
+                    this.proposalRequestImages.splice(index,1);
+                    this.isLoading = false;
+                })
+                    .catch((error) => {
+                        this.isLoading = false;
+
+                        console.log(error);
+                    });
 
             }
         },
