@@ -93,7 +93,7 @@
                     console.error('unable to connect : ' + error);
                   });*/
 
-                    let me = that.$auth.user;
+                    let me = that.$auth.user.me;
 
                     if (process.env.NODE_ENV === 'production') {
                         try {
