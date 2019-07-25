@@ -529,7 +529,6 @@
                         this.isLoading = false;
                         this.proposalRequestImages.push({id : result.id});
 
-
                     })
                         .catch((error) => {
                             this.isLoading = false;
