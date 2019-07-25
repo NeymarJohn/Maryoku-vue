@@ -546,7 +546,7 @@
                 new ProposalRequestImage().for(proposalRequest).get()
                     .then(imagesList => {
                         this.$set(this,'proposalRequestImages',imagesList);
-                        console.log(imagesList)
+                        console.log('proposalRequestImages => ',imagesList)
                     })
                     .catch((error) => {
                         console.log(' ProposalRequestImage Error');
