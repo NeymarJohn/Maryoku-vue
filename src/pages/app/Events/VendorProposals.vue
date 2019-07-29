@@ -83,30 +83,30 @@
                             <div class="vendor-proposals_requirements-list">
                                 <div class="list-item md-layout item-title"  >
                                     <div class="requirement-title md-layout-item md-size-65 md-small-size-100">
-                                        Venue
+                                        {{proposalRequest.requirementsCategory}}
                                     </div>
                                     <div class="md-layout-item md-size-35 md-small-size-100 text-right item-cost-desc">
                                         <span>Per guest $45</span>
                                         <md-field class="with-bg">
                                             <span class="md-prefix">$</span>
-                                            <md-input v-model="initial"></md-input>
+                                            <md-input v-model="proposalRequest.requirementsCategoryCost"></md-input>
                                         </md-field>
                                     </div>
                                 </div>
-                                <div class="list-item md-layout" v-for="(item,index) in dietaryList" :key="index">
+                                <div class="list-item md-layout" v-for="(item,index) in proposalRequest.requirements" :key="index">
                                     <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
-                                        {{item.title}}: {{item.meals}} Meals
+                                        {{item.requirementTitle}}
                                     </div>
                                     <div class="included-in-price md-layout-item md-size-50 md-small-size-100 text-right item-cost-desc">
                                         <template v-if="!item.included_in_price">
                                             <md-field >
-                                                <md-select v-model="initial">
+                                                <md-select v-model="item.per_guest">
                                                     <md-option>Per Guest</md-option>
                                                 </md-select>
                                             </md-field>
                                             <md-field class="with-bg">
                                                 <span class="md-prefix">$</span>
-                                                <md-input v-model="initial"></md-input>
+                                                <md-input v-model="item.block_cost"></md-input>
                                             </md-field>
                                         </template>
 
@@ -125,90 +125,10 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="md-layout-item md-size-100">
-                            <div class="vendor-proposals_cost-and-availability md-layout">
-                                <div class="md-layout-item md-size-75 md-small-size-100">
-                                    <div class="items-costs-list">
-                                        <div class="item-cost" v-for="(item,index) in dietaryList" :key="index">
-                                            <div class="item-cost_title">
-                                                {{item.meals}} {{item.title}}
-                                            </div>
-                                            <div class="item-cost_cost-value">
-                                                <span>Cost</span>
-                                                <div class="input-field">
-                                                    <span class="dollar-sign">$</span>
-                                                    <label-edit :text="item.cost ? item.cost.toString() : ''"
-                                                                :field-name="item.id.toString()"
-                                                                @text-updated-blur="requirementCostChanges"
-                                                                @text-updated-enter="requirementCostChanges"></label-edit>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="md-layout-item md-size-25 md-small-size-100 availability-status">
-                                    <div>
-                                        <md-radio v-model="available_to_deliver" :value="true"
-                                                     :id="`available-1`" class="md-success"></md-radio>
-                                        <!--<label style=" margin:  14px 16px 14px 0" :for="`include-${index}`">Include a link to the <a :href="`/#/events/${eventData ? eventData.id : ''}/public`">event public page</a>?</label>-->
-                                        <label :for="`available-1`">Available for Delivery</label>
-                                    </div>
-                                    <div>
-                                        <md-radio v-model="available_to_deliver" :value="false"
-                                                  :id="`available-2`"></md-radio>
-                                        <!--<label style=" margin:  14px 16px 14px 0" :for="`include-${index}`">Include a link to the <a :href="`/#/events/${eventData ? eventData.id : ''}/public`">event public page</a>?</label>-->
-                                        <label :for="`available-2`">Not Available</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </md-card-content>
             </md-card>
             <!-- ./Dietary requirements -->
-
-            <!-- Must-Have Requirements -->
-            <template v-if="proposalRequestRequirements.length">
-                <md-card class="event-information-card" v-for="(item,index) in proposalRequestRequirements" :key="index">
-                    <md-card-content>
-                        <div class="md-layout">
-                            <div class="md-layout-item md-size-100">
-                                <h4 class="title">{{item.title}} Requirements</h4>
-                            </div>
-
-                            <div class="md-layout-item md-size-100">
-                                <div class="vendor-proposals_requirements-list">
-                                    <div class="list-item md-layout" v-for="(requirement,index) in item.requirements" :key="index">
-                                        <div class="requirement-title md-layout-item md-size-75 md-small-size-100">
-                                            {{requirement.requirementTitle}}
-
-                                            <div class="requirement-desc" style="display: none;">
-                                                {{requirement.requirementValue}}
-                                            </div>
-                                        </div>
-                                        <div class="included-in-price md-layout-item md-size-25 md-small-size-100">
-
-                                            <md-switch class="md-switch-rose switch-btn"  v-model="requirement.includedInPrice"></md-switch>
-                                            <label :for="`include-${index}`">Included in price</label>
-                                        </div>
-                                        <div class="actions-list md-layout-item md-size-100 md-small-size-100">
-                                            <md-field >
-                                                <label>Amount</label>
-                                                <md-input type="number" v-model="requirement.requirementValue"></md-input>
-                                            </md-field>
-                                            <md-button class="md-rose md-simple" v-if="!requirement.itemNotAvailable"><md-icon>block</md-icon> Item not available</md-button>
-                                            <md-button class="md-primary md-simple"><md-icon>comment</md-icon> Add Comment</md-button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </md-card-content>
-                </md-card>
-            </template>
-
-            <!-- ./Must-Have Requirements -->
 
 
             <div class="vendor-images-attachments">
@@ -276,17 +196,84 @@
 
 
             <!-- More Requirements -->
+            <md-card class="event-information-card terms-section">
+                <md-card-content>
+                    <div class="md-layout">
+                        <div class="md-layout-item md-size-100">
+                            <h4 class="title">Terms</h4>
+                        </div>
+                        <div class="terms-form">
+                            <h5>Cancellation policy</h5>
+                            <div class="cancellation-options">
+                                <md-radio v-model="proposalRequest.no_refund"> <span class="label-title">No refund </span> <br> Lorem Ipsum is simply dummy text of the printing and typesetting </md-radio>
+                                <md-radio v-model="proposalRequest.no_refund"> <span class="label-title">Strict </span> <br> Lorem Ipsum is simply dummy text of the printing and typesetting </md-radio>
+                            </div>
+                        </div>
+                        <div class="terms-form">
+                            <h5>Payment Notes</h5>
+                            <div class="payments-notes-fields">
+                                <md-field>
+                                    <label>Deposit Cost</label>
+                                    <span class="md-prefix">$</span>
+                                    <md-input></md-input>
+                                </md-field>
+                                <md-field>
+                                    <label>Timeframe</label>
+                                    <md-select>
+                                        <md-option></md-option>
+                                    </md-select>
+                                </md-field>
+                            </div>
+                        </div>
+                    </div>
+                </md-card-content>
+            </md-card>
+            <!-- ./More Requirements -->
+
+            <!-- More Requirements -->
             <md-card class="event-information-card notes-section">
                 <md-card-content>
                     <div class="md-layout">
                         <div class="md-layout-item md-size-100">
-                            <h4 class="title">Notes</h4>
+                            <h4 class="title">Person Message</h4>
                         </div>
 
                         <div class="md-layout-item md-size-100">
                             <md-field>
                                 <md-textarea rows="5"></md-textarea>
                             </md-field>
+                        </div>
+                        <div class="md-layout-item md-size-50">
+                            <md-field>
+                                <label>First Name</label>
+                                <md-input ></md-input>
+                            </md-field>
+                        </div>
+                        <div class="md-layout-item md-size-50">
+                            <md-field>
+                                <label>Last Name</label>
+                                <md-input ></md-input>
+                            </md-field>
+                        </div>
+                        <div class="md-layout-item md-size-50">
+                            <md-field>
+                                <label>Email</label>
+                                <md-input type="email"></md-input>
+                            </md-field>
+                        </div>
+                        <div class="md-layout-item md-size-50">
+                            <md-field>
+                                <label>Phone Number</label>
+                                <md-input ></md-input>
+                            </md-field>
+                        </div>
+                        <div class="md-layout-item md-size-100">
+                            <md-field>
+                                <label>subject</label>
+                                <md-input ></md-input>
+                            </md-field>
+                        </div>
+                        <div class="md-layout-item md-size-100">
                             <md-button class="md-primary pull-right md-sm">Save</md-button>
                         </div>
                     </div>
@@ -322,12 +309,8 @@
 
                     <div class="offer-value">
                         <div class="value-section upgrades-section ">
-                            <div class="title">Upgrades</div>
-                            <div class="cost text-right">$23</div>
-                        </div>
-                        <div class="value-section upgrades-section ">
-                            <div class="title">Upgrades</div>
-                            <div class="cost text-right">$23</div>
+                            <div class="title">{{proposalRequest.requirementsCategory}}</div>
+                            <div class="cost text-right">${{proposalRequest.requirementsCategoryCost}}</div>
                         </div>
                         <div class="value-section upgrades-section is-bold">
                             <div class="title">Extra</div>
@@ -341,8 +324,12 @@
 
                     <div class="bid-button">
                         <md-button class="md-success">
-                            Place Bid
+                            Submit Proposal
                         </md-button>
+                    </div>
+
+                    <div class="payment-policy text-center">
+                        By clicking pay now, you agree to pay the total amount shown, which includes tax and service Fee.
                     </div>
 
                 </md-card-content>
@@ -568,8 +555,6 @@
                     const proposalRequest = new ProposalRequest({id: this.proposalRequest.id});
 
                     return new ProposalRequestImage({vendorProposalFile : e.target.result}).for(proposalRequest).save().then(result => {
-
-                        console.log('i am here' , result);
                         this.isLoading = false;
                         this.proposalRequestImages.push({id : result.id});
 

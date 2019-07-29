@@ -2803,6 +2803,7 @@ iframe{
         .requirement-title {
             font-weight: 500;
             padding-top : 1em;
+            text-transform: capitalize;
 
             .requirement-desc {
                 color : rgba(112, 112, 112, 0.87);
@@ -3012,10 +3013,26 @@ iframe{
     .md-field {
         border : 1px solid rgba(0,0,0,0.2);
         border-radius: 5px;
+        &:after , &:before {
+            display: none;
+        }
+        label {
+            top: 12px !important;
+            left : 10px !important;
+        }
+        &.md-focused {
+            label {
+                display: none;
+            }
+        }
     }
 }
 
 .bid-section {
+
+    .md-card-content {
+        padding : 1em 2em;
+    }
     h3 {
         font-size: 18px;
         margin : 0 0 0.6em;
@@ -3977,6 +3994,37 @@ iframe{
         }
         .md-button-content {
             width: 100%;
+        }
+    }
+}
+
+.terms-section {
+    .title {
+
+    }
+}
+.terms-form {
+    padding : 0 1em;
+
+    h5 {
+        margin : 2em 0 0;
+        font-weight: 500;
+        color : #000;
+    }
+
+    .md-radio {
+        font-size: 13px;
+        .label-title {
+            font-size: 15px;
+            font-weight: 400;
+            color : #000;
+        }
+    }
+
+    .payments-notes-fields {
+        @include display-flex(row,flex-start,flex-start);
+        .md-field {
+            margin-right : 2em;
         }
     }
 }
