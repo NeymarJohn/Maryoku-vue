@@ -8,16 +8,15 @@
 
         <div class="md-layout-item md-size-70 md-small-size-100">
             <!-- Event Information Card -->
-            <md-card class="md-primary event-information-card">
+            <md-card class="event-information-card">
                 <md-card-content>
                     <div class="md-layout">
                         <div class="md-layout-item md-size-100">
                             <h4 class="title">Event information</h4>
                         </div>
-                        <div class="md-layout-item md-size-45 md-small-size-100">
+                        <div class="md-layout-item md-size-25 md-small-size-100">
                             <div class="info-item">
-                                <div class="">
-                                    <md-icon>calendar_today</md-icon>
+                                <div class="info-label">
                                     Start Date:
                                 </div>
                                 <div class="info-value">
@@ -25,10 +24,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="md-layout-item md-size-45 md-small-size-100">
+                        <div class="md-layout-item md-size-25 md-small-size-100">
                             <div class="info-item">
-                                <div class="">
-                                    <md-icon>place</md-icon>
+                                <div class="info-label">
                                     Location:
                                 </div>
                                 <div class="info-value">
@@ -36,10 +34,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="md-layout-item md-size-45 md-small-size-100">
+                        <div class="md-layout-item md-size-25 md-small-size-100">
                             <div class="info-item">
-                                <div class="">
-                                    <md-icon>history</md-icon>
+                                <div class="info-label">
                                     Time & Duration:
                                 </div>
                                 <div class="info-value">
@@ -47,15 +44,23 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="md-layout-item md-size-45 md-small-size-100">
+                        <div class="md-layout-item md-size-25 md-small-size-100">
                             <div class="info-item">
-                                <div class="">
-                                    <md-icon>person</md-icon>
+                                <div class="info-label">
                                     Participants:
                                 </div>
                                 <div class="info-value">
                                     {{proposalRequest.eventData.numberOfParticipants}} + {{proposalRequest.eventData.participantsType}}
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="md-layout-item md-size-100">
+                            <div class="proposal-description">
+                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                            </div>
+                            <div class="show-more-button">
+                                <md-button class="md-primary md-sm md-simple">Show me another event</md-button>
                             </div>
                         </div>
                     </div>
@@ -64,25 +69,56 @@
             <!-- ./Event Information Card -->
 
             <!-- Dietary requirements -->
-            <md-card class="event-information-card" style="display: none;">
+            <md-card class="event-information-card">
                 <md-card-content>
                     <div class="md-layout">
                         <div class="md-layout-item md-size-100">
-                            <h4 class="title">Dietary Requirements</h4>
+                            <h4 class="title">Elements in this proposal (2)</h4>
+                            <p>
+                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                            </p>
                         </div>
 
                         <div class="md-layout-item md-size-100">
                             <div class="vendor-proposals_requirements-list">
+                                <div class="list-item md-layout item-title"  >
+                                    <div class="requirement-title md-layout-item md-size-65 md-small-size-100">
+                                        Venue
+                                    </div>
+                                    <div class="md-layout-item md-size-35 md-small-size-100 text-right item-cost-desc">
+                                        <span>Per guest $45</span>
+                                        <md-field class="with-bg">
+                                            <span class="md-prefix">$</span>
+                                            <md-input v-model="initial"></md-input>
+                                        </md-field>
+                                    </div>
+                                </div>
                                 <div class="list-item md-layout" v-for="(item,index) in dietaryList" :key="index">
                                     <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
                                         {{item.title}}: {{item.meals}} Meals
                                     </div>
-                                    <div class="included-in-price md-layout-item md-size-25 md-small-size-40">
+                                    <div class="included-in-price md-layout-item md-size-50 md-small-size-100 text-right item-cost-desc">
+                                        <template v-if="!item.included_in_price">
+                                            <md-field >
+                                                <md-select v-model="initial">
+                                                    <md-option>Per Guest</md-option>
+                                                </md-select>
+                                            </md-field>
+                                            <md-field class="with-bg">
+                                                <span class="md-prefix">$</span>
+                                                <md-input v-model="initial"></md-input>
+                                            </md-field>
+                                        </template>
+
 
                                         <md-switch class="md-switch-rose switch-btn"  v-model="item.included_in_price"></md-switch>
                                         <label :for="`include-${index}`">Included in price</label>
                                     </div>
-                                    <div class="actions-list md-layout-item md-size-25 md-small-size-60">
+                                    <div class="actions-list md-layout-item md-size-100 md-small-size-100">
+                                        <md-field >
+                                            <label>Amount</label>
+                                            <md-input type="number"></md-input>
+                                        </md-field>
                                         <md-button class="md-rose md-simple"><md-icon>block</md-icon> Item not available</md-button>
                                         <md-button class="md-primary md-simple"><md-icon>comment</md-icon> Add Comment</md-button>
                                     </div>
@@ -144,20 +180,23 @@
                             <div class="md-layout-item md-size-100">
                                 <div class="vendor-proposals_requirements-list">
                                     <div class="list-item md-layout" v-for="(requirement,index) in item.requirements" :key="index">
-                                        <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
+                                        <div class="requirement-title md-layout-item md-size-75 md-small-size-100">
                                             {{requirement.requirementTitle}}
 
-                                            <div class="requirement-desc">
+                                            <div class="requirement-desc" style="display: none;">
                                                 {{requirement.requirementValue}}
-
                                             </div>
                                         </div>
-                                        <div class="included-in-price md-layout-item md-size-25 md-small-size-40">
+                                        <div class="included-in-price md-layout-item md-size-25 md-small-size-100">
 
                                             <md-switch class="md-switch-rose switch-btn"  v-model="requirement.includedInPrice"></md-switch>
                                             <label :for="`include-${index}`">Included in price</label>
                                         </div>
-                                        <div class="actions-list md-layout-item md-size-25 md-small-size-60">
+                                        <div class="actions-list md-layout-item md-size-100 md-small-size-100">
+                                            <md-field >
+                                                <label>Amount</label>
+                                                <md-input type="number" v-model="requirement.requirementValue"></md-input>
+                                            </md-field>
                                             <md-button class="md-rose md-simple" v-if="!requirement.itemNotAvailable"><md-icon>block</md-icon> Item not available</md-button>
                                             <md-button class="md-primary md-simple"><md-icon>comment</md-icon> Add Comment</md-button>
                                         </div>
@@ -286,6 +325,14 @@
                             <div class="title">Upgrades</div>
                             <div class="cost text-right">$23</div>
                         </div>
+                        <div class="value-section upgrades-section ">
+                            <div class="title">Upgrades</div>
+                            <div class="cost text-right">$23</div>
+                        </div>
+                        <div class="value-section upgrades-section is-bold">
+                            <div class="title">Extra</div>
+                            <div class="cost text-right">$23</div>
+                        </div>
                         <div class="value-section user-offer-section ">
                             <div class="title">Your Offer</div>
                             <div class="cost text-right">$5000</div>
@@ -296,9 +343,6 @@
                         <md-button class="md-success">
                             Place Bid
                         </md-button>
-                    </div>
-                    <div class="show-more-button">
-                        <md-button class="md-primary md-sm md-simple">Show me another event</md-button>
                     </div>
 
                 </md-card-content>
