@@ -2,8 +2,26 @@
     <div class="md-layout">
         <div class="md-layout-item md-size-100" style="justify-content: space-between;">
             <div class="md-group" style="display: inline-block;">
-                <md-button class="md-xs md-icon-button md-white"><md-icon>view_list</md-icon></md-button>
-                <md-button class="md-xs md-icon-button md-info"><md-icon>view_module</md-icon></md-button>
+                <md-button 
+                  class="md-xs md-icon-button"
+                  :class="[
+                    {'md-white': view == 'grid'},
+                    {'md-info': view == 'list'},
+                  ]" 
+                  @click.prevent="changeView('list')"
+                >
+                  <md-icon>view_list</md-icon>
+                </md-button>
+                <md-button 
+                  class="md-xs md-icon-button" 
+                  :class="[
+                    {'md-white': view == 'list'},
+                    {'md-info': view == 'grid'},
+                  ]" 
+                  @click.prevent="changeView('grid')"
+                >
+                  <md-icon>view_module</md-icon>
+                </md-button>
             </div>
             <div style="display: inline-block; width: 60%; height: 30px; border: 1px solid lightgrey; background-color: white; border-radius: 5px; padding: 4px; margin: .3125rem 12px;">
                 <input class="md-input" type="text" style="width: 100%; height: 100%; border: 0; background-color: transparent; font-size: 16px;" placeholder="Search"></input>
@@ -21,7 +39,7 @@
         </div>
         <div class="md-layout-item md-size-100">
             <vue-element-loading :active="working" spinner="ring" color="#FF547C" background-color="transparent"/>
-            <div class="md-layout md-gutter ">
+            <!-- <div class="md-layout md-gutter ">
                 <div class="md-layout-item md-small-size-100 md-medium-size-50 md-large-size-33" v-for="vendor in vendorsList" :key="vendor.id">
                     <md-card>
                         <md-card-content style="padding: 15px;">
@@ -67,8 +85,19 @@
                         </md-card-actions>
                     </md-card>
                 </div>
-            </div>
-
+            </div> -->
+            <vendors-grid v-if="view == 'grid'"
+              :buildingBlocksList="buildingBlocksList"
+              :vendorsList="vendorsList"
+              :ratings="ratings"
+              @showVendorDetails="showVendorDetails"
+            />
+            <vendors-list v-if="view == 'list'"
+              :buildingBlocksList="buildingBlocksList"
+              :vendorsList="vendorsList"
+              @showVendorDetails="showVendorDetails"
+              @delete="showDeleteAlert"
+            />
         </div>
 
         <upload-modal ref="uploadModal"></upload-modal>
@@ -76,22 +105,27 @@
 </template>
 <script>
   import VueElementLoading from 'vue-element-loading';
+  import swal from "sweetalert2";
   import companyForm from './Form/companyForm.vue';
   import UploadModal from './ImportVendors';
+  import VendorsGrid from './VendorsGrid';
+  import VendorsList from './VendorsList';
 
   import Vendors from '@/models/Vendors';
   import EventComponent from '@/models/EventComponent';
-  import _ from 'underscore';
 
   export default {
     name: "vendors-pool",
     components: {
       VueElementLoading,
       companyForm,
-      UploadModal
+      UploadModal,
+      VendorsGrid,
+      VendorsList
     },
     data() {
       return {
+        view: "grid", //{grid, list}
         working: false,
         vendorsList: [],
         buildingBlocksList: [],
@@ -113,6 +147,8 @@
           this.buildingBlocksList = list;
 
           new Vendors().limit(1000).get().then((vendors) => {
+            console.log('vendors', vendors);
+            
             this.vendorsList = vendors[0].results;
             this.working = false;
           });
@@ -120,14 +156,37 @@
       });
     },
     methods: {
-      categoryTitle(categoryId){
-        let category = _.findWhere(this.buildingBlocksList, {id: categoryId});
-        return category ? category.value : categoryId;
+      changeView (view) {
+        this.view = view;
       },
-      categoryColor(categoryId){
-        let category = _.findWhere(this.buildingBlocksList, {id: categoryId});
-        return category ? category.color : 'info';
+      showDeleteAlert(vendor) {
+        swal({
+          title: "Are you sure?",
+          text: `You won't be able to revert this!`,
+          showCancelButton: true,
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonClass: "md-button md-success confirm-btn-bg ",
+          cancelButtonClass: "md-button md-danger cancel-btn-bg",    
+          confirmButtonText: "Yes, delete it!",
+          buttonsStyling: false
+        }).then(result => {
+          if (result.value) {
+            this.working = true;
+
+            vendor.delete()
+              .then(result => {
+                let indx = _.findIndex(this.vendorsList, {id: vendor.id});
+                this.vendorsList.splice(indx, 1);
+                this.working = false;
+              })
+              .catch(() => {
+                this.working = false;
+              });
+          }
+        });
       },
+
       showVendorDetails(vendor){
         window.currentPanel = this.$showPanel({
           component: companyForm,
@@ -173,7 +232,7 @@
         margin: -1px; padding: 0; border: 0;
     }
 
-    .star-rating {
+    /deep/ .star-rating {
 
         &__star {
             display: inline-block;
