@@ -146,9 +146,7 @@
           });
           this.buildingBlocksList = list;
 
-          new Vendors().limit(1000).get().then((vendors) => {
-            console.log('vendors', vendors);
-            
+          new Vendors().limit(1000).get().then((vendors) => {            
             this.vendorsList = vendors[0].results;
             this.working = false;
           });

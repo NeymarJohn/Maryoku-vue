@@ -276,8 +276,6 @@ const actions={
                   let _calendar = new Calendar({id: res[0].defaultCalendarId});
 
                   _calendar.calendarEvents().get().then(events => {
-                    console.log('events', events);
-                    
                    let upcomingEvents = events.reduce(function (result, element) {
                        // TODO : Eyal, Please notice that the status not returned
                       // if (element.status && element.status.toLowerCase() !== 'done') {
