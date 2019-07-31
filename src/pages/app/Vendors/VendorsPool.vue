@@ -1,0 +1,240 @@
+<template>
+    <div class="md-layout">
+        <div class="md-layout-item md-size-100" style="justify-content: space-between;">
+            <div class="md-group" style="display: inline-block;">
+                <md-button class="md-xs md-icon-button md-white"><md-icon>view_list</md-icon></md-button>
+                <md-button class="md-xs md-icon-button md-info"><md-icon>view_module</md-icon></md-button>
+            </div>
+            <div style="display: inline-block; width: 60%; height: 30px; border: 1px solid lightgrey; background-color: white; border-radius: 5px; padding: 4px; margin: .3125rem 12px;">
+                <input class="md-input" type="text" style="width: 100%; height: 100%; border: 0; background-color: transparent; font-size: 16px;" placeholder="Search"></input>
+            </div>
+            <div class="pull-right" style="margin: .3125rem 1px;">
+                <md-button style="display: inline-block;" class="md-info md-sm" @click="addNewVendor">Add Vendor</md-button>
+                <md-button style="display: inline-block;" class="md-info md-sm" @click="openUploadModal">Import Vendors From Spreadsheet</md-button>
+            </div>
+        </div>
+        <div class="md-layout-item md-size-100">
+            <!--<md-field>
+                <label>Search</label>
+                <md-input v-model="searchTerm" type="text"></md-input>
+            </md-field>-->
+        </div>
+        <div class="md-layout-item md-size-100">
+            <vue-element-loading :active="working" spinner="ring" color="#FF547C" background-color="transparent"/>
+            <div class="md-layout md-gutter ">
+                <div class="md-layout-item md-small-size-100 md-medium-size-50 md-large-size-33" v-for="vendor in vendorsList" :key="vendor.id">
+                    <md-card>
+                        <md-card-content style="padding: 15px;">
+                            <div class="md-layout">
+                                <div class="md-layout-item md-size-100" style="padding: 0;">
+                                    <div class="md-layout" style="margin: 0 -12px; ">
+                                        <div class="md-layout-item md-size-50">
+                                            <div style="background:url('/static/img/lock.jpg') no-repeat center center; height:100%; width:100%; background-size: cover; box-shadow: 0 0 3px #c0c0c0; border-radius: 5px; text-align: center;">
+                                                <div class="badge badge-rose" :class="`badge-${categoryColor(vendor.vendorCategory)}`" style="font-size: 10px !important; position: relative; top: 90%;">{{ categoryTitle(vendor.vendorCategory) }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="md-layout-item md-size-50">
+                                            <h5 class="title" style="font-weight: 700;">
+                                                {{vendor.vendorDisplayName}}
+                                            </h5>
+                                            <div class="">
+                                                <label class="star-rating__star"
+                                                       v-for="(rating, ratingIndex) in ratings"
+                                                       :key="ratingIndex"
+                                                       :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}" >★
+                                                </label> <span class="small text-gray">({{vendor.voters}})</span>
+                                            </div>
+                                            <div class="item-content ellipsis" style="min-height: 80px; max-height: 80px;">
+                                                <div>
+                                                    <p>
+                                                        {{vendor.vendorTagLine}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </md-card-content>
+                        <md-card-actions md-alignment="space-between">
+                            <div>
+                                <md-chips v-model="vendor.vendorTagging" style="padding: 0; margin: 0;" class="md-primary" name="tagging" id="tagging" :md-deletable="false" :md-static="true">{{tag}}</md-chips>
+                            </div>
+                            <md-button class="md-sm md-info" @click="showVendorDetails(vendor)">More ...</md-button>
+                        </md-card-actions>
+                    </md-card>
+                </div>
+            </div>
+
+        </div>
+
+        <upload-modal ref="uploadModal"></upload-modal>
+    </div>
+</template>
+<script>
+  import VueElementLoading from 'vue-element-loading';
+  import companyForm from './Form/companyForm.vue';
+  import UploadModal from './ImportVendors';
+
+  import Vendors from '@/models/Vendors';
+  import EventComponent from '@/models/EventComponent';
+  import _ from 'underscore';
+
+  export default {
+    name: "vendors-pool",
+    components: {
+      VueElementLoading,
+      companyForm,
+      UploadModal
+    },
+    data() {
+      return {
+        working: false,
+        vendorsList: [],
+        buildingBlocksList: [],
+        ratings: [1, 2, 3, 4, 5],
+        searchTerm: ""
+      };
+    },
+    mounted() {
+      this.working = true;
+      this.$auth.currentUser(this, true, ()=>{
+        new EventComponent().get().then(res=>{
+          let list = [];
+          res.forEach((parentBuildingBlock)=>{
+            /*parentBuildingBlock.childComponents.forEach((bb)=>{
+                list.push({id: bb.id, value: bb.title});
+            });*/
+            list.push({id: parentBuildingBlock.id, value: parentBuildingBlock.value});
+          });
+          this.buildingBlocksList = list;
+
+          new Vendors().limit(1000).get().then((vendors) => {
+            this.vendorsList = vendors[0].results;
+            this.working = false;
+          });
+        });
+      });
+    },
+    methods: {
+      categoryTitle(categoryId){
+        let category = _.findWhere(this.buildingBlocksList, {id: categoryId});
+        return category ? category.value : categoryId;
+      },
+      categoryColor(categoryId){
+        let category = _.findWhere(this.buildingBlocksList, {id: categoryId});
+        return category ? category.color : 'info';
+      },
+      showVendorDetails(vendor){
+        window.currentPanel = this.$showPanel({
+          component: companyForm,
+          cssClass: 'md-layout-item md-size-40 transition36 ',
+          openOn: 'right',
+          disableBgClick: false,
+          props: {
+            categories: this.buildingBlocksList,
+            selected_vendor: vendor,
+            creation_mode: false,
+          }
+        });
+      },
+      addNewVendor(){
+        window.currentPanel = this.$showPanel({
+          component: companyForm,
+          cssClass: 'md-layout-item md-size-40 transition36 ',
+          openOn: 'right',
+          disableBgClick: false,
+          props: {
+            categories: this.buildingBlocksList,
+            selected_vendor: {},
+            creation_mode: true,
+          }
+        });
+      },
+      openUploadModal(){
+        this.$refs.uploadModal.toggleModal(true);
+      },
+    },
+    computed: {},
+    watch: {}
+  };
+</script>
+<style lang="scss" scoped>
+    @import '@/assets/scss/md/_colors.scss';
+
+    %visually-hidden {
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        height: 1px; width: 1px;
+        margin: -1px; padding: 0; border: 0;
+    }
+
+    .star-rating {
+
+        &__star {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 1;
+            font-size: 0.9em;
+            color: #ABABAB;
+            transition: color .2s ease-out;
+
+            &.is-selected {
+                color: #FFD700;
+            }
+        }
+
+        &__checkbox {
+            @extend %visually-hidden;
+        }
+    }
+
+    .ellipsis {
+        overflow: hidden;
+        height: 80px;
+    }
+
+    .ellipsis:before {
+        content:"";
+        float: left;
+        width: 5px;
+        height: 85px;
+    }
+
+    .ellipsis > *:first-child {
+        float: right;
+        width: 100%;
+        margin-left: -5px;
+    }
+
+    .ellipsis:after {
+        content: "\02026";
+
+        box-sizing: content-box;
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+
+        float: right;
+        position: relative;
+        top: -25px;
+        left: 100%;
+        width: 3em;
+        margin-left: -3em;
+        padding-right: 5px;
+
+        text-align: right;
+
+        font-size: 1.8em;
+
+        background: -webkit-gradient(linear, left top, right top,
+            from(rgba(255, 255, 255, 0)), to(white), color-stop(50%, white));
+        background: -moz-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+        background: -o-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+        background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+        background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+    }
+</style>

@@ -34,6 +34,7 @@ import EventProposal from "@/pages/app/Events/EventProposal.vue";
 import Notes from "@/pages/app/Notes.vue";
 import Proposals from "@/pages/app/Proposals.vue";
 import Vendors from "@/pages/app/Vendors/Vendors.vue";
+import VendorsPool from "@/pages/app/Vendors/VendorsPool.vue";
 import ImportVendors from "@/pages/app/Vendors/ImportVendors.vue";
 import YearlyPlan from "@/pages/app/YearlyPlan/index.vue";
 import AnnualPlanner from "@/pages/app/AnnualPlanner/index.vue";
@@ -239,6 +240,12 @@ let appPages = {
             name: "Vendors",
             component: Vendors,
             meta: {gtm: "Vendors"}
+        },
+        {
+            path: "/vendors-pool",
+            name: "VendorsPool",
+            component: VendorsPool,
+            meta: {gtm: "VendorsPool"}
         },
         {
             path: "/import-vendors",

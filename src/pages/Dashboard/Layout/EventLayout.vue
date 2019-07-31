@@ -36,7 +36,7 @@
 
         <li class="menu-divider"></li>
 
-        <sidebar-item name="left-menu-vendors-list" class="left-menu-vendors-list" :link="{name: 'Vendors Pool', icon: 'contacts', path: '/vendors'}">
+        <sidebar-item name="left-menu-vendors-list" class="left-menu-vendors-list" :link="{name: 'Vendors Pool', icon: 'contacts', path: '/vendors-pool'}">
         </sidebar-item>
 
         <!--<sidebar-item :link="{name: 'My Vendors', icon: 'contacts', path: '/vendors'}">

@@ -11,14 +11,12 @@
                             <md-select id="remove-border"  class="no-underline"
                                        placeholder="Select Category"
                                        @md-selected="fetchVendors(1, $event)"
-                                         name="select">
-                                              <md-option  
-                                value=""
-                                >all</md-option>
-                                <md-option v-for="(cat, index) in buildingBlocksList" 
-                                :key="index"
-                                :value="cat.id"
-                                v-model="cat.id"
+                                       name="select">
+                                <md-option value="">all</md-option>
+                                <md-option v-for="(cat, index) in buildingBlocksList"
+                                           :key="index"
+                                           :value="cat.id"
+                                           v-model="cat.id"
                                 >{{cat.value}}</md-option>
                             </md-select>
                         </md-field>
@@ -53,7 +51,8 @@
                                 <input class="star-rating star-rating__checkbox"
                                        @click="setRanking(vendor.id,rating)"
                                        type="radio" :value="rating" :name="`market_ranking_`+vendor.id"
-                                       v-model="vendor.rank">★</label>
+                                       v-model="vendor.rank">★
+                            </label>
                         </div>
                     </md-table-cell>
                     <md-table-cell class="vendors-table_item-actions" v-if="mode === 'listing'">
@@ -85,213 +84,213 @@
 </template>
 
 <script>
-    import {Modal, SimpleWizard, WizardTab} from "@/components";
-    import swal from "sweetalert2";
-    import Vendors from "@/models/Vendors";
-    import RankingModal from './RankingModal';
-    import TagsModal from './TagsModal';
-    import ClickOutside from 'vue-click-outside'
-    // import auth from '@/auth';
+  import {Modal, SimpleWizard, WizardTab} from "@/components";
+  import swal from "sweetalert2";
+  import Vendors from "@/models/Vendors";
+  import RankingModal from './RankingModal';
+  import TagsModal from './TagsModal';
+  import ClickOutside from 'vue-click-outside'
+  // import auth from '@/auth';
 
-    import Calendar from "@/models/Calendar";
-    import CalendarEvent from "@/models/CalendarEvent";
-    import EventComponent from "@/models/EventComponent";
-    import EventComponentVendor from "@/models/EventComponentVendor";
-    import _ from "underscore";
+  import Calendar from "@/models/Calendar";
+  import CalendarEvent from "@/models/CalendarEvent";
+  import EventComponent from "@/models/EventComponent";
+  import EventComponentVendor from "@/models/EventComponentVendor";
+  import _ from "underscore";
 
-    export default {
-        components: {
-            Modal,
-            SimpleWizard,
-            WizardTab,
-            TagsModal,
-            RankingModal,
-            ClickOutside
-        },
-        props: {
-            vendorsList: {
-                type: Array,
-                default: () => {
-                    return [];
-                }
-            },
-            buildingBlocksList: {
-                type: Array,
-                default: () => {
-                    return [];
-                }
-            },
-            tooltipModels: {
-                type: Array,
-                default: () => {
-                    return {};
-                }
-            },
-            fetchVendors: {
-                type: Function
-            },
-            item: {
-                type: Object,
-                default: () => {
-                    return {};
-                }
-            },
-            mode : String,
-            selectedBlock : {
-                type : Object,
-                default : null
-            },
-            event : {
-                type : Object,
-                default : null
-            }
-        },
-        created() {
-
-            if ( this.event && this.selectedBlock ) {
-                this.getBlockVendors();
-            }
-
-        },
-        data() {
-            return {
-                /*auth : auth,*/
-                tagsModalOpen: false,
-                openPopup: false,
-                openPopupTags: false,
-                tags: [],
-                tag: ' ',
-                name: 'Direction',
-                ratings: [1, 2, 3, 4, 5],
-                index : 0,
-                selectedVendor: undefined,
-                blockVendors : []
-
-
-            }
-        },
-        mounted(){
-
-            this.getBlockVendors();
-
-        },
-        methods: {
-            async setRanking(id,ranking) {
-                console.log("sss")
-                let vendor = await Vendors.find(id);
-                vendor.rank = ranking;
-                vendor.save();
-
-                this.$notify(
-                    {
-                        message: 'Vendor Ranked successfully!',
-                        horizontalAlign: 'center',
-                        verticalAlign: 'top',
-                        type: 'success'
-                    })
-
-            },
-            closeModal(){
-                this.openPopup = false;
-            },
-            openPopover(index){
-                this.tooltipModels[index].value = !this.tooltipModels[index].value && (this.openPopup = true);
-
-                this.tooltipModels.map((item, itemIndex) => {
-                    if (index !== itemIndex) {
-                        this.tooltipModels[itemIndex].value = false;
-                    }
-                })
-
-            },
-            categoryTitle(categoryId){
-                let category = _.findWhere(this.buildingBlocksList, {id: categoryId});
-                return category ? category.value : categoryId;
-                const buildingBlock = _.findWhere(this.buildingBlocksList, {id: categoryId});
-                return buildingBlock ? buildingBlock.value : '';
-            },
-            deleteVendor(id){
-                swal({
-                    title: 'Are you sure you want to delete this vendor?',
-                    text: "You won't be able to revert this!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonClass: "md-button md-success confirm-btn-bg btn-fill",
-                    cancelButtonClass: "md-button md-danger cancel-btn-bg btn-fill",
-                    confirmButtonText: 'Yes, delete it!'
-                }).then(async (result) => {
-                    if (result.value) {
-                        let vendor = await Vendors.find(id);
-                        vendor.delete();
-
-                        let vendorIndex = this.vendorsList.findIndex(obj => obj.id === id);
-
-                        this.vendorsList.splice(vendorIndex, 1);
-                        this.$notify(
-                            {
-                                message: 'Vendor deleted successfully!',
-                                horizontalAlign: 'center',
-                                verticalAlign: 'top',
-                                type: 'success'
-                            })
-
-                        if (  this.selectedVendor == id ) {
-                            this.$set(this,'selectedVendor',undefined);
-                            this.$emit('close-vendor',{});
-                        }
-
-                    }
-                })
-
-            }
-            ,selectVendor(item) {
-                let _self = this;
-
-                if (  _self.selectedVendor != item.id ) {
-                    _self.$set(_self,'selectedVendor',item.id);
-                    _self.$emit('select-vendor',item);
-                } else {
-                    _self.$set(_self,'selectedVendor',undefined);
-                    _self.$emit('close-vendor',{});
-                }
-
-            },
-            resetSelectedVendor(data){
-                this.$set(this,'selectedVendor',data);
-            },
-            addVendor(data) {
-                this.$emit('add-vendor',data);
-                this.getBlockVendors();
-            },
-            removeVendor(data){
-                this.$emit('remove-vendor',data);
-                this.getBlockVendors();
-            },
-            getBlockVendors() {
-
-                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-                if (this.event) {
-                    let event = new CalendarEvent({ id: this.event.id });
-                    let selected_block = new EventComponent({ id: this.selectedBlock.id });
-
-                    new EventComponentVendor().for(calendar, event, selected_block)
-                        .get()
-                        .then(resp => {
-                            this.blockVendors = resp;
-                        })
-                        .catch(error => {
-
-                            console.log('error =>', error);
-
-                        });
-                }
-            },
-            isSelected(vendorId) {
-                let isSelected = _.find(this.blockVendors,function(vendor){ return vendor.vendorId === vendorId });
-                return isSelected ? true : false;
-            }
+  export default {
+    components: {
+      Modal,
+      SimpleWizard,
+      WizardTab,
+      TagsModal,
+      RankingModal,
+      ClickOutside
+    },
+    props: {
+      vendorsList: {
+        type: Array,
+        default: () => {
+          return [];
         }
-    };
+      },
+      buildingBlocksList: {
+        type: Array,
+        default: () => {
+          return [];
+        }
+      },
+      tooltipModels: {
+        type: Array,
+        default: () => {
+          return {};
+        }
+      },
+      fetchVendors: {
+        type: Function
+      },
+      item: {
+        type: Object,
+        default: () => {
+          return {};
+        }
+      },
+      mode : String,
+      selectedBlock : {
+        type : Object,
+        default : null
+      },
+      event : {
+        type : Object,
+        default : null
+      }
+    },
+    created() {
+
+      if ( this.event && this.selectedBlock ) {
+        this.getBlockVendors();
+      }
+
+    },
+    data() {
+      return {
+        /*auth : auth,*/
+        tagsModalOpen: false,
+        openPopup: false,
+        openPopupTags: false,
+        tags: [],
+        tag: ' ',
+        name: 'Direction',
+        ratings: [1, 2, 3, 4, 5],
+        index : 0,
+        selectedVendor: undefined,
+        blockVendors : []
+
+
+      }
+    },
+    mounted(){
+
+      this.getBlockVendors();
+
+    },
+    methods: {
+      async setRanking(id,ranking) {
+        console.log("sss")
+        let vendor = await Vendors.find(id);
+        vendor.rank = ranking;
+        vendor.save();
+
+        this.$notify(
+          {
+            message: 'Vendor Ranked successfully!',
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'success'
+          })
+
+      },
+      closeModal(){
+        this.openPopup = false;
+      },
+      openPopover(index){
+        this.tooltipModels[index].value = !this.tooltipModels[index].value && (this.openPopup = true);
+
+        this.tooltipModels.map((item, itemIndex) => {
+          if (index !== itemIndex) {
+            this.tooltipModels[itemIndex].value = false;
+          }
+        })
+
+      },
+      categoryTitle(categoryId){
+        let category = _.findWhere(this.buildingBlocksList, {id: categoryId});
+        return category ? category.value : categoryId;
+        const buildingBlock = _.findWhere(this.buildingBlocksList, {id: categoryId});
+        return buildingBlock ? buildingBlock.value : '';
+      },
+      deleteVendor(id){
+        swal({
+          title: 'Are you sure you want to delete this vendor?',
+          text: "You won't be able to revert this!",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonClass: "md-button md-success confirm-btn-bg btn-fill",
+          cancelButtonClass: "md-button md-danger cancel-btn-bg btn-fill",
+          confirmButtonText: 'Yes, delete it!'
+        }).then(async (result) => {
+          if (result.value) {
+            let vendor = await Vendors.find(id);
+            vendor.delete();
+
+            let vendorIndex = this.vendorsList.findIndex(obj => obj.id === id);
+
+            this.vendorsList.splice(vendorIndex, 1);
+            this.$notify(
+              {
+                message: 'Vendor deleted successfully!',
+                horizontalAlign: 'center',
+                verticalAlign: 'top',
+                type: 'success'
+              })
+
+            if (  this.selectedVendor == id ) {
+              this.$set(this,'selectedVendor',undefined);
+              this.$emit('close-vendor',{});
+            }
+
+          }
+        })
+
+      }
+      ,selectVendor(item) {
+        let _self = this;
+
+        if (  _self.selectedVendor != item.id ) {
+          _self.$set(_self,'selectedVendor',item.id);
+          _self.$emit('select-vendor',item);
+        } else {
+          _self.$set(_self,'selectedVendor',undefined);
+          _self.$emit('close-vendor',{});
+        }
+
+      },
+      resetSelectedVendor(data){
+        this.$set(this,'selectedVendor',data);
+      },
+      addVendor(data) {
+        this.$emit('add-vendor',data);
+        this.getBlockVendors();
+      },
+      removeVendor(data){
+        this.$emit('remove-vendor',data);
+        this.getBlockVendors();
+      },
+      getBlockVendors() {
+
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+        if (this.event) {
+          let event = new CalendarEvent({ id: this.event.id });
+          let selected_block = new EventComponent({ id: this.selectedBlock.id });
+
+          new EventComponentVendor().for(calendar, event, selected_block)
+            .get()
+            .then(resp => {
+              this.blockVendors = resp;
+            })
+            .catch(error => {
+
+              console.log('error =>', error);
+
+            });
+        }
+      },
+      isSelected(vendorId) {
+        let isSelected = _.find(this.blockVendors,function(vendor){ return vendor.vendorId === vendorId });
+        return isSelected ? true : false;
+      }
+    }
+  };
 </script>
 <style lang="scss">
     .md-table-cell-container{

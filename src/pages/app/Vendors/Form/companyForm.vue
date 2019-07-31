@@ -1,6 +1,6 @@
 <template>
     <div class="vendor-form">
-        <md-card >
+        <md-card class="md-card-plain">
             <md-card-header class="md-card-header-icon md-card-header-rose">
                 <div class="card-icon">
                     <md-icon>mail_outline</md-icon>
@@ -24,7 +24,7 @@
                                 required
                                 data-vv-name="vendorDisplayName"
                                 name="vendorDisplayName"
-                                v-validate="modelValidations.vendorDisplayName"
+                                v-validate="modelValidations.vendorDisplayName" v-focus
                         ></md-input>
                         <slide-y-down-transition>
                             <md-icon class="error" v-show="errors.has('vendorDisplayName')">close</md-icon>

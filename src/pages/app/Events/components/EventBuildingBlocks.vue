@@ -30,7 +30,7 @@
                                 <td>{{category.title}}</td>
                                 <td></td>
                                 <td class="allocated-budget">
-                                    <span class="dollar-sign">$</span>
+                                    <span class="dollar-sign pull-left">$</span>
                                     {{category.totalAllocatedBudget}}
                                     <span class="remains-budget" v-if="category.remainsBudget">-${{parseInt(category.remainsBudget)}}</span>
                                 </td>
@@ -60,7 +60,7 @@
                                 </td>
                                 <td class="allocated-budget" style="width: 15%;" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
                                     <div class="md-table-cell-container" >
-                                        <span class="dollar-sign">$</span>
+                                        <span class="dollar-sign pull-left">$</span>
                                         <label-edit style="width: 100%;" :text="block.allocatedBudget ? block.allocatedBudget.toString() : ''"
                                                     :field-name="block.componentId"
                                                     @text-updated-blur="blockBudgetChanged"
