@@ -13,7 +13,7 @@
         <md-table-cell md-label="Email">{{ item.vendorMainEmail }}</md-table-cell>
         <md-table-cell md-label="Phone">{{ item.vendorMainPhoneNumber }}</md-table-cell>
         <md-table-cell md-label="Website">{{ item.vendorWebsite }}</md-table-cell>
-        <md-table-cell md-label="Vendor Category">{{ categoryTitle(item.vendorCategory, buildingBlocksList) }}</md-table-cell>        
+        <md-table-cell md-label="Vendor Category">{{ categoryTitle(item.vendorCategory, buildingBlocksList) }}</md-table-cell>
         <md-table-cell md-label="Tags">
           <md-chips
             v-model="item.vendorTagging"

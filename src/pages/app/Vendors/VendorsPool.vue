@@ -2,33 +2,33 @@
     <div class="md-layout">
         <div class="md-layout-item md-size-100" style="justify-content: space-between;">
             <div class="md-group" style="display: inline-block;">
-                <md-button 
+                <md-button
                   class="md-xs md-icon-button"
                   :class="[
                     {'md-white': view == 'grid'},
                     {'md-info': view == 'list'},
-                  ]" 
+                  ]"
                   @click.prevent="changeView('list')"
                 >
                   <md-icon>view_list</md-icon>
                 </md-button>
-                <md-button 
-                  class="md-xs md-icon-button" 
+                <md-button
+                  class="md-xs md-icon-button"
                   :class="[
                     {'md-white': view == 'list'},
                     {'md-info': view == 'grid'},
-                  ]" 
+                  ]"
                   @click.prevent="changeView('grid')"
                 >
                   <md-icon>view_module</md-icon>
                 </md-button>
             </div>
-            <div style="display: inline-block; width: 60%; height: 30px; border: 1px solid lightgrey; background-color: white; border-radius: 5px; padding: 4px; margin: .3125rem 12px;">
-                <input class="md-input" type="text" style="width: 100%; height: 100%; border: 0; background-color: transparent; font-size: 16px;" placeholder="Search"></input>
+            <div style="display: inline-block; height: 30px; border: 1px solid lightgrey; background-color: white; border-radius: 5px; padding: 4px; margin: .3125rem 12px; flex-grow: 1;">
+                <input class="md-input" type="text" style="width: 100%; height: 100%; border: 0; background-color: transparent; font-size: 14px;" placeholder="Search"></input>
             </div>
-            <div class="pull-right" style="margin: .3125rem 1px;">
+            <div class="pull-right" style="margin: 0 1px;">
                 <md-button style="display: inline-block;" class="md-info md-sm" @click="addNewVendor">Add Vendor</md-button>
-                <md-button style="display: inline-block;" class="md-info md-sm" @click="openUploadModal">Import Vendors From Spreadsheet</md-button>
+                <md-button style="display: inline-block;" class="md-purple md-sm" @click="openUploadModal">Import Vendors From Spreadsheet</md-button>
             </div>
         </div>
         <div class="md-layout-item md-size-100">
@@ -113,6 +113,7 @@
 
   import Vendors from '@/models/Vendors';
   import EventComponent from '@/models/EventComponent';
+  import _ from 'underscore';
 
   export default {
     name: "vendors-pool",
@@ -146,7 +147,7 @@
           });
           this.buildingBlocksList = list;
 
-          new Vendors().limit(1000).get().then((vendors) => {            
+          new Vendors().limit(1000).get().then((vendors) => {
             this.vendorsList = vendors[0].results;
             this.working = false;
           });
@@ -165,7 +166,7 @@
           type: "warning",
           showCancelButton: true,
           confirmButtonClass: "md-button md-success confirm-btn-bg ",
-          cancelButtonClass: "md-button md-danger cancel-btn-bg",    
+          cancelButtonClass: "md-button md-danger cancel-btn-bg",
           confirmButtonText: "Yes, delete it!",
           buttonsStyling: false
         }).then(result => {
