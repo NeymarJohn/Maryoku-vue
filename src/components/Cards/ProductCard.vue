@@ -16,15 +16,18 @@
         <md-button class="md-danger md-simple fix-broken-card" @click="fixHeader" v-if="headerDown">
           <slot name="fixed-button"></slot> Fix Header!
         </md-button>
-        <md-button class="md-simple md-just-icon">
+        <md-button class="md-purple md-xs md-round md-just-icon">
           <slot name="first-button"></slot>
         </md-button>
-        <md-button class="md-success md-simple md-just-icon">
+        <md-button class="md-info md-xs md-round md-just-icon">
           <slot name="second-button"></slot>
         </md-button>
-        <md-button class="md-danger md-simple md-just-icon">
+        <md-button class="md-warning md-xs md-round md-just-icon">
           <slot name="third-button"></slot>
         </md-button>
+          <md-button class="md-danger md-xs md-round md-just-icon">
+              <slot name="fourth-button"></slot>
+          </md-button>
       </div>
       <slot name="title"></slot>
       <slot name="description"></slot>
@@ -54,7 +57,7 @@ export default {
   },
   computed: {
     headerDown() {
-      return this.hoverCount > 15;
+      return false; //this.hoverCount > 15;
     }
   },
   methods: {

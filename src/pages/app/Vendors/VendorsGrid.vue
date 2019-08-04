@@ -1,27 +1,34 @@
 <template>
     <div class="md-layout" style="margin-top: 42px;">
-        <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33"
+        <div class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100 md-large-size-25 md-size-20"
              v-for="vendor in vendorsList"
              :key="vendor.id">
             <product-card
-                header-animation="true">
-                <img class="img" slot="imageHeader" :src="vendorMainImage(vendor)">
+                header-animation="true" fixed-header="false" :data-count="9999" :hover-count="9999">
+                <img class="img" slot="imageHeader" :src="vendorMainImage(vendor)" style="min-height: 180px;max-height: 180px; object-fit: cover;">
                 <md-icon slot="fixed-button">build</md-icon>
                 <template slot="first-button">
-                    <md-icon>art_track</md-icon>
+                    <md-icon >more_horiz</md-icon>
                     <md-tooltip md-direction="bottom">View</md-tooltip>
                 </template>
                 <template slot="second-button">
-                    <md-icon >edit</md-icon>
-                    <md-tooltip md-direction="bottom">Edit</md-tooltip>
+                    <md-icon>open_in_browser</md-icon>
+                    <md-tooltip md-direction="bottom">Open website</md-tooltip>
+
                 </template>
                 <template slot="third-button">
-                    <md-icon >close</md-icon>
+                    <md-icon >edit</md-icon>
+                    <md-tooltip md-direction="bottom">Edit</md-tooltip>
+
+                </template>
+                <template slot="fourth-button">
+                    <md-icon >delete</md-icon>
                     <md-tooltip md-direction="bottom">Remove</md-tooltip>
+
                 </template>
                 <h4 slot="title" class="title">
                     <a class="" style="font-weight: bold;" href="#pablo">{{vendor.vendorDisplayName}}</a>
-                    <div class>
+                    <div class="small">
                         <label
                             class="star-rating__star"
                             v-for="(rating, ratingIndex) in ratings"
@@ -32,24 +39,30 @@
                     </div>
                 </h4>
 
-                <div slot="description" class="card-description " style="min-height: 96px; max-height: 96px;">
+                <div slot="description" class="card-description ">
                     <div style="max-height: 20px;">
                         <p>
                             {{vendor.vendorTagLine}}
                         </p>
                     </div>
+                    <div style="min-height: 38px;">
+                        <template v-if="vendor.vendorTagging && vendor.vendorTagging.length" v-for="(tag, index) in vendor.vendorTagging">
+                            <span style="text-transform: capitalize;">{{tag}}</span><span v-if="index <=  vendor.vendorTagging.length"> &middot; </span>
+                        </template>
+                    </div>
                 </div>
                 <template slot="footer">
                     <div class="price">
                         <div
-                            class="badge badge-rose"
+                            class="badge badge-primary"
                             :class="`badge-${categoryColor(vendor.vendorCategory, buildingBlocksList)}`"
                             style="font-size: 10px !important; position: relative; top: 90%;">{{ categoryTitle(vendor.vendorCategory, buildingBlocksList) }}</div>
                     </div>
                     <div class="stats">
-
-                        <md-chips v-model="vendor.vendorTagging" style="padding: 0; margin: 0;" class="md-primary text-center" name="tagging" id="tagging" :md-deletable="false" :md-static="true">{{tag}}</md-chips>
-
+                        <p class="category">
+                            <md-icon>place</md-icon>
+                            Geography
+                        </p>
                     </div>
                 </template>
             </product-card>
