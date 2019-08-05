@@ -7,6 +7,8 @@ import DropDown from "./Dropdown.vue";
 // Modals
 import Modal from "./Modal.vue";
 
+import VueSlideoutPanel from "./SlidePanel";
+
 // Tables
 import GlobalSalesTable from "./Tables/GlobalSalesTable.vue";
 
@@ -41,35 +43,36 @@ import SidebarPlugin from "./SidebarPlugin";
 import AnimatedNumber from "./AnimatedNumber";
 
 export {
-  IconCheckbox,
-  InputText,
-  Badge,
-  Modal,
-  Pagination,
-  GlobalSalesTable,
-  LockCard,
-  PricingCard,
-  SignupCard,
-  TestimonialCard,
-  StatsCard,
-  LoginCard,
-  ChartCard,
-  ChartComponent,
-  GlobalSalesCard,
-  NavTabsCard,
-  ProductCard,
-  DropDown,
-  SidebarPlugin,
-  TimeLine,
-  TimeLineItem,
-  ButtonTimeLineItem,
-  Tabs,
-  NavTabs,
-  Slider,
-  SimpleWizard,
-  WizardTab,
-  AnimatedNumber,
-  Collapse,
-  AsyncWorldMap,
-  LabelEdit
+    IconCheckbox,
+    InputText,
+    Badge,
+    Modal,
+    Pagination,
+    GlobalSalesTable,
+    LockCard,
+    PricingCard,
+    SignupCard,
+    TestimonialCard,
+    StatsCard,
+    LoginCard,
+    ChartCard,
+    ChartComponent,
+    GlobalSalesCard,
+    NavTabsCard,
+    ProductCard,
+    DropDown,
+    SidebarPlugin,
+    TimeLine,
+    TimeLineItem,
+    ButtonTimeLineItem,
+    Tabs,
+    NavTabs,
+    Slider,
+    SimpleWizard,
+    WizardTab,
+    AnimatedNumber,
+    Collapse,
+    AsyncWorldMap,
+    LabelEdit,
+    VueSlideoutPanel
 };

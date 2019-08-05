@@ -326,8 +326,6 @@
       this.$root.$on('submitForm', () => {
         this.validateEvent();
       });
-
-      this.$root.$emit("create-event-panel-open");
     },
     methods: {
       ...mapMutations('AnnualPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
@@ -512,7 +510,6 @@
         this.editTitle = false;
         this.clearForm();
         this.$emit("closePanel");
-        this.$root.$emit("create-event-panel-closed");
       },
       getOccasionList() {
         if ( this.$auth.user.defaultCalendarId ) {

@@ -10,6 +10,9 @@
   import Model from '@/models/Model';
 
   export default {
+    components: {
+
+    },
     data(){
       return {
         //auth: auth

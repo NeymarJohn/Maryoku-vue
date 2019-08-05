@@ -22,7 +22,7 @@ import VueGmaps from 'vue-gmaps'
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import VTooltip from 'v-tooltip';
 import VueGtm from 'vue-gtm';
-import VueSlideoutPanel from 'vue2-slideout-panel';
+import VueSlideoutPanel from 'src/components/SlidePanel';
 import Tawk from 'vue-tawk';
 import VueCookies from 'vue-cookies';
 import { VueStars } from "vue-stars"

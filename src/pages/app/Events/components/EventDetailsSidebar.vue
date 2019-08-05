@@ -133,192 +133,207 @@
 
 </template>
 <script>
-    import EventModal from '../EventModal/';
-    import EventPlannerVuexModule from '../EventPlanner.vuex';
-    import moment from 'moment'
+  import EventModal from '../EventModal/';
+  import EventPlannerVuexModule from '../EventPlanner.vuex';
+  import moment from 'moment'
 
-    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-    import swal from 'sweetalert2'
-    import Calendar from '@/models/Calendar'
-    import CalendarEvent from '@/models/CalendarEvent'
-    import EventComponent from '@/models/EventComponent'
-    import ChartComponent from '@/components/Cards/ChartComponent'
-    import CalendarEventStatistics from '@/models/CalendarEventStatistics'
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+  import swal from 'sweetalert2'
+  import Calendar from '@/models/Calendar'
+  import CalendarEvent from '@/models/CalendarEvent'
+  import EventComponent from '@/models/EventComponent'
+  import ChartComponent from '@/components/Cards/ChartComponent'
+  import CalendarEventStatistics from '@/models/CalendarEventStatistics'
 
-    // import auth from '@/auth';
-    import _ from 'underscore'
-    import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
-    import Tab from 'uiv/src/components/tabs/Tab'
-    import EventSidePanel from '../EventSidePanel.vue'
+  // import auth from '@/auth';
+  import _ from 'underscore'
+  import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
+  import Tab from 'uiv/src/components/tabs/Tab'
+  import EventSidePanel from '../EventSidePanel.vue'
 
-    export default {
-        name: 'event-details-sidebar',
-        components: {
-            Tab,
-            LabelEdit,
-            AnimatedNumber,
-            StatsCard,
-            ChartCard,
-            ChartComponent,
-            CalendarEventStatistics
-        },
-        props: {
-            event: {
-                type: Object,
-                default: () => {
-                    return {statistics: {}}
-                }
-            },
-        },
-        data: () => ({
-            calendarEvent: {},
-            selectedComponents: [],
-            eventId: null,
-            percentage: 0,
-            totalRemainingBudget: 0,
-            remainingBudgetPerEmployee: 0,
-            seriesData: [],
-            isLoading: false,
-            routeName: null,
-            budgetPerEmployee: 0
+  export default {
+    name: 'event-details-sidebar',
+    components: {
+      Tab,
+      LabelEdit,
+      AnimatedNumber,
+      StatsCard,
+      ChartCard,
+      ChartComponent,
+      CalendarEventStatistics
+    },
+    props: {
+      event: {
+        type: Object,
+        default: () => {
+          return {statistics: {}}
+        }
+      },
+    },
+    data: () => ({
+      calendarEvent: {},
+      selectedComponents: [],
+      eventId: null,
+      percentage: 0,
+      totalRemainingBudget: 0,
+      remainingBudgetPerEmployee: 0,
+      seriesData: [],
+      isLoading: false,
+      routeName: null,
+      budgetPerEmployee: 0
 
-        }),
-        methods: {
-            ...mapMutations('EventPlannerVuex', [
-                'setEventModal',
-                'setEditMode',
-                'setModalSubmitTitle',
-                'setEventModalAndEventData',
-                'setNumberOfParticipants',
-                'setEventData'
-            ]),
-            inviteeType(calendarEvent){
-                //"Employees Only","Employees and spouse","Employees and families", "Employees children"
-                let typeText = '';
-                let participantsType = calendarEvent.participantsType;
-                if (participantsType === 'Employees and spouse'){
-                    typeText = '+ spouses';
-                } else if (participantsType === 'Employees and families'){
-                    typeText = '+ families';
-                } else if (participantsType === 'Employees siblings'){
-                    typeText = '+ siblings';
-                }
+    }),
+    methods: {
+      ...mapMutations('EventPlannerVuex', [
+        'setEventModal',
+        'setEditMode',
+        'setModalSubmitTitle',
+        'setEventModalAndEventData',
+        'setNumberOfParticipants',
+        'setEventData'
+      ]),
+      inviteeType(calendarEvent){
+        //"Employees Only","Employees and spouse","Employees and families", "Employees children"
+        let typeText = '';
+        let participantsType = calendarEvent.participantsType;
+        if (participantsType === 'Employees and spouse'){
+          typeText = '+ spouses';
+        } else if (participantsType === 'Employees and families'){
+          typeText = '+ families';
+        } else if (participantsType === 'Employees siblings'){
+          typeText = '+ siblings';
+        }
 
-                return typeText;
-            },
-            getEvent () {
-                this.$auth.currentUser(this, true, function () {
-                    let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+        return typeText;
+      },
+      getEvent () {
+        this.$auth.currentUser(this, true, ()=> {
+          if (!this.event) {
+            let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
 
-                    _calendar.calendarEvents().find(this.$route.params.id).then(event => {
+            _calendar.calendarEvents().find(this.$route.params.id).then(event => {
 
-                        //this.event = event
-                        this.eventId = event.id
-                        this.calendarEvent = event
-                        this.selectedComponents = event.components;
+                //this.event = event
+                this.eventId = event.id
+                this.calendarEvent = event
+                this.selectedComponents = event.components;
 
-                        this.getCalendarEventStatistics(event)
+                this.getCalendarEventStatistics(event)
 
-                        this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
-                    })
-                }.bind(this))
-            },
-            getCalendarEventStatistics (evt) {
-
-                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-                let event = new CalendarEvent({id: this.eventId});
-
-                new CalendarEventStatistics().for(calendar, event).get()
-                    .then(resp => {
-                        this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget//evt.totalBudget - resp[0].totalAllocatedBudget;
-                        this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants//evt.totalBudget - resp[0].totalAllocatedBudget;
-                        this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
-
-                        if (this.percentage > 0) {
-                            this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-positive"}, {value: this.percentage, className:"budget-chart-slice-b-positive"}];
-                        } else {
-                            this.seriesData =  [{value: 0.01, className: "budget-chart-slice-a-negative"},{value: 99.99, className: "budget-chart-slice-b-negative"}];
-                        }
-
-                        this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
-                        this.allocatedBudget = resp.totalAllocatedBudget;
-                        this.event.statistics['allocatedBudget'] = this.allocatedBudget
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
-            },
-            openEventModal () {
-                window.currentPanel = this.$showPanel({
-                    component: EventSidePanel,
-                    cssClass: 'md-layout-item md-size-40 transition36 ',
-                    openOn: 'right',
-                    disableBgClick: true,
-                    props: {
-                        modalSubmitTitle: 'Save',
-                        editMode: true,
-                        sourceEventData: this.event,
-                        openInPlannerOption: false
-                    }
-                })
-
-                this.setEventData(this.event)
-                this.setEventModal({showModal: true})
-                this.setModalSubmitTitle('Save')
-                this.setEditMode({editMode: true})
-            }
-        },
-        created() {
-            this.$store.registerModule('EventPlannerVuex', EventPlannerVuexModule)
-
-            this.routeName = this.$route.name
-        },
-        mounted() {
-            let _self = this;
-
-            this.getEvent();
-
-            this.$bus.$on('RefreshStatistics', function () {
-                _self.getCalendarEventStatistics(_self.calendarEvent)
+                this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
             })
+          } else {
+            this.eventId = this.event.id
+            this.calendarEvent = this.event
+            this.selectedComponents = this.event.components;
 
-            this.$root.$on('calendar-refresh-events', () => {
-                this.getEvent()
-            })
+            this.getCalendarEventStatistics(this.event)
 
+            this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
+          }
+        });
+      },
+      getCalendarEventStatistics (evt) {
 
-        },
-        computed: {
-            ...mapGetters({
-                components: 'event/getComponentsList'
-            }),
-            pieChart () {
-                return {
-                    data: {
-                        labels: [' ', ' '], // should be empty to remove text from chart
-                        series: this.seriesData
-                    },
-                    options: {
-                        padding: 0,
-                        height: 156,
-                        donut: true,
-                        donutWidth: 15,
-                    }
-                }
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.eventId});
+
+        new CalendarEventStatistics().for(calendar, event).get()
+          .then(resp => {
+            this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget//evt.totalBudget - resp[0].totalAllocatedBudget;
+            this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants//evt.totalBudget - resp[0].totalAllocatedBudget;
+            this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
+
+            if (this.percentage > 0) {
+              this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-positive"}, {value: this.percentage, className:"budget-chart-slice-b-positive"}];
+            } else {
+              this.seriesData =  [{value: 0.01, className: "budget-chart-slice-a-negative"},{value: 99.99, className: "budget-chart-slice-b-negative"}];
             }
-        },
-        filters: {
-            formatDate: function (date) {
-                return moment(date).format('MMM Do YYYY ')
-            },
-            formatTime: function (date) {
-                return moment(date).format('h:00 A')
-            },
-            formatDuration: function (startDate, endDate) {
-                return moment(endDate).diff(startDate, 'hours')
-            }
-        },
+
+            this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
+            this.allocatedBudget = resp.totalAllocatedBudget;
+            this.event.statistics['allocatedBudget'] = this.allocatedBudget
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      },
+      openEventModal () {
+        window.currentPanel = this.$showPanel({
+          component: EventSidePanel,
+          cssClass: 'md-layout-item md-size-40 transition36 ',
+          openOn: 'right',
+          disableBgClick: false,
+          props: {
+            modalSubmitTitle: 'Save',
+            editMode: true,
+            sourceEventData: this.event,
+            openInPlannerOption: false
+          }
+        })
+
+        this.setEventData(this.event)
+        this.setEventModal({showModal: true})
+        this.setModalSubmitTitle('Save')
+        this.setEditMode({editMode: true})
+      }
+    },
+    created() {
+      this.$store.registerModule('EventPlannerVuex', EventPlannerVuexModule)
+
+      this.routeName = this.$route.name
+    },
+    mounted() {
+      let _self = this;
+      if (!this.event){
+        this.getEvent();
+      }
+      this.$bus.$on('RefreshStatistics', function () {
+        _self.getCalendarEventStatistics(_self.calendarEvent)
+      })
+
+      this.$root.$on('calendar-refresh-events', () => {
+        this.getEvent()
+      })
+
+
+    },
+    computed: {
+      ...mapGetters({
+        components: 'event/getComponentsList'
+      }),
+      pieChart () {
+        return {
+          data: {
+            labels: [' ', ' '], // should be empty to remove text from chart
+            series: this.seriesData
+          },
+          options: {
+            padding: 0,
+            height: 156,
+            donut: true,
+            donutWidth: 15,
+          }
+        }
+      }
+    },
+    filters: {
+      formatDate: function (date) {
+        return moment(date).format('MMM Do YYYY ')
+      },
+      formatTime: function (date) {
+        return moment(date).format('h:00 A')
+      },
+      formatDuration: function (startDate, endDate) {
+        return moment(endDate).diff(startDate, 'hours')
+      }
+    },
+    watch: {
+      event(newVal, oldVal){
+        this.getEvent();
+      }
     }
+  }
 </script>
 <style lang="scss" scoped>
     @import '@/assets/scss/md/_colors.scss';

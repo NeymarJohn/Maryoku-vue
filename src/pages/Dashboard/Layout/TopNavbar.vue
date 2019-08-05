@@ -253,7 +253,7 @@
           component: EventSidePanel,
           cssClass: 'md-layout-item md-size-40 transition36 ',
           openOn: 'right',
-          disableBgClick: true,
+          disableBgClick: false,
           props: {
             modalSubmitTitle: 'Save',
             editMode: true,

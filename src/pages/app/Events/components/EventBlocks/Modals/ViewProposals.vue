@@ -14,8 +14,7 @@
                 <div class="tabs-section">
                     <tabs
                         :tab-name="['<span>'+requirementsLength+'</span> Requirements', '<span>' + selectedBlock.proposals.length + '</span> Proposals', '<span>0</span> Comparison', '<span>0</span> Winner']"
-                        color-button="default"
-                    ref="proposalsTabs">
+                        color-button="primary" ref="proposalsTabs">
                         <template slot="tab-pane-1" style="width: 100%;">
                             <event-block-requirements :event="event" :selectedBlock="selectedBlock" :predefinedRequirements="selectedBlock.predefinedRequirements"> </event-block-requirements>
                         </template>
@@ -168,22 +167,18 @@
 
     },
     mounted() {
+      this.requirementsLength = this.selectedBlock.values.length;
 
-      this.$bus.$on('refreshRequirementsLength',(data)=>{
-
-        this.$set(this,'requirementsLength',data);
-
-        this.$nextTick(()=>{
-          this.$refs.proposalsTabs.$emit('event-planner-nav-switch-panel', this.tab);
-        });
+      this.$nextTick(()=>{
+        if (this.$refs.proposalsTabs) {
+          this.$refs.proposalsTabs.$emit('event-planner-nav-switch-panel', this.tab)
+        }
       });
-
-      this.$refs.proposalsTabs.$emit('event-planner-nav-switch-panel', this.tab);
     },
     methods: {
 
       closePanel(){
-        this.$emit("closePanel");
+        this.$emit("closePanel", {a:'b'});
       },
       setAsWining (item) {
 

@@ -235,7 +235,7 @@ export default {
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "md-button md-success confirm-btn-bg ",
-        cancelButtonClass: "md-button md-danger cancel-btn-bg",    
+        cancelButtonClass: "md-button md-danger cancel-btn-bg",
         confirmButtonText: "Yes, delete it!",
         buttonsStyling: false
       }).then(result => {
@@ -289,7 +289,7 @@ export default {
         component: EventSidePanel,
         cssClass: "md-layout-item md-size-40 transition36 ",
         openOn: "right",
-        disableBgClick: true,
+        disableBgClick: false,
         props: {
           modalSubmitTitle: options.modalSubmitTitle,
           editMode: options.editMode,
@@ -321,7 +321,7 @@ export default {
         component: EventSidePanel,
         cssClass: "md-layout-item md-size-40 transition36 ",
         openOn: "right",
-        disableBgClick: true,
+        disableBgClick: false,
         props: {
           modalSubmitTitle: "Save",
           editMode: false,

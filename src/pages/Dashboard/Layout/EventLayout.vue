@@ -231,11 +231,12 @@
       },openEventModal() {
         this.setModalSubmitTitle("Create");
         let now = new Date();
+        this.createEventModalOpen = true;
         window.currentPanel = this.$showPanel({
           component: EventSidePanel,
           cssClass: 'md-layout-item md-size-40 transition36 ',
           openOn: 'right',
-          disableBgClick: true,
+          disableBgClick: false,
           props: {
             modalSubmitTitle: 'Save',
             editMode: false,
@@ -248,18 +249,14 @@
           }
         });
 
-
+        window.currentPanel.promise.then(res=>{
+          this.createEventModalOpen = false;
+        });
       }
 
     },
     created(){
       this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
-      this.$root.$on("create-event-panel-closed", () => {
-        this.createEventModalOpen = false;
-      });
-      this.$root.$on("create-event-panel-open", () => {
-        this.createEventModalOpen = true;
-      });
     },
     mounted() {
 

@@ -16,13 +16,13 @@
 
                     <table style="width:100%;" class="table event-building-blocks_table" v-if="eventBuildingBlocksList.length">
                         <thead>
-                            <tr class="md-warning">
-                                <th> Expenses </th>
-                                <th>Requirements</th>
-                                <th>Allocated budget</th>
-                                <th>Actual cost</th>
-                                <th></th>
-                            </tr>
+                        <tr class="md-warning">
+                            <th> Expenses </th>
+                            <th>Requirements</th>
+                            <th>Allocated budget</th>
+                            <th>Actual cost</th>
+                            <th></th>
+                        </tr>
                         </thead>
                         <tbody>
                         <template v-for="(category,index) in eventBuildingBlocksList" v-if="category.title != 'null'">
@@ -131,275 +131,313 @@
 
 </template>
 <script>
-    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-    import swal from 'sweetalert2'
-    import Calendar from '@/models/Calendar'
-    import CalendarEvent from '@/models/CalendarEvent'
-    import EventComponent from '@/models/EventComponent'
-    import VueElementLoading from 'vue-element-loading'
-    // import auth from '@/auth';
-    import EventBlocks from '../components/NewEventBlocks'
-    import AddBuildingBlockModal from '../components/EventBlocks/Modals/AddBuildingBlocks.vue'
-    import EventBlockRequirements from '../components/EventBlocks/Modals/EventBlockRequirements.vue'
-    import EventBlockVendors from './EventBlocks/Modals/EventBlockVendors.vue'
-    import ViewProposals from './EventBlocks/Modals/ViewProposals.vue'
-    import _ from 'underscore'
-    import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
-    import Tab from 'uiv/src/components/tabs/Tab'
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+  import swal from 'sweetalert2'
+  import Calendar from '@/models/Calendar'
+  import CalendarEvent from '@/models/CalendarEvent'
+  import EventComponent from '@/models/EventComponent'
+  import VueElementLoading from 'vue-element-loading'
+  // import auth from '@/auth';
+  import EventBlocks from '../components/NewEventBlocks'
+  import AddBuildingBlockModal from '../components/EventBlocks/Modals/AddBuildingBlocks.vue'
+  import EventBlockRequirements from '../components/EventBlocks/Modals/EventBlockRequirements.vue'
+  import EventBlockVendors from './EventBlocks/Modals/EventBlockVendors.vue'
+  import ViewProposals from './EventBlocks/Modals/ViewProposals.vue'
+  import _ from 'underscore'
+  import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
+  import Tab from 'uiv/src/components/tabs/Tab'
 
-    export default {
-        name: 'event-building-blocks',
-        components: {
-            Tab,
-            VueElementLoading,
-            EventBlocks,
-            AddBuildingBlockModal,
-            LabelEdit,
-            AnimatedNumber,
-            StatsCard,
-            ChartCard
-        },
-        props: {
-            event: {
-                type: Object,
-                default: () => {
-                    return {statistics: {}}
-                }
-            },
-            eventComponents: [Array, Function]
+  export default {
+    name: 'event-building-blocks',
+    components: {
+      Tab,
+      VueElementLoading,
+      EventBlocks,
+      AddBuildingBlockModal,
+      LabelEdit,
+      AnimatedNumber,
+      StatsCard,
+      ChartCard
+    },
+    props: {
+      event: {
+        type: Object,
+        default: () => {
+          return {statistics: {}}
+        }
+      },
+      eventComponents: [Array, Function]
 
-        },
-        data: () => ({
-            // auth: auth,
-            isLoading: false,
-            allocatedBudget: 0,
-            eventBuildingBlocks: [],
-            eventBuildingBlocksList: [],
+    },
+    data: () => ({
+      // auth: auth,
+      isLoading: false,
+      allocatedBudget: 0,
+      eventBuildingBlocks: [],
+      eventBuildingBlocksList: [],
 
-        }),
-        methods: {
-            ...mapMutations('EventPlannerVuex', [
-                'setBuildingBlockModal'
-            ]),
-            deleteBlock(blockId) {
+    }),
+    methods: {
+      ...mapMutations('EventPlannerVuex', [
+        'setBuildingBlockModal'
+      ]),
+      deleteBlock(blockId) {
 
-                swal({
-                    title: 'Are you sure?',
-                    text: `You won't be able to revert this!`,
-                    showCancelButton: true,
-                    confirmButtonClass: 'md-button md-success',
-                    cancelButtonClass: 'md-button md-danger',
-                    confirmButtonText: 'Yes, delete it!',
-                    buttonsStyling: false
-                }).then(result => {
-                    if (result.value) {
-                        this.isLoading = true
+        swal({
+          title: 'Are you sure?',
+          text: `You won't be able to revert this!`,
+          showCancelButton: true,
+          confirmButtonClass: 'md-button md-success',
+          cancelButtonClass: 'md-button md-danger',
+          confirmButtonText: 'Yes, delete it!',
+          buttonsStyling: false
+        }).then(result => {
+          if (result.value) {
+            this.isLoading = true
 
-                        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-                        let event = new CalendarEvent({id: this.event.id})
-                        let selected_block = new EventComponent({id: blockId})
+            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+            let event = new CalendarEvent({id: this.event.id})
+            let selected_block = new EventComponent({id: blockId})
 
-                        selected_block.for(calendar, event).delete().then(resp => {
-                            this.isLoading = false
-                            this.getEventBuildingBlocks();
-                            this.$bus.$emit('RefreshStatistics');
-                            this.$forceUpdate()
+            selected_block.for(calendar, event).delete().then(resp => {
+              this.isLoading = false
+              this.getEventBuildingBlocks();
+              this.$bus.$emit('RefreshStatistics');
+              this.$forceUpdate()
 
-                            let allocatedBudget = 0;
-                            this.eventBuildingBlocks.forEach(item => {
-                                allocatedBudget += Number(item.allocatedBudget);
-                            });
+              let allocatedBudget = 0;
+              this.eventBuildingBlocks.forEach(item => {
+                allocatedBudget += Number(item.allocatedBudget);
+              });
 
-                            this.allocatedBudget = allocatedBudget;
-                        })
-                            .catch(error => {
-                                console.log(error)
-                            })
-                    }
-                })
+              this.allocatedBudget = allocatedBudget;
+            })
+              .catch(error => {
+                console.log(error)
+              })
+          }
+        })
 
-            },
-            /**
-             * Get Event building blocks
-             */
-            getEventBuildingBlocks() {
+      },
+      /**
+       * Get Event building blocks
+       */
+      getEventBuildingBlocks() {
 
-                if (!this.event.id) return;
+        if (!this.event.id) return;
 
-                this.isLoading = true;
+        this.isLoading = true;
 
-                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-                let event = new CalendarEvent({id: this.event.id});
-
-
-                new EventComponent().for(calendar, event).get()
-                    .then(res => {
-
-                        this.$set(this, 'eventBuildingBlocks', res);
-
-                        // group event blocks by category name
-                        this.eventBuildingBlocksList = _.chain(res).groupBy('category').map(function(value, key) {
-
-                            let totalAllocatedBudget = 0, totalActualCost = 0;
+        /*let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
 
 
-                            value.forEach(function (item) {
-                                if (item.allocatedBudget) totalAllocatedBudget += item.allocatedBudget;
-                                if (item.winningProposalId) totalActualCost += item.winingProposal.cost;
-                            })
-                            return {
-                                title: key,
-                                blocks: value,
-                                totalAllocatedBudget : totalAllocatedBudget,
-                                totalActualCost : totalActualCost,
-                                remainsBudget : totalActualCost ? totalAllocatedBudget - totalActualCost : 0
-                            }
+        new EventComponent().for(calendar, event).get()
+          .then(res => {
+
+            this.$set(this, 'eventBuildingBlocks', res);
+
+            // group event blocks by category name
+            this.eventBuildingBlocksList = _.chain(res).groupBy('category').map(function(value, key) {
+
+              let totalAllocatedBudget = 0, totalActualCost = 0;
 
 
-                            })
-                            .value();
-
-                        let allocatedBudget = 0;
-                        this.eventBuildingBlocks.forEach(item => {
-                            allocatedBudget += Number(item.allocatedBudget);
-                        });
-
-                        console.log(this.eventBuildingBlocks);
-
-                        this.allocatedBudget = allocatedBudget;
-                        this.isLoading = false;
-                    })
-                    .catch(error => {
-                        console.log('Error ', error)
-                    })
-            },
-            showAddBuildingBlocksModal() {
-                window.currentPanel = this.$showPanel({
-                    component: AddBuildingBlockModal,
-                    cssClass: 'md-layout-item md-size-35 transition36 bg-grey',
-                    openOn: 'right',
-                    props: {event: this.event}
-                })
-            },
-            blockBudgetChanged(val, index) {
-
-                let block = _.find(this.eventBuildingBlocks, function (item) {
-                    return item.componentId == index;
-                });
-
-                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-                let event = new CalendarEvent({id: this.event.id});
-                let selected_block = new EventComponent({id: block.id});
-
-                selected_block.calendarEvent = block.calendarEvent;
-                selected_block.componentId = block.componentId;
-                selected_block.icon = block.icon;
-                selected_block.color = block.color;
-                selected_block.todos = block.todos;
-                selected_block.values = block.values;
-                selected_block.vendors = block.vendors;
-                if (val) {
-                    if (val.toString().toLowerCase() === 'click to set') {
-                        selected_block.allocatedBudget = null;
-                        block.allocatedBudget = null;
-                    } else {
-                        selected_block.allocatedBudget = val;
-                        block.allocatedBudget = val;
-                    }
-                } else {
-                    selected_block.allocatedBudget = null;
-                    block.allocatedBudget = null;
-                }
-
-                selected_block.for(calendar, event).save().then(resp => {
-
-                    this.isLoading = false;
-                    this.$bus.$emit('RefreshStatistics');
-                    this.getEventBuildingBlocks();
-                    this.$forceUpdate();
-
-                    let allocatedBudget = 0;
-                    this.eventBuildingBlocks.forEach(item => {
-                        if (item.allocatedBudget) {
-                            allocatedBudget += Number(item.allocatedBudget);
-                        }
-                    });
-
-                    this.allocatedBudget = allocatedBudget;
-                })
-                    .catch(error => {
-                        console.log(error)
-                    })
-
-            },
-
-            addRequirements(item) {
-
-                if ( item.proposals.length ) {
-                    swal({
-                        text: `You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?`,
-                        showCancelButton: true,
-                        type: "warning",
-                        confirmButtonClass: "md-button md-success confirm-btn-bg ",
-                        cancelButtonClass: "md-button md-danger cancel-btn-bg",
-                        confirmButtonText: "Yes!",
-                        buttonsStyling: false
-                    }).then(result => {
-                        if (result.value) {
-                            this.showRequirementsSidepanel(item);
-                        }
-                    });
-                } else {
-
-                    this.showRequirementsSidepanel(item);
-                }
+              value.forEach(function (item) {
+                if (item.allocatedBudget) totalAllocatedBudget += item.allocatedBudget;
+                if (item.winningProposalId) totalActualCost += item.winingProposal.cost;
+              })
+              return {
+                title: key,
+                blocks: value,
+                totalAllocatedBudget : totalAllocatedBudget,
+                totalActualCost : totalActualCost,
+                remainsBudget : totalActualCost ? totalAllocatedBudget - totalActualCost : 0
+              }
 
 
-            },
-            reviewProposals(item, winnerId = null) {
-                window.currentPanel = this.$showPanel({
-                    component: ViewProposals,
-                    cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
-                    openOn: 'right',
-                    props: {event: this.event, selectedBlock: item, winnerId : winnerId}
-                })
-            },
-            reviewVendors(item , categoryTitle) {
-                window.currentPanel = this.$showPanel({
-                    component: EventBlockVendors,
-                    cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
-                    openOn: 'right',
-                    props: {event: this.event, selectedBlock: item, getOffers: true , categoryTitle : categoryTitle}
-                })
-            },
-            showRequirementsSidepanel(item , winnerId = null) {
-                window.currentPanel = this.$showPanel({
-                    component: ViewProposals,
-                    cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
-                    openOn: 'right',
-                    props: {event: this.event, selectedBlock: item, winnerId : winnerId, tab: 0}
-                })
-            }
-        },
-        created() {
+            })
+              .value();
 
-        },
-        mounted() {
-
-            this.getEventBuildingBlocks();
-
-            this.$bus.$on('refreshBuildingBlock', () => {
-                this.getEventBuildingBlocks()
+            let allocatedBudget = 0;
+            this.eventBuildingBlocks.forEach(item => {
+              allocatedBudget += Number(item.allocatedBudget);
             });
 
-        },
-        watch: {
-            event(newVal, oldVal) {
-                // Get default event building blocks
-                this.getEventBuildingBlocks();
-            }
+            this.allocatedBudget = allocatedBudget;
+            this.isLoading = false;
+          })
+          .catch(error => {
+            console.log('Error ', error)
+          })*/
+
+        let res = this.event.components;
+
+        console.log(res);
+
+        this.$set(this, 'eventBuildingBlocks', res);
+
+        // group event blocks by category name
+        this.eventBuildingBlocksList = _.chain(res).groupBy('category').map(function(value, key) {
+
+          let totalAllocatedBudget = 0, totalActualCost = 0;
+
+
+          value.forEach(function (item) {
+            if (item.allocatedBudget) totalAllocatedBudget += item.allocatedBudget;
+            if (item.winningProposalId) totalActualCost += item.winingProposal.cost;
+          })
+          return {
+            title: key,
+            blocks: value,
+            totalAllocatedBudget : totalAllocatedBudget,
+            totalActualCost : totalActualCost,
+            remainsBudget : totalActualCost ? totalAllocatedBudget - totalActualCost : 0
+          }
+
+
+        })
+          .value();
+
+        let allocatedBudget = 0;
+        this.eventBuildingBlocks.forEach(item => {
+          allocatedBudget += Number(item.allocatedBudget);
+        });
+
+        this.allocatedBudget = allocatedBudget;
+        this.isLoading = false;
+      },
+      showAddBuildingBlocksModal() {
+        window.currentPanel = this.$showPanel({
+          component: AddBuildingBlockModal,
+          cssClass: 'md-layout-item md-size-35 transition36 bg-grey',
+          openOn: 'right',
+          props: {event: this.event}
+        })
+      },
+      blockBudgetChanged(val, index) {
+
+        let block = _.find(this.eventBuildingBlocks, function (item) {
+          return item.componentId == index;
+        });
+
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
+        let selected_block = new EventComponent({id: block.id});
+
+        selected_block.calendarEvent = block.calendarEvent;
+        selected_block.componentId = block.componentId;
+        selected_block.icon = block.icon;
+        selected_block.color = block.color;
+        selected_block.todos = block.todos;
+        selected_block.values = block.values;
+        selected_block.vendors = block.vendors;
+        if (val) {
+          if (val.toString().toLowerCase() === 'click to set') {
+            selected_block.allocatedBudget = null;
+            block.allocatedBudget = null;
+          } else {
+            selected_block.allocatedBudget = val;
+            block.allocatedBudget = val;
+          }
+        } else {
+          selected_block.allocatedBudget = null;
+          block.allocatedBudget = null;
         }
+
+        selected_block.for(calendar, event).save().then(resp => {
+
+          this.isLoading = false;
+          this.$bus.$emit('RefreshStatistics');
+          this.getEventBuildingBlocks();
+          this.$forceUpdate();
+
+          let allocatedBudget = 0;
+          this.eventBuildingBlocks.forEach(item => {
+            if (item.allocatedBudget) {
+              allocatedBudget += Number(item.allocatedBudget);
+            }
+          });
+
+          this.allocatedBudget = allocatedBudget;
+        })
+          .catch(error => {
+            console.log(error)
+          })
+
+      },
+
+      addRequirements(item) {
+
+        if ( item.proposals.length ) {
+          swal({
+            text: `You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?`,
+            showCancelButton: true,
+            type: "warning",
+            confirmButtonClass: "md-button md-success confirm-btn-bg ",
+            cancelButtonClass: "md-button md-danger cancel-btn-bg",
+            confirmButtonText: "Yes!",
+            buttonsStyling: false
+          }).then(result => {
+            if (result.value) {
+              this.showRequirementsSidepanel(item);
+            }
+          });
+        } else {
+
+          this.showRequirementsSidepanel(item);
+        }
+
+
+      },
+      reviewProposals(item, winnerId = null) {
+        window.currentPanel = this.$showPanel({
+          component: ViewProposals,
+          cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
+          openOn: 'right',
+          props: {event: this.event, selectedBlock: item, winnerId : winnerId, tab: winnerId != null ? 3 : 1}
+        })
+      },
+      reviewVendors(item , categoryTitle) {
+        window.currentPanel = this.$showPanel({
+          component: EventBlockVendors,
+          cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
+          openOn: 'right',
+          props: {event: this.event, selectedBlock: item, getOffers: true , categoryTitle : categoryTitle}
+        })
+      },
+      showRequirementsSidepanel(item , winnerId = null) {
+        const panelResult = this.$showPanel({
+          component: ViewProposals,
+          cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
+          openOn: 'right',
+          props: {event: this.event, selectedBlock: item, winnerId : winnerId, tab: 0}
+        });
+
+        panelResult.promise.then(res=>{
+          //this.getEventBuildingBlocks();
+        });
+      }
+    },
+    created() {
+
+    },
+    mounted() {
+
+      this.getEventBuildingBlocks();
+
+      this.$bus.$on('refreshBuildingBlock', () => {
+        this.getEventBuildingBlocks()
+      });
+
+    },
+    watch: {
+      event(newVal, oldVal) {
+        // Get default event building blocks
+        this.getEventBuildingBlocks();
+      }
     }
+  }
 </script>
 <style lang="scss">
     .requirements-cell-button {
