@@ -169,6 +169,12 @@
           return {statistics: {}}
         }
       },
+      eventStatistics: {
+        type: Object,
+        default: () => {
+          return {}
+        }
+      }
     },
     data: () => ({
       calendarEvent: {},
@@ -227,7 +233,7 @@
             this.calendarEvent = this.event
             this.selectedComponents = this.event.components;
 
-            this.getCalendarEventStatistics(this.event)
+            this.getCalendarEventStatistics(this.event);
 
             this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
           }
@@ -235,28 +241,57 @@
       },
       getCalendarEventStatistics (evt) {
 
-        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-        let event = new CalendarEvent({id: this.eventId});
+        if (!this.eventStatistics) {
+          let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+          let event = new CalendarEvent({id: this.eventId});
 
-        new CalendarEventStatistics().for(calendar, event).get()
-          .then(resp => {
-            this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget//evt.totalBudget - resp[0].totalAllocatedBudget;
-            this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants//evt.totalBudget - resp[0].totalAllocatedBudget;
-            this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
+          new CalendarEventStatistics().for(calendar, event).get()
+            .then(resp => {
+              this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget//evt.totalBudget - resp[0].totalAllocatedBudget;
+              this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants//evt.totalBudget - resp[0].totalAllocatedBudget;
+              this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
 
-            if (this.percentage > 0) {
-              this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-positive"}, {value: this.percentage, className:"budget-chart-slice-b-positive"}];
-            } else {
-              this.seriesData =  [{value: 0.01, className: "budget-chart-slice-a-negative"},{value: 99.99, className: "budget-chart-slice-b-negative"}];
-            }
+              if (this.percentage > 0) {
+                this.seriesData = [{
+                  value: (100 - this.percentage),
+                  className: "budget-chart-slice-a-positive"
+                }, {value: this.percentage, className: "budget-chart-slice-b-positive"}];
+              } else {
+                this.seriesData = [{value: 0.01, className: "budget-chart-slice-a-negative"}, {
+                  value: 99.99,
+                  className: "budget-chart-slice-b-negative"
+                }];
+              }
 
-            this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
-            this.allocatedBudget = resp.totalAllocatedBudget;
-            this.event.statistics['allocatedBudget'] = this.allocatedBudget
-          })
-          .catch(error => {
-            console.log(error)
-          })
+              this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
+              this.allocatedBudget = resp.totalAllocatedBudget;
+              this.event.statistics['allocatedBudget'] = this.allocatedBudget
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        } else {
+          this.resp = this.eventStatistics;
+          this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget//evt.totalBudget - resp[0].totalAllocatedBudget;
+          this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants//evt.totalBudget - resp[0].totalAllocatedBudget;
+          this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
+
+          if (this.percentage > 0) {
+            this.seriesData = [{
+              value: (100 - this.percentage),
+              className: "budget-chart-slice-a-positive"
+            }, {value: this.percentage, className: "budget-chart-slice-b-positive"}];
+          } else {
+            this.seriesData = [{value: 0.01, className: "budget-chart-slice-a-negative"}, {
+              value: 99.99,
+              className: "budget-chart-slice-b-negative"
+            }];
+          }
+
+          this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
+          this.allocatedBudget = resp.totalAllocatedBudget;
+          this.event.statistics['allocatedBudget'] = this.allocatedBudget;
+        }
       },
       openEventModal () {
         window.currentPanel = this.$showPanel({
@@ -331,6 +366,9 @@
     watch: {
       event(newVal, oldVal){
         this.getEvent();
+      },
+      eventStatistics(newVal, oldVal){
+        this.getCalendarEventStatistics(this.event);
       }
     }
   }

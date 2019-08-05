@@ -10,7 +10,7 @@
                 <template slot="tab-pane-1" style="width: 100%;">
                     <div class="md-layout">
                         <div class="md-layout-item md-size-25">
-                            <event-details-sidebar :event.sync="event"></event-details-sidebar>
+                            <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
                         </div>
                         <div class="md-layout-item md-size-75 text-left">
                             <md-card class="manage-vendors">
@@ -278,7 +278,7 @@
             this.getCalendarEventStatistics(event)
 
             this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
-            this.isLoading = true;
+            this.isLoading = false;
             console.log(event);
           })
         }.bind(this))
@@ -342,7 +342,9 @@
             this.seriesData = [(100 - this.percentage), this.percentage]
             this.budgetPerEmployee = evt.budgetPerPerson//this.totalRemainingBudget / evt.numberOfParticipants;
             this.allocatedBudget = resp.totalAllocatedBudget
-            this.event.statistics['allocatedBudget'] = this.allocatedBudget
+            this.event.statistics = resp;
+            this.event.statistics['allocatedBudget'] = this.allocatedBudget;
+            this.$forceUpdate();
           })
           .catch(error => {
             console.log(error)
