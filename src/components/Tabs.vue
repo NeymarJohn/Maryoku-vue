@@ -64,7 +64,7 @@
         created(){
         },
     mounted(){
-        this.$root.$on('event-planner-nav-switch-panel',(index)=>{
+        this.$on('event-planner-nav-switch-panel',(index)=>{
             this.switchPanel(this.tabName[index]);
         })
 

@@ -5,7 +5,7 @@
             <tabs
                 :tab-name="['EVENT DETAILS', 'BUDGET & PROPOSALS','EVENT PAGE']"
                 color-button="rose"
-                :active-tab="$store.state.EventPlannerVuex.eventDetailsActiveTab">
+                :active-tab="$store.state.EventPlannerVuex.eventDetailsActiveTab" ref="eventPlannerTabs">
                 <!-- here you can add your content for tab-content -->
                 <template slot="tab-pane-1" style="width: 100%;">
                     <div class="md-layout">
@@ -279,7 +279,7 @@
                 }.bind(this))
             },
             selectServices(){
-              this.$root.$emit("event-planner-nav-switch-panel", 1);
+              this.$refs.eventPlannerTabs.$emit("event-planner-nav-switch-panel", 1);
             },
             selectTimeline(){
                 this.$root.$emit("event-planner-nav-switch-panel", 2);

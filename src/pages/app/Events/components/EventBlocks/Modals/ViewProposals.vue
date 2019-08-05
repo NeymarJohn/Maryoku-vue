@@ -15,7 +15,7 @@
                     <tabs
                         :tab-name="['<span>'+requirementsLength+'</span> Requirements', '<span>' + selectedBlock.proposals.length + '</span> Proposals', '<span>0</span> Comparison', '<span>0</span> Winner']"
                         color-button="default"
-                        >
+                    ref="proposalsTabs">
                         <template slot="tab-pane-1" style="width: 100%;">
                             <event-block-requirements :event="event" :selectedBlock="selectedBlock" :predefinedRequirements="selectedBlock.predefinedRequirements"> </event-block-requirements>
                         </template>
@@ -122,129 +122,135 @@
     </div>
 </template>
 <script>
-    // import auth from '@/auth';
-    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-    import CalendarEvent from '@/models/CalendarEvent';
-    import Calendar from "@/models/Calendar";
-    import EventComponent from "@/models/EventComponent";
-    import {Tabs} from '@/components'
+  // import auth from '@/auth';
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import CalendarEvent from '@/models/CalendarEvent';
+  import Calendar from "@/models/Calendar";
+  import EventComponent from "@/models/EventComponent";
+  import {Tabs} from '@/components'
 
-    import swal from "sweetalert2";
-    import {error} from 'util';
-    import moment from 'moment';
-    import VueElementLoading from 'vue-element-loading';
-    import _ from "underscore";
-    import ViewProposal from './ViewProposal.vue'
-    import EventBlockRequirements from '../Modals/EventBlockRequirements.vue';
-    import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue';
-
-
-    export default {
-        components: {
-            VueElementLoading,
-            Tabs,
-            EventBlockRequirements,
-            ManageProposalsAccept
-        },
-        props: {
-            event: Object,
-            vendor : Object,
-            selectedBlock : Object,
-            winnerId : {
-                type : String,
-                default : null
-            }
-        },
-        data: () => ({
-            // auth: auth,
-            isLoaded : false,
-            proposalsToDisplay : 1,
-            ratings: [1, 2, 3, 4, 5],
-            requirementsLength : 0
-        }),
-
-        created() {
-
-        },
-        mounted() {
-
-            this.$bus.$on('refreshRequirementsLength',(data)=>{
-
-                this.$set(this,'requirementsLength',data);
-            });
-
-        },
-        methods: {
-
-            closePanel(){
-                this.$emit("closePanel");
-            },
-            setAsWining (item) {
-
-              let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-              let event = new CalendarEvent({id: this.event.id})
-              let selected_block = new EventComponent({id: this.selectedBlock.id})
-
-              selected_block.calendarEvent = this.selectedBlock.calendarEvent;
-              selected_block.componentId = this.selectedBlock.componentId;
-
-              selected_block.winningProposalId = item.id;
+  import swal from "sweetalert2";
+  import {error} from 'util';
+  import moment from 'moment';
+  import VueElementLoading from 'vue-element-loading';
+  import _ from "underscore";
+  import ViewProposal from './ViewProposal.vue'
+  import EventBlockRequirements from '../Modals/EventBlockRequirements.vue';
+  import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue';
 
 
-              selected_block.for(calendar, event).save().then(resp => {
+  export default {
+    components: {
+      VueElementLoading,
+      Tabs,
+      EventBlockRequirements,
+      ManageProposalsAccept
+    },
+    props: {
+      event: Object,
+      vendor : Object,
+      selectedBlock : Object,
+      winnerId : {
+        type : String,
+        default : null
+      },
+      tab: Number,
+    },
+    data: () => ({
+      // auth: auth,
+      isLoaded : false,
+      proposalsToDisplay : 1,
+      ratings: [1, 2, 3, 4, 5],
+      requirementsLength : 0
+    }),
 
-                this.isLoading = false
-                this.$notify(
-                  {
-                    message: 'Budget modified successfully!',
-                    horizontalAlign: 'center',
-                    verticalAlign: 'top',
-                    type: 'success'
-                  })
+    created() {
 
-                  this.$bus.$emit('RefreshStatistics');
-                  this.$bus.$emit('refreshBuildingBlock');
-                    this.closePanel();
+    },
+    mounted() {
 
-                this.$forceUpdate()
-              })
-                .catch(error => {
-                  console.log(error)
-                })
+      this.$bus.$on('refreshRequirementsLength',(data)=>{
 
-            },
-            viewAllProposals() {
-                this.proposalsToDisplay  = this.selectedBlock.vendors.length;
-            },
-          getProposalDate(eventStartMillis) {
+        this.$set(this,'requirementsLength',data);
 
-            let x = new Date(eventStartMillis);
+        this.$nextTick(()=>{
+          this.$refs.proposalsTabs.$emit('event-planner-nav-switch-panel', this.tab);
+        });
+      });
 
-            return x.getDate() + '-' + x.getMonth() + '-' + x.getFullYear();
+      this.$refs.proposalsTabs.$emit('event-planner-nav-switch-panel', this.tab);
+    },
+    methods: {
 
-          },
-            isThereProposals() {
-                return this.selectedBlock.proposals && this.selectedBlock.proposals.length;
-            },
-            viewProposal(proposal) {
-                window.currentPanel = this.$showPanel({
-                    component: ViewProposal,
-                    cssClass: 'md-layout-item md-size-70 transition36',
-                    openOn: 'right',
-                    props: {event: this.event, proposal: proposal, selectedBlock : this.selectedBlock}
-                })
-            },
-            manageProposalsAccept(proposal) {
-                window.currentPanel = this.$showPanel({
-                    component: ManageProposalsAccept,
-                    cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
-                    openOn: 'right',
-                    props: {event: this.event, selectedBlock: this.selectedBlock}
-                })
-            }
-        },
-        computed: {
+      closePanel(){
+        this.$emit("closePanel");
+      },
+      setAsWining (item) {
 
-        }
-    };
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+        let event = new CalendarEvent({id: this.event.id})
+        let selected_block = new EventComponent({id: this.selectedBlock.id})
+
+        selected_block.calendarEvent = this.selectedBlock.calendarEvent;
+        selected_block.componentId = this.selectedBlock.componentId;
+
+        selected_block.winningProposalId = item.id;
+
+
+        selected_block.for(calendar, event).save().then(resp => {
+
+          this.isLoading = false
+          this.$notify(
+            {
+              message: 'Budget modified successfully!',
+              horizontalAlign: 'center',
+              verticalAlign: 'top',
+              type: 'success'
+            })
+
+          this.$bus.$emit('RefreshStatistics');
+          this.$bus.$emit('refreshBuildingBlock');
+          this.closePanel();
+
+          this.$forceUpdate()
+        })
+          .catch(error => {
+            console.log(error)
+          })
+
+      },
+      viewAllProposals() {
+        this.proposalsToDisplay  = this.selectedBlock.vendors.length;
+      },
+      getProposalDate(eventStartMillis) {
+
+        let x = new Date(eventStartMillis);
+
+        return x.getDate() + '-' + x.getMonth() + '-' + x.getFullYear();
+
+      },
+      isThereProposals() {
+        return this.selectedBlock.proposals && this.selectedBlock.proposals.length;
+      },
+      viewProposal(proposal) {
+        window.currentPanel = this.$showPanel({
+          component: ViewProposal,
+          cssClass: 'md-layout-item md-size-70 transition36',
+          openOn: 'right',
+          props: {event: this.event, proposal: proposal, selectedBlock : this.selectedBlock}
+        })
+      },
+      manageProposalsAccept(proposal) {
+        window.currentPanel = this.$showPanel({
+          component: ManageProposalsAccept,
+          cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
+          openOn: 'right',
+          props: {event: this.event, selectedBlock: this.selectedBlock}
+        })
+      }
+    },
+    computed: {
+
+    }
+  };
 </script>

@@ -3,7 +3,7 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
     <div class="md-layout vendor-proposals" v-if="proposalRequest">
         <div class="md-layout-item md-size-100">
-            <h3 class="title">Vendor's Name</h3>
+            <h3 class="title">{{proposalRequest.vendorName}}</h3>
         </div>
 
         <div class="md-layout-item md-size-70 md-small-size-100">
@@ -27,16 +27,6 @@
                         <div class="md-layout-item md-size-25 md-small-size-100">
                             <div class="info-item">
                                 <div class="info-label">
-                                    Location:
-                                </div>
-                                <div class="info-value">
-                                    {{proposalRequest.eventData.location}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="md-layout-item md-size-25 md-small-size-100">
-                            <div class="info-item">
-                                <div class="info-label">
                                     Time & Duration:
                                 </div>
                                 <div class="info-value">
@@ -47,17 +37,27 @@
                         <div class="md-layout-item md-size-25 md-small-size-100">
                             <div class="info-item">
                                 <div class="info-label">
+                                    Location:
+                                </div>
+                                <div class="info-value">
+                                    {{proposalRequest.eventData.location}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md-layout-item md-size-25 md-small-size-100">
+                            <div class="info-item">
+                                <div class="info-label">
                                     Participants:
                                 </div>
                                 <div class="info-value">
-                                    {{proposalRequest.eventData.numberOfParticipants}} + {{proposalRequest.eventData.participantsType}}
+                                    {{proposalRequest.eventData.numberOfParticipants}} <small>({{proposalRequest.eventData.participantsType}})</small>
                                 </div>
                             </div>
                         </div>
 
                         <div class="md-layout-item md-size-100">
                             <div class="proposal-description">
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                                {{proposalRequest.description}}
                             </div>
                             <div class="show-more-button">
                                 <md-button class="md-primary md-sm md-simple">Show me another event</md-button>
@@ -69,24 +69,21 @@
             <!-- ./Event Information Card -->
 
             <!-- Dietary requirements -->
-            <md-card class="event-information-card">
+            <md-card class="event-information-card " >
                 <md-card-content>
                     <div class="md-layout">
                         <div class="md-layout-item md-size-100">
-                            <h4 class="title">Elements in this proposal (2)</h4>
-                            <p>
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-                            </p>
+                            <h4 class="title">{{proposalRequest.requirements.length}} Elements in this proposal</h4>
                         </div>
 
                         <div class="md-layout-item md-size-100">
                             <div class="vendor-proposals_requirements-list">
                                 <div class="list-item md-layout item-title"  >
                                     <div class="requirement-title md-layout-item md-size-65 md-small-size-100">
-                                        {{proposalRequest.requirementsCategory}}
+                                        {{proposalRequest.requirementsCategory}} ({{proposalRequest.requirements.length}})
                                     </div>
                                     <div class="md-layout-item md-size-35 md-small-size-100 text-right item-cost-desc">
-                                        <span>Per guest $45</span>
+                                        <span>Per guest ${{(proposalRequest.requirementsCategoryCost / proposalRequest.eventData.numberOfParticipants).toFixed(2)}}</span>
                                         <md-field class="with-bg">
                                             <span class="md-prefix">$</span>
                                             <md-input v-model="proposalRequest.requirementsCategoryCost"></md-input>
@@ -98,10 +95,11 @@
                                         {{item.requirementTitle}}
                                     </div>
                                     <div class="included-in-price md-layout-item md-size-50 md-small-size-100 text-right item-cost-desc">
-                                        <template v-if="!item.included_in_price">
+                                        <template v-if="!item.includedInPrice">
                                             <md-field >
                                                 <md-select v-model="item.per_guest">
                                                     <md-option>Per Guest</md-option>
+                                                    <md-option>Total</md-option>
                                                 </md-select>
                                             </md-field>
                                             <md-field class="with-bg">
@@ -111,7 +109,7 @@
                                         </template>
 
 
-                                        <md-switch class="md-switch-rose switch-btn"  v-model="item.included_in_price"></md-switch>
+                                        <md-switch class="md-switch-rose switch-btn"  v-model="item.includedInPrice"></md-switch>
                                         <label :for="`include-${index}`">Included in price</label>
                                     </div>
                                     <div class="actions-list md-layout-item md-size-100 md-small-size-100">
@@ -243,39 +241,7 @@
                                 <md-textarea rows="5"></md-textarea>
                             </md-field>
                         </div>
-                        <div class="md-layout-item md-size-50">
-                            <md-field>
-                                <label>First Name</label>
-                                <md-input ></md-input>
-                            </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-50">
-                            <md-field>
-                                <label>Last Name</label>
-                                <md-input ></md-input>
-                            </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-50">
-                            <md-field>
-                                <label>Email</label>
-                                <md-input type="email"></md-input>
-                            </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-50">
-                            <md-field>
-                                <label>Phone Number</label>
-                                <md-input ></md-input>
-                            </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-100">
-                            <md-field>
-                                <label>subject</label>
-                                <md-input ></md-input>
-                            </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-100">
-                            <md-button class="md-primary pull-right md-sm">Save</md-button>
-                        </div>
+
                     </div>
                 </md-card-content>
             </md-card>
@@ -312,13 +278,9 @@
                             <div class="title">{{proposalRequest.requirementsCategory}}</div>
                             <div class="cost text-right">${{proposalRequest.requirementsCategoryCost}}</div>
                         </div>
-                        <div class="value-section upgrades-section is-bold">
-                            <div class="title">Extra</div>
-                            <div class="cost text-right">$23</div>
-                        </div>
                         <div class="value-section user-offer-section ">
                             <div class="title">Your Offer</div>
-                            <div class="cost text-right">$5000</div>
+                            <div class="cost text-right">${{proposalRequest.requirementsCategoryCost}}</div>
                         </div>
                     </div>
 

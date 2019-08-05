@@ -1,6 +1,5 @@
 <template>
     <div class="adding-building-blocks-panel">
-        <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
         <div class="md-layout" >
 
             <div class="md-layout-item md-size-100">
@@ -21,6 +20,7 @@
             </div>
 
             <div class="md-layout-item md-size-100">
+
                 <md-card>
 
                     <md-card-header  class="md-card-header-text md-card-header-warning">
@@ -32,7 +32,7 @@
                     </md-card-header>
 
                     <md-card-content>
-
+                        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
                         <md-table  v-if="blockVendors" v-model="blockVendors"  table-header-color="orange" class="vendors-table">
                             <md-table-row slot="md-table-row" slot-scope="{ item }" :key="blockVendors.indexOf(item)"   >
                                 <md-table-cell md-label="Vendor Name"  > {{ item.vendor ? item.vendor.vendorDisplayName : 'No Title'}}</md-table-cell>
@@ -56,7 +56,7 @@
                                         {{ `Ready to send` }}
                                     </template>
                                     <template v-else-if="item.rfpStatus == 'Sent'">
-                                        {{ `Sent on ` }} {{item.vendor ? getVendorDate(item.vendor.dateCreated) : 'N/A'}}
+                                        {{ `Sent on ` }} {{item.vendor ? getVendorDate(item.rfpSentMillis) : 'N/A'}}
                                     </template>
                                     <template v-else-if="item.rfpStatus == 'Ready to send'"></template>
                                 </md-table-cell>
@@ -262,7 +262,7 @@
 
             },
             getVendorDate(eventStartMillis) {
-
+              alert(eventStartMillis);
                 let x = new Date(eventStartMillis);
 
                 return x.getDate() + '-' + x.getMonth() + '-' + x.getFullYear();

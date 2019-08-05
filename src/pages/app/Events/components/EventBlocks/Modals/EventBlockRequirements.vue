@@ -1,6 +1,6 @@
 <template>
     <div class="adding-building-blocks-panel">
-        <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
+        <!--<vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />-->
         <div class="md-layout text-left">
             <h4 class="md-title md-layout-item md-size-100" style="margin : 0; line-height: 51px; width:100%; font-size: 20px;">
                 {{this.selectedBlock.title}} Requirements
@@ -55,7 +55,7 @@
                                 </md-table-cell>
 
                                 <md-table-cell md-label="Amount" class="requirement-amount">
-                                    <span class="dollar-sign">$</span>
+                                    <!--<span class="dollar-sign">$</span>-->
                                     <label-edit :text="item.value"
                                                 :field-name="item.id.toString()"
                                                 :scope="`value`"

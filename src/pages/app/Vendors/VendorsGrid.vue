@@ -6,26 +6,29 @@
             <product-card
                 header-animation="true" fixed-header="false" :data-count="9999" :hover-count="9999">
                 <img class="img" slot="imageHeader" :src="vendorMainImage(vendor)" style="min-height: 180px;max-height: 180px; object-fit: cover;">
-                <md-icon slot="fixed-button">build</md-icon>
-                <template slot="first-button">
-                    <md-icon >more_horiz</md-icon>
-                    <md-tooltip md-direction="bottom">View</md-tooltip>
-                </template>
-                <template slot="second-button">
-                    <md-icon>open_in_browser</md-icon>
-                    <md-tooltip md-direction="bottom">Open website</md-tooltip>
+                <div slot="card-buttons">
+                    <md-button class="md-purple md-xs md-round md-just-icon">
+                        <md-icon >more_horiz</md-icon>
+                        <md-tooltip md-direction="bottom">View</md-tooltip>
+                    </md-button>
 
-                </template>
-                <template slot="third-button">
-                    <md-icon >edit</md-icon>
-                    <md-tooltip md-direction="bottom">Edit</md-tooltip>
+                    <md-button class="md-info md-xs md-round md-just-icon" :href="`${vendor.vendorWebsite}`" target="_blank">
+                        <md-icon>open_in_browser</md-icon>
+                        <md-tooltip md-direction="bottom">Open website</md-tooltip>
 
-                </template>
-                <template slot="fourth-button">
-                    <md-icon >delete</md-icon>
-                    <md-tooltip md-direction="bottom">Remove</md-tooltip>
+                    </md-button>
 
-                </template>
+                    <md-button class="md-warning md-xs md-round md-just-icon" @click="showVendorDetails(vendor)">
+                        <md-icon >edit</md-icon>
+                        <md-tooltip md-direction="bottom">Edit</md-tooltip>
+
+                    </md-button>
+                    <md-button class="md-danger md-xs md-round md-just-icon">
+                        <md-icon >delete</md-icon>
+                        <md-tooltip md-direction="bottom">Remove</md-tooltip>
+
+                    </md-button>
+                </div>
                 <h4 slot="title" class="title">
                     <a class="" style="font-weight: bold;" href="#pablo">{{vendor.vendorDisplayName}}</a>
                     <div class="small">

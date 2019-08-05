@@ -13,7 +13,7 @@
 
     <md-card-content>
       <div class="md-card-action-buttons text-center" v-if="headerAnimation === 'true'">
-        <md-button class="md-danger md-simple fix-broken-card" @click="fixHeader" v-if="headerDown">
+        <!--<md-button class="md-danger md-simple fix-broken-card" @click="fixHeader" v-if="headerDown">
           <slot name="fixed-button"></slot> Fix Header!
         </md-button>
         <md-button class="md-purple md-xs md-round md-just-icon">
@@ -27,7 +27,8 @@
         </md-button>
           <md-button class="md-danger md-xs md-round md-just-icon">
               <slot name="fourth-button"></slot>
-          </md-button>
+          </md-button>-->
+          <slot name="card-buttons"></slot>
       </div>
       <slot name="title"></slot>
       <slot name="description"></slot>

@@ -81,20 +81,20 @@
 
                                 </td>
                                 <td class="text-center">
-                                    <template v-if="block.allocatedBudget">
+                                    <template >
                                         <template
                                             v-if="block.winningProposalId">
                                             <md-button class="md-warning actual-cost md-xs" @click="reviewProposals(block,block.winningProposalId)">
                                                 View Order
                                             </md-button>
                                         </template>
-                                        <template v-else-if="(block.proposalsState == 'show-proposals' || block.proposalsState == 'waiting-for-proposals') &&  block.values.length">
+                                        <template v-else-if="(block.proposalsState == 'show-proposals' || block.proposalsState == 'waiting-for-proposals')">
                                             <md-button class="md-xs md-info" @click="reviewProposals(block)">
                                                 Manage proposals
                                                 ({{block.proposals.length}})
                                             </md-button>
                                         </template>
-                                        <template v-else-if="block.proposalsState == 'get-offers' && block.values.length">
+                                        <template v-else-if="block.proposalsState == 'get-offers' ">
                                             <md-button class="md-xs md-primary" @click="reviewVendors(block, category.title)">
                                                 Get Proposals
                                                 <md-icon>near_me</md-icon>
@@ -377,7 +377,7 @@
                     component: ViewProposals,
                     cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
                     openOn: 'right',
-                    props: {event: this.event, selectedBlock: item, winnerId : winnerId}
+                    props: {event: this.event, selectedBlock: item, winnerId : winnerId, tab: 0}
                 })
             }
         },
