@@ -262,7 +262,7 @@
 
             },
             getVendorDate(eventStartMillis) {
-              alert(eventStartMillis);
+
                 let x = new Date(eventStartMillis);
 
                 return x.getDate() + '-' + x.getMonth() + '-' + x.getFullYear();

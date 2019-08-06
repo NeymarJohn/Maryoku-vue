@@ -405,6 +405,9 @@
           openOn: 'right',
           props: {event: this.event, selectedBlock: item, getOffers: true , categoryTitle : categoryTitle}
         })
+        window.currentPanel.promise.then(res=>{
+          this.getEventBuildingBlocks();
+        });
       },
       showRequirementsSidepanel(item , winnerId = null) {
         const panelResult = this.$showPanel({
@@ -415,7 +418,7 @@
         });
 
         panelResult.promise.then(res=>{
-          //this.getEventBuildingBlocks();
+          this.getEventBuildingBlocks();
         });
       }
     },
