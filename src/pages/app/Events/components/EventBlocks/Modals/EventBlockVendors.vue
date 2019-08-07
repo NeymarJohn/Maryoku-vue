@@ -8,7 +8,7 @@
                     {{categoryTitle}}'s Vendors List
 
                     <div class="header-actions pull-right">
-                        <md-button class="md-primary md-sm" @click="manageVendors()">
+                        <md-button class="md-primary md-sm" @click="manageVendors()" :disabled="isLoading">
                             Manage Vendors
                         </md-button>
                     </div>
@@ -23,7 +23,7 @@
                         </div>
                         <md-card>
                             <md-card-content>
-                                <md-table v-if="blockVendors" v-model="filteredBlockVendors"  table-header-color="orange" class="vendors-table" @md-selected="onSelect" :md-selected-value.sync="selectedVendors">
+                                <md-table v-if="blockVendors" v-model="filteredBlockVendors"  table-header-color="orange" class="vendors-table">
 
                                     <md-table-toolbar >
                                         <div class="md-toolbar-section-start">
@@ -44,7 +44,7 @@
                                         </div>
                                     </md-table-toolbar>
 
-                                    <md-table-row slot="md-table-row" slot-scope="{ item }" :key="blockVendors.indexOf(item)"   md-selectable="multiple" @md-selected="onSelect">
+                                    <md-table-row slot="md-table-row" slot-scope="{ item }" :key="blockVendors.indexOf(item)" >
                                         <md-table-cell md-label="Vendor Name"  >
                                             <a href="javascript: void(null);" @click="vendorDetails(item.vendor)">
                                                 {{ item.vendor ? item.vendor.vendorDisplayName :  item.vendor.vendorMainEmail}}
@@ -70,17 +70,17 @@
                                                 {{ `` }}
                                             </template>
                                             <template v-else-if="item.rfpStatus == 'Sent'">
-                                                {{ `RFP sent ` }} {{getVendorDate(item.rfpSentMillis) | moment}}
+                                                {{ `Request sent ` }} {{getVendorDate(item.rfpSentMillis)}}
                                             </template>
                                             <template v-else-if="item.rfpStatus == ''"></template>
                                         </md-table-cell>
                                         <md-table-cell class="vendors-table_item-actions">
 
-                                            <md-button class="md-rose md-just-icon md-round" @click="onRemoveVendor(item)" v-if="item.rfpStatus == 'Ready to send' || item.rfpStatus == null">
+                                            <!--<md-button class="md-rose md-just-icon md-round" @click="onRemoveVendor(item)" v-if="item.rfpStatus == 'Ready to send' || item.rfpStatus == null">
                                                 <md-icon>remove</md-icon>
-                                            </md-button>
+                                            </md-button>-->
 
-                                            <md-button class="md-primary md-just-icon md-round" style="font-size: 20px;" @click="sendVendor(item)">
+                                            <md-button v-if="item.rfpStatus === 'Ready to send' || item.rfpStatus == null" class="md-primary md-just-icon md-round" style="font-size: 20px;" @click="sendVendor(item)">
                                                 <md-icon>near_me</md-icon>
                                             </md-button>
 
@@ -209,9 +209,6 @@
             this.isLoading = false;
             this.blockVendors = resp;
             this.filteredBlockVendors = this.blockVendors;
-            this.$nextTick(()=>{
-              this.selectedVendors = [];
-            });
           })
           .catch(error => {
             this.isLoading = false;
@@ -294,7 +291,7 @@
 
         let x = new Date(eventStartMillis);
 
-        return x.getDate() + '-' + x.getMonth() + '-' + x.getFullYear();
+        return moment(x).fromNow();
 
       },
       sendVendor(item) {
