@@ -104,7 +104,7 @@
                 <template slot="tab-pane-2" style="width: 100%;">
                     <div class="md-layout">
                         <div class="md-layout-item md-size-25">
-                            <event-details-sidebar :event.sync="event"></event-details-sidebar>
+                            <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
                         </div>
                         <div class="md-layout-item md-size-75">
                             <event-building-blocks :event.sync="event" :event-components="selectedComponents"

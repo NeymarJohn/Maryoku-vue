@@ -296,7 +296,7 @@
         this.getEvent()
       })
 
-
+      this.getEvent();
     },
     computed: {
       ...mapGetters({
