@@ -82,11 +82,13 @@
     methods: {
       switchPanel(panel) {
         this.activePanel = panel;
-        if (this.syncRouter) {
+        if (this.syncRouter && this.activePanel) {
           let panelIndex = _.findIndex(this.tabName, (t) => {
             return t === this.activePanel;
           });
-          this.$router.push({query: {t: panelIndex > -1 ? panelIndex : 0}});
+          if (panelIndex > -1) {
+            this.$router.push({query: {t: panelIndex}})
+          }
         }
       },
       isActivePanel(panel) {
