@@ -234,6 +234,25 @@
                         <div class="md-layout">
                             <div class="md-layout-item md-size-100">
                                 <h4 class="title">Personal Message</h4>
+                                <span class="text-gray">A personal message from you can increase your chances of winning.</span>
+                            </div>
+
+                            <div class="md-layout-item md-size-100">
+                                <md-field>
+                                    <md-textarea rows="5"></md-textarea>
+                                </md-field>
+                            </div>
+
+                        </div>
+                    </md-card-content>
+                </md-card>
+
+                <md-card class="event-information-card notes-section">
+                    <md-card-content>
+                        <div class="md-layout">
+                            <div class="md-layout-item md-size-100">
+                                <h4 class="title">About Us</h4>
+                                <span class="text-gray">Let your clients know more about your business, what should they pick you? What makes your proposal unique?</span>
                             </div>
 
                             <div class="md-layout-item md-size-100">
