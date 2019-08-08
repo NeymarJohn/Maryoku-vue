@@ -3,7 +3,10 @@
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
         <div class="md-layout vendor-proposals" v-if="proposalRequest">
             <div class="md-layout-item md-size-100">
-                <h3 class="title">{{proposalRequest.vendorName}}</h3>
+                <h5><a href=""><small><md-icon>keyboard_backspace</md-icon> I'd like to see other requests</small></a></h5>
+            </div>
+            <div class="md-layout-item md-size-100">
+                <h3 class="title" style="font-weight: bold;">Submit your proposal</h3>
             </div>
 
             <div class="md-layout-item md-size-70 md-small-size-100">
@@ -268,7 +271,7 @@
 
             </div>
             <div class="md-layout-item md-size-30 md-small-size-100">
-                <md-card class="bid-section">
+                <md-card class="bid-section" style="position: fixed; width: 27%;">
                     <md-card-content >
 
                         <h3 class="text-center">You're the {{proposalRequest.bidderRank | numeral('Oo')}} bidder</h3>
