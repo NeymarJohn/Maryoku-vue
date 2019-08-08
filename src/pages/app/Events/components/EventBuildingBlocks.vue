@@ -403,7 +403,7 @@
       reviewVendors(item , categoryTitle) {
         window.currentPanel = this.$showPanel({
           component: EventBlockVendors,
-          cssClass: 'md-layout-item md-size-65 transition36 bg-grey',
+          cssClass: 'md-layout-item md-size-65 transition36 bg-white',
           openOn: 'right',
           props: {event: this.event, selectedBlock: item, getOffers: true , categoryTitle : categoryTitle}
         })

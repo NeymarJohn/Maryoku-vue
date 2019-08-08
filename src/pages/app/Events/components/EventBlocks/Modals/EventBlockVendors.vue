@@ -16,12 +16,12 @@
                 </h4>
 
                 <div class="md-layout">
-                    <div class="md-layout-item md-size-100" style="padding-left: 42px;">
+                    <div class="md-layout-item md-size-100" style="padding-left: 42px; min-height: 240px;">
                         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
                         <div style="padding-left: 6px;">
                             Send vendors of your choice a request for proposal
                         </div>
-                        <md-card v-show="blockVendors.length && !isLoading">
+                        <md-card v-show="blockVendors.length && !isLoading" class="md-card-plain clear-margins" >
                             <md-card-content>
                                 <md-table v-model="filteredBlockVendors"  table-header-color="orange" class="vendors-table">
 
@@ -75,23 +75,10 @@
                                             <template v-else-if="item.rfpStatus == ''">Ready</template>
                                         </md-table-cell>
                                         <md-table-cell class="vendors-table_item-actions">
-
-                                            <!--<md-button class="md-rose md-just-icon md-round" @click="onRemoveVendor(item)" v-if="item.rfpStatus == 'Ready to send' || item.rfpStatus == null">
-                                                <md-icon>remove</md-icon>
-                                            </md-button>-->
-
-                                            <md-button v-if="item.rfpStatus === 'Ready to send' || item.rfpStatus == null" class="md-primary md-just-icon md-round" style="font-size: 20px;" @click="sendVendor(item)">
+                                            <vue-element-loading :active="sendingRfp" spinner="ring" color="#FF547C"></vue-element-loading>
+                                            <md-button v-promise-btn v-if="!sendingRfp && (item.rfpStatus === 'Ready to send' || item.rfpStatus == null)" class="md-primary md-just-icon md-round" style="font-size: 20px;" @click="sendVendor(item)">
                                                 <md-icon>near_me</md-icon>
                                             </md-button>
-
-                                            <!--                                    <md-button v-if="true" class="md-button md-info md-sm md-theme-default auto-width md-just-icon" @click="viewProposals(item)">-->
-                                            <!--                                        View Proposals-->
-                                            <!--                                    </md-button>-->
-                                            <!--                                    <md-button v-if="true" class="md-button md-default md-sm md-theme-default auto-width md-just-icon">-->
-                                            <!--                                        Inquiry Sent-->
-                                            <!--                                    </md-button>-->
-
-
                                         </md-table-cell>
                                     </md-table-row>
 
@@ -194,7 +181,8 @@
         page : 1
       },
       tooltipModels: [],
-      searchQuery: ""
+      searchQuery: "",
+      sendingRfp: false
     }),
     methods: {
       openUploadModal(){
@@ -307,7 +295,7 @@
 
       },
       sendVendor(item) {
-        this.isLoading = true;
+        //this.isLoading = true;
 
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
@@ -323,16 +311,6 @@
 
         vendor.for(calendar, event, selected_block).save()
           .then(resp => {
-
-            this.isLoading = false;
-
-            this.$notify(
-              {
-                message: 'Vendor Sent successfully',
-                horizontalAlign: 'center',
-                verticalAlign: 'top',
-                type: 'success'
-              })
 
             this.getBlockVendors();
 

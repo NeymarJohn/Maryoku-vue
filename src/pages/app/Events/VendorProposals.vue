@@ -272,7 +272,7 @@
 
                                 <div class="notes-section">
                                     <md-field>
-                                        <md-textarea rows="5" v-model="proposalRequest.personalMessage"
+                                        <md-textarea rows="5" v-model="proposalRequest.cancellationPolicy"
                                                      @blur="updateProposalRequest()"></md-textarea>
                                     </md-field>
                                 </div>

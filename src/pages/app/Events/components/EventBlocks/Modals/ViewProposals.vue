@@ -59,10 +59,14 @@
                             </div>
                         </template>
                         <template slot="tab-pane-3" style="width: 100%;">
-                            3
+                            <div style="padding-left: 6px;">
+                                When vendors submit their proposals you can compare them here.
+                            </div>
                         </template>
                         <template slot="tab-pane-4" style="width: 100%;">
-                            4
+                            <div style="padding-left: 6px;">
+                                Select a proposal as winning to view its details here.
+                            </div>
                         </template>
                     </tabs>
 
