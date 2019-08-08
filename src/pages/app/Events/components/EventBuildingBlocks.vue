@@ -408,7 +408,13 @@
           props: {event: this.event, selectedBlock: item, getOffers: true , categoryTitle : categoryTitle}
         })
         window.currentPanel.promise.then(res=>{
-          this.getEventBuildingBlocks();
+          let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+          let event = new CalendarEvent({id: this.event.id});
+          new EventComponent().for(calendar, event).find(item.id).then(component => {
+            this.event.components.splice(_.findIndex(this.event.components, (b)=>{ return b.id === item.id}),1);
+            this.event.components.push(JSON.parse(JSON.stringify(component)));
+            this.getEventBuildingBlocks();
+          });
         });
       },
       showRequirementsSidepanel(item , winnerId = null) {

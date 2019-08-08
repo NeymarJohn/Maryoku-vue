@@ -8,7 +8,7 @@
                     {{categoryTitle}}'s Vendors List
 
                     <div class="header-actions pull-right">
-                        <md-button class="md-primary md-sm" @click="manageVendors()" :disabled="isLoading">
+                        <md-button v-if="blockVendors.length && !isLoading" class="md-primary md-sm" @click="manageVendors()" :disabled="isLoading">
                             Manage Vendors
                         </md-button>
                     </div>
@@ -21,9 +21,9 @@
                         <div style="padding-left: 6px;">
                             Send vendors of your choice a request for proposal
                         </div>
-                        <md-card>
+                        <md-card v-show="blockVendors.length && !isLoading">
                             <md-card-content>
-                                <md-table v-if="blockVendors" v-model="filteredBlockVendors"  table-header-color="orange" class="vendors-table">
+                                <md-table v-model="filteredBlockVendors"  table-header-color="orange" class="vendors-table">
 
                                     <md-table-toolbar >
                                         <div class="md-toolbar-section-start">
@@ -67,12 +67,12 @@
                                         <md-table-cell md-label="Inquiry Status">
                                             <template v-if="item.rfpStatus === 'Ready to send' || item.rfpStatus == null"
                                             >
-                                                {{ `` }}
+                                                {{ `Ready` }}
                                             </template>
                                             <template v-else-if="item.rfpStatus == 'Sent'">
                                                 {{ `Request sent ` }} {{getVendorDate(item.rfpSentMillis)}}
                                             </template>
-                                            <template v-else-if="item.rfpStatus == ''"></template>
+                                            <template v-else-if="item.rfpStatus == ''">Ready</template>
                                         </md-table-cell>
                                         <md-table-cell class="vendors-table_item-actions">
 
@@ -100,7 +100,7 @@
                         </md-card>
 
 
-                        <template v-if="!blockVendors.length && !isLoading">
+                        <!--<template v-if="!blockVendors.length && !isLoading">
                             <md-card >
                                 <md-card-content>
                                     <h5 >Your vendors list is empty</h5>
@@ -108,7 +108,19 @@
                                 </md-card-content>
                             </md-card>
 
-                        </template>
+                        </template>-->
+
+                        <md-card class="md-card-plain" v-if="!blockVendors.length && !isLoading">
+                            <md-card-content>
+                                <div class="text-center">
+                                    <img src="/static/img/paperandpen.png" style="width: 120px;">
+                                    <h4>No vendors found that match '{{categoryTitle}}'</h4>
+                                    <md-button class="md-purple md-sm" @click="manageVendors">
+                                        Manage Vendors Pool
+                                    </md-button>
+                                </div>
+                            </md-card-content>
+                        </md-card>
                     </div>
                 </div>
             </div>
