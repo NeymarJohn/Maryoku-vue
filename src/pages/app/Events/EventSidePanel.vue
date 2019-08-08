@@ -185,7 +185,7 @@
   import Calendar from "@/models/Calendar"
   import Occasion from "@/models/Occasion"
   import swal from "sweetalert2";
-  import { error, log } from 'util';
+  import { error } from 'util';
   import moment from 'moment';
   import _ from "underscore";
   import AnnualPlannerVuexModule from '../AnnualPlanner/AnnualPlanner.vuex';
@@ -212,9 +212,7 @@
     },
     data: () => ({
       working: false,
-      eventData: {
-        occasion: null
-      },
+      eventData: {},
       occasionsList: [],
       occasionsForCategory: [],
       // auth: auth,
