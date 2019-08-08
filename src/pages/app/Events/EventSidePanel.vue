@@ -136,15 +136,6 @@
                         </div>
                         <div class="md-layout mb16">
                             <div class="md-layout-item md-small-size-100">
-                                <md-field>
-                                    <label>Budget Per Participant</label>
-                                    <md-input v-model="eventData.budgetPerPerson"
-                                              data-vv-name="budgetPerPerson"
-                                              v-validate= "modelValidations.budgetPerPerson"
-                                              required/>
-                                </md-field>
-                            </div>
-                            <div class="md-layout-item md-small-size-100">
                                 <md-field :class="[{'md-error': errors.has('numberOfParticipants')}]">
                                     <label>Number of Participants</label>
                                     <md-input type="text"
@@ -155,6 +146,17 @@
                                     <span class="md-error" v-if="errors.has('numberOfParticipants')">The event participants is required and should be in range of 1 - 10 000</span>
                                 </md-field>
                             </div>
+                            <div class="md-layout-item md-small-size-100">
+                                <md-field>
+                                    <label>Budget (Per Participant)</label>
+                                    <span class="md-prefix">$</span>
+                                    <md-input v-model="eventData.budgetPerPerson"
+                                              data-vv-name="budgetPerPerson"
+                                              v-validate= "modelValidations.budgetPerPerson"
+                                              required/>
+                                </md-field>
+                            </div>
+                            
                             <div class="md-layout-item md-size-100" style="margin-top: 24px;">
                                 <md-button v-if="editMode && openInPlannerOption" @click="openEventPlanner" class="md-simple md-info">
                                     &lt; Open in Event Planner
@@ -183,7 +185,7 @@
   import Calendar from "@/models/Calendar"
   import Occasion from "@/models/Occasion"
   import swal from "sweetalert2";
-  import { error } from 'util';
+  import { error, log } from 'util';
   import moment from 'moment';
   import _ from "underscore";
   import AnnualPlannerVuexModule from '../AnnualPlanner/AnnualPlanner.vuex';
@@ -210,7 +212,9 @@
     },
     data: () => ({
       working: false,
-      eventData: {},
+      eventData: {
+        occasion: null
+      },
       occasionsList: [],
       occasionsForCategory: [],
       // auth: auth,
@@ -256,12 +260,13 @@
     }),
 
     created() {
+      
       if (this.editMode) {
-
+        
         this.eventData = {
           id: this.sourceEventData.id,
           title: this.sourceEventData.title,
-          occasion: this.sourceEventData.occasion,
+          occasion: this.sourceEventData.occasion || "",
           date: new Date(this.sourceEventData.eventStartMillis),
           numberOfParticipants: this.sourceEventData.numberOfParticipants,
           budgetPerPerson: this.sourceEventData.budgetPerPerson,
@@ -284,7 +289,7 @@
       } else {
         this.eventData = {
           title: this.sourceEventData.title,
-          occasion: this.sourceEventData.occasion,
+          occasion: this.sourceEventData.occasion || "",
           date: new Date(this.sourceEventData.eventStartMillis),
           numberOfParticipants: this.sourceEventData.numberOfParticipants,
           budgetPerPerson: this.sourceEventData.budgetPerPerson,
@@ -457,12 +462,12 @@
             editable: true,
             //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
           }).for(_calendar).save().then(response => {
-            console.log('new event => ' , response.id);
+            console.log('new event => ' , response);
             //this.$parent.isLoading = false;
             this.closePanel();
             this.working = false;
             this.$root.$emit('calendar-refresh-events');
-            this.$root.$emit('get-started-event-created', response.id);
+            this.$root.$emit('get-started-event-created', response);
           })
             .catch((error) => {
               console.log(error);
@@ -498,7 +503,7 @@
           type: 'danger',
         });
       },
-      mdOpened:function() {
+      mdOpened:function() {        
         this.eventData.occasion += " ";
         this.eventData.occasion = this.eventData.occasion.substring(0, this.eventData.occasion.length -1)
       },

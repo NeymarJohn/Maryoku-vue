@@ -2855,16 +2855,6 @@ iframe{
                     padding : 0 !important;
                 }
             }
-
-            .requirement-comment {
-                margin-left : 1em;
-
-                span {
-                    background-color: #efefef;
-                    padding : 0.7em 2em 0.7em 0.7em;
-                    border-radius: 3px;
-                }
-            }
         }
         .item-cost-desc {
             display: flex;
@@ -3026,8 +3016,6 @@ iframe{
     .md-field {
         border : 1px solid rgba(0,0,0,0.2);
         border-radius: 5px;
-        margin-bottom : 1em;
-
         &:after , &:before {
             display: none;
         }
@@ -4042,29 +4030,9 @@ iframe{
             margin-right : 2em;
         }
     }
+}
 
-    .md-field.with-bg {
-        width: 50%;
-        max-width: 130px;
-        margin-left: 0;
-        padding-bottom: 0;
-        margin-bottom: 10px;
-        background-color: #F6F6F6;
-
-        &:before , &:after {
-            bottom : 0;
-        }
-
-        .md-prefix {
-            display: inline-block !important;
-            margin-left: 0.5em;
-
-        }
-        .md-input {
-            max-width: 70%;
-            text-align: right;
-        }
-
-    }
-
+.md-datepicker-dialog.md-theme-default .md-datepicker-today:not(.md-datepicker-selected) {    
+    background-color: #ccc !important;
+    box-shadow: none !important;
 }

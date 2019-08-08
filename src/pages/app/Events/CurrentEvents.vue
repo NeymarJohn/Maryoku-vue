@@ -239,11 +239,7 @@
     mounted () {
       let _self = this
       this.isLoading = true;
-
       this.getEvent()
-      const tab = this.$route.query.t || 0;
-      this.$refs.eventPlannerTabs.$emit('event-planner-nav-switch-panel',tab);
-
       if (this.components.length === 0) {
         this.$store.dispatch('event/getComponents')
         this.$store.dispatch('event/getCategories', this.$auth.user.defaultCalendarId)
@@ -255,6 +251,9 @@
       this.$root.$on('calendar-refresh-events',()=>{
         this.getEvent();
       })
+
+      const tab = this.$route.query.t || 0;
+      this.$refs.eventPlannerTabs.$emit('event-planner-nav-switch-panel',tab);
     },
     methods: {
       ...mapMutations('EventPlannerVuex', [

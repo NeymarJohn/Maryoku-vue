@@ -104,7 +104,7 @@
                         statistics.forEach(function(data){
                             statisticMap[data.item] = data.value
                         });
-
+                                                
                         this.statisticsData = statisticMap;
 
                         this.checkSelectedYearMonth();

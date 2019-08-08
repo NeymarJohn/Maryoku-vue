@@ -42,7 +42,7 @@
     </div>
 </template>
 <script>
-
+  import Calendar from '@/models/Calendar';
   import EventSidePanel from '@/pages/app/Events/EventSidePanel';
 
   export default {
@@ -50,9 +50,15 @@
 
     },
     mounted(){
-      this.$auth.currentUser(this, true, () =>{
-        this.$root.$on("get-started-event-created", (eventId)=>{
-          this.$router.push({name: 'EditEvent', params: {id: eventId}});
+      this.$auth.currentUser(this, true, () => {
+        this.$root.$on("get-started-event-created", event => {
+          let calendarId = this.$auth.user.defaultCalendarId;
+          let calendar = new Calendar({
+            id: calendarId, 
+            annualBudgetPerEmployee: Number(event.numberOfParticipants * event.budgetPerPerson)
+          }).save();
+
+          this.$router.push({name: 'EditEvent', params: {id: event.id}});
         });
       });
     },
@@ -80,7 +86,6 @@
             openInPlannerOption: false
           }
         });
-
       },
       openYearPlanner() {
         this.$router.push({ path: `/planner`});

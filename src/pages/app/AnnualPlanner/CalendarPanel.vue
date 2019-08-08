@@ -35,7 +35,7 @@
                                                             <th class="text-gray" v-for="dayOfWeek in weekDays">{{dayOfWeek}}</th>
                                                         </tr>
                                                         <tr v-for="monthRow in monthRows">
-                                                            <td v-for="monthDay in monthRow" style="width: 14.2%; min-width: 14.2%; max-width: 14.2%;">
+                                                            <td v-for="monthDay in monthRow" style="width: 14.2%; min-width: 14.2%; max-width: 14.2%;" :class="{'calendar--today': monthDay.isToday}">
                                                                 <template v-if="monthDay !== 0">
                                                                     <template v-if="monthDay.hasEvents">
                                                                         <!--<md-button v-if="monthDay.dayInMonth === 1" :ref="`month-day-${monthDay.dayInMonth}`" class="md-simple month-day-button md-just-icon md-round md-md">-->
@@ -61,7 +61,7 @@
                                                                         </md-button>
                                                                     </template>
                                                                     <template v-else>
-                                                                        <md-button :ref="`month-day-${monthDay.dayInMonth}`" @click="openNewEventModal(fullDateWithDay(monthDay.dayInMonth))" class="md-white md-round  md-just-icon md-md">
+                                                                        <md-button :ref="`month-day-${monthDay.dayInMonth}`" @click="openNewEventModal(fullDateWithDay(monthDay.dayInMonth))" class="md-round  md-just-icon md-md" :class="{'md-white': !monthDay.isToday}">
                                                                             {{monthDay.dayInMonth}}
                                                                         </md-button>
                                                                     </template>
@@ -134,6 +134,7 @@
     import EventSidePanel from '../Events/EventSidePanel';
     import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
     import AnnualPlannerVuexModule from './AnnualPlanner.vuex';
+import { log } from 'util';
 
 
     export default {
@@ -289,18 +290,19 @@
                 for (var rowIdx = 0; rowIdx < 6; rowIdx++){ // 5 rows
                     let row = [];
                     for (var dayIdx = 0; dayIdx < 7; dayIdx++) { // 7 days
+                        let isToday = moment().isSame(currentMoment, 'day');                
                         if (currentMoment.date() === 1 && currentMoment.month() === currentMonth && currentMoment.year() === currentYear) {
                             if (currentMoment.weekday() === dayIdx){
-                                row.push({dayInMonth: currentMoment.date(), ...this.selectedDay(currentMoment)});
+                                row.push({dayInMonth: currentMoment.date(), ...this.selectedDay(currentMoment), isToday});
                                 currentMoment = currentMoment.add(1, 'day');
                             } else {
                                 row.push(0);
                             }
                         } else if (this.selectedDay(currentMoment).hasEvents) {
-                            row.push({dayInMonth: currentMoment.date(), hasEvents: true, events: this.selectedDay(currentMoment).events});
+                            row.push({dayInMonth: currentMoment.date(), hasEvents: true, events: this.selectedDay(currentMoment).events, isToday});
                             currentMoment = currentMoment.add(1, 'day');
                         } else if (currentMoment.date() <= daysInMonth && currentMoment.month() === currentMonth && currentMoment.year() === currentYear){
-                            row.push({dayInMonth: currentMoment.date(), hasEvents: false});
+                            row.push({dayInMonth: currentMoment.date(), hasEvents: false, isToday});
                             currentMoment = currentMoment.add(1, 'day');
                         } else {
                             row.push(0);
@@ -369,7 +371,7 @@
             colorWithCategory(category) {
                 let filterCategories = this.categories.filter(c => c.id === category);
                 return filterCategories[0] != null ? `${filterCategories[0].color} !important;` : '';
-            },
+            }
         },
         computed: {
             ...mapState('AnnualPlannerVuex', ['filtersData']),
@@ -442,5 +444,11 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+
+    .calendar--today {
+        button {
+            background-color: #ccc !important;
+        }
     }
 </style>
