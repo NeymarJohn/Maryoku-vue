@@ -89,8 +89,8 @@
             closeModal() {
                 this.setBuildingBlockModal({showModal: false});
             },
-            closePanel(payload){
-                this.$emit("closePanel", payload);
+            closePanel(){
+                this.$emit("closePanel");
             },
             addBuildingBlock(item) {
 
@@ -112,11 +112,8 @@
                     this.$parent.isLoading = false;
 
                     this.setBuildingBlockModal({showModal: false});
-
-                    new EventComponent().for(calendar, event).find(res.item.id).then(item => {
-                      this.$emit("closePanel", item);
-                    });
-                    //this.$bus.$emit('refreshBuildingBlock');
+                    this.$emit("closePanel", {});
+                    this.$bus.$emit('refreshBuildingBlock');
 
                 })
                     .catch(error => {

@@ -227,9 +227,7 @@
             this.calendarEvent = this.event
             this.selectedComponents = this.event.components;
 
-            if (this.eventId) {
-              this.getCalendarEventStatistics(this.event)
-            }
+            this.getCalendarEventStatistics(this.event);
 
             this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
           }
@@ -238,9 +236,7 @@
       getCalendarEventStatistics (evt) {
 
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-        let event = new CalendarEvent({id: evt.id});
-
-        if (!evt.id) { return; }
+        let event = new CalendarEvent({id: this.eventId});
 
         new CalendarEventStatistics().for(calendar, event).get()
           .then(resp => {
@@ -293,14 +289,14 @@
         this.getEvent();
       }
       this.$bus.$on('RefreshStatistics', function () {
-        _self.getCalendarEventStatistics(_self.event)
+        _self.getCalendarEventStatistics(_self.calendarEvent)
       })
 
       this.$root.$on('calendar-refresh-events', () => {
         this.getEvent()
       })
 
-      this.getEvent();
+
     },
     computed: {
       ...mapGetters({

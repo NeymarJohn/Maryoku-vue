@@ -23,6 +23,9 @@
                   <md-icon>view_module</md-icon>
                 </md-button>
             </div>
+            <div style="display: inline-block; height: 30px; border: 1px solid lightgrey; background-color: white; border-radius: 5px; padding: 4px; margin: .3125rem 12px; flex-grow: 1;">
+                <input class="md-input" type="text" style="width: 100%; height: 100%; border: 0; background-color: transparent; font-size: 14px;" placeholder="Search"></input>
+            </div>
             <div class="pull-right" style="margin: 0 1px;">
                 <md-button style="display: inline-block;" class="md-info md-sm" @click="addNewVendor">Add Vendor</md-button>
                 <md-button style="display: inline-block;" class="md-purple md-sm" @click="openUploadModal">Import Vendors From Spreadsheet</md-button>
@@ -34,7 +37,7 @@
                 <md-input v-model="searchTerm" type="text"></md-input>
             </md-field>-->
         </div>
-        <div class="md-layout-item md-size-100" style="min-height: 95vmin;">
+        <div class="md-layout-item md-size-100">
             <vue-element-loading :active="working" spinner="ring" color="#FF547C" background-color="transparent"/>
             <!-- <div class="md-layout md-gutter ">
                 <div class="md-layout-item md-small-size-100 md-medium-size-50 md-large-size-33" v-for="vendor in vendorsList" :key="vendor.id">
@@ -121,9 +124,6 @@
       VendorsGrid,
       VendorsList
     },
-    props: {
-      inPanel: Boolean
-    },
     data() {
       return {
         view: "grid", //{grid, list}
@@ -196,21 +196,8 @@
             categories: this.buildingBlocksList,
             selected_vendor: vendor,
             creation_mode: false,
-          },
-        });
-
-        if (this.inPanel){
-          let slideoutPanelBg = document.getElementsByClassName("slideout-panel-bg");
-          if (slideoutPanelBg && slideoutPanelBg.length > 0) {
-            slideoutPanelBg[0].style = "z-index: 102";
           }
-
-          window.currentPanel.promise.then(res=>{
-            if (slideoutPanelBg && slideoutPanelBg.length > 0) {
-              slideoutPanelBg[0].style = "z-index: 101";
-            }
-          });
-        }
+        });
       },
       addNewVendor(){
         window.currentPanel = this.$showPanel({

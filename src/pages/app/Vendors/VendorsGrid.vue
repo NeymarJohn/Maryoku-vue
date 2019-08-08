@@ -1,18 +1,7 @@
 <template>
-    <div class="md-layout md-gutter">
-        <div class="md-layout-item md-size-100 " style="margin-bottom: 42px; margin-top: 0;">
-            <md-field>
-                <md-input
-                    type="search"
-                    class="mb-3"
-                    clearable
-                    placeholder="Search vendors"
-                    v-model="searchQuery">
-                </md-input>
-            </md-field>
-        </div>
+    <div class="md-layout" style="margin-top: 42px;">
         <div class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100 md-large-size-25 md-size-20"
-             v-for="vendor in filteredVendorsList"
+             v-for="vendor in vendorsList"
              :key="vendor.id">
             <product-card
                 header-animation="true" fixed-header="false" :data-count="9999" :hover-count="9999">
@@ -23,7 +12,7 @@
                         <md-tooltip md-direction="bottom">View</md-tooltip>
                     </md-button>
 
-                    <md-button v-if="vendor.vendorWebsite" class="md-info md-xs md-round md-just-icon" :href="`${vendor.vendorWebsite}`" target="_blank">
+                    <md-button class="md-info md-xs md-round md-just-icon" :href="`${vendor.vendorWebsite}`" target="_blank">
                         <md-icon>open_in_browser</md-icon>
                         <md-tooltip md-direction="bottom">Open website</md-tooltip>
 
@@ -157,7 +146,6 @@
 </template>
 <script>
   import { categoryTitle, categoryColor } from './helpers'
-  import _ from 'underscore';
 
   import {
     ProductCard,
@@ -172,8 +160,6 @@
     props: ['vendorsList', 'ratings', 'buildingBlocksList'],
     data() {
       return {
-        searchQuery: "",
-        filteredVendorsList: [],
         bgImages : [
           '/static/img/lock.jpg',
           '/static/img/login.jpg',
@@ -195,9 +181,6 @@
         ]
       }
     },
-    mounted() {
-      this.filteredVendorsList = this.vendorsList;
-    },
     methods: {
       categoryTitle,
       categoryColor,
@@ -207,31 +190,11 @@
       vendorMainImage(vendor){
         const rndInt = Math.floor(Math.random() * this.bgImages.length);
         return this.bgImages[rndInt];
-      },
-      filterVendors(){
-        this.filteredVendorsList = _.filter(this.vendorsList, (v)=>{
-          return v.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
-        });
-      }
-    },
-    watch: {
-      searchQuery(newVal, oldVal){
-        if (newVal === '') {
-          this.filteredVendorsList = this.vendorsList;
-        } else {
-          this.filterVendors();
-        }
-      },
-      vendorsList(newVal, oldVal){
-        this.filterVendors();
       }
     }
   }
 </script>
 <style lang="scss" scoped>
-
-    @import '@/assets/scss/md/_colors.scss';
-
     .md-card-header-image {
         > img {
             max-height: 25vmin;
@@ -281,27 +244,5 @@
         background: -o-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
         background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
         background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
-    }
-
-    .md-tooltip {
-        z-index: 9999 !important;
-        background: $purple-500 !important;
-        color: $white !important;
-
-        &[x-placement="top"]:after {
-            border-bottom-color: $purple-500 !important;
-        }
-
-        &[x-placement="bottom"]:after {
-            border-bottom-color: $purple-500 !important;
-        }
-
-        &[x-placement="right"]:after {
-            border-bottom-color: $purple-500 !important;
-        }
-
-        &[x-placement="left"]:after {
-            border-bottom-color: $purple-500 !important;
-        }
     }
 </style>

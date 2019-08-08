@@ -61,7 +61,7 @@
                                 <td class="allocated-budget" style="width: 15%;" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
                                     <div class="md-table-cell-container" >
                                         <span class="dollar-sign pull-left">$</span>
-                                        <label-edit style="width: 100%; margin-left: 8px;" :text="block.allocatedBudget ? block.allocatedBudget.toString() : ''"
+                                        <label-edit style="width: 100%;" :text="block.allocatedBudget ? block.allocatedBudget.toString() : ''"
                                                     :field-name="block.componentId"
                                                     @text-updated-blur="blockBudgetChanged"
                                                     @text-updated-enter="blockBudgetChanged"></label-edit>
@@ -201,7 +201,6 @@
 
             selected_block.for(calendar, event).delete().then(resp => {
               this.isLoading = false
-              this.event.components.splice(_.findIndex(this.eventBuildingBlocks, (b)=>{ return b.id === selected_block.id}),1);
               this.getEventBuildingBlocks();
               this.$bus.$emit('RefreshStatistics');
               this.$forceUpdate()
@@ -274,12 +273,15 @@
 
         let res = this.event.components;
 
+        console.log(res);
+
         this.$set(this, 'eventBuildingBlocks', res);
 
         // group event blocks by category name
         this.eventBuildingBlocksList = _.chain(res).groupBy('category').map(function(value, key) {
 
           let totalAllocatedBudget = 0, totalActualCost = 0;
+
 
           value.forEach(function (item) {
             if (item.allocatedBudget) totalAllocatedBudget += item.allocatedBudget;
@@ -311,11 +313,7 @@
           cssClass: 'md-layout-item md-size-35 transition36 bg-grey',
           openOn: 'right',
           props: {event: this.event}
-        });
-        window.currentPanel.promise.then(res=>{
-          this.event.components.push(JSON.parse(JSON.stringify(res)));
-          this.getEventBuildingBlocks();
-        });
+        })
       },
       blockBudgetChanged(val, index) {
 
@@ -403,7 +401,7 @@
       reviewVendors(item , categoryTitle) {
         window.currentPanel = this.$showPanel({
           component: EventBlockVendors,
-          cssClass: 'md-layout-item md-size-65 transition36 bg-grey',
+          cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
           openOn: 'right',
           props: {event: this.event, selectedBlock: item, getOffers: true , categoryTitle : categoryTitle}
         })

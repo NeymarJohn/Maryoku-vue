@@ -655,7 +655,6 @@ $tooltip-border-color: $blue-grey-200 !default;
         padding : 0 !important;
         width : 75% !important;
         box-shadow: none;
-        height: 45px !important;
 
         .md-list-item {
             margin-left : 0;
@@ -663,7 +662,6 @@ $tooltip-border-color: $blue-grey-200 !default;
             width: 25%;
             box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
             border : none;
-            height: 45px !important;
 
             &:first-child {
                 border-radius: 5px 0 0 5px;
@@ -690,7 +688,6 @@ $tooltip-border-color: $blue-grey-200 !default;
                 background: #e1e1e1;
                 text-transform: capitalize;
                 font-size: 13px;
-                height: 45px !important;
 
                 .md-list-item-content {
                     >div {
@@ -703,11 +700,11 @@ $tooltip-border-color: $blue-grey-200 !default;
                 span {
                     border : 1px solid #c6c6c6;
                     border-radius: 50%;
-                    width : 25px;
-                    height : 25px;
+                    width : 35px;
+                    height : 35px;
                     display: inline-block;
                     text-align: center;
-                    padding-top : 5px;
+                    padding-top : 10px;
                     margin-right : 0.7em;
 
                     i {
@@ -722,7 +719,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
             &.active {
                 .md-list-item-button {
-                    background-color: $purple-500 !important;
+                    background-color: $orange-800 !important;
                     color : #fff !important;
                     box-shadow: none;
                     span {

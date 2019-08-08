@@ -66,7 +66,7 @@
                         </template>
                     </tabs>
 
-                    <md-card class="allocated-budget" style="height: 45px;"> <md-card-content><span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span> <div class="budget">${{selectedBlock.allocatedBudget}}</div></md-card-content></md-card>
+                    <md-card class="allocated-budget"> <md-card-content>Allocated Budget: <div class="budget">${{selectedBlock.allocatedBudget}}</div></md-card-content></md-card>
                 </div>
 
                 <div class="md-layout" style="overflow: auto; max-height: 80vh;" v-if="selectedBlock.proposals">
