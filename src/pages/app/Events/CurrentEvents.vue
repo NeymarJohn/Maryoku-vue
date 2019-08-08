@@ -104,7 +104,7 @@
                 <template slot="tab-pane-2" style="width: 100%;">
                     <div class="md-layout">
                         <div class="md-layout-item md-size-25">
-                            <event-details-sidebar :event.sync="event"></event-details-sidebar>
+                            <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
                         </div>
                         <div class="md-layout-item md-size-75">
                             <event-building-blocks :event.sync="event" :event-components="selectedComponents"
@@ -239,7 +239,11 @@
     mounted () {
       let _self = this
       this.isLoading = true;
+
       this.getEvent()
+      const tab = this.$route.query.t || 0;
+      this.$refs.eventPlannerTabs.$emit('event-planner-nav-switch-panel',tab);
+
       if (this.components.length === 0) {
         this.$store.dispatch('event/getComponents')
         this.$store.dispatch('event/getCategories', this.$auth.user.defaultCalendarId)
@@ -251,9 +255,6 @@
       this.$root.$on('calendar-refresh-events',()=>{
         this.getEvent();
       })
-
-      const tab = this.$route.query.t || 0;
-      this.$refs.eventPlannerTabs.$emit('event-planner-nav-switch-panel',tab);
     },
     methods: {
       ...mapMutations('EventPlannerVuex', [
