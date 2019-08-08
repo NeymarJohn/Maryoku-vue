@@ -72,7 +72,7 @@
                 <!-- ./Event Information Card -->
 
                 <!-- Dietary requirements -->
-                <md-card class="event-information-card " >
+                <md-card class="event-information-card ">
                     <md-card-content>
                         <div class="md-layout">
                             <div class="md-layout-item md-size-100">
@@ -81,35 +81,29 @@
 
                             <div class="md-layout-item md-size-100">
                                 <div class="vendor-proposals_requirements-list">
-                                    <div class="list-item md-layout item-title"  >
+                                    <div class="list-item md-layout item-title">
                                         <div class="requirement-title md-layout-item md-size-65 md-small-size-100">
-                                            {{proposalRequest.requirementsCategory}} ({{proposalRequest.requirements.length}})
+                                            {{proposalRequest.requirementsCategory}}
+                                            ({{proposalRequest.requirements.length}})
                                         </div>
-                                        <div class="md-layout-item md-size-35 md-small-size-100 text-right item-cost-desc">
-                                            <span>Per guest ${{(proposalRequest.requirementsCategoryCost / proposalRequest.eventData.numberOfParticipants).toFixed(2) | numeral('0,0')}}</span>
+                                        <div
+                                            class="md-layout-item md-size-35 md-small-size-100 text-right item-cost-desc">
+                                            <span>Per guest ${{(proposalRequest.requirementsCategoryCost / proposalRequest.eventData.numberOfParticipants).toFixed(2) | numeral('0,0') }}</span>
                                             <md-field class="with-bg">
                                                 <span class="md-prefix">$</span>
-                                                <md-input v-model="proposalRequest.requirementsCategoryCost"></md-input>
+                                                <md-input v-model="proposalRequest.requirementsCategoryCost" @blur="updateProposalRequest"></md-input>
                                             </md-field>
                                         </div>
                                     </div>
-                                    <div class="list-item md-layout" v-for="(item,index) in proposalRequest.requirements" :key="index">
+                                    <div class="list-item md-layout"
+                                         v-for="(item,index) in proposalRequest.requirements" :key="index">
                                         <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
-                                            <span v-if="item.requirementValue">{{item.requirementValue}} x </span> {{item.requirementTitle}}
-                                            <blockquote v-if="item.requirementMandatory" style="background-color: #EEEEEE; border-left: 2px solid #aaaaaa; padding: 8px; margin-left: 0;">
-                                                <span>Client <strong>must-have</strong> requirement</span>
-                                                <div v-if="item.requirementValue">
-                                                    <span class="text-gray">{{item.requirementComment}}</span>
-                                                </div>
-                                            </blockquote>
-                                            <blockquote v-else style="background-color: #EEEEEE; border-left: 2px solid #aaaaaa; padding: 8px; margin-left: 0;">
-                                                <span>Client requirement</span>
-                                                <span class="text-gray">{{item.requirementComment}}</span>
-                                            </blockquote>
+                                            {{item.requirementTitle}}
                                         </div>
-                                        <div class="included-in-price md-layout-item md-size-50 md-small-size-100 text-right item-cost-desc">
+                                        <div
+                                            class="included-in-price md-layout-item md-size-50 md-small-size-100 text-right item-cost-desc">
                                             <template v-if="!item.includedInPrice">
-                                                <md-field >
+                                                <md-field>
                                                     <md-select v-model="item.per_guest">
                                                         <md-option>Per Guest</md-option>
                                                         <md-option>Total</md-option>
@@ -117,21 +111,28 @@
                                                 </md-field>
                                                 <md-field class="with-bg">
                                                     <span class="md-prefix">$</span>
-                                                    <md-input v-model="item.block_cost"></md-input>
+                                                    <md-input v-model="item.price" @blur="updateProposalRequest"></md-input>
                                                 </md-field>
                                             </template>
 
 
-                                            <md-switch class="md-switch-rose switch-btn"  v-model="item.includedInPrice"></md-switch>
+                                            <md-switch class="md-switch-rose switch-btn"
+                                                       v-model="item.includedInPrice"></md-switch>
                                             <label :for="`include-${index}`">Included in price</label>
                                         </div>
                                         <div class="actions-list md-layout-item md-size-100 md-small-size-100">
-                                            <md-field >
+                                            <md-field>
                                                 <label>Amount</label>
                                                 <md-input type="number"></md-input>
                                             </md-field>
-                                            <md-button class="md-rose md-simple"><md-icon>block</md-icon> Item not available</md-button>
-                                            <md-button class="md-primary md-simple"><md-icon>comment</md-icon> Add Comment</md-button>
+                                            <md-button class="md-rose md-simple">
+                                                <md-icon>block</md-icon>
+                                                Item not available
+                                            </md-button>
+                                            <md-button class="md-primary md-simple">
+                                                <md-icon>comment</md-icon>
+                                                Add Comment
+                                            </md-button>
                                         </div>
                                     </div>
                                 </div>
@@ -252,7 +253,8 @@
 
                             <div class="md-layout-item md-size-100">
                                 <md-field>
-                                    <md-textarea rows="5"></md-textarea>
+                                    <md-textarea rows="5" v-model="proposalRequest.personalMessage"
+                                                 @blur="updateProposalRequest()"></md-textarea>
                                 </md-field>
                             </div>
 
@@ -307,12 +309,12 @@
 
                         <div class="offer-value">
                             <div class="value-section upgrades-section ">
-                                <div class="title" style="text-transform: capitalize;">{{proposalRequest.requirementsCategory}}</div>
+                                <div class="title">{{proposalRequest.requirementsCategory}}</div>
                                 <div class="cost text-right">${{proposalRequest.requirementsCategoryCost | numeral('0,0')}}</div>
                             </div>
                             <div class="value-section user-offer-section ">
                                 <div class="title">Your Offer</div>
-                                <div class="cost text-right">${{proposalRequest.requirementsCategoryCost | numeral('0,0')}}</div>
+                                <div class="cost text-right">${{totalOffer | numeral('0,0')}}</div>
                             </div>
                         </div>
 
@@ -448,7 +450,8 @@
         proposalRequest : null,
         proposalRequestRequirements : [],
         proposalRequestImages : [],
-        alretExceedPictureSize : false
+        alretExceedPictureSize : false,
+          proposalRequestComment: ''
       };
     },
     created(){
@@ -488,10 +491,6 @@
 
     },
     mounted() {
-
-
-
-
 
 
     },
@@ -596,10 +595,75 @@
             console.log(error);
           });
 
-      }
-    },
-    computed: {
+      },
+        updateProposalComment () {
+            const proposalRequest = new ProposalRequest({id: this.$route.params.id});
+            let dataToSend = {
+                from : 'string',
+                commentText: this.proposalRequestComment
+            }
 
-    }
+            return new ProposalRequestComment(dataToSend)
+                .for(proposalRequest).save()
+                .then(result => {
+                    console.log(result)
+                })
+                .catch((error) => {
+                    this.isLoading = false
+
+                    console.log(error)
+                })
+
+        },
+        updateProposalRequest(){
+            let proposalRequest = new ProposalRequest({id: this.$route.params.id});
+
+            proposalRequest.id = this.proposalRequest.id;
+            proposalRequest.requirementsCategoryCost = this.proposalRequest.requirementsCategoryCost;
+            proposalRequest.attachments = this.proposalRequest.attachments;
+            proposalRequest.bid = this.proposalRequest.bid;
+            proposalRequest.bidRange = this.proposalRequest.bidRange;
+            proposalRequest.bidUnit = this.proposalRequest.bidUnit;
+            proposalRequest.bidderRank = this.proposalRequest.bidderRank;
+            proposalRequest.comments = this.proposalRequest.comments;
+            proposalRequest.eventData = this.proposalRequest.eventData;
+            proposalRequest.images = this.proposalRequest.images;
+            proposalRequest.insuranceDocument = this.proposalRequest.insuranceDocument;
+            proposalRequest.lastRequestEmailSentMillis = this.proposalRequest.lastRequestEmailSentMillis;
+            proposalRequest.lastRequestViewMillis = this.proposalRequest.lastRequestViewMillis;
+            proposalRequest.licenseDocument = this.proposalRequest.licenseDocument;
+            proposalRequest.nudgeCount = this.proposalRequest.nudgeCount;
+            proposalRequest.requirements = this.proposalRequest.requirements;
+            proposalRequest.requirementsCategory = this.proposalRequest.requirementsCategory;
+            proposalRequest.requirementsCategoryCost = this.proposalRequest.requirementsCategoryCost;
+            proposalRequest.submitted = this.proposalRequest.submitted;
+            proposalRequest.vendorId = this.proposalRequest.vendorId;
+            proposalRequest.vendorName = this.proposalRequest.vendorName;
+            proposalRequest.personalMessage = this.proposalRequest.personalMessage;
+
+            proposalRequest.save()
+                .then(res=>{
+                    console.log('saved ', res)
+                })
+                .catch(error=> {
+                    console.log(error);
+                });
+        }
+    },
+      computed: {
+          totalOffer(){
+              console.log(this.proposalRequest);
+              let total = parseInt(this.proposalRequest.requirementsCategoryCost);
+
+              this.proposalRequest.requirements.map(function(item) {
+
+                  if ( item.requirementValue) {
+                      total += parseInt(item.price)
+                  }
+
+              });
+              return total
+          }
+      }
   };
 </script>

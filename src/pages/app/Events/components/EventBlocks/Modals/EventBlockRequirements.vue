@@ -219,7 +219,6 @@
         let selected_block = new EventComponent({id: this.selectedBlock.id});
 
         new EventComponentValue(new_value).for(calendar, event, selected_block).save().then(res => {
-          this.selectedBlock.values.push(JSON.parse(JSON.stringify(res.item)));
           this.isLoading = false;
           this.getBuildingBlockValues();
         });
@@ -265,7 +264,6 @@
             let value = new EventComponentValue({id: valueId});
 
             value.for(calendar, event, selected_block).delete().then(resp => {
-              this.selectedBlock.values.splice(_.findIndex(this.selectedBlock.values, (v) => { return v.id === value.id}), 1);
               this.getBuildingBlockValues();
               this.isLoading = false;
               this.$forceUpdate();
@@ -300,8 +298,6 @@
         value[property] = val ? val : false;
 
         value.for(calendar, event, selected_block).save().then(resp => {
-          this.selectedBlock.values.splice(_.findIndex(this.selectedBlock.values, (v) => { return v.id === value.id}), 1);
-          this.selectedBlock.values.push(JSON.parse(JSON.stringify(resp.item)));
           this.isLoading = false;
           this.cancelEdit(item);
           this.getBuildingBlockValues();
