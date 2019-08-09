@@ -2859,10 +2859,13 @@ iframe{
             .requirement-comment {
                 margin-left : 1em;
 
-                span {
+                .vlabeledit {
                     background-color: #efefef;
-                    padding : 0.7em 2em 0.7em 0.7em;
+                    padding: 0 1em;
                     border-radius: 3px;
+                    display: inline-block;
+                    float: right;
+                    margin-left: 0.5em;
                 }
             }
         }
@@ -3010,7 +3013,7 @@ iframe{
         align-items: center;
         text-align: center;
         width: 31%;
-        padding: 1em 0;
+        padding: 1em 0.5em;
         float: left;
         margin-right: 2%;
 
@@ -3042,7 +3045,24 @@ iframe{
         }
     }
 }
+.md-field {
+    &.full-width {
+        width: 70% !important;
+        margin-left: 1em !important;
+        padding : 0 1em;
+    }
 
+    &.bordered-field {
+        border : 1px solid rgba(0,0,0,0.2);
+        border-radius: 5px;
+        margin-bottom : 1em;
+
+        &:after , &:before {
+            display: none;
+        }
+
+    }
+}
 .bid-section {
 
     .md-card-content {
@@ -4069,7 +4089,7 @@ iframe{
 
 }
 
-.md-datepicker-dialog.md-theme-default .md-datepicker-today:not(.md-datepicker-selected) {    
+.md-datepicker-dialog.md-theme-default .md-datepicker-today:not(.md-datepicker-selected) {
     background-color: #ccc !important;
     box-shadow: none !important;
 }

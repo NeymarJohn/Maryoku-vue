@@ -70,9 +70,6 @@
                                 <div class="proposal-description">
                                     {{proposalRequest.description}}
                                 </div>
-                                <div class="show-more-button">
-                                    <md-button class="md-primary md-sm md-simple">Show me another event</md-button>
-                                </div>
                             </div>
                         </div>
                     </md-card-content>
@@ -153,25 +150,28 @@
                                                 <md-icon>block</md-icon>
                                                 Item not available
                                             </md-button>
-                                            <md-button class="md-primary md-simple" v-if="!item.requirementComment"
-                                                       @click="item.showCommentForm =  true; $forceUpdate();">
+                                            <md-button class="md-primary md-simple" v-if="!item.requirementComment || !item.addedComment"
+                                                       @click="item.showCommentForm =  true; item.addedComment = false; $forceUpdate();">
                                                 <md-icon>comment</md-icon>
                                                 Add Comment
                                             </md-button>
-
-                                            <div class="requirement-comment" v-if="item.requirementComment">
+                                            <div class="requirement-comment" v-if="item.requirementComment && item.addedComment">
                                                 <md-icon>comment</md-icon>
-                                                <span>{{item.requirementComment}}</span>
+                                                <label-edit :text="item.proposalRequestRequirementComment"
+                                                            @text-updated-blur="updateProposalRequest"
+                                                            @text-updated-enter="updateProposalRequest"></label-edit>
                                             </div>
+
+                                            <template v-if="item.showCommentForm">
+                                                <md-field class="full-width bordered-field">
+                                                    <md-input v-model="item.requirementComment" placeholder="add your comment here"
+                                                              @blur="updateProposalRequest(); item.showCommentForm =  false; item.addedComment = true; $forceUpdate();"></md-input>
+                                                </md-field>
+                                            </template>
+
                                         </div>
 
-                                        <div class="md-layout-item md-size-100 notes-section "
-                                             v-if="item.showCommentForm">
-                                            <md-field>
-                                                <md-textarea rows="5" v-model="item.requirementComment"
-                                                             @blur="updateProposalRequest(); item.showCommentForm =  false; $forceUpdate();"></md-textarea>
-                                            </md-field>
-                                        </div>
+
 
                                     </div>
                                 </div>
@@ -240,9 +240,12 @@
                                         <div class="attachment-placeholder">Add <br>Insurance Papers</div>
                                     </div>
                                     <div class="vendor-attachments-list_item">
-                                        <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image">
+                                        <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image"
+                                                   @click="uploadLicense">
                                             <md-icon>add</md-icon>
                                         </md-button>
+                                        <input type="file" style="display: none;" ref="license"
+                                               @change="onLicensePicked">
                                         <div class="attachment-placeholder">Add <br>License</div>
                                     </div>
                                     <div class="vendor-attachments-list_item">
@@ -285,7 +288,7 @@
                                     <md-field class="with-bg">
                                         <label></label>
                                         <span class="md-prefix">$</span>
-                                        <md-input v-model="proposalRequest.depositCost"></md-input>
+                                        <md-input v-model="proposalRequest.depositCost" @blur="updateProposalRequest()"></md-input>
                                     </md-field>
                                 </div>
                             </div>
@@ -370,6 +373,18 @@
                                 <div class="cost text-right">${{proposalRequest.requirementsCategoryCost |
                                     numeral('0,0')}}
                                 </div>
+                            </div>
+                            <div class="value-section upgrades-section ">
+                                <div class="title" style="text-transform: capitalize;">
+                                    Extra
+                                </div>
+                                <div class="cost text-right">${{extraTotal | numeral('0,0')}}</div>
+                            </div>
+                            <div class="value-section upgrades-section ">
+                                <div class="title" style="text-transform: capitalize;">
+                                    Deposit
+                                </div>
+                                <div class="cost text-right">${{proposalRequest.depositCost | numeral('0,0')}}</div>
                             </div>
                             <div class="value-section user-offer-section ">
                                 <div class="title">Your Offer</div>
@@ -597,6 +612,31 @@
                 }
 
             },
+            createImage (file, type) {
+                let reader = new FileReader()
+                let vm = this
+
+                this.isLoading = true
+
+                reader.onload = e => {
+
+                    const proposalRequest = new ProposalRequest({id: this.proposalRequest.id})
+
+                    return new ProposalRequestImage({vendorProposalFile: e.target.result}).for(proposalRequest).save().then(result => {
+                        this.isLoading = false
+                        this.proposalRequestImages.push({id: result.id})
+
+                    })
+                        .catch((error) => {
+                            this.isLoading = false
+                            console.log('Error')
+                            console.log(error)
+                        })
+                }
+                reader.readAsDataURL(file)
+            },
+
+
             uploadInsurancePapers (imageId = null) {
                 this.selectedImage = typeof imageId != 'object' ? imageId : null
                 this.$refs.InsurancePapers.click()
@@ -624,29 +664,6 @@
 
                 }
             },
-            createImage (file, type) {
-                let reader = new FileReader()
-                let vm = this
-
-                this.isLoading = true
-
-                reader.onload = e => {
-
-                    const proposalRequest = new ProposalRequest({id: this.proposalRequest.id})
-
-                    return new ProposalRequestImage({vendorProposalFile: e.target.result}).for(proposalRequest).save().then(result => {
-                        this.isLoading = false
-                        this.proposalRequestImages.push({id: result.id})
-
-                    })
-                        .catch((error) => {
-                            this.isLoading = false
-                            console.log('Error')
-                            console.log(error)
-                        })
-                }
-                reader.readAsDataURL(file)
-            },
             createInsurancePapers (file, type) {
                 let reader = new FileReader()
                 let vm = this
@@ -658,7 +675,6 @@
                     let  proposalRequest = new ProposalRequest({id: vm.$route.params.id})
 
                     proposalRequest.id = this.proposalRequest.id;
-
                     proposalRequest.insuranceDocument = e.target.result;
 
                     return proposalRequest.save()
@@ -671,6 +687,60 @@
                 }
                 reader.readAsDataURL(file)
             },
+
+            uploadLicense (imageId = null) {
+                this.selectedImage = typeof imageId != 'object' ? imageId : null
+                this.$refs.InsurancePapers.click()
+            },
+            onLicensePicked (event) {
+                let file = event.target.files || event.dataTransfer.files
+                if (!file.length) {
+                    return
+                }
+
+                if (file[0].size <= 5000000) { // 5mb
+
+                    this.createLicense(file[0])
+
+                } else {
+
+                    this.alretExceedPictureSize = true
+                    this.$notify(
+                        {
+                            message: 'You\'ve Uploaded an Image that Exceed the allowed size, try small one!',
+                            horizontalAlign: 'center',
+                            verticalAlign: 'top',
+                            type: 'warning'
+                        })
+
+                }
+            },
+            createLicense (file, type) {
+                let reader = new FileReader()
+                let vm = this
+
+                //this.isLoading = true
+
+                reader.onload = e => {
+
+                    let  proposalRequest = new ProposalRequest({id: vm.$route.params.id})
+
+                    proposalRequest.id = this.proposalRequest.id;
+                    proposalRequest.licenseDocument = e.target.result;
+
+                    return proposalRequest.save()
+                        .then(res => {
+                            console.log('saved ', res)
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                }
+                reader.readAsDataURL(file)
+            },
+
+
+
             getImages () {
 
                 const proposalRequest = new ProposalRequest({id: this.$route.params.id})
@@ -728,27 +798,19 @@
                 proposalRequest.id = this.proposalRequest.id
                 proposalRequest.requirementsCategoryCost = this.proposalRequest.requirementsCategoryCost
                 proposalRequest.attachments = this.proposalRequest.attachments
-                proposalRequest.bid = this.proposalRequest.bid
-                proposalRequest.bidRange = this.proposalRequest.bidRange
-                proposalRequest.bidUnit = this.proposalRequest.bidUnit
-                proposalRequest.bidderRank = this.proposalRequest.bidderRank
-                proposalRequest.comments = this.proposalRequest.comments
                 proposalRequest.eventData = this.proposalRequest.eventData
-                proposalRequest.images = this.proposalRequest.images
                 proposalRequest.insuranceDocument = this.proposalRequest.insuranceDocument
-                proposalRequest.lastRequestEmailSentMillis = this.proposalRequest.lastRequestEmailSentMillis
-                proposalRequest.lastRequestViewMillis = this.proposalRequest.lastRequestViewMillis
                 proposalRequest.licenseDocument = this.proposalRequest.licenseDocument
                 proposalRequest.nudgeCount = this.proposalRequest.nudgeCount
                 proposalRequest.requirements = this.proposalRequest.requirements
                 proposalRequest.requirementsCategory = this.proposalRequest.requirementsCategory
                 proposalRequest.requirementsCategoryCost = this.proposalRequest.requirementsCategoryCost
                 proposalRequest.submitted = this.proposalRequest.submitted
-                proposalRequest.vendorId = this.proposalRequest.vendorId
-                proposalRequest.vendorName = this.proposalRequest.vendorName
                 proposalRequest.personalMessage = this.proposalRequest.personalMessage
                 proposalRequest.aboutUsMessage = this.proposalRequest.aboutUsMessage
                 proposalRequest.updateOnOutbid = this.proposalRequest.updateOnOutbid
+                proposalRequest.cancellationPolicy = this.proposalRequest.cancellationPolicy
+                proposalRequest.depositCost = this.proposalRequest.depositCost
 
                 proposalRequest.save()
                     .then(res => {
@@ -761,7 +823,19 @@
         },
         computed: {
             totalOffer () {
-                let total = parseInt(this.proposalRequest.requirementsCategoryCost)
+                let total = parseInt(this.proposalRequest.requirementsCategoryCost) + parseInt(this.proposalRequest.depositCost);
+
+                this.proposalRequest.requirements.map(function (item) {
+
+                    if (item.price) {
+                        total += parseInt(item.price)
+                    }
+
+                })
+                return total
+            },
+            extraTotal () {
+                let total = 0
                 this.proposalRequest.requirements.map(function (item) {
 
                     if (item.price) {
