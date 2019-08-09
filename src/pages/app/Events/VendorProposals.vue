@@ -393,7 +393,7 @@
                         </div>
 
                         <div class="bid-button">
-                            <md-button class="md-success">
+                            <md-button class="md-success" @click="updateProposalRequest(true)">
                                 Submit Proposal
                             </md-button>
                         </div>
@@ -565,6 +565,14 @@
         },
         mounted () {
 
+            this.$notify(
+                {
+                    message: "You've submitted the proposal successfully",
+                    horizontalAlign: 'center',
+                    verticalAlign: 'top',
+                    type: 'success'
+                })
+
         },
         methods: {
 
@@ -690,7 +698,7 @@
 
             uploadLicense (imageId = null) {
                 this.selectedImage = typeof imageId != 'object' ? imageId : null
-                this.$refs.InsurancePapers.click()
+                this.$refs.license.click()
             },
             onLicensePicked (event) {
                 let file = event.target.files || event.dataTransfer.files
@@ -723,6 +731,8 @@
 
                 reader.onload = e => {
 
+                    console.log('createLicense');
+
                     let  proposalRequest = new ProposalRequest({id: vm.$route.params.id})
 
                     proposalRequest.id = this.proposalRequest.id;
@@ -730,6 +740,7 @@
 
                     return proposalRequest.save()
                         .then(res => {
+
                             console.log('saved ', res)
                         })
                         .catch(error => {
@@ -792,8 +803,14 @@
                     })
 
             },
-            updateProposalRequest () {
-                let proposalRequest = new ProposalRequest({id: this.$route.params.id})
+            updateProposalRequest (submitted = null) {
+                let proposalRequest = new ProposalRequest({id: this.$route.params.id});
+                let _self = this;
+
+                if ( submitted ) {
+                    _self.isLoading = true;
+                }
+
 
                 proposalRequest.id = this.proposalRequest.id
                 proposalRequest.requirementsCategoryCost = this.proposalRequest.requirementsCategoryCost
@@ -805,7 +822,7 @@
                 proposalRequest.requirements = this.proposalRequest.requirements
                 proposalRequest.requirementsCategory = this.proposalRequest.requirementsCategory
                 proposalRequest.requirementsCategoryCost = this.proposalRequest.requirementsCategoryCost
-                proposalRequest.submitted = this.proposalRequest.submitted
+                proposalRequest.submitted = submitted ? submitted : false
                 proposalRequest.personalMessage = this.proposalRequest.personalMessage
                 proposalRequest.aboutUsMessage = this.proposalRequest.aboutUsMessage
                 proposalRequest.updateOnOutbid = this.proposalRequest.updateOnOutbid
@@ -814,7 +831,22 @@
 
                 proposalRequest.save()
                     .then(res => {
+
                         console.log('saved ', res)
+
+                        if ( submitted ) {
+
+                            _self.$notify(
+                                {
+                                    message: "You've submitted the proposal successfully",
+                                    horizontalAlign: 'center',
+                                    verticalAlign: 'top',
+                                    type: 'success'
+                                })
+
+                            _self.isLoading = false;
+
+                        }
                     })
                     .catch(error => {
                         console.log(error)
