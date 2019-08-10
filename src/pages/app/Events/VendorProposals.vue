@@ -1,7 +1,8 @@
 <template>
-    <div class="md-layout">
+    <div class="md-layout" >
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
         <div class="md-layout vendor-proposals" v-if="proposalRequest">
+            <div style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; height: 100%; width: 100%; background-color: rgba(0,0,0,0); z-index: 9998;" v-if="proposalRequest.submitted"></div>
             <div class="md-layout-item md-size-100">
                 <h5><a href="">
                     <small>
@@ -12,8 +13,10 @@
             </div>
             <div class="md-layout-item md-size-100">
                 <h3 class="title" style="font-weight: bold;">Submit your proposal</h3>
+                <div class="alert alert-danger text-center" v-if="proposalRequest.submitted">
+                    <h5 class="text-center clear-margins" style="z-index: 9999;">This proposal was already submitted and cannot be changed.</h5>
+                </div>
             </div>
-
             <div class="md-layout-item md-size-70 md-small-size-100">
                 <!-- Event Information Card -->
                 <md-card class="event-information-card">
@@ -395,9 +398,14 @@
                     <md-card-content>
 
                         <h3 class="text-center">You're the {{proposalRequest.bidderRank | numeral('Oo')}} bidder</h3>
-                        <p class="text-center">Consider former proposals before placing your bid</p>
 
-                        <div class="cost-average">
+                        <div class="text-center">
+                            <h5 class="clear-margins">Budget</h5>
+                            <span class="text-gray">${{proposalRequest.bidRange.low}} - ${{proposalRequest.bidRange.high}}</span>
+                        </div>
+
+                        <div class="cost-average" v-if="proposalRequest.bidderRank > 1">
+                            <div class="text-center small">Consider former proposals before placing your bid</div>
                             <div class="cost-average_item">
                                 <h5 class="">Lowest</h5>
                                 <div class="cost">${{proposalRequest.bidRange.low | numeral('0,0')}}</div>
@@ -432,12 +440,6 @@
                                 </div>
                                 <div class="cost text-right">${{extraTotal | numeral('0,0')}}</div>
                             </div>
-                            <div class="value-section upgrades-section ">
-                                <div class="title" style="text-transform: capitalize;">
-                                    Deposit
-                                </div>
-                                <div class="cost text-right">${{proposalRequest.depositCost | numeral('0,0')}}</div>
-                            </div>
                             <div class="value-section user-offer-section ">
                                 <div class="title">Your Offer</div>
                                 <div class="cost text-right">${{totalOffer | numeral('0,0')}}</div>
@@ -445,9 +447,10 @@
                         </div>
 
                         <div class="bid-button">
-                            <md-button class="md-success" @click="updateProposalRequest(true)">
+                            <md-button class="md-success" @click="updateProposalRequest(true)" v-if="!proposalRequest.submitted">
                                 Submit Proposal
                             </md-button>
+                            <h6 class="text-primary text-center" v-else>Submitted {{dateSubmitted(proposalRequest)}}</h6>
                         </div>
 
                         <div class="payment-policy text-center">
@@ -890,7 +893,9 @@
         proposalRequest.requirements = this.proposalRequest.requirements
         proposalRequest.requirementsCategory = this.proposalRequest.requirementsCategory
         proposalRequest.requirementsCategoryCost = this.proposalRequest.requirementsCategoryCost
-        proposalRequest.submitted = submitted ? submitted : false
+        if (!this.proposalRequest.submitted){
+          proposalRequest.submitted = submitted ? submitted : false
+        }
         proposalRequest.personalMessage = this.proposalRequest.personalMessage
         proposalRequest.aboutUsMessage = this.proposalRequest.aboutUsMessage
         proposalRequest.updateOnOutbid = this.proposalRequest.updateOnOutbid
@@ -922,11 +927,14 @@
       },
       openInNewTab(url){
         window.open(url, '_blank');
+      },
+      dateSubmitted(proposalRequest){
+        return moment(proposalRequest.lastUpdated).fromNow();
       }
     },
     computed: {
       totalOffer () {
-        let total = parseInt(this.proposalRequest.requirementsCategoryCost) + parseInt(this.proposalRequest.depositCost);
+        let total = parseInt(this.proposalRequest.requirementsCategoryCost);
 
         this.proposalRequest.requirements.map(function (item) {
 
