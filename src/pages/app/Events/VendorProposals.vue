@@ -109,14 +109,12 @@
                                             <blockquote v-if="item.requirementMandatory"
                                                         style="background-color: #EEEEEE; border-left: 2px solid #aaaaaa; padding: 8px; margin-left: 0;">
                                                 <span>Client <strong>must-have</strong> requirement</span>
-                                                <div v-if="item.requirementValue">
-                                                    <span class="text-gray">{{item.requirementComment}}</span>
-                                                </div>
+                                                <div class="text-gray">{{item.requirementComment}}</div>
                                             </blockquote>
                                             <blockquote v-else
                                                         style="background-color: #EEEEEE; border-left: 2px solid #aaaaaa; padding: 8px; margin-left: 0;">
                                                 <span>Client requirement</span>
-                                                <span class="text-gray">{{item.requirementComment}}</span>
+                                                <div class="text-gray">{{item.requirementComment}}</div>
                                             </blockquote>
                                         </div>
                                         <div
@@ -150,21 +148,21 @@
                                                 <md-icon>block</md-icon>
                                                 Item not available
                                             </md-button>
-                                            <md-button class="md-primary md-simple" v-if="!item.requirementComment || !item.addedComment"
+                                            <md-button class="md-primary md-simple" v-if="!(item.comments && item.comments.length) || !item.addedComment"
                                                        @click="item.showCommentForm =  true; item.addedComment = false; $forceUpdate();">
                                                 <md-icon>comment</md-icon>
                                                 Add Comment
                                             </md-button>
-                                            <div class="requirement-comment" v-if="item.requirementComment && item.addedComment">
+                                            <div class="requirement-comment" v-if="item.comments && item.comments.length && item.addedComment">
                                                 <md-icon>comment</md-icon>
-                                                <label-edit :text="item.proposalRequestRequirementComment"
-                                                            @text-updated-blur="updateProposalRequest"
-                                                            @text-updated-enter="updateProposalRequest"></label-edit>
+                                                <label-edit :text="item.comments[0]"
+                                                            @text-updated-blur="setRequirementComment(item)"
+                                                            @text-updated-enter="setRequirementComment(item)"></label-edit>
                                             </div>
 
                                             <template v-if="item.showCommentForm">
                                                 <md-field class="full-width bordered-field">
-                                                    <md-input v-model="item.requirementComment" placeholder="add your comment here"
+                                                    <md-input v-model="item.comments[0]" placeholder="add your comment here"
                                                               @blur="updateProposalRequest(); item.showCommentForm =  false; item.addedComment = true; $forceUpdate();"></md-input>
                                                 </md-field>
                                             </template>
@@ -412,471 +410,485 @@
 </template>
 
 <script>
-    //MAIN MODULES
-    import ChartComponent from '@/components/Cards/ChartComponent'
-    import VueElementLoading from 'vue-element-loading'
-    import ProposalRequest from '@/models/ProposalRequest'
-    import ProposalRequestComment from '@/models/ProposalRequestComment'
-    import ProposalRequestImage from '@/models/ProposalRequestImage'
+  //MAIN MODULES
+  import ChartComponent from '@/components/Cards/ChartComponent'
+  import VueElementLoading from 'vue-element-loading'
+  import ProposalRequest from '@/models/ProposalRequest'
+  import ProposalRequestComment from '@/models/ProposalRequestComment'
+  import ProposalRequestImage from '@/models/ProposalRequestImage'
+  import ProposalRequestFile from '@/models/ProposalRequestFile'
 
-    //COMPONENTS
-    import Icon from '@/components/Icon/Icon.vue'
-    import {Collapse, LabelEdit} from '@/components'
+  //COMPONENTS
+  import Icon from '@/components/Icon/Icon.vue'
+  import {Collapse, LabelEdit} from '@/components'
 
-    import moment from 'moment'
+  import moment from 'moment'
 
-    export default {
-        components: {
-            VueElementLoading,
-            Icon,
-            Collapse,
-            LabelEdit
-        },
+  export default {
+    components: {
+      VueElementLoading,
+      Icon,
+      Collapse,
+      LabelEdit
+    },
 
-        data () {
+    data () {
+      return {
+        // auth: auth,
+        calendarEvent: {},
+        isLoading: false,
+        readonly: true,
+        isMobile: window.innerWidth <= 500 ? true : false,
+        dietaryList: [
+          {
+            id: 1,
+            title: 'Kosher',
+            meals: 4,
+            included_in_price: true,
+            available: false,
+            comments: []
+          },
+          {
+            id: 2,
+            title: 'Vegan',
+            meals: 12,
+            included_in_price: true,
+            available: false,
+            comments: []
+          },
+          {
+            id: 3,
+            title: 'Vegetarian',
+            meals: 5,
+            included_in_price: true,
+            available: false,
+            comments: []
+          }
+        ],
+        available_to_deliver: true,
+        mustHaveList: [
+          {
+            id: 1,
+            title: 'Event Coordinator',
+            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
+            included_in_price: true,
+            available: false,
+            comments: []
+          },
+          {
+            id: 2,
+            title: 'Main Venue',
+            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
+            included_in_price: true,
+            available: false,
+            comments: []
+          },
+          {
+            id: 3,
+            title: 'Transportation',
+            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
+            included_in_price: true,
+            available: false,
+            comments: []
+          }
+        ],
+        moreList: [
+          {
+            id: 1,
+            title: 'Waiters',
+            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
+            included_in_price: true,
+            available: false,
+            comments: []
+          },
+          {
+            id: 2,
+            title: 'Main Chef',
+            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
+            included_in_price: true,
+            available: false,
+            comments: []
+          },
+          {
+            id: 3,
+            title: 'Food Menu',
+            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
+            included_in_price: true,
+            available: false,
+            comments: []
+          }
+        ],
+        vendorImages: [],
+        serverUrl: process.env.SERVER_URL,
+        imagePreview: null,
+        proposalRequest: null,
+        proposalRequestRequirements: [],
+        proposalRequestImages: [],
+        alretExceedPictureSize: false,
+        proposalRequestComment: ''
+      }
+    },
+    created () {
+
+    },
+    mounted () {
+
+      this.isLoading = true;
+      ProposalRequest.find(this.$route.params.id)
+        .then(resp => {
+          this.$set(this, 'proposalRequest', resp)
+
+          this.proposalRequestRequirements = _.chain(resp.requirements).groupBy('requirementPriority').map(function (value, key) {
+
             return {
-                // auth: auth,
-                calendarEvent: {},
-                isLoading: false,
-                readonly: true,
-                isMobile: window.innerWidth <= 500 ? true : false,
-                dietaryList: [
-                    {
-                        id: 1,
-                        title: 'Kosher',
-                        meals: 4,
-                        included_in_price: true,
-                        available: false,
-                        comments: []
-                    },
-                    {
-                        id: 2,
-                        title: 'Vegan',
-                        meals: 12,
-                        included_in_price: true,
-                        available: false,
-                        comments: []
-                    },
-                    {
-                        id: 3,
-                        title: 'Vegetarian',
-                        meals: 5,
-                        included_in_price: true,
-                        available: false,
-                        comments: []
-                    }
-                ],
-                available_to_deliver: true,
-                mustHaveList: [
-                    {
-                        id: 1,
-                        title: 'Event Coordinator',
-                        desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
-                        included_in_price: true,
-                        available: false,
-                        comments: []
-                    },
-                    {
-                        id: 2,
-                        title: 'Main Venue',
-                        desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
-                        included_in_price: true,
-                        available: false,
-                        comments: []
-                    },
-                    {
-                        id: 3,
-                        title: 'Transportation',
-                        desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
-                        included_in_price: true,
-                        available: false,
-                        comments: []
-                    }
-                ],
-                moreList: [
-                    {
-                        id: 1,
-                        title: 'Waiters',
-                        desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
-                        included_in_price: true,
-                        available: false,
-                        comments: []
-                    },
-                    {
-                        id: 2,
-                        title: 'Main Chef',
-                        desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
-                        included_in_price: true,
-                        available: false,
-                        comments: []
-                    },
-                    {
-                        id: 3,
-                        title: 'Food Menu',
-                        desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
-                        included_in_price: true,
-                        available: false,
-                        comments: []
-                    }
-                ],
-                vendorImages: [],
-                serverUrl: process.env.SERVER_URL,
-                imagePreview: null,
-                proposalRequest: null,
-                proposalRequestRequirements: [],
-                proposalRequestImages: [],
-                alretExceedPictureSize: false,
-                proposalRequestComment: ''
+              title: key,
+              requirements: value
             }
-        },
-        created () {
 
-            ProposalRequest.find(this.$route.params.id)
-                .then(resp => {
-                    this.$set(this, 'proposalRequest', resp)
-
-                    this.proposalRequestRequirements = _.chain(resp.requirements).groupBy('requirementPriority').map(function (value, key) {
-
-                        return {
-                            title: key,
-                            requirements: value
-                        }
-
-                    })
-                        .value()
-
-                    console.log(this.proposalRequest)
-
-                })
-                .catch(error => {
-                    console.log(' error here   -->>>  ', error)
-                })
-
-            this.getImages()
-
-            // ProposalRequestComment.find(this.$route.params.id)
-            //     .then(resp => {
-            //         console.log(' Response2   -->>>  ',resp);
-            //     })
-            //     .catch(error=>{
-            //         console.log(error);
-            //     })
-
-        },
-        mounted () {
-
-            this.$notify(
-                {
-                    message: "You've submitted the proposal successfully",
-                    horizontalAlign: 'center',
-                    verticalAlign: 'top',
-                    type: 'success'
-                })
-
-        },
-        methods: {
-
-            requirementCostChanges (val, index) {
-
-            },
-            getEventDate (eventStartMillis) {
-                let x = new Date(eventStartMillis)
-                return moment(x).format('MMMM D, YYYY')
-            },
-            getEventTime (eventStartMillis) {
-                let x = new Date(eventStartMillis)
-                return moment(x).format('hh:mm A')
-            },
-            getEventDuration (eventStartMillis, eventEndMillis) {
-                return moment.duration(eventEndMillis - eventStartMillis).humanize()
-
-            },
-            uploadEventImage (imageId = null) {
-                this.selectedImage = typeof imageId != 'object' ? imageId : null
-                this.$refs.eventFile.click()
-            },
-
-            onEventFilePicked (event) {
-                let file = event.target.files || event.dataTransfer.files
-                if (!file.length) {
-                    return
-                }
-
-                if (file[0].size <= 5000000) { // 5mb
-
-                    this.createImage(file[0])
-
-                } else {
-
-                    this.alretExceedPictureSize = true
-                    this.$notify(
-                        {
-                            message: 'You\'ve Uploaded an Image that Exceed the allowed size, try small one!',
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'warning'
-                        })
-
-                }
-
-            },
-            createImage (file, type) {
-                let reader = new FileReader()
-                let vm = this
-
-                this.isLoading = true
-
-                reader.onload = e => {
-
-                    const proposalRequest = new ProposalRequest({id: this.proposalRequest.id})
-
-                    return new ProposalRequestImage({vendorProposalFile: e.target.result}).for(proposalRequest).save().then(result => {
-                        this.isLoading = false
-                        this.proposalRequestImages.push({id: result.id})
-
-                    })
-                        .catch((error) => {
-                            this.isLoading = false
-                            console.log('Error')
-                            console.log(error)
-                        })
-                }
-                reader.readAsDataURL(file)
-            },
-
-
-            uploadInsurancePapers (imageId = null) {
-                this.selectedImage = typeof imageId != 'object' ? imageId : null
-                this.$refs.InsurancePapers.click()
-            },
-            onInsurancePapersPicked (event) {
-                let file = event.target.files || event.dataTransfer.files
-                if (!file.length) {
-                    return
-                }
-
-                if (file[0].size <= 5000000) { // 5mb
-
-                    this.createInsurancePapers(file[0])
-
-                } else {
-
-                    this.alretExceedPictureSize = true
-                    this.$notify(
-                        {
-                            message: 'You\'ve Uploaded an Image that Exceed the allowed size, try small one!',
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'warning'
-                        })
-
-                }
-            },
-            createInsurancePapers (file, type) {
-                let reader = new FileReader()
-                let vm = this
-
-                //this.isLoading = true
-
-                reader.onload = e => {
-
-                    let  proposalRequest = new ProposalRequest({id: vm.$route.params.id})
-
-                    proposalRequest.id = this.proposalRequest.id;
-                    proposalRequest.insuranceDocument = e.target.result;
-
-                    return proposalRequest.save()
-                        .then(res => {
-                            console.log('saved ', res)
-                        })
-                        .catch(error => {
-                            console.log(error)
-                        })
-                }
-                reader.readAsDataURL(file)
-            },
-
-            uploadLicense (imageId = null) {
-                this.selectedImage = typeof imageId != 'object' ? imageId : null
-                this.$refs.license.click()
-            },
-            onLicensePicked (event) {
-                let file = event.target.files || event.dataTransfer.files
-                if (!file.length) {
-                    return
-                }
-
-                if (file[0].size <= 5000000) { // 5mb
-
-                    this.createLicense(file[0])
-
-                } else {
-
-                    this.alretExceedPictureSize = true
-                    this.$notify(
-                        {
-                            message: 'You\'ve Uploaded an Image that Exceed the allowed size, try small one!',
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'warning'
-                        })
-
-                }
-            },
-            createLicense (file, type) {
-                let reader = new FileReader()
-                let vm = this
-
-                //this.isLoading = true
-
-                reader.onload = e => {
-
-                    console.log('createLicense');
-
-                    let  proposalRequest = new ProposalRequest({id: vm.$route.params.id})
-
-                    proposalRequest.id = this.proposalRequest.id;
-                    proposalRequest.licenseDocument = e.target.result;
-
-                    return proposalRequest.save()
-                        .then(res => {
-
-                            console.log('saved ', res)
-                        })
-                        .catch(error => {
-                            console.log(error)
-                        })
-                }
-                reader.readAsDataURL(file)
-            },
-
-
-
-            getImages () {
-
-                const proposalRequest = new ProposalRequest({id: this.$route.params.id})
-
-                new ProposalRequestImage().for(proposalRequest).get()
-                    .then(imagesList => {
-                        this.$set(this, 'proposalRequestImages', imagesList)
-                        console.log('proposalRequestImages => ', imagesList)
-                    })
-                    .catch((error) => {
-                        console.log(' ProposalRequestImage Error')
-
-                        console.log(error)
-                    })
-            },
-            deleteImage (imageId, index) {
-                const proposalRequest = new ProposalRequest({id: this.$route.params.id})
-
-                this.isLoading = true
-
-                return new ProposalRequestImage({id: imageId}).for(proposalRequest).delete().then(result => {
-
-                    this.proposalRequestImages.splice(index, 1)
-                    this.isLoading = false
-                })
-                    .catch((error) => {
-                        this.isLoading = false
-
-                        console.log(error)
-                    })
-
-            },
-            updateProposalComment () {
-                const proposalRequest = new ProposalRequest({id: this.$route.params.id})
-                let dataToSend = {
-                    from: 'string',
-                    commentText: this.proposalRequestComment
-                }
-
-                return new ProposalRequestComment(dataToSend)
-                    .for(proposalRequest).save()
-                    .then(result => {
-                        console.log(result)
-                    })
-                    .catch((error) => {
-                        this.isLoading = false
-
-                        console.log(error)
-                    })
-
-            },
-            updateProposalRequest (submitted = null) {
-                let proposalRequest = new ProposalRequest({id: this.$route.params.id});
-                let _self = this;
-
-                if ( submitted ) {
-                    _self.isLoading = true;
-                }
-
-
-                proposalRequest.id = this.proposalRequest.id
-                proposalRequest.requirementsCategoryCost = this.proposalRequest.requirementsCategoryCost
-                proposalRequest.attachments = this.proposalRequest.attachments
-                proposalRequest.eventData = this.proposalRequest.eventData
-                proposalRequest.insuranceDocument = this.proposalRequest.insuranceDocument
-                proposalRequest.licenseDocument = this.proposalRequest.licenseDocument
-                proposalRequest.nudgeCount = this.proposalRequest.nudgeCount
-                proposalRequest.requirements = this.proposalRequest.requirements
-                proposalRequest.requirementsCategory = this.proposalRequest.requirementsCategory
-                proposalRequest.requirementsCategoryCost = this.proposalRequest.requirementsCategoryCost
-                proposalRequest.submitted = submitted ? submitted : false
-                proposalRequest.personalMessage = this.proposalRequest.personalMessage
-                proposalRequest.aboutUsMessage = this.proposalRequest.aboutUsMessage
-                proposalRequest.updateOnOutbid = this.proposalRequest.updateOnOutbid
-                proposalRequest.cancellationPolicy = this.proposalRequest.cancellationPolicy
-                proposalRequest.depositCost = this.proposalRequest.depositCost
-
-                proposalRequest.save()
-                    .then(res => {
-
-                        console.log('saved ', res)
-
-                        if ( submitted ) {
-
-                            _self.$notify(
-                                {
-                                    message: "You've submitted the proposal successfully",
-                                    horizontalAlign: 'center',
-                                    verticalAlign: 'top',
-                                    type: 'success'
-                                })
-
-                            _self.isLoading = false;
-
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
-            }
-        },
-        computed: {
-            totalOffer () {
-                let total = parseInt(this.proposalRequest.requirementsCategoryCost) + parseInt(this.proposalRequest.depositCost);
-
-                this.proposalRequest.requirements.map(function (item) {
-
-                    if (item.price) {
-                        total += parseInt(item.price)
-                    }
-
-                })
-                return total
-            },
-            extraTotal () {
-                let total = 0
-                this.proposalRequest.requirements.map(function (item) {
-
-                    if (item.price) {
-                        total += parseInt(item.price)
-                    }
-
-                })
-                return total
-            }
+          })
+            .value();
+
+          console.log(this.proposalRequest);
+          this.isLoading = false;
+        })
+        .catch(error => {
+          console.log(' error here   -->>>  ', error)
+        })
+
+      this.getImages();
+
+      this.$notify(
+        {
+          message: "You've submitted the proposal successfully",
+          horizontalAlign: 'center',
+          verticalAlign: 'top',
+          type: 'success'
+        })
+
+    },
+    methods: {
+
+      requirementCostChanges (val, index) {
+
+      },
+      getEventDate (eventStartMillis) {
+        let x = new Date(eventStartMillis)
+        return moment(x).format('MMMM D, YYYY')
+      },
+      getEventTime (eventStartMillis) {
+        let x = new Date(eventStartMillis)
+        return moment(x).format('hh:mm A')
+      },
+      getEventDuration (eventStartMillis, eventEndMillis) {
+        return moment.duration(eventEndMillis - eventStartMillis).humanize()
+
+      },
+      uploadEventImage (imageId = null) {
+        this.selectedImage = typeof imageId != 'object' ? imageId : null
+        this.$refs.eventFile.click()
+      },
+
+      onEventFilePicked (event) {
+        let file = event.target.files || event.dataTransfer.files
+        if (!file.length) {
+          return
         }
+
+        if (file[0].size <= 5000000) { // 5mb
+
+          this.createImage(file[0])
+
+        } else {
+
+          this.alretExceedPictureSize = true
+          this.$notify(
+            {
+              message: 'You\'ve Uploaded an Image that Exceed the allowed size, try small one!',
+              horizontalAlign: 'center',
+              verticalAlign: 'top',
+              type: 'warning'
+            })
+
+        }
+
+      },
+      createImage (file, type) {
+        let reader = new FileReader()
+        let vm = this
+
+        this.isLoading = true
+
+        reader.onload = e => {
+
+          const proposalRequest = new ProposalRequest({id: this.proposalRequest.id})
+
+          return new ProposalRequestImage({vendorProposalFile: e.target.result}).for(proposalRequest).save().then(result => {
+            this.isLoading = false
+            this.proposalRequestImages.push({id: result.id})
+
+          })
+            .catch((error) => {
+              this.isLoading = false
+              console.log('Error')
+              console.log(error)
+            })
+        }
+        reader.readAsDataURL(file)
+      },
+
+
+      uploadInsurancePapers (imageId = null) {
+        this.selectedImage = typeof imageId != 'object' ? imageId : null
+        this.$refs.InsurancePapers.click()
+      },
+      onInsurancePapersPicked (event) {
+        let file = event.target.files || event.dataTransfer.files
+        if (!file.length) {
+          return
+        }
+
+        if (file[0].size <= 5000000) { // 5mb
+
+          this.createInsurancePapers(file[0])
+
+        } else {
+
+          this.alretExceedPictureSize = true
+          this.$notify(
+            {
+              message: 'You\'ve Uploaded an Image that Exceed the allowed size, try small one!',
+              horizontalAlign: 'center',
+              verticalAlign: 'top',
+              type: 'warning'
+            })
+
+        }
+      },
+      createInsurancePapers (file, type) {
+        let reader = new FileReader()
+        let vm = this
+
+        //this.isLoading = true
+
+        reader.onload = e => {
+
+          let  proposalRequest = new ProposalRequest({id: vm.$route.params.id})
+
+          /*proposalRequest.id = this.proposalRequest.id;
+          proposalRequest.insuranceDocument = e.target.result;*/
+
+          return new ProposalRequestFile({vendorProposalFile: e.target.result, tag: 'insurance'}).for(proposalRequest).save().then(result => {
+            this.isLoading = false
+          })
+            .catch((error) => {
+              this.isLoading = false
+              console.log('Error')
+              console.log(error)
+            })
+        }
+        reader.readAsDataURL(file)
+      },
+
+      uploadLicense (imageId = null) {
+        this.selectedImage = typeof imageId != 'object' ? imageId : null
+        this.$refs.license.click()
+      },
+      onLicensePicked (event) {
+        let file = event.target.files || event.dataTransfer.files
+        if (!file.length) {
+          return
+        }
+
+        if (file[0].size <= 5000000) { // 5mb
+
+          this.createLicense(file[0])
+
+        } else {
+
+          this.alretExceedPictureSize = true
+          this.$notify(
+            {
+              message: 'You\'ve Uploaded an Image that Exceed the allowed size, try small one!',
+              horizontalAlign: 'center',
+              verticalAlign: 'top',
+              type: 'warning'
+            })
+
+        }
+      },
+      createLicense (file, type) {
+        let reader = new FileReader()
+        let vm = this
+
+        //this.isLoading = true
+
+        reader.onload = e => {
+
+          console.log('createLicense');
+
+          let  proposalRequest = new ProposalRequest({id: vm.$route.params.id})
+
+          proposalRequest.id = this.proposalRequest.id;
+          proposalRequest.licenseDocument = e.target.result;
+
+          return proposalRequest.save()
+            .then(res => {
+
+              console.log('saved ', res)
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        }
+        reader.readAsDataURL(file)
+      },
+
+
+
+      getImages () {
+
+        const proposalRequest = new ProposalRequest({id: this.$route.params.id})
+
+        new ProposalRequestImage().for(proposalRequest).get()
+          .then(imagesList => {
+            this.$set(this, 'proposalRequestImages', imagesList)
+            console.log('proposalRequestImages => ', imagesList)
+          })
+          .catch((error) => {
+            console.log(' ProposalRequestImage Error')
+
+            console.log(error)
+          })
+      },
+      deleteImage (imageId, index) {
+        const proposalRequest = new ProposalRequest({id: this.$route.params.id})
+
+        this.isLoading = true
+
+        return new ProposalRequestImage({id: imageId}).for(proposalRequest).delete().then(result => {
+
+          this.proposalRequestImages.splice(index, 1)
+          this.isLoading = false
+        })
+          .catch((error) => {
+            this.isLoading = false
+
+            console.log(error)
+          })
+
+      },
+      updateProposalComment () {
+        const proposalRequest = new ProposalRequest({id: this.$route.params.id})
+        let dataToSend = {
+          from: 'string',
+          commentText: this.proposalRequestComment
+        }
+
+        return new ProposalRequestComment(dataToSend)
+          .for(proposalRequest).save()
+          .then(result => {
+            console.log(result)
+          })
+          .catch((error) => {
+            this.isLoading = false
+
+            console.log(error)
+          })
+
+      },
+      updateProposalRequirementComment (val, index) {
+        const proposalRequest = new ProposalRequest({id: this.$route.params.id})
+        let dataToSend = {
+          from: 'string',
+          commentText: val
+        }
+
+        return new ProposalRequestComment(dataToSend)
+          .for(proposalRequest).save()
+          .then(result => {
+            console.log(result)
+          })
+          .catch((error) => {
+            this.isLoading = false
+
+            console.log(error)
+          })
+
+      },
+      updateProposalRequest (submitted = null) {
+        let proposalRequest = new ProposalRequest({id: this.$route.params.id});
+        let _self = this;
+
+        if ( submitted ) {
+          //_self.isLoading = true;
+        }
+
+
+        proposalRequest.id = this.proposalRequest.id
+        proposalRequest.requirementsCategoryCost = this.proposalRequest.requirementsCategoryCost
+        proposalRequest.attachments = this.proposalRequest.attachments
+        proposalRequest.eventData = this.proposalRequest.eventData
+        proposalRequest.insuranceDocument = this.proposalRequest.insuranceDocument
+        proposalRequest.licenseDocument = this.proposalRequest.licenseDocument
+        proposalRequest.nudgeCount = this.proposalRequest.nudgeCount
+        proposalRequest.requirements = this.proposalRequest.requirements
+        proposalRequest.requirementsCategory = this.proposalRequest.requirementsCategory
+        proposalRequest.requirementsCategoryCost = this.proposalRequest.requirementsCategoryCost
+        proposalRequest.submitted = submitted ? submitted : false
+        proposalRequest.personalMessage = this.proposalRequest.personalMessage
+        proposalRequest.aboutUsMessage = this.proposalRequest.aboutUsMessage
+        proposalRequest.updateOnOutbid = this.proposalRequest.updateOnOutbid
+        proposalRequest.cancellationPolicy = this.proposalRequest.cancellationPolicy
+        proposalRequest.depositCost = this.proposalRequest.depositCost
+
+        proposalRequest.save()
+          .then(res => {
+
+            console.log('saved ', res)
+
+            if ( submitted ) {
+
+              _self.$notify(
+                {
+                  message: "You've submitted the proposal successfully",
+                  horizontalAlign: 'center',
+                  verticalAlign: 'top',
+                  type: 'success'
+                })
+
+              _self.isLoading = false;
+
+            }
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
+    },
+    computed: {
+      totalOffer () {
+        let total = parseInt(this.proposalRequest.requirementsCategoryCost) + parseInt(this.proposalRequest.depositCost);
+
+        this.proposalRequest.requirements.map(function (item) {
+
+          if (item.price) {
+            total += parseInt(item.price)
+          }
+
+        })
+        return total
+      },
+      extraTotal () {
+        let total = 0
+        this.proposalRequest.requirements.map(function (item) {
+
+          if (item.price) {
+            total += parseInt(item.price)
+          }
+
+        })
+        return total
+      }
     }
+  }
 </script>

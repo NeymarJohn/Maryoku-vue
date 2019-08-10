@@ -320,7 +320,7 @@
       blockBudgetChanged(val, index) {
 
         let block = _.find(this.eventBuildingBlocks, function (item) {
-          return item.componentId == index;
+          return item.componentId === index;
         });
 
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});

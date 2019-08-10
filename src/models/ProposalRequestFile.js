@@ -1,7 +1,7 @@
 import Model from './Model';
 import ProposalRequest from './ProposalRequest';
 
-export default class ProposalRequestImage extends Model {
+export default class ProposalRequestFile extends Model {
   resource () {
     return 'files'
   }

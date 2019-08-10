@@ -76,8 +76,9 @@
                                         </md-table-cell>
                                         <md-table-cell class="vendors-table_item-actions">
                                             <vue-element-loading :active="sendingRfp" spinner="ring" color="#FF547C"></vue-element-loading>
-                                            <md-button v-promise-btn v-if="!sendingRfp && (item.rfpStatus === 'Ready to send' || item.rfpStatus == null)" class="md-primary md-just-icon md-round" style="font-size: 20px;" @click="sendVendor(item)">
+                                            <md-button v-if="!sendingRfp && (item.rfpStatus === 'Ready to send' || item.rfpStatus == null)" class="md-primary md-just-icon md-round" style="font-size: 20px;" @click="sendVendor(item)">
                                                 <md-icon>near_me</md-icon>
+                                                <md-tooltip class="md-primary">Send RFP</md-tooltip>
                                             </md-button>
                                         </md-table-cell>
                                     </md-table-row>
@@ -409,3 +410,29 @@
     }
   }
 </script>
+<style lang="scss" scoped>
+
+    @import '@/assets/scss/md/_colors.scss';
+
+    .md-tooltip {
+        z-index: 9999 !important;
+        background: $purple-500 !important;
+        color: $white !important;
+
+        &[x-placement="top"]:after {
+            border-bottom-color: $purple-500 !important;
+        }
+
+        &[x-placement="bottom"]:after {
+            border-bottom-color: $purple-500 !important;
+        }
+
+        &[x-placement="right"]:after {
+            border-bottom-color: $purple-500 !important;
+        }
+
+        &[x-placement="left"]:after {
+            border-bottom-color: $purple-500 !important;
+        }
+    }
+</style>
