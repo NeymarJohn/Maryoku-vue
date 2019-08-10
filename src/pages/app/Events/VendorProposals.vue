@@ -480,6 +480,7 @@
   import {Collapse, LabelEdit} from '@/components'
 
   import moment from 'moment'
+  import swal from "sweetalert2";
 
   export default {
     components: {
@@ -875,11 +876,13 @@
 
       },
       updateProposalRequest (submitted = null) {
+        if (this.proposalRequest.submitted) return;
+
         let proposalRequest = new ProposalRequest({id: this.$route.params.id});
         let _self = this;
 
-        if ( submitted ) {
-          //_self.isLoading = true;
+        if ( submitted != null && submitted === true) {
+          _self.isLoading = true;
         }
 
 
@@ -907,18 +910,18 @@
 
             console.log('saved ', res)
 
-            if ( submitted ) {
+            if ( submitted != null && submitted === true ) {
 
-              _self.$notify(
-                {
-                  message: "You've submitted the proposal successfully",
-                  horizontalAlign: 'center',
-                  verticalAlign: 'top',
-                  type: 'success'
-                })
+              swal({
+                title: "Proposal Submitted",
+                text: "Thank you for submitting your proposal.",
+                type: "success",
+                timer: 2000
+              }).then( result => {
+                document.location.reload();
+              });
 
               _self.isLoading = false;
-
             }
           })
           .catch(error => {
