@@ -653,7 +653,7 @@
           return
         }
 
-        if (file[0].size <= 5000000) { // 5mb
+        if (file[0].size <= 50000000) { // 5mb
 
           this.createImage(file[0])
 
