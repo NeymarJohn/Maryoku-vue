@@ -14,7 +14,7 @@
             <div class="md-layout-item md-size-100">
                 <h3 class="title" style="font-weight: bold;">Submit your proposal</h3>
                 <div class="alert alert-danger text-center" v-if="proposalRequest.submitted">
-                    <h5 class="text-center clear-margins" style="z-index: 9999;">This proposal was already submitted and cannot be changed.</h5>
+                    <h5 class="text-center clear-margins" style="z-index: 9999;">You have already submitted this proposal, you cannot change it anymore.</h5>
                 </div>
             </div>
             <div class="md-layout-item md-size-70 md-small-size-100">
