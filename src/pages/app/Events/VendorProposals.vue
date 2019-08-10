@@ -186,13 +186,58 @@
                     <md-card class="event-information-card vendor-images">
 
                         <md-card-content>
+
+                            <h4  class="title" style="margin-bottom: 12px;">Proposal Attachments</h4>
                             <div class="md-layout">
+                                <div class="md-layout-item md-size-20" v-for="(image,index) in proposalRequestImages" :key="index"  style="margin: 12px; " >
+                                    <vue-element-loading :active="attachmentsLoadingCount > 0" spinner="ring" color="#FF547C"></vue-element-loading>
+                                    <iframe seamless class="vendor-images-list_item" frameborder="0" @load="attachmentsLoadingCount--"
+                                            :src="`${serverUrl}/1/proposal-requests/${proposalRequest.id}/files/${image.id}`" style="max-height: 18vmin;">
+                                        <md-button class="md-primary md-sm" @click="deleteImage(image.id,index)">
+                                            delete
+                                        </md-button>
+                                    </iframe>
+                                    <div class="text-center">
+                                        <md-button style="margin-top: -25px;" class="md-xs md-round md-just-icon md-info" @click="openInNewTab(`${serverUrl}/1/proposal-requests/${proposalRequest.id}/files/${image.id}`)"><md-icon>visibility</md-icon></md-button>
+                                        <md-button style="margin-top: -25px;" class="md-xs md-round md-just-icon md-danger" @click="deleteImage(image.id,index)"><md-icon>delete</md-icon></md-button>
+                                    </div>
+                                </div>
+
+                                <div class="md-layout-item md-size-20" style="margin-top: auto; margin-bottom: auto; text-align: center;">
+                                    <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image"
+                                               @click="uploadEventImage" style="top: -25px; margin-top: auto; margin-bottom: auto; text-align: center;">
+                                        <md-icon>add</md-icon>
+                                    </md-button>
+                                    <input type="file" style="display: none;" ref="eventFile"
+                                           accept="image/gif, image/jpg, image/png, application/text, application/pdf" @change="onEventFilePicked">
+                                </div>
+                            </div>
+
+                            <h5  class="title" style="margin-bottom: 12px;">Additional documentation</h5>
+
+                            <div class="">
+                                <md-button class="md-primary md-sm add-vendor-image"
+                                           @click="uploadEventImage">
+                                    <md-icon>add</md-icon> Proof of Insurance
+                                </md-button>
+
+                                <md-button class="md-primary md-sm add-vendor-image"
+                                           @click="uploadEventImage">
+                                    <md-icon>add</md-icon> Liquor License
+                                </md-button>
+
+                                <md-button class="md-primary md-sm add-vendor-image"
+                                           @click="uploadEventImage">
+                                    <md-icon>add</md-icon> Caterer License
+                                </md-button>
+                            </div>
+                            <!--<div class="md-layout">
                                 <div class="md-layout-item md-size-100">
                                     <h4 class="title">Add Images</h4>
                                 </div>
                             </div>
                             <div class="md-layout">
-                                <!-- List Vendor Images -->
+                                &lt;!&ndash; List Vendor Images &ndash;&gt;
                                 <div class="vendor-images-list">
                                     <div class="vendor-images-list_item"
                                          v-for="(image,index) in proposalRequestImages" :key="index"
@@ -203,6 +248,15 @@
                                         </md-button>
                                     </div>
 
+                                    <iframe class="vendor-images-list_item" frameborder="0"
+                                         v-for="(image,index) in proposalRequestImages" :key="index"
+                                            :src="`${serverUrl}/1/proposal-requests/${proposalRequest.id}/images/${image.id}`"
+                                    >
+                                        <md-button class="md-primary md-sm" @click="deleteImage(image.id,index)">
+                                            delete
+                                        </md-button>
+                                    </iframe>
+
                                     <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image"
                                                @click="uploadEventImage">
                                         <md-icon>add</md-icon>
@@ -210,15 +264,15 @@
                                     <input type="file" style="display: none;" ref="eventFile"
                                            accept="image/gif, image/jpg, image/png" @change="onEventFilePicked">
                                 </div>
-                                <!-- ./List Vendor Images -->
-                            </div>
+                                &lt;!&ndash; ./List Vendor Images &ndash;&gt;
+                            </div>-->
                         </md-card-content>
 
                     </md-card>
                     <!-- ./Vendor images -->
 
                     <!-- Vendor images -->
-                    <md-card class="event-information-card vendor-attachments">
+                    <!--<md-card class="event-information-card vendor-attachments">
 
                         <md-card-content>
                             <div class="md-layout">
@@ -256,7 +310,7 @@
                             </div>
                         </md-card-content>
 
-                    </md-card>
+                    </md-card>-->
                     <!-- ./Vendor images -->
                 </div>
 
@@ -525,7 +579,8 @@
         proposalRequestRequirements: [],
         proposalRequestImages: [],
         alretExceedPictureSize: false,
-        proposalRequestComment: ''
+        proposalRequestComment: '',
+        attachmentsLoadingCount: 0,
       }
     },
     created () {
@@ -752,6 +807,7 @@
         new ProposalRequestImage().for(proposalRequest).get()
           .then(imagesList => {
             this.$set(this, 'proposalRequestImages', imagesList)
+            this.$set(this, 'attachmentsLoadingCount', imagesList.length)
             console.log('proposalRequestImages => ', imagesList)
           })
           .catch((error) => {
@@ -863,6 +919,9 @@
           .catch(error => {
             console.log(error)
           })
+      },
+      openInNewTab(url){
+        window.open(url, '_blank');
       }
     },
     computed: {
