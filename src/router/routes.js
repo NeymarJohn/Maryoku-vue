@@ -8,13 +8,6 @@ import MyCompany from '@/pages/app/MyCompany/MyCompany.vue';
 import MyCompanyNew from '@/pages/app/MyCompany/MyCompanyNew.vue';
 import CompanyDashboard from '@/pages/app/CompanyDashboard/CompanyDashboard.vue';
 
-
-import MyCompanyDashboard from "@/pages/app/MyCompany/MyCompanyDashboard.vue";
-import MyCompanyBilling from "@/pages/app/MyCompany/MyCompanyBilling.vue";
-import MyCompanyApprovals from "@/pages/app/MyCompany/MyCompanyApprovals.vue";
-import MyCompanyProfile from "@/pages/app/MyCompany/MyCompanyProfile.vue";
-import MyCompanySettings from "@/pages/app/MyCompany/MyCompanySettings.vue";
-
 import Team from "@/pages/app/Team/Team.vue";
 import Members from "@/pages/app/Members/Members.vue";
 import Community from "@/pages/app/Community.vue";
