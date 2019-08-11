@@ -16,11 +16,11 @@
 
                     <table style="width:100%;" class="table event-building-blocks_table" v-if="eventBuildingBlocksList.length">
                         <thead>
-                        <tr class="md-warning">
-                            <th> Expenses </th>
-                            <th>Requirements</th>
-                            <th>Allocated budget</th>
-                            <th>Actual cost</th>
+                        <tr class="md-warning" style="text-align: center;">
+                            <th style="text-align: center;">Expenses</th>
+                            <th style="text-align: center;">Requirements</th>
+                            <th style="text-align: center;">Allocated budget</th>
+                            <th style="text-align: center;">Actual cost</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -30,11 +30,16 @@
                                 <td>{{category.title}}</td>
                                 <td></td>
                                 <td class="allocated-budget">
-                                    <span class="dollar-sign pull-left">$</span>
-                                    {{category.totalAllocatedBudget}}
-                                    <span class="remains-budget" v-if="category.remainsBudget">-${{parseInt(category.remainsBudget)}}</span>
+                                    <div class="md-table-cell-container">
+                                        <span class="dollar-sign pull-left small">$</span>
+                                        <span style="display: inline-block; width: 100%; padding-right: 16px;">{{category.totalAllocatedBudget}}</span>
+                                        <span class="remains-budget badge badge-rose small" style="background-color: #fff;" v-if="category.remainsBudget">-${{parseInt(category.remainsBudget)}}</span>
+                                    </div>
                                 </td>
-                                <td class="actual-cost" :class="{disabled : category.totalActualCost==0}">${{category.totalActualCost}}</td>
+                                <td class="actual-cost" :class="{disabled : category.totalActualCost==0}">
+                                    <span class="dollar-sign pull-left small">$</span>
+                                    {{category.totalActualCost}}
+                                </td>
                                 <td></td>
                             </tr>
 
@@ -60,7 +65,7 @@
                                 </td>
                                 <td class="allocated-budget" style="width: 15%;" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
                                     <div class="md-table-cell-container" >
-                                        <span class="dollar-sign pull-left">$</span>
+                                        <span class="dollar-sign pull-left small">$</span>
                                         <label-edit style="width: 100%; margin-left: 8px;" :text="block.allocatedBudget ? block.allocatedBudget.toString() : ''"
                                                     :field-name="block.componentId"
                                                     @text-updated-blur="blockBudgetChanged"
@@ -287,7 +292,7 @@
           })
           return {
             title: key,
-            blocks: value,
+            blocks: _.sortBy(value, 'title'),
             totalAllocatedBudget : totalAllocatedBudget,
             totalActualCost : totalActualCost,
             remainsBudget : totalActualCost ? totalAllocatedBudget - totalActualCost : 0
@@ -296,6 +301,8 @@
 
         })
           .value();
+
+        this.eventBuildingBlocksList = _.sortBy(this.eventBuildingBlocksList, 'title');
 
         let allocatedBudget = 0;
         this.eventBuildingBlocks.forEach(item => {

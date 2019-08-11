@@ -5,7 +5,7 @@
                 <md-icon>date_range</md-icon>
             </div>
             <h4 class="title profile-title">
-                Event invitees
+                Summary
                 <md-button class="md-sm md-simple md-just-icon pull-right clear-margins"  @click="openEventModal()"><md-icon class="company-logo">create</md-icon></md-button>
             </h4>
         </md-card-header>
