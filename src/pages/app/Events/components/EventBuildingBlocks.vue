@@ -150,12 +150,10 @@
   import ViewProposals from './EventBlocks/Modals/ViewProposals.vue'
   import _ from 'underscore'
   import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
-  import Tab from 'uiv/src/components/tabs/Tab'
 
   export default {
     name: 'event-building-blocks',
     components: {
-      Tab,
       VueElementLoading,
       EventBlocks,
       AddBuildingBlockModal,
@@ -208,7 +206,7 @@
               this.isLoading = false
               this.event.components.splice(_.findIndex(this.eventBuildingBlocks, (b)=>{ return b.id === selected_block.id}),1);
               this.getEventBuildingBlocks();
-              this.$bus.$emit('RefreshStatistics');
+              this.$root.$emit('RefreshStatistics');
               this.$forceUpdate()
 
               let allocatedBudget = 0;
@@ -357,7 +355,7 @@
         selected_block.for(calendar, event).save().then(resp => {
 
           this.isLoading = false;
-          this.$bus.$emit('RefreshStatistics');
+          this.$root.$emit('RefreshStatistics');
           this.getEventBuildingBlocks();
           this.$forceUpdate();
 
@@ -444,7 +442,7 @@
 
       this.getEventBuildingBlocks();
 
-      this.$bus.$on('refreshBuildingBlock', () => {
+      this.$root.$on('refreshBuildingBlock', () => {
         this.getEventBuildingBlocks()
       });
 

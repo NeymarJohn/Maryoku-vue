@@ -85,7 +85,7 @@
                 console.log(response);
                 this.$parent.isLoading = false;
                 this.$parent.editMode = false;
-                this.$bus.$emit('refreshEvent');
+                this.$root.$emit('refreshEvent');
 
             })
                 .catch((error) => {

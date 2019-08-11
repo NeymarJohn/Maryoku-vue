@@ -123,8 +123,8 @@
 
             closePanel(){
                 this.$emit("closePanel");
-                this.$bus.$emit('VendorAdded');
-                this.$bus.$emit('refreshBuildingBlock');
+                this.$root.$emit('VendorAdded');
+                this.$root.$emit('refreshBuildingBlock');
 
             },
             fetchData(page) {

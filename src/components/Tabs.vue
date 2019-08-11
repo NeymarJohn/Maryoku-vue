@@ -71,7 +71,7 @@
         this.switchPanel(this.tabName[index]);
       })
 
-      this.$bus.$on('goToTab',(value)=>{
+      this.$root.$on('goToTab',(value)=>{
         this.activePanel = value
       });
 

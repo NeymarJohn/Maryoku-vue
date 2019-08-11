@@ -213,7 +213,7 @@
                 this.getEvent();
             });
 
-            this.$bus.$on('refreshEvent',()=> {
+            this.$root.$on('refreshEvent',()=> {
                 this.getEvent();
             })
         },

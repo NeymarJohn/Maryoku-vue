@@ -148,13 +148,11 @@
   // import auth from '@/auth';
   import _ from 'underscore'
   import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
-  import Tab from 'uiv/src/components/tabs/Tab'
   import EventSidePanel from '../EventSidePanel.vue'
 
   export default {
     name: 'event-details-sidebar',
     components: {
-      Tab,
       LabelEdit,
       AnimatedNumber,
       StatsCard,
@@ -292,7 +290,7 @@
       if (!this.event){
         this.getEvent();
       }
-      this.$bus.$on('RefreshStatistics', function () {
+      this.$root.$on('RefreshStatistics', function () {
         _self.getCalendarEventStatistics(_self.event)
       })
 

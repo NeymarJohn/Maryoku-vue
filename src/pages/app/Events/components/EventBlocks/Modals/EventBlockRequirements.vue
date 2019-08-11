@@ -169,7 +169,7 @@
     methods: {
       closePanel() {
         this.$emit("closePanel");
-        this.$bus.$emit('refreshBuildingBlock');
+        this.$root.$emit('refreshBuildingBlock');
 
       },
       getBuildingBlockValues( newValueId = null) {
@@ -181,7 +181,7 @@
         new EventComponentValue().for(calendar, event, selected_block).get().then(values => {
             this.eventBlocks = values;
 
-            this.$bus.$emit('refreshRequirementsLength',this.eventBlocks.length);
+            this.$root.$emit('refreshRequirementsLength',this.eventBlocks.length);
 
              if ( newValueId ) {
 
@@ -193,7 +193,7 @@
 
         });*/
         this.eventBlocks = this.selectedBlock.values;
-        this.$bus.$emit('refreshRequirementsLength',this.eventBlocks.length);
+        this.$root.$emit('refreshRequirementsLength',this.eventBlocks.length);
         if ( newValueId ) {
 
           let newValue = _.findWhere(this.eventBlocks,{id : newValueId});

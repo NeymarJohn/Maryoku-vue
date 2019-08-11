@@ -139,7 +139,7 @@
         this.isLoading = false;
         this.getBlockVendors();
 
-        this.$bus.$on('VendorAdded',()=>{
+        this.$root.$on('VendorAdded',()=>{
             this.getBlockVendors();
         });
 

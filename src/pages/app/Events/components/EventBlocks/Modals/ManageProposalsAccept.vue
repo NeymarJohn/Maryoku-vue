@@ -295,8 +295,8 @@
                     type: 'success'
                   })
 
-                  this.$bus.$emit('RefreshStatistics');
-                  this.$bus.$emit('refreshBuildingBlock');
+                  this.$root.$emit('RefreshStatistics');
+                  this.$root.$emit('refreshBuildingBlock');
                     this.closePanel();
 
                 this.$forceUpdate()

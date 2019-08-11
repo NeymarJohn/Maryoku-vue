@@ -116,7 +116,7 @@
                     new EventComponent().for(calendar, event).find(res.item.id).then(item => {
                       this.$emit("closePanel", item);
                     });
-                    //this.$bus.$emit('refreshBuildingBlock');
+                    //this.$root.$emit('refreshBuildingBlock');
 
                 })
                     .catch(error => {

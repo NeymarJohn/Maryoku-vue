@@ -75,7 +75,7 @@
             },
             editTimeLineItems() {
                 /*this.$router.push({ path: `/events/`+ this.event.id + '/edit/details' });
-                this.$bus.$emit('goToTab','TIMELINE');*/
+                this.$root.$emit('goToTab','TIMELINE');*/
                 window.currentPanel = this.$showPanel({
                     component: EventTimeLinePanel,
                     cssClass: 'md-layout-item md-size-85 transition36',

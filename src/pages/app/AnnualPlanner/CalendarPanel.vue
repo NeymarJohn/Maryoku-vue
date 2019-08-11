@@ -127,7 +127,7 @@
     import {
         AnimatedNumber
     } from "@/components";
-    import AdvancedSelect from '@myena/advanced-select';
+
     import FiltersPanel from './FiltersPanel';
     import MonthSelectPanel from './MonthSelectPanel';
     import MonthEventsPanel from './MonthEventsPanel';
@@ -147,7 +147,6 @@ import { log } from 'util';
             ChartComponent,
             AnimatedNumber,
             CalendarFiltersPanel,
-            AdvancedSelect,
             EventModal
         },
         props: {
@@ -290,7 +289,7 @@ import { log } from 'util';
                 for (var rowIdx = 0; rowIdx < 6; rowIdx++){ // 5 rows
                     let row = [];
                     for (var dayIdx = 0; dayIdx < 7; dayIdx++) { // 7 days
-                        let isToday = moment().isSame(currentMoment, 'day');                
+                        let isToday = moment().isSame(currentMoment, 'day');
                         if (currentMoment.date() === 1 && currentMoment.month() === currentMonth && currentMoment.year() === currentYear) {
                             if (currentMoment.weekday() === dayIdx){
                                 row.push({dayInMonth: currentMoment.date(), ...this.selectedDay(currentMoment), isToday});

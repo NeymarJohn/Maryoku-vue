@@ -16,7 +16,6 @@ import Tooltip from 'vue-directive-tooltip';
 import 'vue-directive-tooltip/css/index.css';
 import vSelectMenu from 'v-selectmenu';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
-import VueFractionGrid from 'vue-fraction-grid';
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import VueGmaps from 'vue-gmaps'
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';
@@ -26,7 +25,6 @@ import VueSlideoutPanel from 'src/components/SlidePanel';
 import Tawk from 'vue-tawk';
 import VueCookies from 'vue-cookies';
 import { VueStars } from "vue-stars"
-import VueLoadImage from 'vue-load-image';
 import Multiselect from 'vue-multiselect';
 import 'vue-multiselect/dist/vue-multiselect.min.css';
 import lsWatcher from 'vue-storage-watcher';
@@ -38,14 +36,10 @@ import routes from "./router/routes";
 // store setup
 import store from "./store";
 
-var VueEventBus = require('vue-event-bus');
-Vue.use(VueEventBus);
-
 
 // plugin setup
 Vue.use(VueRouter);
 Vue.use(DashboardPlugin);
-Vue.use(VueLazyLoad);
 
 Vue.use(VueGmaps, {
     key: process.env.GOOGLE_API_KEY|| 'AIzaSyAelc-zmvKBlcW78yPFeW9xrbnrJaT-MfA',
@@ -131,13 +125,12 @@ Vue.use(Tooltip, {
 Vue.use(VTooltip)
 Vue.use(vSelectMenu, { language: "en"});
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
-Vue.use(VueFractionGrid);
+
 Vue.use(lsWatcher, { prefix: 'two62_' });
 Vue.use(VuePromiseBtn);
 
 Vue.component('vue-phone-number-input', VuePhoneNumberInput);
 Vue.component("vue-stars", VueStars);
-Vue.component("vue-load-image", VueLoadImage);
 Vue.component("vue-element-loading", VueElementLoading);
 Vue.component('multiselect', Multiselect);
 

@@ -622,10 +622,6 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@myena/advanced-select@^0.5.4":
-  version "0.5.4"
-  resolved "https://registry.yarnpkg.com/@myena/advanced-select/-/advanced-select-0.5.4.tgz#b91d0c57ccf6729f2c3e2fb03815c05bf472d0ba"
-
 "@nodelib/fs.stat@^1.1.2":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
@@ -2671,13 +2667,6 @@ chardet@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
 
-chart.js@^2.7.2:
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-2.8.0.tgz#b703b10d0f4ec5079eaefdcd6ca32dc8f826e0e9"
-  dependencies:
-    chartjs-color "^2.1.0"
-    moment "^2.10.2"
-
 chartist-plugin-tooltip@0.0.11:
   version "0.0.11"
   resolved "https://registry.yarnpkg.com/chartist-plugin-tooltip/-/chartist-plugin-tooltip-0.0.11.tgz#cec2195fa505f4d34e6d8e41a86bfbcb9bfff461"
@@ -2685,19 +2674,6 @@ chartist-plugin-tooltip@0.0.11:
 chartist@0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/chartist/-/chartist-0.11.0.tgz#84ba5e05490d096d93dcfa9343ebc31ef6a3bd28"
-
-chartjs-color-string@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/chartjs-color-string/-/chartjs-color-string-0.6.0.tgz#1df096621c0e70720a64f4135ea171d051402f71"
-  dependencies:
-    color-name "^1.0.0"
-
-chartjs-color@^2.1.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/chartjs-color/-/chartjs-color-2.3.0.tgz#0e7e1e8dba37eae8415fd3db38bf572007dd958f"
-  dependencies:
-    chartjs-color-string "^0.6.0"
-    color-convert "^0.5.3"
 
 check-error@^1.0.2:
   version "1.0.2"
@@ -2884,10 +2860,6 @@ collection-visit@^1.0.0:
   dependencies:
     map-visit "^1.0.0"
     object-visit "^1.0.0"
-
-color-convert@^0.5.3:
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-0.5.3.tgz#bdb6c69ce660fadffe0b0007cc447e1b9f7282bd"
 
 color-convert@^1.3.0, color-convert@^1.9.0, color-convert@^1.9.1:
   version "1.9.3"
@@ -7250,7 +7222,7 @@ mocha@^5.2.0:
     mkdirp "0.5.1"
     supports-color "5.4.0"
 
-moment@^2.10.2, moment@^2.11.1, moment@^2.20.1:
+moment@^2.11.1, moment@^2.20.1:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
 
@@ -9003,7 +8975,7 @@ redent@^1.0.0:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
 
-reduce-css-calc@^1.2.6, reduce-css-calc@^1.3.0:
+reduce-css-calc@^1.2.6:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/reduce-css-calc/-/reduce-css-calc-1.3.0.tgz#747c914e049614a4c9cfbba629871ad1d2927716"
   dependencies:
@@ -10475,12 +10447,6 @@ uglifyjs-webpack-plugin@^1.1.1:
     webpack-sources "^1.1.0"
     worker-farm "^1.5.2"
 
-uiv@^0.14.4:
-  version "0.14.5"
-  resolved "https://registry.yarnpkg.com/uiv/-/uiv-0.14.5.tgz#5376ea42b0e7b47846beda10b10c912646267df2"
-  dependencies:
-    vue-functional-data-merge "^2.0.2"
-
 underscore@^1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.1.tgz#06dce34a0e68a7babc29b365b8e74b8925203961"
@@ -10704,10 +10670,6 @@ vue-axios@^2.1.4:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/vue-axios/-/vue-axios-2.1.4.tgz#a9d298f7e876f9a87feb336b37adcbce34ff9f9f"
 
-vue-chartjs@^3.3.2:
-  version "3.4.2"
-  resolved "https://registry.yarnpkg.com/vue-chartjs/-/vue-chartjs-3.4.2.tgz#0323e6a99a10a68f38d426899c3994f48596fd23"
-
 vue-click-outside@^1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/vue-click-outside/-/vue-click-outside-1.0.7.tgz#cdd2b1605e3c4944784e1794eae4a12a0f700bd6"
@@ -10763,20 +10725,6 @@ vue-eslint-parser@^5.0.0:
     esquery "^1.0.1"
     lodash "^4.17.11"
 
-vue-event-bus@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/vue-event-bus/-/vue-event-bus-1.0.2.tgz#1badd6c3ec6c5f33675d08b9b486123cf0fd5296"
-
-vue-fraction-grid@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/vue-fraction-grid/-/vue-fraction-grid-1.1.0.tgz#9ea053ecdffcd4fd2aa450c8aeee5763e037cc1d"
-  dependencies:
-    reduce-css-calc "^1.3.0"
-
-vue-functional-data-merge@^2.0.2:
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/vue-functional-data-merge/-/vue-functional-data-merge-2.0.7.tgz#bdee655181eacdcb1f96ce95a4cc14e75313d1da"
-
 vue-gmaps@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/vue-gmaps/-/vue-gmaps-0.2.2.tgz#319944671417f1ecd573206685b4c8efbe472ca4"
@@ -10831,11 +10779,6 @@ vue-jest@^1.0.2:
 vue-lazyload@^1.2.6:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/vue-lazyload/-/vue-lazyload-1.2.6.tgz#baa04c172d52a812608eb12c7a6bfb14f5c91079"
-
-vue-load-image@^0.1.7:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/vue-load-image/-/vue-load-image-0.1.7.tgz#93f19a1301f1de0cc8b70213847205912fe0f816"
-  integrity sha512-nFPh1tdynSqBfzYigLkkUfFLjhcjp8XrZF2tnbVUNlXZlc9sNa+ywI6q867GIPG/1naJ4TIeadmFKpeP7vh8RQ==
 
 vue-loader@^13.3.0:
   version "13.7.3"
@@ -10911,11 +10854,6 @@ vue-popperjs@^2.0.3:
   dependencies:
     popper.js "^1.14.7"
 
-vue-promise-btn@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/vue-promise-btn/-/vue-promise-btn-2.0.2.tgz#1ac95896015f63f8850541f8be06fa9a5322ce5d"
-  integrity sha512-6TrBpKz2xGqomkXYAgn8XWNZwSc2AAJr7CGFusn02AANZwjwNLvADs01cnxLrea5zD5RFgKASBvesjxMJGvR/w==
-
 vue-resize@^0.4.5:
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/vue-resize/-/vue-resize-0.4.5.tgz#4777a23042e3c05620d9cbda01c0b3cc5e32dcea"
@@ -10977,9 +10915,10 @@ vue2-transitions@^0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/vue2-transitions/-/vue2-transitions-0.2.3.tgz#69c9d75b1db05f231b80980c03459d68490ba27d"
 
-vue@2.5.17:
-  version "2.5.17"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.17.tgz#0f8789ad718be68ca1872629832ed533589c6ada"
+vue@2.5.22:
+  version "2.5.22"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.22.tgz#3bf88041af08b8539c37b268b70ca79245e9cc30"
+  integrity sha512-pxY3ZHlXNJMFQbkjEgGVMaMMkSV1ONpz+4qB55kZuJzyJOhn6MSy/YZdzhdnumegNzVTL/Dn3Pp4UrVBYt1j/g==
 
 vue@^2.4.4, vue@^2.5.11, vue@^2.5.16, vue@^2.5.21, vue@^2.5.22, vue@^2.6.10:
   version "2.6.10"

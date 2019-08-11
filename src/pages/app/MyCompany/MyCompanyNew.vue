@@ -508,7 +508,7 @@
 <script>
   //MAIN MODULES
   import {mapGetters, mapMutations, mapState} from 'vuex';
-  import Chart from 'chart.js';
+
   // import auth from '@/auth';
    import swal from "sweetalert2";
 

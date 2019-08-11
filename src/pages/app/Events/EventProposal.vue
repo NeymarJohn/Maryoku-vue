@@ -20,8 +20,7 @@
               :class="{'active': index === currentIndex }"
               class="gallery-item"
               style="display: inline-block">
-            <img v-lazy="image.src"
-                 style="height: 100px"
+            <img style="height: 100px"
                  @click="changeCurrentImage(index)">
           </li>
         </ul>

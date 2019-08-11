@@ -191,7 +191,7 @@
       },
       closePanel(){
         this.$emit("closePanel");
-        this.$bus.$emit('refreshBuildingBlock');
+        this.$root.$emit('refreshBuildingBlock');
       },
       manageBlockVendors() {
         this.addingVendors = true;
@@ -235,7 +235,7 @@
           .then(resp => {
 
             this.isLoading = false;
-            this.$bus.$emit('VendorAdded');
+            this.$root.$emit('VendorAdded');
             this.fetchData(0);
 
             this.$notify(
@@ -275,7 +275,7 @@
         vendor.for(calendar, event, selected_block).delete()
           .then(resp => {
             this.isLoading = false;
-            this.$bus.$emit('VendorAdded');
+            this.$root.$emit('VendorAdded');
             this.fetchData(0);
 
           })
@@ -392,7 +392,7 @@
     mounted() {
       this.isLoading = false;
       this.getBlockVendors();
-      this.$bus.$on('VendorAdded',()=>{
+      this.$root.$on('VendorAdded',()=>{
         this.getBlockVendors();
       });
 
