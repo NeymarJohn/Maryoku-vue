@@ -196,7 +196,7 @@
                                 <div class="md-layout-item md-size-20" v-for="(image,index) in proposalRequestImages" :key="index"  style="margin: 12px; " >
                                     <vue-element-loading :active="attachmentsLoadingCount > 0" spinner="ring" color="#FF547C"></vue-element-loading>
                                     <iframe seamless class="vendor-images-list_item" frameborder="0" @load="attachmentsLoadingCount--"
-                                            :src="`${serverUrl}/1/proposal-requests/${proposalRequest.id}/files/${image.id}`" style="max-height: 18vmin;">
+                                            :src="`${serverUrl}/1/proposal-requests/${proposalRequest.id}/files/${image.id}`" style="max-height: 18vmin;width: 100vw;">
                                         <md-button class="md-primary md-sm" @click="deleteImage(image.id,index)">
                                             delete
                                         </md-button>
