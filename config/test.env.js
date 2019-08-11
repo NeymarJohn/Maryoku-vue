@@ -1,6 +1,6 @@
 'use strict'
 const merge = require('webpack-merge')
-const devEnv = require('./prod.env')
+const devEnv = require('./dev.env')
 var webpack = require('webpack')
 
 module.exports = merge(devEnv, {
@@ -12,6 +12,10 @@ module.exports = merge(devEnv, {
         // ...
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production')
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            include: /\.min\.js$/,
+            minimize: true
         })
     ]
 })
