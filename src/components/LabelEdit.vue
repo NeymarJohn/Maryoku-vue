@@ -25,7 +25,7 @@
       text: [String, Number],
       placeholder: String,
       required: Boolean,
-      fieldName: String,
+      fieldName: [String, Object],
       mask: String,
       scope: [String,Object],
       empty: { type: String, default: 'Click to set' },

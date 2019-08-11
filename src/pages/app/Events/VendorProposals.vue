@@ -141,7 +141,7 @@
                                                        v-model="item.includedInPrice"></md-switch>
                                             <label :for="`include-${index}`">Included in price</label>
                                         </div>
-                                        <div class="actions-list md-layout-item md-size-100 md-small-size-100">
+                                        <div class="actions-list md-layout-item md-size-100 md-small-size-100" style="display: flex; justify-content: space-between;">
                                             <md-field>
                                                 <label>Amount</label>
                                                 <md-input type="number" v-model="item.requirementValue"
@@ -151,22 +151,23 @@
                                                 <md-icon>block</md-icon>
                                                 Item not available
                                             </md-button>
-                                            <md-button class="md-primary md-simple" v-if="!(item.comments && item.comments.length) || !item.addedComment"
+                                            <md-button class="md-primary md-simple" v-if="!(item.comments && item.comments.length)"
                                                        @click="item.showCommentForm =  true; item.addedComment = false; $forceUpdate();">
                                                 <md-icon>comment</md-icon>
                                                 Add Comment
                                             </md-button>
-                                            <div class="requirement-comment" v-if="item.comments && item.comments.length && item.addedComment">
+                                            <div class="requirement-comment" v-if="item.comments && item.comments.length ">
                                                 <md-icon>comment</md-icon>
-                                                <label-edit :text="item.comments[0]"
-                                                            @text-updated-blur="setRequirementComment(item)"
-                                                            @text-updated-enter="setRequirementComment(item)"></label-edit>
+                                                <label-edit :text="item.comments[0].commentText"
+                                                            :field-name="item"
+                                                            @text-updated-blur="setRequirementComment"
+                                                            @text-updated-enter="setRequirementComment"></label-edit>
                                             </div>
 
                                             <template v-if="item.showCommentForm">
                                                 <md-field class="full-width bordered-field">
-                                                    <md-input v-model="item.comments[0]" placeholder="add your comment here"
-                                                              @blur="updateProposalRequest(); item.showCommentForm =  false; item.addedComment = true; $forceUpdate();"></md-input>
+                                                    <md-input v-model="item.tempComment" placeholder="Add your comment here, event producers can see these comments."
+                                                              @keypress.enter="setRequirementComment(item.tempComment, item)" @blur="setRequirementComment(item.tempComment, item)"></md-input>
                                                 </md-field>
                                             </template>
 
@@ -481,6 +482,7 @@
 
   import moment from 'moment'
   import swal from "sweetalert2";
+  import ProposalRequestRequirement from '../../../models/ProposalRequestRequirement'
 
   export default {
     components: {
@@ -904,6 +906,7 @@
         proposalRequest.updateOnOutbid = this.proposalRequest.updateOnOutbid
         proposalRequest.cancellationPolicy = this.proposalRequest.cancellationPolicy
         proposalRequest.depositCost = this.proposalRequest.depositCost
+        proposalRequest.bid = this.totalOffer;
 
         proposalRequest.save()
           .then(res => {
@@ -933,6 +936,27 @@
       },
       dateSubmitted(proposalRequest){
         return moment(proposalRequest.lastUpdated).fromNow();
+      },
+      setRequirementComment(val, item){
+        console.log(`Setting comment ${val} to requirement id: ${item.id}`);
+        item.showCommentForm =  false;
+        item.addedComment = true;
+        this.$forceUpdate();
+
+        let comment = {commentText: val};
+
+        if (item.comments && item.comments.length){
+          comment = {id: item.comments[0].id,commentText: val, from: item.vendorId, threadId: this.proposalRequest.id};
+        } else { // New Comment
+          comment = {commentText: val, from: item.vendorId, threadId: this.proposalRequest.id};
+        }
+
+        new ProposalRequestComment(comment)
+          .for(new ProposalRequest({id: this.proposalRequest.id}), new ProposalRequestRequirement({id: item.id}))
+          .save().then(res=>{
+          comment.id = res.item.id;
+          item.comments = [comment];
+        });
       }
     },
     computed: {
