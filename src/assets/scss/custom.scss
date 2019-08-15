@@ -4094,3 +4094,9 @@ iframe{
     background-color: #ccc !important;
     box-shadow: none !important;
 }
+
+.v-tour {
+    .v-step {
+        z-index: 1000000;
+    }
+}
