@@ -3,7 +3,7 @@
     <div tabindex="1" class="vlabeledit-label" :class="{'vlabeledit-empty' : this.vlabel === empty}" @click="onLabelClick" v-if="!edit">
         <span v-if="numeric">{{vlabel | numeral('0,0')}}</span>
         <span v-else>{{vlabel}}</span>
-        <md-icon class="pull-right text-gray small md-sm vlabeledit-label-icon">edit</md-icon></div>
+        <md-icon v-if="icon" class="pull-right text-gray small md-sm vlabeledit-label-icon">edit</md-icon></div>
     <input type="text" v-if="edit && !mask" v-model="label" v-on:blur="updateTextBlur" ref="labeledit" :placeholder="vplaceholder" class="vlabeledit-input" @keyup.enter="updateTextEnter"/>
     <input-mask type="text" v-if="edit && mask" :mask="mask" maskChar="_" v-model="label" v-on:blur="updateTextBlur" ref="labeledit" :placeholder="vplaceholder" class="vlabeledit-input" @keyup.enter="updateTextEnter"/>
   </div>
@@ -29,7 +29,11 @@
       mask: String,
       scope: [String,Object],
       empty: { type: String, default: 'Click to set' },
-      numeric: Boolean
+      numeric: Boolean,
+      icon: {
+        type: Boolean,
+        default: true
+      }
     }, // parent should provide :text or :placeholder
     methods: {
       initText: function(){
@@ -132,7 +136,7 @@
     .vlabeledit-input {
       border: 1px solid lightgray;
       border-radius: 5px;
-      padding: 3px;
+      padding: 6px;
       width: 100%;
       height: 100%;
       font-size: 16px;

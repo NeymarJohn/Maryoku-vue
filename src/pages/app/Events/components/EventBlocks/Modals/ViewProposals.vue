@@ -19,7 +19,7 @@
                             <event-block-requirements :event="event" :selectedBlock="selectedBlock" :predefinedRequirements="selectedBlock.predefinedRequirements"> </event-block-requirements>
                         </template>
                         <template slot="tab-pane-2" style="width: 100%;">
-                            <div class="manage-proposals_proposals-list" v-if="selectedBlock.proposals">
+                            <!--&lt;!&ndash;<div class="manage-proposals_proposals-list" v-if="selectedBlock.proposals">
                                 <h4>New or Updated</h4>
                                 <div class="proposals-list_item" v-for="(proposal,index) in selectedBlock.proposals" :key="index">
                                     <div class="proposal-info text-left">
@@ -55,8 +55,9 @@
                                     </div>
                                 </div>
 
-                                <md-button class="md-default show-more-btn" v-if="selectedBlock.proposals.length"> Show more</md-button>
-                            </div>
+                                <md-button class="md-default show-more-btn"> Show more</md-button>&ndash;&gt;
+                            </div>-->
+                            <manage-proposals-vendors :building-block.sync="selectedBlock" :event.sync="event"></manage-proposals-vendors>
                         </template>
                         <template slot="tab-pane-3" style="width: 100%;">
                             <div style="padding-left: 6px;">
@@ -140,10 +141,12 @@
   import ViewProposal from './ViewProposal.vue'
   import EventBlockRequirements from '../Modals/EventBlockRequirements.vue';
   import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue';
+  import ManageProposalsVendors from './ManageProposalsVendors'
 
 
   export default {
     components: {
+      ManageProposalsVendors,
       VueElementLoading,
       Tabs,
       EventBlockRequirements,
@@ -172,8 +175,6 @@
     },
     mounted() {
       this.requirementsLength = this.selectedBlock.values.length;
-
-      console.log('selectedBlock => ',this.selectedBlock);
 
       this.$nextTick(()=>{
         if (this.$refs.proposalsTabs) {
