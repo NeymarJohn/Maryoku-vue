@@ -1,6 +1,6 @@
 <template>
     <div class="manage-proposals-panel">
-        <div class="md-layout" style="max-height: 50vh;">
+        <div class="md-layout" style="max-height: 50vh;" v-if="vendorProposal && vendorInfo">
             <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
                 <h4 class="md-title">
                     <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
@@ -17,10 +17,10 @@
                     <div class="star-rating">
                         <label class="star-rating__star"
                                v-for="rating in ratings"
-                               :class="{'is-selected' : ((proposal.cost >= rating) && proposal.cost != null)}"
+                               :class="{'is-selected' : ((vendorInfo.rank >= rating) && vendorInfo.rank != null)}"
                         >
                             <input class="star-rating star-rating__checkbox" type="radio"
-                                   v-model="proposal.coste">★</label>
+                                    >★</label>
                     </div>
 
                     <div class="actions-list">
@@ -43,19 +43,20 @@
                         <md-card-content>
                             <h4>Dear Rachel</h4>
                             <p>
-                                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                                <!-- Personal Message -->
+                                {{vendorProposal.personalMessage}}
                             </p>
                             <div class="signature">
                                 Thanks,
                                 <br>
-                                Peter Luger
+                                {{vendorInfo.vendorDisplayName}}
                             </div>
                             <div class="attachments-list">
                                 <h6>Attachments</h6>
                                 <ul class="attachments-list_items">
-                                    <li><a href=""> <md-icon>attach_file</md-icon>Food Menu </a></li>
-                                    <li><a href=""> <md-icon>attach_file</md-icon>Food Menu </a></li>
-                                    <li><a href=""> <md-icon>attach_file</md-icon>Food Menu </a></li>
+                                    <li v-for="(item,index) in vendorProposal.attachements" :key="index">
+                                        <a :href="item"> <md-icon>attach_file</md-icon> Attachment {{index+1}} </a>
+                                    </li>
                                 </ul>
                             </div>
                         </md-card-content>
@@ -67,11 +68,11 @@
                             <div class="cost-info">
                                 <div class="cost-info_desc">
                                     <div class="cost-label">Cost per guest</div>
-                                    <div class="cost-value">$4</div>
+                                    <div class="cost-value">${{vendorProposal.costPerGuest}}</div>
                                 </div>
                                 <div class="cost-info_desc">
                                     <div class="cost-label">Subtotal</div>
-                                    <div class="cost-value">$2,000</div>
+                                    <div class="cost-value">${{vendorProposal.cost}}</div>
                                 </div>
                             </div>
 
@@ -79,17 +80,14 @@
                                 <div class="section-content pros-section">
                                     <md-icon class="thumb-up">thumb_up_alt</md-icon>
                                     <ul class="list-items">
-                                        <li>Price within budget</li>
-                                        <li>Meets 90% of rqmts.</li>
-                                        <li>Low cost per guest</li>
-                                        <li>Very responsive</li>
+                                        <li v-for="(item,index) in vendorProposal.cons" :key="index">{{item}}</li>
                                     </ul>
                                 </div>
                                 <div class="section-content cons-section">
                                     <md-icon class="thumb-down">thumb_down_alt</md-icon>
                                     <ul class="list-items">
-                                        <li>2 needed upgrades</li>
-                                        <li>Strict cancellation policy</li>
+                                        <li v-for="(item,index) in vendorProposal.pros" :key="index">{{item}}</li>
+
                                     </ul>
                                 </div>
                             </div>
@@ -97,8 +95,8 @@
                             <div class="need-help-section text-center">
                                 <h6>Need help or modifications?</h6>
                                 <md-button class="md-rose md-simple md-sm no-uppercase">
-                                    Contact Peter
-                                    <md-tooltip>Email </md-tooltip>
+                                    Contact {{vendorInfo.vendorDisplayName}}
+                                    <md-tooltip>{{vendorInfo.vendorMainEmail}} </md-tooltip>
                                 </md-button>
                             </div>
                         </md-card-content>
@@ -113,12 +111,9 @@
                         <h3>Included</h3>
                     </div>
                     <ul class="included-list">
-                        <li> <md-icon>check</md-icon> Plateware</li>
-                        <li> <md-icon>check</md-icon> Plateware</li>
-                        <li> <md-icon>check</md-icon> Plateware</li>
-                        <li> <md-icon>check</md-icon> Plateware</li>
-                        <li> <md-icon>check</md-icon> Plateware</li>
-                        <li> <md-icon>check</md-icon> Plateware</li>
+                        <li v-for="(item,index) in vendorProposal.included" :key="index">
+                            <md-icon>check</md-icon> Plateware
+                        </li>
                     </ul>
                 </div>
 
@@ -161,10 +156,10 @@
                     <div class="cost-breakdown-notes-sections">
                         <div class="section-content cost-breakdown-section">
                             <div class="section-content">
-                                <md-table v-model="cost_breakdown" class="table-plaint">
+                                <md-table v-model="vendorProposal.costBreakdown" class="table-plaint">
                                     <md-table-row slot="md-table-row" slot-scope="{ item }"  >
                                         <md-table-cell md-label="Service">{{ item.service }}</md-table-cell>
-                                        <md-table-cell md-label="Per guest">${{ item.per_guest }}</md-table-cell>
+                                        <md-table-cell md-label="Per guest">${{ item.perGuest }}</md-table-cell>
                                         <md-table-cell class="cost-cell" md-label="Cost" :class="getAlignClasses(item)">${{ item.cost }}</md-table-cell>
                                     </md-table-row>
                                 </md-table>
@@ -174,7 +169,7 @@
                                             Subtotal
                                         </div>
                                         <span class="td-value">
-                                        $1940
+                                        ${{subtotal}}
                                     </span>
                                     </div>
                                     <div class="td-price">
@@ -182,7 +177,7 @@
                                             Tax (3%)
                                         </div>
                                         <span class="td-value">
-                                        $60
+                                        ${{subtotal*0.03}}
                                     </span>
                                     </div>
                                     <div class="td-price bold">
@@ -190,7 +185,7 @@
                                             Total
                                         </div>
                                         <span class="td-value">
-                                        $2000
+                                        ${{subtotal + subtotal*0.03}}
                                     </span>
                                     </div>
                                 </div>
@@ -205,7 +200,7 @@
                             </div>
 
                             <p class="danger-label">
-                                This offer is valid till July 1st 2019.
+                                This offer is valid till {{getDate(vendorProposal.validUntil)}}.
 
                             </p>
                         </div>
@@ -224,17 +219,8 @@
                     <md-button class="md-default view-images no-uppercase" @click="view()">View Images</md-button>
 
                     <ul class="images-list">
-                        <li class="image-item">
-                            <div style="width : 320px; height : 320px; background : url(https://i.kinja-img.com/gawker-media/image/upload/s--vHt6tbFa--/c_scale,f_auto,fl_progressive,q_80,w_800/xjmx1csashjww8j8jwyh.jpg) center center no-repeat ; background-size : cover;"></div>
-                        </li>
-                        <li class="image-item">
-                            <div style="width : 320px; height : 320px; background : url(https://cdn.jamieoliver.com/home/wp-content/uploads/2016/06/2.jpg) center center no-repeat ; background-size : cover;"></div>
-                        </li>
-                        <li class="image-item">
-                            <div style="width : 320px; height : 320px; background : url(https://i.kinja-img.com/gawker-media/image/upload/s--vHt6tbFa--/c_scale,f_auto,fl_progressive,q_80,w_800/xjmx1csashjww8j8jwyh.jpg) center center no-repeat ; background-size : cover;"></div>
-                        </li>
-                        <li class="image-item">
-                            <div style="width : 320px; height : 320px; background : url(https://cdn.jamieoliver.com/home/wp-content/uploads/2016/06/2.jpg) center center no-repeat ; background-size : cover;"></div>
+                        <li class="image-item" v-for="(item,index) in vendorProposal.attachements" :key="index">
+                            <div :style="`width : 320px; height : 320px; background : url(${serverUrl}/1/proposal-requests/${proposal.id}/files/${item}) center center no-repeat ; background-size : cover;`"></div>
                         </li>
                     </ul>
 
@@ -315,9 +301,6 @@
                     <md-button class="md-rose md-sm md-simple"> show more <md-icon>add</md-icon></md-button>
                 </div>
 
-
-
-
                 <div class="md-layout-item md-size-5"></div>
                 <div class="md-layout-item md-size-95">
                     <ul class="proposal-summary">
@@ -338,7 +321,7 @@
                         <li>
                             <div class="proposal-info about-us">
                                 <div class="proposal-title">About us</div>
-                                <div class="proposal-desc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
+                                <div class="proposal-desc">{{vendorProposal.aboutUsMessage}}</div>
                             </div>
                             <div class="attachments-list">
                                 <ul class="attachments-list_items">
@@ -372,6 +355,8 @@
 
     import LightBox from 'vue-image-lightbox';
     import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue';
+    import ProposalRequest from '@/models/ProposalRequest';
+    import EventComponentProposal from '@/models/EventComponentProposal';
 
 
     export default {
@@ -387,36 +372,35 @@
             // auth: auth,
             isLoaded: false,
             ratings: [1, 2, 3, 4, 5],
-            cost_breakdown : [
-                {
-                    id : 123123123,
-                    service : 'Carting',
-                    per_guest : 3.88,
-                    cost : 1940
-                }
-            ],
-            images : [
-                {
-                    thumb: 'https://i.kinja-img.com/gawker-media/image/upload/s--vHt6tbFa--/c_scale,f_auto,fl_progressive,q_80,w_800/xjmx1csashjww8j8jwyh.jpg',
-                    src: 'https://i.kinja-img.com/gawker-media/image/upload/s--vHt6tbFa--/c_scale,f_auto,fl_progressive,q_80,w_800/xjmx1csashjww8j8jwyh.jpg',
-                    caption: 'caption to display. receive <html> <b>tag</b>', // Optional
-                    srcset: 'https://i.kinja-img.com/gawker-media/image/upload/s--vHt6tbFa--/c_scale,f_auto,fl_progressive,q_80,w_800/xjmx1csashjww8j8jwyh.jpg' // Optional for displaying responsive images
-                },
-                {
-                    thumb: 'https://cdn.jamieoliver.com/home/wp-content/uploads/2016/06/2.jpg',
-                    src: 'https://cdn.jamieoliver.com/home/wp-content/uploads/2016/06/2.jpg',
-                    caption: 'caption to display. receive <html> <b>tag</b>', // Optional
-                    srcset: 'https://cdn.jamieoliver.com/home/wp-content/uploads/2016/06/2.jpg' // Optional for displaying responsive images
-                }
-            ],
+            images : [],
             viewImages : false,
-            feedbackRating : 3
+            feedbackRating : 3,
+            vendorProposal : null,
+            vendorInfo : null,
+            serverUrl: process.env.SERVER_URL,
+
         }),
-
         created () {
-
-            console.log(this.proposal);
-
+            EventComponentProposal.find(this.proposal.id)
+                .then(resp => {
+                    this.$set(this,'vendorProposal',resp)
+                    this.$set(this,'vendorInfo',resp.vendor);
+                    this.images = resp.attachements.map((item)=>{
+                        console.log(item);
+                        return {
+                            thumb: this.serverUrl+'/1/proposal-requests/'+this.proposal.id+'/files/' + item,
+                            src: this.serverUrl+'/1/proposal-requests/'+this.proposal.id+'/files/' + item,
+/*
+                            caption: 'caption to display. receive <html> <b>tag</b>', // Optional
+*/
+                            srcset: this.serverUrl+'/1/proposal-requests/'+this.proposal.id+'/files/' + item,
+                        }
+                    })
+                    console.log(resp);
+                })
+                .catch(error => {
+                    console.log(' error here   -->>>  ', error)
+                })
         },
         mounted () {
 
@@ -456,9 +440,22 @@
                     openOn: 'right',
                     props: {event: this.event, selectedBlock: this.selectedBlock}
                 })
+            },
+            getDate (eventStartMillis) {
+                let x = new Date(eventStartMillis)
+                return moment(x).format('MMMM D, YYYY')
             }
         },
-        computed: {}
+        computed: {
+            subtotal(){
+                let subtotal = 0;
+                this.vendorProposal.costBreakdown.forEach((item) => {
+                    console.log(item);
+                    subtotal += item.cost;
+                })
+                return subtotal;
+            }
+        }
     }
 </script>
 <style lang="scss" scoped>

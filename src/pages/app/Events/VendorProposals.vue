@@ -209,7 +209,7 @@
 
                                 <div class="md-layout-item md-size-20" style="margin-top: auto; margin-bottom: auto; text-align: center;">
                                     <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image"
-                                               @click="uploadEventImage" style="top: -25px; margin-top: auto; margin-bottom: auto; text-align: center;">
+                                               @click="uploadEventImage" style="margin-top: auto; margin-bottom: auto; text-align: center;">
                                         <md-icon>add</md-icon>
                                     </md-button>
                                     <input type="file" style="display: none;" ref="eventFile"
@@ -499,85 +499,7 @@
         isLoading: false,
         readonly: true,
         isMobile: window.innerWidth <= 500 ? true : false,
-        dietaryList: [
-          {
-            id: 1,
-            title: 'Kosher',
-            meals: 4,
-            included_in_price: true,
-            available: false,
-            comments: []
-          },
-          {
-            id: 2,
-            title: 'Vegan',
-            meals: 12,
-            included_in_price: true,
-            available: false,
-            comments: []
-          },
-          {
-            id: 3,
-            title: 'Vegetarian',
-            meals: 5,
-            included_in_price: true,
-            available: false,
-            comments: []
-          }
-        ],
         available_to_deliver: true,
-        mustHaveList: [
-          {
-            id: 1,
-            title: 'Event Coordinator',
-            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
-            included_in_price: true,
-            available: false,
-            comments: []
-          },
-          {
-            id: 2,
-            title: 'Main Venue',
-            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
-            included_in_price: true,
-            available: false,
-            comments: []
-          },
-          {
-            id: 3,
-            title: 'Transportation',
-            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
-            included_in_price: true,
-            available: false,
-            comments: []
-          }
-        ],
-        moreList: [
-          {
-            id: 1,
-            title: 'Waiters',
-            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
-            included_in_price: true,
-            available: false,
-            comments: []
-          },
-          {
-            id: 2,
-            title: 'Main Chef',
-            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
-            included_in_price: true,
-            available: false,
-            comments: []
-          },
-          {
-            id: 3,
-            title: 'Food Menu',
-            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
-            included_in_price: true,
-            available: false,
-            comments: []
-          }
-        ],
         vendorImages: [],
         serverUrl: process.env.SERVER_URL,
         imagePreview: null,
