@@ -55,7 +55,7 @@
                                     </div>
                                 </div>
 
-                                <md-button class="md-default show-more-btn"> Show more</md-button>
+                                <md-button class="md-default show-more-btn" v-if="selectedBlock.proposals.length"> Show more</md-button>
                             </div>
                         </template>
                         <template slot="tab-pane-3" style="width: 100%;">
@@ -172,6 +172,8 @@
     },
     mounted() {
       this.requirementsLength = this.selectedBlock.values.length;
+
+      console.log('selectedBlock => ',this.selectedBlock);
 
       this.$nextTick(()=>{
         if (this.$refs.proposalsTabs) {

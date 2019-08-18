@@ -372,6 +372,7 @@
 
     import LightBox from 'vue-image-lightbox';
     import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue';
+    import ProposalRequest from '@/models/ProposalRequest'
 
 
     export default {
@@ -416,6 +417,15 @@
         created () {
 
             console.log(this.proposal);
+
+            ProposalRequest.find(this.proposal.id)
+                .then(resp => {
+
+                    console.log('resp => ',resp);
+                })
+                .catch(error => {
+                    console.log(' error here   -->>>  ', error)
+                })
 
         },
         mounted () {

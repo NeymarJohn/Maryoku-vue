@@ -28,7 +28,6 @@ import { VueStars } from "vue-stars"
 import Multiselect from 'vue-multiselect';
 import 'vue-multiselect/dist/vue-multiselect.min.css';
 import lsWatcher from 'vue-storage-watcher';
-import VueTour from 'vue-tour'
 
 // router setup
 import routes from "./router/routes";
@@ -36,12 +35,10 @@ import routes from "./router/routes";
 // store setup
 import store from "./store";
 
-require('vue-tour/dist/vue-tour.css')
 
 // plugin setup
 Vue.use(VueRouter);
 Vue.use(DashboardPlugin);
-Vue.use(VueTour)
 
 Vue.use(VueGmaps, {
     key: process.env.GOOGLE_API_KEY|| 'AIzaSyAelc-zmvKBlcW78yPFeW9xrbnrJaT-MfA',
