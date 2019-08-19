@@ -6444,6 +6444,11 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
+jump.js@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/jump.js/-/jump.js-1.0.2.tgz#e0641b47f40a38f2139c25fda0500bf28e43015a"
+  integrity sha1-4GQbR/QKOPITnCX9oFAL8o5DAVo=
+
 jvectormap-next@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/jvectormap-next/-/jvectormap-next-3.0.0.tgz#87070dab31ec7e2702de8f52265d2fe0a8fea3f5"
@@ -8028,7 +8033,7 @@ popper.js@1.12.5:
   version "1.12.5"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.12.5.tgz#229e4dea01629e1f1a1e26991ffade5024220fa6"
 
-popper.js@^1.14.7, popper.js@^1.15.0:
+popper.js@^1.14.4, popper.js@^1.14.7, popper.js@^1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.15.0.tgz#5560b99bbad7647e9faa475c6b8056621f5a4ff2"
 
@@ -10849,6 +10854,16 @@ vue-template-es2015-compiler@^1.5.3, vue-template-es2015-compiler@^1.6.0, vue-te
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
 
+vue-tour@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/vue-tour/-/vue-tour-1.1.0.tgz#20da6e6697b8d286438d90616e847e1af9b82801"
+  integrity sha512-AcJ4pksVbKEKyk5qI3sEBQ6rGwhm2psFpqwsht4aT3vGpNi7Ft3359wrQedfctBcCHJATVB3wVBlFkmYfuRgNg==
+  dependencies:
+    hash-sum "^1.0.2"
+    jump.js "^1.0.2"
+    popper.js "^1.14.4"
+    vue "^2.5.17"
+
 vue2-transitions@^0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/vue2-transitions/-/vue2-transitions-0.2.3.tgz#69c9d75b1db05f231b80980c03459d68490ba27d"
@@ -10858,7 +10873,7 @@ vue@2.5.22:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.22.tgz#3bf88041af08b8539c37b268b70ca79245e9cc30"
   integrity sha512-pxY3ZHlXNJMFQbkjEgGVMaMMkSV1ONpz+4qB55kZuJzyJOhn6MSy/YZdzhdnumegNzVTL/Dn3Pp4UrVBYt1j/g==
 
-vue@^2.4.4, vue@^2.5.11, vue@^2.5.16, vue@^2.5.21, vue@^2.5.22, vue@^2.6.10:
+vue@^2.4.4, vue@^2.5.11, vue@^2.5.16, vue@^2.5.17, vue@^2.5.21, vue@^2.5.22, vue@^2.6.10:
   version "2.6.10"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
 

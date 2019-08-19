@@ -7,7 +7,7 @@
                     <table style="width: 100%; height: 100%;">
                         <tr>
                             <td style="width: 80%;min-width: 80%;max-width: 80%;padding-right: 15px;" colspan="2">
-                                <filters-panel @filters-changed-event="refreshEvents"></filters-panel>
+                                <filters-panel id="tour-step-1" @filters-changed-event="refreshEvents"></filters-panel>
                             </td>
                             <td style="width: 20%;min-width: 20%;max-width: 20%; padding-left: 15px;">
                                 <md-button class="md-success annual-planner-create-new-event-button" @click="openNewEventModal()" style="width: 100%; height: 100%; margin-left: -6px; margin-top: 5px; font-size: 21px; font-weight: 500; white-space: normal;">Create New Event</md-button>
@@ -27,7 +27,7 @@
                                 <table style="width: 100%; height: 100%;">
                                     <tr style="height: 95%;">
                                         <td style="padding-top: 15px; padding-right: 15px;">
-                                            <md-card style="margin: 0; height: 100%; overflow: auto;">
+                                            <md-card id="tour-step-2" style="margin: 0; height: 100%; overflow: auto;">
                                                 <md-card-content style="height: 100%; text-align: center;">
                                                     <h3 class="text-gray">{{currentMonthName}}</h3>
                                                     <table style="width: 100%; height: 90%; text-align: center;">

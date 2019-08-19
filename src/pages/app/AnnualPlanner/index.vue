@@ -5,14 +5,14 @@
         <table style="width: 100%; height: 100%; ">
             <tr>
                 <td style="width: 18%; height: 100%;" >
-                    <budget-panel @month-count="monthCount" :statistics="statisticsData" :month="Number(currentMonth)" :year="Number(currentYear)"></budget-panel>
+                    <budget-panel id="tour-step-0" @month-count="monthCount" :statistics="statisticsData" :month="Number(currentMonth)" :year="Number(currentYear)"></budget-panel>
                 </td>
                 <td style="width: 82%; height: 100%;">
                     <calendar-panel @month-count="monthCount" :month="Number(currentMonth)" :year="Number(currentYear)" :firstDayOfTheWeek="firstDayOfTheWeek" :month-counts="monthCounts"></calendar-panel>
                 </td>
             </tr>
         </table>
-
+        <v-tour name="plannerTour" :steps="tourSteps"></v-tour>
         <!--<div style="border: 1px solid blue; display: flex; flex-direction: column; height: 100%;">
           <div style="flex: 1; border: 1px solid green; display: flex;justify-content: center;flex-direction: column;">2</div>
         </div>-->
@@ -40,6 +40,8 @@
     import BudgetPanel from './BudgetPanel';
     import CalendarPanel from './CalendarPanel';
     import Calendar from '@/models/Calendar';
+    import Tour from '@/models/Tour';
+    import Me from '@/models/Me';
 
     export default {
         components: {
@@ -64,6 +66,27 @@
                 monthCounts: {},
                 queryInProgress: false,
                 metaDataInProgress: false,
+                plannerPageVisited: true,
+                tourSteps: [
+                    // {
+                    //     target: '#tour-step-0',  // We're using document.querySelector() under the hood
+                    //     content: `Start your yearly plan by setting up your annual budget. You can set your budget either by employee or by total sum`,
+                    //     params: {
+                    //         placement: 'right'
+                    //     }
+                    // },
+                    // {
+                    //     target: '#tour-step-1',
+                    //     content: 'Filter occasions by category, country, or religin to discover special days that you may want to celebrate'
+                    // },
+                    // {
+                    //     target: '#tour-step-2',
+                    //     content: 'Click on any day on the calendar to create an event that takes place on that day',
+                    //     params: {
+                    //         placement: 'left'
+                    //     }
+                    // }
+                ]
             }
         },
         created() {
@@ -85,6 +108,37 @@
                     this.$store.dispatch("event/getEventThemes");
 
                     this.metaDataInProgress = false;
+
+                    if (!this.$auth.user.me.plannerPageVisited) {
+                        Tour.params({page: 'planner'}).get().then(steps => {
+                            this.tourSteps = [];
+                            for (let i in steps) {
+                                let obj = {
+                                    target: '#tour-step-' + i,
+                                    content: steps[i]
+                                };
+
+                                if (i == 0) {
+                                    obj.params.placement = 'right';
+                                } else if (i == 2) {
+                                    obj.params.placement = 'left';
+                                }
+
+                                this.tourSteps.push(obj);
+                            }
+
+                            this.$tours['plannerTour'].start();
+
+                            let user = Me.find(this.$auth.user.me.id);
+                            user.plannerPageVisited = true;
+                            user.save();
+
+                            this.$auth.user.me.plannerPageVisited = true;
+                        })
+
+                        // this.$tours['plannerTour'].start();
+                    }
+                    
                 }.bind(this))
             }
         },

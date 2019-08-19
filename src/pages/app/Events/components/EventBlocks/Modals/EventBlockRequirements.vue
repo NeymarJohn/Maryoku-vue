@@ -1,109 +1,38 @@
 <template>
-    <div class="adding-building-blocks-panel">
+    <div class="building-blocks-requirements">
         <!--<vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />-->
         <div class="md-layout text-left">
-            <h4 class="md-title md-layout-item md-size-100" style="margin : 0; line-height: 51px; width:100%; font-size: 20px;">
+            <h4 class="md-title md-layout-item md-size-100 clear-margins" style="margin : 0; line-height: 51px; width:100%; font-size: 20px;">
                 {{this.selectedBlock.title}} Requirements
+
+                <md-button class="md-info md-sm add-new-requirements pull-right"  @click="addNewValue">
+                    <md-icon>add</md-icon> Add Requirement
+                </md-button>
             </h4>
-            <div class="md-layout-item md-size-100">
-
-                <ul class="requirements-list" v-if="predefinedRequirements">
-
-                    <li class="list-item" v-for="(item,index) in predefinedRequirements">
-                        <div
-                            :class="`md-button ${item.color}`"
-                            @click="handleDrop(item)"
-                        > {{item.title}}
-                            <md-icon>add_circle_outline</md-icon>
-                        </div>
-                    </li>
-
-
-                </ul>
-                <md-card>
+            <div class="md-layout-item md-size-100 clear-margins">
+                <md-card class="md-card-plain clear-margins">
                     <md-card-content>
-                        <md-table v-if="eventBlocks && eventBlocks.length" v-model="eventBlocks" table-header-color="orange"
-                                  class="requirements-table">
-                            <md-table-row slot="md-table-row" slot-scope="{ item, index }"
-                                          :key="eventBlocks.indexOf(item)" >
-                                <md-table-cell md-label="Requirement" class="requirement-title">
-                                    <div class="field-section">
-                                        <label-edit :text="item.title"
-                                                    :field-name="item.id.toString()"
-                                                    :scope="`title`"
-                                                    @text-updated-blur="editValue"
-                                                    @text-updated-enter="editValue"></label-edit>
 
-                                        <md-button class="md-rose md-just-icon md-simple" @click="editItemDescription(item)">
-                                            <md-icon>comment</md-icon>
-                                        </md-button>
-                                    </div>
-
-
-                                    <div class="item-description-field" v-if="item.editMode">
-                                        <md-field>
-                                            <md-textarea
-                                                v-model="item.comment"
-                                                placeholder="Add Description here"
-                                                type="text"
-                                                :rows="item.comment ? parseInt(item.comment.length / 33) + 1 : 2"
-                                                @change="itemChanged(item)"
-                                            ></md-textarea>
-                                        </md-field>
-                                    </div>
-
+                        <h6 v-if="predefinedRequirements" class="small text-gray text-right clear-margins" style="display: block; width: 100%;">Predefined Requirements</h6>
+                        <ul class="requirements-list text-right clear-margins" v-if="predefinedRequirements">
+                            <li class="list-item" v-for="(item,index) in predefinedRequirements">
+                                <div
+                                    :class="`md-button ${item.color}`"
+                                    @click="handleDrop(item)">
+                                    {{item.title}}
+                                    <md-icon>add_circle_outline</md-icon>
+                                </div>
+                            </li>
+                        </ul>
+                        <div>&nbsp;</div>
+                        <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-if="eventBlockRequirements && eventBlockRequirements.length" v-model="eventBlockRequirements">
+                            <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" >
+                                <md-table-cell >
+                                    <event-block-requirement :delete-value="deleteValue" :requirement.sync="item"></event-block-requirement>
                                 </md-table-cell>
-
-                                <md-table-cell md-label="Amount" class="requirement-amount">
-                                    <!--<span class="dollar-sign">$</span>-->
-                                    <label-edit :text="item.value"
-                                                :field-name="item.id.toString()"
-                                                :scope="`value`"
-                                                @text-updated-blur="editValue"
-                                                @text-updated-enter="editValue"></label-edit>
-                                </md-table-cell>
-
-                                <md-table-cell md-label="Must Have?" class="requirement-must-have">
-                                    <md-checkbox v-model="item.mandatory" @change="mustHaveChanged(item)"></md-checkbox>
-                                </md-table-cell>
-
-                                <md-table-cell md-label="">
-                                    <md-button
-                                        class="md-danger md-sm md-just-icon event-building-blocks-requirements-delete"
-                                        @click="deleteValue(item.id)">
-                                        <md-icon>delete_outline</md-icon>
-                                    </md-button>
-                                </md-table-cell>
-
-
                             </md-table-row>
                         </md-table>
-                        <div v-else>
-                            <md-table v-model="dummyList" table-header-color="orange"
-                                      class="requirements-table">
-                                <md-table-row slot="md-table-row" style="opacity:0.4; background : #efefef;" slot-scope="{ item, index }"
-                                              :key="dummyList.indexOf(item)"
-                                >
-                                    <md-table-cell md-label="Title">
-                                        {{item.title}}
-                                    </md-table-cell>
-                                    <md-table-cell md-label="Description">
-                                        {{'No Description'}}
-                                    </md-table-cell>
-                                    <md-table-cell md-label="Priority">
-                                        {{'Must Have'}}
-                                    </md-table-cell>
 
-                                    <md-table-cell md-label="Actions">
-                                    </md-table-cell>
-                                </md-table-row>
-                            </md-table>
-                        </div>
-                        <div class="pull-left">
-                            <md-button class="md-default md-simple add-new-requirements"  @click="addNewValue">
-                                Add New <md-icon>add</md-icon>
-                            </md-button>
-                        </div>
                     </md-card-content>
                 </md-card>
 
@@ -129,14 +58,15 @@
   import {LabelEdit} from '@/components';
   import draggable from 'vuedraggable';
   import {Drag, Drop} from 'vue-drag-drop';
-
+  import EventBlockRequirement from './EventBlockRequirement'
   export default {
     components: {
       MdCardContent,
       VueElementLoading,
       LabelEdit,
       draggable, Drag, Drop,
-      ClickOutside
+      ClickOutside,
+      EventBlockRequirement
     },
     props: {
       event: Object,
@@ -149,7 +79,7 @@
     data: () => ({
       // auth: auth,
       isLoading: false,
-      eventBlocks: [],
+      eventBlockRequirements: [],
       dummyList : [
         {
           title : this.predefinedRequirements ? this.predefinedRequirements[0].title : 'No Title'
@@ -179,24 +109,24 @@
         let selected_block = new EventComponent({id: this.selectedBlock.id});
 
         new EventComponentValue().for(calendar, event, selected_block).get().then(values => {
-            this.eventBlocks = values;
+            this.eventBlockRequirements = values;
 
-            this.$root.$emit('refreshRequirementsLength',this.eventBlocks.length);
+            this.$root.$emit('refreshRequirementsLength',this.eventBlockRequirements.length);
 
              if ( newValueId ) {
 
-                let newValue = _.findWhere(this.eventBlocks,{id : newValueId});
+                let newValue = _.findWhere(this.eventBlockRequirements,{id : newValueId});
                 newValue.editMode = true;
                 this.$forceUpdate();
             }
             this.isLoading = false;
 
         });*/
-        this.eventBlocks = this.selectedBlock.values;
-        this.$root.$emit('refreshRequirementsLength',this.eventBlocks.length);
+        this.eventBlockRequirements = this.selectedBlock.values;
+        this.$root.$emit('refreshRequirementsLength',this.eventBlockRequirements.length);
         if ( newValueId ) {
 
-          let newValue = _.findWhere(this.eventBlocks,{id : newValueId});
+          let newValue = _.findWhere(this.eventBlockRequirements,{id : newValueId});
           newValue.editMode = true;
           this.$forceUpdate();
         }
@@ -211,7 +141,8 @@
 
         let new_value = {
           eventComponent: {id: this.selectedBlock.id},
-          editMode : true
+          editMode : true,
+          value: 1
         }
 
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
@@ -328,14 +259,14 @@
        * */
       editValue(val, fieldName , scope) {
 
-        let item = _.findWhere(this.eventBlocks,{id : fieldName});
+        let item = _.findWhere(this.eventBlockRequirements,{id : fieldName});
 
         this.editRequirementItemProperty(scope,val,item);
 
       },
       saveAllValues() {
         let _self = this;
-        this.eventBlocks.forEach(block => {
+        this.eventBlockRequirements.forEach(block => {
           _self.editValue(block);
         })
       },
@@ -358,3 +289,8 @@
     computed: {}
   };
 </script>
+<style lang="scss" scoped>
+    @import '@/assets/scss/md/_colors.scss';
+
+
+</style>

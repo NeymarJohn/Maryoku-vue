@@ -19,7 +19,7 @@
                             <event-block-requirements :event="event" :selectedBlock="selectedBlock" :predefinedRequirements="selectedBlock.predefinedRequirements"> </event-block-requirements>
                         </template>
                         <template slot="tab-pane-2" style="width: 100%;">
-                            <div class="manage-proposals_proposals-list" v-if="selectedBlock.proposals">
+                           <div class="manage-proposals_proposals-list" v-if="selectedBlock.proposals.length">
                                 <h4>New or Updated</h4>
                                 <div class="proposals-list_item" v-for="(proposal,index) in selectedBlock.proposals" :key="index">
                                     <div class="proposal-info text-left">
@@ -57,6 +57,7 @@
 
                                 <md-button class="md-default show-more-btn" v-if="selectedBlock.proposals.length"> Show more</md-button>
                             </div>
+                            <manage-proposals-vendors :building-block.sync="selectedBlock" :event.sync="event"></manage-proposals-vendors>
                         </template>
                         <template slot="tab-pane-3" style="width: 100%;">
                             <div style="padding-left: 6px;">
@@ -140,10 +141,12 @@
   import ViewProposal from './ViewProposal.vue'
   import EventBlockRequirements from '../Modals/EventBlockRequirements.vue';
   import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue';
+  import ManageProposalsVendors from './ManageProposalsVendors'
 
 
   export default {
     components: {
+      ManageProposalsVendors,
       VueElementLoading,
       Tabs,
       EventBlockRequirements,
