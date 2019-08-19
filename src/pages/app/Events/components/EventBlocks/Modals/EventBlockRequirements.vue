@@ -28,17 +28,11 @@
                         <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-if="eventBlockRequirements && eventBlockRequirements.length" v-model="eventBlockRequirements">
                             <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" >
                                 <md-table-cell >
-                                    <event-block-requirement :delete-value="deleteValue" :requirement.sync="item" :event-id="event.id" :selected-block-id="selectedBlock.id"></event-block-requirement>
+                                    <event-block-requirement :delete-value="deleteValue" :requirement.sync="item"></event-block-requirement>
                                 </md-table-cell>
                             </md-table-row>
                         </md-table>
-                        <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-else v-model="dummyList">
-                            <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" >
-                                <md-table-cell >
-                                    <event-block-requirement :delete-value="deleteValue" :requirement.sync="item" :event-id="event.id" :selected-block-id="selectedBlock.id"></event-block-requirement>
-                                </md-table-cell>
-                            </md-table-row>
-                        </md-table>
+
                     </md-card-content>
                 </md-card>
 
@@ -88,11 +82,7 @@
       eventBlockRequirements: [],
       dummyList : [
         {
-          title: "",
-          value: 1,
-          comment: "",
-          mandatory: true,
-          editMode: true
+          title : this.predefinedRequirements ? this.predefinedRequirements[0].title : 'No Title'
         }
       ]
     }),
@@ -100,7 +90,11 @@
     created() {
     },
     mounted() {
+
       this.getBuildingBlockValues();
+
+      // put dummy item
+      this.dummyList[0].title = this.predefinedRequirements ? this.predefinedRequirements[0].title : 'No Title';
     },
     methods: {
       closePanel() {
@@ -148,7 +142,6 @@
         let new_value = {
           eventComponent: {id: this.selectedBlock.id},
           editMode : true,
-          mandatory: true,
           value: 1
         }
 
@@ -157,11 +150,9 @@
         let selected_block = new EventComponent({id: this.selectedBlock.id});
 
         new EventComponentValue(new_value).for(calendar, event, selected_block).save().then(res => {
-          let newRequirement = JSON.parse(JSON.stringify(res.item))
-          newRequirement.editMode = true;
-          this.selectedBlock.values.splice(0, 0, newRequirement);
+          this.selectedBlock.values.push(JSON.parse(JSON.stringify(res.item)));
           this.isLoading = false;
-          this.getBuildingBlockValues(newRequirement.id);
+          this.getBuildingBlockValues();
         });
       },
       handleDrop(data) {
@@ -169,8 +160,6 @@
 
         let item = {};
         item.title = data.title;
-        item.value = 1;
-        item.mandatory = true;
         item.eventComponent = {id: this.selectedBlock.id};
         item.editMode= true;
 
@@ -179,10 +168,9 @@
         let selected_block = new EventComponent({id: this.selectedBlock.id});
 
         new EventComponentValue(item).for(calendar, eventObject, selected_block).save().then(res => {
-          let newRequirement = JSON.parse(JSON.stringify(res.item))
-          this.selectedBlock.values.splice(0, 0, newRequirement);
-          this.getBuildingBlockValues(res.item.id);
+
           this.isLoading = false;
+          this.getBuildingBlockValues(res.item.id);
         });
 
 

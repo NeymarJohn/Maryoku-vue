@@ -12,7 +12,7 @@
 
                 <div class="title-section">
                     <h4 class="md-title" style="margin-bottom: 0; line-height: 51px; text-transform: capitalize;">
-                        Proposal Title
+                        {{vendorInfo.vendorDisplayName}}
                     </h4>
                     <div class="star-rating">
                         <label class="star-rating__star"
@@ -41,12 +41,10 @@
                 <div class="md-layout-item md-size-50">
                     <md-card class="proposal-message">
                         <md-card-content>
-                            <h4>Dear Rachel</h4>
-                            <p>
+                            <p v-html="vendorProposal.personalMessage">
                                 <!-- Personal Message -->
-                                {{vendorProposal.personalMessage}}
                             </p>
-                            <div class="signature">
+                            <div class="signature" style="display: none;">
                                 Thanks,
                                 <br>
                                 {{vendorInfo.vendorDisplayName}}
@@ -55,11 +53,12 @@
                                 <h6>Attachments</h6>
                                 <ul class="attachments-list_items">
                                     <li v-for="(item,index) in vendorProposal.attachements" :key="index">
-                                        <a :href="item"> <md-icon>attach_file</md-icon> Attachment {{index+1}} </a>
+                                        <a target="_blank" :href="`${serverUrl}/1/proposal-requests/${proposal.id}/files/${item}`"> <md-icon>attach_file</md-icon> Attachment {{index+1}} </a>
                                     </li>
                                 </ul>
                             </div>
                         </md-card-content>
+
                     </md-card>
                 </div>
                 <div class="md-layout-item md-size-45">
@@ -94,10 +93,10 @@
 
                             <div class="need-help-section text-center">
                                 <h6>Need help or modifications?</h6>
-                                <md-button class="md-rose md-simple md-sm no-uppercase">
-                                    Contact {{vendorInfo.vendorDisplayName}}
-                                    <md-tooltip>{{vendorInfo.vendorMainEmail}} </md-tooltip>
+                                <md-button class="md-rose md-simple md-sm no-uppercase" @click="tooltipActive = !tooltipActive">
+                                    Contact {{vendorInfo.contactPerson ? vendorInfo.contactPerson : vendorInfo.vendorDisplayName}}
                                 </md-button>
+                                <md-tooltip :md-active.sync="tooltipActive">{{vendorInfo.vendorMainEmail}} </md-tooltip>
                             </div>
                         </md-card-content>
                     </md-card>
@@ -111,42 +110,33 @@
                         <h3>Included</h3>
                     </div>
                     <ul class="included-list">
-                        <li v-for="(item,index) in vendorProposal.included" :key="index">
-                            <md-icon>check</md-icon> Plateware
+                        <li v-for="(item,index) in vendorProposal.included" :key="index" v-if="item.requirementTitle">
+                            <md-icon>check</md-icon> {{item.requirementTitle}}
                         </li>
                     </ul>
                 </div>
 
-                <div class="md-layout-item md-size-5"></div>
-                <div class="md-layout-item md-size-95">
-                    <div class="section-title">
-                        <h3>Waiting for your approval (2)</h3>
+                <template v-if="extraMissingRequirements.length">
+                    <div class="md-layout-item md-size-5"></div>
+                    <div class="md-layout-item md-size-95">
+                        <div class="section-title">
+                            <h3>Waiting for your approval ({{extraMissingRequirements.length}})</h3>
+                        </div>
+                        <ul class="proposals-waiting-approval">
+                            <li v-for="(item,index) in extraMissingRequirements" :key="index">
+                                <div class="proposal-info">
+                                    <div class="proposal-title">{{item.requirementValue}}x {{item.requirementTitle}} <small style="display: none;">(Suggested by vendor)</small></div>
+                                    <div class="proposal-desc" v-for="(comment,index) in item.comments" :key="index">{{comment.commentText}} <md-button v-if="comment.commentText.length > 300" class="md-primary md-simple md-sm read-more no-uppercase">Read more</md-button></div>
+                                </div>
+                                <div class="proposal-actions">
+                                    <md-button v-if="!item.itemNotAvailable" class="md-rose">Add (${{item.price}})</md-button>
+                                    <md-button v-else class="md-success">Got it</md-button>
+
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                    <ul class="proposals-waiting-approval">
-                        <li>
-                            <div class="proposal-info">
-                                <div class="proposal-title">4x Kosher meals <small>(Suggested by vendor)</small></div>
-                                <div class="proposal-desc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. <md-button class="md-primary md-simple md-sm read-more no-uppercase">Read more</md-button></div>
-                            </div>
-                            <div class="proposal-actions">
-                                <md-button class="md-rose">Add ($220)</md-button>
-                            </div>
-                        </li>
-
-                        <li>
-                            <div class="proposal-info">
-                                <div class="proposal-title">3x Lactose free meals</div>
-                                <div class="proposal-desc"><div class="not-available-alert">The item is not available</div></div>
-                            </div>
-                            <div class="proposal-actions">
-                                <md-button class="md-success">Got it</md-button>
-                            </div>
-                        </li>
-
-                    </ul>
-                </div>
-
-
+                </template>
 
                 <div class="md-layout-item md-size-5"></div>
                 <div class="md-layout-item md-size-95 cost-breakdown-notes">
@@ -157,9 +147,12 @@
                         <div class="section-content cost-breakdown-section">
                             <div class="section-content">
                                 <md-table v-model="vendorProposal.costBreakdown" class="table-plaint">
-                                    <md-table-row slot="md-table-row" slot-scope="{ item }"  >
-                                        <md-table-cell md-label="Service">{{ item.service }}</md-table-cell>
-                                        <md-table-cell md-label="Per guest">${{ item.perGuest }}</md-table-cell>
+                                    <md-table-row slot="md-table-row" slot-scope="{ item }"  :class="{disabled : item.perGuest == 'N/A'}" >
+                                        <md-table-cell md-label="Service" style="text-transform: capitalize;">{{ item.service }}</md-table-cell>
+                                        <md-table-cell md-label="Per guest">
+                                            <template v-if="item.perGuest == 'N/A'">{{item.perGuest}}</template>
+                                            <template v-else>${{ item.perGuest }}</template>
+                                        </md-table-cell>
                                         <md-table-cell class="cost-cell" md-label="Cost" :class="getAlignClasses(item)">${{ item.cost }}</md-table-cell>
                                     </md-table-row>
                                 </md-table>
@@ -169,7 +162,7 @@
                                             Subtotal
                                         </div>
                                         <span class="td-value">
-                                        ${{subtotal}}
+                                        ${{vendorProposal.cost}}
                                     </span>
                                     </div>
                                     <div class="td-price">
@@ -177,7 +170,7 @@
                                             Tax (3%)
                                         </div>
                                         <span class="td-value">
-                                        ${{subtotal*0.03}}
+                                        ${{vendorProposal.cost*0.03}}
                                     </span>
                                     </div>
                                     <div class="td-price bold">
@@ -185,7 +178,7 @@
                                             Total
                                         </div>
                                         <span class="td-value">
-                                        ${{subtotal + subtotal*0.03}}
+                                        ${{vendorProposal.cost + vendorProposal.cost*0.03}}
                                     </span>
                                     </div>
                                 </div>
@@ -194,8 +187,8 @@
                         <div class="section-content notes-section">
                             <div>
                                 <h4>Notes</h4>
-                                <p>
-                                    Minimum no. of invitees: 180, cost per each extra invitee: $40.
+                                <p v-for="(note,index) in vendorProposal.notes">
+                                    {{note}}
                                 </p>
                             </div>
 
@@ -207,7 +200,6 @@
                     </div>
 
                 </div>
-
 
                 <div class="md-layout-item md-size-5"></div>
 
@@ -228,10 +220,9 @@
 
                 </div>
 
+                <div class="md-layout-item md-size-5" style="display: none;"></div>
 
-                <div class="md-layout-item md-size-5"></div>
-
-                <div class="md-layout-item md-size-95 feedback-section">
+                <div class="md-layout-item md-size-95 feedback-section " style="display: none;">
                     <div class="section-title">
                         <h5>Feedback</h5>
                         <div class="review-count">(2)</div>
@@ -301,17 +292,17 @@
                     <md-button class="md-rose md-sm md-simple"> show more <md-icon>add</md-icon></md-button>
                 </div>
 
-                <div class="md-layout-item md-size-5"></div>
+                <div class="md-layout-item md-size-5" ></div>
                 <div class="md-layout-item md-size-95">
                     <ul class="proposal-summary">
-                        <li>
+                        <li style="display: none;">
                             <div class="proposal-info">
                                 <div class="proposal-title">Payment & cost <span><md-icon>attach_money</md-icon> Net +30</span></div>
                                 <div class="proposal-desc">A 50% deposit will be due on or before 18/1/20. The remaining balance will be collected a week prior to the.. <md-button class="md-primary md-simple md-sm read-more no-uppercase">Read more</md-button></div>
                             </div>
                         </li>
 
-                        <li>
+                        <li style="display: none;">
                             <div class="proposal-info">
                                 <div class="proposal-title">Payment & cost <span><md-icon>attach_money</md-icon> Net +30</span></div>
                                 <div class="proposal-desc">A 50% deposit will be due on or before 18/1/20. The remaining balance will be collected a week prior to the.. <md-button class="md-primary md-simple md-sm read-more no-uppercase">Read more</md-button></div>
@@ -323,7 +314,7 @@
                                 <div class="proposal-title">About us</div>
                                 <div class="proposal-desc">{{vendorProposal.aboutUsMessage}}</div>
                             </div>
-                            <div class="attachments-list">
+                            <div class="attachments-list" style="display: none;">
                                 <ul class="attachments-list_items">
                                     <li><a href=""> <md-icon>attach_file</md-icon> Insurance certificate </a></li>
                                     <li><a href=""> <md-icon>attach_file</md-icon> Other business indication </a></li>
@@ -378,15 +369,19 @@
             vendorProposal : null,
             vendorInfo : null,
             serverUrl: process.env.SERVER_URL,
+            tooltipActive: false,
 
         }),
         created () {
+            console.log(this.proposal);
+
             EventComponentProposal.find(this.proposal.id)
                 .then(resp => {
                     this.$set(this,'vendorProposal',resp)
                     this.$set(this,'vendorInfo',resp.vendor);
+                    console.log(resp);
+
                     this.images = resp.attachements.map((item)=>{
-                        console.log(item);
                         return {
                             thumb: this.serverUrl+'/1/proposal-requests/'+this.proposal.id+'/files/' + item,
                             src: this.serverUrl+'/1/proposal-requests/'+this.proposal.id+'/files/' + item,
@@ -396,7 +391,6 @@
                             srcset: this.serverUrl+'/1/proposal-requests/'+this.proposal.id+'/files/' + item,
                         }
                     })
-                    console.log(resp);
                 })
                 .catch(error => {
                     console.log(' error here   -->>>  ', error)
@@ -421,15 +415,12 @@
                 "text-right": id
             }),
             view(){
-                console.log('i am here')
                 if ( this.viewImages ) {
-                    console.log('true');
                     this.viewImages = false;
 
                     setTimeout(()=>{this.viewImages = true;},100);
 
                 } else {
-                    console.log('false');
                     this.viewImages = true;
                 }
             },
@@ -447,13 +438,8 @@
             }
         },
         computed: {
-            subtotal(){
-                let subtotal = 0;
-                this.vendorProposal.costBreakdown.forEach((item) => {
-                    console.log(item);
-                    subtotal += item.cost;
-                })
-                return subtotal;
+            extraMissingRequirements(){
+                return _.union(this.vendorProposal.extras,this.vendorProposal.missing)
             }
         }
     }

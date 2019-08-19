@@ -1108,6 +1108,10 @@ $tooltip-border-color: $blue-grey-200 !default;
                     }
 
                 }
+
+                .md-table-row.disabled {
+                    opacity: 0.3;
+                }
             }
             &.notes-section {
                 width:40%;

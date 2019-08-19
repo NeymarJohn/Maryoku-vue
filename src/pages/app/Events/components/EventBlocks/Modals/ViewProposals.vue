@@ -19,18 +19,18 @@
                             <event-block-requirements :event="event" :selectedBlock="selectedBlock" :predefinedRequirements="selectedBlock.predefinedRequirements"> </event-block-requirements>
                         </template>
                         <template slot="tab-pane-2" style="width: 100%;">
-                           <div class="manage-proposals_proposals-list" v-if="selectedBlock.proposals.length">
+                            <div class="manage-proposals_proposals-list" v-if="blockVendors.length">
                                 <h4>New or Updated</h4>
-                                <div class="proposals-list_item" v-for="(proposal,index) in selectedBlock.proposals" :key="index">
+                                <div class="proposals-list_item" v-for="(item,index) in blockVendors" :key="index">
                                     <div class="proposal-info text-left">
-                                        <div class="proposal-title-reviews">{{ proposal.vendor ? proposal.vendor.vendorDisplayName : 'No Vendor Title' }}
+                                        <div class="proposal-title-reviews">{{ item.vendor ? item.vendor.vendorDisplayName : 'No Vendor Title' }}
                                             <div class="star-rating">
                                                 <label class="star-rating__star"
                                                        v-for="rating in ratings"
-                                                       :class="{'is-selected' : ((proposal.cost >= rating) && proposal.cost != null)}"
+                                                       :class="{'is-selected' : ((item.vendor.rank >= rating) && item.vendor.rank != null)}"
                                                 >
                                                     <input class="star-rating star-rating__checkbox" type="radio"
-                                                           v-model="proposal.coste">★</label>
+                                                           >★</label>
                                             </div>
                                         </div>
                                         <div class="proposal-property-list">
@@ -48,15 +48,17 @@
                                         </div>
                                     </div>
                                     <div class="proposal-actions text-right">
-                                        <div class="cost">${{proposal.cost}}</div>
+                                        <div class="cost"  v-if="item.proposals">${{item.proposals[0].cost}}</div>
 
-                                        <md-button class="md-primary md-sm" @click="manageProposalsAccept(proposal)">Accept</md-button>
-                                        <md-button class="md-rose md-sm" @click="viewProposal(proposal)">View</md-button>
+                                        <md-button class="md-primary md-sm" v-if="item.proposals" @click="manageProposalsAccept(item.proposals[0])">Accept</md-button>
+                                        <md-button class="md-rose md-sm"  v-if="item.proposals" @click="viewProposal(item.proposals[0])">View</md-button>
                                     </div>
                                 </div>
 
                                 <md-button class="md-default show-more-btn" v-if="selectedBlock.proposals.length"> Show more</md-button>
                             </div>
+
+
                             <manage-proposals-vendors :building-block.sync="selectedBlock" :event.sync="event"></manage-proposals-vendors>
                         </template>
                         <template slot="tab-pane-3" style="width: 100%;">
@@ -131,6 +133,7 @@
   import CalendarEvent from '@/models/CalendarEvent';
   import Calendar from "@/models/Calendar";
   import EventComponent from "@/models/EventComponent";
+  import EventComponentVendor from "@/models/EventComponentVendor";
   import {Tabs} from '@/components'
 
   import swal from "sweetalert2";
@@ -167,7 +170,8 @@
       isLoaded : false,
       proposalsToDisplay : 1,
       ratings: [1, 2, 3, 4, 5],
-      requirementsLength : 0
+      requirementsLength : 0,
+        blockVendors : []
     }),
 
     created() {
@@ -176,13 +180,14 @@
     mounted() {
       this.requirementsLength = this.selectedBlock.values.length;
 
-      console.log('selectedBlock => ',this.selectedBlock);
 
       this.$nextTick(()=>{
         if (this.$refs.proposalsTabs) {
           this.$refs.proposalsTabs.$emit('event-planner-nav-switch-panel', this.tab)
         }
       });
+
+      this.getBlockVendors();
     },
     methods: {
 
@@ -251,7 +256,28 @@
           openOn: 'right',
           props: {event: this.event, selectedBlock: this.selectedBlock}
         })
-      }
+      },
+        getBlockVendors() {
+
+            this.isLoading = true;
+
+            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+            let selected_block = new EventComponent({id : this.selectedBlock.id});
+
+            new EventComponentVendor().for(calendar, event, selected_block).get()
+                .then(resp => {
+                    this.isLoading = false;
+                    this.blockVendors = resp;
+
+                    console.log('this.blockVendors => ', this.blockVendors);
+                })
+                .catch(error => {
+                    this.isLoading = false;
+                    console.log('EventComponentVendor error =>',error)
+
+                })
+        }
     },
     computed: {
 

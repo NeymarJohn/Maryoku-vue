@@ -884,25 +884,38 @@
     computed: {
       totalOffer () {
         let total = parseInt(this.proposalRequest.requirementsCategoryCost);
+          let vm = this;
 
         this.proposalRequest.requirements.map(function (item) {
 
-          if (item.price) {
-            total += parseInt(item.price)
-          }
+            if (item.price) {
+                if ( item.priceUnit === "total") {
+                    total += parseInt(item.price)
+                } else {
+                    total += parseInt(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants)
+                }
+            }
 
         })
         return total
       },
       extraTotal () {
         let total = 0
+          let vm = this;
         this.proposalRequest.requirements.map(function (item) {
 
+            console.log(item);
+
           if (item.price) {
-            total += parseInt(item.price)
+              if ( item.priceUnit === "total") {
+                  total += parseInt(item.price)
+              } else {
+                  total += parseInt(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants)
+              }
           }
 
         })
+          this.$forceUpdate();
         return total
       }
     }
