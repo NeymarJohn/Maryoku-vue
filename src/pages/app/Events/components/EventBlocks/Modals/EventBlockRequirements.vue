@@ -25,7 +25,32 @@
                             </li>
                         </ul>
                         <div>&nbsp;</div>
-                        <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-if="eventBlockRequirements && eventBlockRequirements.length" v-model="eventBlockRequirements">
+                        <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-if="eventBlockRequirements && eventBlockRequirements.length" v-model="filteredEventBlockRequirements">
+
+                            <md-table-toolbar >
+                                <div class="md-toolbar-section-start">
+                                    <md-field>
+                                        <md-input
+                                            type="search"
+                                            class="mb-3"
+                                            clearable
+                                            placeholder="Search requirements"
+                                            v-model="searchQuery">
+                                        </md-input>
+                                    </md-field>
+                                </div>
+                                <div class="md-toolbar-section-end" v-if="false">
+                                    <md-button class="md-icon-button">
+                                        <md-icon>delete</md-icon>
+                                    </md-button>
+                                </div>
+                            </md-table-toolbar>
+
+                            <md-table-empty-state
+                                :md-description="`No requirements found for '${searchQuery}'. Try a different search term or create a new requirement.`">
+                                <md-button class="md-primary md-raised" @click="addNewValue">Add Requirement</md-button>
+                            </md-table-empty-state>
+
                             <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" >
                                 <md-table-cell >
                                     <event-block-requirement :delete-value="deleteValue" :requirement.sync="item" :event-id="event.id" :selected-block-id="selectedBlock.id"></event-block-requirement>
@@ -86,6 +111,8 @@
       // auth: auth,
       isLoading: false,
       eventBlockRequirements: [],
+      filteredEventBlockRequirements: [],
+      searchQuery: "",
       dummyList : [
         {
           title: "",
@@ -129,6 +156,7 @@
 
         });*/
         this.eventBlockRequirements = this.selectedBlock.values;
+        this.filteredEventBlockRequirements = this.eventBlockRequirements;
         this.$root.$emit('refreshRequirementsLength',this.eventBlockRequirements.length);
         if ( newValueId ) {
 
@@ -303,9 +331,19 @@
           this.selectedBlock.values.splice(0,0, requirement);
           this.getBuildingBlockValues();
         }
-      }
+      },
+      filterRequirements(){
+        this.filteredEventBlockRequirements = _.filter(this.eventBlockRequirements, (v)=>{
+          return v.title.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
+        });
+      },
     },
-    computed: {}
+    computed: {},
+    watch: {
+      searchQuery(newVal, oldVal){
+        this.filterRequirements();
+      },
+    }
   };
 </script>
 <style lang="scss" scoped>
