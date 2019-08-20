@@ -19,9 +19,23 @@
                             <event-block-requirements :event="event" :selectedBlock="selectedBlock" :predefinedRequirements="selectedBlock.predefinedRequirements"> </event-block-requirements>
                         </template>
                         <template slot="tab-pane-2" style="width: 100%;">
-                            <div class="manage-proposals_proposals-list" v-if="blockVendors.length">
+                            <div class="manage-proposals_proposals-list" v-if="filteredBlockVendors.length">
                                 <h4>New or Updated</h4>
-                                <div class="proposals-list_item" v-for="(item,index) in blockVendors" :key="index">
+
+                                <div class="md-toolbar-section-start">
+                                    <md-field>
+                                        <md-input
+                                            type="search"
+                                            class="mb-3"
+                                            clearable
+                                            placeholder="Search vendors"
+                                            v-model="searchQuery">
+                                        </md-input>
+                                    </md-field>
+                                </div>
+
+
+                                <div class="proposals-list_item" v-for="(item,index) in filteredBlockVendors" :key="index">
                                     <div class="proposal-info text-left">
                                         <div class="proposal-title-reviews">{{ item.vendor ? item.vendor.vendorDisplayName : 'No Vendor Title' }}
                                             <div class="star-rating">
@@ -33,13 +47,13 @@
                                                            >★</label>
                                             </div>
                                         </div>
-                                        <div class="proposal-property-list">
+                                        <div class="proposal-property-list" style="display: none;">
                                             <ul class="list-items">
                                                 <li> <md-icon>check</md-icon> Insurance</li>
                                                 <li> <md-icon>attach_money</md-icon> Net +30</li>
                                             </ul>
                                         </div>
-                                        <div class="proposal-benefits-list">
+                                        <div class="proposal-benefits-list" style="display: none;">
                                             <ul class="list-items">
                                                 <li> Price within budget,</li>
                                                 <li> meets 90% of requirements,</li>
@@ -48,10 +62,19 @@
                                         </div>
                                     </div>
                                     <div class="proposal-actions text-right">
-                                        <div class="cost"  v-if="item.proposals">${{item.proposals[0].cost}}</div>
+                                        <template v-if="item.proposals && item.proposals[0]">
+                                            <md-button class="md-primary md-sm" v-if="item.proposals" @click="manageProposalsAccept(item.proposals[0])">Accept</md-button>
+                                            <md-button class="md-rose md-sm"  v-if="item.proposals" @click="viewProposal(item.proposals[0])">View</md-button>
+                                            <span class="cost">${{item.proposals[0].cost}}</span>
+                                        </template>
 
-                                        <md-button class="md-primary md-sm" v-if="item.proposals" @click="manageProposalsAccept(item.proposals[0])">Accept</md-button>
-                                        <md-button class="md-rose md-sm"  v-if="item.proposals" @click="viewProposal(item.proposals[0])">View</md-button>
+                                        <md-button v-if="!sendingRfp && (item.rfpStatus === 'Ready to send' || item.rfpStatus == null)" class="md-primary md-sm" @click="sendVendor(item)">
+                                            <md-icon>near_me</md-icon>
+                                            Send RFP
+                                        </md-button>
+                                        <template v-else-if="item.rfpStatus === 'Sent' && !item.proposals.length">
+                                            {{ `Request sent ` }} {{getProposalDate(item.rfpSentMillis)}}
+                                        </template>
                                     </div>
                                 </div>
 
@@ -171,7 +194,11 @@
       proposalsToDisplay : 1,
       ratings: [1, 2, 3, 4, 5],
       requirementsLength : 0,
-        blockVendors : []
+        blockVendors : [],
+        sendingRfp: false,
+        searchQuery: "",
+        filteredBlockVendors : []
+
     }),
 
     created() {
@@ -269,6 +296,8 @@
                 .then(resp => {
                     this.isLoading = false;
                     this.blockVendors = resp;
+                    this.filteredBlockVendors = this.blockVendors;
+
 
                     console.log('this.blockVendors => ', this.blockVendors);
                 })
@@ -277,10 +306,57 @@
                     console.log('EventComponentVendor error =>',error)
 
                 })
-        }
+        },
+        sendVendor(item) {
+            this.isLoading = true;
+
+            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+            let selected_block = new EventComponent({id : this.selectedBlock.id});
+
+            let vendor = new EventComponentVendor(item);
+
+            vendor.id = item.id;
+            vendor.cost = item.cost;
+            vendor.vendor = item.vendor;
+            vendor.vendorId = item.vendorId;
+            vendor.rfpStatus = 'Sent';
+
+            vendor.for(calendar, event, selected_block).save()
+                .then(resp => {
+
+                    this.getBlockVendors();
+
+                    this.$forceUpdate();
+
+                })
+                .catch(error => {
+                    this.isLoading = false;
+                    console.log('EventComponentVendor error =>',error);
+
+                    this.$notify(
+                        {
+                            message: 'Error while trying to add vendor, try again!',
+                            horizontalAlign: 'center',
+                            verticalAlign: 'top',
+                            type: 'danger'
+                        })
+
+                })
+        },
+        filterVendors(){
+            this.filteredBlockVendors = _.filter(this.blockVendors, (v)=>{
+                return v.vendor.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
+            });
+        },
     },
     computed: {
 
-    }
+    },
+      watch : {
+          searchQuery(newVal, oldVal){
+              this.filterVendors();
+          },
+      }
   };
 </script>

@@ -142,8 +142,6 @@
             </tabs>
         </div>
 
-
-
         <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
 
         <!--<sticky-budget :event="event" v-if="routeName !== 'EditEvent' && routeName !== 'EditBuildingBlocks'"></sticky-budget>-->

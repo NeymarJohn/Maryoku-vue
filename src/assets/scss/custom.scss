@@ -794,6 +794,12 @@ $tooltip-border-color: $blue-grey-200 !default;
                     color : $brand-success;
 
                 }
+                span.cost {
+                    display: inline-block;
+                    margin-bottom: 0;
+                    margin-top: 0.3em;
+                    margin-left: 1em;
+                }
             }
         }
     }

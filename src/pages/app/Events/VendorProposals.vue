@@ -147,9 +147,13 @@
                                                 <md-input type="number" v-model="item.requirementValue"
                                                           @blur="updateProposalRequest"></md-input>
                                             </md-field>
-                                            <md-button class="md-rose md-simple" v-if="item.itemNotAvailable">
+                                            <md-button class="md-success md-simple" v-if="!item.itemNotAvailable" @click="item.itemNotAvailable = !item.itemNotAvailable; updateProposalRequest();">
+                                                <md-icon>check</md-icon>
+                                                Mark as available
+                                            </md-button>
+                                            <md-button class="md-rose md-simple" v-if="item.itemNotAvailable" @click="item.itemNotAvailable = !item.itemNotAvailable; updateProposalRequest();">
                                                 <md-icon>block</md-icon>
-                                                Item not available
+                                                Mark as not available
                                             </md-button>
                                             <md-button class="md-primary md-simple" v-if="!(item.comments && item.comments.length)"
                                                        @click="item.showCommentForm =  true; item.addedComment = false; $forceUpdate();">
