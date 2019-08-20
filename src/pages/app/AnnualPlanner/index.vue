@@ -131,14 +131,14 @@
 
                             let user = Me.find(this.$auth.user.me.id);
                             user.plannerPageVisited = true;
-                            user.save();
+                            new Me(user).save();
 
                             this.$auth.user.me.plannerPageVisited = true;
                         })
 
                         // this.$tours['plannerTour'].start();
                     }
-                    
+
                 }.bind(this))
             }
         },
@@ -158,7 +158,7 @@
                         statistics.forEach(function(data){
                             statisticMap[data.item] = data.value
                         });
-                                                
+
                         this.statisticsData = statisticMap;
 
                         this.checkSelectedYearMonth();
