@@ -81,6 +81,78 @@
                 </template>
             </product-card>
         </div>
+        <!--<div
+            class="md-layout-item md-small-size-100 md-medium-size-50 md-large-size-33"
+            v-for="vendor in vendorsList"
+            :key="vendor.id"
+        >
+            <md-card>
+                <md-card-content style="padding: 15px;">
+                    <div class="md-layout">
+                        <div class="md-layout-item md-size-100" style="padding: 0;">
+                            <div class="md-layout" style="margin: 0 -12px; ">
+                                <div class="md-layout-item md-size-50">
+                                    <div
+                                        style="background:url('/static/img/lock.jpg') no-repeat center center; height:100%; width:100%; background-size: cover; box-shadow: 0 0 3px #c0c0c0; border-radius: 5px; text-align: center;"
+                                    >
+                                        <div
+                                            class="badge badge-rose"
+                                            :class="`badge-${categoryColor(vendor.vendorCategory, buildingBlocksList)}`"
+                                            style="font-size: 10px !important; position: relative; top: 90%;"
+                                        >{{ categoryTitle(vendor.vendorCategory, buildingBlocksList) }}</div>
+                                    </div>
+                                </div>
+                                <div class="md-layout-item md-size-50">
+                                    <h5 class="title ellipsis" style="font-weight: 700; white-space: nowrap;">{{vendor.vendorDisplayName}}</h5>
+                                    <div class>
+                                        <label
+                                            class="star-rating__star"
+                                            v-for="(rating, ratingIndex) in ratings"
+                                            :key="ratingIndex"
+                                            :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}"
+                                        >★</label>
+                                        <span class="small text-gray">({{vendor.voters}})</span>
+                                    </div>
+                                    <div class="item-content ellipsis" style="min-height: 80px; max-height: 80px;">
+                                        <div>
+                                            <p>{{vendor.vendorTagLine}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </md-card-content>
+                <md-card-actions md-alignment="space-between">
+                    <div>
+                        <md-chips
+                            v-model="vendor.vendorTagging"
+                            style="padding: 0; margin: 0;"
+                            class="md-primary"
+                            name="tagging"
+                            id="tagging"
+                            :md-deletable="false"
+                            :md-static="true"
+                        />
+                    </div>
+                    <div>
+                        <md-button :href="`${vendor.vendorWebsite}`" target="_blank" class="text-info md-sm md-simple md-round md-just-icon clear-margins">
+                            <md-icon>chat_bubble</md-icon>
+                            <md-tooltip>Contact</md-tooltip>
+                        </md-button>
+                        <md-button :href="`${vendor.vendorWebsite}`" target="_blank" class="text-info md-sm md-simple md-round md-just-icon clear-margins">
+                            <md-icon>open_in_browser</md-icon>
+                            <md-tooltip>Website</md-tooltip>
+                        </md-button>
+                        <md-button @click="showVendorDetails(vendor)" target="_blank" class="text-info md-small md-simple md-round md-just-icon clear-margins">
+                            <md-icon>more_horiz</md-icon>
+                            <md-tooltip>Details</md-tooltip>
+                        </md-button>
+                        &lt;!&ndash;<md-button class="md-simple md-round md-xs md-info md-just-icon" @click="showVendorDetails(vendor)"><md-icon>chevron_right</md-icon></md-button>&ndash;&gt;
+                    </div>
+                </md-card-actions>
+            </md-card>
+        </div>-->
     </div>
 </template>
 <script>

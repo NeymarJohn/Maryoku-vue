@@ -19,41 +19,27 @@
                             <event-block-requirements :event="event" :selectedBlock="selectedBlock" :predefinedRequirements="selectedBlock.predefinedRequirements"> </event-block-requirements>
                         </template>
                         <template slot="tab-pane-2" style="width: 100%;">
-                            <div class="manage-proposals_proposals-list" v-if="filteredBlockVendors.length">
+                            <!--&lt;!&ndash;<div class="manage-proposals_proposals-list" v-if="selectedBlock.proposals">
                                 <h4>New or Updated</h4>
-
-                                <div class="md-toolbar-section-start">
-                                    <md-field>
-                                        <md-input
-                                            type="search"
-                                            class="mb-3"
-                                            clearable
-                                            placeholder="Search vendors"
-                                            v-model="searchQuery">
-                                        </md-input>
-                                    </md-field>
-                                </div>
-
-
-                                <div class="proposals-list_item" v-for="(item,index) in filteredBlockVendors" :key="index">
+                                <div class="proposals-list_item" v-for="(proposal,index) in selectedBlock.proposals" :key="index">
                                     <div class="proposal-info text-left">
-                                        <div class="proposal-title-reviews">{{ item.vendor ? item.vendor.vendorDisplayName : 'No Vendor Title' }}
+                                        <div class="proposal-title-reviews">{{ proposal.vendor ? proposal.vendor.vendorDisplayName : 'No Vendor Title' }}
                                             <div class="star-rating">
                                                 <label class="star-rating__star"
                                                        v-for="rating in ratings"
-                                                       :class="{'is-selected' : ((item.vendor.rank >= rating) && item.vendor.rank != null)}"
+                                                       :class="{'is-selected' : ((proposal.cost >= rating) && proposal.cost != null)}"
                                                 >
                                                     <input class="star-rating star-rating__checkbox" type="radio"
-                                                           >★</label>
+                                                           v-model="proposal.coste">★</label>
                                             </div>
                                         </div>
-                                        <div class="proposal-property-list" style="display: none;">
+                                        <div class="proposal-property-list">
                                             <ul class="list-items">
                                                 <li> <md-icon>check</md-icon> Insurance</li>
                                                 <li> <md-icon>attach_money</md-icon> Net +30</li>
                                             </ul>
                                         </div>
-                                        <div class="proposal-benefits-list" style="display: none;">
+                                        <div class="proposal-benefits-list">
                                             <ul class="list-items">
                                                 <li> Price within budget,</li>
                                                 <li> meets 90% of requirements,</li>
@@ -62,26 +48,15 @@
                                         </div>
                                     </div>
                                     <div class="proposal-actions text-right">
-                                        <template v-if="item.proposals && item.proposals[0]">
-                                            <md-button class="md-primary md-sm" v-if="item.proposals" @click="manageProposalsAccept(item.proposals[0])">Accept</md-button>
-                                            <md-button class="md-rose md-sm"  v-if="item.proposals" @click="viewProposal(item.proposals[0])">View</md-button>
-                                            <span class="cost">${{item.proposals[0].cost}}</span>
-                                        </template>
+                                        <div class="cost">${{proposal.cost}}</div>
 
-                                        <md-button v-if="!sendingRfp && (item.rfpStatus === 'Ready to send' || item.rfpStatus == null)" class="md-primary md-sm" @click="sendVendor(item)">
-                                            <md-icon>near_me</md-icon>
-                                            Send RFP
-                                        </md-button>
-                                        <template v-else-if="item.rfpStatus === 'Sent' && !item.proposals.length">
-                                            {{ `Request sent ` }} {{getProposalDate(item.rfpSentMillis)}}
-                                        </template>
+                                        <md-button class="md-primary md-sm" @click="manageProposalsAccept(proposal)">Accept</md-button>
+                                        <md-button class="md-rose md-sm" @click="viewProposal(proposal)">View</md-button>
                                     </div>
                                 </div>
 
-                                <md-button class="md-default show-more-btn" v-if="selectedBlock.proposals.length"> Show more</md-button>
-                            </div>
-
-
+                                <md-button class="md-default show-more-btn"> Show more</md-button>&ndash;&gt;
+                            </div>-->
                             <manage-proposals-vendors :building-block.sync="selectedBlock" :event.sync="event"></manage-proposals-vendors>
                         </template>
                         <template slot="tab-pane-3" style="width: 100%;">
@@ -156,7 +131,6 @@
   import CalendarEvent from '@/models/CalendarEvent';
   import Calendar from "@/models/Calendar";
   import EventComponent from "@/models/EventComponent";
-  import EventComponentVendor from "@/models/EventComponentVendor";
   import {Tabs} from '@/components'
 
   import swal from "sweetalert2";
@@ -193,12 +167,7 @@
       isLoaded : false,
       proposalsToDisplay : 1,
       ratings: [1, 2, 3, 4, 5],
-      requirementsLength : 0,
-        blockVendors : [],
-        sendingRfp: false,
-        searchQuery: "",
-        filteredBlockVendors : []
-
+      requirementsLength : 0
     }),
 
     created() {
@@ -207,14 +176,11 @@
     mounted() {
       this.requirementsLength = this.selectedBlock.values.length;
 
-
       this.$nextTick(()=>{
         if (this.$refs.proposalsTabs) {
           this.$refs.proposalsTabs.$emit('event-planner-nav-switch-panel', this.tab)
         }
       });
-
-      this.getBlockVendors();
     },
     methods: {
 
@@ -283,80 +249,10 @@
           openOn: 'right',
           props: {event: this.event, selectedBlock: this.selectedBlock}
         })
-      },
-        getBlockVendors() {
-
-            this.isLoading = true;
-
-            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-            let event = new CalendarEvent({id: this.event.id});
-            let selected_block = new EventComponent({id : this.selectedBlock.id});
-
-            new EventComponentVendor().for(calendar, event, selected_block).get()
-                .then(resp => {
-                    this.isLoading = false;
-                    this.blockVendors = resp;
-                    this.filteredBlockVendors = this.blockVendors;
-
-
-                    console.log('this.blockVendors => ', this.blockVendors);
-                })
-                .catch(error => {
-                    this.isLoading = false;
-                    console.log('EventComponentVendor error =>',error)
-
-                })
-        },
-        sendVendor(item) {
-            this.isLoading = true;
-
-            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-            let event = new CalendarEvent({id: this.event.id});
-            let selected_block = new EventComponent({id : this.selectedBlock.id});
-
-            let vendor = new EventComponentVendor(item);
-
-            vendor.id = item.id;
-            vendor.cost = item.cost;
-            vendor.vendor = item.vendor;
-            vendor.vendorId = item.vendorId;
-            vendor.rfpStatus = 'Sent';
-
-            vendor.for(calendar, event, selected_block).save()
-                .then(resp => {
-
-                    this.getBlockVendors();
-
-                    this.$forceUpdate();
-
-                })
-                .catch(error => {
-                    this.isLoading = false;
-                    console.log('EventComponentVendor error =>',error);
-
-                    this.$notify(
-                        {
-                            message: 'Error while trying to add vendor, try again!',
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'danger'
-                        })
-
-                })
-        },
-        filterVendors(){
-            this.filteredBlockVendors = _.filter(this.blockVendors, (v)=>{
-                return v.vendor.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
-            });
-        },
+      }
     },
     computed: {
 
-    },
-      watch : {
-          searchQuery(newVal, oldVal){
-              this.filterVendors();
-          },
-      }
+    }
   };
 </script>

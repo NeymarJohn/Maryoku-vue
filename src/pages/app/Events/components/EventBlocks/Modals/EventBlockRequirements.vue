@@ -25,45 +25,95 @@
                             </li>
                         </ul>
                         <div>&nbsp;</div>
-                        <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-if="eventBlockRequirements && eventBlockRequirements.length" v-model="filteredEventBlockRequirements">
+                        <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-if="eventBlockRequirements && eventBlockRequirements.length" v-model="eventBlockRequirements">
+                            <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" >
+                                <md-table-cell >
+                                    <event-block-requirement :delete-value="deleteValue" :requirement.sync="item"></event-block-requirement>
+                                </md-table-cell>
+                            </md-table-row>
+                        </md-table>
+                        <!--<md-table v-if="eventBlockRequirements && eventBlockRequirements.length" v-model="eventBlockRequirements" table-header-color="orange"
+                                  class="requirements-table">
+                            <md-table-row slot="md-table-row" slot-scope="{ item, index }"
+                                          :key="eventBlockRequirements.indexOf(item)" >
+                                <md-table-cell md-label="Requirement" class="requirement-title">
+                                    <div class="field-section">
+                                        <label-edit :text="item.title"
+                                                    :field-name="item.id.toString()"
+                                                    :scope="`title`"
+                                                    @text-updated-blur="editValue"
+                                                    @text-updated-enter="editValue"></label-edit>
 
-                            <md-table-toolbar >
-                                <div class="md-toolbar-section-start">
-                                    <md-field>
-                                        <md-input
-                                            type="search"
-                                            class="mb-3"
-                                            clearable
-                                            placeholder="Search requirements"
-                                            v-model="searchQuery">
-                                        </md-input>
-                                    </md-field>
-                                </div>
-                                <div class="md-toolbar-section-end" v-if="false">
-                                    <md-button class="md-icon-button">
-                                        <md-icon>delete</md-icon>
+                                        <md-button class="md-rose md-just-icon md-simple" @click="editItemDescription(item)">
+                                            <md-icon>comment</md-icon>
+                                        </md-button>
+                                    </div>
+
+
+                                    <div class="item-description-field" v-if="item.editMode">
+                                        <md-field>
+                                            <md-textarea
+                                                v-model="item.comment"
+                                                placeholder="Add Description here"
+                                                type="text"
+                                                :rows="item.comment ? parseInt(item.comment.length / 33) + 1 : 2"
+                                                @change="itemChanged(item)"
+                                            ></md-textarea>
+                                        </md-field>
+                                    </div>
+
+                                </md-table-cell>
+
+                                <md-table-cell md-label="Amount" class="requirement-amount">
+                                    &lt;!&ndash;<span class="dollar-sign">$</span>&ndash;&gt;
+                                    <label-edit :text="item.value"
+                                                :field-name="item.id.toString()"
+                                                :scope="`value`"
+                                                @text-updated-blur="editValue"
+                                                @text-updated-enter="editValue"></label-edit>
+                                </md-table-cell>
+
+                                <md-table-cell md-label="Must Have?" class="requirement-must-have">
+                                    <md-checkbox v-model="item.mandatory" @change="mustHaveChanged(item)"></md-checkbox>
+                                </md-table-cell>
+
+                                <md-table-cell md-label="">
+                                    <md-button
+                                        class="md-danger md-sm md-just-icon event-building-blocks-requirements-delete"
+                                        @click="deleteValue(item.id)">
+                                        <md-icon>delete_outline</md-icon>
                                     </md-button>
-                                </div>
-                            </md-table-toolbar>
-
-                            <md-table-empty-state
-                                :md-description="`No requirements found for '${searchQuery}'. Try a different search term or create a new requirement.`">
-                                <md-button class="md-primary md-raised" @click="addNewValue">Add Requirement</md-button>
-                            </md-table-empty-state>
-
-                            <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" >
-                                <md-table-cell >
-                                    <event-block-requirement :delete-value="deleteValue" :requirement.sync="item" :event-id="event.id" :selected-block-id="selectedBlock.id"></event-block-requirement>
                                 </md-table-cell>
+
+
                             </md-table-row>
                         </md-table>
-                        <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-else v-model="dummyList">
-                            <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" >
-                                <md-table-cell >
-                                    <event-block-requirement :delete-value="deleteValue" :requirement.sync="item" :event-id="event.id" :selected-block-id="selectedBlock.id" @requirement-saved="requirementSaved"></event-block-requirement>
-                                </md-table-cell>
-                            </md-table-row>
-                        </md-table>
+                        <div v-else>
+                            <md-table v-model="dummyList" table-header-color="orange"
+                                      class="requirements-table">
+                                <md-table-row slot="md-table-row" style="opacity:0.4; background : #efefef;" slot-scope="{ item, index }"
+                                              :key="dummyList.indexOf(item)"
+                                >
+                                    <md-table-cell md-label="Title">
+                                        {{item.title}}
+                                    </md-table-cell>
+                                    <md-table-cell md-label="Description">
+                                        {{'No Description'}}
+                                    </md-table-cell>
+                                    <md-table-cell md-label="Priority">
+                                        {{'Must Have'}}
+                                    </md-table-cell>
+
+                                    <md-table-cell md-label="Actions">
+                                    </md-table-cell>
+                                </md-table-row>
+                            </md-table>
+                        </div>
+                        <div class="pull-left">
+                            <md-button class="md-default md-simple add-new-requirements"  @click="addNewValue">
+                                Add New <md-icon>add</md-icon>
+                            </md-button>
+                        </div>-->
                     </md-card-content>
                 </md-card>
 
@@ -111,15 +161,9 @@
       // auth: auth,
       isLoading: false,
       eventBlockRequirements: [],
-      filteredEventBlockRequirements: [],
-      searchQuery: "",
       dummyList : [
         {
-          title: "",
-          value: 1,
-          comment: "",
-          mandatory: true,
-          editMode: true
+          title : this.predefinedRequirements ? this.predefinedRequirements[0].title : 'No Title'
         }
       ]
     }),
@@ -127,7 +171,11 @@
     created() {
     },
     mounted() {
+
       this.getBuildingBlockValues();
+
+      // put dummy item
+      this.dummyList[0].title = this.predefinedRequirements ? this.predefinedRequirements[0].title : 'No Title';
     },
     methods: {
       closePanel() {
@@ -156,7 +204,6 @@
 
         });*/
         this.eventBlockRequirements = this.selectedBlock.values;
-        this.filteredEventBlockRequirements = this.eventBlockRequirements;
         this.$root.$emit('refreshRequirementsLength',this.eventBlockRequirements.length);
         if ( newValueId ) {
 
@@ -175,9 +222,7 @@
 
         let new_value = {
           eventComponent: {id: this.selectedBlock.id},
-          editMode : true,
-          mandatory: true,
-          value: 1
+          editMode : true
         }
 
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
@@ -185,11 +230,9 @@
         let selected_block = new EventComponent({id: this.selectedBlock.id});
 
         new EventComponentValue(new_value).for(calendar, event, selected_block).save().then(res => {
-          let newRequirement = JSON.parse(JSON.stringify(res.item))
-          newRequirement.editMode = true;
-          this.selectedBlock.values.splice(0, 0, newRequirement);
+          this.selectedBlock.values.push(JSON.parse(JSON.stringify(res.item)));
           this.isLoading = false;
-          this.getBuildingBlockValues(newRequirement.id);
+          this.getBuildingBlockValues();
         });
       },
       handleDrop(data) {
@@ -197,8 +240,6 @@
 
         let item = {};
         item.title = data.title;
-        item.value = 1;
-        item.mandatory = true;
         item.eventComponent = {id: this.selectedBlock.id};
         item.editMode= true;
 
@@ -207,10 +248,9 @@
         let selected_block = new EventComponent({id: this.selectedBlock.id});
 
         new EventComponentValue(item).for(calendar, eventObject, selected_block).save().then(res => {
-          let newRequirement = JSON.parse(JSON.stringify(res.item))
-          this.selectedBlock.values.splice(0, 0, newRequirement);
-          this.getBuildingBlockValues(res.item.id);
+
           this.isLoading = false;
+          this.getBuildingBlockValues(res.item.id);
         });
 
 
@@ -324,26 +364,9 @@
       },
       mustHaveChanged (item) {
         this.editRequirementItemProperty('mandatory',item.mandatory,item);
-      },
-      requirementSaved(requirement){
-        let item = _.findWhere(this.eventBlockRequirements,{id : requirement.id});
-        if (!item){
-          this.selectedBlock.values.splice(0,0, requirement);
-          this.getBuildingBlockValues();
-        }
-      },
-      filterRequirements(){
-        this.filteredEventBlockRequirements = _.filter(this.eventBlockRequirements, (v)=>{
-          return v.title.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
-        });
-      },
+      }
     },
-    computed: {},
-    watch: {
-      searchQuery(newVal, oldVal){
-        this.filterRequirements();
-      },
-    }
+    computed: {}
   };
 </script>
 <style lang="scss" scoped>

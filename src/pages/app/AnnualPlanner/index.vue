@@ -67,26 +67,7 @@
                 queryInProgress: false,
                 metaDataInProgress: false,
                 plannerPageVisited: true,
-                tourSteps: [
-                    // {
-                    //     target: '#tour-step-0',  // We're using document.querySelector() under the hood
-                    //     content: `Start your yearly plan by setting up your annual budget. You can set your budget either by employee or by total sum`,
-                    //     params: {
-                    //         placement: 'right'
-                    //     }
-                    // },
-                    // {
-                    //     target: '#tour-step-1',
-                    //     content: 'Filter occasions by category, country, or religin to discover special days that you may want to celebrate'
-                    // },
-                    // {
-                    //     target: '#tour-step-2',
-                    //     content: 'Click on any day on the calendar to create an event that takes place on that day',
-                    //     params: {
-                    //         placement: 'left'
-                    //     }
-                    // }
-                ]
+                tourSteps: []
             }
         },
         created() {
@@ -112,33 +93,32 @@
                     if (!this.$auth.user.me.plannerPageVisited) {
                         Tour.params({page: 'planner'}).get().then(steps => {
                             this.tourSteps = [];
+                            console.log('steps', steps);
+                            
                             for (let i in steps) {
                                 let obj = {
-                                    target: '#tour-step-' + i,
-                                    content: steps[i]
+                                    target: steps[i].target || null,
+                                    content: steps[i].content || null,
+                                    params: {
+                                        placement: steps[i].placement || null
+                                    }
                                 };
-
-                                if (i == 0) {
-                                    obj.params.placement = 'right';
-                                } else if (i == 2) {
-                                    obj.params.placement = 'left';
-                                }
 
                                 this.tourSteps.push(obj);
                             }
 
                             this.$tours['plannerTour'].start();
 
-                            let user = Me.find(this.$auth.user.me.id);
-                            user.plannerPageVisited = true;
-                            new Me(user).save();
+                            Me.find(this.$auth.user.me.id).then((user) => {
+                                user.plannerPageVisited = true;
+                                user.save();                            
+                            });    
 
                             this.$auth.user.me.plannerPageVisited = true;
+
                         })
-
-                        // this.$tours['plannerTour'].start();
                     }
-
+                    
                 }.bind(this))
             }
         },
@@ -158,7 +138,7 @@
                         statistics.forEach(function(data){
                             statisticMap[data.item] = data.value
                         });
-
+                                                
                         this.statisticsData = statisticMap;
 
                         this.checkSelectedYearMonth();
