@@ -44,7 +44,7 @@
             </md-field>
           </div>
           <div class="md-layout-item md-size-10" style="text-align: center; margin-top: auto; margin-bottom: auto;">
-            <md-button class="md-info md-md" @click="filterBaseData">Refresh</md-button>
+            <md-button class="md-info md-md annual-planner-filters-refresh-button" @click="filterBaseData">Refresh</md-button>
           </div>
         </div>
 

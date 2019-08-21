@@ -112,13 +112,10 @@
                     if (!this.$auth.user.me.plannerPageVisited) {
                         Tour.params({page: 'planner'}).get().then(steps => {
                             this.tourSteps = [];
-                            console.log('steps', steps);
-                            
                             for (let i in steps) {
                                 let obj = {
                                     target: '#tour-step-' + i,
-                                    content: steps[i],
-                                    params: {}
+                                    content: steps[i]
                                 };
 
                                 if (i == 0) {
@@ -132,18 +129,16 @@
 
                             this.$tours['plannerTour'].start();
 
-                            Me.find(this.$auth.user.me.id).then((user) => {
-                                user.plannerPageVisited = true;
-                                user.save();                            
-                            });    
+                            let user = Me.find(this.$auth.user.me.id);
+                            user.plannerPageVisited = true;
+                            new Me(user).save();
 
                             this.$auth.user.me.plannerPageVisited = true;
-
                         })
 
                         // this.$tours['plannerTour'].start();
                     }
-                    
+
                 }.bind(this))
             }
         },
@@ -163,7 +158,7 @@
                         statistics.forEach(function(data){
                             statisticMap[data.item] = data.value
                         });
-                                                
+
                         this.statisticsData = statisticMap;
 
                         this.checkSelectedYearMonth();
