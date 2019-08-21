@@ -155,18 +155,7 @@
         border-left: 1px dashed #ddd;
     }
 
-    .hover-parent {
-        .hover {
-            opacity: 0;
-            transition: opacity .1s ease-out;
-        }
-        &:hover {
-            .hover {
-                opacity: 1;
-                transition: opacity .3s ease-in;
-            }
-        }
-    }
+
 
     .inline-badge {
         background-color: white;

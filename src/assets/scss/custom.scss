@@ -2627,7 +2627,7 @@ iframe{
                     text-align: center;
                     padding : 0 0.4em;
                     font-size: 14px;
-                    font-family: 'arial',sans-serif;
+                    font-family: 'Roboto','arial',sans-serif;
 
                     &:not(:last-child){
                         border-right : 1px solid #e2e2e2;
@@ -4156,4 +4156,28 @@ iframe{
     margin: 6px 0;
     padding: 0;
     line-height: 0;
+}
+
+.hover-parent {
+    .hover {
+        opacity: 0;
+        transition: opacity .1s ease-out;
+    }
+    &:hover {
+        .hover {
+            opacity: 1;
+            transition: opacity .3s ease-in;
+        }
+    }
+}
+
+.text-bold {
+    font-size: 12px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 2;
+    letter-spacing: normal;
+    text-align: left;
+    color: #292929;
 }

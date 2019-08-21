@@ -1,26 +1,24 @@
 <template>
     <div class="md-layout">
         <div class="md-layout-item md-size-100" style="justify-content: space-between;">
-            <div class="md-group" style="display: inline-block;">
+            <div class="md-group" style="">
                 <md-button
-                  class="md-xs md-icon-button"
-                  :class="[
-                    {'md-white': view == 'grid'},
-                    {'md-info': view == 'list'},
+                    class="md-xs md-icon-button"
+                    :class="[
+                    {'md-white': view === 'list'},
+                    {'md-info': view === 'grid'},
                   ]"
-                  @click.prevent="changeView('list')"
-                >
-                  <md-icon>view_list</md-icon>
+                    @click.prevent="changeView('grid')">
+                    <md-icon>view_module</md-icon>
                 </md-button>
                 <md-button
-                  class="md-xs md-icon-button"
-                  :class="[
-                    {'md-white': view == 'list'},
-                    {'md-info': view == 'grid'},
+                    class="md-xs md-icon-button"
+                    :class="[
+                    {'md-white': view === 'grid'},
+                    {'md-info': view === 'list'},
                   ]"
-                  @click.prevent="changeView('grid')"
-                >
-                  <md-icon>view_module</md-icon>
+                    @click.prevent="changeView('list')">
+                    <md-icon>view_list</md-icon>
                 </md-button>
             </div>
             <div class="pull-right" style="margin: 0 1px;">
@@ -28,72 +26,21 @@
                 <md-button style="display: inline-block;" class="md-purple md-sm" @click="openUploadModal">Import Vendors From Spreadsheet</md-button>
             </div>
         </div>
-        <div class="md-layout-item md-size-100">
-            <!--<md-field>
-                <label>Search</label>
-                <md-input v-model="searchTerm" type="text"></md-input>
-            </md-field>-->
-        </div>
-        <div class="md-layout-item md-size-100" style="min-height: 95vmin;">
+        <div class="md-layout-item md-size-100 clear-margins">
             <vue-element-loading :active="working" spinner="ring" color="#FF547C" background-color="transparent"/>
-            <!-- <div class="md-layout md-gutter ">
-                <div class="md-layout-item md-small-size-100 md-medium-size-50 md-large-size-33" v-for="vendor in vendorsList" :key="vendor.id">
-                    <md-card>
-                        <md-card-content style="padding: 15px;">
-                            <div class="md-layout">
-                                <div class="md-layout-item md-size-100" style="padding: 0;">
-                                    <div class="md-layout" style="margin: 0 -12px; ">
-                                        <div class="md-layout-item md-size-50">
-                                            <div style="background:url('/static/img/lock.jpg') no-repeat center center; height:100%; width:100%; background-size: cover; box-shadow: 0 0 3px #c0c0c0; border-radius: 5px; text-align: center;">
-                                                <div class="badge badge-rose" :class="`badge-${categoryColor(vendor.vendorCategory)}`" style="font-size: 10px !important; position: relative; top: 90%;">{{ categoryTitle(vendor.vendorCategory) }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="md-layout-item md-size-50">
-                                            <h5 class="title" style="font-weight: 700;">
-                                                {{vendor.vendorDisplayName}}
-                                            </h5>
-                                            <div class="">
-                                                <label class="star-rating__star"
-                                                       v-for="(rating, ratingIndex) in ratings"
-                                                       :key="ratingIndex"
-                                                       :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}" >★
-                                                </label> <span class="small text-gray">({{vendor.voters}})</span>
-                                            </div>
-                                            <div class="item-content ellipsis" style="min-height: 80px; max-height: 80px;">
-                                                <div>
-                                                    <p>
-                                                        {{vendor.vendorTagLine}}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                            </div>
-
-                        </md-card-content>
-                        <md-card-actions md-alignment="space-between">
-                            <div>
-                                <md-chips v-model="vendor.vendorTagging" style="padding: 0; margin: 0;" class="md-primary" name="tagging" id="tagging" :md-deletable="false" :md-static="true">{{tag}}</md-chips>
-                            </div>
-                            <md-button class="md-sm md-info" @click="showVendorDetails(vendor)">More ...</md-button>
-                        </md-card-actions>
-                    </md-card>
-                </div>
-            </div> -->
-            <vendors-grid v-if="view == 'grid'"
-              :buildingBlocksList="buildingBlocksList"
-              :vendorsList="vendorsList"
-              :ratings="ratings"
-              @showVendorDetails="showVendorDetails"
+            <vendors-grid v-if="view === 'grid'"
+                          :buildingBlocksList="buildingBlocksList"
+                          :vendorsList="vendorsList"
+                          :ratings="ratings"
+                          @showVendorDetails="showVendorDetails"
             />
-            <vendors-list v-if="view == 'list'"
-              :buildingBlocksList="buildingBlocksList"
-              :vendorsList="vendorsList"
-              @showVendorDetails="showVendorDetails"
-              @delete="showDeleteAlert"
+            <vendors-list v-if="view === 'list'"
+                          :buildingBlocksList="buildingBlocksList"
+                          :vendorsList="vendorsList"
+                          @showVendorDetails="showVendorDetails"
+                          @delete="showDeleteAlert"
+                          @add-new-vendor="addNewVendor"
+                          @open-upload-modal="openUploadModal"
             />
         </div>
 
