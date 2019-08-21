@@ -743,16 +743,14 @@ $tooltip-border-color: $blue-grey-200 !default;
                 font-weight: 500;
             }
             .proposals-list_item {
-                border-radius: 6px;
-                box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
-                background-color: #ffffff;
                 display: flex;
                 flex : 1;
                 justify-content: space-between;
-                padding : 1em;
+                padding : 2em 1em;
                 font-weight: 500;
-                margin-bottom : 2em;
-
+                &:not(:last-child) {
+                    border-bottom : 1px solid #d2d2d2;
+                }
                 .proposal-title-reviews {
                     font-size: 17px;
                 }
@@ -794,6 +792,18 @@ $tooltip-border-color: $blue-grey-200 !default;
                     color : $brand-success;
 
                 }
+                span.cost {
+                    display: inline-block;
+                    margin-bottom: 0;
+                    margin-top: 0.3em;
+                    margin-left: 1em;
+                }
+            }
+
+            .empty-vendors-list {
+                padding : 3em 0;
+                font-size: 16px;
+                line-height: 24px;
             }
         }
     }
@@ -1108,6 +1118,10 @@ $tooltip-border-color: $blue-grey-200 !default;
                     }
 
                 }
+
+                .md-table-row.disabled {
+                    opacity: 0.3;
+                }
             }
             &.notes-section {
                 width:40%;
@@ -1263,11 +1277,31 @@ $tooltip-border-color: $blue-grey-200 !default;
 .md-switch-info {
     &.md-checked {
         .md-switch-thumb {
-            border: 1px solid #64b5f6 !important;
+            border: 1px solid $blue-300 !important;
         }
 
         .md-switch-container {
-            background-color: #64b5f6 !important;
+            background-color: $blue-300 !important;
+        }
+    }
+}
+
+.md-switch-success {
+    .md-switch-container {
+        background-color: $grey-500 !important;
+    }
+
+    .md-switch-thumb {
+        border: 1px solid $grey-500 !important;
+    }
+
+    &.md-checked {
+        .md-switch-thumb {
+            border: 1px solid $green-500 !important;
+        }
+
+        .md-switch-container {
+            background-color: $green-500 !important;
         }
     }
 }
@@ -1275,11 +1309,11 @@ $tooltip-border-color: $blue-grey-200 !default;
 .md-switch-rose {
     &.md-checked {
         .md-switch-thumb {
-            border: 1px solid #FF547C !important;
+            border: 1px solid $pink-300 !important;
         }
 
         .md-switch-container {
-            background-color: #FF547C !important;
+            background-color: $pink-300 !important;
             margin: auto;
         }
     }
@@ -4117,4 +4151,13 @@ iframe{
             border: none;
         }
     }
+}
+
+.md-switch-small {
+    transform: scale(0.75);
+    display: inline-block;
+    height: 0;
+    margin: 6px 0;
+    padding: 0;
+    line-height: 0;
 }

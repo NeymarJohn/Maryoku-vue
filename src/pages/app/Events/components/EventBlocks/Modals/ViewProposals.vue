@@ -19,45 +19,7 @@
                             <event-block-requirements :event="event" :selectedBlock="selectedBlock" :predefinedRequirements="selectedBlock.predefinedRequirements"> </event-block-requirements>
                         </template>
                         <template slot="tab-pane-2" style="width: 100%;">
-                            <!--&lt;!&ndash;<div class="manage-proposals_proposals-list" v-if="selectedBlock.proposals">
-                                <h4>New or Updated</h4>
-                                <div class="proposals-list_item" v-for="(proposal,index) in selectedBlock.proposals" :key="index">
-                                    <div class="proposal-info text-left">
-                                        <div class="proposal-title-reviews">{{ proposal.vendor ? proposal.vendor.vendorDisplayName : 'No Vendor Title' }}
-                                            <div class="star-rating">
-                                                <label class="star-rating__star"
-                                                       v-for="rating in ratings"
-                                                       :class="{'is-selected' : ((proposal.cost >= rating) && proposal.cost != null)}"
-                                                >
-                                                    <input class="star-rating star-rating__checkbox" type="radio"
-                                                           v-model="proposal.coste">★</label>
-                                            </div>
-                                        </div>
-                                        <div class="proposal-property-list">
-                                            <ul class="list-items">
-                                                <li> <md-icon>check</md-icon> Insurance</li>
-                                                <li> <md-icon>attach_money</md-icon> Net +30</li>
-                                            </ul>
-                                        </div>
-                                        <div class="proposal-benefits-list">
-                                            <ul class="list-items">
-                                                <li> Price within budget,</li>
-                                                <li> meets 90% of requirements,</li>
-                                                <li> low cost per guest.</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="proposal-actions text-right">
-                                        <div class="cost">${{proposal.cost}}</div>
-
-                                        <md-button class="md-primary md-sm" @click="manageProposalsAccept(proposal)">Accept</md-button>
-                                        <md-button class="md-rose md-sm" @click="viewProposal(proposal)">View</md-button>
-                                    </div>
-                                </div>
-
-                                <md-button class="md-default show-more-btn"> Show more</md-button>&ndash;&gt;
-                            </div>-->
-                            <manage-proposals-vendors :building-block.sync="selectedBlock" :event.sync="event"></manage-proposals-vendors>
+                            <event-block-proposal-vendors :event="event" :selectedBlock="selectedBlock"></event-block-proposal-vendors>
                         </template>
                         <template slot="tab-pane-3" style="width: 100%;">
                             <div style="padding-left: 6px;">
@@ -131,6 +93,7 @@
   import CalendarEvent from '@/models/CalendarEvent';
   import Calendar from "@/models/Calendar";
   import EventComponent from "@/models/EventComponent";
+  import EventComponentVendor from "@/models/EventComponentVendor";
   import {Tabs} from '@/components'
 
   import swal from "sweetalert2";
@@ -138,19 +101,17 @@
   import moment from 'moment';
   import VueElementLoading from 'vue-element-loading';
   import _ from "underscore";
-  import ViewProposal from './ViewProposal.vue'
   import EventBlockRequirements from '../Modals/EventBlockRequirements.vue';
-  import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue';
-  import ManageProposalsVendors from './ManageProposalsVendors'
+  import EventBlockProposalVendors from '../Modals/EventBlockProposalVendors.vue';
+
 
 
   export default {
     components: {
-      ManageProposalsVendors,
       VueElementLoading,
       Tabs,
       EventBlockRequirements,
-      ManageProposalsAccept
+      EventBlockProposalVendors
     },
     props: {
       event: Object,
@@ -166,8 +127,8 @@
       // auth: auth,
       isLoaded : false,
       proposalsToDisplay : 1,
-      ratings: [1, 2, 3, 4, 5],
-      requirementsLength : 0
+      requirementsLength : 0,
+
     }),
 
     created() {
@@ -175,6 +136,7 @@
     },
     mounted() {
       this.requirementsLength = this.selectedBlock.values.length;
+
 
       this.$nextTick(()=>{
         if (this.$refs.proposalsTabs) {
@@ -224,35 +186,12 @@
       viewAllProposals() {
         this.proposalsToDisplay  = this.selectedBlock.vendors.length;
       },
-      getProposalDate(eventStartMillis) {
-
-        let x = new Date(eventStartMillis);
-
-        return x.getDate() + '-' + x.getMonth() + '-' + x.getFullYear();
-
-      },
       isThereProposals() {
         return this.selectedBlock.proposals && this.selectedBlock.proposals.length;
-      },
-      viewProposal(proposal) {
-        window.currentPanel = this.$showPanel({
-          component: ViewProposal,
-          cssClass: 'md-layout-item md-size-70 transition36',
-          openOn: 'right',
-          props: {event: this.event, proposal: proposal, selectedBlock : this.selectedBlock}
-        })
-      },
-      manageProposalsAccept(proposal) {
-        window.currentPanel = this.$showPanel({
-          component: ManageProposalsAccept,
-          cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
-          openOn: 'right',
-          props: {event: this.event, selectedBlock: this.selectedBlock}
-        })
       }
     },
     computed: {
+    },
 
-    }
   };
 </script>
