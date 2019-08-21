@@ -302,9 +302,6 @@
 
         this.eventBuildingBlocksList = _.sortBy(this.eventBuildingBlocksList, 'title');
 
-
-        console.log(this.eventBuildingBlocksList);
-
         let allocatedBudget = 0;
         this.eventBuildingBlocks.forEach(item => {
           allocatedBudget += Number(item.allocatedBudget);

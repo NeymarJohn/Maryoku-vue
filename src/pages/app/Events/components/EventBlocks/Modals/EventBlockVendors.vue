@@ -44,7 +44,7 @@
                                         </div>
                                     </md-table-toolbar>
 
-                                    <md-table-row :class="[{'table-warning':item.rfpStatus === 'Sent'}]" slot="md-table-row" slot-scope="{ item }" :key="blockVendors.indexOf(item)" >
+                                    <md-table-row slot="md-table-row" slot-scope="{ item }" :key="blockVendors.indexOf(item)" >
                                         <md-table-cell md-label="Vendor Name"  >
                                             <a href="javascript: void(null);" @click="vendorDetails(item.vendor)">
                                                 {{ item.vendor ? item.vendor.vendorDisplayName :  item.vendor.vendorMainEmail}}
@@ -69,10 +69,10 @@
                                             >
                                                 {{ `Ready` }}
                                             </template>
-                                            <template v-else-if="item.rfpStatus === 'Sent'">
+                                            <template v-else-if="item.rfpStatus == 'Sent'">
                                                 {{ `Request sent ` }} {{getVendorDate(item.rfpSentMillis)}}
                                             </template>
-                                            <template v-else-if="item.rfpStatus === ''">Ready</template>
+                                            <template v-else-if="item.rfpStatus == ''">Ready</template>
                                         </md-table-cell>
                                         <md-table-cell class="vendors-table_item-actions">
                                             <vue-element-loading :active="sendingRfp" spinner="ring" color="#FF547C"></vue-element-loading>
