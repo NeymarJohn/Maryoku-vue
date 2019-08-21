@@ -147,13 +147,9 @@
                                                 <md-input type="number" v-model="item.requirementValue"
                                                           @blur="updateProposalRequest"></md-input>
                                             </md-field>
-                                            <md-button class="md-success md-simple" v-if="!item.itemNotAvailable" @click="item.itemNotAvailable = !item.itemNotAvailable; updateProposalRequest();">
-                                                <md-icon>check</md-icon>
-                                                Mark as available
-                                            </md-button>
-                                            <md-button class="md-rose md-simple" v-if="item.itemNotAvailable" @click="item.itemNotAvailable = !item.itemNotAvailable; updateProposalRequest();">
+                                            <md-button class="md-rose md-simple" v-if="item.itemNotAvailable">
                                                 <md-icon>block</md-icon>
-                                                Mark as not available
+                                                Item not available
                                             </md-button>
                                             <md-button class="md-primary md-simple" v-if="!(item.comments && item.comments.length)"
                                                        @click="item.showCommentForm =  true; item.addedComment = false; $forceUpdate();">
@@ -213,7 +209,7 @@
 
                                 <div class="md-layout-item md-size-20" style="margin-top: auto; margin-bottom: auto; text-align: center;">
                                     <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image"
-                                               @click="uploadEventImage" style="margin-top: auto; margin-bottom: auto; text-align: center;">
+                                               @click="uploadEventImage" style="top: -25px; margin-top: auto; margin-bottom: auto; text-align: center;">
                                         <md-icon>add</md-icon>
                                     </md-button>
                                     <input type="file" style="display: none;" ref="eventFile"
@@ -503,7 +499,85 @@
         isLoading: false,
         readonly: true,
         isMobile: window.innerWidth <= 500 ? true : false,
+        dietaryList: [
+          {
+            id: 1,
+            title: 'Kosher',
+            meals: 4,
+            included_in_price: true,
+            available: false,
+            comments: []
+          },
+          {
+            id: 2,
+            title: 'Vegan',
+            meals: 12,
+            included_in_price: true,
+            available: false,
+            comments: []
+          },
+          {
+            id: 3,
+            title: 'Vegetarian',
+            meals: 5,
+            included_in_price: true,
+            available: false,
+            comments: []
+          }
+        ],
         available_to_deliver: true,
+        mustHaveList: [
+          {
+            id: 1,
+            title: 'Event Coordinator',
+            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
+            included_in_price: true,
+            available: false,
+            comments: []
+          },
+          {
+            id: 2,
+            title: 'Main Venue',
+            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
+            included_in_price: true,
+            available: false,
+            comments: []
+          },
+          {
+            id: 3,
+            title: 'Transportation',
+            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
+            included_in_price: true,
+            available: false,
+            comments: []
+          }
+        ],
+        moreList: [
+          {
+            id: 1,
+            title: 'Waiters',
+            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
+            included_in_price: true,
+            available: false,
+            comments: []
+          },
+          {
+            id: 2,
+            title: 'Main Chef',
+            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
+            included_in_price: true,
+            available: false,
+            comments: []
+          },
+          {
+            id: 3,
+            title: 'Food Menu',
+            desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. minim veniam, quis nostrud exercitation ullamco laboris',
+            included_in_price: true,
+            available: false,
+            comments: []
+          }
+        ],
         vendorImages: [],
         serverUrl: process.env.SERVER_URL,
         imagePreview: null,
@@ -888,38 +962,25 @@
     computed: {
       totalOffer () {
         let total = parseInt(this.proposalRequest.requirementsCategoryCost);
-          let vm = this;
 
         this.proposalRequest.requirements.map(function (item) {
 
-            if (item.price) {
-                if ( item.priceUnit === "total") {
-                    total += parseInt(item.price)
-                } else {
-                    total += parseInt(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants)
-                }
-            }
+          if (item.price) {
+            total += parseInt(item.price)
+          }
 
         })
         return total
       },
       extraTotal () {
         let total = 0
-          let vm = this;
         this.proposalRequest.requirements.map(function (item) {
 
-            console.log(item);
-
           if (item.price) {
-              if ( item.priceUnit === "total") {
-                  total += parseInt(item.price)
-              } else {
-                  total += parseInt(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants)
-              }
+            total += parseInt(item.price)
           }
 
         })
-          this.$forceUpdate();
         return total
       }
     }
