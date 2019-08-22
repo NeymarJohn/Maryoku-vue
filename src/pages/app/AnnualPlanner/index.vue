@@ -5,7 +5,7 @@
         <table style="width: 100%; height: 100%; ">
             <tr>
                 <td style="width: 18%; height: 100%;" >
-                    <budget-panel class="annual-planner-filters-refresh-button" @month-count="monthCount" :statistics="statisticsData" :month="Number(currentMonth)" :year="Number(currentYear)"></budget-panel>
+                    <budget-panel @month-count="monthCount" :statistics="statisticsData" :month="Number(currentMonth)" :year="Number(currentYear)"></budget-panel>
                 </td>
                 <td style="width: 82%; height: 100%;">
                     <calendar-panel @month-count="monthCount" :month="Number(currentMonth)" :year="Number(currentYear)" :firstDayOfTheWeek="firstDayOfTheWeek" :month-counts="monthCounts"></calendar-panel>
@@ -119,7 +119,7 @@
 
                         })
                     }
-                    
+
                 }.bind(this))
             }
         },
@@ -139,7 +139,7 @@
                         statistics.forEach(function(data){
                             statisticMap[data.item] = data.value
                         });
-                                                
+
                         this.statisticsData = statisticMap;
 
                         this.checkSelectedYearMonth();
