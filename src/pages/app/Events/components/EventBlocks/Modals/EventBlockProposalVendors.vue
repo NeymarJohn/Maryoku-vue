@@ -14,16 +14,14 @@
             </div>
 
             <div class="proposals-list_items" v-if="filteredBlockVendors.length">
-                <div class="proposals-list_item" v-for="(item,index) in filteredBlockVendors" :key="index">
+                <div class="proposals-list_item hover-parent" v-for="(item,index) in filteredBlockVendors" :key="index">
                     <div class="proposal-info text-left">
                         <div class="proposal-title-reviews" @click="showVendorDetail(item.vendor)">{{ item.vendor ? item.vendor.vendorDisplayName : 'No Vendor Title' }}
                             <div class="star-rating">
                                 <label class="star-rating__star"
                                        v-for="rating in ratings"
-                                       :class="{'is-selected' : ((item.vendor.rank >= rating) && item.vendor.rank != null)}"
-                                >
-                                    <input class="star-rating star-rating__checkbox" type="radio"
-                                    >★</label>
+                                       :class="{'is-selected' : ((item.vendor.rank >= rating) && item.vendor.rank != null)}">
+                                    <input class="star-rating star-rating__checkbox" type="radio">★</label>
                             </div>
                         </div>
                         <div class="proposal-property-list" style="display: none;">
@@ -32,11 +30,9 @@
                                 <li> <md-icon>attach_money</md-icon> Net +30</li>
                             </ul>
                         </div>
-                        <div class="proposal-benefits-list" style="display: none;">
-                            <ul class="list-items">
-                                <li> Price within budget,</li>
-                                <li> meets 90% of requirements,</li>
-                                <li> low cost per guest.</li>
+                        <div class="proposal-benefits-list" v-if="item.proposals && item.proposals[0]">
+                            <ul class="list-items" >
+                                <li v-for="pro in item.proposals[0].pros"> {{pro}}</li>
                             </ul>
                         </div>
                     </div>
@@ -47,12 +43,13 @@
                             <md-button class="md-rose md-sm"  v-if="item.proposals" @click="viewProposal(item.proposals[0])">View</md-button>
                         </template>
 
-                        <md-button v-if="!sendingRfp && (item.rfpStatus === 'Ready to send' || item.rfpStatus == null)" class="md-primary md-sm" @click="sendVendor(item)">
+                        <md-button v-if="!sendingRfp && (item.rfpStatus === 'Ready to send' || item.rfpStatus == null)" class="md-primary md-sm hover" @click="sendVendor(item)">
                             <md-icon>near_me</md-icon>
-                            Send RFP
+                            Request Proposal
                         </md-button>
                         <template v-else-if="item.rfpStatus === 'Sent' && !item.proposals.length">
-                            {{ `Request sent ` }} {{getProposalDate(item.rfpSentMillis)}}
+                            <span style="font-weight: 300;">Request sent</span> {{getProposalDate(item.rfpSentMillis)}}
+                            <a href="javascript: void(null);" class="small hover" style="display: block;">Request again &rarr;</a>
                         </template>
                     </div>
                 </div>
@@ -221,7 +218,7 @@
 
             let x = new Date(eventStartMillis);
 
-            return x.getDate() + '-' + x.getMonth() + '-' + x.getFullYear();
+            return moment(x).fromNow();
 
         },
         showVendorDetail(vendor){

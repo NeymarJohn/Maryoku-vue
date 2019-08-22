@@ -94,7 +94,7 @@
                         Tour.params({page: 'planner'}).get().then(steps => {
                             this.tourSteps = [];
                             console.log('steps', steps);
-                            
+
                             for (let i in steps) {
                                 let obj = {
                                     target: steps[i].target || null,
@@ -112,8 +112,8 @@
 
                             Me.find(this.$auth.user.me.id).then((user) => {
                                 user.plannerPageVisited = true;
-                                user.save();                            
-                            });    
+                                user.save();
+                            });
 
                             this.$auth.user.me.plannerPageVisited = true;
 
