@@ -29,7 +29,7 @@
                                         <td style="padding-top: 15px; padding-right: 15px;">
                                             <md-card id="tour-step-2" style="margin: 0; height: 100%; overflow: auto;">
                                                 <md-card-content style="height: 100%; text-align: center;">
-                                                    <h3 class="text-gray">{{currentMonthName}}</h3>
+                                                    <h3 class="text-gray annual-planner-month-title">{{currentMonthName}}</h3>
                                                     <table style="width: 100%; height: 90%; text-align: center;">
                                                         <tr>
                                                             <th class="text-gray" v-for="dayOfWeek in weekDays">{{dayOfWeek}}</th>

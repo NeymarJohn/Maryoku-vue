@@ -1,10 +1,10 @@
 <template>
   <div class="md-layout" style="overflow: hidden; height: 100%;">
 
-    <md-card style="padding: 0; margin: 0; height: 100%;">
+    <md-card style="padding: 0; margin: 0; height: 100%;" class="annual-planner-filters-box">
       <md-card-content style="margin-top: auto; margin-bottom: auto; padding-right: 50px;">
 
-        <div class="md-layout" >
+        <div class="md-layout " >
           <div class="md-layout-item md-size-30">
             <md-field>
               <label for="category">Event Categories</label>
