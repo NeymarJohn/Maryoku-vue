@@ -7,6 +7,7 @@
                 </div>
                 <h4 class="title2">{{selected_vendor.vendorDisplayName ? `${selected_vendor.vendorDisplayName}’s Company`: "Create New Vendor"}}</h4>
                 <md-card-actions md-alignment="right">
+                    <md-button   class="md-default md-sm" @click="closePanel">Close</md-button>
                     <md-button v-if="creation_mode" class="md-success md-sm" @click="addVendor" >Create</md-button>
                     <md-button v-else-if="!creation_mode" class="md-info md-sm" @click="saveVendor">Save</md-button>
                 </md-card-actions>
@@ -434,7 +435,10 @@ input[type=number]::-webkit-outer-spin-button {
                 if (!(event.ctrlKey || event.altKey || (47<key && key<58 && event.shiftKey==false) || (95<key && key<106) || (key==8) || (key==9) || (key>34 && key<41) || (key==46))) { // 46 is dot
                     event.preventDefault();
                 }
-            }
+            },
+            closePanel(){
+                this.$emit("closePanel", {a:'b'});
+            },
 
         }
     };

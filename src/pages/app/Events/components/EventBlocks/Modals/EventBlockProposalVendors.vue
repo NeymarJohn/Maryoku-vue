@@ -16,7 +16,7 @@
             <div class="proposals-list_items" v-if="filteredBlockVendors.length">
                 <div class="proposals-list_item" v-for="(item,index) in filteredBlockVendors" :key="index">
                     <div class="proposal-info text-left">
-                        <div class="proposal-title-reviews">{{ item.vendor ? item.vendor.vendorDisplayName : 'No Vendor Title' }}
+                        <div class="proposal-title-reviews" @click="showVendorDetail(item.vendor)">{{ item.vendor ? item.vendor.vendorDisplayName : 'No Vendor Title' }}
                             <div class="star-rating">
                                 <label class="star-rating__star"
                                        v-for="rating in ratings"
@@ -108,7 +108,8 @@
       VendorsTable,
       Pagination,
         ManageProposalsAccept,
-        ManageProposalsVendors
+        ManageProposalsVendors,
+        companyForm
     },
     props: {
       selectedBlock : Object,
@@ -142,6 +143,8 @@
                     let vendorsWithNoStatus =  _.filter(this.blockVendors, function(item){ return !item.proposals });
 
                     this.filteredBlockVendors = _.union( vendorsWithProposals,vendorsWithSentStatus,vendorsWithNoStatus);
+
+                    console.log(this.filteredBlockVendors);
 
                 })
                 .catch(error => {
@@ -221,6 +224,21 @@
             return x.getDate() + '-' + x.getMonth() + '-' + x.getFullYear();
 
         },
+        showVendorDetail(vendor){
+            window.currentPanel = this.$showPanel({
+                component: companyForm,
+                cssClass: 'md-layout-item md-size-70 transition36 ',
+                openOn: 'right',
+                disableBgClick: false,
+                props: {
+                    categories: this.buildingBlocksList,
+                    selected_vendor: vendor,
+                    creation_mode: false,
+                },
+            });
+
+
+        }
 
     },
     created() {
