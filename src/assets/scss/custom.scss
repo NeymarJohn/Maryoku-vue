@@ -4211,4 +4211,25 @@ iframe{
         border-right-color: transparent !important;
         border-top-color: transparent !important;
     }
+
+    &[x-placement^=top] .v-step__arrow {
+        border-color: $brand-primary !important;
+        border-left-color: transparent !important;
+        border-right-color: transparent !important;
+        border-bottom-color: transparent !important;
+    }
+
+    &[x-placement^=left] .v-step__arrow {
+        border-color: $brand-primary !important;
+        border-bottom-color: transparent !important;
+        border-right-color: transparent !important;
+        border-top-color: transparent !important;
+    }
+
+    &[x-placement^=right] .v-step__arrow {
+        border-color: $brand-primary !important;
+        border-left-color: transparent !important;
+        border-bottom-color: transparent !important;
+        border-top-color: transparent !important;
+    }
 }
