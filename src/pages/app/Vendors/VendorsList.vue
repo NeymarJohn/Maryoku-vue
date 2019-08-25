@@ -1,7 +1,7 @@
 <template>
     <md-card class="md-card-plain clear-margins vendors-pool-list">
         <md-card-content>
-            <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-model="filteredVendorsList">
+            <md-table :md-fixed-header="true" md-height="75vh" style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-model="filteredVendorsList">
 
                 <md-table-toolbar >
                     <div class="md-toolbar-section-start">

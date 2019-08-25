@@ -34,7 +34,7 @@
 
                     <div style="padding: 16px;"></div>
 
-                    <div class="text-left annual-planner-annual-budget-per-employee">
+                    <div class="text-left">
                         <h5 style="font-size: 15px !important; font-weight: 300; padding: 0; margin: 0; color: #959595;">Annual budget per employee</h5>
                         <div class="d-flex flex-wrap justify-beetwen items-center-v">
                             <label-edit :numeric="true" :required="true" :text="annualBudgetPerEmployee" field-name="annualBudgetPerEmployee"  @text-updated-blur="saveBudgeData" @text-updated-enter="saveBudgeData" @no-change="closeEditMode"></label-edit>

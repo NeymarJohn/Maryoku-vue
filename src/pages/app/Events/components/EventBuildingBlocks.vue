@@ -101,7 +101,7 @@
                                         </template>
                                         <template v-else-if="block.proposalsState == 'get-offers' ">
                                             <md-button class="md-xs md-primary" @click="reviewProposals(block)">
-                                                Get Proposals
+                                                Manage Vendors
                                                 <md-icon>near_me</md-icon>
                                             </md-button>
                                         </template>
