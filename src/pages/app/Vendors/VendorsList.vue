@@ -1,7 +1,7 @@
 <template>
     <md-card class="md-card-plain clear-margins vendors-pool-list">
         <md-card-content>
-            <md-table :md-fixed-header="true" md-height="75vh" style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-model="filteredVendorsList">
+            <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-model="filteredVendorsList">
 
                 <md-table-toolbar >
                     <div class="md-toolbar-section-start">
@@ -28,7 +28,7 @@
                     <md-button style="display: inline-block;" class="md-purple md-sm" @click="$emit('open-upload-modal')">Import Vendors From Spreadsheet</md-button>
                 </md-table-empty-state>
 
-                <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" class="hover-parent table-striped">
+                <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" class="table-striped">
                     <md-table-cell md-label="Vendor Name" class="text-bold">
                         <a href="javascript: void(null);" @click="showVendorDetails(item)">
                             {{ item.vendorDisplayName}}
