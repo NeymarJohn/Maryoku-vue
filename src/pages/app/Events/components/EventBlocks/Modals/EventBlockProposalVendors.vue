@@ -49,7 +49,7 @@
                         </md-button>
                         <template v-else-if="item.rfpStatus === 'Sent' && !item.proposals.length">
                             <span style="font-weight: 300;">Request sent</span> {{getProposalDate(item.rfpSentMillis)}}
-                            <a href="javascript: void(null);" class="small hover" style="display: block;">Request again &rarr;</a>
+                            <!--<a href="javascript: void(null);" class="small hover" style="display: block;">Request again &rarr;</a>-->
                         </template>
                     </div>
                 </div>
