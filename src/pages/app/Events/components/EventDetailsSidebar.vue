@@ -23,7 +23,7 @@
                     </div>
 
                     <div class="md-layout-item md-size-50">
-                        <div class="md-layout-item  title-text">Guests</div>
+                        <div class="md-layout-item  title-text">Participants</div>
                         <div class="md-layout-item md-size-100 md-caption ">
                             {{calendarEvent.numberOfParticipants}} {{inviteeType(calendarEvent)}}
                         </div>
@@ -69,7 +69,7 @@
                         </h4>
 
 
-                        <h5 class="title-budget-main">Per guest</h5>
+                        <h5 class="title-budget-main">Per employee</h5>
                         <h4
                             class="title"
                             style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">

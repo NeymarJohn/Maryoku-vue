@@ -302,9 +302,6 @@
 
         this.eventBuildingBlocksList = _.sortBy(this.eventBuildingBlocksList, 'title');
 
-
-        console.log(this.eventBuildingBlocksList);
-
         let allocatedBudget = 0;
         this.eventBuildingBlocks.forEach(item => {
           allocatedBudget += Number(item.allocatedBudget);
@@ -403,7 +400,7 @@
       reviewProposals(item, winnerId = null) {
         window.currentPanel = this.$showPanel({
           component: ViewProposals,
-          cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
+          cssClass: 'md-layout-item md-size-70 transition36 bg-white',
           openOn: 'right',
           props: {event: this.event, selectedBlock: item, winnerId : winnerId, tab: winnerId != null ? 3 : 1}
         })

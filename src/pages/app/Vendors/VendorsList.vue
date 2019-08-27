@@ -28,7 +28,7 @@
                     <md-button style="display: inline-block;" class="md-purple md-sm" @click="$emit('open-upload-modal')">Import Vendors From Spreadsheet</md-button>
                 </md-table-empty-state>
 
-                <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" class="table-striped">
+                <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" class="hover-parent table-striped">
                     <md-table-cell md-label="Vendor Name" class="text-bold">
                         <a href="javascript: void(null);" @click="showVendorDetails(item)">
                             {{ item.vendorDisplayName}}

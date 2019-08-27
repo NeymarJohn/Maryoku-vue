@@ -4233,3 +4233,78 @@ iframe{
         border-top-color: transparent !important;
     }
 }
+
+
+.selected-proposals-list {
+    @include display-flex(row,space-between, center);
+    margin-left : 23%;
+    .selected_proposals_item {
+        width : 100%;
+        padding : 1em;
+
+        .md-menu.md-select {
+            background: #efefef;
+            border-radius: 5px;
+            padding: 0 0.5em;
+        }
+        .md-field:not(.md-disabled):after {
+            display: none;
+        }
+        .md-field.md-focused label, .md-field.md-field.md-has-value label {
+            top : -1.8em;
+        }
+    }
+}
+
+.event-blocks-comparison-panel {
+    .services-section {
+        color : #000;
+        font-weight: 400;
+        padding : 1em 0.8em;
+        margin-bottom : 1em;
+
+        &.bg-gray {
+            background: #efefef;
+        }
+        .service-item {
+
+        }
+        .service-title , .service-subtitle{
+            @include display-flex(row,flex-start, center);
+            width : 100%;
+            border-bottom : 1px solid #909090;
+            padding-bottom : 0.4em;
+
+            .title {
+                font-size : 23px;
+                width: 25%;
+                text-transform: capitalize;
+            }
+
+            .subtitle {
+                font-size : 17px;
+                width: 25%;
+                color: #515151;
+            }
+        }
+        .service-items {
+            padding : 2em 0;
+        }
+        .items-list {
+            @include display-flex(row,flex-start, center);
+            padding: 0.4em 0;
+
+        }
+        .item-value {
+            text-align: center;
+            width: 25%;
+            &.red {
+                color : $brand-rose;
+            }
+        }
+        .item-title {
+            width: 25%;
+            text-transform: capitalize;
+        }
+    }
+}
