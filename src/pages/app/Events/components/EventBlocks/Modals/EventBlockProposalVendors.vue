@@ -1,6 +1,6 @@
 <template>
     <div class="adding-building-blocks-panel" style="min-height: 240px;">
-        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee" text="Loading vendors and proposals ..."/>
+        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee"/>
         <div class="manage-proposals_proposals-list" style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);" v-if="filteredBlockVendors.length && !isLoading">
             <div class="md-toolbar-section-start" style="padding : 0 1em;">
                 <md-field>
