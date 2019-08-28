@@ -163,7 +163,6 @@
   import Calendar from '@/models/Calendar'
   import CalendarEvent from '@/models/CalendarEvent'
   import CalendarEventStatistics from '@/models/CalendarEventStatistics'
-  import EventComponent from '@/models/EventComponent'
   import {mapState, mapMutations, mapGetters, mapActions} from 'vuex'
 
   //COMPONENTS
@@ -244,11 +243,11 @@
       this.$refs.eventPlannerTabs.$emit('event-planner-nav-switch-panel',tab);
 
       if (this.components.length === 0) {
-        this.$store.dispatch('event/getComponents', this)
-        this.$store.dispatch('event/getCategories', {data: this.$auth.user.defaultCalendarId, ctx: this})
-        this.$store.dispatch('event/getEventTypes', {data: this.$auth.user.defaultCalendarId, ctx: this})
-        this.$store.dispatch('event/getCurrencies', this)
-        this.$store.dispatch('event/getEventThemes', this);
+        this.$store.dispatch('event/getComponents')
+        this.$store.dispatch('event/getCategories', this.$auth.user.defaultCalendarId)
+        this.$store.dispatch('event/getEventTypes', this.$auth.user.defaultCalendarId)
+        this.$store.dispatch('event/getCurrencies')
+        this.$store.dispatch('event/getEventThemes');
       }
 
       this.$root.$on('calendar-refresh-events',()=>{
@@ -273,10 +272,7 @@
             this.event = event
             this.eventId = event.id
             this.calendarEvent = event
-            new EventComponent().for(_calendar, event).get().then(components =>{
-              this.event.components = components;
-              this.selectedComponents = components;
-            })
+            this.selectedComponents = event.components;
 
             this.getCalendarEventStatistics(event)
 
