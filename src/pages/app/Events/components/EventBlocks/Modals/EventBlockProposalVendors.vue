@@ -42,7 +42,7 @@
                             <div class="cost">${{item.proposals[0].cost}}</div>
                             <md-button class="md-rose md-sm md-simple" v-if="addedToCompare(item.proposals[0].id)" @click="removeFromCompare(item.proposals[0].id)">Remove from compare</md-button>
                             <md-button class="md-success md-sm md-simple" v-if="!addedToCompare(item.proposals[0].id)"@click="addToCompare(item.proposals[0].id)">Add to compare</md-button>
-                            <md-button class="md-primary md-sm" @click="manageProposalsAccept(item.proposals[0])">Accept</md-button>
+                            <md-button class="md-primary md-sm md-simple" @click="manageProposalsAccept(item.proposals[0])">Accept</md-button>
                             <md-button class="md-rose md-sm"   @click="viewProposal(item.proposals[0])">View</md-button>
                         </template>
 

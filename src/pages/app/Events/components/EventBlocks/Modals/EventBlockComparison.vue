@@ -16,7 +16,7 @@
                 </md-field>
                 <md-button class="md-rose md-sm"
                            :class="{ disabled : !proposal.proposals[0] || proposal.proposals[0].cost === undefined }"
-                           @clicl="viewProposal(proposal)"> View Proposal </md-button>
+                           @click="viewProposal(proposal.proposals[0])"> View Proposal </md-button>
                 <div class="proposal-cost" >${{proposal.proposals[0] && proposal.proposals[0].cost !== undefined ? proposal.proposals[0].cost : 0}}</div>
             </div>
         </div>
@@ -72,7 +72,7 @@
                 <div class="service-title">
                     <div class="title">Rating</div>
                 </div>
-                <div class="service-items">
+                <div class="service-items" v-if="proposalsRatings">
                     <div class="items-list">
                         <div class="item-title">Score</div>
                         <div class="item-value" v-for="(rank,indx) in proposalsRatings" :key="indx">
@@ -219,8 +219,10 @@
             let proposal = _.find(this.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === proposalId });
 
             if ( proposal ) {
-                this.$set(this.selectedProposals[index],'proposals', proposal.proposals);
-                vm.categoriesProposalsData();
+                this.$set(this.selectedProposals,index, proposal);
+                setTimeout(()=>{
+                    vm.categoriesProposalsData();
+                },300)
             }
         },
         getProposalCost(proposalId,index){
@@ -250,8 +252,7 @@
 
             _.map(this.selectedProposals,function(value,key){
 
-
-                if ( value.proposals[0].id ) {
+                if ( value.proposals[0].id !== null && value.vendor) {
                     vm.allProposals.push(value.proposals[0]);
                     vm.proposalsRatings.push(value.vendor.rank);
                 }

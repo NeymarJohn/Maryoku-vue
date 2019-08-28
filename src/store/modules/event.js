@@ -8,7 +8,7 @@ const state = {
 
     },
     param1: "test param",
-    eventData: {      
+    eventData: {
       id: null,
       occasion: "",
       occasionCache: "",
@@ -30,7 +30,7 @@ const state = {
     categories: [],
     eventTypes: [],
     eventThemes: [],
-    calendarId: null,    
+    calendarId: null,
 }
 
 const getters = {
@@ -49,13 +49,13 @@ const getters = {
   getComponentsList:(state)=>{
     return state.components;
   },
-  
+
 }
 
 const actions = {
-    getEventThemes({commit,state}){
-    EventTheme
-      .get()
+    getEventThemes({commit,state}, ctx){
+    new EventTheme()
+      .fetch(ctx, false)
       .then(res=>{
           commit("setEventThemes" , res)
       })
@@ -63,9 +63,9 @@ const actions = {
           commit("setEventThemes" , [])
       })
   },
-  async getCurrencies({commit,state}){
-    Currency
-      .get()
+  async getCurrencies({commit,state}, ctx){
+    new Currency()
+      .fetch(ctx, false)
       .then(res=>{
           commit("setCurrencies" , res)
       })
@@ -73,34 +73,34 @@ const actions = {
           commit("setCurrencies" , [])
       })
   },
-  async getCategories({commit,state}, data){
+  async getCategories({commit,state}, {data, ctx}){
     let _calendar = new Calendar({id: data});
-    _calendar.categories().get().then(res => {
+    _calendar.categories().fetch(ctx, false).then(res => {
         commit("setCategories" , res)
     })
     .catch(e=>{
       commit("setCategories" , [])
     });
   },
-  async getEventTypes({commit,state}, data){
+  async getEventTypes({commit,state},{data, ctx}){
     let _calendar = new Calendar({id: data});
-    _calendar.eventTypes().get().then(res => {
+    _calendar.eventTypes().fetch(ctx, false).then(res => {
         commit("setEventTypes" , res)
     })
     .catch(e=>{
       commit("setEventTypes" , [])
     });
   },
-  async getComponents({commit,state}, data){
-    EventComponent
-      .get()
+  async getComponents({commit,state}, ctx){
+    new EventComponent()
+      .fetch(ctx,false)
       .then(res=>{
           commit("setComponents" , res)
       })
       .catch(e=>{
           commit("setComponents" , [])
       })
-  }       
+  }
 }
 
 const mutations = {
@@ -134,7 +134,7 @@ const mutations = {
       setCurrentUserData(state, data){
         state.currentUser = data;
       },
-      
+
 }
 
 export default {
