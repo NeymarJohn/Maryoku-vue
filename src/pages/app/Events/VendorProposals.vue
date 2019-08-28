@@ -405,12 +405,12 @@
                         <h3 class="text-center">You're the {{proposalRequest.bidderRank | numeral('Oo')}} bidder</h3>
 
                         <div class="text-center">
-                            <h5 class="clear-margins">Budget</h5>
+                            <h5 class="clear-margins">Client's budget is</h5>
                             <span class="text-gray">${{proposalRequest.bidRange.low}} - ${{proposalRequest.bidRange.high}}</span>
                         </div>
 
                         <div class="cost-average" v-if="proposalRequest.bidderRank > 1">
-                            <div class="text-center small">Consider former proposals before placing your bid</div>
+                            <div class="text-center small">Current bids range between</div>
                             <div class="cost-average_item">
                                 <h5 class="">Lowest</h5>
                                 <div class="cost">${{proposalRequest.bidRange.low | numeral('0,0')}}</div>

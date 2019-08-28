@@ -1,5 +1,5 @@
 <template>
-    <div class="md-layout hover-parent">
+    <div class="md-layout">
         <vue-element-loading :active="working" spinner="ring" color="#FF547C"></vue-element-loading>
         <div class="md-layout-item md-size-90 clear-margins">
             <md-card class="md-card-plain" style="margin: 8px;" v-if="!requirement.editMode">
