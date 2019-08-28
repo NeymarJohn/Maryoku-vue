@@ -1,8 +1,8 @@
 <template>
     <div class="md-layout" style="padding: 0; margin: 0;">
+        <vue-element-loading :active="isLoading" spinner="ring" is-full-screen color="#FF547C" isFullScreen/>
         <div class="md-layout-item mx-auto event-building-blocks">
             <md-card  >
-
 
                 <md-card-header  class="md-card-header-text md-card-header-warning">
                     <div class="card-text">
@@ -13,7 +13,7 @@
                 </md-card-header>
 
                 <md-card-content class="md-layout">
-                    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
+
                     <table style="width:100%;" class="table event-building-blocks_table" v-if="eventBuildingBlocksList.length">
                         <thead>
                         <tr class="md-warning" style="text-align: center;">
@@ -303,14 +303,12 @@
         this.eventBuildingBlocksList = _.sortBy(this.eventBuildingBlocksList, 'title');
 
         let allocatedBudget = 0;
-        if (this.eventBuildingBlocks) {
-          this.eventBuildingBlocks.forEach(item => {
-            allocatedBudget += Number(item.allocatedBudget);
-          });
-        }
+        this.eventBuildingBlocks.forEach(item => {
+          allocatedBudget += Number(item.allocatedBudget);
+        });
 
         this.allocatedBudget = allocatedBudget;
-        this.isLoading = this.event.componentsCount !== this.event.components.length;
+        this.isLoading = false;
       },
       showAddBuildingBlocksModal() {
         window.currentPanel = this.$showPanel({
@@ -451,10 +449,6 @@
     },
     watch: {
       event(newVal, oldVal) {
-        // Get default event building blocks
-        this.getEventBuildingBlocks();
-      },
-      eventComponents(newVal, oldVal) {
         // Get default event building blocks
         this.getEventBuildingBlocks();
       }

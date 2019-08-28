@@ -82,12 +82,11 @@
             this.isLoading = true;
             if (this.categories.length === 0 || this.eventTypes.length === 0 || this.currencies.length === 0) {
                 this.metaDataInProgress = true;
-
-                this.$auth.currentUser(this, true, () => {
-                    this.$store.dispatch("event/getCategories", {data: this.$auth.user.defaultCalendarId, ctx: this});
-                    this.$store.dispatch("event/getEventTypes", {data: this.$auth.user.defaultCalendarId, ctx: this});
-                    this.$store.dispatch("event/getCurrencies", this);
-                    this.$store.dispatch("event/getEventThemes", this);
+                this.$auth.currentUser(this, true, function() {
+                    this.$store.dispatch("event/getCategories", this.$auth.user.defaultCalendarId);
+                    this.$store.dispatch("event/getEventTypes", this.$auth.user.defaultCalendarId);
+                    this.$store.dispatch("event/getCurrencies");
+                    this.$store.dispatch("event/getEventThemes");
 
                     this.metaDataInProgress = false;
 
@@ -121,7 +120,7 @@
                         })
                     }
 
-                });
+                }.bind(this))
             }
         },
         methods: {

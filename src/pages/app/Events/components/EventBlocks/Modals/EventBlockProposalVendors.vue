@@ -40,7 +40,8 @@
                     <div class="proposal-actions text-right">
                         <template v-if="item.proposals && item.proposals[0]">
                             <div class="cost">${{item.proposals[0].cost}}</div>
-                            <md-button class="md-primary md-sm" @click="addToCompare(item.proposals[0].id)">Add to compare</md-button>
+                            <md-button class="md-rose md-sm md-simple" v-if="addedToCompare(item.proposals[0].id)" @click="removeFromCompare(item.proposals[0].id)">Remove from compare</md-button>
+                            <md-button class="md-success md-sm md-simple" v-if="!addedToCompare(item.proposals[0].id)"@click="addToCompare(item.proposals[0].id)">Add to compare</md-button>
                             <md-button class="md-primary md-sm" @click="manageProposalsAccept(item.proposals[0])">Accept</md-button>
                             <md-button class="md-rose md-sm"   @click="viewProposal(item.proposals[0])">View</md-button>
                         </template>
@@ -209,7 +210,7 @@
       viewProposal(proposal) {
         window.currentPanel = this.$showPanel({
           component: ViewProposal,
-          cssClass: 'md-layout-item md-size-70 transition36',
+          cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
           openOn: 'right',
           props: {event: this.event, proposal: proposal, selectedBlock : this.selectedBlock}
         })
@@ -244,8 +245,19 @@
 
         },
         addToCompare(proposalId) {
-            this.selectedBlock.proposalComparison.push(proposalId);
-            console.log(this.selectedBlock.proposalComparison);
+          if ( this.selectedBlock.proposalComparison.length < 3 ) {
+              this.selectedBlock.proposalComparison.push(proposalId);
+          } else {
+              this.selectedBlock.proposalComparison.splice(0,1);
+              this.selectedBlock.proposalComparison.push(proposalId);
+          }
+        },
+        removeFromCompare(proposalId) {
+            let i = _.indexOf( this.selectedBlock.proposalComparison, proposalId );
+
+            if ( i !== -1 ) {
+                this.selectedBlock.proposalComparison.splice( i, 1 );
+            }
         },
         manageVendors() {
             //this.$router.push({ path: `/vendors-pool`});
@@ -266,6 +278,18 @@
                 }
             });
         },
+        addedToCompare(proposalId) {
+          let isExists = true;
+          let i = _.indexOf( this.selectedBlock.proposalComparison, proposalId );
+
+          if ( i !== -1  ) {
+              isExists = true;
+          } else {
+              isExists = false;
+          }
+
+          return isExists;
+        }
 
     },
     created() {

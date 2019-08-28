@@ -167,13 +167,13 @@ export default {
           that.$store.dispatch("event/getEventThemes",that);
         }, 100);
 
-        let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+        /*let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
 
         let m = new CalendarEvent().for(_calendar).fetch(this, false);
         m.then(allEvents=>{
           this.upcomingEvents = allEvents;
           this.isLoading = false;
-        });
+        });*/
       }
     );
 

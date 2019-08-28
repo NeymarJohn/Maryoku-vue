@@ -23,7 +23,7 @@
         <!-- ./Selected Proposals list -->
 
         <!-- Proposal Services Information -->
-        <div class="services-section text-left bg-gray" v-if="proposalsData.services">
+        <div class="services-section text-left bg-white" v-if="proposalsData.services">
             <div class="service-item">
                 <div class="service-title">
                     <div class="title">{{proposalsData.services.title}}</div>
@@ -67,7 +67,7 @@
             </div>
         </div>
 
-        <div class="services-section text-left">
+        <div class="services-section text-left bg-white">
             <div class="service-item">
                 <div class="service-title">
                     <div class="title">Rating</div>
@@ -91,7 +91,7 @@
         </div>
 
 
-        <div class="services-section text-left">
+        <div class="services-section text-left bg-white">
             <div class="service-item">
                 <div class="service-title">
                     <div class="title">Cancellation</div>
@@ -366,6 +366,7 @@
             return dataToReturn
         },
         viewProposal(proposal) {
+            console.log('proposal ', proposal);
             window.currentPanel = this.$showPanel({
                 component: ViewProposal,
                 cssClass: 'md-layout-item md-size-70 transition36',
