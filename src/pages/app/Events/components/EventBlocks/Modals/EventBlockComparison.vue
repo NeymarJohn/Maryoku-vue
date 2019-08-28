@@ -1,6 +1,6 @@
 <template>
     <div class="event-blocks-comparison-panel">
-        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"></vue-element-loading>
+        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee"/>
         <!-- Selected Proposals list -->
         <div class="selected-proposals-list">
             <div class="selected_proposals_item" v-for="(proposal,index) in selectedProposals" :key="index">
@@ -11,7 +11,7 @@
                                    v-if="vendor.proposals && vendor.proposals[0]"
                                    :value="vendor.proposals[0].id"
                                    :key="index"
-                                    >{{vendor.vendor.vendorDisplayName}}</md-option>
+                        >{{vendor.vendor.vendorDisplayName}}</md-option>
                     </md-select>
                 </md-field>
                 <md-button class="md-rose md-sm"
@@ -144,252 +144,252 @@
     },
     data: () => ({
       // auth: auth,
-        noneProposalObject : {
-            id: 0,
-            proposals : [
-                {
-                    id : 0
-                }
-            ],
-            vendor: {
-                vendorDisplayName : 'None'
-            },
-        },
-      isLoading:true,
-        blockVendors : [],
-        selectedProposals : [
-            {
-                id : null,
-                proposals : [{}]
-            },
-            {
-                id : null,
-                proposals : [{}]
-            },
-            {
-                id : null,
-                proposals : [{}]
-            }
+      noneProposalObject : {
+        id: 0,
+        proposals : [
+          {
+            id : 0
+          }
         ],
-        proposalComparsion : [],
-        proposalsData : {},
-        allProposals : [],
-        ratings: [1, 2, 3, 4, 5],
-        proposalsRatings: []
+        vendor: {
+          vendorDisplayName : 'None'
+        },
+      },
+      isLoading:true,
+      blockVendors : [],
+      selectedProposals : [
+        {
+          id : null,
+          proposals : [{}]
+        },
+        {
+          id : null,
+          proposals : [{}]
+        },
+        {
+          id : null,
+          proposals : [{}]
+        }
+      ],
+      proposalComparsion : [],
+      proposalsData : {},
+      allProposals : [],
+      ratings: [1, 2, 3, 4, 5],
+      proposalsRatings: []
 
     }),
     methods: {
-        getBlockVendors() {
+      getBlockVendors() {
 
-            this.isLoading = true;
+        this.isLoading = true;
 
-            let vm = this;
-
-
-            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-            let event = new CalendarEvent({id: this.event.id});
-            let selected_block = new EventComponent({id : this.selectedBlock.id});
-
-            new EventComponentVendor().for(calendar, event, selected_block).get()
-                .then(resp => {
-                    this.isLoading = false;
-                    this.blockVendors = resp;
-                    this.blockVendors.unshift(this.noneProposalObject);
-                    //console.log('blocks is ',resp);
+        let vm = this;
 
 
-                    if (vm.selectedBlock.proposalComparison.length ) {
-                        vm.proposalComparsion = vm.selectedBlock.proposalComparison;
-                        _.map(vm.selectedBlock.proposalComparison,function(id,key){
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
+        let selected_block = new EventComponent({id : this.selectedBlock.id});
 
-                            let proposal = _.find(vm.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === id });
-                            vm.$set(vm.selectedProposals,key,proposal);
-                        });
-                    }
-
-
-                })
-                .catch(error => {
-                    this.isLoading = false;
-                    console.log('EventComponentVendor error =>',error)
-                })
-        },
-        selectProposal(proposalId,index){
-            let vm = this;
-            let proposal = _.find(this.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === proposalId });
-
-            if ( proposal ) {
-                this.$set(this.selectedProposals,index, proposal);
-                setTimeout(()=>{
-                    vm.categoriesProposalsData();
-                },300)
-            }
-        },
-        getProposalCost(proposalId,index){
-            let proposal = _.find(this.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === proposalId });
-            if ( proposal ) {
-
-                //this.$set(this.selectedProposals,index, proposal.proposals[0]);
-                //console.log('proposal => ',proposal.proposals[0]);
-            }
-            return proposal && proposal.proposals[0].id ? proposal.proposals[0].cost : 0;
-        },
-        categoriesProposalsData () {
-
-            let vm = this;
-
-            // get services
-
-            vm.$set(vm.proposalsData,'services',{});
-            vm.$set(vm.proposalsData.services,'subtotal',[]);
-            vm.$set(vm.proposalsData.services,'perGuest',[]);
-            vm.$set(vm.proposalsData,'included',[]);
-            vm.$set(vm.proposalsData,'requirements',[]);
+        new EventComponentVendor().for(calendar, event, selected_block).get()
+          .then(resp => {
+            this.isLoading = false;
+            this.blockVendors = resp;
+            this.blockVendors.unshift(this.noneProposalObject);
+            //console.log('blocks is ',resp);
 
 
-            vm.$set(vm,'allProposals',[]); // allProposals
-            vm.$set(vm,'proposalsRatings',[]); // proposalsRatings
+            if (vm.selectedBlock.proposalComparison.length ) {
+              vm.proposalComparsion = vm.selectedBlock.proposalComparison;
+              _.map(vm.selectedBlock.proposalComparison,function(id,key){
 
-            _.map(this.selectedProposals,function(value,key){
-
-                if ( value.proposals[0].id !== null && value.vendor) {
-                    vm.allProposals.push(value.proposals[0]);
-                    vm.proposalsRatings.push(value.vendor.rank);
-                }
-            });
-
-            _.map(vm.allProposals,function(value,key){
-
-                // get proposals services info
-                if ( value.costBreakdown ) {
-
-                    let costBreakdown = value.costBreakdown;
-
-                    vm.$set(vm.proposalsData.services,'title',costBreakdown[0].service);
-
-                    vm.proposalsData.services.subtotal.push(costBreakdown[0].cost);
-
-                    vm.proposalsData.services.perGuest.push(costBreakdown[0].perGuest);
-                }
-
-                // get included
-                if ( value.included ) {
-
-                    let included = value.included;
-
-                    _.map(included,function(item,index){
-                        let title = item.requirementTitle;
-
-                        if ( title  ) {
-                            if ( !vm.proposalsData.included[title] ) {
-                                vm.proposalsData.included.push(title);
-                            }
-                        }
-                    })
-                }
-
-                if ( value.extras ) {
-
-                    let extras = value.extras;
-
-                    _.map(extras,function(item,index){
-                        let title = item.requirementTitle;
-
-                        if ( title  ) {
-                            if ( !vm.proposalsData.requirements[title] ) {
-                                vm.proposalsData.requirements.push(title);
-                            }
-                        }
-                    })
-                }
-
-                if ( value.missing ) {
-
-                    let missing = value.missing;
-
-                    _.map(missing,function(item,index){
-                        let title = item.requirementTitle;
-
-                        if ( title  ) {
-                            if ( !vm.proposalsData.requirements[title] ) {
-                                vm.proposalsData.requirements.push(title);
-                            }
-                        }
-                    })
-                }
-
-            });
-        },
-        checkIncluded(title, proposal) {
-
-            let vm = this;
-            let check = null;
-
-            // get included
-            if ( proposal.included ) {
-
-                let included = proposal.included;
-                check = _.find(included,function(obj) {return obj.requirementTitle === title});
-            }
-            return check ? check.requirementValue : 'X'
-        },
-        checkRequirement(title, proposal) {
-            let vm = this;
-            let check = null;
-            let dataToReturn = 'X';
-
-            console.log('proposal => ', proposal);
-
-            // get included
-            if ( proposal.extras ) {
-
-                let included = proposal.extras;
-                check = _.find(included,function(obj) {return obj.requirementTitle === title});
+                let proposal = _.find(vm.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === id });
+                vm.$set(vm.selectedProposals,key,proposal);
+              });
             }
 
-            if ( !check ) {
-                let included = proposal.missing;
-                check = _.find(included,function(obj) {return obj.requirementTitle === title});
-            }
 
-            if ( check ) {
+          })
+          .catch(error => {
+            this.isLoading = false;
+            console.log('EventComponentVendor error =>',error)
+          })
+      },
+      selectProposal(proposalId,index){
+        let vm = this;
+        let proposal = _.find(this.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === proposalId });
 
-                if ( check.includedInPrice ) {
-                    dataToReturn = 'Free'
-                } else if ( check.itemNotAvailable ) {
-                    dataToReturn = 'X'
+        if ( proposal ) {
+          this.$set(this.selectedProposals,index, proposal);
+          setTimeout(()=>{
+            vm.categoriesProposalsData();
+          },300)
+        }
+      },
+      getProposalCost(proposalId,index){
+        let proposal = _.find(this.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === proposalId });
+        if ( proposal ) {
 
-                } else {
-                    dataToReturn = check.price
+          //this.$set(this.selectedProposals,index, proposal.proposals[0]);
+          //console.log('proposal => ',proposal.proposals[0]);
+        }
+        return proposal && proposal.proposals[0].id ? proposal.proposals[0].cost : 0;
+      },
+      categoriesProposalsData () {
+
+        let vm = this;
+
+        // get services
+
+        vm.$set(vm.proposalsData,'services',{});
+        vm.$set(vm.proposalsData.services,'subtotal',[]);
+        vm.$set(vm.proposalsData.services,'perGuest',[]);
+        vm.$set(vm.proposalsData,'included',[]);
+        vm.$set(vm.proposalsData,'requirements',[]);
+
+
+        vm.$set(vm,'allProposals',[]); // allProposals
+        vm.$set(vm,'proposalsRatings',[]); // proposalsRatings
+
+        _.map(this.selectedProposals,function(value,key){
+
+          if ( value.proposals[0].id !== null && value.vendor) {
+            vm.allProposals.push(value.proposals[0]);
+            vm.proposalsRatings.push(value.vendor.rank);
+          }
+        });
+
+        _.map(vm.allProposals,function(value,key){
+
+          // get proposals services info
+          if ( value.costBreakdown ) {
+
+            let costBreakdown = value.costBreakdown;
+
+            vm.$set(vm.proposalsData.services,'title',costBreakdown[0].service);
+
+            vm.proposalsData.services.subtotal.push(costBreakdown[0].cost);
+
+            vm.proposalsData.services.perGuest.push(costBreakdown[0].perGuest);
+          }
+
+          // get included
+          if ( value.included ) {
+
+            let included = value.included;
+
+            _.map(included,function(item,index){
+              let title = item.requirementTitle;
+
+              if ( title  ) {
+                if ( !vm.proposalsData.included[title] ) {
+                  vm.proposalsData.included.push(title);
                 }
-            }
-
-            return dataToReturn
-        },
-        viewProposal(proposal) {
-            console.log('proposal ', proposal);
-            window.currentPanel = this.$showPanel({
-                component: ViewProposal,
-                cssClass: 'md-layout-item md-size-70 transition36',
-                openOn: 'right',
-                props: {event: this.event, proposal: proposal, selectedBlock : this.selectedBlock}
+              }
             })
-        },
+          }
+
+          if ( value.extras ) {
+
+            let extras = value.extras;
+
+            _.map(extras,function(item,index){
+              let title = item.requirementTitle;
+
+              if ( title  ) {
+                if ( !vm.proposalsData.requirements[title] ) {
+                  vm.proposalsData.requirements.push(title);
+                }
+              }
+            })
+          }
+
+          if ( value.missing ) {
+
+            let missing = value.missing;
+
+            _.map(missing,function(item,index){
+              let title = item.requirementTitle;
+
+              if ( title  ) {
+                if ( !vm.proposalsData.requirements[title] ) {
+                  vm.proposalsData.requirements.push(title);
+                }
+              }
+            })
+          }
+
+        });
+      },
+      checkIncluded(title, proposal) {
+
+        let vm = this;
+        let check = null;
+
+        // get included
+        if ( proposal.included ) {
+
+          let included = proposal.included;
+          check = _.find(included,function(obj) {return obj.requirementTitle === title});
+        }
+        return check ? check.requirementValue : 'X'
+      },
+      checkRequirement(title, proposal) {
+        let vm = this;
+        let check = null;
+        let dataToReturn = 'X';
+
+        console.log('proposal => ', proposal);
+
+        // get included
+        if ( proposal.extras ) {
+
+          let included = proposal.extras;
+          check = _.find(included,function(obj) {return obj.requirementTitle === title});
+        }
+
+        if ( !check ) {
+          let included = proposal.missing;
+          check = _.find(included,function(obj) {return obj.requirementTitle === title});
+        }
+
+        if ( check ) {
+
+          if ( check.includedInPrice ) {
+            dataToReturn = 'Free'
+          } else if ( check.itemNotAvailable ) {
+            dataToReturn = 'X'
+
+          } else {
+            dataToReturn = check.price
+          }
+        }
+
+        return dataToReturn
+      },
+      viewProposal(proposal) {
+        console.log('proposal ', proposal);
+        window.currentPanel = this.$showPanel({
+          component: ViewProposal,
+          cssClass: 'md-layout-item md-size-65 transition36 bg-white',
+          openOn: 'right',
+          props: {event: this.event, proposal: proposal, selectedBlock : this.selectedBlock}
+        });
+      },
     },
     created(title, proposal) {
 
     },
     mounted() {
-        let vm = this;
+      let vm = this;
 
 
-        this.getBlockVendors();
+      this.getBlockVendors();
     },
     computed: {
 
     },
-      watch : {
+    watch : {
 
-      }
+    }
   }
 </script>
