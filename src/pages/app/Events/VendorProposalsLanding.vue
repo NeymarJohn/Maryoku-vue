@@ -92,7 +92,10 @@
                     </div>
                   </div>
                   <div class="centered">
-                    <md-button @click.prevent="goToDetails" class="md-button md-primary">
+                    <md-button v-if="proposalRequest.submitted" class="md-button md-primary">
+                      See more event requests
+                    </md-button>
+                    <md-button v-else @click.prevent="goToDetails" class="md-button md-primary">
                       See full details
                     </md-button>
                   </div>

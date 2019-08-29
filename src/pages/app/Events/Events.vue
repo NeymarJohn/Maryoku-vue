@@ -46,8 +46,7 @@
                 </md-button>
                 <md-button
                   @click="showDeleteAlert($event, item)"
-                  class="md-danger md-just-icon md-round"
-                >
+                  class="md-danger md-just-icon md-round">
                   <md-icon>delete</md-icon>
                 </md-button>
 
@@ -128,6 +127,7 @@ import EventModal from "./EventModal/";
 import { mapMutations, mapGetters } from "vuex";
 import EventPlannerVuexModule from "./EventPlanner.vuex";
 import Calendar from "@/models/Calendar";
+import CalendarEvent from "@/models/CalendarEvent";
 import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import swal from "sweetalert2";
@@ -143,27 +143,38 @@ export default {
     this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
   },
   computed: {
-    ...mapGetters({
-      upcomingEvents: "user/getUpcomingEvents"
-    })
+
   },
   mounted() {
     this.$auth.currentUser(
       this,
       true,
-      function() {
+      () => {
         this.$store.dispatch("user/getUserFromApi");
-        this.$store.dispatch(
-          "event/getCategories",
-          this.$auth.user.defaultCalendarId
-        );
-        this.$store.dispatch(
-          "event/getEventTypes",
-          this.$auth.user.defaultCalendarId
-        );
-        this.$store.dispatch("event/getCurrencies");
-        this.$store.dispatch("event/getEventThemes");
-      }.bind(this)
+        let that = this;
+        setTimeout(()=>{
+          that.$store.dispatch(
+            "event/getCategories",
+            this.$auth.user.defaultCalendarId,
+            that
+          );
+          that.$store.dispatch(
+            "event/getEventTypes",
+            this.$auth.user.defaultCalendarId,
+            that
+          );
+          that.$store.dispatch("event/getCurrencies",that);
+          that.$store.dispatch("event/getEventThemes",that);
+        }, 100);
+
+        let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+
+        let m = new CalendarEvent().for(_calendar).fetch(this, false);
+        m.then(allEvents=>{
+          this.upcomingEvents = allEvents;
+          this.isLoading = false;
+        });
+      }
     );
 
     if (this.$route.params.mode && this.$route.params.mode == "create-event") {
@@ -176,6 +187,7 @@ export default {
       // auth: auth,
       product3: "static/img/shutterstock_289440710.png",
       recentEvents: [],
+      upcomingEvents: [],
       isLoading: true
     };
   },

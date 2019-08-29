@@ -23,7 +23,7 @@
                         </template>
                         <template slot="tab-pane-3" style="width: 100%;">
                             <div style="padding-left: 6px;">
-                                When vendors submit their proposals you can compare them here.
+                                <event-block-comparison :event="event" :selectedBlock="selectedBlock" ></event-block-comparison>
                             </div>
                         </template>
                         <template slot="tab-pane-4" style="width: 100%;">
@@ -33,7 +33,7 @@
                         </template>
                     </tabs>
 
-                    <md-card class="allocated-budget" style="height: 45px;"> <md-card-content><span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span> <div class="budget">${{selectedBlock.allocatedBudget}}</div></md-card-content></md-card>
+                    <md-card class="allocated-budget" style="height: 45px;"> <md-card-content><span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span> <div class="budget">${{selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget : '0.0'}}</div></md-card-content></md-card>
                 </div>
 
                 <div class="md-layout" style="overflow: auto; max-height: 80vh;" v-if="selectedBlock.proposals">
@@ -103,6 +103,7 @@
   import _ from "underscore";
   import EventBlockRequirements from '../Modals/EventBlockRequirements.vue';
   import EventBlockProposalVendors from '../Modals/EventBlockProposalVendors.vue';
+  import EventBlockComparison from '../Modals/EventBlockComparison';
 
 
 
@@ -111,7 +112,8 @@
       VueElementLoading,
       Tabs,
       EventBlockRequirements,
-      EventBlockProposalVendors
+      EventBlockProposalVendors,
+      EventBlockComparison
     },
     props: {
       event: Object,

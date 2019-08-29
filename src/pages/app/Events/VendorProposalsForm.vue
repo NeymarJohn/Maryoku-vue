@@ -2,7 +2,7 @@
     <div class="md-layout" >
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
         <div class="md-layout vendor-proposals" v-if="proposalRequest">
-            <div style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; height: 100%; width: 100%; background-color: rgba(0,0,0,0); z-index: 9998;" v-if="proposalRequest.submitted"></div>
+                        <div style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; height: 100%; width: 100%; background-color: rgba(0,0,0,0); z-index: 9998;" v-if="proposalRequest.submitted"></div>
             <div class="md-layout-item md-size-100">
                 <h5><a href="#" @click.prevent="goToLanding">
                     <small>
@@ -405,12 +405,12 @@
                         <h3 class="text-center">You're the {{proposalRequest.bidderRank | numeral('Oo')}} bidder</h3>
 
                         <div class="text-center">
-                            <h5 class="clear-margins">Budget</h5>
+                            <h5 class="clear-margins">Client's budget is</h5>
                             <span class="text-gray">${{proposalRequest.bidRange.low}} - ${{proposalRequest.bidRange.high}}</span>
                         </div>
 
                         <div class="cost-average" v-if="proposalRequest.bidderRank > 1">
-                            <div class="text-center small">Consider former proposals before placing your bid</div>
+                            <div class="text-center small">Current bids range between</div>
                             <div class="cost-average_item">
                                 <h5 class="">Lowest</h5>
                                 <div class="cost">${{proposalRequest.bidRange.low | numeral('0,0')}}</div>

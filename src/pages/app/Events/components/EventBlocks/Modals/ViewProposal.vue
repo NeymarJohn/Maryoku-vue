@@ -49,14 +49,16 @@
                                 <br>
                                 {{vendorInfo.vendorDisplayName}}
                             </div>
-                            <div class="attachments-list">
-                                <h6>Attachments</h6>
-                                <ul class="attachments-list_items">
-                                    <li v-for="(item,index) in vendorProposal.attachements" :key="index">
-                                        <a target="_blank" :href="`${serverUrl}/1/proposal-requests/${proposal.id}/files/${item}`"> <md-icon>attach_file</md-icon> Attachment {{index+1}} </a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <template v-if="vendorProposal.attachements.length">
+                                <div class="attachments-list">
+                                    <h6>Attachments</h6>
+                                    <ul class="attachments-list_items">
+                                        <li v-for="(item,index) in vendorProposal.attachements" :key="index">
+                                            <a target="_blank" :href="`${serverUrl}/1/proposal-requests/${proposal.id}/files/${item}`"> <md-icon>attach_file</md-icon> Attachment {{index+1}} </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </template>
                         </md-card-content>
 
                     </md-card>
@@ -201,24 +203,28 @@
 
                 </div>
 
-                <div class="md-layout-item md-size-5"></div>
+                <template v-if="vendorProposal.attachements.length">
+                    <div class="md-layout-item md-size-5"></div>
 
-                <div class="md-layout-item md-size-95 gallery-section">
-                    <div class="section-title">
-                        <h3>Why Us?</h3>
+                    <div class="md-layout-item md-size-95 gallery-section">
+                        <div class="section-title">
+                            <h3>Why Us?</h3>
+                        </div>
+
+                        <md-button class="md-default view-images no-uppercase" @click="view()">View Images</md-button>
+
+                        <ul class="images-list">
+                            <li class="image-item" v-for="(item,index) in vendorProposal.attachements" :key="index">
+                                <div :style="`width : 320px; height : 320px; background : url(${serverUrl}/1/proposal-requests/${proposal.id}/files/${item}) center center no-repeat ; background-size : cover;`"></div>
+                            </li>
+                        </ul>
+
+                        <LightBox  v-if="viewImages" :images="images"></LightBox>
+
                     </div>
+                </template>
 
-                    <md-button class="md-default view-images no-uppercase" @click="view()">View Images</md-button>
 
-                    <ul class="images-list">
-                        <li class="image-item" v-for="(item,index) in vendorProposal.attachements" :key="index">
-                            <div :style="`width : 320px; height : 320px; background : url(${serverUrl}/1/proposal-requests/${proposal.id}/files/${item}) center center no-repeat ; background-size : cover;`"></div>
-                        </li>
-                    </ul>
-
-                    <LightBox  v-if="viewImages" :images="images"></LightBox>
-
-                </div>
 
                 <div class="md-layout-item md-size-5" style="display: none;"></div>
 
@@ -377,6 +383,7 @@
 
             this.$set(this,'vendorProposal',this.proposal)
             this.$set(this,'vendorInfo',this.proposal.vendor);
+
         },
         mounted () {
 
