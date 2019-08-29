@@ -62,7 +62,20 @@ function showPanel(panelOptions, existingId) {
     });
   });
 
-  return new PanelResult(id, promise, panelOptions);
+    let panelResult = new PanelResult(id, promise, panelOptions);
+
+    let slideoutPanelBg = document.getElementsByClassName("slideout-panel-bg");
+    if (slideoutPanelBg && slideoutPanelBg.length > 0) {
+        slideoutPanelBg[0].style = "z-index: 101";
+    }
+
+    panelResult.promise.then(res=>{
+        if (slideoutPanelBg && slideoutPanelBg.length > 0) {
+            slideoutPanelBg[0].style = "z-index: 100";
+        }
+    });
+
+  return panelResult;
 }
 
 function showPanelStack(panelOptions) {
