@@ -8,7 +8,7 @@
                         type="search"
                         class="mb-3"
                         clearable
-                        placeholder="Search proposals and vendors"
+                        placeholder="Search vendors"
                         v-model="searchQuery">
                     </md-input>
                 </md-field>
@@ -210,7 +210,7 @@
       viewProposal(proposal) {
         window.currentPanel = this.$showPanel({
           component: ViewProposal,
-          cssClass: 'md-layout-item md-size-65 transition36 bg-white',
+          cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
           openOn: 'right',
           props: {event: this.event, proposal: proposal, selectedBlock : this.selectedBlock}
         })
@@ -218,7 +218,7 @@
       manageProposalsAccept(proposal) {
         window.currentPanel = this.$showPanel({
           component: ManageProposalsAccept,
-          cssClass: 'md-layout-item md-size-65 transition36 bg-grey',
+          cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
           openOn: 'right',
           props: {event: this.event, selectedBlock: this.selectedBlock}
         })
@@ -233,7 +233,7 @@
       showVendorDetail(vendor){
         window.currentPanel = this.$showPanel({
           component: companyForm,
-          cssClass: 'md-layout-item md-size-60 transition36 ',
+          cssClass: 'md-layout-item md-size-70 transition36 ',
           openOn: 'right',
           disableBgClick: false,
           props: {

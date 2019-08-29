@@ -35,11 +35,6 @@
           before = new Date();
         }
       });
-
-      let initialMessage = document.getElementById("initial-message");
-      if (initialMessage){
-        initialMessage.remove();
-      }
     }
   };
 </script>
