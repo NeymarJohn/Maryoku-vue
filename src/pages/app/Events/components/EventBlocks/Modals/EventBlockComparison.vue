@@ -2,110 +2,147 @@
     <div class="event-blocks-comparison-panel">
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee"/>
         <!-- Selected Proposals list -->
-        <div class="selected-proposals-list">
-            <div class="selected_proposals_item" v-for="(proposal,index) in selectedProposals" :key="index">
-                <md-field v-if="proposal">
-                    <label>Select Proposal</label>
-                    <md-select v-model="proposal.proposals[0].id" v-on:md-selected="selectProposal(proposal.proposals[0].id,index)">
-                        <md-option v-for="(vendor,index) in blockVendors"
-                                   v-if="vendor.proposals && vendor.proposals[0]"
-                                   :value="vendor.proposals[0].id"
-                                   :key="index"
-                        >{{vendor.vendor.vendorDisplayName}}</md-option>
-                    </md-select>
-                </md-field>
-                <md-button class="md-rose md-sm"
-                           :class="{ disabled : !proposal.proposals[0] || proposal.proposals[0].cost === undefined }"
-                           @click="viewProposal(proposal.proposals[0])"> View Proposal </md-button>
-                <div class="proposal-cost" >${{proposal.proposals[0] && proposal.proposals[0].cost !== undefined ? proposal.proposals[0].cost : 0}}</div>
-            </div>
+
+        <div class="selected-proposals-list" v-if="selectedProposals">
+
+            <md-table>
+            <md-table-row >
+                <md-table-cell class="text-center selected_proposals_item"
+                        v-for="(proposal,index) in selectedProposals" :key="index">
+                    <md-field v-if="proposal">
+                        <label>Select Proposal</label>
+                        <md-select  v-model="proposal.proposals[0].id" :name="'name_' + index" :key="index"
+                                    @md-selected="selectProposal(proposal.proposals[0].id,index)"
+                                    :multiple="false">
+                            <md-option v-for="(vendor,indx) in availableProposals"
+                                       :value="vendor.proposals[0].id"
+                                       :key="indx"
+                            >{{vendor.vendor.vendorDisplayName}}</md-option>
+                        </md-select>
+                    </md-field>
+
+
+                    <!--                <md-field >-->
+                    <!--                    <multiselect :reset-after="true" @select="selectMember"-->
+                    <!--                                 :close-on-select="false"-->
+                    <!--                                 :preserve-search="true"-->
+                    <!--                                 placeholder="Search members"-->
+                    <!--                                 label="emailAddress" track-by="id"-->
+                    <!--                                 :searchable="true"-->
+                    <!--                                 :options="availableProposals"-->
+                    <!--                                 v-model="proposal.proposals[0].id"-->
+                    <!--                                >-->
+                    <!--                        <template slot="option" slot-scope="props">-->
+                    <!--                            <div class="md-menu-item">-->
+                    <!--                                {{ props.option.vendor.vendorDisplayName }}-->
+                    <!--                            </div>-->
+                    <!--                        </template>-->
+                    <!--                        <template slot="tag" slot-scope="{option}">-->
+                    <!--                            <span style="display: none;"></span>-->
+                    <!--                        </template>-->
+                    <!--                        <template slot="noOptions">-->
+                    <!--                            All the available members are selected.-->
+                    <!--                        </template>-->
+                    <!--                    </multiselect>-->
+                    <!--                </md-field>-->
+
+
+                    <md-button class="md-rose md-sm view-proposal-btn"
+                               :class="{ disabled : !proposal.proposals[0] || proposal.proposals[0].cost === undefined }"
+                               @click="viewProposal(proposal.proposals[0])"> View Proposal </md-button>
+                    <div class="proposal-cost" >${{proposal.proposals[0] && proposal.proposals[0].cost !== undefined ? proposal.proposals[0].cost : 0}}</div>
+                </md-table-cell>
+            </md-table-row>
+            </md-table>
         </div>
         <!-- ./Selected Proposals list -->
 
         <!-- Proposal Services Information -->
         <div class="services-section text-left bg-white" v-if="proposalsData.services">
             <div class="service-item">
-                <div class="service-title">
-                    <div class="title">{{proposalsData.services.title}}</div>
-                </div>
-                <div class="service-items">
-                    <div class="items-list">
-                        <div class="item-title">Subtotal</div>
-                        <div class="item-value" v-for="(subtotal,index) in proposalsData.services.subtotal" :key="index">${{subtotal ? subtotal : 0}}</div>
-                    </div>
-                    <div class="items-list">
-                        <div class="item-title">Per guest</div>
-                        <div class="item-value" v-for="(perGuest,index) in proposalsData.services.perGuest" :key="index">${{perGuest ? perGuest : 0}}</div>
+                <md-table>
+                    <md-table-toolbar>
+                        <h1 class="md-title">{{proposalsData.services.title}}</h1>
+                    </md-table-toolbar>
+                    <md-table-row v-if="proposalsData.services.subtotal">
+                        <md-table-cell>Subtotal</md-table-cell>
+                        <md-table-cell class="text-center" v-for="(subtotal,index) in proposalsData.services.subtotal" :key="index">${{subtotal ? subtotal : 0}}</md-table-cell>
+                        <md-table-cell v-for="(n,indx) in 3 - proposalsData.services.subtotal.length" :key="indx+2"></md-table-cell>
+                    </md-table-row>
+                    <md-table-row v-if="proposalsData.services.perGuest">
+                        <md-table-cell>Per guest</md-table-cell>
+                        <md-table-cell class="text-center" v-for="(perGuest,index) in proposalsData.services.perGuest" :key="index">${{perGuest ? perGuest : 0}}</md-table-cell>
+                        <md-table-cell v-for="(n,indx) in 3 - proposalsData.services.perGuest.length" :key="indx+2"></md-table-cell>
+                    </md-table-row>
 
-                    </div>
-                </div>
-            </div>
-            <div class="service-item" v-if="proposalsData.requirements" >
-                <div class="service-subtitle">
-                    <div class="subtitle">Requirements</div>
-                    <div class="item-value" v-for="(item,index) in allProposals" :key="index">{{item.extras.length + item.missing.length}}/{{item.included.length}}</div>
-                </div>
-                <div class="service-items">
-                    <div class="items-list"  v-for="(item,index) in proposalsData.requirements" :key="index">
-                        <div class="item-title">{{item}}</div>
-                        <div class="item-value" v-for="(proposal,indx) in allProposals" :key="indx">{{checkRequirement(item,proposal)}}</div>
-                    </div>
-                </div>
-            </div>
+                </md-table>
+                <md-table v-if="proposalsData.requirements">
+                    <md-table-toolbar>
+                        <h1 class="md-subtitle ">Requirements</h1>
+                    </md-table-toolbar>
 
+                    <md-table-row v-if="proposalsData.services.perGuest"
+                                  v-for="(item,index) in proposalsData.requirements" :key="index">
+                        <md-table-cell>{{item}}</md-table-cell>
+                        <md-table-cell class="text-center" v-for="(proposal,indx) in allProposals" :key="indx">{{checkRequirement(item,proposal)}}</md-table-cell>
+                        <md-table-cell v-for="(n,indx) in 3 - allProposals.length" :key="indx+2"></md-table-cell>
+                    </md-table-row>
 
-            <div class="service-item" v-if="proposalsData.included" >
-                <div class="service-subtitle">
-                    <div class="subtitle">Included</div>
-                </div>
-                <div class="service-items">
-                    <div class="items-list"  v-for="(item,index) in proposalsData.included" :key="index">
-                        <div class="item-title">{{item}}</div>
-                        <div class="item-value" v-for="(proposal,indx) in allProposals" :key="indx">{{checkIncluded(item,proposal)}}</div>
-                    </div>
-                </div>
+                </md-table>
+                <md-table v-if="proposalsData.included">
+                    <md-table-toolbar>
+                        <h1 class="md-subtitle">Included</h1>
+                    </md-table-toolbar>
+                    <md-table-row v-if="proposalsData.services.perGuest"
+                                  v-for="(item,index) in proposalsData.included" :key="index">
+                        <md-table-cell>{{item}}</md-table-cell>
+                        <md-table-cell class="text-center" v-for="(proposal,indx) in allProposals" :key="indx">{{checkIncluded(item,proposal)}}</md-table-cell>
+                        <md-table-cell v-for="(n,indx) in 3 - allProposals.length" :key="indx+2"></md-table-cell>
+                    </md-table-row>
+
+                </md-table>
             </div>
         </div>
 
         <div class="services-section text-left bg-white">
-            <div class="service-item">
-                <div class="service-title">
-                    <div class="title">Rating</div>
-                </div>
-                <div class="service-items" v-if="proposalsRatings">
-                    <div class="items-list">
-                        <div class="item-title">Score</div>
-                        <div class="item-value" v-for="(rank,indx) in proposalsRatings" :key="indx">
-                            <div class="star-rating">
-                                <label class="star-rating__star"
-                                       v-for="rating in ratings"
-                                       :class="{'is-selected' : ((rank >= rating) && rank!= null)}"
-                                >
-                                    <input class="star-rating star-rating__checkbox" type="radio"
-                                    >★</label>
-                            </div>
+            <md-table v-if="proposalsRatings">
+                <md-table-toolbar>
+                    <h1 class="md-subtitle">Rating</h1>
+                </md-table-toolbar>
+                <md-table-row >
+                    <md-table-cell>Score</md-table-cell>
+                    <md-table-cell class="text-center" v-for="(rank,indx) in proposalsRatings" :key="indx">
+                        <div class="star-rating">
+                            <label class="star-rating__star"
+                                   v-for="rating in ratings"
+                                   :class="{'is-selected' : ((rank >= rating) && rank!= null)}"
+                            >
+                                <input class="star-rating star-rating__checkbox" type="radio"
+                                >★</label>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </md-table-cell>
+                    <md-table-cell v-for="(n,indx) in 3 - proposalsRatings.length" :key="indx+2"></md-table-cell>
+                </md-table-row>
+            </md-table>
         </div>
-
 
         <div class="services-section text-left bg-white">
-            <div class="service-item">
-                <div class="service-title">
-                    <div class="title">Cancellation</div>
-                </div>
-                <div class="service-items">
-                    <div class="items-list">
-                        <div class="item-title">Policy</div>
-                        <div class="item-value" v-for="(proposal,indx) in allProposals" :key="indx">
-                            {{proposal.candellationPolicy}}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <md-table >
+                <md-table-toolbar>
+                    <h1 class="md-subtitle">Cancellation</h1>
+                </md-table-toolbar>
+
+                <md-table-row v-if="allProposals">
+                    <md-table-cell>Policy</md-table-cell>
+                    <md-table-cell class="text-center" v-for="(proposal,indx) in allProposals" :key="indx">
+                        {{proposal.candellationPolicy}}
+                    </md-table-cell>
+                    <md-table-cell v-for="(n,indx) in 3 - getObjectSize(allProposals)" :key="indx+2"></md-table-cell>
+                </md-table-row>
+
+            </md-table>
         </div>
+
         <!-- ./Proposal Services Information -->
     </div>
 
@@ -156,26 +193,27 @@
         },
       },
       isLoading:true,
-      blockVendors : [],
-      selectedProposals : [
-        {
-          id : null,
-          proposals : [{}]
-        },
-        {
-          id : null,
-          proposals : [{}]
-        },
-        {
-          id : null,
-          proposals : [{}]
-        }
-      ],
-      proposalComparsion : [],
-      proposalsData : {},
-      allProposals : [],
-      ratings: [1, 2, 3, 4, 5],
-      proposalsRatings: []
+        blockVendors : [],
+        selectedProposals : [
+            {
+                id : null,
+                proposals : [{}]
+            },
+            {
+                id : null,
+                proposals : [{}]
+            },{
+                id : null,
+                proposals : [{}]
+            }
+        ],
+        proposalComparsion : [],
+        proposalsData : {},
+        allProposals : [],
+        ratings: [1, 2, 3, 4, 5],
+        proposalsRatings: [],
+        selectedProposalsIds : [],
+        proposalsOptions : []
 
     }),
     methods: {
@@ -183,144 +221,161 @@
 
         this.isLoading = true;
 
-        let vm = this;
+            let vm = this;
+            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+            let selected_block = new EventComponent({id : this.selectedBlock.id});
+
+            new EventComponentVendor().for(calendar, event, selected_block).get()
+                .then(resp => {
+                    this.blockVendors = resp;
+                    this.blockVendors.unshift(this.noneProposalObject);
+                    //console.log('blocks is ',resp);
 
 
-        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-        let event = new CalendarEvent({id: this.event.id});
-        let selected_block = new EventComponent({id : this.selectedBlock.id});
+                    if (vm.selectedBlock.proposalComparison.length ) {
+                        vm.proposalComparsion = vm.selectedBlock.proposalComparison;
+                        _.map(vm.selectedBlock.proposalComparison,function(id,key){
 
-        new EventComponentVendor().for(calendar, event, selected_block).get()
-          .then(resp => {
-            this.isLoading = false;
-            this.blockVendors = resp;
-            this.blockVendors.unshift(this.noneProposalObject);
-            //console.log('blocks is ',resp);
+                            let proposal = _.find(vm.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === id });
+                            vm.$set(vm.selectedProposals,key,proposal);
+                        });
+                    }
 
+                    vm.isLoading = false;
 
-            if (vm.selectedBlock.proposalComparison.length ) {
-              vm.proposalComparsion = vm.selectedBlock.proposalComparison;
-              _.map(vm.selectedBlock.proposalComparison,function(id,key){
+                })
+                .catch(error => {
+                    this.isLoading = false;
+                    console.log('EventComponentVendor error =>',error)
+                })
+        },
+        selectProposal(proposalId,index){
+            console.log('i am selecting ',proposalId);
+            let vm = this;
+
+            _.map(vm.selectedProposalsIds,function(id,key){
 
                 let proposal = _.find(vm.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === id });
                 vm.$set(vm.selectedProposals,key,proposal);
-              });
+            });
+
+            let i = _.indexOf( vm.selectedProposalsIds, proposalId );
+
+            if ( i !== -1 ) {
+                vm.selectedProposalsIds.splice( i, 1 );
+            }
+            let proposal = _.find(this.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === proposalId });
+
+            if ( proposal ) {
+                vm.$set(vm.selectedProposals,index, proposal);
+
+                vm.selectedProposalsIds.push(proposalId);
+
+                setTimeout(()=>{
+                    vm.categoriesProposalsData();
+
+                },300)
             }
 
+        },
+        getProposalCost(proposalId,index){
+            let proposal = _.find(this.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === proposalId });
+            if ( proposal ) {
 
-          })
-          .catch(error => {
-            this.isLoading = false;
-            console.log('EventComponentVendor error =>',error)
-          })
-      },
-      selectProposal(proposalId,index){
-        let vm = this;
-        let proposal = _.find(this.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === proposalId });
+                //this.$set(this.selectedProposals,index, proposal.proposals[0]);
+                //console.log('proposal => ',proposal.proposals[0]);
+            }
+            return proposal && proposal.proposals[0].id ? proposal.proposals[0].cost : 0;
+        },
+        categoriesProposalsData () {
 
-        if ( proposal ) {
-          this.$set(this.selectedProposals,index, proposal);
-          setTimeout(()=>{
-            vm.categoriesProposalsData();
-          },300)
-        }
-      },
-      getProposalCost(proposalId,index){
-        let proposal = _.find(this.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === proposalId });
-        if ( proposal ) {
-
-          //this.$set(this.selectedProposals,index, proposal.proposals[0]);
-          //console.log('proposal => ',proposal.proposals[0]);
-        }
-        return proposal && proposal.proposals[0].id ? proposal.proposals[0].cost : 0;
-      },
-      categoriesProposalsData () {
-
-        let vm = this;
-
-        // get services
-
-        vm.$set(vm.proposalsData,'services',{});
-        vm.$set(vm.proposalsData.services,'subtotal',[]);
-        vm.$set(vm.proposalsData.services,'perGuest',[]);
-        vm.$set(vm.proposalsData,'included',[]);
-        vm.$set(vm.proposalsData,'requirements',[]);
+            let vm = this;
 
 
-        vm.$set(vm,'allProposals',[]); // allProposals
-        vm.$set(vm,'proposalsRatings',[]); // proposalsRatings
+            // get services
 
-        _.map(this.selectedProposals,function(value,key){
+            vm.$set(vm.proposalsData,'services',{});
+            vm.$set(vm.proposalsData.services,'subtotal',[]);
+            vm.$set(vm.proposalsData.services,'perGuest',[]);
+            vm.$set(vm.proposalsData,'included',[]);
+            vm.$set(vm.proposalsData,'requirements',[]);
 
-          if ( value.proposals[0].id !== null && value.vendor) {
-            vm.allProposals.push(value.proposals[0]);
-            vm.proposalsRatings.push(value.vendor.rank);
-          }
-        });
 
-        _.map(vm.allProposals,function(value,key){
+            vm.$set(vm,'allProposals',[]); // allProposals
+            vm.$set(vm,'proposalsRatings',[]); // proposalsRatings
 
-          // get proposals services info
-          if ( value.costBreakdown ) {
+            _.map(this.selectedProposals,function(value,key){
 
-            let costBreakdown = value.costBreakdown;
-
-            vm.$set(vm.proposalsData.services,'title',costBreakdown[0].service);
-
-            vm.proposalsData.services.subtotal.push(costBreakdown[0].cost);
-
-            vm.proposalsData.services.perGuest.push(costBreakdown[0].perGuest);
-          }
-
-          // get included
-          if ( value.included ) {
-
-            let included = value.included;
-
-            _.map(included,function(item,index){
-              let title = item.requirementTitle;
-
-              if ( title  ) {
-                if ( !vm.proposalsData.included[title] ) {
-                  vm.proposalsData.included.push(title);
+                if ( value.proposals[0].id !== null && value.vendor) {
+                    vm.allProposals.push(value.proposals[0]);
+                    vm.proposalsRatings.push(value.vendor.rank);
                 }
-              }
-            })
-          }
+            });
 
-          if ( value.extras ) {
+            _.map(vm.allProposals,function(value,key){
 
-            let extras = value.extras;
+                // get proposals services info
+                if ( value.costBreakdown ) {
 
-            _.map(extras,function(item,index){
-              let title = item.requirementTitle;
+                    let costBreakdown = value.costBreakdown;
 
-              if ( title  ) {
-                if ( !vm.proposalsData.requirements[title] ) {
-                  vm.proposalsData.requirements.push(title);
+                    vm.$set(vm.proposalsData.services,'title',costBreakdown[0].service);
+
+                    vm.proposalsData.services.subtotal.push(costBreakdown[0].cost);
+
+                    vm.proposalsData.services.perGuest.push(costBreakdown[0].perGuest);
                 }
-              }
-            })
-          }
 
-          if ( value.missing ) {
+                // get included
+                if ( value.included ) {
 
-            let missing = value.missing;
+                    let included = value.included;
 
-            _.map(missing,function(item,index){
-              let title = item.requirementTitle;
+                    _.map(included,function(item,index){
+                        let title = item.requirementTitle;
 
-              if ( title  ) {
-                if ( !vm.proposalsData.requirements[title] ) {
-                  vm.proposalsData.requirements.push(title);
+                        if ( title  ) {
+                            if ( !vm.proposalsData.included[title] ) {
+                                vm.proposalsData.included.push(title);
+                            }
+                        }
+                    })
                 }
-              }
-            })
-          }
+
+                if ( value.extras ) {
+
+                    let extras = value.extras;
+
+                    _.map(extras,function(item,index){
+                        let title = item.requirementTitle;
+
+                        if ( title  ) {
+                            if ( !vm.proposalsData.requirements[title] ) {
+                                vm.proposalsData.requirements.push(title);
+                            }
+                        }
+                    })
+                }
+
+                if ( value.missing ) {
+
+                    let missing = value.missing;
+
+                    _.map(missing,function(item,index){
+                        let title = item.requirementTitle;
+
+                        if ( title  ) {
+                            if ( !vm.proposalsData.requirements[title] ) {
+                                vm.proposalsData.requirements.push(title);
+                            }
+                        }
+                    })
+                }
 
         });
       },
-      checkIncluded(title, proposal) {
+        checkIncluded(title, proposal) {
 
         let vm = this;
         let check = null;
@@ -328,20 +383,17 @@
         // get included
         if ( proposal.included ) {
 
-          let included = proposal.included;
-          check = _.find(included,function(obj) {return obj.requirementTitle === title});
-        }
-        return check ? check.requirementValue : 'X'
-      },
-      checkRequirement(title, proposal) {
-        let vm = this;
-        let check = null;
-        let dataToReturn = 'X';
-
-        console.log('proposal => ', proposal);
-
-        // get included
-        if ( proposal.extras ) {
+                let included = proposal.included;
+                check = _.find(included,function(obj) {return obj.requirementTitle === title});
+            }
+            return check ? check.requirementValue : 'X'
+        },
+        checkRequirement(title, proposal) {
+            let vm = this;
+            let check = null;
+            let dataToReturn = 'X';
+            // get included
+            if ( proposal.extras ) {
 
           let included = proposal.extras;
           check = _.find(included,function(obj) {return obj.requirementTitle === title});
@@ -364,17 +416,35 @@
           }
         }
 
-        return dataToReturn
-      },
-      viewProposal(proposal) {
-        console.log('proposal ', proposal);
-        window.currentPanel = this.$showPanel({
-          component: ViewProposal,
-          cssClass: 'md-layout-item md-size-65 transition36 bg-white',
-          openOn: 'right',
-          props: {event: this.event, proposal: proposal, selectedBlock : this.selectedBlock}
-        });
-      },
+            return dataToReturn
+        },
+        viewProposal(proposal) {
+            window.currentPanel = this.$showPanel({
+                component: ViewProposal,
+                cssClass: 'md-layout-item md-size-70 transition36',
+                openOn: 'right',
+                props: {event: this.event, proposal: proposal, selectedBlock : this.selectedBlock}
+            })
+        },
+        isSelected(proposalId){
+            //let proposal = _.find(this.selectedProposals, function(vendor) { return vendor.id !== 0 && vendor.proposals[0] && vendor.proposals[0].id === proposalId });
+            let vm = this;
+            let check = false;
+
+            let i = _.indexOf( vm.selectedProposalsIds, proposalId );
+
+            if ( i !== -1 ) {
+                //check = true;
+            }
+
+            return check;
+        },
+        selectMember(item){
+            console.log('selectMember => ', item);
+        },
+        getObjectSize(object) {
+          return _.size(object);
+        }
     },
     created(title, proposal) {
 
@@ -386,10 +456,27 @@
       this.getBlockVendors();
     },
     computed: {
+        availableProposals(){
+            let arr = _.filter(this.blockVendors,function(item){
+                return item.proposals && item.proposals[0]
+            })
 
+            this.proposalsOptions[0] = arr;
+            this.proposalsOptions[1] = arr;
+            this.proposalsOptions[2] = arr;
+
+            return _.filter(this.blockVendors,function(item){
+                return item.proposals && item.proposals[0]
+            })
+        },
+        availableProposals2(){
+            return _.filter(this.blockVendors,function(item){
+                return item.proposals && item.proposals[0]
+            })
+        }
     },
-    watch : {
+      watch : {
 
-    }
+      }
   }
 </script>

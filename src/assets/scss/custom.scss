@@ -4237,7 +4237,15 @@ iframe{
 
 .selected-proposals-list {
     @include display-flex(row,space-between, center);
-    margin-left : 23%;
+    margin-left : calc(100% - 700px);
+
+    .md-table-row {
+
+    }
+    .md-table.md-theme-default .md-table-row td {
+        border-top : none !important;
+    }
+
     .selected_proposals_item {
         width : 100%;
         padding : 1em;
@@ -4250,11 +4258,16 @@ iframe{
         .md-field:not(.md-disabled):after {
             display: none;
         }
+
         .md-field.md-focused label, .md-field.md-field.md-has-value label {
             top : -1.8em;
         }
         .proposal-cost {
             font-weight: bold;
+        }
+        .view-proposal-btn {
+            width : 100%;
+            margin : 0.5em auto;
         }
     }
 }
@@ -4269,45 +4282,27 @@ iframe{
         &.bg-white {
             background: #fff;
         }
-        .service-item {
 
+        .md-table-toolbar {
+            padding : 0;
         }
-        .service-title , .service-subtitle{
-            @include display-flex(row,flex-start, center);
-            width : 100%;
-            border-bottom : 1px solid #909090;
-            padding-bottom : 0.4em;
-
-            .title {
-                font-size : 23px;
-                width: 25%;
-                text-transform: capitalize;
-            }
-
-            .subtitle {
-                font-size : 17px;
-                width: 25%;
-                color: #515151;
-            }
-        }
-        .service-items {
-            padding : 2em 0;
-        }
-        .items-list {
-            @include display-flex(row,flex-start, center);
-            padding: 0.4em 0;
-
-        }
-        .item-value {
-            text-align: center;
-            width: 25%;
-            &.red {
-                color : $brand-rose;
-            }
-        }
-        .item-title {
-            width: 25%;
+        .md-title {
+            font-size : 23px;
             text-transform: capitalize;
+            padding  : 0;
+            font-weight: 500;
+        }
+
+        .md-subtitle {
+            font-size : 17px;
+            color: #515151;
+            font-weight: 500;
+        }
+
+        .md-table-cell {
+            width : 25%;
+            padding-left : 0;
+            padding-right : 0;
         }
     }
 }
