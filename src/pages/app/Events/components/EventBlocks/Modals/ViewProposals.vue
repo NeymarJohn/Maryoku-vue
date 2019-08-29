@@ -1,5 +1,7 @@
 <template>
     <div class="manage-proposals-panel">
+        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee"/>
+
         <div class="md-layout" style="max-height: 50vh;">
             <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
                 <h4 class="md-title">
@@ -11,19 +13,25 @@
                     Manage Proposals - {{selectedBlock.componentCategoryId}}
                 </h4>
 
-                <div class="tabs-section">
+                <div class="tabs-section" v-if="!isLoading">
                     <tabs
-                        :tab-name="['<span>'+requirementsLength+'</span> Requirements', '<span>' + selectedBlock.proposals.length + '</span> Proposals', '<span>0</span> Comparison', '<span>0</span> Winner']"
+                        :tab-name="['<span>'+requirementsLength+'</span> Requirements', '<span>' + selectedBlock.proposals.length + '</span> Proposals', '<span>'+comparisonsNumber+'</span> Comparison', '<span>0</span> Winner']"
                         color-button="primary" ref="proposalsTabs">
                         <template slot="tab-pane-1" style="width: 100%;">
                             <event-block-requirements :event="event" :selectedBlock="selectedBlock" :predefinedRequirements="selectedBlock.predefinedRequirements"> </event-block-requirements>
                         </template>
                         <template slot="tab-pane-2" style="width: 100%;">
-                            <event-block-proposal-vendors :event="event" :selectedBlock="selectedBlock"></event-block-proposal-vendors>
+                            <event-block-proposal-vendors :event="event"
+                                :selectedBlock="selectedBlock"
+                                @update-comparison="updateComparison"
+                            ></event-block-proposal-vendors>
                         </template>
                         <template slot="tab-pane-3" style="width: 100%;">
                             <div style="padding-left: 6px;">
-                                <event-block-comparison :event="event" :selectedBlock="selectedBlock" ></event-block-comparison>
+                                <event-block-comparison
+                                    :event="event"
+                                    :selectedBlock="selectedBlock"
+                                ></event-block-comparison>
                             </div>
                         </template>
                         <template slot="tab-pane-4" style="width: 100%;">
@@ -34,53 +42,6 @@
                     </tabs>
 
                     <md-card class="allocated-budget" style="height: 45px;"> <md-card-content><span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span> <div class="budget">${{selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget : '0.0'}}</div></md-card-content></md-card>
-                </div>
-
-                <div class="md-layout" style="overflow: auto; max-height: 80vh;" v-if="selectedBlock.proposals">
-
-                    <md-card style="display: none;">
-
-                        <md-card-header  class="md-card-header-text md-card-header-warning">
-                            <div class="card-text">
-                                <h4 class="title" style="color: white;">
-                                    Manage Proposals
-                                </h4>
-                                <p class="category">Applicable vendors from your list</p>
-                            </div>
-                        </md-card-header>
-                        <md-card-content>
-                            <md-table v-if="isThereProposals()" v-model="selectedBlock.proposals" table-header-color="orange" class="vendors-table">
-                                <md-table-row slot="md-table-row" slot-scope="{ item }" :key="selectedBlock.proposals.indexOf(item)"  class="vendors-table_item">
-                                    <md-table-cell md-label="Proposals"  style="text-transform: capitalize;"> {{ item.vendor ? item.vendor.vendorDisplayName : 'No Vendor Title' }}</md-table-cell>
-                                    <md-table-cell md-label="Price">
-                                        ${{item.cost}}
-                                    </md-table-cell>
-                                    <md-table-cell md-label="Requirements">
-                                        %{{item.percentRequirements}}
-                                    </md-table-cell>
-                                    <md-table-cell class="vendors-table_item-actions" >
-
-                                        <md-button class="md-button md-success md-sm md-theme-default auto-width"  >
-                                            View
-                                        </md-button>
-
-                                        <md-button  v-if="item.id != winnerId" class="md-button md-rose md-sm md-theme-default auto-width" @click="setAsWining(item)">
-                                            Set as wining
-                                        </md-button>
-                                        <md-button  class="md-button md-success md-sm md-theme-default auto-width"  v-else>
-                                            <span><md-icon>check</md-icon></span>Winner
-                                        </md-button>
-                                    </md-table-cell>
-
-                                </md-table-row>
-                            </md-table>
-                            <template v-else>
-                                <h5>No Proposals assigned</h5>
-                            </template>
-                        </md-card-content>
-
-                    </md-card>
-
                 </div>
             </div>
         </div>
@@ -127,9 +88,10 @@
     },
     data: () => ({
       // auth: auth,
-      isLoaded : false,
+        isLoading : false,
       proposalsToDisplay : 1,
       requirementsLength : 0,
+        comparisonsNumber: 0
 
     }),
 
@@ -190,7 +152,11 @@
       },
       isThereProposals() {
         return this.selectedBlock.proposals && this.selectedBlock.proposals.length;
-      }
+      },
+        updateComparison(item) {
+            this.comparisonsNumber = item;
+
+        }
     },
     computed: {
     },

@@ -6,53 +6,7 @@
         <div class="selected-proposals-list" v-if="selectedProposals">
 
             <md-table>
-            <md-table-row >
-                <md-table-cell class="text-center selected_proposals_item"
-                        v-for="(proposal,index) in selectedProposals" :key="index">
-                    <md-field v-if="proposal">
-                        <label>Select Proposal</label>
-                        <md-select  v-model="proposal.proposals[0].id" :name="'name_' + index" :key="index"
-                                    @md-selected="selectProposal(proposal.proposals[0].id,index)"
-                                    :multiple="false">
-                            <md-option v-for="(vendor,indx) in availableProposals"
-                                       :value="vendor.proposals[0].id"
-                                       :key="indx"
-                            >{{vendor.vendor.vendorDisplayName}}</md-option>
-                        </md-select>
-                    </md-field>
 
-
-                    <!--                <md-field >-->
-                    <!--                    <multiselect :reset-after="true" @select="selectMember"-->
-                    <!--                                 :close-on-select="false"-->
-                    <!--                                 :preserve-search="true"-->
-                    <!--                                 placeholder="Search members"-->
-                    <!--                                 label="emailAddress" track-by="id"-->
-                    <!--                                 :searchable="true"-->
-                    <!--                                 :options="availableProposals"-->
-                    <!--                                 v-model="proposal.proposals[0].id"-->
-                    <!--                                >-->
-                    <!--                        <template slot="option" slot-scope="props">-->
-                    <!--                            <div class="md-menu-item">-->
-                    <!--                                {{ props.option.vendor.vendorDisplayName }}-->
-                    <!--                            </div>-->
-                    <!--                        </template>-->
-                    <!--                        <template slot="tag" slot-scope="{option}">-->
-                    <!--                            <span style="display: none;"></span>-->
-                    <!--                        </template>-->
-                    <!--                        <template slot="noOptions">-->
-                    <!--                            All the available members are selected.-->
-                    <!--                        </template>-->
-                    <!--                    </multiselect>-->
-                    <!--                </md-field>-->
-
-
-                    <md-button class="md-rose md-sm view-proposal-btn"
-                               :class="{ disabled : !proposal.proposals[0] || proposal.proposals[0].cost === undefined }"
-                               @click="viewProposal(proposal.proposals[0])"> View Proposal </md-button>
-                    <div class="proposal-cost" >${{proposal.proposals[0] && proposal.proposals[0].cost !== undefined ? proposal.proposals[0].cost : 0}}</div>
-                </md-table-cell>
-            </md-table-row>
             </md-table>
         </div>
         <!-- ./Selected Proposals list -->
@@ -61,9 +15,60 @@
         <div class="services-section text-left bg-white" v-if="proposalsData.services">
             <div class="service-item">
                 <md-table>
-                    <md-table-toolbar>
+
+                    <md-table-row class="selected-proposals-list">
+                        <md-table-cell></md-table-cell>
+                        <md-table-cell class="text-center selected_proposals_item"
+                                       v-for="(proposal,index) in selectedProposals" :key="index">
+                            <md-field v-if="proposal">
+                                <label>Select Proposal</label>
+                                <md-select  v-model="proposal.proposals[0].id" :name="'name_' + index" :key="index"
+                                            @md-selected="selectProposal(proposal.proposals[0].id,index)"
+                                            :multiple="false">
+                                    <md-option v-for="(vendor,indx) in availableProposals"
+                                               :value="vendor.proposals[0].id"
+                                               :key="indx"
+                                    >{{vendor.vendor.vendorDisplayName}}</md-option>
+                                </md-select>
+                            </md-field>
+
+
+                            <!--                <md-field >-->
+                            <!--                    <multiselect :reset-after="true" @select="selectMember"-->
+                            <!--                                 :close-on-select="false"-->
+                            <!--                                 :preserve-search="true"-->
+                            <!--                                 placeholder="Search members"-->
+                            <!--                                 label="emailAddress" track-by="id"-->
+                            <!--                                 :searchable="true"-->
+                            <!--                                 :options="availableProposals"-->
+                            <!--                                 v-model="proposal.proposals[0].id"-->
+                            <!--                                >-->
+                            <!--                        <template slot="option" slot-scope="props">-->
+                            <!--                            <div class="md-menu-item">-->
+                            <!--                                {{ props.option.vendor.vendorDisplayName }}-->
+                            <!--                            </div>-->
+                            <!--                        </template>-->
+                            <!--                        <template slot="tag" slot-scope="{option}">-->
+                            <!--                            <span style="display: none;"></span>-->
+                            <!--                        </template>-->
+                            <!--                        <template slot="noOptions">-->
+                            <!--                            All the available members are selected.-->
+                            <!--                        </template>-->
+                            <!--                    </multiselect>-->
+                            <!--                </md-field>-->
+
+
+                            <md-button class="md-rose md-sm view-proposal-btn"
+                                       :class="{ disabled : !proposal.proposals[0] || proposal.proposals[0].cost === undefined }"
+                                       @click="viewProposal(proposal.proposals[0])"> View Proposal </md-button>
+                            <div class="proposal-cost" >${{proposal.proposals[0] && proposal.proposals[0].cost !== undefined ? proposal.proposals[0].cost : 0}}</div>
+                        </md-table-cell>
+                    </md-table-row>
+
+
+                    <md-table-row>
                         <h1 class="md-title">{{proposalsData.services.title}}</h1>
-                    </md-table-toolbar>
+                    </md-table-row>
                     <md-table-row v-if="proposalsData.services.subtotal">
                         <md-table-cell>Subtotal</md-table-cell>
                         <md-table-cell class="text-center" v-for="(subtotal,index) in proposalsData.services.subtotal" :key="index">${{subtotal ? subtotal : 0}}</md-table-cell>
@@ -251,11 +256,9 @@
                 })
         },
         selectProposal(proposalId,index){
-            console.log('i am selecting ',proposalId);
             let vm = this;
 
             _.map(vm.selectedProposalsIds,function(id,key){
-
                 let proposal = _.find(vm.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === id });
                 vm.$set(vm.selectedProposals,key,proposal);
             });
@@ -278,15 +281,6 @@
                 },300)
             }
 
-        },
-        getProposalCost(proposalId,index){
-            let proposal = _.find(this.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === proposalId });
-            if ( proposal ) {
-
-                //this.$set(this.selectedProposals,index, proposal.proposals[0]);
-                //console.log('proposal => ',proposal.proposals[0]);
-            }
-            return proposal && proposal.proposals[0].id ? proposal.proposals[0].cost : 0;
         },
         categoriesProposalsData () {
 
@@ -312,6 +306,9 @@
                     vm.proposalsRatings.push(value.vendor.rank);
                 }
             });
+
+            //this.$emit('update-comparison',_.size(this.allProposals));
+
 
             _.map(vm.allProposals,function(value,key){
 
@@ -440,8 +437,7 @@
             return check;
         },
         selectMember(item){
-            console.log('selectMember => ', item);
-        },
+         },
         getObjectSize(object) {
           return _.size(object);
         }

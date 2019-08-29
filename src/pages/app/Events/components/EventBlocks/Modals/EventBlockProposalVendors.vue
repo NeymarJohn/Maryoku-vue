@@ -258,6 +258,7 @@
             if ( i !== -1 ) {
                 this.selectedBlock.proposalComparison.splice( i, 1 );
             }
+            this.$emit('update-comparison',this.selectedBlock.proposalComparison.length);
         },
         manageVendors() {
             //this.$router.push({ path: `/vendors-pool`});
@@ -287,8 +288,10 @@
           } else {
               isExists = false;
           }
+            this.$emit('update-comparison',this.selectedBlock.proposalComparison.length);
 
-          return isExists;
+
+            return isExists;
         }
 
     },

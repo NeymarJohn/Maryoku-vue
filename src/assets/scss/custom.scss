@@ -4236,19 +4236,13 @@ iframe{
 
 
 .selected-proposals-list {
-    @include display-flex(row,space-between, center);
-    margin-left : calc(100% - 700px);
 
-    .md-table-row {
-
-    }
-    .md-table.md-theme-default .md-table-row td {
+    &.md-table-row td {
         border-top : none !important;
     }
 
     .selected_proposals_item {
-        width : 100%;
-        padding : 1em;
+        padding : 1em !important;
 
         .md-menu.md-select {
             background: #fff;
@@ -4283,7 +4277,7 @@ iframe{
             background: #fff;
         }
 
-        .md-table-toolbar {
+        .md-table-toolbar, .md-table-cell {
             padding : 0;
         }
         .md-title {

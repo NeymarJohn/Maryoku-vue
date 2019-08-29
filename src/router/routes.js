@@ -110,6 +110,12 @@ let publicPages = {
           component: VendorProposals,
           meta: {auth: false, title: 'Vendor Proposals', gtm: "VendorProposals"},
       },
+      {
+          path: "/vendors/:vendorId/proposal-request/:id",
+          name: "VendorProposals",
+          component: VendorProposals,
+          meta: {auth: false, title: 'Vendor Proposals', gtm: "VendorProposals"},
+      },
     /*{
       path: "/get-started",
       name: "GetStarted",
