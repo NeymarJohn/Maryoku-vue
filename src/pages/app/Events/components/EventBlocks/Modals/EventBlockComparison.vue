@@ -12,7 +12,7 @@
         <!-- ./Selected Proposals list -->
 
         <!-- Proposal Services Information -->
-        <div class="services-section text-left bg-white" v-if="proposalsData.services">
+        <div class="services-section text-left bg-white">
             <div class="service-item">
                 <md-table>
 
@@ -65,20 +65,22 @@
                         </md-table-cell>
                     </md-table-row>
 
+                    <template v-if="proposalsData.services">
+                        <md-table-row >
+                            <h1 class="md-title">{{proposalsData.services.title}}</h1>
+                        </md-table-row>
+                        <md-table-row v-if="proposalsData.services.subtotal">
+                            <md-table-cell>Subtotal</md-table-cell>
+                            <md-table-cell class="text-center" v-for="(subtotal,index) in proposalsData.services.subtotal" :key="index">${{subtotal ? subtotal : 0}}</md-table-cell>
+                            <md-table-cell v-for="(n,indx) in 3 - proposalsData.services.subtotal.length" :key="indx+2"></md-table-cell>
+                        </md-table-row>
+                        <md-table-row v-if="proposalsData.services.perGuest">
+                            <md-table-cell>Per guest</md-table-cell>
+                            <md-table-cell class="text-center" v-for="(perGuest,index) in proposalsData.services.perGuest" :key="index">${{perGuest ? perGuest : 0}}</md-table-cell>
+                            <md-table-cell v-for="(n,indx) in 3 - proposalsData.services.perGuest.length" :key="indx+2"></md-table-cell>
+                        </md-table-row>
+                    </template>
 
-                    <md-table-row>
-                        <h1 class="md-title">{{proposalsData.services.title}}</h1>
-                    </md-table-row>
-                    <md-table-row v-if="proposalsData.services.subtotal">
-                        <md-table-cell>Subtotal</md-table-cell>
-                        <md-table-cell class="text-center" v-for="(subtotal,index) in proposalsData.services.subtotal" :key="index">${{subtotal ? subtotal : 0}}</md-table-cell>
-                        <md-table-cell v-for="(n,indx) in 3 - proposalsData.services.subtotal.length" :key="indx+2"></md-table-cell>
-                    </md-table-row>
-                    <md-table-row v-if="proposalsData.services.perGuest">
-                        <md-table-cell>Per guest</md-table-cell>
-                        <md-table-cell class="text-center" v-for="(perGuest,index) in proposalsData.services.perGuest" :key="index">${{perGuest ? perGuest : 0}}</md-table-cell>
-                        <md-table-cell v-for="(n,indx) in 3 - proposalsData.services.perGuest.length" :key="indx+2"></md-table-cell>
-                    </md-table-row>
 
                 </md-table>
                 <md-table v-if="proposalsData.requirements">

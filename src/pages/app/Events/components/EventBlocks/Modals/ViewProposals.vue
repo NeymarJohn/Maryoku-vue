@@ -15,7 +15,7 @@
 
                 <div class="tabs-section" v-if="!isLoading">
                     <tabs
-                        :tab-name="['<span>'+requirementsLength+'</span> Requirements', '<span>' + selectedBlock.proposals.length + '</span> Proposals', '<span>'+comparisonsNumber+'</span> Comparison', '<span>0</span> Winner']"
+                        :tab-name="['<span>'+requirementsLength+'</span> Requirements', '<span>' + proposalsNumber + '</span> Proposals', '<span>'+comparisonsNumber+'</span> Comparison', '<span>0</span> Winner']"
                         color-button="primary" ref="proposalsTabs">
                         <template slot="tab-pane-1" style="width: 100%;">
                             <event-block-requirements :event="event" :selectedBlock="selectedBlock" :predefinedRequirements="selectedBlock.predefinedRequirements"> </event-block-requirements>
@@ -159,6 +159,20 @@
         }
     },
     computed: {
+
+        proposalsNumber(){
+            let proposals = [];
+
+            _.map(this.selectedBlock.proposals,(item)=> {
+                console.log(item);
+                if ( _.indexOf(proposals,item.vendorId) === -1 ) {
+                    proposals.push(item.vendorId);
+                }
+
+            })
+
+            return proposals.length;
+        }
     },
 
   };
