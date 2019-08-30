@@ -16,14 +16,19 @@
                 <div class="tabs-section" v-if="!isLoading">
                     <tabs
                         :tab-name="['<span>'+requirementsLength+'</span> Requirements', '<span>' + proposalsNumber + '</span> Proposals', '<span>'+comparisonsNumber+'</span> Comparison', '<span>0</span> Winner']"
-                        color-button="primary" ref="proposalsTabs">
+                        color-button="primary" ref="proposalsTabs" :activeTab="1">
                         <template slot="tab-pane-1" style="width: 100%;">
-                            <event-block-requirements :event="event" :selectedBlock="selectedBlock" :predefinedRequirements="selectedBlock.predefinedRequirements"> </event-block-requirements>
+                            <event-block-requirements
+                                :event="event"
+                                :selectedBlock="selectedBlock"
+                                :predefinedRequirements="selectedBlock.predefinedRequirements"
+                                > </event-block-requirements>
                         </template>
                         <template slot="tab-pane-2" style="width: 100%;">
                             <event-block-proposal-vendors :event="event"
                                 :selectedBlock="selectedBlock"
                                 @update-comparison="updateComparison"
+                                                          :blockVendors="blockVendors"
                             ></event-block-proposal-vendors>
                         </template>
                         <template slot="tab-pane-3" style="width: 100%;">
@@ -31,6 +36,8 @@
                                 <event-block-comparison
                                     :event="event"
                                     :selectedBlock="selectedBlock"
+                                    :blockVendors="blockVendors"
+
                                 ></event-block-comparison>
                             </div>
                         </template>
@@ -91,7 +98,8 @@
         isLoading : false,
       proposalsToDisplay : 1,
       requirementsLength : 0,
-        comparisonsNumber: 0
+        comparisonsNumber: 0,
+        blockVendors : null
 
     }),
 
@@ -107,6 +115,8 @@
           this.$refs.proposalsTabs.$emit('event-planner-nav-switch-panel', this.tab)
         }
       });
+
+      this.getBlockVendors();
     },
     methods: {
 
@@ -156,10 +166,27 @@
         updateComparison(item) {
             this.comparisonsNumber = item;
 
+        },
+        getBlockVendors() {
+
+            this.isLoading = true;
+
+            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+            let selected_block = new EventComponent({id : this.selectedBlock.id});
+
+            new EventComponentVendor().for(calendar, event, selected_block).get()
+                .then(resp => {
+                    this.isLoading = false;
+                    this.blockVendors = resp;
+                })
+                .catch(error => {
+                    this.isLoading = false;
+                    console.log('EventComponentVendor error =>',error)
+                })
         }
     },
     computed: {
-
         proposalsNumber(){
             let proposals = [];
 
@@ -168,7 +195,6 @@
                 if ( _.indexOf(proposals,item.vendorId) === -1 ) {
                     proposals.push(item.vendorId);
                 }
-
             })
 
             return proposals.length;

@@ -71,12 +71,12 @@
                         </md-table-row>
                         <md-table-row v-if="proposalsData.services.subtotal">
                             <md-table-cell>Subtotal</md-table-cell>
-                            <md-table-cell class="text-center" v-for="(subtotal,index) in proposalsData.services.subtotal" :key="index">${{subtotal ? subtotal : 0}}</md-table-cell>
+                            <md-table-cell class="text-center" v-for="(subtotal,index) in proposalsData.services.subtotal" :key="index">${{subtotal ? subtotal.toFixed(1) : 0}}</md-table-cell>
                             <md-table-cell v-for="(n,indx) in 3 - proposalsData.services.subtotal.length" :key="indx+2"></md-table-cell>
                         </md-table-row>
                         <md-table-row v-if="proposalsData.services.perGuest">
                             <md-table-cell>Per guest</md-table-cell>
-                            <md-table-cell class="text-center" v-for="(perGuest,index) in proposalsData.services.perGuest" :key="index">${{perGuest ? perGuest : 0}}</md-table-cell>
+                            <md-table-cell class="text-center" v-for="(perGuest,index) in proposalsData.services.perGuest" :key="index">${{perGuest ? perGuest.toFixed(1) : 0}}</md-table-cell>
                             <md-table-cell v-for="(n,indx) in 3 - proposalsData.services.perGuest.length" :key="indx+2"></md-table-cell>
                         </md-table-row>
                     </template>
@@ -185,6 +185,8 @@
     props: {
       selectedBlock : Object,
       event : Object,
+        blockVendors : Array,
+
     },
     data: () => ({
       // auth: auth,
@@ -199,8 +201,7 @@
           vendorDisplayName : 'None'
         },
       },
-      isLoading:true,
-        blockVendors : [],
+      isLoading:false,
         selectedProposals : [
             {
                 id : null,
@@ -226,37 +227,21 @@
     methods: {
       getBlockVendors() {
 
-        this.isLoading = true;
-
             let vm = this;
-            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-            let event = new CalendarEvent({id: this.event.id});
-            let selected_block = new EventComponent({id : this.selectedBlock.id});
-
-            new EventComponentVendor().for(calendar, event, selected_block).get()
-                .then(resp => {
-                    this.blockVendors = resp;
-                    this.blockVendors.unshift(this.noneProposalObject);
-                    //console.log('blocks is ',resp);
+          this.blockVendors.unshift(this.noneProposalObject);
+          //console.log('blocks is ',resp);
 
 
-                    if (vm.selectedBlock.proposalComparison.length ) {
-                        vm.proposalComparsion = vm.selectedBlock.proposalComparison;
-                        _.map(vm.selectedBlock.proposalComparison,function(id,key){
+          if (vm.selectedBlock.proposalComparison.length ) {
+              vm.proposalComparsion = vm.selectedBlock.proposalComparison;
+              _.map(vm.selectedBlock.proposalComparison,function(id,key){
 
-                            let proposal = _.find(vm.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === id });
-                            vm.$set(vm.selectedProposals,key,proposal);
-                        });
-                    }
+                  let proposal = _.find(vm.blockVendors, function(vendor) { return vendor.proposals && vendor.proposals[0] && vendor.proposals[0].id === id });
+                  vm.$set(vm.selectedProposals,key,proposal);
+              });
+          }
 
-                    vm.isLoading = false;
-
-                })
-                .catch(error => {
-                    this.isLoading = false;
-                    console.log('EventComponentVendor error =>',error)
-                })
-        },
+      },
         selectProposal(proposalId,index){
             let vm = this;
 
