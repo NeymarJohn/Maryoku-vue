@@ -4242,30 +4242,25 @@ iframe{
     }
 
     .selected_proposals_item {
+        padding : 1em !important;
 
         .md-menu.md-select {
+            background: #fff;
             border-radius: 5px;
             padding: 0 0.5em;
-            max-width: 90%;
-            border: 1px solid #efefef;
-            margin: 0 auto;
-
-        }
-        .md-field label {
-            left: 1.5em;
         }
         .md-field:not(.md-disabled):after {
             display: none;
         }
 
         .md-field.md-focused label, .md-field.md-field.md-has-value label {
-            display: none;
+            top : -1.8em;
         }
         .proposal-cost {
             font-weight: bold;
         }
         .view-proposal-btn {
-            width : 90%;
+            width : 100%;
             margin : 0.5em auto;
         }
     }

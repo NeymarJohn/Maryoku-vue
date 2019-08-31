@@ -57,19 +57,14 @@
         default: ""
       },
       syncRouter: Boolean,
-        activeTab : {
-          type : Number,
-            default : 0
-        }
     },
     data() {
       return {
-        activePanel: this.tabName[this.activeTab]
+        activePanel: this.tabName[0]
       };
     },
     computed: {},
     created(){
-        console.log(this.tabName[this.activeTab]);
     },
     mounted(){
       this.$on('event-planner-nav-switch-panel',(index)=>{
