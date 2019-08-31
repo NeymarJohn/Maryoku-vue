@@ -89,6 +89,7 @@
   import { Pagination } from "@/components";
   import _ from 'underscore';
   import moment from 'moment';
+  import numeral from 'numeral';
 
   // import auth from '@/auth';
 
@@ -121,42 +122,27 @@
     },
     props: {
       selectedBlock : Object,
-      event : Object
+      event : Object,
+        blockVendors : Array,
+
     },
     data: () => ({
       // auth: auth,
-      isLoading:true,
+      isLoading:false,
       sendingRfp: false,
       searchQuery: "",
       ratings: [1, 2, 3, 4, 5],
-      blockVendors : [],
       filteredBlockVendors : []
     }),
     methods: {
       getBlockVendors() {
 
-        this.isLoading = true;
+          console.log('blockVendors => ',this.blockVendors);
+          let vendorsWithProposals = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
+          let vendorsWithSentStatus =  _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
+          let vendorsWithNoStatus =  _.filter(this.blockVendors, function(item){ return !item.proposals });
 
-        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-        let event = new CalendarEvent({id: this.event.id});
-        let selected_block = new EventComponent({id : this.selectedBlock.id});
-
-        new EventComponentVendor().for(calendar, event, selected_block).get()
-          .then(resp => {
-            this.isLoading = false;
-            this.blockVendors = resp;
-
-            let vendorsWithProposals = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
-            let vendorsWithSentStatus =  _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
-            let vendorsWithNoStatus =  _.filter(this.blockVendors, function(item){ return !item.proposals });
-
-            this.filteredBlockVendors = _.union( vendorsWithProposals,vendorsWithSentStatus,vendorsWithNoStatus);
-
-                })
-                .catch(error => {
-                    this.isLoading = false;
-                    console.log('EventComponentVendor error =>',error)
-                })
+          this.filteredBlockVendors = _.union( vendorsWithProposals,vendorsWithSentStatus,vendorsWithNoStatus);
         },
         sendVendor(item) {
             this.isLoading = true;
@@ -258,6 +244,7 @@
             if ( i !== -1 ) {
                 this.selectedBlock.proposalComparison.splice( i, 1 );
             }
+            this.updateEventComponent();
             this.$emit('update-comparison',this.selectedBlock.proposalComparison.length);
         },
         manageVendors() {
@@ -290,8 +277,23 @@
           }
             this.$emit('update-comparison',this.selectedBlock.proposalComparison.length);
 
-
+            this.updateEventComponent();
             return isExists;
+        },
+        updateEventComponent() {
+            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+            let event = new CalendarEvent({id: this.event.id});
+            let selected_block = new EventComponent({id : this.selectedBlock.id});
+
+            selected_block.proposalComparison = this.selectedBlock.proposalComparison
+
+            selected_block.for(calendar, event).save()
+                .then(resp => {
+
+                })
+                .catch(error => {
+                    console.log('EventComponentVendor error =>',error)
+                })
         }
 
     },

@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout md-alignment-top-center">
+  <div class="md-layout md-alignment-top-center" style="padding-top: 24px;">
     <div class="md-layout-item md-size-70" v-if="firstTime">
       <div class="margin-bottom-lg">
         <h3 class="title">
@@ -18,9 +18,15 @@
         <p>* We study your preferences and send you more leads according to them.</p>
       </div>
     </div>
-
+      <div class="md-layout-item md-size-70" v-else>
+          <div class="margin-bottom-lg">
+              <h3 class="title">
+                  <md-icon class="md-success md-size-2x margin-right-sm">check_circle</md-icon>Welcome back
+              </h3>
+          </div>
+      </div>
     <div class="md-layout-item md-size-70 margin-bottom-lg">
-      <h4 class="title">Waiting for you quote</h4>
+      <h4 class="title">Waiting for your quote:</h4>
       <md-card class="proposals--card">
         <md-card-content>
           <div class="md-layout">
