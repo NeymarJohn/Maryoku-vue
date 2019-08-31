@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout md-alignment-top-center" style="padding-top: 24px;">
+  <div class="md-layout md-alignment-top-center">
     <div class="md-layout-item md-size-70" v-if="firstTime">
       <div class="margin-bottom-lg">
         <h3 class="title">
@@ -18,15 +18,9 @@
         <p>* We study your preferences and send you more leads according to them.</p>
       </div>
     </div>
-      <div class="md-layout-item md-size-70" v-else>
-          <div class="margin-bottom-lg">
-              <h3 class="title">
-                  <md-icon class="md-success md-size-2x margin-right-sm">check_circle</md-icon>Welcome back
-              </h3>
-          </div>
-      </div>
+
     <div class="md-layout-item md-size-70 margin-bottom-lg">
-      <h4 class="title">Waiting for your quote:</h4>
+      <h4 class="title">Waiting for you quote</h4>
       <md-card class="proposals--card">
         <md-card-content>
           <div class="md-layout">
@@ -38,7 +32,7 @@
               <div class="md-layout align-with-title">
                 <div class="md-layout-item md-size-50 margin-bottom-md">
                   <div>Guests</div>
-                  <p class="proposal--title">{{ proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' }}</p>
+                  <p class="proposal--title">{{ proposalRequest.eventData.numberOfParticipants }}</p>
                 </div>
                 <div
                   v-if="proposalRequest.bidderRank > 1"
@@ -53,11 +47,11 @@
                 </div>
                 <div class="md-layout-item md-size-50 margin-bottom-md">
                   <div>Location</div>
-                  <p class="proposal--title">{{ proposalRequest ? (proposalRequest.eventData.location || '-') : '-' }}</p>
+                  <p class="proposal--title">{{ proposalRequest.eventData.location || '-' }}</p>
                 </div>
                 <div class="md-layout-item md-size-50 margin-bottom-md">
                   <div>Requirements</div>
-                  <p class="proposal--title">{{ proposalRequest ? proposalRequest.requirements.length : '-' }}</p>
+                  <p class="proposal--title">{{ proposalRequest.requirements.length }}</p>
                 </div>
               </div>
             </div>
@@ -81,7 +75,7 @@
                 </div>
                 <div v-else class="md-layout-item margin-bottom-md md-size-20">
                   <div>Min</div>
-                  <p class="proposal--title">${{ proposalRequest ? proposalRequest.bidRange.low : '-' }}</p>
+                  <p class="proposal--title">${{ proposalRequest.bidRange.low }}</p>
                 </div>
                 <div class="md-layout-item margin-bottom-md md-size-30">
                   <div class="arrow"></div>
@@ -98,14 +92,13 @@
                 </div>
                 <div v-else class="md-layout-item margin-bottom-md md-size-20">
                   <div>Max</div>
-                  <p class="proposal--title">${{ proposalRequest ? proposalRequest.bidRange.high : '-' }}</p>
+                  <p class="proposal--title">${{ proposalRequest.bidRange.high }}</p>
                 </div>
               </div>
               <div class="centered">
                 <md-button
-                  v-if="!proposalRequest"
+                  v-if="proposalRequest.submitted"
                   class="md-button md-primary"
-                  @click.prevent="onSkipToAnotherEventRequest"
                 >See more event requests</md-button>
                 <md-button
                   v-else
@@ -153,7 +146,7 @@ export default {
   },
   computed: {
     eventDate() {
-      if (!this.proposalRequest) return '-';
+      if (!this.proposalRequest) return;
 
       let date = new Date(this.proposalRequest.eventData.eventStartMillis);
       return moment(date).format("MMM D, YYYY [at] hh:mma");

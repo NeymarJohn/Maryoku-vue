@@ -173,6 +173,7 @@
 
   import MdCardContent from "../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue";
   import MdCardHeader from "../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardHeader/MdCardHeader.vue";
+  import {cloneObject} from "../../../../../../../src/utils/helperFunction";
 
   export default {
     name: 'event-block-proposal-vendors',
@@ -228,9 +229,10 @@
       getBlockVendors() {
 
             let vm = this;
-          this.blockVendors.unshift(this.noneProposalObject);
-          //console.log('blocks is ',resp);
+            //console.log('blocks is ',resp);
 
+
+          console.log(vm.blockVendors);
 
           if (vm.selectedBlock.proposalComparison.length ) {
               vm.proposalComparsion = vm.selectedBlock.proposalComparison;
@@ -444,13 +446,15 @@
                 return item.proposals && item.proposals[0]
             })
 
-            this.proposalsOptions[0] = arr;
-            this.proposalsOptions[1] = arr;
-            this.proposalsOptions[2] = arr;
 
-            return _.filter(this.blockVendors,function(item){
-                return item.proposals && item.proposals[0]
-            })
+            arr.unshift(this.noneProposalObject);
+
+
+            this.proposalsOptions[0] = cloneObject(arr);
+            this.proposalsOptions[1] = cloneObject(arr);
+            this.proposalsOptions[2] = cloneObject(arr);
+
+            return cloneObject(arr);
         },
         availableProposals2(){
             return _.filter(this.blockVendors,function(item){

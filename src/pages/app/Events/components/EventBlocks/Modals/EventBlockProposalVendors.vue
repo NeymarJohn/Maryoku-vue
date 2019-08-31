@@ -137,6 +137,8 @@
     methods: {
       getBlockVendors() {
 
+          this.filteredBlockVendors = [];
+
           console.log('blockVendors => ',this.blockVendors);
           let vendorsWithProposals = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
           let vendorsWithSentStatus =  _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });

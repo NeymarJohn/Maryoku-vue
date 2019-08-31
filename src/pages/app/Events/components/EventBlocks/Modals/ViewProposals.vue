@@ -191,7 +191,6 @@
             let proposals = [];
 
             _.map(this.selectedBlock.proposals,(item)=> {
-                console.log(item);
                 if ( _.indexOf(proposals,item.vendorId) === -1 ) {
                     proposals.push(item.vendorId);
                 }
