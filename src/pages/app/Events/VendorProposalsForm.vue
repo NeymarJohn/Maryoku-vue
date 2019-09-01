@@ -2,7 +2,7 @@
     <div class="md-layout" >
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
         <div class="md-layout vendor-proposals" v-if="proposalRequest">
-                        <div style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; height: 100%; width: 100%; background-color: rgba(0,0,0,0); z-index: 9998;" v-if="proposalRequest.submitted"></div>
+                        <div style="position: absolute; top: 60px; bottom: 0; left: 0; right: 0; height: 100%; width: 100%; background-color: rgba(0,0,0,0); z-index: 9998;" v-if="proposalRequest.submitted"></div>
             <div class="md-layout-item md-size-100">
                 <h5><a href="#" @click.prevent="goToLanding">
                     <small>

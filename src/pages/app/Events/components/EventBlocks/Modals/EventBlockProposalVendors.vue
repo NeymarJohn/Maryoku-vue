@@ -123,7 +123,7 @@
     props: {
       selectedBlock : Object,
       event : Object,
-        blockVendors : Array,
+      blockVendors : Array,
 
     },
     data: () => ({
@@ -136,18 +136,17 @@
     }),
     methods: {
       getBlockVendors() {
+        this.filteredBlockVendors = [];
 
-          this.filteredBlockVendors = [];
+        console.log('blockVendors => ',this.blockVendors);
+        let vendorsWithProposals = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
+        let vendorsWithSentStatus =  _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
+        let vendorsWithNoStatus =  _.filter(this.blockVendors, function(item){ return !item.proposals });
 
-          console.log('blockVendors => ',this.blockVendors);
-          let vendorsWithProposals = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
-          let vendorsWithSentStatus =  _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
-          let vendorsWithNoStatus =  _.filter(this.blockVendors, function(item){ return !item.proposals });
-
-          this.filteredBlockVendors = _.union( vendorsWithProposals,vendorsWithSentStatus,vendorsWithNoStatus);
-        },
-        sendVendor(item) {
-            this.isLoading = true;
+        this.filteredBlockVendors = _.union( vendorsWithProposals,vendorsWithSentStatus,vendorsWithNoStatus);
+      },
+      sendVendor(item) {
+        this.isLoading = true;
 
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
@@ -231,72 +230,72 @@
           },
         });
 
-        },
-        addToCompare(proposalId) {
-          if ( this.selectedBlock.proposalComparison.length < 3 ) {
-              this.selectedBlock.proposalComparison.push(proposalId);
-          } else {
-              this.selectedBlock.proposalComparison.splice(0,1);
-              this.selectedBlock.proposalComparison.push(proposalId);
-          }
-        },
-        removeFromCompare(proposalId) {
-            let i = _.indexOf( this.selectedBlock.proposalComparison, proposalId );
-
-            if ( i !== -1 ) {
-                this.selectedBlock.proposalComparison.splice( i, 1 );
-            }
-            this.updateEventComponent();
-            this.$emit('update-comparison',this.selectedBlock.proposalComparison.length);
-        },
-        manageVendors() {
-            //this.$router.push({ path: `/vendors-pool`});
-            window.currentPanel = this.$showPanel({
-                component: VendorsPoolPanel,
-                cssClass: 'md-layout-item md-size-85 transition36 bg-grey',
-                openOn: 'right',
-                props: {}
-            });
-
-            let slideoutPanelBg = document.getElementsByClassName("slideout-panel-bg");
-            if (slideoutPanelBg && slideoutPanelBg.length > 0) {
-                slideoutPanelBg[0].style = "z-index: 101";
-            }
-            window.currentPanel.promise.then(res=>{
-                if (slideoutPanelBg && slideoutPanelBg.length > 0) {
-                    slideoutPanelBg[0].style = "z-index: 100";
-                }
-            });
-        },
-        addedToCompare(proposalId) {
-          let isExists = true;
-          let i = _.indexOf( this.selectedBlock.proposalComparison, proposalId );
-
-          if ( i !== -1  ) {
-              isExists = true;
-          } else {
-              isExists = false;
-          }
-            this.$emit('update-comparison',this.selectedBlock.proposalComparison.length);
-
-            this.updateEventComponent();
-            return isExists;
-        },
-        updateEventComponent() {
-            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-            let event = new CalendarEvent({id: this.event.id});
-            let selected_block = new EventComponent({id : this.selectedBlock.id});
-
-            selected_block.proposalComparison = this.selectedBlock.proposalComparison
-
-            selected_block.for(calendar, event).save()
-                .then(resp => {
-
-                })
-                .catch(error => {
-                    console.log('EventComponentVendor error =>',error)
-                })
+      },
+      addToCompare(proposalId) {
+        if ( this.selectedBlock.proposalComparison.length < 3 ) {
+          this.selectedBlock.proposalComparison.push(proposalId);
+        } else {
+          this.selectedBlock.proposalComparison.splice(0,1);
+          this.selectedBlock.proposalComparison.push(proposalId);
         }
+      },
+      removeFromCompare(proposalId) {
+        let i = _.indexOf( this.selectedBlock.proposalComparison, proposalId );
+
+        if ( i !== -1 ) {
+          this.selectedBlock.proposalComparison.splice( i, 1 );
+        }
+        this.updateEventComponent();
+        this.$emit('update-comparison',this.selectedBlock.proposalComparison.length);
+      },
+      manageVendors() {
+        //this.$router.push({ path: `/vendors-pool`});
+        window.currentPanel = this.$showPanel({
+          component: VendorsPoolPanel,
+          cssClass: 'md-layout-item md-size-85 transition36 bg-grey',
+          openOn: 'right',
+          props: {}
+        });
+
+        let slideoutPanelBg = document.getElementsByClassName("slideout-panel-bg");
+        if (slideoutPanelBg && slideoutPanelBg.length > 0) {
+          slideoutPanelBg[0].style = "z-index: 101";
+        }
+        window.currentPanel.promise.then(res=>{
+          if (slideoutPanelBg && slideoutPanelBg.length > 0) {
+            slideoutPanelBg[0].style = "z-index: 100";
+          }
+        });
+      },
+      addedToCompare(proposalId) {
+        let isExists = true;
+        let i = _.indexOf( this.selectedBlock.proposalComparison, proposalId );
+
+        if ( i !== -1  ) {
+          isExists = true;
+        } else {
+          isExists = false;
+        }
+        this.$emit('update-comparison',this.selectedBlock.proposalComparison.length);
+
+        this.updateEventComponent();
+        return isExists;
+      },
+      updateEventComponent() {
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
+        let selected_block = new EventComponent({id : this.selectedBlock.id});
+
+        selected_block.proposalComparison = this.selectedBlock.proposalComparison
+
+        selected_block.for(calendar, event).save()
+          .then(resp => {
+
+          })
+          .catch(error => {
+            console.log('EventComponentVendor error =>',error)
+          })
+      }
 
     },
     created() {
@@ -313,6 +312,10 @@
       searchQuery(newVal, oldVal){
         this.filterVendors();
       },
+      blockVendors(newVal, oldVal){
+        this.getBlockVendors();
+        this.isLoading = false;
+      }
     }
   }
 </script>

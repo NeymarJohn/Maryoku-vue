@@ -1,6 +1,5 @@
 <template>
     <div class="manage-proposals-panel">
-        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee"/>
 
         <div class="md-layout" style="max-height: 50vh;">
             <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
@@ -13,7 +12,7 @@
                     Manage Proposals - {{selectedBlock.componentCategoryId}}
                 </h4>
 
-                <div class="tabs-section" v-if="!isLoading">
+                <div class="tabs-section">
                     <tabs
                         :tab-name="['<span>'+requirementsLength+'</span> Requirements', '<span>' + proposalsNumber + '</span> Proposals', '<span>'+comparisonsNumber+'</span> Comparison', '<span>0</span> Winner']"
                         color-button="primary" ref="proposalsTabs" :activeTab="1">

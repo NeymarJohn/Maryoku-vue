@@ -74,10 +74,6 @@ export default {
       .then(resp => {
 
         this.$set(this, "proposalRequest", resp);
-        
-        this.$router.push({
-          params: {id}
-        });
 
         if (!this.gotProposals) {
           this.getProposals(resp.vendorId);

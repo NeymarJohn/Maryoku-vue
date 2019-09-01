@@ -156,7 +156,7 @@
                                               required/>
                                 </md-field>
                             </div>
-                            
+
                             <div class="md-layout-item md-size-100" style="margin-top: 24px;">
                                 <md-button v-if="editMode && openInPlannerOption" @click="openEventPlanner" class="md-simple md-info">
                                     &lt; Open in Event Planner
@@ -258,9 +258,9 @@
     }),
 
     created() {
-      
+
       if (this.editMode) {
-        
+
         this.eventData = {
           id: this.sourceEventData.id,
           title: this.sourceEventData.title,
@@ -320,7 +320,7 @@
     mounted() {
 
       this.getOccasionList();
-      this.$store.dispatch("event/getEventTypes", this.$auth.user.defaultCalendarId);
+      this.$store.dispatch("event/getEventTypes", {data: this.$auth.user.defaultCalendarId, ctx: this});
 
       this.$root.$on('statusChange', (newStatus) => {
         this.status = newStatus;
@@ -501,7 +501,7 @@
           type: 'danger',
         });
       },
-      mdOpened:function() {        
+      mdOpened:function() {
         this.eventData.occasion += " ";
         this.eventData.occasion = this.eventData.occasion.substring(0, this.eventData.occasion.length -1)
       },
