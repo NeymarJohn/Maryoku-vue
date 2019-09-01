@@ -128,7 +128,7 @@
     },
     data: () => ({
       // auth: auth,
-      isLoading:false,
+      isLoading:true,
       sendingRfp: false,
       searchQuery: "",
       ratings: [1, 2, 3, 4, 5],
@@ -144,6 +144,8 @@
         let vendorsWithNoStatus =  _.filter(this.blockVendors, function(item){ return !item.proposals });
 
         this.filteredBlockVendors = _.union( vendorsWithProposals,vendorsWithSentStatus,vendorsWithNoStatus);
+
+        this.isLoading = this.filteredBlockVendors.length <= 0;
       },
       sendVendor(item) {
         this.isLoading = true;
