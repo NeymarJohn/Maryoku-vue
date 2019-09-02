@@ -209,7 +209,7 @@
           component: ManageProposalsAccept,
           cssClass: 'md-layout-item md-size-65 transition36 bg-grey',
           openOn: 'right',
-          props: {event: this.event, selectedBlock: this.selectedBlock}
+          props: {event: this.event, proposal: proposal, selectedBlock: this.selectedBlock}
         })
       },
       getProposalDate(eventStartMillis) {

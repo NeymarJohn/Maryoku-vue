@@ -169,7 +169,7 @@ export default {
 
         let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
 
-        let m = new CalendarEvent().for(_calendar).fetch(this, true);
+        let m = new CalendarEvent().for(_calendar).fetch(this, false);
         m.then(allEvents=>{
           this.upcomingEvents = allEvents;
           this.isLoading = false;

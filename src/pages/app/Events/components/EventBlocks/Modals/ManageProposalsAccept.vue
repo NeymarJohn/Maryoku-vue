@@ -8,7 +8,7 @@
             </div>
             <div class="md-layout-item md-size-95" style="max-height: 50vh;">
                 <h4 class="md-title" style="margin-bottom: 0; line-height: 51px; text-transform: capitalize;">
-                    Manage Proposals - {{selectedBlock.componentCategoryId}}
+                    Accept Proposal <small></small>
                 </h4>
 
                 <div class="tabs-section">
@@ -21,18 +21,19 @@
                             <md-card class="text-left acceptance-section">
                                 <md-card-header class="acceptance-section-header">
                                     <div class="header-title">
-                                        <div class="md-title">Moshe & sons food for events</div>
+                                        <div class="md-title">{{proposal.vendor.vendorDisplayName}}</div>
                                         <div class="star-rating">
                                             <label class="star-rating__star"
                                                    v-for="rating in ratings"
-                                                   :class="{'is-selected' : ((feedbackRating >= rating) && feedbackRating != null)}"
+                                                   :class="{'is-selected' : ((proposal.vendor.rank >= rating) && proposal.vendor.rank != null)}"
                                             >
                                                 <input class="star-rating star-rating__checkbox" type="radio"
-                                                       v-model="feedbackRating">★</label>
+                                                       >★</label>
                                         </div>
                                     </div>
                                     <div class="header-actions">
-                                        <md-button class="md-primary">I ACCEPT THIS PROPOSAL</md-button>
+                                        <md-button class="md-danger" @click="acceptProposal(false)">UNDO ACCEPT THIS PROPOSAL</md-button>
+                                        <md-button class="md-primary" @click="acceptProposal(true)">I ACCEPT THIS PROPOSAL</md-button>
                                     </div>
                                 </md-card-header>
                                 <md-card-content>
@@ -43,11 +44,11 @@
                                                     <ul class="proposal-payments-details">
                                                         <li>
                                                             <div class="details-label">Provided Service</div>
-                                                            <div class="details-desc">Catering</div>
+                                                            <div class="details-desc">{{selectedBlock.category}}</div>
                                                         </li>
                                                         <li>
                                                             <div class="details-label">Event</div>
-                                                            <div class="details-desc">End of the year party, Sep 19th 2019</div>
+                                                            <div class="details-desc">{{event.title}}, {{event.eventEndMillis}}</div>
                                                         </li>
                                                         <li>
                                                             <div class="details-label">Payment Method</div>
@@ -55,7 +56,7 @@
                                                         </li>
                                                         <li>
                                                             <div class="details-label">Cancellation Policy</div>
-                                                            <div class="details-desc">Strict <md-button class="md-rose md-sm md-simple no-uppercase">(Learn more)</md-button></div>
+                                                            <div class="details-desc">{{proposal.candellationPolicy}} <md-button class="md-rose md-sm md-simple no-uppercase">(Learn more)</md-button></div>
                                                         </li>
                                                     </ul>
                                                 </md-card-content>
@@ -67,19 +68,19 @@
                                                     <div class="cost-info">
                                                         <div class="cost-info_desc full-width">
                                                             <div class="cost-label">Subtotal</div>
-                                                            <div class="cost-value">$2,000</div>
+                                                            <div class="cost-value">${{(proposal.cost+ proposal.cost*0.03).toFixed(2)}}</div>
                                                         </div>
                                                     </div>
 
                                                     <div class="payment-details">
-                                                        <ul class="payment-details_list-items">
-                                                            <li>
-                                                                <div class="details-title">Now - Upfront payment, service fee and tax (3%)</div>
-                                                                <div class="details-cost">$400</div>
+                                                        <ul class="payment-details_list-items" v-if="proposal.costBreakdown" >
+                                                            <li v-for="(item,index) in proposal.costBreakdown">
+                                                                <div class="details-title">{{ item.service }}</div>
+                                                                <div class="details-cost">{{item.cost.toFixed(2)}}</div>
                                                             </li>
                                                             <li>
-                                                                <div class="details-title">Oct 2nd 2019</div>
-                                                                <div class="details-cost">$1600</div>
+                                                                <div class="details-title">Upfront payment, service fee and tax (3%)</div>
+                                                                <div class="details-cost">${{(proposal.cost*0.03).toFixed(2)}}</div>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -103,7 +104,7 @@
                                         <div class="md-title">Payment</div>
                                     </div>
                                     <div class="header-actions">
-                                        <md-button class="md-primary">PAY NOW ($400)</md-button>
+                                        <md-button class="md-primary">PAY NOW (${{(proposal.cost+ proposal.cost*0.03).toFixed(2)}})</md-button>
                                     </div>
                                 </md-card-header>
                                 <md-card-content>
@@ -114,7 +115,7 @@
                                                     <div class="cost-info">
                                                         <div class="cost-info_desc full-width">
                                                             <div class="cost-label">Subtotal</div>
-                                                            <div class="cost-value">$2,000</div>
+                                                            <div class="cost-value">${{(proposal.cost).toFixed(2)}}</div>
                                                         </div>
                                                     </div>
 
@@ -122,7 +123,7 @@
                                                         <ul class="payment-details_list-items fee-tax-items">
                                                             <li class="fee-tax">
                                                                 <div class="details-title">Upfront payment, service fee and tax (3%)</div>
-                                                                <div class="details-cost">$400</div>
+                                                                <div class="details-cost">${{(proposal.cost*0.03).toFixed(2)}}</div>
                                                             </li>
                                                         </ul>
 
@@ -193,11 +194,6 @@
                                                                     <md-checkbox class="md-info"    >Remember details for future payments</md-checkbox>
 
                                                                 </div>
-
-
-
-
-
                                                             </div>
                                                         </div>
 
@@ -236,6 +232,7 @@
     import _ from "underscore";
     import ViewProposal from './ViewProposal.vue'
     import EventBlockRequirements from '../Modals/EventBlockRequirements.vue'
+    import EventComponentProposal from '@/models/EventComponentProposal';
 
 
     export default {
@@ -246,8 +243,8 @@
         },
         props: {
             event: Object,
-            vendor : Object,
             selectedBlock : Object,
+            proposal : Object,
             winnerId : {
                 type : String,
                 default : null
@@ -262,9 +259,22 @@
         }),
 
         created() {
-            console.log(this.selectedBlock.proposals);
+
         },
         mounted() {
+            console.log(this.event);
+            console.log(this.selectedBlock);
+            console.log(this.proposal);
+
+            EventComponentProposal.find(this.proposal.id)
+                .then(resp => {
+
+                    this.proposal.accepted = resp.accepted;
+                    console.log('EventComponentProposal => ',resp);
+                })
+                .catch(error => {
+                    console.log(' error here   -->>>  ', error)
+                })
 
         },
         methods: {
@@ -272,60 +282,44 @@
             closePanel(){
                 this.$emit("closePanel");
             },
-            setAsWining (item) {
+            getDate (eventStartMillis) {
+                let x = new Date(eventStartMillis)
+                return moment(x).format('MMMM D, YYYY')
+            },
+            acceptProposal(boolean) {
 
-              let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-              let event = new CalendarEvent({id: this.event.id})
-              let selected_block = new EventComponent({id: this.selectedBlock.id})
+                console.log(boolean);
 
-              selected_block.calendarEvent = this.selectedBlock.calendarEvent;
-              selected_block.componentId = this.selectedBlock.componentId;
+                let proposal = new EventComponentProposal({id : this.proposal.id});
 
-              selected_block.winningProposalId = item.id;
+                proposal.accepted = boolean;
 
+                // proposal.aboutUsMessage = this.proposal.aboutUsMessage;
+                // proposal.attachements = this.proposal.attachements;
+                // proposal.candellationPolicy = this.proposal.candellationPolicy;
+                // proposal.cons = this.proposal.cons;
+                // proposal.cost = this.proposal.cost;
+                // proposal.costBreakdown = this.proposal.costBreakdown;
+                // proposal.costPerGuest = this.proposal.costPerGuest;
+                // proposal.dateCreated = this.proposal.dateCreated;
+                // proposal.extras = this.proposal.extras;
+                // proposal.included = this.proposal.included;
+                // proposal.lastUpdated = this.proposal.lastUpdated;
+                // proposal.missing = this.proposal.missing;
+                // proposal.notes  = this.proposal.notes;
+                // proposal.percentRequirements = this.proposal.percentRequirements;
+                // proposal.personalMessage = this.proposal.personalMessage;
+                // proposal.pros = this.proposal.pros;
+                // proposal.validUntil = this.proposal.validUntil;
+                // proposal.vendor = this.proposal.vendor;
+                // proposal.vendorId = this.proposal.vendorId;
 
-              selected_block.for(calendar, event).save().then(resp => {
-
-                this.isLoading = false
-                this.$notify(
-                  {
-                    message: 'Budget modified successfully!',
-                    horizontalAlign: 'center',
-                    verticalAlign: 'top',
-                    type: 'success'
-                  })
-
-                  this.$root.$emit('RefreshStatistics');
-                  this.$root.$emit('refreshBuildingBlock');
-                    this.closePanel();
-
-                this.$forceUpdate()
-              })
-                .catch(error => {
-                  console.log(error)
+                proposal.save().then((resp)=>{
+                    console.log(resp);
+                }).catch((error)=>{
+                    console.log(error);
                 })
 
-            },
-            viewAllProposals() {
-                this.proposalsToDisplay  = this.selectedBlock.vendors.length;
-            },
-          getProposalDate(eventStartMillis) {
-
-            let x = new Date(eventStartMillis);
-
-            return x.getDate() + '-' + x.getMonth() + '-' + x.getFullYear();
-
-          },
-            isThereProposals() {
-                return this.selectedBlock.proposals && this.selectedBlock.proposals.length;
-            },
-            viewProposal(proposal) {
-                window.currentPanel = this.$showPanel({
-                    component: ViewProposal,
-                    cssClass: 'md-layout-item md-size-70 transition36',
-                    openOn: 'right',
-                    props: {event: this.event, proposal: proposal}
-                })
             }
         },
         computed: {
