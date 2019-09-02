@@ -24,6 +24,7 @@ import EditEventNew from "@/pages/app/Events/EditEventNew.vue";
 import ShowEvent from "@/pages/app/Events/ShowEvent.vue";
 import VendorProposals from "@/pages/app/Events/VendorProposals.vue";
 import EventProposal from "@/pages/app/Events/EventProposal.vue";
+import EventSteps from '@/pages/app/Events/Steps'
 import Notes from "@/pages/app/Notes.vue";
 import Proposals from "@/pages/app/Proposals.vue";
 import Vendors from "@/pages/app/Vendors/Vendors.vue";
@@ -54,6 +55,7 @@ const SignedIn = () => import("@/pages/Dashboard/Pages/SignedIn.vue");
 
 import MyEvents from '@/pages/app/Guest/MyEvents.vue';
 import MarketPlace from '@/pages/app/MarketPlace/MarketPlace.vue';
+
 
 let authPages = {
     path: "/",
@@ -266,7 +268,7 @@ let appPages = {
             name: "EventDetails",
             component: EventDetails,
             meta: {title: 'Event Page', gtm: "Event Details", opaque: false},
-        }
+        },
     ]
 };
 let EventPages = {
@@ -321,6 +323,15 @@ let EventPages = {
             name: "EventInvitees",
             component: CurrentEvents,
             meta: {title: 'Event Invitees', gtm: "Event Invitees", opaque: false},
+        },
+
+        //Event Wizzard
+        {
+            path: "/event-steps/:id",
+            name: "EventSteps",
+            component: EventSteps,
+            meta: {title: 'Event Wizzard', gtm: "Event Wizzard"},
+
         }
     ]
 };
