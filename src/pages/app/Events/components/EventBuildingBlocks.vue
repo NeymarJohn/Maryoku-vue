@@ -310,11 +310,7 @@
         }
 
         this.allocatedBudget = allocatedBudget;
-        //this.isLoading = this.event.componentsCount !== this.event.components.length;
-          setTimeout(()=>{
-              this.isLoading = false;
-          },500)
-
+        this.isLoading = this.event.componentsCount !== this.event.components.length;
       },
       showAddBuildingBlocksModal() {
         window.currentPanel = this.$showPanel({

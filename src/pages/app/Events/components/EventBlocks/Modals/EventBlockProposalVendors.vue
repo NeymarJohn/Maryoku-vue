@@ -209,7 +209,7 @@
           component: ManageProposalsAccept,
           cssClass: 'md-layout-item md-size-65 transition36 bg-grey',
           openOn: 'right',
-          props: {event: this.event, proposal: proposal, selectedBlock: this.selectedBlock}
+          props: {event: this.event, selectedBlock: this.selectedBlock}
         })
       },
       getProposalDate(eventStartMillis) {
@@ -240,6 +240,8 @@
           this.selectedBlock.proposalComparison.splice(0,1);
           this.selectedBlock.proposalComparison.push(proposalId);
         }
+
+        this.updateEventComponent();
       },
       removeFromCompare(proposalId) {
         let i = _.indexOf( this.selectedBlock.proposalComparison, proposalId );
@@ -270,17 +272,10 @@
         });
       },
       addedToCompare(proposalId) {
-        let isExists = true;
-        let i = _.indexOf( this.selectedBlock.proposalComparison, proposalId );
-
-        if ( i !== -1  ) {
-          isExists = true;
-        } else {
-          isExists = false;
-        }
+        let isExists = _.indexOf( this.selectedBlock.proposalComparison, proposalId ) !== -1;
         this.$emit('update-comparison',this.selectedBlock.proposalComparison.length);
 
-        this.updateEventComponent();
+        // this.updateEventComponent();
         return isExists;
       },
       updateEventComponent() {
@@ -289,7 +284,6 @@
         let selected_block = new EventComponent({id : this.selectedBlock.id});
 
         selected_block.proposalComparison = this.selectedBlock.proposalComparison
-
         selected_block.for(calendar, event).save()
           .then(resp => {
 
