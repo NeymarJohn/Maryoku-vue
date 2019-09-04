@@ -123,7 +123,7 @@
     props: {
       selectedBlock : Object,
       event : Object,
-      blockVendors : Array,
+      //blockVendors : Array,
 
     },
     data: () => ({
@@ -132,23 +132,44 @@
       sendingRfp: false,
       searchQuery: "",
       ratings: [1, 2, 3, 4, 5],
-      filteredBlockVendors : []
+      filteredBlockVendors : [],
+        blockVendors : null
     }),
     methods: {
       getBlockVendors() {
-        this.filteredBlockVendors = [];
 
-        console.log('blockVendors => ',this.blockVendors);
-        let vendorsWithProposals = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
-        let vendorsWithSentStatus =  _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
-        let vendorsWithNoStatus =  _.filter(this.blockVendors, function(item){ return !item.proposals });
 
-        this.filteredBlockVendors = _.union( vendorsWithProposals,vendorsWithSentStatus,vendorsWithNoStatus);
+          let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+          let event = new CalendarEvent({id: this.event.id});
+          let selected_block = new EventComponent({id : this.selectedBlock.id});
 
-        this.isLoading = this.filteredBlockVendors.length <= 0;
+          new EventComponentVendor().for(calendar, event, selected_block).get()
+              .then(resp => {
+                  this.isLoading = false;
+                  this.blockVendors = resp;
+
+
+                  console.log('blockVendors => ',this.blockVendors);
+                  let vendorsWithProposals = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
+                  let vendorsWithSentStatus =  _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
+                  let vendorsWithNoStatus =  _.filter(this.blockVendors, function(item){ return !item.proposals });
+
+                  this.filteredBlockVendors = _.union( vendorsWithProposals,vendorsWithSentStatus,vendorsWithNoStatus);
+
+              })
+              .catch(error => {
+                  this.isLoading = false;
+                  console.log('EventComponentVendor error =>',error)
+              })
+
+
+
+
+
+        //this.isLoading = this.filteredBlockVendors.length <= 0;
       },
       sendVendor(item) {
-        this.isLoading = true;
+        //this.isLoading = true;
 
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
@@ -165,13 +186,15 @@
         vendor.for(calendar, event, selected_block).save()
           .then(resp => {
 
+              console.log(resp);
+
             this.getBlockVendors();
 
             this.$forceUpdate();
 
           })
           .catch(error => {
-            this.isLoading = false;
+            //this.isLoading = false;
             console.log('EventComponentVendor error =>',error);
 
             this.$notify(
@@ -209,7 +232,7 @@
           component: ManageProposalsAccept,
           cssClass: 'md-layout-item md-size-65 transition36 bg-grey',
           openOn: 'right',
-          props: {event: this.event, selectedBlock: this.selectedBlock}
+          props: {event: this.event, proposal: proposal, selectedBlock: this.selectedBlock}
         })
       },
       getProposalDate(eventStartMillis) {
@@ -240,8 +263,6 @@
           this.selectedBlock.proposalComparison.splice(0,1);
           this.selectedBlock.proposalComparison.push(proposalId);
         }
-
-        this.updateEventComponent();
       },
       removeFromCompare(proposalId) {
         let i = _.indexOf( this.selectedBlock.proposalComparison, proposalId );
@@ -272,10 +293,17 @@
         });
       },
       addedToCompare(proposalId) {
-        let isExists = _.indexOf( this.selectedBlock.proposalComparison, proposalId ) !== -1;
+        let isExists = true;
+        let i = _.indexOf( this.selectedBlock.proposalComparison, proposalId );
+
+        if ( i !== -1  ) {
+          isExists = true;
+        } else {
+          isExists = false;
+        }
         this.$emit('update-comparison',this.selectedBlock.proposalComparison.length);
 
-        // this.updateEventComponent();
+        this.updateEventComponent();
         return isExists;
       },
       updateEventComponent() {
@@ -284,6 +312,7 @@
         let selected_block = new EventComponent({id : this.selectedBlock.id});
 
         selected_block.proposalComparison = this.selectedBlock.proposalComparison
+
         selected_block.for(calendar, event).save()
           .then(resp => {
 
@@ -309,7 +338,7 @@
         this.filterVendors();
       },
       blockVendors(newVal, oldVal){
-        this.getBlockVendors();
+        //this.getBlockVendors();
         this.isLoading = false;
       }
     }

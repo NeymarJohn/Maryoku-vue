@@ -152,10 +152,10 @@
                                     <md-table-row slot="md-table-row" slot-scope="{ item }"  :class="{disabled : item.perGuest == 'N/A'}" >
                                         <md-table-cell md-label="Service" style="text-transform: capitalize;">{{ item.service }}</md-table-cell>
                                         <md-table-cell md-label="Per guest">
-                                            <template v-if="item.perGuest == 'N/A'">{{item.perGuest}}</template>
+                                            <template v-if="item.perGuest == 'N/A'">{{item.perGuest.toFixed(2)}}</template>
                                             <template v-else>${{ item.perGuest }}</template>
                                         </md-table-cell>
-                                        <md-table-cell class="cost-cell" md-label="Cost" :class="getAlignClasses(item)">${{ item.cost }}</md-table-cell>
+                                        <md-table-cell class="cost-cell" md-label="Cost" :class="getAlignClasses(item)">${{ item.cost.toFixed(2) }}</md-table-cell>
                                     </md-table-row>
                                 </md-table>
                                 <div class="table table-stats table-striped">
@@ -164,7 +164,7 @@
                                             Subtotal
                                         </div>
                                         <span class="td-value">
-                                        ${{vendorProposal.cost}}
+                                        ${{(vendorProposal.cost).toFixed(2)}}
                                     </span>
                                     </div>
                                     <div class="td-price">
@@ -172,7 +172,7 @@
                                             Tax (3%)
                                         </div>
                                         <span class="td-value">
-                                        ${{vendorProposal.cost*0.03}}
+                                        ${{(vendorProposal.cost*0.03).toFixed(2)}}
                                     </span>
                                     </div>
                                     <div class="td-price bold">
@@ -418,7 +418,7 @@
                     component: ManageProposalsAccept,
                     cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
                     openOn: 'right',
-                    props: {event: this.event, selectedBlock: this.selectedBlock}
+                    props: {event: this.event, proposal: this.proposal , selectedBlock: this.selectedBlock}
                 })
             },
             getDate (eventStartMillis) {
