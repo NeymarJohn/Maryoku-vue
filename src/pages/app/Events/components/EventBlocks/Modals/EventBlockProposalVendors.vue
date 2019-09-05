@@ -263,6 +263,8 @@
           this.selectedBlock.proposalComparison.splice(0,1);
           this.selectedBlock.proposalComparison.push(proposalId);
         }
+
+        this.updateEventComponent();
       },
       removeFromCompare(proposalId) {
         let i = _.indexOf( this.selectedBlock.proposalComparison, proposalId );
@@ -293,17 +295,10 @@
         });
       },
       addedToCompare(proposalId) {
-        let isExists = true;
-        let i = _.indexOf( this.selectedBlock.proposalComparison, proposalId );
-
-        if ( i !== -1  ) {
-          isExists = true;
-        } else {
-          isExists = false;
-        }
+        let isExists = _.indexOf( this.selectedBlock.proposalComparison, proposalId ) !== -1;
         this.$emit('update-comparison',this.selectedBlock.proposalComparison.length);
 
-        this.updateEventComponent();
+        // this.updateEventComponent();
         return isExists;
       },
       updateEventComponent() {
@@ -312,7 +307,6 @@
         let selected_block = new EventComponent({id : this.selectedBlock.id});
 
         selected_block.proposalComparison = this.selectedBlock.proposalComparison
-
         selected_block.for(calendar, event).save()
           .then(resp => {
 

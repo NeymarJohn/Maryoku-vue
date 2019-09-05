@@ -21,7 +21,7 @@
                                 :event="event"
                                 :selectedBlock="selectedBlock"
                                 :predefinedRequirements="selectedBlock.predefinedRequirements"
-                                > </event-block-requirements>
+                            > </event-block-requirements>
                         </template>
                         <template slot="tab-pane-2" style="width: 100%;">
                             <event-block-proposal-vendors :event="event"
@@ -32,9 +32,9 @@
                         <template slot="tab-pane-3" style="width: 100%;">
                             <div style="padding-left: 6px;">
                                 <event-block-comparison
-                                    :event="event"
-                                    :selectedBlock="selectedBlock"
-                                    :blockVendors="blockVendors"
+                                    :event.sync="event"
+                                    :selectedBlock.sync="selectedBlock"
+                                    :blockVendors.sync="blockVendors"
 
                                 ></event-block-comparison>
                             </div>
@@ -93,11 +93,11 @@
     },
     data: () => ({
       // auth: auth,
-        isLoading : false,
+      isLoading : false,
       proposalsToDisplay : 1,
       requirementsLength : 0,
-        comparisonsNumber: 0,
-        blockVendors : null
+      comparisonsNumber: 0,
+      blockVendors : null
 
     }),
 
@@ -161,41 +161,41 @@
       isThereProposals() {
         return this.selectedBlock.proposals && this.selectedBlock.proposals.length;
       },
-        updateComparison(item) {
-            this.comparisonsNumber = item;
+      updateComparison(item) {
+        this.comparisonsNumber = item;
+        this.$forceUpdate();
+      },
+      getBlockVendors() {
 
-        },
-        getBlockVendors() {
+        this.isLoading = true;
 
-            this.isLoading = true;
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
+        let selected_block = new EventComponent({id : this.selectedBlock.id});
 
-            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-            let event = new CalendarEvent({id: this.event.id});
-            let selected_block = new EventComponent({id : this.selectedBlock.id});
-
-            new EventComponentVendor().for(calendar, event, selected_block).get()
-                .then(resp => {
-                    this.isLoading = false;
-                    this.blockVendors = resp;
-                })
-                .catch(error => {
-                    this.isLoading = false;
-                    console.log('EventComponentVendor error =>',error)
-                })
-        }
+        new EventComponentVendor().for(calendar, event, selected_block).get()
+          .then(resp => {
+            this.isLoading = false;
+            this.blockVendors = resp;
+          })
+          .catch(error => {
+            this.isLoading = false;
+            console.log('EventComponentVendor error =>',error)
+          })
+      }
     },
     computed: {
-        proposalsNumber(){
-            let proposals = [];
+      proposalsNumber(){
+        let proposals = [];
 
-            _.map(this.selectedBlock.proposals,(item)=> {
-                if ( _.indexOf(proposals,item.vendorId) === -1 ) {
-                    proposals.push(item.vendorId);
-                }
-            })
+        _.map(this.selectedBlock.proposals,(item)=> {
+          if ( _.indexOf(proposals,item.vendorId) === -1 ) {
+            proposals.push(item.vendorId);
+          }
+        })
 
-            return proposals.length;
-        }
+        return proposals.length;
+      }
     },
 
   };
