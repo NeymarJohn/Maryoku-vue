@@ -257,54 +257,23 @@
 
       },
       addToCompare(proposalId) {
-        /*if ( this.selectedBlock.proposalComparison.length < 3 ) {
+        if ( this.selectedBlock.proposalComparison.length < 3 ) {
           this.selectedBlock.proposalComparison.push(proposalId);
         } else {
           this.selectedBlock.proposalComparison.splice(0,1);
           this.selectedBlock.proposalComparison.push(proposalId);
-        }*/
-        if (!this.selectedBlock.proposalComparison1){
-          this.selectedBlock.proposalComparison1 = proposalId;
-        } else if (!this.selectedBlock.proposalComparison2){
-          this.selectedBlock.proposalComparison2 = proposalId;
-        } else if (!this.selectedBlock.proposalComparison3){
-          this.selectedBlock.proposalComparison3 = proposalId;
-        } else {
-          this.selectedBlock.proposalComparison1 = this.selectedBlock.proposalComparison2;
-          this.selectedBlock.proposalComparison2 = this.selectedBlock.proposalComparison3;
-          this.selectedBlock.proposalComparison3 = proposalId;
         }
 
         this.updateEventComponent();
       },
       removeFromCompare(proposalId) {
-        /*let i = _.indexOf( this.selectedBlock.proposalComparison, proposalId );
+        let i = _.indexOf( this.selectedBlock.proposalComparison, proposalId );
 
         if ( i !== -1 ) {
           this.selectedBlock.proposalComparison.splice( i, 1 );
-        }*/
-
-        if (this.selectedBlock.proposalComparison1 === proposalId){
-          this.selectedBlock.proposalComparison1 = null;
-        } else if (this.selectedBlock.proposalComparison2 === proposalId){
-          this.selectedBlock.proposalComparison2 = null;
-        } else if (this.selectedBlock.proposalComparison3 === proposalId){
-          this.selectedBlock.proposalComparison3 = null;
         }
-
-        let count = 0;
-        if (this.selectedBlock.proposalComparison1){
-          count++;
-        }
-        if (this.selectedBlock.proposalComparison2){
-          count++;
-        }
-        if (this.selectedBlock.proposalComparison3){
-          count++;
-        }
-
         this.updateEventComponent();
-        this.$emit('update-comparison',count);
+        this.$emit('update-comparison',this.selectedBlock.proposalComparison.length);
       },
       manageVendors() {
         //this.$router.push({ path: `/vendors-pool`});
@@ -326,39 +295,18 @@
         });
       },
       addedToCompare(proposalId) {
-        //let isExists = _.indexOf( this.selectedBlock.proposalComparison, proposalId ) !== -1;
-        let count = 0;
-        if (this.selectedBlock.proposalComparison1){
-          count++;
-        }
-        if (this.selectedBlock.proposalComparison2){
-          count++;
-        }
-        if (this.selectedBlock.proposalComparison3){
-          count++;
-        }
-
-        this.$emit('update-comparison',count);
+        let isExists = _.indexOf( this.selectedBlock.proposalComparison, proposalId ) !== -1;
+        this.$emit('update-comparison',this.selectedBlock.proposalComparison.length);
 
         // this.updateEventComponent();
-        if (this.selectedBlock.proposalComparison1 === proposalId){
-          return true;
-        } else if (this.selectedBlock.proposalComparison2 === proposalId){
-          return true;
-        } else if (this.selectedBlock.proposalComparison3 === proposalId){
-          return true;
-        }
-
-        return false;
+        return isExists;
       },
       updateEventComponent() {
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
         let selected_block = new EventComponent({id : this.selectedBlock.id});
 
-        selected_block.proposalComparison1 = this.selectedBlock.proposalComparison1
-        selected_block.proposalComparison2 = this.selectedBlock.proposalComparison2
-        selected_block.proposalComparison3 = this.selectedBlock.proposalComparison3
+        selected_block.proposalComparison = this.selectedBlock.proposalComparison
         selected_block.for(calendar, event).save()
           .then(resp => {
 

@@ -110,6 +110,7 @@
                                 <md-card-content>
                                     <div class="md-layout">
                                         <div class="md-layout-item md-size-100">
+
                                             <md-card class="cost-pros-cons-section">
                                                 <md-card-content>
                                                     <div class="cost-info">
@@ -205,6 +206,7 @@
                                                 By clicking pay now, you agree to pay the total amount shown, which includes tax and service Fee.
                                             </div>
 
+
                                         </div>
                                     </div>
                                 </md-card-content>
@@ -219,6 +221,7 @@
 </template>
 <script>
     // import auth from '@/auth';
+    import Vue from 'vue';
     import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
     import CalendarEvent from '@/models/CalendarEvent';
     import Calendar from "@/models/Calendar";
@@ -233,7 +236,6 @@
     import ViewProposal from './ViewProposal.vue'
     import EventBlockRequirements from '../Modals/EventBlockRequirements.vue'
     import EventComponentProposal from '@/models/EventComponentProposal';
-
 
     export default {
         components: {
@@ -256,7 +258,12 @@
             proposalsToDisplay : 1,
             ratings: [1, 2, 3, 4, 5],
             feedbackRating : 3,
-            proposalAccepted : false
+            proposalAccepted : false,
+            image: 'https://i.imgur.com/HhqxVCW.jpg',
+            name: 'Shut up and take my money!',
+            description: 'Cats are the best dog!',
+            currency: 'PHP',
+            amount: 99999
         }),
 
         created() {
@@ -326,6 +333,25 @@
                     console.log(error);
                 })
 
+            },
+            async checkout () {
+                // token - is the token object
+                // args - is an object containing the billing and shipping address if enabled
+                const { token, args } = await this.$refs.checkoutRef.open();
+            },
+            done ({token, args}) {
+                // token - is the token object
+                // args - is an object containing the billing and shipping address if enabled
+                // do stuff...
+            },
+            opened () {
+                // do stuff
+            },
+            closed () {
+                // do stuff
+            },
+            canceled () {
+                // do stuff
             }
         },
         computed: {
