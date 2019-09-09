@@ -25,6 +25,7 @@
         "google-maps": "3.3.0",
         "ignore-loader": "^0.1.2",
         "jquery": "3.3.1",
+        "jspdf": "^1.5.3",
         "jvectormap-next": "3.0.0",
         "nouislider": "12.1.0",
         "nprogress": "^0.2.0",

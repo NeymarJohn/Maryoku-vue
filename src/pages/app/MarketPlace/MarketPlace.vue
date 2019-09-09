@@ -49,7 +49,7 @@
               <span class="md-list-item-text md-headline">Good For</span>
               <md-list slot="md-expand">
                 <md-list-item class="md-inset">All Categories</md-list-item>
-                <md-list-item v-for="(item,index) in items" :key="index" class="md-inset">20-50 Employees</md-list-item>
+                <md-list-item v-for="(item,index) in items" :key="index" class="md-inset">20-50 Guests</md-list-item>
               </md-list>
             </md-list-item>
           </md-list>

@@ -157,6 +157,12 @@
     import ViewProposal from './ViewProposal.vue'
     import EventBlockRequirements from '../Modals/EventBlockRequirements.vue'
     import EventComponentProposal from '@/models/EventComponentProposal';
+
+    var stripe = Stripe('pk_test_Pf5EtcXWfAPTNuKeJ6IDqQPu00zkS2tASs');
+
+    // Create an instance of Elements.
+    var elements = stripe.elements();
+
     var card = undefined;
 
     export default {
@@ -194,10 +200,7 @@
         mounted() {
 
             setTimeout(()=>{
-                var stripe = Stripe('pk_test_Pf5EtcXWfAPTNuKeJ6IDqQPu00zkS2tASs');
 
-                // Create an instance of Elements.
-                var elements = stripe.elements();
 
 
 
@@ -225,7 +228,6 @@
                     }
                 };
 
-
                 card = elements.create('card');
                 card.mount(this.$refs.card);
 
@@ -242,6 +244,7 @@
                 let self = this;
 
                 stripe.createToken(card).then(function(result) {
+                    console.log(result);
                     if (result.error) {
                         self.hasCardErrors = true;
                         self.$forceUpdate(); // Forcing the DOM to update so the Stripe Element can update.

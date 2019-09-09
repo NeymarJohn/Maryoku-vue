@@ -11,26 +11,26 @@
         class='event_emp-title'
         title="We're ready here..."
         titleText='event_titleStyle'/>
-        
+
 </div>
-        <Datepicker 
+        <Datepicker
                 labelStyle='event_label_input'
                 label='Your bithday'
                 fieldStyle="field_input"
                 :value='bithday'
                 name='bithday'
-                :onChange='onChange'                
+                :onChange='onChange'
         />
         <Datepicker
                 labelStyle='event_label_input'
                 label='When did you join the company'
                 :value='join_to_company'
                 name='join_to_company'
-                :onChange='onChange'                
-        /> 
+                :onChange='onChange'
+        />
         <Select
          label='Which holidays do u celebrate?'
-         labelStyle='event_label_input'         
+         labelStyle='event_label_input'
          :list='event_list'
           name='select_holiday'
           :valueName="['title','name']"
@@ -39,36 +39,36 @@
          />
          <div class='events-add-new-date-block'  v-if='add_dates.length!==0'  v-for='item  in add_dates'>
          <div class='event-add-new-date_input'>
-             <InputText 
+             <InputText
                labelStyle='event_label_input'
                 label='Description'
                 fieldStyle="field_input"
                 :value='item.description'
                 name='description'
                 :onChange='onChange'
-                count                
+                count
         />
         </div>
         <div class='event-add-new-date_datepicke'>
-          <Datepicker                
-                 :key='date'               
+          <Datepicker
+                 :key='date'
                 :value='item.date'
                 name='date'
                 :onChange='onChange'
-                count                 
+                count
         />
         </div>
         <div class='event-add-new-date-delete_button' @click.prevent='deleteDate(item.description)'><md-icon  class='event-add_icon'>clear</md-icon></div>
-        </div> 
+        </div>
         <Title
                 title='The more we know about important dates, the more we can celebrate you.'
                 titleBlock='event_titleBlock'
-                titleText='event_title-span'                
+                titleText='event_title-span'
                 withSpan
                 spanText=' Add dates'
-                spanStyles='event_span-title' 
-                 :onClick='onAddDate'                
-        /> 
+                spanStyles='event_span-title'
+                 :onClick='onAddDate'
+        />
 </div>
 <div class='event_button-block' >
         <ButtonDiv buttonStyle='event_buttonStyle' text='skip' :onClick='onSkip'/>
@@ -82,11 +82,11 @@
                 titleBlock='event_titleBlock'
                 titleText='event_titleStyle'
         />
-        <Title  
-                titleText='titleTextLogo'        
+        <Title
+                titleText='titleTextLogo'
                 titleBlock='event_titleBlock'
-                title='Automate individual congratulation cards to help you give that personal touch your employees crave, without the usual efford that comes with it'
-         />         
+                title='Automate individual congratulation cards to help you give that personal touch your guests crave, without the usual efford that comes with it'
+         />
 </div>
 </div>
 </div>
@@ -104,18 +104,18 @@
         title="We're ready here..."
         titleText='event_titleStyle'/>
 </div>
-        <Datepicker                 
-                label='Your bithday'                
+        <Datepicker
+                label='Your bithday'
                 :value='bithday'
                 name='bithday'
                 :onChange='onChange'
-                
+
         />
-        <Datepicker                
+        <Datepicker
                 label='When did you join the company'
                 :value='join_to_company'
                 name='join_to_company'
-                :onChange='onChange'                
+                :onChange='onChange'
         />
         <Select
          label='Which holidays do u celebrate?'
@@ -128,25 +128,25 @@
           />
           <div class='events-add-new-date-block'  v-show='add_dates.length!==0' v-for='(item,index)  in add_dates'>
           <div class='event-add-new-date_input'>
-              <InputText 
+              <InputText
                 labelStyle='event_label_input'
                 label='Description'
                 fieldStyle="field_input"
                 :value='item.description'
                 name='description'
                 :onChange='onChange'
-                count                
+                count
         />
-        </div>        
-          <Datepicker                
-                :key='date'               
+        </div>
+          <Datepicker
+                :key='date'
                 :value='item.date'
                 name='date'
                 :onChange='onChange'
-                count                
-        />        
+                count
+        />
         <div  class='event-add-new-date-delete_button' @click.prevent='deleteDate(item.description)'><md-icon  class='event-add_icon'>clear</md-icon></div>
-        </div>           
+        </div>
         <Title
                 title='The more we know about important dates, the more we can celebrate you.'
                 titleBlock='event_titleBlock'
@@ -154,8 +154,8 @@
                 withSpan
                 spanText=' Add dates'
                 spanStyles='event_span-title'
-                 :onClick='onAddDate'                              
-        />       
+                 :onClick='onAddDate'
+        />
 </div>
 <div class='event_button-block'>
         <ButtonDiv buttonStyle='event_buttonStyle' text='skip' :onClick='onSkip'/>
@@ -168,7 +168,7 @@
                 title='Just give us a reason to selebrate'
                 titleBlock='event_titleBlock'
                 titleText='event_titleStyle'
-        />        
+        />
 </div>
 </div>
 </div>
@@ -191,7 +191,7 @@ import Modal from '@/components/Modal.vue'
 export default {
     name:'Employee',
     props:{
-       officeManager:String     
+       officeManager:String
     },
     components:{
    Datepicker,
@@ -220,62 +220,62 @@ export default {
         }
         ,
                 mounted:function(){
-                const onboardingPath = this.$store.getters['user/getUser'].onboardingPath                
-                this.role=onboardingPath  
+                const onboardingPath = this.$store.getters['user/getUser'].onboardingPath
+                this.role=onboardingPath
         },
         methods: {
-                onSkip:function(){                           
-                        this.$router.push('/dietary')     
-                },                
-                onChange:function(value, name,count){                                      
-                 this[name]=value 
+                onSkip:function(){
+                        this.$router.push('/dietary')
+                },
+                onChange:function(value, name,count){
+                 this[name]=value
                  console.log(value, name,count)
                  if(this.new_number_of_event&&count){
                          this.add_dates[this.new_number_of_event-1][name]=value
-                 }                   
+                 }
                 }
                 ,onNext:function(){
                         console.log(this.add_dates)
                         // const event=isWrong(this,this.listComponentName)
-                        // this.$store.dispatch("user/sendEvent",event)     
-                        // this.$router.push('/dietary')     
+                        // this.$store.dispatch("user/sendEvent",event)
+                        // this.$router.push('/dietary')
                 }
                 ,onAddDate:function(){
                         const newDate={description:'',date:''}
-                        this.new_number_of_event=++this.new_number_of_event                        
+                        this.new_number_of_event=++this.new_number_of_event
                         this.add_dates.push(newDate)
                 },
                 deleteDate:function(value){
-                        console.log(value,this.add_dates)  
-                        console.log(this.add_dates.filter((item)=>item.description!==value)) 
+                        console.log(value,this.add_dates)
+                        console.log(this.add_dates.filter((item)=>item.description!==value))
                       this.add_dates=this.add_dates.filter((item)=>item.description!==value)
-                        
+
                 },
 
         },
-    
+
 }
 </script>
 <style lang="scss">
 .employee-body{
     display:flex;
-    flex-direction:'column'      
+    flex-direction:'column'
 }
 .event_form-main {
         width:50%;
-        height: 100vh; 
+        height: 100vh;
         background-color: white;
         display: flex;
         justify-content: center;
         flex-direction: row-reverse;
-          
+
 }
 .event_logo-main {
         width:50%;
-        height: 100vh;  
+        height: 100vh;
         background:  #23d0a1;
         display: flex;
-        align-items: center;  
+        align-items: center;
 }
 .event_form-block{
     width: 75%;
@@ -286,8 +286,8 @@ export default {
 }
 .event_emp-logo{
         height: 100%;
-        width: 100%; 
-         margin-bottom: -10%;       
+        width: 100%;
+         margin-bottom: -10%;
 }
 .event_emp-title{
         text-align: center;
@@ -299,28 +299,28 @@ export default {
 }
 .event_titleStyle{
       font-size: 40px;
-      font-weight: 700; 
+      font-weight: 700;
 }
 .event_titleBlock{
        display:flex;
-       justify-content: center; 
+       justify-content: center;
 }
 .event_title-span{
     color: #b6b6b6;
     font-size: 22px;
     margin-top: 20px;
 }
-.event_buttonStyle{        
+.event_buttonStyle{
         cursor: pointer;
         color: #23d0a1;
-        font-size: 20px;        
-        
+        font-size: 20px;
+
 }
-.event_button-block{      
-      display:flex;      
+.event_button-block{
+      display:flex;
       justify-content: flex-end;
-      align-items: flex-end; 
-      margin-bottom: 45px;           
+      align-items: flex-end;
+      margin-bottom: 45px;
 }
 .event_span-title{
         color:red;
@@ -335,12 +335,12 @@ export default {
     line-height: 147%;
 }
 .events-add-new-date-block{
-        display: flex;        
+        display: flex;
         width: 100%;
 }
 .event-add-new-date_input{
        width: 45%;
-    margin-right: 20px;     
+    margin-right: 20px;
 }
 .event-add-new-date_datepicke{
 width: 45%;
@@ -350,7 +350,7 @@ width: 45%;
     display: flex;
 }
 .event-add_icon{
-  cursor: pointer;    
+  cursor: pointer;
 }
 
 </style>

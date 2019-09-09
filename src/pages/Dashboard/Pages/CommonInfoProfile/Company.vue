@@ -37,7 +37,7 @@
                     <!-- Email Address -->
                     <div class="md-layout">
                         <label class="md-layout-item md-size-35 md-form-label">
-                            Number of employees
+                            Number of Guests
                         </label>
                         <div class="md-layout-item">
                             <md-field :class="[{'md-valid': !errors.has('numberOfEmployees') && touched.email},{'md-error': errors.has('numberOfEmployees')}]">

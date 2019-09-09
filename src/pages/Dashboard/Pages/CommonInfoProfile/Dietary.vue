@@ -9,7 +9,7 @@
                 title="It's time to come clean"
                 titleText='titleStyle'
         />
-        <Title        
+        <Title
             title="Mark you dietary constrints, so that we'll know to order for you"
             titleBlock='dietary_titleBlock'
             titleText='dietary_title-span'
@@ -19,7 +19,7 @@
        <Icon
             iconSourceOne="static/img/dietary/gluten_free_off.png"
             iconSourceTwo="static/img/dietary/gluten_free_on.png"
-            imageStyle='dietary-icon_logo'           
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='cluten'
 
@@ -27,77 +27,77 @@
        <Icon
             iconSourceOne="static/img/dietary/lactose_free_off.png"
             iconSourceTwo="static/img/dietary/lactose_free_on.png"
-            imageStyle='dietary-icon_logo'            
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
-            name='lactuz' 
+            name='lactuz'
        />
        <Icon
             iconSourceOne="static/img/dietary/gmo_free_off.png"
             iconSourceTwo="static/img/dietary/gmo_free_on.png"
-            imageStyle='dietary-icon_logo'            
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='gmo'
        />
        <Icon
             iconSourceOne="static/img/dietary/egg_free_off.png"
             iconSourceTwo="static/img/dietary/egg_free_on.png"
-            imageStyle='dietary-icon_logo'            
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='egg'
        />
-       </div> 
+       </div>
         <div class='dietary-check-block'>
        <Icon
             iconSourceOne="static/img/dietary/sugar_free_off.png"
             iconSourceTwo="static/img/dietary/sugar_free_on.png"
-            imageStyle='dietary-icon_logo'            
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
-            name='sugar'      
+            name='sugar'
        />
        <Icon
             iconSourceOne="static/img/dietary/peanut_free_off.png"
             iconSourceTwo="static/img/dietary/peanut_free_on.png"
-            imageStyle='dietary-icon_logo'           
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='peanut'
        />
        <Icon
             iconSourceOne="static/img/dietary/kosher_off.png"
             iconSourceTwo="static/img/dietary/kosher_on.png"
-            imageStyle='dietary-icon_logo'           
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='kosher'
        />
        <Icon
             iconSourceOne="static/img/dietary/organic_off.png"
             iconSourceTwo="static/img/dietary/organic_on.png"
-            imageStyle='dietary-icon_logo'           
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='organic'
        />
-       </div> 
+       </div>
        <div class='dietary-check-block'>
        <Icon
             iconSourceOne="static/img/dietary/eco_off.png"
             iconSourceTwo="static/img/dietary/eco_on.png"
-            imageStyle='dietary-icon_logo'            
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='ecofood'
        />
        <div class='dietary_other-options'>
-       <InputText 
+       <InputText
                 labelStyle='label_input'
                 label='Other'
                 fieldStyle="field_input"
                 :value='another_food'
                 name='another_food'
-                :onChange='onChange'                
+                :onChange='onChange'
         />
          </div>
-       </div>        
+       </div>
 </div>
 <div class='button-block'>
-        <ButtonDiv buttonStyle='dietary_buttonStyle' text='skip' :onClick='onSkip'/>        
+        <ButtonDiv buttonStyle='dietary_buttonStyle' text='skip' :onClick='onSkip'/>
         <Button text='next' :onClick='onNext' class="md-success md-fileinput button-md-common"/>
 
 
@@ -107,12 +107,12 @@
 <div>
         <img class='emp-logo' src="static/img/syncer.png">
         <Title
-                title='All Employees Preferences in one place'
+                title='All Guests Preferences in one place'
                 titleBlock='titleBlock'
                 titleText='titleStyle'
         />
-        <Title  
-                titleText='dietary_addition-text'        
+        <Title
+                titleText='dietary_addition-text'
                 titleBlock='titleBlock'
                 title="Keeping track on everyone's dietory preferences can be a hassle, when each employee manages their personal preferences, all you have to do is lay back and enjoy"
          />
@@ -129,7 +129,7 @@
         class='emp-title'
         title="It's time to come clean"
         titleText='titleStyle'/>
-        <Title        
+        <Title
         title="Mark you dietary constrints, so that we'll know to order for you"
         titleBlock='event_titleBlock'
         titleText='dietary_title-span'/>
@@ -139,7 +139,7 @@
        <Icon
             iconSourceOne="static/img/dietary/gluten_free_off.png"
             iconSourceTwo="static/img/dietary/gluten_free_on.png"
-            imageStyle='dietary-icon_logo'            
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='cluten'
 
@@ -147,76 +147,76 @@
        <Icon
             iconSourceOne="static/img/dietary/lactose_free_off.png"
             iconSourceTwo="static/img/dietary/lactose_free_on.png"
-            imageStyle='dietary-icon_logo'           
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='lactuz'
-            
+
        />
        <Icon
             iconSourceOne="static/img/dietary/gmo_free_off.png"
             iconSourceTwo="static/img/dietary/gmo_free_on.png"
-            imageStyle='dietary-icon_logo'           
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='gmo'
        />
        <Icon
             iconSourceOne="static/img/dietary/egg_free_off.png"
             iconSourceTwo="static/img/dietary/egg_free_on.png"
-            imageStyle='dietary-icon_logo'            
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='egg'
        />
-       </div> 
+       </div>
         <div class='dietary-check-block'>
         <Icon
             iconSourceOne="static/img/dietary/sugar_free_off.png"
             iconSourceTwo="static/img/dietary/sugar_free_on.png"
-            imageStyle='dietary-icon_logo'            
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
-            name='sugar'       
+            name='sugar'
        />
        <Icon
             iconSourceOne="static/img/dietary/peanut_free_off.png"
             iconSourceTwo="static/img/dietary/peanut_free_on.png"
-            imageStyle='dietary-icon_logo'           
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='peanut'
        />
       <Icon
             iconSourceOne="static/img/dietary/kosher_off.png"
             iconSourceTwo="static/img/dietary/kosher_on.png"
-            imageStyle='dietary-icon_logo'           
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='kosher'
        />
        <Icon
             iconSourceOne="static/img/dietary/organic_off.png"
             iconSourceTwo="static/img/dietary/organic_on.png"
-            imageStyle='dietary-icon_logo'           
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='organic'
        />
-       </div> 
+       </div>
        <div  class='dietary-check-block'>
        <Icon
             iconSourceOne="static/img/dietary/eco_off.png"
             iconSourceTwo="static/img/dietary/eco_on.png"
-            imageStyle='dietary-icon_logo'            
+            imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='ecofood'
        />
        <div class='dietary_other-options'>
-       <InputText 
+       <InputText
                 labelStyle='label_input'
                 label='Other'
                 fieldStyle="field_input"
                 :value='another_food'
                 name='another_food'
-                :onChange='onChange'                
+                :onChange='onChange'
         />
         </div>
-       </div> 
-  </div>             
+       </div>
+  </div>
 </div>
 <div class='button-block' >
         <ButtonDiv buttonStyle='dietary_buttonStyle' text='skip' :onClick='onSkip'/>
@@ -247,7 +247,7 @@ import Icon from '@/components/Icon/Icon.vue'
 export default {
     name:'Employee',
     props:{
-       officeManager:String     
+       officeManager:String
     },
     components:{
    InputText,
@@ -266,56 +266,56 @@ export default {
         }
         ,
         mounted:function(){
-                const onboardingPath= this.$store.getters['user/getUser'].onboardingPath                
-                this.role=onboardingPath                  
+                const onboardingPath= this.$store.getters['user/getUser'].onboardingPath
+                this.role=onboardingPath
         },
         methods: {
-                onSkip:function(){                        
-                        this.$router.push('/company')     
+                onSkip:function(){
+                        this.$router.push('/company')
                 },
                 onSelect:function(food){
                         if(!this.dietary.includes(food)){
-                              this.dietary.push(food)  
+                              this.dietary.push(food)
                         }else{
                              this.dietary=this.dietary.filter(item=>item!==food)
 
                         }
-                        
+
                 },
-                onChange:function(value, name){                                   
+                onChange:function(value, name){
                  this[name]=value
-                                   
+
          },onNext:function(){
                   const data={}
-                        data['dietary']= this.dietary 
-                        data['another_food']=this.another_food                
-                        this.$store.dispatch("user/sendCompanyInfo",data) 
-                        this.$router.push('/company') 
+                        data['dietary']= this.dietary
+                        data['another_food']=this.another_food
+                        this.$store.dispatch("user/sendCompanyInfo",data)
+                        this.$router.push('/company')
          }
         }
-    
+
 }
 </script>
 <style lang="scss">
 .dietery_employee-body{
     display:flex;
-    flex-direction:'column'      
+    flex-direction:'column'
 }
 .dietary_form-main {
         width:50%;
-        height: 100vh; 
+        height: 100vh;
         background-color: white;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;     
+        align-items: center;
 }
 .dietary_logo-main {
         width:50%;
-        height: 100vh;  
+        height: 100vh;
         background:  #67b5dd;
         display: flex;
-        align-items: center;  
+        align-items: center;
 }
 .dietary_form-block{
     width: 75%;
@@ -324,7 +324,7 @@ export default {
 }
 .emp-logo{
         height: 100%;
-        width: 100%;        
+        width: 100%;
 }
 .emp-title{
         text-align: center;
@@ -336,23 +336,23 @@ export default {
 }
 .titleStyle{
       font-size: 40px;
-      font-weight: 700; 
+      font-weight: 700;
 }
 .titleBlock{
        display:flex;
-       justify-content: center; 
+       justify-content: center;
 }
-.dietary_buttonStyle{        
+.dietary_buttonStyle{
         cursor: pointer;
         color: #67b5dd;
         font-size: 20px;
-        padding: 10px 0px               
+        padding: 10px 0px
 }
 .button-block{
       width:100%;
-      display:flex;      
+      display:flex;
       justify-content: space-between;
-      padding: 0px 40px                  
+      padding: 0px 40px
 }
 .dietary_addition-text{
 text-align: center;
@@ -363,7 +363,7 @@ text-align: center;
     line-height: 147%;
 }
 .dietary-icon_logo{
-    width: 150px;    
+    width: 150px;
     height: 150px;
 }
 .dietary-check-block{
@@ -386,6 +386,6 @@ text-align: center;
 }
 .dietary_titleBlock{
        display:flex;
-       justify-content: center; 
+       justify-content: center;
 }
 </style>
