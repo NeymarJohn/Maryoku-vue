@@ -184,7 +184,7 @@
             eventInvitees: [],
             groups: [],
             inviteesExpanded: false,
-            InviteeTypes: ["Guests Only","Guests and spouse","Guests and families", "Guests siblings"],
+            InviteeTypes: ["Employees Only","Employees and spouse","Employees and families", "Employees siblings"],
             rolesList: [
                 { id: 'ADMIN', title: 'Administrator'},
                 { id: 'co_producer', title: 'Co-Producer'},
@@ -265,7 +265,7 @@
                     if (personGroups.length > 0){
                         personGroup = personGroups[0];
                     } else {
-                        personGroup = {id: 'unknown', name: 'All Guests'};
+                        personGroup = {id: 'unknown', name: 'All Employees'};
                     }
 
                     let group = _.findWhere(updatedGroups, {id: personGroup.id});

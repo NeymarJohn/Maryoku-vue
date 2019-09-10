@@ -29,7 +29,7 @@
               <div class="md-layout-item md-size-100 hover-block" style="text-align:left;">
                   <div style="display:flex;align-items:center;justify-content: space-between;">
                     <p style="width:100%; display:flex;align-items:center;justify-content: space-between;">
-                      <span>Number of Guests</span>
+                      <span>Number of Employees</span>
                       <span class="value">{{customer.numberOfEmployees}}</span>
                     </p>
                     <v-popover
@@ -45,7 +45,7 @@
                       <template slot="popover">
                         <input-text
                               labelStyle='company_label_input'
-                              label='Number of guests'
+                              label='Number of employees'
                               name='numberOfEmployees'
                               :value='String(customer.numberOfEmployees)'
                               :onChange='onChange'

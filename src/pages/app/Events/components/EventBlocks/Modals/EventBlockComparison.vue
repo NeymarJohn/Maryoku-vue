@@ -1,15 +1,13 @@
 <template>
-    <div  class="event-blocks-comparison-panel" style="height: 100%;">
+    <div class="event-blocks-comparison-panel" style="height: 100%;">
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee"/>
         <!-- Selected Proposals list -->
 
-        <div  class="selected-proposals-list" style="height: 100%;" v-if="selectedBlock.proposals && selectedBlock.proposals.length > 0">
+        <div class="selected-proposals-list" style="height: 100%;" v-if="selectedBlock.proposals && selectedBlock.proposals.length > 0">
 
-            <table ref="content" style="width: 100%; height: 100%;" cellspacing="0" colpadding="0">
+            <table style="width: 100%; height: 100%;" cellspacing="0" colpadding="0">
                 <tr>
-                    <td class="comparison-cell category-outer-cell" style="vertical-align: top; padding : 0;">
-                        <md-button class="md-warning md-sm" @click="exportToPDF">Export to PDF</md-button>
-                    </td>
+                    <td class="comparison-cell category-outer-cell"></td>
                     <td class="comparison-cell outer-cell" style="padding: 4px 24px;">
                         <multiselect id="0" v-model="selectedBlock.proposalComparison1" @select="addToCompare" @remove="removeFromCompare" style="height: 0;" :customLabel="getProposalName" placeholder="Select proposal" :searchable="false" :allow-empty="true" :options="selectableProposals" selectLabel="" deselectLabel="" selectedLabel="" ></multiselect>
                         <div class="spacer"></div>
@@ -236,9 +234,6 @@
   import _ from 'underscore'
   import numeral from 'numeral'
 
-  import jsPDF from 'jspdf';
-  import html2canvas from 'html2canvas';
-
   export default {
     name: 'event-block-proposal-vendors',
     components: {
@@ -448,21 +443,7 @@
             console.log('EventComponentVendor error =>',error)
             this.$forceUpdate();
           })
-      },
-        exportToPDF() {
-            const doc = new jsPDF('p', 'mm', 'a3');
-            /** WITH CSS */
-            var canvasElement = document.createElement('canvas');
-            html2canvas(this.$refs.content, { canvas: canvasElement,scale : 1 }).then(function (canvas) {
-                const img = canvas.toDataURL("image/png");
-
-                doc.addImage(img,'PNG',20,-10);
-                doc.save("sample.pdf");
-
-            });
-
-
-        }
+      }
     },
     created(title, proposal) {
 

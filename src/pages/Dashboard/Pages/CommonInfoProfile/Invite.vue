@@ -10,31 +10,31 @@
         class='invite_emp-title'
         title="Time to say hello"
         titleText='invite_titleStyle'/>
-
+        
 </div>
         <div class='invite_massage-block'>
-        <InputText
+        <InputText 
                 labelStyle='company_label_input'
-                label='Website'
+                label='Website'               
                 :value='employee_email'
                 name="employee_email"
                 :onChange='onChange'
-         />
+         />        
         <div class='send-button' >
                 <Button text='Send' :onClick='onSend' class="md-success md-fileinput button-md-common"/>
         </div>
-   </div>
+   </div>            
         <Title
-                title="Or upload guests' emails from csv file."
+                title="Or upload employees' emails from csv file."
                 titleBlock='invite_titleBlock'
-                titleText='invite_title-span'
+                titleText='invite_title-span'                
                 withSpan
                 spanText=' Browse file'
                 spanStyles='invite_event-title'
-                :onClick='UploadCSV'
-        >
-                <input type="file" id='csv-upload' @change="onFileChange($event)" style="display:none"/>
-        </Title>
+                :onClick='UploadCSV'                 
+        >                
+                <input type="file" id='csv-upload' @change="onFileChange($event)" style="display:none"/>            
+        </Title> 
 </div>
 <div class='invite_button-block'>
         <ButtonDiv buttonStyle='invite_buttonStyle' text='skip' :onClick='onSkip'/>
@@ -48,10 +48,10 @@
                 titleBlock='invite_titleBlock'
                 titleText='invite_titleStyle'
         />
-        <Title
-                titleText='invite_titleTextLogo'
+        <Title  
+                titleText='invite_titleTextLogo'        
                 titleBlock='invite_titleBlock'
-                title='Enchance the experience for your guests using variouns Participants Tools such as RSVP, Feedback, Group Segregation, After party options and so much more'
+                title='Enchance the experience for your employees using variouns Participants Tools such as RSVP, Feedback, Group Segregation, After party options and so much more'
          />
 </div>
 </div>
@@ -71,7 +71,7 @@ import Button from '@/components/Button/Button.vue'
 export default {
     name:'Employee',
     props:{
-       officeManager:String
+       officeManager:String     
     },
     components:{
    InputText,
@@ -83,20 +83,20 @@ export default {
 data(){
         return{
                employee_email:'',
-               isErrors:false
+               isErrors:false               
         }
 }
 ,
  methods: {
-         onSkip:function(){
-            this.$router.push('/officeManager-form')
+         onSkip:function(){                                      
+            this.$router.push('/officeManager-form')          
          }
          ,
-         onChange:function(value, name){
+         onChange:function(value, name){                 
                  this[name]=value
-
+                 
          },
-         UploadCSV:function(){
+         UploadCSV:function(){                 
                  document.getElementById('csv-upload').click()
          }
          ,onFileChange:function(e){
@@ -109,40 +109,40 @@ data(){
          },onSend:function(){
                  if(this.employee_email){
                       const massages=this.employee_email.split(',').map(item=>item.trim())
-                      this.$store.dispatch("user/sendEvent",massages)
+                      this.$store.dispatch("user/sendEvent",massages)      
                  }
          },
          onNext:function(){
                  if(this.employee_email){
                       const massages=this.employee_email.split(',').map(item=>item.trim())
-                      this.$store.dispatch("user/sendEvent",massages)
+                      this.$store.dispatch("user/sendEvent",massages)      
                  }
-                  this.$router.push('/officeManager-form')
+                  this.$router.push('/officeManager-form') 
          }
  },
-
+    
 }
 </script>
 <style lang="scss">
 .invite_body{
     display:flex;
-    flex-direction:'column'
+    flex-direction:'column'      
 }
 .invite_form-main {
         width:50%;
-        height: 100vh;
+        height: 100vh; 
         background-color: white;
         display: flex;
         justify-content: center;
-        flex-direction: row-reverse;
-
+        flex-direction: row-reverse;       
+          
 }
 .invite_logo-main {
         width:50%;
-        height: 100vh;
+        height: 100vh;  
         background:  #23d0a1;
         display: flex;
-        align-items: center;
+        align-items: center;  
 }
 .invite_form-block{
           width: 75%;
@@ -155,7 +155,7 @@ data(){
 .invite_emp-logo{
         height: 100%;
         width: 100%;
-         margin-bottom: -10%;
+         margin-bottom: -10%;        
 }
 .invite_emp-title{
         text-align: center;
@@ -167,27 +167,27 @@ data(){
 }
 .invite_titleStyle{
       font-size: 40px;
-      font-weight: 700;
+      font-weight: 700; 
 }
 .invite_titleBlock{
        display:flex;
-       justify-content: center;
+       justify-content: center; 
 }
 .invite_title-span{
     color: #b6b6b6;
     font-size: 22px;
     margin-top: 20px;
 }
-.invite_buttonStyle{
+.invite_buttonStyle{        
         cursor: pointer;
         color: #23d0a1;
-        font-size: 20px;
+        font-size: 20px;       
 }
-.invite_button-block{
-      display:flex;
+.invite_button-block{      
+      display:flex;      
       justify-content: flex-end;
-      align-items: flex-end;
-      margin-bottom: 45px;
+      align-items: flex-end; 
+      margin-bottom: 45px;           
 }
 .invite_event-title{
         color:#23d0a1;
@@ -215,15 +215,15 @@ data(){
     padding: 10px;
     width:80%;
     height: 100%
-
+    
 }
 .invite_massage-block{
                 display:flex;
-       .send-button{
+       .send-button{          
                 display: flex;
                 align-items: center;
                 margin-left: 40px;
 }
-
+               
 }
 </style>
