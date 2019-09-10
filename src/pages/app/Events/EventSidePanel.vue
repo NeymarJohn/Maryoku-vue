@@ -220,7 +220,7 @@
       durationArray: [...Array(12).keys()].map(x =>  ++x),
       dateValid: true,
       editTitle: false,
-      InviteeTypes: ["Employees Only","Employees and spouse","Employees and families", "Employees siblings"],
+      InviteeTypes: ["Guests Only","Guests and spouse","Guests and families", "Guests siblings"],
       modelValidations: {
         title: {
           required: true,
@@ -347,7 +347,7 @@
           status: 'draft',
           currency: 'USD',
           eventType: 'Party',
-          participantsType: 'Employees Only',
+          participantsType: 'Guests Only',
           category: 'CompanyDays'
         };
       },

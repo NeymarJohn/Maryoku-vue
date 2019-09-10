@@ -54,7 +54,7 @@
                     <div style="padding: 16px;"></div>
 
                     <div class="text-left">
-                        <h5 style="font-size: 15px !important; font-weight: 300; padding: 0; margin: 0; color: #959595;">Number of employees</h5>
+                        <h5 style="font-size: 15px !important; font-weight: 300; padding: 0; margin: 0; color: #959595;">Number of guests</h5>
                         <div class="d-flex flex-wrap justify-beetwen items-center-v">
                             <label-edit :numeric="true" :required="true" :text="numberOfEmployees" field-name="numberOfEmployees"  @text-updated-blur="saveBudgeData" @text-updated-enter="saveBudgeData" @no-change="closeEditMode"></label-edit>
                             <!--<h4 v-show="!editNumberOfEmployees" style="font-size: 25px; font-weight: 500; padding: 0; margin: 0; color: rgba(9, 170, 192, 0.8);">

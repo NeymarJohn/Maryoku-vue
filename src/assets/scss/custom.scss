@@ -4307,7 +4307,6 @@ iframe{
 
     .multiselect__content-wrapper {
         width: auto !important;
-        min-width: 100% !important;
     }
 
     .multiselect__content {
@@ -4366,5 +4365,51 @@ iframe{
             content: attr(data-deselect);
             color: #fff;
         }
+    }
+}
+
+
+/**
+* The CSS shown here will not be introduced in the Quickstart guide, but
+* shows how you can use CSS to style your Element's container.
+*/
+input,
+.StripeElement {
+    height: 40px;
+    padding: 10px 12px;
+
+    color: #32325d;
+    background-color: white;
+    border: 1px solid transparent;
+    border-radius: 4px;
+
+    box-shadow: 0 1px 3px 0 #e6ebf1;
+    -webkit-transition: box-shadow 150ms ease;
+    transition: box-shadow 150ms ease;
+}
+
+input:focus,
+.StripeElement--focus {
+    box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+    border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+    background-color: #fefde5 !important;
+}
+
+.show-cost-switch {
+    @include display-flex(row,flex-start,flex-start);
+
+    >label {
+        margin-top : 0.4em;
+    }
+    .md-field {
+        width: 60%;
+        margin-top: 0;
+        margin-left: 1em;
     }
 }
