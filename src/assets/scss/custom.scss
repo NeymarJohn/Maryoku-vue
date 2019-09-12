@@ -4413,3 +4413,15 @@ input:focus,
         margin-left: 1em;
     }
 }
+
+.vertical-tabs {
+    .md-card-content {
+        @include display-flex(row,flex-start,flex-start);
+        .nav-tabs {
+            width : 20% !important;
+            margin-left : auto !important;
+            padding-left: 0 !important;
+            margin-top : 0 !important;
+        }
+    }
+}
