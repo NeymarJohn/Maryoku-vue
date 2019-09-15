@@ -46,7 +46,7 @@
                         </template>
                     </tabs>
 
-                    <md-card class="allocated-budget" style="height: 45px;"> <md-card-content><span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span> <div class="budget">${{selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget : '0.0'}}</div></md-card-content></md-card>
+                    <md-card class="allocated-budget" style="height: 45px;"> <md-card-content><span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span> <div class="budget">${{selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget.toFixed(1) : '0.0'}}</div></md-card-content></md-card>
                 </div>
             </div>
         </div>
