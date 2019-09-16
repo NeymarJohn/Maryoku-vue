@@ -14,18 +14,18 @@
 
                 <div class="tabs-section">
                     <tabs
-                        :tab-name="['<span>'+requirementsLength+'</span> Requirements', '<span>' + proposalsNumber + '</span> Proposals', '<span>'+comparisonsNumber+'</span> Comparison', '<span>0</span> Accepted']"
+                        :tab-name="['<span>'+requirementsLength+'</span> Requirements', '<span>' + proposalsNumber + '</span> Proposals', '<span>'+comparisonsNumber+'</span> Comparison', '<span>0</span> Winner']"
                         color-button="primary" ref="proposalsTabs" :activeTab="1">
                         <template slot="tab-pane-1" style="width: 100%;">
                             <event-block-requirements
-                                :event.sync="event"
-                                :selectedBlock.sync="selectedBlock"
+                                :event="event"
+                                :selectedBlock="selectedBlock"
                                 :predefinedRequirements="selectedBlock.predefinedRequirements"
                             > </event-block-requirements>
                         </template>
                         <template slot="tab-pane-2" style="width: 100%;">
                             <event-block-proposal-vendors :event="event"
-                                :selectedBlock.sync="selectedBlock"
+                                :selectedBlock="selectedBlock"
                                 @update-comparison="updateComparison"
                             ></event-block-proposal-vendors>
                         </template>
@@ -41,12 +41,12 @@
                         </template>
                         <template slot="tab-pane-4" style="width: 100%;">
                             <div style="padding-left: 6px;">
-                                Accept proposals to view their details here.
+                                Select a proposal as winning to view its details here.
                             </div>
                         </template>
                     </tabs>
 
-                    <md-card class="allocated-budget" style="height: 45px;"> <md-card-content><span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span> <div class="budget">${{selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget : '0.0'}}</div></md-card-content></md-card>
+                    <md-card class="allocated-budget" style="height: 45px;"> <md-card-content><span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span> <div class="budget">${{selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget.toFixed(1) : '0.0'}}</div></md-card-content></md-card>
                 </div>
             </div>
         </div>
@@ -105,23 +105,12 @@
 
     },
     mounted() {
-      this.requirementsLength = this.selectedBlock.valuesCount;
+      this.requirementsLength = this.selectedBlock.values.length;
 
 
       this.$nextTick(()=>{
         if (this.$refs.proposalsTabs) {
           this.$refs.proposalsTabs.$emit('event-planner-nav-switch-panel', this.tab)
-          let count = 0;
-          if (this.selectedBlock.proposalComparison1){
-            count++;
-          }
-          if (this.selectedBlock.proposalComparison2){
-            count++;
-          }
-          if (this.selectedBlock.proposalComparison3){
-            count++;
-          }
-          this.updateComparison(count);
         }
       });
 
@@ -197,7 +186,15 @@
     },
     computed: {
       proposalsNumber(){
-        return this.selectedBlock.proposalsCount;
+        let proposals = [];
+
+        _.map(this.selectedBlock.proposals,(item)=> {
+          if ( _.indexOf(proposals,item.vendorId) === -1 ) {
+            proposals.push(item.vendorId);
+          }
+        })
+
+        return proposals.length;
       }
     },
 

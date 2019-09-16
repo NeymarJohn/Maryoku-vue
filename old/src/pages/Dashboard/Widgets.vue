@@ -4,8 +4,8 @@
       <md-card>
         <md-card-header class="md-card-header-text md-card-header-warning">
           <div class="card-text">
-            <h4 class="title">Employees Stats</h4>
-            <p class="category">New employees on 15th September, 2016</p>
+            <h4 class="title">Guests Stats</h4>
+            <p class="category">New Guests on 15th September, 2016</p>
           </div>
         </md-card-header>
         <md-card-content>

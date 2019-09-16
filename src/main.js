@@ -30,6 +30,8 @@ import 'vue-multiselect/dist/vue-multiselect.min.css';
 import lsWatcher from 'vue-storage-watcher';
 import VueTour from 'vue-tour'
 
+
+
 // router setup
 import routes from "./router/routes";
 

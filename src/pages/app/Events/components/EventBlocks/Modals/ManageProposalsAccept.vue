@@ -98,117 +98,9 @@
 
                         </template>
                         <template slot="tab-pane-2" style="width: 50%;">
-                            <md-card class="text-left acceptance-section bank-account-details">
-                                <md-card-header class="acceptance-section-header">
-                                    <div class="header-title">
-                                        <div class="md-title">Payment</div>
-                                    </div>
-                                    <div class="header-actions">
-                                        <md-button class="md-primary">PAY NOW (${{(proposal.cost+ proposal.cost*0.03).toFixed(2)}})</md-button>
-                                    </div>
-                                </md-card-header>
-                                <md-card-content>
-                                    <div class="md-layout">
-                                        <div class="md-layout-item md-size-100">
-                                            <md-card class="cost-pros-cons-section">
-                                                <md-card-content>
-                                                    <div class="cost-info">
-                                                        <div class="cost-info_desc full-width">
-                                                            <div class="cost-label">Subtotal</div>
-                                                            <div class="cost-value">${{(proposal.cost).toFixed(2)}}</div>
-                                                        </div>
-                                                    </div>
 
-                                                    <div class="payment-details">
-                                                        <ul class="payment-details_list-items fee-tax-items">
-                                                            <li class="fee-tax">
-                                                                <div class="details-title">Upfront payment, service fee and tax (3%)</div>
-                                                                <div class="details-cost">${{(proposal.cost*0.03).toFixed(2)}}</div>
-                                                            </li>
-                                                        </ul>
+                            <proposal-payment :event="event" :selectedBlock="selectedBlock" :proposal="proposal" :winner-id="winnerId"></proposal-payment>
 
-                                                        <div class="form-section">
-                                                            <div class="md-layout">
-                                                                <div class="md-layout-item md-size-100">
-                                                                    <h4 class="section-title">Bank Details</h4>
-                                                                </div>
-                                                                <div class="md-layout-item md-size-50">
-                                                                    <md-field>
-                                                                        <label>Swift / BIC</label>
-                                                                        <md-input   type="text"></md-input>
-                                                                    </md-field>
-                                                                </div>
-                                                                <div class="md-layout-item md-size-50">
-                                                                    <md-field>
-                                                                        <label>Bank Name</label>
-                                                                        <md-input   type="text"></md-input>
-                                                                    </md-field>
-                                                                </div>
-                                                                <div class="md-layout-item md-size-100">
-                                                                    <md-field>
-                                                                        <label>Address</label>
-                                                                        <md-input   type="text"></md-input>
-                                                                    </md-field>
-                                                                </div>
-                                                                <div class="md-layout-item md-size-33">
-                                                                    <md-field>
-                                                                        <label>City</label>
-                                                                        <md-input   type="text"></md-input>
-                                                                    </md-field>
-                                                                </div>
-                                                                <div class="md-layout-item md-size-33">
-                                                                    <md-field>
-                                                                        <label>State</label>
-                                                                        <md-input   type="text"></md-input>
-                                                                    </md-field>
-                                                                </div>
-                                                                <div class="md-layout-item md-size-33">
-                                                                    <md-field>
-                                                                        <label>Country</label>
-                                                                        <md-input   type="text"></md-input>
-                                                                    </md-field>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-section">
-                                                            <div class="md-layout">
-                                                                <div class="md-layout-item md-size-100">
-                                                                    <h4 class="section-title">Your Details</h4>
-                                                                </div>
-                                                                <div class="md-layout-item md-size-50">
-                                                                    <md-field>
-                                                                        <label>Landline number</label>
-                                                                        <md-input   type="text"></md-input>
-                                                                    </md-field>
-                                                                </div>
-                                                                <div class="md-layout-item md-size-50">
-                                                                    <md-field>
-                                                                        <label>Mobile number</label>
-                                                                        <md-input   type="text"></md-input>
-                                                                    </md-field>
-                                                                </div>
-
-                                                                <div class="md-layout-item md-size-100">
-                                                                    <md-checkbox class="md-info"    >Remember details for future payments</md-checkbox>
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </md-card-content>
-                                            </md-card>
-
-                                            <div class="payment-policy">
-                                                By clicking pay now, you agree to pay the total amount shown, which includes tax and service Fee.
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </md-card-content>
-                            </md-card>
                         </template>
                     </tabs>
                 </div>
@@ -217,8 +109,10 @@
 
     </div>
 </template>
+
 <script>
     // import auth from '@/auth';
+    import Vue from 'vue';
     import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
     import CalendarEvent from '@/models/CalendarEvent';
     import Calendar from "@/models/Calendar";
@@ -233,13 +127,14 @@
     import ViewProposal from './ViewProposal.vue'
     import EventBlockRequirements from '../Modals/EventBlockRequirements.vue'
     import EventComponentProposal from '@/models/EventComponentProposal';
-
+    import ProposalPayment from './ProposalPayment';
 
     export default {
         components: {
             VueElementLoading,
             Tabs,
-            EventBlockRequirements
+            EventBlockRequirements,
+            ProposalPayment
         },
         props: {
             event: Object,
@@ -256,7 +151,12 @@
             proposalsToDisplay : 1,
             ratings: [1, 2, 3, 4, 5],
             feedbackRating : 3,
-            proposalAccepted : false
+            proposalAccepted : false,
+            image: 'https://i.imgur.com/HhqxVCW.jpg',
+            name: 'Shut up and take my money!',
+            description: 'Cats are the best dog!',
+            currency: 'PHP',
+            amount: 99999
         }),
 
         created() {
@@ -278,6 +178,8 @@
                 })
 
             this.proposalAccepted = this.proposal.accepted;
+
+
 
         },
         methods: {

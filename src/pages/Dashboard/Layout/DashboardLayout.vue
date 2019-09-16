@@ -31,10 +31,8 @@
                         <span>Create New Event</span>
                     </md-button>
                 </li>
-                <li class="menu-divider"></li>
-
                 <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Events List',  icon: 'event', path: '/events'}"></sidebar-item>
-                <!--<sidebar-item name="left-menu-yearly-plan" class="left-menu-yearly-plan" :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>-->
+                <sidebar-item name="left-menu-yearly-plan" class="left-menu-yearly-plan" :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>
 
                 <li class="menu-divider"></li>
 
