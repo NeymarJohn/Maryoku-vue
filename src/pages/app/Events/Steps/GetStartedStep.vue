@@ -8,9 +8,9 @@
                 {{ cerrors.selectedCategories[0] }}
             </div>
             <div class="list-container">
-                <div v-for="category in categories" :key="category.id"
+                <div v-for="category in categories" :key="category.id" 
                 @click="toggleSelectCategory(category)"
-                class="list-item"
+                class="list-item" 
                 :class="{'active': isCategorySelected(category)}">
                     <div class="list-item--icon">
                         <md-icon v-if="isCategorySelected(category)">check</md-icon>
@@ -25,9 +25,9 @@
                 Select more elements <md-icon>keyboard_arrow_right</md-icon>
             </label>
             <div class="list-container">
-                <div v-for="subCategory in subCategories"
+                <div v-for="subCategory in subCategories" 
                 @click="toggleSelectSubCategory(subCategory)"
-                :key="subCategory.id" class="list-item"
+                :key="subCategory.id" class="list-item" 
                 :class="{'active': isSubCategorySelected(subCategory)}">
                     <div class="list-item--icon">
                         <md-icon v-if="isSubCategorySelected(subCategory)">check</md-icon>
@@ -90,9 +90,6 @@
             },
 
             validateAndSubmit () {
-
-                // this.$emit('goToNextPage');
-                //  return;
                 this.cerrors = {};
 
                 if (!this.selectedCategories.length) {
@@ -102,8 +99,8 @@
 
                 this.isLoading = true;
                 let promisses = [];
-
-
+                
+                
                 let new_block = {
                     componentId: null,
                     componentCategoryId: null,
@@ -113,27 +110,23 @@
                     calendarEvent: {id: this.event.id}
                 }
 
-                this.event.brief = this.brief;
+                this.event.brief = this.brief; 
                 promisses.push(this.event.save());
 
-                this.selectedCategories.forEach(category => {
+                this.selectedCategories.forEach(category => {                    
                     new_block.componentCategoryId = category.id;
                     let sub_categories = this.selectedSubCategories.filter(o => o.categoryId == new_block.componentCategoryId);
+                    
 
                     if (sub_categories.length) {
-                        for (let j in sub_categories) {
+                        for (let j in sub_categories) { 
                             new_block.componentId = sub_categories[j].id;
-
-                            console.log(new_block.componentId);
                             promisses.push(new EventComponent(new_block).for(this.calendar, this.event).save())
                         }
                     } else {
-                        new_block.componentId = category.id;
-
                         promisses.push(new EventComponent(new_block).for(this.calendar, this.event).save());
                     }
                 })
-
 
                 Promise.all(promisses).then(() => {
                     this.isLoading = false;
@@ -143,7 +136,7 @@
                     console.log('error -->', e);
                     this.isLoading = false;
                 });
-
+                
             },
         },
         data () {
@@ -159,34 +152,20 @@
                 selectedSubCategories: []
             }
         },
-         mounted () {
+        mounted () {
             this.isLoading = true;
-            let vm = this;
-
-             vm.$auth.currentUser(vm, true, ()=> {
-
+            this.$auth.currentUser(this, true, ()=>{
+                
                 Promise.all([
-                    CalendarEvent.find(vm.$route.params.id),
-                    EventComponent.get()
+                    CalendarEvent.find(this.$route.params.id),
+                    EventComponent.get(),
                 ]).then(([event, components]) => {
-                    vm.calendar = new Calendar({id: vm.$auth.user.defaultCalendarId});
-                    vm.event = event.for(vm.calendar);
-                    vm.categories = components;
-
-                    console.log('categories ', components);
-
-
-                    new EventComponent().for(vm.calendar, vm.event).get().then(resp =>{
-                        console.log('components ', resp);
-                        vm.selectedCategories = resp;
-                        vm.$set(vm,'selectedCategories',resp);
-
-                    })
-                    vm.isLoading = false;
+                    this.calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+                    this.event = event.for(this.calendar);
+                    this.categories = components;
+                    this.isLoading = false;
                 });
             });
-
-
         }
     }
 </script>
