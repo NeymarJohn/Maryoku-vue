@@ -194,11 +194,11 @@
         //"Employees Only","Employees and spouse","Employees and families", "Employees children"
         let typeText = '';
         let participantsType = calendarEvent.participantsType;
-        if (participantsType === 'Guests and spouse'){
+        if (participantsType === 'Employees and spouse'){
           typeText = '+ spouses';
-        } else if (participantsType === 'Guests and families'){
+        } else if (participantsType === 'Employees and families'){
           typeText = '+ families';
-        } else if (participantsType === 'Guests siblings'){
+        } else if (participantsType === 'Employees siblings'){
           typeText = '+ siblings';
         }
 

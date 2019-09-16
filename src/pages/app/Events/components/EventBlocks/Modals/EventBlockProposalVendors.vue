@@ -133,34 +133,53 @@
       searchQuery: "",
       ratings: [1, 2, 3, 4, 5],
       filteredBlockVendors : [],
-        blockVendors : null
+      blockVendors : null
     }),
     methods: {
       getBlockVendors() {
 
+        if ((this.selectedBlock.vendors === null || this.selectedBlock.vendors === undefined) || this.selectedBlock.vendorsCount !== this.selectedBlock.vendors.length){
 
           let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
           let event = new CalendarEvent({id: this.event.id});
           let selected_block = new EventComponent({id : this.selectedBlock.id});
 
           new EventComponentVendor().for(calendar, event, selected_block).get()
-              .then(resp => {
-                  this.isLoading = false;
-                  this.blockVendors = resp;
+            .then(resp => {
+              this.isLoading = false;
+              this.selectedBlock.vendors = resp;
+              this.selectedBlock.vendorsCount = resp.length;
+              this.blockVendors = resp;
 
+              console.log('blockVendors => ',this.blockVendors);
+              let vendorsWithProposals = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
+              let vendorsWithSentStatus =  _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
+              let vendorsWithNoStatus =  _.filter(this.blockVendors, function(item){ return !item.proposals });
 
-                  console.log('blockVendors => ',this.blockVendors);
-                  let vendorsWithProposals = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
-                  let vendorsWithSentStatus =  _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
-                  let vendorsWithNoStatus =  _.filter(this.blockVendors, function(item){ return !item.proposals });
+              this.filteredBlockVendors = _.union( vendorsWithProposals,vendorsWithSentStatus,vendorsWithNoStatus);
 
-                  this.filteredBlockVendors = _.union( vendorsWithProposals,vendorsWithSentStatus,vendorsWithNoStatus);
+              let proposals = [];
+              _.each(vendorsWithProposals, (v)=>{
+                proposals.push(v.proposals[0]);
+              });
+              this.selectedBlock.proposals = proposals;
+              this.selectedBlock.proposalsCount = proposals.length;
+            })
+            .catch(error => {
+              this.isLoading = false;
+              console.log('EventComponentVendor error =>',error)
+            });
+        } else {
+          this.blockVendors = this.selectedBlock.vendors;
 
-              })
-              .catch(error => {
-                  this.isLoading = false;
-                  console.log('EventComponentVendor error =>',error)
-              })
+          console.log('blockVendors => ',this.blockVendors);
+          let vendorsWithProposals = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
+          let vendorsWithSentStatus =  _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
+          let vendorsWithNoStatus =  _.filter(this.blockVendors, function(item){ return !item.proposals });
+
+          this.filteredBlockVendors = _.union( vendorsWithProposals,vendorsWithSentStatus,vendorsWithNoStatus);
+          this.isLoading = false;
+        }
 
 
 
@@ -186,7 +205,7 @@
         vendor.for(calendar, event, selected_block).save()
           .then(resp => {
 
-              console.log(resp);
+            console.log(resp);
 
             this.getBlockVendors();
 

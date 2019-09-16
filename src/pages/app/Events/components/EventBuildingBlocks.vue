@@ -14,16 +14,6 @@
 
                 <md-card-content class="md-layout">
                     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
-                    <div class="md-layout-item md-size-30 show-cost-switch">
-                        <label>Show Cost</label>
-                        <md-field>
-                            <label></label>
-                            <md-select v-model="elementsBudget">
-                                <md-option value="element">Per Element</md-option>
-                                <md-option value="guest">Per Guest</md-option>
-                            </md-select>
-                        </md-field>
-                    </div>
                     <table style="width:100%;" class="table event-building-blocks_table" v-if="eventBuildingBlocksList.length">
                         <thead>
                         <tr class="md-warning" style="text-align: center;">
@@ -31,12 +21,7 @@
                             <th style="text-align: center;">Requirements</th>
                             <th style="text-align: center;">Allocated budget</th>
                             <th style="text-align: center;">Actual cost</th>
-                            <th>
-                                <md-button class="md-default md-simple add-new-block-btn no-padding md-sm"
-                                           @click="showAddBuildingBlocksModal()"
-                                           >Add new block +
-                                </md-button>
-                            </th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -47,16 +32,13 @@
                                 <td class="allocated-budget">
                                     <div class="md-table-cell-container">
                                         <span class="dollar-sign pull-left small">$</span>
-                                        <span style="display: inline-block; width: 100%; padding-right: 16px;">
-                                            {{event.elementsBudgetPerGuest ? (category.totalAllocatedBudget / event.numberOfParticipants).toFixed(2) : category.totalAllocatedBudget.toFixed(2)}}
-                                        </span>
+                                        <span style="display: inline-block; width: 100%; padding-right: 16px;">{{category.totalAllocatedBudget}}</span>
                                         <span class="remains-budget badge badge-rose small" style="background-color: #fff;" v-if="category.remainsBudget">-${{parseInt(category.remainsBudget)}}</span>
                                     </div>
                                 </td>
                                 <td class="actual-cost" :class="{disabled : category.totalActualCost==0}">
                                     <span class="dollar-sign pull-left small">$</span>
-                                    {{event.elementsBudgetPerGuest ? (category.totalActualCost / event.numberOfParticipants).toFixed(2) : category.totalActualCost.toFixed(2)}}
-
+                                    {{category.totalActualCost}}
                                 </td>
                                 <td></td>
                             </tr>
@@ -65,15 +47,15 @@
                                 <td>{{block.title}}</td>
                                 <td>
                                     <template >
-                                        <div v-if="!block.is_parent && block.values.length"
+                                        <div v-if="!block.is_parent && block.valuesCount"
                                              style="cursor: pointer;">
                                             <md-button class="md-simple md-xs requirements-cell-button"
                                                        @click="addRequirements(block)">
-                                                {{`${block.values.length} selected`}}
+                                                {{`${block.valuesCount} selected`}}
                                                 <md-icon class="text-danger">edit</md-icon>
                                             </md-button>
                                         </div>
-                                        <template v-else-if="!block.is_parent && !block.values.length">
+                                        <template v-else-if="!block.is_parent && !block.valuesCount">
                                             <md-button class="md-info md-xs md-simple" @click="addRequirements(block)">
                                                 Set requirements
                                             </md-button>
@@ -84,16 +66,10 @@
                                 <td class="allocated-budget" style="width: 15%;" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
                                     <div class="md-table-cell-container" >
                                         <span class="dollar-sign pull-left small">$</span>
-                                        <label-edit v-if="!event.elementsBudgetPerGuest"  style="width: 100%; margin-left: 8px;" :text="block.allocatedBudget ? block.allocatedBudget.toFixed(2).toString() : ''"
+                                        <label-edit style="width: 100%; margin-left: 8px;" :text="block.allocatedBudget ? block.allocatedBudget.toString() : ''"
                                                     :field-name="block.componentId"
                                                     @text-updated-blur="blockBudgetChanged"
                                                     @text-updated-enter="blockBudgetChanged"></label-edit>
-
-                                        <label-edit v-else style="width: 100%; margin-left: 8px;" :text="block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : ''"
-                                                    :field-name="block.componentId"
-                                                    @text-updated-blur="blockBudgetChanged"
-                                                    @text-updated-enter="blockBudgetChanged"></label-edit>
-
                                     </div>
 
                                 </td>
@@ -102,7 +78,7 @@
                                         <template
                                             v-if="block.winningProposalId">
                                             <md-button class="md-simple actual-cost md-xs" :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`" >
-                                                {{ event.elementsBudgetPerGuest ?  `$${(block.winingProposal.cost / event.numberOfParticipants).toFixed(2)}` : `$${block.winingProposal.cost.toFixed(2)}` }}
+                                                {{ `$${block.winingProposal.cost}`}}
                                                 <md-icon >open_in_new</md-icon>
                                             </md-button>
                                         </template>
@@ -120,7 +96,7 @@
                                         <template v-else-if="(block.proposalsState == 'show-proposals' || block.proposalsState == 'waiting-for-proposals')">
                                             <md-button class="md-xs md-info" @click="reviewProposals(block)">
                                                 Manage proposals
-                                                ({{block.proposals.length}})
+                                                ({{block.proposalsCount}})
                                             </md-button>
                                         </template>
                                         <template v-else-if="block.proposalsState == 'get-offers' ">
@@ -134,6 +110,18 @@
                                         <md-icon>delete</md-icon>
                                     </md-button>
                                 </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <md-button class="md-default md-simple add-new-block-btn"
+                                               @click="showAddBuildingBlocksModal()"
+                                               style="width:100%; font-weight: bold">Add new block +
+                                    </md-button>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                         </template>
                         </tbody>
@@ -190,7 +178,6 @@
       allocatedBudget: 0,
       eventBuildingBlocks: [],
       eventBuildingBlocksList: [],
-      elementsBudget: 'element'
 
     }),
     methods: {
@@ -245,9 +232,53 @@
 
         this.isLoading = true;
 
+        /*let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id});
+
+
+        new EventComponent().for(calendar, event).get()
+          .then(res => {
+
+            this.$set(this, 'eventBuildingBlocks', res);
+
+            // group event blocks by category name
+            this.eventBuildingBlocksList = _.chain(res).groupBy('category').map(function(value, key) {
+
+              let totalAllocatedBudget = 0, totalActualCost = 0;
+
+
+              value.forEach(function (item) {
+                if (item.allocatedBudget) totalAllocatedBudget += item.allocatedBudget;
+                if (item.winningProposalId) totalActualCost += item.winingProposal.cost;
+              })
+              return {
+                title: key,
+                blocks: value,
+                totalAllocatedBudget : totalAllocatedBudget,
+                totalActualCost : totalActualCost,
+                remainsBudget : totalActualCost ? totalAllocatedBudget - totalActualCost : 0
+              }
+
+
+            })
+              .value();
+
+            let allocatedBudget = 0;
+            this.eventBuildingBlocks.forEach(item => {
+              allocatedBudget += Number(item.allocatedBudget);
+            });
+
+            this.allocatedBudget = allocatedBudget;
+            this.isLoading = false;
+          })
+          .catch(error => {
+            console.log('Error ', error)
+          })*/
+
         let res = this.event.components;
 
-          this.$set(this, 'eventBuildingBlocks', res);
+        this.$set(this, 'eventBuildingBlocks', res);
+
         // group event blocks by category name
         this.eventBuildingBlocksList = _.chain(res).groupBy('category').map(function(value, key) {
 
@@ -284,7 +315,6 @@
               this.isLoading = false;
           },500)
 
-          this.$forceUpdate();
       },
       showAddBuildingBlocksModal() {
         window.currentPanel = this.$showPanel({
@@ -320,8 +350,8 @@
             selected_block.allocatedBudget = null;
             block.allocatedBudget = null;
           } else {
-            selected_block.allocatedBudget = !this.event.elementsBudgetPerGuest ? val : val * this.event.numberOfParticipants;
-            block.allocatedBudget = !this.event.elementsBudgetPerGuest ? val : val * this.event.numberOfParticipants;
+            selected_block.allocatedBudget = val;
+            block.allocatedBudget = val;
           }
         } else {
           selected_block.allocatedBudget = null;
@@ -352,7 +382,7 @@
 
       addRequirements(item) {
 
-        if ( item.proposals.length ) {
+        if ( item.proposalsCount ) {
           swal({
             text: `You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?`,
             showCancelButton: true,
@@ -409,30 +439,14 @@
         panelResult.promise.then(res=>{
           this.getEventBuildingBlocks();
         });
-      },
-        switchingBudgetAndCost(val) {
-
-          console.log('i am here');
-            let vm = this;
-
-            if ( val === 'guest' ) {
-                vm.$set(vm,'elementBudget','guest');
-                vm.$set(vm.event,'elementsBudgetPerGuest',true);
-            } else {
-                vm.$set(vm,'elementBudget','element');
-                vm.$set(vm.event,'elementsBudgetPerGuest',false);
-            }
-
-            vm.getEventBuildingBlocks();
-
-        }
+      }
     },
     created() {
 
     },
     mounted() {
 
-      this.switchingBudgetAndCost('element');
+      this.getEventBuildingBlocks();
 
       this.$root.$on('refreshBuildingBlock', () => {
         this.getEventBuildingBlocks()
@@ -447,11 +461,7 @@
       eventComponents(newVal, oldVal) {
         // Get default event building blocks
         this.getEventBuildingBlocks();
-      },
-        elementsBudget(val) {
-          console.log(val);
-            this.switchingBudgetAndCost(val);
-        }
+      }
     }
   }
 </script>

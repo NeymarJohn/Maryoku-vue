@@ -25,7 +25,7 @@
             <label-edit :text="companyProfile.mainAddress.onelineAddress" field-name="mainAddress" :title="companyProfile.mainAddress.onelineAddress" @text-updated-blur="companyValueChanged" @text-updated-enter="companyValueChanged"></label-edit>
           </h6>
         </div>
-        <div class="md-layout-item md-size-60"><span class="text-gray" style="font-weight: 500;">Number of Guests</span></div>
+        <div class="md-layout-item md-size-60"><span class="text-gray" style="font-weight: 500;">Number of Employees</span></div>
         <div class="md-layout-item md-size-40 text-right">
           <h6 style="padding: 0;margin: 4px 0; text-transform: none !important;">
             <label-edit :text="companyProfile.numberOfEmployees" field-name="numberOfEmployees" :title="companyProfile.numberOfEmployees" @text-updated-blur="companyValueChanged" @text-updated-enter="companyValueChanged"></label-edit>
