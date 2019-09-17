@@ -4307,6 +4307,7 @@ iframe{
 
     .multiselect__content-wrapper {
         width: auto !important;
+        min-width: 100% !important;
     }
 
     .multiselect__content {
@@ -4345,8 +4346,8 @@ iframe{
         }
 
         &--selected {
-            background: $pink-262;
-            color: #fff !important;
+            //background: $pink-262;
+            //color: #fff !important;
             font-weight: bold;
         }
 
@@ -4356,14 +4357,14 @@ iframe{
         }
 
         &--selected.multiselect__option--highlight {
-            background: $pink-262;
-            color: #fff;
+            //background: $pink-262;
+            //color: #fff;
         }
 
         &--selected.multiselect__option--highlight:after {
-            background: $pink-262;
+            //background: $pink-262;
             content: attr(data-deselect);
-            color: #fff;
+            //color: #fff;
         }
     }
 }

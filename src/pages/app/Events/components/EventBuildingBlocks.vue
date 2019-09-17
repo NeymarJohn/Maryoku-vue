@@ -65,15 +65,15 @@
                                 <td>{{block.title}}</td>
                                 <td>
                                     <template >
-                                        <div v-if="!block.is_parent && block.values.length"
+                                        <div v-if="!block.is_parent && block.valuesCount"
                                              style="cursor: pointer;">
                                             <md-button class="md-simple md-xs requirements-cell-button"
                                                        @click="addRequirements(block)">
-                                                {{`${block.values.length} selected`}}
+                                                {{`${block.valuesCount} selected`}}
                                                 <md-icon class="text-danger">edit</md-icon>
                                             </md-button>
                                         </div>
-                                        <template v-else-if="!block.is_parent && !block.values.length">
+                                        <template v-else-if="!block.is_parent && !block.valuesCount">
                                             <md-button class="md-info md-xs md-simple" @click="addRequirements(block)">
                                                 Set requirements
                                             </md-button>
@@ -120,7 +120,7 @@
                                         <template v-else-if="(block.proposalsState == 'show-proposals' || block.proposalsState == 'waiting-for-proposals')">
                                             <md-button class="md-xs md-info" @click="reviewProposals(block)">
                                                 Manage proposals
-                                                ({{block.proposals.length}})
+                                                ({{block.proposalsCount}})
                                             </md-button>
                                         </template>
                                         <template v-else-if="block.proposalsState == 'get-offers' ">
@@ -352,7 +352,7 @@
 
       addRequirements(item) {
 
-        if ( item.proposals.length ) {
+        if ( item.proposalsCount ) {
           swal({
             text: `You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?`,
             showCancelButton: true,

@@ -108,7 +108,7 @@ let publicPages = {
     },
       {
           path: "/proposal-request/:id",
-          name: "VendorProposals",
+          name: "VendorProposals2",
           component: VendorProposals,
           meta: {auth: false, title: 'Vendor Proposals', gtm: "VendorProposals"},
       },
@@ -272,9 +272,9 @@ let appPages = {
     ]
 };
 let EventPages = {
-    path: "/app",
+    path: "/app2",
     component: EventLayout,
-    name: "App",
+    name: "App2",
     children: [
         {
             path: "/events",
@@ -383,7 +383,7 @@ const appCurrentInfo={
 const routes = [
     {
         path: "/",
-        redirect: "/planner",
+        redirect: "/events",
         name: "Root",
         meta: {gtm : "Root"}
     },

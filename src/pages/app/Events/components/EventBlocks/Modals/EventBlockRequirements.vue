@@ -1,6 +1,5 @@
 <template>
     <div class="building-blocks-requirements">
-        <!--<vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />-->
         <div class="md-layout text-left">
             <h4 class="md-title md-layout-item md-size-100 clear-margins" style="margin : 0; line-height: 51px; width:100%; font-size: 20px;">
                 {{this.selectedBlock.title}} Requirements
@@ -12,7 +11,6 @@
             <div class="md-layout-item md-size-100 clear-margins">
                 <md-card class="md-card-plain clear-margins">
                     <md-card-content>
-
                         <h6 v-if="predefinedRequirements" class="small text-gray text-right clear-margins" style="display: block; width: 100%;">Predefined Requirements</h6>
                         <ul class="requirements-list text-right clear-margins" v-if="predefinedRequirements">
                             <li class="list-item" v-for="(item,index) in predefinedRequirements">
@@ -26,7 +24,6 @@
                         </ul>
                         <div>&nbsp;</div>
                         <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-if="eventBlockRequirements && eventBlockRequirements.length" v-model="filteredEventBlockRequirements">
-
                             <md-table-toolbar >
                                 <div class="md-toolbar-section-start">
                                     <md-field>
@@ -53,6 +50,7 @@
 
                             <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" >
                                 <md-table-cell >
+                                    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"  />
                                     <event-block-requirement :delete-value="deleteValue" :requirement.sync="item" :event-id="event.id" :selected-block-id="selectedBlock.id"></event-block-requirement>
                                 </md-table-cell>
                             </md-table-row>
@@ -60,6 +58,7 @@
                         <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-else v-model="dummyList">
                             <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" >
                                 <md-table-cell >
+                                    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"  />
                                     <event-block-requirement :delete-value="deleteValue" :requirement.sync="item" :event-id="event.id" :selected-block-id="selectedBlock.id" @requirement-saved="requirementSaved"></event-block-requirement>
                                 </md-table-cell>
                             </md-table-row>
@@ -136,36 +135,41 @@
 
       },
       getBuildingBlockValues( newValueId = null) {
+        this.isLoading = true;
+        if (this.selectedBlock.values === null || this.selectedBlock.valuesCount !== this.selectedBlock.values.length){
 
-        /*let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-        let event = new CalendarEvent({id: this.event.id});
-        let selected_block = new EventComponent({id: this.selectedBlock.id});
+          let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+          let event = new CalendarEvent({id: this.event.id});
+          let selected_block = new EventComponent({id: this.selectedBlock.id});
 
-        new EventComponentValue().for(calendar, event, selected_block).get().then(values => {
+          new EventComponentValue().for(calendar, event, selected_block).get().then(values => {
+            this.selectedBlock.values = values;
             this.eventBlockRequirements = values;
-
+            this.filteredEventBlockRequirements = this.eventBlockRequirements;
             this.$root.$emit('refreshRequirementsLength',this.eventBlockRequirements.length);
 
-             if ( newValueId ) {
+            if ( newValueId ) {
 
-                let newValue = _.findWhere(this.eventBlockRequirements,{id : newValueId});
-                newValue.editMode = true;
-                this.$forceUpdate();
+              let newValue = _.findWhere(this.eventBlockRequirements,{id : newValueId});
+              newValue.editMode = true;
+              this.$forceUpdate();
             }
             this.isLoading = false;
 
-        });*/
-        this.eventBlockRequirements = this.selectedBlock.values;
-        this.filteredEventBlockRequirements = this.eventBlockRequirements;
-        this.$root.$emit('refreshRequirementsLength',this.eventBlockRequirements.length);
-        if ( newValueId ) {
+          });
+        } else {
+          this.eventBlockRequirements = this.selectedBlock.values;
+          this.filteredEventBlockRequirements = this.eventBlockRequirements;
+          this.$root.$emit('refreshRequirementsLength',this.eventBlockRequirements.length);
+          if ( newValueId ) {
 
-          let newValue = _.findWhere(this.eventBlockRequirements,{id : newValueId});
-          newValue.editMode = true;
-          this.$forceUpdate();
+            let newValue = _.findWhere(this.eventBlockRequirements,{id : newValueId});
+            newValue.editMode = true;
+            this.$forceUpdate();
+          }
+
+          this.isLoading = false;
         }
-
-        this.isLoading = false;
       },
       addNewValue() {
 
