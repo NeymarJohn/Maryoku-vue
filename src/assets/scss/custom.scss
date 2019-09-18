@@ -4414,3 +4414,45 @@ input:focus,
         margin-left: 1em;
     }
 }
+
+.event-components-list {
+
+    margin-top : 1.6em;
+
+    .md-button {
+        width : 200px !important;
+
+    }
+}
+.horizontal-field {
+    flex-wrap: wrap;
+    &:before , &:after {
+        display: none;
+    }
+
+    label {
+        position: relative;
+        top: 0.2em !important;
+        right: 0;
+        left: 0;
+        display: inline-block;
+        font-size: 20px !important;
+        color : #000 !important;
+        margin-right : 1em;
+        opacity: 1 !important;
+    }
+    .md-input,.md-select,.md-textarea {
+        border-bottom : 1px solid rgba(0,0,0,0);
+        border-radius: 0;
+        font-size: 20px !important;
+        color : #000;
+        max-width: 30%;
+    }
+
+    &.md-focused {
+        .md-input,.md-select,.md-textarea {
+            border-bottom : 1px solid #d2d2d2;
+        }
+    }
+
+}

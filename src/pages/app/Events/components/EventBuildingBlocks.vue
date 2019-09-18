@@ -24,7 +24,7 @@
                             </md-select>
                         </md-field>
                     </div>
-                    <table style="width:100%;" class="table event-building-blocks_table" v-if="eventBuildingBlocksList.length">
+                    <table style="width:100%;" class="table event-building-blocks_table" >
                         <thead>
                         <tr class="md-warning" style="text-align: center;">
                             <th style="text-align: center;">Expenses</th>
@@ -39,7 +39,7 @@
                             </th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody v-if="eventBuildingBlocksList.length">
                         <template v-for="(category,index) in eventBuildingBlocksList" v-if="category.title != 'null'">
                             <tr class="parent">
                                 <td>{{category.title}}</td>
@@ -271,6 +271,8 @@
 
         this.eventBuildingBlocksList = _.sortBy(this.eventBuildingBlocksList, 'title');
 
+        console.log('eventBuildingBlocksList = > ',this.eventBuildingBlocksList);
+
         let allocatedBudget = 0;
         if (this.eventBuildingBlocks) {
           this.eventBuildingBlocks.forEach(item => {
@@ -416,11 +418,11 @@
             let vm = this;
 
             if ( val === 'guest' ) {
-                vm.$set(vm,'elementBudget','guest');
-                vm.$set(vm.event,'elementsBudgetPerGuest',true);
+                //vm.$set(vm,'elementBudget','guest');
+                //vm.$set(vm.event,'elementsBudgetPerGuest',true);
             } else {
-                vm.$set(vm,'elementBudget','element');
-                vm.$set(vm.event,'elementsBudgetPerGuest',false);
+                //vm.$set(vm,'elementBudget','element');
+                //vm.$set(vm.event,'elementsBudgetPerGuest',false);
             }
 
             vm.getEventBuildingBlocks();

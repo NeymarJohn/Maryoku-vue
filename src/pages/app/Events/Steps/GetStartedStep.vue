@@ -8,16 +8,16 @@
                 {{ cerrors.selectedCategories[0] }}
             </div>
             <div class="list-container">
-                <div v-for="category in categories" :key="category.id" 
+                <div v-for="category in categories" :key="category.id"
                 @click="toggleSelectCategory(category)"
-                class="list-item" 
-                :class="{'active': isCategorySelected(category)}">
+                class="list-item"
+                :class="{'active': isCategorySelected(category) || isSelected(category)}">
                     <div class="list-item--icon">
-                        <md-icon v-if="isCategorySelected(category)">check</md-icon>
+                        <md-icon v-if="isCategorySelected(category) || isSelected(category)">check</md-icon>
                         <md-icon v-else>arrow_forward</md-icon>
                     </div>
                     <div class="list-item--title">
-                        {{ category.value }}
+                        {{ category.title }}
                     </div>
                 </div>
             </div>
@@ -25,12 +25,12 @@
                 Select more elements <md-icon>keyboard_arrow_right</md-icon>
             </label>
             <div class="list-container">
-                <div v-for="subCategory in subCategories" 
+                <div v-for="subCategory in subCategories"
                 @click="toggleSelectSubCategory(subCategory)"
-                :key="subCategory.id" class="list-item" 
-                :class="{'active': isSubCategorySelected(subCategory)}">
+                :key="subCategory.id" class="list-item"
+                :class="{'active': isSubCategorySelected(subCategory) || isSelected(subCategory) }">
                     <div class="list-item--icon">
-                        <md-icon v-if="isSubCategorySelected(subCategory)">check</md-icon>
+                        <md-icon v-if="isSubCategorySelected(subCategory) || isSelected(subCategory)">check</md-icon>
                         <md-icon v-else>arrow_forward</md-icon>
                     </div>
                     <div class="list-item--title">
@@ -62,6 +62,9 @@
             VueElementLoading
         },
         methods: {
+            isSelected (category) {
+                return _.findIndex(this.eventComponents, o => o.componentId == category.id) > -1;
+            },
             isCategorySelected (category) {
                 return _.findIndex(this.selectedCategories, o => o.id == category.id) > -1;
             },
@@ -76,31 +79,40 @@
                 } else {
                     this.selectedSubCategories = this.selectedSubCategories.concat([subCategory]);
                 }
+
             },
 
             toggleSelectCategory (category) {
                 if (this.isCategorySelected(category)) {
                     this.selectedCategories = this.selectedCategories.filter(o => o.id != category.id);
-                    this.subCategories = this.subCategories.filter(o => o.categoryId != category.id);
-                    this.selectedSubCategories = this.selectedSubCategories.filter(o => o.categoryId != category.id);
+                    //this.subCategories = this.subCategories.filter(o => o.categoryId != category.id);
+                    //this.selectedSubCategories = this.selectedSubCategories.filter(o => o.categoryId != category.id);
                 } else {
                     this.selectedCategories = this.selectedCategories.concat([category]);
-                    this.subCategories = this.subCategories.concat(category.childComponents);
+                   // this.subCategories = this.subCategories.concat(category.childComponents);
                 }
             },
 
             validateAndSubmit () {
+
+                // this.$emit('goToNextPage');
+                //  return;
                 this.cerrors = {};
 
-                if (!this.selectedCategories.length) {
+                if (!this.selectedCategories.length && !this.selectedSubCategories.length && this.eventComponents.length ) {
+                    this.$emit('goToNextPage');
+                    return;
+                }
+
+                if (!this.selectedCategories.length && !this.selectedSubCategories.length) {
                     this.cerrors.selectedCategories = ['you must select at least one category'];
                     return;
                 }
 
                 this.isLoading = true;
                 let promisses = [];
-                
-                
+
+
                 let new_block = {
                     componentId: null,
                     componentCategoryId: null,
@@ -110,23 +122,23 @@
                     calendarEvent: {id: this.event.id}
                 }
 
-                this.event.brief = this.brief; 
+                this.event.brief = this.brief;
                 promisses.push(this.event.save());
 
-                this.selectedCategories.forEach(category => {                    
+                this.selectedCategories.forEach(category => {
                     new_block.componentCategoryId = category.id;
-                    let sub_categories = this.selectedSubCategories.filter(o => o.categoryId == new_block.componentCategoryId);
-                    
+                    new_block.componentId = category.id;
 
-                    if (sub_categories.length) {
-                        for (let j in sub_categories) { 
-                            new_block.componentId = sub_categories[j].id;
-                            promisses.push(new EventComponent(new_block).for(this.calendar, this.event).save())
-                        }
-                    } else {
-                        promisses.push(new EventComponent(new_block).for(this.calendar, this.event).save());
-                    }
+                    promisses.push(new EventComponent(new_block).for(this.calendar, this.event).save());
                 })
+
+                this.selectedSubCategories.forEach(category => {
+                    new_block.componentCategoryId = category.id;
+                    new_block.componentId = category.id;
+
+                    promisses.push(new EventComponent(new_block).for(this.calendar, this.event).save());
+                })
+
 
                 Promise.all(promisses).then(() => {
                     this.isLoading = false;
@@ -136,7 +148,7 @@
                     console.log('error -->', e);
                     this.isLoading = false;
                 });
-                
+
             },
         },
         data () {
@@ -149,23 +161,40 @@
                 categories: [],
                 subCategories: [],
                 selectedCategories: [],
-                selectedSubCategories: []
+                selectedSubCategories: [],
+                eventComponents : []
             }
         },
-        mounted () {
+         mounted () {
             this.isLoading = true;
-            this.$auth.currentUser(this, true, ()=>{
-                
+            let vm = this;
+
+             vm.$auth.currentUser(vm, true, ()=> {
+
                 Promise.all([
-                    CalendarEvent.find(this.$route.params.id),
-                    EventComponent.get(),
+                    CalendarEvent.find(vm.$route.params.id),
+                    EventComponent.get()
                 ]).then(([event, components]) => {
-                    this.calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-                    this.event = event.for(this.calendar);
-                    this.categories = components;
-                    this.isLoading = false;
+                    vm.calendar = new Calendar({id: vm.$auth.user.defaultCalendarId});
+                    vm.event = event.for(vm.calendar);
+                    vm.categories =_.filter(components ,  function(item) { return item.promoted === true});
+                    vm.subCategories =_.filter(components ,  function(item) { return item.promoted === false});
+
+                    console.log('categories ', vm.categories);
+                    console.log('categories ', vm.subCategories);
+
+
+                    new EventComponent().for(vm.calendar, vm.event).get().then(resp =>{
+                        console.log('components ', resp);
+                        //vm.selectedCategories = resp;
+                        vm.$set(vm,'eventComponents',resp);
+
+                    })
+                    vm.isLoading = false;
                 });
             });
+
+
         }
     }
 </script>
