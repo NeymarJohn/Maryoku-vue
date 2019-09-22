@@ -4464,3 +4464,16 @@ input:focus,
     }
 
 }
+
+.md-field{
+    &.required {
+        label {
+            &:after {
+                content : '*';
+                position : absolute;
+                right: -.7em;
+                top: 2px;
+            }
+        }
+    }
+}

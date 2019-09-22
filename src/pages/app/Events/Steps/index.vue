@@ -3,31 +3,33 @@
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
         <div class="steps-container">
             <div class="step" :class="[{'visited': step > 1}, {'active': step == 1}]">
-                Get started
+                <span>1</span> Create Event Details
             </div>
             <div class="step" :class="[{'visited': step > 2}, {'active': step == 2}]">
-                Brief details
+                <span>2</span> Select Elements
             </div>
-            <div class="step" :class="[{'active': step == 3}]">
-                Send to vendors
-            </div>
+<!--            <div class="step" :class="[{'active': step == 3}]">-->
+<!--                Send to vendors-->
+<!--            </div>-->
         </div>
-        <md-divider></md-divider>
-        <get-started v-show="step == 1" @goToNextPage="goToNextPage" />
-        <brief-details v-show="step == 2" @goToNextPage="goToNextPage" @goToPrevPage="goToPrevPage" />
+        <event-details v-show="step == 1" @goToNextPage="goToNextPage" />
+        <get-started v-show="step == 2" @goToNextPage="goToNextPage" />
+<!--        <brief-details v-show="step == 2" @goToNextPage="goToNextPage" @goToPrevPage="goToPrevPage" />-->
     </div>
 </template>
 <script>
     import VueElementLoading from 'vue-element-loading'
     import GetStarted from './GetStartedStep'
     import BriefDetails from './BriefDetails'
-    
+    import EventDetails from './EventDetails'
+
     export default {
         name: "event-steps",
         components: {
             VueElementLoading,
             GetStarted,
-            BriefDetails
+            BriefDetails,
+            EventDetails
         },
         methods: {
             goToNextPage () {
@@ -64,49 +66,47 @@
     }
 
     .steps-container {
-        width: 50%;
         display: flex;
-        margin: auto;
-        justify-content: space-between;
+        justify-content: flex-start;
         position: relative;
         text-align: center;
         margin-top: 15px;
-        margin-bottom: 15px;
-
-        &::before {
-            content: " ";
-            position: absolute;
-            border-bottom: 1px solid $input-border;
-            width: 65%;
-            left: 0;
-            right: 0;
-            margin: auto;
-            top: 15px;
-        }
 
         .step {
-            padding-top: 35px;
+            padding: 20px 0;
             position: relative;
-            width: 100%;
+            width: 240px;
+            background: #e3e3e3;
+            color : #b6b6b6;
+            font-weight: 500;
+            font-size: 18px;
 
-            &:before {
-                content: " ";
-                position: absolute;
-                width: 30px;
-                height: 30px;
-                border-width: 1px;
-                border-style: solid;
+            &:first-child {
+                border-radius: 5px 0 0 5px;
+            }
+
+            &:last-child {
+                border-radius: 0 5px 5px 0;
+            }
+
+            span {
+                border : 1px solid #c2c2c2;
                 border-radius: 50%;
-                border-color: $input-border;
-                background: white;
-                top: 0;
-                left: 0;
-                right: 0;
-                margin: auto;
+                width : 40px;
+                height: 40px;
+                display: inline-block;
+                padding-top: 6px;
+                margin-right : 0.3em;
             }
 
             &.active {
-                color: $brand-primary;
+                //color: $brand-primary;
+                background: $brand-warning;
+                color : $white-color;
+
+                span {
+                    border-color : #fff;
+                }
 
                 &:before {
                     border-color: $brand-primary;
