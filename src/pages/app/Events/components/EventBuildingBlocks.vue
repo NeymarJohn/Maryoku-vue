@@ -14,6 +14,7 @@
 
                 <md-card-content class="md-layout">
                     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
+                    <div class="md-layout-item md-size-60"></div>
                     <div class="md-layout-item md-size-30 show-cost-switch">
                         <label>Show Cost</label>
                         <md-field>
@@ -24,18 +25,21 @@
                             </md-select>
                         </md-field>
                     </div>
+                    <div class="md-layout-item md-size-10 no-padding">
+                        <md-button class="md-default md-simple add-new-block-btn no-padding" style="color : #fff;font-weight: bold"
+                                   @click="showAddBuildingBlocksModal()"
+                        ><md-icon>add</md-icon> Add New
+                        </md-button>
+                    </div>
                     <table style="width:100%;" class="table event-building-blocks_table" >
                         <thead>
                         <tr class="md-warning" style="text-align: center;">
-                            <th style="text-align: center;">Expenses</th>
-                            <th style="text-align: center;">Requirements</th>
-                            <th style="text-align: center;">Allocated budget</th>
+                            <th style="text-align: center;">Element</th>
+                            <th style="text-align: center;">Brief</th>
+                            <th style="text-align: center;">Budget</th>
                             <th style="text-align: center;">Actual cost</th>
                             <th>
-                                <md-button class="md-default md-simple add-new-block-btn no-padding md-sm"
-                                           @click="showAddBuildingBlocksModal()"
-                                           >Add new block +
-                                </md-button>
+
                             </th>
                         </tr>
                         </thead>
@@ -83,7 +87,7 @@
                                 </td>
                                 <td class="allocated-budget" style="width: 15%;" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
                                     <div class="md-table-cell-container" >
-                                        <span class="dollar-sign pull-left small">$</span>
+                                        <span class="dollar-sign pull-left">$</span>
                                         <label-edit v-if="!event.elementsBudgetPerGuest"  style="width: 100%; margin-left: 8px;" :text="block.allocatedBudget"
                                                     :field-name="block.componentId"
                                                     @text-updated-blur="blockBudgetChanged"
@@ -412,26 +416,15 @@
           this.getEventBuildingBlocks();
         });
       },
-        switchingBudgetAndCost(val) {
+        switchingBudgetAndCost() {
             let vm = this;
-
-            if ( val === 'guest' ) {
-                //vm.$set(vm,'elementBudget','guest');
-                //vm.$set(vm.event,'elementsBudgetPerGuest',true);
-            } else {
-                //vm.$set(vm,'elementBudget','element');
-                //vm.$set(vm.event,'elementsBudgetPerGuest',false);
-            }
-
-
+            vm.event.elementsBudgetPerGuest = !vm.event.elementsBudgetPerGuest;
         }
     },
     created() {
 
     },
     mounted() {
-
-      //this.switchingBudgetAndCost('element');
 
         this.getEventBuildingBlocks();
 
@@ -451,7 +444,7 @@
         this.getEventBuildingBlocks();
       },
         elementsBudget(val) {
-            //this.switchingBudgetAndCost(val);
+            this.switchingBudgetAndCost();
         }
     }
   }

@@ -8,14 +8,19 @@
             </div>
             <div class="md-layout-item md-size-95" style="max-height: 50vh;">
                 <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
-                    Add Building Block
+                    <b>Back to table</b> / Add Building Block
                 </h4>
                 <p>
                     Drag & Drop building blocks to your working panel to add new services or products to your event
                 </p>
                 <div class="md-layout" style="overflow: auto; max-height: 80vh;">
-                    <div v-for="(item,index) in categoryBuildingBlocks" :key="index" class="md-layout-item md-size-80 mx-auto" @click="addBlock(item)">
-                        <drag :class="`md-button md-${item.color} block-item text-center`"
+                    <md-field>
+                        <md-icon>search</md-icon>
+                        <md-input placeholder="Search for event element"
+                                  v-model="searchQuery"></md-input>
+                    </md-field>
+                    <div v-for="(item,index) in filteredEventBlocks" :key="index" class="md-layout-item md-size-100 mx-auto event-element-item" @click="addBlock(item)">
+                        <drag :class="`md-button md-warning block-item text-center`"
                               :transfer-data="{ item }"
                               v-if="!item.childComponents">
                             <!--<md-icon>{{item.icon}}</md-icon>-->
@@ -61,7 +66,9 @@
         data: () => ({
             // auth: auth,
             categoryBuildingBlocks: [],
-            isLoaded : false
+            isLoaded : false,
+            filteredEventBlocks  : [],
+            searchQuery : ''
 
         }),
 
@@ -87,9 +94,6 @@
                 let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
 
-                console.log(item);
-
-
                 let new_block = {
                     componentId: item.id,
                     componentCategoryId: item.categoryId,
@@ -105,9 +109,9 @@
                     this.setBuildingBlockModal({showModal: false});
 
                     new EventComponent().for(calendar, event).find(res.item.id).then(item => {
-                      //this.$emit("closePanel", item);
+                      this.$emit("closePanel", item);
                     });
-                    //this.$root.$emit('refreshBuildingBlock');
+                    this.$root.$emit('refreshBuildingBlock');
 
                 })
                     .catch(error => {
@@ -122,9 +126,8 @@
                             this.isLoaded = true;
                         } ,500);
 
-                        console.log('res res => ',res);
-
-                        this.$set(this, 'categoryBuildingBlocks', res);
+                        this.categoryBuildingBlocks = res;
+                        this.filteredEventBlocks = this.categoryBuildingBlocks;
 
                     })
                     .catch(error => {
@@ -147,12 +150,22 @@
             },
             addBlock(item) {
                 this.addBuildingBlock(item);
+            },
+            filterEventElements(){
+                this.filteredEventBlocks = _.filter(this.categoryBuildingBlocks, (v)=>{
+                    return v.title.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
+                });
             }
         },
         computed: {
             ...mapState('EventPlannerVuex', [
                 'addBuildingBlockModal',
             ])
+        },
+        watch : {
+            searchQuery(newVal, oldVal){
+                this.filterEventElements();
+            },
         }
     };
 </script>

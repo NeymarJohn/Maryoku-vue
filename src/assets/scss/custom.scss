@@ -413,7 +413,8 @@ $tooltip-border-color: $blue-grey-200 !default;
     .md-ripple {
         padding: 10px 0 !important;
         text-align: left;
-        font-weight: normal;
+        color: rgb(0, 0, 0) !important;
+        font-weight: bold !important;
     }
 }
 /**
@@ -2474,6 +2475,13 @@ iframe{
         border: 2px dashed #fff;
         border-radius: 3px;
     }
+
+    .event-element-item {
+        .block-item {
+            padding : 1em;
+            font-size: 14px;
+        }
+    }
 }
 
 .signup-modal {
@@ -2630,7 +2638,7 @@ iframe{
                 }
                 td {
                     text-align: center;
-                    padding : 0 0.4em;
+                    padding : 0 0.2em;
                     font-size: 14px;
                     font-family: 'Roboto','arial',sans-serif;
 
