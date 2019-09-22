@@ -39,33 +39,33 @@
                             </th>
                         </tr>
                         </thead>
-                        <tbody v-if="eventBuildingBlocksList.length">
-                        <template v-for="(category,index) in eventBuildingBlocksList" v-if="category.title != 'null'">
-                            <tr class="parent">
-                                <td>{{category.title}}</td>
-                                <td></td>
-                                <td class="allocated-budget">
-                                    <div class="md-table-cell-container">
-                                        <span class="dollar-sign pull-left small">$</span>
-                                        <span style="display: inline-block; width: 100%; padding-right: 16px;">
-                                            {{event.elementsBudgetPerGuest ? (category.totalAllocatedBudget / event.numberOfParticipants).toFixed(2) : category.totalAllocatedBudget.toFixed(2)}}
-                                        </span>
-                                        <span class="remains-budget badge badge-rose small" style="background-color: #fff;" v-if="category.remainsBudget">-${{parseInt(category.remainsBudget)}}</span>
-                                    </div>
-                                </td>
-                                <td class="actual-cost" :class="{disabled : category.totalActualCost==0}">
-                                    <span class="dollar-sign pull-left small">$</span>
-                                    {{event.elementsBudgetPerGuest ? (category.totalActualCost / event.numberOfParticipants).toFixed(2) : category.totalActualCost.toFixed(2)}}
+                        <tbody v-if="eventBuildingBlocks.length">
+                        <template v-for="(block,index) in eventBuildingBlocks">
+<!--                            <tr class="parent">-->
+<!--                                <td>{{category.title}}</td>-->
+<!--                                <td></td>-->
+<!--                                <td class="allocated-budget">-->
+<!--                                    <div class="md-table-cell-container">-->
+<!--                                        <span class="dollar-sign pull-left small">$</span>-->
+<!--                                        <span style="display: inline-block; width: 100%; padding-right: 16px;">-->
+<!--                                            {{event.elementsBudgetPerGuest ? (category.totalAllocatedBudget / event.numberOfParticipants).toFixed(2) : category.totalAllocatedBudget.toFixed(2)}}-->
+<!--                                        </span>-->
+<!--                                        <span class="remains-budget badge badge-rose small" style="background-color: #fff;" v-if="category.remainsBudget">-${{parseInt(category.remainsBudget)}}</span>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td class="actual-cost" :class="{disabled : category.totalActualCost==0}">-->
+<!--                                    <span class="dollar-sign pull-left small">$</span>-->
+<!--                                    {{event.elementsBudgetPerGuest ? (category.totalActualCost / event.numberOfParticipants).toFixed(2) : category.totalActualCost.toFixed(2)}}-->
 
-                                </td>
-                                <td></td>
-                            </tr>
+<!--                                </td>-->
+<!--                                <td></td>-->
+<!--                            </tr>-->
 
-                            <tr v-for="(block,index) in category.blocks">
+                            <tr >
                                 <td>{{block.title}}</td>
                                 <td>
                                     <template >
-                                        <div v-if="!block.is_parent && block.valuesCount"
+                                        <div v-if="block.valuesCount"
                                              style="cursor: pointer;">
                                             <md-button class="md-simple md-xs requirements-cell-button"
                                                        @click="addRequirements(block)">
@@ -73,7 +73,7 @@
                                                 <md-icon class="text-danger">edit</md-icon>
                                             </md-button>
                                         </div>
-                                        <template v-else-if="!block.is_parent && !block.valuesCount">
+                                        <template v-else-if="!block.valuesCount">
                                             <md-button class="md-info md-xs md-simple" @click="addRequirements(block)">
                                                 Set requirements
                                             </md-button>
@@ -84,7 +84,7 @@
                                 <td class="allocated-budget" style="width: 15%;" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
                                     <div class="md-table-cell-container" >
                                         <span class="dollar-sign pull-left small">$</span>
-                                        <label-edit v-if="!event.elementsBudgetPerGuest"  style="width: 100%; margin-left: 8px;" :text="block.allocatedBudget ? block.allocatedBudget.toFixed(2).toString() : ''"
+                                        <label-edit v-if="!event.elementsBudgetPerGuest"  style="width: 100%; margin-left: 8px;" :text="block.allocatedBudget"
                                                     :field-name="block.componentId"
                                                     @text-updated-blur="blockBudgetChanged"
                                                     @text-updated-enter="blockBudgetChanged"></label-edit>
@@ -249,38 +249,38 @@
 
           this.$set(this, 'eventBuildingBlocks', res);
         // group event blocks by category name
-        this.eventBuildingBlocksList = _.chain(res).groupBy('category').map(function(value, key) {
+        // this.eventBuildingBlocksList = _.chain(res).groupBy('category').map(function(value, key) {
+        //
+        //   let totalAllocatedBudget = 0, totalActualCost = 0;
+        //
+        //   value.forEach(function (item) {
+        //     if (item.allocatedBudget) totalAllocatedBudget += item.allocatedBudget;
+        //     if (item.winningProposalId) totalActualCost += item.winingProposal.cost;
+        //   })
+        //   return {
+        //     title: key,
+        //     blocks: _.sortBy(value, 'title'),
+        //     totalAllocatedBudget : totalAllocatedBudget,
+        //     totalActualCost : totalActualCost,
+        //     remainsBudget : totalActualCost ? totalAllocatedBudget - totalActualCost : 0
+        //   }
+        //
+        //
+        // })
+        //   .value();
+        //
+        // this.eventBuildingBlocksList = _.sortBy(this.eventBuildingBlocksList, 'title');
 
-          let totalAllocatedBudget = 0, totalActualCost = 0;
+        console.log('event = > ',this.event.components);
 
-          value.forEach(function (item) {
-            if (item.allocatedBudget) totalAllocatedBudget += item.allocatedBudget;
-            if (item.winningProposalId) totalActualCost += item.winingProposal.cost;
-          })
-          return {
-            title: key,
-            blocks: _.sortBy(value, 'title'),
-            totalAllocatedBudget : totalAllocatedBudget,
-            totalActualCost : totalActualCost,
-            remainsBudget : totalActualCost ? totalAllocatedBudget - totalActualCost : 0
-          }
+        //let allocatedBudget = 0;
+        // if (this.eventBuildingBlocks) {
+        //   this.eventBuildingBlocks.forEach(item => {
+        //     allocatedBudget += Number(item.allocatedBudget);
+        //   });
+        // }
 
-
-        })
-          .value();
-
-        this.eventBuildingBlocksList = _.sortBy(this.eventBuildingBlocksList, 'title');
-
-        console.log('eventBuildingBlocksList = > ',this.eventBuildingBlocksList);
-
-        let allocatedBudget = 0;
-        if (this.eventBuildingBlocks) {
-          this.eventBuildingBlocks.forEach(item => {
-            allocatedBudget += Number(item.allocatedBudget);
-          });
-        }
-
-        this.allocatedBudget = allocatedBudget;
+        //this.allocatedBudget = allocatedBudget;
         //this.isLoading = this.event.componentsCount !== this.event.components.length;
           setTimeout(()=>{
               this.isLoading = false;
@@ -413,8 +413,6 @@
         });
       },
         switchingBudgetAndCost(val) {
-
-          console.log('i am here');
             let vm = this;
 
             if ( val === 'guest' ) {
@@ -425,7 +423,6 @@
                 //vm.$set(vm.event,'elementsBudgetPerGuest',false);
             }
 
-            vm.getEventBuildingBlocks();
 
         }
     },
@@ -434,9 +431,12 @@
     },
     mounted() {
 
-      this.switchingBudgetAndCost('element');
+      //this.switchingBudgetAndCost('element');
 
-      this.$root.$on('refreshBuildingBlock', () => {
+        this.getEventBuildingBlocks();
+
+
+        this.$root.$on('refreshBuildingBlock', () => {
         this.getEventBuildingBlocks()
       });
 
@@ -451,8 +451,7 @@
         this.getEventBuildingBlocks();
       },
         elementsBudget(val) {
-          console.log(val);
-            this.switchingBudgetAndCost(val);
+            //this.switchingBudgetAndCost(val);
         }
     }
   }

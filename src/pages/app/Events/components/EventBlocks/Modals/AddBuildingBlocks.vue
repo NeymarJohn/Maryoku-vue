@@ -14,24 +14,13 @@
                     Drag & Drop building blocks to your working panel to add new services or products to your event
                 </p>
                 <div class="md-layout" style="overflow: auto; max-height: 80vh;">
-                    <div v-for="(item,index) in categoryBuildingBlocks" :key="index" class="md-layout-item md-size-80 mx-auto">
+                    <div v-for="(item,index) in categoryBuildingBlocks" :key="index" class="md-layout-item md-size-80 mx-auto" @click="addBlock(item)">
                         <drag :class="`md-button md-${item.color} block-item text-center`"
                               :transfer-data="{ item }"
                               v-if="!item.childComponents">
-
                             <!--<md-icon>{{item.icon}}</md-icon>-->
-                            {{item.value}}
+                            {{item.title}}
                         </drag>
-                        <template v-else-if="item.childComponents">
-                            <h4>{{item.value}}</h4>
-                            <div v-for="(item1,index1) in item.childComponents" :key="index1">
-                                <drag :class="`md-button md-${item1.color} block-item text-center`"
-                                      :transfer-data="{ item1 }">
-                                    <!--<md-icon>{{item1.icon}}</md-icon>-->
-                                    {{item1.title}}
-                                </drag>
-                            </div>
-                        </template>
                     </div>
                 </div>
             </div>
@@ -98,6 +87,8 @@
                 let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
                 let event = new CalendarEvent({id: this.event.id});
 
+                console.log(item);
+
 
                 let new_block = {
                     componentId: item.id,
@@ -114,7 +105,7 @@
                     this.setBuildingBlockModal({showModal: false});
 
                     new EventComponent().for(calendar, event).find(res.item.id).then(item => {
-                      this.$emit("closePanel", item);
+                      //this.$emit("closePanel", item);
                     });
                     //this.$root.$emit('refreshBuildingBlock');
 
@@ -130,6 +121,8 @@
                         setTimeout( ()=>{
                             this.isLoaded = true;
                         } ,500);
+
+                        console.log('res res => ',res);
 
                         this.$set(this, 'categoryBuildingBlocks', res);
 
@@ -151,6 +144,9 @@
 
                 }
 
+            },
+            addBlock(item) {
+                this.addBuildingBlock(item);
             }
         },
         computed: {

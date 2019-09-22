@@ -3,7 +3,7 @@
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
         <div class="event-details-tabs">
             <tabs
-                :tab-name="['EVENT DETAILS', 'BUDGET & PROPOSALS','EVENT PAGE']"
+                :tab-name="['EVENT DETAILS', 'BUDGET & PROPOSALS']"
                 color-button="rose"
                 :active-tab="$store.state.EventPlannerVuex.eventDetailsActiveTab" ref="eventPlannerTabs" :sync-router="true">
                 <!-- here you can add your content for tab-content -->
@@ -130,14 +130,14 @@
                     </div>
                 </template>-->
 
-                <template slot="tab-pane-3" style="width: 100%;">
+                <!--<template slot="tab-pane-3" style="width: 100%;">
                     <div class="md-layout">
                         <div class="md-layout-item md-size-100">
                             <event-details :event.sync="event"
                                            :event-components="selectedComponents"></event-details>
                         </div>
                     </div>
-                </template>
+                </template>-->
 
             </tabs>
         </div>
@@ -231,7 +231,6 @@
       this.$store.registerModule('EventPlannerVuex', EventPlannerVuexModule  )
 
       this.routeName = this.$route.name;
-
 
 
     },

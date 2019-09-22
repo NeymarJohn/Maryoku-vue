@@ -9,7 +9,7 @@
             </div>
             <div class="md-layout-item md-size-95" style="max-height: 50vh;">
                 <h4 class="md-title" style="margin-bottom: 0; line-height: 51px; text-transform: capitalize;">
-                    Manage Proposals - {{selectedBlock.componentCategoryId}}
+                    Manage Proposals - {{selectedBlock.title}}
                 </h4>
 
                 <div class="tabs-section">
@@ -46,7 +46,7 @@
                         </template>
                     </tabs>
 
-                    <md-card class="allocated-budget" style="height: 45px;"> <md-card-content><span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span> <div class="budget">${{selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget.toFixed(1) : '0.0'}}</div></md-card-content></md-card>
+                    <md-card class="allocated-budget" style="height: 45px;"> <md-card-content><span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span> <div class="budget">${{selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget  : '0.0'}}</div></md-card-content></md-card>
                 </div>
             </div>
         </div>
@@ -102,6 +102,8 @@
     }),
 
     created() {
+
+        console.log(this.selectedBlock);
 
     },
     mounted() {
