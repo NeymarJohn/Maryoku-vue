@@ -62,7 +62,7 @@
     }
 
     /deep/ .md-error {
-        color: $state-danger-text;
+        color: $brand-danger;
     }
 
     .steps-container {

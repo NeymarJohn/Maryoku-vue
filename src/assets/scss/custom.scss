@@ -4465,7 +4465,7 @@ input:focus,
 
 }
 
-.md-field{
+.md-field , .md-layout-item {
     &.required {
         label {
             &:after {
@@ -4475,5 +4475,17 @@ input:focus,
                 top: 2px;
             }
         }
+    }
+}
+
+.has-error {
+    label {
+        color : $brand-danger;
+    }
+}
+.event-types-list {
+    label {
+        position: relative;
+        font-size: 18px;
     }
 }
