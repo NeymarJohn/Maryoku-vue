@@ -424,21 +424,21 @@
             this.hoursArray.push();
         },
         mounted () {
-            this.isLoading = true;
+            this.isLoading = false;
             let vm = this;
 
-            vm.$auth.currentUser(vm, true, ()=> {
-
-                Promise.all([
-                    CalendarEvent.find(vm.$route.params.id),
-                    EventComponent.get()
-                ]).then(([event, components]) => {
-                    vm.calendar = new Calendar({id: vm.$auth.user.defaultCalendarId});
-                    vm.event = event.for(vm.calendar);
-
-                    vm.isLoading = false;
-                });
-            });
+            // vm.$auth.currentUser(vm, true, ()=> {
+            //
+            //     Promise.all([
+            //         CalendarEvent.find(vm.$route.params.id),
+            //         EventComponent.get()
+            //     ]).then(([event, components]) => {
+            //         vm.calendar = new Calendar({id: vm.$auth.user.defaultCalendarId});
+            //         vm.event = event.for(vm.calendar);
+            //
+            //         vm.isLoading = false;
+            //     });
+            // });
 
 
         },

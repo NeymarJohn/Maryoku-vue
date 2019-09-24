@@ -13,7 +13,7 @@
 <!--            </div>-->
         </div>
         <event-details v-show="step == 1" @goToNextPage="goToNextPage" />
-        <get-started v-show="step == 2" @goToNextPage="goToNextPage" />
+<!--        <get-started v-show="step == 2" @goToNextPage="goToNextPage" />-->
 <!--        <brief-details v-show="step == 2" @goToNextPage="goToNextPage" @goToPrevPage="goToPrevPage" />-->
     </div>
 </template>

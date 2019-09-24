@@ -332,6 +332,13 @@ let EventPages = {
             component: EventSteps,
             meta: {title: 'Event Wizzard', gtm: "Event Wizzard"},
 
+        },
+        {
+            path: "/event/create",
+            name: "EventSteps",
+            component: EventSteps,
+            meta: {title: 'Event Wizzard', gtm: "Event Wizzard"},
+
         }
     ]
 };

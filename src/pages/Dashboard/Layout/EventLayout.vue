@@ -25,12 +25,16 @@
                 <!--<sidebar-item :link="{name: 'Yearly Planner', icon: 'calendar_today', path: '/yearly-plan'}">
                 </sidebar-item>-->
 
-                <li class="nav-item router-link-active">
-                    <md-button name="left-menu-create-event" class="left-menu-create-event md-button md-purple" @click="openEventModal()" :disabled="createEventModalOpen">
-                        <md-icon>event</md-icon>
-                        <span>Create New Event</span>
-                    </md-button>
-                </li>
+<!--                <li class="nav-item router-link-active">-->
+<!--                    <md-button name="left-menu-create-event" class="left-menu-create-event md-button md-purple" @click="openEventModal()" :disabled="createEventModalOpen">-->
+<!--                        <md-icon>event</md-icon>-->
+<!--                        <span>Create New Event</span>-->
+<!--                    </md-button>-->
+<!--                </li>-->
+
+                <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Create Event',  icon: 'event', path: '/event/create'}"></sidebar-item>
+
+
                 <li class="menu-divider"></li>
                 <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Events List',  icon: 'event', path: '/events'}"></sidebar-item>
                 <!--<sidebar-item name="left-menu-yearly-plan" class="left-menu-yearly-plan" :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>-->
