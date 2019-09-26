@@ -244,7 +244,7 @@ let appPages = {
             meta: {gtm: "Vendors"}
         },
         {
-            path: "/vendors/:id/edit",
+            path: "/vendors/:id/detail",
             name: "VendorDetails",
             component: CurrentVendors,
             meta: {title: 'Vendor Page', gtm: "Vendor Details", opaque: false},

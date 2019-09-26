@@ -25,8 +25,6 @@
             </h3>
             {{vendor.vendorAddressLine1}}
             {{vendor.avgScore}}
-            {{vendor.voters}}
-            {{vendor.rank}}
           </div>
         </div>
       </div>
@@ -52,12 +50,12 @@
         <div class="text-group">
           <div class="">
             <span>
-              Past Events With the Vendor: 1
+              Past Events With the Vendor: {{vendor.voters}}
             </span>
           </div>
           <div class="">
             <span>
-              Past Proposals Sent by the Vendor: 5
+              Past Proposals Sent by the Vendor: {{vendor.rank}}
             </span>
           </div>
         </div>
