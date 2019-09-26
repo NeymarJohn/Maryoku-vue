@@ -3346,6 +3346,62 @@ iframe{
     }
 }
 
+.vendor-details {
+    .image-list-container {
+        display: flex;
+
+        .img-cont {
+            flex: 1;
+            
+            img {
+                max-width: 100%;
+                object-fit: cover;
+            }
+
+            &.thumb-img-cont {
+                display: flex;
+                flex-wrap: wrap;
+
+                img {
+                    width: calc( 50% - 1px );
+                    padding: 1px;
+                }
+            }
+        }
+    }
+
+    .md-button {
+        text-transform: none;
+    }
+
+    .md-layout {
+        &.bg-white {
+            background: #fff;
+
+            .text-group {
+                color: red;
+                padding: 2em 1em;
+            }
+            .description {
+                padding: 0 1em;
+            }
+            .title-cont {
+                display: flex;
+
+                .title-child {
+                    padding: 0 1em;
+                    img {
+                        width: 120px;
+                        height: 120px;
+                        position: relative;
+                        top: -2rem;
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 @media screen and (max-width : 500px) {
     .event-details {

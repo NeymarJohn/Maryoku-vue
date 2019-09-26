@@ -1,8 +1,67 @@
 <template>
-  <div class="md-layout edit-vendor-details">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
-    <div class="vendor-details-tabs">
-      {{vendor}}
+  <div class="vendor-details">
+    <div class="md-layout">
+      <div class="md-layout-item image-list-container no-padding">
+        <div class="img-cont big-img-cont">
+          <img :src="bgImages[0]">
+        </div>
+        <div class="img-cont thumb-img-cont">
+          <img :src="bgImages[1]">
+          <img :src="bgImages[2]">
+          <img :src="bgImages[3]">
+          <img :src="bgImages[4]">
+        </div>
+      </div>
+    </div>
+    <div class="md-layout bg-white">
+      <div class="md-layout-item">
+        <div class="title-cont">
+          <div class="title-child">
+            <img :src="bgImages[1]">
+          </div>
+          <div class="title-child">
+            <h3>
+              {{vendor.vendorDisplayName}}
+            </h3>
+            {{vendor.vendorAddressLine1}}
+            {{vendor.avgScore}}
+            {{vendor.voters}}
+            {{vendor.rank}}
+          </div>
+        </div>
+      </div>
+      <div class="md-layout-item text-right">
+        <md-button class="md-success">
+          Contact Vendor
+        </md-button>
+        <md-button class="md-danger">
+          Create Brief Ask for Proposal
+        </md-button>
+      </div>
+    </div>
+    <div class="md-layout bg-white">
+      <div class="md-layout-item">
+        <div class="description">
+          <h4>
+            <md-icon>view_list</md-icon> Description
+          </h4>
+          <p>
+            Lorem
+          </p>
+        </div>
+        <div class="text-group">
+          <div class="">
+            <span>
+              Past Events With the Vendor: 1
+            </span>
+          </div>
+          <div class="">
+            <span>
+              Past Proposals Sent by the Vendor: 5
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -33,6 +92,13 @@
         vendorId: null,
         isLoading: false,
         vendor: {statistics: {}},
+        bgImages : [
+          '/static/img/lock.jpg',
+          '/static/img/login.jpg',
+          '/static/img/register.jpg',
+          '/static/img/bg-pricing.jpg',
+          '/static/img/bg3.jpg',
+        ],
         routeName: null
       }
     },
