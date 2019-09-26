@@ -28,6 +28,7 @@ import EventSteps from '@/pages/app/Events/Steps'
 import Notes from "@/pages/app/Notes.vue";
 import Proposals from "@/pages/app/Proposals.vue";
 import Vendors from "@/pages/app/Vendors/Vendors.vue";
+import CurrentVendors from "@/pages/app/Vendors/CurrentVendors.vue";
 import VendorsPool from "@/pages/app/Vendors/VendorsPool.vue";
 import ImportVendors from "@/pages/app/Vendors/ImportVendors.vue";
 import YearlyPlan from "@/pages/app/YearlyPlan/index.vue";
@@ -241,6 +242,12 @@ let appPages = {
             name: "Vendors",
             component: Vendors,
             meta: {gtm: "Vendors"}
+        },
+        {
+            path: "/vendors/:id/edit",
+            name: "VendorDetails",
+            component: CurrentVendors,
+            meta: {title: 'Vendor Page', gtm: "Vendor Details", opaque: false},
         },
         {
             path: "/vendors-pool",

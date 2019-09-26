@@ -88,7 +88,7 @@
             VueElementLoading,
             UploadModal,
             Pagination,
-            companyForm
+            companyForm,
         },
         mixins: [paginationMixin],
         data() {
