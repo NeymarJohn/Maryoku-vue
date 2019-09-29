@@ -52,27 +52,31 @@
 
                 <!-- Event Types list-->
                 <div class="md-layout event-types-list" style="margin-top : 1em;">
-                    <div class="md-layout-item md-size-100 required" :class="{'has-error': !guestType && validating }">
+                    <div class="md-layout-item md-size-40 required" :class="{'has-error': !guestType && validating }">
                         <label class="bold">
                             Select Event Type
                         </label>
                         <br>
-                        <span class="md-error" v-if="!eventType.id && validating">The Event Type Is Required</span>
-
+                        <span class="md-error" v-if="!eventType && validating">The Event Type Is Required</span>
 
                         <div class="list-container">
-                            <div v-for="type in eventTypes"
-                                 :key="type.item" class="list-item"
-                                 :class="{'active': isTypeSelected(type.id) }"
-                                 @click="selectEventType(type)"
-                            >
-                                <div class="list-item--icon">
-                                    <md-icon v-if="isTypeSelected(type.id)" class="checked-item">check</md-icon>
-                                </div>
-                                <div class="list-item--title">
-                                    {{ type.item }}
-                                </div>
-                            </div>
+                            <md-field style="margin-top: 0; margin-bottom : 2em;">
+                                <md-select v-model="eventType">
+                                    <md-option v-for="(type,index) in eventTypes" :key="index"  :value="type.id">{{ type.item }}</md-option>
+                                </md-select>
+                            </md-field>
+<!--                            <div v-for="type in eventTypes"-->
+<!--                                 :key="type.item" class="list-item"-->
+<!--                                 :class="{'active': isTypeSelected(type.id) }"-->
+<!--                                 @click="selectEventType(type)"-->
+<!--                            >-->
+<!--                                <div class="list-item&#45;&#45;icon">-->
+<!--                                    <md-icon v-if="isTypeSelected(type.id)" class="checked-item">check</md-icon>-->
+<!--                                </div>-->
+<!--                                <div class="list-item&#45;&#45;title">-->
+<!--                                    {{ type.item }}-->
+<!--                                </div>-->
+<!--                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -120,11 +124,9 @@
                     </div>
                     <div class="md-layout-item md-size-25">
                         <md-field>
-                            <label>Where is your event?</label>
-                            <md-input></md-input>
+                            <label>City</label>
+                            <md-input v-model="eventData.city"></md-input>
                         </md-field>
-
-                        <md-checkbox >I don't know yet</md-checkbox>
                     </div>
                 </div>
                 <div class="md-layout">
@@ -139,15 +141,7 @@
                             <label >Date</label>
                         </md-datepicker>
 
-                        <md-checkbox v-model="selectMonth">Select a month if you don't have a specific date yet</md-checkbox>
-
-                        <md-datepicker
-                            v-if="selectMonth"
-                            data-vv-name="date"
-                            ref="datePicker"
-                            required>
-                            <label >Month</label>
-                        </md-datepicker>
+                        <md-checkbox v-model="flexibleDate" @change="switchDateRequired">I'm flexible around the selected date</md-checkbox>
 
                     </div>
                 </div>
@@ -230,7 +224,7 @@
                 this.eventType = type;
             },
             isTypeSelected(id) {
-                return this.eventType && this.eventType.id === id;
+                return this.eventType;
             },
             selectGuestType(type) {
                 this.guestType = type;
@@ -259,7 +253,7 @@
 
                 });
 
-                if ( !this.eventType.id || !this.guestType ) {
+                if ( !this.eventType || !this.guestType ) {
 
                 } else {
 
@@ -336,10 +330,11 @@
                         budgetPerPerson: this.eventData.budgetPerPerson,
                         status: 'draft',
                         currency: 'USD',
-                        eventType: this.eventType.id,
+                        eventType: this.eventType,
                         participantsType: this.guestType,
                         category: catObject.category, //!this.eventData.editable ? 'Holidays' : 'CompanyDays',
                         editable: true,
+                        city: this.eventType.city,
                         //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
                     }).for(_calendar).save().then(response => {
                         console.log('new event => ' , response);
@@ -354,6 +349,9 @@
                         });
                 },100);
             },
+            switchDateRequired() {
+                this.modelValidations.date.required = !this.flexibleDate;
+            }
 
         },
         data () {
@@ -361,13 +359,13 @@
                 isLoading: true,
                 event: null,
                 calendar: null,
-                eventType : {},
+                eventType : null,
                 category : '',
                 InviteeTypes: ["Guests Only","Guests and spouse","Guests and families", "Guests siblings"],
                 guestType : null,
                 hoursArray: [],
                 durationArray: [...Array(12).keys()].map(x =>  ++x),
-                selectMonth : false,
+                flexibleDate : false,
                 modelValidations: {
                     title: {
                         required: true,

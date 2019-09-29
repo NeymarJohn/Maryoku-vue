@@ -30,7 +30,7 @@
 
                 <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" class="table-striped">
                     <md-table-cell md-label="Vendor Name" class="text-bold">
-                        <a href="javascript: void(null);" @click="routeToVendor(item.id, $event)">
+                        <a href="javascript: void(null);" @click="showVendorDetails(item)">
                             {{ item.vendorDisplayName}}
                         </a>
                     </md-table-cell>
@@ -50,7 +50,7 @@
                         />
                     </md-table-cell>
                     <md-table-cell style="white-space: nowrap;" class="hover">
-                        <md-button  @click.prevent="editVendorDetails(item)" class="md-info md-xs md-just-icon md-round">
+                        <md-button  @click.prevent="showVendorDetails(item)" class="md-info md-xs md-just-icon md-round">
                             <md-icon>edit</md-icon>
                         </md-button>
                         <md-button
@@ -120,12 +120,10 @@
     },
     methods: {
       categoryTitle,
-      editVendorDetails (vendor) {
-        this.$emit('editVendorDetails', vendor);
+      showVendorDetails (vendor) {
+        this.$emit('showVendorDetails', vendor);
       },
-      routeToVendor(vendorId) {
-        this.$router.push({ name: "VendorDetails", params: { id: vendorId } });
-      },
+
       remove (vendor) {
         this.$emit('delete', vendor);
       },
