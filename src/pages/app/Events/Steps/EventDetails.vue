@@ -24,7 +24,6 @@
                                 data-vv-name="numberOfParticipants"
                                 v-validate= "modelValidations.numberOfParticipants"
                                 required
-                                type="number"
                             ></md-input>
                             <span class="md-error" v-if="errors.has('numberOfParticipants')">The Guest Count is required</span>
 
@@ -38,19 +37,15 @@
                                 data-vv-name="budget"
                                 v-validate= "modelValidations.budget"
                                 required
-                                type="number"
-
                             ></md-input>
                             <span class="md-error" v-if="errors.has('budget')">The Budget is required</span>
 
                         </md-field>
                     </div>
                     <div class="md-layout-item md-size-15">
-                        <md-field>
+                        <md-field class="required">
                             <label>Per Guest</label>
-                            <md-input v-model="eventData.budgetPerPerson"
-                                      type="number"
-                            ></md-input>
+                            <md-input v-model="eventData.budgetPerPerson"></md-input>
                         </md-field>
                     </div>
                 </div>
@@ -97,18 +92,16 @@
                         <span class="md-error" v-if="!guestType && validating">The Guest Type Is Required</span>
 
                         <div class="list-container">
-                            <div v-for="type in InviteeTypes2"
-                                 :key="type.title" class="list-item"
-                                 :class="{'active': isGuestTypeSelected(type.title) }"
-                                 @click="selectGuestType(type.title)"
+                            <div v-for="type in InviteeTypes"
+                                 :key="type" class="list-item"
+                                 :class="{'active': isGuestTypeSelected(type) }"
+                                 @click="selectGuestType(type)"
                             >
                                 <div class="list-item--icon">
-                                    <md-icon v-if="isGuestTypeSelected(type.title)" class="checked-item">check</md-icon>
-
-                                    <img :src="type.icon">
+                                    <md-icon v-if="isGuestTypeSelected(type)" class="checked-item">check</md-icon>
                                 </div>
                                 <div class="list-item--title">
-                                    {{ type.title }}
+                                    {{ type }}
                                 </div>
                             </div>
                         </div>
@@ -221,7 +214,6 @@
 
     export default {
         name: "get-started-step",
-        props : ['newEventData'],
         components: {
             VueElementLoading
         },
@@ -264,8 +256,13 @@
                 if ( !this.eventType || !this.guestType ) {
 
                 } else {
+
+
+
                     //this.$emit('goToNextPage');
                 }
+
+
             },
             getOccasionList() {
                 if ( this.$auth.user.defaultCalendarId ) {
@@ -318,47 +315,38 @@
 
 
                 setTimeout(()=>{
+                    let calendarId = this.$auth.user.defaultCalendarId;
+                    let _calendar = new Calendar({ id: calendarId});
+                    let catObject = _.find(this.occasionsForCategory, (el => el.value === this.eventData.occasion)) || {category: "CompanyDays"};
+                    this.category = catObject.category;
 
-                    this.$auth.currentUser(this, true, ()=>{
-                        // Code  here
+                    let newEvent = new CalendarEvent({
+                        calendar: {id: calendarId},
+                        title: this.eventData.title,
+                        occasion: this.eventData.occasion,
+                        eventStartMillis: this.getEventStartInMillis(),
+                        eventEndMillis: this.getEventEndInMillis(),
+                        numberOfParticipants: this.eventData.numberOfParticipants,
+                        budgetPerPerson: this.eventData.budgetPerPerson,
+                        status: 'draft',
+                        currency: 'USD',
+                        eventType: this.eventType,
+                        participantsType: this.guestType,
+                        category: catObject.category, //!this.eventData.editable ? 'Holidays' : 'CompanyDays',
+                        editable: true,
+                        city: this.eventType.city,
+                        //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+                    }).for(_calendar).save().then(response => {
+                        console.log('new event => ' , response);
+                        //this.$parent.isLoading = false;
+                        vm.$emit('goToNextPage');
 
-                        let calendarId = this.$auth.user.defaultCalendarId;
-                        let _calendar = new Calendar({ id: calendarId});
-                        let catObject = _.find(this.occasionsForCategory, (el => el.value === this.eventData.occasion)) || {category: "CompanyDays"};
-                        this.category = catObject.category;
-
-                        let newEvent = new CalendarEvent({
-                            calendar: {id: calendarId},
-                            title: this.eventData.title,
-                            occasion: this.eventData.occasion,
-                            eventStartMillis: this.getEventStartInMillis(),
-                            eventEndMillis: this.getEventEndInMillis(),
-                            numberOfParticipants: this.eventData.numberOfParticipants,
-                            budgetPerPerson: this.eventData.budgetPerPerson,
-                            status: 'draft',
-                            currency: 'USD',
-                            eventType: this.eventType,
-                            participantsType: this.guestType,
-                            category: catObject.category, //!this.eventData.editable ? 'Holidays' : 'CompanyDays',
-                            editable: true,
-                            city: this.eventType.city,
-                            //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
-                        }).for(_calendar).save().then(response => {
+                    })
+                        .catch((error) => {
+                            console.log(error);
+                            this.working = false;
                             //this.$parent.isLoading = false;
-                            vm.$emit('goToNextPage', response);
-                            vm.newEvent = response
-
-                        })
-                            .catch((error) => {
-                                console.log(error);
-                                this.working = false;
-                                //this.$parent.isLoading = false;
-                            });
-
-                    });
-
-
-
+                        });
                 },100);
             },
             switchDateRequired() {
@@ -374,20 +362,6 @@
                 eventType : null,
                 category : '',
                 InviteeTypes: ["Guests Only","Guests and spouse","Guests and families", "Guests siblings"],
-                InviteeTypes2: [
-                    {
-                        title : 'Corporate Guests',
-                        icon : 'static/img/guest_type_corporate.png'
-                    },
-                    {
-                        title : 'Children',
-                        icon : 'static/img/guest_type_children.png'
-                    },
-                    {
-                        title : 'Social Event Invitees',
-                        icon : 'static/img/guest_type_social.png'
-                    }
-                ],
                 guestType : null,
                 hoursArray: [],
                 durationArray: [...Array(12).keys()].map(x =>  ++x),
@@ -432,7 +406,7 @@
                 occasionsList: [],
                 occasionsForCategory: [],
                 dateValid: true,
-                validating : false,
+                validating : false
             }
         },
         created(){
@@ -446,19 +420,10 @@
             [...Array(8).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`));
 
             this.hoursArray.push();
-
-            console.log(this.newEventData);
-
-            if ( this.newEventData ) {
-
-            }
-
         },
         mounted () {
             this.isLoading = false;
             let vm = this;
-
-
 
             // vm.$auth.currentUser(vm, true, ()=> {
             //
@@ -547,11 +512,6 @@
             border: 1px solid #e0e0e0;
             text-align: center;
             border-radius: 2px;
-
-            img {
-                width : 50%;
-                margin-top: 30px;
-            }
         }
     }
 
