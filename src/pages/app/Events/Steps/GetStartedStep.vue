@@ -1,51 +1,65 @@
 <template>
-    <div class="md-layout">
+    <div >
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
-        <div class="md-layout-item">
-            <h2 class="margin-bottom-md">Let's start with big things</h2>
-            <label class="bold">First things first, this party needs:</label>
-            <div class="md-error" v-if="cerrors.selectedCategories">
-                {{ cerrors.selectedCategories[0] }}
-            </div>
-            <div class="list-container">
-                <div v-for="category in categories" :key="category.id"
-                @click="toggleSelectCategory(category)"
-                class="list-item"
-                :class="{'active': isCategorySelected(category) || isSelected(category)}">
-                    <div class="list-item--icon">
-                        <md-icon v-if="isCategorySelected(category) || isSelected(category)">check</md-icon>
-                        <md-icon v-else>arrow_forward</md-icon>
-                    </div>
-                    <div class="list-item--title">
-                        {{ category.title }}
+
+        <div class="md-card">
+            <div class="md-card-content">
+                <div class="md-layout">
+                    <div class="md-layout-item">
+                        <h3 class="margin-bottom-md">Now, select elements:</h3>
+                        <div class="md-error" v-if="cerrors.selectedCategories">
+                            {{ cerrors.selectedCategories[0] }}
+                        </div>
+                        <div class="list-container">
+
+                            <div class="list-container">
+                                <div v-for="category in categories" :key="category.id"
+                                     @click="toggleSelectCategory(category)"
+                                     class="list-item"
+                                     :class="{'active': isCategorySelected(category) || isSelected(category)}"
+                                >
+                                    <div class="list-item--icon">
+                                        <md-icon class="check-icon" v-if="isCategorySelected(category) || isSelected(category)">check</md-icon>
+
+                                        <img :src="`/static/img/event-elements/venue-lighting.png`">
+                                    </div>
+                                    <div class="list-item--title">
+                                        {{ category.title }}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <label class="bold" style="font-size: 15px;">
+                            Select more elements <md-icon>keyboard_arrow_right</md-icon>
+                        </label>
+                        <div class="list-container">
+                            <div class="list-container">
+                                <div v-for="subCategory in subCategories"
+                                     @click="toggleSelectSubCategory(subCategory)"
+                                     :key="subCategory.id" class="list-item"
+                                     :class="{'active': isSubCategorySelected(subCategory) || isSelected(subCategory) }">
+                                    <div class="list-item--icon">
+                                        <md-icon class="check-icon" v-if="isSubCategorySelected(subCategory) || isSelected(subCategory)">check</md-icon>
+                                    </div>
+                                    <div class="list-item--title">
+                                        {{ subCategory.title }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <md-field class="margin-bottom-xxl">
+                                <label>Add a short paragraph about the event.</label><br/>
+                                <md-textarea v-model="brief" placeholder="Is there a dress code? Who is participating? What's the occasion?"></md-textarea>
+                            </md-field>
+                        </div>
+                        <div class="text-right margin-bottom-xxl">
+                            <md-button  @click="goBack" class="md-button md-default">Back</md-button>
+                            <md-button @click.prevent="validateAndSubmit" class="md-button md-primary">Continue</md-button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <label class="bold">
-                Select more elements <md-icon>keyboard_arrow_right</md-icon>
-            </label>
-            <div class="list-container">
-                <div v-for="subCategory in subCategories"
-                @click="toggleSelectSubCategory(subCategory)"
-                :key="subCategory.id" class="list-item"
-                :class="{'active': isSubCategorySelected(subCategory) || isSelected(subCategory) }">
-                    <div class="list-item--icon">
-                        <md-icon v-if="isSubCategorySelected(subCategory) || isSelected(subCategory)">check</md-icon>
-                        <md-icon v-else>arrow_forward</md-icon>
-                    </div>
-                    <div class="list-item--title">
-                        {{ subCategory.title }}
-                    </div>
-                </div>
-            </div>
-            <div>
-                <md-field class="margin-bottom-xxl">
-                    <label>Add a short paragraph about the event.</label><br/>
-                    <md-textarea v-model="brief" placeholder="Is there a dress code? Who is participating? What's the occasion?"></md-textarea>
-                </md-field>
-            </div>
-            <div class="text-right margin-bottom-xxl">
-                <md-button @click.prevent="validateAndSubmit" class="md-button md-primary">Brief Details</md-button>
             </div>
         </div>
     </div>
@@ -58,6 +72,7 @@
 
     export default {
         name: "get-started-step",
+        props : ['newEvent'],
         components: {
             VueElementLoading
         },
@@ -99,10 +114,10 @@
                 //  return;
                 this.cerrors = {};
 
-                if (!this.selectedCategories.length && !this.selectedSubCategories.length && this.eventComponents.length ) {
-                    this.$emit('goToNextPage');
-                    return;
-                }
+                // if (!this.selectedCategories.length && !this.selectedSubCategories.length && this.eventComponents.length ) {
+                //     this.$emit('goToNextPage');
+                //     return;
+                // }
 
                 if (!this.selectedCategories.length && !this.selectedSubCategories.length) {
                     this.cerrors.selectedCategories = ['you must select at least one category'];
@@ -142,7 +157,7 @@
 
                 Promise.all(promisses).then(() => {
                     this.isLoading = false;
-                    this.$emit('goToNextPage');
+                    //this.$emit('goToNextPage');
                 })
                 .catch((e) => {
                     console.log('error -->', e);
@@ -150,6 +165,10 @@
                 });
 
             },
+            goBack(){
+                this.$emit('goToPrevPage');
+
+            }
         },
         data () {
             return {
@@ -169,30 +188,41 @@
             this.isLoading = true;
             let vm = this;
 
-             vm.$auth.currentUser(vm, true, ()=> {
-
-                Promise.all([
-                    CalendarEvent.find(vm.$route.params.id),
-                    EventComponent.get()
-                ]).then(([event, components]) => {
-                    vm.calendar = new Calendar({id: vm.$auth.user.defaultCalendarId});
-                    vm.event = event.for(vm.calendar);
-                    vm.categories =_.filter(components ,  function(item) { return item.promoted === true});
-                    vm.subCategories =_.filter(components ,  function(item) { return item.promoted === false});
-
-                    console.log('categories ', vm.categories);
-                    console.log('categories ', vm.subCategories);
+             console.log('newEvent => ',vm.newEvent);
 
 
-                    new EventComponent().for(vm.calendar, vm.event).get().then(resp =>{
-                        console.log('components ', resp);
-                        //vm.selectedCategories = resp;
-                        vm.$set(vm,'eventComponents',resp);
+             if ( vm.newEvent ) {
+                vm.$auth.currentUser(vm, true, ()=> {
 
-                    })
-                    vm.isLoading = false;
+                    console.log(vm.newEvent);
+
+                    Promise.all([
+                        CalendarEvent.find(vm.newEvent.item.id) ,
+                        EventComponent.get()
+                    ]).then(([event, components]) => {
+
+                        vm.calendar = new Calendar({id: vm.$auth.user.defaultCalendarId});
+                        vm.event = event.for(vm.calendar);
+                        vm.categories =_.filter(components ,  function(item) { return item.promoted === true});
+                        vm.subCategories =_.filter(components ,  function(item) { return item.promoted === false});
+
+                        console.log('categories ', vm.categories);
+                        console.log('categories ', vm.subCategories);
+
+
+                        new EventComponent().for(vm.calendar, vm.event).get().then(resp =>{
+                            console.log('components ', resp);
+                            //vm.selectedCategories = resp;
+                            vm.$set(vm,'eventComponents',resp);
+
+                        })
+                        vm.isLoading = false;
+                    });
                 });
-            });
+            }
+
+
+
 
 
         }
@@ -215,16 +245,15 @@
         flex-wrap: wrap;
         margin-top: 15px;
         margin-bottom: 20px;
+        flex-direction: row;
 
         .list-item {
-            display: flex;
-            padding: 15px;
-            margin-right: 15px;
-            margin-bottom: 15px;
-            background: white;
             border-radius: 4px;
-            min-width: 180px;
             cursor: pointer;
+            width : 120px;
+            text-align: center;
+            margin-right : 10px;
+            position: relative;
 
             &.active {
                 .list-item--icon {
@@ -234,23 +263,34 @@
                         color: white;
                         content: "check";
                     }
+
+                    .checked-item {
+                        position: absolute;
+                        right : 5px;
+                        top : 5px;
+                    }
                 }
             }
         }
 
         .list-item--title {
-            font-size: 20px;
             margin-top: 5px;
         }
 
         .list-item--icon {
-            width: 35px;
-            height: 35px;
-            border: 1px solid $input-border;
-            border-radius: 50%;
+            width : 120px;
+            height : 120px;
+            border: 1px solid #e0e0e0;
             text-align: center;
-            margin-right: 10px;
-            padding-top: 3px;
+            border-radius: 2px;
+
+            img {
+                width : 50%;
+                margin-top: 30px;
+            }
+        }
+        .check-icon {
+            float : right;
         }
     }
 </style>
