@@ -97,16 +97,18 @@
                         <span class="md-error" v-if="!guestType && validating">The Guest Type Is Required</span>
 
                         <div class="list-container">
-                            <div v-for="type in InviteeTypes"
-                                 :key="type" class="list-item"
-                                 :class="{'active': isGuestTypeSelected(type) }"
-                                 @click="selectGuestType(type)"
+                            <div v-for="type in InviteeTypes2"
+                                 :key="type.title" class="list-item"
+                                 :class="{'active': isGuestTypeSelected(type.title) }"
+                                 @click="selectGuestType(type.title)"
                             >
                                 <div class="list-item--icon">
-                                    <md-icon v-if="isGuestTypeSelected(type)" class="checked-item">check</md-icon>
+                                    <md-icon v-if="isGuestTypeSelected(type.title)" class="checked-item">check</md-icon>
+
+                                    <img :src="type.icon">
                                 </div>
                                 <div class="list-item--title">
-                                    {{ type }}
+                                    {{ type.title }}
                                 </div>
                             </div>
                         </div>
@@ -219,6 +221,7 @@
 
     export default {
         name: "get-started-step",
+        props : ['newEventData'],
         components: {
             VueElementLoading
         },
@@ -371,6 +374,20 @@
                 eventType : null,
                 category : '',
                 InviteeTypes: ["Guests Only","Guests and spouse","Guests and families", "Guests siblings"],
+                InviteeTypes2: [
+                    {
+                        title : 'Corporate Guests',
+                        icon : 'static/img/guest_type_corporate.png'
+                    },
+                    {
+                        title : 'Children',
+                        icon : 'static/img/guest_type_children.png'
+                    },
+                    {
+                        title : 'Social Event Invitees',
+                        icon : 'static/img/guest_type_social.png'
+                    }
+                ],
                 guestType : null,
                 hoursArray: [],
                 durationArray: [...Array(12).keys()].map(x =>  ++x),
@@ -416,7 +433,6 @@
                 occasionsForCategory: [],
                 dateValid: true,
                 validating : false,
-                newEvent : null
             }
         },
         created(){
@@ -431,7 +447,11 @@
 
             this.hoursArray.push();
 
-            console.log(this.$auth.user.defaultCalendarId);
+            console.log(this.newEventData);
+
+            if ( this.newEventData ) {
+
+            }
 
         },
         mounted () {
@@ -527,6 +547,11 @@
             border: 1px solid #e0e0e0;
             text-align: center;
             border-radius: 2px;
+
+            img {
+                width : 50%;
+                margin-top: 30px;
+            }
         }
     }
 

@@ -12,8 +12,8 @@
 <!--                Send to vendors-->
 <!--            </div>-->
         </div>
-        <event-details v-if="step == 1" @goToNextPage="goToNextPage" />
-        <get-started v-else-if="step == 2" @goToNextPage="goToNextPage" :new-event="newEvent" />
+        <event-details v-if="step == 1" @goToNextPage="goToNextPage" :new-event-data="newEvent" />
+        <get-started v-else-if="step == 2" @goToNextPage="goToNextPage" @goToPrevPage="goToPrevPage" :new-event="newEvent" />
 <!--        <brief-details v-show="step == 2" @goToNextPage="goToNextPage" @goToPrevPage="goToPrevPage" />-->
     </div>
 </template>

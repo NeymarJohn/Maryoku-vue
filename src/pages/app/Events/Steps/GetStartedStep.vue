@@ -19,7 +19,7 @@
                                      :class="{'active': isCategorySelected(category) || isSelected(category)}"
                                 >
                                     <div class="list-item--icon">
-                                        <md-icon v-if="isCategorySelected(category) || isSelected(category)">check</md-icon>
+                                        <md-icon class="check-icon" v-if="isCategorySelected(category) || isSelected(category)">check</md-icon>
                                     </div>
                                     <div class="list-item--title">
                                         {{ category.title }}
@@ -38,7 +38,7 @@
                                      :key="subCategory.id" class="list-item"
                                      :class="{'active': isSubCategorySelected(subCategory) || isSelected(subCategory) }">
                                     <div class="list-item--icon">
-                                        <md-icon v-if="isSubCategorySelected(subCategory) || isSelected(subCategory)">check</md-icon>
+                                        <md-icon class="check-icon" v-if="isSubCategorySelected(subCategory) || isSelected(subCategory)">check</md-icon>
                                     </div>
                                     <div class="list-item--title">
                                         {{ subCategory.title }}
@@ -53,7 +53,8 @@
                             </md-field>
                         </div>
                         <div class="text-right margin-bottom-xxl">
-                            <md-button @click.prevent="validateAndSubmit" class="md-button md-primary">Brief Details</md-button>
+                            <md-button  @click="goBack" class="md-button md-default">Back</md-button>
+                            <md-button @click.prevent="validateAndSubmit" class="md-button md-primary">Continue</md-button>
                         </div>
                     </div>
                 </div>
@@ -111,10 +112,10 @@
                 //  return;
                 this.cerrors = {};
 
-                if (!this.selectedCategories.length && !this.selectedSubCategories.length && this.eventComponents.length ) {
-                    this.$emit('goToNextPage');
-                    return;
-                }
+                // if (!this.selectedCategories.length && !this.selectedSubCategories.length && this.eventComponents.length ) {
+                //     this.$emit('goToNextPage');
+                //     return;
+                // }
 
                 if (!this.selectedCategories.length && !this.selectedSubCategories.length) {
                     this.cerrors.selectedCategories = ['you must select at least one category'];
@@ -154,7 +155,7 @@
 
                 Promise.all(promisses).then(() => {
                     this.isLoading = false;
-                    this.$emit('goToNextPage');
+                    //this.$emit('goToNextPage');
                 })
                 .catch((e) => {
                     console.log('error -->', e);
@@ -162,6 +163,10 @@
                 });
 
             },
+            goBack(){
+                this.$emit('goToPrevPage');
+
+            }
         },
         data () {
             return {
@@ -276,6 +281,9 @@
             border: 1px solid #e0e0e0;
             text-align: center;
             border-radius: 2px;
+        }
+        .check-icon {
+            float : right;
         }
     }
 </style>
