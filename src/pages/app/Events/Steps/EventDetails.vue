@@ -24,6 +24,7 @@
                                 data-vv-name="numberOfParticipants"
                                 v-validate= "modelValidations.numberOfParticipants"
                                 required
+                                type="number"
                             ></md-input>
                             <span class="md-error" v-if="errors.has('numberOfParticipants')">The Guest Count is required</span>
 
@@ -37,15 +38,19 @@
                                 data-vv-name="budget"
                                 v-validate= "modelValidations.budget"
                                 required
+                                type="number"
+
                             ></md-input>
                             <span class="md-error" v-if="errors.has('budget')">The Budget is required</span>
 
                         </md-field>
                     </div>
                     <div class="md-layout-item md-size-15">
-                        <md-field class="required">
+                        <md-field>
                             <label>Per Guest</label>
-                            <md-input v-model="eventData.budgetPerPerson"></md-input>
+                            <md-input v-model="eventData.budgetPerPerson"
+                                      type="number"
+                            ></md-input>
                         </md-field>
                     </div>
                 </div>
@@ -256,13 +261,8 @@
                 if ( !this.eventType || !this.guestType ) {
 
                 } else {
-
-
-
                     //this.$emit('goToNextPage');
                 }
-
-
             },
             getOccasionList() {
                 if ( this.$auth.user.defaultCalendarId ) {
@@ -315,38 +315,47 @@
 
 
                 setTimeout(()=>{
-                    let calendarId = this.$auth.user.defaultCalendarId;
-                    let _calendar = new Calendar({ id: calendarId});
-                    let catObject = _.find(this.occasionsForCategory, (el => el.value === this.eventData.occasion)) || {category: "CompanyDays"};
-                    this.category = catObject.category;
 
-                    let newEvent = new CalendarEvent({
-                        calendar: {id: calendarId},
-                        title: this.eventData.title,
-                        occasion: this.eventData.occasion,
-                        eventStartMillis: this.getEventStartInMillis(),
-                        eventEndMillis: this.getEventEndInMillis(),
-                        numberOfParticipants: this.eventData.numberOfParticipants,
-                        budgetPerPerson: this.eventData.budgetPerPerson,
-                        status: 'draft',
-                        currency: 'USD',
-                        eventType: this.eventType,
-                        participantsType: this.guestType,
-                        category: catObject.category, //!this.eventData.editable ? 'Holidays' : 'CompanyDays',
-                        editable: true,
-                        city: this.eventType.city,
-                        //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
-                    }).for(_calendar).save().then(response => {
-                        console.log('new event => ' , response);
-                        //this.$parent.isLoading = false;
-                        vm.$emit('goToNextPage');
+                    this.$auth.currentUser(this, true, ()=>{
+                        // Code  here
 
-                    })
-                        .catch((error) => {
-                            console.log(error);
-                            this.working = false;
+                        let calendarId = this.$auth.user.defaultCalendarId;
+                        let _calendar = new Calendar({ id: calendarId});
+                        let catObject = _.find(this.occasionsForCategory, (el => el.value === this.eventData.occasion)) || {category: "CompanyDays"};
+                        this.category = catObject.category;
+
+                        let newEvent = new CalendarEvent({
+                            calendar: {id: calendarId},
+                            title: this.eventData.title,
+                            occasion: this.eventData.occasion,
+                            eventStartMillis: this.getEventStartInMillis(),
+                            eventEndMillis: this.getEventEndInMillis(),
+                            numberOfParticipants: this.eventData.numberOfParticipants,
+                            budgetPerPerson: this.eventData.budgetPerPerson,
+                            status: 'draft',
+                            currency: 'USD',
+                            eventType: this.eventType,
+                            participantsType: this.guestType,
+                            category: catObject.category, //!this.eventData.editable ? 'Holidays' : 'CompanyDays',
+                            editable: true,
+                            city: this.eventType.city,
+                            //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+                        }).for(_calendar).save().then(response => {
                             //this.$parent.isLoading = false;
-                        });
+                            vm.$emit('goToNextPage', response);
+                            vm.newEvent = response
+
+                        })
+                            .catch((error) => {
+                                console.log(error);
+                                this.working = false;
+                                //this.$parent.isLoading = false;
+                            });
+
+                    });
+
+
+
                 },100);
             },
             switchDateRequired() {
@@ -406,7 +415,8 @@
                 occasionsList: [],
                 occasionsForCategory: [],
                 dateValid: true,
-                validating : false
+                validating : false,
+                newEvent : null
             }
         },
         created(){
@@ -420,10 +430,15 @@
             [...Array(8).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`));
 
             this.hoursArray.push();
+
+            console.log(this.$auth.user.defaultCalendarId);
+
         },
         mounted () {
             this.isLoading = false;
             let vm = this;
+
+
 
             // vm.$auth.currentUser(vm, true, ()=> {
             //

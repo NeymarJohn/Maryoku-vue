@@ -329,6 +329,9 @@
       this.$root.$on('submitForm', () => {
         this.validateEvent();
       });
+
+        console.log(this.$auth.user.defaultCalendarId);
+
     },
     methods: {
       ...mapMutations('AnnualPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),

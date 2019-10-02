@@ -12,8 +12,8 @@
 <!--                Send to vendors-->
 <!--            </div>-->
         </div>
-        <event-details v-show="step == 1" @goToNextPage="goToNextPage" />
-<!--        <get-started v-show="step == 2" @goToNextPage="goToNextPage" />-->
+        <event-details v-if="step == 1" @goToNextPage="goToNextPage" />
+        <get-started v-else-if="step == 2" @goToNextPage="goToNextPage" :new-event="newEvent" />
 <!--        <brief-details v-show="step == 2" @goToNextPage="goToNextPage" @goToPrevPage="goToPrevPage" />-->
     </div>
 </template>
@@ -32,7 +32,9 @@
             EventDetails
         },
         methods: {
-            goToNextPage () {
+            goToNextPage (eventData) {
+                console.log('eventData => ',eventData);
+                this.newEvent = eventData;
                 this.step++;
             },
             goToPrevPage () {
@@ -43,6 +45,7 @@
             return {
                 isLoading: false,
                 step: 1,
+                newEvent: null
             }
         }
     }
@@ -114,12 +117,9 @@
                 }
             }
 
-            &.visited:before {
-                color: $brand-primary;
-                border-color: $brand-primary;
-                padding-top: 2px;
-                font-family: 'Material Icons';
-                content: '\e5ca';
+            &.visited{
+                // background: $brand-warning;
+                // color : $white-color;
             }
         }
     }

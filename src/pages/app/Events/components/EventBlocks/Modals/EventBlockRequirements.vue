@@ -11,7 +11,7 @@
             <div class="md-layout-item md-size-100 clear-margins">
                 <md-card class="md-card-plain clear-margins">
                     <md-card-content>
-                        <!--<h6 v-if="predefinedRequirements" class="small text-gray text-right clear-margins" style="display: block; width: 100%;">Predefined Requirements</h6>
+                        <h6 v-if="predefinedRequirements" class="small text-gray text-right clear-margins" style="display: block; width: 100%;">Predefined Requirements</h6>
                         <ul class="requirements-list text-right clear-margins" v-if="predefinedRequirements">
                             <li class="list-item" v-for="(item,index) in predefinedRequirements">
                                 <div
@@ -22,7 +22,7 @@
                                 </div>
                             </li>
                         </ul>
-                        <div>&nbsp;</div>-->
+                        <div>&nbsp;</div>
                         <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-if="eventBlockRequirements && eventBlockRequirements.length" v-model="filteredEventBlockRequirements">
                             <md-table-toolbar >
                                 <div class="md-toolbar-section-start">
