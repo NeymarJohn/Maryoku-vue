@@ -279,7 +279,7 @@
             time: moment(event[0].eventStartMillis).format('HH:00'),
             duration: moment(event[0].eventEndMillis).diff(event[0].eventStartMillis, 'hours'),
             participants: event[0].numberOfParticipants,
-            status: event[0].eventStatus,
+            status: event[0].status,
             budget: event[0].totalBudget,
             location: event[0].location,
             budgetPerPersonFlag: event[0].budgetPerPersonFlag

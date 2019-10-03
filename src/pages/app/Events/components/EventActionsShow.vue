@@ -87,7 +87,7 @@
         let _calendar = new Calendar({id: this.$store.state.calendarId});
         let editedEvent = new CalendarEvent({id: this.event.id});
 
-        editedEvent.eventStatus = status;
+        editedEvent.status = status;
         editedEvent.for(_calendar).save().then(response => {
         })
           .catch((error) => {
@@ -99,7 +99,7 @@
       },
     },
     watch: {
-      'event.eventStatus': {
+      'event.status': {
         handler: function(newVal) {
           if (newVal != '' && newVal != undefined) {
             return this.updateEvent(newVal);
