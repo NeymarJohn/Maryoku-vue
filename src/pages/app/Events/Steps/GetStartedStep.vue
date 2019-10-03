@@ -21,7 +21,7 @@
                                     <div class="list-item--icon">
                                         <md-icon class="check-icon" v-if="isCategorySelected(category) || isSelected(category)">check</md-icon>
 
-                                        <img :src="`/static/img/event-elements/venue-lighting.png`">
+                                        <img :src="`/static/img/event-elements/${category.id}.png`">
                                     </div>
                                     <div class="list-item--title">
                                         {{ category.title }}
@@ -41,6 +41,9 @@
                                      :class="{'active': isSubCategorySelected(subCategory) || isSelected(subCategory) }">
                                     <div class="list-item--icon">
                                         <md-icon class="check-icon" v-if="isSubCategorySelected(subCategory) || isSelected(subCategory)">check</md-icon>
+
+                                        <img :src="`/static/img/event-elements/${subCategory.id}.png`">
+
                                     </div>
                                     <div class="list-item--title">
                                         {{ subCategory.title }}
@@ -283,14 +286,20 @@
             border: 1px solid #e0e0e0;
             text-align: center;
             border-radius: 2px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
 
             img {
-                width : 50%;
-                margin-top: 30px;
+                width : auto;
             }
         }
         .check-icon {
             float : right;
+            position: absolute;
+            right: 0.2em;
+            top: 0.2em;
         }
     }
 </style>
