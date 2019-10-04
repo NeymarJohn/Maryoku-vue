@@ -1,5 +1,6 @@
 <template>
   <div class="vendor-details">
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
     <div class="md-layout">
       <div class="md-layout-item image-list-container no-padding">
         <div class="img-cont big-img-cont">
@@ -104,8 +105,7 @@
                 </div>
               </div>
             </div>
-            <div class="divider">
-            </div>
+            <md-divider></md-divider>
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>check_circle</md-icon>
@@ -142,8 +142,7 @@
                 </div>
               </div>
             </div>
-            <div class="divider">
-            </div>
+            <md-divider></md-divider>
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>menu_book</md-icon>
@@ -174,8 +173,7 @@
                 </div>
               </div>
             </div>
-            <div class="divider">
-            </div>
+            <md-divider></md-divider>
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>dehaze</md-icon>
@@ -184,10 +182,10 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
+                <vendor-similar-proposals :proposals="proposals"></vendor-similar-proposals>
               </div>
             </div>
-            <div class="divider">
-            </div>
+            <md-divider></md-divider>
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>edit</md-icon>
@@ -196,10 +194,10 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
+                <vendor-feedbacks :feedbacks="feedbacks"></vendor-feedbacks>
               </div>
             </div>
-            <div class="divider">
-            </div>
+            <md-divider></md-divider>
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>credit_card</md-icon>
@@ -213,8 +211,7 @@
                 </p>
               </div>
             </div>
-            <div class="divider">
-            </div>
+            <md-divider></md-divider>
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>warning</md-icon>
@@ -228,8 +225,7 @@
                 </p>
               </div>
             </div>
-            <div class="divider">
-            </div>
+            <md-divider></md-divider>
             <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>flip_to_back</md-icon>
@@ -238,6 +234,7 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
+                <vendor-similar-item :similarItems="similarItems"></vendor-similar-item>
               </div>
             </div>
           </div>
@@ -257,10 +254,16 @@
 
   //COMPONENTS
   import Icon from '@/components/Icon/Icon.vue'
+  import VendorSimilarProposals from './components/VendorSimilarProposals.vue'
+  import VendorFeedbacks from './components/VendorFeedbacks.vue'
+  import VendorSimilarItem from './components/VendorSimilarItem.vue'
 
   export default {
     components: {
       VueElementLoading,
+      VendorSimilarProposals,
+      VendorSimilarItem,
+      VendorFeedbacks,
       Icon,
     },
     props: {
@@ -274,7 +277,7 @@
     data () {
       return {
         vendorId: null,
-        isLoading: false,
+        isLoading: true,
         vendor: {statistics: {}},
         bgImages : [
           '/static/img/lock.jpg',
@@ -288,7 +291,7 @@
           { icon: 'airline_seat_recline_extra', value: '30', key: 'Seated' },
           { icon: 'fullscreen', value: '300 m2', key: 'Floor Area' },
         ],
-        pricesAndRules : [
+        pricesAndRules: [
           { price: '41', description: 'Price / person' },
           { price: '74', description: 'Price / hour' },
           { price: '25', description: 'Daliy rent' },
@@ -296,18 +299,56 @@
           { price: '50', description: 'Reservation fee' },
           { price: '12', description: 'Cleaning fee' }
         ],
-        checkListItems : [
+        checkListItems: [
           'Catering via venue',
           'Own food allowed',
           'Alchol license',
           'own beverages allowed',
           'Meeting Catering'
         ],
-        attachments : [
+        attachments: [
           'Food menu Option 1',
           'Food menu Option 2',
           'Food menu Option Insurance Certificate',
           'Food menu Other Business Indication'
+        ],
+        proposals: [
+          {
+            image: '/static/img/shutterstock_289440710.png', 
+            price: '258', 
+            username: 'Jane Bloom, Facebook',
+            title: 'Halloween Company Party',
+            description: 'Corporate Guests 500 Guests',
+            date: 'Feburary',
+            status: 'In the same price range'
+          },
+          {
+            image: '/static/img/shutterstock_289440710.png', 
+            price: '7845', 
+            username: 'Jane Bloom, Facebook',
+            title: 'Halloween Company Party',
+            description: 'Corporate Guests 500 Guests',
+            date: 'Feburary',
+            status: 'In the same price range'
+          },
+          {
+            image: '/static/img/shutterstock_289440710.png', 
+            price: '455122', 
+            username: 'Jane Bloom, Facebook',
+            title: 'Halloween Company Party',
+            description: 'Corporate Guests 500 Guests',
+            date: 'Feburary',
+            status: 'In the same price range'
+          },
+        ],
+        feedbacks: [
+          {image: '/static/img/shutterstock_289440710.png', username: 'Jane Bloom, Facebook', date: '2017/12/29', score: '5', message: 'A 50% deposit will be due on or before 18/1/20.'},
+          {image: '/static/img/shutterstock_289440710.png', username: 'Leonard Parker', date: '2017/12/29', score: '4', message: 'A 50% deposit will be due on or before 18/1/20.'},
+          {image: '/static/img/shutterstock_289440710.png', username: 'Alex Marlon', date: '2017/12/29', score: '3', message: 'A 50% deposit will be due on or before 18/1/20.'}
+        ],
+        similarItems: [
+          {image: '/static/img/shutterstock_289440710.png', thumbnail: 'thumbnail', score: '5', title: 'title'},
+          {image: '/static/img/shutterstock_289440710.png', thumbnail: 'thumbnail', score: '5', title: 'title'},
         ],
         currentTab: 1,
         routeName: null
@@ -318,7 +359,7 @@
     },
     mounted () {
       let _self = this
-      this.isLoading = true;
+      this.isLoading = false;
 
       this.getVendor()
     },
@@ -458,10 +499,10 @@
             }
           }
           .notes {
-            background: #f9f9f9;
+            background: $grey-100;
             flex-basis: 100%;
             border: 1;
-            border: 1px solid #e6e6e6;
+            border: 1px solid $grey-300;
             margin-top: 2em;
             padding: 1em 2em;
 
@@ -534,7 +575,7 @@
         }
       }
 
-      .divider {
+      .md-divider {
         background: #f9f9f9;
         height: 2px;
         margin: 2em 0;
