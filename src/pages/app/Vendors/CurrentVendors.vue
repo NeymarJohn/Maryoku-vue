@@ -93,31 +93,13 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <div class="icon-text-vertical">
-                  <md-icon>insert_chart</md-icon>
+                <div class="icon-text-vertical" v-for="(item, index) in capacities" :value="item" :key="index">
+                  <md-icon>{{item.icon}}</md-icon>
                   <h5>
-                    200
+                    {{item.value}}
                   </h5>
                   <span>
-                    Standing
-                  </span>
-                </div>
-                <div class="icon-text-vertical">
-                  <md-icon>insert_chart</md-icon>
-                  <h5>
-                    30
-                  </h5>
-                  <span>
-                    Seated
-                  </span>
-                </div>
-                <div class="icon-text-vertical">
-                  <md-icon>insert_chart</md-icon>
-                  <h5>
-                    300 m2
-                  </h5>
-                  <span>
-                    Floor Area
+                    {{item.key}}
                   </span>
                 </div>
               </div>
@@ -139,20 +121,8 @@
                   <li>
                     <br/>
                   </li>
-                  <li class="normal">
-                    <md-icon>check</md-icon> Catering via venue
-                  </li>
-                  <li class="normal">
-                    <md-icon>check</md-icon> Own food allowed
-                  </li>
-                  <li class="normal">
-                    <md-icon>check</md-icon> Alchol license
-                  </li>
-                  <li class="normal">
-                    <md-icon>check</md-icon> own beverages allowed
-                  </li>
-                  <li class="normal">
-                    <md-icon>check</md-icon> Meeting Catering
+                  <li class="normal" v-for="(item, index) of checkListItems" :key='index' :value="item">
+                    <md-icon>check</md-icon> {{item}}
                   </li>
                   <li class="disabled">
                     <md-icon></md-icon> <span>Dinnerware</span>
@@ -165,17 +135,8 @@
                     </h4>
                   </div>
                   <div class="notes-body">
-                    <div class="note-item">
-                      <md-icon>picture_as_pdf</md-icon> Food menu Option 1
-                    </div>
-                    <div class="note-item">
-                      <md-icon>picture_as_pdf</md-icon> Food menu Option 2
-                    </div>
-                    <div class="note-item">
-                      <md-icon>picture_as_pdf</md-icon> Food menu Option Insurance Certificate
-                    </div>
-                    <div class="note-item">
-                      <md-icon>picture_as_pdf</md-icon> Food menu Other Business Indication
+                    <div class="note-item" v-for="(item, index) in attachments" :key="index" :value="item">
+                      <md-icon>picture_as_pdf</md-icon> {{item}}
                     </div>
                   </div>
                 </div>
@@ -191,52 +152,12 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <div class="text-vertical">
+                <div class="text-vertical" v-for="(item,index) of pricesAndRules" :key='index' :value="item">
                   <h5>
-                    $41
+                    ${{item.price}}
                   </h5>
                   <span>
-                    Price / person
-                  </span>
-                </div>
-                <div class="text-vertical">
-                  <h5>
-                    $74
-                  </h5>
-                  <span>
-                    Price / hour
-                  </span>
-                </div>
-                <div class="text-vertical">
-                  <h5>
-                    $25
-                  </h5>
-                  <span>
-                    Daliy rent
-                  </span>
-                </div>
-                <div class="text-vertical">
-                  <h5>
-                    $78
-                  </h5>
-                  <span>
-                    Minimum spend
-                  </span>
-                </div>
-                <div class="text-vertical">
-                  <h5>
-                    $50
-                  </h5>
-                  <span>
-                    Reservation fee
-                  </span>
-                </div>
-                <div class="text-vertical">
-                  <h5>
-                    $12
-                  </h5>
-                  <span>
-                    Cleaning fee
+                    {{item.description}}
                   </span>
                 </div>
                 <div class="notes">
@@ -362,6 +283,32 @@
           '/static/img/bg-pricing.jpg',
           '/static/img/bg3.jpg',
         ],
+        capacities: [
+          { icon: 'people', value: '200', key: 'Standing' },
+          { icon: 'airline_seat_recline_extra', value: '30', key: 'Seated' },
+          { icon: 'fullscreen', value: '300 m2', key: 'Floor Area' },
+        ],
+        pricesAndRules : [
+          { price: '41', description: 'Price / person' },
+          { price: '74', description: 'Price / hour' },
+          { price: '25', description: 'Daliy rent' },
+          { price: '78', description: 'Minimum spend' },
+          { price: '50', description: 'Reservation fee' },
+          { price: '12', description: 'Cleaning fee' }
+        ],
+        checkListItems : [
+          'Catering via venue',
+          'Own food allowed',
+          'Alchol license',
+          'own beverages allowed',
+          'Meeting Catering'
+        ],
+        attachments : [
+          'Food menu Option 1',
+          'Food menu Option 2',
+          'Food menu Option Insurance Certificate',
+          'Food menu Other Business Indication'
+        ],
         currentTab: 1,
         routeName: null
       }
@@ -470,12 +417,14 @@
           display: flex;
           i {
             display: block;
+            margin-top: 0;
             margin-right: .5em;
             color: $purple-500;
           }
           h4 {
             flex: 1;
             font-weight: 400;
+            margin-top: 0;
           }
         }
         .tab-item-content-body {
