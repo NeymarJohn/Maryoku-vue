@@ -42,8 +42,7 @@ export default {
             addBuildingBlockModal: false,
             signUpModal: false,
             DietaryConstraintsModal: false,
-            is_going_to_event : '',
-            CreateCustomElementModal : false
+            is_going_to_event : ''
         };
     },
 
@@ -77,9 +76,6 @@ export default {
         },
         setDietaryConstraintsModal(state, data) {
             state.DietaryConstraintsModal = data.showModal;
-        },
-        setCustomElementModal(state, data) {
-            state.CreateCustomElementModal = data.showModal;
         },
         setGoingToEvent(state, data) {
             state.is_going_to_event = data.isGoing;
