@@ -12,7 +12,15 @@
           </md-avatar>
 
           <div class="md-title">{{item.title}}</div>
-          <div class="md-subhead">{{item.score}}</div>
+          <div class="md-subhead">
+            <label
+              class="star-rating__star"
+              v-for="(rating, ratingIndex) in ratings"
+              :key="ratingIndex"
+              :class="{'is-selected' : true}"
+            >★</label>
+            {{item.score}}
+          </div>
         </md-card-header>
       </md-card>
     </div>
@@ -29,6 +37,7 @@
     },
     props: {
       similarItems: Array,
+      ratings: Array
     },
     data: () => ({
       isLoading:true,

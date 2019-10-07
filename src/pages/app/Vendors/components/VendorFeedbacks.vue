@@ -7,7 +7,15 @@
             <img :src="item.image">
           </md-avatar>
 
-          <div class="md-title">{{item.username}}</div>
+          <div class="md-title">
+            {{item.username}}
+            <label
+              class="star-rating__star"
+              v-for="(rating, ratingIndex) in ratings"
+              :key="ratingIndex"
+              :class="{'is-selected' : true}"
+            >★</label>
+          </div>
           <div class="md-subhead">{{item.date}}</div>
         </md-card-header>
         <md-card-content>
@@ -31,6 +39,7 @@
     },
     props: {
       feedbacks: Array,
+      ratings: Array
     },
     data: () => ({
       isLoading:true,

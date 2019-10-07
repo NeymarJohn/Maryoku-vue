@@ -12,6 +12,10 @@
           <img :src="bgImages[3]">
           <img :src="bgImages[4]">
         </div>
+        <md-button class="md-default btn-photos">
+          <md-icon>photo</md-icon>
+          view photos
+        </md-button>
       </div>
     </div>
     <div class="md-layout bg-white">
@@ -24,18 +28,35 @@
             <h3>
               {{vendor.vendorDisplayName}}
             </h3>
-            {{vendor.vendorAddressLine1}}
+            <span class="address">
+              <i class="fa fa-map-marker-alt"></i>
+              {{vendor.vendorAddressLine1}}
+            </span>
+            <br class="hidden-lg hidden-md"/>
+            <label
+              class="star-rating__star"
+              v-for="(rating, ratingIndex) in ratings"
+              :key="ratingIndex"
+              :class="{'is-selected' : true}"
+            >★</label>
             {{vendor.avgScore}}
+            <br class="hidden-lg hidden-md"/>
+            <a class="favorite">
+              <md-icon>favorite_border</md-icon> add to favorites
+            </a>
           </div>
         </div>
       </div>
-      <div class="md-layout-item text-right">
-        <md-button class="md-success">
+      <div class="md-layout-item button-group text-right">
+        <md-button class="md-success md-lg">
           Contact Vendor
         </md-button>
-        <md-button class="md-danger">
+        <md-button class="md-danger md-lg">
           Create Brief Ask for Proposal
         </md-button>
+        <h4>
+          Avg. Response Time: {{vendor.rank}}
+        </h4>
       </div>
     </div>
     <div class="md-layout bg-white">
@@ -182,7 +203,7 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <vendor-similar-proposals :proposals="proposals"></vendor-similar-proposals>
+                <vendor-similar-proposals :proposals="proposals" :ratings="ratings"></vendor-similar-proposals>
               </div>
             </div>
             <md-divider></md-divider>
@@ -191,10 +212,16 @@
                 <md-icon>edit</md-icon>
                 <h4>
                   Feedbacks
+                  <label
+                    class="star-rating__star"
+                    v-for="(rating, ratingIndex) in ratings"
+                    :key="ratingIndex"
+                    :class="{'is-selected' : true}"
+                  >★</label>
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <vendor-feedbacks :feedbacks="feedbacks"></vendor-feedbacks>
+                <vendor-feedbacks :feedbacks="feedbacks" :ratings="ratings"></vendor-feedbacks>
               </div>
             </div>
             <md-divider></md-divider>
@@ -234,7 +261,7 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <vendor-similar-item :similarItems="similarItems"></vendor-similar-item>
+                <vendor-similar-item :similarItems="similarItems" :ratings="ratings"></vendor-similar-item>
               </div>
             </div>
           </div>
@@ -350,6 +377,7 @@
           {image: '/static/img/shutterstock_289440710.png', thumbnail: 'thumbnail', score: '5', title: 'title'},
           {image: '/static/img/shutterstock_289440710.png', thumbnail: 'thumbnail', score: '5', title: 'title'},
         ],
+        ratings: [1,2,3,4,5],
         currentTab: 1,
         routeName: null
       }
@@ -383,6 +411,75 @@
 <style lang="scss" scoped>
   @import "@/assets/scss/md/_variables.scss";
   @import "@/assets/scss/md/_colors.scss";
+  .md-layout {
+    &.bg-white {
+      background: #fff;
+
+      .text-group {
+        color: red;
+        padding: 2em 1em;
+      }
+
+      .button-group {
+        .md-success {
+          margin-right: 1em;
+
+          @media (max-width: $screen-sm-min) {
+            display: flex;
+          }
+        }
+        h4 {
+          color: #45cdde;
+          font-size: 12px;
+          font-weight: 600;
+          padding-right: 24em;
+          margin-top: .5em;
+          width: 100%;
+          @media (max-width: $screen-sm-min) {
+            padding: 0;
+          }
+        }
+        @media (max-width: $screen-sm-min) {
+          display: flex;
+          flex-direction: column;
+          text-align: left;
+        }
+      }
+
+      .title-cont {
+        display: flex;
+
+        .title-child {
+          padding: 0 1em;
+          img {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            top: -2rem;
+          }
+          .address {
+            font-size: 12px;
+            i {
+              font-size: 14px!important;
+              padding-right: 4px;
+              color: $grey-400;
+            }
+          }
+          label {
+            font-size: 12px;
+          }
+          .favorite {
+            i {
+              font-size: 12px!important;
+              color: $purple-500!important;
+            }
+            font-size: 12px;
+            text-transform: capitalize;
+          }
+        }
+      }
+    }
+  }
   .banner-description {
     padding: 0 1em;
     .banner-description-title {

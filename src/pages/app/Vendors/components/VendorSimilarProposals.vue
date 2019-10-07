@@ -9,10 +9,10 @@
               <p>
                 {{item.username}}
                 <label
-                    class="star-rating__star"
-                    v-for="(rating, ratingIndex) in ratings"
-                    :key="ratingIndex"
-                    :class="{'is-selected' : true}"
+                  class="star-rating__star"
+                  v-for="(rating, ratingIndex) in ratings"
+                  :key="ratingIndex"
+                  :class="{'is-selected' : true}"
                 >★</label>
               </p>
               <h4>
@@ -59,6 +59,7 @@
     },
     props: {
       proposals: Array,
+      ratings: Array,
     },
     data: () => ({
       isLoading:true,
