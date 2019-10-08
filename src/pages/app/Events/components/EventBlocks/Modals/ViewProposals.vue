@@ -14,8 +14,8 @@
 
                 <div class="tabs-section">
                     <tabs
-                        :tab-name="['<span>'+requirementsLength+'</span> Brief', '<span>' + proposalsNumber + '</span> Manage Proposals', '<span>'+comparisonsNumber+'</span> Compare', '<span>0</span> Accepted']"
-                        color-button="warning" ref="proposalsTabs" :activeTab="1">
+                        :tab-name="['<span>'+requirementsLength+'</span> Requirements', '<span>' + proposalsNumber + '</span> Proposals', '<span>'+comparisonsNumber+'</span> Comparison', '<span>0</span> Accepted']"
+                        color-button="primary" ref="proposalsTabs" :activeTab="1">
                         <template slot="tab-pane-1" style="width: 100%;">
                             <event-block-requirements
                                 :event.sync="event"
@@ -46,7 +46,7 @@
                         </template>
                     </tabs>
 
-<!--                    <md-card class="allocated-budget" style="height: 45px;"> <md-card-content><span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span> <div class="budget">${{selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget  : '0.0'}}</div></md-card-content></md-card>-->
+                    <md-card class="allocated-budget" style="height: 45px;"> <md-card-content><span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span> <div class="budget">${{selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget  : '0.0'}}</div></md-card-content></md-card>
                 </div>
             </div>
         </div>

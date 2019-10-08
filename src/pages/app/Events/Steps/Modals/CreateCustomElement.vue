@@ -62,7 +62,6 @@
         methods: {
             ...mapMutations('EventPlannerVuex', ['setCustomElementModal']),
             closeModal() {
-                this.$root.$emit("get-event-components");
                 this.setCustomElementModal({showModal: false});
             },
             CreateCustomElement(){
