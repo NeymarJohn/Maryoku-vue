@@ -413,8 +413,7 @@ $tooltip-border-color: $blue-grey-200 !default;
     .md-ripple {
         padding: 10px 0 !important;
         text-align: left;
-        color: rgb(0, 0, 0) !important;
-        font-weight: bold !important;
+        color: $purple-500 !important;
     }
 }
 /**
@@ -2607,19 +2606,20 @@ iframe{
 
 .event-building-blocks {
     text-align: left;
+
     &_table {
         border-collapse: collapse;
         border-spacing: 0;
         margin-top : 1em;
         th {
             text-align: left;
-            color : $brand-warning;
-            padding: 0.5em 0.4em;
+            color: $grey-500;
+            padding: 0.5em;
             font-weight: normal;
             font-size: 12px;
-            &:not(:last-child){
-                border-right : 1px solid #e2e2e2;
-            }
+            // &:not(:last-child){
+            //     border-right : 1px solid #e2e2e2;
+            // }
         }
         tbody {
             tr {
@@ -2637,8 +2637,8 @@ iframe{
                     }
                 }
                 td {
-                    text-align: center;
-                    padding : 0 0.2em;
+                    text-align: left;
+                    padding : .5em;
                     font-size: 14px;
                     font-family: 'Roboto','arial',sans-serif;
 
@@ -2682,7 +2682,6 @@ iframe{
         }
         .md-button:not(.md-just-icon) {
             text-align: center;
-            width: 65% !important;
             font-weight: bold;
             padding: 6px;
             .md-ripple {
@@ -4412,14 +4411,22 @@ input:focus,
 
 .show-cost-switch {
     @include display-flex(row,flex-start,flex-start);
+    justify-content: flex-end;
+    align-items: center;
 
-    >label {
-        margin-top : 0.4em;
+    h4.title-summary {
+        flex: 1;
+        margin-top: 0!important;
     }
+
     .md-field {
-        width: 60%;
+        width: auto;
         margin-top: 0;
-        margin-left: 1em;
+        margin: 10px 1em 0 1em;
+        position: relative;
+    }
+    .md-select ._md-select-value._md-select-placeholder {
+        color: red!important;
     }
 }
 

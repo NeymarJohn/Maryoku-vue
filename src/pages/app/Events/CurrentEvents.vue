@@ -3,12 +3,12 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
     <div class="event-details-tabs">
       <div class="md-layout">
-        <div class="md-layout-item md-size-25">
-            <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
+        <div class="md-layout-item md-size-25 no-padding">
+          <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
         </div>
-        <div class="md-layout-item md-size-75">
-            <event-building-blocks :event.sync="event" :event-components="selectedComponents"
-                                    @go-to-building-blocks="resetTab"></event-building-blocks>
+        <div class="md-layout-item md-size-75 no-padding">
+          <event-building-blocks :event.sync="event" :event-components="selectedComponents"
+                                  @go-to-building-blocks="resetTab"></event-building-blocks>
         </div>
       </div>
       <!-- <tabs

@@ -58,9 +58,7 @@
         <div class="md-layout md-gutter">
           <div class="md-layout-item">
             <h5 class="title-budget-main">Remaining budget</h5>
-            <h4
-              class="title"
-              style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
+            <h4 class="title budget">
               <div class="title" 
                 :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
                 v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants">
@@ -68,8 +66,11 @@
                                   :value="totalRemainingBudget"
                                   prefix="$"></animated-number>
                 <small class="total-event-budget">/
-                  ${{calendarEvent.budgetPerPerson *
-                  calendarEvent.numberOfParticipants}}
+                  ${{
+                    calendarEvent.budgetPerPerson *
+                    calendarEvent.numberOfParticipants | 
+                    numeral('0,0')
+                  }}
                 </small>
               </div>
             </h4>
@@ -101,6 +102,16 @@
               <animated-number class="percentage" ref="percentageNumber"
                 :value="percentage" suffix="%"></animated-number>
             </div>
+          </div>
+        </div>
+        <div class="md-layout md-gutter">
+          <div class="md-layout-item">
+            <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
+          </div>
+        </div>
+        <div class="md-layout md-gutter">
+          <div class="md-layout-item">
+            <event-paid-total-amounts :paid="2100" :total="3000"></event-paid-total-amounts>
           </div>
         </div>
       </div>
@@ -157,6 +168,7 @@
   import _ from 'underscore'
   import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
   import EventSidePanel from '../EventSidePanel.vue'
+  import EventPaidTotalAmounts from '../components/EventPaidTotalAmounts.vue'
 
   export default {
     name: 'event-details-sidebar',
@@ -166,7 +178,8 @@
       StatsCard,
       ChartCard,
       ChartComponent,
-      CalendarEventStatistics
+      CalendarEventStatistics,
+      EventPaidTotalAmounts
     },
     props: {
       event: {
@@ -386,9 +399,9 @@
         grid-row: 1;
         margin-top: auto;
         margin-bottom: auto;
-        font-size: 3vmin;
-        font-weight: 700;
-        color: #515151;
+        font-size: 25px;
+        font-weight: normal;
+        color: #000000;
     }
 
     .logo-block {
@@ -475,14 +488,20 @@
         margin-top: 1.7em;
         //margin-bottom: 1em;
         font-family: "Roboto";
-        font-size: 15px;
-        font-weight: 500;
+        font-size: 14px;
+        font-weight: normal;
         font-style: normal;
         font-stretch: normal;
         line-height: 1.33;
         letter-spacing: normal;
         text-align: center;
         color: #7a7a7a;
+    }
+
+    .title.budget {
+      h4 {
+        color: $purple-500;
+      }
     }
 
     .title-budget-prise {
@@ -529,12 +548,8 @@
 
     .total-event-budget {
         color: #000;
-        font-weight: bold;
-        font-size: 15px;
-    }
-
-    .percentage {
-        font-size: 2.5em;
+        font-weight: normal;
+        font-size: 18px;
     }
 
     .md-card-header-icon .card-icon .md-icon {
