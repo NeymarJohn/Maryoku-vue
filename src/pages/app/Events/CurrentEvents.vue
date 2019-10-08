@@ -228,7 +228,11 @@
       }
     },
     created () {
+      this.$store.registerModule('EventPlannerVuex', EventPlannerVuexModule  )
+
       this.routeName = this.$route.name;
+
+
     },
     mounted () {
       let _self = this
