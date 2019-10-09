@@ -2,10 +2,10 @@
   <div class="md-layout amounts-wrapper">
     <div class="amounts">
       <span class="text-left">
-        Paid: ${{paid}}
+        Paid: ${{paid | numeral('0,0')}}
       </span>
       <span class="text-right">
-        Total: ${{total}}
+        Total: ${{total | numeral('0,0')}}
       </span>
     </div>
     <div class="percentage">
@@ -64,6 +64,8 @@ export default {
       display: flex;
       span {
         flex: 1;
+        font-size: 14px;
+        color: #000000;
       }
     }
     .percentage {

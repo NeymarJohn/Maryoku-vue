@@ -461,10 +461,6 @@
       display: flex;
     }
 
-    .title-summary {
-      font-weight: 400;
-    }
-
     .title-text {
       font-family: "Roboto";
       font-size: 12px;
@@ -554,5 +550,8 @@
 
     .md-card-header-icon .card-icon .md-icon {
         color: white !important;
+    }
+    .md-card-header-rose {
+      margin-top: 1.5em;
     }
 </style>

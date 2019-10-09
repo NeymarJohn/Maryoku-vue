@@ -2616,7 +2616,7 @@ iframe{
             color: $grey-500;
             padding: 0.5em;
             font-weight: normal;
-            font-size: 12px;
+            font-size: 14px;
             // &:not(:last-child){
             //     border-right : 1px solid #e2e2e2;
             // }
@@ -2639,7 +2639,7 @@ iframe{
                 td {
                     text-align: left;
                     padding : .5em;
-                    font-size: 14px;
+                    font-size: 18px;
                     font-family: 'Roboto','arial',sans-serif;
 
                     &:not(:last-child){
@@ -4413,11 +4413,7 @@ input:focus,
     @include display-flex(row,flex-start,flex-start);
     justify-content: flex-end;
     align-items: center;
-
-    h4.title-summary {
-        flex: 1;
-        margin-top: 0!important;
-    }
+    margin-top: 1em;
 
     .md-field {
         width: auto;
@@ -4428,6 +4424,13 @@ input:focus,
     .md-select ._md-select-value._md-select-placeholder {
         color: red!important;
     }
+}
+
+h4.title-summary {
+    flex: 1;
+    margin-top: 0!important;
+    font-size: 25px;
+    font-weight: 300!important;
 }
 
 .event-components-list {
