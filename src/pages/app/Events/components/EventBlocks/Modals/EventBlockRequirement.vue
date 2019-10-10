@@ -1,7 +1,7 @@
 <template>
-    <div class="md-layout">
+    <div class="md-layout requirement-item" :class="{'edit-mode' : requirement.editMode}">
         <vue-element-loading :active="working" spinner="ring" color="#FF547C"></vue-element-loading>
-        <div class="md-layout-item md-size-90 clear-margins">
+        <div class="md-layout-item clear-margins" :class="{'md-size-90' : !requirement.editMode, 'md-size-100' : requirement.editMode}">
             <md-card class="md-card-plain" style="margin: 8px;" v-if="!requirement.editMode">
                 <md-card-header>
                     <h5 class="title" style="font-weight: bold;">
@@ -20,19 +20,52 @@
                 </md-card-content>
             </md-card>
 
+
             <md-card class="md-card-plain" style="margin: 8px;" v-if="requirement.editMode">
                 <md-card-header>
                     <div class="md-layout md-gutter">
-                        <div class="md-layout-item md-size-15">
-                            <md-field>
-                                <label>Amount</label>
-                                <md-input v-focus type="text" v-model="tempValue"></md-input>
-                            </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-85">
+                        <div class="md-layout-item md-size-75">
                             <md-field>
                                 <label>Title</label>
                                 <md-input type="text" v-model="tempTitle"></md-input>
+                            </md-field>
+                        </div>
+                        <div class="md-layout-item md-size-25">
+                            <div style="margin-top: 12px;">
+                                <md-switch class="md-switch-success" style="" v-model="tempMandatory">Must Have</md-switch>
+                            </div>
+                        </div>
+
+
+                        <div class="md-layout-item md-size-100" v-if="requirementProperties">
+
+                            <md-checkbox
+                                v-for="(option , index) in requirementProperties.multiSelectionOptions "
+                                class="readonly"
+                                v-model="option.checked"
+                                :key="option.id">{{ option.title }}</md-checkbox>
+
+
+                            <md-checkbox
+                                class="readonly"
+                                v-model="otherOption.checked"
+                                key="other">
+                                <input v-model="otherOption.label" placeholder="Other" class="other-input"></input>
+                            </md-checkbox>
+
+                            <br>
+
+                            <md-checkbox
+                                v-for="(option , index) in requirementProperties.additionalOptions "
+                                class="readonly"
+                                v-model="option.checked"
+                                :key="option.id">{{ option.title }}</md-checkbox>
+                        </div>
+
+                        <div class="md-layout-item md-size-15">
+                            <md-field>
+                                <label>Quantity</label>
+                                <md-input v-focus type="text" v-model="tempValue"></md-input>
                             </md-field>
                         </div>
                     </div>
@@ -41,26 +74,21 @@
                     <div class="md-layout">
                         <div class="md-layout-item md-size-75">
                             <md-field>
-                                <label>Description</label>
+                                <label>Add a Comment</label>
                                 <md-input type="text" v-model="tempComment"></md-input>
                             </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-25">
-                            <div style="margin-top: 12px;">
-                                <md-switch class="md-switch-success" style="" v-model="tempMandatory">Must Have</md-switch>
-                            </div>
                         </div>
                     </div>
                 </md-card-content>
             </md-card>
         </div>
 
-        <div class="md-layout-item md-size-10">
-            <div class="text-right pull-right" style="margin-top: 18px; white-space: nowrap;">
-                <md-button v-if="!requirement.editMode" class="md-xs md-round md-just-icon md-info hover" @click="startEdit(requirement)"><md-icon>edit</md-icon></md-button>
+        <div class="md-layout-item " :class="{'md-size-10' : !requirement.editMode, 'md-size-100' : requirement.editMode}">
+            <div class="text-right pull-right" style="margin : 25px 0 10px; white-space: nowrap;">
+                <md-button v-if="!requirement.editMode" class="md-xs md-round md-just-icon md-default hover" @click="startEdit(requirement)"><md-icon>add</md-icon></md-button>
                 <md-button v-if="!requirement.editMode" class="md-xs md-round md-just-icon md-danger hover" @click="deleteValue(requirement.id)"><md-icon>delete_outline</md-icon></md-button>
-                <md-button v-if="requirement.editMode" class="md-xs md-round md-just-icon md-success" @click="saveEdit(requirement)"><md-icon>check</md-icon></md-button>
-                <md-button v-if="requirement.editMode" class="md-xs md-round md-just-icon md-warning" @click="cancelEdit"><md-icon>close</md-icon></md-button>
+                <md-button v-if="requirement.editMode" class="md-xs md-default md-simple" @click="cancelEdit"><md-icon>close</md-icon> close </md-button>
+                <md-button v-if="requirement.editMode" class="md-xs md-rose md-simple" @click="saveEdit(requirement)"><md-icon>check</md-icon> Save</md-button>
             </div>
         </div>
     </div>
@@ -81,7 +109,11 @@
       requirement: Object,
       deleteValue: Function,
       eventId: String,
-      selectedBlockId: String
+      selectedBlockId: String,
+        requirementProperties : {
+          type : Object,
+            default : null
+        }
     },
     data() {
       return {
@@ -89,10 +121,17 @@
         tempValue: 1,
         tempTitle: "",
         tempComment: "",
-        tempMandatory: false
+        tempMandatory: false,
+          reqType : '',
+          tempOptions : null,
+          tempAdditionalOptions : null,
+          otherOption : {}
       }
     },
     mounted(){
+        console.log('requirementProperties ==> ', this.requirementProperties);
+
+
       if (this.requirement.editMode){
         this.startEdit(this.requirement);
       }
@@ -110,6 +149,10 @@
         this.tempTitle = requirement.title;
         this.tempComment = requirement.comment;
         this.tempMandatory = requirement.mandatory;
+        this.reqType = requirement.type;
+        this.tempOptions = requirement.multiSelectionOptions;
+        this.tempAdditionalOptions = requirement.additionalOptions;
+
         this.$forceUpdate();
       },
       cancelEdit (){
@@ -170,6 +213,26 @@
         display: inline;
         top: -2px;
         position: relative;
+    }
+
+    .md-table-cell-container {
+
+        .md-button {
+            &:not(.md-just-icon) {
+                width:auto;
+                .md-ripple {
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+
+    .other-input {
+        border-bottom : 1px solid #efefef;
+        box-shadow: none;
+        border-radius: 0;
+        font-size: 14px;
+        margin-top: -11px;
     }
 
 </style>

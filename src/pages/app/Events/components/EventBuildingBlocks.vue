@@ -1,146 +1,156 @@
 <template>
-  <div class="md-layout">
-    <div class="md-layout-item mx-auto event-building-blocks no-padding">
-      <md-card>
-        <md-card-header class="md-card-header-icon md-card-header-rose">
-          <div class="md-layout-item show-cost-switch">
-            <h4 class="title profile-title title-summary">
-              Budget Table
-            </h4>
-            <label>Show Cost:</label>
-            <md-field>
-              <label></label>
-              <md-select v-model="elementsBudget">
-                <md-option value="element">Per Element</md-option>
-                <md-option value="guest">Per Guest</md-option>
-              </md-select>
-            </md-field>
-            <md-button class="md-default md-simple add-new-block-btn no-padding" style="color : #fff;"
-                        @click="showAddBuildingBlocksModal()">
-              <md-icon>add</md-icon> Add New
-            </md-button>
-          </div>
-        </md-card-header>
+    <div class="md-layout" style="padding: 0; margin: 0;">
+        <div class="md-layout-item mx-auto event-building-blocks">
+            <md-card  >
 
-        <md-card-content class="md-layout">
-          <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
-          <table style="width:100%;" class="table event-building-blocks_table">
-            <thead>
-              <tr class="md-warning">
-                <th>Element</th>
-                <th>Brief</th>
-                <th>Budget</th>
-                <th>Actual cost</th>
-                <th>
-                </th>
-              </tr>
-            </thead>
-            <tbody v-if="eventBuildingBlocks.length">
-              <template v-for="(block,index) in eventBuildingBlocks">
-                <!-- <tr class="parent">
-                  <td>{{category.title}}</td>
-                  <td></td>
-                  <td class="allocated-budget">
-                    <div class="md-table-cell-container">
-                      <span class="dollar-sign pull-left small">$</span>
-                      <span style="display: inline-block; width: 100%; padding-right: 16px;">
-                        {{event.elementsBudgetPerGuest ? (category.totalAllocatedBudget / event.numberOfParticipants).toFixed(2) : category.totalAllocatedBudget.toFixed(2)}}
-                      </span>
-                      <span class="remains-budget badge badge-rose small" style="background-color: #fff;" v-if="category.remainsBudget">-${{parseInt(category.remainsBudget)}}</span>
-                    </div>
-                  </td>
-                  <td class="actual-cost" :class="{disabled : category.totalActualCost==0}">
-                    <span class="dollar-sign pull-left small">$</span>
-                    {{event.elementsBudgetPerGuest ? (category.totalActualCost / event.numberOfParticipants).toFixed(2) : category.totalActualCost.toFixed(2)}}
-                  </td>
-                  <td></td>
-                </tr> -->
-                <tr class="text-left">
-                  <td>{{block.title}}</td>
-                  <td>
-                    <template>
-                      <div v-if="block.valuesCount"
-                            style="cursor: pointer;">
-                        <md-button class="md-simple md-xs requirements-cell-button no-padding"
-                                    @click="addRequirements(block)">
-                          <!-- {{`${block.valuesCount} selected`}} -->
-                          Edit
-                        </md-button>
-                      </div>
-                      <template v-else-if="!block.valuesCount">
-                        <md-button class="md-info md-xs md-warning btn-add no-padding" @click="addRequirements(block)">
-                          <!-- Set requirements -->
-                          Add+
-                        </md-button>
-                      </template>
-                    </template>
-                  </td>
-                  <td class="allocated-budget" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
-                    <div class="md-table-cell-container" >
-                      <span class="dollar-sign pull-left">$</span>
-                      <label-edit v-if="!event.elementsBudgetPerGuest"  style="width: 100%; margin-left: 8px;" :text="block.allocatedBudget"
-                                  :field-name="block.componentId"
-                                  @text-updated-blur="blockBudgetChanged"
-                                  @text-updated-enter="blockBudgetChanged"></label-edit>
 
-                      <label-edit v-else style="width: 100%; margin-left: 8px;" :text="block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : ''"
-                                  :field-name="block.componentId"
-                                  @text-updated-blur="blockBudgetChanged"
-                                  @text-updated-enter="blockBudgetChanged"></label-edit>
+                <md-card-header  class="md-card-header-text md-card-header-warning">
+                    <div class="card-text">
+                        <h4 class="title" style="color: white;">
+                            Manage Budget
+                        </h4>
                     </div>
-                  </td>
-                  <td class="actual-cost">
-                    <template v-if="block.allocatedBudget">
-                      <template
-                        v-if="block.winningProposalId">
-                        <md-button class="md-simple actual-cost md-xs" :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`" >
-                          {{ event.elementsBudgetPerGuest ?  `$${(block.winingProposal.cost / event.numberOfParticipants).toFixed(2)}` : `$${block.winingProposal.cost.toFixed(2)}` }}
-                          <md-icon >open_in_new</md-icon>
+                </md-card-header>
+
+                <md-card-content class="md-layout">
+                    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
+                    <div class="md-layout-item md-size-60"></div>
+                    <div class="md-layout-item md-size-30 show-cost-switch">
+                        <label>Show Cost</label>
+                        <md-field>
+                            <label></label>
+                            <md-select v-model="elementsBudget">
+                                <md-option value="element">Per Element</md-option>
+                                <md-option value="guest">Per Guest</md-option>
+                            </md-select>
+                        </md-field>
+                    </div>
+                    <div class="md-layout-item md-size-10 no-padding">
+                        <md-button class="md-default md-simple add-new-block-btn no-padding" style="color : #fff;font-weight: bold"
+                                   @click="showAddBuildingBlocksModal()"
+                        ><md-icon>add</md-icon> Add New
                         </md-button>
-                      </template>
-                    </template>
-                    <event-actual-cost-icon-tooltip
-                      :icon="'credit_card'"
-                      :paid="3000"
-                      :date="'2019/08/31'"
-                    >
-                    </event-actual-cost-icon-tooltip>
-                  </td>
-                  <td class="text-center">
-                    <template>
-                      <template
-                        v-if="block.winningProposalId">
-                        <md-button class="md-warning actual-cost md-xs" @click="reviewProposals(block,block.winningProposalId)">
-                          View Order
-                        </md-button>
-                      </template>
-                      <template v-else-if="(block.proposalsState == 'show-proposals' || block.proposalsState == 'waiting-for-proposals')">
-                        <md-button class="md-xs md-info" @click="reviewProposals(block)">
-                          Manage proposals
-                          ({{block.proposalsCount}})
-                        </md-button>
-                      </template>
-                      <template v-else-if="block.proposalsState == 'get-offers' ">
-                        <md-button class="md-xs md-primary" @click="reviewProposals(block)">
-                          Get Proposals
-                          <md-icon>near_me</md-icon>
-                        </md-button>
-                      </template>
-                    </template>
-                    <md-button class="md-danger md-xs md-round md-just-icon pull-right" style="padding: 0;" @click="deleteBlock(block.id)">
-                      <md-icon>delete</md-icon>
-                    </md-button>
-                  </td>
-                </tr>
-              </template>
-            </tbody>
-          </table>
-        </md-card-content>
-      </md-card>
+                    </div>
+                    <table style="width:100%;" class="table event-building-blocks_table" >
+                        <thead>
+                        <tr class="md-warning" style="text-align: center;">
+                            <th style="text-align: center;">Element</th>
+                            <th style="text-align: center;">Brief</th>
+                            <th style="text-align: center;">Budget</th>
+                            <th style="text-align: center;">Actual cost</th>
+                            <th>
+
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody v-if="eventBuildingBlocks.length">
+                        <template v-for="(block,index) in eventBuildingBlocks">
+<!--                            <tr class="parent">-->
+<!--                                <td>{{category.title}}</td>-->
+<!--                                <td></td>-->
+<!--                                <td class="allocated-budget">-->
+<!--                                    <div class="md-table-cell-container">-->
+<!--                                        <span class="dollar-sign pull-left small">$</span>-->
+<!--                                        <span style="display: inline-block; width: 100%; padding-right: 16px;">-->
+<!--                                            {{event.elementsBudgetPerGuest ? (category.totalAllocatedBudget / event.numberOfParticipants).toFixed(2) : category.totalAllocatedBudget.toFixed(2)}}-->
+<!--                                        </span>-->
+<!--                                        <span class="remains-budget badge badge-rose small" style="background-color: #fff;" v-if="category.remainsBudget">-${{parseInt(category.remainsBudget)}}</span>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                <td class="actual-cost" :class="{disabled : category.totalActualCost==0}">-->
+<!--                                    <span class="dollar-sign pull-left small">$</span>-->
+<!--                                    {{event.elementsBudgetPerGuest ? (category.totalActualCost / event.numberOfParticipants).toFixed(2) : category.totalActualCost.toFixed(2)}}-->
+
+<!--                                </td>-->
+<!--                                <td></td>-->
+<!--                            </tr>-->
+
+                            <tr >
+                                <td>{{block.title}}</td>
+                                <td>
+                                    <template >
+                                        <div v-if="block.valuesCount"
+                                             style="cursor: pointer;">
+                                            <md-button class="md-simple md-xs requirements-cell-button"
+                                                       @click="addRequirements(block)">
+                                                {{`${block.valuesCount} selected`}}
+                                                <md-icon class="text-danger">edit</md-icon>
+                                            </md-button>
+                                        </div>
+                                        <template v-else-if="!block.valuesCount">
+                                            <md-button class="md-info md-xs md-simple" @click="addRequirements(block)">
+                                                Set requirements
+                                            </md-button>
+                                        </template>
+                                    </template>
+
+                                </td>
+                                <td class="allocated-budget" style="width: 15%;" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
+                                    <div class="md-table-cell-container" >
+                                        <span class="dollar-sign pull-left">$</span>
+                                        <label-edit v-if="!event.elementsBudgetPerGuest"  style="width: 100%; margin-left: 8px;" :text="block.allocatedBudget"
+                                                    :field-name="block.componentId"
+                                                    @text-updated-blur="blockBudgetChanged"
+                                                    @text-updated-enter="blockBudgetChanged"></label-edit>
+
+                                        <label-edit v-else style="width: 100%; margin-left: 8px;" :text="block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : ''"
+                                                    :field-name="block.componentId"
+                                                    @text-updated-blur="blockBudgetChanged"
+                                                    @text-updated-enter="blockBudgetChanged"></label-edit>
+
+                                    </div>
+
+                                </td>
+                                <td class="actual-cost" style="width: 15%;">
+                                    <template v-if="block.allocatedBudget">
+                                        <template
+                                            v-if="block.winningProposalId">
+                                            <md-button class="md-simple actual-cost md-xs" :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`" >
+                                                {{ event.elementsBudgetPerGuest ?  `$${(block.winingProposal.cost / event.numberOfParticipants).toFixed(2)}` : `$${block.winingProposal.cost.toFixed(2)}` }}
+                                                <md-icon >open_in_new</md-icon>
+                                            </md-button>
+                                        </template>
+                                    </template>
+
+                                </td>
+                                <td class="text-center">
+                                    <template >
+                                        <template
+                                            v-if="block.winningProposalId">
+                                            <md-button class="md-warning actual-cost md-xs" @click="reviewProposals(block,block.winningProposalId)">
+                                                View Order
+                                            </md-button>
+                                        </template>
+                                        <template v-else-if="(block.proposalsState == 'show-proposals' || block.proposalsState == 'waiting-for-proposals')">
+                                            <md-button class="md-xs md-info" @click="reviewProposals(block)">
+                                                Manage proposals
+                                                ({{block.proposalsCount}})
+                                            </md-button>
+                                        </template>
+                                        <template v-else-if="block.proposalsState == 'get-offers' ">
+                                            <md-button class="md-xs md-primary" @click="reviewProposals(block)">
+                                                Get Proposals
+                                                <md-icon>near_me</md-icon>
+                                            </md-button>
+                                        </template>
+                                    </template>
+                                    <md-button class="md-danger md-xs md-round md-just-icon pull-right" style="padding: 0;" @click="deleteBlock(block.id)">
+                                        <md-icon>delete</md-icon>
+                                    </md-button>
+                                </td>
+                            </tr>
+                        </template>
+                        </tbody>
+                    </table>
+
+                </md-card-content>
+            </md-card>
+        </div>
+
     </div>
-  </div>
-</template>
 
+
+</template>
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
   import swal from 'sweetalert2'
@@ -152,7 +162,6 @@
   import EventBlocks from '../components/NewEventBlocks'
   import AddBuildingBlockModal from '../components/EventBlocks/Modals/AddBuildingBlocks.vue'
   import EventBlockRequirements from '../components/EventBlocks/Modals/EventBlockRequirements.vue'
-  import EventActualCostIconTooltip from '../components/EventActualCostIconTooltip.vue'
   import EventBlockVendors from './EventBlocks/Modals/EventBlockVendors.vue'
   import ViewProposals from './EventBlocks/Modals/ViewProposals.vue'
   import _ from 'underscore'
@@ -167,8 +176,7 @@
       LabelEdit,
       AnimatedNumber,
       StatsCard,
-      ChartCard,
-      EventActualCostIconTooltip,
+      ChartCard
     },
     props: {
       event: {
@@ -442,28 +450,12 @@
   }
 </script>
 <style lang="scss">
-  @import '@/assets/scss/md/_colors.scss';
-  .requirements-cell-button {
-    width: 48px;
-    min-width: 48px;
-    .md-ripple {
-      width: 48px;
-      min-width: 48px;
+    .requirements-cell-button {
+        &.md-icon:hover {
+            visibility: hidden;
+        }
+        &.md-icon:hover {
+            visibility: visible;
+        }
     }
-    &.md-icon:hover {
-      visibility: hidden;
-    }
-    &.md-icon:hover {
-      visibility: visible;
-    }
-  }
-  .btn-add {
-    border-radius: 25px;
-    width: 48px;
-    min-width: 48px;
-    .md-ripple {
-      width: 48px;
-      min-width: 48px;
-    }
-  }
 </style>

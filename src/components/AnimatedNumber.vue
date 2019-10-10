@@ -64,9 +64,4 @@ export default {
 };
 </script>
 <style>
-  span {
-    color: #9c27b0;
-    font-size: 18px;
-    font-weight: normal;
-  }
 </style>
