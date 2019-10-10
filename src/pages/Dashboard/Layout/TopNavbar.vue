@@ -5,7 +5,7 @@
     :class="{'md-toolbar-absolute md-white md-fixed-top': $route.meta.navbarAbsolute, 'navbar-white': $route.meta.opaque}">
     <div class="md-toolbar-row">
       <div class="md-toolbar-section-start event-top-bar">
-          <h3 v-if="topBarTitle" class="md-title">{{topBarTitle}}</h3>
+        <h3 v-if="topBarTitle" class="md-title">{{topBarTitle}}</h3>
         <!--<drop-down direction="down" v-if="topBarTitle" :has-caret="false" :hover="true">
           <md-button slot="title" class="md-button md-simple md-rose dropdown-toggle md-tiny" data-toggle="dropdown" style="border-radius: 3px 3px 0 0; text-transform: capitalize; font-size: 18px !important; font-weight: 400 !important;">
             {{topBarTitle}}
@@ -148,7 +148,13 @@
 <!--              </md-button>-->
 <!--            </li>-->
 
-
+            <li class="md-list-item import-vendor" v-if="topBarEventId">
+              <a class="import" @click="gotoVendorsPool">import your vendors</a>
+              <md-button class="md-warning md-sm no-padding">
+                <md-icon>play_arrow</md-icon>
+                Learn more
+              </md-button>
+            </li>
             <li class="md-list-item">
               <a href="#" class="md-list-item-router md-list-item-container md-button-clean dropdown">
                 <div class="md-list-item-content">
@@ -158,7 +164,8 @@
                       <span class="notification">5</span>
                       <p class="hidden-lg hidden-md">Notifications</p>-->
                       <div class="photo">
-                        <img :src="avatar" alt="avatar"/>
+                        <md-icon>menu</md-icon>
+                        <!-- <img :src="avatar" alt="avatar"/> -->
                       </div>
                     </md-button>
                     <ul class="dropdown-menu dropdown-menu-right">
@@ -334,6 +341,10 @@
       timeline(){
         this.$router.push({name: 'EditTimeLine', params: {id: this.topBarEventId}});
         document.location.reload();
+      },
+      gotoVendorsPool(){
+        let routeData = this.$router.resolve({name: 'VendorsPool', params: {id: this.topBarEventId}});
+        window.open(routeData.href, '_blank');
       }
     }
   };
@@ -409,5 +420,24 @@
 
   .md-button:not(.md-just-icon):not(.md-btn-fab):not(.md-icon-button):not(.md-toolbar-toggle) .md-ripple {
     padding: 6px 12px !important;
+  }
+
+  .import-vendor {
+    display: flex;
+    align-items: center;
+    a.import {
+      color: #9c27b0!important;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      margin-right: 2em!important;
+      cursor: pointer;
+    }
+    .md-button {
+      height: 36px!important;
+      text-transform: capitalize;
+      margin-right: 4em;
+      border-radius: 36px;
+    }
   }
 </style>

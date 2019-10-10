@@ -1,136 +1,155 @@
 <template>
-    <md-card class="md-card-profile">
-        <md-card-header class="md-card-header-icon md-card-header-rose">
-            <div class="card-icon" style="padding: 12px;">
-                <md-icon>date_range</md-icon>
+  <md-card class="md-card-profile">
+    <md-card-header class="md-card-header-icon md-card-header-rose">
+      <!-- <div class="card-icon" style="padding: 12px;">
+          <md-icon>date_range</md-icon>
+      </div> -->
+      <h4 class="title profile-title title-summary">
+        Event Summary
+        <md-button class="md-sm md-simple md-just-icon pull-right clear-margins"  @click="openEventModal()"><md-icon class="company-logo">create</md-icon></md-button>
+      </h4>
+    </md-card-header>
+    <md-card-content v-if="event">
+      <div>
+        <div class="md-layout event-info-section">
+          <div class="md-layout-item summary-item">
+            <div class="md-layout-item title-text">
+              <i class="fa fa-calendar"></i>
             </div>
-            <h4 class="title profile-title">
-                Summary
-                <md-button class="md-sm md-simple md-just-icon pull-right clear-margins"  @click="openEventModal()"><md-icon class="company-logo">create</md-icon></md-button>
+            <div class="md-layout-item">
+              {{calendarEvent.eventStartMillis | formatDate}},
+              {{calendarEvent.eventStartMillis | formatTime}}
+              ({{calendarEvent.eventStartMillis |
+              formatDuration(calendarEvent.eventEndMillis)}}h)
+            </div>
+          </div>
+
+          <div class="md-layout-item summary-item">
+            <div class="md-layout-item title-text">
+              <i class="fa fa-map-marker-alt"></i> 
+            </div>
+            <div class="md-layout-item">
+              {{calendarEvent.numberOfParticipants}} {{inviteeType(calendarEvent)}}
+            </div>
+          </div>
+
+          <div class="md-layout-item summary-item">
+            <div class="md-layout-item  title-text">
+              <i class="fa fa-user"></i> 
+            </div>
+            <div class="md-layout-item md-size-100 md-caption ">
+              {{calendarEvent.location}}
+            </div>
+          </div>
+          <!-- NOTE: just hiding it -->
+          <!-- <div class="md-layout-item md-size-100">
+            <md-button class="md-sm md-simple md-rose">
+              <md-icon>cached</md-icon>
+              Recurring weekly
+            </md-button>
+          </div> -->
+        </div>
+
+        <div class="md-layout md-gutter">
+          <div class="md-layout-item">
+            <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
+          </div>
+        </div>
+        <div class="md-layout md-gutter">
+          <div class="md-layout-item">
+            <h5 class="title-budget-main">Remaining budget</h5>
+            <h4 class="title budget">
+              <div class="title" 
+                :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
+                v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants">
+                <animated-number ref="totalRemainingBudgetNumber"
+                                  :value="totalRemainingBudget"
+                                  prefix="$"></animated-number>
+                <small class="total-event-budget">/
+                  ${{
+                    calendarEvent.budgetPerPerson *
+                    calendarEvent.numberOfParticipants | 
+                    numeral('0,0')
+                  }}
+                </small>
+              </div>
             </h4>
-        </md-card-header>
-        <md-card-content v-if="event">
-            <div>
-                <div class="md-layout event-info-section">
-                    <div class="md-layout-item md-size-100">
-                        <div class="md-layout-item  title-text">Date</div>
-                        <div class="md-layout-item md-size-100 md-caption ">
-                            {{calendarEvent.eventStartMillis | formatDate}},
-                            {{calendarEvent.eventStartMillis | formatTime}}
-                            ({{calendarEvent.eventStartMillis |
-                            formatDuration(calendarEvent.eventEndMillis)}} hrs)
-                        </div>
-                    </div>
 
-                    <div class="md-layout-item md-size-50">
-                        <div class="md-layout-item  title-text">Guests</div>
-                        <div class="md-layout-item md-size-100 md-caption ">
-                            {{calendarEvent.numberOfParticipants}} {{inviteeType(calendarEvent)}}
-                        </div>
-                    </div>
-
-                    <div class="md-layout-item md-size-50">
-                        <div class="md-layout-item  title-text">Geography</div>
-                        <div class="md-layout-item md-size-100 md-caption ">
-                            {{calendarEvent.location}}
-                        </div>
-                    </div>
-                    <!-- NOTE: just hiding it -->
-                    <!-- <div class="md-layout-item md-size-100">
-                        <md-button class="md-sm md-simple md-rose">
-                            <md-icon>cached</md-icon>
-                            Recurring weekly
-                        </md-button>
-                    </div> -->
-
-                </div>
-
-                <div class="md-layout md-gutter">
-                    <div class="md-layout-item">
-                        <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
-                    </div>
-                </div>
-                <div class="md-layout md-gutter">
-                    <div class="md-layout-item">
-                        <h5 class="title-budget-main">Remaining budget</h5>
-                        <h4
-                            class="title"
-                            style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
-                            <div class="title" :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
-                                 v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants">
-                                <animated-number ref="totalRemainingBudgetNumber"
-                                                 :value="totalRemainingBudget"
-                                                 prefix="$"></animated-number>
-                                <small class="total-event-budget">/
-                                    ${{calendarEvent.budgetPerPerson *
-                                    calendarEvent.numberOfParticipants}}
-                                </small>
-                            </div>
-                        </h4>
+            <h5 class="title-budget-main">Per guest</h5>
+            <h4
+              class="title"
+              style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
+              <div class="title" 
+                :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
+                v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants">
+                <animated-number ref="totalRemainingBudgetNumber"
+                                  :value="remainingBudgetPerEmployee"
+                                  prefix="$"></animated-number>
+                <small class="total-event-budget">/
+                  ${{calendarEvent.budgetPerPerson}}
+                </small>
+              </div>
+            </h4>
 
 
-                        <h5 class="title-budget-main">Per guest</h5>
-                        <h4
-                            class="title"
-                            style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
-                            <div class="title" :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
-                                 v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants">
-                                <animated-number ref="totalRemainingBudgetNumber"
-                                                 :value="remainingBudgetPerEmployee"
-                                                 prefix="$"></animated-number>
-                                <small class="total-event-budget">/
-                                    ${{calendarEvent.budgetPerPerson}}
-                                </small>
-                            </div>
-                        </h4>
-
-
-                        <div class="budget-pie-container"
-                             style="display: grid;margin: 3em 18px;">
-                            <chart-component
-                                :chart-data="pieChart.data"
-                                :chart-options="pieChart.options"
-                                chart-type="Pie"
-                                style="grid-column: 1; grid-row: 1; color:red"/>
-                            <animated-number class="percentage" ref="percentageNumber"
-                                             :value="percentage" suffix="%"></animated-number>
-                        </div>
-                    </div>
-                </div>
+            <div class="budget-pie-container"
+                  style="display: grid;margin: 3em 18px;">
+              <chart-component
+                  :chart-data="pieChart.data"
+                  :chart-options="pieChart.options"
+                  chart-type="Pie"
+                  style="grid-column: 1; grid-row: 1; color:red"/>
+              <animated-number class="percentage" ref="percentageNumber"
+                :value="percentage" suffix="%"></animated-number>
             </div>
-            <div class="md-layout md-gutter" style="display: none;">
-                <div class="md-layout-item">
-                    <div>
-                        <div class="md-caption title-text">Remaining budget per participant
-                        </div>
-                        <!-- TODO Need calculate with components -->
-                        <div class="md-caption title-text " :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]">
-                            <animated-number ref="budgetPerPersonNumber"
-                                             :value="remainingBudgetPerEmployee"
-                                             prefix="$"></animated-number>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="md-caption title-text">Budget per participant</div>
-                        <div class="md-caption title-text " :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]">
-                            <animated-number ref="budgetPerPersonNumber"
-                                             :value="calendarEvent.budgetPerPerson"
-                                             prefix="$"></animated-number>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="md-caption title-text">Total budget for the event</div>
-                        <div class="md-caption title-text title-budget-prise">
-                            <animated-number ref="totalBudgetNumber"
-                                             :value="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants"
-                                             prefix="$"></animated-number>
-                        </div>
-                    </div>
-                </div>
+          </div>
+        </div>
+        <div class="md-layout md-gutter">
+          <div class="md-layout-item">
+            <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
+          </div>
+        </div>
+        <div class="md-layout md-gutter">
+          <div class="md-layout-item">
+            <event-paid-total-amounts :paid="event.totalBudget" :total="totalRemainingBudget"></event-paid-total-amounts>
+          </div>
+        </div>
+      </div>
+      <div class="md-layout md-gutter" style="display: none;">
+        <div class="md-layout-item">
+          <div>
+            <div class="md-caption title-text">
+              Remaining budget per participant
             </div>
-        </md-card-content>
-    </md-card>
-
+            <!-- TODO Need calculate with components -->
+            <div class="md-caption title-text " 
+              :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]">
+              <animated-number ref="budgetPerPersonNumber"
+                                :value="remainingBudgetPerEmployee"
+                                prefix="$"></animated-number>
+            </div>
+          </div>
+          <div>
+            <div class="md-caption title-text">Budget per participant</div>
+            <div class="md-caption title-text " 
+              :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]">
+              <animated-number ref="budgetPerPersonNumber"
+                                :value="calendarEvent.budgetPerPerson"
+                                prefix="$"></animated-number>
+            </div>
+          </div>
+          <div>
+            <div class="md-caption title-text">Total budget for the event</div>
+            <div class="md-caption title-text title-budget-prise">
+              <animated-number ref="totalBudgetNumber"
+                              :value="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants"
+                              prefix="$"></animated-number>
+            </div>
+          </div>
+        </div>
+      </div>
+    </md-card-content>
+  </md-card>
 </template>
 <script>
   import EventModal from '../EventModal/';
@@ -149,6 +168,7 @@
   import _ from 'underscore'
   import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
   import EventSidePanel from '../EventSidePanel.vue'
+  import EventPaidTotalAmounts from '../components/EventPaidTotalAmounts.vue'
 
   export default {
     name: 'event-details-sidebar',
@@ -158,7 +178,8 @@
       StatsCard,
       ChartCard,
       ChartComponent,
-      CalendarEventStatistics
+      CalendarEventStatistics,
+      EventPaidTotalAmounts
     },
     props: {
       event: {
@@ -341,7 +362,8 @@
     @import '@/assets/scss/md/_colors.scss';
 
     .md-layout, .md-layout-item {
-        width: initial;
+      width: initial;
+      padding: 0;
     }
     .control-main-block {
         .company-control-logo {
@@ -377,9 +399,9 @@
         grid-row: 1;
         margin-top: auto;
         margin-bottom: auto;
-        font-size: 3vmin;
-        font-weight: 700;
-        color: #515151;
+        font-size: 25px;
+        font-weight: normal;
+        color: #000000;
     }
 
     .logo-block {
@@ -431,30 +453,51 @@
         }
     }
 
+    .event-info-section {
+      flex-direction: column;
+    }
+
+    .summary-item {
+      display: flex;
+    }
+
     .title-text {
-        font-family: "Roboto";
-        font-size: 12px;
-        font-weight: 400;
-        font-style: normal;
-        font-stretch: normal;
-        line-height: 2.2;
-        letter-spacing: normal;
-        text-align: left;
-        color: #959595;
+      font-family: "Roboto";
+      font-size: 12px;
+      font-weight: 400;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: 2.2;
+      letter-spacing: normal;
+      text-align: left;
+      color: #959595;
+      flex: 0;
+
+      i {
+        color: $purple-500!important;
+        font-size: 12px!important;
+        padding-right: 1em;
+      }
     }
 
     .title-budget-main {
         margin-top: 1.7em;
         //margin-bottom: 1em;
         font-family: "Roboto";
-        font-size: 15px;
-        font-weight: 500;
+        font-size: 14px;
+        font-weight: normal;
         font-style: normal;
         font-stretch: normal;
         line-height: 1.33;
         letter-spacing: normal;
         text-align: center;
         color: #7a7a7a;
+    }
+
+    .title.budget {
+      h4 {
+        color: $purple-500;
+      }
     }
 
     .title-budget-prise {
@@ -501,15 +544,14 @@
 
     .total-event-budget {
         color: #000;
-        font-weight: bold;
-        font-size: 15px;
-    }
-
-    .percentage {
-        font-size: 2.5em;
+        font-weight: normal;
+        font-size: 18px;
     }
 
     .md-card-header-icon .card-icon .md-icon {
         color: white !important;
+    }
+    .md-card-header-rose {
+      margin-top: 1.5em;
     }
 </style>

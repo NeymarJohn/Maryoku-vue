@@ -1,152 +1,161 @@
 <template>
-    <div class="md-layout edit-event-details">
-        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
-        <div class="event-details-tabs">
-            <tabs
-                :tab-name="['EVENT DETAILS', 'BUDGET & PROPOSALS']"
-                color-button="rose"
-                :active-tab="$store.state.EventPlannerVuex.eventDetailsActiveTab" ref="eventPlannerTabs" :sync-router="true">
-                <!-- here you can add your content for tab-content -->
-                <template slot="tab-pane-1" style="width: 100%;">
-                    <div class="md-layout">
-                        <div class="md-layout-item md-size-25">
-                            <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
-                        </div>
-                        <div class="md-layout-item md-size-75 text-left">
-                            <md-card class="manage-vendors">
-                                <md-card-content class="md-layout">
-                                    <div class="md-layout-item md-size-60">
-                                        <h4>Manage Vendor Proposals</h4>
-                                        <p>
-                                            Save planning time by sending quote requests and easily compare them to get
-                                            the best deals.
-                                        </p>
-
-                                        <ol>
-                                            <li>Select desired services for the event</li>
-                                            <li>Create and send inquiries to your vendors</li>
-                                            <li>Get proposals and choose the best offers</li>
-                                        </ol>
-
-                                        <md-button name="event-planner-tab-event-details-banner-manage-proposals"
-                                                   class="event-planner-tab-event-details-banner-manage-proposals md-info" @click="openUploadModal()">
-                                            Upload Vendors
-                                        </md-button>
-
-                                        <md-button name="event-planner-tab-event-details-banner-manage-proposals"
-                                                   class="event-planner-tab-event-details-banner-manage-proposals md-info"
-                                                   @click="selectServices">
-                                            Select Services
-                                        </md-button>
-
-                                    </div>
-                                    <div class="md-layout-item md-size-40 promotion-video">
-                                        <iframe src="https://www.youtube.com/embed/ualjiukVg68"  frameborder="0"
-                                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-                                        </iframe>
-                                    </div>
-                                </md-card-content>
-                            </md-card>
-
-                            <div class="edit-event-boxes md-layout">
-                                <md-card class="md-layout-item md-size-30">
-                                    <md-card-content>
-                                        <h4>Event Timeline</h4>
-                                        <p>
-                                            Organize the event in a beautiful timeline.
-                                        </p>
-                                        <md-button name="event-planner-tab-event-details-banner-timeline"
-                                                   class="event-planner-tab-event-details-banner-timeline md-rose md-simple got-to-component-btn"
-                                                   @click="selectTimeline">
-                                            Edit Event Timeline
-                                            <md-icon>arrow_forward</md-icon>
-                                        </md-button>
-                                    </md-card-content>
-                                </md-card>
-
-                                <md-card class="md-layout-item md-size-30">
-                                    <md-card-content>
-                                        <h4>Invitees Management</h4>
-
-                                        <p>
-                                            Select invitees, send scheduled RSVP and messages.
-                                        </p>
-
-                                        <md-button name="event-planner-tab-event-details-banner-invitees"
-                                                   class="event-planner-tab-event-details-banner-invitees md-rose md-simple got-to-component-btn"
-                                                   @click="selectInviteesManagement">
-                                            Manage Invitees
-                                            <md-icon>arrow_forward</md-icon>
-                                        </md-button>
-                                    </md-card-content>
-                                </md-card>
-
-                                <md-card class="md-layout-item md-size-30">
-                                    <md-card-content>
-                                        <h4>Publish Event Details</h4>
-                                        <p>
-                                            Create a beautiful event page
-                                            and send to invitees.
-                                        </p>
-
-                                        <md-button name="event-planner-tab-event-details-banner-event-page"
-                                                   class="event-planner-tab-event-details-banner-event-page md-rose md-simple got-to-component-btn"
-                                                   @click="selectEventPage">
-                                            Edit Event page
-                                            <md-icon>arrow_forward</md-icon>
-                                        </md-button>
-                                    </md-card-content>
-                                </md-card>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <template slot="tab-pane-2" style="width: 100%;">
-                    <div class="md-layout">
-                        <div class="md-layout-item md-size-25">
-                            <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
-                        </div>
-                        <div class="md-layout-item md-size-75">
-                            <event-building-blocks :event.sync="event" :event-components="selectedComponents"
-                                                   @go-to-building-blocks="resetTab"></event-building-blocks>
-                        </div>
-                    </div>
-
-                </template>
-                <!--<template slot="tab-pane-3" style="width: 100%;">
-                    <div class="md-layout">
-                        <div class="md-layout-item md-size-100">
-                            <event-time-line :event="event" :event-components="selectedComponents"></event-time-line>
-
-                        </div>
-                    </div>
-
-                </template>
-                <template slot="tab-pane-4" style="width: 100%;">
-                    <div class="md-layout">
-                        <div class="md-layout-item md-size-100">
-                            <event-invitees :event-data.sync="event"></event-invitees>
-                        </div>
-                    </div>
-                </template>-->
-
-                <!--<template slot="tab-pane-3" style="width: 100%;">
-                    <div class="md-layout">
-                        <div class="md-layout-item md-size-100">
-                            <event-details :event.sync="event"
-                                           :event-components="selectedComponents"></event-details>
-                        </div>
-                    </div>
-                </template>-->
-
-            </tabs>
+  <div class="md-layout edit-event-details">
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
+    <div class="event-details-tabs">
+      <div class="md-layout">
+        <div class="md-layout-item md-size-20 no-padding">
+          <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
         </div>
+        <div class="md-layout-item md-size-80 no-padding">
+          <event-building-blocks :event.sync="event" :event-components="selectedComponents"
+                                  @go-to-building-blocks="resetTab"></event-building-blocks>
+        </div>
+      </div>
+      <!-- <tabs
+        :tab-name="['EVENT DETAILS', 'BUDGET & PROPOSALS']"
+        color-button="rose"
+        :active-tab="$store.state.EventPlannerVuex.eventDetailsActiveTab" ref="eventPlannerTabs" :sync-router="true"> -->
+        <!-- here you can add your content for tab-content -->
+        <!-- <template slot="tab-pane-1" style="width: 100%;">
+            <div class="md-layout">
+                <div class="md-layout-item md-size-25">
+                    <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
+                </div>
+                <div class="md-layout-item md-size-75 text-left">
+                    <md-card class="manage-vendors">
+                        <md-card-content class="md-layout">
+                            <div class="md-layout-item md-size-60">
+                                <h4>Manage Vendor Proposals</h4>
+                                <p>
+                                    Save planning time by sending quote requests and easily compare them to get
+                                    the best deals.
+                                </p>
 
-        <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
+                                <ol>
+                                    <li>Select desired services for the event</li>
+                                    <li>Create and send inquiries to your vendors</li>
+                                    <li>Get proposals and choose the best offers</li>
+                                </ol>
 
-        <!--<sticky-budget :event="event" v-if="routeName !== 'EditEvent' && routeName !== 'EditBuildingBlocks'"></sticky-budget>-->
+                                <md-button name="event-planner-tab-event-details-banner-manage-proposals"
+                                            class="event-planner-tab-event-details-banner-manage-proposals md-info" @click="openUploadModal()">
+                                    Upload Vendors
+                                </md-button>
 
+                                <md-button name="event-planner-tab-event-details-banner-manage-proposals"
+                                            class="event-planner-tab-event-details-banner-manage-proposals md-info"
+                                            @click="selectServices">
+                                    Select Services
+                                </md-button>
+
+                            </div>
+                            <div class="md-layout-item md-size-40 promotion-video">
+                                <iframe src="https://www.youtube.com/embed/ualjiukVg68"  frameborder="0"
+                                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                                </iframe>
+                            </div>
+                        </md-card-content>
+                    </md-card>
+
+                    <div class="edit-event-boxes md-layout">
+                        <md-card class="md-layout-item md-size-30">
+                            <md-card-content>
+                                <h4>Event Timeline</h4>
+                                <p>
+                                    Organize the event in a beautiful timeline.
+                                </p>
+                                <md-button name="event-planner-tab-event-details-banner-timeline"
+                                            class="event-planner-tab-event-details-banner-timeline md-rose md-simple got-to-component-btn"
+                                            @click="selectTimeline">
+                                    Edit Event Timeline
+                                    <md-icon>arrow_forward</md-icon>
+                                </md-button>
+                            </md-card-content>
+                        </md-card>
+
+                        <md-card class="md-layout-item md-size-30">
+                            <md-card-content>
+                                <h4>Invitees Management</h4>
+
+                                <p>
+                                    Select invitees, send scheduled RSVP and messages.
+                                </p>
+
+                                <md-button name="event-planner-tab-event-details-banner-invitees"
+                                            class="event-planner-tab-event-details-banner-invitees md-rose md-simple got-to-component-btn"
+                                            @click="selectInviteesManagement">
+                                    Manage Invitees
+                                    <md-icon>arrow_forward</md-icon>
+                                </md-button>
+                            </md-card-content>
+                        </md-card>
+
+                        <md-card class="md-layout-item md-size-30">
+                            <md-card-content>
+                                <h4>Publish Event Details</h4>
+                                <p>
+                                    Create a beautiful event page
+                                    and send to invitees.
+                                </p>
+
+                                <md-button name="event-planner-tab-event-details-banner-event-page"
+                                            class="event-planner-tab-event-details-banner-event-page md-rose md-simple got-to-component-btn"
+                                            @click="selectEventPage">
+                                    Edit Event page
+                                    <md-icon>arrow_forward</md-icon>
+                                </md-button>
+                            </md-card-content>
+                        </md-card>
+                    </div>
+                </div>
+            </div>
+        </template> -->
+        <!-- <template slot="tab-pane-2" style="width: 100%;">
+            <div class="md-layout">
+                <div class="md-layout-item md-size-25">
+                    <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
+                </div>
+                <div class="md-layout-item md-size-75">
+                    <event-building-blocks :event.sync="event" :event-components="selectedComponents"
+                                            @go-to-building-blocks="resetTab"></event-building-blocks>
+                </div>
+            </div>
+
+        </template> -->
+        <!--<template slot="tab-pane-3" style="width: 100%;">
+            <div class="md-layout">
+                <div class="md-layout-item md-size-100">
+                    <event-time-line :event="event" :event-components="selectedComponents"></event-time-line>
+
+                </div>
+            </div>
+
+        </template>
+        <template slot="tab-pane-4" style="width: 100%;">
+            <div class="md-layout">
+                <div class="md-layout-item md-size-100">
+                    <event-invitees :event-data.sync="event"></event-invitees>
+                </div>
+            </div>
+        </template>-->
+
+        <!--<template slot="tab-pane-3" style="width: 100%;">
+            <div class="md-layout">
+                <div class="md-layout-item md-size-100">
+                    <event-details :event.sync="event"
+                                    :event-components="selectedComponents"></event-details>
+                </div>
+            </div>
+        </template>-->
+
+      <!-- </tabs> -->
     </div>
+
+    <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
+
+    <!--<sticky-budget :event="event" v-if="routeName !== 'EditEvent' && routeName !== 'EditBuildingBlocks'"></sticky-budget>-->
+
+  </div>
 
 </template>
 
@@ -228,7 +237,11 @@
       }
     },
     created () {
+      this.$store.registerModule('EventPlannerVuex', EventPlannerVuexModule  )
+
       this.routeName = this.$route.name;
+
+
     },
     mounted () {
       let _self = this

@@ -1,7 +1,7 @@
 .md-tooltip{
   padding: 10px 15px;
   min-width: 130px;
-  max-width: 200px;
+  // max-width: 200px;
   height: auto;
   text-align: center;
   border-radius: $border-radius-base;
@@ -11,6 +11,11 @@
   font-weight: 400;
   @include shadow-8dp();
 
+  .tooltip-wrapper {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
   &:after{
     position: absolute;
     bottom: -5px;

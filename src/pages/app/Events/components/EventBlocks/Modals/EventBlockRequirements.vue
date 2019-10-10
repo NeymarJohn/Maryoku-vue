@@ -1,112 +1,6 @@
 <template>
     <div class="building-blocks-requirements">
         <div class="md-layout text-left">
-
-            <div class="md-layout event-details">
-                <div class="md-layout-item md-size-40">
-                    <div class="md-layout">
-                        <div class="md-layout-item md-size-100">
-                            <div class="event-date">
-                                <md-icon>local_mall</md-icon>
-                                <label>{{eventData.date}}, {{eventData.time}} ({{eventData.duration}})</label>
-                            </div>
-                        </div>
-                        <div class="md-layout-item md-size-100 required">
-                            <md-datepicker
-                                :class="[{'md-error': (eventData.date && $refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value') )}]"
-                                v-model="eventData.date"
-                                data-vv-name="date"
-                                ref="datePicker"
-                                v-validate= "modelValidations.date"
-                                required>
-                                <label >Date</label>
-                            </md-datepicker>
-
-                        </div>
-                        <div class="md-layout-item md-size-50">
-                            <md-field class="required" :class="[{'md-error': errors.has('time')}]">
-                                <label>Start Time</label>
-                                <md-select
-                                    v-model="eventData.time"
-                                    v-validate= "modelValidations.time"
-                                    data-vv-name="time"
-                                    required>
-                                    <md-option v-for="hour in hoursArray"
-                                               :key="hour"
-                                               :value="hour">
-                                        {{ hour }}
-                                    </md-option>
-                                </md-select>
-
-                                <span class="md-error" v-if="errors.has('time')">The start time is required</span>
-
-                            </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-50">
-                            <md-field class="required" :class="[{'md-error': errors.has('duration')}]">
-                                <label>Duration</label>
-                                <md-select
-                                    v-model="eventData.duration"
-                                    v-validate= "modelValidations.duration"
-                                    data-vv-name="duration"
-                                    required>
-                                    <md-option v-for="hour in durationArray"
-                                               :key="hour"
-                                               :value="hour">
-                                        {{ hour + ' hours' }}
-                                    </md-option>
-                                </md-select>
-                                <span class="md-error" v-if="errors.has('duration')">The duration is required</span>
-
-                            </md-field>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="md-layout-item md-size-60">
-                    <div class="md-layout">
-                        <div class="md-layout-item md-size-33">
-                            <md-field class="required" :class="[{'md-error': errors.has('numberOfParticipants')}]">
-                                <md-icon>person</md-icon>
-                                <label>Guest Count</label>
-                                <md-input
-                                    v-model="eventData.numberOfParticipants"
-                                    data-vv-name="numberOfParticipants"
-                                    v-validate= "modelValidations.numberOfParticipants"
-                                    required
-                                    type="number"
-                                ></md-input>
-                                <span class="md-error" v-if="errors.has('numberOfParticipants')">The Guest Count is required</span>
-
-                            </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-33">
-                            <md-field class="required" :class="[{'md-error': errors.has('budget')}]">
-                                <md-icon>account_balance_wallet</md-icon>
-                                <label>Budget</label>
-                                <md-input
-                                    v-model="eventData.budget"
-                                    data-vv-name="budget"
-                                    v-validate= "modelValidations.budget"
-                                    required
-                                    type="number"
-
-                                ></md-input>
-                                <span class="md-error" v-if="errors.has('budget')">The Budget is required</span>
-
-                            </md-field>
-                        </div>
-                        <div class="md-layout-item md-size-33">
-                            <md-field>
-                                <label>Per Guest</label>
-                                <md-input v-model="eventData.budgetPerPerson"
-                                          type="number"
-                                ></md-input>
-                            </md-field>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <h4 class="md-title md-layout-item md-size-100 clear-margins" style="margin : 0; line-height: 51px; width:100%; font-size: 20px;">
                 {{this.selectedBlock.title}} Requirements
 
@@ -128,26 +22,26 @@
                                 </div>
                             </li>
                         </ul>
-                        <div style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;" >&nbsp;</div>-->
-                        <md-table class="clear-margins" v-if="eventBlockRequirements && eventBlockRequirements.length" v-model="filteredEventBlockRequirements">
-<!--                            <md-table-toolbar >-->
-<!--                                <div class="md-toolbar-section-start">-->
-<!--                                    <md-field>-->
-<!--                                        <md-input-->
-<!--                                            type="search"-->
-<!--                                            class="mb-3"-->
-<!--                                            clearable-->
-<!--                                            placeholder="Search requirements"-->
-<!--                                            v-model="searchQuery">-->
-<!--                                        </md-input>-->
-<!--                                    </md-field>-->
-<!--                                </div>-->
-<!--                                <div class="md-toolbar-section-end" v-if="false">-->
-<!--                                    <md-button class="md-icon-button">-->
-<!--                                        <md-icon>delete</md-icon>-->
-<!--                                    </md-button>-->
-<!--                                </div>-->
-<!--                            </md-table-toolbar>-->
+                        <div>&nbsp;</div>-->
+                        <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-if="eventBlockRequirements && eventBlockRequirements.length" v-model="filteredEventBlockRequirements">
+                            <md-table-toolbar >
+                                <div class="md-toolbar-section-start">
+                                    <md-field>
+                                        <md-input
+                                            type="search"
+                                            class="mb-3"
+                                            clearable
+                                            placeholder="Search requirements"
+                                            v-model="searchQuery">
+                                        </md-input>
+                                    </md-field>
+                                </div>
+                                <div class="md-toolbar-section-end" v-if="false">
+                                    <md-button class="md-icon-button">
+                                        <md-icon>delete</md-icon>
+                                    </md-button>
+                                </div>
+                            </md-table-toolbar>
 
                             <md-table-empty-state
                                 :md-description="`No requirements found for '${searchQuery}'. Try a different search term or create a new requirement.`">
@@ -157,15 +51,15 @@
                             <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" >
                                 <md-table-cell >
                                     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"  />
-                                    <event-block-requirement :delete-value="deleteValue" :requirement.sync="item" :event-id="event.id" :selected-block-id="selectedBlock.id" :requirement-properties="getRequirementProperties(item)"></event-block-requirement>
+                                    <event-block-requirement :delete-value="deleteValue" :requirement.sync="item" :event-id="event.id" :selected-block-id="selectedBlock.id"></event-block-requirement>
                                 </md-table-cell>
                             </md-table-row>
                         </md-table>
-                        <md-table  class="clear-margins" v-else v-model="dummyList">
+                        <md-table style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;"  class="clear-margins" v-else v-model="dummyList">
                             <md-table-row slot="md-table-row" slot-scope="{ item, index }" :key="item.id" >
                                 <md-table-cell >
                                     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"  />
-                                    <event-block-requirement :delete-value="deleteValue" :requirement.sync="item" :event-id="event.id" :selected-block-id="selectedBlock.id" @requirement-saved="requirementSaved" :requirement-properties="getRequirementProperties(item)"></event-block-requirement>
+                                    <event-block-requirement :delete-value="deleteValue" :requirement.sync="item" :event-id="event.id" :selected-block-id="selectedBlock.id" @requirement-saved="requirementSaved"></event-block-requirement>
                                 </md-table-cell>
                             </md-table-row>
                         </md-table>
@@ -226,57 +120,10 @@
           mandatory: true,
           editMode: true
         }
-      ],eventData : {},
-        modelValidations: {
-            title: {
-                required: true,
-            },
-            date: {
-                required: true,
-            },
-            time: {
-                required: true,
-            },
-            duration: {
-                required: true,
-            },
-            numberOfParticipants: {
-                required: true,
-                min_value: 1,
-                max_value: 10000,
-            },
-            status: {
-                required: true,
-            },
-            currency: {
-                required: true,
-            },
-            eventType: {
-                required: true,
-            },
-            category: {
-                required: true,
-            },
-            budget : {
-                required: true
-            },
-            guestType : {
-                required : true
-            }
-        },
-        durationArray: [...Array(12).keys()].map(x =>  ++x),
-        hoursArray: [],
+      ]
     }),
 
     created() {
-
-        [...Array(12).keys()].map(x => x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined);
-        [...Array(12).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`));
-        [...Array(8).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`));
-
-        this.hoursArray.push();
-
-        console.log('selectedBlock => ',this.selectedBlock);
     },
     mounted() {
       this.getBuildingBlockValues();
@@ -328,7 +175,7 @@
 
         this.isLoading = true;
 
-        //this.saveAllValues();
+        this.saveAllValues();
 
         let new_value = {
           eventComponent: {id: this.selectedBlock.id},
@@ -337,35 +184,15 @@
           value: 1
         }
 
-        let new_req_value = {
-            id:"string",
-            eventComponent:{id:"string"},
-            propertyId:"string", //The predefined requirement id
-            propertyType:"string", // the requirement's values type (multi-selection, multi-selection-with-amount, boolean, string, float)
-            title:"string",
-            comment:"string",
-            mandatory:"boolean",
-            order:"number",
-            dateCreated:"number",
-            lastUpdated:"number",
-            value: "string|number|boolean|object", // For Yes/No boolean values
-            multipleSelectionValues:"array of strings", // For multiple-selection, the ids of the selected options
-            multipleSelectionAndAmountValues:"object", // . Key-Value object for multiple-selection-with-amount, the key is the id of the selected option and the value is the amount
-        }
-
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.event.id});
         let selected_block = new EventComponent({id: this.selectedBlock.id});
 
         new EventComponentValue(new_value).for(calendar, event, selected_block).save().then(res => {
-
-            console.log('res is ', res);
-
           let newRequirement = JSON.parse(JSON.stringify(res.item))
           newRequirement.editMode = true;
-            if ( _.isArray(this.selectedBlock.values) ) {
-                this.selectedBlock.values.splice(0, 0, newRequirement);
-            }
+          this.selectedBlock.values.splice(0, 0, newRequirement);
+          this.isLoading = false;
           this.getBuildingBlockValues(newRequirement.id);
         });
       },
@@ -514,14 +341,6 @@
           return v.title.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
         });
       },
-        getRequirementProperties(item){
-            let object  = null;
-            if (item.propertyId) {
-                object =  _.find(this.selectedBlock.predefinedRequirements,(req)=>{ return req.id === item.propertyId });
-            }
-
-            return object;
-        }
     },
     computed: {},
     watch: {
