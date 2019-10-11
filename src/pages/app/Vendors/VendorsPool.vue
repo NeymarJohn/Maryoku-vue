@@ -32,12 +32,12 @@
                           :buildingBlocksList="buildingBlocksList"
                           :vendorsList="vendorsList"
                           :ratings="ratings"
-                          @showVendorDetails="showVendorDetails"
+                          @editVendorDetails="editVendorDetails"
             />
             <vendors-list v-if="view === 'list'"
                           :buildingBlocksList="buildingBlocksList"
                           :vendorsList="vendorsList"
-                          @showVendorDetails="showVendorDetails"
+                          @editVendorDetails="editVendorDetails"
                           @delete="showDeleteAlert"
                           @add-new-vendor="addNewVendor"
                           @open-upload-modal="openUploadModal"
@@ -132,8 +132,8 @@
           }
         });
       },
-
-      showVendorDetails(vendor){
+      
+      editVendorDetails(vendor){
         window.currentPanel = this.$showPanel({
           component: companyForm,
           cssClass: 'md-layout-item md-size-40 transition36 ',

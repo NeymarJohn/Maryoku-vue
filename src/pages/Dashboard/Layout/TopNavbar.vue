@@ -148,13 +148,7 @@
 <!--              </md-button>-->
 <!--            </li>-->
 
-            <li class="md-list-item import-vendor" v-if="topBarEventId">
-              <a class="import" @click="gotoVendorsPool">import your vendors</a>
-              <md-button class="md-warning md-sm no-padding">
-                <md-icon>play_arrow</md-icon>
-                Learn more
-              </md-button>
-            </li>
+
             <li class="md-list-item">
               <a href="#" class="md-list-item-router md-list-item-container md-button-clean dropdown">
                 <div class="md-list-item-content">
@@ -341,10 +335,6 @@
       timeline(){
         this.$router.push({name: 'EditTimeLine', params: {id: this.topBarEventId}});
         document.location.reload();
-      },
-      gotoVendorsPool(){
-        let routeData = this.$router.resolve({name: 'VendorsPool', params: {id: this.topBarEventId}});
-        window.open(routeData.href, '_blank');
       }
     }
   };
@@ -420,24 +410,5 @@
 
   .md-button:not(.md-just-icon):not(.md-btn-fab):not(.md-icon-button):not(.md-toolbar-toggle) .md-ripple {
     padding: 6px 12px !important;
-  }
-
-  .import-vendor {
-    display: flex;
-    align-items: center;
-    a.import {
-      color: #9c27b0!important;
-      font-size: 12px;
-      font-weight: 500;
-      text-transform: uppercase;
-      margin-right: 2em!important;
-      cursor: pointer;
-    }
-    .md-button {
-      height: 36px!important;
-      text-transform: capitalize;
-      margin-right: 4em;
-      border-radius: 36px;
-    }
   }
 </style>

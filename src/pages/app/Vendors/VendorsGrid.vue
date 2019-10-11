@@ -18,7 +18,7 @@
                 header-animation="true" fixed-header="false" :data-count="9999" :hover-count="9999">
                 <img class="img" slot="imageHeader" :src="vendorMainImage(vendor)" style="min-height: 180px;max-height: 180px; object-fit: cover;">
                 <div slot="card-buttons">
-                    <md-button class="md-purple md-xs md-round md-just-icon">
+                    <md-button class="md-purple md-xs md-round md-just-icon" @click="routeToVendor(vendor.id, $event)">
                         <md-icon >more_horiz</md-icon>
                         <md-tooltip md-direction="bottom">View</md-tooltip>
                     </md-button>
@@ -29,7 +29,7 @@
 
                     </md-button>
 
-                    <md-button class="md-warning md-xs md-round md-just-icon" @click="showVendorDetails(vendor)">
+                    <md-button class="md-warning md-xs md-round md-just-icon" @click="editVendorDetails(vendor)">
                         <md-icon >edit</md-icon>
                         <md-tooltip md-direction="bottom">Edit</md-tooltip>
 
@@ -129,8 +129,11 @@
     methods: {
       categoryTitle,
       categoryColor,
-      showVendorDetails (vendor) {
-        this.$emit('showVendorDetails', vendor);
+      editVendorDetails (vendor) {
+        this.$emit('editVendorDetails', vendor);
+      },
+      routeToVendor(vendorId) {
+        this.$router.push({ name: "VendorDetails", params: { id: vendorId } });
       },
       vendorMainImage(vendor){
         const rndInt = Math.floor(Math.random() * this.bgImages.length);
