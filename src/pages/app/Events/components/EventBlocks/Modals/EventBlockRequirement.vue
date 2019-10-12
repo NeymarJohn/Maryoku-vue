@@ -101,7 +101,8 @@
   import EventComponentValue from '@/models/EventComponentValue'
   import EventComponent from '@/models/EventComponent'
   import Calendar from '@/models/Calendar'
-  import CalendarEvent from '@/models/CalendarEvent'
+  import CalendarEvent from '@/models/CalendarEvent';
+  import _ from 'underscore';
 
   export default {
     name: 'event-block-requirement',
@@ -131,8 +132,8 @@
       }
     },
     mounted(){
-        console.log('requirement ==> ', this.requirement);
-
+         console.log('requirement ==> ', this.requirement);
+        // console.log('requirementProperties ==> ', this.requirementProperties);
 
       if (this.requirement.editMode){
         this.startEdit(this.requirement);
@@ -154,6 +155,8 @@
         this.reqType = requirement.type;
         this.tempOptions = this.requirementProperties ? this.requirementProperties.multiSelectionOptions : [];
         this.tempAdditionalOptions = this.requirementProperties ? this.requirementProperties.additionalOptions : [];
+
+        this.checkSelectedOptions();
 
         this.$forceUpdate();
       },
@@ -188,6 +191,21 @@
                   this.selectedOptions.push(option.id);
               }
           });
+        },
+        checkSelectedOptions() {
+
+          if ( this.requirement.multipleSelectionValues ) {
+
+              _.map(this.tempOptions,( option, key ) => {
+
+                  if( _.contains(this.requirement.multipleSelectionValues,option.id)){
+
+                      this.tempOptions[key].checked = true;
+                  }
+
+              });
+
+          }
         }
     }
   }

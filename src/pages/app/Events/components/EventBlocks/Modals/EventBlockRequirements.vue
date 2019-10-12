@@ -517,7 +517,7 @@
         getRequirementProperties(item){
             let object  = null;
             if (item.propertyId) {
-                object =  _.find(this.selectedBlock.predefinedRequirements,(req)=>{ return req.id === item.propertyId });
+                object =  _.find(this.selectedBlock.predefinedRequirements,(req)=>{ return req.title === item.title });
             }
 
             return object;
