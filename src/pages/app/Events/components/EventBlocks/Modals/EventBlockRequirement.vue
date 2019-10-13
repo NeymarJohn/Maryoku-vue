@@ -37,30 +37,37 @@
                         </div>
 
 
-                        <div class="md-layout-item md-size-100" v-if="requirementProperties">
+                        <div class="md-layout-item md-size-100" >
 
-                            <md-checkbox
-                                v-for="(option , index) in tempOptions "
-                                class="readonly"
-                                @change="getSelectedOptions"
-                                v-model="option.checked"
-                                :key="option.id">{{ option.title }}</md-checkbox>
+                            <template v-if="tempOptions && tempOptions.length">
+                                <md-checkbox
+                                    v-for="(option , index) in tempOptions "
+                                    class="readonly"
+                                    @change="getSelectedOptions"
+                                    v-model="option.checked"
+                                    :key="option.id">{{ option.title }}</md-checkbox>
 
 
-                            <md-checkbox
-                                class="readonly"
-                                v-model="otherOption.checked"
-                                key="other">
-                                <input v-model="otherOption.label" placeholder="Other" class="other-input"></input>
-                            </md-checkbox>
+                                <md-checkbox
+                                    class="readonly"
+                                    v-model="otherOption.checked"
+                                    key="other">
+                                    <input v-model="otherOption.label" placeholder="Other" class="other-input"></input>
+                                </md-checkbox>
 
-                            <br>
+                                <br>
+                            </template>
 
-                            <md-checkbox
-                                v-for="(option , index) in tempAdditionalOptions "
-                                class="readonly"
-                                v-model="option.checked"
-                                :key="option.id">{{ option.title }}</md-checkbox>
+                            <template v-if="tempAdditionalOptions && tempAdditionalOptions.length">
+                                <md-checkbox
+                                    v-for="(option , index) in tempAdditionalOptions "
+                                    class="readonly"
+                                    v-model="option.checked"
+                                    :key="option.id">{{ option.title }}</md-checkbox>
+                            </template>
+
+
+
                         </div>
 
                         <div class="md-layout-item md-size-15">

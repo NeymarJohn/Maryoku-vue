@@ -612,7 +612,7 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 
     .star-rating {
-       display: inline-block;
+        display: inline-block;
         margin-left : 1em;
 
         &__star {
@@ -653,17 +653,33 @@ $tooltip-border-color: $blue-grey-200 !default;
         justify-content: flex-start !important;
         margin : 1em 0 2em !important;
         padding : 0 !important;
-        width : 100% !important;
+        width : 75% !important;
         box-shadow: none;
-        font-size: 20px;
+        height: 45px !important;
+
         .md-list-item {
             margin-left : 0;
             margin-right : -1px;
             width: 25%;
             box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
             border : none;
-            text-align: left;
+            height: 45px !important;
 
+            &:first-child {
+                border-radius: 5px 0 0 5px;
+
+                .md-list-item-container {
+                    border-radius: 5px 0 0 5px;
+                }
+            }
+
+            &:last-child {
+                border-radius: 0 5px 5px 0;
+
+                .md-list-item-container {
+                    border-radius: 0 5px 5px 0;
+                }
+            }
 
             &-button {
                 line-height: 11px;
@@ -673,15 +689,13 @@ $tooltip-border-color: $blue-grey-200 !default;
                 padding : 0.4em 0;
                 background: #e1e1e1;
                 text-transform: capitalize;
-                font-size: 16px;
-                height: 65px !important;
+                font-size: 13px;
+                height: 45px !important;
 
                 .md-list-item-content {
-                    justify-content: flex-start;
-
                     >div {
                         display: flex;
-                        justify-content: flex-start;
+                        justify-content: center;
                         align-items: center;
                     }
                 }
@@ -695,6 +709,8 @@ $tooltip-border-color: $blue-grey-200 !default;
                     text-align: center;
                     padding-top : 5px;
                     margin-right : 0.7em;
+                    color: #8f8f8f;
+                    font-size: 14px;
 
                     i {
                         margin : 0;
@@ -708,11 +724,12 @@ $tooltip-border-color: $blue-grey-200 !default;
 
             &.active {
                 .md-list-item-button {
-                    background-color: $orange-500 !important;
+                    background-color: $purple-500 !important;
                     color : #fff !important;
                     box-shadow: none;
                     span {
                         border-color : #fff;
+                        color : #fff;
                     }
                 }
             }
@@ -2649,6 +2666,9 @@ iframe{
                 align-items: center;
                 .vlabeledit-label {
                     font-size: 14px;
+                    span {
+                        font-size: 14px;
+                    }
                 }
             }
 
@@ -4175,16 +4195,6 @@ iframe{
   }
 }
 
-.requirement-item {
-    &.edit-mode {
-        border : 1px solid $purple-500 !important;
-
-        .md-table-cell-container {
-            border : 1px solid $purple-500 !important;
-        }
-
-    }
-}
 .building-blocks-requirements {
     .md-table-content {
         thead {
@@ -4204,16 +4214,6 @@ iframe{
                     border: 1px solid #eeeeee;
                     margin-bottom: 0.5em;
                 }
-            }
-            &:hover {
-                td{
-
-                    .md-table-cell-container {
-                        border : 1px solid $purple-500 !important;
-                    }
-
-                }
-
             }
         }
     }

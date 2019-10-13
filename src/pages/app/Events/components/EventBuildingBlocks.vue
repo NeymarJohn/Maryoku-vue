@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout">
-    <div class="md-layout-item mx-auto event-building-blocks no-padding">
+    <div class="md-layout-item mx-auto event-building-blocks">
       <md-card>
         <md-card-header class="md-card-header-icon md-card-header-rose">
           <div class="md-layout-item show-cost-switch">
