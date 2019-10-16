@@ -5,7 +5,7 @@
             <md-card class="md-card-plain" style="margin: 8px;" v-if="!requirement.editMode">
                 <md-card-header>
                     <h5 class="title" style="font-weight: bold;">
-                        {{requirement.value || 1}}
+                        {{ getRequirementValue(requirement) || 1}}
                         <md-icon class="text-gray" style="font-size: 14px !important;">close</md-icon>
                         {{requirement.title}}
                         <badge v-if="requirement.mandatory" class="inline-badge" type="danger">Must Have</badge>
@@ -39,42 +39,67 @@
 
                         <div class="md-layout-item md-size-100" >
 
+                            <!-- Multi Select Options list -->
                             <template v-if="tempOptions && tempOptions.length">
-                                <md-checkbox
-                                    v-for="(option , index) in tempOptions "
-                                    class="readonly"
-                                    @change="getSelectedOptions"
-                                    v-model="option.checked"
-                                    :key="option.id">{{ option.title }}</md-checkbox>
 
+                                <div class="multi-select-options">
 
+                                    <div class="multi-select-options__item "
+                                         :class="{ 'with-amount' : requirementProperties.type === 'multi-selection-with-amount'}"
+                                        v-for="(option , index) in tempOptions "
+                                    >
+                                        <md-checkbox
+                                            class="readonly"
+                                            @change="getSelectedOptions"
+                                            v-model="option.checked"
+                                            :key="option.id">{{ option.title }}</md-checkbox>
+                                        <md-field>
+                                            <md-input v-model="option.value" @change="getSelectedOptions"></md-input>
+                                        </md-field>
+                                    </div>
+
+                                </div>
+                                <!-- ./Multi Select Options list -->
+
+                                <!-- Other field -->
                                 <md-checkbox
+                                    v-if="requirementProperties.type === 'multi-selection'"
                                     class="readonly"
+
                                     v-model="otherOption.checked"
                                     key="other">
                                     <input v-model="otherOption.label" placeholder="Other" class="other-input"></input>
                                 </md-checkbox>
+                                <!-- ./Other field -->
 
                                 <br>
                             </template>
 
+                            <!-- Additional Options list -->
                             <template v-if="tempAdditionalOptions && tempAdditionalOptions.length">
                                 <md-checkbox
+                                    @change="getAdditionalSelectedOptions"
                                     v-for="(option , index) in tempAdditionalOptions "
                                     class="readonly"
                                     v-model="option.checked"
                                     :key="option.id">{{ option.title }}</md-checkbox>
                             </template>
-
-
-
+                            <!-- ./Additional Options list -->
                         </div>
 
                         <div class="md-layout-item md-size-15">
-                            <md-field>
+                            <md-field
+                                v-if="requirementProperties.type !== 'boolean'"
+                            >
                                 <label>Quantity</label>
                                 <md-input v-focus type="text" v-model="tempValue"></md-input>
                             </md-field>
+                            <template v-else-if="requirementProperties.type === 'boolean'">
+                                <div class="boolean-options">
+                                    <md-radio v-model="tempValue" value="true">Yes</md-radio>
+                                    <md-radio v-model="tempValue" value="false">No</md-radio>
+                                </div>
+                            </template>
                         </div>
                     </div>
                 </md-card-header>
@@ -135,12 +160,13 @@
           tempOptions : null,
           tempAdditionalOptions : null,
           otherOption : {},
-          selectedOptions : []
+          selectedOptions : [],
+          additionalSelectedOptions : []
       }
     },
     mounted(){
          console.log('requirement ==> ', this.requirement);
-        // console.log('requirementProperties ==> ', this.requirementProperties);
+        console.log('requirementProperties ==> ', this.requirementProperties);
 
       if (this.requirement.editMode){
         this.startEdit(this.requirement);
@@ -178,6 +204,7 @@
         requirement.comment = this.tempComment;
         requirement.mandatory = this.tempMandatory;
         requirement.multipleSelectionValues = this.selectedOptions;
+        requirement.additionalOptionsValues = this.additionalSelectedOptions;
 
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: this.eventId});
@@ -193,26 +220,45 @@
         getSelectedOptions(){
           this.selectedOptions = [];
 
+          // mapping multi select options
           _.map(this.tempOptions,( option ) => {
               if ( option.checked === true ) {
-                  this.selectedOptions.push(option.id);
+                  let obj = {};
+                  let value = option.value ? parseInt(option.value) : 0;
+                  obj[option.id] = value;
+
+                  this.selectedOptions.push(obj);
               }
           });
+
+          console.log(this.selectedOptions);
+        },
+        getAdditionalSelectedOptions(){
+            this.additionalSelectedOptions = [];
+            // mapping additionl options
+            _.map(this.tempAdditionalOptions,( option ) => {
+                if ( option.checked === true ) {
+                    let obj = {};
+                    let value = option.value ? parseInt(option.value) : 0;
+                    obj[option.id] = value;
+
+                    this.additionalSelectedOptions.push(obj);
+                }
+            });
+
+            console.log(this.additionalSelectedOptions);
         },
         checkSelectedOptions() {
-
           if ( this.requirement.multipleSelectionValues ) {
-
               _.map(this.tempOptions,( option, key ) => {
-
                   if( _.contains(this.requirement.multipleSelectionValues,option.id)){
-
                       this.tempOptions[key].checked = true;
                   }
-
               });
-
           }
+        },
+        getRequirementValue(requirement){
+          return requirement.value !== '[]' ? requirement.value : 0
         }
     }
   }

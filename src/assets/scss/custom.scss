@@ -4566,3 +4566,34 @@ h4.title-summary {
         font-size: 18px;
     }
 }
+
+
+.multi-select-options {
+
+    &__item {
+
+        @include display-flex(row,space-between,flex-start);
+
+        width: auto;
+        float:left;
+
+        &.with-amount {
+            width: 33%;
+            float:left;
+        }
+
+        .md-field {
+            width : 40px;
+            margin-right : 2em;
+            margin-top: 0;
+
+            .md-input {
+                width : 100%;
+            }
+        }
+    }
+}
+
+.boolean-options {
+    @include display-flex(row,flex-start,flex-start);
+}
