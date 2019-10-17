@@ -84,14 +84,15 @@
     mounted() {
       this.working = true;
       this.$auth.currentUser(this, true, ()=>{
-        new EventComponent().get().then(res=>{
+        Vendors.find('categories').then(res=>{
           let list = [];
-          res.forEach((parentBuildingBlock)=>{
+          _.each(res, (parentBuildingBlock)=>{
             /*parentBuildingBlock.childComponents.forEach((bb)=>{
                 list.push({id: bb.id, value: bb.title});
             });*/
             list.push({id: parentBuildingBlock.id, value: parentBuildingBlock.value});
           });
+
           this.buildingBlocksList = list;
 
           new Vendors().limit(1000).get().then((vendors) => {
@@ -132,7 +133,7 @@
           }
         });
       },
-      
+
       editVendorDetails(vendor){
         window.currentPanel = this.$showPanel({
           component: companyForm,

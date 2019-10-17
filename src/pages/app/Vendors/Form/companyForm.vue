@@ -270,7 +270,7 @@ input[type=number]::-webkit-outer-spin-button {
            * Get categories for vendors
            */
           Vendors.find('categories').then(categories => {
-              this.vendorCategory = categories;
+              this.categories = categories;
 
           }, (error) => {
               console.log(error)
