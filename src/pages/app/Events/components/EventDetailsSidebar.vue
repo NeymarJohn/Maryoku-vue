@@ -111,7 +111,7 @@
         </div>
         <div class="md-layout md-gutter">
           <div class="md-layout-item">
-            <event-paid-total-amounts :paid="2100" :total="3000"></event-paid-total-amounts>
+            <event-paid-total-amounts :paid="event.totalBudget" :total="totalRemainingBudget"></event-paid-total-amounts>
           </div>
         </div>
       </div>

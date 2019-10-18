@@ -409,13 +409,7 @@ $tooltip-border-color: $blue-grey-200 !default;
         font-weight: bold;
     }
 }
-.add-new-block-btn {
-    .md-ripple {
-        padding: 10px 0 !important;
-        text-align: left;
-        color: $purple-500 !important;
-    }
-}
+
 /**
  * Event Blocks
  */
@@ -2644,6 +2638,10 @@ iframe{
                     padding : .5em;
                     font-size: 18px;
                     font-family: 'Roboto','arial',sans-serif;
+
+                    .requirements-cell-button {
+                        color: $purple-500!important;
+                    }
 
                     &:not(:last-child){
                         border-right : 1px solid #e2e2e2;

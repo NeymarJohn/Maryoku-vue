@@ -11,7 +11,7 @@
     <div class="percentage">
       <div class="inner" :style="percentageStyle"></div>
     </div>
-    <h3>${{total-paid}} to be paid</h3>
+    <h3>${{total-paid | numeral('0,0')}} to be paid</h3>
   </div>
 </template>
 <script>

@@ -466,4 +466,11 @@
       min-width: 48px;
     }
   }
+  .add-new-block-btn {
+    .md-ripple {
+      padding: 10px 0 !important;
+      text-align: left;
+      color: $purple-500 !important;
+    }
+  }
 </style>
