@@ -16,7 +16,7 @@
               </md-select>
             </md-field>
             <md-button class="md-default md-simple add-new-block-btn no-padding" style="color : #fff;"
-                        @click="showAddBuildingBlocksModal()">
+                        @click="showAddEventElementsModal()">
               <md-icon>add</md-icon> Add New
             </md-button>
           </div>
@@ -131,7 +131,6 @@
                   <td class="fit-content text-right">
                     <a href="#" 
                       class="no-padding pull-right" 
-                      v-if="(block.proposalsState == 'show-proposals' || block.proposalsState == 'waiting-for-proposals')"
                       @click="deleteBlock(block.id)">
                       <md-icon @click="deleteBlock(block.id)">close</md-icon>
                     </a>
@@ -156,6 +155,7 @@
   // import auth from '@/auth';
   import EventBlocks from '../components/NewEventBlocks'
   import AddBuildingBlockModal from '../components/EventBlocks/Modals/AddBuildingBlocks.vue'
+  import AddEventElementsModal from '../components/EventBlocks/Modals/AddEventElements.vue'
   import EventBlockRequirements from '../components/EventBlocks/Modals/EventBlockRequirements.vue'
   import EventActualCostIconTooltip from '../components/EventActualCostIconTooltip.vue'
   import EventBlockVendors from './EventBlocks/Modals/EventBlockVendors.vue'
@@ -292,6 +292,18 @@
       showAddBuildingBlocksModal() {
         window.currentPanel = this.$showPanel({
           component: AddBuildingBlockModal,
+          cssClass: 'md-layout-item md-size-35 transition36 bg-grey',
+          openOn: 'right',
+          props: {event: this.event}
+        });
+        window.currentPanel.promise.then(res=>{
+          this.event.components.push(JSON.parse(JSON.stringify(res)));
+          this.getEventBuildingBlocks();
+        });
+      },
+      showAddEventElementsModal() {
+        window.currentPanel = this.$showPanel({
+          component: AddEventElementsModal,
           cssClass: 'md-layout-item md-size-35 transition36 bg-grey',
           openOn: 'right',
           props: {event: this.event}
