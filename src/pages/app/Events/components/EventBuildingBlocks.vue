@@ -31,8 +31,8 @@
                 <th>Brief</th>
                 <th>Budget</th>
                 <th>Actual cost</th>
-                <th>
-                </th>
+                <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody v-if="eventBuildingBlocks.length">
@@ -57,7 +57,7 @@
                 </tr> -->
                 <tr class="text-left">
                   <td>{{block.title}}</td>
-                  <td>
+                  <td class="fit-content">
                     <template>
                       <div v-if="block.valuesCount"
                             style="cursor: pointer;">
@@ -106,30 +106,35 @@
                     >
                     </event-actual-cost-icon-tooltip>
                   </td>
-                  <td class="text-center">
+                  <td class="fit-content text-center">
                     <template>
                       <template
                         v-if="block.winningProposalId">
-                        <md-button class="md-warning actual-cost md-xs" @click="reviewProposals(block,block.winningProposalId)">
+                        <md-button class="md-success md-sm btn-proposal" @click="reviewProposals(block,block.winningProposalId)">
                           View Order
                         </md-button>
                       </template>
                       <template v-else-if="(block.proposalsState == 'show-proposals' || block.proposalsState == 'waiting-for-proposals')">
-                        <md-button class="md-xs md-info" @click="reviewProposals(block)">
+                        <md-button class="md-sm md-danger btn-proposal" @click="reviewProposals(block)">
                           Manage proposals
-                          ({{block.proposalsCount}})
+                          <!-- ({{block.proposalsCount}}) -->
                         </md-button>
                       </template>
-                      <template v-else-if="block.proposalsState == 'get-offers' ">
-                        <md-button class="md-xs md-primary" @click="reviewProposals(block)">
+                      <template v-else-if="block.proposalsState == 'get-offers'">
+                        <md-button class="md-sm md-primary btn-proposal" @click="reviewProposals(block)">
                           Get Proposals
-                          <md-icon>near_me</md-icon>
+                          <!-- <md-icon>near_me</md-icon> -->
                         </md-button>
                       </template>
                     </template>
-                    <md-button class="md-danger md-xs md-round md-just-icon pull-right" style="padding: 0;" @click="deleteBlock(block.id)">
-                      <md-icon>delete</md-icon>
-                    </md-button>
+                  </td>
+                  <td class="fit-content text-right">
+                    <a href="#" 
+                      class="no-padding pull-right" 
+                      v-if="(block.proposalsState == 'show-proposals' || block.proposalsState == 'waiting-for-proposals')"
+                      @click="deleteBlock(block.id)">
+                      <md-icon @click="deleteBlock(block.id)">close</md-icon>
+                    </a>
                   </td>
                 </tr>
               </template>

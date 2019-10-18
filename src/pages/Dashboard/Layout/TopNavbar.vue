@@ -150,7 +150,7 @@
 
             <li class="md-list-item import-vendor" v-if="topBarEventId">
               <a class="import" @click="gotoVendorsPool">import your vendors</a>
-              <md-button class="md-warning md-sm no-padding">
+              <md-button class="md-danger md-sm no-padding">
                 <md-icon>play_arrow</md-icon>
                 Learn more
               </md-button>

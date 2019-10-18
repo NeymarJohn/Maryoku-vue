@@ -29,7 +29,7 @@
               <i class="fa fa-map-marker-alt"></i> 
             </div>
             <div class="md-layout-item">
-              {{calendarEvent.numberOfParticipants}} {{inviteeType(calendarEvent)}}
+              {{calendarEvent.location}}
             </div>
           </div>
 
@@ -37,8 +37,8 @@
             <div class="md-layout-item  title-text">
               <i class="fa fa-user"></i> 
             </div>
-            <div class="md-layout-item md-size-100 md-caption ">
-              {{calendarEvent.location}}
+            <div class="md-layout-item">
+              {{calendarEvent.numberOfParticipants}} {{inviteeType(calendarEvent)}}
             </div>
           </div>
           <!-- NOTE: just hiding it -->
