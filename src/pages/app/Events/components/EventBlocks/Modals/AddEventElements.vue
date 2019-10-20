@@ -76,6 +76,7 @@ export default {
     isLoaded: false,
     filteredEventBlocks: [],
     selectedItems: [],
+    selectedItemsRequests: [],
   }),
 
   created() {
