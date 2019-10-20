@@ -19,7 +19,7 @@
             <drag :class="[
               `md-button block-item text-center`,
               {'active': isElementSelected(item)}]"
-              :transfer-data="{ item }"
+              :transfer-data="{ selectedItems }"
               v-if="!item.childComponents">
               {{item.title}}
             </drag>
@@ -84,9 +84,9 @@ export default {
     this.getCategoryBlocks();
   },
   methods: {
-    ...mapMutations('EventPlannerVuex', ['setBuildingBlockModal']),
+    ...mapMutations('EventPlannerVuex', ['addNewEventElementModal']),
     closeModal() {
-      this.setBuildingBlockModal({
+      this.addNewEventElementModal({
         showModal: false
       });
     },
@@ -101,7 +101,7 @@ export default {
         id: this.event.id
       });
 
-      let new_block = {
+      let new_item = {
         componentId: item.id,
         componentCategoryId: item.categoryId,
         todos: "",
@@ -112,10 +112,10 @@ export default {
         }
       }
 
-      new EventComponent(new_block).for(calendar, event).save().then(res => {
+      new EventComponent(new_item).for(calendar, event).save().then(res => {
         this.$parent.isLoading = false;
 
-        this.setBuildingBlockModal({
+        this.addNewEventElementModal({
           showModal: false
         });
 
@@ -123,7 +123,6 @@ export default {
           this.$emit("closePanel", item);
         });
         this.$root.$emit('refreshBuildingBlock');
-
       })
       .catch(error => {
         console.log('Error while saving ', error);
@@ -146,18 +145,48 @@ export default {
     },
     handleDrop(data, event) {
       this.$parent.isLoading = true;
-      let block = data.item ? data.item : data.item1;
-
-      if (block) {
-        this.addEventElement(block);
-      } else {
-        this.$parent.isLoading = false;
-      }
+      this.addSelectedElements();
     },
     addSelectedElements() {
-      this.selectedItems.forEach((item)=>{
-        this.addEventElement(item);
+      let calendar = new Calendar({
+        id: this.$auth.user.defaultCalendarId
       });
+      let event = new CalendarEvent({
+        id: this.event.id
+      });
+
+      this.selectedItems.forEach(item => {
+        let new_item = {
+          componentId: item.id,
+          componentCategoryId: item.categoryId,
+          todos: "",
+          values: "",
+          vendors: "",
+          calendarEvent: {
+            id: event.id
+          }
+        }
+        this.selectedItemsRequests.push(new EventComponent(new_item).for(calendar, event).save());
+      })
+
+      Promise.all(
+        this.selectedItemsRequests
+      )
+      .then((res) => {
+        this.selectedItemsRequests = [];
+        this.$parent.isLoading = false;
+
+        this.addNewEventElementModal({
+          showModal: false
+        });
+
+        new EventComponent().for(calendar, event).get().then(events => {
+          this.$emit("closePanel", events.filter(e => res.map(r => { return r.item.id }).includes(e.id)));
+        });
+      })
+      .catch(error => {
+        console.log('Error while saving ', error);
+      })
     },
     isElementSelected(item) {
       return this.selectedItems.includes(item);
@@ -230,57 +259,5 @@ export default {
       background-color: #9a9a9a!important;
       color: white!important;
     }
-  }
-
-  .modal-z-index {
-    z-index: 5;
-  }
-
-  .large-z-index {
-    z-index: 6;
-    position: relative;
-  }
-
-  .move-center {
-    margin: 0 auto !important;
-    ;
-  }
-
-  .move-left {
-    margin-left: 0 !important;
-    margin-right: auto !important;
-  }
-
-  .move-right {
-    margin-right: 0 !important;
-    margin-left: auto !important;
-  }
-
-  .text-center {
-    text-align: center;
-  }
-
-  .d-flex {
-    display: flex;
-  }
-
-  .items-center-v {
-    align-items: center;
-  }
-
-  .items-center-g {
-    justify-content: center;
-  }
-
-  .justify-beetwen {
-    justify-content: space-between
-  }
-
-  .md-field .md-error {
-    text-align: left;
-  }
-
-  .swal2-container {
-    z-index: 10000;
   }
 </style>

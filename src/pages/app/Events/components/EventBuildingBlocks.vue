@@ -248,7 +248,7 @@
 
         let res = this.event.components;
 
-          this.$set(this, 'eventBuildingBlocks', res);
+        this.$set(this, 'eventBuildingBlocks', res);
         // group event blocks by category name
         // this.eventBuildingBlocksList = _.chain(res).groupBy('category').map(function(value, key) {
         //
@@ -283,11 +283,11 @@
 
         //this.allocatedBudget = allocatedBudget;
         //this.isLoading = this.event.componentsCount !== this.event.components.length;
-          setTimeout(()=>{
-              this.isLoading = false;
-          },500)
+        setTimeout(()=>{
+            this.isLoading = false;
+        },500)
 
-          this.$forceUpdate();
+        this.$forceUpdate();
       },
       showAddBuildingBlocksModal() {
         window.currentPanel = this.$showPanel({
@@ -309,7 +309,9 @@
           props: {event: this.event}
         });
         window.currentPanel.promise.then(res=>{
-          this.event.components.push(JSON.parse(JSON.stringify(res)));
+          res.forEach(item => {
+            this.event.components.push(JSON.parse(JSON.stringify(item)));
+          })
           this.getEventBuildingBlocks();
         });
       },
