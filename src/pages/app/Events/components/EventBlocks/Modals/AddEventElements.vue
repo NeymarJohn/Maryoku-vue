@@ -93,41 +93,7 @@ export default {
     closePanel(payload) {
       this.$emit("closePanel", payload);
     },
-    addEventElement(item) {
-      let calendar = new Calendar({
-        id: this.$auth.user.defaultCalendarId
-      });
-      let event = new CalendarEvent({
-        id: this.event.id
-      });
-
-      let new_item = {
-        componentId: item.id,
-        componentCategoryId: item.categoryId,
-        todos: "",
-        values: "",
-        vendors: "",
-        calendarEvent: {
-          id: event.id
-        }
-      }
-
-      new EventComponent(new_item).for(calendar, event).save().then(res => {
-        this.$parent.isLoading = false;
-
-        this.addNewEventElementModal({
-          showModal: false
-        });
-
-        new EventComponent().for(calendar, event).find(res.item.id).then(item => {
-          this.$emit("closePanel", item);
-        });
-        this.$root.$emit('refreshBuildingBlock');
-      })
-      .catch(error => {
-        console.log('Error while saving ', error);
-      })
-    },
+    
     getCategoryBlocks() {
       EventComponent.get()
         .then(res => {
