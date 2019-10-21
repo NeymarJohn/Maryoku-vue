@@ -1,5 +1,5 @@
 <template>
-  <span class="text-color-purple">{{prefix}}{{animatedNumber | numeral('0,0') }}{{suffix}}</span>
+  <span>{{prefix}}{{animatedNumber | numeral('0,0') }}{{suffix}}</span>
 </template>
 <script>
 import TWEEN from "@tweenjs/tween.js";
@@ -63,8 +63,8 @@ export default {
   }
 };
 </script>
-<style>
-  .text-color-purple {
+<style scoped>
+  span {
     color: #9c27b0;
     font-size: 18px;
     font-weight: normal;

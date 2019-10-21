@@ -409,7 +409,13 @@ $tooltip-border-color: $blue-grey-200 !default;
         font-weight: bold;
     }
 }
-
+.add-new-block-btn {
+    .md-ripple {
+        padding: 10px 0 !important;
+        text-align: left;
+        color: $purple-500 !important;
+    }
+}
 /**
  * Event Blocks
  */
@@ -2639,33 +2645,8 @@ iframe{
                     font-size: 18px;
                     font-family: 'Roboto','arial',sans-serif;
 
-                    .requirements-cell-button {
-                        color: $purple-500!important;
-                    }
-
-                    .btn-proposal {
-                        font-size: 14px;
-                        font-weight: normal!important;
-                    }
-
-                    &.fit-content {
-                        width: 1%;
-                        white-space: nowrap;
-                    }
-
                     &:not(:last-child){
                         border-right : 1px solid #e2e2e2;
-                    }
-
-                    &:nth-last-child(2) {
-                        border-right: none!important;
-                    }
-
-                    &:last-child {
-                        border: 1px solid white!important;
-                        i {
-                            font-size: .8em!important;
-                        }
                     }
                 }
                 &:not(.parent){
