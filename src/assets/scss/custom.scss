@@ -613,11 +613,15 @@ $tooltip-border-color: $blue-grey-200 !default;
 
     .star-rating {
         display: inline-block;
-        margin-left : 1em;
+        margin-left : 0.2em;
 
         &__star {
-            font-size : 1em;
+            font-size : 0.8em;
             padding : 0;
+
+            &.is-selected {
+                color : $yellow-500
+            }
         }
     }
 
@@ -739,7 +743,15 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 
     .manage-proposals {
+
         &_proposals-list {
+
+            .md-toolbar-section-start {
+                @include display-flex(row,space-between,center);
+                padding : 1em;
+                border-bottom : 1px solid #d2d2d2;
+            }
+
             h4 {
                 text-align: left;
                 margin : 0 0 1em;
@@ -748,7 +760,7 @@ $tooltip-border-color: $blue-grey-200 !default;
             .proposals-list_item {
                 display: flex;
                 flex : 1;
-                justify-content: space-between;
+                justify-content: flex-start;
                 padding : 2em 1em;
                 font-weight: 500;
                 &:not(:last-child) {
@@ -758,6 +770,22 @@ $tooltip-border-color: $blue-grey-200 !default;
                     font-size: 17px;
                     cursor: pointer;
                 }
+                .vendor-avatar {
+                    width : 10%;
+                }
+                .proposal-info {
+                    width : 40%;
+
+                }
+                .more-details {
+                    width : 20%;
+
+                }
+                .proposal-actions {
+                    width : 30%;
+
+                }
+
             }
 
             .list-items {

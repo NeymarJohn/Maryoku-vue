@@ -1,21 +1,39 @@
 <template>
     <div class="adding-building-blocks-panel" style="min-height: 240px;">
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee"/>
-        <div class="manage-proposals_proposals-list" style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);" v-if="filteredBlockVendors.length && !isLoading">
-            <div class="md-toolbar-section-start" style="padding : 0 1em;">
-                <md-field>
-                    <md-input
-                        type="search"
-                        class="mb-3"
-                        clearable
-                        placeholder="Search proposals and vendors"
-                        v-model="searchQuery">
-                    </md-input>
-                </md-field>
+        <div class="manage-proposals_proposals-list" style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);" v-if="!isLoading">
+            <div class="md-toolbar-section-start">
+<!--                <md-field>-->
+<!--                    <md-input-->
+<!--                        type="search"-->
+<!--                        class="mb-3"-->
+<!--                        clearable-->
+<!--                        placeholder="Search proposals and vendors"-->
+<!--                        v-model="searchQuery">-->
+<!--                    </md-input>-->
+<!--                </md-field>-->
+
+                <div class="proposals-name">
+                    <template v-if="activeList === 'vendors'">
+                        {{vendors.length}} Vendors
+                    </template>
+                    <template v-else>
+                        {{proposals.length}} Received Proposals
+                    </template>
+                </div>
+                <div class="sub-tabs">
+                    <md-button :class="{'md-info' : activeList === 'vendors'}" @click="switchList('vendors')">Vendors</md-button>
+                    <md-button :class="{'md-info' : activeList === 'proposals'}" @click="switchList('proposals')">Proposals</md-button>
+                </div>
             </div>
 
-            <div class="proposals-list_items" v-if="filteredBlockVendors.length && !isLoading">
+            <div class="proposals-list_items" v-if="!isLoading">
                 <div class="proposals-list_item" v-for="(item,index) in filteredBlockVendors" :key="index">
+                    <div class="vendor-avatar">
+                        <md-avatar class="md-avatar-icon">
+                            <md-icon>people</md-icon>
+                        </md-avatar>
+                    </div>
                     <div class="proposal-info text-left">
                         <div class="proposal-title-reviews" @click="showVendorDetail(item.vendor)">{{ item.vendor ? item.vendor.vendorDisplayName : 'No Vendor Title' }}
                             <div class="star-rating">
@@ -25,10 +43,9 @@
                                     <input class="star-rating star-rating__checkbox" type="radio">★</label>
                             </div>
                         </div>
-                        <div class="proposal-property-list" style="display: none;">
+                        <div class="proposal-property-list">
                             <ul class="list-items">
                                 <li> <md-icon>check</md-icon> Insurance</li>
-                                <li> <md-icon>attach_money</md-icon> Net +30</li>
                             </ul>
                         </div>
                         <div class="proposal-benefits-list" v-if="item.proposals && item.proposals[0]">
@@ -36,6 +53,9 @@
                                 <li v-for="pro in item.proposals[0].pros"> {{pro}}</li>
                             </ul>
                         </div>
+                    </div>
+                    <div class="more-details">
+                        <md-button class="md-danger md-simple md-sm">see more details</md-button>
                     </div>
                     <div class="proposal-actions text-right">
                         <template v-if="item.proposals && item.proposals[0]">
@@ -48,7 +68,7 @@
 
                         <md-button v-if="!sendingRfp && (item.rfpStatus === 'Ready to send' || item.rfpStatus == null)" class="md-primary md-sm hover" @click="sendVendor(item)">
                             <md-icon>near_me</md-icon>
-                            Request Proposal
+                            Send
                         </md-button>
                         <template v-else-if="item.rfpStatus === 'Sent' && !item.proposals.length">
                             <span style="font-weight: 300;">Request sent</span> {{getProposalDate(item.rfpSentMillis)}}
@@ -60,7 +80,7 @@
 
         </div>
 
-        <md-card class="md-card-plain" v-if="!filteredBlockVendors.length && !isLoading">
+        <md-card class="md-card-plain" v-if="!vendors.length && !proposals.length && !isLoading">
             <md-card-content>
                 <div class="text-center">
                     <img src="/static/img/paperandpen.png" style="width: 120px;">
@@ -90,6 +110,7 @@
   import _ from 'underscore';
   import moment from 'moment';
   import numeral from 'numeral';
+  import {Tabs} from '@/components'
 
   // import auth from '@/auth';
 
@@ -118,7 +139,8 @@
       Pagination,
       ManageProposalsAccept,
       ManageProposalsVendors,
-      companyForm
+      companyForm,
+        Tabs
     },
     props: {
       selectedBlock : Object,
@@ -133,12 +155,15 @@
       searchQuery: "",
       ratings: [1, 2, 3, 4, 5],
       filteredBlockVendors : [],
-      blockVendors : null
+      blockVendors : null,
+        vendors : [],
+        proposals : [],
+        activeList : 'vendors'
     }),
     methods: {
       getBlockVendors() {
 
-        if ((this.selectedBlock.vendors === null || this.selectedBlock.vendors === undefined) || this.selectedBlock.vendorsCount !== this.selectedBlock.vendors.length){
+        if (true){
 
           let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
           let event = new CalendarEvent({id: this.event.id});
@@ -146,17 +171,21 @@
 
           new EventComponentVendor().for(calendar, event, selected_block).get()
             .then(resp => {
+
+                console.log('resp => ',resp);
+
               this.isLoading = false;
               this.selectedBlock.vendors = resp;
               this.selectedBlock.vendorsCount = resp.length;
               this.blockVendors = resp;
 
               console.log('blockVendors => ',this.blockVendors);
-              let vendorsWithProposals = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
-              let vendorsWithSentStatus =  _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
-              let vendorsWithNoStatus =  _.filter(this.blockVendors, function(item){ return !item.proposals });
 
-              this.filteredBlockVendors = _.union( vendorsWithProposals,vendorsWithSentStatus,vendorsWithNoStatus);
+              let vendorsWithProposals  = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
+              let vendorsWithSentStatus = _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
+              let vendorsWithNoStatus   = _.filter(this.blockVendors, function(item){ return !item.proposals });
+
+              this.filteredBlockVendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
 
               let proposals = [];
               _.each(vendorsWithProposals, (v)=>{
@@ -164,6 +193,9 @@
               });
               this.selectedBlock.proposals = proposals;
               this.selectedBlock.proposalsCount = proposals.length;
+
+              this.vendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
+              this.proposals = vendorsWithProposals;
             })
             .catch(error => {
               this.isLoading = false;
@@ -172,7 +204,7 @@
         } else {
           this.blockVendors = this.selectedBlock.vendors;
 
-          console.log('blockVendors => ',this.blockVendors);
+          // console.log('blockVendors => ',this.blockVendors);
           let vendorsWithProposals = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
           let vendorsWithSentStatus =  _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
           let vendorsWithNoStatus =  _.filter(this.blockVendors, function(item){ return !item.proposals });
@@ -180,10 +212,6 @@
           this.filteredBlockVendors = _.union( vendorsWithProposals,vendorsWithSentStatus,vendorsWithNoStatus);
           this.isLoading = false;
         }
-
-
-
-
 
         //this.isLoading = this.filteredBlockVendors.length <= 0;
       },
@@ -385,7 +413,16 @@
           .catch(error => {
             console.log('EventComponentVendor error =>',error)
           })
-      }
+      },
+        switchList(listType){
+          this.activeList = listType;
+            if( listType === 'vendors' ) {
+                this.filteredBlockVendors = this.vendors;
+            } else {
+                this.filteredBlockVendors = this.proposals;
+            }
+
+        }
 
     },
     created() {
