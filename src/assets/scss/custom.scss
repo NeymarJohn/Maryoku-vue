@@ -657,7 +657,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
         .md-list-item {
             margin-left : 0;
-            margin-right: 5px;
+            margin-right: 12px;
             flex: 1;
             box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
             border : none;
@@ -4362,6 +4362,7 @@ iframe{
 
 
 .selected-proposals-list {
+    height: 100%;
 
     &.md-table-row td {
         border-top : none !important;
@@ -4398,6 +4399,8 @@ iframe{
 }
 
 .event-blocks-comparison-panel {
+    height: 100%;
+
     .services-section {
         color : #000;
         font-weight: 400;

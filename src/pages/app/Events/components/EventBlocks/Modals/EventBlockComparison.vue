@@ -1,15 +1,25 @@
 <template>
-  <div  class="event-blocks-comparison-panel" style="height: 100%;">
+  <div class="event-blocks-comparison-panel">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee"/>
     <!-- Selected Proposals list -->
-    <!-- <div  class="selected-proposals-list" style="height: 100%;" v-if="selectedBlock.proposals && selectedBlock.proposals.length > 0"> -->
-    <div  class="selected-proposals-list" style="height: 100%;">
+    <div class="selected-proposals-list" v-if="selectedBlock.proposals && selectedBlock.proposals.length > 0">
       <table ref="content" style="width: 100%; height: 100%;" cellspacing="0" colpadding="0">
         <tr>
           <td class="comparison-cell category-outer-cell" style="vertical-align: top; padding : 0;">
           </td>
-          <td class="comparison-cell outer-cell" style="padding: 4px 24px;">
-            <multiselect id="0" 
+          <td class="comparison-cell outer-cell">
+            <md-field>
+              <label></label>
+              <md-select id="0" v-model="selectedBlock.proposalComparison1" placeholder="Select Proposal">
+                <md-option
+                  v-for="item in selectableProposals"
+                  :key="item"
+                  :value="item">
+                  {{ getProposalName(item) }}
+                </md-option>
+              </md-select>
+            </md-field>
+            <!-- <multiselect id="0" 
               v-model="selectedBlock.proposalComparison1" 
               @select="addToCompare" 
               @remove="removeFromCompare" 
@@ -26,56 +36,102 @@
               <template slot="option" slot-scope="props">
                 <div class="option__desc"><i class="fa fa-check" v-if="props.option === selectedBlock.proposalComparison1"></i> <span class="option__title">{{ getProposalName(props.option) }}</span></div>
               </template>
-            </multiselect>
-            <div class="spacer"></div>
-            <md-button class="md-danger md-sm" @click="viewProposal(selectedBlock.proposalComparison1)">View Proposal</md-button>
-            <h4 style="font-weight: 500; min-height: 24px;">{{getProposalPrice(selectedBlock.proposalComparison1)}}</h4>
+            </multiselect> -->
+            <md-button 
+              class="md-danger w-100" 
+              v-if="selectedBlock.proposalComparison1"
+              @click="viewProposal(selectedBlock.proposalComparison1)">
+              View - {{getProposalPrice(selectedBlock.proposalComparison1)}}</span>
+            </md-button>
           </td>
-          <td class="comparison-cell outer-cell" style="padding: 4px 24px;">
-            <multiselect id="1" 
-              v-model="selectedBlock.proposalComparison2" 
-              @select="addToCompare" 
-              @remove="removeFromCompare" 
-              style="height: 0;" 
-              placeholder="Select proposal" 
-              :searchable="false" 
-              :allow-empty="true" 
-              :options="selectableProposals" 
-              selectLabel="" 
-              deselectLabel="">
-              <template slot="singleLabel" slot-scope="props">
-                <span class="option__title">{{ getProposalName(props.option) }}</span>
-              </template>
-              <template slot="option" slot-scope="props">
-                <div class="option__desc"><i class="fa fa-check" v-if="props.option === selectedBlock.proposalComparison1"></i> <span class="option__title">{{ getProposalName(props.option) }}</span></div>
-              </template>
-            </multiselect>
-            <div class="spacer"></div>
-            <md-button class="md-danger md-sm" @click="viewProposal(selectedBlock.proposalComparison2)">View Proposal</md-button>
-            <h4 style="font-weight: 500; min-height: 24px;">{{getProposalPrice(selectedBlock.proposalComparison2)}}</h4>
+          <td class="comparison-cell outer-cell">
+            <md-field>
+              <label></label>
+              <md-select id="1" v-model="selectedBlock.proposalComparison2" placeholder="Select Proposal">
+                <md-option
+                  v-for="item in selectableProposals"
+                  :key="item"
+                  :value="item">
+                  {{ getProposalName(item) }}
+                </md-option>
+              </md-select>
+            </md-field>
+            <md-button 
+              class="md-danger w-100" 
+              v-if="selectedBlock.proposalComparison2"
+              @click="viewProposal(selectedBlock.proposalComparison2)">
+              View - {{getProposalPrice(selectedBlock.proposalComparison2)}}</span>
+            </md-button>
           </td>
-          <td class="comparison-cell outer-cell" style="padding: 4px 24px;">
-            <multiselect id="2" v-model="selectedBlock.proposalComparison3" @select="addToCompare" @remove="removeFromCompare" style="height: 0;" placeholder="Select proposal" :searchable="false" :allow-empty="true" :options="selectableProposals" selectLabel="" deselectLabel="" selectedLabel="" >
-              <template slot="singleLabel" slot-scope="props">
-                <span class="option__title">{{ getProposalName(props.option) }}</span>
-              </template>
-              <template slot="option" slot-scope="props">
-                <div class="option__desc"><i class="fa fa-check" v-if="props.option === selectedBlock.proposalComparison1"></i> <span class="option__title">{{ getProposalName(props.option) }}</span></div>
-              </template>
-            </multiselect>
-            <div class="spacer"></div>
-            <md-button class="md-danger md-sm" @click="viewProposal(selectedBlock.proposalComparison3)">View Proposal</md-button>
-            <h4 style="font-weight: 500; min-height: 24px;">{{getProposalPrice(selectedBlock.proposalComparison3)}}</h4>
+          <td class="comparison-cell outer-cell">
+            <md-field>
+              <label></label>
+              <md-select id="2" v-model="selectedBlock.proposalComparison3" placeholder="Select Proposal">
+                <md-option
+                  v-for="item in selectableProposals"
+                  :key="item"
+                  :value="item">
+                  {{ getProposalName(item) }}
+                </md-option>
+              </md-select>
+            </md-field>
+            <md-button 
+              class="md-danger w-100" 
+              v-if="selectedBlock.proposalComparison3"
+              @click="viewProposal(selectedBlock.proposalComparison3)">
+              View - {{getProposalPrice(selectedBlock.proposalComparison3)}}</span>
+            </md-button>
           </td>
         </tr>
         <tr>
           <td colspan="4">
-            <md-card class="clear-margins" style="padding: 18px !important;">
+            <md-card class="clear-margins">
               <md-card-header class="md-card-header-text text-left">
                 <h5 class="title">{{this.selectedBlock.category}}</h5>
               </md-card-header>
-              <md-card-content style="margin-top: 8px;">
+              <md-card-content class="table-padding">
                 <table style="width: 100%; height: 100%;">
+                  <tr>
+                    <td class="text-left" colspan="4">
+                      <h5 class="title">Catering</h5>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-left border-bottom">
+                      <span class="subtitle">ITEMS</span>
+                    </td>
+                    <td class="comparison-cell proposal border-bottom">
+                      <!-- {{getProposalRequirementsFulfilled(selectedBlock.proposalComparison1)}} -->
+                    </td>
+                    <td class="comparison-cell proposal border-bottom">
+                      <!-- {{getProposalRequirementsFulfilled(selectedBlock.proposalComparison2)}} -->
+                    </td>
+                    <td class="comparison-cell proposal border-bottom">
+                      <!-- {{getProposalRequirementsFulfilled(selectedBlock.proposalComparison3)}} -->
+                    </td>
+                  </tr>
+                  <tr v-for="(requirement, index) in selectedBlock.values">
+                    <td class="comparison-cell category border-bottom">
+                      <h6 class="title small" v-tooltip="requirement.comment">
+                        {{requirement.title}}
+                      </h6>
+                    </td>
+                    <td class="comparison-cell proposal border-bottom">
+                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).included">check</md-icon>
+                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).missing">close</md-icon>
+                      <span v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).price}}</span>
+                    </td>
+                    <td class="comparison-cell proposal border-bottom">
+                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).included">check</md-icon>
+                      <md-icon v-else-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).missing">close</md-icon>
+                      <span v-else-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).price}}</span>
+                    </td>
+                    <td class="comparison-cell proposal border-bottom">
+                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).included">check</md-icon>
+                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).missing">close</md-icon>
+                      <span v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).price}}</span>
+                    </td>
+                  </tr>
                   <tr>
                     <td class="comparison-cell category">
                       <h6 class="title">Subtotal</h6>
@@ -116,45 +172,6 @@
                       </h5>
                     </td>
                   </tr>
-                  <tr>
-                    <td colspan="4" class="spacer"></td>
-                  </tr>
-                  <tr>
-                    <td class="comparison-cell category border-bottom">
-                      <h6 class="title">Requirements</h6>
-                    </td>
-                    <td class="comparison-cell proposal border-bottom">
-                      {{getProposalRequirementsFulfilled(selectedBlock.proposalComparison1)}}
-                    </td>
-                    <td class="comparison-cell proposal border-bottom">
-                      {{getProposalRequirementsFulfilled(selectedBlock.proposalComparison2)}}
-                    </td>
-                    <td class="comparison-cell proposal border-bottom">
-                      {{getProposalRequirementsFulfilled(selectedBlock.proposalComparison3)}}
-                    </td>
-                  </tr>
-                  <tr v-for="(requirement, index) in selectedBlock.values">
-                    <td class="comparison-cell category">
-                      <h6 class="title small" v-tooltip="requirement.comment">
-                        {{requirement.title}}
-                      </h6>
-                    </td>
-                    <td class="comparison-cell proposal">
-                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).included">check</md-icon>
-                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).missing">close</md-icon>
-                      <span v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).price}}</span>
-                    </td>
-                    <td class="comparison-cell proposal">
-                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).included">check</md-icon>
-                      <md-icon v-else-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).missing">close</md-icon>
-                      <span v-else-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).price}}</span>
-                    </td>
-                    <td class="comparison-cell proposal">
-                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).included">check</md-icon>
-                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).missing">close</md-icon>
-                      <span v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).price}}</span>
-                    </td>
-                  </tr>
                 </table>
               </md-card-content>
             </md-card>
@@ -165,15 +182,12 @@
         </tr>
         <tr>
           <td colspan="4">
-            <md-card class="clear-margins" style="padding: 18px !important;">
-              <md-card-header class="md-card-header-text text-left">
-                <h5 class="title">Rating</h5>
-              </md-card-header>
+            <md-card class="clear-margins no-shadow">
               <md-card-content>
                 <table style="width: 100%; height: 100%;">
-                  <tr >
+                  <tr>
                     <td class="comparison-cell category">
-                      <h6 class="title small">Score</h6>
+                      <h5 class="title">Rating</h5>
                     </td>
                     <td class="comparison-cell proposal">
                       <div class="star-rating" v-if="selectedBlock.proposalComparison1">
@@ -181,7 +195,7 @@
                           v-for="rating in ratings"
                           :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison1) >= rating) && getProposalRating(selectedBlock.proposalComparison1) != null)}">
                         <input class="star-rating star-rating__checkbox" type="radio">★</label>
-                        <span class="small">(0)</span>
+                        <span class="small"> 0 </span>
                       </div>
                     </td>
                     <td class="comparison-cell proposal">
@@ -190,7 +204,7 @@
                           v-for="rating in ratings"
                           :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison2) >= rating) && getProposalRating(selectedBlock.proposalComparison2) != null)}">
                         <input class="star-rating star-rating__checkbox" type="radio">★</label>
-                        <span class="small">(0)</span>
+                        <span class="small"> 0 </span>
                       </div>
                     </td>
                     <td class="comparison-cell proposal">
@@ -199,7 +213,7 @@
                           v-for="rating in ratings"
                           :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison3) >= rating) && getProposalRating(selectedBlock.proposalComparison3) != null)}">
                         <input class="star-rating star-rating__checkbox" type="radio">★</label>
-                        <span class="small">(0)</span>
+                        <span class="small"> 0 </span>
                       </div>
                     </td>
                   </tr>
@@ -213,15 +227,12 @@
         </tr>
         <tr>
           <td colspan="4">
-            <md-card class="clear-margins" style="padding: 18px !important;">
-              <md-card-header class="md-card-header-text text-left">
-                <h5 class="title">Cancellation</h5>
-              </md-card-header>
+            <md-card class="clear-margins no-shadow">
               <md-card-content>
                 <table style="width: 100%; height: 100%;">
-                  <tr >
+                  <tr>
                     <td class="comparison-cell category">
-                      <h6 class="title small">Policy</h6>
+                      <h5 class="title">Cancellation</h5>
                     </td>
                     <td class="comparison-cell proposal">
                       <p>
@@ -248,18 +259,33 @@
           <td colspan="4" class="spacer"></td>
         </tr>
         <tr>
-          <td class="comparison-cell category-outer-cell"></td>
-          <td class="comparison-cell outer-cell">
-            <md-button class="md-danger md-sm">View Proposal</md-button>
-            <h4 style="font-weight: 500;">$1,000</h4>
-          </td>
-          <td class="comparison-cell outer-cell">
-            <md-button class="md-danger md-sm">View Proposal</md-button>
-            <h4 style="font-weight: 500;">$1,000</h4>
-          </td>
-          <td class="comparison-cell outer-cell">
-            <md-button class="md-danger md-sm">View Proposal</md-button>
-            <h4 style="font-weight: 500;">$1,000</h4>
+          <td colspan="4">
+            <md-card class="clear-margins no-shadow">
+              <md-card-content>
+                <table style="width: 100%; height: 100%;">
+                  <tr>
+                    <td class="comparison-cell category">
+                      <h5 class="title">Legal Docs</h5>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <p>
+                        {{getLegalDocs(selectedBlock.proposalComparison1)}}
+                      </p>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <p>
+                        {{getLegalDocs(selectedBlock.proposalComparison2)}}
+                      </p>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <p>
+                        {{getLegalDocs(selectedBlock.proposalComparison3)}}
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </md-card-content>
+            </md-card>
           </td>
         </tr>
       </table>
@@ -349,6 +375,15 @@
           let proposalById = this.proposalsById[proposalId]
           if (proposalById) {
             return `${JSON.stringify(proposalById.vendor.rank)}`;
+          }
+        }
+        return "";
+      },
+      getLegalDocs(proposalId) {
+        if (proposalId) {
+          let proposalById = this.proposalsById[proposalId]
+          if (proposalById) {
+            return proposalById.legal;
           }
         }
         return "";
@@ -562,49 +597,59 @@
 <style lang="scss" scoped>
   .comparison-cell {
     border: 1px solid transparent;
-    padding: 0;
     margin: 0;
     vertical-align: middle;
+    text-align: left;
     &.category {
       width: 25%;
       max-width: 25%;
       min-width: 25%;
       text-align: left;
-      padding: 8px 16px;
       .title {
         text-transform: none !important;
         font-size: 14px;
       }
-      background-color: #fafafa;
     }
     &.category-outer-cell {
       width: 25%;
       max-width: 25%;
       min-width: 25%;
       text-align: left;
-      padding: 8px 16px;
+      vertical-align: top;
+      padding: 1em 2em;
       .title {
         text-transform: none !important;
         font-size: 14px;
       }
     }
-    &.border-bottom {
-      border-bottom: 1px solid #ddd;
-    }
-    &.proposal {
-      width: 25%;
-      max-width: 25%;
-      min-width: 25%;
-      background-color: #fafafa;
-    }
-    &.outer-cell {
+    &.proposal, &.outer-cell {
+      vertical-align: top;
+      padding: 1em 2em;
       width: 25%;
       max-width: 25%;
       min-width: 25%;
     }
   }
-
-  .spacer {
-    height: 24px;
+  .w-100 {
+    width: 100%;
+  }
+  .no-shadow {
+    box-shadow: none;
+  }
+  h5 {
+    &.title {
+      font-size: 16px!important;
+      font-weight: 500;
+    }
+  }
+  span.subtitle {
+    font-size: 10px;
+    font-weight: 400;
+  }
+  .table-padding {
+    padding: 1em 2em!important;
+  }
+  .border-bottom {
+    border-bottom: 1px solid #eeeeee;
   }
 </style>
