@@ -16,7 +16,7 @@
               </md-select>
             </md-field>
             <md-button class="md-default md-simple add-new-block-btn no-padding" style="color : #fff;"
-                        @click="showAddBuildingBlocksModal()">
+                        @click="showAddEventElementsModal()">
               <md-icon>add</md-icon> Add New
             </md-button>
           </div>
@@ -31,8 +31,8 @@
                 <th>Brief</th>
                 <th>Budget</th>
                 <th>Actual cost</th>
-                <th>
-                </th>
+                <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody v-if="eventBuildingBlocks.length">
@@ -57,7 +57,7 @@
                 </tr> -->
                 <tr class="text-left">
                   <td>{{block.title}}</td>
-                  <td>
+                  <td class="fit-content">
                     <template>
                       <div v-if="block.valuesCount"
                             style="cursor: pointer;">
@@ -106,30 +106,34 @@
                     >
                     </event-actual-cost-icon-tooltip>
                   </td>
-                  <td class="text-center">
+                  <td class="fit-content text-center">
                     <template>
                       <template
                         v-if="block.winningProposalId">
-                        <md-button class="md-warning actual-cost md-xs" @click="reviewProposals(block,block.winningProposalId)">
+                        <md-button class="md-success md-sm btn-proposal" @click="reviewProposals(block,block.winningProposalId)">
                           View Order
                         </md-button>
                       </template>
                       <template v-else-if="(block.proposalsState == 'show-proposals' || block.proposalsState == 'waiting-for-proposals')">
-                        <md-button class="md-xs md-info" @click="reviewProposals(block)">
+                        <md-button class="md-sm md-danger btn-proposal" @click="reviewProposals(block)">
                           Manage proposals
-                          ({{block.proposalsCount}})
+                          <!-- ({{block.proposalsCount}}) -->
                         </md-button>
                       </template>
-                      <template v-else-if="block.proposalsState == 'get-offers' ">
-                        <md-button class="md-xs md-primary" @click="reviewProposals(block)">
+                      <template v-else-if="block.proposalsState == 'get-offers'">
+                        <md-button class="md-sm md-primary btn-proposal" @click="reviewProposals(block)">
                           Get Proposals
-                          <md-icon>near_me</md-icon>
+                          <!-- <md-icon>near_me</md-icon> -->
                         </md-button>
                       </template>
                     </template>
-                    <md-button class="md-danger md-xs md-round md-just-icon pull-right" style="padding: 0;" @click="deleteBlock(block.id)">
-                      <md-icon>delete</md-icon>
-                    </md-button>
+                  </td>
+                  <td class="fit-content text-right">
+                    <a href="#" 
+                      class="no-padding pull-right" 
+                      @click="deleteBlock(block.id)">
+                      <md-icon @click="deleteBlock(block.id)">close</md-icon>
+                    </a>
                   </td>
                 </tr>
               </template>
@@ -151,6 +155,7 @@
   // import auth from '@/auth';
   import EventBlocks from '../components/NewEventBlocks'
   import AddBuildingBlockModal from '../components/EventBlocks/Modals/AddBuildingBlocks.vue'
+  import AddEventElementsModal from '../components/EventBlocks/Modals/AddEventElements.vue'
   import EventBlockRequirements from '../components/EventBlocks/Modals/EventBlockRequirements.vue'
   import EventActualCostIconTooltip from '../components/EventActualCostIconTooltip.vue'
   import EventBlockVendors from './EventBlocks/Modals/EventBlockVendors.vue'
@@ -243,7 +248,7 @@
 
         let res = this.event.components;
 
-          this.$set(this, 'eventBuildingBlocks', res);
+        this.$set(this, 'eventBuildingBlocks', res);
         // group event blocks by category name
         // this.eventBuildingBlocksList = _.chain(res).groupBy('category').map(function(value, key) {
         //
@@ -278,11 +283,11 @@
 
         //this.allocatedBudget = allocatedBudget;
         //this.isLoading = this.event.componentsCount !== this.event.components.length;
-          setTimeout(()=>{
-              this.isLoading = false;
-          },500)
+        setTimeout(()=>{
+            this.isLoading = false;
+        },500)
 
-          this.$forceUpdate();
+        this.$forceUpdate();
       },
       showAddBuildingBlocksModal() {
         window.currentPanel = this.$showPanel({
@@ -293,6 +298,20 @@
         });
         window.currentPanel.promise.then(res=>{
           this.event.components.push(JSON.parse(JSON.stringify(res)));
+          this.getEventBuildingBlocks();
+        });
+      },
+      showAddEventElementsModal() {
+        window.currentPanel = this.$showPanel({
+          component: AddEventElementsModal,
+          cssClass: 'md-layout-item md-size-35 transition36 bg-grey',
+          openOn: 'right',
+          props: {event: this.event}
+        });
+        window.currentPanel.promise.then(res=>{
+          res.forEach(item => {
+            this.event.components.push(JSON.parse(JSON.stringify(item)));
+          })
           this.getEventBuildingBlocks();
         });
       },
@@ -464,6 +483,13 @@
     .md-ripple {
       width: 48px;
       min-width: 48px;
+    }
+  }
+  .add-new-block-btn {
+    .md-ripple {
+      padding: 10px 0 !important;
+      text-align: left;
+      color: $purple-500 !important;
     }
   }
 </style>

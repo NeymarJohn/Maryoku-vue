@@ -409,13 +409,7 @@ $tooltip-border-color: $blue-grey-200 !default;
         font-weight: bold;
     }
 }
-.add-new-block-btn {
-    .md-ripple {
-        padding: 10px 0 !important;
-        text-align: left;
-        color: $purple-500 !important;
-    }
-}
+
 /**
  * Event Blocks
  */
@@ -654,20 +648,20 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 
     .md-card-tabs.md-card-plain .md-list {
+        display: flex;
         justify-content: flex-start !important;
         margin : 1em 0 2em !important;
         padding : 0 !important;
-        width : 75% !important;
+        width : 100% !important;
         box-shadow: none;
-        height: 45px !important;
 
         .md-list-item {
             margin-left : 0;
-            margin-right : -1px;
-            width: 25%;
+            margin-right: 5px;
+            flex: 1;
             box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
             border : none;
-            height: 45px !important;
+            height: 56px;
 
             &:first-child {
                 border-radius: 5px 0 0 5px;
@@ -679,6 +673,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
             &:last-child {
                 border-radius: 0 5px 5px 0;
+                margin-right: 0;
 
                 .md-list-item-container {
                     border-radius: 0 5px 5px 0;
@@ -694,7 +689,7 @@ $tooltip-border-color: $blue-grey-200 !default;
                 background: #e1e1e1;
                 text-transform: capitalize;
                 font-size: 13px;
-                height: 45px !important;
+                height: 56px;
 
                 .md-list-item-content {
                     >div {
@@ -728,7 +723,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
             &.active {
                 .md-list-item-button {
-                    background-color: $purple-500 !important;
+                    background-color: #fb9704 !important;
                     color : #fff !important;
                     box-shadow: none;
                     span {
@@ -754,7 +749,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
             h4 {
                 text-align: left;
-                margin : 0 0 1em;
+                margin : 0 0 .5em;
                 font-weight: 500;
             }
             .proposals-list_item {
@@ -843,7 +838,11 @@ $tooltip-border-color: $blue-grey-200 !default;
         background-color : #a0a2a3 !important;
     }
 
-
+    .tab-content {
+        background: white;
+        margin: 0 -2em;
+        padding: 1em;
+    }
 
     .attachments-list {
         &_items {
@@ -2673,8 +2672,33 @@ iframe{
                     font-size: 18px;
                     font-family: 'Roboto','arial',sans-serif;
 
+                    .requirements-cell-button {
+                        color: $purple-500!important;
+                    }
+
+                    .btn-proposal {
+                        font-size: 14px;
+                        font-weight: normal!important;
+                    }
+
+                    &.fit-content {
+                        width: 1%;
+                        white-space: nowrap;
+                    }
+
                     &:not(:last-child){
                         border-right : 1px solid #e2e2e2;
+                    }
+
+                    &:nth-last-child(2) {
+                        border-right: none!important;
+                    }
+
+                    &:last-child {
+                        border: 1px solid white!important;
+                        i {
+                            font-size: .8em!important;
+                        }
                     }
                 }
                 &:not(.parent){
