@@ -38,10 +38,16 @@
               </template>
             </multiselect> -->
             <md-button 
-              class="md-danger w-100" 
-              v-if="selectedBlock.proposalComparison1"
+              class="md-success w-100 text-capitalize" 
+              v-if="selectedBlock.proposalComparison1 && isAccepted(selectedBlock.proposalComparison1)"
               @click="viewProposal(selectedBlock.proposalComparison1)">
               View - {{getProposalPrice(selectedBlock.proposalComparison1)}}</span>
+            </md-button>
+            <md-button 
+              class="md-danger w-100 text-capitalize" 
+              v-if="selectedBlock.proposalComparison1 && !isAccepted(selectedBlock.proposalComparison1)"
+              @click="manageProposalsAccept(selectedBlock.proposalComparison1)">
+              Accept - {{getProposalPrice(selectedBlock.proposalComparison1)}}</span>
             </md-button>
           </td>
           <td class="comparison-cell outer-cell">
@@ -57,10 +63,16 @@
               </md-select>
             </md-field>
             <md-button 
-              class="md-danger w-100" 
-              v-if="selectedBlock.proposalComparison2"
+              class="md-success w-100 text-capitalize" 
+              v-if="selectedBlock.proposalComparison2 && isAccepted(selectedBlock.proposalComparison2)"
               @click="viewProposal(selectedBlock.proposalComparison2)">
               View - {{getProposalPrice(selectedBlock.proposalComparison2)}}</span>
+            </md-button>
+            <md-button 
+              class="md-danger w-100 text-capitalize" 
+              v-if="selectedBlock.proposalComparison2 && !isAccepted(selectedBlock.proposalComparison2)"
+              @click="manageProposalsAccept(selectedBlock.proposalComparison2)">
+              Accept - {{getProposalPrice(selectedBlock.proposalComparison2)}}</span>
             </md-button>
           </td>
           <td class="comparison-cell outer-cell">
@@ -76,10 +88,16 @@
               </md-select>
             </md-field>
             <md-button 
-              class="md-danger w-100" 
-              v-if="selectedBlock.proposalComparison3"
+              class="md-success w-100 text-capitalize" 
+              v-if="selectedBlock.proposalComparison3 && isAccepted(selectedBlock.proposalComparison3)"
               @click="viewProposal(selectedBlock.proposalComparison3)">
               View - {{getProposalPrice(selectedBlock.proposalComparison3)}}</span>
+            </md-button>
+            <md-button 
+              class="md-danger w-100 text-capitalize" 
+              v-if="selectedBlock.proposalComparison3 && !isAccepted(selectedBlock.proposalComparison3)"
+              @click="manageProposalsAccept(selectedBlock.proposalComparison3)">
+              Accept - {{getProposalPrice(selectedBlock.proposalComparison3)}}</span>
             </md-button>
           </td>
         </tr>
@@ -298,6 +316,7 @@
   import EventComponent from '@/models/EventComponent';
 
   import ViewProposal from './ViewProposal.vue';
+  import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue';
   import VueElementLoading from 'vue-element-loading';
   import _ from 'underscore';
   import numeral from 'numeral';
@@ -309,13 +328,13 @@
     name: 'event-block-proposal-vendors',
     components: {
       VueElementLoading,
+      ManageProposalsAccept,
       ViewProposal
     },
     props: {
       selectedBlock: Object,
       event: Object,
       blockVendors: Array,
-
     },
     data: () => ({
       isLoading: false,
@@ -323,9 +342,20 @@
       selectableProposals: [],
       proposalsById: {},
       requirementsById: {},
-
     }),
     methods: {
+      manageProposalsAccept(proposal) {
+        window.currentPanel = this.$showPanel({
+          component: ManageProposalsAccept,
+          cssClass: 'md-layout-item md-size-65 transition36 bg-grey',
+          openOn: 'right',
+          props: {event: this.event, proposal: this.proposalsById[proposal], selectedBlock: this.selectedBlock}
+        })
+      },
+      isAccepted (proposal) {
+        console.log('test', this.proposalsById[proposal].accepted);
+        return this.proposalsById[proposal].accepted;
+      },
       getProposalPrice(proposalId) {
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
@@ -632,6 +662,9 @@
   }
   .w-100 {
     width: 100%;
+  }
+  .text-capitalize {
+    text-transform: capitalize;
   }
   .no-shadow {
     box-shadow: none;
