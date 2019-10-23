@@ -648,20 +648,20 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 
     .md-card-tabs.md-card-plain .md-list {
-        display: flex;
         justify-content: flex-start !important;
         margin : 1em 0 2em !important;
         padding : 0 !important;
-        width : 100% !important;
+        width : 75% !important;
         box-shadow: none;
+        height: 45px !important;
 
         .md-list-item {
             margin-left : 0;
-            margin-right: 12px;
-            flex: 1;
+            margin-right : -1px;
+            width: 25%;
             box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
             border : none;
-            height: 56px;
+            height: 45px !important;
 
             &:first-child {
                 border-radius: 5px 0 0 5px;
@@ -673,7 +673,6 @@ $tooltip-border-color: $blue-grey-200 !default;
 
             &:last-child {
                 border-radius: 0 5px 5px 0;
-                margin-right: 0;
 
                 .md-list-item-container {
                     border-radius: 0 5px 5px 0;
@@ -689,7 +688,7 @@ $tooltip-border-color: $blue-grey-200 !default;
                 background: #e1e1e1;
                 text-transform: capitalize;
                 font-size: 13px;
-                height: 56px;
+                height: 45px !important;
 
                 .md-list-item-content {
                     >div {
@@ -723,7 +722,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
             &.active {
                 .md-list-item-button {
-                    background-color: #fb9704 !important;
+                    background-color: $purple-500 !important;
                     color : #fff !important;
                     box-shadow: none;
                     span {
@@ -749,7 +748,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
             h4 {
                 text-align: left;
-                margin : 0 0 .5em;
+                margin : 0 0 1em;
                 font-weight: 500;
             }
             .proposals-list_item {
@@ -838,11 +837,7 @@ $tooltip-border-color: $blue-grey-200 !default;
         background-color : #a0a2a3 !important;
     }
 
-    .tab-content {
-        background: white;
-        margin: 0 -2em;
-        padding: 1em;
-    }
+
 
     .attachments-list {
         &_items {
@@ -900,6 +895,55 @@ $tooltip-border-color: $blue-grey-200 !default;
         }
     }
 
+    .vendor-info {
+        padding-left : 4em;
+        position : relative;
+
+        .vendor-image {
+            position: absolute;
+            left : 0;
+            right : 0;
+        }
+        .vendor-name {
+            @include display-flex(row,flex-start,center);
+
+            .md-title {
+                margin: 0 0.6em 0 0;
+                font-size: 17px;
+            }
+        }
+
+        .vendor-location {
+            @include display-flex(row,flex-start,flex-start);
+            margin : 0.4em 0;
+
+            .md-icon {
+                margin:0 0.5em 0 -6px;
+                color : $purple-500;
+            }
+        }
+        .vendor-tags {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 0 1em;
+            li {
+                display: inline-block;
+                border: 1px solid #585858;
+                color: #585858;
+                font-weight: 400;
+                padding: 0 4px;
+                border-radius: 3px;
+                text-transform: capitalize;
+                line-height: 20px;
+                margin-right : 0.3em;
+            }
+        }
+
+        .last-update {
+            color : #a9a9a9;
+        }
+    }
+
 
     .cost-pros-cons-section {
         background-color :  #f3f3f3 !important;
@@ -910,25 +954,25 @@ $tooltip-border-color: $blue-grey-200 !default;
             padding : 0;
         }
 
+        .cost {
+            &-label {
+                font-size: 13px;
+                color : #000;
+                font-weight: 500;
+            }
+            &-value {
+                font-weight: bold;
+                color : $brand-success;
+            }
+        }
+
         .cost-info {
             @include display-flex(row,space-between,center);
-            border-bottom : 1px solid #e4e4e4;
-            padding : 1em 0;
 
+            padding : 1em;
             &_desc {
-                text-align: center;
+                text-align: left;
                 width : 50%;
-                .cost {
-                    &-label {
-                        font-size: 13px;
-                        color : #000;
-                        font-weight: 500;
-                    }
-                    &-value {
-                        font-weight: bold;
-                        color : $brand-success;
-                    }
-                }
 
                 &.full-width {
                     padding : 0 1em;
@@ -937,6 +981,24 @@ $tooltip-border-color: $blue-grey-200 !default;
 
                 }
             }
+
+            &_breakdown {
+                width : 100%;
+                border-bottom : 1px solid #e4e4e4;
+                padding : 0 1em;
+                .cost-breakdown__items {
+                    padding : 0;
+                    margin : 0;
+                    list-style: none;
+
+                    li {
+                        display: inline-block;
+                        margin-right : 1em;
+                        color : #6a6a6a;
+                    }
+                }
+            }
+
         }
 
         .proposal-pros-cons {
@@ -4255,24 +4317,13 @@ iframe{
 
         .md-table-row {
             background: none;
-
-            td {
-
-                border : none !important;
-                padding : 0;
-
-                .md-table-cell-container {
-                    background: #fff !important;
-                    border: 1px solid #eeeeee;
-                    margin-bottom: 0.5em;
-                }
-            }
         }
     }
 
     .event-details {
         background: white;
         padding : 1em 0;
+        margin : 0;
 
         .md-icon {
             color : $purple-500 !important;
@@ -4362,7 +4413,6 @@ iframe{
 
 
 .selected-proposals-list {
-    height: 100%;
 
     &.md-table-row td {
         border-top : none !important;
@@ -4399,8 +4449,6 @@ iframe{
 }
 
 .event-blocks-comparison-panel {
-    height: 100%;
-
     .services-section {
         color : #000;
         font-weight: 400;

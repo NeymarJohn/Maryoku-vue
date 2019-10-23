@@ -12,16 +12,8 @@
 
                 <div class="title-section">
                     <h4 class="md-title" style="margin-bottom: 0; line-height: 51px; text-transform: capitalize;">
-                        {{vendorInfo.vendorDisplayName}}
+                        Food/Relish Caterers and Venues
                     </h4>
-                    <div class="star-rating">
-                        <label class="star-rating__star"
-                               v-for="rating in ratings"
-                               :class="{'is-selected' : ((vendorInfo.rank >= rating) && vendorInfo.rank != null)}"
-                        >
-                            <input class="star-rating star-rating__checkbox" type="radio"
-                                    >★</label>
-                    </div>
 
                     <div class="actions-list">
                         <md-button class="md-rose md-sm md-simple no-uppercase">
@@ -41,6 +33,37 @@
                 <div class="md-layout-item md-size-50">
                     <md-card class="proposal-message">
                         <md-card-content>
+                            <div class="vendor-info">
+                                <div class="vendor-image">
+                                    <md-avatar class="md-avatar-icon">
+                                        <md-icon>people</md-icon>
+                                    </md-avatar>
+                                </div>
+                                <div class="vendor-name">
+                                    <h4 class="md-title">
+                                        {{vendorInfo.vendorDisplayName}}
+                                    </h4>
+                                    <div class="star-rating">
+                                        <label class="star-rating__star"
+                                               v-for="rating in ratings"
+                                               :class="{'is-selected' : ((vendorInfo.rank >= rating) && vendorInfo.rank != null)}"
+                                        >
+                                            <input class="star-rating star-rating__checkbox" type="radio"
+                                            >★</label>
+                                    </div>
+                                </div>
+                                <div class="vendor-location">
+                                    <md-icon>room</md-icon>
+                                    <span>{{vendorInfo.vendorAddressLine1}} {{vendorInfo.vendorAddressLine2 ? ' - ' + vendorInfo.vendorAddressLine2 : ''}}</span>
+                                    <ul class="vendor-tags">
+                                        <li v-for="(tag,index) in vendorInfo.vendorTagging" :key="index">{{tag}}</li>
+                                    </ul>
+                                </div>
+                                <div class="last-update">
+                                    Last Update on {{getProposalDate(vendorInfo.lastUpdated)}} (3 updates)
+                                </div>
+
+                            </div>
                             <p v-html="vendorProposal.personalMessage">
                                 <!-- Personal Message -->
                             </p>
@@ -68,13 +91,22 @@
                         <md-card-content>
                             <div class="cost-info">
                                 <div class="cost-info_desc">
-                                    <div class="cost-label">Cost per guest</div>
-                                    <div class="cost-value">${{vendorProposal.costPerGuest}}</div>
-                                </div>
-                                <div class="cost-info_desc">
                                     <div class="cost-label">Subtotal</div>
                                     <div class="cost-value">${{vendorProposal.cost}}</div>
                                 </div>
+                                <div class="cost-info_desc">
+                                    <div class="cost-label">Cost per guest</div>
+                                    <div class="cost-value">${{vendorProposal.costPerGuest}}</div>
+                                </div>
+                            </div>
+
+                            <div class="cost-info_breakdown">
+                                <div class="cost-label">Cost Breakdown</div>
+                                <ul class="cost-breakdown__items">
+                                    <li v-for="(item,index) in proposal.costBreakdown" :key="index">
+                                        {{item.service}}: ${{item.cost}}
+                                    </li>
+                                </ul>
                             </div>
 
                             <div class="proposal-pros-cons">
@@ -140,8 +172,8 @@
                     </div>
                 </template>
 
-                <div class="md-layout-item md-size-5"></div>
-                <div class="md-layout-item md-size-95 cost-breakdown-notes">
+                <div class="md-layout-item md-size-5" style="display: none;"></div>
+                <div class="md-layout-item md-size-95 cost-breakdown-notes" style="display: none">
                     <div class="section-title">
                         <h3>Cost Breakdown</h3>
                     </div>
