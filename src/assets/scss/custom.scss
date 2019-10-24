@@ -967,7 +967,7 @@ $tooltip-border-color: $blue-grey-200 !default;
         }
 
         .cost-info {
-            @include display-flex(row,space-between,center);
+            @include display-flex(row,space-between,flex-start);
 
             padding : 1em;
             &_desc {
@@ -995,8 +995,17 @@ $tooltip-border-color: $blue-grey-200 !default;
                         display: inline-block;
                         margin-right : 1em;
                         color : #6a6a6a;
+                        text-transform: capitalize;
+                        font-size: 13px;
+                        font-weight: 400;
                     }
                 }
+            }
+
+            .down-payment {
+                font-weight: 400;
+                font-size: 13px;
+                text-transform: capitalize;
             }
 
         }
@@ -1008,9 +1017,10 @@ $tooltip-border-color: $blue-grey-200 !default;
             margin-bottom : 1em;
 
             .section-content {
-                text-align: center;
+                text-align: left;
                 width : 50%;
                 color : #707070;
+                padding : 0 1em;
 
                 .md-icon {
                     &.thumb-up {
@@ -1052,9 +1062,20 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 
     .section-title {
+
+        &.with-border {
+            border : 1px solid #d8d8d8;
+
+            h3 {
+                margin: 0;
+                padding: 1em;
+            }
+
+        }
         h3 {
             font-weight: 500;
             font-size: 20px;
+
         }
     }
 
@@ -1063,38 +1084,39 @@ $tooltip-border-color: $blue-grey-200 !default;
         padding : 0;
         margin : 0;
         li {
-            display: inline-block;
-            width : 22%;
-            margin-bottom : 1em;
+            border : 1px solid #d8d8d8;
+            border-top : none;
             font-weight: 500;
             font-size: 13px;
+            padding: 2em 1em 2em 4em;
+            position: relative;
             .md-icon {
                 font-size: 15px !important;
                 color : $brand-warning;
+                position: absolute;
+                left: 14px;
+                top: 24px;
             }
-        }
-    }
 
-    .read-more {
-        min-width: inherit;
-        text-decoration: underline;
-        margin : 2px 0 0;
-        .md-ripple {
-            padding : 0 !important;
-            font-size : 14px;
-        }
-    }
+            .included-item {
+                h5 {
+                    margin : 0;
+                    font-weight: 500;
+                    color : #3F3F3F;
+                    font-size: 14px;
+                }
+                p {
+                    color : #999999;
+                    font-weight: 400;
+                    margin : 0 auto 0;
+                }
+            }
 
-    .proposals-waiting-approval {
-        padding : 0;
-        margin : 0 0 2em;
-        list-style : none;
-        border : 1px solid #ccc;
-        border-radius: 8px;
+            &.proposals-waiting-approval {
+                @include display-flex(row,space-between,center);
+                padding : 1em 2em;
+            }
 
-        li {
-            @include display-flex(row,space-between,center);
-            padding : 1em 2em;
 
             .not-available-alert {
                 color : $brand-danger;
@@ -1120,8 +1142,21 @@ $tooltip-border-color: $blue-grey-200 !default;
                     font-weight: 500;
                 }
             }
+
         }
     }
+
+    .read-more {
+        min-width: inherit;
+        text-decoration: underline;
+        margin : 2px 0 0;
+        .md-ripple {
+            padding : 0 !important;
+            font-size : 14px;
+        }
+    }
+
+
 
 
     .proposal-summary {
