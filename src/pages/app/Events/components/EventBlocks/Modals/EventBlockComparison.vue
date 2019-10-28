@@ -1,258 +1,322 @@
 <template>
-    <div  class="event-blocks-comparison-panel" style="height: 100%;">
-        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee"/>
-        <!-- Selected Proposals list -->
-
-        <div  class="selected-proposals-list" style="height: 100%;" v-if="selectedBlock.proposals && selectedBlock.proposals.length > 0">
-
-            <table ref="content" style="width: 100%; height: 100%;" cellspacing="0" colpadding="0">
-                <tr>
-                    <td class="comparison-cell category-outer-cell" style="vertical-align: top; padding : 0;">
-                        <md-button class="md-warning md-sm" @click="exportToPDF">Export to PDF</md-button>
+  <div class="event-blocks-comparison-panel">
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee"/>
+    <!-- Selected Proposals list -->
+    <div class="selected-proposals-list" v-if="selectedBlock.proposals && selectedBlock.proposals.length > 0">
+      <table ref="content" style="width: 100%; height: 100%;" cellspacing="0" colpadding="0">
+        <tr>
+          <td class="comparison-cell category-outer-cell" style="vertical-align: top; padding : 0;">
+          </td>
+          <td class="comparison-cell outer-cell">
+            <md-field>
+              <label></label>
+              <md-select id="0" v-model="selectedBlock.proposalComparison1" placeholder="Select Proposal">
+                <md-option
+                  v-for="item in selectableProposals"
+                  :key="item"
+                  :value="item">
+                  {{ getProposalName(item) }}
+                </md-option>
+              </md-select>
+            </md-field>
+            <!-- <multiselect id="0"
+              v-model="selectedBlock.proposalComparison1"
+              @select="addToCompare"
+              @remove="removeFromCompare"
+              style="height: 0;"
+              placeholder="Select proposal"
+              :searchable="false"
+              :allow-empty="true"
+              :options="selectableProposals"
+              selectLabel=""
+              deselectLabel="">
+              <template slot="singleLabel" slot-scope="props">
+                <span class="option__title">{{ getProposalName(props.option) }}</span>
+              </template>
+              <template slot="option" slot-scope="props">
+                <div class="option__desc"><i class="fa fa-check" v-if="props.option === selectedBlock.proposalComparison1"></i> <span class="option__title">{{ getProposalName(props.option) }}</span></div>
+              </template>
+            </multiselect> -->
+            <md-button
+              class="md-success w-100 text-capitalize"
+              v-if="selectedBlock.proposalComparison1 && isAccepted(selectedBlock.proposalComparison1)"
+              @click="viewProposal(selectedBlock.proposalComparison1)">
+              View - {{getProposalPrice(selectedBlock.proposalComparison1)}}</span>
+            </md-button>
+            <md-button
+              class="md-danger w-100 text-capitalize"
+              v-if="selectedBlock.proposalComparison1 && !isAccepted(selectedBlock.proposalComparison1)"
+              @click="manageProposalsAccept(selectedBlock.proposalComparison1)">
+              Accept - {{getProposalPrice(selectedBlock.proposalComparison1)}}</span>
+            </md-button>
+          </td>
+          <td class="comparison-cell outer-cell">
+            <md-field>
+              <label></label>
+              <md-select id="1" v-model="selectedBlock.proposalComparison2" placeholder="Select Proposal">
+                <md-option
+                  v-for="item in selectableProposals"
+                  :key="item"
+                  :value="item">
+                  {{ getProposalName(item) }}
+                </md-option>
+              </md-select>
+            </md-field>
+            <md-button
+              class="md-success w-100 text-capitalize"
+              v-if="selectedBlock.proposalComparison2 && isAccepted(selectedBlock.proposalComparison2)"
+              @click="viewProposal(selectedBlock.proposalComparison2)">
+              View - {{getProposalPrice(selectedBlock.proposalComparison2)}}</span>
+            </md-button>
+            <md-button
+              class="md-danger w-100 text-capitalize"
+              v-if="selectedBlock.proposalComparison2 && !isAccepted(selectedBlock.proposalComparison2)"
+              @click="manageProposalsAccept(selectedBlock.proposalComparison2)">
+              Accept - {{getProposalPrice(selectedBlock.proposalComparison2)}}</span>
+            </md-button>
+          </td>
+          <td class="comparison-cell outer-cell">
+            <md-field>
+              <label></label>
+              <md-select id="2" v-model="selectedBlock.proposalComparison3" placeholder="Select Proposal">
+                <md-option
+                  v-for="item in selectableProposals"
+                  :key="item"
+                  :value="item">
+                  {{ getProposalName(item) }}
+                </md-option>
+              </md-select>
+            </md-field>
+            <md-button
+              class="md-success w-100 text-capitalize"
+              v-if="selectedBlock.proposalComparison3 && isAccepted(selectedBlock.proposalComparison3)"
+              @click="viewProposal(selectedBlock.proposalComparison3)">
+              View - {{getProposalPrice(selectedBlock.proposalComparison3)}}</span>
+            </md-button>
+            <md-button
+              class="md-danger w-100 text-capitalize"
+              v-if="selectedBlock.proposalComparison3 && !isAccepted(selectedBlock.proposalComparison3)"
+              @click="manageProposalsAccept(selectedBlock.proposalComparison3)">
+              Accept - {{getProposalPrice(selectedBlock.proposalComparison3)}}</span>
+            </md-button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <md-card class="clear-margins">
+              <md-card-header class="md-card-header-text text-left">
+                <h5 class="title">{{this.selectedBlock.category}}</h5>
+              </md-card-header>
+              <md-card-content class="table-padding">
+                <table style="width: 100%; height: 100%;">
+                  <tr>
+                    <td class="text-left" colspan="4">
+                      <h5 class="title">Catering</h5>
                     </td>
-                    <td class="comparison-cell outer-cell" style="padding: 4px 24px;">
-                        <multiselect id="0" v-model="selectedBlock.proposalComparison1" @select="addToCompare" @remove="removeFromCompare" style="height: 0;" placeholder="Select proposal" :searchable="false" :allow-empty="true" :options="selectableProposals" selectLabel="" deselectLabel="" selectedLabel="" >
-                            <template slot="singleLabel" slot-scope="props">
-                                <span class="option__title">{{ getProposalName(props.option) }}</span>
-                            </template>
-                            <template slot="option" slot-scope="props">
-                                <div class="option__desc"><i class="fa fa-check" v-if="props.option === selectedBlock.proposalComparison1"></i> <span class="option__title">{{ getProposalName(props.option) }}</span></div>
-                            </template>
-                        </multiselect>
-                        <div class="spacer"></div>
-                        <md-button class="md-danger md-sm" @click="viewProposal(selectedBlock.proposalComparison1)">View Proposal</md-button>
-                        <h4 style="font-weight: 500; min-height: 24px;">{{getProposalPrice(selectedBlock.proposalComparison1)}}</h4>
+                  </tr>
+                  <tr>
+                    <td class="text-left border-bottom">
+                      <span class="subtitle">ITEMS</span>
                     </td>
-                    <td class="comparison-cell outer-cell" style="padding: 4px 24px;">
-                        <multiselect id="1" v-model="selectedBlock.proposalComparison2" @select="addToCompare" @remove="removeFromCompare" style="height: 0;" placeholder="Select proposal" :searchable="false" :allow-empty="true" :options="selectableProposals" selectLabel="" deselectLabel="" selectedLabel="" >
-                            <template slot="singleLabel" slot-scope="props">
-                                <span class="option__title">{{ getProposalName(props.option) }}</span>
-                            </template>
-                            <template slot="option" slot-scope="props">
-                                <div class="option__desc"><i class="fa fa-check" v-if="props.option === selectedBlock.proposalComparison1"></i> <span class="option__title">{{ getProposalName(props.option) }}</span></div>
-                            </template>
-                        </multiselect>
-                        <div class="spacer"></div>
-                        <md-button class="md-danger md-sm" @click="viewProposal(selectedBlock.proposalComparison2)">View Proposal</md-button>
-                        <h4 style="font-weight: 500; min-height: 24px;">{{getProposalPrice(selectedBlock.proposalComparison2)}}</h4>
+                    <td class="comparison-cell proposal border-bottom">
+                      <!-- {{getProposalRequirementsFulfilled(selectedBlock.proposalComparison1)}} -->
                     </td>
-                    <td class="comparison-cell outer-cell" style="padding: 4px 24px;">
-                        <multiselect id="2" v-model="selectedBlock.proposalComparison3" @select="addToCompare" @remove="removeFromCompare" style="height: 0;" placeholder="Select proposal" :searchable="false" :allow-empty="true" :options="selectableProposals" selectLabel="" deselectLabel="" selectedLabel="" >
-                            <template slot="singleLabel" slot-scope="props">
-                                <span class="option__title">{{ getProposalName(props.option) }}</span>
-                            </template>
-                            <template slot="option" slot-scope="props">
-                                <div class="option__desc"><i class="fa fa-check" v-if="props.option === selectedBlock.proposalComparison1"></i> <span class="option__title">{{ getProposalName(props.option) }}</span></div>
-                            </template>
-                        </multiselect>
-                        <div class="spacer"></div>
-                        <md-button class="md-danger md-sm" @click="viewProposal(selectedBlock.proposalComparison3)">View Proposal</md-button>
-                        <h4 style="font-weight: 500; min-height: 24px;">{{getProposalPrice(selectedBlock.proposalComparison3)}}</h4>
+                    <td class="comparison-cell proposal border-bottom">
+                      <!-- {{getProposalRequirementsFulfilled(selectedBlock.proposalComparison2)}} -->
                     </td>
-                </tr>
-                <tr>
-                    <td colspan="4">
-                        <md-card class="clear-margins" style="padding: 18px !important;">
-                            <md-card-header class="md-card-header-text text-left">
-                                <h5 class="title">{{this.selectedBlock.category}}</h5>
-                            </md-card-header>
-                            <md-card-content style="margin-top: 8px;">
-                                <table style="width: 100%; height: 100%;">
-                                    <tr>
-                                        <td class="comparison-cell category">
-                                            <h6 class="title">Subtotal</h6>
-                                        </td>
-                                        <td class="comparison-cell proposal">
-                                            <h5 class="title" style="font-weight: 400; font-size: 14px;">
-                                                {{getProposalPrice(selectedBlock.proposalComparison1)}}
-                                            </h5>
-                                        </td>
-                                        <td class="comparison-cell proposal">
-                                            <h5 class="title" style="font-weight: 400; font-size: 14px;">
-                                                {{getProposalPrice(selectedBlock.proposalComparison2)}}
-                                            </h5>
-                                        </td>
-                                        <td class="comparison-cell proposal">
-                                            <h5 class="title" style="font-weight: 400; font-size: 14px;">
-                                                {{getProposalPrice(selectedBlock.proposalComparison3)}}
-                                            </h5>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="comparison-cell category">
-                                            <h6 class="title">Per guest</h6>
-                                        </td>
-                                        <td class="comparison-cell proposal">
-                                            <h5 class="title" style="font-weight: 400; font-size: 14px;">
-                                                {{getProposalPricePerGuest(selectedBlock.proposalComparison1)}}
-                                            </h5>
-                                        </td>
-                                        <td class="comparison-cell proposal">
-                                            <h5 class="title" style="font-weight: 400; font-size: 14px;">
-                                                {{getProposalPricePerGuest(selectedBlock.proposalComparison2)}}
-                                            </h5>
-                                        </td>
-                                        <td class="comparison-cell proposal">
-                                            <h5 class="title" style="font-weight: 400; font-size: 14px;">
-                                                {{getProposalPricePerGuest(selectedBlock.proposalComparison3)}}
-                                            </h5>
-                                        </td>
-                                    </tr>
-                                    <tr><td colspan="4" class="spacer"></td></tr>
-                                    <tr>
-                                        <td class="comparison-cell category border-bottom">
-                                            <h6 class="title">Requirements</h6>
-                                        </td>
-                                        <td class="comparison-cell proposal border-bottom">
-                                            {{getProposalRequirementsFulfilled(selectedBlock.proposalComparison1)}}
-                                        </td>
-                                        <td class="comparison-cell proposal border-bottom">
-                                            {{getProposalRequirementsFulfilled(selectedBlock.proposalComparison2)}}
-                                        </td>
-                                        <td class="comparison-cell proposal border-bottom">
-                                            {{getProposalRequirementsFulfilled(selectedBlock.proposalComparison3)}}
-                                        </td>
-                                    </tr>
-                                    <tr v-for="(requirement, index) in selectedBlock.values">
-                                        <td class="comparison-cell category">
-                                            <h6 class="title small" v-tooltip="requirement.comment">
-                                                {{requirement.title}}
-                                            </h6>
-                                        </td>
-                                        <td class="comparison-cell proposal">
-                                            <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).included">check</md-icon>
-                                            <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).missing">close</md-icon>
-                                            <span v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).price}}</span>
-                                        </td>
-                                        <td class="comparison-cell proposal">
-                                            <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).included">check</md-icon>
-                                            <md-icon v-else-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).missing">close</md-icon>
-                                            <span v-else-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).price}}</span>
-                                        </td>
-                                        <td class="comparison-cell proposal">
-                                            <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).included">check</md-icon>
-                                            <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).missing">close</md-icon>
-                                            <span v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).price}}</span>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                            </md-card-content>
-                        </md-card>
+                    <td class="comparison-cell proposal border-bottom">
+                      <!-- {{getProposalRequirementsFulfilled(selectedBlock.proposalComparison3)}} -->
                     </td>
-                </tr>
-                <tr><td colspan="4" class="spacer"></td></tr>
-                <tr>
-                    <td colspan="4">
-                        <md-card class="clear-margins" style="padding: 18px !important;">
-                            <md-card-header class="md-card-header-text text-left">
-                                <h5 class="title">Rating</h5>
-                            </md-card-header>
-                            <md-card-content>
-                                <table style="width: 100%; height: 100%;">
-                                    <tr >
-                                        <td class="comparison-cell category">
-                                            <h6 class="title small">Score</h6>
-                                        </td>
-                                        <td class="comparison-cell proposal">
-                                            <div class="star-rating" v-if="selectedBlock.proposalComparison1">
-                                                <label class="star-rating__star"
-                                                       v-for="rating in ratings"
-                                                       :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison1) >= rating) && getProposalRating(selectedBlock.proposalComparison1) != null)}">
-                                                    <input class="star-rating star-rating__checkbox" type="radio">★</label>
-                                                <span class="small">(0)</span>
-                                            </div>
-                                        </td>
-                                        <td class="comparison-cell proposal">
-                                            <div class="star-rating" v-if="selectedBlock.proposalComparison2">
-                                                <label class="star-rating__star"
-                                                       v-for="rating in ratings"
-                                                       :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison2) >= rating) && getProposalRating(selectedBlock.proposalComparison2) != null)}">
-                                                    <input class="star-rating star-rating__checkbox" type="radio">★</label>
-                                                <span class="small">(0)</span>
-                                            </div>
-                                        </td>
-                                        <td class="comparison-cell proposal">
-                                            <div class="star-rating" v-if="selectedBlock.proposalComparison3">
-                                                <label class="star-rating__star"
-                                                       v-for="rating in ratings"
-                                                       :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison3) >= rating) && getProposalRating(selectedBlock.proposalComparison3) != null)}">
-                                                    <input class="star-rating star-rating__checkbox" type="radio">★</label>
-                                                <span class="small">(0)</span>
-                                            </div>
-
-                                        </td>
-                                    </tr>
-                                </table>
-
-                            </md-card-content>
-                        </md-card>
+                  </tr>
+                  <tr v-for="(requirement, index) in selectedBlock.values">
+                    <td class="comparison-cell category border-bottom">
+                      <h6 class="title small" v-tooltip="requirement.comment">
+                        {{requirement.title}}
+                      </h6>
                     </td>
-                </tr>
-                <tr><td colspan="4" class="spacer"></td></tr>
-                <tr>
-                    <td colspan="4">
-                        <md-card class="clear-margins" style="padding: 18px !important;">
-                            <md-card-header class="md-card-header-text text-left">
-                                <h5 class="title">Cancellation</h5>
-                            </md-card-header>
-                            <md-card-content>
-                                <table style="width: 100%; height: 100%;">
-                                    <tr >
-                                        <td class="comparison-cell category">
-                                            <h6 class="title small">Policy</h6>
-                                        </td>
-                                        <td class="comparison-cell proposal">
-                                            <p>
-                                                {{getProposalCancellationPolicy(selectedBlock.proposalComparison1)}}
-                                            </p>
-                                        </td>
-                                        <td class="comparison-cell proposal">
-                                            <p>
-                                                {{getProposalCancellationPolicy(selectedBlock.proposalComparison2)}}
-                                            </p>
-                                        </td>
-                                        <td class="comparison-cell proposal">
-                                            <p>
-                                                {{getProposalCancellationPolicy(selectedBlock.proposalComparison3)}}
-                                            </p>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                            </md-card-content>
-                        </md-card>
+                    <td class="comparison-cell proposal border-bottom">
+                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).included">check</md-icon>
+                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).missing">close</md-icon>
+                      <span v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).price}}</span>
                     </td>
-                </tr>
-                <tr><td colspan="4" class="spacer"></td> </tr>
-                <tr>
-                    <td class="comparison-cell category-outer-cell"></td>
-                    <td class="comparison-cell outer-cell">
-                        <md-button class="md-danger md-sm">View Proposal</md-button>
-                        <h4 style="font-weight: 500;">$1,000</h4>
+                    <td class="comparison-cell proposal border-bottom">
+                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).included">check</md-icon>
+                      <md-icon v-else-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).missing">close</md-icon>
+                      <span v-else-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).price}}</span>
                     </td>
-                    <td class="comparison-cell outer-cell">
-                        <md-button class="md-danger md-sm">View Proposal</md-button>
-                        <h4 style="font-weight: 500;">$1,000</h4>
+                    <td class="comparison-cell proposal border-bottom">
+                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).included">check</md-icon>
+                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).missing">close</md-icon>
+                      <span v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).price}}</span>
                     </td>
-                    <td class="comparison-cell outer-cell">
-                        <md-button class="md-danger md-sm">View Proposal</md-button>
-                        <h4 style="font-weight: 500;">$1,000</h4>
+                  </tr>
+                  <tr>
+                    <td class="comparison-cell category">
+                      <h6 class="title">Subtotal</h6>
                     </td>
-                </tr>
-            </table>
-        </div>
+                    <td class="comparison-cell proposal">
+                      <h5 class="title" style="font-weight: 400; font-size: 14px;">
+                        {{getProposalPrice(selectedBlock.proposalComparison1)}}
+                      </h5>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <h5 class="title" style="font-weight: 400; font-size: 14px;">
+                        {{getProposalPrice(selectedBlock.proposalComparison2)}}
+                      </h5>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <h5 class="title" style="font-weight: 400; font-size: 14px;">
+                        {{getProposalPrice(selectedBlock.proposalComparison3)}}
+                      </h5>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="comparison-cell category">
+                      <h6 class="title">Per guest</h6>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <h5 class="title" style="font-weight: 400; font-size: 14px;">
+                        {{getProposalPricePerGuest(selectedBlock.proposalComparison1)}}
+                      </h5>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <h5 class="title" style="font-weight: 400; font-size: 14px;">
+                        {{getProposalPricePerGuest(selectedBlock.proposalComparison2)}}
+                      </h5>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <h5 class="title" style="font-weight: 400; font-size: 14px;">
+                        {{getProposalPricePerGuest(selectedBlock.proposalComparison3)}}
+                      </h5>
+                    </td>
+                  </tr>
+                </table>
+              </md-card-content>
+            </md-card>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4" class="spacer"></td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <md-card class="clear-margins no-shadow">
+              <md-card-content>
+                <table style="width: 100%; height: 100%;">
+                  <tr>
+                    <td class="comparison-cell category">
+                      <h5 class="title">Rating</h5>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <div class="star-rating" v-if="selectedBlock.proposalComparison1">
+                        <label class="star-rating__star"
+                          v-for="rating in ratings"
+                          :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison1) >= rating) && getProposalRating(selectedBlock.proposalComparison1) != null)}">
+                        <input class="star-rating star-rating__checkbox" type="radio">★</label>
+                        <span class="small"> 0 </span>
+                      </div>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <div class="star-rating" v-if="selectedBlock.proposalComparison2">
+                        <label class="star-rating__star"
+                          v-for="rating in ratings"
+                          :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison2) >= rating) && getProposalRating(selectedBlock.proposalComparison2) != null)}">
+                        <input class="star-rating star-rating__checkbox" type="radio">★</label>
+                        <span class="small"> 0 </span>
+                      </div>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <div class="star-rating" v-if="selectedBlock.proposalComparison3">
+                        <label class="star-rating__star"
+                          v-for="rating in ratings"
+                          :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison3) >= rating) && getProposalRating(selectedBlock.proposalComparison3) != null)}">
+                        <input class="star-rating star-rating__checkbox" type="radio">★</label>
+                        <span class="small"> 0 </span>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </md-card-content>
+            </md-card>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4" class="spacer"></td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <md-card class="clear-margins no-shadow">
+              <md-card-content>
+                <table style="width: 100%; height: 100%;">
+                  <tr>
+                    <td class="comparison-cell category">
+                      <h5 class="title">Cancellation</h5>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <p>
+                        {{getProposalCancellationPolicy(selectedBlock.proposalComparison1)}}
+                      </p>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <p>
+                        {{getProposalCancellationPolicy(selectedBlock.proposalComparison2)}}
+                      </p>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <p>
+                        {{getProposalCancellationPolicy(selectedBlock.proposalComparison3)}}
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </md-card-content>
+            </md-card>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4" class="spacer"></td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <md-card class="clear-margins no-shadow">
+              <md-card-content>
+                <table style="width: 100%; height: 100%;">
+                  <tr>
+                    <td class="comparison-cell category">
+                      <h5 class="title">Legal Docs</h5>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <p>
+                        {{getLegalDocs(selectedBlock.proposalComparison1)}}
+                      </p>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <p>
+                        {{getLegalDocs(selectedBlock.proposalComparison2)}}
+                      </p>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <p>
+                        {{getLegalDocs(selectedBlock.proposalComparison3)}}
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </md-card-content>
+            </md-card>
+          </td>
+        </tr>
+      </table>
     </div>
-
+  </div>
 </template>
 <script>
-
   import Calendar from '@/models/Calendar';
   import CalendarEvent from '@/models/CalendarEvent';
   import EventComponent from '@/models/EventComponent';
 
   import ViewProposal from './ViewProposal.vue';
+  import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue';
   import VueElementLoading from 'vue-element-loading';
   import _ from 'underscore';
   import numeral from 'numeral';
@@ -261,27 +325,38 @@
   import html2canvas from 'html2canvas';
 
   export default {
-    name: 'event-block-proposal-vendors',
+    name: 'event-block-comparison',
     components: {
       VueElementLoading,
+      ManageProposalsAccept,
       ViewProposal
     },
     props: {
-      selectedBlock : Object,
-      event : Object,
-      blockVendors : Array,
-
+      selectedBlock: Object,
+      event: Object,
+      blockVendors: Array,
     },
     data: () => ({
-      isLoading:false,
+      isLoading: false,
       ratings: [1, 2, 3, 4, 5],
       selectableProposals: [],
       proposalsById: {},
       requirementsById: {},
-
     }),
     methods: {
-      getProposalPrice(proposalId){
+      manageProposalsAccept(proposal) {
+        window.currentPanel = this.$showPanel({
+          component: ManageProposalsAccept,
+          cssClass: 'md-layout-item md-size-65 transition36 bg-grey',
+          openOn: 'right',
+          props: {event: this.event, proposal: this.proposalsById[proposal], selectedBlock: this.selectedBlock}
+        })
+      },
+      isAccepted (proposal) {
+        console.log('test', this.proposalsById[proposal].accepted);
+        return this.proposalsById[proposal].accepted;
+      },
+      getProposalPrice(proposalId) {
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
           if (proposalById) {
@@ -290,7 +365,7 @@
         }
         return "";
       },
-      getProposalPricePerGuest(proposalId){
+      getProposalPricePerGuest(proposalId) {
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
           if (proposalById && proposalById.cost) {
@@ -299,7 +374,7 @@
         }
         return "";
       },
-      getProposalRequirementsFulfilled(proposalId){
+      getProposalRequirementsFulfilled(proposalId) {
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
           if (proposalById && proposalById.cost) {
@@ -310,70 +385,104 @@
         }
         return "";
       },
-      getProposalRequirementFulfillment(proposalId, requirementId){
+      getProposalRequirementFulfillment(proposalId, requirementId) {
         if (proposalId && requirementId) {
           let requirementById = this.requirementsById[`${proposalId}__${requirementId}`]
-          if (requirementById){
+          if (requirementById) {
             return requirementById;
           }
         }
-        return {id: null, included: false, missing: false, extra: false, price: null};
+        return {
+          id: null,
+          included: false,
+          missing: false,
+          extra: false,
+          price: null
+        };
       },
-      getProposalRating(proposalId){
+      getProposalRating(proposalId) {
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
-          if (proposalById ) {
+          if (proposalById) {
             return `${JSON.stringify(proposalById.vendor.rank)}`;
           }
         }
         return "";
       },
-      getProposalCancellationPolicy(proposalId){
+      getLegalDocs(proposalId) {
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
-          if (proposalById ) {
+          if (proposalById) {
+            return proposalById.legal;
+          }
+        }
+        return "";
+      },
+      getProposalCancellationPolicy(proposalId) {
+        if (proposalId) {
+          let proposalById = this.proposalsById[proposalId]
+          if (proposalById) {
             return proposalById.candellationPolicy;
           }
         }
         return "";
       },
-      getProposalValidUntil(proposalId){
+      getProposalValidUntil(proposalId) {
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
-          if (proposalById ) {
+          if (proposalById) {
             return proposalById.validUntil;
           }
         }
         return "";
       },
-      getProposalName(proposalId){
+      getProposalName(proposalId) {
         if (proposalId === "0") return "None";
 
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
-          if (proposalById ) {
+          if (proposalById) {
             return proposalById.vendor.vendorDisplayName;
           }
         }
         return "Unknown";
       },
-      populateProposals(){
+      populateProposals() {
         console.log("EventBlockComparison: ");
+        console.log(this.selectedBlock);
 
-        _.each(this.selectedBlock.proposals,(item)=>{
+        _.each(this.selectedBlock.proposals, (item) => {
           this.proposalsById[item.id] = item;
           this.selectableProposals.push(item.id);
 
-          _.each(item.included, (included)=>{
-            this.requirementsById[`${item.id}__${included.requirementId}`] = { id: included.requirementId, included: true, missing: false, extra: false, price: null};
+          _.each(item.included, (included) => {
+            this.requirementsById[`${item.id}__${included.requirementId}`] = {
+              id: included.requirementId,
+              included: true,
+              missing: false,
+              extra: false,
+              price: null
+            };
           });
 
-          _.each(item.extras, (extra)=>{
-            this.requirementsById[`${item.id}__${extra.requirementId}`] = { id: extra.requirementId, included: false, missing: false, extra: true, price: extra.price};
+          _.each(item.extras, (extra) => {
+            this.requirementsById[`${item.id}__${extra.requirementId}`] = {
+              id: extra.requirementId,
+              included: false,
+              missing: false,
+              extra: true,
+              price: extra.price
+            };
           });
 
-          _.each(item.missing, (missing)=>{
-            this.requirementsById[`${item.id}__${missing.requirementId}`] = { id: missing.requirementId, included: false, missing: true, extra: false, price: null};
+          _.each(item.missing, (missing) => {
+            this.requirementsById[`${item.id}__${missing.requirementId}`] = {
+              id: missing.requirementId,
+              included: false,
+              missing: true,
+              extra: false,
+              price: null
+            };
           });
         });
 
@@ -389,7 +498,11 @@
             component: ViewProposal,
             cssClass: 'md-layout-item md-size-65 transition36 bg-white',
             openOn: 'right',
-            props: {event: this.event, proposal: this.proposalsById[proposal], selectedBlock: this.selectedBlock}
+            props: {
+              event: this.event,
+              proposal: this.proposalsById[proposal],
+              selectedBlock: this.selectedBlock
+            }
           });
         }
       },
@@ -442,21 +555,27 @@
         this.updateEventComponent();
 
         let count = 0;
-        if (this.selectedBlock.proposalComparison1){
+        if (this.selectedBlock.proposalComparison1) {
           count++;
         }
-        if (this.selectedBlock.proposalComparison2){
+        if (this.selectedBlock.proposalComparison2) {
           count++;
         }
-        if (this.selectedBlock.proposalComparison3){
+        if (this.selectedBlock.proposalComparison3) {
           count++;
         }
-        this.$emit('update-comparison',count);
+        this.$emit('update-comparison', count);
       },
       updateEventComponent() {
-        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-        let event = new CalendarEvent({id: this.event.id});
-        let selected_block = new EventComponent({id : this.selectedBlock.id});
+        let calendar = new Calendar({
+          id: this.$auth.user.defaultCalendarId
+        });
+        let event = new CalendarEvent({
+          id: this.event.id
+        });
+        let selected_block = new EventComponent({
+          id: this.selectedBlock.id
+        });
         selected_block.proposalComparison1 = this.selectedBlock.proposalComparison1;
         selected_block.proposalComparison2 = this.selectedBlock.proposalComparison2;
         selected_block.proposalComparison3 = this.selectedBlock.proposalComparison3;
@@ -466,24 +585,27 @@
             this.$forceUpdate();
           })
           .catch(error => {
-            console.log('EventComponentVendor error =>',error)
+            console.log('EventComponentVendor error =>', error)
             this.$forceUpdate();
           })
       },
-        exportToPDF() {
-            const doc = new jsPDF('p', 'mm', 'a3');
-            /** WITH CSS */
-            var canvasElement = document.createElement('canvas');
-            html2canvas(this.$refs.content, { canvas: canvasElement,scale : 1 }).then(function (canvas) {
-                const img = canvas.toDataURL("image/png");
+      exportToPDF() {
+        const doc = new jsPDF('p', 'mm', 'a3');
+        /** WITH CSS */
+        var canvasElement = document.createElement('canvas');
+        html2canvas(this.$refs.content, {
+          canvas: canvasElement,
+          scale: 1
+        }).then(function (canvas) {
+          const img = canvas.toDataURL("image/png");
 
-                doc.addImage(img,'PNG',20,-10);
-                doc.save("sample.pdf");
+          doc.addImage(img, 'PNG', 20, -10);
+          doc.save("sample.pdf");
 
-            });
+        });
 
 
-        }
+      }
     },
     created(title, proposal) {
 
@@ -495,7 +617,7 @@
     computed: {
 
     },
-    watch : {
+    watch: {
       selectedBlock(newVal, oldVal) {
         this.populateProposals();
       }
@@ -503,61 +625,64 @@
   }
 </script>
 <style lang="scss" scoped>
-
-    .comparison-cell {
-        border: 1px solid transparent;
-        padding: 0;
-        margin: 0;
-        vertical-align: middle;
-
-        &.category {
-            width: 19%;
-            max-width: 19%;
-            min-width: 19%;
-            text-align: left;
-            padding: 8px 16px;
-
-            .title {
-                text-transform: none !important;
-                font-size: 14px;
-            }
-            background-color: #fafafa;
-
-        }
-
-        &.category-outer-cell {
-            width: 19%;
-            max-width: 19%;
-            min-width: 19%;
-            text-align: left;
-            padding: 8px 16px;
-
-            .title {
-                text-transform: none !important;
-                font-size: 14px;
-            }
-
-        }
-
-        &.border-bottom {
-            border-bottom: 1px solid #ddd;
-        }
-
-        &.proposal {
-            width: 27%;
-            max-width: 27%;
-            min-width: 27%;
-            background-color: #fafafa;
-        }
-
-        &.outer-cell {
-            width: 27%;
-            max-width: 27%;
-            min-width: 27%;
-        }
+  .comparison-cell {
+    border: 1px solid transparent;
+    margin: 0;
+    vertical-align: middle;
+    text-align: left;
+    &.category {
+      width: 25%;
+      max-width: 25%;
+      min-width: 25%;
+      text-align: left;
+      .title {
+        text-transform: none !important;
+        font-size: 14px;
+      }
     }
-
-    .spacer {
-        height: 24px;
+    &.category-outer-cell {
+      width: 25%;
+      max-width: 25%;
+      min-width: 25%;
+      text-align: left;
+      vertical-align: top;
+      padding: 1em 2em;
+      .title {
+        text-transform: none !important;
+        font-size: 14px;
+      }
     }
+    &.proposal, &.outer-cell {
+      vertical-align: top;
+      padding: 1em 2em;
+      width: 25%;
+      max-width: 25%;
+      min-width: 25%;
+    }
+  }
+  .w-100 {
+    width: 100%;
+  }
+  .text-capitalize {
+    text-transform: capitalize;
+  }
+  .no-shadow {
+    box-shadow: none;
+  }
+  h5 {
+    &.title {
+      font-size: 16px!important;
+      font-weight: 500;
+    }
+  }
+  span.subtitle {
+    font-size: 10px;
+    font-weight: 400;
+  }
+  .table-padding {
+    padding: 1em 2em!important;
+  }
+  .border-bottom {
+    border-bottom: 1px solid #eeeeee;
+  }
 </style>

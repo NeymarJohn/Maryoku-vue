@@ -1,57 +1,69 @@
 <template>
-    <div class="manage-proposals-panel">
-
-        <div class="md-layout" style="max-height: 50vh;">
-            <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
-                <h4 class="md-title">
-                    <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon"><md-icon>arrow_back</md-icon></md-button>
-                </h4>
-            </div>
-            <div class="md-layout-item md-size-95" style="max-height: 50vh;">
-                <h4 class="md-title" style="margin-bottom: 0; line-height: 51px; text-transform: capitalize;">
-                    Manage Proposals - {{selectedBlock.title}}
-                </h4>
-
-                <div class="tabs-section">
-                    <tabs
-                        :tab-name="['<span>'+requirementsLength+'</span> Brief', '<span>' + proposalsNumber + '</span> Manage Proposals', '<span>'+comparisonsNumber+'</span> Compare', '<span>0</span> Accepted']"
-                        color-button="warning" ref="proposalsTabs" :activeTab="1">
-                        <template slot="tab-pane-1" style="width: 100%;">
-                            <event-block-requirements
-                                :event.sync="event"
-                                :selectedBlock.sync="selectedBlock"
-                                :predefinedRequirements="selectedBlock.predefinedRequirements"
-                            > </event-block-requirements>
-                        </template>
-                        <template slot="tab-pane-2" style="width: 100%;">
-                            <event-block-proposal-vendors :event="event"
-                                :selectedBlock.sync="selectedBlock"
-                                @update-comparison="updateComparison"
-                            ></event-block-proposal-vendors>
-                        </template>
-                        <template slot="tab-pane-3" style="width: 100%;">
-                            <div style="padding-left: 6px;">
-                                <event-block-comparison
-                                    :event.sync="event"
-                                    :selectedBlock.sync="selectedBlock"
-                                    :blockVendors.sync="blockVendors"
-
-                                ></event-block-comparison>
-                            </div>
-                        </template>
-                        <template slot="tab-pane-4" style="width: 100%;">
-                            <div style="padding-left: 6px;">
-                                Accept proposals to view their details here.
-                            </div>
-                        </template>
-                    </tabs>
-
-                    <md-card class="allocated-budget" style="height: 45px;"> <md-card-content><span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span> <div class="budget">${{selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget  : '0.0'}}</div></md-card-content></md-card>
-                </div>
-            </div>
+  <div class="manage-proposals-panel">
+    <div class="md-layout" style="max-height: 50vh;">
+      <!-- <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
+        <h4 class="md-title">
+          <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
+            <md-icon>arrow_back</md-icon>
+          </md-button>
+        </h4>
+      </div> -->
+      <div class="md-layout-item md-size-100" style="max-height: 50vh;">
+        <h4 class="md-title" style="margin-bottom: 0; line-height: 51px; text-transform: capitalize;">
+          {{selectedBlock.title}}
+        </h4>
+        <div class="tabs-section">
+          <tabs
+            :tab-name="[
+              '<span>1</span> Brief (' + requirementsLength + ')',
+              '<span>2</span> Manage Proposals (' + proposalsNumber + ')',
+              '<span>3</span> Compare (' + comparisonsNumber + ')',
+              '<span>4</span> Accepted (' + acceptedNumber + ')'
+            ]"
+            color-button="danger"
+            ref="proposalsTabs"
+            :activeTab="1">
+            <template slot="tab-pane-1" style="width: 100%;">
+              <event-block-requirements
+                :event.sync="event"
+                :selectedBlock.sync="selectedBlock"
+                :predefinedRequirements="selectedBlock.predefinedRequirements"
+                > </event-block-requirements>
+            </template>
+            <template slot="tab-pane-2" style="width: 100%;">
+              <event-block-proposal-vendors :event="event"
+                :selectedBlock.sync="selectedBlock"
+                @update-comparison="updateComparison"
+                ></event-block-proposal-vendors>
+            </template>
+            <template slot="tab-pane-3" style="width: 100%;">
+              <div style="padding-left: 6px;">
+                <event-block-comparison
+                  :event.sync="event"
+                  :selectedBlock.sync="selectedBlock"
+                  :blockVendors.sync="blockVendors"
+                  ></event-block-comparison>
+              </div>
+            </template>
+            <template slot="tab-pane-4" style="width: 100%;">
+              <div>
+                  <event-block-acceptance :event="event"
+                                                :selectedBlock.sync="selectedBlock"
+                                                @update-comparison="updateComparison"
+                  ></event-block-acceptance>
+              </div>
+            </template>
+          </tabs>
+          <!-- <md-card class="allocated-budget" style="height: 45px;">
+            <md-card-content>
+              <span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span>
+              <div class="budget">${{selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget  : '0.0'}}</div>
+            </md-card-content>
+          </md-card> -->
         </div>
-
+      </div>
     </div>
+  </div>
 </template>
 <script>
   // import auth from '@/auth';
@@ -70,8 +82,7 @@
   import EventBlockRequirements from '../Modals/EventBlockRequirements.vue';
   import EventBlockProposalVendors from '../Modals/EventBlockProposalVendors.vue';
   import EventBlockComparison from '../Modals/EventBlockComparison';
-
-
+  import EventBlockAcceptance from '../Modals/EventBlockAcceptance';
 
   export default {
     components: {
@@ -79,7 +90,8 @@
       Tabs,
       EventBlockRequirements,
       EventBlockProposalVendors,
-      EventBlockComparison
+      EventBlockComparison,
+        EventBlockAcceptance
     },
     props: {
       event: Object,
@@ -97,18 +109,15 @@
       proposalsToDisplay : 1,
       requirementsLength : 0,
       comparisonsNumber: 0,
+      acceptedNumber: 0,
       blockVendors : null
-
     }),
 
     created() {
-
-        console.log(this.selectedBlock);
-
+      console.log(this.selectedBlock);
     },
     mounted() {
       this.requirementsLength = this.selectedBlock.valuesCount;
-
 
       this.$nextTick(()=>{
         if (this.$refs.proposalsTabs) {
@@ -126,11 +135,9 @@
           this.updateComparison(count);
         }
       });
-
       this.getBlockVendors();
     },
     methods: {
-
       closePanel(){
         this.$emit("closePanel", {a:'b'});
       },
@@ -144,7 +151,6 @@
         selected_block.componentId = this.selectedBlock.componentId;
 
         selected_block.winningProposalId = item.id;
-
 
         selected_block.for(calendar, event).save().then(resp => {
 
@@ -163,10 +169,9 @@
 
           this.$forceUpdate()
         })
-          .catch(error => {
-            console.log(error)
-          })
-
+        .catch(error => {
+          console.log(error)
+        })
       },
       viewAllProposals() {
         this.proposalsToDisplay  = this.selectedBlock.vendors.length;
@@ -179,7 +184,6 @@
         this.$forceUpdate();
       },
       getBlockVendors() {
-
         this.isLoading = true;
 
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
@@ -205,3 +209,7 @@
 
   };
 </script>
+
+<style lang="scss" scoped>
+
+</style>
