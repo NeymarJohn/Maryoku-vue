@@ -76,15 +76,22 @@
                     </template>
                   </td>
                   <td class="allocated-budget" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
-                    <div class="md-table-cell-container" >
-                      <span class="dollar-sign pull-left">$</span>
-                      <label-edit v-if="!event.elementsBudgetPerGuest"  style="width: 100%; margin-left: 8px;" :text="block.allocatedBudget"
+                    <div class="md-table-cell-container">
+                      <label-edit v-if="!event.elementsBudgetPerGuest" 
+                                  :text="block.allocatedBudget"
                                   :field-name="block.componentId"
+                                  :sub-description="'Per guest'"
+                                  :placeholder="'$98756'"
+                                  :currency="'$'"
                                   @text-updated-blur="blockBudgetChanged"
                                   @text-updated-enter="blockBudgetChanged"></label-edit>
 
-                      <label-edit v-else style="width: 100%; margin-left: 8px;" :text="block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : ''"
+                      <label-edit v-else 
+                                  :text="block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : ''"
                                   :field-name="block.componentId"
+                                  :sub-description="'Per guest'"
+                                  :placeholder="'$12,345.67'"
+                                  :currency="'$'"
                                   @text-updated-blur="blockBudgetChanged"
                                   @text-updated-enter="blockBudgetChanged"></label-edit>
                     </div>
