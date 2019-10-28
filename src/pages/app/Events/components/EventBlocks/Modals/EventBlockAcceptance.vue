@@ -42,7 +42,7 @@
                         <template v-if="item.proposals && item.proposals[0]">
                             <div class="cost">${{item.proposals[0].cost}}</div>
                             <md-button class="md-rose md-sm md-simple"  @click="viewProposal(item.proposals[0])">view contract</md-button>
-                            <md-button class="md-rose md-sm" v-if="item.proposals[0].downPaymentStatus !== 'paid'">Pay</md-button>
+                            <md-button class="md-rose md-sm"  @click="manageProposalsAccept(item.proposals[0])" v-if="item.proposals[0].downPaymentStatus !== 'paid'">Pay</md-button>
                         </template>
                     </div>
                 </div>
