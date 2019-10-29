@@ -15,13 +15,13 @@
         <div class="tabs-section">
           <tabs
             :tab-name="[
-              '<span>1</span> Brief (' + requirementsLength + ')', 
-              '<span>2</span> Manage Proposals (' + proposalsNumber + ')', 
-              '<span>3</span> Compare (' + comparisonsNumber + ')', 
+              '<span>1</span> Brief (' + requirementsLength + ')',
+              '<span>2</span> Manage Proposals (' + proposalsNumber + ')',
+              '<span>3</span> Compare (' + comparisonsNumber + ')',
               '<span>4</span> Accepted (' + acceptedNumber + ')'
             ]"
-            color-button="danger" 
-            ref="proposalsTabs" 
+            color-button="danger"
+            ref="proposalsTabs"
             :activeTab="1">
             <template slot="tab-pane-1" style="width: 100%;">
               <event-block-requirements
@@ -46,14 +46,17 @@
               </div>
             </template>
             <template slot="tab-pane-4" style="width: 100%;">
-              <div style="padding-left: 6px;">
-                Accept proposals to view their details here.
+              <div>
+                  <event-block-acceptance :event="event"
+                                                :selectedBlock.sync="selectedBlock"
+                                                @update-comparison="updateComparison"
+                  ></event-block-acceptance>
               </div>
             </template>
           </tabs>
           <!-- <md-card class="allocated-budget" style="height: 45px;">
             <md-card-content>
-              <span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span> 
+              <span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span>
               <div class="budget">${{selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget  : '0.0'}}</div>
             </md-card-content>
           </md-card> -->
@@ -79,6 +82,7 @@
   import EventBlockRequirements from '../Modals/EventBlockRequirements.vue';
   import EventBlockProposalVendors from '../Modals/EventBlockProposalVendors.vue';
   import EventBlockComparison from '../Modals/EventBlockComparison';
+  import EventBlockAcceptance from '../Modals/EventBlockAcceptance';
 
   export default {
     components: {
@@ -86,7 +90,8 @@
       Tabs,
       EventBlockRequirements,
       EventBlockProposalVendors,
-      EventBlockComparison
+      EventBlockComparison,
+        EventBlockAcceptance
     },
     props: {
       event: Object,

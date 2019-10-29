@@ -5,6 +5,7 @@
           :class="{'vlabeledit-empty' : this.vlabel === empty}" 
           @click="onLabelClick" 
           v-if="!edit">
+      <span>{{showCurrency}}</span>
       <span v-if="numeric">{{vlabel | numeral('0,0')}}</span>
       <span v-else>{{vlabel}}</span>
       <md-icon v-if="icon" class="pull-right text-gray small md-sm vlabeledit-label-icon">edit</md-icon>
@@ -28,6 +29,8 @@
                 :placeholder="vplaceholder" 
                 class="vlabeledit-input" 
                 @keyup.enter="updateTextEnter"/>
+    <br v-if="edit && !mask"/>
+    <span v-if="edit && !mask" class="span-per-guest">{{showSubDescription}}</span>
   </div>
 </template>
 <script>
@@ -128,12 +131,16 @@
           return this.label
         }
       },
-      showCurrency: function(){
-        if(this.currency !==undefined && this.currency == '') {
-          console.log(this.currency);
+      showCurrency: function() {
+        if(this.currency !==undefined && this.currency != '') {
           return this.currency
         }
       },
+      showSubDescription: function() {
+        if(this.subDescription !==undefined && this.subDescription != '') {
+          return this.subDescription
+        }
+      }
     },
     mounted: function(){
       // initiate the label view
@@ -157,52 +164,57 @@
   }
 </script>
 <style lang="scss" scoped>
-    .vlabeledit-empty {
-        color: #ccc !important;
+  .vlabeledit-empty {
+    color: #ccc !important;
+  }
+
+  .vlabeledit {
+    width: 100%;
+    .vlabeledit-input {
+      border: 1px solid lightgray;
+      border-radius: 5px;
+      padding: 6px;
+      width: 100%;
+      height: 100%;
+      font-size: 16px;
+      line-height: 24px;
+      display: inline-block;
     }
 
-    .vlabeledit {
-
-        .vlabeledit-input {
-            border: 1px solid lightgray;
-            border-radius: 5px;
-            padding: 6px;
-            width: 100%;
-            height: 100%;
-            font-size: 16px;
-            line-height: 24px;
-            display: inline-block;
-        }
-
-        .vlabeledit-label {
-            cursor: pointer;
-            padding: 6px;
-            border: 1px solid transparent;
-            border-radius: 5px;
-
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-
-            font-size: 16px;
-            line-height: 24px;
-            display: inline-block;
-            width: 100%;
-            height: 100%;
-
-            &:hover {
-                border: 1px solid lightgray;
-                border-radius: 5px;
-
-                .vlabeledit-label-icon{
-                    visibility: visible;
-                }
-            }
-
-            .vlabeledit-label-icon{
-                font-size: 16px !important;
-                visibility: hidden;
-            }
-        }
+    .span-per-guest {
+      font-size: 12px;
+      color: #999999;
     }
+
+    .vlabeledit-label {
+      cursor: pointer;
+      padding: 6px;
+      border: 1px solid transparent;
+      border-radius: 5px;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      font-size: 16px;
+      line-height: 24px;
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+
+      &:hover {
+        border: 1px solid lightgray;
+        border-radius: 5px;
+
+        .vlabeledit-label-icon{
+          visibility: visible;
+        }
+      }
+
+      .vlabeledit-label-icon{
+        font-size: 16px !important;
+        visibility: hidden;
+      }
+    }
+  }
 </style>

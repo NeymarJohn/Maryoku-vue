@@ -19,16 +19,16 @@
                 </md-option>
               </md-select>
             </md-field>
-            <!-- <multiselect id="0" 
-              v-model="selectedBlock.proposalComparison1" 
-              @select="addToCompare" 
-              @remove="removeFromCompare" 
-              style="height: 0;" 
-              placeholder="Select proposal" 
-              :searchable="false" 
-              :allow-empty="true" 
-              :options="selectableProposals" 
-              selectLabel="" 
+            <!-- <multiselect id="0"
+              v-model="selectedBlock.proposalComparison1"
+              @select="addToCompare"
+              @remove="removeFromCompare"
+              style="height: 0;"
+              placeholder="Select proposal"
+              :searchable="false"
+              :allow-empty="true"
+              :options="selectableProposals"
+              selectLabel=""
               deselectLabel="">
               <template slot="singleLabel" slot-scope="props">
                 <span class="option__title">{{ getProposalName(props.option) }}</span>
@@ -37,14 +37,14 @@
                 <div class="option__desc"><i class="fa fa-check" v-if="props.option === selectedBlock.proposalComparison1"></i> <span class="option__title">{{ getProposalName(props.option) }}</span></div>
               </template>
             </multiselect> -->
-            <md-button 
-              class="md-success w-100 text-capitalize" 
+            <md-button
+              class="md-success w-100 text-capitalize"
               v-if="selectedBlock.proposalComparison1 && isAccepted(selectedBlock.proposalComparison1)"
               @click="viewProposal(selectedBlock.proposalComparison1)">
               View - {{getProposalPrice(selectedBlock.proposalComparison1)}}</span>
             </md-button>
-            <md-button 
-              class="md-danger w-100 text-capitalize" 
+            <md-button
+              class="md-danger w-100 text-capitalize"
               v-if="selectedBlock.proposalComparison1 && !isAccepted(selectedBlock.proposalComparison1)"
               @click="manageProposalsAccept(selectedBlock.proposalComparison1)">
               Accept - {{getProposalPrice(selectedBlock.proposalComparison1)}}</span>
@@ -62,14 +62,14 @@
                 </md-option>
               </md-select>
             </md-field>
-            <md-button 
-              class="md-success w-100 text-capitalize" 
+            <md-button
+              class="md-success w-100 text-capitalize"
               v-if="selectedBlock.proposalComparison2 && isAccepted(selectedBlock.proposalComparison2)"
               @click="viewProposal(selectedBlock.proposalComparison2)">
               View - {{getProposalPrice(selectedBlock.proposalComparison2)}}</span>
             </md-button>
-            <md-button 
-              class="md-danger w-100 text-capitalize" 
+            <md-button
+              class="md-danger w-100 text-capitalize"
               v-if="selectedBlock.proposalComparison2 && !isAccepted(selectedBlock.proposalComparison2)"
               @click="manageProposalsAccept(selectedBlock.proposalComparison2)">
               Accept - {{getProposalPrice(selectedBlock.proposalComparison2)}}</span>
@@ -87,14 +87,14 @@
                 </md-option>
               </md-select>
             </md-field>
-            <md-button 
-              class="md-success w-100 text-capitalize" 
+            <md-button
+              class="md-success w-100 text-capitalize"
               v-if="selectedBlock.proposalComparison3 && isAccepted(selectedBlock.proposalComparison3)"
               @click="viewProposal(selectedBlock.proposalComparison3)">
               View - {{getProposalPrice(selectedBlock.proposalComparison3)}}</span>
             </md-button>
-            <md-button 
-              class="md-danger w-100 text-capitalize" 
+            <md-button
+              class="md-danger w-100 text-capitalize"
               v-if="selectedBlock.proposalComparison3 && !isAccepted(selectedBlock.proposalComparison3)"
               @click="manageProposalsAccept(selectedBlock.proposalComparison3)">
               Accept - {{getProposalPrice(selectedBlock.proposalComparison3)}}</span>
@@ -325,7 +325,7 @@
   import html2canvas from 'html2canvas';
 
   export default {
-    name: 'event-block-proposal-vendors',
+    name: 'event-block-comparison',
     components: {
       VueElementLoading,
       ManageProposalsAccept,

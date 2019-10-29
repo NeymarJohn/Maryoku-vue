@@ -75,14 +75,14 @@
                       </template>
                     </template>
                   </td>
-                  <td class="allocated-budget" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
+                  <td class="fit-content w-20 allocated-budget" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
                     <div class="md-table-cell-container">
                       <label-edit v-if="!event.elementsBudgetPerGuest" 
                                   :text="block.allocatedBudget"
                                   :field-name="block.componentId"
                                   :sub-description="'Per guest'"
-                                  :placeholder="'$98756'"
                                   :currency="'$'"
+                                  :numeric="true"
                                   @text-updated-blur="blockBudgetChanged"
                                   @text-updated-enter="blockBudgetChanged"></label-edit>
 
@@ -90,8 +90,8 @@
                                   :text="block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : ''"
                                   :field-name="block.componentId"
                                   :sub-description="'Per guest'"
-                                  :placeholder="'$12,345.67'"
                                   :currency="'$'"
+                                  :numeric="true"
                                   @text-updated-blur="blockBudgetChanged"
                                   @text-updated-enter="blockBudgetChanged"></label-edit>
                     </div>
