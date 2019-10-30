@@ -56,7 +56,12 @@
                   <td></td>
                 </tr> -->
                 <tr class="text-left">
-                  <td>{{block.title}}</td>
+                  <td>
+                    {{block.title}}
+                    <span class="span-users-count pull-right" v-if="elementsBudget == 'guest'">
+                      <i class="fa fa-user"></i> {{event.numberOfParticipants}}
+                    </span>
+                  </td>
                   <td class="fit-content">
                     <template>
                       <div v-if="block.valuesCount"
@@ -507,5 +512,9 @@
     &:before {
       border: 2px solid white;
     }
+  }
+  .span-users-count {
+    color: #999999;
+    font-size: 14px;
   }
 </style>
