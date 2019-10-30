@@ -150,9 +150,11 @@
 
             <li class="md-list-item import-vendor" v-if="topBarEventId">
               <a class="import" @click="gotoVendorsPool">import your vendors</a>
-              <md-button class="md-danger md-sm no-padding">
+              <md-button class="md-danger md-xs no-padding btn-learn-more">
                 <md-icon>play_arrow</md-icon>
-                Learn more
+                <span>
+                  Learn more
+                </span>
               </md-button>
             </li>
             <li class="md-list-item">
@@ -433,11 +435,22 @@
       margin-right: 2em!important;
       cursor: pointer;
     }
-    .md-button {
-      height: 36px!important;
+    .btn-learn-more {
+      width: 100px;
+      height: 30px!important;
       text-transform: capitalize;
-      margin-right: 4em;
-      border-radius: 36px;
+      border-radius: 25px;
+      i {
+        height: 0;
+        font-size: 14px!important;
+        width: 12px!important;
+        min-width: 12px!important;
+      }
+      span {
+        padding-left: 3px;
+        font-size: 12px;
+        font-weight: 500;
+      }
     }
   }
 </style>
