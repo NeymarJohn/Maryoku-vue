@@ -8,10 +8,10 @@
               Budget Table
             </h4>
             <label>Show Cost:</label>
-            <md-field>
+            <md-field class="no-border">
               <label></label>
-              <md-select v-model="elementsBudget">
-                <md-option value="element">Per Element</md-option>
+              <md-select class="select-elements-budget" v-model="elementsBudget">
+                <md-option value="event">Per Event</md-option>
                 <md-option value="guest">Per Guest</md-option>
               </md-select>
             </md-field>
@@ -80,7 +80,7 @@
                       <label-edit v-if="!event.elementsBudgetPerGuest" 
                                   :text="block.allocatedBudget"
                                   :field-name="block.componentId"
-                                  :sub-description="'Per guest'"
+                                  :sub-description="elementsBudget"
                                   :currency="'$'"
                                   :numeric="true"
                                   @text-updated-blur="blockBudgetChanged"
@@ -89,7 +89,7 @@
                       <label-edit v-else 
                                   :text="block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : ''"
                                   :field-name="block.componentId"
-                                  :sub-description="'Per guest'"
+                                  :sub-description="elementsBudget"
                                   :currency="'$'"
                                   :numeric="true"
                                   @text-updated-blur="blockBudgetChanged"
@@ -198,8 +198,7 @@
       allocatedBudget: 0,
       eventBuildingBlocks: [],
       eventBuildingBlocksList: [],
-      elementsBudget: 'element'
-
+      elementsBudget: 'event'
     }),
     methods: {
       ...mapMutations('EventPlannerVuex', [
@@ -434,10 +433,10 @@
           this.getEventBuildingBlocks();
         });
       },
-        switchingBudgetAndCost() {
-            let vm = this;
-            vm.event.elementsBudgetPerGuest = !vm.event.elementsBudgetPerGuest;
-        }
+      switchingBudgetAndCost() {
+        let vm = this;
+        vm.event.elementsBudgetPerGuest = !vm.event.elementsBudgetPerGuest;
+      }
     },
     created() {
 
@@ -461,9 +460,9 @@
         // Get default event building blocks
         this.getEventBuildingBlocks();
       },
-        elementsBudget(val) {
-            this.switchingBudgetAndCost();
-        }
+      elementsBudget(val) {
+        this.switchingBudgetAndCost();
+      }
     }
   }
 </script>
@@ -497,6 +496,16 @@
       padding: 10px 0 !important;
       text-align: left;
       color: $purple-500 !important;
+    }
+  }
+  .select-elements-budget {
+    & > input[type=text] {
+      font-size: 14px!important;
+    }
+  }
+  .no-border {
+    &:before {
+      border: 2px solid white;
     }
   }
 </style>

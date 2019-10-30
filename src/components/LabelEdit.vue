@@ -138,7 +138,7 @@
       },
       showSubDescription: function() {
         if(this.subDescription !==undefined && this.subDescription != '') {
-          return this.subDescription
+          return 'Per ' + this.subDescription
         }
       }
     },
