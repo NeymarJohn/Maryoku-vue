@@ -2782,12 +2782,30 @@ iframe{
                     font-family: 'Roboto','arial',sans-serif;
 
                     .requirements-cell-button {
-                        color: $purple-500!important;
+                        color: #ff4470!important;
                     }
 
                     .btn-proposal {
-                        font-size: 14px;
-                        font-weight: normal!important;
+                        .md-ripple {
+                            text-transform: capitalize!important;
+                            font-size: 14px!important;
+                            font-weight: 500!important;
+                        }
+                    }
+
+                    .btn-view-order {
+                        background-color: white!important;
+                        color: #ff4470!important;
+                        box-shadow: none;
+                        .md-ripple {
+                            text-transform: uppercase!important;
+                            font-size: 14px!important;
+                            font-weight: 400!important;
+                        }
+                    }
+
+                    &.text-center {
+                        text-align: center;
                     }
 
                     &.fit-content {

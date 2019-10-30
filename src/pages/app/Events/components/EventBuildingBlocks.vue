@@ -15,7 +15,7 @@
                 <md-option value="guest">Per Guest</md-option>
               </md-select>
             </md-field>
-            <md-button class="md-default md-simple add-new-block-btn no-padding" style="color : #fff;"
+            <md-button class="md-default md-simple add-new-block-btn no-padding"
                         @click="showAddEventElementsModal()">
               <md-icon>add</md-icon> Add New
             </md-button>
@@ -57,7 +57,7 @@
                 </tr> -->
                 <tr class="text-left">
                   <td>
-                    {{block.title}}
+                    <span class="span-element">{{block.title}}</span>
                     <span class="span-users-count pull-right" v-if="elementsBudget == 'guest'">
                       <i class="fa fa-user"></i> {{event.numberOfParticipants}}
                     </span>
@@ -114,15 +114,13 @@
                     <event-actual-cost-icon-tooltip
                       :icon="'credit_card'"
                       :paid="3000"
-                      :date="'2019/08/31'"
-                    >
-                    </event-actual-cost-icon-tooltip>
+                      :date="'2019/08/31'"/>
                   </td>
                   <td class="fit-content text-center">
                     <template>
                       <template
                         v-if="block.winningProposalId">
-                        <md-button class="md-success md-sm btn-proposal" @click="reviewProposals(block,block.winningProposalId)">
+                        <md-button class="md-success md-sm btn-view-order" @click="reviewProposals(block,block.winningProposalId)">
                           View Order
                         </md-button>
                       </template>
@@ -133,7 +131,7 @@
                         </md-button>
                       </template>
                       <template v-else-if="block.proposalsState == 'get-offers'">
-                        <md-button class="md-sm md-primary btn-proposal" @click="reviewProposals(block)">
+                        <md-button class="md-sm md-primary btn-view-order" @click="reviewProposals(block)">
                           Get Proposals
                           <!-- <md-icon>near_me</md-icon> -->
                         </md-button>
@@ -500,7 +498,17 @@
     .md-ripple {
       padding: 10px 0 !important;
       text-align: left;
-      color: $purple-500 !important;
+      color: #ff4470 !important;
+      font-weight: 500!important;
+      font-size: 12px!important;
+      .md-button-content {
+        i {
+          color: #ff4470 !important;
+        }
+      }
+      &:hover {
+        color: #999999 !important;
+      }
     }
   }
   .select-elements-budget {
@@ -512,6 +520,9 @@
     &:before {
       border: 2px solid white;
     }
+  }
+  .span-element {
+    font-weight: 400;
   }
   .span-users-count {
     color: #999999;

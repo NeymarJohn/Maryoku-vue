@@ -149,19 +149,26 @@
 <!--            </li>-->
 
             <li class="md-list-item import-vendor" v-if="topBarEventId">
-              <a class="import" @click="gotoVendorsPool">import your vendors</a>
-              <md-button class="md-danger md-xs no-padding btn-learn-more">
+              <a class="import" @click="gotoVendorsPool">
+                <md-icon>file_upload</md-icon>
+                import your vendors
+              </a>
+              <a class="import">
+                <md-icon>play_arrow</md-icon>
+                learn more
+              </a>
+              <!-- <md-button class="md-danger md-xs no-padding btn-learn-more">
                 <md-icon>play_arrow</md-icon>
                 <span>
                   Learn more
                 </span>
-              </md-button>
+              </md-button> -->
             </li>
             <li class="md-list-item">
               <a href="#" class="md-list-item-router md-list-item-container md-button-clean dropdown">
                 <div class="md-list-item-content">
                   <drop-down direction="down" :hover="true">
-                    <md-button name="user-top-menu" slot="title" class="user-top-menu md-button md-simple" data-toggle="dropdown">
+                    <md-button name="user-top-menu" slot="title" class="user-top-menu md-button md-simple no-padding" data-toggle="dropdown">
                       <!--<md-icon>email</md-icon>
                       <span class="notification">5</span>
                       <p class="hidden-lg hidden-md">Notifications</p>-->
@@ -427,13 +434,19 @@
   .import-vendor {
     display: flex;
     align-items: center;
-    a.import {
-      color: #9c27b0!important;
+    a {
+      color: #ff4470!important;
       font-size: 12px;
       font-weight: 500;
       text-transform: uppercase;
       margin-right: 2em!important;
       cursor: pointer;
+      i {
+        color: #ff4470!important;
+        font-size: 14px!important;
+        width: 14px!important;
+        min-width: 14px!important;
+      }
     }
     .btn-learn-more {
       width: 100px;
@@ -452,5 +465,8 @@
         font-weight: 500;
       }
     }
+  }
+  .user-top-menu {
+    margin: 0!important;
   }
 </style>

@@ -91,7 +91,6 @@
               </div>
             </h4>
 
-
             <div class="budget-pie-container">
               <chart-component
                   :chart-data="pieChart.data"
