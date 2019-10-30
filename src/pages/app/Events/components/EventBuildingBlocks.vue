@@ -55,7 +55,10 @@
                   </td>
                   <td></td>
                 </tr> -->
-                <tr class="text-left">
+                <tr class="text-left" 
+                  @mouseover="mouseOver(block.id)" 
+                  @mouseleave="mouseLeave()" 
+                >
                   <td>
                     <span class="span-element">{{block.title}}</span>
                     <span class="span-users-count pull-right" v-if="elementsBudget == 'guest'">
@@ -138,9 +141,10 @@
                       </template>
                     </template>
                   </td>
-                  <td class="fit-content text-right">
+                  <td class="w-5 text-right">
                     <a href="#" 
                       class="no-padding pull-right" 
+                      v-if="currentBlockId == block.id"
                       @click="deleteBlock(block.id)">
                       <md-icon @click="deleteBlock(block.id)">close</md-icon>
                     </a>
@@ -193,7 +197,6 @@
         }
       },
       eventComponents: [Array, Function]
-
     },
     data: () => ({
       // auth: auth,
@@ -201,6 +204,7 @@
       allocatedBudget: 0,
       eventBuildingBlocks: [],
       eventBuildingBlocksList: [],
+      currentBlockId: null,
       elementsBudget: 'event'
     }),
     methods: {
@@ -439,7 +443,13 @@
       switchingBudgetAndCost() {
         let vm = this;
         vm.event.elementsBudgetPerGuest = !vm.event.elementsBudgetPerGuest;
-      }
+      },
+      mouseOver: function(blockId) {
+        this.currentBlockId = blockId;
+      },
+      mouseLeave: function() {
+        this.currentBlockId = null;
+      },
     },
     created() {
 
