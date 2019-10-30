@@ -92,15 +92,18 @@
             </h4>
 
 
-            <div class="budget-pie-container"
-                  style="display: grid;margin: 3em 18px;">
+            <div class="budget-pie-container">
               <chart-component
                   :chart-data="pieChart.data"
                   :chart-options="pieChart.options"
                   chart-type="Pie"
                   style="grid-column: 1; grid-row: 1; color:red"/>
-              <animated-number class="percentage" ref="percentageNumber"
-                :value="percentage" suffix="%"></animated-number>
+              <animated-number 
+                  class="percentage" 
+                  ref="percentageNumber"
+                  :custom-style="true"
+                  :custom-style-contents="'font-weight:500;font-size:24px;'"
+                  :value="percentage" suffix="%"/>
             </div>
           </div>
         </div>
@@ -215,12 +218,15 @@
         //"Employees Only","Employees and spouse","Employees and families", "Employees children"
         let typeText = '';
         let participantsType = calendarEvent.participantsType;
+        
         if (participantsType === 'Guests and spouse'){
           typeText = '+ spouses';
         } else if (participantsType === 'Guests and families'){
           typeText = '+ families';
         } else if (participantsType === 'Guests siblings'){
           typeText = '+ siblings';
+        } else {
+          typeText = participantsType;
         }
 
         return typeText;
@@ -335,7 +341,7 @@
             padding: 0,
             height: 156,
             donut: true,
-            donutWidth: 15,
+            donutWidth: 8,
           }
         }
       }
@@ -359,199 +365,202 @@
   }
 </script>
 <style lang="scss" scoped>
-    @import '@/assets/scss/md/_colors.scss';
+  @import '@/assets/scss/md/_colors.scss';
 
-    .md-layout, .md-layout-item {
-      width: initial;
-      padding: 0;
-    }
-    .control-main-block {
-        .company-control-logo {
-            margin-right: 8px;
+  .md-layout, .md-layout-item {
+    width: initial;
+    padding: 0;
+  }
+  .control-main-block {
+    .company-control-logo {
+        margin-right: 8px;
 
-            &:last-child {
-                margin-right: 0;
-            }
-
-            i {
-                font-size: 24px !important;
-            }
+        &:last-child {
+            margin-right: 0;
         }
 
-        .md-button.selected {
-            background-color: #eb3e79 !important;
-            border-color: #eb3e79 !important;;
-
-            i {
-                color: #fff !important;
-            }
+        i {
+            font-size: 24px !important;
         }
     }
 
-    .company-control-logo .md-button {
-        border: 2px solid #959595;
-    }
+    .md-button.selected {
+        background-color: #eb3e79 !important;
+        border-color: #eb3e79 !important;;
 
-    .percentage {
-        padding-bottom: 8px;
-        padding-left: 5px;
-        grid-column: 1;
-        grid-row: 1;
-        margin-top: auto;
-        margin-bottom: auto;
-        font-size: 25px;
-        font-weight: normal;
-        color: #000000;
-    }
-
-    .logo-block {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        padding: 0px 15px;
-        margin: -20px 0px 20px 0px;
-
-        .event-planer-logo {
-            background: #eb3e79;
-            width: 100%;
-            max-width: 64px;
-            height: 64px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 5px;
-            margin-right: 10px;
-
-            .company-logo {
-                color: white !important;
-            }
-        }
-
-        .event-title {
-            white-space: nowrap;
-            font-family: "Roboto";
-            font-size: 1.125rem;
-            font-weight: 400;
-            font-style: normal;
-            font-stretch: normal;
-            line-height: 1.33;
-            letter-spacing: normal;
-            text-align: left;
-            color: #000000;
+        i {
+            color: #fff !important;
         }
     }
+  }
 
-    .control-main-block {
-        display: flex;
-        justify-content: center;
+  .company-control-logo .md-button {
+    border: 2px solid #959595;
+  }
 
-        .company-logo-block {
-            border: 2px solid #8b8b8b;
-            padding: 7px;
-            border-radius: 50%;
-            margin: 0px 5px;
-        }
-    }
+  .percentage {
+    padding-bottom: 8px;
+    padding-left: 5px;
+    grid-column: 1;
+    grid-row: 1;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 25px;
+    font-weight: normal;
+    color: #000000;
+  }
 
-    .event-info-section {
-      flex-direction: column;
-    }
+  .logo-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0px 15px;
+    margin: -20px 0px 20px 0px;
 
-    .summary-item {
+    .event-planer-logo {
+      background: #eb3e79;
+      width: 100%;
+      max-width: 64px;
+      height: 64px;
       display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 5px;
+      margin-right: 10px;
+
+      .company-logo {
+        color: white !important;
+      }
     }
 
-    .title-text {
+    .event-title {
+      white-space: nowrap;
       font-family: "Roboto";
-      font-size: 12px;
+      font-size: 1.125rem;
       font-weight: 400;
       font-style: normal;
       font-stretch: normal;
-      line-height: 2.2;
+      line-height: 1.33;
       letter-spacing: normal;
       text-align: left;
-      color: #959595;
-      flex: 0;
+      color: #000000;
+    }
+  }
 
-      i {
-        color: $purple-500!important;
-        font-size: 12px!important;
-        padding-right: 1em;
-      }
-    }
+  .control-main-block {
+    display: flex;
+    justify-content: center;
 
-    .title-budget-main {
-        margin-top: 1.7em;
-        //margin-bottom: 1em;
-        font-family: "Roboto";
-        font-size: 14px;
-        font-weight: normal;
-        font-style: normal;
-        font-stretch: normal;
-        line-height: 1.33;
-        letter-spacing: normal;
-        text-align: center;
-        color: #7a7a7a;
+    .company-logo-block {
+      border: 2px solid #8b8b8b;
+      padding: 7px;
+      border-radius: 50%;
+      margin: 0px 5px;
     }
+  }
 
-    .title.budget {
-      h4 {
-        color: $purple-500;
-      }
-    }
+  .event-info-section {
+    flex-direction: column;
+  }
 
-    .title-budget-prise {
-        color: $green !important;
-        font-size: 1.25rem;
-        font-weight: bold;
-        line-height: 1.2;
-        margin-bottom: 5px;
-    }
+  .summary-item {
+    display: flex;
+  }
 
-    .title-budget-prise-negative {
-        color: $pink-262 !important;
-        font-size: 1.25rem;
-        font-weight: bold;
-        line-height: 1.2;
-        margin-bottom: 5px;
-    }
+  .title-text {
+    font-family: "Roboto";
+    font-size: 12px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 2.2;
+    letter-spacing: normal;
+    text-align: left;
+    color: #959595;
+    flex: 0;
 
-    .title-budget-prise.title {
-        font-size: 1.45rem;
-        margin-bottom: 0;
+    i {
+      color: $purple-500!important;
+      font-size: 12px!important;
+      padding-right: 1em;
     }
+  }
 
-    .block-flex {
-        display: flex;
-    }
+  .title-budget-main {
+    margin-top: 1.7em;
+    font-family: "Roboto";
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.33;
+    letter-spacing: normal;
+    text-align: center;
+    color: #212121;
+  }
 
-    .button-event-creatig .md-ripple {
-        background-color: #00bcd4;
+  .title.budget {
+    h4 {
+      color: $purple-500;
     }
+  }
 
-    .footer-link-button .md-ripple {
-        color: #89229b;
-        background-color: rgba(240, 240, 240, 1);
-    }
+  .title-budget-prise {
+    color: $green !important;
+    font-size: 1.25rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 5px;
+  }
 
-    .copyright {
-        color: #9c27b0;
-    }
+  .title-budget-prise-negative {
+    color: $pink-262 !important;
+    font-size: 1.25rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 5px;
+  }
 
-    .copyright-block {
-        justify-content: space-between;
-    }
+  .title-budget-prise.title {
+    font-size: 1.45rem;
+    margin-bottom: 0;
+  }
 
-    .total-event-budget {
-        color: #000;
-        font-weight: normal;
-        font-size: 18px;
-    }
+  .block-flex {
+    display: flex;
+  }
 
-    .md-card-header-icon .card-icon .md-icon {
-        color: white !important;
-    }
-    .md-card-header-rose {
-      margin-top: 1.5em;
-    }
+  .button-event-creatig .md-ripple {
+    background-color: #00bcd4;
+  }
+
+  .footer-link-button .md-ripple {
+    color: #89229b;
+    background-color: rgba(240, 240, 240, 1);
+  }
+
+  .copyright {
+    color: #9c27b0;
+  }
+
+  .copyright-block {
+    justify-content: space-between;
+  }
+
+  .total-event-budget {
+    color: #000;
+    font-weight: 500;
+    font-size: 18px;
+  }
+
+  .md-card-header-icon .card-icon .md-icon {
+    color: white !important;
+  }
+  .md-card-header-rose {
+    margin-top: 1.5em;
+  }
+  .budget-pie-container {
+    display: grid;
+    margin: 3em 18px;
+  }
 </style>
