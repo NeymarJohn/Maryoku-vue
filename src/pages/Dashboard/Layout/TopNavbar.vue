@@ -51,13 +51,12 @@
                       <md-icon>cached</md-icon> Recurring weekly
                     </md-button>
                   </div>
-
                 </div>
               </div>
             </li>
           </ul>
         </drop-down>-->
-        <h3 class="md-title" style="font-weight: 400; padding-top: 14px; margin-left: -10px;">
+        <h3 class="md-title cst-style" v-if="isEventDetails">
           <md-icon class="text-rose" v-if="topBarTitle">arrow_right</md-icon>
           {{$route.meta.title ? $route.meta.title : $route.name}}
         </h3>
@@ -355,6 +354,15 @@
         let routeData = this.$router.resolve({name: 'VendorsPool', params: {id: this.topBarEventId}});
         window.open(routeData.href, '_blank');
       }
+    },
+    computed: {
+      isEventDetails() {
+        if (this.$route.name == "EditEvent" || this.$route.title == "Event Details") {
+          return false;
+        } else {
+          return true;
+        }
+      }
     }
   };
 </script>
@@ -468,5 +476,10 @@
   }
   .user-top-menu {
     margin: 0!important;
+  }
+  h3.cst-style {
+    font-weight: 400;
+    padding-top: 14px;
+    margin-left: -10px;
   }
 </style>
