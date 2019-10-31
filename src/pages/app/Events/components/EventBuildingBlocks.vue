@@ -68,7 +68,7 @@
                   </td>
                   <td class="fit-content">
                     <template>
-                      <div v-if="block.valuesCount"
+                      <div v-if="block.valuesCount && block.proposalsState != 'get-offers'"
                             style="cursor: pointer;">
                         <md-button class="md-simple md-xs requirements-cell-button no-padding"
                                     @click="addRequirements(block)">
@@ -76,9 +76,8 @@
                           Edit
                         </md-button>
                       </div>
-                      <template v-else-if="!block.valuesCount">
+                      <template v-else>
                         <md-button class="md-info md-xs md-warning btn-add no-padding" @click="addRequirements(block)">
-                          <!-- Set requirements -->
                           Add+
                         </md-button>
                       </template>
@@ -495,7 +494,7 @@
     }
   }
   .btn-add {
-    border-radius: 25px;
+    border-radius: 3px;
     width: 48px;
     min-width: 48px;
     .md-ripple {
