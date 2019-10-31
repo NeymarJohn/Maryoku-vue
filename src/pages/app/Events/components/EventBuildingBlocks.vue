@@ -36,7 +36,9 @@
               </tr>
             </thead>
             <tbody v-if="eventBuildingBlocks.length">
-              <template v-for="(block,index) in eventBuildingBlocks">
+              <template v-for="(block, index) in eventBuildingBlocks">
+                <!-- v-for="(rating, ratingIndex) in ratings"
+                :key="ratingIndex" -->
                 <!-- <tr class="parent">
                   <td>{{category.title}}</td>
                   <td></td>
@@ -56,9 +58,8 @@
                   <td></td>
                 </tr> -->
                 <tr class="text-left" 
-                  @mouseover="mouseOver(block.id)" 
-                  @mouseleave="mouseLeave()" 
-                >
+                  @mouseover="setCurrentBlockId(block)" 
+                  @mouseout="setCurrentBlockId(null)">
                   <td>
                     <span class="span-element">{{block.title}}</span>
                     <span class="span-users-count pull-right" v-if="elementsBudget == 'guest'">
@@ -444,25 +445,23 @@
         let vm = this;
         vm.event.elementsBudgetPerGuest = !vm.event.elementsBudgetPerGuest;
       },
-      mouseOver: function(blockId) {
-        this.currentBlockId = blockId;
-      },
-      mouseLeave: function() {
-        this.currentBlockId = null;
-      },
+      setCurrentBlockId: function(currentBlock) {
+        if (currentBlock) {
+          this.currentBlockId = currentBlock.id;
+        } else {
+          this.currentBlockId = null;
+        }
+      }
     },
     created() {
 
     },
     mounted() {
+      this.getEventBuildingBlocks();
 
-        this.getEventBuildingBlocks();
-
-
-        this.$root.$on('refreshBuildingBlock', () => {
+      this.$root.$on('refreshBuildingBlock', () => {
         this.getEventBuildingBlocks()
       });
-
     },
     watch: {
       event(newVal, oldVal) {
