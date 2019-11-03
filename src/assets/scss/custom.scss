@@ -648,20 +648,20 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 
     .md-card-tabs.md-card-plain .md-list {
-        display: flex;
         justify-content: flex-start !important;
         margin : 1em 0 2em !important;
         padding : 0 !important;
-        width : 100% !important;
+        width : 75% !important;
         box-shadow: none;
+        height: 45px !important;
 
         .md-list-item {
             margin-left : 0;
-            margin-right: 12px;
-            flex: 1;
+            margin-right : -1px;
+            width: 25%;
             box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
             border : none;
-            height: 56px;
+            height: 45px !important;
 
             &:first-child {
                 border-radius: 5px 0 0 5px;
@@ -673,7 +673,6 @@ $tooltip-border-color: $blue-grey-200 !default;
 
             &:last-child {
                 border-radius: 0 5px 5px 0;
-                margin-right: 0;
 
                 .md-list-item-container {
                     border-radius: 0 5px 5px 0;
@@ -689,7 +688,7 @@ $tooltip-border-color: $blue-grey-200 !default;
                 background: #e1e1e1;
                 text-transform: capitalize;
                 font-size: 13px;
-                height: 56px;
+                height: 45px !important;
 
                 .md-list-item-content {
                     >div {
@@ -723,7 +722,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
             &.active {
                 .md-list-item-button {
-                    background-color: #fb9704 !important;
+                    background-color: $purple-500 !important;
                     color : #fff !important;
                     box-shadow: none;
                     span {
@@ -846,9 +845,18 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 
     .tab-content {
-        background: white;
-        margin: 0 -2em;
+        margin: 0 -1em;
         padding: 1em;
+
+        tbody {
+            .md-table-row:first-child {
+                td {
+                    border-top : none;
+                }
+            }
+        }
+
+
     }
 
     .attachments-list {
@@ -2782,17 +2790,43 @@ iframe{
                     font-family: 'Roboto','arial',sans-serif;
 
                     .requirements-cell-button {
-                        color: $purple-500!important;
+                        color: #ff4470!important;
                     }
 
                     .btn-proposal {
-                        font-size: 14px;
-                        font-weight: normal!important;
+                        .md-ripple {
+                            text-transform: capitalize!important;
+                            font-size: 14px!important;
+                            font-weight: 500!important;
+                        }
+                    }
+
+                    .btn-view-order {
+                        background-color: white!important;
+                        color: #ff4470!important;
+                        box-shadow: none;
+                        .md-ripple {
+                            text-transform: uppercase!important;
+                            font-size: 14px!important;
+                            font-weight: 400!important;
+                        }
+                    }
+
+                    &.text-center {
+                        text-align: center;
                     }
 
                     &.fit-content {
                         width: 1%;
                         white-space: nowrap;
+                    }
+
+                    &.w-5 {
+                        width: 43px;
+                    }
+
+                    &.w-20 {
+                        width: 20%;
                     }
 
                     &:not(:last-child){

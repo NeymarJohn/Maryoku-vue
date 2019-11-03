@@ -1,54 +1,59 @@
 <template>
-    <div class="adding-building-blocks-panel" style="min-height: 240px;">
+    <div class="adding-building-blocks-panel" style="min-height: 240px; background: white; border-radius: 5px;">
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee"/>
         <div class="manage-proposals_proposals-list" v-if="!isLoading && acceptedBlockVendors.length"
              v-for="(list,index) in acceptedBlockVendors"
              :key="index"
         >
-            <div class="md-toolbar-section-start acceptance-list">
-                <div class="proposals-name">
-                    {{list.title}} ({{list.list.length}})
-                </div>
-            </div>
-
-            <div class="proposals-list_items">
-                <div class="proposals-list_item" v-for="(item,indx) in list.list" :key="indx">
-                    <div class="vendor-avatar">
-                        <md-avatar class="md-avatar-icon">
-                            <md-icon>people</md-icon>
-                        </md-avatar>
+            <template
+                v-if="list.list.length"
+            >
+                <div class="md-toolbar-section-start acceptance-list">
+                    <div class="proposals-name">
+                        {{list.title}} ({{list.list.length}})
                     </div>
-                    <div class="proposal-info text-left" style="width:70% !important;">
-                        <div class="proposal-title-reviews" @click="showVendorDetail(item.vendor)">{{ item.vendor ? item.vendor.vendorDisplayName : 'No Vendor Title' }}
-                            <div class="star-rating">
-                                <label class="star-rating__star"
-                                       v-for="rating in ratings"
-                                       :class="{'is-selected' : ((item.vendor.rank >= rating) && item.vendor.rank != null)}">
-                                    <input class="star-rating star-rating__checkbox" type="radio">★</label>
+                </div>
+
+                <div class="proposals-list_items">
+                    <div class="proposals-list_item" v-for="(item,indx) in list.list" :key="indx">
+                        <div class="vendor-avatar">
+                            <md-avatar class="md-avatar-icon">
+                                <md-icon>people</md-icon>
+                            </md-avatar>
+                        </div>
+                        <div class="proposal-info text-left" style="width:70% !important;">
+                            <div class="proposal-title-reviews" @click="showVendorDetail(item.vendor)">{{ item.vendor ? item.vendor.vendorDisplayName : 'No Vendor Title' }}
+                                <div class="star-rating">
+                                    <label class="star-rating__star"
+                                           v-for="rating in ratings"
+                                           :class="{'is-selected' : ((item.vendor.rank >= rating) && item.vendor.rank != null)}">
+                                        <input class="star-rating star-rating__checkbox" type="radio">★</label>
+                                </div>
+                            </div>
+                            <div class="proposal-property-list">
+                                <ul class="list-items">
+                                    <li> <md-icon>check</md-icon> Insurance</li>
+                                </ul>
+
+
+                            </div>
+                            <div class="proposal-benefits-list" v-if="item.proposals && item.proposals[0]">
+                                <ul class="list-items" >
+                                    <li v-for="pro in item.proposals[0].pros"> {{pro}}</li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="proposal-property-list">
-                            <ul class="list-items">
-                                <li> <md-icon>check</md-icon> Insurance</li>
-                            </ul>
-
-
+                        <div class="proposal-actions text-right">
+                            <template v-if="item.proposals && item.proposals[0]">
+                                <div class="cost">${{item.proposals[0].cost}}</div>
+                                <md-button class="md-rose md-sm md-simple"  @click="viewProposal(item.proposals[0])">view contract</md-button>
+                                <md-button class="md-rose md-sm"  @click="manageProposalsAccept(item.proposals[0])" v-if="item.proposals[0].downPaymentStatus !== 'paid'">Pay</md-button>
+                            </template>
                         </div>
-                        <div class="proposal-benefits-list" v-if="item.proposals && item.proposals[0]">
-                            <ul class="list-items" >
-                                <li v-for="pro in item.proposals[0].pros"> {{pro}}</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="proposal-actions text-right">
-                        <template v-if="item.proposals && item.proposals[0]">
-                            <div class="cost">${{item.proposals[0].cost}}</div>
-                            <md-button class="md-rose md-sm md-simple"  @click="viewProposal(item.proposals[0])">view contract</md-button>
-                            <md-button class="md-rose md-sm"  @click="manageProposalsAccept(item.proposals[0])" v-if="item.proposals[0].downPaymentStatus !== 'paid'">Pay</md-button>
-                        </template>
                     </div>
                 </div>
-            </div>
+            </template>
+
 
         </div>
 

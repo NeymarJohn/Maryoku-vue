@@ -1,5 +1,10 @@
 <template>
-  <span class="text-color-purple">{{prefix}}{{animatedNumber | numeral('0,0') }}{{suffix}}</span>
+  <span v-if="customStyle" :style="customStyleContents">
+    {{prefix}}{{animatedNumber | numeral('0,0') }}{{suffix}}
+  </span>
+  <span v-else class="text-color-pink">
+    {{prefix}}{{animatedNumber | numeral('0,0') }}{{suffix}}
+  </span>
 </template>
 <script>
 import TWEEN from "@tweenjs/tween.js";
@@ -19,6 +24,14 @@ export default {
     },
     suffix: {
       type: String,
+      default: ''
+    },
+    customStyle: {
+      type: Boolean,
+      default: false
+    },
+    customStyleContents: {
+      type: String, 
       default: ''
     }
   },
@@ -64,9 +77,9 @@ export default {
 };
 </script>
 <style scoped>
-  span.text-color-purple {
-    color: #9c27b0;
+  span.text-color-pink {
+    color: #ff4470;
     font-size: 18px;
-    font-weight: normal;
+    font-weight: 500;
   }
 </style>
