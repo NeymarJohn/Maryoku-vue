@@ -55,8 +55,9 @@ export default {
     flex-direction: column;
     h3 {
       text-transform: capitalize;
-      font-size: 14px;
-      font-weight: 400;
+      color: $purple-500;
+      font-size: 18px;
+      font-weight: 500;
       text-align: left;
     }
     .amounts {
@@ -64,15 +65,14 @@ export default {
       span {
         flex: 1;
         font-size: 14px;
-        font-weight: 400;
         color: #000000;
       }
     }
     .percentage {
       height: 5px;
-      background: #d8dce5;
+      background: rgb(187,208,234);
       .inner {
-        background: #ff9800;
+        background: rgb(217,154,50);
         height: 100%;
         width: 100%;
       }

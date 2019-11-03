@@ -31,6 +31,8 @@
                             <ul class="list-items">
                                 <li> <md-icon>check</md-icon> Insurance</li>
                             </ul>
+
+
                         </div>
                         <div class="proposal-benefits-list" v-if="item.proposals && item.proposals[0]">
                             <ul class="list-items" >

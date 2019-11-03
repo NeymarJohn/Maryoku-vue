@@ -245,9 +245,7 @@
 
       this.getEvent()
       const tab = this.$route.query.t || 0;
-      if (this.$refs.eventPlannerTabs) {
-        this.$refs.eventPlannerTabs.$emit('event-planner-nav-switch-panel', tab);
-      }
+      this.$refs.eventPlannerTabs.$emit('event-planner-nav-switch-panel',tab);
 
       if (this.components.length === 0) {
         this.$store.dispatch('event/getComponents', this)

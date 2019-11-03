@@ -51,12 +51,13 @@
                       <md-icon>cached</md-icon> Recurring weekly
                     </md-button>
                   </div>
+
                 </div>
               </div>
             </li>
           </ul>
         </drop-down>-->
-        <h3 class="md-title cst-style" v-if="isEventDetails">
+        <h3 class="md-title" style="font-weight: 400; padding-top: 14px; margin-left: -10px;">
           <md-icon class="text-rose" v-if="topBarTitle">arrow_right</md-icon>
           {{$route.meta.title ? $route.meta.title : $route.name}}
         </h3>
@@ -148,26 +149,17 @@
 <!--            </li>-->
 
             <li class="md-list-item import-vendor" v-if="topBarEventId">
-              <a class="import" @click="gotoVendorsPool">
-                <md-icon>file_upload</md-icon>
-                import your vendors
-              </a>
-              <a class="import">
+              <a class="import" @click="gotoVendorsPool">import your vendors</a>
+              <md-button class="md-danger md-sm no-padding">
                 <md-icon>play_arrow</md-icon>
-                learn more
-              </a>
-              <!-- <md-button class="md-danger md-xs no-padding btn-learn-more">
-                <md-icon>play_arrow</md-icon>
-                <span>
-                  Learn more
-                </span>
-              </md-button> -->
+                Learn more
+              </md-button>
             </li>
             <li class="md-list-item">
               <a href="#" class="md-list-item-router md-list-item-container md-button-clean dropdown">
                 <div class="md-list-item-content">
                   <drop-down direction="down" :hover="true">
-                    <md-button name="user-top-menu" slot="title" class="user-top-menu md-button md-simple no-padding" data-toggle="dropdown">
+                    <md-button name="user-top-menu" slot="title" class="user-top-menu md-button md-simple" data-toggle="dropdown">
                       <!--<md-icon>email</md-icon>
                       <span class="notification">5</span>
                       <p class="hidden-lg hidden-md">Notifications</p>-->
@@ -354,15 +346,6 @@
         let routeData = this.$router.resolve({name: 'VendorsPool', params: {id: this.topBarEventId}});
         window.open(routeData.href, '_blank');
       }
-    },
-    computed: {
-      isEventDetails() {
-        if (this.$route.name == "EditEvent" || this.$route.title == "Event Details") {
-          return false;
-        } else {
-          return true;
-        }
-      }
     }
   };
 </script>
@@ -442,44 +425,19 @@
   .import-vendor {
     display: flex;
     align-items: center;
-    a {
-      color: #ff4470!important;
+    a.import {
+      color: #9c27b0!important;
       font-size: 12px;
       font-weight: 500;
       text-transform: uppercase;
       margin-right: 2em!important;
       cursor: pointer;
-      i {
-        color: #ff4470!important;
-        font-size: 14px!important;
-        width: 14px!important;
-        min-width: 14px!important;
-      }
     }
-    .btn-learn-more {
-      width: 100px;
-      height: 30px!important;
+    .md-button {
+      height: 36px!important;
       text-transform: capitalize;
-      border-radius: 25px;
-      i {
-        height: 0;
-        font-size: 14px!important;
-        width: 12px!important;
-        min-width: 12px!important;
-      }
-      span {
-        padding-left: 3px;
-        font-size: 12px;
-        font-weight: 500;
-      }
+      margin-right: 4em;
+      border-radius: 36px;
     }
-  }
-  .user-top-menu {
-    margin: 0!important;
-  }
-  h3.cst-style {
-    font-weight: 400;
-    padding-top: 14px;
-    margin-left: -10px;
   }
 </style>
