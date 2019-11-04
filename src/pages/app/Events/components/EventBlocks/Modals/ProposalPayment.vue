@@ -201,6 +201,9 @@
 
             setTimeout(()=>{
 
+
+
+
                 // Custom styling can be passed to options when creating an Element.
                 // (Note that this demo uses a wider set of styles than the guide below.)
                 var style = {
