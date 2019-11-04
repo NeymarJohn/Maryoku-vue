@@ -99,10 +99,10 @@
                                     </md-field>
                                 </div>
                                 <div class="md-layout-item md-size-33">
-                                    <md-field>
+                                    <md-field style="margin-top : 3px;">
                                         <label>Per Guest</label>
                                         <md-input v-model="eventData.budgetPerPerson"
-                                                  type="number"
+
                                         ></md-input>
                                     </md-field>
                                 </div>
