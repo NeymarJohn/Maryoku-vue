@@ -169,9 +169,7 @@ const vm = {
     onBgClicked() {
       const currentPanel = this.panels[this.panels.length - 1];
 
-      if (currentPanel) {
-        if (currentPanel.disableBgClick) return;
-      }
+      if (currentPanel.disableBgClick) return;
 
       this.closeCurrentPanel({
         closedBy: 'bg'

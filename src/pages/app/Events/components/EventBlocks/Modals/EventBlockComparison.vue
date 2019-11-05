@@ -449,6 +449,7 @@
       },
       populateProposals() {
         console.log("EventBlockComparison: ");
+        console.log(this.selectedBlock);
 
         _.each(this.selectedBlock.proposals, (item) => {
           this.proposalsById[item.id] = item;

@@ -1,189 +1,190 @@
 <template>
-  <div class="adding-building-blocks-panel">
-    <div class="md-layout">
-      <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
-        <md-button @click="closeModal" class="md-button md-theme-default md-simple md-just-icon">
-          <md-icon>arrow_back</md-icon>
-        </md-button>
-        Create New Event
-      </h4>
-      <div class="from md-layout-item md-size-100">
-        <form>
-          <div class="md-layout mb16">
-            <div class="md-layout-item md-size-auto md-small-size-100 d-flex items-center-v text-center">
-              <md-field   :class="[{'md-error': errors.has('title')}]">
-                <label>Event title</label>
-                <md-input v-model="title"
-                  data-vv-name="title"
-                  v-validate= "modelValidations.title"
-                  required
-                  />
-                <span class="md-error" v-if="errors.has('title')">The event title is required</span>
-              </md-field>
-            </div>
-          </div>
-          <div class="md-layout mb16">
-            <div class="md-layout-item md-small-size-100">
-              <md-autocomplete v-model="occasion"
-                data-vv-name="occasion"
-                :md-options="occasionList"
-                @md-opened="mdOpened"
-                class="change-icon-order select-with-icon mb16"
-                :class="[{'md-error': errors.has('occasion')}]">
-                <label>Occasion</label>
-                <span class="md-error" v-if="errors.has('occasion')">This field is required</span>
-              </md-autocomplete>
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="[{'md-error': errors.has('theme')}]" class="select-with-icon">
-                <label>Theme</label>
-                <md-select v-model="theme"
-                  data-vv-name="theme"
-                  v-validate= "modelValidations.category"
-                  required>
-                  <md-option v-for="event in eventThemes"
-                    :key="event.id"
-                    :value="event.id">
-                    {{ event.title }}
-                  </md-option>
-                </md-select>
-                <span class="md-error" v-if="errors.has('theme')">The event category is required</span>
-              </md-field>
-            </div>
-          </div>
-          <div class="md-layout mb16">
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="[{'md-error': errors.has('eventType')}]" class="select-with-icon">
-                <label>Event Type</label>
-                <md-select v-model="eventType"
-                  data-vv-name="eventType"
-                  v-validate= "modelValidations.eventType"
-                  required>
-                  <md-option v-for="option in eventTypes"
-                    :key="option.item"
-                    :value="option.item">
-                    {{ option.item }}
-                  </md-option>
-                </md-select>
-                <span class="md-error" v-if="errors.has('eventType')">The event eventType is required</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="[{'md-error': errors.has('category')}]" class="select-with-icon">
-                <label>Category</label>
-                <md-select v-model="category"
-                  data-vv-name="category"
-                  v-validate= "modelValidations.category"
-                  required>
-                  <md-option v-for="option in categories"
-                    :key="option.id"
-                    :value="option.item">
-                    {{ option.item }}
-                  </md-option>
-                </md-select>
-                <span class="md-error" v-if="errors.has('category')">The event category is required</span>
-              </md-field>
-            </div>
-          </div>
-          <div class="md-layout mb16">
-            <div class="md-layout-item md-size-100 md-small-size-100">
-              <md-datepicker
-                v-model="date"
-                data-vv-name="date"
-                ref="datePicker"
-                v-validate= "modelValidations.date"
-                required>
-                <label :class="[{'md-error': ($refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value') )}]">Date</label>
-              </md-datepicker>
-            </div>
-          </div>
-          <div class="md-layout mb16">
-            <div class="md-layout-item md-size-50 md-small-size-100">
-              <md-field :class="[{'md-error': errors.has('time')}]" class="">
-                <label>Start Time</label>
-                <md-select v-model="time"
-                  data-vv-name="time"
-                  v-validate= "modelValidations.time"
-                  required>
-                  <md-option v-for="hour in hoursArray"
-                    :key="hour"
-                    :value="hour">
-                    {{ hour }}
-                  </md-option>
-                </md-select>
-                <span class="md-error" v-if="errors.has('time')">The event time is required</span>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-size-50 md-small-size-100">
-              <md-field :class="[{'md-error': errors.has('duration')}]" class="">
-                <label>Duration</label>
-                <md-select v-model="duration"
-                  data-vv-name="duration"
-                  v-validate= "modelValidations.duration"
-                  required>
-                  <md-option v-for="hour in durationArray"
-                    :key="hour"
-                    :value="hour">
-                    {{ hour + ' hours' }}
-                  </md-option>
-                </md-select>
-                <span class="md-error" v-if="errors.has('duration')">The event duration time is required</span>
-              </md-field>
-            </div>
-          </div>
-          <div class="md-layout mb16">
-            <div class="md-layout-item md-small-size-100">
-              <md-field>
-                <label>Budget</label>
-                <md-input v-model="totalBudget"
-                  data-vv-name="totalBudget"/>
-              </md-field>
-            </div>
-            <div class="md-layout-item md-small-size-100">
-              <md-field :class="[{'md-error': errors.has('numberOfParticipants')}]">
-                <label>Number of Participants</label>
-                <md-input type="text"
-                  v-model="numberOfParticipants"
-                  data-vv-name="numberOfParticipants"
-                  v-validate= "modelValidations.numberOfParticipants"
-                  required/>
-                <span class="md-error" v-if="errors.has('numberOfParticipants')">The event participants is required and should be in range of 1 - 10 000</span>
-              </md-field>
-            </div>
-            <!--<div class="md-layout-item md-small-size-100">
-              <md-field :class="[{'md-error': errors.has('currency')}]" class="select-with-icon">
-                  <label>Currency</label>
-                  <md-select v-model="currency"
-                             data-vv-name="currency"
-                             v-validate= "modelValidations.currency"
-                  >
-                      <md-option v-for="option in currencies"
-                                 :key="option.id"
-                                 :value="option.value">
-                          {{ option.value }}
-                      </md-option>
-                  </md-select>
-                  <span class="md-error" v-if="errors.has('currency')">The event currency is required</span>
-              </md-field>
-              </div>-->
-          </div>
-        </form>
-      </div>
-      <div class="actions-section md-layout-item md-size-100 text-right">
-        <md-button v-if="this.editMode" class="md-danger move-left" @click="showDeleteAlert">
-          Delete
-        </md-button>
-        <md-button v-if="this.editMode" @click="openEventPlanner" class="md-success">
-          Open in Event Planner
-        </md-button>
-        <md-button class="md-success pull-right" @click="validateEvent">
-          {{modalSubmitTitle}}
-        </md-button>
-      </div>
-    </div>
-  </div>
-</template>
+    <div class="adding-building-blocks-panel">
+        <div class="md-layout">
+            <h4 class="md-title" style="margin-bottom: 0; line-height: 51px;">
+                <md-button @click="closeModal" class="md-button md-theme-default md-simple md-just-icon"><md-icon>arrow_back</md-icon></md-button>
+                Create New Event
+            </h4>
+            <div class="from md-layout-item md-size-100">
+                <form>
+                    <div class="md-layout mb16">
+                        <div class="md-layout-item md-size-auto md-small-size-100 d-flex items-center-v text-center">
+                            <md-field   :class="[{'md-error': errors.has('title')}]">
+                                <label>Event title</label>
+                                <md-input v-model="title"
+                                          data-vv-name="title"
+                                          v-validate= "modelValidations.title"
+                                          required
+                                />
+                                <span class="md-error" v-if="errors.has('title')">The event title is required</span>
+                            </md-field>
+                        </div>
+                    </div>
+                    <div class="md-layout mb16">
+                        <div class="md-layout-item md-small-size-100">
+                            <md-autocomplete v-model="occasion"
+                                             data-vv-name="occasion"
+                                             :md-options="occasionList"
+                                             @md-opened="mdOpened"
+                                             class="change-icon-order select-with-icon mb16"
+                                             :class="[{'md-error': errors.has('occasion')}]">
+                                <label>Occasion</label>
+                                <span class="md-error" v-if="errors.has('occasion')">This field is required</span>
+                            </md-autocomplete>
+                        </div>
+                        <div class="md-layout-item md-small-size-100">
+                            <md-field :class="[{'md-error': errors.has('theme')}]" class="select-with-icon">
+                                <label>Theme</label>
+                                <md-select v-model="theme"
+                                           data-vv-name="theme"
+                                           v-validate= "modelValidations.category"
+                                           required>
+                                    <md-option v-for="event in eventThemes"
+                                               :key="event.id"
+                                               :value="event.id">
+                                        {{ event.title }}
+                                    </md-option>
+                                </md-select>
+                                <span class="md-error" v-if="errors.has('theme')">The event category is required</span>
+                            </md-field>
+                        </div>
+                    </div>
+                    <div class="md-layout mb16">
+                        <div class="md-layout-item md-small-size-100">
+                            <md-field :class="[{'md-error': errors.has('eventType')}]" class="select-with-icon">
+                                <label>Event Type</label>
+                                <md-select v-model="eventType"
+                                           data-vv-name="eventType"
+                                           v-validate= "modelValidations.eventType"
+                                           required>
+                                    <md-option v-for="option in eventTypes"
+                                               :key="option.item"
+                                               :value="option.item">
+                                        {{ option.item }}
+                                    </md-option>
+                                </md-select>
+                                <span class="md-error" v-if="errors.has('eventType')">The event eventType is required</span>
+                            </md-field>
+                        </div>
+                        <div class="md-layout-item md-small-size-100">
+                            <md-field :class="[{'md-error': errors.has('category')}]" class="select-with-icon">
+                                <label>Category</label>
+                                <md-select v-model="category"
+                                           data-vv-name="category"
+                                           v-validate= "modelValidations.category"
+                                           required>
+                                    <md-option v-for="option in categories"
+                                               :key="option.id"
+                                               :value="option.item">
+                                        {{ option.item }}
+                                    </md-option>
+                                </md-select>
+                                <span class="md-error" v-if="errors.has('category')">The event category is required</span>
+                            </md-field>
+                        </div>
+                    </div>
+                    <div class="md-layout mb16">
+                        <div class="md-layout-item md-size-100 md-small-size-100">
+                            <md-datepicker
+                                    v-model="date"
+                                    data-vv-name="date"
+                                    ref="datePicker"
+                                    v-validate= "modelValidations.date"
+                                    required>
+                                <label :class="[{'md-error': ($refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value') )}]">Date</label>
+                            </md-datepicker>
+                        </div>
+                    </div>
+                    <div class="md-layout mb16">
+                        <div class="md-layout-item md-size-50 md-small-size-100">
+                            <md-field :class="[{'md-error': errors.has('time')}]" class="">
+                                <label>Start Time</label>
+                                <md-select v-model="time"
+                                           data-vv-name="time"
+                                           v-validate= "modelValidations.time"
+                                           required>
+                                    <md-option v-for="hour in hoursArray"
+                                               :key="hour"
+                                               :value="hour">
+                                        {{ hour }}
+                                    </md-option>
+                                </md-select>
+                                <span class="md-error" v-if="errors.has('time')">The event time is required</span>
+                            </md-field>
+                        </div>
 
+                        <div class="md-layout-item md-size-50 md-small-size-100">
+                            <md-field :class="[{'md-error': errors.has('duration')}]" class="">
+                                <label>Duration</label>
+                                <md-select v-model="duration"
+                                           data-vv-name="duration"
+                                           v-validate= "modelValidations.duration"
+                                           required>
+                                    <md-option v-for="hour in durationArray"
+                                               :key="hour"
+                                               :value="hour">
+                                        {{ hour + ' hours' }}
+                                    </md-option>
+                                </md-select>
+                                <span class="md-error" v-if="errors.has('duration')">The event duration time is required</span>
+                            </md-field>
+                        </div>
+                    </div>
+                    <div class="md-layout mb16">
+                        <div class="md-layout-item md-small-size-100">
+                            <md-field>
+                                <label>Budget</label>
+                                <md-input v-model="totalBudget"
+                                          data-vv-name="totalBudget"/>
+                            </md-field>
+                        </div>
+                        <div class="md-layout-item md-small-size-100">
+                            <md-field :class="[{'md-error': errors.has('numberOfParticipants')}]">
+                                <label>Number of Participants</label>
+                                <md-input type="text"
+                                          v-model="numberOfParticipants"
+                                          data-vv-name="numberOfParticipants"
+                                          v-validate= "modelValidations.numberOfParticipants"
+                                          required/>
+                                <span class="md-error" v-if="errors.has('numberOfParticipants')">The event participants is required and should be in range of 1 - 10 000</span>
+                            </md-field>
+                        </div>
+                        <!--<div class="md-layout-item md-small-size-100">
+                            <md-field :class="[{'md-error': errors.has('currency')}]" class="select-with-icon">
+                                <label>Currency</label>
+                                <md-select v-model="currency"
+                                           data-vv-name="currency"
+                                           v-validate= "modelValidations.currency"
+                                >
+                                    <md-option v-for="option in currencies"
+                                               :key="option.id"
+                                               :value="option.value">
+                                        {{ option.value }}
+                                    </md-option>
+                                </md-select>
+                                <span class="md-error" v-if="errors.has('currency')">The event currency is required</span>
+                            </md-field>
+                        </div>-->
+                    </div>
+
+                </form>
+            </div>
+            <div class="actions-section md-layout-item md-size-100 text-right">
+                <md-button v-if="this.editMode" class="md-danger move-left" @click="showDeleteAlert">
+                    Delete
+                </md-button>
+
+                <md-button v-if="this.editMode" @click="openEventPlanner" class="md-success">
+                    Open in Event Planner
+                </md-button>
+
+                <md-button class="md-success pull-right" @click="validateEvent">
+                    {{modalSubmitTitle}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</template>
 <script>
   // import auth from '@/auth';
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
@@ -207,6 +208,7 @@
           type : Object,
             default : null
         }
+
     },
     data: () => ({
       // auth: auth,
@@ -616,43 +618,43 @@
   }
 </style>
 <style lang="scss">
-  .modal-z-index {
-    z-index: 5;
-  }
-  .large-z-index {
-    z-index: 6;
-    position: relative;
-  }
-  .move-center {
-    margin: 0 auto!important;
-  }
-  .move-left {
-    margin-left: 0!important;
-    margin-right: auto!important;
-  }
-  .move-right {
-    margin-right: 0!important;
-    margin-left: auto!important;
-  }
-  .text-center {
-    text-align: center;
-  }
-  .d-flex {
-    display: flex;
-  }
-  .items-center-v {
-    align-items: center;
-  }
-  .items-center-g {
-    justify-content: center;
-  }
-  .justify-beetwen {
-    justify-content: space-between
-  }
-  .md-field .md-error {
-    text-align: left;
-  }
-  .swal2-container {
-    z-index: 10000;
-  }
+    .modal-z-index {
+        z-index: 5;
+    }
+    .large-z-index {
+        z-index: 6;
+        position: relative;
+    }
+    .move-center {
+        margin: 0 auto!important;;
+    }
+    .move-left {
+      margin-left: 0!important;
+      margin-right: auto!important;
+    }
+    .move-right {
+      margin-right: 0!important;
+      margin-left: auto!important;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .d-flex {
+      display: flex;
+    }
+    .items-center-v {
+      align-items: center;
+    }
+    .items-center-g {
+      justify-content: center;
+    }
+    .justify-beetwen {
+      justify-content: space-between
+    }
+    .md-field .md-error {
+      text-align: left;
+    }
+    .swal2-container {
+      z-index: 10000;
+    }
 </style>
