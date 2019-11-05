@@ -1,8 +1,8 @@
 {
     "name": "two62-app",
     "version": "1.0.0",
-    "description": "262 Days Back Office WebApp",
-    "author": "262 Days Ltd",
+    "description": "maryoku Back Office WebApp",
+    "author": "maryoku Ltd",
     "private": true,
     "scripts": {
         "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",

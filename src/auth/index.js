@@ -1,6 +1,6 @@
 /* const { SCHEME, HOSTNAME } =
   process.env.NODE_ENV === 'production'
-    ? {SCHEME: 'https', HOSTNAME: 'api.262days.com'}
+    ? {SCHEME: 'https', HOSTNAME: 'api.maryoku.com'}
     : {SCHEME: 'http', HOSTNAME: process.env.SERVER_URL} */
 import { Model } from 'vue-api-query';
 import ME from '@/models/Me';
@@ -213,8 +213,8 @@ export default {
         return window.localStorage.getItem(TOKEN_KEY);
     },
     resolveTenantId(){
-        let tenantId = document.location.hostname.replace(".dev.262days.com","");
-        tenantId = tenantId.replace(".262days.com","");
+        let tenantId = document.location.hostname.replace(".dev.maryoku.com","");
+        tenantId = tenantId.replace(".maryoku.com","");
 
         if (document.location.hostname.startsWith("app") || document.location.hostname.startsWith("dev")){
             tenantId = "DEFAULT";

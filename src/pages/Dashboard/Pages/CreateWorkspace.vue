@@ -44,7 +44,7 @@
             <label>Workspace Name</label>
             <span class="md-prefix">https://</span>
             <md-input v-focus v-model="workspace" type="text" data-vv-name="workspace" required @keyup="checkWorkspace"></md-input>
-            <span class="md-suffix">.262days.com</span>
+            <span class="md-suffix">.maryoku.com</span>
             <div class='md-error' v-if="!workspaceValid" style="text-align: center; width: 100%;font-size: 0.9rem; padding-top: 18px;">{{error}}</div>
           </md-field>
 
@@ -71,7 +71,7 @@ export default {
   methods: {
     authenticate(provider) {
       this.loading = true;
-      let tenantId = document.location.hostname.replace(".262days.com","");
+      let tenantId = document.location.hostname.replace(".maryoku.com","");
       const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`);
       document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
     },
@@ -81,13 +81,13 @@ export default {
       this.$validator.validateAll().then(isValid => {
         if (isValid){
 
-          /*let tenantId = document.location.hostname.replace(".262days.com","");
+          /*let tenantId = document.location.hostname.replace(".maryoku.com","");
           tenantId = tenantId.length > 0 && tenantId === 'dev' ? "_"+tenantId : '';*/
-          let tenantIdExt = document.location.hostname === 'dev.262days.com' ? '.dev' : '';
+          let tenantIdExt = document.location.hostname === 'dev.maryoku.com' ? '.dev' : '';
           new Tenant({id: this.workspace}).save().then(res => {
             if (res.status){
               this.loading = true;
-              document.location.href=`${document.location.protocol}//${this.workspace}${tenantIdExt}.262days.com:${document.location.port}/#/signedin?token=${res.token}`;
+              document.location.href=`${document.location.protocol}//${this.workspace}${tenantIdExt}.maryoku.com:${document.location.port}/#/signedin?token=${res.token}`;
             } else {
               this.error = "Failed"
             }
@@ -125,7 +125,7 @@ export default {
 
         this.t = setTimeout(function(){
           //this.loading = true;
-          /*let tenantId = document.location.hostname.replace(".262days.com","");
+          /*let tenantId = document.location.hostname.replace(".maryoku.com","");
           tenantId = tenantId.length > 0 && tenantId === 'dev' ? "_"+tenantId : '';
 */
           new Tenant().find(this.workspace).then(res =>{
@@ -146,7 +146,7 @@ export default {
     //const givenToken = this.$route.query.token;
     //this.$auth.setToken(givenToken);
     //this.$auth.currentUser(this, true);
-    /*let tenantId = document.location.hostname.replace(".262days.com","");
+    /*let tenantId = document.location.hostname.replace(".maryoku.com","");
     new Tenant().find(tenantId).then(res =>{
       if (!res.status){
         this.$router.push({name:"CreateWorkspace"});

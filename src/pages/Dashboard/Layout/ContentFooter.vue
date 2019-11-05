@@ -34,7 +34,7 @@
             </ul>
         </nav>
         <div class="copyright text-center">
-          &copy; {{ new Date().getFullYear() }}, Made with <i class="fa fa-heart heart text-rose"></i> <a href="https://www.maryoku.com/?ref=mdp-vuejs" target="_blank">262Days Ltd</a>
+          &copy; {{ new Date().getFullYear() }}, Made with <i class="fa fa-heart heart text-rose"></i> <a href="https://www.maryoku.com/?ref=mdp-vuejs" target="_blank">maryoku Ltd</a>
         </div>
     </div>
   </footer>

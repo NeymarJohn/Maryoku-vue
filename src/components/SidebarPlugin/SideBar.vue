@@ -47,11 +47,11 @@ export default {
   props: {
     title: {
       type: String,
-      default: "262 Days"
+      default: "maryoku"
     },
     rtlTitle: {
       type: String,
-      default: "262 Days"
+      default: "maryoku"
     },
     activeColor: {
       type: String,

@@ -65,7 +65,7 @@
         methods: {
             authenticate(provider) {
                 this.loading = true;
-                let tenantId = document.location.hostname.replace(".262days.com","").replace(".","_");
+                let tenantId = document.location.hostname.replace(".maryoku.com","").replace(".","_");
                 const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`);
                 document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
             },
@@ -97,7 +97,7 @@
             const givenToken = this.$route.query.token;
             this.$auth.setToken(givenToken);
             this.$auth.currentUser(this, true);
-            /*let tenantId = document.location.hostname.replace(".262days.com","");
+            /*let tenantId = document.location.hostname.replace(".maryoku.com","");
             new Tenant().find(tenantId).then(res =>{
               if (!res.status){
                 this.$router.push({name:"CreateWorkspace"});

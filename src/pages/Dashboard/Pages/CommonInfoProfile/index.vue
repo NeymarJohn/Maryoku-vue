@@ -43,7 +43,7 @@
               </ul>
             </nav>
             <div class="copyright text-center">
-              &copy; <a href="https://www.maryoku.com" target="_blank">262 Days Ltd</a> &middot; All rights reserved
+              &copy; <a href="https://www.maryoku.com" target="_blank">maryoku Ltd</a> &middot; All rights reserved
             </div>
           </div>
         </footer>
