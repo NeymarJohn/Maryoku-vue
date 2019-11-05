@@ -3,7 +3,7 @@
     <md-toolbar md-elevation="0" class="md-transparent md-toolbar-absolute">
       <div class="md-toolbar-row md-offset">
         <div class="md-toolbar-section-start">
-          <h3 class="md-title"><a href="https://www.262days.com"><img src="static/img/262Logo2.png"/></a> </h3>
+          <h3 class="md-title"><a href="https://www.maryoku.com"><img src="static/img/262Logo2.png"/></a> </h3>
         </div>
         <div class="md-toolbar-section-end">
           <md-button class="md-just-icon md-simple md-round md-toolbar-toggle" :class="{toggled: $sidebar.showSidebar}" @click="toggleSidebar">
@@ -26,24 +26,24 @@
             <nav>
               <ul>
                 <li>
-                  <a href="https://www.262days.com/our-story">
+                  <a href="https://www.maryoku.com/our-story">
                     Our Story
                   </a>
                 </li>
                 <li>
-                  <a href="https://www.262days.com/terms">
+                  <a href="https://www.maryoku.com/terms">
                     Terms of Use
                   </a>
                 </li>
                 <li>
-                  <a href="https://www.262days.com/privacy">
+                  <a href="https://www.maryoku.com/privacy">
                     Privacy
                   </a>
                 </li>
               </ul>
             </nav>
             <div class="copyright text-center">
-              &copy; <a href="https://www.262days.com" target="_blank">262 Days Ltd</a> &middot; All rights reserved
+              &copy; <a href="https://www.maryoku.com" target="_blank">262 Days Ltd</a> &middot; All rights reserved
             </div>
           </div>
         </footer>

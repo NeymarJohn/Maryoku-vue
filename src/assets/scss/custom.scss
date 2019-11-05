@@ -4784,3 +4784,7 @@ h4.title-summary {
 .boolean-options {
     @include display-flex(row,flex-start,flex-start);
 }
+
+.md-datepicker-body-content {
+    max-height: 268px!important;
+}

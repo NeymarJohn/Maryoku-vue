@@ -12,8 +12,6 @@ import App from "./App.vue";
 import VueElementLoading from 'vue-element-loading';
 import Chartist from "chartist";
 import ChartistTooltipPlugin from "chartist-plugin-tooltip";
-import Tooltip from 'vue-directive-tooltip';
-import 'vue-directive-tooltip/css/index.css';
 import vSelectMenu from 'v-selectmenu';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VuePhoneNumberInput from 'vue-phone-number-input';
@@ -119,13 +117,6 @@ Object.defineProperty(Vue.prototype, "$Chartist", {
 
 Vue.use(VueAxios, axios);
 Vue.use(require('vue-moment'));
-Vue.use(Tooltip, {
-    delay: 200,
-    placement: 'auto',
-    class: 'tooltip-custom', // ex: 'tooltip-custom tooltip-other-custom'
-    triggers: ['hover', 'focus'],
-    offset: 5
-});
 Vue.use(VTooltip)
 Vue.use(vSelectMenu, { language: "en"});
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
