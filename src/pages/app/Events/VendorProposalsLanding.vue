@@ -8,7 +8,7 @@
         </h3>
       </div>
       <div class="margin-bottom-md">
-        <h4 class="title">What's maryoku?</h4>
+        <h4 class="title">What's 262 days?</h4>
         <p>Our community based marketplace brings together event producers and vetted vendors to streamline event production.</p>
       </div>
       <div class="margin-bottom-lg">

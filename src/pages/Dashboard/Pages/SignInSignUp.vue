@@ -41,7 +41,7 @@
                     </md-field>
 
                     <div class="title">
-                        By signing up you agree to our <br/> <a href="https://www.maryoku.com/terms" target="_blank" style="background-color: #f2f2f2;">Terms of Use</a> and <a href="https://www.maryoku.com/privacy" target="_blank" style="background-color: #f2f2f2;">Privacy Policy</a>
+                        By signing up you agree to our <br/> <a href="https://www.262days.com/terms" target="_blank" style="background-color: #f2f2f2;">Terms of Use</a> and <a href="https://www.262days.com/privacy" target="_blank" style="background-color: #f2f2f2;">Privacy Policy</a>
                     </div>
                     <div class="button-container">
                         <md-button @click="signup" class="md-success md-round mt-4" slot="footer">Continue</md-button>
@@ -65,7 +65,7 @@
         methods: {
             authenticate(provider) {
                 this.loading = true;
-                let tenantId = document.location.hostname.replace(".maryoku.com","").replace(".","_");
+                let tenantId = document.location.hostname.replace(".262days.com","").replace(".","_");
                 const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`);
                 document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
             },
@@ -97,7 +97,7 @@
             const givenToken = this.$route.query.token;
             this.$auth.setToken(givenToken);
             this.$auth.currentUser(this, true);
-            /*let tenantId = document.location.hostname.replace(".maryoku.com","");
+            /*let tenantId = document.location.hostname.replace(".262days.com","");
             new Tenant().find(tenantId).then(res =>{
               if (!res.status){
                 this.$router.push({name:"CreateWorkspace"});

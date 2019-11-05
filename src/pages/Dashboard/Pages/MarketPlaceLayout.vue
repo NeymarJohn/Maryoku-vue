@@ -10,7 +10,7 @@
         <a href="/index.php/blog" class="blog">BLOG</a>
         <a href="/index.php/product" class="product">PRODUCT</a>'
         <a href="/index.php/our-story" class="our-story">OUR STORY</a>
-        <a href="https://app.maryoku.com" class="book-a-demo">SIGN UP</a>
+        <a href="https://app.262days.com" class="book-a-demo">SIGN UP</a>
       </md-nav-links>
     </md-nav>
     </div>

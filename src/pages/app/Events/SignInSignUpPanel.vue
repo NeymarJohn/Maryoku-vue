@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="title">
-                        By signing up you agree to our <br/> <a href="https://www.maryoku.com/terms" target="_blank" style="background-color: #f2f2f2;">Terms of Use</a> and <a href="https://www.maryoku.com/privacy" target="_blank" style="background-color: #f2f2f2;">Privacy Policy</a>
+                        By signing up you agree to our <br/> <a href="https://www.262days.com/terms" target="_blank" style="background-color: #f2f2f2;">Terms of Use</a> and <a href="https://www.262days.com/privacy" target="_blank" style="background-color: #f2f2f2;">Privacy Policy</a>
                     </div>
 
                 </div>

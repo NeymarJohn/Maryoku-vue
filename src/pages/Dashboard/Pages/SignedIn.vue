@@ -28,11 +28,11 @@
 
             const that = this;
 
-            let tenantId = document.location.hostname.replace(".maryoku.com","");
+            let tenantId = document.location.hostname.replace(".262days.com","");
             let isPrimeTenant = tenantId === 'dev' || tenantId === 'app';
             if (isPrimeTenant) {
 
-                this.$cookies.set('at', givenToken, '1m', '', 'maryoku.com', true);
+                this.$cookies.set('at', givenToken, '1m', '', '262days.com', true);
 
                 new TenantUser().find(givenToken).then(res => {
                     if (res.status){
@@ -62,8 +62,8 @@
 
             } else {
 
-                let tenantId = document.location.hostname.replace( ".dev.maryoku.com","");
-                tenantId = tenantId.replace(".maryoku.com","");
+                let tenantId = document.location.hostname.replace( ".dev.262days.com","");
+                tenantId = tenantId.replace(".262days.com","");
 
                 that.$http.defaults.headers.common['gorm-tenantid'] = tenantId;
                 that.$http.defaults.headers.common.gorm_tenantid = tenantId;

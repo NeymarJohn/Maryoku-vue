@@ -32,7 +32,7 @@
     methods: {
       authenticate(provider) {
         this.loading = true;
-        let tenantId = document.location.hostname.replace(".maryoku.com","");
+        let tenantId = document.location.hostname.replace(".262days.com","");
         const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`);
         document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
       },
@@ -42,13 +42,13 @@
         this.$validator.validateAll().then(isValid => {
           if (isValid){
 
-            let tenantId = document.location.hostname.replace(".maryoku.com","");
+            let tenantId = document.location.hostname.replace(".262days.com","");
             tenantId = tenantId.length > 0 && tenantId === 'dev' ? "_"+tenantId : '';
 
             new Tenant({id: this.workspace + tenantId}).save().then(res => {
               if (res.status){
                 this.loading = true;
-                document.location.href=`${document.location.protocol}//${this.workspace}${tenantId}.maryoku.com:${document.location.port}`;
+                document.location.href=`${document.location.protocol}//${this.workspace}${tenantId}.262days.com:${document.location.port}`;
               } else {
                 this.$router.push({name: "SignIn"});
               }
@@ -88,7 +88,7 @@
 
           this.t = setTimeout(function(){
             this.loading = true;
-            let tenantId = document.location.hostname.replace(".maryoku.com","");
+            let tenantId = document.location.hostname.replace(".262days.com","");
             tenantId = tenantId.length > 0 && tenantId === 'dev' ? "_"+tenantId : '';
 
             new Tenant().find(this.workspace + tenantId).then(res =>{
@@ -107,8 +107,8 @@
       tenantUrl(tenant){
         //${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=
         let hostname = document.location.hostname;
-        if (hostname.startsWith("app.maryoku.com")){
-          hostname = 'maryoku.com';
+        if (hostname.startsWith("app.262days.com")){
+          hostname = '262days.com';
         }
         return `${document.location.protocol}//${tenant}.${hostname}:${document.location.port}/#/signedin?token=${this.$auth.getToken()}`;
       }
@@ -117,7 +117,7 @@
       //const givenToken = this.$route.query.token;
       //this.$auth.setToken(givenToken);
       //this.$auth.currentUser(this, true);
-      /*let tenantId = document.location.hostname.replace(".maryoku.com","");
+      /*let tenantId = document.location.hostname.replace(".262days.com","");
       new Tenant().find(tenantId).then(res =>{
         if (!res.status){
           this.$router.push({name:"CreateWorkspace"});

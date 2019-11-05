@@ -17,5 +17,5 @@ Please use **yarn** to add/remove dependencies, **DO NOT** use **npm** unless yo
 
 ### Server APIs document
 
-<a href="https://api.maryoku.com/apidocs" target="_blank">https://api.maryoku.com/apidocs</a>
+<a href="https://api.262days.com/apidocs" target="_blank">https://api.262days.com/apidocs</a>
 
