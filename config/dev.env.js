@@ -4,5 +4,6 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  SERVER_URL: '"https://api-dev.262days.com"'
+  SERVER_URL: '"https://api-dev.maryoku.com"',
+    GOOGLE_API_KEY:'"AIzaSyD6JvMsiEN9jz3lfVbKlnUQhjZB6fgcCu8"'
 })

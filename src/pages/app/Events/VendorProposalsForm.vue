@@ -459,9 +459,9 @@
                         </div>
 
                         <div class="payment-policy text-center">
-                            By submitting a proposal you agree to our <a href="https://www.262days.com/terms"
+                            By submitting a proposal you agree to our <a href="https://www.maryoku.com/terms"
                                                                          target="_blank">Terms of Service</a> and <a
-                            href="https://www.262days.com/privacy" target="_blank">Privacy Policy</a>.
+                            href="https://www.maryoku.com/privacy" target="_blank">Privacy Policy</a>.
                         </div>
 
                     </md-card-content>

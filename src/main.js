@@ -12,8 +12,6 @@ import App from "./App.vue";
 import VueElementLoading from 'vue-element-loading';
 import Chartist from "chartist";
 import ChartistTooltipPlugin from "chartist-plugin-tooltip";
-import Tooltip from 'vue-directive-tooltip';
-import 'vue-directive-tooltip/css/index.css';
 import vSelectMenu from 'v-selectmenu';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VuePhoneNumberInput from 'vue-phone-number-input';
@@ -66,7 +64,7 @@ router.beforeEach((to, from, next) => {
         window.currentPanel = null;
     }
 
-    /*let tenantId = document.location.hostname.replace(".262days.com","");
+    /*let tenantId = document.location.hostname.replace(".maryoku.com","");
     router.app.$http.defaults.headers.common.gorm_tenantid = tenantId;
     Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
 
@@ -80,7 +78,7 @@ router.beforeEach((to, from, next) => {
       }
     }*/
 
-    let tenantId = document.location.hostname.replace(".262days.com","");
+    let tenantId = document.location.hostname.replace(".maryoku.com","");
     let isPrimeTenant = tenantId === 'dev' || tenantId === 'app';
     if ((isPrimeTenant && to.path !== '/signout' && to.path !== '/signin' && to.path !== '/signedin' && to.path !== '/create-workspace' && to.path !== '/choose-workspace') || (to.meta.auth && !auth.user.authenticated)) {
         next('signin');
@@ -98,7 +96,7 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach((to, from) => {
-    window.document.title = `${to.meta.title ? to.meta.title : to.name} @ 262 Days`;
+    window.document.title = `${to.meta.title ? to.meta.title : to.name} @ maryoku`;
 });
 
 // global library setup
@@ -119,13 +117,6 @@ Object.defineProperty(Vue.prototype, "$Chartist", {
 
 Vue.use(VueAxios, axios);
 Vue.use(require('vue-moment'));
-Vue.use(Tooltip, {
-    delay: 200,
-    placement: 'auto',
-    class: 'tooltip-custom', // ex: 'tooltip-custom tooltip-other-custom'
-    triggers: ['hover', 'focus'],
-    offset: 5
-});
 Vue.use(VTooltip)
 Vue.use(vSelectMenu, { language: "en"});
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
