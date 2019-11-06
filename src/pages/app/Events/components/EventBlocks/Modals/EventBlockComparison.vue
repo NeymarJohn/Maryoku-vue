@@ -2,7 +2,7 @@
   <div class="event-blocks-comparison-panel">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee"/>
     <!-- Selected Proposals list -->
-    <div class="selected-proposals-list">
+    <div class="selected-proposals-list" v-if="selectedBlock.proposals && selectedBlock.proposals.length > 0">
       <table ref="content" style="width: 100%; height: 100%;" cellspacing="0" colpadding="0">
         <tr>
           <td class="comparison-cell category-outer-cell" style="vertical-align: top; padding : 0;">
@@ -353,11 +353,8 @@
         })
       },
       isAccepted (proposal) {
-        if (this.proposalsById[proposal]) {
-          return this.proposalsById[proposal].accepted;
-        } else {
-          return false;
-        }
+        console.log('test', this.proposalsById[proposal].accepted);
+        return this.proposalsById[proposal].accepted;
       },
       getProposalPrice(proposalId) {
         if (proposalId) {

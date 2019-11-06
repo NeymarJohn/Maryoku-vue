@@ -54,9 +54,9 @@
               </div>
             </template>
           </tabs>
-          <md-card class="allocated-budget">
+           <md-card class="allocated-budget" style="height: 45px;">
             <md-card-content>
-              <span class="small">Allocated Budget</span>
+              <span class="small" style="margin-top: -35px; margin-bottom: 12.5px;">Allocated Budget</span>
               <div class="budget">${{selectedBlock.allocatedBudget ? selectedBlock.allocatedBudget  : '0.0'}}</div>
             </md-card-content>
           </md-card>
@@ -211,15 +211,5 @@
 </script>
 
 <style lang="scss" scoped>
-.allocated-budget {
-  display: none;
-  height: 45px!important;
-  .md-card-content {
-    border: 2px solid black;
-    .small {
-      margin-top: -35px; 
-      margin-bottom: 12.5px;      
-    }    
-  }  
-}
+
 </style>
