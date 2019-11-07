@@ -651,7 +651,7 @@ $tooltip-border-color: $blue-grey-200 !default;
         justify-content: flex-start !important;
         margin : 1em 0 2em !important;
         padding : 0 !important;
-        width : 75% !important;
+        // width : 75% !important;
         box-shadow: none;
         height: 45px !important;
 
@@ -662,9 +662,11 @@ $tooltip-border-color: $blue-grey-200 !default;
             box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
             border : none;
             height: 45px !important;
+            margin: 0 5px;
 
             &:first-child {
                 border-radius: 5px 0 0 5px;
+                margin-left: 0;
 
                 .md-list-item-container {
                     border-radius: 5px 0 0 5px;
@@ -673,6 +675,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
             &:last-child {
                 border-radius: 0 5px 5px 0;
+                margin-right: 0;
 
                 .md-list-item-container {
                     border-radius: 0 5px 5px 0;
@@ -722,7 +725,7 @@ $tooltip-border-color: $blue-grey-200 !default;
 
             &.active {
                 .md-list-item-button {
-                    background-color: $purple-500 !important;
+                    background-color: #fb9704 !important;
                     color : #fff !important;
                     box-shadow: none;
                     span {

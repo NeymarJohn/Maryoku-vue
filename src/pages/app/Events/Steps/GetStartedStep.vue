@@ -175,8 +175,6 @@
                 Promise.all(promisses).then(() => {
                     this.isLoading = false;
                     //this.$emit('goToNextPage');
-
-                    this.$router.push({ path: `/events/`+ this.event.id + '/edit/details' });
                 })
                 .catch((e) => {
                     console.log('error -->', e);
