@@ -200,7 +200,6 @@ import {
 import EventComponent from '@/models/EventComponent'
 import CalendarEvent from '@/models/CalendarEvent';
 import Calendar from "@/models/Calendar";
-import CalendarEventStatistics from "@/models/CalendarEventStatistics";
 import VueElementLoading from 'vue-element-loading';
 import Occasion from "@/models/Occasion";
 import AnnualPlannerVuexModule from '../../AnnualPlanner/AnnualPlanner.vuex';
@@ -309,6 +308,7 @@ export default {
     convertDurationToMillis(hours) {
       return hours * 60 * 60 * 1000;
     },
+
     createEvent() {
       let vm = this;
 
@@ -364,63 +364,13 @@ export default {
     },
     switchDateRequired() {
       this.modelValidations.date.required = !this.flexibleDate;
-    },
-      getEvent () {
-          this.$auth.currentUser(this, true, ()=> {
-              let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-
-              _calendar.calendarEvents().find(this.$route.params.id).then(event => {
-
-                  console.log('Event =>' , event);
-
-                  this.title = event.title;
-                  //this.$set(this,'eventData', event);
-
-                  this.setEventData(event);
-
-                  //this.event = event
-                  this.eventId = event.id;
-                  this.event = event;
-                  this.selectedComponents = event.components;
-
-                  this.getCalendarEventStatistics(event)
-              })
-          });
-      },
-      getCalendarEventStatistics (evt) {
-
-          let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-          let event = new CalendarEvent({id: evt.id});
-
-          if (!evt.id) { return; }
-
-          new CalendarEventStatistics().for(calendar, event).get()
-              .then(resp => {
-                  // this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget//evt.totalBudget - resp[0].totalAllocatedBudget;
-                  // this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants//evt.totalBudget - resp[0].totalAllocatedBudget;
-                  // this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
-                  //
-                  // if (this.percentage > 0) {
-                  //     this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-positive"}, {value: this.percentage, className:"budget-chart-slice-b-positive"}];
-                  // } else {
-                  //     this.seriesData =  [{value: 0.01, className: "budget-chart-slice-a-negative"},{value: 99.99, className: "budget-chart-slice-b-negative"}];
-                  // }
-                  //
-                  // this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
-                  // this.allocatedBudget = resp.totalAllocatedBudget;
-                  // this.event.statistics['allocatedBudget'] = this.allocatedBudget
-              })
-              .catch(error => {
-                  console.log(error)
-              })
-      },
+    }
 
   },
   data() {
     return {
       isLoading: true,
       event: null,
-        eventId : null,
       calendar: null,
       eventType: null,
       category: '',
@@ -483,12 +433,9 @@ export default {
       occasionsForCategory: [],
       dateValid: true,
       validating: false,
-        selectedComponents :null
     }
   },
   created() {
-
-      let vm = this;
 
     this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule);
     this.getOccasionList();
@@ -503,13 +450,7 @@ export default {
 
     this.hoursArray.push();
 
-    console.log('$route => ',this.$route.params.id);
-
-    if (  this.$route.params.id ) {
-        this.getEvent();
-    }
-
-
+    console.log(this.newEventData);
 
     if (this.newEventData) {
 
@@ -543,9 +484,6 @@ export default {
     ...mapGetters({
       eventTypes: 'event/getEventTypesList',
     }),
-      ...mapMutations('EventPlannerVuex', [
-          'setEventData'
-      ]),
     dateFormat: {
       get() {
         return this.$material.locale.dateFormat
