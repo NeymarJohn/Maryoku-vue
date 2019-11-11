@@ -115,9 +115,11 @@
                       </template>
                     </template>
                     <event-actual-cost-icon-tooltip
+                      v-if="block.downPaymentStatus == 'paid'"
                       :icon="'credit_card'"
-                      :paid="3000"
-                      :date="'2019/08/31'"/>
+                      :item="block"
+                      :event="event"
+                    />
                   </td>
                   <td class="fit-content text-center">
                     <template>
@@ -174,6 +176,7 @@
   import EventActualCostIconTooltip from '../components/EventActualCostIconTooltip.vue'
   import EventBlockVendors from './EventBlocks/Modals/EventBlockVendors.vue'
   import ViewProposals from './EventBlocks/Modals/ViewProposals.vue'
+  import EventComponentVendor from "@/models/EventComponentVendor"
   import _ from 'underscore'
   import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
 
@@ -243,9 +246,9 @@
 
               this.allocatedBudget = allocatedBudget;
             })
-              .catch(error => {
-                console.log(error)
-              })
+            .catch(error => {
+              console.log(error)
+            })
           }
         })
 
@@ -359,7 +362,6 @@
         }
 
         selected_block.for(calendar, event).save().then(resp => {
-
           this.isLoading = false;
           this.$root.$emit('RefreshStatistics');
           this.getEventBuildingBlocks();
@@ -374,14 +376,12 @@
 
           this.allocatedBudget = allocatedBudget;
         })
-          .catch(error => {
-            console.log(error)
-          })
-
+        .catch(error => {
+          console.log(error)
+        })
       },
 
       addRequirements(item) {
-
         if ( item.proposalsCount ) {
           swal({
             text: `You have offers based on these requirements, after changing them you will need to request updated proposal. Would you like to proceed?`,
@@ -397,11 +397,8 @@
             }
           });
         } else {
-
           this.showRequirementsSidepanel(item);
         }
-
-
       },
       reviewProposals(item, winnerId = null) {
         window.currentPanel = this.$showPanel({

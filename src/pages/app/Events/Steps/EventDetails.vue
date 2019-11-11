@@ -374,7 +374,9 @@ export default {
                   console.log('Event =>' , event);
 
                   this.title = event.title;
-                  this.eventData = event;
+                  //this.$set(this,'eventData', event);
+
+                  this.setEventData(event);
 
                   //this.event = event
                   this.eventId = event.id;
@@ -541,6 +543,9 @@ export default {
     ...mapGetters({
       eventTypes: 'event/getEventTypesList',
     }),
+      ...mapMutations('EventPlannerVuex', [
+          'setEventData'
+      ]),
     dateFormat: {
       get() {
         return this.$material.locale.dateFormat
