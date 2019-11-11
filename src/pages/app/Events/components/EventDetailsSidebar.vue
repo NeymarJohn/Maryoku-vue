@@ -26,7 +26,7 @@
 
           <div class="md-layout-item summary-item">
             <div class="md-layout-item title-text">
-              <i class="fa fa-map-marker-alt"></i> 
+              <i class="fa fa-map-marker-alt"></i>
             </div>
             <div class="md-layout-item">
               {{calendarEvent.location}}
@@ -35,7 +35,7 @@
 
           <div class="md-layout-item summary-item">
             <div class="md-layout-item  title-text">
-              <i class="fa fa-user"></i> 
+              <i class="fa fa-user"></i>
             </div>
             <div class="md-layout-item">
               {{calendarEvent.numberOfParticipants}} {{inviteeType(calendarEvent)}}
@@ -59,7 +59,7 @@
           <div class="md-layout-item">
             <h5 class="title-budget-main">Remaining budget</h5>
             <h4 class="title budget">
-              <div class="title" 
+              <div class="title"
                 :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
                 v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants">
                 <animated-number ref="totalRemainingBudgetNumber"
@@ -68,7 +68,7 @@
                 <small class="total-event-budget">/
                   ${{
                     calendarEvent.budgetPerPerson *
-                    calendarEvent.numberOfParticipants | 
+                    calendarEvent.numberOfParticipants |
                     numeral('0,0')
                   }}
                 </small>
@@ -79,7 +79,7 @@
             <h4
               class="title"
               style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
-              <div class="title" 
+              <div class="title"
                 :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
                 v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants">
                 <animated-number ref="totalRemainingBudgetNumber"
@@ -97,8 +97,8 @@
                   :chart-options="pieChart.options"
                   chart-type="Pie"
                   style="grid-column: 1; grid-row: 1; color:red"/>
-              <animated-number 
-                  class="percentage" 
+              <animated-number
+                  class="percentage"
                   ref="percentageNumber"
                   :custom-style="true"
                   :custom-style-contents="'font-weight:500;font-size:24px;'"
@@ -124,7 +124,7 @@
               Remaining budget per participant
             </div>
             <!-- TODO Need calculate with components -->
-            <div class="md-caption title-text " 
+            <div class="md-caption title-text "
               :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]">
               <animated-number ref="budgetPerPersonNumber"
                                 :value="remainingBudgetPerEmployee"
@@ -133,7 +133,7 @@
           </div>
           <div>
             <div class="md-caption title-text">Budget per participant</div>
-            <div class="md-caption title-text " 
+            <div class="md-caption title-text "
               :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]">
               <animated-number ref="budgetPerPersonNumber"
                                 :value="calendarEvent.budgetPerPerson"
@@ -217,7 +217,7 @@
         //"Employees Only","Employees and spouse","Employees and families", "Employees children"
         let typeText = '';
         let participantsType = calendarEvent.participantsType;
-        
+
         if (participantsType === 'Guests and spouse'){
           typeText = '+ spouses';
         } else if (participantsType === 'Guests and families'){
@@ -287,23 +287,28 @@
           })
       },
       openEventModal () {
-        window.currentPanel = this.$showPanel({
-          component: EventSidePanel,
-          cssClass: 'md-layout-item md-size-40 transition36 ',
-          openOn: 'right',
-          disableBgClick: false,
-          props: {
-            modalSubmitTitle: 'Save',
-            editMode: true,
-            sourceEventData: this.event,
-            openInPlannerOption: false
-          }
-        })
 
-        this.setEventData(this.event)
-        this.setEventModal({showModal: true})
-        this.setModalSubmitTitle('Save')
-        this.setEditMode({editMode: true})
+
+          this.$router.push({ path: `/event/`+ this.event.id + '/edit' });
+
+
+          // window.currentPanel = this.$showPanel({
+        //   component: EventSidePanel,
+        //   cssClass: 'md-layout-item md-size-40 transition36 ',
+        //   openOn: 'right',
+        //   disableBgClick: false,
+        //   props: {
+        //     modalSubmitTitle: 'Save',
+        //     editMode: true,
+        //     sourceEventData: this.event,
+        //     openInPlannerOption: false
+        //   }
+        // })
+        //
+        // this.setEventData(this.event)
+        // this.setEventModal({showModal: true})
+        // this.setModalSubmitTitle('Save')
+        // this.setEditMode({editMode: true})
       }
     },
     created() {

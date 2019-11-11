@@ -8,7 +8,7 @@
             <md-field class="required" :class="[{'md-error': errors.has('title')}]">
               <label>Event Title</label>
               <md-input
-                v-model="title"
+                v-model="eventData.title"
                 data-vv-name="title"
                 v-validate= "modelValidations.title"
                 required
@@ -33,9 +33,9 @@
             <md-field class="required" :class="[{'md-error': errors.has('budget')}]">
               <label>Budget</label>
               <md-input
-                v-model="eventData.budget"
+                v-model="eventData.totalBudget"
                 data-vv-name="budget"
-                v-validate= "modelValidations.budget"
+                v-validate= "modelValidations.totalBudget"
                 required
                 type="number"
                 ></md-input>
@@ -123,7 +123,7 @@
           <div class="md-layout-item md-size-25">
             <md-field>
               <label>City</label>
-              <md-input v-model="eventData.city"></md-input>
+              <md-input v-model="eventData.location"></md-input>
             </md-field>
           </div>
         </div>
@@ -200,6 +200,7 @@ import {
 import EventComponent from '@/models/EventComponent'
 import CalendarEvent from '@/models/CalendarEvent';
 import Calendar from "@/models/Calendar";
+import CalendarEventStatistics from "@/models/CalendarEventStatistics";
 import VueElementLoading from 'vue-element-loading';
 import Occasion from "@/models/Occasion";
 import AnnualPlannerVuexModule from '../../AnnualPlanner/AnnualPlanner.vuex';
@@ -236,13 +237,20 @@ export default {
 
       // this.$emit('goToNextPage');
       //  return;
+        let vm = this;
+
       this.cerrors = {};
       this.validating = true;
 
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
           //this.$parent.isLoading = true;
-          this.createEvent()
+
+          if ( this.eventId ) {
+              vm.updateEvent();
+          } else {
+              vm.createEvent();
+          }
 
         } else {
           this.showNotify();
@@ -308,69 +316,146 @@ export default {
     convertDurationToMillis(hours) {
       return hours * 60 * 60 * 1000;
     },
-
     createEvent() {
       let vm = this;
 
-
-      setTimeout(() => {
-
         this.$auth.currentUser(this, true, () => {
-          // Code  here
+            // Code  here
 
-          let calendarId = this.$auth.user.defaultCalendarId;
-          let _calendar = new Calendar({
-            id: calendarId
-          });
-          let catObject = _.find(this.occasionsForCategory, (el => el.value === this.eventData.occasion)) || {
-            category: "CompanyDays"
-          };
-          this.category = catObject.category;
-
-          let newEvent = new CalendarEvent({
-              calendar: {
+            let calendarId = this.$auth.user.defaultCalendarId;
+            let _calendar = new Calendar({
                 id: calendarId
-              },
-              title: this.eventData.title,
-              occasion: this.eventData.occasion,
-              eventStartMillis: this.getEventStartInMillis(),
-              eventEndMillis: this.getEventEndInMillis(),
-              numberOfParticipants: this.eventData.numberOfParticipants,
-              budgetPerPerson: this.eventData.budgetPerPerson,
-              status: 'draft',
-              currency: 'USD',
-              eventType: this.eventType,
-              participantsType: this.guestType,
-              category: catObject.category, //!this.eventData.editable ? 'Holidays' : 'CompanyDays',
-              editable: true,
-              city: this.eventType.city,
-              //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
-            }).for(_calendar).save().then(response => {
-              //this.$parent.isLoading = false;
-              vm.$emit('goToNextPage', response);
-              vm.newEvent = response
-
-            })
-            .catch((error) => {
-              console.log(error);
-              this.working = false;
-              //this.$parent.isLoading = false;
             });
 
+            let catObject = _.find(this.occasionsForCategory, (el => el.value === this.eventData.occasion)) || {
+                category: "CompanyDays"
+            };
+            this.category = catObject.category;
+
+            let newEvent = new CalendarEvent({
+                calendar: {
+                    id: calendarId
+                },
+                title: this.eventData.title,
+                occasion: this.eventData.occasion,
+                eventStartMillis: this.getEventStartInMillis(),
+                eventEndMillis: this.getEventEndInMillis(),
+                numberOfParticipants: this.eventData.numberOfParticipants,
+                budgetPerPerson: this.eventData.budgetPerPerson,
+                totalBudget : this.eventData.totalBudget,
+                status: 'draft',
+                currency: 'USD',
+                eventType: this.eventType,
+                participantsType: this.guestType,
+                category: catObject.category, //!this.eventData.editable ? 'Holidays' : 'CompanyDays',
+                editable: true,
+                location: this.eventType.location,
+                //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+            }).for(_calendar).save().then(response => {
+                //this.$parent.isLoading = false;
+                vm.$emit('goToNextPage', response);
+                vm.newEvent = response
+
+            })
+                .catch((error) => {
+                    console.log(error);
+                    this.working = false;
+                    //this.$parent.isLoading = false;
+                });
+
         });
-
-
-      }, 100);
     },
+      updateEvent() {
+          //this.$parent.isLoading = true;
+          let vm = this;
+
+          this.$nextTick(()=>{
+              let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+              let editedEvent = new CalendarEvent(this.eventData);
+              editedEvent.eventStartMillis = this.getEventStartInMillis();
+              editedEvent.eventEndMillis = this.getEventEndInMillis();
+
+              let catObject = _.find(this.occasionsForCategory, (el => el.value === editedEvent.occasion)) || {category: "CompanyDays"};
+              this.eventData.category = catObject.category;
+              editedEvent.category = catObject.category;
+              // editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
+              editedEvent.for(_calendar).save().then(response => {
+                  //this.$parent.isLoading = false;
+                  vm.$emit('goToNextPage', response);
+                  vm.newEvent = vm.eventData;
+
+              })
+                  .catch((error) => {
+                      console.log(error);
+                      this.working = false;
+                      //this.$parent.isLoading = false;
+                  });
+          });
+
+      },
     switchDateRequired() {
       this.modelValidations.date.required = !this.flexibleDate;
-    }
+    },
+      getEvent () {
+          this.$auth.currentUser(this, true, ()=> {
+              let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+
+              _calendar.calendarEvents().find(this.$route.params.id).then(event => {
+
+                  console.log('Event =>' , event);
+
+                  this.$set(this,'eventData', event);
+                  this.$set(this,'eventType', event.eventType);
+                  this.$set(this,'guestType',event.participantsType);
+
+                  this.eventData.date = new Date(event.eventStartMillis);
+                  this.eventData.time = moment(new Date(event.eventStartMillis).getTime())
+                      .format('H:mm A');
+                  this.eventData.duration = (event.eventEndMillis - event.eventStartMillis) / 1000 / 60 / 60;
+
+                  this.eventId = event.id;
+                  this.event = event;
+                  this.selectedComponents = event.components;
+
+                  this.getCalendarEventStatistics(event)
+              })
+          });
+      },
+      getCalendarEventStatistics (evt) {
+
+          let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+          let event = new CalendarEvent({id: evt.id});
+
+          if (!evt.id) { return; }
+
+          new CalendarEventStatistics().for(calendar, event).get()
+              .then(resp => {
+                  // this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget//evt.totalBudget - resp[0].totalAllocatedBudget;
+                  // this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants//evt.totalBudget - resp[0].totalAllocatedBudget;
+                  // this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
+                  //
+                  // if (this.percentage > 0) {
+                  //     this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-positive"}, {value: this.percentage, className:"budget-chart-slice-b-positive"}];
+                  // } else {
+                  //     this.seriesData =  [{value: 0.01, className: "budget-chart-slice-a-negative"},{value: 99.99, className: "budget-chart-slice-b-negative"}];
+                  // }
+                  //
+                  // this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
+                  // this.allocatedBudget = resp.totalAllocatedBudget;
+                  // this.event.statistics['allocatedBudget'] = this.allocatedBudget
+              })
+              .catch(error => {
+                  console.log(error)
+              })
+      },
 
   },
   data() {
     return {
       isLoading: true,
+        eventData : {},
       event: null,
+        eventId : null,
       calendar: null,
       eventType: null,
       category: '',
@@ -422,7 +507,7 @@ export default {
         category: {
           required: true,
         },
-        budget: {
+        totalBudget: {
           required: true
         },
         guestType: {
@@ -433,9 +518,12 @@ export default {
       occasionsForCategory: [],
       dateValid: true,
       validating: false,
+        selectedComponents :null
     }
   },
   created() {
+
+      let vm = this;
 
     this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule);
     this.getOccasionList();
@@ -450,7 +538,9 @@ export default {
 
     this.hoursArray.push();
 
-    console.log(this.newEventData);
+    if (  this.$route.params.id ) {
+        this.getEvent();
+    }
 
     if (this.newEventData) {
 
@@ -478,12 +568,12 @@ export default {
 
   },
   computed: {
-    ...mapState('AnnualPlannerVuex', [
-      'eventData'
-    ]),
     ...mapGetters({
       eventTypes: 'event/getEventTypesList',
     }),
+      ...mapMutations('EventPlannerVuex', [
+          'setEventData'
+      ]),
     dateFormat: {
       get() {
         return this.$material.locale.dateFormat

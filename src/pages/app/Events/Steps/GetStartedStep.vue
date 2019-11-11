@@ -98,7 +98,7 @@
                 return _.findIndex(this.eventComponents, o => o.componentId == category.id) > -1;
             },
             isCategorySelected (category) {
-                return _.findIndex(this.selectedCategories, o => o.id == category.id) > -1;
+                return _.findIndex(this.selectedCategories, o => o.id == category.id || o.title.toLowerCase() == category.id) > -1;
             },
 
             isSubCategorySelected (subCategory) {
@@ -106,6 +106,11 @@
             },
 
             toggleSelectSubCategory (subCategory) {
+
+                if ( this.isSelected(subCategory) ) {
+                    this.selectedSubCategories = this.selectedSubCategories.concat([subCategory]);
+
+                }
                 if (this.isSubCategorySelected(subCategory)) {
                     this.selectedSubCategories = this.selectedSubCategories.filter(o => o.id != subCategory.id);
                 } else {
@@ -115,6 +120,7 @@
             },
 
             toggleSelectCategory (category) {
+
                 if (this.isCategorySelected(category)) {
                     this.selectedCategories = this.selectedCategories.filter(o => o.id != category.id);
                     //this.subCategories = this.subCategories.filter(o => o.categoryId != category.id);
@@ -123,6 +129,7 @@
                     this.selectedCategories = this.selectedCategories.concat([category]);
                    // this.subCategories = this.subCategories.concat(category.childComponents);
                 }
+
             },
 
             validateAndSubmit () {
@@ -130,11 +137,6 @@
                 // this.$emit('goToNextPage');
                 //  return;
                 this.cerrors = {};
-
-                // if (!this.selectedCategories.length && !this.selectedSubCategories.length && this.eventComponents.length ) {
-                //     this.$emit('goToNextPage');
-                //     return;
-                // }
 
                 if (!this.selectedCategories.length && !this.selectedSubCategories.length) {
                     this.cerrors.selectedCategories = ['you must select at least one category'];
@@ -192,16 +194,11 @@
                 this.isLoading = true;
                 let vm = this;
 
-                console.log('newEvent is => ',vm.newEvent);
-
-
                 if ( vm.newEvent ) {
                     vm.$auth.currentUser(vm, true, ()=> {
 
-                        console.log(vm.newEvent);
-
                         Promise.all([
-                            CalendarEvent.find(vm.newEvent.item.id) ,
+                            CalendarEvent.find(vm.newEvent.item ? vm.newEvent.item.id : vm.$route.params.id) ,
                             EventComponent.get()
                         ]).then(([event, components]) => {
 
@@ -210,19 +207,33 @@
                             vm.categories =_.filter(components ,  function(item) { return item.promoted === true});
                             vm.subCategories =_.filter(components ,  function(item) { return item.promoted === false});
 
-                            console.log('categories ', vm.categories);
-                            console.log('categories ', vm.subCategories);
-
-
                             new EventComponent().for(vm.calendar, vm.event).get().then(resp =>{
                                 console.log('components ', resp);
+
+                                resp.forEach(component => {
+                                    // check if component is promoted or not
+                                    if ( _.findIndex(this.categories, o => o.title == component.title) > -1  ) {
+                                        vm.selectedCategories = this.selectedCategories.concat([component]);
+
+                                    } else if ( _.findIndex(this.subCategories, o => o.title == component.title) > -1  ){
+                                        vm.selectedSubCategories = this.selectedSubCategories.concat([component]);
+                                    }
+
+                                })
                                 //vm.selectedCategories = resp;
                                 vm.$set(vm,'eventComponents',resp);
+                                console.log(vm.selectedCategories);
+
 
                             })
                             vm.isLoading = false;
                         });
                     });
+                }
+
+
+                if ( vm.$route.params.id ) {
+
                 }
             }
         },
