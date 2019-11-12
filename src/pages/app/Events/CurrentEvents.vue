@@ -2,7 +2,7 @@
   <div class="md-layout edit-event-details">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
     <div class="event-details-tabs">
-      <div class="md-layout">
+      <!--<div class="md-layout">
         <div class="md-layout-item md-size-20 no-padding">
           <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
         </div>
@@ -10,13 +10,13 @@
           <event-building-blocks :event.sync="event" :event-components="selectedComponents"
                                   @go-to-building-blocks="resetTab"></event-building-blocks>
         </div>
-      </div>
-      <!-- <tabs
-        :tab-name="['EVENT DETAILS', 'BUDGET & PROPOSALS']"
+      </div>-->
+       <tabs
+        :tab-name="['EVENT DETAILS', 'BUDGET & PROPOSALS','TIMELINE', 'INVITEES']"
         color-button="rose"
-        :active-tab="$store.state.EventPlannerVuex.eventDetailsActiveTab" ref="eventPlannerTabs" :sync-router="true"> -->
-        <!-- here you can add your content for tab-content -->
-        <!-- <template slot="tab-pane-1" style="width: 100%;">
+        :active-tab="$store.state.EventPlannerVuex.eventDetailsActiveTab" ref="eventPlannerTabs" :sync-router="true">
+         here you can add your content for tab-content
+         <template slot="tab-pane-1" style="width: 100%;">
             <div class="md-layout">
                 <div class="md-layout-item md-size-25">
                     <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
@@ -109,8 +109,8 @@
                     </div>
                 </div>
             </div>
-        </template> -->
-        <!-- <template slot="tab-pane-2" style="width: 100%;">
+        </template>
+         <template slot="tab-pane-2" style="width: 100%;">
             <div class="md-layout">
                 <div class="md-layout-item md-size-25">
                     <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
@@ -121,8 +121,8 @@
                 </div>
             </div>
 
-        </template> -->
-        <!--<template slot="tab-pane-3" style="width: 100%;">
+        </template>
+        <template slot="tab-pane-3" style="width: 100%;">
             <div class="md-layout">
                 <div class="md-layout-item md-size-100">
                     <event-time-line :event="event" :event-components="selectedComponents"></event-time-line>
@@ -137,7 +137,7 @@
                     <event-invitees :event-data.sync="event"></event-invitees>
                 </div>
             </div>
-        </template>-->
+        </template>
 
         <!--<template slot="tab-pane-3" style="width: 100%;">
             <div class="md-layout">
@@ -148,7 +148,7 @@
             </div>
         </template>-->
 
-      <!-- </tabs> -->
+       </tabs>
     </div>
 
     <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
