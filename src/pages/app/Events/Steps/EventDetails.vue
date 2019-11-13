@@ -24,10 +24,9 @@
                 data-vv-name="numberOfParticipants"
                 v-validate= "modelValidations.numberOfParticipants"
                 required
-                type="text"
-                @change="calculateBudgetPerGuest()"
+                type="number"
                 ></md-input>
-              <span class="md-error" v-if="errors.has('numberOfParticipants')">The Guest Count is required and should be a number</span>
+              <span class="md-error" v-if="errors.has('numberOfParticipants')">The Guest Count is required</span>
             </md-field>
           </div>
           <div class="md-layout-item md-size-15">
@@ -38,26 +37,23 @@
                 data-vv-name="budget"
                 v-validate= "modelValidations.totalBudget"
                 required
-                type="text"
-                @change="calculateBudgetPerGuest()"
-
-              ></md-input>
-              <span class="md-error" v-if="errors.has('budget')">The Budget is required and should be a number</span>
+                type="number"
+                ></md-input>
+              <span class="md-error" v-if="errors.has('budget')">The Budget is required</span>
             </md-field>
           </div>
           <div class="md-layout-item md-size-15">
-            <md-field class="disabled">
+            <md-field>
               <label>Per Guest</label>
               <md-input v-model="eventData.budgetPerPerson"
-                type="text"
-                        disabled="disabled"
+                type="number"
                 ></md-input>
             </md-field>
           </div>
         </div>
         <!-- Event Types list-->
         <div class="md-layout event-types-list" style="margin-top : 1em;">
-          <div class="md-layout-item md-size-40 required" :class="{'has-error': !eventType && validating }">
+          <div class="md-layout-item md-size-40 required" :class="{'has-error': !guestType && validating }">
             <label class="bold">
             Select Event Type
             </label>
@@ -69,11 +65,48 @@
                   <md-option v-for="(type,index) in eventTypes" :key="index"  :value="type.id">{{ type.item }}</md-option>
                 </md-select>
               </md-field>
+              <!--                            <div v-for="type in eventTypes"-->
+              <!--                                 :key="type.item" class="list-item"-->
+              <!--                                 :class="{'active': isTypeSelected(type.id) }"-->
+              <!--                                 @click="selectEventType(type)"-->
+              <!--                            >-->
+              <!--                                <div class="list-item&#45;&#45;icon">-->
+              <!--                                    <md-icon v-if="isTypeSelected(type.id)" class="checked-item">check</md-icon>-->
+              <!--                                </div>-->
+              <!--                                <div class="list-item&#45;&#45;title">-->
+              <!--                                    {{ type.item }}-->
+              <!--                                </div>-->
+              <!--                            </div>-->
             </div>
           </div>
         </div>
         <!-- ./Event Types list-->
-
+        <!-- Guest Types list-->
+        <div class="md-layout event-types-list">
+          <div class="md-layout-item md-size-100 required" :class="{'has-error': !guestType && validating }">
+            <label class="bold">
+            Select Guest Type
+            </label>
+            <br>
+            <span class="md-error" v-if="!guestType && validating">The Guest Type Is Required</span>
+            <div class="list-container">
+              <div v-for="type in InviteeTypes2"
+                :key="type.title" class="list-item"
+                :class="{'active': isGuestTypeSelected(type.title) }"
+                @click="selectGuestType(type.title)"
+                >
+                <div class="list-item--icon">
+                  <md-icon v-if="isGuestTypeSelected(type.title)" class="checked-item">check</md-icon>
+                  <img :src="type.icon">
+                </div>
+                <div class="list-item--title">
+                  {{ type.title }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ./Guest Types list-->
         <!-- Event fields section -->
         <div class="md-layout">
           <div class="md-layout-item md-size-25">
@@ -172,7 +205,6 @@ import VueElementLoading from 'vue-element-loading';
 import Occasion from "@/models/Occasion";
 import AnnualPlannerVuexModule from '../../AnnualPlanner/AnnualPlanner.vuex';
 import moment from 'moment';
-import numeral from 'numeral';
 import _ from "underscore";
 import swal from "sweetalert2";
 
@@ -185,11 +217,19 @@ export default {
   },
   methods: {
     ...mapMutations('AnnualPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
-      calculateBudgetPerGuest() {
-        if ( this.eventData.totalBudget && this.eventData.numberOfParticipants ) {
-            this.eventData.budgetPerPerson =  this.eventData.totalBudget / this.eventData.numberOfParticipants | numeral('0,0');
-        }
-      },
+    selectEventType(type) {
+      console.log(type);
+      this.eventType = type;
+    },
+    isTypeSelected(id) {
+      return this.eventType;
+    },
+    selectGuestType(type) {
+      this.guestType = type;
+    },
+    isGuestTypeSelected(guest) {
+      return this.guestType === guest;
+    },
     validateDate() {
       return this.$refs.datePicker.$el.classList.contains('md-has-value')
     },
@@ -218,7 +258,7 @@ export default {
 
       });
 
-      if (!this.eventType) {
+      if (!this.eventType || !this.guestType) {
 
       } else {
         //this.$emit('goToNextPage');
@@ -306,6 +346,7 @@ export default {
                 status: 'draft',
                 currency: 'USD',
                 eventType: this.eventType,
+                participantsType: this.guestType,
                 category: catObject.category, //!this.eventData.editable ? 'Holidays' : 'CompanyDays',
                 editable: true,
                 location: this.eventType.location,
@@ -365,7 +406,7 @@ export default {
 
                   this.$set(this,'eventData', event);
                   this.$set(this,'eventType', event.eventType);
-                  // this.$set(this,'guestType',event.participantsType);
+                  this.$set(this,'guestType',event.participantsType);
 
                   this.eventData.date = new Date(event.eventStartMillis);
                   this.eventData.time = moment(new Date(event.eventStartMillis).getTime())
@@ -412,9 +453,7 @@ export default {
   data() {
     return {
       isLoading: true,
-        eventData : {
-            budgetPerPerson : 0
-        },
+        eventData : {},
       event: null,
         eventId : null,
       calendar: null,
@@ -469,12 +508,10 @@ export default {
           required: true,
         },
         totalBudget: {
-          required: true,
-            min_value: 1,
-            max_value: 100000,
+          required: true
         },
         guestType: {
-          required: false
+          required: true
         }
       },
       occasionsList: [],

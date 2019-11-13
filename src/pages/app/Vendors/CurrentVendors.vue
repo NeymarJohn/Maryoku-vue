@@ -94,12 +94,14 @@
 
     <!-- Tabs -->
     <div class="tabs-container">
-      <div class="tab-item" :class="[{'visited': currentTab > 1}, {'active': currentTab == 1}]" v-on:click="currentTab = 1">
-        Food
+      <div class="tab-item" 
+        :class="[{'visited': currentTab > 1}, {'active': currentTab == 1}]" 
+        v-on:click="currentTab = 1">
+        <span class="capitalize">{{vendor.vendorCategory}}</span>
       </div>
-      <div class="tab-item" :class="[{'visited': currentTab > 2}, {'active': currentTab == 2}]" v-on:click="currentTab = 2">
+      <!-- <div class="tab-item" :class="[{'visited': currentTab > 2}, {'active': currentTab == 2}]" v-on:click="currentTab = 2">
         Venue
-      </div>
+      </div> -->
     </div>
 
     <!-- Tab contents -->
@@ -137,7 +139,7 @@
               <div class="tab-item-content-body">
                 <ul class="check-list">
                   <li>
-                    <md-icon>restaurant</md-icon> <strong>Food</strong>
+                    <md-icon>restaurant</md-icon> <strong class="capitalize">{{vendor.vendorCategory}}</strong>
                   </li>
                   <li>
                     <br/>
@@ -390,15 +392,23 @@
       this.isLoading = false;
 
       this.getVendor()
+      this.getVendorProposals()
     },
     methods: {
-      getVendor () {
+      getVendor() {
         this.$auth.currentUser(this, true, function () {
           Vendors.find(this.$route.params.id).then(vendor => {
             this.vendor = vendor
             this.isLoading = false;
           })
         }.bind(this))
+      },
+      getVendorProposals() {
+        this.isLoading = true;
+        new Vendors(this.$route.params.id).proposalRequests().first().then(proposals => {
+          this.proposals = proposals.vendorProposals;
+          this.isLoading = false;
+        });
       }
     },
     computed: {
@@ -687,5 +697,8 @@
       padding: 1em;
       top: 0;
     }
+  }
+  .capitalize {
+    text-transform: capitalize;
   }
 </style>

@@ -98,7 +98,7 @@
                 return _.findIndex(this.eventComponents, o => o.componentId == category.id) > -1;
             },
             isCategorySelected (category) {
-                return _.findIndex(this.selectedCategories, o => o.id == category.id) > -1;
+                return _.findIndex(this.selectedCategories, o => o.id == category.id || o.title.toLowerCase() == category.id) > -1;
             },
 
             isSubCategorySelected (subCategory) {
@@ -107,33 +107,29 @@
 
             toggleSelectSubCategory (subCategory) {
 
+                if ( this.isSelected(subCategory) ) {
+                    this.selectedSubCategories = this.selectedSubCategories.concat([subCategory]);
+
+                }
                 if (this.isSubCategorySelected(subCategory)) {
                     this.selectedSubCategories = this.selectedSubCategories.filter(o => o.id != subCategory.id);
                 } else {
                     this.selectedSubCategories = this.selectedSubCategories.concat([subCategory]);
                 }
 
-                this.$set(this,'eventComponents',this.eventComponents.filter(o => o.componentId != subCategory.id))
-
             },
 
             toggleSelectCategory (category) {
-
-                this.isLoading = true;
 
                 if (this.isCategorySelected(category)) {
                     this.selectedCategories = this.selectedCategories.filter(o => o.id != category.id);
                     //this.subCategories = this.subCategories.filter(o => o.categoryId != category.id);
                     //this.selectedSubCategories = this.selectedSubCategories.filter(o => o.categoryId != category.id);
-                } else if ( !this.isSelected(category) ){
+                } else {
                     this.selectedCategories = this.selectedCategories.concat([category]);
                    // this.subCategories = this.subCategories.concat(category.childComponents);
                 }
 
-                this.$set(this,'eventComponents',this.eventComponents.filter(o => o.componentId != category.id))
-
-
-                this.isLoading = false;
             },
 
             validateAndSubmit () {
@@ -252,8 +248,7 @@
                 subCategories: [],
                 selectedCategories: [],
                 selectedSubCategories: [],
-                eventComponents : [],
-                selectedEventComponents : []
+                eventComponents : []
             }
         },
          mounted () {
