@@ -1,87 +1,81 @@
 <template>
-    <div class="md-layout md-gutter">
-        <div class="md-layout-item md-size-100 " style="margin-bottom: 42px; margin-top: 0;">
-            <md-field>
-                <md-input
-                    type="search"
-                    class="mb-3"
-                    clearable
-                    placeholder="Search vendors"
-                    v-model="searchQuery">
-                </md-input>
-            </md-field>
-        </div>
-        <div class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100 md-large-size-25 md-size-20"
-             v-for="vendor in filteredVendorsList"
-             :key="vendor.id">
-            <product-card
-                header-animation="true" fixed-header="false" :data-count="9999" :hover-count="9999">
-                <img class="img" slot="imageHeader" :src="vendorMainImage(vendor)" style="min-height: 180px;max-height: 180px; object-fit: cover;">
-                <div slot="card-buttons">
-                    <md-button class="md-purple md-xs md-round md-just-icon" @click="routeToVendor(vendor.id, $event)">
-                        <md-icon >more_horiz</md-icon>
-                        <md-tooltip md-direction="bottom">View</md-tooltip>
-                    </md-button>
-
-                    <md-button v-if="vendor.vendorWebsite" class="md-info md-xs md-round md-just-icon" :href="`${vendor.vendorWebsite}`" target="_blank">
-                        <md-icon>open_in_browser</md-icon>
-                        <md-tooltip md-direction="bottom">Open website</md-tooltip>
-
-                    </md-button>
-
-                    <md-button class="md-warning md-xs md-round md-just-icon" @click="editVendorDetails(vendor)">
-                        <md-icon >edit</md-icon>
-                        <md-tooltip md-direction="bottom">Edit</md-tooltip>
-
-                    </md-button>
-                    <md-button class="md-danger md-xs md-round md-just-icon">
-                        <md-icon >delete</md-icon>
-                        <md-tooltip md-direction="bottom">Remove</md-tooltip>
-
-                    </md-button>
-                </div>
-                <h4 slot="title" class="title">
-                    <a class="" style="font-weight: bold;" href="#pablo">{{vendor.vendorDisplayName}}</a>
-                    <div class="small">
-                        <label
-                            class="star-rating__star"
-                            v-for="(rating, ratingIndex) in ratings"
-                            :key="ratingIndex"
-                            :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}"
-                        >★</label>
-                        <span class="small text-gray">({{vendor.voters}})</span>
-                    </div>
-                </h4>
-
-                <div slot="description" class="card-description ">
-                    <div style="max-height: 20px;">
-                        <p>
-                            {{vendor.vendorTagLine}}
-                        </p>
-                    </div>
-                    <div style="min-height: 38px;">
-                        <template v-if="vendor.vendorTagging && vendor.vendorTagging.length" v-for="(tag, index) in vendor.vendorTagging">
-                            <span style="text-transform: capitalize;">{{tag}}</span><span v-if="index <=  vendor.vendorTagging.length"> &middot; </span>
-                        </template>
-                    </div>
-                </div>
-                <template slot="footer">
-                    <div class="price">
-                        <div
-                            class="badge badge-primary"
-                            :class="`badge-${categoryColor(vendor.vendorCategory, buildingBlocksList)}`"
-                            style="font-size: 10px !important; position: relative; top: 90%;">{{ categoryTitle(vendor.vendorCategory, buildingBlocksList) }}</div>
-                    </div>
-                    <div class="stats">
-                        <p class="category">
-                            <md-icon>place</md-icon>
-                            Geography
-                        </p>
-                    </div>
-                </template>
-            </product-card>
-        </div>
+  <div class="md-layout md-gutter">
+    <div class="md-layout-item md-size-100 " style="margin-bottom: 42px; margin-top: 0;">
+      <md-field>
+        <md-input
+          type="search"
+          class="mb-3"
+          clearable
+          placeholder="Search vendors"
+          v-model="searchQuery">
+        </md-input>
+      </md-field>
     </div>
+    <div class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100 md-large-size-25 md-size-20"
+      v-for="vendor in filteredVendorsList"
+      :key="vendor.id">
+      <product-card
+        header-animation="true" fixed-header="false" :data-count="9999" :hover-count="9999">
+        <img class="img" slot="imageHeader" :src="vendorMainImage(vendor)" style="min-height: 180px;max-height: 180px; object-fit: cover;">
+        <div slot="card-buttons">
+          <md-button class="md-purple md-xs md-round md-just-icon" @click="routeToVendor(vendor.id, $event)">
+            <md-icon >more_horiz</md-icon>
+            <md-tooltip md-direction="bottom">View</md-tooltip>
+          </md-button>
+          <md-button v-if="vendor.vendorWebsite" class="md-info md-xs md-round md-just-icon" :href="`${vendor.vendorWebsite}`" target="_blank">
+            <md-icon>open_in_browser</md-icon>
+            <md-tooltip md-direction="bottom">Open website</md-tooltip>
+          </md-button>
+          <md-button class="md-warning md-xs md-round md-just-icon" @click="editVendorDetails(vendor)">
+            <md-icon >edit</md-icon>
+            <md-tooltip md-direction="bottom">Edit</md-tooltip>
+          </md-button>
+          <md-button class="md-danger md-xs md-round md-just-icon">
+            <md-icon >delete</md-icon>
+            <md-tooltip md-direction="bottom">Remove</md-tooltip>
+          </md-button>
+        </div>
+        <h4 slot="title" class="title">
+          <a class="" style="font-weight: bold;" href="#pablo">{{vendor.vendorDisplayName}}</a>
+          <div class="small">
+            <label
+              class="star-rating__star"
+              v-for="(rating, ratingIndex) in ratings"
+              :key="ratingIndex"
+              :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}"
+              >★</label>
+            <span class="small text-gray">({{vendor.voters}})</span>
+          </div>
+        </h4>
+        <div slot="description" class="card-description ">
+          <div style="max-height: 20px;">
+            <p>
+              {{vendor.vendorTagLine}}
+            </p>
+          </div>
+          <div style="min-height: 38px;">
+            <template v-if="vendor.vendorTagging && vendor.vendorTagging.length" v-for="(tag, index) in vendor.vendorTagging">
+              <span style="text-transform: capitalize;">{{tag}}</span><span v-if="index <=  vendor.vendorTagging.length"> &middot; </span>
+            </template>
+          </div>
+        </div>
+        <template slot="footer">
+          <div class="price">
+            <div
+              class="badge badge-primary"
+              :class="`badge-${categoryColor(vendor.vendorCategory, buildingBlocksList)}`"
+              style="font-size: 10px !important; position: relative; top: 90%;">{{ categoryTitle(vendor.vendorCategory, buildingBlocksList) }}</div>
+          </div>
+          <div class="stats">
+            <p class="category">
+              <md-icon>place</md-icon>
+              Geography
+            </p>
+          </div>
+        </template>
+      </product-card>
+    </div>
+  </div>
 </template>
 <script>
   import { categoryTitle, categoryColor } from './helpers'
@@ -160,79 +154,67 @@
   }
 </script>
 <style lang="scss" scoped>
-
-    @import '@/assets/scss/md/_colors.scss';
-
-    .md-card-header-image {
-        > img {
-            max-height: 25vmin;
-        }
+  @import '@/assets/scss/md/_colors.scss';
+  .md-card-header-image {
+    >img {
+      max-height: 25vmin;
     }
+  }
 
-    .ellipsis {
-        overflow: hidden;
-        height: 80px;
+  .ellipsis {
+    overflow: hidden;
+    height: 80px;
+  }
+
+  .ellipsis:before {
+    content: "";
+    float: left;
+    width: 5px;
+    height: 85px;
+  }
+
+  .ellipsis>*:first-child {
+    float: right;
+    width: 100%;
+    margin-left: -5px;
+  }
+
+  .ellipsis:after {
+    content: "\02026";
+    box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    float: right;
+    position: relative;
+    top: -25px;
+    left: 100%;
+    width: 3em;
+    margin-left: -3em;
+    padding-right: 5px;
+    text-align: right;
+    font-size: 1.8em;
+    background: -webkit-gradient(linear, left top, right top, from(rgba(255, 255, 255, 0)), to(white), color-stop(50%, white));
+    background: -moz-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+    background: -o-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+    background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+  }
+
+  .md-tooltip {
+    z-index: 9999 !important;
+    background: $purple-500 !important;
+    color: $white !important;
+    &[x-placement="top"]:after {
+      border-bottom-color: $purple-500 !important;
     }
-
-    .ellipsis:before {
-        content:"";
-        float: left;
-        width: 5px;
-        height: 85px;
+    &[x-placement="bottom"]:after {
+      border-bottom-color: $purple-500 !important;
     }
-
-    .ellipsis > *:first-child {
-        float: right;
-        width: 100%;
-        margin-left: -5px;
+    &[x-placement="right"]:after {
+      border-bottom-color: $purple-500 !important;
     }
-
-    .ellipsis:after {
-        content: "\02026";
-
-        box-sizing: content-box;
-        -webkit-box-sizing: content-box;
-        -moz-box-sizing: content-box;
-
-        float: right;
-        position: relative;
-        top: -25px;
-        left: 100%;
-        width: 3em;
-        margin-left: -3em;
-        padding-right: 5px;
-
-        text-align: right;
-
-        font-size: 1.8em;
-
-        background: -webkit-gradient(linear, left top, right top,
-            from(rgba(255, 255, 255, 0)), to(white), color-stop(50%, white));
-        background: -moz-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
-        background: -o-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
-        background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
-        background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+    &[x-placement="left"]:after {
+      border-bottom-color: $purple-500 !important;
     }
-
-    .md-tooltip {
-        z-index: 9999 !important;
-        background: $purple-500 !important;
-        color: $white !important;
-
-        &[x-placement="top"]:after {
-            border-bottom-color: $purple-500 !important;
-        }
-
-        &[x-placement="bottom"]:after {
-            border-bottom-color: $purple-500 !important;
-        }
-
-        &[x-placement="right"]:after {
-            border-bottom-color: $purple-500 !important;
-        }
-
-        &[x-placement="left"]:after {
-            border-bottom-color: $purple-500 !important;
-        }
-    }
+  }
 </style>

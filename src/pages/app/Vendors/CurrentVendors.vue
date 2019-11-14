@@ -22,7 +22,7 @@
       <div class="md-layout-item">
         <div class="title-cont">
           <div class="title-child">
-            <img v-if="isVendorLogo" :src="bgImages[1]">
+            <img v-if="isVendorLogo" :src="isVendorLogo">
             <div v-else class="default-text-logo">
               {{logoText}}
             </div>
@@ -36,13 +36,15 @@
               {{vendor.vendorAddressLine1}}
             </span>
             <br class="hidden-lg hidden-md"/>
-            <label
-              class="star-rating__star"
-              v-for="(rating, ratingIndex) in ratings"
-              :key="ratingIndex"
-              :class="{'is-selected' : true}"
-            >★</label>
-            {{vendor.avgScore}}
+            <div class="hor-divider">
+              <label
+                class="star-rating__star"
+                v-for="(rating, ratingIndex) in ratings"
+                :key="ratingIndex"
+                :class="{'is-selected' : true}"
+              >★</label>
+              {{vendor.avgScore}}
+            </div>
             <br class="hidden-lg hidden-md"/>
             <a class="favorite">
               <md-icon>favorite_border</md-icon> add to favorites
@@ -308,10 +310,10 @@
     },
     data () {
       return {
-        vendorId: null,
         isLoading: true,
         vendor: {statistics: {}},
         isVendorLogo: null,
+        vendorProperties: {},
         bgImages : [
           '/static/img/lock.jpg',
           '/static/img/login.jpg',
@@ -403,6 +405,12 @@
         this.$auth.currentUser(this, true, function () {
           Vendors.find(this.$route.params.id).then(vendor => {
             this.vendor = vendor
+            Vendors.find('properties').then(properties => {
+              this.vendorProperties = properties;
+              console.log('properties', properties);
+            }, (error) => {
+              console.log(error)
+            });
             this.isLoading = false
           })
         }.bind(this))
@@ -727,5 +735,16 @@
   }
   .capitalize {
     text-transform: capitalize;
+  }
+  .hor-divider {
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+    margin: 0 .5em;
+    padding: 0 .5em;
+    display: inline-block;
+
+    @media (max-width: $screen-sm-min) {
+      border: none;
+    }
   }
 </style>
