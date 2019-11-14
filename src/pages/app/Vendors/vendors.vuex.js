@@ -33,7 +33,6 @@ export default {
       state.vendorsMemberData.vendorMainEmail = null;
       state.vendorsMemberData.vendorMainPhoneNumber = null;
     }
-
   },
 
   actions: {}

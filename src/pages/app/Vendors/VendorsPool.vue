@@ -1,51 +1,49 @@
 <template>
-    <div class="md-layout">
-        <div class="md-layout-item md-size-100" style="justify-content: space-between;">
-            <div class="md-group" style="">
-                <md-button
-                    class="md-xs md-icon-button"
-                    :class="[
-                    {'md-white': view === 'list'},
-                    {'md-info': view === 'grid'},
-                  ]"
-                    @click.prevent="changeView('grid')">
-                    <md-icon>view_module</md-icon>
-                </md-button>
-                <md-button
-                    class="md-xs md-icon-button"
-                    :class="[
-                    {'md-white': view === 'grid'},
-                    {'md-info': view === 'list'},
-                  ]"
-                    @click.prevent="changeView('list')">
-                    <md-icon>view_list</md-icon>
-                </md-button>
-            </div>
-            <div class="pull-right" style="margin: 0 1px;">
-                <md-button style="display: inline-block;" class="md-info md-sm" @click="addNewVendor">Add Vendor</md-button>
-                <md-button style="display: inline-block;" class="md-purple md-sm" @click="openUploadModal">Import Vendors From Spreadsheet</md-button>
-            </div>
-        </div>
-        <div class="md-layout-item md-size-100 clear-margins">
-            <vue-element-loading :active="working" spinner="ring" color="#FF547C" background-color="transparent"/>
-            <vendors-grid v-if="view === 'grid'"
-                          :buildingBlocksList="buildingBlocksList"
-                          :vendorsList="vendorsList"
-                          :ratings="ratings"
-                          @editVendorDetails="editVendorDetails"
-            />
-            <vendors-list v-if="view === 'list'"
-                          :buildingBlocksList="buildingBlocksList"
-                          :vendorsList="vendorsList"
-                          @editVendorDetails="editVendorDetails"
-                          @delete="showDeleteAlert"
-                          @add-new-vendor="addNewVendor"
-                          @open-upload-modal="openUploadModal"
-            />
-        </div>
-
-        <upload-modal ref="uploadModal"></upload-modal>
+  <div class="md-layout">
+    <div class="md-layout-item md-size-100" style="justify-content: space-between;">
+      <div class="md-group" style="">
+        <md-button
+          class="md-xs md-icon-button"
+          :class="[
+            {'md-white': view === 'list'},
+            {'md-info': view === 'grid'},
+          ]"
+          @click.prevent="changeView('grid')">
+          <md-icon>view_module</md-icon>
+        </md-button>
+        <md-button
+          class="md-xs md-icon-button"
+          :class="[
+            {'md-white': view === 'grid'},
+            {'md-info': view === 'list'},
+          ]"
+          @click.prevent="changeView('list')">
+          <md-icon>view_list</md-icon>
+        </md-button>
+      </div>
+      <div class="pull-right" style="margin: 0 1px;">
+        <md-button style="display: inline-block;" class="md-info md-sm" @click="addNewVendor">Add Vendor</md-button>
+        <md-button style="display: inline-block;" class="md-purple md-sm" @click="openUploadModal">Import Vendors From Spreadsheet</md-button>
+      </div>
     </div>
+    <div class="md-layout-item md-size-100 clear-margins">
+      <vue-element-loading :active="working" spinner="ring" color="#FF547C" background-color="transparent"/>
+      <vendors-grid v-if="view === 'grid'"
+        :buildingBlocksList="buildingBlocksList"
+        :vendorsList="vendorsList"
+        :ratings="ratings"
+        @editVendorDetails="editVendorDetails"/>
+      <vendors-list v-if="view === 'list'"
+      :buildingBlocksList="buildingBlocksList"
+      :vendorsList="vendorsList"
+      @editVendorDetails="editVendorDetails"
+      @delete="showDeleteAlert"
+      @add-new-vendor="addNewVendor"
+      @open-upload-modal="openUploadModal"
+      />
+    </div>
+    <upload-modal ref="uploadModal"></upload-modal>
+  </div>
 </template>
 <script>
   import VueElementLoading from 'vue-element-loading';
@@ -182,35 +180,32 @@
   };
 </script>
 <style lang="scss" scoped>
-    @import '@/assets/scss/md/_colors.scss';
+  @import '@/assets/scss/md/_colors.scss';
+  %visually-hidden {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+  }
 
-    %visually-hidden {
-        position: absolute;
-        overflow: hidden;
-        clip: rect(0 0 0 0);
-        height: 1px; width: 1px;
-        margin: -1px; padding: 0; border: 0;
+  /deep/ .star-rating {
+    &__star {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+      font-size: 0.9em;
+      color: #ABABAB;
+      transition: color .2s ease-out;
+      &.is-selected {
+        color: #FFD700;
+      }
     }
-
-    /deep/ .star-rating {
-
-        &__star {
-            display: inline-block;
-            vertical-align: middle;
-            line-height: 1;
-            font-size: 0.9em;
-            color: #ABABAB;
-            transition: color .2s ease-out;
-
-            &.is-selected {
-                color: #FFD700;
-            }
-        }
-
-        &__checkbox {
-            @extend %visually-hidden;
-        }
+    &__checkbox {
+      @extend %visually-hidden;
     }
-
-
+  }
 </style>

@@ -2,8 +2,8 @@
   <div :class="!grid && 'list'" >
     <md-card class="md-elevation" :class="!grid && 'list'" >
       <md-card-header>
-       <div class="md-title">{{vendor.vendorDisplayName}}</div>
-      <div class="md-subhead">{{vendor.vendorCategory}}</div>
+        <div class="md-title">{{vendor.vendorDisplayName}}</div>
+        <div class="md-subhead">{{vendor.vendorCategory}}</div>
       </md-card-header>
 
       <md-card-content>{{vendor.vendorMainEmail || "-"}}</md-card-content>
