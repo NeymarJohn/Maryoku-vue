@@ -22,10 +22,7 @@
       <div class="md-layout-item">
         <div class="title-cont">
           <div class="title-child">
-            <img v-if="isVendorLogo" :src="isVendorLogo">
-            <div v-else class="default-text-logo">
-              {{logoText}}
-            </div>
+            <img :src="bgImages[1]">
           </div>
           <div class="title-child">
             <h3>
@@ -36,15 +33,13 @@
               {{vendor.vendorAddressLine1}}
             </span>
             <br class="hidden-lg hidden-md"/>
-            <div class="hor-divider">
-              <label
-                class="star-rating__star"
-                v-for="(rating, ratingIndex) in ratings"
-                :key="ratingIndex"
-                :class="{'is-selected' : true}"
-              >★</label>
-              {{vendor.avgScore}}
-            </div>
+            <label
+              class="star-rating__star"
+              v-for="(rating, ratingIndex) in ratings"
+              :key="ratingIndex"
+              :class="{'is-selected' : true}"
+            >★</label>
+            {{vendor.avgScore}}
             <br class="hidden-lg hidden-md"/>
             <a class="favorite">
               <md-icon>favorite_border</md-icon> add to favorites
@@ -99,14 +94,12 @@
 
     <!-- Tabs -->
     <div class="tabs-container">
-      <div class="tab-item" 
-        :class="[{'visited': currentTab > 1}, {'active': currentTab == 1}]" 
-        v-on:click="currentTab = 1">
-        <span class="capitalize">{{vendor.vendorCategory}}</span>
+      <div class="tab-item" :class="[{'visited': currentTab > 1}, {'active': currentTab == 1}]" v-on:click="currentTab = 1">
+        Food
       </div>
-      <!-- <div class="tab-item" :class="[{'visited': currentTab > 2}, {'active': currentTab == 2}]" v-on:click="currentTab = 2">
+      <div class="tab-item" :class="[{'visited': currentTab > 2}, {'active': currentTab == 2}]" v-on:click="currentTab = 2">
         Venue
-      </div> -->
+      </div>
     </div>
 
     <!-- Tab contents -->
@@ -144,7 +137,7 @@
               <div class="tab-item-content-body">
                 <ul class="check-list">
                   <li>
-                    <md-icon>restaurant</md-icon> <strong class="capitalize">{{vendor.vendorCategory}}</strong>
+                    <md-icon>restaurant</md-icon> <strong>Food</strong>
                   </li>
                   <li>
                     <br/>
@@ -310,10 +303,9 @@
     },
     data () {
       return {
+        vendorId: null,
         isLoading: true,
         vendor: {statistics: {}},
-        isVendorLogo: null,
-        vendorProperties: {},
         bgImages : [
           '/static/img/lock.jpg',
           '/static/img/login.jpg',
@@ -398,49 +390,22 @@
       this.isLoading = false;
 
       this.getVendor()
-      this.getVendorProposals()
     },
     methods: {
-      getVendor() {
+      getVendor () {
         this.$auth.currentUser(this, true, function () {
           Vendors.find(this.$route.params.id).then(vendor => {
             this.vendor = vendor
-            Vendors.find('properties').then(properties => {
-              this.vendorProperties = properties;
-              console.log('properties', properties);
-            }, (error) => {
-              console.log(error)
-            });
-            this.isLoading = false
+            this.isLoading = false;
           })
         }.bind(this))
-      },
-      getVendorProposals() {
-        this.isLoading = true;
-        new Vendors(this.$route.params.id).proposalRequests().first().then(proposals => {
-          this.proposals = proposals.vendorProposals;
-          this.isLoading = false
-        });
       }
     },
     computed: {
-      logoText: function () {
-        if (!this.vendor.vendorDisplayName) {
-          return null
-        } else {
-          const titleWords = this.vendor.vendorDisplayName.split(' ')
-          if (titleWords.length > 1 && titleWords[titleWords.length-1].length > 0) {
-            return titleWords[0].charAt(0) + titleWords[titleWords.length-1].charAt(0)
-          } else {
-            return titleWords[0].charAt(0)
-          }
-        }
-      }
     },
     filters: {
     },
-    watch: {
-    },
+    watch: {},
   }
 </script>
 <style lang="scss" scoped>
@@ -486,21 +451,11 @@
 
         .title-child {
           padding: 0 1em;
-          img, .default-text-logo {
+          img {
             width: 120px;
             height: 120px;
             position: relative;
             top: -2rem;
-          }
-          .default-text-logo {
-            border: 3px solid #ffffff;
-            border-radius: 3px;
-            background-color: #999999;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
           }
           .address {
             font-size: 12px;
@@ -731,20 +686,6 @@
     @media (max-width: $screen-sm-min) {
       padding: 1em;
       top: 0;
-    }
-  }
-  .capitalize {
-    text-transform: capitalize;
-  }
-  .hor-divider {
-    border-left: 1px solid #cccccc;
-    border-right: 1px solid #cccccc;
-    margin: 0 .5em;
-    padding: 0 .5em;
-    display: inline-block;
-
-    @media (max-width: $screen-sm-min) {
-      border: none;
     }
   }
 </style>

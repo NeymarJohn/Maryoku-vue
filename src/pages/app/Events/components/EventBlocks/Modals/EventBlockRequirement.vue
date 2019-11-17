@@ -35,7 +35,7 @@
             </div>
             <div class="md-layout-item md-size-100" >
               <!-- Multi Select Options list -->
-              <template v-if="tempOptions && tempOptions.length">
+              <template v-if="tempOptions.length">
                 <div class="multi-select-options">
                   <div class="multi-select-options__item "
                     :class="{ 'with-amount' : requirementPropertiesType === 'multi-selection-with-amount'}"
@@ -64,7 +64,7 @@
                 <br>
               </template>
               <!-- Additional Options list -->
-              <template v-if="tempAdditionalOptions && tempAdditionalOptions.length">
+              <template v-if="tempAdditionalOptions.length">
                 <md-checkbox
                   @change="getAdditionalSelectedOptions"
                   v-for="(option , index) in tempAdditionalOptions "
@@ -81,7 +81,7 @@
                 <label>Quantity</label>
                 <md-input v-focus type="text" v-model="tempValue"></md-input>
               </md-field>
-              <template v-else-if="requirementPropertiesType === 'boolean'">
+              <template v-else-if="requirementPropertiesType === 'boolean' && !tempAdditionalOptions.length && !tempOptions.length">
                 <div class="boolean-options">
                   <md-radio v-model="tempValue" value="true">Yes</md-radio>
                   <md-radio v-model="tempValue" value="false">No</md-radio>
@@ -112,7 +112,7 @@
         </md-button>
         <md-button v-if="requirement.editMode" class="md-xs md-default md-simple" @click="cancelEdit">
           <md-icon>close</md-icon>
-          close 
+          close
         </md-button>
         <md-button v-if="requirement.editMode" class="md-xs md-rose md-simple" @click="saveEdit(requirement)">
           <md-icon>check</md-icon>
@@ -156,17 +156,14 @@ export default {
       tempComment: "",
       tempMandatory: false,
       reqType: '',
-      tempOptions: null,
-      tempAdditionalOptions: null,
+      tempOptions: [],
+      tempAdditionalOptions: [],
       otherOption: {},
       selectedOptions: [],
       additionalSelectedOptions: []
     }
   },
   mounted() {
-    console.log('requirement ==> ', this.requirement);
-    console.log('requirementProperties ==> ', this.requirementProperties);
-
     if (this.requirement.editMode) {
       this.startEdit(this.requirement);
     }
@@ -185,8 +182,8 @@ export default {
       this.tempComment = requirement.comment;
       this.tempMandatory = requirement.mandatory;
       this.reqType = requirement.type;
-      this.tempOptions = this.requirementProperties ? this.requirementProperties.multiSelectionOptions : [];
-      this.tempAdditionalOptions = this.requirementProperties ? this.requirementProperties.additionalOptions : [];
+      this.tempOptions = this.requirementProperties && this.requirementProperties.multiSelectionOptions? this.requirementProperties.multiSelectionOptions : [];
+      this.tempAdditionalOptions = this.requirementProperties && this.requirementProperties.additionalOptions ? this.requirementProperties.additionalOptions : [];
 
       this.checkSelectedOptions();
 
@@ -235,8 +232,6 @@ export default {
           this.selectedOptions.push(obj);
         }
       });
-
-      console.log(this.selectedOptions);
     },
     getAdditionalSelectedOptions() {
       this.additionalSelectedOptions = [];
@@ -250,8 +245,6 @@ export default {
           this.additionalSelectedOptions.push(obj);
         }
       });
-
-      console.log(this.additionalSelectedOptions);
     },
     checkSelectedOptions() {
       if (this.requirement.multipleSelectionValues) {

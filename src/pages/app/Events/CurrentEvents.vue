@@ -11,12 +11,12 @@
                                   @go-to-building-blocks="resetTab"></event-building-blocks>
         </div>
       </div>-->
-       <tabs v-if="false"
-        :tab-name="['BUDGET & PROPOSALS','TIMELINE', 'INVITEES']"
+       <tabs
+        :tab-name="['EVENT DETAILS', 'BUDGET & PROPOSALS','TIMELINE', 'INVITEES']"
         color-button="rose"
         :active-tab="$store.state.EventPlannerVuex.eventDetailsActiveTab" ref="eventPlannerTabs" :sync-router="true">
          here you can add your content for tab-content
-         <!--<template slot="tab-pane-1" style="width: 100%;">
+         <template slot="tab-pane-1" style="width: 100%;">
             <div class="md-layout">
                 <div class="md-layout-item md-size-25">
                     <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
@@ -109,20 +109,20 @@
                     </div>
                 </div>
             </div>
-        </template>-->
-         <template slot="tab-pane-1" style="width: 100%;">
+        </template>
+         <template slot="tab-pane-2" style="width: 100%;">
             <div class="md-layout">
-                <div class="md-layout-item md-size-20 no-padding">
+                <div class="md-layout-item md-size-25">
                     <event-details-sidebar :event.sync="event" :event-statistics.sync="event.statistics"></event-details-sidebar>
                 </div>
-                <div class="md-layout-item md-size-80 no-padding">
+                <div class="md-layout-item md-size-75">
                     <event-building-blocks :event.sync="event" :event-components="selectedComponents"
-                                           @go-to-building-blocks="resetTab"></event-building-blocks>
+                                            @go-to-building-blocks="resetTab"></event-building-blocks>
                 </div>
             </div>
 
         </template>
-        <template slot="tab-pane-2" style="width: 100%;">
+        <template slot="tab-pane-3" style="width: 100%;">
             <div class="md-layout">
                 <div class="md-layout-item md-size-100">
                     <event-time-line :event="event" :event-components="selectedComponents"></event-time-line>
@@ -131,7 +131,7 @@
             </div>
 
         </template>
-        <template slot="tab-pane-3" style="width: 100%;">
+        <template slot="tab-pane-4" style="width: 100%;">
             <div class="md-layout">
                 <div class="md-layout-item md-size-100">
                     <event-invitees :event-data.sync="event"></event-invitees>
