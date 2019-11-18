@@ -398,28 +398,23 @@
       this.isLoading = false;
 
       this.getVendor()
-      this.getVendorProposals()
+      this.getVendorProposals(this.$route.params.id)
     },
     methods: {
       getVendor() {
         this.$auth.currentUser(this, true, function () {
           Vendors.find(this.$route.params.id).then(vendor => {
             this.vendor = vendor
-            Vendors.find('properties').then(properties => {
-              this.vendorProperties = properties;
-              console.log('properties', properties);
-            }, (error) => {
-              console.log(error)
-            });
             this.isLoading = false
           })
         }.bind(this))
       },
-      getVendorProposals() {
+      getVendorProposals(id) {
         this.isLoading = true;
-        new Vendors(this.$route.params.id).proposalRequests().first().then(proposals => {
+        new Vendors({id}).proposalRequests().first().then(proposals => {
+          console.log('proposals', proposals);
           this.proposals = proposals.vendorProposals;
-          this.isLoading = false
+          this.isLoading = false;
         });
       }
     },

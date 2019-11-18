@@ -56,46 +56,48 @@ export default {
     goToLanding() {
       this.page = "landing";
     },
-    getProposals (id) {
+    getProposals(id) {
       this.isLoading = true;
-      new Vendors({id}).proposalRequests().first().then(proposals => {
+      new Vendors({
+        id
+      }).proposalRequests().first().then(proposals => {
         console.log('proposals', proposals);
-        
+
         this.proposals = proposals.vendorProposals;
         this.firstTime = proposals.firstTime;
 
         this.isLoading = false;
       });
     },
-    getProposal (id) {
+    getProposal(id) {
       this.isLoading = true;
-    
+
       ProposalRequest.find(id)
-      .then(resp => {
+        .then(resp => {
 
-        this.$set(this, "proposalRequest", resp);
+          this.$set(this, "proposalRequest", resp);
 
-        if (!this.gotProposals) {
-          this.getProposals(resp.vendorId);
-          this.gotProposals = true;
-        } else {
-          this.isLoading = false;
-        }
+          if (!this.gotProposals) {
+            this.getProposals(resp.vendorId);
+            this.gotProposals = true;
+          } else {
+            this.isLoading = false;
+          }
 
-        this.proposalRequestRequirements = _.chain(resp.requirements)
-          .groupBy("requirementPriority")
-          .map(function(value, key) {
-            return {
-              title: key,
-              requirements: value
-            };
-          })
-          .value();
+          this.proposalRequestRequirements = _.chain(resp.requirements)
+            .groupBy("requirementPriority")
+            .map(function (value, key) {
+              return {
+                title: key,
+                requirements: value
+              };
+            })
+            .value();
 
-      })
-      .catch(error => {
-        console.log(" error here   -->>>  ", error);
-      });
+        })
+        .catch(error => {
+          console.log(" error here   -->>>  ", error);
+        });
     }
   },
   computed: {}

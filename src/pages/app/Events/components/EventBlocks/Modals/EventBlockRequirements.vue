@@ -134,7 +134,7 @@
                             </li>
                         </ul>
                         <div style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 0 3px #ccc;" >&nbsp;</div>-->
-                        <md-table class="clear-margins" v-if="eventBlockRequirements" v-model="filteredEventBlockRequirements">
+                        <md-table class="clear-margins" v-if="eventBlockRequirements && eventBlockRequirements.length" v-model="filteredEventBlockRequirements">
 <!--                            <md-table-toolbar >-->
 <!--                                <div class="md-toolbar-section-start">-->
 <!--                                    <md-field>-->
@@ -295,7 +295,6 @@
       getBuildingBlockValues( newValueId = null) {
         this.isLoading = true;
         if (this.selectedBlock.values === null || this.selectedBlock.valuesCount !== this.selectedBlock.values.length){
-            console.log(' if ');
 
           let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
           let event = new CalendarEvent({id: this.event.id});
@@ -303,9 +302,8 @@
 
           new EventComponentValue().for(calendar, event, selected_block).get().then(values => {
             this.selectedBlock.values = values;
-            this.eventBlockRequirements = values ? values : [];
+            this.eventBlockRequirements = values;
             this.filteredEventBlockRequirements = this.eventBlockRequirements;
-            console.log('i am here');
             this.$root.$emit('refreshRequirementsLength',this.eventBlockRequirements.length);
 
             if ( newValueId ) {
@@ -318,7 +316,6 @@
 
           });
         } else {
-            console.log(' else');
           this.eventBlockRequirements = this.selectedBlock.values;
           this.filteredEventBlockRequirements = this.eventBlockRequirements;
           this.$root.$emit('refreshRequirementsLength',this.eventBlockRequirements.length);

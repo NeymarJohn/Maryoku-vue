@@ -15,16 +15,16 @@
         <h4 class="title">Win more quotes, get better leads</h4>
         <p>* Get insights about the competition and budget range to create winning quotes.</p>
         <p>* Get notified when quote outbided, and update your quote.</p>
-        <p>* We study your preferences and send you more leads according to them.</p>
+        <p>* We study your proposals and build your auto proposal builder to save you time and energy.</p>
       </div>
     </div>
-      <div class="md-layout-item md-size-70" v-else>
-          <div class="margin-bottom-lg">
-              <h3 class="title">
-                  <md-icon class="md-success md-size-2x margin-right-sm">check_circle</md-icon>Welcome back
-              </h3>
-          </div>
+    <div class="md-layout-item md-size-70" v-else>
+      <div class="margin-bottom-lg">
+        <h3 class="title">
+          <md-icon class="md-success md-size-2x margin-right-sm">check_circle</md-icon>Welcome back
+        </h3>
       </div>
+    </div>
     <div class="md-layout-item md-size-70 margin-bottom-lg">
       <h4 class="title">Waiting for your quote:</h4>
       <md-card class="proposals--card">
