@@ -21,7 +21,7 @@
     <div class="md-layout-item md-size-70" v-else>
       <div class="margin-bottom-lg">
         <h3 class="title">
-          <md-icon class="md-success md-size-2x margin-right-sm">check_circle</md-icon>Welcome back
+          <md-icon class="md-success md-size-2x margin-right-sm">check_circle</md-icon>Thank you
         </h3>
       </div>
     </div>
@@ -117,7 +117,7 @@
           </div>
         </md-card-content>
       </md-card>
-      <a href="#" @click.prevent="onSkipToAnotherEventRequest">
+      <a href="#" @click.prevent="onSkipToAnotherEventRequest" v-if="showSkipLink">
         Skip to another event request
         <md-icon class="md-primary">keyboard_arrow_right</md-icon>
       </a>
@@ -133,7 +133,9 @@ export default {
   components: {},
 
   data() {
-    return {};
+    return {
+      showSkipLink: false
+    };
   },
   created() {},
   mounted() {},

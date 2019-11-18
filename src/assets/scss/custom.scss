@@ -3044,6 +3044,12 @@ iframe{
     border-radius: 5px;
     margin-top : 3em;
 
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        margin: 0; 
+    }
+
     .list-item {
         &:not(:last-child) {
             border-bottom : 1px solid #d9d9d9;
@@ -3365,6 +3371,12 @@ iframe{
         }
     }
 
+    .extra-section {
+        padding: 1em 0;
+        border-top: 1px solid #c0c0c0ef;
+        border-bottom: 1px solid #c0c0c0ef;
+    }
+
     .offer-value {
         .value-section {
             display: flex;
@@ -3376,6 +3388,9 @@ iframe{
             &.upgrades-section {
                 margin-bottom : 1em;
 
+                .title {
+                    text-transform: capitalize;
+                }
                 &.is-bold {
                     font-weight: bold;
                 }
@@ -4333,6 +4348,12 @@ iframe{
 }
 .terms-form {
     padding : 0 1em;
+
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        margin: 0; 
+    }
 
     h5 {
         margin : 2em 0 0;
