@@ -315,7 +315,7 @@ export default {
                 //vm.$emit('goToNextPage', response);
                 //vm.newEvent = response;
 
-                vm.$router.push({ path: `/events/`+ vm.event.id + '/edit/details' });
+                vm.$router.push({ path: `/events/`+ response.item.id + '/edit/details' });
 
             })
                 .catch((error) => {
