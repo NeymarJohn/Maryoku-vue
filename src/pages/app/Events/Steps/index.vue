@@ -5,9 +5,9 @@
             <div class="step" :class="[{'visited': step > 1}, {'active': step == 1}]">
                 <span>1</span> Create Event Details
             </div>
-            <div class="step" :class="[{'visited': step > 2}, {'active': step == 2}]">
-                <span>2</span> Select Elements
-            </div>
+<!--            <div class="step" :class="[{'visited': step > 2}, {'active': step == 2}]">-->
+<!--                <span>2</span> Select Elements-->
+<!--            </div>-->
 <!--            <div class="step" :class="[{'active': step == 3}]">-->
 <!--                Send to vendors-->
 <!--            </div>-->
@@ -15,6 +15,12 @@
         <event-details v-if="step == 1" @goToNextPage="goToNextPage" :new-event-data="newEvent" />
         <get-started v-else-if="step == 2" @goToNextPage="goToNextPage" @goToPrevPage="goToPrevPage" :new-event="newEvent" />
 <!--        <brief-details v-show="step == 2" @goToNextPage="goToNextPage" @goToPrevPage="goToPrevPage" />-->
+
+        <div class="first-child">
+            <div class="second-child">
+                <div class=""></div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
