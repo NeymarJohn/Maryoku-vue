@@ -8,10 +8,10 @@ export default class Vendors extends Model {
   }
 
   categories() {
-      return this.hasMany(VendorCategories)
+    return this.hasMany(VendorCategories)
   }
   
   proposalRequests() {
-      return this.hasMany(ProposalRequest)
+    return this.hasMany(ProposalRequest)
   }
 }

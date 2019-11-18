@@ -15,12 +15,6 @@
         <event-details v-if="step == 1" @goToNextPage="goToNextPage" :new-event-data="newEvent" />
         <get-started v-else-if="step == 2" @goToNextPage="goToNextPage" @goToPrevPage="goToPrevPage" :new-event="newEvent" />
 <!--        <brief-details v-show="step == 2" @goToNextPage="goToNextPage" @goToPrevPage="goToPrevPage" />-->
-
-        <div class="first-child">
-            <div class="second-child">
-                <div class=""></div>
-            </div>
-        </div>
     </div>
 </template>
 <script>
