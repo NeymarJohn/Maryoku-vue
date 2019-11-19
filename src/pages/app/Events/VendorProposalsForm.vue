@@ -98,15 +98,15 @@
                       <span>Per guest ${{(proposalRequest.requirementsCategoryCost / proposalRequest.eventData.numberOfParticipants).toFixed(2) | numeral('0,0') }}</span>
                       <md-field class="with-bg">
                         <span class="md-prefix">$</span>
-                        <md-input 
-                          type="number" 
+                        <md-input
+                          type="number"
                           v-model="proposalRequest.requirementsCategoryCost"
                           @blur="updateProposalRequest">
                         </md-input>
                       </md-field>
                     </div>
                   </div>
-                  <div class="list-item md-layout"
+                  <div class="list-item md-layout" :class="{'not-available'  : item.itemNotAvailable}"
                     v-for="(item,index) in proposalRequest.requirements" :key="index">
                     <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
                       <span v-if="item.requirementValue">{{item.requirementValue}} x </span>
@@ -142,11 +142,11 @@
                       <label :for="`include-${index}`">Included in price</label>
                     </div>
                     <div class="actions-list md-layout-item md-size-100 md-small-size-100" style="display: flex; justify-content: space-between;">
-                      <md-field v-if="item.requirementMandatory">
+                      <md-field v-if="item.requirementMandatory" class="amount-field">
                         <label>Amount</label>
-                        <md-input 
-                          type="number" 
-                          v-model="item.requirementValue" 
+                        <md-input
+                          type="number"
+                          v-model="item.requirementValue"
                           @blur="updateProposalRequest">
                         </md-input>
                       </md-field>
@@ -158,7 +158,7 @@
                         <md-icon>block</md-icon>
                         Mark as not available
                       </md-button>
-                      <md-button class="md-primary md-simple" v-if="!(item.comments && item.comments.length)"
+                      <md-button class="md-primary md-simple add-comment-btn" v-if="!(item.comments && item.comments.length)"
                         @click="item.showCommentForm =  true; item.addedComment = false; $forceUpdate();">
                         <md-icon>comment</md-icon>
                         Add Comment
@@ -250,7 +250,7 @@
                             delete
                         </md-button>
                     </div>
-                
+
                     <iframe class="vendor-images-list_item" frameborder="0"
                         v-for="(image,index) in proposalRequestImages" :key="index"
                             :src="`${serverUrl}/1/proposal-requests/${proposalRequest.id}/images/${image.id}`"
@@ -259,7 +259,7 @@
                             delete
                         </md-button>
                     </iframe>
-                
+
                     <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image"
                               @click="uploadEventImage">
                         <md-icon>add</md-icon>
@@ -309,7 +309,7 @@
                     </div>
                 </div>
             </md-card-content>
-            
+
             </md-card>-->
           <!-- ./Vendor images -->
         </div>
@@ -324,8 +324,8 @@
                 <h5>Cancellation policy</h5>
                 <div class="notes-section">
                   <md-field>
-                    <md-textarea 
-                      rows="5" 
+                    <md-textarea
+                      rows="5"
                       v-model="proposalRequest.cancellationPolicy"
                       @blur="updateProposalRequest()">
                     </md-textarea>
@@ -357,8 +357,8 @@
               </div>
               <div class="md-layout-item md-size-100">
                 <md-field>
-                  <md-textarea 
-                    rows="5" 
+                  <md-textarea
+                    rows="5"
                     v-model="proposalRequest.personalMessage"
                     @blur="updateProposalRequest()">
                   </md-textarea>
@@ -376,9 +376,9 @@
               </div>
               <div class="md-layout-item md-size-100">
                 <md-field>
-                  <md-textarea 
-                    rows="5" 
-                    v-model="proposalRequest.aboutUsMessage" 
+                  <md-textarea
+                    rows="5"
+                    v-model="proposalRequest.aboutUsMessage"
                     @blur="updateProposalRequest()">
                   </md-textarea>
                 </md-field>
@@ -411,9 +411,9 @@
               </div>
             </div>
             <div class="update-checkbox">
-              <md-checkbox 
-                class="md-success" 
-                v-model="proposalRequest.updateOnOutbid" 
+              <md-checkbox
+                class="md-success"
+                v-model="proposalRequest.updateOnOutbid"
                 @change="updateProposalRequest()">
                 Update me if someone outbids my offer
               </md-checkbox>

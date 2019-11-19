@@ -1,20 +1,16 @@
 <template>
   <div class="manage-proposals-panel">
     <div class="md-layout" style="max-height: 50vh;" v-if="vendorProposal && vendorInfo">
-      <!-- <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
+      <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
         <h4 class="md-title">
           <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
             <md-icon>arrow_back</md-icon>
           </md-button>
         </h4>
-      </div> -->
-      <div class="md-layout-item md-size-100" style="max-height: 50vh;">
+      </div>
+      <div class="md-layout-item md-size-95" style="max-height: 50vh;">
         <div class="title-section">
           <h4 class="md-title" style="margin-bottom: 0; line-height: 51px; text-transform: capitalize;">
-            <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
-              <md-icon>navigate_before</md-icon>
-            </md-button>
-
             {{vendorInfo.vendorCategory}}
           </h4>
           <div class="actions-list">
@@ -30,6 +26,7 @@
         </div>
       </div>
       <div class="md-layout">
+        <div class="md-layout-item md-size-5"></div>
         <div class="md-layout-item md-size-50">
           <md-card class="proposal-message">
             <md-card-content>
@@ -62,7 +59,6 @@
                   Last Update on {{getProposalDate(vendorInfo.lastUpdated)}} (3 updates)
                 </div>
               </div>
-              <h3>Dear {{vendorInfo.vendorDisplayName}}</h3>
               <p v-html="vendorProposal.personalMessage">
                 <!-- Personal Message -->
               </p>
@@ -87,7 +83,7 @@
             </md-card-content>
           </md-card>
         </div>
-        <div class="md-layout-item md-size-50">
+        <div class="md-layout-item md-size-45">
           <md-card class="cost-pros-cons-section">
             <md-card-content>
               <div class="cost-info">
@@ -99,7 +95,7 @@
                   <div class="down-payment">Down Payment : ${{vendorProposal.cost *.1 }}</div>
                 </div>
                 <div class="cost-info_desc">
-                  <div class="cost-label">Cost Per Guest</div>
+                  <div class="cost-label">Cost per guest</div>
                   <br/>
                   <div class="cost-value">${{vendorProposal.costPerGuest}}</div>
                 </div>
@@ -145,7 +141,8 @@
             </md-card-content>
           </md-card>
         </div>
-        <div class="md-layout-item md-size-100">
+        <div class="md-layout-item md-size-5"></div>
+        <div class="md-layout-item md-size-95">
           <div class="section-title with-border">
             <h3>Included in {{vendorInfo.vendorCategory}}:</h3>
             <div class="total-budget text-right pull-right">
@@ -239,9 +236,10 @@
           </div>
         </div>
         <template v-if="vendorProposal.attachements.length">
-          <div class="md-layout-item md-size-100 gallery-section">
+          <div class="md-layout-item md-size-5"></div>
+          <div class="md-layout-item md-size-95 gallery-section">
             <div class="section-title">
-              <h3>Vendor's Images</h3>
+              <h3>Why Us?</h3>
             </div>
             <md-button class="md-default view-images no-uppercase" @click="view()">View Images</md-button>
             <ul class="images-list">
@@ -249,13 +247,7 @@
                 <div :style="`width : 320px; height : 320px; background : url(${serverUrl}/1/proposal-requests/${proposal.id}/files/${item}) center center no-repeat ; background-size : cover;`"></div>
               </li>
             </ul>
-            <LightBox 
-              v-if="viewImages"
-              :images="getImages()"
-              ref="lightbox"
-              :show-caption="true"
-              :show-light-box="false">
-            </LightBox>
+            <LightBox  v-if="viewImages" :images="images"></LightBox>
           </div>
         </template>
         <div class="md-layout-item md-size-5" style="display: none;"></div>
@@ -329,7 +321,8 @@
             <md-icon>add</md-icon>
           </md-button>
         </div>
-        <div class="md-layout-item md-size-100">
+        <div class="md-layout-item md-size-5" ></div>
+        <div class="md-layout-item md-size-95">
           <ul class="proposal-summary">
             <li style="display: none;">
               <div class="proposal-info">
@@ -363,7 +356,7 @@
             </li>
             <li>
               <div class="proposal-info about-us">
-                <div class="proposal-title">About Us</div>
+                <div class="proposal-title">About us</div>
                 <div class="proposal-desc">{{vendorProposal.aboutUsMessage}}</div>
               </div>
               <div class="attachments-list" style="display: none;">
@@ -455,7 +448,7 @@ export default {
     },
     getProposalDate(eventStartMillis) {
       let x = new Date(eventStartMillis)
-      return x.getMonth() + ' ' + x.getDate() + ', ' + x.getFullYear()
+      return x.getDate() + '-' + x.getMonth() + '-' + x.getFullYear()
     },
     getAlignClasses: ({
       id
