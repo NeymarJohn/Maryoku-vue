@@ -14,12 +14,13 @@
             {{vendorInfo.vendorCategory}}
           </h4>
           <div class="actions-list">
-            <md-button class="md-rose md-sm md-simple no-uppercase">
+            <md-button class="md-rose md-sm md-simple">
               <md-icon>compare</md-icon>
               Add to compare
             </md-button>
-            <md-button class="md-rose md-sm bold no-uppercase" @click="manageProposalsAccept(proposal)">
-              Accept proposal
+            <md-button class="md-rose no-uppercase" @click="manageProposalsAccept(proposal)">
+              Accept Proposal
+              <md-icon>check</md-icon>
             </md-button>
           </div>
         </div>
@@ -40,12 +41,11 @@
                     {{vendorInfo.vendorDisplayName}}
                   </h4>
                   <div class="star-rating">
-                    <label class="star-rating__star"
+                    <!-- <label class="star-rating__star"
                       v-for="rating in ratings"
                       :class="{'is-selected' : ((vendorInfo.rank >= rating) && vendorInfo.rank != null)}"
                       >
-                    <input class="star-rating star-rating__checkbox" type="radio"
-                      >★</label>
+                    <input class="star-rating star-rating__checkbox" type="radio">★</label> -->
                   </div>
                 </div>
                 <div class="vendor-location">
@@ -89,16 +89,20 @@
               <div class="cost-info">
                 <div class="cost-info_desc">
                   <div class="cost-label">Subtotal</div>
+                  <br/>
                   <div class="cost-value">${{vendorProposal.cost}}</div>
+                  <br/>
                   <div class="down-payment">Down Payment : ${{vendorProposal.cost *.1 }}</div>
                 </div>
                 <div class="cost-info_desc">
                   <div class="cost-label">Cost per guest</div>
+                  <br/>
                   <div class="cost-value">${{vendorProposal.costPerGuest}}</div>
                 </div>
               </div>
               <div class="cost-info_breakdown">
                 <div class="cost-label">Cost Breakdown</div>
+                <br/>
                 <ul class="cost-breakdown__items">
                   <li v-for="(item,index) in proposal.costBreakdown" :key="index">
                     {{item.service}}: ${{item.cost}}
@@ -109,22 +113,30 @@
                 <div class="section-content pros-section">
                   <md-icon class="thumb-up">thumb_up_alt</md-icon>
                   <ul class="list-items">
-                    <li v-for="(item,index) in vendorProposal.pros" :key="index">{{item}}</li>
+                    <li><br/></li>
+                    <li v-for="(item,index) in vendorProposal.pros" :key="index">{{getStringWithRoundedNumber(item)}}</li>
                   </ul>
                 </div>
                 <div class="section-content cons-section">
                   <md-icon class="thumb-down">thumb_down_alt</md-icon>
                   <ul class="list-items">
+                    <li><br/></li>
                     <li v-for="(item,index) in vendorProposal.cons" :key="index">{{item}}</li>
                   </ul>
                 </div>
               </div>
-              <div class="need-help-section text-center">
-                <h6>Need help or modifications?</h6>
-                <md-button class="md-rose md-simple md-sm no-uppercase" @click="tooltipActive = !tooltipActive">
+              <div class="need-help-section">
+                <h6>Need help or Modification?</h6>
+                <br/>
+                <a @click="tooltipActive = !tooltipActive">
                   Contact {{vendorInfo.contactPerson ? vendorInfo.contactPerson : vendorInfo.vendorDisplayName}}
-                </md-button>
-                <md-tooltip :md-active.sync="tooltipActive">{{vendorInfo.vendorMainEmail}} </md-tooltip>
+                </a>
+                <br/>
+                <div class="arrow_box" v-if="tooltipActive">
+                  <strong>Contact Information:</strong><br/>
+                  <span>Phone: {{vendorInfo.vendorMainPhoneNumber}}</span><br/>
+                  <span>Email: {{vendorInfo.vendorMainEmail}}</span>
+                </div>
               </div>
             </md-card-content>
           </md-card>
@@ -132,7 +144,12 @@
         <div class="md-layout-item md-size-5"></div>
         <div class="md-layout-item md-size-95">
           <div class="section-title with-border">
-            <h3>Included in {{vendorInfo.vendorCategory}}</h3>
+            <h3>Included in {{vendorInfo.vendorCategory}}:</h3>
+            <div class="total-budget text-right pull-right">
+              <span class="total">Total {{vendorInfo.vendorCategory}}: ${{vendorProposal.cost}}</span>
+              <br/>
+              <span class="per-guest">Per Guest: ${{vendorProposal.costPerGuest}}</span>
+            </div>
           </div>
           <ul class="included-list">
             <li v-for="(item,index) in vendorProposal.included" :key="index" v-if="item.requirementTitle">
@@ -141,10 +158,10 @@
                 <h5>
                   {{item.requirementTitle}}
                 </h5>
-                <p> asdasda asd asd asd asda sda sd  lipsum yesjskjd skdjf skjdflskjdfklsjdflskdjfslkjdfslkdjfslkjf {{item.comment}}</p>
+                <p>{{item.comment}}</p>
               </div>
             </li>
-            <li v-if="extraMissingRequirements.length" v-for="(item,index) in extraMissingRequirements" :key="index" class="proposals-waiting-approval">
+            <li v-for="(item,index) in extraMissingRequirements" :key="index" class="proposals-waiting-approval" v-if="extraMissingRequirements.length">
               <div class="proposal-info">
                 <div class="proposal-title">{{item.requirementValue}}x {{item.requirementTitle}} <small style="display: none;">(Suggested by vendor)</small></div>
                 <div class="proposal-desc" v-for="(comment,index) in item.comments" :key="index">
@@ -390,7 +407,6 @@ import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue';
 import ProposalRequest from '@/models/ProposalRequest';
 import EventComponentProposal from '@/models/EventComponentProposal';
 
-
 export default {
   components: {
     VueElementLoading,
@@ -466,6 +482,16 @@ export default {
     getDate(eventStartMillis) {
       let x = new Date(eventStartMillis)
       return moment(x).format('MMMM D, YYYY')
+    },
+    getStringWithRoundedNumber(rawString) {
+      let numbers = rawString.replace(/[^\d\.]*/g, '')
+      if (numbers) {
+        const subString = rawString.split(numbers)
+        numbers = parseFloat(numbers).toFixed(2)
+        return subString[0] + numbers.toString() + subString[1]
+      } else {
+        return rawString
+      }
     }
   },
   computed: {
@@ -476,52 +502,94 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.text-right /deep/ .md-table-cell-container {
-  display: flex;
-  justify-content: flex-end;
-}
+  .text-right /deep/ .md-table-cell-container {
+    display: flex;
+    justify-content: flex-end;
+  }
 
-.md-table /deep/ .md-table-head:last-child {
-  text-align: right;
-}
+  .md-table /deep/ .md-table-head:last-child {
+    text-align: right;
+  }
 
-.table-stats {
-  display: flex;
-  align-items: center;
-  text-align: right;
-  flex-flow: row wrap;
-  .td-price {
-    .td-total {
-      display: inline-flex;
-      margin-right: 20px;
+  .table-stats {
+    display: flex;
+    align-items: center;
+    text-align: right;
+    flex-flow: row wrap;
+    .td-price {
+      .td-total {
+        display: inline-flex;
+        margin-right: 20px;
+      }
+      .td-value {
+        width: 91px;
+        display: inline-block;
+        text-align: left;
+      }
     }
-    .td-value {
-      width: 91px;
-      display: inline-block;
-      text-align: left;
+    &.table-striped .td-price {
+      border-bottom: 0;
+      color: #000;
+    }
+    .td-price {
+      font-size: 14px;
+      font-weight: 400;
+      &.bold {
+        font-weight: bold;
+      }
+    }
+    .td-price,
+    >div {
+      flex: 0 0 100%;
+      padding: 4px 8px;
     }
   }
-  &.table-striped .td-price {
-    border-bottom: 0;
-    color: #000;
-  }
-  .td-price {
-    font-size: 14px;
-    font-weight: 400;
-    &.bold {
-      font-weight: bold;
-    }
-  }
-  .td-price,
-  >div {
-    flex: 0 0 100%;
-    padding: 4px 8px;
-  }
-}
 
-.table-shopping /deep/ .md-table-head:nth-child(5),
-.table-shopping /deep/ .md-table-head:nth-child(7),
-.table-shopping /deep/ .md-table-head:nth-child(6) {
-  text-align: right;
-}
+  .table-shopping /deep/ .md-table-head:nth-child(5),
+  .table-shopping /deep/ .md-table-head:nth-child(7),
+  .table-shopping /deep/ .md-table-head:nth-child(6) {
+    text-align: right;
+  }
+
+  .arrow_box {
+    background: white;
+    position: absolute;
+    padding: 1em;
+    border-radius: 3px;
+    border: 1px solid #c6c6c6;
+    margin-top: 1em;
+    margin-left: -2em;
+
+    strong {
+      font-size: 13px;
+      font-weight: 400;
+    }
+    span {
+      font-size: 12px;
+      color: #666666;
+    }
+  }
+  .arrow_box:after, .arrow_box:before {
+    bottom: 100%;
+    left: 20%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .arrow_box:after {
+    border-color: rgba(0, 0, 0, 0);
+    border-bottom-color: #ffffff;
+    border-width: 8px;
+    margin-left: -8px;
+  }
+  .arrow_box:before {
+    border-color: rgba(198, 198, 198, 0);
+    border-bottom-color: #c6c6c6;
+    border-width: 9px;
+    margin-left: -9px;
+  }
 </style>

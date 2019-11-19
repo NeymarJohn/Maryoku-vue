@@ -91,7 +91,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/scss/md/_colors.scss';
   .tooltip-wrapper {
     strong {
       font-size: 13px;

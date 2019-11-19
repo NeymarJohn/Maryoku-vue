@@ -584,8 +584,9 @@ $tooltip-border-color: $blue-grey-200 !default;
         }
 
         .actions-list {
+            display: flex;
             float : right;
-            margin-top : 2em;
+            margin-top : 1em;
 
             .md-button {
                 width : 200px;
@@ -969,30 +970,26 @@ $tooltip-border-color: $blue-grey-200 !default;
 
 
     .cost-pros-cons-section {
-        background-color :  #f3f3f3 !important;
-        border: solid 1px #d8d8d8;
+        background-color :  #f9f9f9 !important;
+        border-radius: 0;
         box-shadow: none;
+        padding: 2em;
 
         .md-card-content {
             padding : 0;
         }
 
         .cost {
-            &-label {
-                font-size: 13px;
+            &-label, &-value {
+                font-size: 18px;
                 color : #000;
-                font-weight: 500;
-            }
-            &-value {
-                font-weight: bold;
-                color : $brand-success;
+                font-weight: 400;
             }
         }
 
         .cost-info {
             @include display-flex(row,space-between,flex-start);
 
-            padding : 1em;
             &_desc {
                 text-align: left;
                 width : 50%;
@@ -1008,7 +1005,8 @@ $tooltip-border-color: $blue-grey-200 !default;
             &_breakdown {
                 width : 100%;
                 border-bottom : 1px solid #e4e4e4;
-                padding : 0 1em;
+                padding: 2em 0;
+                margin-bottom: 2em;
                 .cost-breakdown__items {
                     padding : 0;
                     margin : 0;
@@ -1017,17 +1015,18 @@ $tooltip-border-color: $blue-grey-200 !default;
                     li {
                         display: inline-block;
                         margin-right : 1em;
-                        color : #6a6a6a;
+                        color : #000000;
                         text-transform: capitalize;
-                        font-size: 13px;
-                        font-weight: 400;
+                        font-size: 14px;
+                        font-weight: 300;
                     }
                 }
             }
 
             .down-payment {
-                font-weight: 400;
-                font-size: 13px;
+                font-weight: 300;
+                font-size: 14px;
+                color: #000000;
                 text-transform: capitalize;
             }
 
@@ -1036,14 +1035,13 @@ $tooltip-border-color: $blue-grey-200 !default;
         .proposal-pros-cons {
             @include display-flex(row,space-between,flex-start);
             border-bottom : 1px solid #e4e4e4;
-            padding: 1em 0;
-            margin-bottom : 1em;
+            padding-bottom: 2em;;
+            margin-bottom : 2em;
 
             .section-content {
                 text-align: left;
                 width : 50%;
                 color : #707070;
-                padding : 0 1em;
 
                 .md-icon {
                     &.thumb-up {
@@ -1057,10 +1055,10 @@ $tooltip-border-color: $blue-grey-200 !default;
                     list-style: none;
                     margin : 0;
                     padding : 0;
-                    font-size: 13px;
+                    font-size: 14px;
                     li {
-                        margin-top : 0.5em;
-                        font-weight: 400;
+                        color: #000000;
+                        font-weight: 100;
                     }
                 }
             }
@@ -1070,8 +1068,15 @@ $tooltip-border-color: $blue-grey-200 !default;
         .need-help-section {
             h6 {
                 margin : 0;
-                color : #9c9c9c;
+                color : #000000;
+                font-size: 18px;
+                font-weight: 400;
                 text-transform: none;
+            }
+
+            a {
+                color: #ff4470;
+                cursor: pointer;
             }
 
             .md-button {
@@ -1090,15 +1095,29 @@ $tooltip-border-color: $blue-grey-200 !default;
             border : 1px solid #d8d8d8;
 
             h3 {
+                display: inline-block;
                 margin: 0;
                 padding: 1em;
             }
 
+            .total-budget {
+                display: inline-block;
+                margin: 0;
+                padding: .5em 1em;
+                .total {
+                    font-weight: 400;
+                    font-size: 18px;
+                }
+                .per-guest {
+                    font-size: 14px;
+                    color: #999999;
+                }
+            }
+
         }
         h3 {
-            font-weight: 500;
-            font-size: 20px;
-
+            font-weight: 400;
+            font-size: 18px;
         }
     }
 
@@ -1267,7 +1286,6 @@ $tooltip-border-color: $blue-grey-200 !default;
                             }
                         }
                     }
-
                 }
 
                 .md-table-row.disabled {
