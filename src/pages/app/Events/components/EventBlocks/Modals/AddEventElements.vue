@@ -11,15 +11,15 @@
           </md-button>
         </div>
         <div class="md-layout" style="overflow: auto; max-height: 80vh;">
-          <div v-for="(item,index) in filteredEventBlocks"
-            :key="index"
+          <div v-for="(item,index) in filteredEventBlocks" 
+            :key="index" 
             class="md-layout-item md-size-100 mx-auto event-element-item no-padding"
             @click="addElement(item)"
           >
             <drag :class="[
               `md-button block-item text-center`,
               {'active': isElementSelected(item)}]"
-              :transfer-data="{ item }"
+              :transfer-data="{ selectedItems }"
               v-if="!item.childComponents">
               {{item.title}}
             </drag>
@@ -94,7 +94,7 @@ export default {
     closePanel(payload) {
       this.$emit("closePanel", payload);
     },
-
+    
     getCategoryBlocks() {
       EventComponent.get()
         .then(res => {
@@ -111,8 +111,8 @@ export default {
         })
     },
     handleDrop(data, event) {
-      //this.$parent.isLoading = true;
-      this.addElement(data.item);
+      this.$parent.isLoading = true;
+      this.addSelectedElements();
     },
     addSelectedElements() {
       let calendar = new Calendar({
@@ -143,9 +143,9 @@ export default {
         this.selectedItemsRequests = [];
         this.$parent.isLoading = false;
 
-        // this.addNewEventElementModal({
-        //   showModal: false
-        // });
+        this.addNewEventElementModal({
+          showModal: false
+        });
 
         new EventComponent().for(calendar, event).get().then(events => {
           this.$emit("closePanel", events.filter(e => res.map(r => { return r.item.id }).includes(e.id)));

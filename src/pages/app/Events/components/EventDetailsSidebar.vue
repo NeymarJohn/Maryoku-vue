@@ -292,7 +292,7 @@
           this.$router.push({ path: `/event/`+ this.event.id + '/edit' });
 
 
-        //   window.currentPanel = this.$showPanel({
+          // window.currentPanel = this.$showPanel({
         //   component: EventSidePanel,
         //   cssClass: 'md-layout-item md-size-40 transition36 ',
         //   openOn: 'right',

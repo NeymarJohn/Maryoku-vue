@@ -2,7 +2,7 @@
     <div class="building-blocks-requirements">
         <div class="md-layout text-left">
 
-            <md-card class="event-requirements__event-details event-details">
+            <md-card class="event-details">
                 <md-card-content >
                     <div class="md-layout ">
                         <div class="md-layout-item md-size-40">
@@ -10,13 +10,10 @@
                                 <div class="md-layout-item md-size-100">
                                     <div class="event-date">
                                         <md-icon>local_mall</md-icon>
-                                        <label>{{event.eventStartMillis | formatDate}},
-                                            {{event.eventStartMillis | formatTime}}
-                                            ({{event.eventStartMillis |
-                                            formatDuration(event.eventEndMillis)}}h)</label>
+                                        <label>{{eventData.date}}, {{eventData.time}} ({{eventData.duration}})</label>
                                     </div>
                                 </div>
-                                <div class="md-layout-item md-size-100 required" style="margin-top : 2em;">
+                                <div class="md-layout-item md-size-100 required">
                                     <md-datepicker
                                         :class="[{'md-error': (eventData.date && $refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value') )}]"
                                         v-model="eventData.date"
@@ -75,7 +72,7 @@
                                         <md-icon>person</md-icon>
                                         <label>Guest Count</label>
                                         <md-input
-                                            v-model="event.numberOfParticipants"
+                                            v-model="eventData.numberOfParticipants"
                                             data-vv-name="numberOfParticipants"
                                             v-validate= "modelValidations.numberOfParticipants"
                                             required
@@ -90,9 +87,9 @@
                                         <md-icon>account_balance_wallet</md-icon>
                                         <label>Budget</label>
                                         <md-input
-                                            v-model="event.totalBudget"
+                                            v-model="eventData.budget"
                                             data-vv-name="budget"
-                                            v-validate= "modelValidations.totalBudget"
+                                            v-validate= "modelValidations.budget"
                                             required
                                             type="number"
 
@@ -102,9 +99,9 @@
                                     </md-field>
                                 </div>
                                 <div class="md-layout-item md-size-33">
-                                    <md-field class="disabled" style="pointer-events: none;">
+                                    <md-field style="margin-top : 3px;">
                                         <label>Per Guest</label>
-                                        <md-input v-model="event.budgetPerPerson" style="color : gray;"
+                                        <md-input v-model="eventData.budgetPerPerson"
 
                                         ></md-input>
                                     </md-field>
@@ -285,13 +282,6 @@
         this.hoursArray.push();
 
         console.log('selectedBlock => ',this.selectedBlock);
-
-        console.log('Event => ',this.event);
-
-        this.eventData.date = new Date(this.event.eventStartMillis);
-        this.eventData.time = moment(new Date(this.event.eventStartMillis).getTime())
-            .format('H:mm A');
-        this.eventData.duration = (this.event.eventEndMillis - this.event.eventStartMillis) / 1000 / 60 / 60;
     },
     mounted() {
       this.getBuildingBlockValues();
@@ -546,18 +536,7 @@
       searchQuery(newVal, oldVal){
         this.filterRequirements();
       },
-    },
-      filters: {
-          formatDate: function (date) {
-              return moment(date).format('MMM Do YYYY ')
-          },
-          formatTime: function (date) {
-              return moment(date).format('h:00 A')
-          },
-          formatDuration: function (startDate, endDate) {
-              return moment(endDate).diff(startDate, 'hours')
-          }
-      },
+    }
   };
 </script>
 <style lang="scss" scoped>

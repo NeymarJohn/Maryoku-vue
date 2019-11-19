@@ -308,7 +308,7 @@ export default {
                 eventType: this.eventType,
                 category: catObject.category, //!this.eventData.editable ? 'Holidays' : 'CompanyDays',
                 editable: true,
-                location: this.eventData.location,
+                location: this.eventType.location,
                 //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
             }).for(_calendar).save().then(response => {
                 //this.$parent.isLoading = false;
@@ -332,27 +332,11 @@ export default {
 
           this.$nextTick(()=>{
               let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-
-              let eventData = {
-                  id: this.eventData.id,
-                  title: this.eventData.title,
-                  occasion: this.eventData.occasion || "",
-                  date: new Date(this.eventData.eventStartMillis),
-                  numberOfParticipants: this.eventData.numberOfParticipants,
-                  budgetPerPerson: this.eventData.budgetPerPerson,
-                  status: this.eventData.status,
-                  currency: this.eventData.currency,
-                  eventType: this.eventData.eventType,
-                  participantsType: this.eventData.participantsType,
-                  category: this.eventData.category,
-                  location : this.eventData.location
-              }
-
-              let editedEvent = new CalendarEvent(eventData);
+              let editedEvent = new CalendarEvent(this.eventData);
               editedEvent.eventStartMillis = this.getEventStartInMillis();
               editedEvent.eventEndMillis = this.getEventEndInMillis();
-              let catObject = _.find(this.occasionsForCategory, (el => el.value === editedEvent.occasion)) || {category: "CompanyDays"};
 
+              let catObject = _.find(this.occasionsForCategory, (el => el.value === editedEvent.occasion)) || {category: "CompanyDays"};
               this.eventData.category = catObject.category;
               editedEvent.category = catObject.category;
               // editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
