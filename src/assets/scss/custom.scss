@@ -583,10 +583,23 @@ $tooltip-border-color: $blue-grey-200 !default;
             display: inline-block;
         }
 
+        h4 {
+            font-size: 25px;
+            font-weight: 400;
+            color: #000000;
+            margin-top: 12px;
+            margin-left: -15px;
+
+            .md-button .md-button-content i {
+                font-size: 24px!important;
+                color: #000000!important;
+            }
+        }
+
         .actions-list {
             display: flex;
             float : right;
-            margin-top : 1em;
+            margin-top : 9px;
 
             .md-button {
                 width : 200px;
@@ -872,8 +885,9 @@ $tooltip-border-color: $blue-grey-200 !default;
                     font-size: 16px !important;
                 }
                 a {
-                    color : #000;
-                    font-size: 13px;
+                    color : #ff4470;
+                    font-size: 14px;
+                    font-weight: 400;
                 }
             }
         }
@@ -886,20 +900,35 @@ $tooltip-border-color: $blue-grey-200 !default;
             padding : 0;
             font-weight: 500;
 
+            h3 {
+                font-size: 18px;
+                color: #000000;
+                font-weight: 400;
+            }
+
             h4 {
                 margin-top : 0;
                 font-weight: 500;
             }
 
             p {
-                color : #707070;
+                font-weight: 300;
+                color: #000000;
+                font-size: 14px;
+                line-height: 1.79;
+                font-family: Roboto;
             }
         }
 
         .attachments-list {
 
             h6 {
-                margin-bottom : 0.6em;
+                font-size: 18px;
+                color: #000000;
+                line-height: 1.39;
+                text-transform: none;
+                font-weight: 400;
+                margin: 2em 0 .75em 0;
             }
             &_items {
                 padding : 0;
@@ -918,20 +947,28 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 
     .vendor-info {
-        padding-left : 4em;
+        padding-left : 5em;
         position : relative;
 
         .vendor-image {
             position: absolute;
             left : 0;
             right : 0;
+
+            .md-avatar {
+                width: 50px;
+                height: 50px;
+                border-radius: 0!important;
+            }
         }
         .vendor-name {
             @include display-flex(row,flex-start,center);
 
             .md-title {
                 margin: 0 0.6em 0 0;
-                font-size: 17px;
+                font-size: 18px;
+                font-weight: 400;
+                line-height: 1em;
             }
         }
 
@@ -940,8 +977,14 @@ $tooltip-border-color: $blue-grey-200 !default;
             margin : 0.4em 0;
 
             .md-icon {
-                margin:0 0.5em 0 -6px;
+                margin:0 0 0 -6px;
                 color : $purple-500;
+                font-size: 16px!important;
+            }
+
+            span {
+                font-size: 14px;
+                font-weight: 400;
             }
         }
         .vendor-tags {
@@ -962,7 +1005,8 @@ $tooltip-border-color: $blue-grey-200 !default;
         }
 
         .last-update {
-            color : #a9a9a9;
+            color : #999999;
+            margin-top: -2px;
         }
     }
 
