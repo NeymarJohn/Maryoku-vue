@@ -26,7 +26,7 @@
         },
         mounted() {
             this.working = false;
-            this.$root.$emit('set-title',null);
+            //this.$root.$emit('set-title',null);
         }
     }
 </script>

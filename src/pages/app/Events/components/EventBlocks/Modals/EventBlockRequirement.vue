@@ -232,8 +232,6 @@ export default {
           this.selectedOptions.push(obj);
         }
       });
-
-      console.log(this.selectedOptions);
     },
     getAdditionalSelectedOptions() {
       this.additionalSelectedOptions = [];
@@ -247,8 +245,6 @@ export default {
           this.additionalSelectedOptions.push(obj);
         }
       });
-
-      console.log(this.additionalSelectedOptions);
     },
     checkSelectedOptions() {
       if (this.requirement.multipleSelectionValues) {

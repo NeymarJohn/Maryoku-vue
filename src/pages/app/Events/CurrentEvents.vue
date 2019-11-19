@@ -406,5 +406,9 @@
     .md-layout, .md-layout-item {
         width: initial;
     }
+
+    .tab-content {
+        background-color: transparent !important;
+    }
 </style>
 

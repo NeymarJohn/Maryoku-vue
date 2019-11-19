@@ -108,7 +108,7 @@
             <md-checkbox v-model="flexibleDate" @change="switchDateRequired">I'm flexible around the selected date</md-checkbox>
           </div>
         </div>
-        <div class="md-layout">
+        <div class="md-layout " style="display: none;">
           <div class="md-layout-item md-size-25">
             <md-field class="required" :class="[{'md-error': errors.has('time')}]">
               <label>Start Time</label>
@@ -149,7 +149,7 @@
           <div class="md-layout-item md-size-100 text-right">
             <br>
             <md-button class="md-default">Cancel</md-button>
-            <md-button class="md-primary" @click="validateAndSubmit">Continue</md-button>
+            <md-button class="md-primary" @click="validateAndSubmit">{{submitButtonLabel}}</md-button>
           </div>
         </div>
       </div>
@@ -187,7 +187,7 @@ export default {
     ...mapMutations('AnnualPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
       calculateBudgetPerGuest() {
         if ( this.eventData.totalBudget && this.eventData.numberOfParticipants ) {
-            this.eventData.budgetPerPerson =  this.eventData.totalBudget / this.eventData.numberOfParticipants | numeral('0,0');
+            this.eventData.budgetPerPerson = (parseInt(this.eventData.totalBudget) / this.eventData.numberOfParticipants) | numeral('0,0');
         }
       },
     validateDate() {
@@ -312,8 +312,10 @@ export default {
                 //  participantsType: 'Test', // HARDCODED, REMOVE AFTER BACK WILL FIX API,
             }).for(_calendar).save().then(response => {
                 //this.$parent.isLoading = false;
-                vm.$emit('goToNextPage', response);
-                vm.newEvent = response
+                //vm.$emit('goToNextPage', response);
+                //vm.newEvent = response;
+
+                vm.$router.push({ path: `/events/`+ response.item.id + '/edit/details' });
 
             })
                 .catch((error) => {
@@ -340,8 +342,10 @@ export default {
               // editedEvent.participantsType = 'Test'; // HARDCODED, REMOVE AFTER BACK WILL FIX API,
               editedEvent.for(_calendar).save().then(response => {
                   //this.$parent.isLoading = false;
-                  vm.$emit('goToNextPage', response);
-                  vm.newEvent = vm.eventData;
+                  //vm.$emit('goToNextPage', response);
+                  //vm.newEvent = vm.eventData;
+                  vm.$router.push({ path: `/events/`+ vm.event.id + '/edit/details' });
+
 
               })
                   .catch((error) => {
@@ -446,10 +450,10 @@ export default {
           required: true,
         },
         time: {
-          required: true,
+          required: false,
         },
         duration: {
-          required: true,
+          required: false,
         },
         numberOfParticipants: {
           required: true,
@@ -481,7 +485,8 @@ export default {
       occasionsForCategory: [],
       dateValid: true,
       validating: false,
-        selectedComponents :null
+        selectedComponents :null,
+        submitButtonLabel : 'Create'
     }
   },
   created() {
@@ -503,6 +508,7 @@ export default {
 
     if (  this.$route.params.id ) {
         this.getEvent();
+        this.submitButtonLabel = 'Update';
     }
 
     if (this.newEventData) {

@@ -135,7 +135,9 @@
       },
       filterVendors(){
         this.filteredVendorsList = _.filter(this.vendorsList, (v)=>{
-          return v.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
+          let byDisplayName = v.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
+          let byCategory = v.vendorCategory.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
+          return byDisplayName || byCategory;
         });
       }
     },

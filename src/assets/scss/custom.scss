@@ -859,8 +859,6 @@ $tooltip-border-color: $blue-grey-200 !default;
                 }
             }
         }
-
-
     }
 
     .attachments-list {
@@ -2588,21 +2586,25 @@ iframe{
     }
 
     .md-card-tabs {
-        background : none !important;
         box-shadow : none;
     }
 
     .event-details-tabs {
         width : 100%;
 
+        .tab-content {
+            background : none !important;
+        }
         .md-card-tabs {
             >.md-card-content {
                 padding-top: 0;
             }
+
         }
         .md-list {
             justify-content: flex-start !important;
             box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.14);
+            width: 110% !important;
         }
     }
 }
@@ -4215,6 +4217,10 @@ iframe{
 }
 
 .event-invitees {
+
+    .md-card-tabs.md-card-plain .md-card-header, .md-card-tabs.md-card-plain .md-list,.nav-tabs {
+        background-color: transparent !important;
+    }
 
     .md-list-item .md-list-item-button {
         padding: 4px 8px !important;
