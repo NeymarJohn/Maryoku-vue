@@ -1380,21 +1380,26 @@ $tooltip-border-color: $blue-grey-200 !default;
             margin : 0;
             @include display-flex(row,flex-start,flex-start);
             overflow: auto;
+            flex-wrap: wrap;
         }
 
         .image-item {
-            width: 320px;
+            width: 25%;
             display: inline-block;
             vertical-align: top;
             margin : 0;
             border : 1px solid #6b6b6b;
+
+            div {
+                min-height: 320px;
+            }
         }
 
         .view-images {
             position : absolute;
             bottom : 1em;
             left : 2em;
-            z-index : 1999;
+            z-index : 9999;
             background: #fff !important;
             color : #000 !important;
             border-radius: 0;

@@ -252,7 +252,29 @@
             </md-button>
             <ul class="images-list">
               <li class="image-item" v-for="(item,index) in images" :key="index">
-                <div :style="`width : 320px; height : 320px; background : url(${item.src}) center center no-repeat ; background-size : cover;`"></div>
+                <div :style="`
+                  background: url(${item.src}) center center no-repeat; 
+                  background-size: cover;`">
+                </div>
+              </li>
+              <li class="image-item" v-if="vendorProposal.attachements.length - images.length - attachedFiles.length">
+                <div>
+                  <vue-element-loading :active="true" spinner="ring" color="#FF547C">
+                  </vue-element-loading>
+                </div>
+              </li>
+              <li class="image-item" v-for="(af,index) in attachedFiles" :key="index">
+                <vue-element-loading 
+                  :active="attachmentsLoadingCount > 0" 
+                  spinner="ring" color="#FF547C">
+                </vue-element-loading>
+                <iframe 
+                  seamless 
+                  frameborder="0" 
+                  @load="attachmentsLoadingCount--"
+                  :src="`${af}`"
+                  style="width: 100%; min-height: 320px; padding: 0; margin: 0;">
+                </iframe>
               </li>
             </ul>
             <LightBox 
@@ -432,16 +454,15 @@ export default {
   },
   data: () => ({
     // auth: auth,
-    isLoaded: false,
     ratings: [1, 2, 3, 4, 5],
     images: Array,
-    viewImages: false,
     feedbackRating: 3,
     vendorProposal: null,
     vendorInfo: null,
     serverUrl: process.env.SERVER_URL,
     tooltipActive: false,
-
+    attachedFiles: [],
+    attachmentsLoadingCount: 0,
   }),
   created() {
     console.log(this.proposal);
@@ -497,6 +518,8 @@ export default {
     },
     getImages() {
       this.images = []
+      this.attachedFiles = []
+      this.attachmentsLoadingCount = 0
 
       this.vendorProposal.attachements.forEach((item)=>{
         const fullPath = `${this.serverUrl}/1/proposal-requests/${this.proposal.id}/files/${item}`
@@ -513,7 +536,9 @@ export default {
                 caption: "",
                 srcset: ""
               })
-              return this.images
+            } else {
+              this.attachedFiles.push(fullPath)
+              this.attachmentsLoadingCount++
             }
           }
         });
