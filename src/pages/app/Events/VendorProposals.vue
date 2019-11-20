@@ -93,7 +93,6 @@ export default {
               };
             })
             .value();
-
         })
         .catch(error => {
           console.log(" error here   -->>>  ", error);

@@ -148,7 +148,7 @@
         <div class="md-layout">
           <div class="md-layout-item md-size-100 text-right">
             <br>
-            <md-button class="md-default" @click="cancel">Cancel</md-button>
+            <md-button class="md-default">Cancel</md-button>
             <md-button class="md-primary" @click="validateAndSubmit">{{submitButtonLabel}}</md-button>
           </div>
         </div>
@@ -427,9 +427,7 @@ export default {
                   console.log(error)
               })
       },
-        cancel(){
-            this.$router.push({ path: `/events` });
-        }
+
   },
   data() {
     return {

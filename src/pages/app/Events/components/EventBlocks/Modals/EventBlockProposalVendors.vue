@@ -57,7 +57,9 @@
             </div>
           </div>
           <div class="more-details">
-            <md-button class="md-danger md-simple md-sm">see more details</md-button>
+            <md-button class="md-danger md-simple md-sm" @click="routeToVendorsProposal(item.vendor.id, item.proposals[0].id)">
+              see more details
+            </md-button>
           </div>
           <div class="proposal-actions text-right">
             <template v-if="item.proposals && item.proposals[0]">
@@ -406,7 +408,11 @@
           } else {
             this.filteredBlockVendors = this.proposals;
           }
-      }
+      },
+      routeToVendorsProposal(vendorId, proposalId) {
+        console.log(vendorId, proposalId)
+        this.$router.push({ name: "VendorProposals", params: { id: proposalId, vendorId: vendorId } });
+      },
     },
     created() {
     },

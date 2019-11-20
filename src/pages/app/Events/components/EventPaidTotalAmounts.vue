@@ -37,8 +37,9 @@ export default {
   },
   computed: {    
     percentageStyle() {
+      const percentage = 100 / this.total * this.paid
       return {
-        width: 100 / this.total * this.paid + '%'
+        width: percentage > 100 ? '100%' : percentage + '%'
       };
     }
   },

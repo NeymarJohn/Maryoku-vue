@@ -585,24 +585,22 @@
         this.isLoading = true
 
         reader.onload = e => {
-
           const proposalRequest = new ProposalRequest({id: this.proposalRequest.id})
 
-          return new ProposalRequestImage({vendorProposalFile: e.target.result}).for(proposalRequest).save().then(result => {
+          return new ProposalRequestImage({
+            vendorProposalFile: e.target.result
+          }).for(proposalRequest).save().then(result => {
             this.isLoading = false
             this.proposalRequestImages.push({id: result.id})
-
           })
-            .catch((error) => {
-              this.isLoading = false
-              console.log('Error')
-              console.log(error)
-            })
+          .catch((error) => {
+            this.isLoading = false
+            console.log('Error')
+            console.log(error)
+          })
         }
         reader.readAsDataURL(file)
       },
-
-
       uploadInsurancePapers (imageId = null) {
         this.selectedImage = typeof imageId != 'object' ? imageId : null
         this.$refs.InsurancePapers.click()
@@ -612,22 +610,16 @@
         if (!file.length) {
           return
         }
-
         if (file[0].size <= 5000000) { // 5mb
-
           this.createInsurancePapers(file[0])
-
         } else {
-
           this.alretExceedPictureSize = true
-          this.$notify(
-            {
-              message: 'You\'ve Uploaded an Image that Exceed the allowed size, try small one!',
-              horizontalAlign: 'center',
-              verticalAlign: 'top',
-              type: 'warning'
-            })
-
+          this.$notify({
+            message: 'You\'ve Uploaded an Image that Exceed the allowed size, try small one!',
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'warning'
+          })
         }
       },
       createInsurancePapers (file, type) {
@@ -637,7 +629,6 @@
         //this.isLoading = true
 
         reader.onload = e => {
-
           let  proposalRequest = new ProposalRequest({id: vm.$route.params.id})
 
           /*proposalRequest.id = this.proposalRequest.id;
@@ -646,15 +637,14 @@
           return new ProposalRequestFile({vendorProposalFile: e.target.result, tag: 'insurance'}).for(proposalRequest).save().then(result => {
             this.isLoading = false
           })
-            .catch((error) => {
-              this.isLoading = false
-              console.log('Error')
-              console.log(error)
-            })
+          .catch((error) => {
+            this.isLoading = false
+            console.log('Error')
+            console.log(error)
+          })
         }
         reader.readAsDataURL(file)
       },
-
       uploadLicense (imageId = null) {
         this.selectedImage = typeof imageId != 'object' ? imageId : null
         this.$refs.license.click()
@@ -666,20 +656,15 @@
         }
 
         if (file[0].size <= 5000000) { // 5mb
-
           this.createLicense(file[0])
-
         } else {
-
           this.alretExceedPictureSize = true
-          this.$notify(
-            {
-              message: 'You\'ve Uploaded an Image that Exceed the allowed size, try small one!',
-              horizontalAlign: 'center',
-              verticalAlign: 'top',
-              type: 'warning'
-            })
-
+          this.$notify({
+            message: 'You\'ve Uploaded an Image that Exceed the allowed size, try small one!',
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'warning'
+          })
         }
       },
       createLicense (file, type) {
@@ -689,7 +674,6 @@
         //this.isLoading = true
 
         reader.onload = e => {
-
           console.log('createLicense');
 
           let  proposalRequest = new ProposalRequest({id: vm.$route.params.id})
@@ -699,7 +683,6 @@
 
           return proposalRequest.save()
             .then(res => {
-
               console.log('saved ', res)
             })
             .catch(error => {
@@ -709,10 +692,7 @@
         reader.readAsDataURL(file)
       },
 
-
-
       getImages () {
-
         const proposalRequest = new ProposalRequest({id: this.$route.params.id})
 
         new ProposalRequestImage().for(proposalRequest).get()
@@ -722,8 +702,7 @@
             console.log('proposalRequestImages => ', imagesList)
           })
           .catch((error) => {
-            console.log(' ProposalRequestImage Error')
-
+            console.log('ProposalRequestImage Error')
             console.log(error)
           })
       },
@@ -733,16 +712,13 @@
         this.isLoading = true
 
         return new ProposalRequestImage({id: imageId}).for(proposalRequest).delete().then(result => {
-
           this.proposalRequestImages.splice(index, 1)
           this.isLoading = false
         })
-          .catch((error) => {
-            this.isLoading = false
-
-            console.log(error)
-          })
-
+        .catch((error) => {
+          this.isLoading = false
+          console.log(error)
+        })
       },
       updateProposalComment () {
         const proposalRequest = new ProposalRequest({id: this.$route.params.id})
@@ -758,10 +734,8 @@
           })
           .catch((error) => {
             this.isLoading = false
-
             console.log(error)
           })
-
       },
       updateProposalRequirementComment (val, index) {
         const proposalRequest = new ProposalRequest({id: this.$route.params.id})
@@ -777,10 +751,8 @@
           })
           .catch((error) => {
             this.isLoading = false
-
             console.log(error)
           })
-
       },
       updateProposalRequest (submitted = null) {
         if (this.proposalRequest.submitted) return;
@@ -791,7 +763,6 @@
         if ( submitted != null && submitted === true) {
           _self.isLoading = true;
         }
-
 
         proposalRequest.id = this.proposalRequest.id
         proposalRequest.requirementsCategoryCost = this.proposalRequest.requirementsCategoryCost
@@ -815,7 +786,6 @@
 
         proposalRequest.save()
           .then(res => {
-
             console.log('saved ', res)
 
             if ( submitted != null && submitted === true ) {
@@ -867,38 +837,35 @@
     computed: {
       totalOffer () {
         let total = parseInt(this.proposalRequest.requirementsCategoryCost);
-          let vm = this;
+        let vm = this;
 
         this.proposalRequest.requirements.map(function (item) {
-
-            if (item.price) {
-                if ( item.priceUnit === "total") {
-                    total += parseInt(item.price)
-                } else {
-                    total += parseInt(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants)
-                }
+          if (item.price) {
+            if ( item.priceUnit === "total") {
+              total += parseInt(item.price)
+            } else {
+              total += parseInt(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants)
             }
-
+          }
         })
         return total
       },
       extraTotal () {
         let total = 0
-          let vm = this;
+        let vm = this;
         this.proposalRequest.requirements.map(function (item) {
-
-            console.log(item);
+          console.log(item);
 
           if (item.price) {
-              if ( item.priceUnit === "total") {
-                  total += parseInt(item.price)
-              } else {
-                  total += parseInt(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants)
-              }
+            if ( item.priceUnit === "total") {
+              total += parseInt(item.price)
+            } else {
+              total += parseInt(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants)
+            }
           }
 
         })
-          this.$forceUpdate();
+        this.$forceUpdate();
         return total
       }
     }

@@ -53,7 +53,7 @@
                 </div>
                 <div class="md-layout-item md-size-50 margin-bottom-md">
                   <div>Location</div>
-                  <p class="proposal--title">{{ proposalRequest ? (proposalRequest.eventData.location || '-') : '-' }}</p>
+                  <p class="proposal--title">{{getLocation}}</p>
                 </div>
                 <div class="md-layout-item md-size-50 margin-bottom-md">
                   <div>Requirements</div>
@@ -126,7 +126,8 @@
 </template>
 
 <script>
-import moment from "moment";
+import moment from "moment"
+import Vendors from '@/models/Vendors'
 
 export default {
   props: ["proposalRequest", "proposals", "firstTime"],
@@ -134,16 +135,18 @@ export default {
 
   data() {
     return {
-      showSkipLink: false
+      showSkipLink: false,
+      vendor: null
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.getVendor()
+  },
   methods: {
     goToDetails() {
       this.$emit("goToDetails");
     },
-
     onSkipToAnotherEventRequest() {
       let index = _.findIndex(
         this.proposals,
@@ -151,7 +154,14 @@ export default {
       );
       let nextIndex = (index + 1) % this.proposals.length;
       this.$emit("requestAnotherProposal", this.proposals[nextIndex].id);
-    }
+    },
+    getVendor() {
+      this.$auth.currentUser(this, true, function () {
+        Vendors.find(this.proposalRequest.vendorId).then(vendor => {
+          this.vendor = vendor
+        })
+      }.bind(this))
+    },
   },
   computed: {
     eventDate() {
@@ -159,6 +169,13 @@ export default {
 
       let date = new Date(this.proposalRequest.eventData.eventStartMillis);
       return moment(date).format("MMM D, YYYY [at] hh:mma");
+    },
+    getLocation() {
+      if (this.vendor && this.proposalRequest) {
+        return this.vendor.vendorAddressLine1 || this.proposalRequest.eventData.location || '-'
+      } else {
+        return '-'
+      }
     }
   }
 };
