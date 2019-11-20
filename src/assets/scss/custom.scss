@@ -583,23 +583,10 @@ $tooltip-border-color: $blue-grey-200 !default;
             display: inline-block;
         }
 
-        h4 {
-            font-size: 25px;
-            font-weight: 400;
-            color: #000000;
-            margin-top: 12px;
-            margin-left: -15px;
-
-            .md-button .md-button-content i {
-                font-size: 24px!important;
-                color: #000000!important;
-            }
-        }
-
         .actions-list {
             display: flex;
             float : right;
-            margin-top : 9px;
+            margin-top : 1em;
 
             .md-button {
                 width : 200px;
@@ -670,13 +657,11 @@ $tooltip-border-color: $blue-grey-200 !default;
         height: 45px !important;
 
         .md-list-item {
-            margin-left : 0;
-            margin-right : -1px;
             width: 25%;
             box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
             border : none;
             height: 45px !important;
-            margin: 0 5px;
+            margin: 0;
 
             &:first-child {
                 border-radius: 5px 0 0 5px;
@@ -864,6 +849,7 @@ $tooltip-border-color: $blue-grey-200 !default;
     .tab-content {
         margin: 0 -1em;
         padding: 1em;
+        background: none;
 
         tbody {
             .md-table-row:first-child {
@@ -885,9 +871,8 @@ $tooltip-border-color: $blue-grey-200 !default;
                     font-size: 16px !important;
                 }
                 a {
-                    color : #ff4470;
-                    font-size: 14px;
-                    font-weight: 400;
+                    color : #000;
+                    font-size: 13px;
                 }
             }
         }
@@ -900,35 +885,20 @@ $tooltip-border-color: $blue-grey-200 !default;
             padding : 0;
             font-weight: 500;
 
-            h3 {
-                font-size: 18px;
-                color: #000000;
-                font-weight: 400;
-            }
-
             h4 {
                 margin-top : 0;
                 font-weight: 500;
             }
 
             p {
-                font-weight: 300;
-                color: #000000;
-                font-size: 14px;
-                line-height: 1.79;
-                font-family: Roboto;
+                color : #707070;
             }
         }
 
         .attachments-list {
 
             h6 {
-                font-size: 18px;
-                color: #000000;
-                line-height: 1.39;
-                text-transform: none;
-                font-weight: 400;
-                margin: 2em 0 .75em 0;
+                margin-bottom : 0.6em;
             }
             &_items {
                 padding : 0;
@@ -947,28 +917,20 @@ $tooltip-border-color: $blue-grey-200 !default;
     }
 
     .vendor-info {
-        padding-left : 5em;
+        padding-left : 4em;
         position : relative;
 
         .vendor-image {
             position: absolute;
             left : 0;
             right : 0;
-
-            .md-avatar {
-                width: 50px;
-                height: 50px;
-                border-radius: 0!important;
-            }
         }
         .vendor-name {
             @include display-flex(row,flex-start,center);
 
             .md-title {
                 margin: 0 0.6em 0 0;
-                font-size: 18px;
-                font-weight: 400;
-                line-height: 1em;
+                font-size: 17px;
             }
         }
 
@@ -977,14 +939,8 @@ $tooltip-border-color: $blue-grey-200 !default;
             margin : 0.4em 0;
 
             .md-icon {
-                margin:0 0 0 -6px;
+                margin:0 0.5em 0 -6px;
                 color : $purple-500;
-                font-size: 16px!important;
-            }
-
-            span {
-                font-size: 14px;
-                font-weight: 400;
             }
         }
         .vendor-tags {
@@ -1005,8 +961,7 @@ $tooltip-border-color: $blue-grey-200 !default;
         }
 
         .last-update {
-            color : #999999;
-            margin-top: -2px;
+            color : #a9a9a9;
         }
     }
 
@@ -3108,15 +3063,36 @@ iframe{
     border-radius: 5px;
     margin-top : 3em;
 
-    input[type=number]::-webkit-inner-spin-button, 
-    input[type=number]::-webkit-outer-spin-button { 
-        -webkit-appearance: none; 
-        margin: 0; 
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
     }
 
     .list-item {
         &:not(:last-child) {
             border-bottom : 1px solid #d9d9d9;
+        }
+
+        &.not-available {
+            .included-in-price {
+                opacity: 0.5;
+                pointer-events: none;
+
+                .md-field {
+                    background-color: #F6F6F6;
+                }
+            }
+            .add-comment-btn {
+                opacity: 0.5;
+                pointer-events: none;
+            }
+
+            .amount-field {
+                opacity: 0.5;
+                pointer-events: none;
+                background-color: #F6F6F6;
+            }
         }
 
         .requirement-title {
@@ -4417,10 +4393,10 @@ iframe{
 .terms-form {
     padding : 0 1em;
 
-    input[type=number]::-webkit-inner-spin-button, 
-    input[type=number]::-webkit-outer-spin-button { 
-        -webkit-appearance: none; 
-        margin: 0; 
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
     }
 
     h5 {
@@ -4879,4 +4855,31 @@ h4.title-summary {
 
 .md-datepicker-body-content {
     max-height: 268px!important;
+}
+
+.md-field > .md-icon ~ .md-input {
+    width: 100%;
+}
+
+.md-field {
+    &.disabled {
+        pointer-events: none;
+
+        &:after {
+            display: none;
+        }
+    }
+}
+
+.event-requirements__event-details {
+
+    .md-field {
+        >.md-icon.md-theme-default.md-icon-font:not(.md-icon-image){
+            position: absolute;
+            top: -1.3rem;
+        }
+        >.md-icon~label {
+            left: 28px;
+        }
+    }
 }
