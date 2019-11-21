@@ -17,24 +17,27 @@
           <md-table
             v-model="upcomingEvents"
             table-header-color="rose"
+            @click="forceRerender()"
             class="table-striped table-hover right-align-actions"
           >
             <md-table-row
               slot="md-table-row"
               slot-scope="{ item }"
               class="hover-row"
-               @click="routeToEvent(item.id, $event)"
+              @click="routeToEvent(item.id, $event)"
             >
               <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
               <md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>
               <md-table-cell md-label="Event Type">{{ item.eventType }}</md-table-cell>
               <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
+              <md-table-cell md-label="Customer Name">{{ item.customerName }}</md-table-cell>
+              <md-table-cell md-label="Username">{{ item.plannerEmail }}</md-table-cell>
               <md-table-cell
                 md-label="Created By"
                 style="text-transform: capitalize;"
                 v-if="item.owner.id !== $auth.user.id"
               >{{ item.owner.displayName }}</md-table-cell>
-              <md-table-cell md-label="Created By" style="text-transform: capitalize;" v-else>You</md-table-cell>
+              <md-table-cell md-label="Created By" v-else>You</md-table-cell>
               <md-table-cell md-label="# Participants">{{item.numberOfParticipants}}</md-table-cell>
               <md-table-cell md-label="Budget Per Participant">$ {{item.budgetPerPerson}}</md-table-cell>
               <md-table-cell md-label="Actions" style="white-space: nowrap;">
@@ -119,6 +122,7 @@
 
 <script>
 // import auth from '@/auth';
+import Vue from 'vue';
 import { Tabs, ProductCard } from "@/components";
 
 import EventSidePanel from "@/pages/app/Events/EventSidePanel";
@@ -131,6 +135,7 @@ import CalendarEvent from "@/models/CalendarEvent";
 import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import swal from "sweetalert2";
+import TeamMember from '@/models/TeamMember';
 
 export default {
   components: {
@@ -143,7 +148,6 @@ export default {
     this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
   },
   computed: {
-
   },
   mounted() {
     this.$auth.currentUser(
@@ -171,7 +175,7 @@ export default {
 
         let m = new CalendarEvent().for(_calendar).fetch(this, true);
         m.then(allEvents=>{
-          this.upcomingEvents = allEvents;
+          this.upcomingEvents = this.getExtraFields(allEvents);
           this.isLoading = false;
         });
       }
@@ -346,6 +350,15 @@ export default {
           openInPlannerOption: false
         }
       });
+    },
+    getExtraFields(allEvents) {
+      allEvents.forEach((item) => {
+        TeamMember.find(item.owner.id).then(owner => {
+          Vue.set(item, 'customerName', owner.customer.name)
+          Vue.set(item, 'plannerEmail', owner.emailAddress)
+        })
+      })
+      return allEvents
     }
   },
 
