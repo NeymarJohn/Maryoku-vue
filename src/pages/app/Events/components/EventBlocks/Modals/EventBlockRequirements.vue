@@ -284,17 +284,14 @@
 
         this.hoursArray.push();
 
-        console.log('selectedBlock => ',this.selectedBlock);
-
-        console.log('Event => ',this.event);
-
         this.eventData.date = new Date(this.event.eventStartMillis);
         this.eventData.time = moment(new Date(this.event.eventStartMillis).getTime())
             .format('H:mm A');
         this.eventData.duration = (this.event.eventEndMillis - this.event.eventStartMillis) / 1000 / 60 / 60;
+
     },
     mounted() {
-      this.getBuildingBlockValues();
+        this.getBuildingBlockValues();
     },
     methods: {
       closePanel() {
@@ -304,8 +301,7 @@
       },
       getBuildingBlockValues( newValueId = null) {
         this.isLoading = true;
-        if (this.selectedBlock.values === null || this.selectedBlock.valuesCount !== this.selectedBlock.values.length){
-            console.log(' if ');
+        if (this.selectedBlock.values === null || this.selectedBlock.values === undefined || ( this.selectedBlock.values && this.selectedBlock.valuesCount !== this.selectedBlock.values.length) ){
 
           let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
           let event = new CalendarEvent({id: this.event.id});
@@ -315,7 +311,6 @@
             this.selectedBlock.values = values;
             this.eventBlockRequirements = values ? values : [];
             this.filteredEventBlockRequirements = this.eventBlockRequirements;
-            console.log('i am here');
             this.$root.$emit('refreshRequirementsLength',this.eventBlockRequirements.length);
 
             if ( newValueId ) {
@@ -328,8 +323,7 @@
 
           });
         } else {
-            console.log(' else');
-          this.eventBlockRequirements = this.selectedBlock.values;
+          this.eventBlockRequirements = this.selectedBlock.values ? this.selectedBlock.values : [];
           this.filteredEventBlockRequirements = this.eventBlockRequirements;
           this.$root.$emit('refreshRequirementsLength',this.eventBlockRequirements.length);
           if ( newValueId ) {
@@ -376,9 +370,6 @@
         let selected_block = new EventComponent({id: this.selectedBlock.id});
 
         new EventComponentValue(new_value).for(calendar, event, selected_block).save().then(res => {
-
-            console.log('res is ', res);
-
           let newRequirement = JSON.parse(JSON.stringify(res.item))
           newRequirement.editMode = true;
             if ( _.isArray(this.selectedBlock.values) ) {

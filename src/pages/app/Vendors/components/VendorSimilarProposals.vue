@@ -7,34 +7,34 @@
             <img :src="item.image">
             <div class="text-container">
               <p>
-                {{item.username}}
+                {{item.vendorName}}
                 <label
                   class="star-rating__star"
                   v-for="(rating, ratingIndex) in ratings"
                   :key="ratingIndex"
-                  :class="{'is-selected' : true}"
+                  :class="{'is-selected' : ((item.bidderRank >= rating) && item.bidderRank != null)}"
                 >★</label>
               </p>
               <h4>
-                {{item.title}}
+                {{getEventTitle(item.eventData)}}
               </h4>
               <h5>
-                {{item.description}}
+                {{item.eventData.participantsType}} {{item.eventData.numberOfParticipants}}
               </h5>
             </div>
             <span>
-              {{item.date}}
+              {{getMonth(item.eventData.eventStartMillis)}}
             </span>
           </div>
         </md-card-header>
         <md-card-content>
           <div class="down-row">
             <h4>
-              ${{item.price | numeral('0,0')}}
+              ${{(item.bidRange.low + item.bidRange.high) / 2  | numeral('0,0')}}
             </h4>
             <div class="status">
               <span>
-                {{item.status}}
+                {{item.vendorName}}
               </span>
             </div>
             <a class="link-photos">
@@ -49,8 +49,12 @@
   </div>
 </template>
 <script>
+  import numeral from 'numeral'
+  import moment from 'moment'
+  import Calendar from '@/models/Calendar'
+  import CalendarEvent from '@/models/CalendarEvent'
+  import EventComponent from '@/models/EventComponent'
   import VueElementLoading from 'vue-element-loading'
-  import numeral from 'numeral';
 
   export default {
     name: 'vendor-similar-proposals',
@@ -62,11 +66,35 @@
       ratings: Array,
     },
     data: () => ({
-      isLoading:true,
+      isLoading: true,
+      events: []
     }),
     mounted() {
-      this.isLoading = false;
+      let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+
+      let m = new CalendarEvent().for(_calendar).fetch(this, true);
+      m.then(allEvents=>{
+        this.events = allEvents
+        this.isLoading = false;
+      });
     },
+    methods: {
+      getMonth(eventStartMillis) {
+        let x = new Date(eventStartMillis)
+        return moment(x).format('MMMM')
+      },
+      getEventTitle(eventData) {
+        if (this.events) {
+          const e = this.events.filter(event => event.eventStartMillis == eventData.eventStartMillis && event.eventEndMillis == eventData.eventEndMillis)
+          console.log(e)
+          if (e.length) {
+            return e[0].title
+          } else {
+            return 'No Event Title'
+          }
+        }
+      }
+    }
   }
 </script>
 <style lang="scss" scoped>

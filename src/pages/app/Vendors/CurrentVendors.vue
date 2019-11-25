@@ -122,13 +122,13 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <div class="icon-text-vertical" v-for="(item, index) in capacities" :value="item" :key="index">
-                  <md-icon>{{item.icon}}</md-icon>
+                <div class="icon-text-vertical" v-for="(item, index) in vendorCapacities" :value="item" :key="index">
+                  <md-icon>airline_seat_recline_extra</md-icon>
                   <h5>
-                    {{item.value}}
+                    {{item.defaultValue}}
                   </h5>
                   <span>
-                    {{item.key}}
+                    {{item.name}}
                   </span>
                 </div>
               </div>
@@ -164,7 +164,20 @@
                   </div>
                   <div class="notes-body">
                     <div class="note-item" v-for="(item, index) in attachments" :key="index" :value="item">
-                      <md-icon>picture_as_pdf</md-icon> {{item}}
+                      <a 
+                        v-if="item.vendorsFileContentType == 'application/pdf'"
+                        target="_blank"
+                        :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`"
+                      >
+                        <md-icon>picture_as_pdf</md-icon> Attachment {{index}}
+                      </a>
+                      <a
+                        v-else
+                        target="_blank"
+                        :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`" 
+                      >
+                        <md-icon>image</md-icon> Attachment {{index}}
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -313,18 +326,15 @@
         isLoading: true,
         vendor: {statistics: {}},
         isVendorLogo: null,
-        vendorProperties: {},
+        serverUrl: process.env.SERVER_URL,
+        attachments: [],
+        proposals: [],
         bgImages : [
           '/static/img/lock.jpg',
           '/static/img/login.jpg',
           '/static/img/register.jpg',
           '/static/img/bg-pricing.jpg',
           '/static/img/bg3.jpg',
-        ],
-        capacities: [
-          { icon: 'people', value: '200', key: 'Standing' },
-          { icon: 'airline_seat_recline_extra', value: '30', key: 'Seated' },
-          { icon: 'fullscreen', value: '300 m2', key: 'Floor Area' },
         ],
         pricesAndRules: [
           { price: '41', description: 'Price / person' },
@@ -340,41 +350,6 @@
           'Alchol license',
           'own beverages allowed',
           'Meeting Catering'
-        ],
-        attachments: [
-          'Food menu Option 1',
-          'Food menu Option 2',
-          'Food menu Option Insurance Certificate',
-          'Food menu Other Business Indication'
-        ],
-        proposals: [
-          {
-            image: '/static/img/shutterstock_289440710.png', 
-            price: '258', 
-            username: 'Jane Bloom, Facebook',
-            title: 'Halloween Company Party',
-            description: 'Corporate Guests 500 Guests',
-            date: 'Feburary',
-            status: 'In the same price range'
-          },
-          {
-            image: '/static/img/shutterstock_289440710.png', 
-            price: '7845', 
-            username: 'Jane Bloom, Facebook',
-            title: 'Halloween Company Party',
-            description: 'Corporate Guests 500 Guests',
-            date: 'Feburary',
-            status: 'In the same price range'
-          },
-          {
-            image: '/static/img/shutterstock_289440710.png', 
-            price: '455122', 
-            username: 'Jane Bloom, Facebook',
-            title: 'Halloween Company Party',
-            description: 'Corporate Guests 500 Guests',
-            date: 'Feburary',
-            status: 'In the same price range'
-          },
         ],
         feedbacks: [
           {image: '/static/img/shutterstock_289440710.png', username: 'Jane Bloom, Facebook', date: '2017/12/29', score: '5', message: 'A 50% deposit will be due on or before 18/1/20.'},
@@ -412,8 +387,12 @@
       getVendorProposals(id) {
         this.isLoading = true;
         new Vendors({id}).proposalRequests().first().then(proposals => {
-          console.log('proposals', proposals);
-          this.proposals = proposals.vendorProposals;
+          this.proposals = proposals.vendorProposals.filter( proposal => proposal.bidRange != null );
+          this.proposals.forEach(proposal => {
+            proposal.attachments.forEach( attachment => {
+              this.attachments.push(attachment)
+            })
+          });
           this.isLoading = false;
         });
       }
@@ -429,6 +408,28 @@
           } else {
             return titleWords[0].charAt(0)
           }
+        }
+      },
+      vendorCapacities: function() {
+        if (this.vendor.vendorProperties) {
+          return this.vendor.vendorProperties.filter( item => item.categoryTitle == 'Capacity')
+        } else {
+          return [];
+        }
+      },
+      vendorLogoImage: function() {
+        if (this.vendor.vendorProperties) {
+          return this.vendor.vendorProperties.filter( item => item.name == 'Logo' && item.type == 'image')
+          // return 'static/img/image_placeholder.jpg'
+        } else {
+          return [];
+        }
+      },
+      vendorExtraImage: function() {
+        if (this.vendor.vendorProperties) {
+          return this.vendor.vendorProperties.filter( item => item.name != 'Logo' && item.type == 'image')
+        } else {
+          return [];
         }
       }
     },
