@@ -67,6 +67,7 @@
     },
     data: () => ({
       isLoading: true,
+      serverUrl: process.env.SERVER_URL,
       events: []
     }),
     mounted() {
@@ -86,7 +87,6 @@
       getEventTitle(eventData) {
         if (this.events) {
           const e = this.events.filter(event => event.eventStartMillis == eventData.eventStartMillis && event.eventEndMillis == eventData.eventEndMillis)
-          console.log(e)
           if (e.length) {
             return e[0].title
           } else {

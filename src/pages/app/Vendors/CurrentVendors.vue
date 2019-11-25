@@ -3,8 +3,14 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
     <div class="md-layout">
       <div class="md-layout-item image-list-container no-padding">
-        <div class="img-cont big-img-cont">
-          <img :src="bgImages[0]">
+        <div 
+          class="img-cont big-img-cont" 
+          :style="`
+            background-image: url(${bgImages[0]}); 
+            background-size: cover; 
+            background-size: 100% 100%;`
+          "
+        >
         </div>
         <div class="img-cont thumb-img-cont">
           <img :src="bgImages[1]">
@@ -12,10 +18,17 @@
           <img :src="bgImages[3]">
           <img :src="bgImages[4]">
         </div>
-        <md-button class="md-default btn-photos">
+        <md-button class="md-default btn-photos" @click="view()">
           <md-icon>photo</md-icon>
-          view photos
+          <span v-if="getGalleryImages.length > 0">view photos</span>
+          <span v-else>no vendor image</span>
         </md-button>
+        <LightBox 
+          v-if="getGalleryImages.length > 0"
+          :images="getGalleryImages"
+          ref="lightbox"
+          :show-light-box="false">
+        </LightBox>
       </div>
     </div>
     <div class="md-layout bg-white">
@@ -41,7 +54,7 @@
                 class="star-rating__star"
                 v-for="(rating, ratingIndex) in ratings"
                 :key="ratingIndex"
-                :class="{'is-selected' : true}"
+                :class="{'is-selected' : ((vendor.rank >= rating) && item.rank != null)}"
               >★</label>
               {{vendor.avgScore}}
             </div>
@@ -156,7 +169,7 @@
                     <md-icon></md-icon> <span>Dinnerware</span>
                   </li>
                 </ul>
-                <div class="notes">
+                <div class="notes" v-if="attachments.length > 0">
                   <div class="notes-title">
                     <h4>
                       Attachment
@@ -215,7 +228,7 @@
               </div>
             </div>
             <md-divider></md-divider>
-            <div class="tab-item-content">
+            <div class="tab-item-content" v-if="proposals.length > 0">
               <div class="tab-item-content-title">
                 <md-icon>dehaze</md-icon>
                 <h4>
@@ -304,6 +317,7 @@
   import VendorSimilarProposals from './components/VendorSimilarProposals.vue'
   import VendorFeedbacks from './components/VendorFeedbacks.vue'
   import VendorSimilarItem from './components/VendorSimilarItem.vue'
+  import LightBox from 'vue-image-lightbox'
 
   export default {
     components: {
@@ -312,6 +326,7 @@
       VendorSimilarItem,
       VendorFeedbacks,
       Icon,
+      LightBox
     },
     props: {
       item: {
@@ -329,13 +344,8 @@
         serverUrl: process.env.SERVER_URL,
         attachments: [],
         proposals: [],
-        bgImages : [
-          '/static/img/lock.jpg',
-          '/static/img/login.jpg',
-          '/static/img/register.jpg',
-          '/static/img/bg-pricing.jpg',
-          '/static/img/bg3.jpg',
-        ],
+        bgImages: [],
+        defaultImg: 'static/img/lock.jpg',
         pricesAndRules: [
           { price: '41', description: 'Price / person' },
           { price: '74', description: 'Price / hour' },
@@ -391,11 +401,29 @@
           this.proposals.forEach(proposal => {
             proposal.attachments.forEach( attachment => {
               this.attachments.push(attachment)
+
+              const fullPath = `${this.serverUrl}/1/proposal-requests/${attachment.proposalRequst.id}/files/${attachment.id}`
+
+              if (attachment.vendorsFileContentType != 'application/pdf') {
+                this.bgImages.push(fullPath)
+              }
             })
           });
+          const start = this.bgImages.length
+          const diff = 5 - this.bgImages.length
+          if (this.bgImages.length < 5) {
+            for (let i = 0; i < diff; i++) {
+              this.bgImages.push(this.defaultImg)
+            }
+          }
           this.isLoading = false;
         });
-      }
+      },
+      view() {
+        if (this.$refs.lightbox) {
+          this.$refs.lightbox.showImage(0)
+        }
+      },
     },
     computed: {
       logoText: function () {
@@ -420,7 +448,6 @@
       vendorLogoImage: function() {
         if (this.vendor.vendorProperties) {
           return this.vendor.vendorProperties.filter( item => item.name == 'Logo' && item.type == 'image')
-          // return 'static/img/image_placeholder.jpg'
         } else {
           return [];
         }
@@ -430,6 +457,24 @@
           return this.vendor.vendorProperties.filter( item => item.name != 'Logo' && item.type == 'image')
         } else {
           return [];
+        }
+      },
+      getGalleryImages: function() {
+        let temp = []
+        if (this.bgImages.length > 0) {
+          this.bgImages.forEach( item => {
+            if (item != this.defaultImg) {
+              temp.push({
+                thumb: item,
+                src: item,
+                caption: "",
+                srcset: ""
+              })
+            }
+          })
+          return temp
+        } else {
+          return []
         }
       }
     },
@@ -691,6 +736,7 @@
             justify-content: center;
             align-items: center;
             padding-right: 2em;
+            text-align: center;
 
             i {
               font-size: 36px!important;
