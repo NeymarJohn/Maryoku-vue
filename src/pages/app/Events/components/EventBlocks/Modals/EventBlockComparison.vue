@@ -128,7 +128,7 @@
                       <!-- {{getProposalRequirementsFulfilled(selectedBlock.proposalComparison3)}} -->
                     </td>
                   </tr>
-                  <tr v-for="(requirement, index) in selectedBlock.values" :value="requirement" :key="index">
+                  <tr v-for="(requirement, index) in selectedBlock.values">
                     <td class="comparison-cell category border-bottom">
                       <h6 class="title small" v-tooltip="requirement.comment">
                         {{requirement.title}}
@@ -210,8 +210,7 @@
                     <td class="comparison-cell proposal">
                       <div class="star-rating" v-if="selectedBlock.proposalComparison1">
                         <label class="star-rating__star"
-                          v-for="(rating, index) in ratings" 
-                          :value="item" :key="index"
+                          v-for="rating in ratings"
                           :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison1) >= rating) && getProposalRating(selectedBlock.proposalComparison1) != null)}">
                         <input class="star-rating star-rating__checkbox" type="radio">★</label>
                         <span class="small"> 0 </span>
@@ -220,8 +219,7 @@
                     <td class="comparison-cell proposal">
                       <div class="star-rating" v-if="selectedBlock.proposalComparison2">
                         <label class="star-rating__star"
-                          v-for="(rating, index) in ratings" 
-                          :value="item" :key="index"
+                          v-for="rating in ratings"
                           :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison2) >= rating) && getProposalRating(selectedBlock.proposalComparison2) != null)}">
                         <input class="star-rating star-rating__checkbox" type="radio">★</label>
                         <span class="small"> 0 </span>

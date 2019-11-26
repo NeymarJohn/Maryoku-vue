@@ -37,8 +37,7 @@
               {{ item.vendor ? item.vendor.vendorDisplayName : 'No Vendor Title' }}
               <div class="star-rating">
                 <label class="star-rating__star"
-                  v-for="(rating, ratingIndex) in ratings"
-                  :key="ratingIndex"
+                  v-for="rating in ratings"
                   :class="{'is-selected' : ((item.vendor.rank >= rating) && item.vendor.rank != null)}">
                 <input class="star-rating star-rating__checkbox" type="radio">★</label>
               </div>
@@ -53,7 +52,7 @@
             </div>
             <div class="proposal-benefits-list" v-if="item.proposals && item.proposals[0]">
               <ul class="list-items" >
-                <li v-for="(pro, proIndex) in item.proposals[0].pros" :key="proIndex"> {{pro}}</li>
+                <li v-for="pro in item.proposals[0].pros"> {{pro}}</li>
               </ul>
             </div>
           </div>

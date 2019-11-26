@@ -34,12 +34,12 @@
         :ratings="ratings"
         @editVendorDetails="editVendorDetails"/>
       <vendors-list v-if="view === 'list'"
-        :buildingBlocksList="buildingBlocksList"
-        :vendorsList="vendorsList"
-        @editVendorDetails="editVendorDetails"
-        @delete="showDeleteAlert"
-        @add-new-vendor="addNewVendor"
-        @open-upload-modal="openUploadModal"
+      :buildingBlocksList="buildingBlocksList"
+      :vendorsList="vendorsList"
+      @editVendorDetails="editVendorDetails"
+      @delete="showDeleteAlert"
+      @add-new-vendor="addNewVendor"
+      @open-upload-modal="openUploadModal"
       />
     </div>
     <upload-modal ref="uploadModal"></upload-modal>

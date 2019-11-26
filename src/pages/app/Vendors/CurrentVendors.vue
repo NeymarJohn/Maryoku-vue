@@ -3,14 +3,8 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
     <div class="md-layout">
       <div class="md-layout-item image-list-container no-padding">
-        <div 
-          class="img-cont big-img-cont" 
-          :style="`
-            background-image: url(${bgImages[0]}); 
-            background-size: cover; 
-            background-size: 100% 100%;`
-          "
-        >
+        <div class="img-cont big-img-cont">
+          <img :src="bgImages[0]">
         </div>
         <div class="img-cont thumb-img-cont">
           <img :src="bgImages[1]">
@@ -18,17 +12,10 @@
           <img :src="bgImages[3]">
           <img :src="bgImages[4]">
         </div>
-        <md-button class="md-default btn-photos" @click="view()">
+        <md-button class="md-default btn-photos">
           <md-icon>photo</md-icon>
-          <span v-if="getGalleryImages.length > 0">view photos</span>
-          <span v-else>no vendor image</span>
+          view photos
         </md-button>
-        <LightBox 
-          v-if="getGalleryImages.length > 0"
-          :images="getGalleryImages"
-          ref="lightbox"
-          :show-light-box="false">
-        </LightBox>
       </div>
     </div>
     <div class="md-layout bg-white">
@@ -54,7 +41,7 @@
                 class="star-rating__star"
                 v-for="(rating, ratingIndex) in ratings"
                 :key="ratingIndex"
-                :class="{'is-selected' : ((vendor.rank >= rating) && item.rank != null)}"
+                :class="{'is-selected' : true}"
               >★</label>
               {{vendor.avgScore}}
             </div>
@@ -135,20 +122,15 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <template v-if="vendorCapacities">
-                  <div class="icon-text-vertical" v-for="(item, index) in vendorCapacities" :value="item" :key="index">
-                    <md-icon>airline_seat_recline_extra</md-icon>
-                    <h5>
-                      {{item.defaultValue}}
-                    </h5>
-                    <span>
-                      {{item.name}}
-                    </span>
-                  </div>
-                </template>
-                <template v-else>
-                  No Capacity Info
-                </template>
+                <div class="icon-text-vertical" v-for="(item, index) in capacities" :value="item" :key="index">
+                  <md-icon>{{item.icon}}</md-icon>
+                  <h5>
+                    {{item.value}}
+                  </h5>
+                  <span>
+                    {{item.key}}
+                  </span>
+                </div>
               </div>
             </div>
             <md-divider></md-divider>
@@ -160,26 +142,21 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <template v-if="vendorServicesList.length > 0 || vendorRestrictions.length > 0">
-                  <ul class="check-list">
-                    <li>
-                      <md-icon>restaurant</md-icon> <strong class="capitalize">{{vendor.vendorCategory}}</strong>
-                    </li>
-                    <li>
-                      <br/>
-                    </li>
-                    <li class="normal" v-for="(service, sIndex) of vendorServicesList" :key='sIndex' :value="service">
-                      <md-icon>check</md-icon> {{service.name}}
-                    </li>
-                    <li class="disabled" v-for="(restriction, rIndex) of vendorRestrictions" :key='rIndex' :value="restriction">
-                      <md-icon></md-icon> <span>{{restriction.name}}</span>
-                    </li>
-                  </ul>
-                </template>
-                <template v-else>
-                  No Service Data
-                </template>
-                <div class="notes" v-if="attachments.length > 0">
+                <ul class="check-list">
+                  <li>
+                    <md-icon>restaurant</md-icon> <strong class="capitalize">{{vendor.vendorCategory}}</strong>
+                  </li>
+                  <li>
+                    <br/>
+                  </li>
+                  <li class="normal" v-for="(item, index) of checkListItems" :key='index' :value="item">
+                    <md-icon>check</md-icon> {{item}}
+                  </li>
+                  <li class="disabled">
+                    <md-icon></md-icon> <span>Dinnerware</span>
+                  </li>
+                </ul>
+                <div class="notes">
                   <div class="notes-title">
                     <h4>
                       Attachment
@@ -187,20 +164,7 @@
                   </div>
                   <div class="notes-body">
                     <div class="note-item" v-for="(item, index) in attachments" :key="index" :value="item">
-                      <a 
-                        v-if="item.vendorsFileContentType == 'application/pdf'"
-                        target="_blank"
-                        :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`"
-                      >
-                        <md-icon>picture_as_pdf</md-icon> Attachment {{index}}
-                      </a>
-                      <a
-                        v-else
-                        target="_blank"
-                        :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`" 
-                      >
-                        <md-icon>image</md-icon> Attachment {{index}}
-                      </a>
+                      <md-icon>picture_as_pdf</md-icon> {{item}}
                     </div>
                   </div>
                 </div>
@@ -215,19 +179,14 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <template v-if="vendorPricesAndRules.length > 0">
-                  <div class="text-vertical" v-for="(item,index) of vendorPricesAndRules" :key='index' :value="item">
-                    <h5>
-                      ${{item.defaultValue == null ? 0 : item.defaultValue}}
-                    </h5>
-                    <span>
-                      {{item.name}}
-                    </span>
-                  </div>
-                </template>
-                <template>
-                  No Price Data
-                </template>
+                <div class="text-vertical" v-for="(item,index) of pricesAndRules" :key='index' :value="item">
+                  <h5>
+                    ${{item.price}}
+                  </h5>
+                  <span>
+                    {{item.description}}
+                  </span>
+                </div>
                 <div class="notes">
                   <div class="notes-title">
                     <h4>
@@ -243,7 +202,7 @@
               </div>
             </div>
             <md-divider></md-divider>
-            <div class="tab-item-content" v-if="proposals.length > 0">
+            <div class="tab-item-content">
               <div class="tab-item-content-title">
                 <md-icon>dehaze</md-icon>
                 <h4>
@@ -332,7 +291,6 @@
   import VendorSimilarProposals from './components/VendorSimilarProposals.vue'
   import VendorFeedbacks from './components/VendorFeedbacks.vue'
   import VendorSimilarItem from './components/VendorSimilarItem.vue'
-  import LightBox from 'vue-image-lightbox'
 
   export default {
     components: {
@@ -341,7 +299,6 @@
       VendorSimilarItem,
       VendorFeedbacks,
       Icon,
-      LightBox
     },
     props: {
       item: {
@@ -356,25 +313,68 @@
         isLoading: true,
         vendor: {statistics: {}},
         isVendorLogo: null,
-        serverUrl: process.env.SERVER_URL,
-        attachments: [],
-        proposals: [],
-        bgImages: [],
-        defaultImg: 'static/img/lock.jpg',
+        vendorProperties: {},
+        bgImages : [
+          '/static/img/lock.jpg',
+          '/static/img/login.jpg',
+          '/static/img/register.jpg',
+          '/static/img/bg-pricing.jpg',
+          '/static/img/bg3.jpg',
+        ],
+        capacities: [
+          { icon: 'people', value: '200', key: 'Standing' },
+          { icon: 'airline_seat_recline_extra', value: '30', key: 'Seated' },
+          { icon: 'fullscreen', value: '300 m2', key: 'Floor Area' },
+        ],
         pricesAndRules: [
-          // { price: '41', description: 'Price / person' },
-          // { price: '74', description: 'Price / hour' },
-          // { price: '25', description: 'Daliy rent' },
-          // { price: '78', description: 'Minimum spend' },
-          // { price: '50', description: 'Reservation fee' },
-          // { price: '12', description: 'Cleaning fee' }
+          { price: '41', description: 'Price / person' },
+          { price: '74', description: 'Price / hour' },
+          { price: '25', description: 'Daliy rent' },
+          { price: '78', description: 'Minimum spend' },
+          { price: '50', description: 'Reservation fee' },
+          { price: '12', description: 'Cleaning fee' }
         ],
         checkListItems: [
-          // 'Catering via venue',
-          // 'Own food allowed',
-          // 'Alchol license',
-          // 'own beverages allowed',
-          // 'Meeting Catering'
+          'Catering via venue',
+          'Own food allowed',
+          'Alchol license',
+          'own beverages allowed',
+          'Meeting Catering'
+        ],
+        attachments: [
+          'Food menu Option 1',
+          'Food menu Option 2',
+          'Food menu Option Insurance Certificate',
+          'Food menu Other Business Indication'
+        ],
+        proposals: [
+          {
+            image: '/static/img/shutterstock_289440710.png', 
+            price: '258', 
+            username: 'Jane Bloom, Facebook',
+            title: 'Halloween Company Party',
+            description: 'Corporate Guests 500 Guests',
+            date: 'Feburary',
+            status: 'In the same price range'
+          },
+          {
+            image: '/static/img/shutterstock_289440710.png', 
+            price: '7845', 
+            username: 'Jane Bloom, Facebook',
+            title: 'Halloween Company Party',
+            description: 'Corporate Guests 500 Guests',
+            date: 'Feburary',
+            status: 'In the same price range'
+          },
+          {
+            image: '/static/img/shutterstock_289440710.png', 
+            price: '455122', 
+            username: 'Jane Bloom, Facebook',
+            title: 'Halloween Company Party',
+            description: 'Corporate Guests 500 Guests',
+            date: 'Feburary',
+            status: 'In the same price range'
+          },
         ],
         feedbacks: [
           {image: '/static/img/shutterstock_289440710.png', username: 'Jane Bloom, Facebook', date: '2017/12/29', score: '5', message: 'A 50% deposit will be due on or before 18/1/20.'},
@@ -412,33 +412,11 @@
       getVendorProposals(id) {
         this.isLoading = true;
         new Vendors({id}).proposalRequests().first().then(proposals => {
-          this.proposals = proposals.vendorProposals.filter( proposal => proposal.bidRange != null );
-          this.proposals.forEach(proposal => {
-            proposal.attachments.forEach( attachment => {
-              this.attachments.push(attachment)
-
-              const fullPath = `${this.serverUrl}/1/proposal-requests/${attachment.proposalRequst.id}/files/${attachment.id}`
-
-              if (attachment.vendorsFileContentType != 'application/pdf') {
-                this.bgImages.push(fullPath)
-              }
-            })
-          });
-          const start = this.bgImages.length
-          const diff = 5 - this.bgImages.length
-          if (this.bgImages.length < 5) {
-            for (let i = 0; i < diff; i++) {
-              this.bgImages.push(this.defaultImg)
-            }
-          }
+          console.log('proposals', proposals);
+          this.proposals = proposals.vendorProposals;
           this.isLoading = false;
         });
-      },
-      view() {
-        if (this.$refs.lightbox) {
-          this.$refs.lightbox.showImage(0)
-        }
-      },
+      }
     },
     computed: {
       logoText: function () {
@@ -451,66 +429,6 @@
           } else {
             return titleWords[0].charAt(0)
           }
-        }
-      },
-      vendorCapacities: function() {
-        if (this.vendor.vendorProperties) {
-          return this.vendor.vendorProperties.filter( item => item.categoryTitle == 'Capacity')
-        } else {
-          return [];
-        }
-      },
-      vendorLogoImage: function() {
-        if (this.vendor.vendorProperties) {
-          return this.vendor.vendorProperties.filter( item => item.name == 'Logo' && item.type == 'image')
-        } else {
-          return [];
-        }
-      },
-      vendorExtraImage: function() {
-        if (this.vendor.vendorProperties) {
-          return this.vendor.vendorProperties.filter( item => item.name != 'Logo' && item.type == 'image')
-        } else {
-          return [];
-        }
-      },
-      vendorPricesAndRules: function() {
-        if (this.vendor.vendorProperties) {
-          return this.vendor.vendorProperties.filter( item => item.categoryTitle == 'Cost Elements' )
-        } else {
-          return [];
-        }
-      },
-      vendorServicesList: function() {
-        if (this.vendor.vendorProperties) {
-          return this.vendor.vendorProperties.filter( item => item.categoryTitle == 'Services' || item.categoryTitle == 'Included services and amenities')
-        } else {
-          return [];
-        }
-      },
-      vendorRestrictions: function() {
-        if (this.vendor.vendorProperties) {
-          return this.vendor.vendorProperties.filter( item => item.categoryTitle == 'Restrictions')
-        } else {
-          return [];
-        }
-      },
-      getGalleryImages: function() {
-        let temp = []
-        if (this.bgImages.length > 0) {
-          this.bgImages.forEach( item => {
-            if (item != this.defaultImg) {
-              temp.push({
-                thumb: item,
-                src: item,
-                caption: "",
-                srcset: ""
-              })
-            }
-          })
-          return temp
-        } else {
-          return []
         }
       }
     },
@@ -772,7 +690,6 @@
             justify-content: center;
             align-items: center;
             padding-right: 2em;
-            text-align: center;
 
             i {
               font-size: 36px!important;
