@@ -34,12 +34,12 @@
         :ratings="ratings"
         @editVendorDetails="editVendorDetails"/>
       <vendors-list v-if="view === 'list'"
-      :buildingBlocksList="buildingBlocksList"
-      :vendorsList="vendorsList"
-      @editVendorDetails="editVendorDetails"
-      @delete="showDeleteAlert"
-      @add-new-vendor="addNewVendor"
-      @open-upload-modal="openUploadModal"
+        :buildingBlocksList="buildingBlocksList"
+        :vendorsList="vendorsList"
+        @editVendorDetails="editVendorDetails"
+        @delete="showDeleteAlert"
+        @add-new-vendor="addNewVendor"
+        @open-upload-modal="openUploadModal"
       />
     </div>
     <upload-modal ref="uploadModal"></upload-modal>
@@ -133,30 +133,31 @@
       },
 
       editVendorDetails(vendor){
-        window.currentPanel = this.$showPanel({
-          component: companyForm,
-          cssClass: 'md-layout-item md-size-40 transition36 ',
-          openOn: 'right',
-          disableBgClick: false,
-          props: {
-            categories: this.buildingBlocksList,
-            selected_vendor: vendor,
-            creation_mode: false,
-          },
-        });
+        this.$router.push({ name: "EditVendor", params: { id: vendor.id } });
+        // window.currentPanel = this.$showPanel({
+        //   component: companyForm,
+        //   cssClass: 'md-layout-item md-size-40 transition36 ',
+        //   openOn: 'right',
+        //   disableBgClick: false,
+        //   props: {
+        //     categories: this.buildingBlocksList,
+        //     selected_vendor: vendor,
+        //     creation_mode: false,
+        //   },
+        // });
 
-        if (this.inPanel){
-          let slideoutPanelBg = document.getElementsByClassName("slideout-panel-bg");
-          if (slideoutPanelBg && slideoutPanelBg.length > 0) {
-            slideoutPanelBg[0].style = "z-index: 102";
-          }
+        // if (this.inPanel){
+        //   let slideoutPanelBg = document.getElementsByClassName("slideout-panel-bg");
+        //   if (slideoutPanelBg && slideoutPanelBg.length > 0) {
+        //     slideoutPanelBg[0].style = "z-index: 102";
+        //   }
 
-          window.currentPanel.promise.then(res=>{
-            if (slideoutPanelBg && slideoutPanelBg.length > 0) {
-              slideoutPanelBg[0].style = "z-index: 101";
-            }
-          });
-        }
+        //   window.currentPanel.promise.then(res=>{
+        //     if (slideoutPanelBg && slideoutPanelBg.length > 0) {
+        //       slideoutPanelBg[0].style = "z-index: 101";
+        //     }
+        //   });
+        // }
       },
       addNewVendor(){
         window.currentPanel = this.$showPanel({

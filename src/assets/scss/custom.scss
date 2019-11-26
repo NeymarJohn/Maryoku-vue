@@ -3678,11 +3678,11 @@ iframe{
 
         .btn-photos {
             position: absolute;
-            right: 3em;
+            top: 6em;
+            right: 2em;
             background: white !important;
             color: #424242 !important;
             text-transform: capitalize;
-            top: 7em;
             text-transform: capitalize;
             i {
                 color: $grey-800!important;
@@ -4931,11 +4931,4 @@ h4.title-summary {
             left: 28px;
         }
     }
-}
-
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
 }

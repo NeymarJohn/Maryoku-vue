@@ -24,7 +24,7 @@
                 data-vv-name="numberOfParticipants"
                 v-validate= "modelValidations.numberOfParticipants"
                 required
-                type="number"
+                type="text"
                 @change="calculateBudgetPerGuest()"
                 ></md-input>
               <span class="md-error" v-if="errors.has('numberOfParticipants')">The Guest Count is required and should be a number</span>
@@ -38,7 +38,7 @@
                 data-vv-name="budget"
                 v-validate= "modelValidations.totalBudget"
                 required
-                type="number"
+                type="text"
                 @change="calculateBudgetPerGuest()"
 
               ></md-input>

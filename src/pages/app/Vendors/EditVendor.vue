@@ -400,6 +400,23 @@
         routeName: null
       }
     },
+    beforeUpdate() {
+      if (!this.selected_vendor.vendorContactPerson) {
+        this.selected_vendor.vendorContactPerson = [{
+          name: null,
+          email: null,
+          phone_number: null
+        }]
+      }
+
+      if (!this.selected_vendor.vendorAttachments) {
+        this.selected_vendor.vendorAttachments = [];
+      }
+
+      if (!this.selected_vendor.vendorTagging) {
+        this.selected_vendor.vendorTagging = [];
+      }
+    },
     created () {
       this.routeName = this.$route.name;
     },
@@ -448,30 +465,6 @@
         if (this.$refs.lightbox) {
           this.$refs.lightbox.showImage(0)
         }
-      },
-      /**
-       * Modify selected vendor from vendors list
-       */
-      async saveVendor() {
-        let vendor = await Vendors.find(this.selected_vendor.id);
-
-        vendor.vendorDisplayName = this.selected_vendor.vendorDisplayName;
-        vendor.vendorWebsite = this.selected_vendor.vendorWebsite;
-        vendor.vendorMainEmail = this.selected_vendor.vendorMainEmail;
-        vendor.vendorAddressLine1 = this.selected_vendor.vendorAddressLine1;
-        vendor.vendorMainPhoneNumber = this.selected_vendor.vendorMainPhoneNumber;
-        vendor.vendorCategory = this.selected_vendor.vendorCategory;
-        vendor.vendorTagging = this.selected_vendor.vendorTagging;
-        vendor.vendorContactPerson = this.selected_vendor.vendorContactPerson;
-        vendor.vendorAttachments = this.selected_vendor.vendorAttachments;
-        vendor.save();
-
-        this.$notify({
-          message: 'Vendor Updated successfully!',
-          horizontalAlign: 'center',
-          verticalAlign: 'top',
-          type: 'success'
-        })
       },
     },
     computed: {
