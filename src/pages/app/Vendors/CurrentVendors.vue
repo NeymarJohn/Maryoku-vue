@@ -135,15 +135,20 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <div class="icon-text-vertical" v-for="(item, index) in vendorCapacities" :value="item" :key="index">
-                  <md-icon>airline_seat_recline_extra</md-icon>
-                  <h5>
-                    {{item.defaultValue}}
-                  </h5>
-                  <span>
-                    {{item.name}}
-                  </span>
-                </div>
+                <template v-if="vendorCapacities">
+                  <div class="icon-text-vertical" v-for="(item, index) in vendorCapacities" :value="item" :key="index">
+                    <md-icon>airline_seat_recline_extra</md-icon>
+                    <h5>
+                      {{item.defaultValue}}
+                    </h5>
+                    <span>
+                      {{item.name}}
+                    </span>
+                  </div>
+                </template>
+                <template v-else>
+                  No Capacity Info
+                </template>
               </div>
             </div>
             <md-divider></md-divider>
@@ -155,20 +160,25 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <ul class="check-list">
-                  <li>
-                    <md-icon>restaurant</md-icon> <strong class="capitalize">{{vendor.vendorCategory}}</strong>
-                  </li>
-                  <li>
-                    <br/>
-                  </li>
-                  <li class="normal" v-for="(item, index) of checkListItems" :key='index' :value="item">
-                    <md-icon>check</md-icon> {{item}}
-                  </li>
-                  <li class="disabled">
-                    <md-icon></md-icon> <span>Dinnerware</span>
-                  </li>
-                </ul>
+                <template v-if="vendorServicesList.length > 0 || vendorRestrictions.length > 0">
+                  <ul class="check-list">
+                    <li>
+                      <md-icon>restaurant</md-icon> <strong class="capitalize">{{vendor.vendorCategory}}</strong>
+                    </li>
+                    <li>
+                      <br/>
+                    </li>
+                    <li class="normal" v-for="(service, sIndex) of vendorServicesList" :key='sIndex' :value="service">
+                      <md-icon>check</md-icon> {{service.name}}
+                    </li>
+                    <li class="disabled" v-for="(restriction, rIndex) of vendorRestrictions" :key='rIndex' :value="restriction">
+                      <md-icon></md-icon> <span>{{restriction.name}}</span>
+                    </li>
+                  </ul>
+                </template>
+                <template v-else>
+                  No Service Data
+                </template>
                 <div class="notes" v-if="attachments.length > 0">
                   <div class="notes-title">
                     <h4>
@@ -205,14 +215,19 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <div class="text-vertical" v-for="(item,index) of pricesAndRules" :key='index' :value="item">
-                  <h5>
-                    ${{item.price}}
-                  </h5>
-                  <span>
-                    {{item.description}}
-                  </span>
-                </div>
+                <template v-if="vendorPricesAndRules.length > 0">
+                  <div class="text-vertical" v-for="(item,index) of vendorPricesAndRules" :key='index' :value="item">
+                    <h5>
+                      ${{item.defaultValue == null ? 0 : item.defaultValue}}
+                    </h5>
+                    <span>
+                      {{item.name}}
+                    </span>
+                  </div>
+                </template>
+                <template>
+                  No Price Data
+                </template>
                 <div class="notes">
                   <div class="notes-title">
                     <h4>
@@ -347,19 +362,19 @@
         bgImages: [],
         defaultImg: 'static/img/lock.jpg',
         pricesAndRules: [
-          { price: '41', description: 'Price / person' },
-          { price: '74', description: 'Price / hour' },
-          { price: '25', description: 'Daliy rent' },
-          { price: '78', description: 'Minimum spend' },
-          { price: '50', description: 'Reservation fee' },
-          { price: '12', description: 'Cleaning fee' }
+          // { price: '41', description: 'Price / person' },
+          // { price: '74', description: 'Price / hour' },
+          // { price: '25', description: 'Daliy rent' },
+          // { price: '78', description: 'Minimum spend' },
+          // { price: '50', description: 'Reservation fee' },
+          // { price: '12', description: 'Cleaning fee' }
         ],
         checkListItems: [
-          'Catering via venue',
-          'Own food allowed',
-          'Alchol license',
-          'own beverages allowed',
-          'Meeting Catering'
+          // 'Catering via venue',
+          // 'Own food allowed',
+          // 'Alchol license',
+          // 'own beverages allowed',
+          // 'Meeting Catering'
         ],
         feedbacks: [
           {image: '/static/img/shutterstock_289440710.png', username: 'Jane Bloom, Facebook', date: '2017/12/29', score: '5', message: 'A 50% deposit will be due on or before 18/1/20.'},
@@ -455,6 +470,27 @@
       vendorExtraImage: function() {
         if (this.vendor.vendorProperties) {
           return this.vendor.vendorProperties.filter( item => item.name != 'Logo' && item.type == 'image')
+        } else {
+          return [];
+        }
+      },
+      vendorPricesAndRules: function() {
+        if (this.vendor.vendorProperties) {
+          return this.vendor.vendorProperties.filter( item => item.categoryTitle == 'Cost Elements' )
+        } else {
+          return [];
+        }
+      },
+      vendorServicesList: function() {
+        if (this.vendor.vendorProperties) {
+          return this.vendor.vendorProperties.filter( item => item.categoryTitle == 'Services' || item.categoryTitle == 'Included services and amenities')
+        } else {
+          return [];
+        }
+      },
+      vendorRestrictions: function() {
+        if (this.vendor.vendorProperties) {
+          return this.vendor.vendorProperties.filter( item => item.categoryTitle == 'Restrictions')
         } else {
           return [];
         }
