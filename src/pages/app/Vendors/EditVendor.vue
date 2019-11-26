@@ -41,12 +41,29 @@
             </div>
           </div>
           <div class="title-child">
-            <h3>
+            <h3 
+              v-if="!selectedField || selectedField != 'vendor_title'" 
+              @click="selectedField = 'vendor_title'"
+            >
               {{vendor.vendorDisplayName}}
             </h3>
-            <span class="address">
+            <template v-if="selectedField == 'vendor_title'">
+              <md-field>
+                <label>Vendor Title</label>
+                <md-input v-model="vendor.vendorDisplayName" @blur="updateVendor()"></md-input>
+              </md-field>
+            </template>
+            <span class="address" @click="selectedField = 'address'">
               <i class="fa fa-map-marker-alt"></i>
-              {{vendor.vendorAddressLine1}}
+              <template v-if="!selectedField || selectedField != 'address'">
+                {{vendor.vendorAddressLine1}}
+              </template>
+              <template v-if="selectedField == 'address'">
+                <md-field class="auto-width">
+                  <label>Address</label>
+                  <md-input v-model="vendor.vendorAddressLine1" @blur="updateVendor()"></md-input>
+                </md-field>
+              </template>
             </span>
             <br class="hidden-lg hidden-md"/>
             <div class="hor-divider">
@@ -115,7 +132,33 @@
       <div class="tab-item" 
         :class="[{'visited': currentTab > 1}, {'active': currentTab == 1}]" 
         v-on:click="currentTab = 1">
-        <span class="capitalize">{{vendor.vendorCategory}}</span>
+        <span 
+          class="capitalize"
+          v-if="!selectedField || selectedField != 'vendor_category'" 
+          @click="selectedField = 'vendor_category'"
+        >
+          {{vendor.vendorCategory}}
+        </span>
+        <template v-if="selectedField == 'vendor_category'">
+          <md-field :class="[{'md-error': errors.has('vendorCategory')}]" class="select-with-icon">
+            <label for="category">Category</label>
+            <md-select 
+              v-model="vendor.vendorCategory" 
+              name="vendorCategory"
+              data-vv-name="vendorCategory" 
+              @md-selected="onChangeCategory()"
+              required>
+              <md-option 
+                v-for="(option, index) in categories"
+                :key="index" 
+                :value="option.id"
+              >
+                {{ option.value }}
+              </md-option>
+            </md-select>
+            <span class="md-error" v-if="errors.has('vendorCategory')">The Vendor Category is required</span>
+          </md-field>
+        </template>
       </div>
       <!-- <div class="tab-item" :class="[{'visited': currentTab > 2}, {'active': currentTab == 2}]" v-on:click="currentTab = 2">
         Venue
@@ -135,7 +178,7 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <template v-if="vendorCapacities">
+                <template v-if="vendorCapacities.length > 0">
                   <div class="icon-text-vertical" v-for="(item, index) in vendorCapacities" :value="item" :key="index">
                     <md-icon>airline_seat_recline_extra</md-icon>
                     <h5>
@@ -171,7 +214,7 @@
                     <li 
                       class="normal" 
                       v-for="(item, i) of vendorServicesList" 
-                      :key="'A' + i" 
+                      :key="'S' + i" 
                       :value="item"
                     >
                       <md-icon>check</md-icon> {{item.name}}
@@ -179,7 +222,7 @@
                     <li 
                       class="disabled" 
                       v-for="(item, i) of vendorRestrictions" 
-                      :key="'B' + i" 
+                      :key="'R' + i" 
                       :value="item"
                     >
                       <md-icon></md-icon> <span>{{item.name}}</span>
@@ -371,21 +414,8 @@
         proposals: [],
         bgImages: [],
         defaultImg: 'static/img/lock.jpg',
-        pricesAndRules: [
-          // { price: '41', description: 'Price / person' },
-          // { price: '74', description: 'Price / hour' },
-          // { price: '25', description: 'Daliy rent' },
-          // { price: '78', description: 'Minimum spend' },
-          // { price: '50', description: 'Reservation fee' },
-          // { price: '12', description: 'Cleaning fee' }
-        ],
-        checkListItems: [
-          // 'Catering via venue',
-          // 'Own food allowed',
-          // 'Alchol license',
-          // 'own beverages allowed',
-          // 'Meeting Catering'
-        ],
+        pricesAndRules: [],
+        checkListItems: [],
         feedbacks: [
           {image: '/static/img/shutterstock_289440710.png', username: 'Jane Bloom, Facebook', date: '2017/12/29', score: '5', message: 'A 50% deposit will be due on or before 18/1/20.'},
           {image: '/static/img/shutterstock_289440710.png', username: 'Leonard Parker', date: '2017/12/29', score: '4', message: 'A 50% deposit will be due on or before 18/1/20.'},
@@ -397,28 +427,19 @@
         ],
         ratings: [1,2,3,4,5],
         currentTab: 1,
+        selectedField: null,
+        categories: [], 
+        isDropped: false,
         routeName: null
-      }
-    },
-    beforeUpdate() {
-      if (!this.selected_vendor.vendorContactPerson) {
-        this.selected_vendor.vendorContactPerson = [{
-          name: null,
-          email: null,
-          phone_number: null
-        }]
-      }
-
-      if (!this.selected_vendor.vendorAttachments) {
-        this.selected_vendor.vendorAttachments = [];
-      }
-
-      if (!this.selected_vendor.vendorTagging) {
-        this.selected_vendor.vendorTagging = [];
       }
     },
     created () {
       this.routeName = this.$route.name;
+      Vendors.find('categories').then(categories => {
+        this.categories = categories;
+      }, (error) => {
+        console.log(error)
+      });
     },
     mounted () {
       let _self = this
@@ -465,6 +486,29 @@
         if (this.$refs.lightbox) {
           this.$refs.lightbox.showImage(0)
         }
+      },
+      onChangeCategory() {
+        if (this.isDropped) {
+          this.updateVendor()
+        }
+        this.isDropped = !this.isDropped
+      },
+      async updateVendor() {
+        let newVendor = await Vendors.find(this.vendor.id);
+
+        newVendor.vendorDisplayName = this.vendor.vendorDisplayName;
+        newVendor.vendorAddressLine1 = this.vendor.vendorAddressLine1;
+        newVendor.vendorCategory = this.vendor.vendorCategory;
+        newVendor.save();
+
+        this.$notify({
+          message: 'Vendor Updated successfully!',
+          horizontalAlign: 'center',
+          verticalAlign: 'top',
+          type: 'success'
+        })
+
+        this.selectedField = null
       },
     },
     computed: {
@@ -653,7 +697,7 @@
     z-index: 999;
 
     .tab-item {
-      padding: 20px 0;
+      padding: 20px 1em;
       position: relative;
       width: 240px;
       background: #e3e3e3;
@@ -681,6 +725,10 @@
 
         span {
           border-color : #fff;
+        }
+
+        label {
+          color: #3c4858 !important;
         }
 
         &:before {
@@ -851,5 +899,9 @@
     @media (max-width: $screen-sm-min) {
       border: none;
     }
+  }
+  .auto-width {
+    display: inline-block;
+    width: auto;
   }
 </style>

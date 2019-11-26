@@ -135,7 +135,7 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <template v-if="vendorCapacities">
+                <template v-if="vendorCapacities.length > 0">
                   <div class="icon-text-vertical" v-for="(item, index) in vendorCapacities" :value="item" :key="index">
                     <md-icon>airline_seat_recline_extra</md-icon>
                     <h5>
@@ -171,7 +171,7 @@
                     <li 
                       class="normal" 
                       v-for="(item, i) of vendorServicesList" 
-                      :key="'A' + i" 
+                      :key="'S' + i" 
                       :value="item"
                     >
                       <md-icon>check</md-icon> {{item.name}}
@@ -179,7 +179,7 @@
                     <li 
                       class="disabled" 
                       v-for="(item, i) of vendorRestrictions" 
-                      :key="'B' + i" 
+                      :key="'R' + i" 
                       :value="item"
                     >
                       <md-icon></md-icon> <span>{{item.name}}</span>
@@ -371,21 +371,8 @@
         proposals: [],
         bgImages: [],
         defaultImg: 'static/img/lock.jpg',
-        pricesAndRules: [
-          // { price: '41', description: 'Price / person' },
-          // { price: '74', description: 'Price / hour' },
-          // { price: '25', description: 'Daliy rent' },
-          // { price: '78', description: 'Minimum spend' },
-          // { price: '50', description: 'Reservation fee' },
-          // { price: '12', description: 'Cleaning fee' }
-        ],
-        checkListItems: [
-          // 'Catering via venue',
-          // 'Own food allowed',
-          // 'Alchol license',
-          // 'own beverages allowed',
-          // 'Meeting Catering'
-        ],
+        pricesAndRules: [],
+        checkListItems: [],
         feedbacks: [
           {image: '/static/img/shutterstock_289440710.png', username: 'Jane Bloom, Facebook', date: '2017/12/29', score: '5', message: 'A 50% deposit will be due on or before 18/1/20.'},
           {image: '/static/img/shutterstock_289440710.png', username: 'Leonard Parker', date: '2017/12/29', score: '4', message: 'A 50% deposit will be due on or before 18/1/20.'},
@@ -448,31 +435,7 @@
         if (this.$refs.lightbox) {
           this.$refs.lightbox.showImage(0)
         }
-      },
-      /**
-       * Modify selected vendor from vendors list
-       */
-      async saveVendor() {
-        let vendor = await Vendors.find(this.selected_vendor.id);
-
-        vendor.vendorDisplayName = this.selected_vendor.vendorDisplayName;
-        vendor.vendorWebsite = this.selected_vendor.vendorWebsite;
-        vendor.vendorMainEmail = this.selected_vendor.vendorMainEmail;
-        vendor.vendorAddressLine1 = this.selected_vendor.vendorAddressLine1;
-        vendor.vendorMainPhoneNumber = this.selected_vendor.vendorMainPhoneNumber;
-        vendor.vendorCategory = this.selected_vendor.vendorCategory;
-        vendor.vendorTagging = this.selected_vendor.vendorTagging;
-        vendor.vendorContactPerson = this.selected_vendor.vendorContactPerson;
-        vendor.vendorAttachments = this.selected_vendor.vendorAttachments;
-        vendor.save();
-
-        this.$notify({
-          message: 'Vendor Updated successfully!',
-          horizontalAlign: 'center',
-          verticalAlign: 'top',
-          type: 'success'
-        })
-      },
+      }
     },
     computed: {
       logoText: function () {
