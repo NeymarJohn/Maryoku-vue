@@ -191,9 +191,11 @@
               <h4  class="title" style="margin-bottom: 12px;">Images</h4>
               <div class="md-layout">
                 <div class="md-layout-item md-size-20" v-for="(image,index) in proposalRequestImages" :key="index"  style="margin: 12px; " >
-                  <vue-element-loading :active="attachmentsLoadingCount > 0" spinner="ring" color="#FF547C"></vue-element-loading>
-                  <iframe seamless class="vendor-images-list_item" frameborder="0" @load="attachmentsLoadingCount--"
-                    :src="`${serverUrl}/1/proposal-requests/${proposalRequest.id}/files/${image.id}`" style="max-height: 18vmin;width: 100vw;">
+                    <div class="vendor-images-list_item"  v-if="image.vendorsFileContentType === 'application/pdf'">
+                        <md-icon>picture_as_pdf</md-icon>
+                    </div>
+                  <iframe v-else seamless class="vendor-images-list_item" frameborder="0"
+                    :src="`${serverUrl}/1/proposal-requests/${proposalRequest.id}/files/${image.id}`" >
                     <md-button class="md-primary md-sm" @click="deleteImage(image.id,index)">
                       delete
                     </md-button>
@@ -699,7 +701,7 @@
           .then(imagesList => {
             this.$set(this, 'proposalRequestImages', imagesList)
             this.$set(this, 'attachmentsLoadingCount', imagesList.length)
-            console.log('proposalRequestImages => ', imagesList)
+            console.log('proposalRequestImages is  => ', imagesList)
           })
           .catch((error) => {
             console.log('ProposalRequestImage Error')

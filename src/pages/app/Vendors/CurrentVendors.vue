@@ -54,7 +54,7 @@
                 class="star-rating__star"
                 v-for="(rating, ratingIndex) in ratings"
                 :key="ratingIndex"
-                :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}"
+                :class="{'is-selected' : ((vendor.rank >= rating) && item.rank != null)}"
               >★</label>
               {{vendor.avgScore}}
             </div>

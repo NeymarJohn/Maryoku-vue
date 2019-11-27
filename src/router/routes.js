@@ -322,7 +322,7 @@ let appPages = {
       name: "EditVendor",
       component: EditVendor,
       meta: {
-        title: 'Edit Vendor',
+        title: 'Eedit Vendor',
         gtm: "Edit Vendor",
         opaque: false
       },

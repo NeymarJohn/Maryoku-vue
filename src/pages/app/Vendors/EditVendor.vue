@@ -41,18 +41,27 @@
             </div>
           </div>
           <div class="title-child">
-            <template>
+            <h3 
+              v-if="!selectedField || selectedField != 'vendor_title'" 
+              @click="selectedField = 'vendor_title'"
+            >
+              {{vendor.vendorDisplayName}}
+            </h3>
+            <template v-if="selectedField == 'vendor_title'">
               <md-field>
                 <label>Vendor Title</label>
-                <md-input v-model="vendor.vendorDisplayName"></md-input>
+                <md-input v-model="vendor.vendorDisplayName" @blur="updateVendor()"></md-input>
               </md-field>
             </template>
             <span class="address" @click="selectedField = 'address'">
               <i class="fa fa-map-marker-alt"></i>
-              <template>
+              <template v-if="!selectedField || selectedField != 'address'">
+                {{vendor.vendorAddressLine1}}
+              </template>
+              <template v-if="selectedField == 'address'">
                 <md-field class="auto-width">
                   <label>Address</label>
-                  <md-input v-model="vendor.vendorAddressLine1"></md-input>
+                  <md-input v-model="vendor.vendorAddressLine1" @blur="updateVendor()"></md-input>
                 </md-field>
               </template>
             </span>
@@ -62,15 +71,9 @@
                 class="star-rating__star"
                 v-for="(rating, ratingIndex) in ratings"
                 :key="ratingIndex"
-                @click="setRating(ratingIndex)"
-                :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}"
+                :class="{'is-selected' : ((vendor.rank >= rating) && item.rank != null)}"
               >★</label>
-              <template>
-                <md-field class="auto-width">
-                  <label>Avg Score</label>
-                  <md-input v-model="vendor.avgScore" type="number" min="0" @keyup="validateScore()"></md-input>
-                </md-field>
-              </template>
+              {{vendor.avgScore}}
             </div>
             <br class="hidden-lg hidden-md"/>
             <a class="favorite">
@@ -80,9 +83,6 @@
         </div>
       </div>
       <div class="md-layout-item button-group text-right">
-        <md-button class="md-purple md-lg" @click="updateVendor()">
-          Save
-        </md-button>
         <md-button class="md-success md-lg">
           Contact Vendor
         </md-button>
@@ -132,7 +132,14 @@
       <div class="tab-item" 
         :class="[{'visited': currentTab > 1}, {'active': currentTab == 1}]" 
         v-on:click="currentTab = 1">
-        <template>
+        <span 
+          class="capitalize"
+          v-if="!selectedField || selectedField != 'vendor_category'" 
+          @click="selectedField = 'vendor_category'"
+        >
+          {{vendor.vendorCategory}}
+        </span>
+        <template v-if="selectedField == 'vendor_category'">
           <md-field :class="[{'md-error': errors.has('vendorCategory')}]" class="select-with-icon">
             <label for="category">Category</label>
             <md-select 
@@ -481,16 +488,10 @@
         }
       },
       onChangeCategory() {
-        // if (this.isDropped) {
-        //   this.updateVendor()
-        // }
+        if (this.isDropped) {
+          this.updateVendor()
+        }
         this.isDropped = !this.isDropped
-      },
-      setRating(ratingIndex) {
-        this.vendor.rank = parseInt(ratingIndex) + 1
-      },
-      validateScore() {
-        this.vendor.avgScore = this.vendor.avgScore > 100 ? this.vendor.avgScore = 100 : this.vendor.avgScore
       },
       async updateVendor() {
         let newVendor = await Vendors.find(this.vendor.id);
@@ -498,8 +499,6 @@
         newVendor.vendorDisplayName = this.vendor.vendorDisplayName;
         newVendor.vendorAddressLine1 = this.vendor.vendorAddressLine1;
         newVendor.vendorCategory = this.vendor.vendorCategory;
-        newVendor.rank = this.vendor.rank;
-        newVendor.avgScore = this.vendor.avgScore;
         newVendor.save();
 
         this.$notify({
@@ -605,7 +604,7 @@
       }
 
       .button-group {
-        .md-purple, .md-success {
+        .md-success {
           margin-right: 1em;
 
           @media (max-width: $screen-sm-min) {
@@ -904,10 +903,5 @@
   .auto-width {
     display: inline-block;
     width: auto;
-  }
-  input[type=number]::-webkit-inner-spin-button,
-  input[type=number]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
   }
 </style>
