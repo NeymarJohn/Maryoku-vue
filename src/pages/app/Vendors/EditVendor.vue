@@ -41,12 +41,20 @@
             </div>
           </div>
           <div class="title-child">
-            <h3>
-              {{vendor.vendorDisplayName}}
-            </h3>
-            <span class="address">
+            <template>
+              <md-field>
+                <label>Vendor Title</label>
+                <md-input v-model="vendor.vendorDisplayName"></md-input>
+              </md-field>
+            </template>
+            <span class="address" @click="selectedField = 'address'">
               <i class="fa fa-map-marker-alt"></i>
-              {{vendor.vendorAddressLine1}}
+              <template>
+                <md-field class="auto-width">
+                  <label>Address</label>
+                  <md-input v-model="vendor.vendorAddressLine1"></md-input>
+                </md-field>
+              </template>
             </span>
             <br class="hidden-lg hidden-md"/>
             <div class="hor-divider">
@@ -54,9 +62,15 @@
                 class="star-rating__star"
                 v-for="(rating, ratingIndex) in ratings"
                 :key="ratingIndex"
+                @click="setRating(ratingIndex)"
                 :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}"
               >★</label>
-              {{vendor.avgScore}}
+              <template>
+                <md-field class="auto-width">
+                  <label>Avg Score</label>
+                  <md-input v-model="vendor.avgScore" type="number" min="0" @keyup="validateScore()"></md-input>
+                </md-field>
+              </template>
             </div>
             <br class="hidden-lg hidden-md"/>
             <a class="favorite">
@@ -66,6 +80,9 @@
         </div>
       </div>
       <div class="md-layout-item button-group text-right">
+        <md-button class="md-purple md-lg" @click="updateVendor()">
+          Save
+        </md-button>
         <md-button class="md-success md-lg">
           Contact Vendor
         </md-button>
@@ -115,7 +132,26 @@
       <div class="tab-item" 
         :class="[{'visited': currentTab > 1}, {'active': currentTab == 1}]" 
         v-on:click="currentTab = 1">
-        <span class="capitalize">{{vendor.vendorCategory}}</span>
+        <template>
+          <md-field :class="[{'md-error': errors.has('vendorCategory')}]" class="select-with-icon">
+            <label for="category">Category</label>
+            <md-select 
+              v-model="vendor.vendorCategory" 
+              name="vendorCategory"
+              data-vv-name="vendorCategory" 
+              @md-selected="onChangeCategory()"
+              required>
+              <md-option 
+                v-for="(option, index) in categories"
+                :key="index" 
+                :value="option.id"
+              >
+                {{ option.value }}
+              </md-option>
+            </md-select>
+            <span class="md-error" v-if="errors.has('vendorCategory')">The Vendor Category is required</span>
+          </md-field>
+        </template>
       </div>
       <!-- <div class="tab-item" :class="[{'visited': currentTab > 2}, {'active': currentTab == 2}]" v-on:click="currentTab = 2">
         Venue
@@ -384,11 +420,19 @@
         ],
         ratings: [1,2,3,4,5],
         currentTab: 1,
+        selectedField: null,
+        categories: [], 
+        isDropped: false,
         routeName: null
       }
     },
     created () {
       this.routeName = this.$route.name;
+      Vendors.find('categories').then(categories => {
+        this.categories = categories;
+      }, (error) => {
+        console.log(error)
+      });
     },
     mounted () {
       let _self = this
@@ -435,7 +479,40 @@
         if (this.$refs.lightbox) {
           this.$refs.lightbox.showImage(0)
         }
-      }
+      },
+      onChangeCategory() {
+        // if (this.isDropped) {
+        //   this.updateVendor()
+        // }
+        this.isDropped = !this.isDropped
+      },
+      setRating(ratingIndex) {
+        this.vendor.rank = parseInt(ratingIndex) + 1
+      },
+      validateScore() {
+        this.vendor.avgScore = this.vendor.avgScore > 100 ? this.vendor.avgScore = 100 : this.vendor.avgScore
+      },
+      async updateVendor() {
+        let newVendor = await Vendors.find(this.vendor.id);
+
+        newVendor.vendorDisplayName = this.vendor.vendorDisplayName;
+        newVendor.vendorAddressLine1 = this.vendor.vendorAddressLine1;
+        newVendor.vendorCategory = this.vendor.vendorCategory;
+        newVendor.rank = this.vendor.rank;
+        newVendor.avgScore = this.vendor.avgScore;
+        // newVendor.save();
+        newVendor = {...this.vendor}
+        console.log(newVendor)
+
+        this.$notify({
+          message: 'Vendor Updated successfully!',
+          horizontalAlign: 'center',
+          verticalAlign: 'top',
+          type: 'success'
+        })
+
+        this.selectedField = null
+      },
     },
     computed: {
       logoText: function () {
@@ -530,7 +607,7 @@
       }
 
       .button-group {
-        .md-success {
+        .md-purple, .md-success {
           margin-right: 1em;
 
           @media (max-width: $screen-sm-min) {
@@ -623,7 +700,7 @@
     z-index: 999;
 
     .tab-item {
-      padding: 20px 0;
+      padding: 20px 1em;
       position: relative;
       width: 240px;
       background: #e3e3e3;
@@ -651,6 +728,10 @@
 
         span {
           border-color : #fff;
+        }
+
+        label {
+          color: #3c4858 !important;
         }
 
         &:before {
@@ -821,5 +902,14 @@
     @media (max-width: $screen-sm-min) {
       border: none;
     }
+  }
+  .auto-width {
+    display: inline-block;
+    width: auto;
+  }
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
   }
 </style>
