@@ -7,7 +7,7 @@
         </div>
         <h4 class="title2">{{selected_vendor.vendorDisplayName ? `${selected_vendor.vendorDisplayName}’s Company`: "Create New Vendor"}}</h4>
         <md-card-actions md-alignment="right">
-          <md-button class="md-default md-sm" @click="closePanel">Close</md-button>
+          <md-button   class="md-default md-sm" @click="closePanel">Close</md-button>
           <md-button v-if="creation_mode" class="md-success md-sm" @click="addVendor" >Create</md-button>
           <md-button v-else-if="!creation_mode" class="md-info md-sm" @click="saveVendor">Save</md-button>
         </md-card-actions>

@@ -135,7 +135,7 @@
                 </h4>
               </div>
               <div class="tab-item-content-body">
-                <template v-if="vendorCapacities.length > 0">
+                <template v-if="vendorCapacities">
                   <div class="icon-text-vertical" v-for="(item, index) in vendorCapacities" :value="item" :key="index">
                     <md-icon>airline_seat_recline_extra</md-icon>
                     <h5>
@@ -168,21 +168,11 @@
                     <li>
                       <br/>
                     </li>
-                    <li 
-                      class="normal" 
-                      v-for="(item, i) of vendorServicesList" 
-                      :key="'S' + i" 
-                      :value="item"
-                    >
-                      <md-icon>check</md-icon> {{item.name}}
+                    <li class="normal" v-for="(service, sIndex) of vendorServicesList" :key='sIndex' :value="service">
+                      <md-icon>check</md-icon> {{service.name}}
                     </li>
-                    <li 
-                      class="disabled" 
-                      v-for="(item, i) of vendorRestrictions" 
-                      :key="'R' + i" 
-                      :value="item"
-                    >
-                      <md-icon></md-icon> <span>{{item.name}}</span>
+                    <li class="disabled" v-for="(restriction, rIndex) of vendorRestrictions" :key='rIndex' :value="restriction">
+                      <md-icon></md-icon> <span>{{restriction.name}}</span>
                     </li>
                   </ul>
                 </template>
@@ -202,14 +192,14 @@
                         target="_blank"
                         :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`"
                       >
-                        <md-icon>picture_as_pdf</md-icon> Attachment {{index+1}}
+                        <md-icon>picture_as_pdf</md-icon> Attachment {{index}}
                       </a>
                       <a
                         v-else
                         target="_blank"
                         :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`" 
                       >
-                        <md-icon>image</md-icon> Attachment {{index+1}}
+                        <md-icon>image</md-icon> Attachment {{index}}
                       </a>
                     </div>
                   </div>
@@ -235,7 +225,7 @@
                     </span>
                   </div>
                 </template>
-                <template v-else>
+                <template>
                   No Price Data
                 </template>
                 <div class="notes">
@@ -371,8 +361,21 @@
         proposals: [],
         bgImages: [],
         defaultImg: 'static/img/lock.jpg',
-        pricesAndRules: [],
-        checkListItems: [],
+        pricesAndRules: [
+          // { price: '41', description: 'Price / person' },
+          // { price: '74', description: 'Price / hour' },
+          // { price: '25', description: 'Daliy rent' },
+          // { price: '78', description: 'Minimum spend' },
+          // { price: '50', description: 'Reservation fee' },
+          // { price: '12', description: 'Cleaning fee' }
+        ],
+        checkListItems: [
+          // 'Catering via venue',
+          // 'Own food allowed',
+          // 'Alchol license',
+          // 'own beverages allowed',
+          // 'Meeting Catering'
+        ],
         feedbacks: [
           {image: '/static/img/shutterstock_289440710.png', username: 'Jane Bloom, Facebook', date: '2017/12/29', score: '5', message: 'A 50% deposit will be due on or before 18/1/20.'},
           {image: '/static/img/shutterstock_289440710.png', username: 'Leonard Parker', date: '2017/12/29', score: '4', message: 'A 50% deposit will be due on or before 18/1/20.'},
@@ -435,7 +438,7 @@
         if (this.$refs.lightbox) {
           this.$refs.lightbox.showImage(0)
         }
-      }
+      },
     },
     computed: {
       logoText: function () {

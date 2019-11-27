@@ -29,11 +29,11 @@ import Notes from "@/pages/app/Notes.vue";
 import Proposals from "@/pages/app/Proposals.vue";
 import Vendors from "@/pages/app/Vendors/Vendors.vue";
 import CurrentVendors from "@/pages/app/Vendors/CurrentVendors.vue";
-import EditVendor from "@/pages/app/Vendors/EditVendor.vue";
 import VendorsPool from "@/pages/app/Vendors/VendorsPool.vue";
 import ImportVendors from "@/pages/app/Vendors/ImportVendors.vue";
 import YearlyPlan from "@/pages/app/YearlyPlan/index.vue";
 import AnnualPlanner from "@/pages/app/AnnualPlanner/index.vue";
+
 
 // Dashboard pages
 import EmployeeMain from '@/pages/Dashboard/Pages/CommonInfoProfile/Employee.vue';
@@ -50,107 +50,75 @@ import ChooseWorkspace from '@/pages/Dashboard/Pages/ChooseWorkspace';
 import GetStarted from '@/pages/app/GetStarted';
 import EmptyLayout from '../pages/Dashboard/Pages/EmptyLayout';
 import MarketPlaceLayout from '../pages/Dashboard/Pages/MarketPlaceLayout';
-const SignInSignUp = () =>
-  import ("@/pages/Dashboard/Pages/SignInSignUp.vue");
-const SignOut = () =>
-  import ("@/pages/Dashboard/Pages/SignOut.vue");
-const SignedIn = () =>
-  import ("@/pages/Dashboard/Pages/SignedIn.vue");
+const SignInSignUp = () => import("@/pages/Dashboard/Pages/SignInSignUp.vue");
+const SignOut = () => import("@/pages/Dashboard/Pages/SignOut.vue");
+const SignedIn = () => import("@/pages/Dashboard/Pages/SignedIn.vue");
 
 import MyEvents from '@/pages/app/Guest/MyEvents.vue';
 import MarketPlace from '@/pages/app/MarketPlace/MarketPlace.vue';
 
 
 let authPages = {
-  path: "/",
-  component: AuthLayout,
-  name: "Authentication",
-  children: [{
-      path: "/signin",
-      name: "SignIn",
-      component: SignInSignUp,
-      meta: {
-        auth: false,
-        gtm: "SignIn"
-      }
-    },
-    {
-      path: "/signout",
-      name: "SignOut",
-      component: SignOut,
-      meta: {
-        auth: false,
-        title: 'Sign Out',
-        gtm: "SignOut"
-      }
-    },
-    {
-      path: "/signedin",
-      name: "SignedIn",
-      component: SignedIn,
-      meta: {
-        auth: false,
-        title: 'Signed In',
-        gtm: "SignedIn"
-      }
-    },
-    {
-      path: "/create-workspace",
-      name: "CreateWorkspace",
-      component: CreateWorkspace,
-      meta: {
-        auth: false,
-        title: 'Create Workspace',
-        gtm: "CreateWorkspace"
-      }
-    },
-    {
-      path: "/choose-workspace",
-      name: "ChooseWorkspace",
-      component: ChooseWorkspace,
-      meta: {
-        auth: false,
-        title: 'Choose Workspace',
-        gtm: "ChooseWorkspace"
-      }
-    },
-  ]
+    path: "/",
+    component: AuthLayout,
+    name: "Authentication",
+    children: [
+        {
+            path: "/signin",
+            name: "SignIn",
+            component: SignInSignUp,
+            meta: {auth: false, gtm: "SignIn"}
+        },
+        {
+            path: "/signout",
+            name: "SignOut",
+            component: SignOut,
+            meta: {auth: false, title: 'Sign Out', gtm: "SignOut"}
+        },
+        {
+            path: "/signedin",
+            name: "SignedIn",
+            component: SignedIn,
+            meta: {auth: false, title: 'Signed In', gtm: "SignedIn"}
+        },
+        {
+            path: "/create-workspace",
+            name: "CreateWorkspace",
+            component: CreateWorkspace,
+            meta: {auth: false, title: 'Create Workspace', gtm: "CreateWorkspace"}
+        },
+        {
+            path: "/choose-workspace",
+            name: "ChooseWorkspace",
+            component: ChooseWorkspace,
+            meta: {auth: false, title: 'Choose Workspace', gtm: "ChooseWorkspace"}
+        },
+    ]
 };
 
 let publicPages = {
   path: "/",
   component: PublicLayout,
   name: "Public",
-  children: [{
+  children: [
+    {
       path: "/events/:id/public",
       name: "ShowEvent",
       component: ShowEvent,
-      meta: {
-        auth: false,
-        title: 'Event',
-        gtm: "Event"
-      },
+      meta: {auth: false, title: 'Event', gtm: "Event"},
     },
-    {
-      path: "/proposal-request/:id",
-      name: "VendorProposals2",
-      component: VendorProposals,
-      meta: {
-        auth: false,
-        title: 'Vendor Proposals',
-        gtm: "VendorProposals"
+      {
+          path: "/proposal-request/:id",
+          name: "VendorProposals2",
+          component: VendorProposals,
+          meta: {auth: false, title: 'Vendor Proposals', gtm: "VendorProposals"},
       },
-    },
-    {
-      path: "/vendors/:vendorId/proposal-request/:id",
-      name: "VendorProposals",
-      component: VendorProposals,
-      meta: {
-        auth: false,
-        title: 'Vendor Proposals',
-        gtm: "VendorProposals"
+      {
+          path: "/vendors/:vendorId/proposal-request/:id",
+          name: "VendorProposals",
+          component: VendorProposals,
+          meta: {auth: false, title: 'Vendor Proposals', gtm: "VendorProposals"},
       },
-    },
     /*{
       path: "/get-started",
       name: "GetStarted",
@@ -163,373 +131,290 @@ let marketPlacePages = {
   path: "/",
   component: MarketPlaceLayout,
   name: "Market",
-  children: [{
-    path: "/market-place",
-    name: "MarketPlace",
-    component: MarketPlace,
-    meta: {
-      auth: false,
-      title: 'Choose Workspace',
-      gtm: "MarketPlace"
-    }
-  }, ]
+  children: [
+    {
+        path: "/market-place",
+        name: "MarketPlace",
+        component: MarketPlace,
+        meta: {auth: false, title: 'Choose Workspace', gtm: "MarketPlace"}
+    },
+  ]
 };
 
 let emptyLayoutPages = {
-  path: "/",
-  component: EmptyLayout,
-  name: "Empty",
-  children: [{
-      path: "/get-started",
-      name: "GetStarted",
-      component: GetStarted,
-      meta: {
-        auth: true,
-        title: 'Get Started',
-        gtm: "GetStarted"
-      }
-    },
-    {
-      path: "/my-events",
-      name: "MyEvents",
-      component: MyEvents,
-      meta: {
-        auth: true,
-        title: 'My Events',
-        gtm: "MyEvents"
-      }
-    }
-  ]
+    path: "/",
+    component: EmptyLayout,
+    name: "Empty",
+    children: [
+        {
+            path: "/get-started",
+            name: "GetStarted",
+            component: GetStarted,
+            meta: {auth: true, title: 'Get Started', gtm: "GetStarted"}
+        },
+        {
+            path: "/my-events",
+            name: "MyEvents",
+            component: MyEvents,
+            meta: {auth: true, title: 'My Events', gtm: "MyEvents"}
+        },
+
+    ]
 };
 
 let appPages = {
-  path: "/app",
-  component: DashboardLayout,
-  name: "App",
-  children: [{
-      path: "/me",
-      name: "Me",
-      component: Me,
-      meta: {
-        gtm: "Me"
-      }
-    },
-    {
-      path: "/settings",
-      name: "Settings",
-      component: Profile,
-      meta: {
-        gtm: "Settings"
-      }
-    },
+    path: "/app",
+    component: DashboardLayout,
+    name: "App",
+    children: [
+        {
+            path: "/me",
+            name: "Me",
+            component: Me,
+            meta: {gtm: "Me"}
+        },
+        {
+            path: "/settings",
+            name: "Settings",
+            component: Profile,
+            meta: {gtm: "Settings"}
+        },
 
-    {
-      path: "/company",
-      name: "CompanyDashboard",
-      component: CompanyDashboard,
-      meta: {
-        title: "Company Dashboard",
-        gtm: "CompanyDashboard"
-      },
-    },
-    {
-      path: "/old-company",
-      name: "MyCompany",
-      component: MyCompanyNew,
-      meta: {
-        title: "My Company",
-        gtm: "MyCompany"
-      },
-    },
-    {
-      path: "/team",
-      name: "Team",
-      component: Members,
-      meta: {
-        gtm: "Team"
-      }
-    },
-    {
-      path: "/community",
-      name: "Community",
-      component: Community
-    },
-    {
-      path: "/vendors-suggested",
-      name: "VendorsSuggested",
-      component: VendorsSuggested
-    },
-    {
-      path: "/community-new",
-      name: "Community-new",
-      component: CommunityNew
-    },
-    {
-      path: "/yearly-plan",
-      name: "YearlyPlan",
-      component: YearlyPlan,
-      meta: {
-        title: "Yearly Plan"
-      }
-    },
-    {
-      path: "/planner/:year/:month",
-      name: "AnnualPlannerYearMonth",
-      component: AnnualPlanner,
-      meta: {
-        title: "Planner",
-        gtm: "Planner"
-      }
-    },
-    {
-      path: "/planner/:year",
-      name: "AnnualPlannerYear",
-      component: AnnualPlanner,
-      meta: {
-        title: "Planner",
-        gtm: "Planner"
-      }
-    },
-    {
-      path: "/planner",
-      name: "AnnualPlanner",
-      component: AnnualPlanner,
-      meta: {
-        title: "Planner",
-        gtm: "Planner"
-      }
-    },
-    {
-      path: "/vendors",
-      name: "Vendors",
-      component: Vendors,
-      meta: {
-        gtm: "Vendors"
-      }
-    },
-    {
-      path: "/vendors/:id/detail",
-      name: "VendorDetails",
-      component: CurrentVendors,
-      meta: {
-        title: 'Vendor Page',
-        gtm: "Vendor Details",
-        opaque: false
-      },
-    },
-    {
-      path: "/vendors/:id/edit",
-      name: "EditVendor",
-      component: EditVendor,
-      meta: {
-        title: 'Eedit Vendor',
-        gtm: "Edit Vendor",
-        opaque: false
-      },
-    },
-    {
-      path: "/vendors-pool",
-      name: "VendorsPool",
-      component: VendorsPool,
-      meta: {
-        gtm: "VendorsPool"
-      }
-    },
-    {
-      path: "/import-vendors",
-      name: "ImportVendors",
-      component: ImportVendors
-    },
-    {
-      path: "/proposals",
-      name: "Proposals",
-      component: Proposals
-    },
-    {
-      path: "/notes",
-      name: "Notes",
-      component: Notes
-    },
-    {
-      path: "/events/:id/edit",
-      name: "EventDetails",
-      component: EventDetails,
-      meta: {
-        title: 'Event Page',
-        gtm: "Event Details",
-        opaque: false
-      },
-    }
-  ]
+        {
+            path: "/company",
+            name: "CompanyDashboard",
+            component: CompanyDashboard,
+            meta: {title: "Company Dashboard", gtm: "CompanyDashboard"},
+        },
+        {
+            path: "/old-company",
+            name: "MyCompany",
+            component: MyCompanyNew,
+            meta: {title: "My Company", gtm: "MyCompany"},
+        },
+        {
+            path: "/team",
+            name: "Team",
+            component: Members,
+            meta: {gtm: "Team"}
+        },
+        {
+            path: "/community",
+            name: "Community",
+            component: Community
+        },
+        {
+            path: "/vendors-suggested",
+            name: "VendorsSuggested",
+            component: VendorsSuggested
+        },
+        {
+            path: "/community-new",
+            name: "Community-new",
+            component: CommunityNew
+        },
+        {
+            path: "/yearly-plan",
+            name: "YearlyPlan",
+            component: YearlyPlan,
+            meta: {title: "Yearly Plan"}
+        },
+        {
+            path: "/planner/:year/:month",
+            name: "AnnualPlannerYearMonth",
+            component: AnnualPlanner,
+            meta: {title: "Planner", gtm: "Planner"}
+        },
+        {
+            path: "/planner/:year",
+            name: "AnnualPlannerYear",
+            component: AnnualPlanner,
+            meta: {title: "Planner", gtm: "Planner"}
+        },
+        {
+            path: "/planner",
+            name: "AnnualPlanner",
+            component: AnnualPlanner,
+            meta: {title: "Planner", gtm: "Planner"}
+        },
+        {
+            path: "/vendors",
+            name: "Vendors",
+            component: Vendors,
+            meta: {gtm: "Vendors"}
+        },
+        {
+            path: "/vendors/:id/detail",
+            name: "VendorDetails",
+            component: CurrentVendors,
+            meta: {title: 'Vendor Page', gtm: "Vendor Details", opaque: false},
+        },
+        {
+            path: "/vendors-pool",
+            name: "VendorsPool",
+            component: VendorsPool,
+            meta: {gtm: "VendorsPool"}
+        },
+        {
+            path: "/import-vendors",
+            name: "ImportVendors",
+            component: ImportVendors
+        },
+        {
+            path: "/proposals",
+            name: "Proposals",
+            component: Proposals
+        },
+        {
+            path: "/notes",
+            name: "Notes",
+            component: Notes
+        },
+        {
+            path: "/events/:id/edit",
+            name: "EventDetails",
+            component: EventDetails,
+            meta: {title: 'Event Page', gtm: "Event Details", opaque: false},
+        },
+    ]
 };
 let EventPages = {
-  path: "/app2",
-  component: EventLayout,
-  name: "App2",
-  children: [{
-      path: "/events",
-      name: "Events",
-      component: Events,
-      meta: {
-        title: 'Our Events',
-        gtm: "Events"
-      },
-    },
-    {
-      path: "/events/proposal",
-      name: "EventProposal",
-      component: EventProposal,
-      meta: {
-        title: 'Event Proposal'
-      },
-    },
-    {
-      path: '/events/new',
-      name: 'NewEvent',
-      component: NewEvent,
-      meta: {
-        title: 'Create New Event'
-      },
-    },
-    {
-      path: "/events/:id/edit/details",
-      name: "EditEvent",
-      component: CurrentEvents,
-      meta: {
-        title: 'Event Details',
-        gtm: "Event Edit",
-        opaque: false
-      }
-    },
-    {
-      path: "/events/:id/edit/building-blocks",
-      name: "EditBuildingBlocks",
-      component: CurrentEvents,
-      meta: {
-        title: 'Building Blocks',
-        gtm: "Building Blocks",
-        opaque: false
-      },
-    },
-    {
-      path: "/events/:id/edit/timeline",
-      name: "EditTimeLine",
-      component: CurrentEvents,
-      meta: {
-        title: 'Timeline',
-        gtm: "Event Timeline",
-        opaque: false
-      },
-    },
-    {
-      path: "/events/:id/edit/invitees-management",
-      name: "InviteesManagement",
-      component: CurrentEvents,
-      meta: {
-        title: 'Automated Interactions',
-        gtm: "Event Edit",
-        opaque: false
-      },
-    },
-    {
-      path: "/events/:id/edit/event-invitees",
-      name: "EventInvitees",
-      component: CurrentEvents,
-      meta: {
-        title: 'Event Invitees',
-        gtm: "Event Invitees",
-        opaque: false
-      },
-    },
+    path: "/app2",
+    component: EventLayout,
+    name: "App2",
+    children: [
+        {
+            path: "/events",
+            name: "Events",
+            component: Events,
+            meta: {title: 'Our Events', gtm: "Events"},
+        },
+        {
+            path: "/events/proposal",
+            name: "EventProposal",
+            component: EventProposal,
+            meta: {title: 'Event Proposal'},
+        },
+        {
+            path: '/events/new',
+            name: 'NewEvent',
+            component: NewEvent,
+            meta: {title: 'Create New Event'},
+        },
+        {
+            path: "/events/:id/edit/details",
+            name: "EditEvent",
+            component: CurrentEvents,
+            meta: {title: 'Event Details', gtm: "Event Edit", opaque: false}
+        },
+        {
+            path: "/events/:id/edit/building-blocks",
+            name: "EditBuildingBlocks",
+            component: CurrentEvents,
+            meta: {title: 'Building Blocks', gtm: "Building Blocks", opaque: false},
+        },
+        {
+            path: "/events/:id/edit/timeline",
+            name: "EditTimeLine",
+            component: CurrentEvents,
+            meta: {title: 'Timeline', gtm: "Event Timeline", opaque: false},
+        },
+        {
+            path: "/events/:id/edit/invitees-management",
+            name: "InviteesManagement",
+            component: CurrentEvents,
+            meta: {title: 'Automated Interactions', gtm: "Event Edit", opaque: false},
+        },
+        {
+            path: "/events/:id/edit/event-invitees",
+            name: "EventInvitees",
+            component: CurrentEvents,
+            meta: {title: 'Event Invitees', gtm: "Event Invitees", opaque: false},
+        },
 
-    //Event Wizard
-    {
-      path: "/event-steps/:id",
-      name: "EventSteps",
-      component: EventSteps,
-      meta: {
-        title: 'Event Wizard',
-        gtm: "Event Wizard"
-      },
-    },
-    {
-      path: "/event/create",
-      name: "EventSteps",
-      component: EventSteps,
-      meta: {
-        title: 'Event Wizard',
-        gtm: "Event Wizard"
-      },
-    },
-    {
-      path: "/event/:id/edit",
-      name: "EventSteps",
-      component: EventSteps,
-      meta: {
-        title: 'Event Wizard',
-        gtm: "Event Wizard"
-      },
-    }
-  ]
+        //Event Wizzard
+        {
+            path: "/event-steps/:id",
+            name: "EventSteps",
+            component: EventSteps,
+            meta: {title: 'Event Wizzard', gtm: "Event Wizzard"},
+
+        },
+        {
+            path: "/event/create",
+            name: "EventSteps",
+            component: EventSteps,
+            meta: {title: 'Event Wizzard', gtm: "Event Wizzard"},
+
+        },
+        {
+            path: "/event/:id/edit",
+            name: "EventSteps",
+            component: EventSteps,
+            meta: {title: 'Event Wizzard', gtm: "Event Wizzard"},
+
+        }
+    ]
 };
 
-const appCurrentInfo = {
-  path: "/additional-form",
-  name: "CommonInfoProfile",
-  component: CommonInfoProfile,
-  children: [{
-      path: "/employee-form",
-      name: "EmployeeMain",
-      component: EmployeeMain
-    },
-    {
-      path: "/officeManager-form",
-      name: "OfficeMenageMain",
-      component: OfficeMenageMain
-    },
-    {
-      path: "/events-data",
-      name: "EventForm",
-      component: EventForm
-    },
-    {
-      path: "/dietary",
-      name: "Dietary",
-      component: Dietary
-    },
-    {
-      path: "/company-form",
-      name: "Company",
-      component: Company
-    },
-    {
-      path: "/me-form",
-      name: "MeForm",
-      component: Step2
-    },
-    {
-      path: "/invite",
-      name: "InviteEmployee",
-      component: Invite
-    },
-  ]
+const appCurrentInfo={
+    path: "/additional-form",
+    name: "CommonInfoProfile",
+    component: CommonInfoProfile,
+    children: [
+        {
+            path: "/employee-form",
+            name: "EmployeeMain",
+            component: EmployeeMain
+        },
+        {
+            path: "/officeManager-form",
+            name: "OfficeMenageMain",
+            component: OfficeMenageMain
+        },
+        {
+            path: "/events-data",
+            name: "EventForm",
+            component: EventForm
+        },
+        ,
+        {
+            path: "/dietary",
+            name: "Dietary",
+            component: Dietary
+        },
+        {
+            path: "/company-form",
+            name: "Company",
+            component: Company
+        },
+        {
+            path: "/me-form",
+            name: "MeForm",
+            component: Step2
+        },
+        {
+            path: "/invite",
+            name: "InviteEmployee",
+            component: Invite
+        },
+    ]
 };
 
-const routes = [{
-    path: "/",
-    redirect: "/events",
-    name: "Root",
-    meta: {
-      gtm: "Root"
-    }
-  },
-  appCurrentInfo,
-  authPages,
-  appPages,
-  publicPages,
-  emptyLayoutPages,
-  EventPages,
-  marketPlacePages
+const routes = [
+    {
+        path: "/",
+        redirect: "/events",
+        name: "Root",
+        meta: {gtm : "Root"}
+    },
+    appCurrentInfo,
+    authPages,
+    appPages,
+    publicPages,
+    emptyLayoutPages,
+    EventPages,
+    marketPlacePages
 ];
 
 export default routes;

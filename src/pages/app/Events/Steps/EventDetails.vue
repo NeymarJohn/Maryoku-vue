@@ -24,7 +24,7 @@
                 data-vv-name="numberOfParticipants"
                 v-validate= "modelValidations.numberOfParticipants"
                 required
-                type="text"
+                type="number"
                 @change="calculateBudgetPerGuest()"
                 ></md-input>
               <span class="md-error" v-if="errors.has('numberOfParticipants')">The Guest Count is required and should be a number</span>
@@ -38,7 +38,7 @@
                 data-vv-name="budget"
                 v-validate= "modelValidations.totalBudget"
                 required
-                type="text"
+                type="number"
                 @change="calculateBudgetPerGuest()"
 
               ></md-input>
@@ -345,7 +345,8 @@ export default {
                   eventType: this.eventData.eventType,
                   participantsType: this.eventData.participantsType,
                   category: this.eventData.category,
-                  location : this.eventData.location
+                  location : this.eventData.location,
+                  totalBudget : this.eventData.totalBudget
               }
 
               let editedEvent = new CalendarEvent(eventData);
@@ -428,7 +429,7 @@ export default {
               })
       },
         cancel(){
-            this.$router.push({ path: `/events` });
+            window.history.back();
         }
   },
   data() {
@@ -476,7 +477,7 @@ export default {
         numberOfParticipants: {
           required: true,
           min_value: 1,
-          max_value: 10000,
+          max_value: 10000000,
         },
         status: {
           required: true,
@@ -493,7 +494,7 @@ export default {
         totalBudget: {
           required: true,
             min_value: 1,
-            max_value: 100000,
+            max_value: 100000000,
         },
         guestType: {
           required: false
