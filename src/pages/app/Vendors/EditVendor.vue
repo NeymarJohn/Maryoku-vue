@@ -500,9 +500,7 @@
         newVendor.vendorCategory = this.vendor.vendorCategory;
         newVendor.rank = this.vendor.rank;
         newVendor.avgScore = this.vendor.avgScore;
-        // newVendor.save();
-        newVendor = {...this.vendor}
-        console.log(newVendor)
+        newVendor.save();
 
         this.$notify({
           message: 'Vendor Updated successfully!',
