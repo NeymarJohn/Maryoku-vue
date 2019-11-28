@@ -1020,17 +1020,6 @@
   .capitalize {
     text-transform: capitalize;
   }
-  .hor-divider {
-    border-left: 1px solid #cccccc;
-    border-right: 1px solid #cccccc;
-    margin: 0 .5em;
-    padding: 0 .5em;
-    display: inline-block;
-
-    @media (max-width: $screen-sm-min) {
-      border: none;
-    }
-  }
   .auto-width {
     display: inline-block;
     width: auto;

@@ -55,7 +55,7 @@
                     Location:
                   </div>
                   <div class="info-value">
-                    {{proposalRequest.eventData.location || '-'}}
+                    {{getLocation}}
                   </div>
                 </div>
               </div>
@@ -504,29 +504,6 @@
 
     },
     mounted () {
-
-      // this.isLoading = true;
-      // ProposalRequest.find(this.$route.params.id)
-      //   .then(resp => {
-      //     this.$set(this, 'proposalRequest', resp)
-
-      //     this.proposalRequestRequirements = _.chain(resp.requirements).groupBy('requirementPriority').map(function (value, key) {
-
-      //       return {
-      //         title: key,
-      //         requirements: value
-      //       }
-
-      //     })
-      //       .value();
-
-      //     console.log(this.proposalRequest);
-      //     this.isLoading = false;
-      //   })
-      //   .catch(error => {
-      //     console.log(' error here   -->>>  ', error)
-      //   })
-
       this.getImages();
 
       this.$notify({
@@ -535,7 +512,6 @@
         verticalAlign: 'top',
         type: 'success'
       })
-
     },
     methods: {
       goToLanding () {
@@ -867,6 +843,13 @@
         })
         this.$forceUpdate();
         return total
+      },
+      getLocation() {
+        if (this.proposalRequest) {
+          return this.proposalRequest.eventData.location || '-'
+        } else {
+          return '-'
+        }
       }
     }
   }

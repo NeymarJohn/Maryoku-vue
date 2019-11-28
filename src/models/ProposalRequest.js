@@ -3,15 +3,15 @@ import ProposalRequestComment from './ProposalRequestComment';
 import ProposalRequestRequirement from './ProposalRequestRequirement';
 
 export default class ProposalRequest extends Model {
-    resource() {
-        return 'proposal-requests'
-    }
+  resource() {
+    return 'proposal-requests'
+  }
 
-    comments() {
-        return this.hasMany(ProposalRequestComment)
-    }
+  comments() {
+    return this.hasMany(ProposalRequestComment)
+  }
 
-    requirements() {
-        return this.hasMany(ProposalRequestRequirement)
-    }
+  requirements() {
+    return this.hasMany(ProposalRequestRequirement)
+  }
 }

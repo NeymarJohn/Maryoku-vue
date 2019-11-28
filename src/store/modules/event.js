@@ -20,6 +20,7 @@ const state = {
       status: "draft",
       totalBudget: "",
       currency: "",
+      location: "",
       eventType: null,
       category: null,
       components: null,
