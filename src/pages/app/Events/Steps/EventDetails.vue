@@ -24,7 +24,7 @@
                 data-vv-name="numberOfParticipants"
                 v-validate= "modelValidations.numberOfParticipants"
                 required
-                type="number"
+                type="text"
                 @change="calculateBudgetPerGuest()"
                 ></md-input>
               <span class="md-error" v-if="errors.has('numberOfParticipants')">The Guest Count is required and should be a number</span>
@@ -38,7 +38,7 @@
                 data-vv-name="budget"
                 v-validate= "modelValidations.totalBudget"
                 required
-                type="number"
+                type="text"
                 @change="calculateBudgetPerGuest()"
 
               ></md-input>
@@ -187,7 +187,7 @@ export default {
     ...mapMutations('AnnualPlannerVuex', ['resetForm', 'setEventModal', 'setEventProperty']),
       calculateBudgetPerGuest() {
         if ( this.eventData.totalBudget && this.eventData.numberOfParticipants ) {
-            this.eventData.budgetPerPerson = (parseInt(this.eventData.totalBudget) / this.eventData.numberOfParticipants).toFixed(2);
+            this.eventData.budgetPerPerson = (parseInt(this.eventData.totalBudget) / this.eventData.numberOfParticipants) | numeral('0,0');
         }
       },
     validateDate() {
@@ -345,8 +345,7 @@ export default {
                   eventType: this.eventData.eventType,
                   participantsType: this.eventData.participantsType,
                   category: this.eventData.category,
-                  location : this.eventData.location,
-                  totalBudget : this.eventData.totalBudget
+                  location : this.eventData.location
               }
 
               let editedEvent = new CalendarEvent(eventData);
@@ -429,7 +428,7 @@ export default {
               })
       },
         cancel(){
-            window.history.back();
+            this.$router.push({ path: `/events` });
         }
   },
   data() {
@@ -477,7 +476,7 @@ export default {
         numberOfParticipants: {
           required: true,
           min_value: 1,
-          max_value: 10000000,
+          max_value: 10000,
         },
         status: {
           required: true,
@@ -494,7 +493,7 @@ export default {
         totalBudget: {
           required: true,
             min_value: 1,
-            max_value: 100000000,
+            max_value: 100000,
         },
         guestType: {
           required: false

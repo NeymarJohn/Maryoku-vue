@@ -54,7 +54,7 @@
                 class="star-rating__star"
                 v-for="(rating, ratingIndex) in ratings"
                 :key="ratingIndex"
-                :class="{'is-selected' : ((vendor.rank >= rating) && item.rank != null)}"
+                :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}"
               >★</label>
               {{vendor.avgScore}}
             </div>
@@ -410,6 +410,7 @@
         this.isLoading = true;
         new Vendors({id}).proposalRequests().first().then(proposals => {
           this.proposals = proposals.vendorProposals.filter( proposal => proposal.bidRange != null );
+          console.log(this.proposals)
           this.proposals.forEach(proposal => {
             proposal.attachments.forEach( attachment => {
               this.attachments.push(attachment)

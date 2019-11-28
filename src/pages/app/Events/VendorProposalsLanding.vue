@@ -171,8 +171,8 @@ export default {
       return moment(date).format("MMM D, YYYY [at] hh:mma");
     },
     getLocation() {
-      if (this.vendor && this.proposalRequest) {
-        return this.vendor.vendorAddressLine1 || this.proposalRequest.eventData.location || '-'
+      if (this.proposalRequest) {
+        return this.proposalRequest.eventData.location || '-'
       } else {
         return '-'
       }
