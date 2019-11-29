@@ -71,14 +71,14 @@
                 <br>
                 {{vendorInfo.vendorDisplayName}}
               </div>
-              <template v-if="vendorProposal.attachements.length">
+              <template v-if="attachedFiles.length">
                 <div class="attachments-list">
                   <h6>Attachments</h6>
                   <ul class="attachments-list_items">
-                    <li v-for="(item,index) in vendorProposal.attachements" :key="index">
-                      <a target="_blank" :href="`${serverUrl}/1/proposal-requests/${proposal.id}/files/${item}`">
+                    <li v-for="(item,index) in attachedFiles" :key="index">
+                      <a target="_blank" :href="`${item}`">
                         <md-icon>attach_file</md-icon>
-                        Attachment {{index+1}} 
+                        Attachment {{index+1}}
                       </a>
                     </li>
                   </ul>
@@ -108,7 +108,7 @@
                 <div class="cost-label">Cost Breakdown</div>
                 <br/>
                 <ul class="cost-breakdown__items">
-                  <li v-for="(item,index) in proposal.costBreakdown" :key="index">
+                  <li v-for="(item,index) in proposal.costBreakdown" :key="index" v-if="item.service">
                     {{item.service}}: ${{item.cost}}
                   </li>
                 </ul>
@@ -164,11 +164,11 @@
                 <p>{{item.comment}}</p>
               </div>
             </li>
-            <li v-for="(item,index) in extraMissingRequirements" :key="index" class="proposals-waiting-approval" v-if="extraMissingRequirements.length">
+            <li v-for="(item,index) in extraMissingRequirements" :key="index+vendorProposal.included.length" class="proposals-waiting-approval" v-if="extraMissingRequirements.length">
               <div class="proposal-info">
                 <div class="proposal-title">{{item.requirementValue}}x {{item.requirementTitle}} <small style="display: none;">(Suggested by vendor)</small></div>
                 <div class="proposal-desc" v-for="(comment,index) in item.comments" :key="index">
-                  {{comment.commentText}} 
+                  {{comment.commentText}}
                   <md-button v-if="comment.commentText.length > 300" class="md-primary md-simple md-sm read-more no-uppercase">Read more</md-button>
                 </div>
               </div>
@@ -243,9 +243,9 @@
             <div class="section-title">
               <h3>Vendor's Images</h3>
             </div>
-            <md-button 
+            <md-button
               v-if="images.length"
-              class="md-default view-images no-uppercase" 
+              class="md-default view-images no-uppercase"
               @click="view()"
             >
               View Images
@@ -253,31 +253,31 @@
             <ul class="images-list">
               <li class="image-item" v-for="(item,index) in images" :key="index">
                 <div :style="`
-                  background: url(${item.src}) center center no-repeat; 
+                  background: url(${item.src}) center center no-repeat;
                   background-size: cover;`">
                 </div>
               </li>
-              <li class="image-item" v-if="vendorProposal.attachements.length - images.length - attachedFiles.length">
-                <div>
-                  <vue-element-loading :active="true" spinner="ring" color="#FF547C">
-                  </vue-element-loading>
-                </div>
-              </li>
-              <li class="image-item" v-for="(af,index) in attachedFiles" :key="index">
-                <vue-element-loading 
-                  :active="attachmentsLoadingCount > 0" 
-                  spinner="ring" color="#FF547C">
-                </vue-element-loading>
-                <iframe 
-                  seamless 
-                  frameborder="0" 
-                  @load="attachmentsLoadingCount--"
-                  :src="`${af}`"
-                  style="width: 100%; min-height: 320px; padding: 0; margin: 0;">
-                </iframe>
-              </li>
+<!--              <li class="image-item" v-if="vendorProposal.attachements.length - images.length - attachedFiles.length">-->
+<!--                <div>-->
+<!--                  <vue-element-loading :active="true" spinner="ring" color="#FF547C">-->
+<!--                  </vue-element-loading>-->
+<!--                </div>-->
+<!--              </li>-->
+<!--              <li class="image-item" v-for="(af,index) in attachedFiles" :key="index">-->
+<!--                <vue-element-loading-->
+<!--                  :active="attachmentsLoadingCount > 0"-->
+<!--                  spinner="ring" color="#FF547C">-->
+<!--                </vue-element-loading>-->
+<!--                <iframe-->
+<!--                  seamless-->
+<!--                  frameborder="0"-->
+<!--                  @load="attachmentsLoadingCount&#45;&#45;"-->
+<!--                  :src="`${af}`"-->
+<!--                  style="width: 100%; min-height: 320px; padding: 0; margin: 0;">-->
+<!--                </iframe>-->
+<!--              </li>-->
             </ul>
-            <LightBox 
+              <LightBox
               v-if="images.length"
               :images="images"
               ref="lightbox"
@@ -352,7 +352,7 @@
             </li>
           </ul>
           <md-button class="md-rose md-sm md-simple">
-            show more 
+            show more
             <md-icon>add</md-icon>
           </md-button>
         </div>
@@ -361,14 +361,14 @@
             <li style="display: none;">
               <div class="proposal-info">
                 <div class="proposal-title">
-                  Payment & cost 
+                  Payment & cost
                   <span>
                     <md-icon>attach_money</md-icon>
                     Net +30
                   </span>
                 </div>
                 <div class="proposal-desc">
-                  A 50% deposit will be due on or before 18/1/20. The remaining balance will be collected a week prior to the.. 
+                  A 50% deposit will be due on or before 18/1/20. The remaining balance will be collected a week prior to the..
                   <md-button class="md-primary md-simple md-sm read-more no-uppercase">Read more</md-button>
                 </div>
               </div>
@@ -376,14 +376,14 @@
             <li style="display: none;">
               <div class="proposal-info">
                 <div class="proposal-title">
-                  Payment & cost 
+                  Payment & cost
                   <span>
                     <md-icon>attach_money</md-icon>
                     Net +30
                   </span>
                 </div>
                 <div class="proposal-desc">
-                  A 50% deposit will be due on or before 18/1/20. The remaining balance will be collected a week prior to the.. 
+                  A 50% deposit will be due on or before 18/1/20. The remaining balance will be collected a week prior to the..
                   <md-button class="md-primary md-simple md-sm read-more no-uppercase">Read more</md-button>
                 </div>
               </div>
@@ -398,13 +398,13 @@
                   <li>
                     <a href="">
                       <md-icon>attach_file</md-icon>
-                      Insurance certificate 
+                      Insurance certificate
                     </a>
                   </li>
                   <li>
                     <a href="">
                       <md-icon>attach_file</md-icon>
-                      Other business indication 
+                      Other business indication
                     </a>
                   </li>
                 </ul>
@@ -522,10 +522,11 @@ export default {
       this.attachmentsLoadingCount = 0
 
       this.vendorProposal.attachements.forEach((item)=>{
+
         const fullPath = `${this.serverUrl}/1/proposal-requests/${this.proposal.id}/files/${item}`
 
         this.$http.get(
-          fullPath, 
+          fullPath,
           { headers: this.$auth.getAuthHeader() }
         ).then((response) => {
           if (response && response.headers) {

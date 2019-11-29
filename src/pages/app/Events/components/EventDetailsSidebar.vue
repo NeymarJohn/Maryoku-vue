@@ -113,7 +113,12 @@
         </div>
         <div class="md-layout md-gutter">
           <div class="md-layout-item">
-            <event-paid-total-amounts :paid="event.totalBudget" :total="totalRemainingBudget"></event-paid-total-amounts>
+            <event-paid-total-amounts 
+              :paid="event.totalBudget" 
+              :total="totalRemainingBudget" 
+              :toBePaid="getToBePaid"
+            >
+            </event-paid-total-amounts>
           </div>
         </div>
       </div>
@@ -163,14 +168,16 @@
   import Calendar from '@/models/Calendar'
   import CalendarEvent from '@/models/CalendarEvent'
   import EventComponent from '@/models/EventComponent'
-  import ChartComponent from '@/components/Cards/ChartComponent'
+  import EventComponentVendor from '@/models/EventComponentVendor'
   import CalendarEventStatistics from '@/models/CalendarEventStatistics'
 
   // import auth from '@/auth';
+  import ChartComponent from '@/components/Cards/ChartComponent'
   import _ from 'underscore'
   import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
   import EventSidePanel from '../EventSidePanel.vue'
   import EventPaidTotalAmounts from '../components/EventPaidTotalAmounts.vue'
+
 
   export default {
     name: 'event-details-sidebar',
@@ -201,8 +208,8 @@
       seriesData: [],
       isLoading: false,
       routeName: null,
-      budgetPerEmployee: 0
-
+      budgetPerEmployee: 0,
+      toBePaid: 0
     }),
     methods: {
       ...mapMutations('EventPlannerVuex', [
@@ -236,15 +243,14 @@
             let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
 
             _calendar.calendarEvents().find(this.$route.params.id).then(event => {
+              //this.event = event
+              this.eventId = event.id
+              this.calendarEvent = event
+              this.selectedComponents = event.components;
 
-                //this.event = event
-                this.eventId = event.id
-                this.calendarEvent = event
-                this.selectedComponents = event.components;
+              this.getCalendarEventStatistics(event)
 
-                this.getCalendarEventStatistics(event)
-
-                this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
+              this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
             })
           } else {
             this.eventId = this.event.id
@@ -260,7 +266,6 @@
         });
       },
       getCalendarEventStatistics (evt) {
-
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: evt.id});
 
@@ -287,10 +292,7 @@
           })
       },
       openEventModal () {
-
-
-          this.$router.push({ path: `/event/`+ this.event.id + '/edit' });
-
+        this.$router.push({ path: `/event/`+ this.event.id + '/edit' });
 
         //   window.currentPanel = this.$showPanel({
         //   component: EventSidePanel,
@@ -348,6 +350,33 @@
             donutWidth: 8,
           }
         }
+      },
+      getToBePaid() {
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: this.event.id}); 
+        let eventComponents = this.event.components;
+        let toBePaid = 0
+
+        if (eventComponents !== undefined) {
+          eventComponents.forEach( evtComponent => {
+            let selected_block = new EventComponent({id : evtComponent.id});
+            new EventComponentVendor().for(
+              calendar, 
+              event, 
+              selected_block
+            ).get().then(ec => {
+              ec.forEach( e => {
+                e.proposals.filter(item => item.accepted == true).forEach(proposal => {
+                  toBePaid += proposal.cost
+                })
+              })
+            })
+            .catch(error => {
+              console.log('EventComponentVendor error =>',error)
+            });
+          })
+        }
+        return toBePaid
       }
     },
     filters: {
@@ -363,7 +392,7 @@
     },
     watch: {
       event(newVal, oldVal){
-        this.getEvent();
+        this.getEvent()
       }
     }
   }
@@ -377,24 +406,23 @@
   }
   .control-main-block {
     .company-control-logo {
-        margin-right: 8px;
+      margin-right: 8px;
 
-        &:last-child {
-            margin-right: 0;
-        }
-
-        i {
-            font-size: 24px !important;
-        }
+      &:last-child {
+        margin-right: 0;
+      }
+      i {
+        font-size: 24px !important;
+      }
     }
 
     .md-button.selected {
-        background-color: #eb3e79 !important;
-        border-color: #eb3e79 !important;;
+      background-color: #eb3e79 !important;
+      border-color: #eb3e79 !important;;
 
-        i {
-            color: #fff !important;
-        }
+      i {
+        color: #fff !important;
+      }
     }
   }
 
