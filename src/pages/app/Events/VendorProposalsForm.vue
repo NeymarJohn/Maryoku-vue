@@ -55,7 +55,7 @@
                     Location:
                   </div>
                   <div class="info-value">
-                    {{getLocation}}
+                    {{proposalRequest.eventData.location || '-'}}
                   </div>
                 </div>
               </div>
@@ -506,6 +506,29 @@
 
     },
     mounted () {
+
+      // this.isLoading = true;
+      // ProposalRequest.find(this.$route.params.id)
+      //   .then(resp => {
+      //     this.$set(this, 'proposalRequest', resp)
+
+      //     this.proposalRequestRequirements = _.chain(resp.requirements).groupBy('requirementPriority').map(function (value, key) {
+
+      //       return {
+      //         title: key,
+      //         requirements: value
+      //       }
+
+      //     })
+      //       .value();
+
+      //     console.log(this.proposalRequest);
+      //     this.isLoading = false;
+      //   })
+      //   .catch(error => {
+      //     console.log(' error here   -->>>  ', error)
+      //   })
+
       this.getImages();
 
       this.$notify({
@@ -514,6 +537,7 @@
         verticalAlign: 'top',
         type: 'success'
       })
+
     },
     methods: {
       goToLanding () {
@@ -558,7 +582,8 @@
       },
       createImage (file, type) {
         let reader = new FileReader()
-        let vm = this
+        let vm = this;
+
 
         this.isLoading = true
 
@@ -566,7 +591,8 @@
           const proposalRequest = new ProposalRequest({id: this.proposalRequest.id})
 
           return new ProposalRequestImage({
-            vendorProposalFile: e.target.result
+            vendorProposalFile: e.target.result,
+              name : file.name
           }).for(proposalRequest).save().then(result => {
             this.isLoading = false
             this.proposalRequestImages.push({id: result.id})
@@ -652,8 +678,6 @@
         //this.isLoading = true
 
         reader.onload = e => {
-          console.log('createLicense');
-
           let  proposalRequest = new ProposalRequest({id: vm.$route.params.id})
 
           proposalRequest.id = this.proposalRequest.id;
@@ -661,7 +685,7 @@
 
           return proposalRequest.save()
             .then(res => {
-              console.log('saved ', res)
+
             })
             .catch(error => {
               console.log(error)
@@ -845,13 +869,6 @@
         })
         this.$forceUpdate();
         return total
-      },
-      getLocation() {
-        if (this.proposalRequest) {
-          return this.proposalRequest.eventData.location || '-'
-        } else {
-          return '-'
-        }
       }
     }
   }

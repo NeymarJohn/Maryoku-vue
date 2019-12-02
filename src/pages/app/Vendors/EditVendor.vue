@@ -40,142 +40,58 @@
               {{logoText}}
             </div>
           </div>
-          <div class="title-child mt-4">
-            <div class="md-layout-item">
-              <md-field :class="[
-                {'md-valid': !errors.has('vendorDisplayName') && vendor.vendorDisplayName},
-                {'md-error': errors.has('vendorDisplayName')}]"
-              >
-                <label>Display Name</label>
-                <md-input 
-                  v-model="vendor.vendorDisplayName"
-                  required
-                  data-vv-name="vendorDisplayName"
-                  name="vendorDisplayName"
-                  v-validate="modelValidations.vendorDisplayName"
-                />
-                <slide-y-down-transition>
-                  <md-icon class="error" v-show="errors.has('vendorDisplayName')">close</md-icon>
-                </slide-y-down-transition>
-                <slide-y-down-transition>
-                  <md-icon class="success" v-show="!errors.has('vendorDisplayName') && vendor.vendorDisplayName">done</md-icon>
-                </slide-y-down-transition>
+          <div class="title-child">
+            <h3 
+              v-if="!selectedField || selectedField != 'vendor_title'" 
+              @click="selectedField = 'vendor_title'"
+            >
+              {{vendor.vendorDisplayName}}
+            </h3>
+            <template v-if="selectedField == 'vendor_title'">
+              <md-field>
+                <label>Vendor Title</label>
+                <md-input v-model="vendor.vendorDisplayName" @blur="updateVendor()"></md-input>
               </md-field>
+            </template>
+            <span class="address" @click="selectedField = 'address'">
+              <i class="fa fa-map-marker-alt"></i>
+              <template v-if="!selectedField || selectedField != 'address'">
+                {{vendor.vendorAddressLine1}}
+              </template>
+              <template v-if="selectedField == 'address'">
+                <md-field class="auto-width">
+                  <label>Address</label>
+                  <md-input v-model="vendor.vendorAddressLine1" @blur="updateVendor()"></md-input>
+                </md-field>
+              </template>
+            </span>
+            <br class="hidden-lg hidden-md"/>
+            <div class="hor-divider">
+              <label
+                class="star-rating__star"
+                v-for="(rating, ratingIndex) in ratings"
+                :key="ratingIndex"
+                :class="{'is-selected' : ((vendor.rank >= rating) && item.rank != null)}"
+              >★</label>
+              {{vendor.avgScore}}
             </div>
-          </div>
-          <div class="title-child mt-4">
-            <div class="md-layout-item">
-              <md-field 
-                :class="[
-                  {'md-valid': !errors.has('vendorDisplayName') && vendor.vendorDisplayName},
-                  {'md-error': errors.has('vendorDisplayName')}
-                ]"
-              >
-                <label><i class="fa fa-map-marker-alt"></i> Address</label>
-                <md-input v-model="vendor.vendorAddressLine1"></md-input>
-                <slide-y-down-transition>
-                  <md-icon class="error" v-show="errors.has('vendorAddressLine1')">close</md-icon>
-                </slide-y-down-transition>
-                <slide-y-down-transition>
-                  <md-icon class="success" v-show="!errors.has('vendorAddressLine1') && vendor.vendorAddressLine1">done</md-icon>
-                </slide-y-down-transition>
-              </md-field>
-            </div>
-          </div>
-          <div class="title-child mt-4">
-            <div class="md-layout-item">
-              <md-field class="auto-width">
-                <label>Avg Score</label>
-                <md-input v-model="vendor.avgScore" type="number" min="0" @keyup="validateScore()"></md-input>
-              </md-field>
-            </div>
+            <br class="hidden-lg hidden-md"/>
+            <a class="favorite">
+              <md-icon>favorite_border</md-icon> add to favorites
+            </a>
           </div>
         </div>
       </div>
       <div class="md-layout-item button-group text-right">
-        <div class="title-child mt-2">
-          <div class="md-layout-item">
-            <label>Rating</label>
-            <label
-              class="star-rating__star"
-              v-for="(rating, ratingIndex) in ratings"
-              :key="ratingIndex"
-              @click="setRating(ratingIndex)"
-              :class="{'is-selected' : ((vendor.rank >= rating) && vendor.rank != null)}"
-            >★</label>
-            <md-button v-if="creation_mode" class="md-purple md-lg md-save" @click="addVendor">
-              Create
-            </md-button>
-            <md-button v-else class="md-purple md-lg md-save" @click="updateVendor">
-              Save
-            </md-button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="md-layout bg-white">
-      <div class="md-layout-item display-flex">
-        <div class="md-layout-item">
-          <md-field :class="[
-            {'md-valid': !errors.has('vendorMainEmail') && vendor.vendorMainEmail},
-            {'md-error': errors.has('vendorMainEmail')}]">
-            <label>Email</label>
-            <md-input v-model="vendor.vendorMainEmail"
-              type="email"
-              required
-              data-vv-name="vendorMainEmail"
-              name="vendorMainEmail"
-              v-validate="modelValidations.vendorMainEmail"
-            />
-            <slide-y-down-transition>
-              <md-icon class="error" v-show="errors.has('vendorMainEmail')">close</md-icon>
-            </slide-y-down-transition>
-            <slide-y-down-transition>
-              <md-icon class="success" v-show="!errors.has('vendorMainEmail') && vendor.vendorMainEmail">done</md-icon>
-            </slide-y-down-transition>
-          </md-field>
-        </div>
-        <div class="md-layout-item">
-          <md-field :class="[
-            {'md-valid': !errors.has('vendorMainPhoneNumber') && vendor.vendorMainPhoneNumber},
-            {'md-error': errors.has('vendorMainPhoneNumber')}]">
-            <label>Phone Number</label>
-            <md-input
-              v-model="vendor.vendorMainPhoneNumber"
-              type="text"
-              @keydown="onlyNumber"
-              required
-              data-vv-name="vendorMainPhoneNumber"
-              name="vendorMainPhoneNumber"
-              v-validate="modelValidations.vendorMainPhoneNumber"></md-input>
-            <slide-y-down-transition>
-              <md-icon class="error" v-show="errors.has('vendorMainPhoneNumber')">close</md-icon>
-            </slide-y-down-transition>
-            <slide-y-down-transition>
-              <md-icon class="success" v-show="!errors.has('vendorMainPhoneNumber') && vendor.vendorMainPhoneNumber">done</md-icon>
-            </slide-y-down-transition>
-          </md-field>
-        </div>
-      </div>
-      <div class="md-layout-item display-flex">
-        <div class="md-layout-item">
-          <md-field :class="[
-            {'md-valid': !errors.has('vendorWebsite') && vendor.vendorWebsite},
-            {'md-error': errors.has('vendorWebsite')}]">
-            <label>Website</label>
-            <md-input v-model="vendor.vendorWebsite"
-              type="text"
-              data-vv-name="vendorWebsite"
-              name="vendorWebsite"
-            />
-            <slide-y-down-transition>
-              <md-icon class="error" v-show="errors.has('vendorWebsite')">close</md-icon>
-            </slide-y-down-transition>
-            <slide-y-down-transition>
-              <md-icon class="success" v-show="!errors.has('vendorWebsite') && vendor.vendorWebsite">done</md-icon>
-            </slide-y-down-transition>
-          </md-field>
-        </div>
+        <md-button class="md-success md-lg">
+          Contact Vendor
+        </md-button>
+        <md-button class="md-danger md-lg">
+          Create Brief Ask for Proposal
+        </md-button>
+        <h4>
+          Avg. Response Time: {{vendor.rank}}
+        </h4>
       </div>
     </div>
     <div class="md-layout bg-white">
@@ -216,7 +132,14 @@
       <div class="tab-item" 
         :class="[{'visited': currentTab > 1}, {'active': currentTab == 1}]" 
         v-on:click="currentTab = 1">
-        <template>
+        <span 
+          class="capitalize"
+          v-if="!selectedField || selectedField != 'vendor_category'" 
+          @click="selectedField = 'vendor_category'"
+        >
+          {{vendor.vendorCategory}}
+        </span>
+        <template v-if="selectedField == 'vendor_category'">
           <md-field :class="[{'md-error': errors.has('vendorCategory')}]" class="select-with-icon">
             <label for="category">Category</label>
             <md-select 
@@ -463,9 +386,6 @@
   import VendorFeedbacks from './components/VendorFeedbacks.vue'
   import VendorSimilarItem from './components/VendorSimilarItem.vue'
   import LightBox from 'vue-image-lightbox'
-  import {
-    SlideYDownTransition
-  } from "vue2-transitions";
 
   export default {
     components: {
@@ -474,13 +394,19 @@
       VendorSimilarItem,
       VendorFeedbacks,
       Icon,
-      SlideYDownTransition,
       LightBox
+    },
+    props: {
+      item: {
+        type: Object,
+        default: () => {
+          return {};
+        }
+      },
     },
     data () {
       return {
         isLoading: true,
-        creation_mode: false,
         vendor: {statistics: {}},
         isVendorLogo: null,
         serverUrl: process.env.SERVER_URL,
@@ -499,24 +425,6 @@
           {image: '/static/img/shutterstock_289440710.png', thumbnail: 'thumbnail', score: '5', title: 'title'},
           {image: '/static/img/shutterstock_289440710.png', thumbnail: 'thumbnail', score: '5', title: 'title'},
         ],
-        modelValidations: {
-          vendorDisplayName: {
-            required: true,
-            min: 5
-          },
-          vendorMainEmail: {
-            required: true,
-            email: true
-          },
-          vendorMainPhoneNumber: {
-            required: true,
-            min: 5
-          },
-          vendorCategory: {
-            required: true,
-            min: 5
-          }
-        },
         ratings: [1,2,3,4,5],
         currentTab: 1,
         selectedField: null,
@@ -537,13 +445,8 @@
       let _self = this
       this.isLoading = false;
 
-      if (this.$route.params.id) {
-        this.getVendor()
-        this.getVendorProposals(this.$route.params.id)
-      } else {
-        this.creation_mode = true
-        this.fillImages()
-      }
+      this.getVendor()
+      this.getVendorProposals(this.$route.params.id)
     },
     methods: {
       getVendor() {
@@ -569,8 +472,14 @@
               }
             })
           });
-          this.fillImages()
-          this.isLoading = false
+          const start = this.bgImages.length
+          const diff = 5 - this.bgImages.length
+          if (this.bgImages.length < 5) {
+            for (let i = 0; i < diff; i++) {
+              this.bgImages.push(this.defaultImg)
+            }
+          }
+          this.isLoading = false;
         });
       },
       view() {
@@ -579,52 +488,10 @@
         }
       },
       onChangeCategory() {
-        // if (this.isDropped) {
-        //   this.updateVendor()
-        // }
+        if (this.isDropped) {
+          this.updateVendor()
+        }
         this.isDropped = !this.isDropped
-      },
-      setRating(ratingIndex) {
-        this.vendor.rank = parseInt(ratingIndex) + 1
-      },
-      validateScore() {
-        this.vendor.avgScore = this.vendor.avgScore > 100 ? this.vendor.avgScore = 100 : this.vendor.avgScore
-      },
-      onlyNumber(event) {
-        const key = event.keyCode ? event.keyCode : event.which;
-        if (!(event.ctrlKey || event.altKey || (47 < key && key < 58 && event.shiftKey == false) || (95 < key && key < 106) || (key == 8) || (key == 9) || (key > 34 && key < 41) || (key == 46))) { // 46 is dot
-          event.preventDefault();
-        }
-      },
-      fillImages() {
-        const start = this.bgImages.length
-        const diff = 5 - this.bgImages.length
-        if (this.bgImages.length < 5) {
-          for (let i = 0; i < diff; i++) {
-            this.bgImages.push(this.defaultImg)
-          }
-        }
-      },
-      async addVendor() {
-        this.$validator.validateAll().then(res => {
-          if (res) {
-            let newVendor = new Vendors({});
-
-            newVendor.attach(this.vendor).then((res) => {
-              this.$emit('vendorCreated')
-              this.$emit('selectVendor', res.data.item)
-              this.$notify({
-                message: 'Vendor created successfully!',
-                horizontalAlign: 'center',
-                verticalAlign: 'top',
-                type: 'success'
-              })
-            });
-          } else {
-            this.$emit("on-validated", res);
-            return res;
-          }
-        });
       },
       async updateVendor() {
         let newVendor = await Vendors.find(this.vendor.id);
@@ -632,14 +499,8 @@
         newVendor.vendorDisplayName = this.vendor.vendorDisplayName;
         newVendor.vendorAddressLine1 = this.vendor.vendorAddressLine1;
         newVendor.vendorCategory = this.vendor.vendorCategory;
-        newVendor.rank = this.vendor.rank;
-        newVendor.avgScore = this.vendor.avgScore;
-        newVendor.vendorWebsite = this.vendor.vendorWebsite;
-        newVendor.vendorMainEmail = this.vendor.vendorMainEmail;
-        newVendor.vendorMainPhoneNumber = this.vendor.vendorMainPhoneNumber;
-        newVendor.vendorTagging = this.vendor.vendorTagging;
         newVendor.save();
-        
+
         this.$notify({
           message: 'Vendor Updated successfully!',
           horizontalAlign: 'center',
@@ -743,7 +604,7 @@
       }
 
       .button-group {
-        .md-purple, .md-success {
+        .md-success {
           margin-right: 1em;
 
           @media (max-width: $screen-sm-min) {
@@ -788,6 +649,14 @@
             align-items: center;
             justify-content: center;
             font-size: 48px;
+          }
+          .address {
+            font-size: 12px;
+            i {
+              font-size: 14px!important;
+              padding-right: 4px;
+              color: $grey-400;
+            }
           }
           label {
             font-size: 12px;
@@ -1020,24 +889,19 @@
   .capitalize {
     text-transform: capitalize;
   }
+  .hor-divider {
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+    margin: 0 .5em;
+    padding: 0 .5em;
+    display: inline-block;
+
+    @media (max-width: $screen-sm-min) {
+      border: none;
+    }
+  }
   .auto-width {
     display: inline-block;
     width: auto;
-  }
-  input[type=number]::-webkit-inner-spin-button,
-  input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  .display-flex {
-    display: flex;
-  }
-  .mt-2 {
-    margin-top: 1rem!important;
-  }
-  .md-save {
-    position: relative;
-    top: -16px;
-    margin-left: 1em;
   }
 </style>

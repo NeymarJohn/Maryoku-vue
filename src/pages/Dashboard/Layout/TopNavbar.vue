@@ -275,7 +275,7 @@
             sourceEventData: this.topBarEvent,
             year: this.$route.params.year,
             month: this.$route.params.month,
-            openInPlannerOption: false
+              openInPlannerOption: false
           }
         });
       },

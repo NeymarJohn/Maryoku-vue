@@ -113,12 +113,7 @@
         </div>
         <div class="md-layout md-gutter">
           <div class="md-layout-item">
-            <event-paid-total-amounts 
-              :paid="event.totalBudget" 
-              :total="totalRemainingBudget" 
-              :toBePaid="getToBePaidAmount"
-            >
-            </event-paid-total-amounts>
+            <event-paid-total-amounts :paid="event.totalBudget" :total="totalRemainingBudget"></event-paid-total-amounts>
           </div>
         </div>
       </div>
@@ -168,16 +163,14 @@
   import Calendar from '@/models/Calendar'
   import CalendarEvent from '@/models/CalendarEvent'
   import EventComponent from '@/models/EventComponent'
-  import EventComponentVendor from '@/models/EventComponentVendor'
+  import ChartComponent from '@/components/Cards/ChartComponent'
   import CalendarEventStatistics from '@/models/CalendarEventStatistics'
 
   // import auth from '@/auth';
-  import ChartComponent from '@/components/Cards/ChartComponent'
   import _ from 'underscore'
   import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
   import EventSidePanel from '../EventSidePanel.vue'
   import EventPaidTotalAmounts from '../components/EventPaidTotalAmounts.vue'
-
 
   export default {
     name: 'event-details-sidebar',
@@ -208,8 +201,8 @@
       seriesData: [],
       isLoading: false,
       routeName: null,
-      budgetPerEmployee: 0,
-      acceptedProposals: []
+      budgetPerEmployee: 0
+
     }),
     methods: {
       ...mapMutations('EventPlannerVuex', [
@@ -243,14 +236,15 @@
             let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
 
             _calendar.calendarEvents().find(this.$route.params.id).then(event => {
-              //this.event = event
-              this.eventId = event.id
-              this.calendarEvent = event
-              this.selectedComponents = event.components;
 
-              this.getCalendarEventStatistics(event)
+                //this.event = event
+                this.eventId = event.id
+                this.calendarEvent = event
+                this.selectedComponents = event.components;
 
-              this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
+                this.getCalendarEventStatistics(event)
+
+                this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
             })
           } else {
             this.eventId = this.event.id
@@ -266,6 +260,7 @@
         });
       },
       getCalendarEventStatistics (evt) {
+
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
         let event = new CalendarEvent({id: evt.id});
 
@@ -292,7 +287,10 @@
           })
       },
       openEventModal () {
-        this.$router.push({ path: `/event/`+ this.event.id + '/edit' });
+
+
+          this.$router.push({ path: `/event/`+ this.event.id + '/edit' });
+
 
         //   window.currentPanel = this.$showPanel({
         //   component: EventSidePanel,
@@ -311,32 +309,6 @@
         // this.setEventModal({showModal: true})
         // this.setModalSubmitTitle('Save')
         // this.setEditMode({editMode: true})
-      },
-      getAcceptedProposals(calendar, event, eventComponents) {
-        if (calendar !== null && event !== null && eventComponents !== undefined) {
-          eventComponents.forEach( evtComponent => {
-            let selected_block = new EventComponent({id : evtComponent.id});
-            new EventComponentVendor().for(
-              calendar, 
-              event, 
-              selected_block
-            ).get().then(ec => {
-              ec.forEach( e => {
-                e.proposals.filter(item => item.accepted == true).forEach(proposal => {
-                  if (this.acceptedProposals.filter( p => p.proposalId == proposal.id ).length == 0) {
-                    this.acceptedProposals.push({
-                      proposalId: proposal.id,
-                      proposalCost: proposal.cost
-                    })
-                  }
-                })
-              })
-            })
-            .catch(error => {
-              console.log('EventComponentVendor error =>',error)
-            });
-          })
-        }
       }
     },
     created() {
@@ -358,8 +330,6 @@
       })
 
       this.getEvent();
-
-      this.getAcceptedProposals()
     },
     computed: {
       ...mapGetters({
@@ -378,24 +348,11 @@
             donutWidth: 8,
           }
         }
-      },
-      getToBePaidAmount() {
-        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-        let event = new CalendarEvent({id: this.event.id})
-        let eventComponents = this.event.components
-        let toBePaidAmount = 0
-        this.getAcceptedProposals(calendar, event, eventComponents)
-
-        if (this.acceptedProposals.length > 0 ) {
-          return this.acceptedProposals.reduce((p, item) => p + item.proposalCost, 0)
-        } else {
-          return 0
-        }
       }
     },
     filters: {
       formatDate: function (date) {
-        return moment(date).format('MMM Do YYYY')
+        return moment(date).format('MMM Do YYYY ')
       },
       formatTime: function (date) {
         return moment(date).format('h:00 A')
@@ -406,7 +363,7 @@
     },
     watch: {
       event(newVal, oldVal){
-        this.getEvent()
+        this.getEvent();
       }
     }
   }
@@ -420,23 +377,24 @@
   }
   .control-main-block {
     .company-control-logo {
-      margin-right: 8px;
+        margin-right: 8px;
 
-      &:last-child {
-        margin-right: 0;
-      }
-      i {
-        font-size: 24px !important;
-      }
+        &:last-child {
+            margin-right: 0;
+        }
+
+        i {
+            font-size: 24px !important;
+        }
     }
 
     .md-button.selected {
-      background-color: #eb3e79 !important;
-      border-color: #eb3e79 !important;
+        background-color: #eb3e79 !important;
+        border-color: #eb3e79 !important;;
 
-      i {
-        color: #fff !important;
-      }
+        i {
+            color: #fff !important;
+        }
     }
   }
 

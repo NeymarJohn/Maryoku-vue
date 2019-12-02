@@ -128,9 +128,6 @@
 <script>
 import moment from "moment"
 import Vendors from '@/models/Vendors'
-import Calendar from "@/models/Calendar"
-import CalendarEvent from "@/models/CalendarEvent"
-
 
 export default {
   props: ["proposalRequest", "proposals", "firstTime"],
@@ -139,22 +136,12 @@ export default {
   data() {
     return {
       showSkipLink: false,
-      upcomingEvents: [],
       vendor: null
     };
   },
   created() {},
   mounted() {
     this.getVendor()
-
-    let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-
-    let m = new CalendarEvent().for(_calendar).fetch(this, true);
-    m.then(allEvents=>{
-      console.log(allEvents)
-      this.upcomingEvents = allEvents
-      this.isLoading = false;
-    });
   },
   methods: {
     goToDetails() {
@@ -184,18 +171,8 @@ export default {
       return moment(date).format("MMM D, YYYY [at] hh:mma");
     },
     getLocation() {
-      console.log(this.proposalRequest)
-      console.log(this.upcomingEvents)
-      console.log('test', this.upcomingEvents.filter( item => 
-        item.participantsType == this.proposalRequest.eventData.participantsType && 
-        item.numberOfParticipants == this.proposalRequest.eventData.numberOfParticipants
-        // item.participantsType == this.proposalRequest.eventData.participantsType &&
-        // item.eventStartMillis == this.proposalRequest.eventStartMillis && 
-        // item.eventEndMillis == this.proposalRequest.eventEndMillis 
-      ))
-
-      if (this.proposalRequest) {
-        return this.proposalRequest.eventData.location || '-'
+      if (this.vendor && this.proposalRequest) {
+        return this.vendor.vendorAddressLine1 || this.proposalRequest.eventData.location || '-'
       } else {
         return '-'
       }

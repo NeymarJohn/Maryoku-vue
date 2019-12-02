@@ -318,20 +318,11 @@ let appPages = {
       },
     },
     {
-      path: "/vendors/create",
-      name: "CreateVendor",
-      component: EditVendor,
-      meta: {
-        title: 'Create Vendor',
-        gtm: "Create Vendor"
-      },
-    },
-    {
       path: "/vendors/:id/edit",
       name: "EditVendor",
       component: EditVendor,
       meta: {
-        title: 'Edit Vendor',
+        title: 'Eedit Vendor',
         gtm: "Edit Vendor",
         opaque: false
       },

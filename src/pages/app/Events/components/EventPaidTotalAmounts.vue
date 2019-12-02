@@ -11,7 +11,7 @@
     <div class="percentage">
       <div class="inner" :style="percentageStyle"></div>
     </div>
-    <h3>${{toBePaid | numeral('0,0')}} to be paid</h3>
+    <h3>${{total-paid | numeral('0,0')}} to be paid</h3>
   </div>
 </template>
 <script>
@@ -23,7 +23,6 @@ export default {
   props:{
     paid: Number, 
     total: Number,
-    toBePaid: Number
   },
   components: {   
   },

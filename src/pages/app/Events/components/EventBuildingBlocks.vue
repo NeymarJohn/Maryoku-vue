@@ -15,10 +15,8 @@
                 <md-option value="guest">Per Guest</md-option>
               </md-select>
             </md-field>
-            <md-button 
-              class="md-default md-simple add-new-block-btn no-padding"
-              @click="showAddEventElementsModal()"
-            >
+            <md-button class="md-default md-simple add-new-block-btn no-padding"
+                        @click="showAddEventElementsModal()">
               <md-icon>add</md-icon> Add New
             </md-button>
           </div>
@@ -259,14 +257,14 @@
        * Get Event building blocks
        */
       getEventBuildingBlocks() {
+
         if (!this.event.id) return;
 
         this.isLoading = true;
 
         let res = this.event.components;
-        this.$set(this, 'eventBuildingBlocks', res);
 
-        console.log('event = > ',this.event.components);
+        this.$set(this, 'eventBuildingBlocks', res);
         // group event blocks by category name
         // this.eventBuildingBlocksList = _.chain(res).groupBy('category').map(function(value, key) {
         //
@@ -290,6 +288,8 @@
         //
         // this.eventBuildingBlocksList = _.sortBy(this.eventBuildingBlocksList, 'title');
 
+        console.log('event = > ',this.event.components);
+
         //let allocatedBudget = 0;
         // if (this.eventBuildingBlocks) {
         //   this.eventBuildingBlocks.forEach(item => {
@@ -300,7 +300,7 @@
         //this.allocatedBudget = allocatedBudget;
         //this.isLoading = this.event.componentsCount !== this.event.components.length;
         setTimeout(()=>{
-          this.isLoading = false;
+            this.isLoading = false;
         },500)
 
         this.$forceUpdate();
@@ -332,6 +332,7 @@
         });
       },
       blockBudgetChanged(val, index) {
+
         let block = _.find(this.eventBuildingBlocks, function (item) {
           return item.componentId === index;
         });

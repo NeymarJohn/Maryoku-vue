@@ -161,13 +161,16 @@
     }),
     methods: {
       getBlockVendors() {
+
         if (true){
+
           let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
           let event = new CalendarEvent({id: this.event.id});
           let selected_block = new EventComponent({id : this.selectedBlock.id});
 
           new EventComponentVendor().for(calendar, event, selected_block).get()
             .then(resp => {
+
               console.log('resp => ',resp);
 
               this.isLoading = false;

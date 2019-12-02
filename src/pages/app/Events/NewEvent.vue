@@ -6,16 +6,12 @@
       <event-actions-edit :formData="formData"></event-actions-edit>
     </div>
 
+
     <div class="md-layout-item md-size-30 md-small-size-100 scrollable-container" style="margin-top: -42px;">
-      <event-header-form 
-        :selected-date="selectedDate" 
-        :selected-occasion="selectedOccasion" 
-        :occasionOptions="occasionsArray" 
-        :formData="formData">
-      </event-header-form>
+      <event-header-form :selected-date="selectedDate" :selected-occasion="selectedOccasion" :occasionOptions="occasionsArray" :formData="formData"></event-header-form>
     </div>
 
-    <div class="md-layout-item md-size-70 md-small-size-100 scrollable-container" v-if="components == null || !components.length">
+    <div  class="md-layout-item md-size-70 md-small-size-100 scrollable-container" v-if="components == null || !components.length">
       <pricing-card card-class="md-card-plain" icon-color="icon-black">
         <drop-down slot="category" direction="down" ref="dropdown" class="dropdown-component-button empty-timeline">
           <md-button slot="title" class="md-info md-block" data-toggle="dropdown">
@@ -40,15 +36,15 @@
         <!--<md-button slot="footer" class="md-info"><md-icon>add</md-icon> Event Component</md-button>-->
       </pricing-card>
     </div>
-    <div class="md-layout-item md-size-70 md-small-size-100 scrollable-container" v-if="components !== null && components.length">
+    <div class="md-layout-item md-size-70 md-small-size-100 scrollable-container"  v-if="components !== null && components.length">
+
       <time-line plain :type="'simple'" class="mt-0">
-        <template v-if="$store.state.vendorsList">
-          <event-card-component v-for="(component, index) in components"
-                                :key="'event-card-component-' + index"
-                                :componentObject="component"
-                                :componentIndex="index">
-          </event-card-component>
-        </template>
+        <event-card-component v-for="(component, index) in components"
+                              :key="'event-card-component-' + index"
+                              v-if="$store.state.vendorsList"
+                              :componentObject="component"
+                              :componentIndex="index">
+        </event-card-component>
 
         <!--<time-line-item inverted badge-type="danger" badge-icon="card_travel" class="empty-timeline">
           <div slot="header">
@@ -90,12 +86,14 @@
             </drop-down>
           </div>
         </time-line-item>
+
       </time-line>
     </div>
   </div>
 </template>
 
 <script>
+
   import EventHeaderForm from './components/EventHeaderForm.vue';
   import EventCardComponent from './components/EventCardComponent.vue';
   import Calendar from '@/models/Calendar';
@@ -194,18 +192,21 @@
         }
       )
 
-      this.$store.state.eventData = {
-        id: null,
-        calendar: {id: null},
-        title: "Jamil",
-        eventStartMillis: null,
-        eventEndMillis: null,
-        eventType: null,
-        numberOfParticipants: null,
-        totalBudget: null,
-        status: null,
-        components: null,
-      }
+
+        this.$store.state.eventData = {
+            id: null,
+            calendar: {id: null},
+            title: "Jamil",
+            eventStartMillis: null,
+            eventEndMillis: null,
+            eventType: null,
+            numberOfParticipants: null,
+            totalBudget: null,
+            status: null,
+            components: null,
+        }
+
+
     },
     beforeDestroy() {
       window.removeEventListener("resize", this.onResponsiveInverted);
@@ -268,7 +269,7 @@
     opacity: 1;
     transform: scale(1);
   }
-  .left-offset {
+   .left-offset {
     margin-left: 30px;
     margin-bottom: -23px;
   }
