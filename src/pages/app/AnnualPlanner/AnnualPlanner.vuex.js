@@ -4,36 +4,36 @@ export default {
     namespaced: true,
 
     state() {
-        return {
-          filtersData: {
-            year: null,
-            month: null,
-            categories: [],
-            countries: [],
-            holidays: []
-          },
-          eventData: {
-            id: null,
-            occasion: "",
-            theme: "",
-            occasionCache: "",
-            title: "New Event",
-            date: null,
-            time: "",
-            duration: "",
-            numberOfParticipants: "",
-            status: "draft",
-            totalBudget: "",
-            currency: "",
-            eventType: null,
-            participantsType : null,
-            category: null,
-          },
-          eventModalOpen: false,
-          modalTitle: '',
-          modalSubmitTitle: '',
-          editMode: false,
-        };
+      return {
+        filtersData: {
+          year: null,
+          month: null,
+          categories: [],
+          countries: [],
+          holidays: []
+        },
+        eventData: {
+          id: null,
+          occasion: "",
+          theme: "",
+          occasionCache: "",
+          title: "New Event",
+          date: null,
+          time: "",
+          duration: "",
+          numberOfParticipants: "",
+          status: "draft",
+          totalBudget: "",
+          currency: "",
+          eventType: null,
+          participantsType : null,
+          category: null,
+        },
+        eventModalOpen: false,
+        modalTitle: '',
+        modalSubmitTitle: '',
+        editMode: false,
+      };
     },
 
     mutations: {

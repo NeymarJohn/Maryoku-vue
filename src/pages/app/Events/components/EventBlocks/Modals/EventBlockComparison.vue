@@ -3,18 +3,19 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee"/>
     <!-- Selected Proposals list -->
     <div class="selected-proposals-list">
-      <table ref="content" style="width: 100%; height: 100%;" cellspacing="0" colpadding="0">
+      <table ref="content" class="w-100 h-100" cellspacing="0" colpadding="0">
         <tr>
-          <td class="comparison-cell category-outer-cell" style="vertical-align: top; padding : 0;">
+          <td class="comparison-cell category-outer-cell no-padding va-top">
           </td>
           <td class="comparison-cell outer-cell">
             <md-field>
               <label></label>
               <md-select id="0" v-model="selectedBlock.proposalComparison1" placeholder="Select Proposal">
                 <md-option
-                  v-for="item in selectableProposals"
-                  :key="item"
-                  :value="item">
+                  v-for="(item, index) in selectableProposals"
+                  :key="index"
+                  :value="item"
+                >
                   {{ getProposalName(item) }}
                 </md-option>
               </md-select>
@@ -55,9 +56,10 @@
               <label></label>
               <md-select id="1" v-model="selectedBlock.proposalComparison2" placeholder="Select Proposal">
                 <md-option
-                  v-for="item in selectableProposals"
-                  :key="item"
-                  :value="item">
+                  v-for="(item, index) in selectableProposals"
+                  :key="index"
+                  :value="item"
+                >
                   {{ getProposalName(item) }}
                 </md-option>
               </md-select>
@@ -66,13 +68,13 @@
               class="md-success w-100 text-capitalize"
               v-if="selectedBlock.proposalComparison2 && isAccepted(selectedBlock.proposalComparison2)"
               @click="viewProposal(selectedBlock.proposalComparison2)">
-              View - {{getProposalPrice(selectedBlock.proposalComparison2)}}</span>
+              View - {{getProposalPrice(selectedBlock.proposalComparison2)}}
             </md-button>
             <md-button
               class="md-danger w-100 text-capitalize"
               v-if="selectedBlock.proposalComparison2 && !isAccepted(selectedBlock.proposalComparison2)"
               @click="manageProposalsAccept(selectedBlock.proposalComparison2)">
-              Accept - {{getProposalPrice(selectedBlock.proposalComparison2)}}</span>
+              Accept - {{getProposalPrice(selectedBlock.proposalComparison2)}}
             </md-button>
           </td>
           <td class="comparison-cell outer-cell">
@@ -80,9 +82,10 @@
               <label></label>
               <md-select id="2" v-model="selectedBlock.proposalComparison3" placeholder="Select Proposal">
                 <md-option
-                  v-for="item in selectableProposals"
-                  :key="item"
-                  :value="item">
+                  v-for="(item, index) in selectableProposals"
+                  :key="index"
+                  :value="item"
+                >
                   {{ getProposalName(item) }}
                 </md-option>
               </md-select>
@@ -108,7 +111,7 @@
                 <h5 class="title">{{this.selectedBlock.category}}</h5>
               </md-card-header>
               <md-card-content class="table-padding">
-                <table style="width: 100%; height: 100%;">
+                <table class="w-100 h-100">
                   <tr>
                     <td class="text-left" colspan="4">
                       <h5 class="title">Catering</h5>
@@ -155,17 +158,17 @@
                       <h6 class="title">Subtotal</h6>
                     </td>
                     <td class="comparison-cell proposal">
-                      <h5 class="title" style="font-weight: 400; font-size: 14px;">
+                      <h5 class="title fw-400 fz-14">
                         {{getProposalPrice(selectedBlock.proposalComparison1)}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
-                      <h5 class="title" style="font-weight: 400; font-size: 14px;">
+                      <h5 class="title fw-400 fz-14">
                         {{getProposalPrice(selectedBlock.proposalComparison2)}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
-                      <h5 class="title" style="font-weight: 400; font-size: 14px;">
+                      <h5 class="title fw-400 fz-14">
                         {{getProposalPrice(selectedBlock.proposalComparison3)}}
                       </h5>
                     </td>
@@ -175,17 +178,17 @@
                       <h6 class="title">Per guest</h6>
                     </td>
                     <td class="comparison-cell proposal">
-                      <h5 class="title" style="font-weight: 400; font-size: 14px;">
+                      <h5 class="title fw-400 fz-14">
                         {{getProposalPricePerGuest(selectedBlock.proposalComparison1)}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
-                      <h5 class="title" style="font-weight: 400; font-size: 14px;">
+                      <h5 class="title fw-400 fz-14">
                         {{getProposalPricePerGuest(selectedBlock.proposalComparison2)}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
-                      <h5 class="title" style="font-weight: 400; font-size: 14px;">
+                      <h5 class="title fw-400 fz-14">
                         {{getProposalPricePerGuest(selectedBlock.proposalComparison3)}}
                       </h5>
                     </td>
@@ -202,7 +205,7 @@
           <td colspan="4">
             <md-card class="clear-margins no-shadow">
               <md-card-content>
-                <table style="width: 100%; height: 100%;">
+                <table class="w-100 h-100">
                   <tr>
                     <td class="comparison-cell category">
                       <h5 class="title">Rating</h5>
@@ -211,7 +214,7 @@
                       <div class="star-rating" v-if="selectedBlock.proposalComparison1">
                         <label class="star-rating__star"
                           v-for="(rating, index) in ratings" 
-                          :value="item" :key="index"
+                          :value="rating" :key="index"
                           :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison1) >= rating) && getProposalRating(selectedBlock.proposalComparison1) != null)}">
                         <input class="star-rating star-rating__checkbox" type="radio">★</label>
                         <span class="small"> 0 </span>
@@ -230,7 +233,8 @@
                     <td class="comparison-cell proposal">
                       <div class="star-rating" v-if="selectedBlock.proposalComparison3">
                         <label class="star-rating__star"
-                          v-for="rating in ratings"
+                          v-for="(rating, index) in ratings"
+                          :value="rating" :key="index"
                           :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison3) >= rating) && getProposalRating(selectedBlock.proposalComparison3) != null)}">
                         <input class="star-rating star-rating__checkbox" type="radio">★</label>
                         <span class="small"> 0 </span>
@@ -249,7 +253,7 @@
           <td colspan="4">
             <md-card class="clear-margins no-shadow">
               <md-card-content>
-                <table style="width: 100%; height: 100%;">
+                <table class="w-100 h-100">
                   <tr>
                     <td class="comparison-cell category">
                       <h5 class="title">Cancellation</h5>
@@ -282,7 +286,7 @@
           <td colspan="4">
             <md-card class="clear-margins no-shadow">
               <md-card-content>
-                <table style="width: 100%; height: 100%;">
+                <table class="w-100 h-100">
                   <tr>
                     <td class="comparison-cell category">
                       <h5 class="title">Legal Docs</h5>
@@ -605,21 +609,16 @@
 
           doc.addImage(img, 'PNG', 20, -10);
           doc.save("sample.pdf");
-
         });
-
-
       }
     },
     created(title, proposal) {
-
     },
     mounted() {
       this.populateProposals();
       //this.getBlockVendors();
     },
     computed: {
-
     },
     watch: {
       selectedBlock(newVal, oldVal) {
@@ -688,5 +687,20 @@
   }
   .border-bottom {
     border-bottom: 1px solid #eeeeee;
+  }
+  .w-100 {
+    width: 100%;
+  }
+  .h-100 {
+    height: 100%;
+  }
+  .va-top {
+    vertical-align: top;
+  }
+  .fw-400 {
+    font-weight: 400;
+  } 
+  .fs-14 {
+    font-size: 14px;
   }
 </style>

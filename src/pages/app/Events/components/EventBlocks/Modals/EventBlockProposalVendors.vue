@@ -1,7 +1,7 @@
 <template>
-  <div class="adding-building-blocks-panel" style="min-height: 240px;">
+  <div class="adding-building-blocks-panel mh-240">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" background-color="#eee"/>
-    <div class="manage-proposals_proposals-list" style="background-color: white !important; display: block; border-radius: 8px;box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);" v-if="!isLoading">
+    <div class="manage-proposals_proposals-list manage-proposals-wrapper" v-if="!isLoading">
       <div class="md-toolbar-section-start">
         <!-- <md-field>
           <md-input
@@ -66,16 +66,16 @@
             <template v-if="item.proposals && item.proposals[0]">
               <div class="cost">${{item.proposals[0].cost}}</div>
               <md-button class="md-rose md-sm md-simple" v-if="addedToCompare(item.proposals[0].id)" @click="removeFromCompare(item.proposals[0].id)">Remove from compare</md-button>
-              <md-button class="md-success md-sm md-simple" v-if="!addedToCompare(item.proposals[0].id)"@click="addToCompare(item.proposals[0].id)">Add to compare</md-button>
+              <md-button class="md-success md-sm md-simple" v-if="!addedToCompare(item.proposals[0].id)" @click="addToCompare(item.proposals[0].id)">Add to compare</md-button>
               <md-button class="md-primary md-sm md-simple" @click="manageProposalsAccept(item.proposals[0])">Accept</md-button>
-              <md-button class="md-rose md-sm"   @click="viewProposal(item.proposals[0])">View</md-button>
+              <md-button class="md-rose md-sm" @click="viewProposal(item.proposals[0])">View</md-button>
             </template>
             <md-button v-if="!sendingRfp && (item.rfpStatus === 'Ready to send' || item.rfpStatus == null)" class="md-primary md-sm hover" @click="sendVendor(item)">
               <md-icon>near_me</md-icon>
               Send
             </md-button>
             <template v-else-if="item.rfpStatus === 'Sent' && !item.proposals.length">
-              <span style="font-weight: 300;">Request sent</span> {{getProposalDate(item.rfpSentMillis)}}
+              <span class="fw-300">Request sent</span> {{getProposalDate(item.rfpSentMillis)}}
               <!--<a href="javascript: void(null);" class="small hover" style="display: block;">Request again &rarr;</a>-->
             </template>
           </div>
@@ -85,7 +85,7 @@
     <md-card class="md-card-plain" v-if="!vendors.length && !proposals.length && !isLoading">
       <md-card-content>
         <div class="text-center">
-          <img src="/static/img/paperandpen.png" style="width: 120px;">
+          <img class="w-120" src="/static/img/paperandpen.png">
           <h4>No vendors found that match '{{selectedBlock.title}}'</h4>
           <md-button class="md-purple md-sm" @click="manageVendors">
             Manage Vendors Pool
@@ -161,16 +161,13 @@
     }),
     methods: {
       getBlockVendors() {
-
         if (true){
-
           let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
           let event = new CalendarEvent({id: this.event.id});
           let selected_block = new EventComponent({id : this.selectedBlock.id});
 
           new EventComponentVendor().for(calendar, event, selected_block).get()
             .then(resp => {
-
               console.log('resp => ',resp);
 
               this.isLoading = false;
@@ -456,5 +453,24 @@
     &[x-placement="left"]:after {
       border-bottom-color: $purple-500 !important;
     }
+  }
+
+  .mh-240 {
+    min-height: 240px;
+  }
+
+  .manage-proposals-wrapper {
+    background-color: white !important; 
+    display: block; 
+    border-radius: 8px;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+  }
+
+  .fw-300 {
+    font-weight: 300;
+  }
+
+  .w-120 {
+    width: 120px;
   }
 </style>
