@@ -116,7 +116,7 @@
             <event-paid-total-amounts 
               :paid="event.totalBudget" 
               :total="totalRemainingBudget" 
-              :toBePaid="getToBePaid"
+              :toBePaid="getToBePaidAmount"
             >
             </event-paid-total-amounts>
           </div>
@@ -209,7 +209,7 @@
       isLoading: false,
       routeName: null,
       budgetPerEmployee: 0,
-      toBePaid: 0
+      acceptedProposals: []
     }),
     methods: {
       ...mapMutations('EventPlannerVuex', [
@@ -311,6 +311,32 @@
         // this.setEventModal({showModal: true})
         // this.setModalSubmitTitle('Save')
         // this.setEditMode({editMode: true})
+      },
+      getAcceptedProposals(calendar, event, eventComponents) {
+        if (calendar !== null && event !== null && eventComponents !== undefined) {
+          eventComponents.forEach( evtComponent => {
+            let selected_block = new EventComponent({id : evtComponent.id});
+            new EventComponentVendor().for(
+              calendar, 
+              event, 
+              selected_block
+            ).get().then(ec => {
+              ec.forEach( e => {
+                e.proposals.filter(item => item.accepted == true).forEach(proposal => {
+                  if (this.acceptedProposals.filter( p => p.proposalId == proposal.id ).length == 0) {
+                    this.acceptedProposals.push({
+                      proposalId: proposal.id,
+                      proposalCost: proposal.cost
+                    })
+                  }
+                })
+              })
+            })
+            .catch(error => {
+              console.log('EventComponentVendor error =>',error)
+            });
+          })
+        }
       }
     },
     created() {
@@ -332,6 +358,8 @@
       })
 
       this.getEvent();
+
+      this.getAcceptedProposals()
     },
     computed: {
       ...mapGetters({
@@ -351,37 +379,23 @@
           }
         }
       },
-      getToBePaid() {
-        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-        let event = new CalendarEvent({id: this.event.id}); 
-        let eventComponents = this.event.components;
-        let toBePaid = 0
+      getToBePaidAmount() {
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+        let event = new CalendarEvent({id: this.event.id})
+        let eventComponents = this.event.components
+        let toBePaidAmount = 0
+        this.getAcceptedProposals(calendar, event, eventComponents)
 
-        if (eventComponents !== undefined) {
-          eventComponents.forEach( evtComponent => {
-            let selected_block = new EventComponent({id : evtComponent.id});
-            new EventComponentVendor().for(
-              calendar, 
-              event, 
-              selected_block
-            ).get().then(ec => {
-              ec.forEach( e => {
-                e.proposals.filter(item => item.accepted == true).forEach(proposal => {
-                  toBePaid += proposal.cost
-                })
-              })
-            })
-            .catch(error => {
-              console.log('EventComponentVendor error =>',error)
-            });
-          })
+        if (this.acceptedProposals.length > 0 ) {
+          return this.acceptedProposals.reduce((p, item) => p + item.proposalCost, 0)
+        } else {
+          return 0
         }
-        return toBePaid
       }
     },
     filters: {
       formatDate: function (date) {
-        return moment(date).format('MMM Do YYYY ')
+        return moment(date).format('MMM Do YYYY')
       },
       formatTime: function (date) {
         return moment(date).format('h:00 A')
@@ -418,7 +432,7 @@
 
     .md-button.selected {
       background-color: #eb3e79 !important;
-      border-color: #eb3e79 !important;;
+      border-color: #eb3e79 !important;
 
       i {
         color: #fff !important;
