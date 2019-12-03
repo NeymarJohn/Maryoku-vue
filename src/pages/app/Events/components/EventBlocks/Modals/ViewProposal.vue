@@ -108,8 +108,10 @@
                 <div class="cost-label">Cost Breakdown</div>
                 <br/>
                 <ul class="cost-breakdown__items">
-                  <li v-for="(item,index) in proposal.costBreakdown" :key="index" v-if="item.service">
-                    {{item.service}}: ${{item.cost}}
+                  <li v-for="(item,index) in proposal.costBreakdown" :key="index">
+                    <span v-if="item.service">
+                      {{item.service}}: ${{item.cost}}
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -155,14 +157,16 @@
             </div>
           </div>
           <ul class="included-list">
-            <li v-for="(item,index) in vendorProposal.included" :key="index" v-if="item.requirementTitle">
-              <md-icon>check</md-icon>
-              <div class="included-item">
-                <h5>
-                  {{item.requirementTitle}}
-                </h5>
-                <p>{{item.comment}}</p>
-              </div>
+            <li v-for="(item,index) in vendorProposal.included" :key="index">
+              <template v-if="item.requirementTitle">
+                <md-icon>check</md-icon>
+                <div class="included-item">
+                  <h5>
+                    {{item.requirementTitle}}
+                  </h5>
+                  <p>{{item.comment}}</p>
+                </div>
+              </template>
             </li>
             <li v-for="(item,index) in extraMissingRequirements" :key="index+vendorProposal.included.length" class="proposals-waiting-approval" v-if="extraMissingRequirements.length">
               <div class="proposal-info">
@@ -228,7 +232,7 @@
             <div class="section-content notes-section">
               <div>
                 <h4>Notes</h4>
-                <p v-for="(note,index) in vendorProposal.notes">
+                <p v-for="(note,index) in vendorProposal.notes" :key="index">
                   {{note}}
                 </p>
               </div>
@@ -277,7 +281,7 @@
 <!--                </iframe>-->
 <!--              </li>-->
             </ul>
-              <LightBox
+            <LightBox
               v-if="images.length"
               :images="images"
               ref="lightbox"
@@ -301,11 +305,15 @@
                   <h5>Jane Bloom, Facebook</h5>
                   <div class="star-rating">
                     <label class="star-rating__star"
-                      v-for="rating in ratings"
+                      v-for="(rating, index) in ratings"
+                      :key="index"
                       :class="{'is-selected' : ((feedbackRating >= rating) && feedbackRating != null)}"
                       >
-                    <input class="star-rating star-rating__checkbox" type="radio"
-                      v-model="feedbackRating">★</label>
+                      <input 
+                        class="star-rating star-rating__checkbox" 
+                        type="radio"
+                        v-model="feedbackRating">★
+                    </label>
                   </div>
                 </div>
                 <div class="item-body">
@@ -330,11 +338,15 @@
                   <h5>Jane Bloom, Facebook</h5>
                   <div class="star-rating">
                     <label class="star-rating__star"
-                      v-for="rating in ratings"
+                      v-for="(rating, index) in ratings"
+                      :key="index"
                       :class="{'is-selected' : ((feedbackRating >= rating) && feedbackRating != null)}"
                       >
-                    <input class="star-rating star-rating__checkbox" type="radio"
-                      v-model="feedbackRating">★</label>
+                      <input 
+                        class="star-rating star-rating__checkbox" 
+                        type="radio"
+                        v-model="feedbackRating">★
+                    </label>
                   </div>
                 </div>
                 <div class="item-body">
@@ -455,7 +467,7 @@ export default {
   data: () => ({
     // auth: auth,
     ratings: [1, 2, 3, 4, 5],
-    images: Array,
+    images: [],
     feedbackRating: 3,
     vendorProposal: null,
     vendorInfo: null,
@@ -522,7 +534,6 @@ export default {
       this.attachmentsLoadingCount = 0
 
       this.vendorProposal.attachements.forEach((item)=>{
-
         const fullPath = `${this.serverUrl}/1/proposal-requests/${this.proposal.id}/files/${item}`
 
         this.$http.get(

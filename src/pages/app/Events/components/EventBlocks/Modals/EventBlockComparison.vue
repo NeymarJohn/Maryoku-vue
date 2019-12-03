@@ -39,13 +39,13 @@
               </template>
             </multiselect> -->
             <md-button
-              class="md-success w-100 text-capitalize"
+              class="md-success w-100 text-capitalize fs-14"
               v-if="selectedBlock.proposalComparison1 && isAccepted(selectedBlock.proposalComparison1)"
               @click="viewProposal(selectedBlock.proposalComparison1)">
               View - ${{getProposalPrice(selectedBlock.proposalComparison1) | numeral('0,0')}}
             </md-button>
             <md-button
-              class="md-danger w-100 text-capitalize"
+              class="md-danger w-100 text-capitalize fs-14"
               v-if="selectedBlock.proposalComparison1 && !isAccepted(selectedBlock.proposalComparison1)"
               @click="manageProposalsAccept(selectedBlock.proposalComparison1)">
               Accept - ${{getProposalPrice(selectedBlock.proposalComparison1) | numeral('0,0')}}
@@ -65,13 +65,13 @@
               </md-select>
             </md-field>
             <md-button
-              class="md-success w-100 text-capitalize"
+              class="md-success w-100 text-capitalize fs-14"
               v-if="selectedBlock.proposalComparison2 && isAccepted(selectedBlock.proposalComparison2)"
               @click="viewProposal(selectedBlock.proposalComparison2)">
               View - ${{getProposalPrice(selectedBlock.proposalComparison2) | numeral('0,0')}}
             </md-button>
             <md-button
-              class="md-danger w-100 text-capitalize"
+              class="md-danger w-100 text-capitalize fs-14"
               v-if="selectedBlock.proposalComparison2 && !isAccepted(selectedBlock.proposalComparison2)"
               @click="manageProposalsAccept(selectedBlock.proposalComparison2)">
               Accept - ${{getProposalPrice(selectedBlock.proposalComparison2) | numeral('0,0')}}
@@ -91,13 +91,13 @@
               </md-select>
             </md-field>
             <md-button
-              class="md-success w-100 text-capitalize"
+              class="md-success w-100 text-capitalize fs-14"
               v-if="selectedBlock.proposalComparison3 && isAccepted(selectedBlock.proposalComparison3)"
               @click="viewProposal(selectedBlock.proposalComparison3)">
               View - ${{getProposalPrice(selectedBlock.proposalComparison3) | numeral('0,0')}}
             </md-button>
             <md-button
-              class="md-danger w-100 text-capitalize"
+              class="md-danger w-100 text-capitalize fs-14"
               v-if="selectedBlock.proposalComparison3 && !isAccepted(selectedBlock.proposalComparison3)"
               @click="manageProposalsAccept(selectedBlock.proposalComparison3)">
               Accept - ${{getProposalPrice(selectedBlock.proposalComparison3) | numeral('0,0')}}
@@ -105,8 +105,8 @@
           </td>
         </tr>
         <tr>
-          <td colspan="4">
-            <md-card class="clear-margins">
+          <td colspan="4" class="padding-2-ex-bottom">
+            <md-card class="clear-margins no-shadow catering-wrapper">
               <md-card-header class="md-card-header-text text-left">
                 <h5 class="title">{{this.selectedBlock.category}}</h5>
               </md-card-header>
@@ -138,19 +138,36 @@
                       </h6>
                     </td>
                     <td class="comparison-cell proposal border-bottom">
-                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).included">check</md-icon>
+                      <!-- <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).included">check</md-icon> -->
+                      <span class="fc-green fs-14" v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).included">Included</span>
                       <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).missing">close</md-icon>
-                      <span v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).price}}</span>
+                      <md-button
+                        class="md-danger w-90 h-30 text-capitalize fs-14"
+                        v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).extra">
+                        Add (${{getProposalRequirementFulfillment(selectedBlock.proposalComparison1,requirement.id).price | numeral(0,0)}})
+                      </md-button>
                     </td>
                     <td class="comparison-cell proposal border-bottom">
-                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).included">check</md-icon>
+                      <!-- <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).included">check</md-icon> -->
+                      <span class="fc-green fs-14" v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).included">Included</span>
                       <md-icon v-else-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).missing">close</md-icon>
-                      <span v-else-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).price}}</span>
+                      <md-button
+                        class="md-danger w-90 h-30 text-capitalize fs-14"
+                        v-else-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).extra">
+                        Add (${{getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).price | numeral(0,0)}})
+                      </md-button>
+                      <!-- <span v-else-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison2,requirement.id).price}}</span> -->
                     </td>
                     <td class="comparison-cell proposal border-bottom">
-                      <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).included">check</md-icon>
+                      <!-- <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).included">check</md-icon> -->
+                      <span class="fc-green fs-14" v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).included">Included</span>
                       <md-icon v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).missing">close</md-icon>
-                      <span v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).price}}</span>
+                      <md-button
+                        class="md-danger w-90 h-30 text-capitalize fs-14"
+                        v-else-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).extra">
+                        Add (${{getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).price | numeral(0,0)}})
+                      </md-button>
+                      <!-- <span v-if="getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).extra">${{getProposalRequirementFulfillment(selectedBlock.proposalComparison3,requirement.id).price}}</span> -->
                     </td>
                   </tr>
                   <tr>
@@ -159,17 +176,17 @@
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        {{getProposalPrice(selectedBlock.proposalComparison1) | numeral('0,0')}}
+                        ${{getProposalPrice(selectedBlock.proposalComparison1) | numeral('0,0')}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        {{getProposalPrice(selectedBlock.proposalComparison2) | numeral('0,0')}}
+                        ${{getProposalPrice(selectedBlock.proposalComparison2) | numeral('0,0')}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        {{getProposalPrice(selectedBlock.proposalComparison3) | numeral('0,0')}}
+                        ${{getProposalPrice(selectedBlock.proposalComparison3) | numeral('0,0')}}
                       </h5>
                     </td>
                   </tr>
@@ -179,17 +196,17 @@
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        {{getProposalPricePerGuest(selectedBlock.proposalComparison1) | numeral('0,0')}}
+                        ${{getProposalPricePerGuest(selectedBlock.proposalComparison1) | numeral('0,0')}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        {{getProposalPricePerGuest(selectedBlock.proposalComparison2) | numeral('0,0')}}
+                        ${{getProposalPricePerGuest(selectedBlock.proposalComparison2) | numeral('0,0')}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        {{getProposalPricePerGuest(selectedBlock.proposalComparison3) | numeral('0,0')}}
+                        ${{getProposalPricePerGuest(selectedBlock.proposalComparison3) | numeral('0,0')}}
                       </h5>
                     </td>
                   </tr>
@@ -202,7 +219,7 @@
           <td colspan="4" class="spacer"></td>
         </tr>
         <tr>
-          <td colspan="4">
+          <td colspan="4" class="padding-x-2">
             <md-card class="clear-margins no-shadow">
               <md-card-content>
                 <table class="w-100 h-100">
@@ -212,31 +229,37 @@
                     </td>
                     <td class="comparison-cell proposal">
                       <div class="star-rating" v-if="selectedBlock.proposalComparison1">
-                        <label class="star-rating__star"
+                        <label class="star-rating__star fs-14"
                           v-for="(rating, index) in ratings" 
                           :value="rating" :key="index"
-                          :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison1) >= rating) && getProposalRating(selectedBlock.proposalComparison1) != null)}">
-                        <input class="star-rating star-rating__checkbox" type="radio">★</label>
+                          :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison1) >= rating) && getProposalRating(selectedBlock.proposalComparison1) != null)}"
+                        >
+                          ★
+                        </label>
                         <span class="small"> {{getProposalRating(selectedBlock.proposalComparison1)}} </span>
                       </div>
                     </td>
                     <td class="comparison-cell proposal">
                       <div class="star-rating" v-if="selectedBlock.proposalComparison2">
-                        <label class="star-rating__star"
+                        <label class="star-rating__star fs-14"
                           v-for="(rating, index) in ratings" 
                           :value="item" :key="index"
-                          :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison2) >= rating) && getProposalRating(selectedBlock.proposalComparison2) != null)}">
-                        <input class="star-rating star-rating__checkbox" type="radio">★</label>
+                          :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison2) >= rating) && getProposalRating(selectedBlock.proposalComparison2) != null)}"
+                        >
+                          ★
+                        </label>
                         <span class="small"> {{getProposalRating(selectedBlock.proposalComparison2)}} </span>
                       </div>
                     </td>
                     <td class="comparison-cell proposal">
                       <div class="star-rating" v-if="selectedBlock.proposalComparison3">
-                        <label class="star-rating__star"
+                        <label class="star-rating__star fs-14"
                           v-for="(rating, index) in ratings"
                           :value="rating" :key="index"
-                          :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison3) >= rating) && getProposalRating(selectedBlock.proposalComparison3) != null)}">
-                        <input class="star-rating star-rating__checkbox" type="radio">★</label>
+                          :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison3) >= rating) && getProposalRating(selectedBlock.proposalComparison3) != null)}"
+                        >
+                          ★
+                        </label>
                         <span class="small"> {{getProposalRating(selectedBlock.proposalComparison3)}} </span>
                       </div>
                     </td>
@@ -250,7 +273,7 @@
           <td colspan="4" class="spacer"></td>
         </tr>
         <tr>
-          <td colspan="4">
+          <td colspan="4" class="padding-x-2">
             <md-card class="clear-margins no-shadow">
               <md-card-content>
                 <table class="w-100 h-100">
@@ -283,7 +306,7 @@
           <td colspan="4" class="spacer"></td>
         </tr>
         <tr>
-          <td colspan="4">
+          <td colspan="4" class="padding-x-2">
             <md-card class="clear-margins no-shadow">
               <md-card-content>
                 <table class="w-100 h-100">
@@ -694,6 +717,12 @@
   .h-100 {
     height: 100%;
   }
+  .w-90 {
+    max-width: 110px;
+  }
+  .h-30 {
+    height: 30px;
+  }
   .va-top {
     vertical-align: top;
   }
@@ -703,4 +732,17 @@
   .fs-14 {
     font-size: 14px;
   }
+  .padding-2-ex-bottom {
+    padding: 2em 2em 0 2em!important
+  }
+  .padding-x-2 {
+    padding: 0 2em!important
+  }
+  .catering-wrapper {
+    border: 1px solid #eeeeee;
+    border-radius: 2px;
+  }
+  .fc-green {
+    color: #01be60!important;
+  }  
 </style>
