@@ -42,13 +42,13 @@
               class="md-success w-100 text-capitalize"
               v-if="selectedBlock.proposalComparison1 && isAccepted(selectedBlock.proposalComparison1)"
               @click="viewProposal(selectedBlock.proposalComparison1)">
-              View - {{getProposalPrice(selectedBlock.proposalComparison1)}}</span>
+              View - ${{getProposalPrice(selectedBlock.proposalComparison1) | numeral('0,0')}}
             </md-button>
             <md-button
               class="md-danger w-100 text-capitalize"
               v-if="selectedBlock.proposalComparison1 && !isAccepted(selectedBlock.proposalComparison1)"
               @click="manageProposalsAccept(selectedBlock.proposalComparison1)">
-              Accept - {{getProposalPrice(selectedBlock.proposalComparison1)}}</span>
+              Accept - ${{getProposalPrice(selectedBlock.proposalComparison1) | numeral('0,0')}}
             </md-button>
           </td>
           <td class="comparison-cell outer-cell">
@@ -68,13 +68,13 @@
               class="md-success w-100 text-capitalize"
               v-if="selectedBlock.proposalComparison2 && isAccepted(selectedBlock.proposalComparison2)"
               @click="viewProposal(selectedBlock.proposalComparison2)">
-              View - {{getProposalPrice(selectedBlock.proposalComparison2)}}
+              View - ${{getProposalPrice(selectedBlock.proposalComparison2) | numeral('0,0')}}
             </md-button>
             <md-button
               class="md-danger w-100 text-capitalize"
               v-if="selectedBlock.proposalComparison2 && !isAccepted(selectedBlock.proposalComparison2)"
               @click="manageProposalsAccept(selectedBlock.proposalComparison2)">
-              Accept - {{getProposalPrice(selectedBlock.proposalComparison2)}}
+              Accept - ${{getProposalPrice(selectedBlock.proposalComparison2) | numeral('0,0')}}
             </md-button>
           </td>
           <td class="comparison-cell outer-cell">
@@ -94,13 +94,13 @@
               class="md-success w-100 text-capitalize"
               v-if="selectedBlock.proposalComparison3 && isAccepted(selectedBlock.proposalComparison3)"
               @click="viewProposal(selectedBlock.proposalComparison3)">
-              View - {{getProposalPrice(selectedBlock.proposalComparison3)}}</span>
+              View - ${{getProposalPrice(selectedBlock.proposalComparison3) | numeral('0,0')}}
             </md-button>
             <md-button
               class="md-danger w-100 text-capitalize"
               v-if="selectedBlock.proposalComparison3 && !isAccepted(selectedBlock.proposalComparison3)"
               @click="manageProposalsAccept(selectedBlock.proposalComparison3)">
-              Accept - {{getProposalPrice(selectedBlock.proposalComparison3)}}</span>
+              Accept - ${{getProposalPrice(selectedBlock.proposalComparison3) | numeral('0,0')}}
             </md-button>
           </td>
         </tr>
@@ -159,17 +159,17 @@
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        {{getProposalPrice(selectedBlock.proposalComparison1)}}
+                        {{getProposalPrice(selectedBlock.proposalComparison1) | numeral('0,0')}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        {{getProposalPrice(selectedBlock.proposalComparison2)}}
+                        {{getProposalPrice(selectedBlock.proposalComparison2) | numeral('0,0')}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        {{getProposalPrice(selectedBlock.proposalComparison3)}}
+                        {{getProposalPrice(selectedBlock.proposalComparison3) | numeral('0,0')}}
                       </h5>
                     </td>
                   </tr>
@@ -179,17 +179,17 @@
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        {{getProposalPricePerGuest(selectedBlock.proposalComparison1)}}
+                        {{getProposalPricePerGuest(selectedBlock.proposalComparison1) | numeral('0,0')}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        {{getProposalPricePerGuest(selectedBlock.proposalComparison2)}}
+                        {{getProposalPricePerGuest(selectedBlock.proposalComparison2) | numeral('0,0')}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        {{getProposalPricePerGuest(selectedBlock.proposalComparison3)}}
+                        {{getProposalPricePerGuest(selectedBlock.proposalComparison3) | numeral('0,0')}}
                       </h5>
                     </td>
                   </tr>
@@ -217,7 +217,7 @@
                           :value="rating" :key="index"
                           :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison1) >= rating) && getProposalRating(selectedBlock.proposalComparison1) != null)}">
                         <input class="star-rating star-rating__checkbox" type="radio">★</label>
-                        <span class="small"> 0 </span>
+                        <span class="small"> {{getProposalRating(selectedBlock.proposalComparison1)}} </span>
                       </div>
                     </td>
                     <td class="comparison-cell proposal">
@@ -227,7 +227,7 @@
                           :value="item" :key="index"
                           :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison2) >= rating) && getProposalRating(selectedBlock.proposalComparison2) != null)}">
                         <input class="star-rating star-rating__checkbox" type="radio">★</label>
-                        <span class="small"> 0 </span>
+                        <span class="small"> {{getProposalRating(selectedBlock.proposalComparison2)}} </span>
                       </div>
                     </td>
                     <td class="comparison-cell proposal">
@@ -237,7 +237,7 @@
                           :value="rating" :key="index"
                           :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison3) >= rating) && getProposalRating(selectedBlock.proposalComparison3) != null)}">
                         <input class="star-rating star-rating__checkbox" type="radio">★</label>
-                        <span class="small"> 0 </span>
+                        <span class="small"> {{getProposalRating(selectedBlock.proposalComparison3)}} </span>
                       </div>
                     </td>
                   </tr>
@@ -378,7 +378,7 @@
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
           if (proposalById && proposalById.cost) {
-            return `$${(proposalById.cost / this.event.numberOfParticipants)  | numeral('0,0.0')}`;
+            return `$${(proposalById.cost / this.event.numberOfParticipants) | numeral('0,0.0')}`;
           }
         }
         return "";
@@ -413,10 +413,10 @@
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
           if (proposalById) {
-            return `${JSON.stringify(proposalById.vendor.rank)}`;
+            return `${JSON.stringify(proposalById.vendor.rank)}`
           }
         }
-        return "";
+        return 0
       },
       getLegalDocs(proposalId) {
         if (proposalId) {
