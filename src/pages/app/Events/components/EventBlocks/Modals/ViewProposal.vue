@@ -76,7 +76,7 @@
                   <h6>Attachments</h6>
                   <ul class="attachments-list_items">
                     <li v-for="(item,index) in attachedFiles" :key="index">
-                      <a target="_blank" :href="`${item}`">
+                      <a target="_blank" :href="`${item.fullPath}`">
                         <md-icon>attach_file</md-icon>
                         Attachment {{index+1}}
                       </a>
@@ -309,8 +309,8 @@
                       :key="index"
                       :class="{'is-selected' : ((feedbackRating >= rating) && feedbackRating != null)}"
                       >
-                      <input 
-                        class="star-rating star-rating__checkbox" 
+                      <input
+                        class="star-rating star-rating__checkbox"
                         type="radio"
                         v-model="feedbackRating">★
                     </label>
@@ -342,8 +342,8 @@
                       :key="index"
                       :class="{'is-selected' : ((feedbackRating >= rating) && feedbackRating != null)}"
                       >
-                      <input 
-                        class="star-rating star-rating__checkbox" 
+                      <input
+                        class="star-rating star-rating__checkbox"
                         type="radio"
                         v-model="feedbackRating">★
                     </label>
@@ -549,7 +549,7 @@ export default {
                 srcset: ""
               })
             } else {
-              this.attachedFiles.push(fullPath)
+              this.attachedFiles.push({fullPath : fullPath, tag : item.tag, name : item.name})
               this.attachmentsLoadingCount++
             }
           }

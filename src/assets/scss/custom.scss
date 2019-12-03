@@ -3316,6 +3316,14 @@ iframe{
         //width : 48.5%;
         margin:0;
     }
+
+    .attachments-documents-btn {
+
+        .md-button:not(.md-primary) {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+    }
 }
 
 .vendor-images-list {
