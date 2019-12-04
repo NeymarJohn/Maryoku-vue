@@ -190,10 +190,10 @@
             <md-card-content>
               <h4  class="title" style="margin-bottom: 12px;">Images</h4>
               <div class="md-layout">
-                <div class="md-layout-item md-size-20" v-for="(image,index) in proposalRequestImages" :key="index"  style="margin: 12px; " >
-                    <div class="vendor-images-list_item"  v-if="image.vendorsFileContentType === 'application/pdf'">
-                        <md-icon>picture_as_pdf</md-icon>
-                    </div>
+                <div class="md-layout-item md-size-20" v-for="(image,index) in proposalRequestImages" :key="index"  style="margin: 12px;">
+                  <div class="vendor-images-list_item"  v-if="image.vendorsFileContentType === 'application/pdf'">
+                    <md-icon>picture_as_pdf</md-icon>
+                  </div>
                   <iframe v-else seamless class="vendor-images-list_item" frameborder="0"
                     :src="`${serverUrl}/1/proposal-requests/${proposalRequest.id}/files/${image.id}`" >
                     <md-button class="md-primary md-sm" @click="deleteImage(image.id,index)">
@@ -447,8 +447,7 @@
               <h6 class="text-primary text-center" v-else>Submitted {{dateSubmitted(proposalRequest)}}</h6>
             </div>
             <div class="payment-policy text-center">
-              By submitting a proposal you agree to our <a href="https://www.maryoku.com/terms"
-                target="_blank">Terms of Service</a> and <a href="https://www.maryoku.com/privacy" target="_blank">Privacy Policy</a>.
+              By submitting a proposal you agree to our <a href="https://www.maryoku.com/terms" target="_blank">Terms of Service</a> and <a href="https://www.maryoku.com/privacy" target="_blank">Privacy Policy</a>.
             </div>
           </md-card-content>
         </md-card>
