@@ -15,7 +15,7 @@
                 <md-option value="guest">Per Guest</md-option>
               </md-select>
             </md-field>
-            <md-button 
+            <md-button
               class="md-default md-simple add-new-block-btn no-padding"
               @click="showAddEventElementsModal()"
             >
@@ -59,8 +59,8 @@
                   </td>
                   <td></td>
                 </tr> -->
-                <tr class="text-left" 
-                  @mouseover="setCurrentBlockId(block)" 
+                <tr class="text-left"
+                  @mouseover="setCurrentBlockId(block)"
                   @mouseout="setCurrentBlockId(null)">
                   <td>
                     <span class="span-element">{{block.title}}</span>
@@ -87,7 +87,7 @@
                   </td>
                   <td class="fit-content w-20 allocated-budget" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
                     <div class="md-table-cell-container">
-                      <label-edit v-if="!event.elementsBudgetPerGuest" 
+                      <label-edit v-if="!event.elementsBudgetPerGuest"
                                   :text="block.allocatedBudget"
                                   :field-name="block.componentId"
                                   :sub-description="elementsBudget"
@@ -96,7 +96,7 @@
                                   @text-updated-blur="blockBudgetChanged"
                                   @text-updated-enter="blockBudgetChanged"></label-edit>
 
-                      <label-edit v-else 
+                      <label-edit v-else
                                   :text="block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : ''"
                                   :field-name="block.componentId"
                                   :sub-description="elementsBudget"
@@ -146,8 +146,8 @@
                     </template>
                   </td>
                   <td class="w-5 text-right">
-                    <a href="#" 
-                      class="no-padding pull-right" 
+                    <a href="#"
+                      class="no-padding pull-right"
                       v-if="currentBlockId == block.id"
                       @click="deleteBlock(block.id)">
                       <md-icon @click="deleteBlock(block.id)">close</md-icon>
@@ -322,7 +322,7 @@
           component: AddEventElementsModal,
           cssClass: 'md-layout-item md-size-35 transition36 bg-grey',
           openOn: 'right',
-          props: {event: this.event}
+          props: {event: this.event, eventBuildingBlocks : this.eventBuildingBlocks}
         });
         window.currentPanel.promise.then(res=>{
           if (res.length > 0) {

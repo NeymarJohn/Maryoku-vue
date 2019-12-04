@@ -534,7 +534,6 @@
             return object;
         },
         updateEventComponent() {
-          console.log('i am here');
 
             let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
             let event = new CalendarEvent({id: this.event.id});
