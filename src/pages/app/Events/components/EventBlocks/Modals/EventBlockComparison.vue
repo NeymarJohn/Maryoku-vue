@@ -14,7 +14,7 @@
                 <md-option
                   v-for="(item, index) in selectableProposals"
                   :key="index"
-                  v-bind:value="item"
+                  :value="item"
                 >
                   {{ getProposalName(item) }}
                 </md-option>
@@ -58,7 +58,7 @@
                 <md-option
                   v-for="(item, index) in selectableProposals"
                   :key="index"
-                  v-bind:value="item"
+                  :value="item"
                 >
                   {{ getProposalName(item) }}
                 </md-option>
@@ -84,7 +84,7 @@
                 <md-option
                   v-for="(item, index) in selectableProposals"
                   :key="index"
-                  v-bind:value="item"
+                  :value="item"
                 >
                   {{ getProposalName(item) }}
                 </md-option>
@@ -243,7 +243,7 @@
                       <div class="star-rating" v-if="selectedBlock.proposalComparison2">
                         <label class="star-rating__star fs-14"
                           v-for="(rating, index) in ratings" 
-                          :value="rating" :key="index"
+                          :value="item" :key="index"
                           :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison2) >= rating) && getProposalRating(selectedBlock.proposalComparison2) != null)}"
                         >
                           ★
@@ -282,17 +282,17 @@
                       <h5 class="title">Cancellation</h5>
                     </td>
                     <td class="comparison-cell proposal">
-                      <p class="fs-14 fc-grey">
+                      <p>
                         {{getProposalCancellationPolicy(selectedBlock.proposalComparison1)}}
                       </p>
                     </td>
                     <td class="comparison-cell proposal">
-                      <p class="fs-14 fc-grey">
+                      <p>
                         {{getProposalCancellationPolicy(selectedBlock.proposalComparison2)}}
                       </p>
                     </td>
                     <td class="comparison-cell proposal">
-                      <p class="fs-14 fc-grey">
+                      <p>
                         {{getProposalCancellationPolicy(selectedBlock.proposalComparison3)}}
                       </p>
                     </td>
@@ -315,83 +315,19 @@
                       <h5 class="title">Legal Docs</h5>
                     </td>
                     <td class="comparison-cell proposal">
-                      <ul class="list-files" v-if="getLegalDocsOfComparison1.length > 0">
-                        <li v-for="(legalDoc, index) in getLegalDocsOfComparison1" :key="index">
-                          <a 
-                            class="fc-danger"
-                            target="_blank"
-                            v-bind:href="legalDoc.path"
-                          >
-                            <md-icon class="fs-14 fc-danger">picture_as_pdf</md-icon> {{legalDoc.fileName}}
-                          </a>
-                        </li>
-                      </ul>
-                      <p class="fc-danger fs-14" v-else>
-                        No Files
+                      <p>
+                        {{getLegalDocs(selectedBlock.proposalComparison1)}}
                       </p>
                     </td>
                     <td class="comparison-cell proposal">
-                      <ul class="list-files" v-if="getLegalDocsOfComparison2.length > 0">
-                        <li v-for="(legalDoc, index) in getLegalDocsOfComparison2" :key="index">
-                          <a 
-                            class="fc-danger"
-                            target="_blank"
-                            v-bind:href="legalDoc.path"
-                          >
-                            <md-icon class="fs-14 fc-danger">picture_as_pdf</md-icon> {{legalDoc.fileName}}
-                          </a>
-                        </li>
-                      </ul>
-                      <p class="fc-danger fs-14" v-else>
-                        No Files
+                      <p>
+                        {{getLegalDocs(selectedBlock.proposalComparison2)}}
                       </p>
                     </td>
                     <td class="comparison-cell proposal">
-                      <ul class="list-files" v-if="getLegalDocsOfComparison3.length > 0">
-                        <li v-for="(legalDoc, index) in getLegalDocsOfComparison3" :key="index">
-                          <a 
-                            class="fc-danger"
-                            target="_blank"
-                            v-bind:href="legalDoc.path"
-                          >
-                            <md-icon class="fs-14 fc-danger">picture_as_pdf</md-icon> {{legalDoc.fileName}}
-                          </a>
-                        </li>
-                      </ul>
-                      <p class="fc-danger fs-14" v-else>
-                        No Files
+                      <p>
+                        {{getLegalDocs(selectedBlock.proposalComparison3)}}
                       </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="comparison-cell category">
-                    </td>
-                    <td class="comparison-cell proposal">
-                      <a 
-                        class="text-transform-uppercase fs-12 fc-danger fw-500"
-                        v-if="selectedBlock.proposalComparison1"
-                        @click="viewProposal(selectedBlock.proposalComparison1)"
-                      >
-                        View Proposal
-                      </a>
-                    </td>
-                    <td class="comparison-cell proposal">
-                      <a 
-                        class="text-transform-uppercase fs-12 fc-danger fw-500"
-                        v-if="selectedBlock.proposalComparison2"
-                        @click="viewProposal(selectedBlock.proposalComparison2)"
-                      >
-                        View Proposal
-                      </a>
-                    </td>
-                    <td class="comparison-cell proposal">
-                      <a 
-                        class="text-transform-uppercase fs-12 fc-danger fw-500"
-                        v-if="selectedBlock.proposalComparison3"
-                        @click="viewProposal(selectedBlock.proposalComparison3)"
-                      >
-                        View Proposal
-                      </a>
                     </td>
                   </tr>
                 </table>
@@ -404,18 +340,18 @@
   </div>
 </template>
 <script>
-  import Calendar from '@/models/Calendar'
-  import CalendarEvent from '@/models/CalendarEvent'
-  import EventComponent from '@/models/EventComponent'
+  import Calendar from '@/models/Calendar';
+  import CalendarEvent from '@/models/CalendarEvent';
+  import EventComponent from '@/models/EventComponent';
 
-  import ViewProposal from './ViewProposal.vue'
-  import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue'
-  import VueElementLoading from 'vue-element-loading'
-  import _ from 'underscore'
-  import numeral from 'numeral'
+  import ViewProposal from './ViewProposal.vue';
+  import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue';
+  import VueElementLoading from 'vue-element-loading';
+  import _ from 'underscore';
+  import numeral from 'numeral';
 
-  import jsPDF from 'jspdf'
-  import html2canvas from 'html2canvas'
+  import jsPDF from 'jspdf';
+  import html2canvas from 'html2canvas';
 
   export default {
     name: 'event-block-comparison',
@@ -435,8 +371,6 @@
       selectableProposals: [],
       proposalsById: {},
       requirementsById: {},
-      serverUrl: process.env.SERVER_URL,
-      legalDocs: [],
     }),
     methods: {
       manageProposalsAccept(proposal) {
@@ -449,45 +383,45 @@
       },
       isAccepted (proposal) {
         if (this.proposalsById[proposal]) {
-          return this.proposalsById[proposal].accepted
+          return this.proposalsById[proposal].accepted;
         } else {
-          return false
+          return false;
         }
       },
       getProposalPrice(proposalId) {
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
           if (proposalById) {
-            return `$${proposalById.cost  | numeral('0,0.0')}`
+            return `$${proposalById.cost  | numeral('0,0.0')}`;
           }
         }
-        return ''
+        return "";
       },
       getProposalPricePerGuest(proposalId) {
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
           if (proposalById && proposalById.cost) {
-            return `$${(proposalById.cost / this.event.numberOfParticipants) | numeral('0,0.0')}`
+            return `$${(proposalById.cost / this.event.numberOfParticipants) | numeral('0,0.0')}`;
           }
         }
-        return ''
+        return "";
       },
       getProposalRequirementsFulfilled(proposalId) {
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
           if (proposalById && proposalById.cost) {
-            let fulfilled = proposalById.included.length + proposalById.extras.length
-            let total = fulfilled + proposalById.missing.length
-            return `${fulfilled} / ${total}`
+            let fulfilled = proposalById.included.length + proposalById.extras.length;
+            let total = fulfilled + proposalById.missing.length;
+            return `${fulfilled} / ${total}`;
           }
         }
-        return ''
+        return "";
       },
       getProposalRequirementFulfillment(proposalId, requirementId) {
         if (proposalId && requirementId) {
           let requirementById = this.requirementsById[`${proposalId}__${requirementId}`]
           if (requirementById) {
-            return requirementById
+            return requirementById;
           }
         }
         return {
@@ -496,7 +430,7 @@
           missing: false,
           extra: false,
           price: null
-        }
+        };
       },
       getProposalRating(proposalId) {
         if (proposalId) {
@@ -507,67 +441,50 @@
         }
         return 0
       },
-      getLegalDocs() {
-        this.legalDocs = []
-
-        if (this.selectedBlock.proposals) {
-          this.selectedBlock.proposals.forEach( proposal => {
-            proposal.attachements.forEach((item)=>{
-              const fullPath = `${this.serverUrl}/1/proposal-requests/${proposal.id}/files/${item}`
-
-              this.$http.get(
-                fullPath,
-                { headers: this.$auth.getAuthHeader() }
-              ).then((response) => {
-                if (response && response.headers) {
-                  if (response.headers['content-type'].indexOf('pdf') > -1) {
-                    if (this.legalDocs.filter( ld => ld.path == fullPath ).length == 0) {
-                      this.legalDocs.push({
-                        fileName: 'LegalDoc' + ( this.legalDocs.length + 1 ),
-                        path: fullPath
-                      })
-                    }
-                  }
-                }
-              })
-            })
-          })
+      getLegalDocs(proposalId) {
+        if (proposalId) {
+          let proposalById = this.proposalsById[proposalId]
+          if (proposalById) {
+            return proposalById.legal;
+          }
         }
-        return []
+        return "";
       },
       getProposalCancellationPolicy(proposalId) {
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
           if (proposalById) {
-            return proposalById.candellationPolicy
+            return proposalById.candellationPolicy;
           }
         }
-        return ''
+        return "";
       },
       getProposalValidUntil(proposalId) {
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
           if (proposalById) {
-            return proposalById.validUntil
+            return proposalById.validUntil;
           }
         }
-        return ''
+        return "";
       },
       getProposalName(proposalId) {
-        if (proposalId === '0') return 'None'
+        if (proposalId === "0") return "None";
 
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
           if (proposalById) {
-            return proposalById.vendor.vendorDisplayName
+            return proposalById.vendor.vendorDisplayName;
           }
         }
-        return 'Unknown'
+        return "Unknown";
       },
       populateProposals() {
+        console.log("EventBlockComparison: ");
+
         _.each(this.selectedBlock.proposals, (item) => {
-          this.proposalsById[item.id] = item
-          this.selectableProposals.push(item.id)
+          this.proposalsById[item.id] = item;
+          this.selectableProposals.push(item.id);
 
           _.each(item.included, (included) => {
             this.requirementsById[`${item.id}__${included.requirementId}`] = {
@@ -576,8 +493,8 @@
               missing: false,
               extra: false,
               price: null
-            }
-          })
+            };
+          });
 
           _.each(item.extras, (extra) => {
             this.requirementsById[`${item.id}__${extra.requirementId}`] = {
@@ -586,8 +503,8 @@
               missing: false,
               extra: true,
               price: extra.price
-            }
-          })
+            };
+          });
 
           _.each(item.missing, (missing) => {
             this.requirementsById[`${item.id}__${missing.requirementId}`] = {
@@ -596,15 +513,15 @@
               missing: true,
               extra: false,
               price: null
-            }
-          })
-        })
+            };
+          });
+        });
 
-        // console.log(this.proposalsById)
-        // console.log(this.requirementsById)
-        // console.log(this.selectedBlock.values)
+        console.log(this.proposalsById);
+        console.log(this.requirementsById);
+        console.log(this.selectedBlock.values);
 
-        this.$forceUpdate()
+        this.$forceUpdate();
       },
       viewProposal(proposal) {
         if (proposal) {
@@ -617,128 +534,118 @@
               proposal: this.proposalsById[proposal],
               selectedBlock: this.selectedBlock
             }
-          })
+          });
         }
       },
       addToCompare(proposalItem, idx) {
-        /*if (proposalItem === '0'){
-          this.selectedBlock.proposalComparison[Number(idx)] = null
+        /*if (proposalItem === "0"){
+          this.selectedBlock.proposalComparison[Number(idx)] = null;
         } else {
-          this.selectedBlock.proposalComparison[Number(idx)] = proposalItem
-          this.selectableProposals = ['0']
+          this.selectedBlock.proposalComparison[Number(idx)] = proposalItem;
+          this.selectableProposals = ["0"];
           _.each(this.selectedBlock.proposals,(item)=> {
             if (_.indexOf(this.selectedBlock.proposalComparison, item.id) === -1) {
-              this.selectableProposals.push(item.id)
+              this.selectableProposals.push(item.id);
             }
-          })
+          });
         }*/
         switch (idx) {
           case 0:
-            this.selectedBlock.proposalComparison1 = proposalItem
-            break
+            this.selectedBlock.proposalComparison1 = proposalItem;
+            break;
           case 1:
-            this.selectedBlock.proposalComparison2 = proposalItem
-            break
+            this.selectedBlock.proposalComparison2 = proposalItem;
+            break;
           case 2:
-            this.selectedBlock.proposalComparison3 = proposalItem
-            break
+            this.selectedBlock.proposalComparison3 = proposalItem;
+            break;
         }
-        this.updateEventComponent()
+        this.updateEventComponent();
       },
       removeFromCompare(proposalItem, idx) {
-        /*this.selectedBlock.proposalComparison[Number(idx)] = null
-        this.selectableProposals = ['0']
+        /*this.selectedBlock.proposalComparison[Number(idx)] = null;
+        this.selectableProposals = ["0"];
         _.each(this.selectedBlock.proposals,(item)=> {
           if (_.indexOf(this.selectedBlock.proposalComparison, item.id) === -1) {
-            this.selectableProposals.push(item.id)
+            this.selectableProposals.push(item.id);
           }
-        })*/
+        });*/
 
         switch (idx) {
           case 0:
-            this.selectedBlock.proposalComparison1 = null
-            break
+            this.selectedBlock.proposalComparison1 = null;
+            break;
           case 1:
-            this.selectedBlock.proposalComparison2 = null
-            break
+            this.selectedBlock.proposalComparison2 = null;
+            break;
           case 2:
-            this.selectedBlock.proposalComparison3 = null
-            break
+            this.selectedBlock.proposalComparison3 = null;
+            break;
         }
 
-        this.updateEventComponent()
+        this.updateEventComponent();
 
-        let count = 0
+        let count = 0;
         if (this.selectedBlock.proposalComparison1) {
-          count++
+          count++;
         }
         if (this.selectedBlock.proposalComparison2) {
-          count++
+          count++;
         }
         if (this.selectedBlock.proposalComparison3) {
-          count++
+          count++;
         }
-        this.$emit('update-comparison', count)
+        this.$emit('update-comparison', count);
       },
       updateEventComponent() {
         let calendar = new Calendar({
           id: this.$auth.user.defaultCalendarId
-        })
+        });
         let event = new CalendarEvent({
           id: this.event.id
-        })
+        });
         let selected_block = new EventComponent({
           id: this.selectedBlock.id
-        })
-        selected_block.proposalComparison1 = this.selectedBlock.proposalComparison1
-        selected_block.proposalComparison2 = this.selectedBlock.proposalComparison2
-        selected_block.proposalComparison3 = this.selectedBlock.proposalComparison3
+        });
+        selected_block.proposalComparison1 = this.selectedBlock.proposalComparison1;
+        selected_block.proposalComparison2 = this.selectedBlock.proposalComparison2;
+        selected_block.proposalComparison3 = this.selectedBlock.proposalComparison3;
         selected_block.for(calendar, event).save()
           .then(resp => {
-            console.log(resp)
-            this.$forceUpdate()
+            console.log(resp);
+            this.$forceUpdate();
           })
           .catch(error => {
             console.log('EventComponentVendor error =>', error)
-            this.$forceUpdate()
+            this.$forceUpdate();
           })
       },
       exportToPDF() {
-        const doc = new jsPDF('p', 'mm', 'a3')
+        const doc = new jsPDF('p', 'mm', 'a3');
         /** WITH CSS */
-        var canvasElement = document.createElement('canvas')
+        var canvasElement = document.createElement('canvas');
         html2canvas(this.$refs.content, {
           canvas: canvasElement,
           scale: 1
         }).then(function (canvas) {
-          const img = canvas.toDataURL('image/png')
+          const img = canvas.toDataURL("image/png");
 
-          doc.addImage(img, 'PNG', 20, -10)
-          doc.save('sample.pdf')
-        })
+          doc.addImage(img, 'PNG', 20, -10);
+          doc.save("sample.pdf");
+        });
       }
     },
     created(title, proposal) {
     },
     mounted() {
-      this.populateProposals()
-      this.getLegalDocs()
-      //this.getBlockVendors()
+      this.populateProposals();
+      //this.getBlockVendors();
     },
     computed: {
-      getLegalDocsOfComparison1 () {
-        return this.legalDocs.filter( ld => ld.path.includes(this.selectedBlock.proposalComparison1))
-      },
-      getLegalDocsOfComparison2 () {
-        return this.legalDocs.filter( ld => ld.path.includes(this.selectedBlock.proposalComparison2))
-      },
-      getLegalDocsOfComparison3 () {
-        return this.legalDocs.filter( ld => ld.path.includes(this.selectedBlock.proposalComparison3))
-      }
     },
     watch: {
       selectedBlock(newVal, oldVal) {
-        this.populateProposals()
+        this.populateProposals();
       }
     }
   }
@@ -822,14 +729,8 @@
   .fw-400 {
     font-weight: 400;
   } 
-  .fs-12 {
-    font-size: 12px;
-  }
   .fs-14 {
     font-size: 14px;
-  }
-  .fw-500 {
-    font-weight: 500;
   }
   .padding-2-ex-bottom {
     padding: 2em 2em 0 2em!important
@@ -844,23 +745,4 @@
   .fc-green {
     color: #01be60!important;
   }  
-  .fc-danger {
-    color: #FF547C !important
-  }
-  .fc-grey {
-    color: #808080!important;
-  }
-  .text-transform-uppercase {
-    text-transform: uppercase;
-    cursor: pointer;
-  }
-  .list-files {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    li {
-      padding: .5em 0;
-    }
-  }
 </style>

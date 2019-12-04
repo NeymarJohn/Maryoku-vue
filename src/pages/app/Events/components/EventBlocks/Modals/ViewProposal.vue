@@ -76,9 +76,9 @@
                   <h6>Attachments</h6>
                   <ul class="attachments-list_items">
                     <li v-for="(item,index) in attachedFiles" :key="index">
-                      <a target="_blank" :href="`${item}`">
+                      <a target="_blank" :href="`${item.fullPath}`">
                         <md-icon>attach_file</md-icon>
-                        Attachment {{index+1}}
+                        {{item.tag.replace(/_/g," ")}}
                       </a>
                     </li>
                   </ul>
@@ -94,14 +94,14 @@
                 <div class="cost-info_desc">
                   <div class="cost-label">Subtotal</div>
                   <br/>
-                  <div class="cost-value">${{vendorProposal.cost | numeral(0,0)}}</div>
+                  <div class="cost-value">${{vendorProposal.cost}}</div>
                   <br/>
-                  <div class="down-payment">Down Payment : ${{vendorProposal.cost *.1 | numeral(0,0)}}</div>
+                  <div class="down-payment">Down Payment : ${{vendorProposal.cost *.1 }}</div>
                 </div>
                 <div class="cost-info_desc">
                   <div class="cost-label">Cost Per Guest</div>
                   <br/>
-                  <div class="cost-value">${{vendorProposal.costPerGuest | numeral(0,0)}}</div>
+                  <div class="cost-value">${{vendorProposal.costPerGuest}}</div>
                 </div>
               </div>
               <div class="cost-info_breakdown">
@@ -110,7 +110,7 @@
                 <ul class="cost-breakdown__items">
                   <li v-for="(item,index) in proposal.costBreakdown" :key="index">
                     <span v-if="item.service">
-                      {{item.service}}: ${{item.cost | numeral(0,0)}}
+                      {{item.service}}: ${{item.cost}}
                     </span>
                   </li>
                 </ul>
@@ -151,9 +151,9 @@
           <div class="section-title with-border">
             <h3>Included in {{vendorInfo.vendorCategory}}:</h3>
             <div class="total-budget text-right pull-right">
-              <span class="total">Total {{vendorInfo.vendorCategory}}: ${{vendorProposal.cost | numeral(0,0)}}</span>
+              <span class="total">Total {{vendorInfo.vendorCategory}}: ${{vendorProposal.cost}}</span>
               <br/>
-              <span class="per-guest">Per Guest: ${{vendorProposal.costPerGuest | numeral(0,0)}}</span>
+              <span class="per-guest">Per Guest: ${{vendorProposal.costPerGuest}}</span>
             </div>
           </div>
           <ul class="included-list">
@@ -177,7 +177,7 @@
                 </div>
               </div>
               <div class="proposal-actions">
-                <md-button v-if="!item.itemNotAvailable" class="md-rose">Add (${{item.price | numeral(0,0)}})</md-button>
+                <md-button v-if="!item.itemNotAvailable" class="md-rose">Add (${{item.price}})</md-button>
                 <md-button v-else class="md-success">Got it</md-button>
               </div>
             </li>
@@ -207,7 +207,7 @@
                       Subtotal
                     </div>
                     <span class="td-value">
-                      ${{(vendorProposal.cost).toFixed(2) | numeral(0,0)}}
+                    ${{(vendorProposal.cost).toFixed(2)}}
                     </span>
                   </div>
                   <div class="td-price">
@@ -215,7 +215,7 @@
                       Tax (3%)
                     </div>
                     <span class="td-value">
-                      ${{(vendorProposal.cost*0.03).toFixed(2) | numeral(0,0)}}
+                    ${{(vendorProposal.cost*0.03).toFixed(2)}}
                     </span>
                   </div>
                   <div class="td-price bold">
@@ -309,8 +309,8 @@
                       :key="index"
                       :class="{'is-selected' : ((feedbackRating >= rating) && feedbackRating != null)}"
                       >
-                      <input 
-                        class="star-rating star-rating__checkbox" 
+                      <input
+                        class="star-rating star-rating__checkbox"
                         type="radio"
                         v-model="feedbackRating">★
                     </label>
@@ -342,8 +342,8 @@
                       :key="index"
                       :class="{'is-selected' : ((feedbackRating >= rating) && feedbackRating != null)}"
                       >
-                      <input 
-                        class="star-rating star-rating__checkbox" 
+                      <input
+                        class="star-rating star-rating__checkbox"
                         type="radio"
                         v-model="feedbackRating">★
                     </label>
@@ -534,7 +534,7 @@ export default {
       this.attachmentsLoadingCount = 0
 
       this.vendorProposal.attachements.forEach((item)=>{
-        const fullPath = `${this.serverUrl}/1/proposal-requests/${this.proposal.id}/files/${item}`
+        const fullPath = `${this.serverUrl}/1/proposal-requests/${this.proposal.id}/files/${item.id}`
 
         this.$http.get(
           fullPath,
@@ -549,7 +549,7 @@ export default {
                 srcset: ""
               })
             } else {
-              this.attachedFiles.push(fullPath)
+              this.attachedFiles.push({fullPath : fullPath, tag : item.tag, name : item.name});
               this.attachmentsLoadingCount++
             }
           }
