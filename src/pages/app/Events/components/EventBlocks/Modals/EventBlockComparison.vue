@@ -14,7 +14,7 @@
                 <md-option
                   v-for="(item, index) in selectableProposals"
                   :key="index"
-                  :value="item"
+                  v-bind:value="item"
                 >
                   {{ getProposalName(item) }}
                 </md-option>
@@ -58,7 +58,7 @@
                 <md-option
                   v-for="(item, index) in selectableProposals"
                   :key="index"
-                  :value="item"
+                  v-bind:value="item"
                 >
                   {{ getProposalName(item) }}
                 </md-option>
@@ -84,7 +84,7 @@
                 <md-option
                   v-for="(item, index) in selectableProposals"
                   :key="index"
-                  :value="item"
+                  v-bind:value="item"
                 >
                   {{ getProposalName(item) }}
                 </md-option>
@@ -243,7 +243,7 @@
                       <div class="star-rating" v-if="selectedBlock.proposalComparison2">
                         <label class="star-rating__star fs-14"
                           v-for="(rating, index) in ratings" 
-                          :value="item" :key="index"
+                          :value="rating" :key="index"
                           :class="{'is-selected' : ((getProposalRating(selectedBlock.proposalComparison2) >= rating) && getProposalRating(selectedBlock.proposalComparison2) != null)}"
                         >
                           ★
@@ -315,19 +315,74 @@
                       <h5 class="title">Legal Docs</h5>
                     </td>
                     <td class="comparison-cell proposal">
-                      <p>
-                        {{getLegalDocs(selectedBlock.proposalComparison1)}}
-                      </p>
+                      <template v-if="getLegalDocs(selectedBlock.proposalComparison1).length > 0">
+                        <a 
+                          v-for="(legalDoc, index) in getLegalDocs(selectedBlock.proposalComparison1)" 
+                          :key="index"
+                          :href="legalDoc.path">
+                          {{legalDoc.fileName}}
+                        </a>
+                      </template>
+                      <template>
+                        No Files
+                      </template>
                     </td>
                     <td class="comparison-cell proposal">
-                      <p>
-                        {{getLegalDocs(selectedBlock.proposalComparison2)}}
-                      </p>
+                      <template v-if="getLegalDocs(selectedBlock.proposalComparison2).length > 0">
+                        <a 
+                          v-for="(legalDoc, index) in getLegalDocs(selectedBlock.proposalComparison2)" 
+                          :key="index"
+                          :href="legalDoc.path">
+                          {{legalDoc.fileName}}
+                        </a>
+                      </template>
+                      <template>
+                        No Files
+                      </template>
                     </td>
                     <td class="comparison-cell proposal">
-                      <p>
-                        {{getLegalDocs(selectedBlock.proposalComparison3)}}
-                      </p>
+                      <template v-if="getLegalDocs(selectedBlock.proposalComparison3).length > 0">
+                        <a 
+                          v-for="(legalDoc, index) in getLegalDocs(selectedBlock.proposalComparison3)" 
+                          :key="index"
+                          :href="legalDoc.path">
+                          {{legalDoc.fileName}}
+                        </a>
+                      </template>
+                      <template>
+                        No Files
+                      </template>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="comparison-cell category">
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <a 
+                        class="text-transform-uppercase fs-12 fc-danger fw-500"
+                        v-if="selectedBlock.proposalComparison1"
+                        @click="viewProposal(selectedBlock.proposalComparison1)"
+                      >
+                        View Proposal
+                      </a>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <a 
+                        class="text-transform-uppercase fs-12 fc-danger fw-500"
+                        v-if="selectedBlock.proposalComparison2"
+                        @click="viewProposal(selectedBlock.proposalComparison2)"
+                      >
+                        View Proposal
+                      </a>
+                    </td>
+                    <td class="comparison-cell proposal">
+                      <a 
+                        class="text-transform-uppercase fs-12 fc-danger fw-500"
+                        v-if="selectedBlock.proposalComparison3"
+                        @click="viewProposal(selectedBlock.proposalComparison3)"
+                      >
+                        View Proposal
+                      </a>
                     </td>
                   </tr>
                 </table>
@@ -371,6 +426,7 @@
       selectableProposals: [],
       proposalsById: {},
       requirementsById: {},
+      serverUrl: process.env.SERVER_URL,
     }),
     methods: {
       manageProposalsAccept(proposal) {
@@ -442,13 +498,33 @@
         return 0
       },
       getLegalDocs(proposalId) {
+        let pdfFiles = []
+
         if (proposalId) {
           let proposalById = this.proposalsById[proposalId]
+
           if (proposalById) {
-            return proposalById.legal;
+            proposalById.attachements.forEach((item)=>{
+              const fullPath = `${this.serverUrl}/1/proposal-requests/${proposalId}/files/${item}`
+
+              this.$http.get(
+                fullPath,
+                { headers: this.$auth.getAuthHeader() }
+              ).then((response) => {
+                if (response && response.headers) {
+                  if (response.headers['content-type'].indexOf('pdf') > -1) {
+                    pdfFiles.push({
+                      fileName: 'LegalDoc' + ( pdfFiles.length + 1 ),
+                      path: fullPath
+                    })
+                    return pdfFiles
+                  }
+                }
+              });
+            })
           }
         }
-        return "";
+        return pdfFiles
       },
       getProposalCancellationPolicy(proposalId) {
         if (proposalId) {
@@ -517,9 +593,9 @@
           });
         });
 
-        console.log(this.proposalsById);
-        console.log(this.requirementsById);
-        console.log(this.selectedBlock.values);
+        // console.log(this.proposalsById);
+        // console.log(this.requirementsById);
+        // console.log(this.selectedBlock.values);
 
         this.$forceUpdate();
       },
@@ -729,8 +805,14 @@
   .fw-400 {
     font-weight: 400;
   } 
+  .fs-12 {
+    font-size: 12px;
+  }
   .fs-14 {
     font-size: 14px;
+  }
+  .fw-500 {
+    font-weight: 500;
   }
   .padding-2-ex-bottom {
     padding: 2em 2em 0 2em!important
@@ -745,4 +827,11 @@
   .fc-green {
     color: #01be60!important;
   }  
+  .fc-danger {
+    color: #FF547C !important
+  }
+  .text-transform-uppercase {
+    text-transform: uppercase;
+    cursor: pointer;
+  }
 </style>

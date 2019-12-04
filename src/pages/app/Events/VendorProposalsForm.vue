@@ -191,7 +191,7 @@
               <h4  class="title" style="margin-bottom: 12px;">Images</h4>
               <div class="md-layout">
                 <div class="md-layout-item md-size-20" v-for="(image,index) in proposalRequestImages" :key="index"  style="margin: 12px; " >
-                    <div class="vendor-images-list_item"  v-if="image.tag !== null">
+                    <div class="vendor-images-list_item"  v-if="image.vendorsFileContentType === 'application/pdf'">
                         <md-icon>picture_as_pdf</md-icon>
                     </div>
                   <iframe v-else seamless class="vendor-images-list_item" frameborder="0"
@@ -219,23 +219,20 @@
                 </div>
               </div>
               <h5  class="title" style="margin-bottom: 12px;">Additional documentation</h5>
-              <div class="attachments-documents-btn">
-                <md-button class=" md-sm add-vendor-image" :class="{'md-primary' : !attachmentUploaded('proof_of_insurance')}"
-                  @click="uploadEventImage(null,'proof_of_insurance')">
-                    <md-icon v-if="attachmentUploaded('proof_of_insurance')">check</md-icon>
-                  <md-icon v-else>add</md-icon>
+              <div class="">
+                <md-button class="md-primary md-sm add-vendor-image"
+                  @click="uploadEventImage">
+                  <md-icon>add</md-icon>
                   Proof of Insurance
                 </md-button>
-                <md-button class="md-primary md-sm add-vendor-image" :class="{'md-primary' : !attachmentUploaded('liquor_license')}"
-                  @click="uploadEventImage(null,'liquor_license')">
-                    <md-icon v-if="attachmentUploaded('liquor_license')">check</md-icon>
-                    <md-icon v-else>add</md-icon>
+                <md-button class="md-primary md-sm add-vendor-image"
+                  @click="uploadEventImage">
+                  <md-icon>add</md-icon>
                   Liquor License
                 </md-button>
-                <md-button class="md-primary md-sm add-vendor-image" :class="{'md-primary' : !attachmentUploaded('caterer_license')}"
-                  @click="uploadEventImage(null,'caterer_license')">
-                    <md-icon v-if="attachmentUploaded('caterer_license')">check</md-icon>
-                    <md-icon v-else>add</md-icon>
+                <md-button class="md-primary md-sm add-vendor-image"
+                  @click="uploadEventImage">
+                  <md-icon>add</md-icon>
                   Caterer License
                 </md-button>
               </div>
@@ -475,8 +472,7 @@
 
   import moment from 'moment'
   import swal from "sweetalert2";
-  import ProposalRequestRequirement from '../../../models/ProposalRequestRequirement';
-  import _ from "underscore";
+  import ProposalRequestRequirement from '../../../models/ProposalRequestRequirement'
 
   export default {
     props: ['proposalRequestRequirements', 'proposalRequest'],
@@ -504,7 +500,6 @@
         alretExceedPictureSize: false,
         proposalRequestComment: '',
         attachmentsLoadingCount: 0,
-          attachmentType : ''
       }
     },
     created () {
@@ -538,9 +533,8 @@
       getEventDuration (eventStartMillis, eventEndMillis) {
         return moment.duration(eventEndMillis - eventStartMillis).humanize()
       },
-      uploadEventImage (imageId = null, attachmentType = null) {
-        this.selectedImage = typeof imageId != 'object' ? imageId : null;
-        this.attachmentType = attachmentType;
+      uploadEventImage (imageId = null) {
+        this.selectedImage = typeof imageId != 'object' ? imageId : null
         this.$refs.eventFile.click()
       },
 
@@ -574,11 +568,10 @@
 
           return new ProposalRequestImage({
             vendorProposalFile: e.target.result,
-              name : file.name,
-              tag : vm.attachmentType
+              name : file.name
           }).for(proposalRequest).save().then(result => {
             this.isLoading = false
-            this.proposalRequestImages.push({id: result.id,tag : vm.attachmentType});
+            this.proposalRequestImages.push({id: result.id})
           })
           .catch((error) => {
             this.isLoading = false
@@ -817,10 +810,7 @@
           comment.id = res.item.id;
           item.comments = [comment];
         });
-      },
-        attachmentUploaded(type) {
-            return _.findWhere(this.proposalRequestImages, {tag : type});
-        }
+      }
     },
     computed: {
       totalOffer () {
