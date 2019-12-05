@@ -75,12 +75,11 @@
                                         <md-icon>person</md-icon>
                                         <label>Guest Count</label>
                                         <md-input
-                                            v-model="selectedBlock.numberOfParticipants"
+                                            v-model="event.numberOfParticipants"
                                             data-vv-name="numberOfParticipants"
                                             v-validate= "modelValidations.numberOfParticipants"
                                             required
                                             type="number"
-                                            @change="updateEventComponent"
                                         ></md-input>
                                         <span class="md-error" v-if="errors.has('numberOfParticipants')">The Guest Count is required</span>
 
@@ -91,12 +90,11 @@
                                         <md-icon>account_balance_wallet</md-icon>
                                         <label>Budget</label>
                                         <md-input
-                                            v-model="selectedBlock.allocatedBudget"
+                                            v-model="event.totalBudget"
                                             data-vv-name="budget"
                                             v-validate= "modelValidations.totalBudget"
                                             required
                                             type="number"
-                                            @change="updateEventComponent"
 
                                         ></md-input>
                                         <span class="md-error" v-if="errors.has('budget')">The Budget is required</span>
@@ -106,7 +104,7 @@
                                 <div class="md-layout-item md-size-33">
                                     <md-field class="disabled" style="pointer-events: none;">
                                         <label>Per Guest</label>
-                                        <md-input v-model="selectedBlock.budgetPerPerson" style="color : gray;"
+                                        <md-input v-model="event.budgetPerPerson" style="color : gray;"
 
                                         ></md-input>
                                     </md-field>
@@ -532,42 +530,6 @@
             }
 
             return object;
-        },
-        updateEventComponent() {
-
-            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-            let event = new CalendarEvent({id: this.event.id});
-            let selected_block = new EventComponent({id: this.selectedBlock.id});
-
-            selected_block.numberOfParticipants = this.selectedBlock.numberOfParticipants;
-            selected_block.allocatedBudget = this.selectedBlock.allocatedBudget;
-            selected_block.budgetPerPerson = this.selectedBlock.budgetPerPerson;
-
-            selected_block.for(calendar, event).save().then(resp => {
-                console.log(resp);
-
-                this.$notify(
-                    {
-                        message: 'Field updated successfully',
-                        horizontalAlign: 'center',
-                        verticalAlign: 'top',
-                        type: 'success'
-                    })
-
-            })
-                .catch(error => {
-                    console.log(error);
-
-                    this.$notify(
-                        {
-                            message: 'Error while trying to modify this requirement',
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'danger'
-                        })
-
-                })
-
         }
     },
     computed: {},

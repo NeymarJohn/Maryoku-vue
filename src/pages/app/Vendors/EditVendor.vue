@@ -163,10 +163,12 @@
             {'md-valid': !errors.has('vendorWebsite') && vendor.vendorWebsite},
             {'md-error': errors.has('vendorWebsite')}]">
             <label>Website</label>
-            <md-input v-model="vendor.vendorWebsite"
-              type="text"
+            <md-input 
+              v-model="vendor.vendorWebsite"
+              type="url"
               data-vv-name="vendorWebsite"
               name="vendorWebsite"
+              v-validate="modelValidations.vendorWebsite"
             />
             <slide-y-down-transition>
               <md-icon class="error" v-show="errors.has('vendorWebsite')">close</md-icon>
@@ -465,7 +467,7 @@
   import LightBox from 'vue-image-lightbox'
   import {
     SlideYDownTransition
-  } from "vue2-transitions";
+  } from 'vue2-transitions'
 
   export default {
     components: {
@@ -515,6 +517,11 @@
           vendorCategory: {
             required: true,
             min: 5
+          },
+          vendorWebsite: {
+            url: {require_protocol: true },
+            regex: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,=.]+$/gm,
+            min: 10 // http://x.x 
           }
         },
         ratings: [1,2,3,4,5],
@@ -526,16 +533,16 @@
       }
     },
     created () {
-      this.routeName = this.$route.name;
+      this.routeName = this.$route.name
       Vendors.find('categories').then(categories => {
-        this.categories = categories;
+        this.categories = categories
       }, (error) => {
         console.log(error)
-      });
+      })
     },
     mounted () {
       let _self = this
-      this.isLoading = false;
+      this.isLoading = false
 
       if (this.$route.params.id) {
         this.getVendor()
@@ -555,9 +562,9 @@
         }.bind(this))
       },
       getVendorProposals(id) {
-        this.isLoading = true;
+        this.isLoading = true
         new Vendors({id}).proposalRequests().first().then(proposals => {
-          this.proposals = proposals.vendorProposals.filter( proposal => proposal.bidRange != null );
+          this.proposals = proposals.vendorProposals.filter( proposal => proposal.bidRange != null )
           this.proposals.forEach(proposal => {
             proposal.attachments.forEach( attachment => {
               this.attachments.push(attachment)
@@ -568,10 +575,10 @@
                 this.bgImages.push(fullPath)
               }
             })
-          });
+          })
           this.fillImages()
           this.isLoading = false
-        });
+        })
       },
       view() {
         if (this.$refs.lightbox) {
@@ -591,9 +598,9 @@
         this.vendor.avgScore = this.vendor.avgScore > 100 ? this.vendor.avgScore = 100 : this.vendor.avgScore
       },
       onlyNumber(event) {
-        const key = event.keyCode ? event.keyCode : event.which;
+        const key = event.keyCode ? event.keyCode : event.which
         if (!(event.ctrlKey || event.altKey || (47 < key && key < 58 && event.shiftKey == false) || (95 < key && key < 106) || (key == 8) || (key == 9) || (key > 34 && key < 41) || (key == 46))) { // 46 is dot
-          event.preventDefault();
+          event.preventDefault()
         }
       },
       fillImages() {
@@ -608,7 +615,7 @@
       async addVendor() {
         this.$validator.validateAll().then(res => {
           if (res) {
-            let newVendor = new Vendors({});
+            let newVendor = new Vendors({})
 
             newVendor.attach(this.vendor).then((res) => {
               this.$emit('vendorCreated')
@@ -619,33 +626,43 @@
                 verticalAlign: 'top',
                 type: 'success'
               })
-            });
+            })
           } else {
-            this.$emit("on-validated", res);
-            return res;
+            this.$emit('on-validated', res)
+            return res
           }
-        });
+        })
       },
       async updateVendor() {
-        let newVendor = await Vendors.find(this.vendor.id);
+        let newVendor = await Vendors.find(this.vendor.id)
 
-        newVendor.vendorDisplayName = this.vendor.vendorDisplayName;
-        newVendor.vendorAddressLine1 = this.vendor.vendorAddressLine1;
-        newVendor.vendorCategory = this.vendor.vendorCategory;
-        newVendor.rank = this.vendor.rank;
-        newVendor.avgScore = this.vendor.avgScore;
-        newVendor.vendorWebsite = this.vendor.vendorWebsite;
-        newVendor.vendorMainEmail = this.vendor.vendorMainEmail;
-        newVendor.vendorMainPhoneNumber = this.vendor.vendorMainPhoneNumber;
-        newVendor.vendorTagging = this.vendor.vendorTagging;
-        newVendor.save();
+        newVendor.vendorDisplayName = this.vendor.vendorDisplayName
+        newVendor.vendorAddressLine1 = this.vendor.vendorAddressLine1
+        newVendor.vendorCategory = this.vendor.vendorCategory
+        newVendor.rank = this.vendor.rank
+        newVendor.avgScore = this.vendor.avgScore
+        newVendor.vendorWebsite = this.vendor.vendorWebsite
+        newVendor.vendorMainEmail = this.vendor.vendorMainEmail
+        newVendor.vendorMainPhoneNumber = this.vendor.vendorMainPhoneNumber
+        newVendor.vendorTagging = this.vendor.vendorTagging
+
+        if (this.errors.items.length == 0) {
+          newVendor.save()
         
-        this.$notify({
-          message: 'Vendor Updated successfully!',
-          horizontalAlign: 'center',
-          verticalAlign: 'top',
-          type: 'success'
-        })
+          this.$notify({
+            message: 'Vendor Updated Successfully!',
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            message: this.errors.items[0].msg,
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'danger'
+          })
+        }
 
         this.selectedField = null
       },
@@ -667,42 +684,42 @@
         if (this.vendor.vendorProperties) {
           return this.vendor.vendorProperties.filter( item => item.categoryTitle == 'Capacity')
         } else {
-          return [];
+          return []
         }
       },
       vendorLogoImage: function() {
         if (this.vendor.vendorProperties) {
           return this.vendor.vendorProperties.filter( item => item.name == 'Logo' && item.type == 'image')
         } else {
-          return [];
+          return []
         }
       },
       vendorExtraImage: function() {
         if (this.vendor.vendorProperties) {
           return this.vendor.vendorProperties.filter( item => item.name != 'Logo' && item.type == 'image')
         } else {
-          return [];
+          return []
         }
       },
       vendorPricesAndRules: function() {
         if (this.vendor.vendorProperties) {
           return this.vendor.vendorProperties.filter( item => item.categoryTitle == 'Cost Elements' )
         } else {
-          return [];
+          return []
         }
       },
       vendorServicesList: function() {
         if (this.vendor.vendorProperties) {
           return this.vendor.vendorProperties.filter( item => item.categoryTitle == 'Services' || item.categoryTitle == 'Included services and amenities')
         } else {
-          return [];
+          return []
         }
       },
       vendorRestrictions: function() {
         if (this.vendor.vendorProperties) {
           return this.vendor.vendorProperties.filter( item => item.categoryTitle == 'Restrictions')
         } else {
-          return [];
+          return []
         }
       },
       getGalleryImages: function() {
@@ -713,8 +730,8 @@
               temp.push({
                 thumb: item,
                 src: item,
-                caption: "",
-                srcset: ""
+                caption: '',
+                srcset: ''
               })
             }
           })

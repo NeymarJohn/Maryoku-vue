@@ -68,7 +68,7 @@
                                                     <div class="cost-info">
                                                         <div class="cost-info_desc full-width">
                                                             <div class="cost-label">Subtotal</div>
-                                                            <div class="cost-value">${{(proposal.cost -  proposal.cost*0.10).toFixed(2)}}</div>
+                                                            <div class="cost-value">${{(proposal.cost+ proposal.cost*0.03).toFixed(2)}}</div>
                                                         </div>
                                                     </div>
 
@@ -76,11 +76,11 @@
                                                         <ul class="payment-details_list-items" v-if="proposal.costBreakdown" >
                                                             <li v-for="(item,index) in proposal.costBreakdown">
                                                                 <div class="details-title">{{ item.service }}</div>
-                                                                <div class="details-cost">${{item.cost.toFixed(2)}}</div>
+                                                                <div class="details-cost">{{item.cost.toFixed(2)}}</div>
                                                             </li>
                                                             <li>
-                                                                <div class="details-title">Down payment (10%)</div>
-                                                                <div class="details-cost">${{(proposal.cost*0.10).toFixed(2)}}</div>
+                                                                <div class="details-title">Upfront payment, service fee and tax (3%)</div>
+                                                                <div class="details-cost">${{(proposal.cost*0.03).toFixed(2)}}</div>
                                                             </li>
                                                         </ul>
                                                     </div>

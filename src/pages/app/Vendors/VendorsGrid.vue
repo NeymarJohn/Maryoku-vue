@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout md-gutter">
-    <div class="md-layout-item md-size-100 " style="margin-bottom: 42px; margin-top: 0;">
+    <div class="md-layout-item md-size-100 mt-42 mt-0">
       <md-field>
         <md-input
           type="search"
@@ -16,13 +16,18 @@
       :key="vendor.id">
       <product-card
         header-animation="true" fixed-header="false" :data-count="9999" :hover-count="9999">
-        <img class="img" slot="imageHeader" :src="vendorMainImage(vendor)" style="min-height: 180px;max-height: 180px; object-fit: cover;">
+        <img class="img imgHeader" slot="imageHeader" :src="vendorMainImage(vendor)">
         <div slot="card-buttons">
           <md-button class="md-purple md-xs md-round md-just-icon" @click="routeToVendor(vendor.id, $event)">
             <md-icon >more_horiz</md-icon>
             <md-tooltip md-direction="bottom">View</md-tooltip>
           </md-button>
-          <md-button v-if="vendor.vendorWebsite" class="md-info md-xs md-round md-just-icon" :href="`${vendor.vendorWebsite}`" target="_blank">
+          <md-button 
+            v-if="vendor.vendorWebsite && isValidVendorWebsite(vendor)" 
+            class="md-info md-xs md-round md-just-icon" 
+            :href="`${vendor.vendorWebsite}`" 
+            target="_blank"
+          >
             <md-icon>open_in_browser</md-icon>
             <md-tooltip md-direction="bottom">Open website</md-tooltip>
           </md-button>
@@ -36,7 +41,7 @@
           </md-button>
         </div>
         <h4 slot="title" class="title">
-          <a class="" style="font-weight: bold;" href="#pablo">{{vendor.vendorDisplayName}}</a>
+          <a class="fw-bold" href="#pablo">{{vendor.vendorDisplayName}}</a>
           <div class="small">
             <label
               class="star-rating__star"
@@ -48,15 +53,15 @@
           </div>
         </h4>
         <div slot="description" class="card-description ">
-          <div style="max-height: 20px;">
+          <div class="maxh-20">
             <p>
               {{vendor.vendorTagLine}}
             </p>
           </div>
-          <div style="min-height: 38px;">
-            <template v-if="vendor.vendorTagging && vendor.vendorTagging.length" v-for="(tag, index) in vendor.vendorTagging">
-              <span style="text-transform: capitalize;">{{tag}}</span><span v-if="index <=  vendor.vendorTagging.length"> &middot; </span>
-            </template>
+          <div class="tags" v-if="vendor.vendorTagging && vendor.vendorTagging.length">
+            <div v-for="(tag, index) in vendor.vendorTagging" :key="index">
+              <span class="tt-capitalize">{{tag}}</span><span v-if="index <=  vendor.vendorTagging.length"> &middot; </span>
+            </div>
           </div>
         </div>
         <template slot="footer">
@@ -64,7 +69,9 @@
             <div
               class="badge badge-primary"
               :class="`badge-${categoryColor(vendor.vendorCategory, buildingBlocksList)}`"
-              style="font-size: 10px !important; position: relative; top: 90%;">{{ categoryTitle(vendor.vendorCategory, buildingBlocksList) }}</div>
+            >
+              {{ categoryTitle(vendor.vendorCategory, buildingBlocksList) }}
+            </div>
           </div>
           <div class="stats">
             <p class="category">
@@ -96,6 +103,13 @@
       return {
         searchQuery: "",
         filteredVendorsList: [],
+        modelValidations: {
+          vendorWebsite: {
+            url: {require_protocol: true },
+            regex: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,=.]+$/gm,
+            min: 10 // http://x.x 
+          }
+        },
         bgImages : [
           '/static/img/lock.jpg',
           '/static/img/login.jpg',
@@ -139,6 +153,12 @@
           let byCategory = v.vendorCategory.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
           return byDisplayName || byCategory;
         });
+      },
+      isValidVendorWebsite(vendor) {
+        if (vendor.vendorWebsite) {
+          return vendor.vendorWebsite.indexOf('http://') > -1 || vendor.vendorWebsite.indexOf('https://') > -1
+        }
+        return false
       }
     },
     watch: {
@@ -218,5 +238,36 @@
     &[x-placement="left"]:after {
       border-bottom-color: $purple-500 !important;
     }
+  }
+  .mb-42 {
+    margin-bottom: 42px!important;
+  }
+  .mt-0 {
+    margin-top: 0!important;
+  }
+  .maxh-20 {
+    max-height: 20px!important;
+  }
+  .fw-bold {
+    font-weight: bold!important;
+  }
+  .tt-capitalize {
+    text-transform: capitalize!important;
+  }
+  .imgHeader {
+    min-height: 180px!important;
+    max-height: 180px!important;
+    object-fit: cover;
+  }
+  .badge {
+    font-size: 10px !important;
+    position: relative!important;
+    top: 90%!important;
+  }
+  .tags {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>

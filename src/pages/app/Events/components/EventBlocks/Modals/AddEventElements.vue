@@ -13,9 +13,8 @@
         <div class="md-layout" style="overflow: auto; max-height: 80vh;">
           <div v-for="(item,index) in filteredEventBlocks"
             :key="index"
-            :class="[`md-layout-item md-size-100 mx-auto event-element-item no-padding`, {'disabled': isElementAdded(item)}]"
+            class="md-layout-item md-size-100 mx-auto event-element-item no-padding"
             @click="addElement(item)"
-
           >
             <drag :class="[
               `md-button block-item text-center`,
@@ -61,8 +60,6 @@ import {
   Drop
 } from 'vue-drag-drop';
 import VueElementLoading from 'vue-element-loading';
-import _ from "underscore";
-
 
 export default {
   components: {
@@ -73,7 +70,6 @@ export default {
   },
   props: {
     event: Object,
-      eventBuildingBlocks : Array
   },
   data: () => ({
     categoryBuildingBlocks: [],
@@ -84,7 +80,6 @@ export default {
   }),
 
   created() {
-
   },
   mounted() {
     this.getCategoryBlocks();
@@ -109,7 +104,6 @@ export default {
 
           this.categoryBuildingBlocks = res;
           this.filteredEventBlocks = this.categoryBuildingBlocks;
-          console.log('filteredEventBlocks => ', this.filteredEventBlocks)
 
         })
         .catch(error => {
@@ -171,9 +165,6 @@ export default {
         this.selectedItems.push(item);
       }
     },
-      isElementAdded(item) {
-        return _.findWhere(this.eventBuildingBlocks,{ title : item.title });
-      }
   },
   computed: {
   },
@@ -226,13 +217,6 @@ export default {
     }
   }
 
-  .event-element-item {
-      &.disabled {
-          pointer-events: none;
-          opacity: 0.5;
-      }
-  }
-
   .block-item {
     text-transform: capitalize;
     background-color: #f2f2f2!important;
@@ -242,7 +226,5 @@ export default {
       background-color: #9a9a9a!important;
       color: white!important;
     }
-
-
   }
 </style>

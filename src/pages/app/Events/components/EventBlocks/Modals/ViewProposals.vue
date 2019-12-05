@@ -114,7 +114,7 @@
     }),
 
     created() {
-      console.log('selectedBlock => ',this.selectedBlock);
+      console.log(this.selectedBlock);
     },
     mounted() {
       this.requirementsLength = this.selectedBlock.valuesCount;
@@ -217,9 +217,9 @@
   .md-card-content {
     border: 2px solid black;
     .small {
-      margin-top: -35px;
-      margin-bottom: 12.5px;
-    }
-  }
+      margin-top: -35px; 
+      margin-bottom: 12.5px;      
+    }    
+  }  
 }
 </style>
