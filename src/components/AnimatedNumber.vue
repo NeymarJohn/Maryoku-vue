@@ -2,7 +2,7 @@
   <span v-if="customStyle" :style="customStyleContents">
     {{prefix}}{{animatedNumber | numeral('0,0') }}{{suffix}}
   </span>
-  <span v-else :class="[{'text-color-pink': isNegative}]">
+  <span v-else class="text-color-pink">
     {{prefix}}{{animatedNumber | numeral('0,0') }}{{suffix}}
   </span>
 </template>
@@ -64,9 +64,6 @@ export default {
   computed: {
     decimalDigits() {
       return (`${this.value}`.split('.')[1] || []).length;
-    },
-    isNegative() {
-      return this.animatedNumber <= 0
     }
   },
   mounted() {
@@ -80,11 +77,9 @@ export default {
 };
 </script>
 <style scoped>
-  span {
+  span.text-color-pink {
+    color: #ff4470;
     font-size: 18px;
     font-weight: 500;
-  }
-  .text-color-pink {
-    color: #ff4470;
   }
 </style>

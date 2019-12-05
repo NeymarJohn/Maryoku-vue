@@ -5,8 +5,11 @@
       <md-card class="md-card-plain" style="margin: 8px;" v-if="!requirement.editMode">
         <md-card-header>
           <h5 class="title" style="font-weight: bold;">
-            {{ getRequirementValue(requirement) || 1}}
-            <md-icon class="text-gray" style="font-size: 14px !important;">close</md-icon>
+              <template v-if="requirement.title && !isNotCounted(requirement.title.toLowerCase())">
+                  {{ getRequirementValue(requirement) || 1}}
+                  <md-icon class="text-gray" style="font-size: 14px !important;">close</md-icon>
+              </template>
+
             {{requirement.title}}
             <badge v-if="requirement.mandatory" class="inline-badge" type="danger">Must Have</badge>
           </h5>
@@ -35,7 +38,7 @@
             </div>
             <div class="md-layout-item md-size-100" >
               <!-- Multi Select Options list -->
-              <template v-if="tempOptions.length">
+              <template v-if="tempOptions.length && requirement.title !== 'Lighting'">
                 <div class="multi-select-options">
                   <div class="multi-select-options__item "
                     :class="{ 'with-amount' : requirementPropertiesType === 'multi-selection-with-amount'}"
@@ -64,7 +67,7 @@
                 <br>
               </template>
               <!-- Additional Options list -->
-              <template v-if="tempAdditionalOptions.length">
+              <template v-if="tempAdditionalOptions.length && requirement.title !== 'Lighting' ">
                 <md-checkbox
                   @change="getAdditionalSelectedOptions"
                   v-for="(option , index) in tempAdditionalOptions "
@@ -76,7 +79,7 @@
             </div>
             <div class="md-layout-item md-size-15">
               <md-field
-                v-if="requirementPropertiesType !== 'boolean'"
+                v-if="requirementPropertiesType === 'multi-selection-with-amount'"
                 >
                 <label>Quantity</label>
                 <md-input v-focus type="text" v-model="tempValue"></md-input>
@@ -160,7 +163,9 @@ export default {
       tempAdditionalOptions: [],
       otherOption: {},
       selectedOptions: [],
-      additionalSelectedOptions: []
+      additionalSelectedOptions: [],
+        notCounted : ['lighting','parking']
+
     }
   },
   mounted() {
@@ -169,6 +174,9 @@ export default {
     }
   },
   methods: {
+      isNotCounted(component){
+        return _.indexOf(this.notCounted, component) > -1;
+      },
     adjustInputSize(refName) {
       let input = this.$refs[refName]
       if (input) {

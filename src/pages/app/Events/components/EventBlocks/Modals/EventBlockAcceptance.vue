@@ -159,14 +159,10 @@ export default {
         new EventComponentVendor().for(calendar, event, selected_block).get()
           .then(resp => {
 
-            console.log('resp => ', resp);
-
             this.isLoading = false;
             this.selectedBlock.vendors = resp;
             this.selectedBlock.vendorsCount = resp.length;
             this.blockVendors = resp;
-
-            console.log('blockVendors => ', this.blockVendors);
 
             let vendorsWithProposals = _.filter(this.blockVendors, function (item) {
               return item.proposals && item.proposals.length;
@@ -178,18 +174,19 @@ export default {
 
             _.each(vendorsWithProposals, (v) => {
 
-              let downPaymentStatus = v.proposals[0].downPaymentStatus;
+                let downPaymentStatus = v.proposals[0].downPaymentStatus;
+                let accepted = v.proposals[0].accepted;
 
-              if (downPaymentStatus === null || downPaymentStatus === 'pending') {
-                downPaymentPaid.push(v);
-              } else if (downPaymentStatus === 'paid') {
-                fullyPaid.push(v);
-              }
+                if ( accepted ) {
+                    if (downPaymentStatus === null || downPaymentStatus === 'pending') {
+                        downPaymentPaid.push(v);
+                    } else if (downPaymentStatus === 'paid') {
+                        fullyPaid.push(v);
+                    }
 
-              if (v.proposals[0].accepted) {
-                proposals.push(v);
+                    proposals.push(v);
+                }
 
-              }
             });
 
             this.acceptedBlockVendors = [{
