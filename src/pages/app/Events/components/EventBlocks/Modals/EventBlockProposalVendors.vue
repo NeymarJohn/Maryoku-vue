@@ -229,7 +229,6 @@
         vendor.for(calendar, event, selected_block).save()
           .then(resp => {
             console.log(resp);
-            this.$root.$emit('calendar-refresh-events');
             this.getBlockVendors();
             this.$forceUpdate();
           })
@@ -461,8 +460,8 @@
   }
 
   .manage-proposals-wrapper {
-    background-color: white !important;
-    display: block;
+    background-color: white !important; 
+    display: block; 
     border-radius: 8px;
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
   }

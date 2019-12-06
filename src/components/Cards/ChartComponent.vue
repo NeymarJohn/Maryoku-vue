@@ -5,28 +5,28 @@
 </template>
 <script>
   export default {
-    name: "chart-component",
+    name: 'chart-component',
     props: {
       chartType: {
         type: String,
-        default: "Line" // Line | Pie | Bar
+        default: 'Line' // Line | Pie | Bar
       },
       chartOptions: {
         type: Object,
         default: () => {
-          return {};
+          return {}
         }
       },
       chartResponsiveOptions: {
         type: Array,
         default: () => {
-          return [];
+          return []
         }
       },
       chartAnimation: {
         type: Array,
         default: () => {
-          return [];
+          return []
         }
       },
       chartData: {
@@ -35,12 +35,12 @@
           return {
             labels: [],
             series: []
-          };
+          }
         }
       },
       backgroundColor: {
         type: String,
-        default: ""
+        default: ''
       }
     },
     data() {
@@ -48,72 +48,72 @@
         hoverCount: 0,
         imgHovered: false,
         fixedHeader: false,
-        chartId: "no-id"
-      };
+        chartId: 'no-id'
+      }
     },
     computed: {
       headerDown() {
-        return this.hoverCount > 15;
+        return this.hoverCount > 15
       }
     },
     methods: {
       headerBack: function() {
-        this.fixedHeader = false;
+        this.fixedHeader = false
       },
       fixHeader: function() {
-        this.hoverCount = 0;
-        this.fixedHeader = true;
+        this.hoverCount = 0
+        this.fixedHeader = true
 
-        setTimeout(this.headerBack, 480);
+        setTimeout(this.headerBack, 480)
       },
       onMouseOver: function() {
-        if (this.headerAnimation === "true") {
-          this.imgHovered = true;
-          this.hoverCount++;
+        if (this.headerAnimation === 'true') {
+          this.imgHovered = true
+          this.hoverCount++
         }
       },
       onMouseLeave: function() {
-        if (this.headerAnimation === "true") {
-          this.imgHovered = false;
+        if (this.headerAnimation === 'true') {
+          this.imgHovered = false
         }
       },
 
       getClass: function(backgroundColor) {
-        return "md-card-header-" + backgroundColor + "";
+        return 'md-card-header-' + backgroundColor + ''
       },
       /***
        * Initializes the chart by merging the chart options sent via props and the default chart options
        */
       initChart() {
-        var chartIdQuery = `#${this.chartId}`;
+        var chartIdQuery = `#${this.chartId}`
         this.$Chartist[this.chartType](
           chartIdQuery,
           this.chartData,
           this.chartOptions,
           this.chartResponsiveOptions
-        );
+        )
       },
       /***
        * Assigns a random id to the chart
        */
       updateChartId() {
-        var currentTime = new Date().getTime().toString();
-        var randomInt = this.getRandomInt(0, currentTime);
-        this.chartId = `div_${randomInt}`;
+        var currentTime = new Date().getTime().toString()
+        var randomInt = this.getRandomInt(0, currentTime)
+        this.chartId = `div_${randomInt}`
       },
       getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+        return Math.floor(Math.random() * (max - min + 1)) + min
       }
     },
     mounted() {
-      this.updateChartId();
-      this.$nextTick(this.initChart);
+      this.updateChartId()
+      this.$nextTick(this.initChart)
     },
     watch: {
       chartData() {
-        this.updateChartId();
-        this.$nextTick(this.initChart);
+        this.updateChartId()
+        this.$nextTick(this.initChart)
       }
     }
-  };
+  }
 </script>
