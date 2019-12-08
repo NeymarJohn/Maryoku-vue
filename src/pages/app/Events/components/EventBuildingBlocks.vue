@@ -265,41 +265,7 @@
 
         let res = this.event.components;
         this.$set(this, 'eventBuildingBlocks', res);
-
-        console.log('event = > ',this.event.components);
-        // group event blocks by category name
-        // this.eventBuildingBlocksList = _.chain(res).groupBy('category').map(function(value, key) {
-        //
-        //   let totalAllocatedBudget = 0, totalActualCost = 0;
-        //
-        //   value.forEach(function (item) {
-        //     if (item.allocatedBudget) totalAllocatedBudget += item.allocatedBudget;
-        //     if (item.winningProposalId) totalActualCost += item.winingProposal.cost;
-        //   })
-        //   return {
-        //     title: key,
-        //     blocks: _.sortBy(value, 'title'),
-        //     totalAllocatedBudget : totalAllocatedBudget,
-        //     totalActualCost : totalActualCost,
-        //     remainsBudget : totalActualCost ? totalAllocatedBudget - totalActualCost : 0
-        //   }
-        //
-        //
-        // })
-        //   .value();
-        //
-        // this.eventBuildingBlocksList = _.sortBy(this.eventBuildingBlocksList, 'title');
-
-        //let allocatedBudget = 0;
-        // if (this.eventBuildingBlocks) {
-        //   this.eventBuildingBlocks.forEach(item => {
-        //     allocatedBudget += Number(item.allocatedBudget);
-        //   });
-        // }
-
-        //this.allocatedBudget = allocatedBudget;
-        //this.isLoading = this.event.componentsCount !== this.event.components.length;
-        setTimeout(()=>{
+          setTimeout(()=>{
           this.isLoading = false;
         },500)
 
