@@ -258,7 +258,6 @@
       }
 
       this.$root.$on('calendar-refresh-events',()=>{
-          console.log('i am here');
         this.getEvent();
       })
     },

@@ -26,7 +26,7 @@
 
         <md-card-content class="md-layout">
           <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
-          <table style="width:100%;" class="table event-building-blocks_table">
+          <table class="table event-building-blocks_table w-100">
             <thead>
               <tr class="md-warning">
                 <th>Element</th>
@@ -38,9 +38,7 @@
               </tr>
             </thead>
             <tbody v-if="eventBuildingBlocks.length">
-              <template v-for="(block, index) in eventBuildingBlocks">
-                <!-- v-for="(rating, ratingIndex) in ratings"
-                :key="ratingIndex" -->
+              <!-- <template v-for="(block, index) in eventBuildingBlocks"> -->
                 <!-- <tr class="parent">
                   <td>{{category.title}}</td>
                   <td></td>
@@ -60,6 +58,8 @@
                   <td></td>
                 </tr> -->
                 <tr class="text-left"
+                  v-for="(block, index) in eventBuildingBlocks"
+                  :key="index"
                   @mouseover="setCurrentBlockId(block)"
                   @mouseout="setCurrentBlockId(null)">
                   <td>
@@ -70,8 +70,7 @@
                   </td>
                   <td class="fit-content">
                     <template>
-                      <div v-if="block.valuesCount && block.proposalsState != 'get-offers'"
-                            style="cursor: pointer;">
+                      <div v-if="block.valuesCount && block.proposalsState != 'get-offers'" class="cursor-pointer">
                         <md-button class="md-simple md-xs requirements-cell-button no-padding"
                                     @click="addRequirements(block)">
                           <!-- {{`${block.valuesCount} selected`}} -->
@@ -85,7 +84,10 @@
                       </template>
                     </template>
                   </td>
-                  <td class="fit-content w-20 allocated-budget" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
+                  <td 
+                    class="fit-content w-20 allocated-budget" 
+                    :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}"
+                  >
                     <div class="md-table-cell-container">
                       <label-edit v-if="!event.elementsBudgetPerGuest"
                                   :text="block.allocatedBudget"
@@ -154,7 +156,7 @@
                     </a>
                   </td>
                 </tr>
-              </template>
+              <!-- </template> -->
             </tbody>
           </table>
         </md-card-content>
@@ -217,7 +219,6 @@
         'setBuildingBlockModal'
       ]),
       deleteBlock(blockId) {
-
         swal({
           title: 'Are you sure?',
           text: `You won't be able to revert this!`,
@@ -265,7 +266,41 @@
 
         let res = this.event.components;
         this.$set(this, 'eventBuildingBlocks', res);
-          setTimeout(()=>{
+
+        console.log('event = > ',this.event.components);
+        // group event blocks by category name
+        // this.eventBuildingBlocksList = _.chain(res).groupBy('category').map(function(value, key) {
+        //
+        //   let totalAllocatedBudget = 0, totalActualCost = 0;
+        //
+        //   value.forEach(function (item) {
+        //     if (item.allocatedBudget) totalAllocatedBudget += item.allocatedBudget;
+        //     if (item.winningProposalId) totalActualCost += item.winingProposal.cost;
+        //   })
+        //   return {
+        //     title: key,
+        //     blocks: _.sortBy(value, 'title'),
+        //     totalAllocatedBudget : totalAllocatedBudget,
+        //     totalActualCost : totalActualCost,
+        //     remainsBudget : totalActualCost ? totalAllocatedBudget - totalActualCost : 0
+        //   }
+        //
+        //
+        // })
+        //   .value();
+        //
+        // this.eventBuildingBlocksList = _.sortBy(this.eventBuildingBlocksList, 'title');
+
+        //let allocatedBudget = 0;
+        // if (this.eventBuildingBlocks) {
+        //   this.eventBuildingBlocks.forEach(item => {
+        //     allocatedBudget += Number(item.allocatedBudget);
+        //   });
+        // }
+
+        //this.allocatedBudget = allocatedBudget;
+        //this.isLoading = this.event.componentsCount !== this.event.components.length;
+        setTimeout(()=>{
           this.isLoading = false;
         },500)
 
@@ -499,5 +534,11 @@
   .span-users-count {
     color: #999999;
     font-size: 14px;
+  }
+  .w-100 {
+    width: 100%!important;
+  }
+  .cursor-pointer {
+    cursor: pointer!important;
   }
 </style>
