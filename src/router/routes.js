@@ -7,6 +7,7 @@ import Profile from '@/pages/app/Profile/index.vue';
 import MyCompany from '@/pages/app/MyCompany/MyCompany.vue';
 import MyCompanyNew from '@/pages/app/MyCompany/MyCompanyNew.vue';
 import CompanyDashboard from '@/pages/app/CompanyDashboard/CompanyDashboard.vue';
+import CreateEvent from '@/pages/Dashboard/Layout/CreateEvent.vue';
 
 import Team from "@/pages/app/Team/Team.vue";
 import Members from "@/pages/app/Members/Members.vue";
@@ -34,6 +35,8 @@ import VendorsPool from "@/pages/app/Vendors/VendorsPool.vue";
 import ImportVendors from "@/pages/app/Vendors/ImportVendors.vue";
 import YearlyPlan from "@/pages/app/YearlyPlan/index.vue";
 import AnnualPlanner from "@/pages/app/AnnualPlanner/index.vue";
+import EventWizard from "@/pages/app/CreateEvent/EventWizard.vue";
+import EventInfo from "@/pages/app/CreateEvent/EventInfo.vue";
 
 // Dashboard pages
 import EmployeeMain from '@/pages/Dashboard/Pages/CommonInfoProfile/Employee.vue';
@@ -482,6 +485,32 @@ let EventPages = {
   ]
 };
 
+let PublicCreateEvent = {
+    path : "/app2",
+    component : CreateEvent,
+    name : "CreateEvent",
+    children : [
+        {
+            path: "/create-event-wizard",
+            name: "EventWizard",
+            component: EventWizard,
+            meta: {
+                title: 'Event Wizard',
+                gtm: "Event Wizard"
+            }
+        },
+        {
+            path: "/about-invited",
+            name: "About",
+            component: EventInfo,
+            meta: {
+                title: 'Event Info',
+                gtm: "Event Info"
+            }
+        }
+    ]
+}
+
 const appCurrentInfo = {
   path: "/additional-form",
   name: "CommonInfoProfile",
@@ -524,6 +553,7 @@ const appCurrentInfo = {
   ]
 };
 
+
 const routes = [{
     path: "/",
     redirect: "/events",
@@ -538,7 +568,8 @@ const routes = [{
   publicPages,
   emptyLayoutPages,
   EventPages,
-  marketPlacePages
+  marketPlacePages,
+    PublicCreateEvent
 ];
 
 export default routes;

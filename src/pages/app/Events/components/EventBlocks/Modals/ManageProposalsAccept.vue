@@ -163,15 +163,10 @@
 
         },
         mounted() {
-            console.log(this.event);
-            console.log(this.selectedBlock);
-            console.log(this.proposal);
-
             EventComponentProposal.find(this.proposal.id)
                 .then(resp => {
 
                     this.proposal.accepted = resp.accepted;
-                    console.log('EventComponentProposal => ',resp);
                 })
                 .catch(error => {
                     console.log(' error here   -->>>  ', error)
@@ -193,34 +188,11 @@
             },
             acceptProposal(boolean) {
 
-                console.log(boolean);
-
                 let proposal = new EventComponentProposal({id : this.proposal.id});
 
                 proposal.accepted = boolean;
 
                 this.proposalAccepted = boolean;
-
-
-                // proposal.aboutUsMessage = this.proposal.aboutUsMessage;
-                // proposal.attachements = this.proposal.attachements;
-                // proposal.candellationPolicy = this.proposal.candellationPolicy;
-                // proposal.cons = this.proposal.cons;
-                // proposal.cost = this.proposal.cost;
-                // proposal.costBreakdown = this.proposal.costBreakdown;
-                // proposal.costPerGuest = this.proposal.costPerGuest;
-                // proposal.dateCreated = this.proposal.dateCreated;
-                // proposal.extras = this.proposal.extras;
-                // proposal.included = this.proposal.included;
-                // proposal.lastUpdated = this.proposal.lastUpdated;
-                // proposal.missing = this.proposal.missing;
-                // proposal.notes  = this.proposal.notes;
-                // proposal.percentRequirements = this.proposal.percentRequirements;
-                // proposal.personalMessage = this.proposal.personalMessage;
-                // proposal.pros = this.proposal.pros;
-                // proposal.validUntil = this.proposal.validUntil;
-                // proposal.vendor = this.proposal.vendor;
-                // proposal.vendorId = this.proposal.vendorId;
 
                 proposal.save().then((resp)=>{
                     console.log(resp);

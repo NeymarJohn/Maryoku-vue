@@ -1,6 +1,6 @@
 <template>
   <div class="manage-proposals-panel">
-    <div class="md-layout maxh-50vh" v-if="vendorProposal && vendorInfo">
+    <div class="md-layout" style="max-height: 50vh;" v-if="vendorProposal && vendorInfo">
       <!-- <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
         <h4 class="md-title">
           <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
@@ -8,9 +8,9 @@
           </md-button>
         </h4>
       </div> -->
-      <div class="md-layout-item md-size-100 maxh-50vh">
+      <div class="md-layout-item md-size-100" style="max-height: 50vh;">
         <div class="title-section">
-          <h4 class="md-title">
+          <h4 class="md-title" style="margin-bottom: 0; line-height: 51px; text-transform: capitalize;">
             <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
               <md-icon>navigate_before</md-icon>
             </md-button>
@@ -66,7 +66,7 @@
               <p v-html="vendorProposal.personalMessage">
                 <!-- Personal Message -->
               </p>
-              <div class="signature md-hide">
+              <div class="signature" style="display: none;">
                 Thanks,
                 <br>
                 {{vendorInfo.vendorDisplayName}}
@@ -78,7 +78,7 @@
                     <li v-for="(item,index) in attachedFiles" :key="index">
                       <a target="_blank" :href="`${item.fullPath}`">
                         <md-icon>attach_file</md-icon>
-                        {{item.tag ? item.tag.replace(/_/g," ") : `Attachment${index+1}`}}
+                        {{item.tag.replace(/_/g," ")}}
                       </a>
                     </li>
                   </ul>
@@ -168,39 +168,23 @@
                 </div>
               </template>
             </li>
-            <template v-if="extraMissingRequirements.length">
-              <li 
-                v-for="(item,index) in extraMissingRequirements" 
-                :key="index+vendorProposal.included.length" 
-                class="proposals-waiting-approval"
-              >
-                <div class="proposal-info">
-                  <div class="proposal-title">
-                    {{item.requirementValue}}x {{item.requirementTitle}} 
-                    <small class="md-hide">(Suggested by vendor)</small>
-                  </div>
-                  <div class="proposal-desc" v-for="(comment,index) in item.comments" :key="index">
-                    {{comment.commentText}}
-                    <md-button 
-                      v-if="comment.commentText.length > 300" 
-                      class="md-primary md-simple md-sm read-more no-uppercase"
-                    >
-                      Read more
-                    </md-button>
-                  </div>
+            <li v-for="(item,index) in extraMissingRequirements" :key="index+vendorProposal.included.length" class="proposals-waiting-approval" v-if="extraMissingRequirements.length">
+              <div class="proposal-info">
+                <div class="proposal-title">{{item.requirementValue}}x {{item.requirementTitle}} <small style="display: none;">(Suggested by vendor)</small></div>
+                <div class="proposal-desc" v-for="(comment,index) in item.comments" :key="index">
+                  {{comment.commentText}}
+                  <md-button v-if="comment.commentText.length > 300" class="md-primary md-simple md-sm read-more no-uppercase">Read more</md-button>
                 </div>
-                <div class="proposal-actions">
-                  <md-button v-if="!item.itemNotAvailable" class="md-rose">
-                    Add (${{item.price | numeral(0,0)}})
-                  </md-button>
-                  <md-button v-else class="md-success">Got it</md-button>
-                </div>
-              </li>
-            </template>
+              </div>
+              <div class="proposal-actions">
+                <md-button v-if="!item.itemNotAvailable" class="md-rose">Add (${{item.price | numeral(0,0)}})</md-button>
+                <md-button v-else class="md-success">Got it</md-button>
+              </div>
+            </li>
           </ul>
         </div>
-        <div class="md-layout-item md-size-5 md-hide"></div>
-        <div class="md-layout-item md-size-95 cost-breakdown-notes md-hide">
+        <div class="md-layout-item md-size-5" style="display: none;"></div>
+        <div class="md-layout-item md-size-95 cost-breakdown-notes" style="display: none">
           <div class="section-title">
             <h3>Cost Breakdown</h3>
           </div>
@@ -209,7 +193,7 @@
               <div class="section-content">
                 <md-table v-model="vendorProposal.costBreakdown" class="table-plaint">
                   <md-table-row slot="md-table-row" slot-scope="{ item }"  :class="{disabled : item.perGuest == 'N/A'}" >
-                    <md-table-cell md-label="Service tf-capitalize">{{ item.service }}</md-table-cell>
+                    <md-table-cell md-label="Service" style="text-transform: capitalize;">{{ item.service }}</md-table-cell>
                     <md-table-cell md-label="Per guest">
                       <template v-if="item.perGuest == 'N/A'">{{item.perGuest.toFixed(2)}}</template>
                       <template v-else>${{ item.perGuest }}</template>
@@ -305,8 +289,8 @@
             </LightBox>
           </div>
         </template>
-        <div class="md-layout-item md-size-5 md-hide"></div>
-        <div class="md-layout-item md-size-95 feedback-section md-hide">
+        <div class="md-layout-item md-size-5" style="display: none;"></div>
+        <div class="md-layout-item md-size-95 feedback-section " style="display: none;">
           <div class="section-title">
             <h5>Feedback</h5>
             <div class="review-count">(2)</div>
@@ -386,7 +370,7 @@
         </div>
         <div class="md-layout-item md-size-100">
           <ul class="proposal-summary">
-            <li class="md-hide">
+            <li style="display: none;">
               <div class="proposal-info">
                 <div class="proposal-title">
                   Payment & cost
@@ -401,7 +385,7 @@
                 </div>
               </div>
             </li>
-            <li class="md-hide">
+            <li style="display: none;">
               <div class="proposal-info">
                 <div class="proposal-title">
                   Payment & cost
@@ -421,7 +405,7 @@
                 <div class="proposal-title">About Us</div>
                 <div class="proposal-desc">{{vendorProposal.aboutUsMessage}}</div>
               </div>
-              <div class="attachments-list md-hide">
+              <div class="attachments-list" style="display: none;">
                 <ul class="attachments-list_items">
                   <li>
                     <a href="">
@@ -445,141 +429,140 @@
   </div>
 </template>
 <script>
-  import {
-    mapState,
-    mapGetters,
-    mapMutations,
-    mapActions
-  } from 'vuex'
-  import CalendarEvent from '@/models/CalendarEvent'
-  import Calendar from '@/models/Calendar'
-  import EventComponent from '@/models/EventComponent'
+// import auth from '@/auth';
+import {
+  mapState,
+  mapGetters,
+  mapMutations,
+  mapActions
+} from 'vuex'
+import CalendarEvent from '@/models/CalendarEvent'
+import Calendar from '@/models/Calendar'
+import EventComponent from '@/models/EventComponent'
 
-  import swal from 'sweetalert2'
-  import {
-    error
-  } from 'util'
-  import moment from 'moment'
-  import VueElementLoading from 'vue-element-loading'
-  import _ from 'underscore'
+import swal from 'sweetalert2'
+import {
+  error
+} from 'util'
+import moment from 'moment'
+import VueElementLoading from 'vue-element-loading'
+import _ from 'underscore';
 
-  import LightBox from 'vue-image-lightbox'
-  import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue'
-  import ProposalRequest from '@/models/ProposalRequest'
-  import EventComponentProposal from '@/models/EventComponentProposal'
+import LightBox from 'vue-image-lightbox';
+import ManageProposalsAccept from '../Modals/ManageProposalsAccept.vue';
+import ProposalRequest from '@/models/ProposalRequest';
+import EventComponentProposal from '@/models/EventComponentProposal';
 
-  export default {
-    components: {
-      VueElementLoading,
-      LightBox,
-      ManageProposalsAccept
+export default {
+  components: {
+    VueElementLoading,
+    LightBox,
+    ManageProposalsAccept
+  },
+  props: {
+    event: Object,
+    proposal: Object,
+    selectedBlock: Object
+  },
+  data: () => ({
+    // auth: auth,
+    ratings: [1, 2, 3, 4, 5],
+    images: [],
+    feedbackRating: 3,
+    vendorProposal: null,
+    vendorInfo: null,
+    serverUrl: process.env.SERVER_URL,
+    tooltipActive: false,
+    attachedFiles: [],
+    attachmentsLoadingCount: 0,
+  }),
+  created() {
+    console.log(this.proposal);
+
+    this.$set(this, 'vendorProposal', this.proposal)
+    this.$set(this, 'vendorInfo', this.proposal.vendor);
+
+  },
+  mounted() {
+    this.getImages()
+  },
+  methods: {
+    closePanel() {
+      this.$emit('closePanel')
     },
-    props: {
-      event: Object,
-      proposal: Object,
-      selectedBlock: Object
+    getProposalDate(eventStartMillis) {
+      let x = new Date(eventStartMillis)
+      return x.getFullYear() + '+' + x.getMonth() + '+' + x.getDate()
     },
-    data: () => ({
-      // auth: auth,
-      ratings: [1, 2, 3, 4, 5],
-      images: [],
-      feedbackRating: 3,
-      vendorProposal: null,
-      vendorInfo: null,
-      serverUrl: process.env.SERVER_URL,
-      tooltipActive: false,
-      attachedFiles: [],
-      attachmentsLoadingCount: 0,
+    getAlignClasses: ({
+      id
+    }) => ({
+      "text-right": id
     }),
-    created() {
-      console.log(this.proposal)
-      this.$set(this, 'vendorProposal', this.proposal)
-      this.$set(this, 'vendorInfo', this.proposal.vendor)
+    view() {
+      this.$refs.lightbox.showImage(0)
     },
-    mounted() {
-      this.getImages()
-    },
-    methods: {
-      closePanel() {
-        this.$emit('closePanel')
-      },
-      getProposalDate(eventStartMillis) {
-        let x = new Date(eventStartMillis)
-        return x.getFullYear() + '+' + x.getMonth() + '+' + x.getDate()
-      },
-      getAlignClasses: ({
-        id
-      }) => ({
-        "text-right": id
-      }),
-      view() {
-        this.$refs.lightbox.showImage(0)
-      },
-      manageProposalsAccept(proposal) {
-        window.currentPanel = this.$showPanel({
-          component: ManageProposalsAccept,
-          cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
-          openOn: 'right',
-          props: {
-            event: this.event,
-            proposal: this.proposal,
-            selectedBlock: this.selectedBlock
-          }
-        })
-      },
-      getDate(eventStartMillis) {
-        let x = new Date(eventStartMillis)
-        return moment(x).format('MMMM D, YYYY')
-      },
-      getStringWithRoundedNumber(rawString) {
-        let numbers = rawString.replace(/[^\d\.]*/g, '')
-        if (numbers) {
-          const subString = rawString.split(numbers)
-          numbers = parseFloat(numbers).toFixed(2)
-          return subString[0] + numbers.toString() + subString[1]
-        } else {
-          return rawString
+    manageProposalsAccept(proposal) {
+      window.currentPanel = this.$showPanel({
+        component: ManageProposalsAccept,
+        cssClass: 'md-layout-item md-size-70 transition36 bg-grey',
+        openOn: 'right',
+        props: {
+          event: this.event,
+          proposal: this.proposal,
+          selectedBlock: this.selectedBlock
         }
-      },
-      getImages() {
-        this.images = []
-        this.attachedFiles = []
-        this.attachmentsLoadingCount = 0
-
-        this.vendorProposal.attachements.forEach((item)=>{
-          const fullPath = `${this.serverUrl}/1/proposal-requests/${this.proposal.id}/files/${item.id}`
-
-          this.$http.get(
-            fullPath,
-            { headers: this.$auth.getAuthHeader() }
-          ).then((response) => {
-            if (response && response.headers) {
-              if (response.headers['content-type'].indexOf('image') > -1) {
-                this.images.push({
-                  thumb: fullPath,
-                  src: fullPath,
-                  caption: "",
-                  srcset: ""
-                })
-              } else {
-                this.attachedFiles.push({
-                  fullPath : fullPath, 
-                  tag : item.tag, 
-                  name : item.name
-                })
-                this.attachmentsLoadingCount++
-              }
-            }
-          })
-        })
+      })
+    },
+    getDate(eventStartMillis) {
+      let x = new Date(eventStartMillis)
+      return moment(x).format('MMMM D, YYYY')
+    },
+    getStringWithRoundedNumber(rawString) {
+      let numbers = rawString.replace(/[^\d\.]*/g, '')
+      if (numbers) {
+        const subString = rawString.split(numbers)
+        numbers = parseFloat(numbers).toFixed(2)
+        return subString[0] + numbers.toString() + subString[1]
+      } else {
+        return rawString
       }
     },
-    computed: {
-      extraMissingRequirements() {
-        return _.union(this.vendorProposal.extras, this.vendorProposal.missing)
-      }
+    getImages() {
+      this.images = []
+      this.attachedFiles = []
+      this.attachmentsLoadingCount = 0
+
+      this.vendorProposal.attachements.forEach((item)=>{
+        const fullPath = `${this.serverUrl}/1/proposal-requests/${this.proposal.id}/files/${item.id}`
+
+        this.$http.get(
+          fullPath,
+          { headers: this.$auth.getAuthHeader() }
+        ).then((response) => {
+          if (response && response.headers) {
+            if (response.headers['content-type'].indexOf('image') > -1) {
+              this.images.push({
+                thumb: fullPath,
+                src: fullPath,
+                caption: "",
+                srcset: ""
+              })
+            } else {
+              this.attachedFiles.push({fullPath : fullPath, tag : item.tag, name : item.name});
+              this.attachmentsLoadingCount++
+            }
+          }
+        });
+      });
+    }
+  },
+  computed: {
+    extraMissingRequirements() {
+      return _.union(this.vendorProposal.extras, this.vendorProposal.missing)
     }
   }
+}
 </script>
 <style lang="scss" scoped>
   .text-right /deep/ .md-table-cell-container {
@@ -671,22 +654,5 @@
     border-bottom-color: #c6c6c6;
     border-width: 9px;
     margin-left: -9px;
-  }
-
-  .maxh-50vh {
-    max-height: 50vh;
-  }
-  .title-section {
-    .md-title {
-      margin-bottom: 0;
-      line-height: 51px;
-      text-transform: capitalize;
-    }
-  }
-  .md-hide {
-    display: none!important;
-  }
-  .tf-capitalize {
-    text-transform: capitalize;
   }
 </style>

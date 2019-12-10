@@ -52,7 +52,7 @@
 
         <div class="md-layout md-gutter">
           <div class="md-layout-item">
-            <div class="fc-divider"></div>
+            <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
           </div>
         </div>
         <div class="md-layout md-gutter">
@@ -62,25 +62,31 @@
               <div class="title"
                 :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
                 v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants">
-                <animated-number  ref="totalRemainingBudgetNumber"
-                                  :value="getTotalRemainingBudget"
+                <animated-number ref="totalRemainingBudgetNumber"
+                                  :value="totalRemainingBudget"
                                   prefix="$"></animated-number>
                 <small class="total-event-budget">/
-                  ${{ getTotalAmountByGuestType | numeral('0,0') }}
+                  ${{
+                    calendarEvent.budgetPerPerson *
+                    calendarEvent.numberOfParticipants |
+                    numeral('0,0')
+                  }}
                 </small>
               </div>
             </h4>
 
             <h5 class="title-budget-main">Per guest</h5>
-            <h4 class="title budget">
+            <h4
+              class="title"
+              style="font-size: 2.3em; font-weight: 500; padding: 0; margin: 0; color: rgb(33, 201, 152);">
               <div class="title"
                 :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
                 v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants">
-                <animated-number  ref="totalRemainingBudgetNumber"
-                                  :value="getRemainingBudgetPerEmployee"
+                <animated-number ref="totalRemainingBudgetNumber"
+                                  :value="remainingBudgetPerEmployee"
                                   prefix="$"></animated-number>
-                <small class="total-event-budget">
-                  / ${{calendarEvent.budgetPerPerson}}
+                <small class="total-event-budget">/
+                  ${{calendarEvent.budgetPerPerson}}
                 </small>
               </div>
             </h4>
@@ -96,27 +102,27 @@
                   ref="percentageNumber"
                   :custom-style="true"
                   :custom-style-contents="'font-weight:500;font-size:24px;'"
-                  :value="getPercentage" suffix="%"/>
+                  :value="percentage" suffix="%"/>
             </div>
           </div>
         </div>
         <div class="md-layout md-gutter">
           <div class="md-layout-item">
-            <div class="fc-divider"></div>
+            <div class="fc-divider" style="color: #eeeeee; margin: 15px 0;"></div>
           </div>
         </div>
         <div class="md-layout md-gutter">
           <div class="md-layout-item">
             <event-paid-total-amounts 
-              :paid="getPaidAmount" 
-              :total="getToBePaidAmount" 
-              :toBePaid="getToBePaidAmount - getPaidAmount"
+              :paid="event.totalBudget" 
+              :total="totalRemainingBudget" 
+              :toBePaid="getToBePaidAmount"
             >
             </event-paid-total-amounts>
           </div>
         </div>
       </div>
-      <div class="md-layout md-gutter hide">
+      <div class="md-layout md-gutter" style="display: none;">
         <div class="md-layout-item">
           <div>
             <div class="md-caption title-text">
@@ -125,7 +131,7 @@
             <!-- TODO Need calculate with components -->
             <div class="md-caption title-text "
               :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]">
-              <animated-number  ref="budgetPerPersonNumber"
+              <animated-number ref="budgetPerPersonNumber"
                                 :value="remainingBudgetPerEmployee"
                                 prefix="$"></animated-number>
             </div>
@@ -153,8 +159,8 @@
   </md-card>
 </template>
 <script>
-  import EventModal from '../EventModal/'
-  import EventPlannerVuexModule from '../EventPlanner.vuex'
+  import EventModal from '../EventModal/';
+  import EventPlannerVuexModule from '../EventPlanner.vuex';
   import moment from 'moment'
 
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
@@ -165,12 +171,13 @@
   import EventComponentVendor from '@/models/EventComponentVendor'
   import CalendarEventStatistics from '@/models/CalendarEventStatistics'
 
-  // import auth from '@/auth'
+  // import auth from '@/auth';
   import ChartComponent from '@/components/Cards/ChartComponent'
   import _ from 'underscore'
   import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
   import EventSidePanel from '../EventSidePanel.vue'
   import EventPaidTotalAmounts from '../components/EventPaidTotalAmounts.vue'
+
 
   export default {
     name: 'event-details-sidebar',
@@ -202,8 +209,7 @@
       isLoading: false,
       routeName: null,
       budgetPerEmployee: 0,
-      acceptedProposals: [],
-      paidProposals: []
+      acceptedProposals: []
     }),
     methods: {
       ...mapMutations('EventPlannerVuex', [
@@ -216,20 +222,20 @@
       ]),
       inviteeType(calendarEvent){
         //"Employees Only","Employees and spouse","Employees and families", "Employees children"
-        let typeText = ''
-        let participantsType = calendarEvent.participantsType
+        let typeText = '';
+        let participantsType = calendarEvent.participantsType;
 
         if (participantsType === 'Guests and spouse'){
-          typeText = '+ spouses'
+          typeText = '+ spouses';
         } else if (participantsType === 'Guests and families'){
-          typeText = '+ families'
+          typeText = '+ families';
         } else if (participantsType === 'Guests siblings'){
-          typeText = '+ siblings'
+          typeText = '+ siblings';
         } else {
-          typeText = participantsType
+          typeText = participantsType;
         }
 
-        return typeText
+        return typeText;
       },
       getEvent () {
         this.$auth.currentUser(this, true, ()=> {
@@ -240,7 +246,7 @@
               //this.event = event
               this.eventId = event.id
               this.calendarEvent = event
-              this.selectedComponents = event.components
+              this.selectedComponents = event.components;
 
               this.getCalendarEventStatistics(event)
 
@@ -249,7 +255,7 @@
           } else {
             this.eventId = this.event.id
             this.calendarEvent = this.event
-            this.selectedComponents = this.event.components
+            this.selectedComponents = this.event.components;
 
             if (this.eventId) {
               this.getCalendarEventStatistics(this.event)
@@ -257,28 +263,28 @@
 
             this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
           }
-        })
+        });
       },
       getCalendarEventStatistics (evt) {
-        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-        let event = new CalendarEvent({id: evt.id})
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+        let event = new CalendarEvent({id: evt.id});
 
-        if (!evt.id) { return }
+        if (!evt.id) { return; }
 
         new CalendarEventStatistics().for(calendar, event).get()
           .then(resp => {
-            this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget//evt.totalBudget - resp[0].totalAllocatedBudget
-            this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants//evt.totalBudget - resp[0].totalAllocatedBudget
+            this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget//evt.totalBudget - resp[0].totalAllocatedBudget;
+            this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants//evt.totalBudget - resp[0].totalAllocatedBudget;
             this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
 
             if (this.percentage > 0) {
-              this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-positive"}, {value: this.percentage, className:"budget-chart-slice-b-positive"}]
+              this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-positive"}, {value: this.percentage, className:"budget-chart-slice-b-positive"}];
             } else {
-              this.seriesData =  [{value: 0.01, className: "budget-chart-slice-a-negative"},{value: 99.99, className: "budget-chart-slice-b-negative"}]
+              this.seriesData =  [{value: 0.01, className: "budget-chart-slice-a-negative"},{value: 99.99, className: "budget-chart-slice-b-negative"}];
             }
 
-            this.budgetPerEmployee = evt.budgetPerPerson//this.totalRemainingBudget / evt.numberOfParticipants
-            this.allocatedBudget = resp.totalAllocatedBudget
+            this.budgetPerEmployee = evt.budgetPerPerson;//this.totalRemainingBudget / evt.numberOfParticipants;
+            this.allocatedBudget = resp.totalAllocatedBudget;
             this.event.statistics['allocatedBudget'] = this.allocatedBudget
           })
           .catch(error => {
@@ -286,7 +292,7 @@
           })
       },
       openEventModal () {
-        this.$router.push({ path: `/event/`+ this.event.id + '/edit' })
+        this.$router.push({ path: `/event/`+ this.event.id + '/edit' });
 
         //   window.currentPanel = this.$showPanel({
         //   component: EventSidePanel,
@@ -306,24 +312,16 @@
         // this.setModalSubmitTitle('Save')
         // this.setEditMode({editMode: true})
       },
-      getAcceptedAndPaidProposals(calendar, event, eventComponents) {
+      getAcceptedProposals(calendar, event, eventComponents) {
         if (calendar !== null && event !== null && eventComponents !== undefined) {
           eventComponents.forEach( evtComponent => {
-            let selected_block = new EventComponent({id : evtComponent.id})
+            let selected_block = new EventComponent({id : evtComponent.id});
             new EventComponentVendor().for(
               calendar, 
               event, 
               selected_block
             ).get().then(ec => {
               ec.forEach( e => {
-                e.proposals.filter(item => item.downPaymentStatus == 'paid').forEach(proposal => {
-                  if (this.paidProposals.filter( p => p.proposalId == proposal.id ).length == 0) {
-                    this.paidProposals.push({
-                      proposalId: proposal.id,
-                      proposalCost: proposal.cost
-                    })
-                  }
-                })
                 e.proposals.filter(item => item.accepted == true).forEach(proposal => {
                   if (this.acceptedProposals.filter( p => p.proposalId == proposal.id ).length == 0) {
                     this.acceptedProposals.push({
@@ -336,7 +334,7 @@
             })
             .catch(error => {
               console.log('EventComponentVendor error =>',error)
-            })
+            });
           })
         }
       }
@@ -347,11 +345,10 @@
       this.routeName = this.$route.name
     },
     mounted() {
-      let _self = this
+      let _self = this;
       if (!this.event){
-        this.getEvent()
+        this.getEvent();
       }
-
       this.$root.$on('RefreshStatistics', function () {
         _self.getCalendarEventStatistics(_self.event)
       })
@@ -360,98 +357,19 @@
         this.getEvent()
       })
 
-      this.getEvent()
+      this.getEvent();
 
-      this.getAcceptedAndPaidProposals()
+      this.getAcceptedProposals()
     },
     computed: {
       ...mapGetters({
         components: 'event/getComponentsList'
       }),
-      getPaidAmount() {
-        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-        let event = new CalendarEvent({id: this.event.id})
-        let eventComponents = this.event.components
-        let paidAmount = 0
-        this.getAcceptedAndPaidProposals(calendar, event, eventComponents)
-
-        if (this.paidProposals.length > 0 ) {
-          return this.paidProposals.reduce((p, item) => p + item.proposalCost, 0)
-        } else {
-          return 0
-        }
-      },
-      getToBePaidAmount() {
-        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-        let event = new CalendarEvent({id: this.event.id})
-        let eventComponents = this.event.components
-        let toBePaidAmount = 0
-        this.getAcceptedAndPaidProposals(calendar, event, eventComponents)
-
-        if (this.acceptedProposals.length > 0 ) {
-          return this.acceptedProposals.reduce((p, item) => p + item.proposalCost, 0)
-        } else {
-          return 0
-        }
-      },
-      getTotalAmountByGuestType() {
-        if ( this.calendarEvent.participantsType == 'Guests and spouse') {
-          return this.event.numberOfParticipants * this.event.budgetPerPerson * 2
-        } else {
-          return this.event.numberOfParticipants * this.event.budgetPerPerson
-        }
-      },
-      getTotalRemainingBudget() {
-        return this.getTotalAmountByGuestType - this.getToBePaidAmount
-      },
-      getRemainingBudgetPerEmployee() {
-        if (this.event.budgetPerPerson == 0) {
-          return 0
-        } else {
-          if ( this.calendarEvent.participantsType == 'Guests and spouse') {
-            return this.getTotalRemainingBudget / this.event.numberOfParticipants / 2
-          } else {
-            return this.getTotalRemainingBudget / this.event.numberOfParticipants
-          }
-        }
-      },
-      getPercentage() {
-        if (this.event.budgetPerPerson == 0) {
-          return 0
-        } else {
-          return (this.getTotalRemainingBudget / this.getTotalAmountByGuestType) * 100
-        }
-      },
-      getSeriesData() {
-        if (this.getTotalRemainingBudget > 0) {
-          return [
-            {
-              value: 100 - this.getPercentage, 
-              className: 'budget-chart-slice-a-positive'
-            }, 
-            {
-              value: this.getPercentage, 
-              className: 'budget-chart-slice-b-positive'
-            }
-          ]
-        } else {
-          return [
-            {
-              value: 0.01, 
-              className: 'budget-chart-slice-a-negative'
-            },
-            {
-              value: 99.99, 
-              className: 'budget-chart-slice-b-negative'
-            }
-          ]
-        }
-      },
       pieChart () {
         return {
           data: {
             labels: [' ', ' '], // should be empty to remove text from chart
-            series: this.getSeriesData
+            series: this.seriesData
           },
           options: {
             padding: 0,
@@ -461,6 +379,19 @@
           }
         }
       },
+      getToBePaidAmount() {
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+        let event = new CalendarEvent({id: this.event.id})
+        let eventComponents = this.event.components
+        let toBePaidAmount = 0
+        this.getAcceptedProposals(calendar, event, eventComponents)
+
+        if (this.acceptedProposals.length > 0 ) {
+          return this.acceptedProposals.reduce((p, item) => p + item.proposalCost, 0)
+        } else {
+          return 0
+        }
+      }
     },
     filters: {
       formatDate: function (date) {
@@ -677,12 +608,5 @@
   .budget-pie-container {
     display: grid;
     margin: 3em 18px;
-  }
-  .fc-divider {
-    color: #eeeeee;
-    margin: 15px 0;
-  }
-  .hide {
-    display: none;
   }
 </style>

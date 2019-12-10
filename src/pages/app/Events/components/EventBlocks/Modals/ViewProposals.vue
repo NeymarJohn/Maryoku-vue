@@ -1,6 +1,6 @@
 <template>
   <div class="manage-proposals-panel">
-    <div class="md-layout maxh-50vh">
+    <div class="md-layout" style="max-height: 50vh;">
       <!-- <div class="md-layout-item md-size-5" style="padding: 0; margin: 0;">
         <h4 class="md-title">
           <md-button @click="closePanel" class="md-button md-theme-default md-simple md-just-icon">
@@ -8,8 +8,8 @@
           </md-button>
         </h4>
       </div> -->
-      <div class="md-layout-item md-size-100 maxh-50vh">
-        <h4 class="md-title">
+      <div class="md-layout-item md-size-100" style="max-height: 50vh;">
+        <h4 class="md-title" style="margin-bottom: 0; line-height: 51px; text-transform: capitalize;">
           {{selectedBlock.title}}
         </h4>
         <div class="tabs-section">
@@ -23,21 +23,21 @@
             color-button="danger"
             ref="proposalsTabs"
             :activeTab="1">
-            <template slot="tab-pane-1" class="w-100p">
+            <template slot="tab-pane-1" style="width: 100%;">
               <event-block-requirements
                 :event.sync="event"
                 :selectedBlock.sync="selectedBlock"
                 :predefinedRequirements="selectedBlock.predefinedRequirements"
                 > </event-block-requirements>
             </template>
-            <template slot="tab-pane-2" class="w-100p">
+            <template slot="tab-pane-2" style="width: 100%;">
               <event-block-proposal-vendors :event="event"
                 :selectedBlock.sync="selectedBlock"
                 @update-comparison="updateComparison"
                 ></event-block-proposal-vendors>
             </template>
-            <template slot="tab-pane-3" class="w-100p">
-              <div class="pl-6">
+            <template slot="tab-pane-3" style="width: 100%;">
+              <div style="padding-left: 6px;">
                 <event-block-comparison
                   :event.sync="event"
                   :selectedBlock.sync="selectedBlock"
@@ -45,11 +45,11 @@
                   ></event-block-comparison>
               </div>
             </template>
-            <template slot="tab-pane-4" class="w-100p">
+            <template slot="tab-pane-4" style="width: 100%;">
               <div>
                   <event-block-acceptance :event="event"
-                                          :selectedBlock.sync="selectedBlock"
-                                          @update-comparison="updateComparison"
+                                                :selectedBlock.sync="selectedBlock"
+                                                @update-comparison="updateComparison"
                   ></event-block-acceptance>
               </div>
             </template>
@@ -142,6 +142,7 @@
         this.$emit("closePanel", {a:'b'});
       },
       setAsWining (item) {
+
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
         let event = new CalendarEvent({id: this.event.id})
         let selected_block = new EventComponent({id: this.selectedBlock.id})
@@ -152,13 +153,15 @@
         selected_block.winningProposalId = item.id;
 
         selected_block.for(calendar, event).save().then(resp => {
+
           this.isLoading = false
-          this.$notify({
-            message: 'Budget modified successfully!',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'success'
-          })
+          this.$notify(
+            {
+              message: 'Budget modified successfully!',
+              horizontalAlign: 'center',
+              verticalAlign: 'top',
+              type: 'success'
+            })
 
           this.$root.$emit('RefreshStatistics');
           this.$root.$emit('refreshBuildingBlock');
@@ -187,18 +190,15 @@
         let event = new CalendarEvent({id: this.event.id});
         let selected_block = new EventComponent({id : this.selectedBlock.id});
 
-        new EventComponentVendor().for(
-          calendar, 
-          event, 
-          selected_block
-        ).get().then(resp => {
-          this.isLoading = false;
-          this.blockVendors = resp;
-        })
-        .catch(error => {
-          this.isLoading = false;
-          console.log('EventComponentVendor error =>',error)
-        })
+        new EventComponentVendor().for(calendar, event, selected_block).get()
+          .then(resp => {
+            this.isLoading = false;
+            this.blockVendors = resp;
+          })
+          .catch(error => {
+            this.isLoading = false;
+            console.log('EventComponentVendor error =>',error)
+          })
       }
     },
     computed: {
@@ -211,29 +211,15 @@
 </script>
 
 <style lang="scss" scoped>
-  .allocated-budget {
-    display: none;
-    height: 45px!important;
-    .md-card-content {
-      border: 2px solid black;
-      .small {
-        margin-top: -35px;
-        margin-bottom: 12.5px;
-      }
+.allocated-budget {
+  display: none;
+  height: 45px!important;
+  .md-card-content {
+    border: 2px solid black;
+    .small {
+      margin-top: -35px;
+      margin-bottom: 12.5px;
     }
   }
-  .w-100p {
-     width: 100%;
-  }
-  .maxh-50vh {
-    max-height: 50vh;
-  }
-  .md-title {
-    margin-bottom: 0;
-    line-height: 51px;
-    text-transform: capitalize;
-  }
-  .pl-6 {
-    padding-left: 6px;
-  }
+}
 </style>
