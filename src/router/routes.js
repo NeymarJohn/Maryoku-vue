@@ -8,6 +8,7 @@ import MyCompany from '@/pages/app/MyCompany/MyCompany.vue';
 import MyCompanyNew from '@/pages/app/MyCompany/MyCompanyNew.vue';
 import CompanyDashboard from '@/pages/app/CompanyDashboard/CompanyDashboard.vue';
 import CreateEvent from '@/pages/Dashboard/Layout/CreateEvent.vue';
+import HomeLayout from '@/pages/Dashboard/Layout/HomeLayout.vue';
 
 import Team from "@/pages/app/Team/Team.vue";
 import Members from "@/pages/app/Members/Members.vue";
@@ -37,6 +38,7 @@ import YearlyPlan from "@/pages/app/YearlyPlan/index.vue";
 import AnnualPlanner from "@/pages/app/AnnualPlanner/index.vue";
 import EventWizard from "@/pages/app/CreateEvent/EventWizard.vue";
 import EventInfo from "@/pages/app/CreateEvent/EventInfo.vue";
+import HomePage from "@/pages/app/HomePage/Home.vue";
 
 // Dashboard pages
 import EmployeeMain from '@/pages/Dashboard/Pages/CommonInfoProfile/Employee.vue';
@@ -511,6 +513,23 @@ let PublicCreateEvent = {
     ]
 }
 
+let HomePages = {
+    path : "/app2",
+    component : HomeLayout,
+    name : "HomePage",
+    children : [
+        {
+            path: "/home",
+            name: "HomePage",
+            component: HomePage,
+            meta: {
+                title: 'HomePage',
+                gtm: "HomePage"
+            }
+        }
+    ]
+}
+
 const appCurrentInfo = {
   path: "/additional-form",
   name: "CommonInfoProfile",
@@ -569,7 +588,8 @@ const routes = [{
   emptyLayoutPages,
   EventPages,
   marketPlacePages,
-    PublicCreateEvent
+    PublicCreateEvent,
+    HomePages
 ];
 
 export default routes;

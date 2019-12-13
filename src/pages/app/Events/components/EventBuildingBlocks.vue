@@ -110,18 +110,16 @@
                   </td>
                   <td class="actual-cost">
                     <template v-if="block.allocatedBudget">
-                      <template v-if="block.winningProposalId">
-                        <md-button 
-                          class="md-simple actual-cost md-xs" 
-                          :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`" 
-                        >
+                      <template
+                        v-if="block.winningProposalId">
+                        <md-button class="md-simple actual-cost md-xs" :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`" >
                           {{ event.elementsBudgetPerGuest ?  `$${(block.winingProposal.cost / event.numberOfParticipants).toFixed(2)}` : `$${block.winingProposal.cost.toFixed(2)}` }}
                           <md-icon >open_in_new</md-icon>
                         </md-button>
                       </template>
                     </template>
-                    <!-- v-if="block.downPaymentStatus == 'accepted'" -->
                     <event-actual-cost-icon-tooltip
+                      v-if="block.downPaymentStatus == 'paid'"
                       :icon="'credit_card'"
                       :item="block"
                       :event="event"

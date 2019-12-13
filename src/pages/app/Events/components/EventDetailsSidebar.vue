@@ -66,7 +66,7 @@
                                   :value="getTotalRemainingBudget"
                                   prefix="$"></animated-number>
                 <small class="total-event-budget">/
-                  ${{ getTotalAmountByGuestType | withComma }}
+                  ${{ getTotalAmountByGuestType | numeral('0,0') }}
                 </small>
               </div>
             </h4>
@@ -471,11 +471,6 @@
       },
       formatDuration: function (startDate, endDate) {
         return moment(endDate).diff(startDate, 'hours')
-      }
-    },
-    filters: {
-      withComma(amount) {
-        return amount ? amount.toLocaleString() : 0
       }
     },
     watch: {
