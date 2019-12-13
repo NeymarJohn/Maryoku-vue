@@ -513,7 +513,7 @@
         if (this.selectedBlock.proposals) {
           this.selectedBlock.proposals.forEach( proposal => {
             proposal.attachements.forEach((item)=>{
-              const fullPath = `${this.serverUrl}/1/proposal-requests/${proposal.id}/files/${item}`
+              const fullPath = `${this.serverUrl}/1/proposal-requests/${proposal.id}/files/${item.id}`
 
               this.$http.get(
                 fullPath,

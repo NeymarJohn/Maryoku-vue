@@ -26,7 +26,7 @@
 
         <md-card-content class="md-layout">
           <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
-          <table style="width:100%;" class="table event-building-blocks_table">
+          <table class="table event-building-blocks_table w-100">
             <thead>
               <tr class="md-warning">
                 <th>Element</th>
@@ -38,9 +38,7 @@
               </tr>
             </thead>
             <tbody v-if="eventBuildingBlocks.length">
-              <template v-for="(block, index) in eventBuildingBlocks">
-                <!-- v-for="(rating, ratingIndex) in ratings"
-                :key="ratingIndex" -->
+              <!-- <template v-for="(block, index) in eventBuildingBlocks"> -->
                 <!-- <tr class="parent">
                   <td>{{category.title}}</td>
                   <td></td>
@@ -60,6 +58,8 @@
                   <td></td>
                 </tr> -->
                 <tr class="text-left"
+                  v-for="(block, index) in eventBuildingBlocks"
+                  :key="index"
                   @mouseover="setCurrentBlockId(block)"
                   @mouseout="setCurrentBlockId(null)">
                   <td>
@@ -70,8 +70,7 @@
                   </td>
                   <td class="fit-content">
                     <template>
-                      <div v-if="block.valuesCount && block.proposalsState != 'get-offers'"
-                            style="cursor: pointer;">
+                      <div v-if="block.valuesCount && block.proposalsState != 'get-offers'" class="cursor-pointer">
                         <md-button class="md-simple md-xs requirements-cell-button no-padding"
                                     @click="addRequirements(block)">
                           <!-- {{`${block.valuesCount} selected`}} -->
@@ -85,7 +84,10 @@
                       </template>
                     </template>
                   </td>
-                  <td class="fit-content w-20 allocated-budget" :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}">
+                  <td 
+                    class="fit-content w-20 allocated-budget" 
+                    :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}"
+                  >
                     <div class="md-table-cell-container">
                       <label-edit v-if="!event.elementsBudgetPerGuest"
                                   :text="block.allocatedBudget"
@@ -108,16 +110,18 @@
                   </td>
                   <td class="actual-cost">
                     <template v-if="block.allocatedBudget">
-                      <template
-                        v-if="block.winningProposalId">
-                        <md-button class="md-simple actual-cost md-xs" :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`" >
+                      <template v-if="block.winningProposalId">
+                        <md-button 
+                          class="md-simple actual-cost md-xs" 
+                          :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`" 
+                        >
                           {{ event.elementsBudgetPerGuest ?  `$${(block.winingProposal.cost / event.numberOfParticipants).toFixed(2)}` : `$${block.winingProposal.cost.toFixed(2)}` }}
                           <md-icon >open_in_new</md-icon>
                         </md-button>
                       </template>
                     </template>
+                    <!-- v-if="block.downPaymentStatus == 'accepted'" -->
                     <event-actual-cost-icon-tooltip
-                      v-if="block.downPaymentStatus == 'paid'"
                       :icon="'credit_card'"
                       :item="block"
                       :event="event"
@@ -154,7 +158,7 @@
                     </a>
                   </td>
                 </tr>
-              </template>
+              <!-- </template> -->
             </tbody>
           </table>
         </md-card-content>
@@ -217,7 +221,6 @@
         'setBuildingBlockModal'
       ]),
       deleteBlock(blockId) {
-
         swal({
           title: 'Are you sure?',
           text: `You won't be able to revert this!`,
@@ -499,5 +502,11 @@
   .span-users-count {
     color: #999999;
     font-size: 14px;
+  }
+  .w-100 {
+    width: 100%!important;
+  }
+  .cursor-pointer {
+    cursor: pointer!important;
   }
 </style>
