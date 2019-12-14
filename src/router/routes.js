@@ -38,6 +38,7 @@ import YearlyPlan from "@/pages/app/YearlyPlan/index.vue";
 import AnnualPlanner from "@/pages/app/AnnualPlanner/index.vue";
 import EventWizard from "@/pages/app/CreateEvent/EventWizard.vue";
 import EventInfo from "@/pages/app/CreateEvent/EventInfo.vue";
+import EventBudget from "@/pages/app/CreateEvent/EventBudget.vue";
 import HomePage from "@/pages/app/HomePage/Home.vue";
 
 // Dashboard pages
@@ -508,6 +509,15 @@ let PublicCreateEvent = {
             meta: {
                 title: 'Event Info',
                 gtm: "Event Info"
+            }
+        },
+        {
+            path : "/event-budget",
+            name : "Event Budget",
+            component : EventBudget,
+            meta : {
+                title : "Event Budget",
+                gmt : "Event Budget"
             }
         }
     ]
