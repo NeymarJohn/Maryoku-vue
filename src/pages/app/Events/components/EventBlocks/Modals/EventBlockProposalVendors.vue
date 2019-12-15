@@ -168,14 +168,11 @@
 
           new EventComponentVendor().for(calendar, event, selected_block).get()
             .then(resp => {
-              console.log('resp => ',resp);
 
               this.isLoading = false;
               this.selectedBlock.vendors = resp;
               this.selectedBlock.vendorsCount = resp.length;
               this.blockVendors = resp;
-
-              console.log('blockVendors => ',this.blockVendors);
 
               let vendorsWithProposals  = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
               let vendorsWithSentStatus = _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
@@ -228,7 +225,7 @@
 
         vendor.for(calendar, event, selected_block).save()
           .then(resp => {
-            console.log(resp);
+            //console.log(resp);
             this.$root.$emit('calendar-refresh-events');
             this.getBlockVendors();
             this.$forceUpdate();
@@ -409,7 +406,7 @@
           }
       },
       routeToVendorsProposal(vendorId, proposalId) {
-        console.log(vendorId, proposalId)
+        //console.log(vendorId, proposalId)
         this.$router.push({ name: "VendorProposals", params: { id: proposalId, vendorId: vendorId } });
       },
     },

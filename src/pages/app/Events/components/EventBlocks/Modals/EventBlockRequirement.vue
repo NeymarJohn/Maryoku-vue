@@ -38,7 +38,7 @@
             </div>
             <div class="md-layout-item md-size-100" >
               <!-- Multi Select Options list -->
-              <template v-if="tempOptions.length && requirement.title !== 'Lighting'">
+              <template v-if="tempOptions.length">
                 <div class="multi-select-options">
                   <div class="multi-select-options__item "
                     :class="{ 'with-amount' : requirementPropertiesType === 'multi-selection-with-amount'}"
@@ -164,7 +164,7 @@ export default {
       otherOption: {},
       selectedOptions: [],
       additionalSelectedOptions: [],
-        notCounted : ['lighting','parking']
+        notCounted : ['lighting','parking','accessibility for disabled','smoking section','dance floor','coat check','separate cocktail hour space','stage']
 
     }
   },
@@ -175,7 +175,7 @@ export default {
   },
   methods: {
       isNotCounted(component){
-        return _.indexOf(this.notCounted, component) > -1;
+        return _.indexOf(this.notCounted, component.toLowerCase()) > -1;
       },
     adjustInputSize(refName) {
       let input = this.$refs[refName]
@@ -224,7 +224,7 @@ export default {
         this.requirement.editMode = false;
         this.working = false;
         this.$forceUpdate();
-        this.$emit("requirement-saved", this.requirement);
+        this.$root.$emit("requirement-saved", this.requirement);
       });
     },
     getSelectedOptions() {

@@ -190,11 +190,10 @@
             <md-card-content>
               <h4  class="title" style="margin-bottom: 12px;">Images</h4>
               <div class="md-layout">
-                <div class="md-layout-item md-size-20" v-for="(image,index) in proposalRequestImages" :key="index"  style="margin: 12px;">
-                  <div class="vendor-images-list_item"  v-if="image.vendorsFileContentType === 'application/pdf'">
-                    <md-icon>picture_as_pdf</md-icon>
-                  </div>
-                  <iframe v-else seamless class="vendor-images-list_item" frameborder="0"
+                <div class="md-layout-item md-size-20" v-for="(image,index) in proposalRequestImages" :key="index"  style="margin: 12px;"
+                     v-if="!image.tag"
+                >
+                  <iframe  seamless class="vendor-images-list_item" frameborder="0"
                     :src="`${serverUrl}/1/proposal-requests/${proposalRequest.id}/files/${image.id}`" >
                     <md-button class="md-primary md-sm" @click="deleteImage(image.id,index)">
                       delete
@@ -503,7 +502,7 @@
         alretExceedPictureSize: false,
         proposalRequestComment: '',
         attachmentsLoadingCount: 0,
-          attachmentType : ''
+          attachmentType : null
       }
     },
     created () {
@@ -576,8 +575,13 @@
               name : file.name,
               tag : vm.attachmentType
           }).for(proposalRequest).save().then(result => {
-            this.isLoading = false
-            this.proposalRequestImages.push({id: result.id,tag : vm.attachmentType});
+            this.isLoading = false;
+
+            if ( !vm.attachmentType ) {
+                this.proposalRequestImages.push({id: result.id,tag : vm.attachmentType});
+            }
+
+            vm.getImages();
           })
           .catch((error) => {
             this.isLoading = false
@@ -683,7 +687,6 @@
           .then(imagesList => {
             this.$set(this, 'proposalRequestImages', imagesList)
             this.$set(this, 'attachmentsLoadingCount', imagesList.length)
-            console.log('proposalRequestImages is  => ', imagesList)
           })
           .catch((error) => {
             console.log('ProposalRequestImage Error')
