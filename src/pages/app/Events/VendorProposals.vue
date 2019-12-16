@@ -21,84 +21,81 @@
 </template>
 
 <script>
-import ProposalRequest from "@/models/ProposalRequest";
-import Vendors from "@/models/Vendors";
-import VendorProposalsForm from "./VendorProposalsForm";
-import VendorProposalsLanding from "./VendorProposalsLanding";
+  import ProposalRequest from '@/models/ProposalRequest'
+  import Vendors from '@/models/Vendors'
+  import VendorProposalsForm from './VendorProposalsForm'
+  import VendorProposalsLanding from './VendorProposalsLanding'
 
-export default {
-  components: {
-    VendorProposalsForm,
-    VendorProposalsLanding
-  },
-
-  data() {
-    return {
-      page: "landing", //landing, details
-      proposalRequestRequirements: [],
-      proposals: [],
-      proposalRequest: null,
-      firstTime: false,
-      gotProposals: false,
-      isLoading: false
-    };
-  },
-  created() {
-
-  },
-  mounted() {
-    this.getProposal(this.$route.params.id);
-  },
-  methods: {
-    goToDetails() {
-      this.page = "details";
+  export default {
+    components: {
+      VendorProposalsForm,
+      VendorProposalsLanding
     },
-    goToLanding() {
-      this.page = "landing";
+
+    data() {
+      return {
+        page: 'landing', //landing, details
+        proposalRequestRequirements: [],
+        proposals: [],
+        proposalRequest: null,
+        firstTime: false,
+        gotProposals: false,
+        isLoading: false
+      }
     },
-    getProposals(id) {
-      this.isLoading = true;
-      new Vendors({
-        id
-      }).proposalRequests().first().then(proposals => {
-        console.log('proposals', proposals);
+    created() {
 
-        this.proposals = proposals.vendorProposals;
-        this.firstTime = proposals.firstTime;
-
-        this.isLoading = false;
-      });
     },
-    getProposal(id) {
-      this.isLoading = true;
+    mounted() {
+      this.getProposal(this.$route.params.id)
+    },
+    methods: {
+      goToDetails() {
+        this.page = 'details'
+      },
+      goToLanding() {
+        this.page = 'landing'
+      },
+      getProposals(id) {
+        this.isLoading = true
+        new Vendors({id}).proposalRequests().first().then(proposals => {
+          this.proposals = proposals.vendorProposals
+          this.firstTime = proposals.firstTime
 
-      ProposalRequest.find(id)
-        .then(resp => {
-
-          this.$set(this, "proposalRequest", resp);
-
-          if (!this.gotProposals) {
-            this.getProposals(resp.vendorId);
-            this.gotProposals = true;
-          } else {
-            this.isLoading = false;
-          }
-
-          this.proposalRequestRequirements = _.chain(resp.requirements)
-            .groupBy("requirementPriority")
-            .map(function (value, key) {
-              return {
-                title: key,
-                requirements: value
-              };
-            })
-            .value();
+          this.isLoading = false
         })
-        .catch(error => {
-          console.log(" error here   -->>>  ", error);
-        });
-    }
-  },
-  computed: {}
-};
+      },
+      getProposal(id) {
+        this.isLoading = true
+
+        ProposalRequest.find(id)
+          .then(resp => {
+            console.log('resp', resp)
+            console.log('pro', this.proposals)
+            this.$set(this, 'proposalRequest', resp)
+
+            if (!this.gotProposals) {
+              this.getProposals(resp.vendorId)
+              this.gotProposals = true
+            } else {
+              this.isLoading = false
+            }
+
+            this.proposalRequestRequirements = _.chain(resp.requirements)
+              .groupBy('requirementPriority')
+              .map(function (value, key) {
+                return {
+                  title: key,
+                  requirements: value
+                }
+              })
+              .value()
+          })
+          .catch(error => {
+            console.log(' error here   -->>>  ', error)
+          })
+      }
+    },
+    computed: {}
+  }
 </script>

@@ -2,7 +2,7 @@
   <div class="md-layout" >
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
     <div class="md-layout vendor-proposals" v-if="proposalRequest">
-      <div style="position: absolute; top: 60px; bottom: 0; left: 0; right: 0; height: 100%; width: 100%; background-color: rgba(0,0,0,0); z-index: 9998;" v-if="proposalRequest.submitted"></div>
+      <div class="custom-1" v-if="proposalRequest.submitted"></div>
       <div class="md-layout-item md-size-100">
         <h5>
           <a href="#" @click.prevent="goToLanding">
@@ -14,9 +14,9 @@
         </h5>
       </div>
       <div class="md-layout-item md-size-100">
-        <h3 class="title" style="font-weight: bold;">Submit your proposal</h3>
+        <h3 class="title fw-bold">Submit your proposal</h3>
         <div class="alert alert-danger text-center" v-if="proposalRequest.submitted">
-          <h5 class="text-center clear-margins" style="z-index: 9999;">You already submitted this proposal, you cannot change it anymore.</h5>
+          <h5 class="text-center clear-margins z-9999">You already submitted this proposal, you cannot change it anymore.</h5>
         </div>
       </div>
       <div class="md-layout-item md-size-70 md-small-size-100">
@@ -65,8 +65,9 @@
                     Participants:
                   </div>
                   <div class="info-value">
-                    {{proposalRequest.eventData.numberOfParticipants}}
-                    <small>({{proposalRequest.eventData.participantsType}})</small>
+                    {{getParticipants}}
+                    <!-- {{proposalRequest.eventData.numberOfParticipants}}
+                    <small>({{proposalRequest.eventData.participantsType}})</small> -->
                   </div>
                 </div>
               </div>
@@ -90,12 +91,11 @@
                 <div class="vendor-proposals_requirements-list">
                   <div class="list-item md-layout item-title">
                     <div class="requirement-title md-layout-item md-size-65 md-small-size-100">
-                      {{proposalRequest.requirementsCategory}}
                       ({{proposalRequest.requirements.length}})
                     </div>
                     <div
                       class="md-layout-item md-size-35 md-small-size-100 text-right item-cost-desc">
-                      <span>Per guest ${{(proposalRequest.requirementsCategoryCost / proposalRequest.eventData.numberOfParticipants).toFixed(2) | numeral('0,0') }}</span>
+                      <span>Per guest ${{ proposalRequest.requirementsCategoryCost / proposalRequest.eventData.numberOfParticipants | withComma }}</span>
                       <md-field class="with-bg">
                         <span class="md-prefix">$</span>
                         <md-input
@@ -111,13 +111,11 @@
                     <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
                       <span v-if="item.requirementValue">{{item.requirementValue}} x </span>
                       {{item.requirementTitle}}
-                      <blockquote v-if="item.requirementMandatory"
-                        style="background-color: #EEEEEE; border-left: 2px solid #aaaaaa; padding: 8px; margin-left: 0;">
+                      <blockquote v-if="item.requirementMandatory" class="grey-blockquote">
                         <span>Client <strong>must-have</strong> requirement</span>
                         <div class="text-gray">{{item.requirementComment}}</div>
                       </blockquote>
-                      <blockquote v-else
-                        style="background-color: #EEEEEE; border-left: 2px solid #aaaaaa; padding: 8px; margin-left: 0;">
+                      <blockquote v-else class="grey-blockquote">
                         <span>Client requirement</span>
                         <div class="text-gray">{{item.requirementComment}}</div>
                       </blockquote>
@@ -141,7 +139,7 @@
                         v-model="item.includedInPrice"></md-switch>
                       <label :for="`include-${index}`">Included in price</label>
                     </div>
-                    <div class="actions-list md-layout-item md-size-100 md-small-size-100" style="display: flex; justify-content: space-between;">
+                    <div class="actions-list md-layout-item md-size-100 md-small-size-100 display-flex">
                       <md-field v-if="item.requirementMandatory" class="amount-field">
                         <label>Amount</label>
                         <md-input
@@ -188,36 +186,39 @@
           <!-- Vendor images -->
           <md-card class="event-information-card vendor-images">
             <md-card-content>
-              <h4  class="title" style="margin-bottom: 12px;">Images</h4>
+              <h4  class="title mb-12">Images</h4>
               <div class="md-layout">
-                <div class="md-layout-item md-size-20" v-for="(image,index) in proposalRequestImages" :key="index"  style="margin: 12px;"
-                     v-if="!image.tag"
-                >
-                  <iframe  seamless class="vendor-images-list_item" frameborder="0"
+                <div class="md-layout-item md-size-20 m-12" v-for="(image,index) in proposalRequestImages" :key="index">
+                  <div class="vendor-images-list_item"  v-if="image.vendorsFileContentType === 'application/pdf'">
+                    <md-icon>picture_as_pdf</md-icon>
+                  </div>
+                  <iframe v-else seamless class="vendor-images-list_item" frameborder="0"
                     :src="`${serverUrl}/1/proposal-requests/${proposalRequest.id}/files/${image.id}`" >
                     <md-button class="md-primary md-sm" @click="deleteImage(image.id,index)">
                       delete
                     </md-button>
                   </iframe>
                   <div class="text-center">
-                    <md-button style="margin-top: -25px;" class="md-xs md-round md-just-icon md-info" @click="openInNewTab(`${serverUrl}/1/proposal-requests/${proposalRequest.id}/files/${image.id}`)">
+                    <md-button class="md-xs md-round md-just-icon md-info mt-m-25" @click="openInNewTab(`${serverUrl}/1/proposal-requests/${proposalRequest.id}/files/${image.id}`)">
                       <md-icon>visibility</md-icon>
                     </md-button>
-                    <md-button style="margin-top: -25px;" class="md-xs md-round md-just-icon md-danger" @click="deleteImage(image.id,index)">
+                    <md-button class="md-xs md-round md-just-icon md-danger mt-m-25" @click="deleteImage(image.id,index)">
                       <md-icon>delete</md-icon>
                     </md-button>
                   </div>
                 </div>
-                <div class="md-layout-item md-size-20" style="margin-top: auto; margin-bottom: auto; text-align: center;">
-                  <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image"
-                    @click="uploadEventImage" style="margin-top: auto; margin-bottom: auto; text-align: center;">
+                <div class="md-layout-item md-size-20 m-auto">
+                  <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image m-auto" @click="uploadEventImage">
                     <md-icon>add</md-icon>
                   </md-button>
-                  <input type="file" style="display: none;" ref="eventFile"
-                    accept="image/gif, image/jpg, image/png, application/text, application/pdf" @change="onEventFilePicked">
+                  <input type="file"
+                    class="hide"
+                    ref="eventFile"
+                    accept="image/gif, image/jpg, image/png, application/text, application/pdf" 
+                    @change="onEventFilePicked">
                 </div>
               </div>
-              <h5  class="title" style="margin-bottom: 12px;">Additional documentation</h5>
+              <h5 class="title mb-12">Additional documentation</h5>
               <div class="attachments-documents-btn">
                 <md-button class=" md-sm add-vendor-image" :class="{'md-primary' : !attachmentUploaded('proof_of_insurance')}"
                   @click="uploadEventImage(null,'proof_of_insurance')">
@@ -393,7 +394,7 @@
         <!-- ./More Requirements -->
       </div>
       <div class="md-layout-item md-size-30 md-small-size-100">
-        <md-card class="bid-section" style="position: fixed; width: 27%;">
+        <md-card class="bid-section pos-fixed">
           <md-card-content>
             <h3 class="text-center">You're the {{proposalRequest.bidderRank | numeral('Oo')}} bidder</h3>
             <div class="text-center">
@@ -404,14 +405,14 @@
               <div class="text-center small">Current bids range between</div>
               <div class="cost-average_item">
                 <h5 class="">Lowest</h5>
-                <div class="cost">${{proposalRequest.bidRange.low | numeral('0,0')}}</div>
+                <div class="cost">${{proposalRequest.bidRange.low | withComma}}</div>
               </div>
               <div class="cost-average_item arrow-item">
                 <md-icon>arrow_right_alt</md-icon>
               </div>
               <div class="cost-average_item">
                 <h5 class="">Highest</h5>
-                <div class="cost">${{proposalRequest.bidRange.high | numeral('0,0')}}</div>
+                <div class="cost">${{proposalRequest.bidRange.high | withComma}}</div>
               </div>
             </div>
             <div class="update-checkbox">
@@ -425,21 +426,21 @@
             <div class="offer-value">
               <div class="value-section upgrades-section">
                 <div class="title">
-                  {{proposalRequest.requirementsCategory}}
+                  {{getServiceCategory}}
                 </div>
                 <div class="cost text-right">
-                  ${{proposalRequest.requirementsCategoryCost | numeral('0,0')}}
+                  ${{proposalRequest.requirementsCategoryCost | withComma}}
                 </div>
               </div>
               <div class="value-section upgrades-section extra-section">
                 <div class="title">
                   Extra
                 </div>
-                <div class="cost text-right">${{extraTotal | numeral('0,0')}}</div>
+                <div class="cost text-right">${{extraTotal | withComma}}</div>
               </div>
               <div class="value-section user-offer-section ">
                 <div class="title">Your Offer</div>
-                <div class="cost text-right">${{totalOffer | numeral('0,0')}}</div>
+                <div class="cost text-right">${{totalOffer | withComma}}</div>
               </div>
             </div>
             <div class="bid-button">
@@ -466,15 +467,16 @@
   import ProposalRequestComment from '@/models/ProposalRequestComment'
   import ProposalRequestImage from '@/models/ProposalRequestImage'
   import ProposalRequestFile from '@/models/ProposalRequestFile'
+  import Vendors from '@/models/Vendors'
 
   //COMPONENTS
   import Icon from '@/components/Icon/Icon.vue'
   import {Collapse, LabelEdit} from '@/components'
 
   import moment from 'moment'
-  import swal from "sweetalert2";
-  import ProposalRequestRequirement from '../../../models/ProposalRequestRequirement';
-  import _ from "underscore";
+  import swal from 'sweetalert2'
+  import ProposalRequestRequirement from '../../../models/ProposalRequestRequirement'
+  import _ from 'underscore'
 
   export default {
     props: ['proposalRequestRequirements', 'proposalRequest'],
@@ -487,7 +489,6 @@
 
     data () {
       return {
-        // auth: auth,
         calendarEvent: {},
         isLoading: false,
         readonly: true,
@@ -496,23 +497,23 @@
         vendorImages: [],
         serverUrl: process.env.SERVER_URL,
         imagePreview: null,
-        // proposalRequest: null,
-        // proposalRequestRequirements: [],
         proposalRequestImages: [],
         alretExceedPictureSize: false,
         proposalRequestComment: '',
         attachmentsLoadingCount: 0,
-          attachmentType : null
+        attachmentType: '',
+        vendorCategory: null
       }
     },
     created () {
 
     },
     mounted () {
-      this.getImages();
+      this.getVendorCategory()
+      this.getImages()
 
       this.$notify({
-        message: "You've submitted the proposal successfully",
+        message: 'You\'ve submitted the proposal successfully',
         horizontalAlign: 'center',
         verticalAlign: 'top',
         type: 'success'
@@ -520,7 +521,15 @@
     },
     methods: {
       goToLanding () {
-        this.$emit('goToLanding');
+        this.$emit('goToLanding')
+      },
+      getVendorCategory() {
+        this.$auth.currentUser(this, true, function () {
+          Vendors.find(this.proposalRequest.vendorId).then(vendor => {
+            this.vendorCategory = vendor.vendorCategory
+            this.isLoading = false
+          })
+        }.bind(this))
       },
       requirementCostChanges (val, index) {
 
@@ -537,8 +546,8 @@
         return moment.duration(eventEndMillis - eventStartMillis).humanize()
       },
       uploadEventImage (imageId = null, attachmentType = null) {
-        this.selectedImage = typeof imageId != 'object' ? imageId : null;
-        this.attachmentType = attachmentType;
+        this.selectedImage = typeof imageId != 'object' ? imageId : null
+        this.attachmentType = attachmentType
         this.$refs.eventFile.click()
       },
 
@@ -562,8 +571,7 @@
       },
       createImage (file, type) {
         let reader = new FileReader()
-        let vm = this;
-
+        let vm = this
 
         this.isLoading = true
 
@@ -575,17 +583,11 @@
               name : file.name,
               tag : vm.attachmentType
           }).for(proposalRequest).save().then(result => {
-            this.isLoading = false;
-
-            if ( !vm.attachmentType ) {
-                this.proposalRequestImages.push({id: result.id,tag : vm.attachmentType});
-            }
-
-            vm.getImages();
+            this.isLoading = false
+            this.proposalRequestImages.push({id: result.id,tag : vm.attachmentType})
           })
           .catch((error) => {
             this.isLoading = false
-            console.log('Error')
             console.log(error)
           })
         }
@@ -624,12 +626,14 @@
           /*proposalRequest.id = this.proposalRequest.id;
           proposalRequest.insuranceDocument = e.target.result;*/
 
-          return new ProposalRequestFile({vendorProposalFile: e.target.result, tag: 'insurance'}).for(proposalRequest).save().then(result => {
+          return new ProposalRequestFile({
+            vendorProposalFile: e.target.result, 
+            tag: 'insurance'
+          }).for(proposalRequest).save().then(result => {
             this.isLoading = false
           })
           .catch((error) => {
             this.isLoading = false
-            console.log('Error')
             console.log(error)
           })
         }
@@ -666,13 +670,11 @@
         reader.onload = e => {
           let  proposalRequest = new ProposalRequest({id: vm.$route.params.id})
 
-          proposalRequest.id = this.proposalRequest.id;
-          proposalRequest.licenseDocument = e.target.result;
+          proposalRequest.id = this.proposalRequest.id
+          proposalRequest.licenseDocument = e.target.result
 
           return proposalRequest.save()
-            .then(res => {
-
-            })
+            .then(res => {})
             .catch(error => {
               console.log(error)
             })
@@ -687,10 +689,10 @@
           .then(imagesList => {
             this.$set(this, 'proposalRequestImages', imagesList)
             this.$set(this, 'attachmentsLoadingCount', imagesList.length)
+            console.log('proposalRequestImages is  => ', imagesList)
           })
           .catch((error) => {
-            console.log('ProposalRequestImage Error')
-            console.log(error)
+            console.log('ProposalRequestImage Error', error)
           })
       },
       deleteImage (imageId, index) {
@@ -698,7 +700,9 @@
 
         this.isLoading = true
 
-        return new ProposalRequestImage({id: imageId}).for(proposalRequest).delete().then(result => {
+        return new ProposalRequestImage({
+          id: imageId
+        }).for(proposalRequest).delete().then(result => {
           this.proposalRequestImages.splice(index, 1)
           this.isLoading = false
         })
@@ -742,17 +746,16 @@
           })
       },
       updateProposalRequest (submitted = null) {
-        if (this.proposalRequest.submitted) return;
+        if (this.proposalRequest.submitted) return
 
-        let proposalRequest = new ProposalRequest({id: this.$route.params.id});
-        let _self = this;
+        let proposalRequest = new ProposalRequest({id: this.$route.params.id})
+        let _self = this
 
         if ( submitted != null && submitted === true) {
-          _self.isLoading = true;
+          _self.isLoading = true
         }
 
         proposalRequest.id = this.proposalRequest.id
-        proposalRequest.requirementsCategoryCost = this.proposalRequest.requirementsCategoryCost
         proposalRequest.attachments = this.proposalRequest.attachments
         proposalRequest.eventData = this.proposalRequest.eventData
         proposalRequest.insuranceDocument = this.proposalRequest.insuranceDocument
@@ -769,24 +772,23 @@
         proposalRequest.updateOnOutbid = this.proposalRequest.updateOnOutbid
         proposalRequest.cancellationPolicy = this.proposalRequest.cancellationPolicy
         proposalRequest.depositCost = this.proposalRequest.depositCost
-        proposalRequest.bid = this.totalOffer;
+        proposalRequest.bid = this.totalOffer
 
         proposalRequest.save()
           .then(res => {
             console.log('saved ', res)
 
             if ( submitted != null && submitted === true ) {
-
               swal({
-                title: "Proposal Submitted",
-                text: "Thank you for submitting your proposal.",
-                type: "success",
+                title: 'Proposal Submitted',
+                text: 'Thank you for submitting your proposal.',
+                type: 'success',
                 timer: 2000
               }).then( result => {
-                document.location.reload();
-              });
+                document.location.reload()
+              })
 
-              _self.isLoading = false;
+              _self.isLoading = false
             }
           })
           .catch(error => {
@@ -794,47 +796,66 @@
           })
       },
       openInNewTab(url){
-        window.open(url, '_blank');
+        window.open(url, '_blank')
       },
       dateSubmitted(proposalRequest){
-        return moment(proposalRequest.lastUpdated).fromNow();
+        return moment(proposalRequest.lastUpdated).fromNow()
       },
       setRequirementComment(val, item){
-        console.log(`Setting comment ${val} to requirement id: ${item.id}`);
-        item.showCommentForm =  false;
-        item.addedComment = true;
-        this.$forceUpdate();
+        console.log(`Setting comment ${val} to requirement id: ${item.id}`)
+        item.showCommentForm =  false
+        item.addedComment = true
+        this.$forceUpdate()
 
-        let comment = {commentText: val};
+        let comment = {commentText: val}
 
         if (item.comments && item.comments.length){
-          comment = {id: item.comments[0].id,commentText: val, from: item.vendorId, threadId: this.proposalRequest.id};
+          comment = {
+            id: item.comments[0].id,
+            commentText: val,
+            from: item.vendorId,
+            threadId: this.proposalRequest.id
+          }
         } else { // New Comment
-          comment = {commentText: val, from: item.vendorId, threadId: this.proposalRequest.id};
+          comment = {
+            commentText: val,
+            from: item.vendorId,
+            threadId: this.proposalRequest.id
+          }
         }
 
-        new ProposalRequestComment(comment)
-          .for(new ProposalRequest({id: this.proposalRequest.id}), new ProposalRequestRequirement({id: item.id}))
-          .save().then(res=>{
-          comment.id = res.item.id;
-          item.comments = [comment];
-        });
+        new ProposalRequestComment(comment).for(
+          new ProposalRequest({
+            id: this.proposalRequest.id
+          }), 
+          new ProposalRequestRequirement({
+            id: item.id
+          })
+        ).save().then(res=>{
+          comment.id = res.item.id
+          item.comments = [comment]
+        })
       },
-        attachmentUploaded(type) {
-            return _.findWhere(this.proposalRequestImages, {tag : type});
-        }
+      attachmentUploaded(type) {
+        return _.findWhere(this.proposalRequestImages, {tag : type})
+      }
+    },
+    filters : {
+      withComma(amount) {
+        return amount ? amount.toLocaleString() : 0
+      }
     },
     computed: {
       totalOffer () {
-        let total = parseInt(this.proposalRequest.requirementsCategoryCost);
-        let vm = this;
+        let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
+        let vm = this
 
         this.proposalRequest.requirements.map(function (item) {
           if (item.price) {
-            if ( item.priceUnit === "total") {
-              total += parseInt(item.price)
+            if ( item.priceUnit === 'total') {
+              total += parseFloat(item.price)
             } else {
-              total += parseInt(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants)
+              total += parseFloat(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants)
             }
           }
         })
@@ -842,20 +863,17 @@
       },
       extraTotal () {
         let total = 0
-        let vm = this;
+        let vm = this
         this.proposalRequest.requirements.map(function (item) {
-          console.log(item);
-
           if (item.price) {
-            if ( item.priceUnit === "total") {
-              total += parseInt(item.price)
+            if ( item.priceUnit === 'total') {
+              total += parseFloat(item.price)
             } else {
-              total += parseInt(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants)
+              total += parseFloat(item.price) * parseInt(vm.proposalRequest.eventData.numberOfParticipants)
             }
           }
-
         })
-        this.$forceUpdate();
+        this.$forceUpdate()
         return total
       },
       getLocation() {
@@ -864,7 +882,72 @@
         } else {
           return '-'
         }
+      },
+      getParticipants() {
+        const eventData = this.proposalRequest.eventData
+        if (eventData.participantsType) {
+          return eventData.numberOfParticipants + eventData.participantsType  
+        } else {
+          return eventData.numberOfParticipants
+        }
+      },
+      getServiceCategory() {
+        if (this.proposalRequest.requirementsCategory) {
+          return this.proposalRequest.requirementsCategory
+        } else {
+          return this.vendorCategory
+        }
       }
     }
   }
 </script>
+<style lang="scss" scoped>
+  .custom {
+    position: absolute;
+    top: 60px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%; 
+    background-color: rgba(0,0,0,0); 
+    z-index: 9998;
+  }
+  .fw-bold {
+    font-weight: bold;
+  }
+  .z-9999 {
+    z-index: 9999;
+  }
+  .grey-blockquote {
+    background-color: #EEEEEE;
+    border-left: 2px solid #aaaaaa;
+    padding: 8px;
+    margin-left: 0;
+  }
+  .mt-m-25 {
+    margin-top: -25px;
+  }
+  .display-flex {
+    display: flex;
+    justify-content: space-between;
+  }
+  .mb-12 {
+    margin-bottom: 12px;
+  }
+  .m-12 {
+    margin: 12px;
+  }
+  .pos-fixed {
+    position: fixed;
+    width: 27%;
+  }
+  .m-auto {
+    margin-top: auto;
+    margin-bottom: auto;
+    text-align: center;
+  }
+  .hide {
+    display: none!important;
+  }
+</style>

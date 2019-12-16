@@ -42,13 +42,13 @@
               class="md-success w-100 text-capitalize fs-14"
               v-if="selectedBlock.proposalComparison1 && isAccepted(selectedBlock.proposalComparison1)"
               @click="viewProposal(selectedBlock.proposalComparison1)">
-              View - ${{getProposalPrice(selectedBlock.proposalComparison1) | numeral('0,0')}}
+              View - ${{getProposalPrice(selectedBlock.proposalComparison1) | withComma}}
             </md-button>
             <md-button
               class="md-danger w-100 text-capitalize fs-14"
               v-if="selectedBlock.proposalComparison1 && !isAccepted(selectedBlock.proposalComparison1)"
               @click="manageProposalsAccept(selectedBlock.proposalComparison1)">
-              Accept - ${{getProposalPrice(selectedBlock.proposalComparison1) | numeral('0,0')}}
+              Accept - ${{getProposalPrice(selectedBlock.proposalComparison1) | withComma}}
             </md-button>
           </td>
           <td class="comparison-cell outer-cell">
@@ -68,13 +68,13 @@
               class="md-success w-100 text-capitalize fs-14"
               v-if="selectedBlock.proposalComparison2 && isAccepted(selectedBlock.proposalComparison2)"
               @click="viewProposal(selectedBlock.proposalComparison2)">
-              View - ${{getProposalPrice(selectedBlock.proposalComparison2) | numeral('0,0')}}
+              View - ${{getProposalPrice(selectedBlock.proposalComparison2) | withComma}}
             </md-button>
             <md-button
               class="md-danger w-100 text-capitalize fs-14"
               v-if="selectedBlock.proposalComparison2 && !isAccepted(selectedBlock.proposalComparison2)"
               @click="manageProposalsAccept(selectedBlock.proposalComparison2)">
-              Accept - ${{getProposalPrice(selectedBlock.proposalComparison2) | numeral('0,0')}}
+              Accept - ${{getProposalPrice(selectedBlock.proposalComparison2) | withComma}}
             </md-button>
           </td>
           <td class="comparison-cell outer-cell">
@@ -94,13 +94,13 @@
               class="md-success w-100 text-capitalize fs-14"
               v-if="selectedBlock.proposalComparison3 && isAccepted(selectedBlock.proposalComparison3)"
               @click="viewProposal(selectedBlock.proposalComparison3)">
-              View - ${{getProposalPrice(selectedBlock.proposalComparison3) | numeral('0,0')}}
+              View - ${{getProposalPrice(selectedBlock.proposalComparison3) | withComma}}
             </md-button>
             <md-button
               class="md-danger w-100 text-capitalize fs-14"
               v-if="selectedBlock.proposalComparison3 && !isAccepted(selectedBlock.proposalComparison3)"
               @click="manageProposalsAccept(selectedBlock.proposalComparison3)">
-              Accept - ${{getProposalPrice(selectedBlock.proposalComparison3) | numeral('0,0')}}
+              Accept - ${{getProposalPrice(selectedBlock.proposalComparison3) | withComma}}
             </md-button>
           </td>
         </tr>
@@ -176,17 +176,17 @@
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        ${{getProposalPrice(selectedBlock.proposalComparison1) | numeral('0,0')}}
+                        ${{getProposalPrice(selectedBlock.proposalComparison1) | withComma}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        ${{getProposalPrice(selectedBlock.proposalComparison2) | numeral('0,0')}}
+                        ${{getProposalPrice(selectedBlock.proposalComparison2) | withComma}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        ${{getProposalPrice(selectedBlock.proposalComparison3) | numeral('0,0')}}
+                        ${{getProposalPrice(selectedBlock.proposalComparison3) | withComma}}
                       </h5>
                     </td>
                   </tr>
@@ -196,17 +196,17 @@
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        ${{getProposalPricePerGuest(selectedBlock.proposalComparison1) | numeral('0,0')}}
+                        ${{getProposalPricePerGuest(selectedBlock.proposalComparison1) | withComma}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        ${{getProposalPricePerGuest(selectedBlock.proposalComparison2) | numeral('0,0')}}
+                        ${{getProposalPricePerGuest(selectedBlock.proposalComparison2) | withComma}}
                       </h5>
                     </td>
                     <td class="comparison-cell proposal">
                       <h5 class="title fw-400 fz-14">
-                        ${{getProposalPricePerGuest(selectedBlock.proposalComparison3) | numeral('0,0')}}
+                        ${{getProposalPricePerGuest(selectedBlock.proposalComparison3) | withComma}}
                       </h5>
                     </td>
                   </tr>
@@ -734,6 +734,11 @@
       },
       getLegalDocsOfComparison3 () {
         return this.legalDocs.filter( ld => ld.path.includes(this.selectedBlock.proposalComparison3))
+      }
+    },
+    filters: {
+      withComma(amount) {
+        return amount ? amount.toLocaleString() : 0
       }
     },
     watch: {
