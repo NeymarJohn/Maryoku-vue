@@ -15,7 +15,9 @@
                     </md-card-content>
                 </md-card>
             </div>
-            <div class="md-layout-item md-offset"></div>
+            <div class="md-layout-item md-size-80 md-offset">
+                <md-button class="md-success text-right">Save</md-button>
+            </div>
         </div>
 
         <div class="md-layout">
@@ -91,6 +93,13 @@
                 </template>
             </div>
         </div>
+
+        <div class="md-layout">
+            <div class="md-layout-item md-size-100 md-offset">
+                <md-button class="md-success text-right">Save</md-button>
+            </div>
+        </div>
+
     </div>
 </template>
 
