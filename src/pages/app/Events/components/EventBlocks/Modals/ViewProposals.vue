@@ -115,10 +115,6 @@
 
     created() {
       console.log('selectedBlock => ',this.selectedBlock);
-
-        this.$root.$on("requirement-saved", (requirement)=>{
-            this.updateBlockStatus();
-        });
     },
     mounted() {
       this.requirementsLength = this.selectedBlock.valuesCount;
@@ -174,23 +170,6 @@
           console.log(error)
         })
       },
-        updateBlockStatus () {
-            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-            let event = new CalendarEvent({id: this.event.id})
-            let selected_block = new EventComponent({id: this.selectedBlock.id})
-
-            selected_block.calendarEvent = this.selectedBlock.calendarEvent;
-            selected_block.componentId = this.selectedBlock.componentId;
-
-            selected_block.proposalsState = 'requirements-entered';
-
-            selected_block.for(calendar, event).save().then(resp => {
-                console.log(resp);
-            })
-                .catch(error => {
-                    console.log(error)
-                })
-        },
       viewAllProposals() {
         this.proposalsToDisplay  = this.selectedBlock.vendors.length;
       },
@@ -209,34 +188,12 @@
         let selected_block = new EventComponent({id : this.selectedBlock.id});
 
         new EventComponentVendor().for(
-          calendar,
-          event,
+          calendar, 
+          event, 
           selected_block
         ).get().then(resp => {
           this.isLoading = false;
           this.blockVendors = resp;
-
-            let vendorsWithProposals = _.filter(this.blockVendors, function (item) {
-                return item.proposals && item.proposals.length;
-            });
-
-            let acceptedProposals = 0;
-
-            _.each(vendorsWithProposals, (v) => {
-                let accepted = v.proposals[0].accepted;
-
-                if ( accepted ) {
-                    acceptedProposals +=1;
-                }
-
-            });
-
-            this.acceptedNumber = acceptedProposals;
-
-
-
-
-
         })
         .catch(error => {
           this.isLoading = false;

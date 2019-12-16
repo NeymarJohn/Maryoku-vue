@@ -18,6 +18,7 @@
                                 </div>
                                 <div class="md-layout-item md-size-100 required" style="margin-top : 2em;">
                                     <md-datepicker
+                                        :class="[{'md-error': (eventData.date && $refs.datePicker && !$refs.datePicker.$el.classList.contains('md-has-value') )}]"
                                         v-model="eventData.date"
                                         data-vv-name="date"
                                         ref="datePicker"
@@ -290,16 +291,6 @@
             .format('H:mm A');
         this.eventData.duration = (this.event.eventEndMillis - this.event.eventStartMillis) / 1000 / 60 / 60;
 
-        if ( this.selectedBlock.allocatedBudget && this.selectedBlock.numberOfParticipants ) {
-            this.$set(this.selectedBlock,'budgetPerPerson', this.selectedBlock.allocatedBudget / this.selectedBlock.numberOfParticipants);
-        }
-
-        if ( !this.selectedBlock.numberOfParticipants ) {
-            this.selectedBlock.numberOfParticipants = this.event.numberOfParticipants;
-        }
-
-
-
     },
     mounted() {
         this.getBuildingBlockValues();
@@ -544,18 +535,13 @@
         },
         updateEventComponent() {
 
-
-            this.$set(this.selectedBlock,'budgetPerPerson', this.selectedBlock.allocatedBudget / this.selectedBlock.numberOfParticipants);
-            this.$forceUpdate();
-
-
             let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
             let event = new CalendarEvent({id: this.event.id});
             let selected_block = new EventComponent({id: this.selectedBlock.id});
 
             selected_block.numberOfParticipants = this.selectedBlock.numberOfParticipants;
             selected_block.allocatedBudget = this.selectedBlock.allocatedBudget;
-            selected_block.budgetPerPerson = this.selectedBlock.allocatedBudget / this.selectedBlock.numberOfParticipants;
+            selected_block.budgetPerPerson = this.selectedBlock.budgetPerPerson;
 
             selected_block.for(calendar, event).save().then(resp => {
                 console.log(resp);

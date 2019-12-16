@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout md-alignment-top-center" style="padding-top: 24px;">
+  <div class="md-layout md-alignment-top-center pt-24">
     <div class="md-layout-item md-size-70" v-if="firstTime">
       <div class="margin-bottom-lg">
         <h3 class="title">
@@ -126,159 +126,162 @@
 </template>
 
 <script>
-import moment from "moment"
-import Vendors from '@/models/Vendors'
-import Calendar from "@/models/Calendar"
-import CalendarEvent from "@/models/CalendarEvent"
+  import moment from 'moment'
+  import Vendors from '@/models/Vendors'
+  import Calendar from '@/models/Calendar'
+  import CalendarEvent from '@/models/CalendarEvent'
 
+  export default {
+    props: ['proposalRequest', 'proposals', 'firstTime'],
+    components: {},
 
-export default {
-  props: ["proposalRequest", "proposals", "firstTime"],
-  components: {},
-
-  data() {
-    return {
-      showSkipLink: false,
-      upcomingEvents: [],
-      vendor: null
-    };
-  },
-  created() {},
-  mounted() {
-    this.getVendor()
-
-    let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-
-    let m = new CalendarEvent().for(_calendar).fetch(this, true);
-    m.then(allEvents=>{
-      console.log(allEvents)
-      this.upcomingEvents = allEvents
-      this.isLoading = false;
-    });
-  },
-  methods: {
-    goToDetails() {
-      this.$emit("goToDetails");
+    data() {
+      return {
+        showSkipLink: false,
+        upcomingEvents: [],
+        vendor: null
+      }
     },
-    onSkipToAnotherEventRequest() {
-      let index = _.findIndex(
-        this.proposals,
-        pr => pr.id == this.proposalRequest.id
-      );
-      let nextIndex = (index + 1) % this.proposals.length;
-      this.$emit("requestAnotherProposal", this.proposals[nextIndex].id);
-    },
-    getVendor() {
-      this.$auth.currentUser(this, true, function () {
-        Vendors.find(this.proposalRequest.vendorId).then(vendor => {
-          this.vendor = vendor
-        })
-      }.bind(this))
-    },
-  },
-  computed: {
-    eventDate() {
-      if (!this.proposalRequest) return '-';
+    created() {},
+    mounted() {
+      this.getVendor()
 
-      let date = new Date(this.proposalRequest.eventData.eventStartMillis);
-      return moment(date).format("MMM D, YYYY [at] hh:mma");
-    },
-    getLocation() {
-      console.log(this.proposalRequest)
-      console.log(this.upcomingEvents)
-      console.log('test', this.upcomingEvents.filter( item => 
-        item.participantsType == this.proposalRequest.eventData.participantsType && 
-        item.numberOfParticipants == this.proposalRequest.eventData.numberOfParticipants
-        // item.participantsType == this.proposalRequest.eventData.participantsType &&
-        // item.eventStartMillis == this.proposalRequest.eventStartMillis && 
-        // item.eventEndMillis == this.proposalRequest.eventEndMillis 
-      ))
+      let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
 
-      if (this.proposalRequest) {
-        return this.proposalRequest.eventData.location || '-'
-      } else {
-        return '-'
+      let m = new CalendarEvent().for(_calendar).fetch(this, true)
+      m.then(allEvents=>{
+        console.log(allEvents)
+        this.upcomingEvents = allEvents
+        this.isLoading = false
+      })
+    },
+    methods: {
+      goToDetails() {
+        this.$emit('goToDetails')
+      },
+      onSkipToAnotherEventRequest() {
+        let index = _.findIndex(
+          this.proposals,
+          pr => pr.id == this.proposalRequest.id
+        )
+        let nextIndex = (index + 1) % this.proposals.length
+        this.$emit('requestAnotherProposal', this.proposals[nextIndex].id)
+      },
+      getVendor() {
+        this.$auth.currentUser(this, true, function () {
+          Vendors.find(this.proposalRequest.vendorId).then(vendor => {
+            this.vendor = vendor
+          })
+        }.bind(this))
+      },
+    },
+    computed: {
+      eventDate() {
+        if (!this.proposalRequest) return '-'
+
+        let date = new Date(this.proposalRequest.eventData.eventStartMillis)
+        return moment(date).format('MMM D, YYYY [at] hh:mma')
+      },
+      getLocation() {
+        console.log(this.proposalRequest)
+        console.log(this.upcomingEvents)
+        console.log('test', this.upcomingEvents.filter( item => 
+          item.participantsType == this.proposalRequest.eventData.participantsType && 
+          item.numberOfParticipants == this.proposalRequest.eventData.numberOfParticipants
+          // item.participantsType == this.proposalRequest.eventData.participantsType &&
+          // item.eventStartMillis == this.proposalRequest.eventStartMillis && 
+          // item.eventEndMillis == this.proposalRequest.eventEndMillis 
+        ))
+
+        if (this.proposalRequest) {
+          return this.proposalRequest.eventData.location || '-'
+        } else {
+          return '-'
+        }
       }
     }
   }
-};
 </script>
 <style lang="scss" scoped>
-@import "@/assets/scss/md/_colors.scss";
-@import "@/assets/scss/md/_variables.scss";
+  @import "@/assets/scss/md/_colors.scss";
+  @import "@/assets/scss/md/_variables.scss";
 
-.md-success {
-  color: $green-700 !important;
-}
-
-.title {
-  font-weight: bold;
-}
-
-h4 {
-  margin: 0;
-}
-
-p {
-  margin: 10px 0 0 0;
-}
-
-.margin-bottom-lg {
-  margin-bottom: 30px;
-}
-
-.margin-bottom-md {
-  margin-bottom: 20px;
-}
-
-.margin-right-sm {
-  margin-right: 10px;
-}
-
-.proposals--card {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.proposal--title {
-  font-size: 20px;
-  font-weight: 400;
-
-  .proposal--icon {
-    margin-right: 5px;
-    margin-top: -5px;
+  .md-success {
+    color: $green-700 !important;
   }
-}
 
-.align-with-title {
-  padding-left: 34px;
-}
+  .title {
+    font-weight: bold;
+  }
 
-.separated {
-  border-right: 1px solid $input-border;
-}
+  h4 {
+    margin: 0;
+  }
 
-.centered {
-  text-align: center;
-}
+  p {
+    margin: 10px 0 0 0;
+  }
 
-.arrow {
-  border-bottom: 1px solid $grey-600;
-  position: relative;
-  top: 46px;
-  width: 60px;
-  margin: auto;
+  .margin-bottom-lg {
+    margin-bottom: 30px;
+  }
 
-  &::after {
-    content: " ";
-    position: absolute;
-    width: 7px;
-    height: 7px;
+  .margin-bottom-md {
+    margin-bottom: 20px;
+  }
+
+  .margin-right-sm {
+    margin-right: 10px;
+  }
+
+  .proposals--card {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .proposal--title {
+    font-size: 20px;
+    font-weight: 400;
+
+    .proposal--icon {
+      margin-right: 5px;
+      margin-top: -5px;
+    }
+  }
+
+  .align-with-title {
+    padding-left: 34px;
+  }
+
+  .separated {
+    border-right: 1px solid $input-border;
+  }
+
+  .centered {
+    text-align: center;
+  }
+
+  .arrow {
     border-bottom: 1px solid $grey-600;
-    border-right: 1px solid $grey-600;
-    transform: rotate(-45deg);
-    bottom: -4px;
-    right: 0px;
+    position: relative;
+    top: 46px;
+    width: 60px;
+    margin: auto;
+
+    &::after {
+      content: " ";
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-bottom: 1px solid $grey-600;
+      border-right: 1px solid $grey-600;
+      transform: rotate(-45deg);
+      bottom: -4px;
+      right: 0px;
+    }
   }
-}
+
+  .pt-24 {
+    padding-top: 24px;
+  }
 </style>

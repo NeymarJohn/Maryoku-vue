@@ -2,7 +2,7 @@
   <div class="md-layout" >
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
     <div class="md-layout vendor-proposals" v-if="proposalRequest">
-      <div style="position: absolute; top: 60px; bottom: 0; left: 0; right: 0; height: 100%; width: 100%; background-color: rgba(0,0,0,0); z-index: 9998;" v-if="proposalRequest.submitted"></div>
+      <div class="custom-1" v-if="proposalRequest.submitted"></div>
       <div class="md-layout-item md-size-100">
         <h5>
           <a href="#" @click.prevent="goToLanding">
@@ -14,9 +14,9 @@
         </h5>
       </div>
       <div class="md-layout-item md-size-100">
-        <h3 class="title" style="font-weight: bold;">Submit your proposal</h3>
+        <h3 class="title fw-bold">Submit your proposal</h3>
         <div class="alert alert-danger text-center" v-if="proposalRequest.submitted">
-          <h5 class="text-center clear-margins" style="z-index: 9999;">You already submitted this proposal, you cannot change it anymore.</h5>
+          <h5 class="text-center clear-margins z-9999">You already submitted this proposal, you cannot change it anymore.</h5>
         </div>
       </div>
       <div class="md-layout-item md-size-70 md-small-size-100">
@@ -111,13 +111,11 @@
                     <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
                       <span v-if="item.requirementValue">{{item.requirementValue}} x </span>
                       {{item.requirementTitle}}
-                      <blockquote v-if="item.requirementMandatory"
-                        style="background-color: #EEEEEE; border-left: 2px solid #aaaaaa; padding: 8px; margin-left: 0;">
+                      <blockquote v-if="item.requirementMandatory" class="grey-blockquote">
                         <span>Client <strong>must-have</strong> requirement</span>
                         <div class="text-gray">{{item.requirementComment}}</div>
                       </blockquote>
-                      <blockquote v-else
-                        style="background-color: #EEEEEE; border-left: 2px solid #aaaaaa; padding: 8px; margin-left: 0;">
+                      <blockquote v-else class="grey-blockquote">
                         <span>Client requirement</span>
                         <div class="text-gray">{{item.requirementComment}}</div>
                       </blockquote>
@@ -141,7 +139,7 @@
                         v-model="item.includedInPrice"></md-switch>
                       <label :for="`include-${index}`">Included in price</label>
                     </div>
-                    <div class="actions-list md-layout-item md-size-100 md-small-size-100" style="display: flex; justify-content: space-between;">
+                    <div class="actions-list md-layout-item md-size-100 md-small-size-100 display-flex">
                       <md-field v-if="item.requirementMandatory" class="amount-field">
                         <label>Amount</label>
                         <md-input
@@ -188,36 +186,39 @@
           <!-- Vendor images -->
           <md-card class="event-information-card vendor-images">
             <md-card-content>
-              <h4  class="title" style="margin-bottom: 12px;">Images</h4>
+              <h4  class="title mb-12">Images</h4>
               <div class="md-layout">
-                <div class="md-layout-item md-size-20" v-for="(image,index) in proposalRequestImages" :key="index"  style="margin: 12px;"
-                     v-if="!image.tag"
-                >
-                  <iframe  seamless class="vendor-images-list_item" frameborder="0"
+                <div class="md-layout-item md-size-20 m-12" v-for="(image,index) in proposalRequestImages" :key="index">
+                  <div class="vendor-images-list_item"  v-if="image.vendorsFileContentType === 'application/pdf'">
+                    <md-icon>picture_as_pdf</md-icon>
+                  </div>
+                  <iframe v-else seamless class="vendor-images-list_item" frameborder="0"
                     :src="`${serverUrl}/1/proposal-requests/${proposalRequest.id}/files/${image.id}`" >
                     <md-button class="md-primary md-sm" @click="deleteImage(image.id,index)">
                       delete
                     </md-button>
                   </iframe>
                   <div class="text-center">
-                    <md-button style="margin-top: -25px;" class="md-xs md-round md-just-icon md-info" @click="openInNewTab(`${serverUrl}/1/proposal-requests/${proposalRequest.id}/files/${image.id}`)">
+                    <md-button class="md-xs md-round md-just-icon md-info mt-m-25" @click="openInNewTab(`${serverUrl}/1/proposal-requests/${proposalRequest.id}/files/${image.id}`)">
                       <md-icon>visibility</md-icon>
                     </md-button>
-                    <md-button style="margin-top: -25px;" class="md-xs md-round md-just-icon md-danger" @click="deleteImage(image.id,index)">
+                    <md-button class="md-xs md-round md-just-icon md-danger mt-m-25" @click="deleteImage(image.id,index)">
                       <md-icon>delete</md-icon>
                     </md-button>
                   </div>
                 </div>
-                <div class="md-layout-item md-size-20" style="margin-top: auto; margin-bottom: auto; text-align: center;">
-                  <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image"
-                    @click="uploadEventImage" style="margin-top: auto; margin-bottom: auto; text-align: center;">
+                <div class="md-layout-item md-size-20 m-auto">
+                  <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image m-auto" @click="uploadEventImage">
                     <md-icon>add</md-icon>
                   </md-button>
-                  <input type="file" style="display: none;" ref="eventFile"
-                    accept="image/gif, image/jpg, image/png, application/text, application/pdf" @change="onEventFilePicked">
+                  <input type="file"
+                    class="hide"
+                    ref="eventFile"
+                    accept="image/gif, image/jpg, image/png, application/text, application/pdf" 
+                    @change="onEventFilePicked">
                 </div>
               </div>
-              <h5  class="title" style="margin-bottom: 12px;">Additional documentation</h5>
+              <h5 class="title mb-12">Additional documentation</h5>
               <div class="attachments-documents-btn">
                 <md-button class=" md-sm add-vendor-image" :class="{'md-primary' : !attachmentUploaded('proof_of_insurance')}"
                   @click="uploadEventImage(null,'proof_of_insurance')">
@@ -393,7 +394,7 @@
         <!-- ./More Requirements -->
       </div>
       <div class="md-layout-item md-size-30 md-small-size-100">
-        <md-card class="bid-section" style="position: fixed; width: 27%;">
+        <md-card class="bid-section pos-fixed">
           <md-card-content>
             <h3 class="text-center">You're the {{proposalRequest.bidderRank | numeral('Oo')}} bidder</h3>
             <div class="text-center">
@@ -502,7 +503,7 @@
         alretExceedPictureSize: false,
         proposalRequestComment: '',
         attachmentsLoadingCount: 0,
-          attachmentType : null
+          attachmentType : ''
       }
     },
     created () {
@@ -575,13 +576,8 @@
               name : file.name,
               tag : vm.attachmentType
           }).for(proposalRequest).save().then(result => {
-            this.isLoading = false;
-
-            if ( !vm.attachmentType ) {
-                this.proposalRequestImages.push({id: result.id,tag : vm.attachmentType});
-            }
-
-            vm.getImages();
+            this.isLoading = false
+            this.proposalRequestImages.push({id: result.id,tag : vm.attachmentType});
           })
           .catch((error) => {
             this.isLoading = false
@@ -687,6 +683,7 @@
           .then(imagesList => {
             this.$set(this, 'proposalRequestImages', imagesList)
             this.$set(this, 'attachmentsLoadingCount', imagesList.length)
+            console.log('proposalRequestImages is  => ', imagesList)
           })
           .catch((error) => {
             console.log('ProposalRequestImage Error')
@@ -868,3 +865,53 @@
     }
   }
 </script>
+<style lang="scss" scoped>
+  .custom {
+    position: absolute;
+    top: 60px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%; 
+    background-color: rgba(0,0,0,0); 
+    z-index: 9998;
+  }
+  .fw-bold {
+    font-weight: bold;
+  }
+  .z-9999 {
+    z-index: 9999;
+  }
+  .grey-blockquote {
+    background-color: #EEEEEE;
+    border-left: 2px solid #aaaaaa;
+    padding: 8px;
+    margin-left: 0;
+  }
+  .mt-m-25 {
+    margin-top: -25px;
+  }
+  .display-flex {
+    display: flex;
+    justify-content: space-between;
+  }
+  .mb-12 {
+    margin-bottom: 12px;
+  }
+  .m-12 {
+    margin: 12px;
+  }
+  .pos-fixed {
+    position: fixed;
+    width: 27%;
+  }
+  .m-auto {
+    margin-top: auto;
+    margin-bottom: auto;
+    text-align: center;
+  }
+  .hide {
+    display: none!important;
+  }
+</style>

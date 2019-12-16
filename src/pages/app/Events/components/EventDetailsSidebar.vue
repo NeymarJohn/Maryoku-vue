@@ -66,7 +66,7 @@
                                   :value="getTotalRemainingBudget"
                                   prefix="$"></animated-number>
                 <small class="total-event-budget">/
-                  ${{ getTotalAmountByGuestType | numeral('0,0') }}
+                  ${{ getTotalAmountByGuestType | withComma }}
                 </small>
               </div>
             </h4>
@@ -107,9 +107,9 @@
         </div>
         <div class="md-layout md-gutter">
           <div class="md-layout-item">
-            <event-paid-total-amounts
-              :paid="getPaidAmount"
-              :total="getToBePaidAmount"
+            <event-paid-total-amounts 
+              :paid="getPaidAmount" 
+              :total="getToBePaidAmount" 
               :toBePaid="getToBePaidAmount - getPaidAmount"
             >
             </event-paid-total-amounts>
@@ -311,8 +311,8 @@
           eventComponents.forEach( evtComponent => {
             let selected_block = new EventComponent({id : evtComponent.id})
             new EventComponentVendor().for(
-              calendar,
-              event,
+              calendar, 
+              event, 
               selected_block
             ).get().then(ec => {
               ec.forEach( e => {
@@ -396,9 +396,9 @@
       },
       getTotalAmountByGuestType() {
         if ( this.calendarEvent.participantsType == 'Guests and spouse') {
-          return parseInt(this.event.numberOfParticipants * this.event.budgetPerPerson  * 2)
+          return this.event.numberOfParticipants * this.event.budgetPerPerson * 2
         } else {
-          return parseInt(this.event.numberOfParticipants *this.event.budgetPerPerson)
+          return this.event.numberOfParticipants * this.event.budgetPerPerson
         }
       },
       getTotalRemainingBudget() {
@@ -426,22 +426,22 @@
         if (this.getTotalRemainingBudget > 0) {
           return [
             {
-              value: 100 - this.getPercentage,
+              value: 100 - this.getPercentage, 
               className: 'budget-chart-slice-a-positive'
-            },
+            }, 
             {
-              value: this.getPercentage,
+              value: this.getPercentage, 
               className: 'budget-chart-slice-b-positive'
             }
           ]
         } else {
           return [
             {
-              value: 0.01,
+              value: 0.01, 
               className: 'budget-chart-slice-a-negative'
             },
             {
-              value: 99.99,
+              value: 99.99, 
               className: 'budget-chart-slice-b-negative'
             }
           ]
@@ -471,6 +471,9 @@
       },
       formatDuration: function (startDate, endDate) {
         return moment(endDate).diff(startDate, 'hours')
+      },
+      withComma(amount) {
+        return amount ? amount.toLocaleString() : 0
       }
     },
     watch: {
