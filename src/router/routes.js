@@ -40,6 +40,7 @@ import AnnualPlanner from "@/pages/app/AnnualPlanner/index.vue";
 import EventWizard from "@/pages/app/CreateEvent/EventWizard.vue";
 import EventInfo from "@/pages/app/CreateEvent/EventInfo.vue";
 import EventBudget from "@/pages/app/CreateEvent/EventBudget.vue";
+import EventVibe from "@/pages/app/CreateEvent/EventVibe.vue";
 import HomePage from "@/pages/app/HomePage/Home.vue";
 
 // Dashboard pages
@@ -522,6 +523,15 @@ let PublicCreateEvent = {
                 title : "Event Budget",
                 gmt : "Event Budget"
             }
+        },
+        {
+            path : "/event-vibe",
+            name : "Event Vibe",
+            component : EventVibe,
+            meta : {
+                title : "Event Vibe",
+                gmt : "Event Vibe"
+            } // EventVibe
         }
     ]
 }

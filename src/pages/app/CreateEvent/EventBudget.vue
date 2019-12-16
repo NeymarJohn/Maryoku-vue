@@ -43,7 +43,9 @@
                 <div class="field-small-note"> <small>Guest estimation: 200</small> </div>
 
                 <div class="form-actions">
-                    <md-button class="md-default next-btn disabled"> Build my budget </md-button>
+                    <md-button class="md-default next-btn"
+                               :class="[{'opacity-btn' : buttonLabel === 'Build my budget'}]"
+                               @mouseover="buttonLabel='I don\'t know yet'" @mouseleave="buttonLabel='Build my budget'" > {{buttonLabel}} </md-button>
                     <md-button class="md-rose next-btn"
                                @click="goToNext"
                                :class="[{'disabled': !eventData.budgetPerPerson || !eventData.totalBudget}]"> Next </md-button>
@@ -86,6 +88,7 @@
                         required: true,
                     }
                 },
+                buttonLabel : 'Build my budget'
 
             }
         },
@@ -99,7 +102,7 @@
 
                 this.$validator.validateAll().then(isValid => {
                     if (isValid) {
-                        //this.$router.push({ path: `/event-budget`});
+                        this.$router.push({ path: `/event-vibe`});
 
 
                     } else {

@@ -357,6 +357,7 @@
 
                 .md-ripple {
                     font-size: 15px;
+                    text-transform: initial;
                 }
 
                 &.md-rose {
@@ -376,10 +377,9 @@
 
 
 
-                &.disabled {
+                &.disabled, &.opacity-btn {
                     opacity: 0.3;
                 }
-
             }
         }
     }
@@ -390,6 +390,7 @@
         padding : 0;
         margin : 0;
         width:100% !important;
+        z-index: 9999999999999999999999;
 
         .md-menu-content-container {
 

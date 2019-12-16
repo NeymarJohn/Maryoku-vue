@@ -11,26 +11,21 @@
       <div class="container">
           <div class="form-section">
 
+
+
               <div class="form-group">
-                  <md-autocomplete v-model="eventData.location"
-                                   data-vv-name="location"
-                                   :md-options="locationsList"
-                                   v-validate= "modelValidations.location"
-                                   class="change-icon-order select-with-icon purple-field with-icon"
-                                   :class="[{'md-error': errors.has('location')}]" value="">
+                  <md-field class="purple-field with-icon">
                       <md-icon>room</md-icon>
                       <label>Event Location (City)</label>
+                      <md-select v-model="eventData.location"
+                                 data-vv-name="location"
+                                 v-validate= "modelValidations.location">
+                          <md-option v-for="(type,index) in locationsList" :key="index"  :value="type">{{ type }}</md-option>
+                      </md-select>
                       <span class="md-error" v-if="errors.has('location')">This field is required</span>
+                  </md-field>
 
-                      <template slot="md-autocomplete-item" slot-scope="{ item, term }">
-                          <md-highlight-text :md-term="term">{{ item }}</md-highlight-text>
-                      </template>
 
-                      <template slot="md-autocomplete-empty" slot-scope="{ term }">
-                          No employees matching "{{ term }}" were found. <a @click="noop()">Create a new</a> one!
-                      </template>
-
-                  </md-autocomplete>
 
                   <md-checkbox v-model="haveEventPlace">I have event place</md-checkbox>
               </div>
@@ -159,7 +154,18 @@ export default {
     },
   data() {
    return {
-
+       selectedCountry: null,
+       selectedEmployee: null,
+       countries: [
+           'Algeria',
+           'Argentina',
+           'Brazil',
+           'Canada',
+           'Italy',
+           'Japan',
+           'United Kingdom',
+           'United States'
+       ],
        step : 1,
        haveEventPlace : false,
        flexibleWithDates : false,
