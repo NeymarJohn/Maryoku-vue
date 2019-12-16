@@ -31,6 +31,7 @@ import Notes from "@/pages/app/Notes.vue";
 import Proposals from "@/pages/app/Proposals.vue";
 import Vendors from "@/pages/app/Vendors/Vendors.vue";
 import CurrentVendors from "@/pages/app/Vendors/CurrentVendors.vue";
+import AddEditVendor from "@/pages/app/Vendors/AddEditVendor.vue";
 import EditVendor from "@/pages/app/Vendors/EditVendor.vue";
 import VendorsPool from "@/pages/app/Vendors/VendorsPool.vue";
 import ImportVendors from "@/pages/app/Vendors/ImportVendors.vue";
@@ -326,10 +327,10 @@ let appPages = {
     {
       path: "/vendors/create",
       name: "CreateVendor",
-      component: EditVendor,
+      component: AddEditVendor,
       meta: {
-        title: 'Create Vendor',
-        gtm: "Create Vendor"
+        title: 'Add New Vendor',
+        gtm: "Add New Vendor"
       },
     },
     {
@@ -337,9 +338,8 @@ let appPages = {
       name: "EditVendor",
       component: EditVendor,
       meta: {
-        title: 'Edit Vendor',
-        gtm: "Edit Vendor",
-        opaque: false
+        title: 'Edit Vendor Details',
+        gtm: "Edit Vendor Details",
       },
     },
     {
