@@ -31,8 +31,6 @@
                                :class="[{'disabled': !eventData.budgetPerPerson || !eventData.totalBudget}]"> Next </md-button>
                 </div>
 
-
-
             </div>
         </div>
 
