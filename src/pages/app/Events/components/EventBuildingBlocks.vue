@@ -84,8 +84,8 @@
                       </template>
                     </template>
                   </td>
-                  <td 
-                    class="fit-content w-20 allocated-budget" 
+                  <td
+                    class="fit-content w-20 allocated-budget"
                     :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}"
                   >
                     <div class="md-table-cell-container">

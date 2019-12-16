@@ -106,8 +106,12 @@
                       </md-field>
                     </div>
                   </div>
-                  <div class="list-item md-layout" :class="{'not-available'  : item.itemNotAvailable}"
-                    v-for="(item,index) in proposalRequest.requirements" :key="index">
+                  <div 
+                    class="list-item md-layout" 
+                    :class="{'not-available' : item.itemNotAvailable}"
+                    v-for="(item,index) in proposalRequest.requirements" 
+                    :key="index"
+                  >
                     <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
                       <span v-if="item.requirementValue">{{item.requirementValue}} x </span>
                       {{item.requirementTitle}}
@@ -188,11 +192,10 @@
             <md-card-content>
               <h4  class="title mb-12">Images</h4>
               <div class="md-layout">
-                <div class="md-layout-item md-size-20 m-12" v-for="(image,index) in proposalRequestImages" :key="index">
-                  <div class="vendor-images-list_item"  v-if="image.vendorsFileContentType === 'application/pdf'">
-                    <md-icon>picture_as_pdf</md-icon>
-                  </div>
-                  <iframe v-else seamless class="vendor-images-list_item" frameborder="0"
+                <div class="md-layout-item md-size-20" v-for="(image,index) in proposalRequestImages" :key="index"  style="margin: 12px;"
+                     v-if="!image.tag"
+                >
+                  <iframe  seamless class="vendor-images-list_item" frameborder="0"
                     :src="`${serverUrl}/1/proposal-requests/${proposalRequest.id}/files/${image.id}`" >
                     <md-button class="md-primary md-sm" @click="deleteImage(image.id,index)">
                       delete
@@ -438,7 +441,16 @@
                 </div>
                 <div class="cost text-right">${{extraTotal | withComma}}</div>
               </div>
-              <div class="value-section user-offer-section ">
+              <div class="extra-items-wrapper">
+                <div class="extra-items"
+                  v-for="(req,rIndex) in proposalRequest.requirements" 
+                  :key="rIndex"
+                >
+                  <span>{{req.requirementTitle}}</span>
+                  <span class="pull-right">${{req.priceUnit == 'total' ? req.price : req.price * proposalRequest.eventData.numberOfParticipants | withComma}}</span>
+                </div>
+              </div>
+              <div class="value-section user-offer-section">
                 <div class="title">Your Offer</div>
                 <div class="cost text-right">${{totalOffer | withComma}}</div>
               </div>
@@ -501,7 +513,7 @@
         alretExceedPictureSize: false,
         proposalRequestComment: '',
         attachmentsLoadingCount: 0,
-        attachmentType: '',
+        attachmentType : null,
         vendorCategory: null
       }
     },
@@ -583,8 +595,13 @@
               name : file.name,
               tag : vm.attachmentType
           }).for(proposalRequest).save().then(result => {
-            this.isLoading = false
-            this.proposalRequestImages.push({id: result.id,tag : vm.attachmentType})
+            this.isLoading = false;
+
+            if ( !vm.attachmentType ) {
+              this.proposalRequestImages.push({id: result.id,tag : vm.attachmentType});
+            }
+
+            vm.getImages();
           })
           .catch((error) => {
             this.isLoading = false
@@ -689,7 +706,6 @@
           .then(imagesList => {
             this.$set(this, 'proposalRequestImages', imagesList)
             this.$set(this, 'attachmentsLoadingCount', imagesList.length)
-            console.log('proposalRequestImages is  => ', imagesList)
           })
           .catch((error) => {
             console.log('ProposalRequestImage Error', error)
@@ -949,5 +965,19 @@
   }
   .hide {
     display: none!important;
+  }
+  .extra-items-wrapper {
+    margin-bottom: 1em;
+    max-height: 12em;
+    overflow: scroll;
+    border-bottom: 1px solid #c0c0c0ef;
+
+    .extra-items {
+      padding: 5px 0;
+
+      &:last-child {
+        padding-bottom: 1em;
+      }
+    }
   }
 </style>

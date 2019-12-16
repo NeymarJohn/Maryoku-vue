@@ -201,11 +201,6 @@ export default {
                 list: fullyPaid
               }
             ]
-
-            this.filteredBlockVendors = proposals;
-
-            this.selectedBlock.proposals = proposals;
-            this.selectedBlock.proposalsCount = proposals.length;
           })
           .catch(error => {
             this.isLoading = false;

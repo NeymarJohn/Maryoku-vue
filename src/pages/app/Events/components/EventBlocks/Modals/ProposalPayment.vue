@@ -6,7 +6,7 @@
                     <div class="md-title">Payment</div>
                 </div>
                 <div class="header-actions">
-                    <md-button class="md-primary" @click="submitPayment">PAY NOW (${{(proposal.cost+ proposal.cost*0.03).toFixed(2)}})</md-button>
+                    <md-button class="md-primary" @click="submitPayment">PAY NOW (${{(proposal.cost- proposal.cost*0.1).toFixed(2)}})</md-button>
                 </div>
             </md-card-header>
             <md-card-content>
@@ -25,8 +25,8 @@
                                 <div class="payment-details">
                                     <ul class="payment-details_list-items fee-tax-items">
                                         <li class="fee-tax">
-                                            <div class="details-title">Upfront payment, service fee and tax (3%)</div>
-                                            <div class="details-cost">${{(proposal.cost*0.03).toFixed(2)}}</div>
+                                            <div class="details-title">Downpayment (10%)</div>
+                                            <div class="details-cost">${{(proposal.cost*0.1).toFixed(2)}}</div>
                                         </li>
                                     </ul>
 
