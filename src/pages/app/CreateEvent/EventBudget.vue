@@ -18,7 +18,6 @@
                         v-model="eventData.totalBudget"
                         data-vv-name="totalBudget"
                         v-validate= "modelValidations.totalBudget"
-                        :class="[{'md-error': errors.has('totalBudget')}]"
                     ></md-input>
                     <span class="md-error" v-if="errors.has('totalBudget')">This field is required</span>
 
@@ -35,7 +34,6 @@
                         v-model="eventData.budgetPerPerson"
                         data-vv-name="budgetPerPerson"
                         v-validate= "modelValidations.budgetPerPerson"
-                        :class="[{'md-error': errors.has('budgetPerPerson')}]"
                     ></md-input>
                     <span class="md-error" v-if="errors.has('budgetPerPerson')">This field is required</span>
 

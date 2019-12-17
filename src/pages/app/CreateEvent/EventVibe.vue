@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="container">
-            <div class="form-section">
+            <div class="form-section vibe-section">
 
                 <div class="vibes-list">
                     <div class="vibe-item" v-for="index in 8" :key="index">
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <go-back navigation="about-invited"></go-back>
+        <go-back navigation="event-budget"></go-back>
 
     </div>
 </template>
@@ -96,7 +96,7 @@
 
     $baseColor : #5c2153;
 
-    .form-section {
+    .form-section.vibe-section {
         width : 65%;
         margin : 0 auto;
         padding : 0 2em;
