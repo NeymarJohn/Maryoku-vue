@@ -17,7 +17,7 @@
                               v-model="eventData.numberOfEmployees"
                               data-vv-name="numberOfEmployees"
                               v-validate= "modelValidations.numberOfEmployees"
-                            ></md-input>
+                              :class="[{'md-error': errors.has('numberOfEmployees')}]"></md-input>
                     <span class="md-error" v-if="errors.has('numberOfEmployees')">This field is required</span>
                 </md-field>
 
@@ -70,7 +70,7 @@
                 eventTime : null,
                 eventDate : null,
                 eventData : {},
-                expectingPeople : ["80% - 85%","85% - 90%","90% - 95%","95% - 100%"],
+                expectingPeople : ["10 - 30%","30 - 60%","60 - 80%","80 - 100%"],
                 modelValidations: {
                     numberOfEmployees: {
                         required: true,

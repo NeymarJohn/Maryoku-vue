@@ -5,7 +5,7 @@
 
             <div class="header-content md-layout">
                 <div class="logo md-layout-item md-size-50">
-                    <img src="/static/img/homepage/maryoku-logo-white@2x.png" width="118">
+                    maryoku
                 </div>
                 <div class="header-actions md-layout-item md-size-50">
                     <ul class="actions-list unstyled">
@@ -80,7 +80,6 @@
         border-radius: 10px;
         padding: 0.5em 6px 0.4em;
         border : 1px solid #aaaaaa;
-        min-height: 52px;
 
         label {
             top: 13px;
@@ -105,7 +104,7 @@
                 padding-left: 2.2em;
             }
         }
-        .md-error:not(.md-input) {
+        .md-error {
             right: 13px;
             left: auto;
             top: 19px;

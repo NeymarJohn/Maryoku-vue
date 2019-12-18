@@ -106,8 +106,12 @@
                       </md-field>
                     </div>
                   </div>
-                  <div class="list-item md-layout" :class="{'not-available'  : item.itemNotAvailable}"
-                    v-for="(item,index) in proposalRequest.requirements" :key="index">
+                  <div 
+                    class="list-item md-layout" 
+                    :class="{'not-available' : item.itemNotAvailable}"
+                    v-for="(item,index) in proposalRequest.requirements" 
+                    :key="index"
+                  >
                     <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
                       <span v-if="item.requirementValue">{{item.requirementValue}} x </span>
                       {{item.requirementTitle}}
@@ -437,7 +441,16 @@
                 </div>
                 <div class="cost text-right">${{extraTotal | withComma}}</div>
               </div>
-              <div class="value-section user-offer-section ">
+              <div class="extra-items-wrapper">
+                <div class="extra-items"
+                  v-for="(req,rIndex) in proposalRequest.requirements" 
+                  :key="rIndex"
+                >
+                  <span>{{req.requirementTitle}}</span>
+                  <span class="pull-right">${{req.priceUnit == 'total' ? req.price : req.price * proposalRequest.eventData.numberOfParticipants | withComma}}</span>
+                </div>
+              </div>
+              <div class="value-section user-offer-section">
                 <div class="title">Your Offer</div>
                 <div class="cost text-right">${{totalOffer | withComma}}</div>
               </div>
@@ -952,5 +965,19 @@
   }
   .hide {
     display: none!important;
+  }
+  .extra-items-wrapper {
+    margin-bottom: 1em;
+    max-height: 12em;
+    overflow: scroll;
+    border-bottom: 1px solid #c0c0c0ef;
+
+    .extra-items {
+      padding: 5px 0;
+
+      &:last-child {
+        padding-bottom: 1em;
+      }
+    }
   }
 </style>
