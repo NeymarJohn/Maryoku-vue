@@ -65,7 +65,7 @@
                   <td>
                     <span class="span-element">{{block.title}}</span>
                     <span class="span-users-count pull-right" v-if="elementsBudget == 'guest'">
-                      <i class="fa fa-user"></i> {{event.numberOfParticipants}}
+                      <i class="fa fa-user"></i> {{block.numberOfParticipants ? block.numberOfParticipants : event.numberOfParticipants}}
                     </span>
                   </td>
                   <td class="fit-content">
@@ -89,31 +89,40 @@
                     :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}"
                   >
                     <div class="md-table-cell-container">
-                      <label-edit v-if="!event.elementsBudgetPerGuest"
-                                  :text="block.allocatedBudget"
-                                  :field-name="block.componentId"
-                                  :sub-description="elementsBudget"
-                                  :currency="'$'"
-                                  :numeric="true"
-                                  @text-updated-blur="blockBudgetChanged"
-                                  @text-updated-enter="blockBudgetChanged"></label-edit>
+                        <label-edit v-if="!event.elementsBudgetPerGuest"
+                                    :text="block.allocatedBudget"
+                                    :field-name="block.componentId"
+                                    :sub-description="elementsBudget"
+                                    :currency="'$'"
+                                    :numeric="true"
+                                    @text-updated-blur="blockBudgetChanged"
+                                    @text-updated-enter="blockBudgetChanged"></label-edit>
 
-                      <label-edit v-else
-                                  :text="block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : ''"
-                                  :field-name="block.componentId"
-                                  :sub-description="elementsBudget"
-                                  :currency="'$'"
-                                  :numeric="true"
-                                  @text-updated-blur="blockBudgetChanged"
-                                  @text-updated-enter="blockBudgetChanged"></label-edit>
+                        <label-edit v-else-if="block.allocatedBudget && block.numberOfParticipants"
+                                    :text="block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(2).toString() : ''"
+                                    :field-name="block.componentId"
+                                    :sub-description="elementsBudget"
+                                    :currency="'$'"
+                                    :numeric="true"
+                                    @text-updated-blur="blockBudgetChanged"
+                                    @text-updated-enter="blockBudgetChanged"></label-edit>
+                        <label-edit v-else
+                                    :text="block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : ''"
+                                    :field-name="block.componentId"
+                                    :sub-description="elementsBudget"
+                                    :currency="'$'"
+                                    :numeric="true"
+                                    @text-updated-blur="blockBudgetChanged"
+                                    @text-updated-enter="blockBudgetChanged"></label-edit>
+
                     </div>
                   </td>
                   <td class="actual-cost">
                     <template v-if="block.allocatedBudget">
                       <template v-if="block.winningProposalId">
-                        <md-button 
-                          class="md-simple actual-cost md-xs" 
-                          :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`" 
+                        <md-button
+                          class="md-simple actual-cost md-xs"
+                          :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`"
                         >
                           {{ event.elementsBudgetPerGuest ?  `$${(block.winingProposal.cost / event.numberOfParticipants).toFixed(2)}` : `$${block.winingProposal.cost.toFixed(2)}` }}
                           <md-icon >open_in_new</md-icon>
@@ -318,13 +327,22 @@
         selected_block.todos = block.todos;
         selected_block.values = block.values;
         selected_block.vendors = block.vendors;
+
+        console.log(val);
         if (val) {
           if (val.toString().toLowerCase() === 'click to set') {
             selected_block.allocatedBudget = null;
             block.allocatedBudget = null;
           } else {
-            selected_block.allocatedBudget = !this.event.elementsBudgetPerGuest ? val : val * this.event.numberOfParticipants;
-            block.allocatedBudget = !this.event.elementsBudgetPerGuest ? val : val * this.event.numberOfParticipants;
+
+              if ( block.allocatedBudget && block.numberOfParticipants ) {
+                  selected_block.allocatedBudget = !this.event.elementsBudgetPerGuest ? val : val * block.numberOfParticipants;
+                  block.allocatedBudget          = !this.event.elementsBudgetPerGuest ? val : val * block.numberOfParticipants;
+              } else {
+                  selected_block.allocatedBudget = !this.event.elementsBudgetPerGuest ? val : val * this.event.numberOfParticipants;
+                  block.allocatedBudget          = !this.event.elementsBudgetPerGuest ? val : val * this.event.numberOfParticipants;
+              }
+
           }
         } else {
           selected_block.allocatedBudget = null;

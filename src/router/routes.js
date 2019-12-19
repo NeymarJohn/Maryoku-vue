@@ -337,7 +337,7 @@ let appPages = {
     {
       path: "/vendors/:id/edit",
       name: "EditVendor",
-      component: AddEditVendor,
+      component: EditVendor,
       meta: {
         title: 'Edit Vendor Details',
         gtm: "Edit Vendor Details",
