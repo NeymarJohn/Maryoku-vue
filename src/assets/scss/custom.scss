@@ -4952,9 +4952,11 @@ h4.title-summary {
     }
 }
 
+input[type='number'] {
+    -moz-appearance: textfield;/*For FireFox*/
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+    &::-webkit-inner-spin-button { /*For Webkits like Chrome and Safari*/
+        -webkit-appearance: none;
+        margin: 0;
+    }
 }
