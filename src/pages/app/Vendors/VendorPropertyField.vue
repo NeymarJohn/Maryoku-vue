@@ -64,7 +64,12 @@
             </md-field>
         </div>
         <div v-else-if="item.type === 'multiple-selection'">
-            {{item.name}} <strong>{{item.type}}</strong>
+            <md-field>
+                <label>{{item.name}}</label>
+                <md-select v-model="vendor.vendorPropertiesValues[item.id]" :name="item.name" :id="item.id" multiple="true">
+                    <md-option v-for="opt in item.selectionOptions" :key="opt.id" :id="opt.id" :value="opt.id">{{opt.title}}</md-option>
+                </md-select>
+            </md-field>
         </div>
         <div v-else-if="item.type === 'single-selection-with-amount'">
             {{item.name}} <strong>{{item.type}}</strong>
