@@ -3,7 +3,7 @@
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
 
         <div class="md-layout">
-            <div class="md-layout-item md-size-20">
+            <div class="md-layout-item md-size-15 md-medium-size-20">
                 <div style="position: fixed;" class="">
                     <md-field style="margin-top: 42px;">
                         <label>Vendor Category</label>
@@ -17,7 +17,7 @@
                     </div>
                 </div>
             </div>
-            <div class="md-layout-item md-size-70">
+            <div class="md-layout-item md-size-75 md-medium-size-70">
                 <vue-element-loading :active="categoryPropertiesLoading" spinner="ring" color="#FF547C"/>
                 <div class="md-layout" v-for="(section, sIndex) in vendorPropertiesSections" :key="sIndex">
                     <div class="md-layout-item md-size-100">
@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div class="md-layout-item md-size-10">
-                <div style="position: fixed; width: 92%;">
+                <div style="position: fixed; width: 92%;margin-top: 21px;">
                     <md-button class="md-success text-right">Save</md-button>
                 </div>
             </div>
