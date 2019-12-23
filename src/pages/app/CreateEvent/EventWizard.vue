@@ -1,211 +1,234 @@
 <template>
-  <div class="">
-      <div class="section-header">
-          <h2 class="section-title">Few steps to complete the background we need</h2>
-          <div class="steps-wizard">
-              <ul class="steps-wizard-items">
-                  <li v-for="index in step" :key="index"></li>
-              </ul>
-          </div>
-      </div>
-      <div class="container">
-          <div class="form-section">
+    <div class="">
+        <div class="section-header">
+            <h2 class="section-title">Few steps to complete the background we need</h2>
+            <div class="steps-wizard">
+                <ul class="steps-wizard-items">
+                    <li v-for="index in step" :key="index"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <div class="form-section">
+                <div class="form-group">
+
+                    <div class="maryoku-field with-icon" :class="{'has-value' : eventData.location}">
+                        <md-icon>room</md-icon>
+                        <v-select v-model="eventData.location"
+                                  :options="locationsList"
+                                  :class="{'has-value' : eventData.location}"
+                                  data-vv-name="location"
+                                  v-validate="modelValidations.location"></v-select>
+                        <label>Event Location (City)</label>
+                        <span class="md-error" v-if="errors.has('location')">This field is required</span>
+                    </div>
+                    <md-checkbox v-model="eventData.haveEventPlace">I have event place</md-checkbox>
+                </div>
+
+                <div class="maryoku-field with-icon" :class="{'has-value' : eventData.eventType}">
+                    <md-icon>grade</md-icon>
+                    <v-select v-model="eventData.eventType"
+                              :options="eventTypes"
+                              :class="{'has-value' : eventData.eventType}"
+                              data-vv-name="location"
+                              v-validate="modelValidations.eventType"></v-select>
+                    <label>Event Type</label>
+                    <span class="md-error" v-if="errors.has('eventType')">This field is required</span>
+                </div>
 
 
+                <div class="form-group">
+                    <md-datepicker
+                        class="purple-field with-icon"
+                        v-model="eventData.date"
+                        v-validate="modelValidations.date"
+                        md-immediately
+                        :class="[{'md-error': errors.has('date')}]">
+                        <label>Event Date</label>
+                        <span class="md-error" v-if="errors.has('date')">This field is required</span>
+                    </md-datepicker>
 
-              <div class="form-group">
-                  <md-field class="purple-field with-icon">
-                      <md-icon>room</md-icon>
-                      <label>Event Location (City)</label>
-                      <md-select v-model="eventData.location"
-                                 data-vv-name="location"
-                                 v-validate= "modelValidations.location">
-                          <md-option v-for="(type,index) in locationsList" :key="index"  :value="type">{{ type }}</md-option>
-                      </md-select>
-                      <span class="md-error" v-if="errors.has('location')">This field is required</span>
-                  </md-field>
+                    <md-checkbox v-model="eventData.flexibleWithDates">I'm flexible with dates</md-checkbox>
+                </div>
 
-
-
-                  <md-checkbox v-model="haveEventPlace">I have event place</md-checkbox>
-              </div>
-
-
-
-              <md-field class="purple-field with-icon">
-                  <md-icon>grade</md-icon>
-                  <label>Event Type</label>
-                  <md-select v-model="eventData.eventType"
-                             data-vv-name="eventType"
-                             v-validate= "modelValidations.eventType">
-                      <md-option v-for="(type,index) in eventTypes" :key="index"  :value="type">{{ type }}</md-option>
-                  </md-select>
-                  <span class="md-error" v-if="errors.has('eventType')">This field is required</span>
-              </md-field>
-
-              <div class="form-group">
-                  <md-datepicker
-                      class="purple-field with-icon"
-                      v-model="eventData.date"
-                      v-validate= "modelValidations.date"
-                      md-immediately
-                      :class="[{'md-error': errors.has('date')}]">
-                      <label>Event Date</label>
-                      <span class="md-error" v-if="errors.has('date')">This field is required</span>
-                  </md-datepicker>
-
-                  <md-checkbox v-model="flexibleWithDates">I'm flexible with dates</md-checkbox>
-              </div>
-
-              <div class="event-time">
-                  <md-radio v-model="eventTime" value="day" class="with-border">Day event</md-radio>
-                  <md-radio v-model="eventTime" value="night" class="with-border">Night event</md-radio>
-              </div>
+                <div class="event-time">
+                    <md-radio v-model="eventData.eventTime" value="day" class="with-border">Day event</md-radio>
+                    <md-radio v-model="eventData.eventTime" value="night" class="with-border">Night event</md-radio>
+                </div>
 
 
-              <div class="form-actions">
-                  <md-button
-                      class="md-rose next-btn"
-                      @click="goToNext"
-                        :class="[{'disabled': !eventData.location || !eventData.eventType || !eventData.date}]"> Next </md-button>
-              </div>
+                <div class="form-actions">
+                    <md-button
+                        class="md-rose next-btn"
+                        @click="goToNext"
+                        :class="[{'disabled': !eventData.location || !eventData.eventType || !eventData.date}]"> Next
+                    </md-button>
+                </div>
 
 
+            </div>
+        </div>
 
-          </div>
-      </div>
+        <go-back navigation="home"></go-back>
 
-      <go-back navigation="home"></go-back>
-
-  </div>
+    </div>
 </template>
 
 <script>
 
-    import GoBack from './componenets/GoBack';
+    import GoBack from './componenets/GoBack'
+    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
-export default {
-  components: {
-      GoBack
-  },
-    methods :{
-        goToNext() {
+    import Vue from 'vue'
+    import vSelect from 'vue-select'
 
-            let vm = this;
+    Vue.component('v-select', vSelect)
 
-            this.cerrors = {};
-            this.validating = true;
-
-            this.$validator.validateAll().then(isValid => {
-                if (isValid) {
-                    this.$router.push({ path: `/about-invited`});
-
-
-                } else {
-                    this.showNotify();
-                }
-
-            });
-
+    export default {
+        components: {
+            GoBack
         },
-        validateDate() {
-            return this.$refs.datePicker.$el.classList.contains('md-has-value')
+        created(){
+            this.$set(this.eventData,'location' ,this.publicEventData.location);
+            this.$set(this.eventData,'eventType' ,this.publicEventData.eventType);
+            this.$set(this.eventData,'date' ,this.publicEventData.date);
+            this.$set(this.eventData,'eventTime' ,this.publicEventData.eventTime);
+            this.$set(this.eventData,'haveEventPlace' ,this.publicEventData.haveEventPlace);
+            this.$set(this.eventData,'flexibleWithDates' ,this.publicEventData.flexibleWithDates);
         },
-        validateAndSubmit() {
+        methods: {
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty']),
+            goToNext () {
 
-            // this.$emit('goToNextPage');
-            //  return;
-            let vm = this;
+                let vm = this
 
-            this.cerrors = {};
-            this.validating = true;
+                this.cerrors = {}
+                this.validating = true
 
-            this.$validator.validateAll().then(isValid => {
-                if (isValid) {
-                    //this.$parent.isLoading = true;
+                this.$validator.validateAll().then(isValid => {
+                    if (isValid) {
 
-                    if ( this.eventId ) {
-                        vm.updateEvent();
+                        this.setEventProperty({key: 'location', actualValue: this.eventData.location});
+                        this.setEventProperty({key: 'eventType', actualValue: this.eventData.eventType});
+                        this.setEventProperty({key: 'date', actualValue: this.eventData.date});
+                        this.setEventProperty({key: 'eventTime', actualValue: this.eventData.eventTime});
+                        this.setEventProperty({key: 'haveEventPlace', actualValue: this.eventData.haveEventPlace});
+                        this.setEventProperty({key: 'flexibleWithDates', actualValue: this.eventData.flexibleWithDates});
+
+                        this.$router.push({path: `/about-invited`})
+
                     } else {
-                        vm.createEvent();
+                        this.showNotify()
                     }
 
+                })
+
+            },
+            validateDate () {
+                return this.$refs.datePicker.$el.classList.contains('md-has-value')
+            },
+            validateAndSubmit () {
+
+                // this.$emit('goToNextPage');
+                //  return;
+                let vm = this
+
+                this.cerrors = {}
+                this.validating = true
+
+                this.$validator.validateAll().then(isValid => {
+                    if (isValid) {
+                        //this.$parent.isLoading = true;
+
+                        if (this.eventId) {
+                            vm.updateEvent()
+                        } else {
+                            vm.createEvent()
+                        }
+
+                    } else {
+                        this.showNotify()
+                    }
+
+                })
+
+                if (!this.eventType) {
+
                 } else {
-                    this.showNotify();
+                    //this.$emit('goToNextPage');
                 }
+            },
+            showNotify () {
+                this.$notify({
+                    message: 'Please, check all required fields',
+                    icon: 'warning',
+                    horizontalAlign: 'center',
+                    verticalAlign: 'top',
+                    type: 'danger',
+                })
+            },
+        },
+        data () {
+            return {
+                selectedCountry: null,
+                selectedEmployee: null,
+                countries: [
+                    'Algeria',
+                    'Argentina',
+                    'Brazil',
+                    'Canada',
+                    'Italy',
+                    'Japan',
+                    'United Kingdom',
+                    'United States'
+                ],
+                step: 1,
+                haveEventPlace: false,
+                flexibleWithDates: false,
+                eventTime: null,
+                eventDate: null,
+                eventData: {
+                    location: null
+                },
+                modelValidations: {
+                    location: {
+                        required: true,
+                    },
+                    date: {
+                        required: true,
+                    },
+                    eventType: {
+                        required: true,
+                    }
+                },
+                locationsList: ['San Francisco, California', 'Los Angeles, California', 'Jacksonville, Florida', 'Miami, Florida', 'NYC, New York', 'Austin, Texas', 'Huston, Texas'],
+                eventTypes: ['Formal meeting', 'Offsite', 'Celebration / Party', 'Toast', 'Team Building', 'Customer event']
+                ,
+                options: ['ameed', 'ahmad']
 
-            });
-
-            if (!this.eventType) {
-
-            } else {
-                //this.$emit('goToNextPage');
             }
-        },
-        showNotify() {
-            this.$notify({
-                message: 'Please, check all required fields',
-                icon: "warning",
-                horizontalAlign: 'center',
-                verticalAlign: 'top',
-                type: 'danger',
-            });
-        },
-    },
-  data() {
-   return {
-       selectedCountry: null,
-       selectedEmployee: null,
-       countries: [
-           'Algeria',
-           'Argentina',
-           'Brazil',
-           'Canada',
-           'Italy',
-           'Japan',
-           'United Kingdom',
-           'United States'
-       ],
-       step : 1,
-       haveEventPlace : false,
-       flexibleWithDates : false,
-       eventTime : null,
-       eventDate : null,
-       eventData : {
-           location : null
-       },
-       modelValidations: {
-           location: {
-               required: true,
-           },
-           date: {
-               required: true,
-           },
-           eventType: {
-               required: true,
-           }
-       },
-       locationsList : ["San Francisco, California","Los Angeles, California","Jacksonville, Florida","Miami, Florida","NYC, New York","Austin, Texas","Huston, Texas"],
-       eventTypes : ["Formal meeting","Offsite","Celebration / Party","Toast","Team Building","Customer event"]
+        }, computed: {
+            ...mapState('PublicEventPlannerVuex', [
+                'publicEventData',
+            ])
+        }
 
-   }
-  }
-};
+    }
 </script>
 <style lang="scss">
 
 
     .form-section {
-        width : 30%;
-        margin : 0 auto;
-        padding : 0 2em;
+        width: 350px;
+        margin: 0 auto;
+        padding: 0;
         min-height: 440px;
 
     }
 
     .event-time {
         display: flex;
-        flex:1;
+        flex: 1;
         flex-direction: row;
         justify-content: space-between;
 

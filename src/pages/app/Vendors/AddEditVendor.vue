@@ -1,56 +1,61 @@
 <template>
     <div class="vendor-editor">
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
-
-        <div class="md-layout">
-            <div class="md-layout-item md-size-15 md-medium-size-20">
-                <div style="position: fixed;" class="">
-                    <md-field style="margin-top: 42px;">
-                        <label>Vendor Category</label>
-                        <md-select v-model="vendor.vendorCategory" name="vendorCategory" id="vendorCategory" @md-selected="vendorCategoryChanged">
-                            <md-option v-for="opt in categories" :key="opt.id" :id="opt.id" :value="opt.id">{{opt.value}}</md-option>
-                        </md-select>
-                    </md-field>
-                    <h6 class="title text-primary" style="border-bottom: 1px solid lightgrey;">Quick Access</h6>
-                    <div v-for="(section, sIndex) in vendorPropertiesSections" :key="sIndex">
-                       <a class="md-button md-simple md-default" href="javascript:void(null);" @click="scrollToHash(section.title)">{{section.title}}</a>
-                    </div>
-                </div>
-            </div>
-            <div class="md-layout-item md-size-75 md-medium-size-70">
-                <vue-element-loading :active="categoryPropertiesLoading" spinner="ring" color="#FF547C"/>
-                <div class="md-layout" v-for="(section, sIndex) in vendorPropertiesSections" :key="sIndex">
-                    <div class="md-layout-item md-size-100">
-                        <md-card>
-                            <md-card-header class="md-card-header-text md-card-header-warning">
-                                <div class="card-text">
-                                    <h4 class="title text-white" style="font-weight: 600; color: white;" :id="section.title">{{section.title}}</h4>
-                                </div>
-                            </md-card-header>
-                            <md-card-content>
-                                <div v-for="(item, index) in section.items" :key="index">
-                                    <template v-if="item.title">
-                                        <h6 class="alert alert-info" style="padding: 8px;">{{item.title}}</h6>
-                                        <div v-for="(subItem, index) in item.items" :key="index" style="padding-left: 18px;">
-                                            <vendor-property-field :item="subItem" :vendor="vendor"/>
-                                        </div>
-                                    </template>
-                                    <template v-else>
-                                        <vendor-property-field :item="item" :vendor="vendor"/>
-                                    </template>
-                                </div>
-                            </md-card-content>
-                        </md-card>
-                    </div>
-                </div>
-            </div>
-            <div class="md-layout-item md-size-10">
-                <div style="position: fixed; width: 92%;margin-top: 21px;">
-                    <md-button class="md-success text-right">Save</md-button>
-                </div>
+        <div style="position: fixed; width: 92%;">
+            <div class="md-layout-item md-size-100 text-right">
+                <md-button class="md-success text-right">Save</md-button>
             </div>
         </div>
-
+        <div class="md-layout">
+            <div class="md-layout-item md-size-10"></div>
+            <div class="md-layout-item md-size-20">
+                <md-card>
+                    <md-card-content>
+                        <md-field>
+                            <label>Vendor Category</label>
+                            <md-select v-model="vendor.vendorCategory" name="vendorCategory" id="vendorCategory" @md-selected="vendorCategoryChanged">
+                                <md-option v-for="opt in categories" :key="opt.id" :id="opt.id" :value="opt.id">{{opt.value}}</md-option>
+                            </md-select>
+                        </md-field>
+                    </md-card-content>
+                </md-card>
+            </div>
+            <div class="md-layout-item md-size-20" v-if="false">
+                <md-card>
+                    <md-card-content style="background-color: #ddd;">
+                        <md-field class="disabled" disabled="true">
+                            <label>Sub Category</label>
+                            <md-select v-model="vendor.vendorCategory" name="vendorSubCategory" id="vendorSubCategory" @md-selected="vendorSubCategoryChanged">
+                                <md-option v-for="opt in categories" :key="opt.id" :id="opt.id" :value="opt.id">{{opt.value}}</md-option>
+                            </md-select>
+                        </md-field>
+                    </md-card-content>
+                </md-card>
+            </div>
+        </div>
+        <div class="md-layout" v-for="(section, sIndex) in vendorPropertiesSections" :key="sIndex">
+            <vue-element-loading :active="categoryPropertiesLoading" spinner="ring" color="#FF547C"/>
+            <div class="md-layout-item md-size-10"></div>
+            <div class="md-layout-item md-size-80">
+                <h4 class="">{{section.title}}</h4>
+                <md-card>
+                    <md-card-content>
+                        <div v-for="(item, index) in section.items" :key="index">
+                            <template v-if="item.title">
+                                <h6>{{item.title}}</h6>
+                                <div v-for="(subItem, index) in item.items" :key="index">
+                                    <vendor-property-field :item="subItem" :vendor="vendor"/>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <vendor-property-field :item="item" :vendor="vendor"/>
+                            </template>
+                        </div>
+                    </md-card-content>
+                </md-card>
+            </div>
+            <div class="md-layout-item md-size-10"></div>
+        </div>
     </div>
 </template>
 
@@ -115,20 +120,6 @@
             })
         },
         methods: {
-            scrollToHash(hash){
-                setTimeout(() => {
-                    /*document.getElementById(hash).scrollIntoView({
-                        behavior: 'smooth' // smooth scroll
-                    });
-                    */
-
-                    const theElement = document.getElementById(hash);
-                    const y = theElement.getBoundingClientRect().top + window.pageYOffset;
-                    const yOffset = -50;
-                    window.scrollTo({top: y + yOffset, behavior: 'smooth'});
-
-                }, 1)
-            },
             getVendor(vendorId) {
                 Vendors.find(vendorId).then(vendor => {
                     this.vendor = vendor
@@ -138,7 +129,6 @@
             },
             vendorCategoryChanged(val) {
                 this.categoryPropertiesLoading = true
-                this.vendorPropertiesSections = []
                 Vendors.params({
                     category: val
                 }).find('properties').then(vendorProperties => {
@@ -183,7 +173,7 @@
                 newVendor.vendorMainPhoneNumber = this.vendor.vendorMainPhoneNumber
                 newVendor.vendorTagging = this.vendor.vendorTagging
 
-                if (this.errors.items.length === 0) {
+                if (this.errors.items.length == 0) {
                     newVendor.save()
 
                     this.$notify({

@@ -18,6 +18,7 @@
                         v-model="eventData.totalBudget"
                         data-vv-name="totalBudget"
                         v-validate= "modelValidations.totalBudget"
+                        @change="totalBudgetChanged"
                     ></md-input>
                     <span class="md-error" v-if="errors.has('totalBudget')">This field is required</span>
 
@@ -34,14 +35,16 @@
                         v-model="eventData.budgetPerPerson"
                         data-vv-name="budgetPerPerson"
                         v-validate= "modelValidations.budgetPerPerson"
+                        @change="budgetPerPersonChanged"
                     ></md-input>
                     <span class="md-error" v-if="errors.has('budgetPerPerson')">This field is required</span>
 
                 </md-field>
-                <div class="field-small-note"> <small>Guest estimation: 200</small> </div>
+                <div class="field-small-note"> <small>Guest estimation: {{publicEventData.numberOfParticipants}}</small> </div>
 
                 <div class="form-actions">
                     <md-button class="md-default next-btn"
+                               @click="skip"
                                :class="[{'opacity-btn' : buttonLabel === 'Build my budget'}]"
                                @mouseover="buttonLabel='I don\'t know yet'" @mouseleave="buttonLabel='Build my budget'" > {{buttonLabel}} </md-button>
                     <md-button class="md-rose next-btn"
@@ -62,6 +65,12 @@
 <script>
 
     import GoBack from './componenets/GoBack';
+
+    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+
+    import PublicEventPlannerVuexModule from "./PublicEventPlanner.vuex";
+
+
 
 
     export default {
@@ -90,7 +99,15 @@
 
             }
         },
+        created(){
+
+            this.$set(this.eventData,'totalBudget' ,this.publicEventData.totalBudget);
+            this.$set(this.eventData,'budgetPerPerson' ,this.publicEventData.budgetPerPerson);
+
+
+        },
         methods : {
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty']),
             goToNext() {
 
                 let vm = this;
@@ -100,6 +117,11 @@
 
                 this.$validator.validateAll().then(isValid => {
                     if (isValid) {
+
+
+                        this.setEventProperty({key: 'totalBudget', actualValue: this.eventData.totalBudget});
+                        this.setEventProperty({key: 'budgetPerPerson', actualValue: this.eventData.budgetPerPerson});
+
                         this.$router.push({ path: `/event-vibe`});
 
 
@@ -109,6 +131,21 @@
                 });
 
             },
+            skip() {
+                this.$router.push({ path: `/event-vibe`});
+
+            },
+            totalBudgetChanged() {
+                this.eventData.budgetPerPerson = this.eventData.totalBudget / this.publicEventData.numberOfParticipants;
+            },
+            budgetPerPersonChanged() {
+                this.eventData.totalBudget = this.eventData.budgetPerPerson * this.publicEventData.numberOfParticipants;
+
+            }
+        },computed : {
+            ...mapState('PublicEventPlannerVuex', [
+                'publicEventData',
+            ])
         }
     };
 </script>
