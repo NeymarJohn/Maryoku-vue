@@ -14,22 +14,22 @@
                 <md-field class="purple-field">
                     <label>How many people do you invite?</label>
                     <md-input type="number"
-                              v-model="eventData.numberOfEmployees"
-                              data-vv-name="numberOfEmployees"
-                              v-validate= "modelValidations.numberOfEmployees"
+                              v-model="eventData.numberOfParticipants"
+                              data-vv-name="numberOfParticipants"
+                              v-validate= "modelValidations.numberOfParticipants"
                             ></md-input>
-                    <span class="md-error" v-if="errors.has('numberOfEmployees')">This field is required</span>
+                    <span class="md-error" v-if="errors.has('numberOfParticipants')">This field is required</span>
                 </md-field>
 
-                <md-field class="purple-field">
+                <div class="maryoku-field" :class="{'has-value' : eventData.expectingPeople}">
+                    <v-select v-model="eventData.expectingPeople"
+                              :options="expectingPeopleList"
+                              :class="{'has-value' : eventData.expectingPeople}"
+                              data-vv-name="location"
+                              v-validate= "modelValidations.expectingPeople"></v-select>
                     <label>% people you're expecting to show up</label>
-                    <md-select v-model="eventData.expectingPeople"
-                               data-vv-name="expectingPeople"
-                               v-validate= "modelValidations.expectingPeople">
-                        <md-option v-for="(type,index) in expectingPeople" :key="index"  :value="type">{{ type }}</md-option>
-                    </md-select>
                     <span class="md-error" v-if="errors.has('expectingPeople')">This field is required</span>
-                </md-field>
+                </div>
 
 
                 <md-checkbox v-model="flexibleWithDates">Internal company event</md-checkbox>
@@ -38,7 +38,7 @@
                 <div class="form-actions">
                     <md-button class="md-rose next-btn"
                                @click="goToNext"
-                               :class="[{'disabled': !eventData.numberOfEmployees || !eventData.expectingPeople}]"> Next </md-button>
+                               :class="[{'disabled': !eventData.numberOfParticipants || !eventData.expectingPeople}]"> Next </md-button>
                 </div>
 
 
@@ -55,6 +55,8 @@
 <script>
 
     import GoBack from './componenets/GoBack';
+    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+    import PublicEventPlannerVuexModule from "./PublicEventPlanner.vuex";
 
 
     export default {
@@ -63,7 +65,6 @@
         },
         data() {
             return {
-
                 step : 2,
                 haveEventPlace : false,
                 flexibleWithDates : false,
@@ -71,18 +72,42 @@
                 eventDate : null,
                 eventData : {},
                 expectingPeople : ["80% - 85%","85% - 90%","90% - 95%","95% - 100%"],
+                expectingPeopleList : [
+                    {
+                        label : '80% - 85%',
+                        value : 85
+                    },
+                    {
+                        label : '85% - 90%',
+                        value : 90
+                    },
+                    {
+                        label : '90% - 95%',
+                        value : 95
+                    },
+                    {
+                        label : '95% - 100%',
+                        value : 100
+                    }
+                ],
                 modelValidations: {
-                    numberOfEmployees: {
+                    numberOfParticipants: {
                         required: true,
                     },
                     expectingPeople: {
                         required: true,
                     }
                 },
-
             }
         },
+        created() {
+            this.$set(this.eventData,'numberOfParticipants' ,this.publicEventData.numberOfParticipants);
+            this.$set(this.eventData,'expectingPeople' ,this.publicEventData.expectingPeople);
+
+        },
         methods : {
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty']),
+
             goToNext() {
 
                 let vm = this;
@@ -90,8 +115,15 @@
                 this.cerrors = {};
                 this.validating = true;
 
+
+
                 this.$validator.validateAll().then(isValid => {
                     if (isValid) {
+                        this.setEventProperty({key: 'numberOfParticipants', actualValue: this.eventData.numberOfParticipants});
+                        this.setEventProperty({key: 'expectingPeople', actualValue: this.eventData.expectingPeople});
+                        console.log(this.eventData);
+                        console.log(this.$store.state.PublicEventPlannerVuex.publicEventData);
+
                         this.$router.push({ path: `/event-budget`});
 
 
@@ -101,6 +133,10 @@
                 });
 
             },
+        },computed : {
+            ...mapState('PublicEventPlannerVuex', [
+                'publicEventData',
+            ])
         }
     };
 </script>
