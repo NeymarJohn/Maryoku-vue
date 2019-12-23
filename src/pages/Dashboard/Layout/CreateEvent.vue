@@ -26,20 +26,10 @@
 </template>
 <script>
     import { FadeTransition } from "vue2-transitions";
-    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-    import PublicEventPlannerVuexModule from "../../../pages/app/CreateEvent/PublicEventPlanner.vuex";
-
     export default {
         components: {
             FadeTransition
-        },
-        created () {
-            this.$store.registerModule("PublicEventPlannerVuex", PublicEventPlannerVuexModule);
-        },
-        methods: {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty']),
         }
-
     };
 </script>
 <style lang="scss">
@@ -395,180 +385,13 @@
         }
     }
 
-    .maryoku-field {
-        margin : 0.5em 0 0;
-        border : 1px solid #aaa;
-        border-radius: 10px;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        font-family: 'Open Sans', sans-serif;
-        cursor: pointer;
-        position: relative;
-
-        .md-error:not(.md-input) {
-            position: absolute;
-            font-size: 12px;
-            right: 33px;
-            left: auto;
-            top: 18px;
-            color: red;
-            width: auto;
-            display: block;
-        }
-
-        .md-icon {
-            position: absolute;
-            left: 8px;
-            z-index: 2;
-        }
-
-        >label {
-            position: absolute;
-            left: 30px;
-            margin: 0;
-            font-size: 15px;
-            pointer-events: none;
-            z-index: 2;
-
-        }
-
-        .v-select {
-            width : 100%;
-        }
-
-        .vs--open + label, .has-value + label {
-            top: 4px;
-            font-size: 12px;
-            color: gray !important;
-            left: 1.4rem;
-        }
-
-        .vs--open {
-            .vs__selected {
-                color : #efefef;
-            }
-            .vs__open-indicator {
-                display: none;
-            }
-        }
-
-        .vs__selected {
-            position: absolute;
-            top: 21px;
-            left: 23px;
-            z-index: 2;
-            color : $baseColor;
-        }
-
-        .vs__selected-options {
-            position: relative;
-
-            input {
-                background: none;
-                font-size: 15px;
-                padding: 1.5em 6px 0.9em 23px;
-                border-radius: 10px;
-                width: 100%;
-                height: 100%;
-                border : none !important;
-
-                &:focus {
-                    outline: none;
-                    box-shadow: none;
-                    background: #fff
-                }
-            }
-        }
-
-        &.with-icon {
-
-            >label {
-                left: 43px;
-            }
-
-            .vs--open + label, .has-value + label {
-                left: 2.6rem;
-            }
-            .vs__selected-options {
-
-                input {
-                    padding: 1.5em 6px 0.9em 42px;
-                }
-            }
-
-            .vs__selected {
-
-                left: 41px;
-            }
-
-        }
-
-        .vs__actions {
-            position: absolute;
-            top: 15px;
-            right: 13px;
-            z-index: 2;
-
-            .vs__clear {
-                background: none !important;
-                border : none !important;
-                opacity: 0.3;
-                margin-right : -9px;
-            }
-        }
-
-        .vs__dropdown-menu {
-            position: absolute;
-            background: #fff;
-            list-style: none;
-            padding : 0;
-            margin : 0;
-            width:100%;
-            z-index: 999999999999999999999;
-            border : 1px solid #aaa;
-            border-radius: 10px;
-            color : #606060;
-            font-size: 16px;
-            li {
-                padding : 0.8em 1em;
-                &:not(:last-child) {
-                    border-bottom : 1px solid #aaa;
-                }
-            }
-
-        }
-
-        &.has-value {
-            background: #fff;
-            border-color : $baseColor !important;
-
-            .vs__open-indicator {
-                display: none;
-            }
-
-
-
-            .md-icon {
-                color : $baseColor;
-            }
-        }
-        &:hover {
-            border-color : $baseColor;
-            >label  , .md-icon {
-                color : $baseColor;
-            }
-        }
-    }
-
 
     .md-menu-content:not(.md-select-menu), .md-select-menu {
         box-shadow: none;
         padding : 0;
         margin : 0;
-        width: 350px !important;
+        width:100% !important;
         z-index: 9999999999999999999999;
-        max-width: none;
 
         .md-menu-content-container {
 
