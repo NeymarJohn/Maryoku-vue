@@ -133,7 +133,7 @@
       },
 
       editVendorDetails(vendor){
-        this.$router.push({ name: "EditVendor", params: { id: vendor.id, creation_mode: false } });
+        this.$router.push({ name: "AddEditVendor", params: { id: vendor.id, creation_mode: false } });
       },
       addNewVendor() {
         this.$router.push({ name: "CreateVendor", props: { default: true, creation_mode: true } });

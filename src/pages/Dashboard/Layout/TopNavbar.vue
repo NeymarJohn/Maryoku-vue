@@ -482,4 +482,8 @@
     padding-top: 14px;
     margin-left: -10px;
   }
+    .title-fixed {
+        position: -webkit-sticky;
+        position: sticky;
+    }
 </style>

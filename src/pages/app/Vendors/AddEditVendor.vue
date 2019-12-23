@@ -32,11 +32,11 @@
                                     <template v-if="item.title">
                                         <h6 class="alert alert-info" style="padding: 8px;">{{item.title}}</h6>
                                         <div v-for="(subItem, index) in item.items" :key="index" style="padding-left: 18px;">
-                                            <vendor-property-field :item="subItem" :vendor="vendor"/>
+                                            <vendor-property-field :item.sync="subItem" :vendor.sync="vendor"/>
                                         </div>
                                     </template>
                                     <template v-else>
-                                        <vendor-property-field :item="item" :vendor="vendor"/>
+                                        <vendor-property-field :item.sync="item" :vendor.sync="vendor"/>
                                     </template>
                                 </div>
                             </md-card-content>
@@ -132,6 +132,7 @@
             getVendor(vendorId) {
                 Vendors.find(vendorId).then(vendor => {
                     this.vendor = vendor
+                    this.vendor.vendorPropertiesValues = {}
                     this.vendorCategoryChanged(this.vendor.vendorCategory)
                     this.isLoading = false
                 })
