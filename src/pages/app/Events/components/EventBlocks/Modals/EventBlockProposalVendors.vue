@@ -85,7 +85,7 @@
     <md-card class="md-card-plain" v-if="!vendors.length && !proposals.length && !isLoading">
       <md-card-content>
         <div class="text-center">
-          <img class="w-120" src="/static/img/paperandpen.png">
+          <img class="w-120" src="http://static.maryoku.com/storage/img/paperandpen.png">
           <h4>No vendors found that match '{{selectedBlock.title}}'</h4>
           <md-button class="md-purple md-sm" @click="manageVendors">
             Manage Vendors Pool

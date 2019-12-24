@@ -30,7 +30,7 @@
 <style lang="scss">
     .header {
         height: 700px;
-        background: url(/static/img/homepage/header@2x.png) center top no-repeat;
+        background: url(http://static.maryoku.com/storage/img/homepage/header@2x.png) center top no-repeat;
         background-size: cover;
 
         .navbar {

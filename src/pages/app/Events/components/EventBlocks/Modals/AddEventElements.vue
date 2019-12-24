@@ -30,7 +30,7 @@
     </div>
     <drop @drop="handleDrop" class="draggable-area" v-if="isLoaded">
       <p>
-        <img src="/static/img/drag_drop_white.png" alt="drag and drop" style="width: 52px;"/>
+        <img src="http://static.maryoku.com/storage/img/drag_drop_white.png" alt="drag and drop" style="width: 52px;"/>
       </p>
       <p class="" style="">Drag Event Elements Here</p>
     </drop>

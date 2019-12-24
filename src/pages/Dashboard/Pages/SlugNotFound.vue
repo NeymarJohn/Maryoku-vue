@@ -1,7 +1,7 @@
 <template>
   <div class="md-layout">
     <div class="md-layout-item md-size-100" style="text-align: center;">
-      <img src="static/img/262Logo2.png" class="text-center" />
+      <img src="http://static.maryoku.com/storage/img/262Logo2.png" class="text-center" />
       <h2 class="title text-center" slot="title" style="text-align: center;">
         Not found
       </h2>

@@ -3,7 +3,7 @@
   <div class="picture-container">
     <div class="picture">
       <div v-if="!imageUrl">
-        <img class="avatar" title src="static/img/profile-picture.png">
+        <img class="avatar" title src="http://static.maryoku.com/storage/img/profile-picture.png">
       </div>
       <div v-else>
         <img v-model="imageUrl" class="avatar" :src="imageUrl">
@@ -105,15 +105,15 @@ export default {
                     buttonsStyling: false
                 }).then(result => {
                     if (result.value) {
-                        
+
  this.loaded = false;
         this.imageUrl = ''
-                        
-     
+
+
                     }
                 });
 
-      
+
     },
         showRemoveConfirmDialog(){
         this.dialogMessage="Are you sure you want delete profile picture ?"
@@ -157,7 +157,7 @@ export default {
                 };
                 reader.readAsDataURL(file);
             },
-    
+
     removeImage: function(type) {
        // sremoveImagehowRemoveConfirmDialog()
               swal({
@@ -170,10 +170,10 @@ export default {
                     buttonsStyling: false
                 }).then(result => {
                     if (result.value) {
-                        
+
  this.loaded = false;
-                        
-     
+
+
                     }
                 });
 
@@ -183,7 +183,7 @@ export default {
       //     this.loaded = true;
       //     customer.logoFileId = null;
       //     this.companyProfile.logoFileId = undefined;
-      //     this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
+      //     this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg';
       // }).catch((error) => {
       //     this.loaded = true;
       // });

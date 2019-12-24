@@ -4,7 +4,7 @@
     <div class="inner">
     <md-nav>
       <md-nav-logo href="#!/navbar">
-        <img src="static/img/262Logo2.png" />
+        <img src="http://static.maryoku.com/storage/img/262Logo2.png" />
       </md-nav-logo>
       <md-nav-links class="links">
         <a href="/index.php/blog" class="blog">BLOG</a>
@@ -48,15 +48,15 @@ export default {
   computed: {
     setBgImage() {
       let images = {
-        Pricing: "static/img/bg-pricing.jpg",
-        Login: "static/img/shutterstock_495639391.png",
-        Register: "static/img/shutterstock_495639391.png",
-        CreateWorkspace: "static/img/shutterstock_495639391.png",
-        SignIn: "static/img/shutterstock_732491308.png",
-        SignOut: "static/img/shutterstock_732491308.png",
-        GetStarted: "static/img/shutterstock_732491308.png",
-        SignedIn: "static/img/shutterstock_732491308.png",
-        Lock: "static/img/lock.jpg"
+        Pricing: "http://static.maryoku.com/storage/img/bg-pricing.jpg",
+        Login: "http://static.maryoku.com/storage/img/shutterstock_495639391.png",
+        Register: "http://static.maryoku.com/storage/img/shutterstock_495639391.png",
+        CreateWorkspace: "http://static.maryoku.com/storage/img/shutterstock_495639391.png",
+        SignIn: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
+        SignOut: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
+        GetStarted: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
+        SignedIn: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
+        Lock: "http://static.maryoku.com/storage/img/lock.jpg"
       };
       return {
         backgroundImage: `url(${images[this.$route.name]})`

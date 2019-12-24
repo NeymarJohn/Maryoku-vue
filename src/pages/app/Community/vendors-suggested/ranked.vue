@@ -9,16 +9,16 @@
                 </div>
                 <div class="md-medium-size-100 md-size-100">
                     <div class="ranked-images">
-                        <img src="static/img/faces/avatar.jpg" alt="">
+                        <img src="http://static.maryoku.com/storage/img/faces/avatar.jpg" alt="">
                     </div>
                     <div class="ranked-images">
-                        <img src="static/img/faces/avatar.jpg" alt="">
+                        <img src="http://static.maryoku.com/storage/img/faces/avatar.jpg" alt="">
                     </div>
                     <div class="ranked-images">
-                        <img src="static/img/faces/avatar.jpg" alt="">
+                        <img src="http://static.maryoku.com/storage/img/faces/avatar.jpg" alt="">
                     </div>
                     <div class="ranked-images">
-                        <img src="static/img/faces/avatar.jpg" alt="">
+                        <img src="http://static.maryoku.com/storage/img/faces/avatar.jpg" alt="">
                     </div>
                 </div>
             </md-card-content>

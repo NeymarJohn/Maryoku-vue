@@ -22,10 +22,10 @@
             <md-icon >more_horiz</md-icon>
             <md-tooltip md-direction="bottom">View</md-tooltip>
           </md-button>
-          <md-button 
-            v-if="vendor.vendorWebsite && isValidVendorWebsite(vendor)" 
-            class="md-info md-xs md-round md-just-icon" 
-            :href="`${vendor.vendorWebsite}`" 
+          <md-button
+            v-if="vendor.vendorWebsite && isValidVendorWebsite(vendor)"
+            class="md-info md-xs md-round md-just-icon"
+            :href="`${vendor.vendorWebsite}`"
             target="_blank"
           >
             <md-icon>open_in_browser</md-icon>
@@ -107,27 +107,27 @@
           vendorWebsite: {
             url: {require_protocol: true },
             regex: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,=.]+$/gm,
-            min: 10 // http://x.x 
+            min: 10 // http://x.x
           }
         },
         bgImages : [
-          '/static/img/lock.jpg',
-          '/static/img/login.jpg',
-          '/static/img/register.jpg',
-          '/static/img/bg-pricing.jpg',
-          '/static/img/bg3.jpg',
-          '/static/img/bg9.jpg',
-          '/static/img/card-1.jpg',
-          '/static/img/card-2.jpg',
-          '/static/img/card-3.jpg',
-          '/static/img/sidebar-1.jpg',
-          '/static/img/sidebar-2.jpg',
-          '/static/img/sidebar-3.jpg',
-          '/static/img/sidebar-4.jpg',
-          '/static/img/shutterstock_289440710.png',
-          '/static/img/shutterstock_495639391.png',
-          '/static/img/shutterstock_732491308.png',
-          '/static/img/shutterstock_740167702.png'
+          'http://static.maryoku.com/storage/img/lock.jpg',
+          'http://static.maryoku.com/storage/img/login.jpg',
+          'http://static.maryoku.com/storage/img/register.jpg',
+          'http://static.maryoku.com/storage/img/bg-pricing.jpg',
+          'http://static.maryoku.com/storage/img/bg3.jpg',
+          'http://static.maryoku.com/storage/img/bg9.jpg',
+          'http://static.maryoku.com/storage/img/card-1.jpg',
+          'http://static.maryoku.com/storage/img/card-2.jpg',
+          'http://static.maryoku.com/storage/img/card-3.jpg',
+          'http://static.maryoku.com/storage/img/sidebar-1.jpg',
+          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
+          'http://static.maryoku.com/storage/img/sidebar-3.jpg',
+          'http://static.maryoku.com/storage/img/sidebar-4.jpg',
+          'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
+          'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
+          'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
+          'http://static.maryoku.com/storage/img/shutterstock_740167702.png'
         ]
       }
     },

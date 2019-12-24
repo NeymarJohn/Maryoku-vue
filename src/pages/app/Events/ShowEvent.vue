@@ -154,7 +154,7 @@
                 readonly : true,
                 shoWSignup: false,
                 isMobile : window.innerWidth <= 500,
-                avatar: "static/img/placeholder.jpg",
+                avatar: "http://static.maryoku.com/storage/img/placeholder.jpg",
                 invitee: {},
                 pendingResponse: null
             };
@@ -198,7 +198,7 @@
                 this.isLoading = true;
                 this.$auth.currentUser(this, false, ()=>{
                     this.user = this.$auth.user;
-                    this.avatar = this.user.avatar || "static/img/placeholder.jpg";
+                    this.avatar = this.user.avatar || "http://static.maryoku.com/storage/img/placeholder.jpg";
                     this.getEvent();
                     this.isLoading = false;
                 });
@@ -208,7 +208,7 @@
             this.$auth.currentUser(this, false, ()=>{
                 if (this.$auth.user.authenticated) {
                     this.user = this.$auth.user;
-                    this.avatar = this.user.avatar || "static/img/placeholder.jpg";
+                    this.avatar = this.user.avatar || "http://static.maryoku.com/storage/img/placeholder.jpg";
                 }
                 this.getEvent();
             });

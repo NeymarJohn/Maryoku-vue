@@ -8,7 +8,7 @@
         title='Oh, wow so thats you'
         titleText='titleStyle'/>
 </div>
-        <InputText 
+        <InputText
                 labelStyle='label_input'
                 label='Full Name'
                 fieldStyle="field_input"
@@ -41,8 +41,8 @@
           :trim='isTrim'
           :isErrors='isErrors'
           />
-          </div> 
-        <InputText 
+          </div>
+        <InputText
                 labelStyle='om_label_input'
                 label='Phone Number'
                 :value='phone'
@@ -51,7 +51,7 @@
                 :isErrors='isErrors'
                 required
         />
-        </div>                
+        </div>
 </div>
 <div class='button-block'>
         <Button text='next' :onClick='submitForm' class="md-success md-fileinput button-md-common"/>
@@ -59,7 +59,7 @@
 </div>
 <div class='logo-main'>
 <div>
-<img class='emp-logo' src="static/img/secure_booker.png">
+<img class='emp-logo' src="http://static.maryoku.com/storage/img/secure_booker.png">
         <Title
                 title='Join the Hive'
                 titleBlock='titleBlock'
@@ -93,34 +93,34 @@ export default {
 },
 data(){
         return{
-                full_name:'',                
+                full_name:'',
                 email:'',
-                phone:'',                                
+                phone:'',
                 isErrors:false,
                 country_code:'',
-                list_code: country_code    
+                list_code: country_code
         }
 },
 computed:{
        isTrim(){
-               return this.country_code===''  
-         } 
+               return this.country_code===''
+         }
 }
 ,
- methods: {         
-         submitForm:function(){                                                     
-            this.validFunc(this)                         
+ methods: {
+         submitForm:function(){
+            this.validFunc(this)
             if(this.isErrors==false){
                 const info=isWrong(this,['full_name','email','phone','country_code'])
-                this.$store.dispatch("user/sendCompanyInfo",info)                      
-                this.$router.push('/events-data')     
+                this.$store.dispatch("user/sendCompanyInfo",info)
+                this.$router.push('/events-data')
             }
-              
+
          },
-         onChange:function(value, name){                
-                 this[name]=value                    
+         onChange:function(value, name){
+                 this[name]=value
          },
-         validFunc:function(ctx,required){                
+         validFunc:function(ctx,required){
                  const errorsObj=[]
             if(ctx['full_name']===''){
                 errorsObj.push('full_name')
@@ -133,11 +133,11 @@ computed:{
             }
             if(ctx['country_code']===''){
                 errorsObj.push('country_code')
-            }                           
-            if(errorsObj.length!==0){                    
+            }
+            if(errorsObj.length!==0){
               ctx.isErrors=true
-            }else{                    
-                 ctx.isErrors=false   
+            }else{
+                 ctx.isErrors=false
             }
          }
  }
@@ -146,21 +146,21 @@ computed:{
 <style lang="scss">
 .employee-body{
     display:flex;
-    flex-direction:'column'      
+    flex-direction:'column'
 }
 .form-main {
         width:50%;
-        height: 100vh; 
+        height: 100vh;
         background-color: white;
         display: flex;
-        justify-content: center;            
+        justify-content: center;
 }
 .logo-main {
         width:50%;
-        height: 100vh;  
+        height: 100vh;
         background:  #ff527c;
         display: flex;
-        align-items: center;  
+        align-items: center;
 }
 .form-block{
     width: 75%;
@@ -169,7 +169,7 @@ computed:{
     flex-direction: column;
 }
 .emp-logo{
-               
+
 }
 .emp-title{
         text-align: center;
@@ -181,33 +181,33 @@ computed:{
 }
 .titleStyle{
       font-size: 40px;
-      font-weight: 700; 
+      font-weight: 700;
 }
 .titleBlock{
        display:flex;
-       justify-content: center; 
+       justify-content: center;
 }
-.buttonStyle{        
+.buttonStyle{
         cursor: pointer;
         color: #ff527c;
         font-size: 20px;
         margin-right: 20px;
         border: 1px solid;
         padding: 10px 15px;
-        border-radius: 10px;        
+        border-radius: 10px;
 }
-.button-block{      
-      display:flex;      
+.button-block{
+      display:flex;
       justify-content: flex-end;
        align-items: flex-end;
-      margin-bottom: 45px;               
-    
+      margin-bottom: 45px;
+
 }
 .om_phone-block{
         display:flex;
         .phone_country-code{
                 margin-right: 40px;
-                width: 30%;           
+                width: 30%;
         }
         &.phone-number{
 

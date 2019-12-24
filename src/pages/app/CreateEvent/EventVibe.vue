@@ -29,7 +29,7 @@
                                @mouseover="buttonLabel='I don\'t know'" @mouseleave="buttonLabel='Skip'" > {{buttonLabel}} </md-button>
                     <md-button class="md-rose next-btn"
                                @click="goToNext"
-                               :class="[{'disabled': !eventSongId }]"> Next </md-button>
+                               :class="[{'disabled': !eventData.budgetPerPerson || !eventData.totalBudget}]"> Next </md-button>
                 </div>
 
             </div>
@@ -143,7 +143,7 @@
                     let eventSongId = this.boardSound[this.currentIndex];
                     if (isValid) {
                         this.setEventProperty({key: 'eventSongId', actualValue: eventSongId});
-                        this.$router.push({ path: `/event-movies`});
+                        //this.$router.push({ path: `/event-budget`});
 
 
                     } else {
@@ -153,7 +153,7 @@
 
             },
             skip() {
-                this.$router.push({ path: `/event-movies`});
+
             },
             songName(name){
                 console.log(name);

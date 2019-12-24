@@ -75,7 +75,7 @@ export default {
     },
     avatar: {
       type: String,
-      default: "static/img/faces/avatar.jpg"
+      default: "http://static.maryoku.com/storage/img/faces/avatar.jpg"
     }
   },
   data() {

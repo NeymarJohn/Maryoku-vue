@@ -23,37 +23,37 @@ export default {
       selected: [],
       users: [
         {
-          flag: "static/img/flags/US.png",
+          flag: "http://static.maryoku.com/storage/img/flags/US.png",
           country: "USA",
           sales: "2.920",
           percent: "53.23%"
         },
         {
-          flag: "static/img/flags/DE.png",
+          flag: "http://static.maryoku.com/storage/img/flags/DE.png",
           country: "Germany",
           sales: "1.300",
           percent: "20.43%"
         },
         {
-          flag: "static/img/flags/AU.png",
+          flag: "http://static.maryoku.com/storage/img/flags/AU.png",
           country: "Australia",
           sales: "760",
           percent: "10.35%"
         },
         {
-          flag: "static/img/flags/GB.png",
+          flag: "http://static.maryoku.com/storage/img/flags/GB.png",
           country: "United Kingdom",
           sales: "690",
           percent: "7.87%"
         },
         {
-          flag: "static/img/flags/RO.png",
+          flag: "http://static.maryoku.com/storage/img/flags/RO.png",
           country: "Romania",
           sales: "600",
           percent: "5.94%"
         },
         {
-          flag: "static/img/flags/BR.png",
+          flag: "http://static.maryoku.com/storage/img/flags/BR.png",
           country: "Brasil",
           sales: "550",
           percent: "4.34%"

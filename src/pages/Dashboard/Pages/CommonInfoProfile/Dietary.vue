@@ -17,30 +17,30 @@
 </div>
        <div class='dietary-check-block'>
        <Icon
-            iconSourceOne="static/img/dietary/gluten_free_off.png"
-            iconSourceTwo="static/img/dietary/gluten_free_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/gluten_free_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/gluten_free_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='cluten'
 
        />
        <Icon
-            iconSourceOne="static/img/dietary/lactose_free_off.png"
-            iconSourceTwo="static/img/dietary/lactose_free_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/lactose_free_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/lactose_free_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='lactuz'
        />
        <Icon
-            iconSourceOne="static/img/dietary/gmo_free_off.png"
-            iconSourceTwo="static/img/dietary/gmo_free_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/gmo_free_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/gmo_free_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='gmo'
        />
        <Icon
-            iconSourceOne="static/img/dietary/egg_free_off.png"
-            iconSourceTwo="static/img/dietary/egg_free_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/egg_free_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/egg_free_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='egg'
@@ -48,29 +48,29 @@
        </div>
         <div class='dietary-check-block'>
        <Icon
-            iconSourceOne="static/img/dietary/sugar_free_off.png"
-            iconSourceTwo="static/img/dietary/sugar_free_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/sugar_free_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/sugar_free_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='sugar'
        />
        <Icon
-            iconSourceOne="static/img/dietary/peanut_free_off.png"
-            iconSourceTwo="static/img/dietary/peanut_free_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/peanut_free_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/peanut_free_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='peanut'
        />
        <Icon
-            iconSourceOne="static/img/dietary/kosher_off.png"
-            iconSourceTwo="static/img/dietary/kosher_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/kosher_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/kosher_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='kosher'
        />
        <Icon
-            iconSourceOne="static/img/dietary/organic_off.png"
-            iconSourceTwo="static/img/dietary/organic_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/organic_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/organic_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='organic'
@@ -78,8 +78,8 @@
        </div>
        <div class='dietary-check-block'>
        <Icon
-            iconSourceOne="static/img/dietary/eco_off.png"
-            iconSourceTwo="static/img/dietary/eco_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/eco_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/eco_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='ecofood'
@@ -105,7 +105,7 @@
 </div>
 <div class='dietary_logo-main'>
 <div>
-        <img class='emp-logo' src="static/img/syncer.png">
+        <img class='emp-logo' src="http://static.maryoku.com/storage/img/syncer.png">
         <Title
                 title='All Guests Preferences in one place'
                 titleBlock='titleBlock'
@@ -137,31 +137,31 @@
 <div >
         <div class='dietary-check-block'>
        <Icon
-            iconSourceOne="static/img/dietary/gluten_free_off.png"
-            iconSourceTwo="static/img/dietary/gluten_free_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/gluten_free_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/gluten_free_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='cluten'
 
        />
        <Icon
-            iconSourceOne="static/img/dietary/lactose_free_off.png"
-            iconSourceTwo="static/img/dietary/lactose_free_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/lactose_free_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/lactose_free_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='lactuz'
 
        />
        <Icon
-            iconSourceOne="static/img/dietary/gmo_free_off.png"
-            iconSourceTwo="static/img/dietary/gmo_free_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/gmo_free_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/gmo_free_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='gmo'
        />
        <Icon
-            iconSourceOne="static/img/dietary/egg_free_off.png"
-            iconSourceTwo="static/img/dietary/egg_free_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/egg_free_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/egg_free_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='egg'
@@ -169,29 +169,29 @@
        </div>
         <div class='dietary-check-block'>
         <Icon
-            iconSourceOne="static/img/dietary/sugar_free_off.png"
-            iconSourceTwo="static/img/dietary/sugar_free_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/sugar_free_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/sugar_free_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='sugar'
        />
        <Icon
-            iconSourceOne="static/img/dietary/peanut_free_off.png"
-            iconSourceTwo="static/img/dietary/peanut_free_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/peanut_free_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/peanut_free_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='peanut'
        />
       <Icon
-            iconSourceOne="static/img/dietary/kosher_off.png"
-            iconSourceTwo="static/img/dietary/kosher_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/kosher_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/kosher_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='kosher'
        />
        <Icon
-            iconSourceOne="static/img/dietary/organic_off.png"
-            iconSourceTwo="static/img/dietary/organic_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/organic_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/organic_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='organic'
@@ -199,8 +199,8 @@
        </div>
        <div  class='dietary-check-block'>
        <Icon
-            iconSourceOne="static/img/dietary/eco_off.png"
-            iconSourceTwo="static/img/dietary/eco_on.png"
+            iconSourceOne="http://static.maryoku.com/storage/img/dietary/eco_off.png"
+            iconSourceTwo="http://static.maryoku.com/storage/img/dietary/eco_on.png"
             imageStyle='dietary-icon_logo'
             :onClick='onSelect'
             name='ecofood'
@@ -225,7 +225,7 @@
 </div>
 <div class='dietary_logo-main'>
 <div>
-<img class='emp-logo' src="static/img/syncer.png">
+<img class='emp-logo' src="http://static.maryoku.com/storage/img/syncer.png">
         <Title
                 title='You gutta eat, right?'
                 titleBlock='titleBlock'
