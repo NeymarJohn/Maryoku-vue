@@ -4,7 +4,7 @@
       <div class="md-toolbar-row md-offset">
         <div class="md-toolbar-section-start">
           <!--<h3 class="md-title">{{$route.name}}</h3>-->
-          <h3 class="md-title"><a href="https://www.maryoku.com"><img src="https://www.maryoku.com/img/maryoku-logo.png"/></a> </h3>
+          <h3 class="md-title"><a href="https://www.maryoku.com"><img src="static/img/262Logo2.png"/></a> </h3>
         </div>
         <div class="md-toolbar-section-end">
           <md-button class="md-just-icon md-simple md-round md-toolbar-toggle" :class="{toggled: $sidebar.showSidebar}" @click="toggleSidebar">
@@ -91,15 +91,15 @@
     computed: {
       setBgImage() {
         let images = {
-          Pricing: "http://static.maryoku.com/storage/img/bg-pricing.jpg",
-          Login: "http://static.maryoku.com/storage/img/shutterstock_495639391.png",
-          Register: "http://static.maryoku.com/storage/img/shutterstock_495639391.png",
-          CreateWorkspace: "http://static.maryoku.com/storage/img/shutterstock_495639391.png",
-          SignIn: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
-          SignOut: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
-          GetStarted: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
-          SignedIn: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
-          Lock: "http://static.maryoku.com/storage/img/lock.jpg"
+          Pricing: "static/img/bg-pricing.jpg",
+          Login: "static/img/shutterstock_495639391.png",
+          Register: "static/img/shutterstock_495639391.png",
+          CreateWorkspace: "static/img/shutterstock_495639391.png",
+          SignIn: "static/img/shutterstock_732491308.png",
+          SignOut: "static/img/shutterstock_732491308.png",
+          GetStarted: "static/img/shutterstock_732491308.png",
+          SignedIn: "static/img/shutterstock_732491308.png",
+          Lock: "static/img/lock.jpg"
         };
         return {
           backgroundImage: `url(${images[this.$route.name]})`

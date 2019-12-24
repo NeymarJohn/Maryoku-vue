@@ -7,9 +7,9 @@
 
 
                 <div class="preview-item"
-                     :style="`background-image: url(http://static.maryoku.com/storage/img/interactions/${selectedInteraction.templateImage}.png)`">
+                     :style="`background-image: url(/static/img/interactions/${selectedInteraction.templateImage}.png)`">
 
-                    <!--<iframe src="http://static.maryoku.com/storage/img/interactions/interaction-1.html"></iframe>-->
+                    <!--<iframe src="/static/img/interactions/interaction-1.html"></iframe>-->
 
                     <h2 class="interaction-title">
                         {{selectedInteraction.line1}}
@@ -25,7 +25,7 @@
                     <ul class="images-list">
                         <li class="list-item" v-for="(image,index) in selectedInteraction.options" @click="selectTemplateImage(image)">
                             <div class="image-item"
-                                 :style="`background-image: url(http://static.maryoku.com/storage/img/interactions/${image}.png)`"
+                                 :style="`background-image: url(/static/img/interactions/${image}.png)`"
                                  :class="{selected : selectedInteraction.templateImage == image }"
                                  ></div>
                         </li>

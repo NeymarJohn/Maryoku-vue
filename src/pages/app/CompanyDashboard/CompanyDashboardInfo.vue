@@ -85,7 +85,7 @@
         this.companyProfile.numberOfEmployees = customer.numberOfEmployees;
         this.companyProfile.industry = customer.industry;
         this.companyProfile.logoFileId = customer.logoFileId;
-        this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg';
+        this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
 
         this.loaded = true;
       });
@@ -131,7 +131,7 @@
                 new CustomerFile({id: customer.logoFileId}).delete().then( deleteResult => {
                     customer.logoFileId = result.id;
                     new Customer({id: customer.id, logoFileId: result.id}).save();
-                    this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg';
+                    this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
                     this.companyProfile.logoFileId = customer.logoFileId;
                     this.$auth.user.customer.logoFileId = customer.logoFileId;
                     this.$ls.set("user", this.$auth.user, 1000 * 60 * 10);
@@ -140,7 +140,7 @@
             } else {
                 customer.logoFileId = result.id;
                 new Customer({id: customer.id, logoFileId: result.id}).save();
-                this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg';
+                this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
                 this.companyProfile.logoFileId = customer.logoFileId;
                 this.$auth.user.customer.logoFileId = customer.logoFileId;
                 this.$ls.set("user", this.$auth.user, 1000 * 60 * 10);
@@ -164,7 +164,7 @@
           this.loaded = true;
           customer.logoFileId = null;
           this.companyProfile.logoFileId = undefined;
-          this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg';
+          this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
         }).catch((error) => {
           this.loaded = true;
         });

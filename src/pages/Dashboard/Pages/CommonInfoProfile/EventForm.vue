@@ -77,7 +77,7 @@
       </div>
       <div class='event_logo-main'>
         <div>
-          <img class='event_emp-logo' src="http://static.maryoku.com/storage/img/orical_power.png">
+          <img class='event_emp-logo' src="static/img/orical_power.png">
           <Title
             title='Save time by automating'
             titleBlock='event_titleBlock'
@@ -165,7 +165,7 @@
       </div>
       <div class='event_logo-main'>
         <div>
-          <img class='event_emp-logo' src="http://static.maryoku.com/storage/img/orical_power.png">
+          <img class='event_emp-logo' src="static/img/orical_power.png">
           <Title
             title='Just give us a reason to selebrate'
             titleBlock='event_titleBlock'

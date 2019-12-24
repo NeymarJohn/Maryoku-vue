@@ -3,11 +3,11 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
     <div class="md-layout">
       <div class="md-layout-item image-list-container no-padding">
-        <div
-          class="img-cont big-img-cont"
+        <div 
+          class="img-cont big-img-cont" 
           :style="`
-            background-image: url(${bgImages[0]});
-            background-size: cover;
+            background-image: url(${bgImages[0]}); 
+            background-size: cover; 
             background-size: 100% 100%;`
           "
         >
@@ -23,7 +23,7 @@
           <span v-if="getGalleryImages.length > 0">view photos</span>
           <span v-else>no vendor image</span>
         </md-button>
-        <LightBox
+        <LightBox 
           v-if="getGalleryImages.length > 0"
           :images="getGalleryImages"
           ref="lightbox"
@@ -47,7 +47,7 @@
                 {'md-error': errors.has('vendorDisplayName')}]"
               >
                 <label>Display Name</label>
-                <md-input
+                <md-input 
                   v-model="vendor.vendorDisplayName"
                   required
                   data-vv-name="vendorDisplayName"
@@ -65,7 +65,7 @@
           </div>
           <div class="title-child mt-4">
             <div class="md-layout-item">
-              <md-field
+              <md-field 
                 :class="[
                   {'md-valid': !errors.has('vendorDisplayName') && vendor.vendorDisplayName},
                   {'md-error': errors.has('vendorDisplayName')}
@@ -163,7 +163,7 @@
             {'md-valid': !errors.has('vendorWebsite') && vendor.vendorWebsite},
             {'md-error': errors.has('vendorWebsite')}]">
             <label>Website</label>
-            <md-input
+            <md-input 
               v-model="vendor.vendorWebsite"
               type="url"
               data-vv-name="vendorWebsite"
@@ -196,7 +196,7 @@
           </div>
         </div>
         <div class="description">
-
+          
         </div>
         <div class="text-group">
           <div class="">
@@ -215,21 +215,21 @@
 
     <!-- Tabs -->
     <div class="tabs-container">
-      <div class="tab-item"
-        :class="[{'visited': currentTab > 1}, {'active': currentTab == 1}]"
+      <div class="tab-item" 
+        :class="[{'visited': currentTab > 1}, {'active': currentTab == 1}]" 
         v-on:click="currentTab = 1">
         <template>
           <md-field :class="[{'md-error': errors.has('vendorCategory')}]" class="select-with-icon">
             <label for="category">Category</label>
-            <md-select
-              v-model="vendor.vendorCategory"
+            <md-select 
+              v-model="vendor.vendorCategory" 
               name="vendorCategory"
-              data-vv-name="vendorCategory"
+              data-vv-name="vendorCategory" 
               @md-selected="onChangeCategory()"
               required>
-              <md-option
+              <md-option 
                 v-for="(option, index) in categories"
-                :key="index"
+                :key="index" 
                 :value="option.id"
               >
                 {{ option.value }}
@@ -290,18 +290,18 @@
                     <li>
                       <br/>
                     </li>
-                    <li
-                      class="normal"
-                      v-for="(item, i) of vendorServicesList"
-                      :key="'S' + i"
+                    <li 
+                      class="normal" 
+                      v-for="(item, i) of vendorServicesList" 
+                      :key="'S' + i" 
                       :value="item"
                     >
                       <md-icon>check</md-icon> {{item.name}}
                     </li>
-                    <li
-                      class="disabled"
-                      v-for="(item, i) of vendorRestrictions"
-                      :key="'R' + i"
+                    <li 
+                      class="disabled" 
+                      v-for="(item, i) of vendorRestrictions" 
+                      :key="'R' + i" 
                       :value="item"
                     >
                       <md-icon></md-icon> <span>{{item.name}}</span>
@@ -319,7 +319,7 @@
                   </div>
                   <div class="notes-body">
                     <div class="note-item" v-for="(item, index) in attachments" :key="index" :value="item">
-                      <a
+                      <a 
                         v-if="item.vendorsFileContentType == 'application/pdf'"
                         target="_blank"
                         :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`"
@@ -329,7 +329,7 @@
                       <a
                         v-else
                         target="_blank"
-                        :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`"
+                        :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`" 
                       >
                         <md-icon>image</md-icon> Attachment {{index+1}}
                       </a>
@@ -489,17 +489,17 @@
         attachments: [],
         proposals: [],
         bgImages: [],
-        defaultImg: 'http://static.maryoku.com/storage/img/lock.jpg',
+        defaultImg: 'static/img/lock.jpg',
         pricesAndRules: [],
         checkListItems: [],
         feedbacks: [
-          {image: 'http://static.maryoku.com/storage/img/shutterstock_289440710.png', username: 'Jane Bloom, Facebook', date: '2017/12/29', score: '5', message: 'A 50% deposit will be due on or before 18/1/20.'},
-          {image: 'http://static.maryoku.com/storage/img/shutterstock_289440710.png', username: 'Leonard Parker', date: '2017/12/29', score: '4', message: 'A 50% deposit will be due on or before 18/1/20.'},
-          {image: 'http://static.maryoku.com/storage/img/shutterstock_289440710.png', username: 'Alex Marlon', date: '2017/12/29', score: '3', message: 'A 50% deposit will be due on or before 18/1/20.'}
+          {image: '/static/img/shutterstock_289440710.png', username: 'Jane Bloom, Facebook', date: '2017/12/29', score: '5', message: 'A 50% deposit will be due on or before 18/1/20.'},
+          {image: '/static/img/shutterstock_289440710.png', username: 'Leonard Parker', date: '2017/12/29', score: '4', message: 'A 50% deposit will be due on or before 18/1/20.'},
+          {image: '/static/img/shutterstock_289440710.png', username: 'Alex Marlon', date: '2017/12/29', score: '3', message: 'A 50% deposit will be due on or before 18/1/20.'}
         ],
         similarItems: [
-          {image: 'http://static.maryoku.com/storage/img/shutterstock_289440710.png', thumbnail: 'thumbnail', score: '5', title: 'title'},
-          {image: 'http://static.maryoku.com/storage/img/shutterstock_289440710.png', thumbnail: 'thumbnail', score: '5', title: 'title'},
+          {image: '/static/img/shutterstock_289440710.png', thumbnail: 'thumbnail', score: '5', title: 'title'},
+          {image: '/static/img/shutterstock_289440710.png', thumbnail: 'thumbnail', score: '5', title: 'title'},
         ],
         modelValidations: {
           vendorDisplayName: {
@@ -521,13 +521,13 @@
           vendorWebsite: {
             url: {require_protocol: true },
             regex: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,=.]+$/gm,
-            min: 10 // http://x.x
+            min: 10 // http://x.x 
           }
         },
         ratings: [1,2,3,4,5],
         currentTab: 1,
         selectedField: null,
-        categories: [],
+        categories: [], 
         isDropped: false,
         routeName: null
       }
@@ -648,7 +648,7 @@
 
         if (this.errors.items.length == 0) {
           newVendor.save()
-
+        
           this.$notify({
             message: 'Vendor Updated Successfully!',
             horizontalAlign: 'center',
@@ -961,7 +961,7 @@
               flex-direction: row;
               flex-wrap: wrap;
               flex-flow: row wrap;
-
+              
               .note-item {
                 margin-right: 2em;
                 width: 40%;
@@ -1022,7 +1022,7 @@
         background: #f9f9f9;
         height: 2px;
         margin: 2em 0;
-
+        
         @media (max-width: $screen-sm-min) {
           margin: 1em 0;
         }

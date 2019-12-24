@@ -46,7 +46,7 @@
             </div>
             <div class="md-layout-item md-size-10">
                 <div style="position: fixed; width: 92%;margin-top: 21px;">
-                    <md-button class="md-success text-right" @click="saveVendor">Save</md-button>
+                    <md-button class="md-success text-right">Save</md-button>
                 </div>
             </div>
         </div>
@@ -150,10 +150,7 @@
                     this.categoryPropertiesLoading = false
                 })
             },
-            saveVendor(){
-
-            },
-            addVendor() {
+            async addVendor() {
                 this.$validator.validateAll().then(res => {
                     if (res) {
                         let newVendor = new Vendors({})
@@ -174,38 +171,38 @@
                     }
                 })
             },
-            updateVendor() {
-                Vendors.find(this.vendor.id).then(newVendor=>{
-                    newVendor.vendorDisplayName = this.vendor.vendorDisplayName
-                    newVendor.vendorAddressLine1 = this.vendor.vendorAddressLine1
-                    newVendor.vendorCategory = this.vendor.vendorCategory
-                    newVendor.rank = this.vendor.rank
-                    newVendor.avgScore = this.vendor.avgScore
-                    newVendor.vendorWebsite = this.vendor.vendorWebsite
-                    newVendor.vendorMainEmail = this.vendor.vendorMainEmail
-                    newVendor.vendorMainPhoneNumber = this.vendor.vendorMainPhoneNumber
-                    newVendor.vendorTagging = this.vendor.vendorTagging
+            async updateVendor() {
+                let newVendor = await Vendors.find(this.vendor.id)
 
-                    if (this.errors.items.length === 0) {
-                        newVendor.save()
+                newVendor.vendorDisplayName = this.vendor.vendorDisplayName
+                newVendor.vendorAddressLine1 = this.vendor.vendorAddressLine1
+                newVendor.vendorCategory = this.vendor.vendorCategory
+                newVendor.rank = this.vendor.rank
+                newVendor.avgScore = this.vendor.avgScore
+                newVendor.vendorWebsite = this.vendor.vendorWebsite
+                newVendor.vendorMainEmail = this.vendor.vendorMainEmail
+                newVendor.vendorMainPhoneNumber = this.vendor.vendorMainPhoneNumber
+                newVendor.vendorTagging = this.vendor.vendorTagging
 
-                        this.$notify({
-                            message: 'Vendor Updated Successfully!',
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'success'
-                        })
-                    } else {
-                        this.$notify({
-                            message: this.errors.items[0].msg,
-                            horizontalAlign: 'center',
-                            verticalAlign: 'top',
-                            type: 'danger'
-                        })
-                    }
+                if (this.errors.items.length === 0) {
+                    newVendor.save()
 
-                    this.selectedField = null
-                });
+                    this.$notify({
+                        message: 'Vendor Updated Successfully!',
+                        horizontalAlign: 'center',
+                        verticalAlign: 'top',
+                        type: 'success'
+                    })
+                } else {
+                    this.$notify({
+                        message: this.errors.items[0].msg,
+                        horizontalAlign: 'center',
+                        verticalAlign: 'top',
+                        type: 'danger'
+                    })
+                }
+
+                this.selectedField = null
             }
         },
         computed: {},

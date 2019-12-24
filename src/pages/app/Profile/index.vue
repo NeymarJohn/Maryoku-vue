@@ -206,7 +206,7 @@
             let customer = this.$auth.user.customer;
             customer.logoFileId = result.id;
             new Customer({id: customer.id, logoFileId: result.id}).save();
-            this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg';
+            this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
             this.companyProfile.logoFileId = customer.logoFileId;
             this.loaded = true;
           })
@@ -224,7 +224,7 @@
           this.loaded = true;
           customer.logoFileId = null;
           this.companyProfile.logoFileId = undefined;
-          this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg';
+          this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'static/img/image_placeholder.jpg';
         }).catch((error) => {
           this.loaded = true;
         });

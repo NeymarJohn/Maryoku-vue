@@ -35,14 +35,14 @@
     computed: {
       setBgImage() {
         let images = {
-          Pricing: "http://static.maryoku.com/storage/img/bg-pricing.jpg",
-          Login: "http://static.maryoku.com/storage/img/shutterstock_495639391.png",
-          Register: "http://static.maryoku.com/storage/img/shutterstock_495639391.png",
-          SignIn: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
-          SignOut: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
-          GetStarted: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
-          SignedIn: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
-          Lock: "http://static.maryoku.com/storage/img/lock.jpg"
+          Pricing: "static/img/bg-pricing.jpg",
+          Login: "static/img/shutterstock_495639391.png",
+          Register: "static/img/shutterstock_495639391.png",
+          SignIn: "static/img/shutterstock_732491308.png",
+          SignOut: "static/img/shutterstock_732491308.png",
+          GetStarted: "static/img/shutterstock_732491308.png",
+          SignedIn: "static/img/shutterstock_732491308.png",
+          Lock: "static/img/lock.jpg"
         };
         return {
           backgroundImage: `url(${images[this.$route.name]})`

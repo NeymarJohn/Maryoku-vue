@@ -21,7 +21,7 @@
                                     <div class="list-item--icon">
                                         <md-icon class="check-icon" v-if="isCategorySelected(category) || isSelected(category)">check</md-icon>
 
-                                        <img :src="`http://static.maryoku.com/storage/img/event-elements/${category.id}.png`">
+                                        <img :src="`/static/img/event-elements/${category.id}.png`">
                                     </div>
                                     <div class="list-item--title">
                                         {{ category.title }}
@@ -41,7 +41,7 @@
                                      :class="{'active': isSubCategorySelected(subCategory) || isSelected(subCategory) }">
                                     <div class="list-item--icon">
                                         <md-icon class="check-icon" v-if="isSubCategorySelected(subCategory) || isSelected(subCategory)">check</md-icon>
-                                        <img :src="`http://static.maryoku.com/storage/img/event-elements/${subCategory.id}.png`">
+                                        <img :src="`/static/img/event-elements/${subCategory.id}.png`">
                                     </div>
                                     <div class="list-item--title">
                                         {{ subCategory.title }}

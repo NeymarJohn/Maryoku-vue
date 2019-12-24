@@ -103,7 +103,7 @@ export default {
         if (user){
 
             if (user.me && (user.me.pictureUrl == '' || user.me.pictureUrl == 'none')) {
-                user.me.pictureUrl = 'http://static.maryoku.com/storage/img/placeholder.jpg';
+                user.me.pictureUrl = 'static/img/placeholder.jpg';
                 user.avatar = user.me.pictureUrl;
             }
             this.user = user;

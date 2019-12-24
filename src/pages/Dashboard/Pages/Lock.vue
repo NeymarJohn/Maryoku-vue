@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       password: null,
-      image: "http://static.maryoku.com/storage/img/faces/avatar.jpg"
+      image: "static/img/faces/avatar.jpg"
     };
   }
 };

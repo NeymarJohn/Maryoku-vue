@@ -187,11 +187,11 @@ export default {
   props: {
     registerImg: {
       type: String,
-      default: "http://static.maryoku.com/storage/img/card-1.jpg"
+      default: "static/img/card-1.jpg"
     },
     applyImg: {
       type: String,
-      default: "http://static.maryoku.com/storage/img/card-2.jpg"
+      default: "static/img/card-2.jpg"
     }
   },
   data() {

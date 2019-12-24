@@ -20,7 +20,7 @@ export default {
   props: {
     cardUserImage: {
       type: String,
-      default: "http://static.maryoku.com/storage/img/faces/marc.jpg"
+      default: "static/img/faces/marc.jpg"
     },
     buttonColor: {
       type: String,

@@ -13,16 +13,16 @@
                 <template slot="body">
                     <div class="md-layout" style="margin-top:5%">
                         <div class="md-layout-item dietary-item" v-for="(item,index) in dietaryIconOnFirstList" >
-                            <img :src="`http://static.maryoku.com/storage/img/dietary/${item.on}.png`" @click="toggleFlagFirstList(index)" v-if="item.flagOn">
-                            <img :src="`http://static.maryoku.com/storage/img/dietary/${item.off}.png`" @click="toggleFlagFirstList(index)" v-if="!item.flagOn">
+                            <img :src="`static/img/dietary/${item.on}.png`" @click="toggleFlagFirstList(index)" v-if="item.flagOn">
+                            <img :src="`static/img/dietary/${item.off}.png`" @click="toggleFlagFirstList(index)" v-if="!item.flagOn">
                         </div>
 
                     </div>
 
                     <div class="md-layout"   style="margin-top:5%">
                         <div class="md-layout-item dietary-item" v-for="(item,index) in dietaryIconOnSecondList" >
-                            <img :src="`http://static.maryoku.com/storage/img/dietary/${item.on}.png`" @click="toggleFlagSecondList(index)" v-if="item.flagOn">
-                            <img :src="`http://static.maryoku.com/storage/img/dietary/${item.off}.png`" @click="toggleFlagSecondList(index)" v-if="!item.flagOn">
+                            <img :src="`static/img/dietary/${item.on}.png`" @click="toggleFlagSecondList(index)" v-if="item.flagOn">
+                            <img :src="`static/img/dietary/${item.off}.png`" @click="toggleFlagSecondList(index)" v-if="!item.flagOn">
                         </div>
 
                     </div>

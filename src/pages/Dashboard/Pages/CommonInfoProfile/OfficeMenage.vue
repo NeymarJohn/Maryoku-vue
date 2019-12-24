@@ -8,7 +8,7 @@
         title='Oh, wow so thats you'
         titleText='om_titleStyle'/>
 </div>
-        <InputText
+        <InputText 
                 labelStyle='om_label_input'
                 label='Full Name'
                 fieldStyle="field_input"
@@ -41,8 +41,8 @@
           :trim='isTrim'
           :isErrors='isErrors'
           />
-          </div>
-        <InputText
+          </div> 
+        <InputText 
                 labelStyle='om_label_input'
                 label='Phone Number'
                 :value='phone'
@@ -51,7 +51,7 @@
                 :isErrors='isErrors'
                 required
         />
-        </div>
+        </div>        
 </div>
 <div class='om_button-block'>
         <Button text='next' :onClick='submitForm' class="md-success md-fileinput button-md-common"/>
@@ -59,18 +59,18 @@
 </div>
 <div class='om_logo-main'>
 <div>
-<img class='om_emp-logo' src="http://static.maryoku.com/storage/img/secure_booker.png">
+<img class='om_emp-logo' src="static/img/secure_booker.png">
         <Title
                 title='Smart Leadership'
                 titleBlock='om_titleStyle'
                 titleText='om_titleStyle'
         />
-        <Title
-                titleText='om_titleTextLogo'
+        <Title  
+                titleText='om_titleTextLogo'        
                 titleBlock='om_titleStyle'
                 title='We help you collect all events data, from participation rate to feedback and budget frends. Evething you need to lead'
-         />
-
+         />                
+               
 </div>
 </div>
 </div>
@@ -104,28 +104,28 @@ export default {
                    email:'',
                    phone:'',
                    country_code:'',
-                   list_code: country_code
+                   list_code: country_code    
                 }
         },
          computed:{
        isTrim(){
-               return this.country_code===''
-         }
+               return this.country_code===''  
+         } 
         },
                 methods:{
-        submitForm:function(){
-            this.validFunc(this)
-            if(this.isErrors==false){
+        submitForm:function(){                                    
+            this.validFunc(this)                         
+            if(this.isErrors==false){  
                 const data=isWrong(this,['full_name','email','phone','country_code'])
-                this.$store.dispatch("user/sendOMInfo",data)
-                this.$router.push('/events-data')
+                this.$store.dispatch("user/sendOMInfo",data)                       
+                this.$router.push('/events-data')     
             }
-
+              
          },
-         onChange:function(value, name){
-                 this[name]=value
+         onChange:function(value, name){                                
+                 this[name]=value                    
          },
-         validFunc:function(ctx,required){
+         validFunc:function(ctx,required){                
                  const errorsObj=[]
             if(ctx['full_name']===''){
                 errorsObj.push('full_name')
@@ -138,11 +138,11 @@ export default {
             }
             if(ctx['country_code']===''){
                 errorsObj.push('country_code')
-            }
-            if(errorsObj.length!==0){
+            }               
+            if(errorsObj.length!==0){                    
               ctx.isErrors=true
-            }else{
-                 ctx.isErrors=false
+            }else{                    
+                 ctx.isErrors=false   
             }
          }
         }
@@ -152,30 +152,30 @@ export default {
 <style lang="scss">
 .om-body{
     display:flex;
-    flex-direction:'column'
+    flex-direction:'column'      
 }
 .om_form-main {
         width:50%;
-        height: 100vh;
+        height: 100vh; 
         background-color: white;
         display: flex;
-        justify-content: center;
+        justify-content: center;        
 }
 .om_logo-main {
         width:50%;
-        height: 100vh;
+        height: 100vh;  
         background:  #ff527c;
         display: flex;
-        align-items: center;
+        align-items: center;  
 }
 .om_form-block{
     width: 75%;
     display: flex;
-    flex-direction: column;
+    flex-direction: column;    
     justify-content: center;
 }
 .om_form-block{
-
+                
 }
 .emp-title{
         text-align: center;
@@ -187,11 +187,11 @@ export default {
 }
 .om_titleStyle{
       font-size: 40px;
-      font-weight: 700;
+      font-weight: 700; 
 }
 .om_titleStyle{
        display:flex;
-       justify-content: center;
+       justify-content: center; 
 }
 .om_titleTextLogo{
     text-align: center;
@@ -202,31 +202,31 @@ export default {
     line-height: 147%;
     font-weight: 300;
 }
-.om_buttonStyle{
+.om_buttonStyle{        
         cursor: pointer;
         color: #ff527c;
         font-size: 20px;
-        margin-right: 20px;
+        margin-right: 20px; 
          border: 1px solid;
         padding: 10px 15px;
-        border-radius: 10px;
+        border-radius: 10px;       
 }
-.om_button-block{
-      display:flex;
+.om_button-block{      
+      display:flex;      
       justify-content: flex-end;
       align-items: flex-end;
-      margin-bottom: 45px;
+      margin-bottom: 45px;               
 }
 .om_emp-logo{
        width: 100%;
     height: 100%;
-    margin-bottom: -10%;
+    margin-bottom: -10%;     
 }
 .om_phone-block{
         display:flex;
         .phone_country-code{
                 margin-right: 40px;
-                width: 30%;
+                width: 30%;           
         }
         &.phone-number{
 

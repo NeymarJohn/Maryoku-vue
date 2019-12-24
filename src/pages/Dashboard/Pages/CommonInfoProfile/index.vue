@@ -3,7 +3,7 @@
     <md-toolbar md-elevation="0" class="md-transparent md-toolbar-absolute">
       <div class="md-toolbar-row md-offset">
         <div class="md-toolbar-section-start">
-          <h3 class="md-title"><a href="https://www.maryoku.com"><img src="http://static.maryoku.com/storage/img/262Logo2.png"/></a> </h3>
+          <h3 class="md-title"><a href="https://www.maryoku.com"><img src="static/img/262Logo2.png"/></a> </h3>
         </div>
         <div class="md-toolbar-section-end">
           <md-button class="md-just-icon md-simple md-round md-toolbar-toggle" :class="{toggled: $sidebar.showSidebar}" @click="toggleSidebar">
@@ -81,8 +81,8 @@
     computed: {
       setBgImage() {
         let images = {
-          Company: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
-          MeForm: "http://static.maryoku.com/storage/img/shutterstock_495639391.png",
+          Company: "static/img/shutterstock_732491308.png",
+          MeForm: "static/img/shutterstock_495639391.png",
         };
         return {
           backgroundImage: `url(${images[this.$route.name]})`

@@ -15,7 +15,7 @@
           <vue-element-loading :active="working" spinner="ring" color="#FF547C" is-full-screen/>
           <div class="header-images-list md-layout">
             <div class="header-images-list_item md-layout-item md-size-33" v-for="(image,index) in headerImages">
-              <img :src="`http://static.maryoku.com/storage/img/page-headers/${image.fullFileName}`" :class="{selected : selectedImage == image.cutFileName}" @click="selectImage(image.cutFileName)"/>
+              <img :src="`/static/img/page-headers/${image.fullFileName}`" :class="{selected : selectedImage == image.cutFileName}" @click="selectImage(image.cutFileName)"/>
               <md-button class="md-simple md-just-icon md-round" @click="previewImage(image.cutFileName)">
                 <md-icon >visibility</md-icon>
                 <md-tooltip>Preview</md-tooltip>
@@ -37,7 +37,7 @@
       <md-button class="md-simple md-just-icon md-round" @click="closePreviewModal">
         <md-icon>clear</md-icon>
       </md-button>
-      <img :src="`http://static.maryoku.com/storage/img/page-headers/${imagePreview}`">
+      <img :src="`/static/img/page-headers/${imagePreview}`">
     </div>
   </div>
 </template>

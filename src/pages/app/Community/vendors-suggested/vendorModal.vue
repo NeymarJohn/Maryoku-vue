@@ -6,7 +6,7 @@
                     <div class="vendor-card">
                         <div class="inline">
                             <div class="vendor-card_img">
-                                <img src="http://static.maryoku.com/storage/img/faces/avatar.jpg" alt="">
+                                <img src="static/img/faces/avatar.jpg" alt="">
                             </div>
                             <div class="vendor-card_title">
                                 <h5>Pinup Photoshoot - Vendor Card</h5>

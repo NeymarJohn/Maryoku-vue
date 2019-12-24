@@ -41,6 +41,7 @@ import EventWizard from "@/pages/app/CreateEvent/EventWizard.vue";
 import EventInfo from "@/pages/app/CreateEvent/EventInfo.vue";
 import EventBudget from "@/pages/app/CreateEvent/EventBudget.vue";
 import EventVibe from "@/pages/app/CreateEvent/EventVibe.vue";
+import EventMovies from "@/pages/app/CreateEvent/EventMovies.vue";
 import HomePage from "@/pages/app/HomePage/Home.vue";
 
 // Dashboard pages
@@ -535,7 +536,18 @@ let PublicCreateEvent = {
                 title : "Event Vibe",
                 gmt : "Event Vibe",
                 auth: false
-            } // EventVibe
+            }
+
+        },
+        {
+            path : "/event-movies",
+            name : "Event Movies",
+            component : EventMovies,
+            meta : {
+                title : "Event Movies",
+                gmt : "Event Movies",
+                auth: false
+            }
         }
     ]
 }

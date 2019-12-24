@@ -229,11 +229,11 @@ export default {
   props: {
     regularImg: {
       type: String,
-      default: "http://static.maryoku.com/storage/img/image_placeholder.jpg"
+      default: "static/img/image_placeholder.jpg"
     },
     avatarImg: {
       type: String,
-      default: "http://static.maryoku.com/storage/img/placeholder.jpg"
+      default: "static/img/placeholder.jpg"
     }
   },
   data() {

@@ -260,7 +260,7 @@ const actions={
         Me.get()
             .then(res=>{
                 if (res[0] && (res[0].pictureUrl == '' || res[0].pictureUrl == 'none')) {
-                    res[0].pictureUrl = 'http://static.maryoku.com/storage/img/placeholder.jpg'
+                    res[0].pictureUrl = 'static/img/placeholder.jpg'
                 }
                 commit("setUser" , res[0])
                 commit('setCustomer',res[0].customer)

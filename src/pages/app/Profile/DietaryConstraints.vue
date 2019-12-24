@@ -12,16 +12,16 @@
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
         <div class="md-layout" style="margin-top:5%">
           <div class="md-layout-item md-size-33" v-for="(item,index) in dietaryIconsList" :key="item.id">
-            <img :src="`http://static.maryoku.com/storage/img/dietary/${item.on}.png`" @click="toggleFlagFirstList(index)" v-if="item.flagOn">
-            <img :src="`http://static.maryoku.com/storage/img/dietary/${item.off}.png`" @click="toggleFlagFirstList(index)" v-if="!item.flagOn">
+            <img :src="`static/img/dietary/${item.on}.png`" @click="toggleFlagFirstList(index)" v-if="item.flagOn">
+            <img :src="`static/img/dietary/${item.off}.png`" @click="toggleFlagFirstList(index)" v-if="!item.flagOn">
           </div>
 
         </div>
 
         <!--<div class="md-layout"   style="margin-top:5%">
           <div class="md-layout-item" v-for="(item,index) in dietaryIconOnSecondList" :key="item.id">
-            <img :src="`http://static.maryoku.com/storage/img/dietary/${item.on}.png`" @click="toggleFlagSecondList(index)" v-if="item.flagOn">
-            <img :src="`http://static.maryoku.com/storage/img/dietary/${item.off}.png`" @click="toggleFlagSecondList(index)" v-if="!item.flagOn">
+            <img :src="`static/img/dietary/${item.on}.png`" @click="toggleFlagSecondList(index)" v-if="item.flagOn">
+            <img :src="`static/img/dietary/${item.off}.png`" @click="toggleFlagSecondList(index)" v-if="!item.flagOn">
           </div>
 
         </div>-->

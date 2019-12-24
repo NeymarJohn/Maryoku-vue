@@ -27,8 +27,8 @@
                 type="number"
                 @change="calculateBudgetPerGuest()"
               ></md-input>
-              <span
-                class="md-error"
+              <span 
+                class="md-error" 
                 v-if="errors.has('numberOfParticipants')"
               >
                 The Guest Count is required and should be a number
@@ -70,8 +70,8 @@
             <div class="list-container">
               <md-field class="mt-0 mb-2">
                 <md-select v-model="eventType">
-                  <md-option
-                    v-for="(type,index) in eventTypes"
+                  <md-option 
+                    v-for="(type,index) in eventTypes" 
                     :key="index"
                     :value="type.id"
                   >
@@ -196,10 +196,10 @@
     },
     methods: {
       ...mapMutations(
-        'AnnualPlannerVuex',
+        'AnnualPlannerVuex', 
         [
-          'resetForm',
-          'setEventModal',
+          'resetForm', 
+          'setEventModal', 
           'setEventProperty'
         ]
       ),
@@ -279,11 +279,11 @@
             this.eventData.time =  '8:00 AM'
           }
           let eventStartTime = new Date(
-            this.eventData.date).getTime() +
+            this.eventData.date).getTime() + 
             (
               this.convertHoursToMillis(
               moment(
-                this.eventData.time,
+                this.eventData.time, 
                 'HH:mm a'
               ).format('H')
             )
@@ -465,23 +465,23 @@
         eventType: null,
         category: '',
         InviteeTypes: [
-          'Guests Only',
-          'Guests and spouse',
-          'Guests and families',
+          'Guests Only', 
+          'Guests and spouse', 
+          'Guests and families', 
           'Guests siblings'
         ],
         InviteeTypes2: [
           {
             title: 'Corporate Guests',
-            icon: 'http://static.maryoku.com/storage/img/guest_type_corporate.png'
+            icon: 'static/img/guest_type_corporate.png'
           },
           {
             title: 'Children',
-            icon: 'http://static.maryoku.com/storage/img/guest_type_children.png'
+            icon: 'static/img/guest_type_children.png'
           },
           {
             title: 'Social Event Invitees',
-            icon: 'http://static.maryoku.com/storage/img/guest_type_social.png'
+            icon: 'static/img/guest_type_social.png'
           }
         ],
         guestType: null,
