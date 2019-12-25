@@ -336,7 +336,7 @@
         li {
             height : 3px;
             background: #fff;
-            width: 20%;
+            width: 14.2%;
 
             &:last-child:not(:first-child) {
                 border-radius: 0 20px  20px 0;

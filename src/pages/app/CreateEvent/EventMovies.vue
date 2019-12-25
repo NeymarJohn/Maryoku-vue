@@ -30,7 +30,7 @@
   },
 }"
 
-                                  :value="movie.image" class="movie-radio"><small>Godfather</small><br>{{movie.title}}</md-radio>
+                                  :value="movie.image" class="movie-radio"><small>{{movie.author}}</small><br>{{movie.title}}</md-radio>
                     </div>
                 </div>
 
@@ -66,7 +66,7 @@
         data() {
             return {
 
-                step : 4,
+                step : 5,
                 haveEventPlace : false,
                 flexibleWithDates : false,
                 eventTime : null,
@@ -91,42 +91,50 @@
                     {
                         image : 'amy-santiago.png',
                         tooltip : 'is a "by the book" type of cop but she takes it a step further by color-coding case files. With her, everything is calculated to perfection and if you want her approval, make sure your budget table is impeccable',
-                        title : 'Amy'
+                        title : 'Amy',
+                        author : 'Veep'
                     },
                     {
                         image : 'amybrookheimer.jpg',
                         tooltip : 'is hyper-competitive, has a deep needto please and can also be a catastrophist. She wants to be the best at everything, and if your event is not perfectly planned her stress levels will skyrocket ',
-                        title : 'Amy Brookheimer'
+                        title : 'Amy Brookheimer',
+                        author : 'Brooklyn Nine-Nine'
                     },
                     {
                         image : 'captain-kirk2.png',
                         tooltip : '"Star Trek" is all about going boldly where no one has gone before -- and nobody is bolder than Captain James T. Kirk. To please him you’d have to come up with fresh ideas, edgy concepts and flawless plan to execute',
-                        title : 'Captain Kirk'
+                        title : 'Captain Kirk',
+                        author : 'Star Trek'
                     },
                     {
                         image : 'dirty-harry2.png',
                         tooltip : 'is not a "company man" and not a real team player (his partners got killed or wounded at an alarming rate). But, what he did have was laser focus on achieving his goals. His moto is: do what you have to do, and we bet if you do the plan he’ll approve it...or shoot you.  ',
-                        title : 'Dirty Harry'
+                        title : 'Inspector Harold Francis',
+                        author : 'Dirty Harry'
                     },
                     {
                         image : 'jerry-seinfeld.png',
                         tooltip : 'Seinfeld\'s is very meticulous about the cleanliness and organization of his apartment. He is stubborn and holds ontightly to his opinions. He isn\'t easy to convince, and your plan better be well organized before you seek his approval',
-                        title : 'Seinfeld'
+                        title : 'Seinfeld',
+                        author : 'Seinfeld'
                     },
                     {
                         image : 'joan-harris.jpg',
                         tooltip : 'Joan Harris is a queen bee. She likes things the way she likes them. At times she can seem bossy or hard to please -- her standards are extremely high and you better have everything nailed before you show her your event plan',
-                        title : 'Joan Harris'
+                        title : 'Joan Harris',
+                        author : 'Mad Men'
                     },
                     {
                         image : 'mirandapreistly.jpg',
                         tooltip : 'Miranda Priestly personifies qualities of a classic A type boss: controlling, demanding and impossible to please. Her favorite words to utter, after all, are "do it correctly." You may try to, but we all know how this well end.',
-                        title : 'Miranda Priestly'
+                        title : 'Miranda Priestly',
+                        author : 'The Devil Wears Prada'
                     },
                     {
                         image : 'soprano.png',
                         tooltip : 'Tony Soprano doesn\'t like to wait and neither does your boss. Impatience is a key characteristic for him. Waiting for vendors’ proposals or a well crafted event plan can be equally frustrating for him',
-                        title : 'Tony Soprano'
+                        title : 'Tony Soprano',
+                        author : 'The Sopranos'
                     }
                 ]
             }
@@ -286,7 +294,7 @@
             left:1px;
             right: 1px;
             border-radius: 0 0 12px 12px;
-            padding: 72% 0 0;
+            padding: 64% 0 0;
             width: 99%;
             margin: 0 !important;
             height: 100%;

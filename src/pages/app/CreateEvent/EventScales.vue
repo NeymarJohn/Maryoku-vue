@@ -67,7 +67,7 @@
         data() {
             return {
 
-                step : 4,
+                step : 6,
                 haveEventPlace : false,
                 flexibleWithDates : false,
                 eventTime : null,

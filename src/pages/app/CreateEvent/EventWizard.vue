@@ -13,7 +13,9 @@
                 <div class="form-group">
 
                     <div class="maryoku-field with-icon" :class="{'has-value' : eventData.location}">
-                        <md-icon>room</md-icon>
+                        <md-icon>
+                            <img src="https://static.maryoku.com/storage/wizard-icons/icon%20location@2x.png">
+                        </md-icon>
                         <v-select v-model="eventData.location"
                                   :options="locationsList"
                                   :class="{'has-value' : eventData.location}"
@@ -39,12 +41,15 @@
 
                 <div class="form-group">
                     <md-datepicker
-                        class="purple-field with-icon"
+                        class="purple-field with-icon datepicker-field"
                         v-model="eventData.date"
                         v-validate="modelValidations.date"
                         md-immediately
                         :class="[{'md-error': errors.has('date')}]">
-                        <label>Event Date</label>
+                        <label>
+                            Event Date
+                        </label>
+                        <md-icon class="custom-icon"><img src="https://static.maryoku.com/storage/wizard-icons/icon date@2x.png"></md-icon>
                         <span class="md-error" v-if="errors.has('date')">This field is required</span>
                     </md-datepicker>
 
@@ -235,6 +240,21 @@
         .md-radio {
             margin-right: 0;
             width: 47%;
+        }
+    }
+
+    .datepicker-field {
+        .md-icon{
+            &.custom-icon {
+                position: absolute;
+                left: 10px;
+                top: 6px;
+
+            }
+            &:not(.custom-icon){
+                display: none;
+            }
+
         }
     }
 </style>
