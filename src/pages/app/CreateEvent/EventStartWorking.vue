@@ -1,7 +1,7 @@
 <template>
     <div class="">
         <div class="section-header">
-            <h2 class="section-title">Tell us what you care for more in this event</h2>
+            <h2 class="section-title">Great Job! we have everything we need to start working!</h2>
             <div class="steps-wizard">
                 <ul class="steps-wizard-items">
                     <li v-for="index in step" :key="index"></li>
@@ -9,30 +9,16 @@
             </div>
         </div>
         <div class="container">
-            <div class="form-section scales-section">
+            <div class="form-section start-working">
 
-                <div class="range-item">
-                    <div class="option left">Convinience & Accessibility</div>
-                    <div class="option right">Authenticity & experience</div>
-                    <input type="range" v-model="eventScale1" @change="checkScale"/>
-                </div>
-
-                <div class="range-item">
-                    <div class="option left">Familiar & trusted</div>
-                    <div class="option right">New & adget</div>
-                    <input type="range" v-model="eventScale2" @change="checkScale"/>
-                </div>
-
-                <div class="range-item">
-                    <div class="option left">Within budget</div>
-                    <div class="option right">Hight Value for Money</div>
-                    <input type="range" v-model="eventScale3" @change="checkScale"/>
-                </div>
-
-                <div class="range-item">
-                    <div class="option left">Meeting Requirements</div>
-                    <div class="option right">Social & Green</div>
-                    <input type="range" v-model="eventScale4" @change="checkScale"/>
+                <div class="start-working-item" v-for="(item,index) in startWorkingList" :key="index">
+                    <md-checkbox v-model="item.selected">
+                        <div class="image-cont">
+                            <img :src="`https://static.maryoku.com/storage/wizard-icons/${item.img}`">
+                        </div>
+                        <span>{{item.title}} </span>
+                        <small>{{item.desc}}</small>
+                    </md-checkbox>
                 </div>
 
                 <div class="form-actions">
@@ -44,7 +30,7 @@
             </div>
         </div>
 
-        <go-back navigation="event-movies"></go-back>
+        <go-back navigation="event-scales"></go-back>
 
     </div>
 </template>
@@ -71,7 +57,7 @@
                 haveEventPlace : false,
                 flexibleWithDates : false,
                 eventTime : null,
-                eventScale1 : null,
+                concept : false,
                 eventScale2 : null,
                 eventScale3 : null,
                 eventScale4 : null,
@@ -92,10 +78,48 @@
                 boardSound:  [],
                 currentIndex : null,
                 isPaused : false,
+                startWorkingList : [
+                    {
+                        title : 'Concept and ideas',
+                        desc : 'we’ll need some more info for that',
+                        img : 'Component 50 – 1@2x.png',
+                        selected : true
+                    },
+                    {
+                        title : 'Detailed Budget Table',
+                        desc : 'to match the concept',
+                        img : 'Component 52 – 4@2x.png',
+                        selected : true
+                    },
+                    {
+                        title : 'Event Timeline',
+                        desc : 'you’ll be able to edit it later',
+                        img : 'Component 49 – 4@2x.png',
+                        selected : true
+                    },
+                    {
+                        title : 'Vendors proposals',
+                        desc : 'to match budget, concept and timing',
+                        img : 'Component 51 – 4@2x.png',
+                        selected : true
+                    },
+                    {
+                        title : 'RSVP',
+                        desc : 'Campaign, invite and track attendance',
+                        img : 'Component 48 – 8@2x.png',
+                        selected : true
+                    },
+                    {
+                        title : 'On day coordination',
+                        desc : 'to match budget, concept and timing',
+                        img : 'Component 51 – 4@2x.png',
+                        selected : true
+                    }
+                ]
             }
         },
         created() {
-            this.$set(this,'eventMovieId' ,this.publicEventData.eventMovieId);
+            // this.$set(this,'eventMovieId' ,this.publicEventData.eventMovieId);
 
         },
 
@@ -112,7 +136,6 @@
                 this.$validator.validateAll().then(isValid => {
                     let eventMovieId = this.boardSound[this.currentIndex];
                     if (isValid) {
-                        this.setEventProperty({key: 'eventMovieId', actualValue: eventMovieId});
                         //this.$router.push({ path: `/event-budget`});
 
 
@@ -139,139 +162,85 @@
 
     $baseColor : #5c2153;
 
-    .form-section.scales-section {
-        width : 70%;
+    .form-section.start-working {
+        width : 60%;
         margin : 0 auto;
         padding : 0 2em 5em;
-        min-height: auto;
         height: auto;
+        min-height: 440px;
 
-        .divider {
-            margin-top : 1em;
-        }
-
-        .field-small-note {
-            font-size: 15px;
-            color : #aaa;
-            font-weight: bold;
-            text-align: center;
-        }
     }
 
-    .range-item {
-        position: relative;
-        margin-bottom : 1em;
-        .option {
-            position: absolute;
-            top :0;
-            font-weight: 500;
-            font-size: 15px;
-            color : #606060;
-            &.left {
-                left : 0;
+    .start-working {
+
+        &-item {
+           width : 48%;
+            display: inline-block;
+            font-family: 'Open Sans';
+
+            .md-checkbox {
+                display: flex;
+                flex-direction: row-reverse;
+                border : 1px solid #aaa;
+                border-radius: 12px;
+                height: 72px;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 1em;
+                margin-bottom : 0;
+
+                .image-cont {
+                    position: absolute;
+                    left : 0;
+                    width : 50px;
+                    text-align: center;
+                }
+
+                img {
+                    filter: gray; /* IE6-9 */
+                    -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+                    filter: grayscale(1); /* Microsoft Edge and Firefox 35+ */
+                    opacity: 0.6;
+                    width: 37px;
+
+                }
+
+
+                label {
+                    position: relative !important;
+                    padding-left : 64px !important;
+                    height: auto !important;
+
+                    img {
+
+                    }
+                    small {
+                        display: block;
+                        font-size: 11px;
+                        color : #606060;
+                        font-weight: bold;
+                    }
+                }
+
+                &.md-checked {
+                    border : 1px solid $baseColor;
+
+                    label {
+                        img {
+                            -webkit-filter: grayscale(0);
+                            filter: none;
+                            opacity: 1;
+                        }
+                    }
+
+                }
+
+
             }
-            &.right {
-                right : 0;
-            }
+
+
         }
     }
-
-    input[type=range] {
-        -webkit-appearance: none;
-        width: 100%;
-        margin: 13.8px 0;
-        background: none;
-        box-shadow: none;
-        padding-left : 0;
-        padding-right : 0;
-    }
-    input[type=range]:focus {
-        outline: none;
-    }
-    input[type=range]::-webkit-slider-runnable-track {
-        width: 100%;
-        height: 2px;
-        cursor: pointer;
-        background: #AAAAAA;
-        border-radius: 1.3px;
-        border: 0.2px solid #010101;
-        position: relative;
-
-    }
-    input[type=range]::-webkit-slider-thumb {
-        height: 24px;
-        width: 37px;
-        border-radius: 100px;
-        background: $baseColor;
-        cursor: pointer;
-        -webkit-appearance: none;
-        margin-top: -12px;
-        border : 1px solid #f4f4f4;
-    }
-    input[type=range]:focus::-webkit-slider-runnable-track {
-        background: #AAAAAA;
-    }
-
-
-    input[type=range]::-moz-range-track {
-        width: 100%;
-        height: 2px;
-        cursor: pointer;
-        background: #AAAAAA;
-        border-radius: 1.3px;
-        position: relative;
-
-    }
-    input[type=range]::-moz-range-thumb {
-        height: 24px;
-        width: 37px;
-        border-radius: 100px;
-        background: $baseColor;
-        cursor: pointer;
-        -webkit-appearance: none;
-        margin-top: -12px;
-        border : 1px solid #f4f4f4;
-    }
-
-
-
-    input[type=range]::-ms-track {
-        width: 100%;
-        height: 8.4px;
-        cursor: pointer;
-        background: transparent;
-        border-color: transparent;
-        color: transparent;
-    }
-    input[type=range]::-ms-fill-lower {
-        background: #AAAAAA;
-        border: 0.2px solid #010101;
-        border-radius: 2.6px;
-        box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-    }
-    input[type=range]::-ms-fill-upper {
-        background: #AAAAAA;
-        border: 0.2px solid #010101;
-        border-radius: 2.6px;
-        box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-    }
-    input[type=range]::-ms-thumb {
-        height: 24px;
-        width: 37px;
-        border-radius: 100px;
-        background: $baseColor;
-        cursor: pointer;
-        -webkit-appearance: none;
-        margin-top: -12px;
-        border : 1px solid #f4f4f4;
-    }
-    input[type=range]:focus::-ms-fill-lower {
-        background: #AAAAAA;
-    }
-    input[type=range]:focus::-ms-fill-upper {
-        background: #AAAAAA;
-    }
-
 
 
 </style>

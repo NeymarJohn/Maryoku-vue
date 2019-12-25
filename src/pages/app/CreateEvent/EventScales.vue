@@ -12,7 +12,7 @@
             <div class="form-section scales-section">
 
                 <div class="range-item">
-                    <div class="option left">Convinience & Accessability</div>
+                    <div class="option left">Convenience & Accessibility</div>
                     <div class="option right">Authenticity & experience</div>
                     <input type="range" v-model="eventScale1" @change="checkScale"/>
                 </div>
@@ -112,8 +112,8 @@
                 this.$validator.validateAll().then(isValid => {
                     let eventMovieId = this.boardSound[this.currentIndex];
                     if (isValid) {
-                        this.setEventProperty({key: 'eventMovieId', actualValue: eventMovieId});
-                        //this.$router.push({ path: `/event-budget`});
+                        //this.setEventProperty({key: 'eventMovieId', actualValue: eventMovieId});
+                        this.$router.push({ path: `/event-start-working`});
 
 
                     } else {
@@ -143,8 +143,8 @@
         width : 70%;
         margin : 0 auto;
         padding : 0 2em 5em;
-        min-height: auto;
         height: auto;
+        min-height: 440px;
 
         .divider {
             margin-top : 1em;
