@@ -244,7 +244,7 @@
     mounted() {
       setTimeout(function(){
         console.log("avatar: " + this.$auth.user.avatar);
-        this.avatar = this.$auth.user.avatar != null ? this.$auth.user.avatar : "static/img/placeholder.jpg";
+        this.avatar = this.$auth.user.avatar != null ? this.$auth.user.avatar : "http://static.maryoku.com/storage/img/placeholder.jpg";
       }.bind(this),3000);
 
       this.$root.$on("set-title", (eventData, invitees, proposals) => {

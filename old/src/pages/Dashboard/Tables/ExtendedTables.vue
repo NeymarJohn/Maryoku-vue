@@ -224,7 +224,7 @@ export default {
       ],
       shoppingCartTable: [
         {
-          image: "static/img/product1.jpg",
+          image: "http://static.maryoku.com/storage/img/product1.jpg",
           product: "Spring Jacket",
           category: "by Dolce&Gabbana",
           color: "Red",
@@ -234,7 +234,7 @@ export default {
           amount: 549
         },
         {
-          image: "static/img/product2.jpg",
+          image: "http://static.maryoku.com/storage/img/product2.jpg",
           product: "Short Pants",
           category: "by Gucci",
           color: "Purple",
@@ -244,7 +244,7 @@ export default {
           amount: 998
         },
         {
-          image: "static/img/product3.jpg",
+          image: "http://static.maryoku.com/storage/img/product3.jpg",
           product: "Pencil Skirt",
           category: "by Valentino",
           color: "Red",

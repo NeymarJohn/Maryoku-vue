@@ -161,7 +161,7 @@
         props: {
             avatar: {
                 type: String,
-                default: "static/img/default-avatar.png"
+                default: "http://static.maryoku.com/storage/img/default-avatar.png"
             }
         },
         data() {

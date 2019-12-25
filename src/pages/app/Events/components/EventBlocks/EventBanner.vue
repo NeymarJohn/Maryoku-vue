@@ -40,7 +40,7 @@
     },
     data: () => ({
         // auth: auth,
-//        bannerURL : this.event.eventPage.headerId ? '/static/img/page-headers/' + this.event.eventPage.headerId : 'https://bit.ly/2TWGILO', // default image for banner
+//        bannerURL : this.event.eventPage.headerId ? 'http://static.maryoku.com/storage/img/page-headers/' + this.event.eventPage.headerId : 'https://bit.ly/2TWGILO', // default image for banner
     }),
     methods: {
         ...mapMutations("EventPlannerVuex", [
@@ -85,7 +85,7 @@
     },
     computed: {
         bannerURL() {
-            return this.event.eventPage.headerImage ? '/static/img/page-headers/' + this.event.eventPage.headerImage : 'https://bit.ly/2TWGILO';
+            return this.event.eventPage.headerImage ? 'http://static.maryoku.com/storage/img/page-headers/' + this.event.eventPage.headerImage : 'https://bit.ly/2TWGILO';
         }
     }
 

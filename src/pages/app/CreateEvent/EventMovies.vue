@@ -150,7 +150,7 @@
                     let eventMovieId = this.boardSound[this.currentIndex];
                     if (isValid) {
                         this.setEventProperty({key: 'eventMovieId', actualValue: eventMovieId});
-                        //this.$router.push({ path: `/event-budget`});
+                        this.$router.push({ path: `/event-scales`});
 
 
                     } else {

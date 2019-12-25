@@ -19,7 +19,7 @@
 
               <div class="title">Select Image for your interaction</div>
               <div class="interaction-options-list" >
-                <img :src="`/static/img/interactions/${image}.png`" class="interaction-option-image" :class="{'selected':selectedTemplateId===image}" v-for="(image,index) in interactionData.options" @click="selectTemplateImage(image)"/>
+                <img :src="`http://static.maryoku.com/storage/img/interactions/${image}.png`" class="interaction-option-image" :class="{'selected':selectedTemplateId===image}" v-for="(image,index) in interactionData.options" @click="selectTemplateImage(image)"/>
               </div>
             </div>
 
@@ -87,7 +87,7 @@
 
           if (ifrm) {
 
-            this.$http.get(`/static/img/interactions/${val.templateImage || val.options[0]}.html`).then(res=>{
+            this.$http.get(`http://static.maryoku.com/storage/img/interactions/${val.templateImage || val.options[0]}.html`).then(res=>{
 
               let content = res.data;
               content = content.replace("{{{line1}}}",val.line1);

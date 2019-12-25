@@ -28,7 +28,7 @@
                 </li>
             </ul>
             <div v-else>
-                <img src="/static/img/timeline_example.png" style="opacity: 0.4;">
+                <img src="http://static.maryoku.com/storage/img/timeline_example.png" style="opacity: 0.4;">
             </div>
         </div>
     </div>

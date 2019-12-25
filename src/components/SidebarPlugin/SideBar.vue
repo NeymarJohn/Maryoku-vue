@@ -71,7 +71,7 @@ export default {
     },
     backgroundImage: {
       type: String,
-      default: "static/img/sidebar-2.jpg"
+      default: "http://static.maryoku.com/storage/img/sidebar-2.jpg"
     },
     backgroundColor: {
       type: String,
@@ -83,7 +83,7 @@ export default {
     },
     logo: {
       type: String,
-      default: "static/img/calendar-loader-3.gif"
+      default: "http://static.maryoku.com/storage/img/calendar-loader-3.gif"
     },
     sidebarLinks: {
       type: Array,

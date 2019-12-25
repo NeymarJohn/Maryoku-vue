@@ -330,9 +330,9 @@ export default {
   },
   data() {
     return {
-      product1: "static/img/card-2.jpg",
-      product2: "static/img/card-3.jpg",
-      product3: "static/img/card-1.jpg",
+      product1: "http://static.maryoku.com/storage/img/card-2.jpg",
+      product2: "http://static.maryoku.com/storage/img/card-3.jpg",
+      product3: "http://static.maryoku.com/storage/img/card-1.jpg",
       seq2: 0,
       mapData: {
         AU: 760,

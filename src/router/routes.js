@@ -42,6 +42,8 @@ import EventInfo from "@/pages/app/CreateEvent/EventInfo.vue";
 import EventBudget from "@/pages/app/CreateEvent/EventBudget.vue";
 import EventVibe from "@/pages/app/CreateEvent/EventVibe.vue";
 import EventMovies from "@/pages/app/CreateEvent/EventMovies.vue";
+import EventScales from "@/pages/app/CreateEvent/EventScales.vue";
+import EventStartWorking from "@/pages/app/CreateEvent/EventStartWorking.vue";
 import HomePage from "@/pages/app/HomePage/Home.vue";
 
 // Dashboard pages
@@ -546,6 +548,26 @@ let PublicCreateEvent = {
             meta : {
                 title : "Event Movies",
                 gmt : "Event Movies",
+                auth: false
+            }
+        },
+        {
+            path : "/event-scales",
+            name : "Event Scales",
+            component : EventScales,
+            meta : {
+                title : "Event Scales",
+                gmt : "Event Scales",
+                auth: false
+            }
+        }, //EventStartWorking.vue
+        {
+            path : "/event-start-working",
+            name : "Event Start Working",
+            component : EventStartWorking,
+            meta : {
+                title : "Event Start Working",
+                gmt : "Event Start Working",
                 auth: false
             }
         }

@@ -5,7 +5,7 @@
                 <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-25">
                     <md-card style="min-height: 440px;">
                         <md-card-content style="text-align: center;">
-                            <img src="/static/img/calendar.png" style="width: 120px;">
+                            <img src="http://static.maryoku.com/storage/img/calendar.png" style="width: 120px;">
                             <h4 class="get-started-card-title">Create Your First Event</h4>
                             <p class="get-started-card-description">Everything you need to produce the best event that invitees would love</p>
                             <p>&nbsp;</p>
@@ -17,7 +17,7 @@
                 <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-25">
                     <md-card style="min-height: 440px;">
                         <md-card-content style="text-align: center;">
-                            <img src="/static/img/paperandpen.png" style="width: 120px;">
+                            <img src="http://static.maryoku.com/storage/img/paperandpen.png" style="width: 120px;">
                             <h4 class="get-started-card-title">Plan Your Year</h4>
                             <p class="get-started-card-description">Use a robust event calendar to manage yearly budget and events</p>
                             <p>&nbsp;</p>
@@ -28,7 +28,7 @@
                 <div class="md-layout-item md-xsmall-size-100  md-medium-size-30 md-size-25">
                     <md-card style="min-height: 440px;">
                         <md-card-content style="text-align: center;">
-                            <img src="/static/img/tools.png" style="width: 120px;">
+                            <img src="http://static.maryoku.com/storage/img/tools.png" style="width: 120px;">
                             <h4 class="get-started-card-title">Manage Vendors</h4>
                             <p class="get-started-card-description">Manage all vendors and proposals in one location and discover new and vetted vendors</p>
                             <p>&nbsp;</p>
@@ -54,7 +54,7 @@
         this.$root.$on("get-started-event-created", event => {
           let calendarId = this.$auth.user.defaultCalendarId;
           let calendar = new Calendar({
-            id: calendarId, 
+            id: calendarId,
             annualBudgetPerEmployee: Number(event.numberOfParticipants * event.budgetPerPerson)
           }).save();
 

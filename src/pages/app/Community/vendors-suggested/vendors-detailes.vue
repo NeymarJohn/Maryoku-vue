@@ -22,16 +22,16 @@
                         <div class="card-content grid-col">
                             <div class="img-holder">
                             <div class="card-content_img">
-                                <img src="static/img/faces/avatar.jpg" alt="">
+                                <img src="http://static.maryoku.com/storage/img/faces/avatar.jpg" alt="">
                             </div>
                                 <div class="card-content_img">
-                                    <img src="static/img/login.jpg" alt="">
+                                    <img src="http://static.maryoku.com/storage/img/login.jpg" alt="">
                                 </div>
                                 <div class="card-content_img">
-                                    <img src="static/img/sidebar-4.jpg" alt="">
+                                    <img src="http://static.maryoku.com/storage/img/sidebar-4.jpg" alt="">
                                 </div>
                                 <div class="card-content_img">
-                                    <img src="static/img/bg9.jpg" alt="">
+                                    <img src="http://static.maryoku.com/storage/img/bg9.jpg" alt="">
                                 </div>
                             </div>
                             <div class="card-content_info">

@@ -67,7 +67,7 @@
     data() {
       return {
         modalOpen: false,
-        regularImg: "static/img/image_placeholder.jpg",
+        regularImg: "http://static.maryoku.com/storage/img/image_placeholder.jpg",
       }
     },
     methods: {

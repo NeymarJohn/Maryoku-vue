@@ -42,7 +42,7 @@
 </div>
 <div class='invite_logo-main'>
 <div>
-        <img class='invite_emp-logo' src="static/img/propasal_manager.png">
+        <img class='invite_emp-logo' src="http://static.maryoku.com/storage/img/propasal_manager.png">
         <Title
                 title='Come on, introduce us'
                 titleBlock='invite_titleBlock'

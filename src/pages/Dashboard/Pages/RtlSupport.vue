@@ -190,7 +190,7 @@ export default {
   props: {
     profileCard: {
       type: String,
-      default: "static/img/faces/card-profile1-square.jpg"
+      default: "http://static.maryoku.com/storage/img/faces/card-profile1-square.jpg"
     }
   },
   data() {

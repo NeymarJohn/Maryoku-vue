@@ -3,11 +3,11 @@
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
     <div class="md-layout">
       <div class="md-layout-item image-list-container no-padding">
-        <div 
-          class="img-cont big-img-cont" 
+        <div
+          class="img-cont big-img-cont"
           :style="`
-            background-image: url(${bgImages[0]}); 
-            background-size: cover; 
+            background-image: url(${bgImages[0]});
+            background-size: cover;
             background-size: 100% 100%;`
           "
         >
@@ -23,7 +23,7 @@
           <span v-if="getGalleryImages.length > 0">view photos</span>
           <span v-else>no vendor image</span>
         </md-button>
-        <LightBox 
+        <LightBox
           v-if="getGalleryImages.length > 0"
           :images="getGalleryImages"
           ref="lightbox"
@@ -93,7 +93,7 @@
           </div>
         </div>
         <div class="description">
-          
+
         </div>
         <div class="text-group">
           <div class="">
@@ -112,8 +112,8 @@
 
     <!-- Tabs -->
     <div class="tabs-container">
-      <div class="tab-item" 
-        :class="[{'visited': currentTab > 1}, {'active': currentTab == 1}]" 
+      <div class="tab-item"
+        :class="[{'visited': currentTab > 1}, {'active': currentTab == 1}]"
         v-on:click="currentTab = 1">
         <span class="capitalize">{{vendor.vendorCategory}}</span>
       </div>
@@ -168,18 +168,18 @@
                     <li>
                       <br/>
                     </li>
-                    <li 
-                      class="normal" 
-                      v-for="(item, i) of vendorServicesList" 
-                      :key="'S' + i" 
+                    <li
+                      class="normal"
+                      v-for="(item, i) of vendorServicesList"
+                      :key="'S' + i"
                       :value="item"
                     >
                       <md-icon>check</md-icon> {{item.name}}
                     </li>
-                    <li 
-                      class="disabled" 
-                      v-for="(item, i) of vendorRestrictions" 
-                      :key="'R' + i" 
+                    <li
+                      class="disabled"
+                      v-for="(item, i) of vendorRestrictions"
+                      :key="'R' + i"
                       :value="item"
                     >
                       <md-icon></md-icon> <span>{{item.name}}</span>
@@ -197,7 +197,7 @@
                   </div>
                   <div class="notes-body">
                     <div class="note-item" v-for="(item, index) in attachments" :key="index" :value="item">
-                      <a 
+                      <a
                         v-if="item.vendorsFileContentType == 'application/pdf'"
                         target="_blank"
                         :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`"
@@ -207,7 +207,7 @@
                       <a
                         v-else
                         target="_blank"
-                        :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`" 
+                        :href="`${serverUrl}/1/proposal-requests/${item.proposalRequst.id}/files/${item.id}`"
                       >
                         <md-icon>image</md-icon> Attachment {{index+1}}
                       </a>
@@ -370,17 +370,17 @@
         attachments: [],
         proposals: [],
         bgImages: [],
-        defaultImg: 'static/img/lock.jpg',
+        defaultImg: 'http://static.maryoku.com/storage/img/lock.jpg',
         pricesAndRules: [],
         checkListItems: [],
         feedbacks: [
-          {image: '/static/img/shutterstock_289440710.png', username: 'Jane Bloom, Facebook', date: '2017/12/29', score: '5', message: 'A 50% deposit will be due on or before 18/1/20.'},
-          {image: '/static/img/shutterstock_289440710.png', username: 'Leonard Parker', date: '2017/12/29', score: '4', message: 'A 50% deposit will be due on or before 18/1/20.'},
-          {image: '/static/img/shutterstock_289440710.png', username: 'Alex Marlon', date: '2017/12/29', score: '3', message: 'A 50% deposit will be due on or before 18/1/20.'}
+          {image: 'http://static.maryoku.com/storage/img/shutterstock_289440710.png', username: 'Jane Bloom, Facebook', date: '2017/12/29', score: '5', message: 'A 50% deposit will be due on or before 18/1/20.'},
+          {image: 'http://static.maryoku.com/storage/img/shutterstock_289440710.png', username: 'Leonard Parker', date: '2017/12/29', score: '4', message: 'A 50% deposit will be due on or before 18/1/20.'},
+          {image: 'http://static.maryoku.com/storage/img/shutterstock_289440710.png', username: 'Alex Marlon', date: '2017/12/29', score: '3', message: 'A 50% deposit will be due on or before 18/1/20.'}
         ],
         similarItems: [
-          {image: '/static/img/shutterstock_289440710.png', thumbnail: 'thumbnail', score: '5', title: 'title'},
-          {image: '/static/img/shutterstock_289440710.png', thumbnail: 'thumbnail', score: '5', title: 'title'},
+          {image: 'http://static.maryoku.com/storage/img/shutterstock_289440710.png', thumbnail: 'thumbnail', score: '5', title: 'title'},
+          {image: 'http://static.maryoku.com/storage/img/shutterstock_289440710.png', thumbnail: 'thumbnail', score: '5', title: 'title'},
         ],
         ratings: [1,2,3,4,5],
         currentTab: 1,
@@ -736,7 +736,7 @@
               flex-direction: row;
               flex-wrap: wrap;
               flex-flow: row wrap;
-              
+
               .note-item {
                 margin-right: 2em;
                 width: 40%;
@@ -797,7 +797,7 @@
         background: #f9f9f9;
         height: 2px;
         margin: 2em 0;
-        
+
         @media (max-width: $screen-sm-min) {
           margin: 1em 0;
         }

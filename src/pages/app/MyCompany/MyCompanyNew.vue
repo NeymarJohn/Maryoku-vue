@@ -574,7 +574,7 @@ const currentYear=new Date().getFullYear()
 
         this.$auth.currentUser(this, true, function() {
           this.$store.dispatch("user/getUserFromApi");
-          this.customerLogoUrl = this.$auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.$auth.user.me.customer.logoFileId}` : 'static/img/placeholder.jpg';
+          this.customerLogoUrl = this.$auth.user.me.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.$auth.user.me.customer.logoFileId}` : 'http://static.maryoku.com/storage/img/placeholder.jpg';
         }.bind(this))
     },
     data() {
@@ -693,7 +693,7 @@ const currentYear=new Date().getFullYear()
         }
       },
       getAvatar(){
-            return  this.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.customer.logoFileId}` : 'static/img/placeholder.jpg';
+            return  this.customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${this.customer.logoFileId}` : 'http://static.maryoku.com/storage/img/placeholder.jpg';
 
       },
       getMonth(){

@@ -5,7 +5,7 @@
 
             <div class="header-content md-layout">
                 <div class="logo md-layout-item md-size-50">
-                    <img src="/static/img/homepage/maryoku-logo-white@2x.png" width="118">
+                    <img src="http://static.maryoku.com/storage/img/homepage/maryoku-logo-white@2x.png" width="118">
                 </div>
                 <div class="header-actions md-layout-item md-size-50">
                     <ul class="actions-list unstyled">
