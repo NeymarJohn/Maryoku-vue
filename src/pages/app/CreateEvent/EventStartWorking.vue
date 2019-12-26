@@ -24,7 +24,7 @@
                 <div class="form-actions">
                     <md-button class="md-rose next-btn custom-btn"
                                @click="goToNext"
-                               > Next </md-button>
+                               > Let's go </md-button>
                 </div>
 
             </div>
@@ -139,7 +139,7 @@
                 this.$validator.validateAll().then(isValid => {
                     let eventMovieId = this.boardSound[this.currentIndex];
                     if (isValid) {
-                        //this.$router.push({ path: `/event-budget`});
+                        this.$router.push({ path: `/event-created`});
 
 
                     } else {

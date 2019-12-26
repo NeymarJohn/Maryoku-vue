@@ -44,6 +44,7 @@ import EventVibe from "@/pages/app/CreateEvent/EventVibe.vue";
 import EventMovies from "@/pages/app/CreateEvent/EventMovies.vue";
 import EventScales from "@/pages/app/CreateEvent/EventScales.vue";
 import EventStartWorking from "@/pages/app/CreateEvent/EventStartWorking.vue";
+import EventCreated from "@/pages/app/CreateEvent/EventCreated.vue";
 import HomePage from "@/pages/app/HomePage/Home.vue";
 
 // Dashboard pages
@@ -568,6 +569,16 @@ let PublicCreateEvent = {
             meta : {
                 title : "Event Start Working",
                 gmt : "Event Start Working",
+                auth: false
+            }
+        }, // EventCreated
+        {
+            path : "/event-created",
+            name : "Event Created",
+            component : EventCreated,
+            meta : {
+                title : "Event Created",
+                gmt : "Event Created",
                 auth: false
             }
         }
