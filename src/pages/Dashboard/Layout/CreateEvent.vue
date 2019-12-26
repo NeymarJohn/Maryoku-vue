@@ -142,6 +142,7 @@
 
         .md-dialog-actions {
             padding : 8px 0;
+            margin-top : 3em;
         }
 
 
