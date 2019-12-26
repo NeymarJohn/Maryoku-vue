@@ -55,7 +55,7 @@
 
             <md-dialog-actions class="text-center">
 
-                <md-button class="md-rose md-sm md-square custom-btn" @click="showDialog = false">Save</md-button>
+                <md-button class="md-rose md-sm md-square custom-btn" @click="showDialog = false">Sign in</md-button>
             </md-dialog-actions>
         </md-dialog>
 
