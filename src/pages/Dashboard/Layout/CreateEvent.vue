@@ -10,7 +10,7 @@
                 <div class="header-actions md-layout-item md-size-50">
                     <ul class="actions-list unstyled">
                         <li class="action-item">
-                            <md-button> Sign up</md-button>
+                            <md-button @click="showDialog = true"> Sign up</md-button>
                         </li>
                     </ul>
                 </div>
@@ -22,6 +22,44 @@
             <!-- your content here -->
             <router-view></router-view>
         </FadeTransition>
+
+
+
+
+        <md-dialog :md-active.sync="showDialog" class="singin-form">
+            <md-dialog-title class="text-center">Sign in <button class="close-btn" @click="showDialog = false"><md-icon>close</md-icon></button></md-dialog-title>
+
+            <md-dialog-content>
+                <md-field class="purple-field">
+                    <label>Email address</label>
+                    <md-input
+                        type="number"
+
+                    ></md-input>
+
+                </md-field>
+                <md-field class="purple-field">
+                    <label>Password</label>
+                    <md-input
+                        type="password"
+
+                    ></md-input>
+
+                </md-field>
+
+                <div class="text-center">
+                    <a href="" class="forget-password">Forget your password ?</a>
+                </div>
+
+            </md-dialog-content>
+
+            <md-dialog-actions class="text-center">
+
+                <md-button class="md-rose md-sm md-square custom-btn" @click="showDialog = false">Save</md-button>
+            </md-dialog-actions>
+        </md-dialog>
+
+
     </div>
 </template>
 <script>
@@ -30,6 +68,11 @@
     import PublicEventPlannerVuexModule from "../../../pages/app/CreateEvent/PublicEventPlanner.vuex";
 
     export default {
+        data(){
+            return {
+                showDialog: false
+            }
+        },
         components: {
             FadeTransition
         },
@@ -48,6 +91,70 @@
 
     @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Rubik:400,500,700&display=swap');
 
+    .md-overlay {
+        z-index: 99999;
+
+    }
+    .md-dialog.singin-form {
+
+        border-radius: 20px;
+        padding : 2em 40px;
+        width: 428px;
+        z-index: 9999999;
+
+
+        .md-dialog-container {
+        }
+
+        .md-dialog-title {
+            color : $baseColor;
+            position: relative;
+            padding : 0;
+
+            button {
+                position: absolute;
+                right :0;
+
+            }
+        }
+
+        .md-dialog-content {
+            padding : 0;
+
+
+
+        }
+
+        .custom-btn {
+            width: 256px;
+        }
+
+        .close-btn {
+            background: none !important;
+            border : none !important;
+            padding : 0;
+
+            .md-icon {
+                color : $baseColor !important;
+            }
+        }
+
+        .md-dialog-actions {
+            padding : 8px 0;
+        }
+
+
+
+    }
+
+    .forget-password {
+        text-align: center;
+        margin : 0.7em auto;
+        color : $baseColor !important;
+        font-size: 14px;
+        font-weight: 500;
+        display: block;
+    }
     .create-event {
         .top-header {
             background: #5c2153;
@@ -360,38 +467,40 @@
             flex: 1;
             justify-content: center;
 
-            .md-button {
-                width: 256px;
-                height: 56px;
-                border-radius: 12px;
-                min-width: 256px;
 
-                .md-ripple {
-                    font-size: 15px;
-                    text-transform: initial;
-                }
+        }
+    }
 
-                &.md-rose {
-                    background-color: #FF0066 !important;
-                    box-shadow: 0px 12px 24px #FF006633;
+    .md-button.custom-btn {
+        width: 256px;
+        height: 56px;
+        border-radius: 12px;
+        min-width: 256px;
 
-                    &:hover {
-                        margin-top:5px;
-                        background-color: #de0e43 !important;
+        .md-ripple {
+            font-size: 15px;
+            text-transform: initial;
+        }
 
-                    }
-                }
+        &.md-rose {
+            background-color: #FF0066 !important;
+            box-shadow: 0px 12px 24px #FF006633;
 
-                &.md-default {
-                    margin-right: 1em;
-                }
+            &:hover {
+                margin-top:5px;
+                background-color: #de0e43 !important;
 
-
-
-                &.disabled, &.opacity-btn {
-                    opacity: 0.3;
-                }
             }
+        }
+
+        &.md-default {
+            margin-right: 1em;
+        }
+
+
+
+        &.disabled, &.opacity-btn {
+            opacity: 0.3;
         }
     }
 

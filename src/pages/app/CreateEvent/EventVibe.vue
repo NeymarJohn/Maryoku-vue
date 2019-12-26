@@ -24,10 +24,10 @@
                 </div>
 
                 <div class="form-actions">
-                    <md-button class="md-default next-btn"
+                    <md-button class="md-default next-btn custom-btn"
                                :class="[{'opacity-btn' : buttonLabel === 'Skip'}]"
                                @mouseover="buttonLabel='I don\'t know'" @mouseleave="buttonLabel='Skip'" > {{buttonLabel}} </md-button>
-                    <md-button class="md-rose next-btn"
+                    <md-button class="md-rose next-btn custom-btn"
                                @click="goToNext"
                                :class="[{'disabled': !eventSongId }]"> Next </md-button>
                 </div>

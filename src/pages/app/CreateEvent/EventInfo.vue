@@ -36,7 +36,7 @@
 
 
                 <div class="form-actions">
-                    <md-button class="md-rose next-btn"
+                    <md-button class="md-rose next-btn custom-btn"
                                @click="goToNext"
                                :class="[{'disabled': !eventData.numberOfParticipants || !eventData.expectingPeople}]"> Next </md-button>
                 </div>

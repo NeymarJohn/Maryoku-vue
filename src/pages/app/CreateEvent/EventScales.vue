@@ -145,6 +145,7 @@
         padding : 0 2em 5em;
         height: auto;
         min-height: 440px;
+        max-width : 800px;
 
         .divider {
             margin-top : 1em;

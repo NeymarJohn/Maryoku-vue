@@ -43,11 +43,11 @@
                 <div class="field-small-note" v-if="publicEventData.expectingPeople"> <small>Guest estimation: {{ publicEventData.numberOfParticipants * (publicEventData.expectingPeople.value / 100) | numeral('0,0')}}</small> </div>
 
                 <div class="form-actions">
-                    <md-button class="md-default next-btn"
+                    <md-button class="md-default next-btn custom-btn"
                                @click="skip"
                                :class="[{'opacity-btn' : buttonLabel === 'Build my budget'}]"
                                @mouseover="buttonLabel='I don\'t know'" @mouseleave="buttonLabel='Build my budget'" > {{buttonLabel}} </md-button>
-                    <md-button class="md-rose next-btn"
+                    <md-button class="md-rose next-btn custom-btn"
                                @click="goToNext"
                                :class="[{'disabled': !eventData.budgetPerPerson || !eventData.totalBudget}]"> Next </md-button>
                 </div>

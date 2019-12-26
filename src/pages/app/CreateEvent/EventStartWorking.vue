@@ -14,7 +14,7 @@
                 <div class="start-working-item" v-for="(item,index) in startWorkingList" :key="index">
                     <md-checkbox v-model="item.selected">
                         <div class="image-cont">
-                            <img :src="`https://static.maryoku.com/storage/wizard-icons/${item.img}`">
+                            <img :src="`http://static.maryoku.com/storage/wizard-icons/${item.img}`">
                         </div>
                         <span>{{item.title}} </span>
                         <small>{{item.desc}}</small>
@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="form-actions">
-                    <md-button class="md-rose next-btn"
+                    <md-button class="md-rose next-btn custom-btn"
                                @click="goToNext"
                                > Next </md-button>
                 </div>
@@ -132,6 +132,9 @@
 
                 this.cerrors = {};
                 this.validating = true;
+
+
+                //open the modal
 
                 this.$validator.validateAll().then(isValid => {
                     let eventMovieId = this.boardSound[this.currentIndex];

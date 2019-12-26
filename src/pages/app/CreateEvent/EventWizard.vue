@@ -14,7 +14,7 @@
 
                     <div class="maryoku-field with-icon" :class="{'has-value' : eventData.location}">
                         <md-icon>
-                            <img src="https://static.maryoku.com/storage/wizard-icons/icon%20location@2x.png">
+                            <img src="http://static.maryoku.com/storage/wizard-icons/icon%20location@2x.png">
                         </md-icon>
                         <v-select v-model="eventData.location"
                                   :options="locationsList"
@@ -49,7 +49,7 @@
                         <label>
                             Event Date
                         </label>
-                        <md-icon class="custom-icon"><img src="https://static.maryoku.com/storage/wizard-icons/icon date@2x.png"></md-icon>
+                        <md-icon class="custom-icon"><img src="http://static.maryoku.com/storage/wizard-icons/icon date@2x.png"></md-icon>
                         <span class="md-error" v-if="errors.has('date')">This field is required</span>
                     </md-datepicker>
 
@@ -64,7 +64,7 @@
 
                 <div class="form-actions">
                     <md-button
-                        class="md-rose next-btn"
+                        class="md-rose next-btn custom-btn"
                         @click="goToNext"
                         :class="[{'disabled': !eventData.location || !eventData.eventType || !eventData.date}]"> Next
                     </md-button>
@@ -255,6 +255,11 @@
                 display: none;
             }
 
+        }
+        &.md-has-value {
+            .md-input {
+                padding: 0 0 0 24px !important;
+            }
         }
     }
 </style>
