@@ -101,6 +101,7 @@
         padding : 2em 40px;
         width: 428px;
         z-index: 9999999;
+        height: auto;
 
 
         .md-dialog-container {
