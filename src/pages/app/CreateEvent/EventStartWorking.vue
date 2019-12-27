@@ -8,7 +8,7 @@
                 </ul>
             </div>
         </div>
-        <div class="container">
+        <div class="container no-padding-mobile">
             <div class="form-section start-working">
 
                 <div class="start-working-item" v-for="(item,index) in startWorkingList" :key="index">

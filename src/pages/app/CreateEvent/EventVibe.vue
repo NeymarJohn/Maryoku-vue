@@ -8,7 +8,7 @@
                 </ul>
             </div>
         </div>
-        <div class="container">
+        <div class="container no-padding-mobile">
             <div class="form-section vibe-section">
 
                 <div class="vibes-list">
@@ -23,7 +23,7 @@
                     </div>
                 </div>
 
-                <div class="form-actions">
+                <div class="form-actions two-btns">
                     <md-button class="md-default next-btn custom-btn"
                                :class="[{'opacity-btn' : buttonLabel === 'Skip'}]"
                                @mouseover="buttonLabel='I don\'t know'" @mouseleave="buttonLabel='Skip'" > {{buttonLabel}} </md-button>
@@ -208,21 +208,23 @@
     }
 
     .vibe-item {
-        width : 50%;
+        width: 50%;
         display: inline-block;
-        float : left;
+        float: left;
 
         .md-icon {
             font-size: 3rem !important;
             float: left;
             margin-top: 0.6em;
             margin-right: 0.4em;
-            color : #AAAAAA !important;
+            color: #AAAAAA !important;
+
             &:hover {
-                color : $baseColor !important;
+                color: $baseColor !important;
             }
+
             &.pause-icon {
-                color : #F51355 !important;
+                color: #F51355 !important;
             }
         }
 
@@ -238,11 +240,11 @@
             // border: 1px solid #aaaaaa;
 
             height: 52px;
-            padding : 4px;
+            padding: 4px;
             width: 81%;
 
             &:hover {
-                border-color : $baseColor;
+                border-color: $baseColor;
             }
 
             label {
@@ -260,9 +262,9 @@
             }
 
             .md-radio-container {
-                position : absolute;
-                right : 1em;
-                top : 0.8em;
+                position: absolute;
+                right: 1em;
+                top: 0.8em;
             }
 
             &:hover {
@@ -270,7 +272,7 @@
                     &:after {
                         background-color: $baseColor !important;
                         opacity: 0.7;
-                        transform: scale3D(1,1,1);
+                        transform: scale3D(1, 1, 1);
                     }
                 }
             }
@@ -282,6 +284,15 @@
                 .md-radio-label {
                     //color : $baseColor;
                 }
+            }
+        }
+
+        @media screen and (max-width: 500px){
+
+            .form-actions.two-btns {
+                margin-top: 2em;
+                float: left;
+                width: 100%;
             }
         }
 

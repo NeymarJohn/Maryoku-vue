@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="container">
-            <div class="form-section">
+            <div class="form-section event-basic-info">
                 <div class="form-group">
 
                     <div class="maryoku-field with-icon" :class="{'has-value' : eventData.location}">
@@ -229,7 +229,9 @@
         padding: 0;
         min-height: 440px;
 
+
     }
+
 
     .event-time {
         display: flex;

@@ -8,7 +8,7 @@
                 </ul>
             </div>
         </div>
-        <div class="container">
+        <div class="container no-padding-mobile">
             <div class="form-section movies-section">
 
                 <div class="movies-list">

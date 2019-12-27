@@ -743,6 +743,8 @@
         box-shadow: none;
         border: 1px solid #606060;
         border-radius: 14px;
+        z-index: 999999999999999;
+        height: auto;
 
         .md-datepicker-header {
             display: none;
@@ -831,6 +833,142 @@
             top: 0;
             width: 200px;
         }
+    }
+
+    @media screen and (max-width : 500px) {
+
+        .create-event {
+            .top-header {
+                .logo {
+                    img {
+                        width : 100px;
+
+                    }
+                }
+                .header-actions ul .md-button {
+                    margin-top : -2px;
+                }
+            }
+        }
+
+        .form-group {
+            .md-checkbox {
+                position: relative;
+                top : auto;
+                left : auto;
+                width : 100%;
+            }
+        }
+
+
+        .section-header {
+            .section-title {
+                font-size: 20px;
+                margin-top: 25px;
+                padding: 0 2em;
+            }
+        }
+
+        .form-section .form-actions  {
+            position: relative;
+        }
+
+        .back-section {
+            margin: 0 auto;
+            height: 30px;
+            width: 30px;
+            left: 0;
+            right: 0;
+            border-radius: 50%;
+            background-color: #aaaaaa8c;
+            top: 30px;
+
+            .md-icon {
+                color : #fff;
+            }
+
+            &:after {
+                display: none;
+            }
+        }
+
+        .form-section {
+            width: 100% !important;
+        }
+
+        .form-actions{
+
+            float: left;
+            width: 100%;
+            margin-top : 2em !important;
+
+            &.two-btns {
+
+                .md-button.custom-btn {
+                    min-width: auto;
+                    width: 50%;
+                }
+            }
+        }
+        .vibe-item {
+            width: 48% !important;
+            margin-right: 2%;
+            margin-bottom: 1em;
+             .md-radio.with-border {
+                width: 100% !important;
+            }
+            >span {
+                display: block;
+                text-align: center;
+                .md-icon {
+                    float: none;
+                    margin: 0;
+                }
+            }
+            .md-radio.with-border label {
+                font-size: 14px !important;
+                width: 80% !important;
+            }
+        }
+
+        .movie-item {
+            width: 40% !important;
+        }
+
+        .range-item .option {
+            font-size: 12px !important;
+        }
+
+        .start-working-item {
+            width: 100% !important;
+
+            .md-checkbox {
+                margin-right :0;
+            }
+        }
+
+        .event-created {
+            .page-banner {
+                h3 {
+                    font-size: 26px !important;
+                }
+            }
+             .page-content {
+                font-size: 16px !important;
+                padding: 0 2em;
+            }
+        }
+        .md-dialog.singin-form {
+            bottom: auto;
+            top: 10%;
+            width: 90%;
+        }
+
+        .no-padding-mobile {
+            padding : 0px;
+        }
+
+
     }
 
 

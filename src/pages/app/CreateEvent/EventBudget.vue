@@ -42,7 +42,7 @@
                 </md-field>
                 <div class="field-small-note" v-if="publicEventData.expectingPeople"> <small>Guest estimation: {{ publicEventData.numberOfParticipants * (publicEventData.expectingPeople.value / 100) | numeral('0,0')}}</small> </div>
 
-                <div class="form-actions">
+                <div class="form-actions two-btns">
                     <md-button class="md-default next-btn custom-btn"
                                @click="skip"
                                :class="[{'opacity-btn' : buttonLabel === 'Build my budget'}]"
