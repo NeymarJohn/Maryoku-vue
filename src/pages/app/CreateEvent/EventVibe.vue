@@ -125,6 +125,8 @@
                 new Audio("http://static.maryoku.com/storage/ringtones/we_are_family_v2_53802.mp3"),
             ]
 
+            console.log(this.publicEventData.eventSongId);
+
             this.$set(this,'eventSongId' ,this.publicEventData.eventSongId);
 
         },
@@ -140,9 +142,9 @@
                 this.validating = true;
 
                 this.$validator.validateAll().then(isValid => {
-                    let eventSongId = this.boardSound[this.currentIndex];
+
                     if (isValid) {
-                        this.setEventProperty({key: 'eventSongId', actualValue: eventSongId});
+                        this.setEventProperty({key: 'eventSongId', actualValue: this.eventSongId});
                         this.$router.push({ path: `/event-movies`});
 
 

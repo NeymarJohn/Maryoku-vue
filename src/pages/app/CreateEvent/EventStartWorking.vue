@@ -121,6 +121,13 @@
         created() {
             // this.$set(this,'eventMovieId' ,this.publicEventData.eventMovieId);
 
+            if ( this.publicEventData.eventNeededServices ) {
+                this.$set(this,'startWorkingList' ,this.publicEventData.eventNeededServices);
+
+            }
+
+
+
         },
 
         methods : {
@@ -137,8 +144,10 @@
                 //open the modal
 
                 this.$validator.validateAll().then(isValid => {
-                    let eventMovieId = this.boardSound[this.currentIndex];
+
                     if (isValid) {
+                        this.setEventProperty({key: 'eventNeededServices', actualValue: this.startWorkingList});
+
                         this.$router.push({ path: `/event-created`});
 
 

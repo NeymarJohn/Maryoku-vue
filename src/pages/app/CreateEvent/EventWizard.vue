@@ -24,7 +24,7 @@
                         <label>Event Location (City)</label>
                         <span class="md-error" v-if="errors.has('location')">This field is required</span>
                     </div>
-                    <md-checkbox v-model="eventData.haveEventPlace">I have event place</md-checkbox>
+                    <md-checkbox v-model="eventData.eventPlaceNeeded">I have event place</md-checkbox>
                 </div>
 
                 <div class="maryoku-field with-icon" :class="{'has-value' : eventData.eventType}">
@@ -57,8 +57,8 @@
                 </div>
 
                 <div class="event-time">
-                    <md-radio v-model="eventData.eventTime" value="day" class="with-border">Day event</md-radio>
-                    <md-radio v-model="eventData.eventTime" value="night" class="with-border">Night event</md-radio>
+                    <md-radio v-model="eventData.eventDayPart" value="day" class="with-border">Day event</md-radio>
+                    <md-radio v-model="eventData.eventDayPart" value="night" class="with-border">Night event</md-radio>
                 </div>
 
 
@@ -97,8 +97,8 @@
             this.$set(this.eventData,'location' ,this.publicEventData.location);
             this.$set(this.eventData,'eventType' ,this.publicEventData.eventType);
             this.$set(this.eventData,'date' ,this.publicEventData.date);
-            this.$set(this.eventData,'eventTime' ,this.publicEventData.eventTime);
-            this.$set(this.eventData,'haveEventPlace' ,this.publicEventData.haveEventPlace);
+            this.$set(this.eventData,'eventDayPart' ,this.publicEventData.eventDayPart);
+            this.$set(this.eventData,'eventPlaceNeeded' ,this.publicEventData.eventPlaceNeeded);
             this.$set(this.eventData,'flexibleWithDates' ,this.publicEventData.flexibleWithDates);
         },
         methods: {
@@ -116,8 +116,8 @@
                         this.setEventProperty({key: 'location', actualValue: this.eventData.location});
                         this.setEventProperty({key: 'eventType', actualValue: this.eventData.eventType});
                         this.setEventProperty({key: 'date', actualValue: this.eventData.date});
-                        this.setEventProperty({key: 'eventTime', actualValue: this.eventData.eventTime});
-                        this.setEventProperty({key: 'haveEventPlace', actualValue: this.eventData.haveEventPlace});
+                        this.setEventProperty({key: 'eventDayPart', actualValue: this.eventData.eventDayPart});
+                        this.setEventProperty({key: 'eventPlaceNeeded', actualValue: this.eventData.eventPlaceNeeded});
                         this.setEventProperty({key: 'flexibleWithDates', actualValue: this.eventData.flexibleWithDates});
 
                         this.$router.push({path: `/about-invited`})

@@ -14,25 +14,25 @@
                 <div class="range-item">
                     <div class="option left">Convenience & Accessibility</div>
                     <div class="option right">Authenticity & experience</div>
-                    <input type="range" v-model="eventScale1" @change="checkScale"/>
+                    <input type="range" v-model="eventScale1" @change="checkScale1"/>
                 </div>
 
                 <div class="range-item">
                     <div class="option left">Familiar & trusted</div>
                     <div class="option right">New & adget</div>
-                    <input type="range" v-model="eventScale2" @change="checkScale"/>
+                    <input type="range" v-model="eventScale2" @change="checkScale2"/>
                 </div>
 
                 <div class="range-item">
                     <div class="option left">Within budget</div>
                     <div class="option right">Hight Value for Money</div>
-                    <input type="range" v-model="eventScale3" @change="checkScale"/>
+                    <input type="range" v-model="eventScale3" @change="checkScale3"/>
                 </div>
 
                 <div class="range-item">
                     <div class="option left">Meeting Requirements</div>
                     <div class="option right">Social & Green</div>
-                    <input type="range" v-model="eventScale4" @change="checkScale"/>
+                    <input type="range" v-model="eventScale4" @change="checkScale4"/>
                 </div>
 
                 <div class="form-actions">
@@ -95,12 +95,14 @@
             }
         },
         created() {
-            this.$set(this,'eventMovieId' ,this.publicEventData.eventMovieId);
-
+            this.$set(this,'eventScale1' ,this.eventDecisionFactors.eventDecisionFactor1);
+            this.$set(this,'eventScale2' ,this.eventDecisionFactors.eventDecisionFactor2);
+            this.$set(this,'eventScale3' ,this.eventDecisionFactors.eventDecisionFactor3);
+            this.$set(this,'eventScale4' ,this.eventDecisionFactors.eventDecisionFactor4);
         },
 
         methods : {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty']),
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setEventDecisionFactor']),
 
             goToNext() {
 
@@ -125,12 +127,50 @@
             skip() {
 
             },
-            checkScale() {
-                console.log(this.eventScale);
+            checkScale1() {
+                if ( this.eventScale1 >=50 ) {
+                    this.setEventProperty({key: 'eventDecisionFactor1', actualValue: "Authenticity & experience"});
+                } else {
+                    this.setEventProperty({key: 'eventDecisionFactor1', actualValue: "Convenience & Accessibility"});
+                }
+
+                this.setEventDecisionFactor({key: 'eventDecisionFactor1', actualValue : this.eventScale1});
+            },
+            checkScale2() {
+
+                if ( this.eventScale2 >=50 ) {
+                    this.setEventProperty({key: 'eventDecisionFactor2', actualValue: "New & adget"});
+                } else {
+                    this.setEventProperty({key: 'eventDecisionFactor2', actualValue: "Familiar & trusted"});
+                }
+                this.setEventDecisionFactor({key:'eventDecisionFactor2',actualValue : this.eventScale2});
+
+            },
+            checkScale3() {
+
+                if ( this.eventScale3 >=50 ) {
+                    this.setEventProperty({key: 'eventDecisionFactor3', actualValue: "Hight Value for Money"});
+                } else {
+                    this.setEventProperty({key: 'eventDecisionFactor3', actualValue: "Within budget"});
+                }
+                this.setEventDecisionFactor({key:'eventDecisionFactor3',actualValue : this.eventScale3});
+
+            },
+            checkScale4() {
+
+                if ( this.eventScale4 >=50 ) {
+                    this.setEventProperty({key: 'eventDecisionFactor4', actualValue: "Social & Green"});
+                } else {
+                    this.setEventProperty({key: 'eventDecisionFactor4', actualValue: "Meeting Requirements"});
+                }
+
+                this.setEventDecisionFactor({key:'eventDecisionFactor4',actualValue : this.eventScale4});
+
             }
         },computed : {
             ...mapState('PublicEventPlannerVuex', [
                 'publicEventData',
+                'eventDecisionFactors'
             ])
         }
     };

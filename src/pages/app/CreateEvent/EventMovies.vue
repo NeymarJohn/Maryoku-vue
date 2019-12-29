@@ -17,7 +17,7 @@
                     >
 <!--                        <md-icon>pause_circle_filled</md-icon>-->
                         <div class="movie-wallpaper" :style="`background : url(${moviesPostersURL + movie.image}) center center no-repeat;`"></div>
-                        <md-radio v-model="eventData.eventMovieId"
+                        <md-radio v-model="eventMovieId"
                                   v-tooltip="{
   content: movie.tooltip,
   placement: 'top-center',
@@ -30,20 +30,20 @@
   },
 }"
 
-                                  :value="movie.image" class="movie-radio"><small>{{movie.author}}</small><br>{{movie.title}}</md-radio>
+                                  :value="movie.title" class="movie-radio"><small>{{movie.author}}</small><br>{{movie.title}}</md-radio>
                     </div>
                 </div>
 
                 <div class="form-actions">
                     <md-button class="md-rose next-btn custom-btn"
                                @click="goToNext"
-                               :class="[{'disabled': !eventData.eventMovieId}]"> Next </md-button>
+                               :class="[{'disabled': !eventMovieId}]"> Next </md-button>
                 </div>
 
             </div>
         </div>
 
-        <go-back navigation="event-budget"></go-back>
+        <go-back navigation="event-vibe"></go-back>
 
     </div>
 </template>
@@ -155,9 +155,9 @@
                 this.validating = true;
 
                 this.$validator.validateAll().then(isValid => {
-                    let eventMovieId = this.boardSound[this.currentIndex];
+
                     if (isValid) {
-                        this.setEventProperty({key: 'eventMovieId', actualValue: eventMovieId});
+                        this.setEventProperty({key: 'eventMovieId', actualValue: this.eventMovieId});
                         this.$router.push({ path: `/event-scales`});
 
 

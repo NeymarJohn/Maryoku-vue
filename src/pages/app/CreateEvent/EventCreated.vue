@@ -18,6 +18,10 @@
     import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
     import PublicEventPlannerVuexModule from "./PublicEventPlanner.vuex";
     import numeral from 'numeral';
+    import EventComponent from '@/models/EventComponent'
+    import CalendarEvent from '@/models/CalendarEvent';
+    import Calendar from "@/models/Calendar";
+
 
     export default {
         components: {
@@ -28,10 +32,25 @@
         },
         created(){
 
+            //create new event
+
+
+            this.$auth.currentUser(this, true, ()=>{
+
+                new CalendarEvent(this.publicEventData).save().then(resp=>{
+                    console.log(resp);
+                });
+            });
+
+
+
         },
         methods : {
-        },computed : {
 
+        },computed : {
+            ...mapState('PublicEventPlannerVuex', [
+                'publicEventData',
+            ])
         }
 
     };

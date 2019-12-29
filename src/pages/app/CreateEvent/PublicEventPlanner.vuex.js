@@ -22,9 +22,20 @@ export default {
                 category: null,
                 expectingPeople : null,
                 eventTime : null,
-                haveEventPlace : false,
+                eventPlaceNeeded : false,
                 flexibleWithDates : false,
-                eventSongId : null
+                eventSongId : null,
+                eventDayPart : null,
+                internalEvent : false,
+                expectedAttendacePercent : null,
+                eventMovieId : null,
+                eventNeededServices: null
+            },
+            eventDecisionFactors : {
+                eventDecisionFactor1 : 50,
+                eventDecisionFactor2 : 50,
+                eventDecisionFactor3 : 50,
+                eventDecisionFactor4 : 50,
             }
         };
     },
@@ -32,6 +43,9 @@ export default {
     mutations: {
         setEventProperty(state, {key, actualValue}) {
             state.publicEventData[key] = actualValue;
+        },
+        setEventDecisionFactor(state, {key, actualValue}) {
+            state.eventDecisionFactors[key] = actualValue;
         },
         setEventData(state, data) {
             state.publicEventData['id'] = data.id;

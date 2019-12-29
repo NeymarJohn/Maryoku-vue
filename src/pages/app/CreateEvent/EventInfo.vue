@@ -21,24 +21,24 @@
                     <span class="md-error" v-if="errors.has('numberOfParticipants')">This field is required</span>
                 </md-field>
 
-                <div class="maryoku-field" :class="{'has-value' : eventData.expectingPeople}">
-                    <v-select v-model="eventData.expectingPeople"
+                <div class="maryoku-field" :class="{'has-value' : eventData.expectedAttendacePercent}">
+                    <v-select v-model="eventData.expectedAttendacePercent"
                               :options="expectingPeopleList"
-                              :class="{'has-value' : eventData.expectingPeople}"
+                              :class="{'has-value' : eventData.expectedAttendacePercent}"
                               data-vv-name="location"
-                              v-validate= "modelValidations.expectingPeople"></v-select>
+                              v-validate= "modelValidations.expectedAttendacePercent"></v-select>
                     <label>% people you're expecting to show up</label>
-                    <span class="md-error" v-if="errors.has('expectingPeople')">This field is required</span>
+                    <span class="md-error" v-if="errors.has('expectedAttendacePercent')">This field is required</span>
                 </div>
 
 
-                <md-checkbox v-model="flexibleWithDates">Internal company event</md-checkbox>
+                <md-checkbox v-model="eventData.internalEvent">Internal company event</md-checkbox>
 
 
                 <div class="form-actions">
                     <md-button class="md-rose next-btn custom-btn"
                                @click="goToNext"
-                               :class="[{'disabled': !eventData.numberOfParticipants || !eventData.expectingPeople}]"> Next </md-button>
+                               :class="[{'disabled': !eventData.numberOfParticipants || !eventData.expectedAttendacePercent}]"> Next </md-button>
                 </div>
 
 
@@ -94,7 +94,7 @@
                     numberOfParticipants: {
                         required: true,
                     },
-                    expectingPeople: {
+                    expectedAttendacePercent: {
                         required: true,
                     }
                 },
@@ -102,7 +102,8 @@
         },
         created() {
             this.$set(this.eventData,'numberOfParticipants' ,this.publicEventData.numberOfParticipants);
-            this.$set(this.eventData,'expectingPeople' ,this.publicEventData.expectingPeople);
+            this.$set(this.eventData,'expectedAttendacePercent' ,this.publicEventData.expectedAttendacePercent);
+            this.$set(this.eventData,'internalEvent' ,this.publicEventData.internalEvent);
 
         },
         methods : {
@@ -120,7 +121,8 @@
                 this.$validator.validateAll().then(isValid => {
                     if (isValid) {
                         this.setEventProperty({key: 'numberOfParticipants', actualValue: this.eventData.numberOfParticipants});
-                        this.setEventProperty({key: 'expectingPeople', actualValue: this.eventData.expectingPeople});
+                        this.setEventProperty({key: 'expectedAttendacePercent', actualValue: this.eventData.expectedAttendacePercent});
+                        this.setEventProperty({key: 'internalEvent', actualValue: this.eventData.internalEvent});
                         console.log(this.eventData);
                         console.log(this.$store.state.PublicEventPlannerVuex.publicEventData);
 
