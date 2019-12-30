@@ -9,8 +9,11 @@
                 </div>
                 <div class="header-actions md-layout-item md-size-50">
                     <ul class="actions-list unstyled">
-                        <li class="action-item">
-                            <md-button @click="showDialog = true"> Sign up</md-button>
+                        <li class="action-item" v-if="!$auth.user.authenticated">
+                            <md-button @click="showSingupDialog"> Sign up</md-button>
+                        </li>
+                        <li class="action-item" v-else>
+                            <md-button :to="{path: '/signout'}">Sing out</md-button>
                         </li>
                     </ul>
                 </div>
@@ -26,15 +29,25 @@
 
 
 
-        <md-dialog :md-active.sync="showDialog" class="singin-form">
-            <md-dialog-title class="text-center">Sign in <button class="close-btn" @click="showDialog = false"><md-icon>close</md-icon></button></md-dialog-title>
+        <md-dialog :md-active.sync="shoWSignupModal" class="singin-form">
+            <md-dialog-title class="text-center">Sign in <button class="close-btn" @click="closeSingupModal"><md-icon>close</md-icon></button></md-dialog-title>
 
             <md-dialog-content>
                 <md-field class="purple-field">
+                    <label>Name of the company</label>
+                    <md-input
+                        type="text"
+                        v-model="companyName"
+                        data-vv-name="companyName" required v-validate="modelValidations.companyName"
+                    ></md-input>
+
+                </md-field>
+                <md-field class="purple-field">
                     <label>Email address</label>
                     <md-input
-                        type="number"
-
+                        type="email"
+                        v-model="email"
+                        data-vv-name="email" required v-validate="modelValidations.email"
                     ></md-input>
 
                 </md-field>
@@ -42,20 +55,20 @@
                     <label>Password</label>
                     <md-input
                         type="password"
-
+                        v-model="password"
+                        data-vv-name="password" required v-validate="modelValidations.password"
                     ></md-input>
-
                 </md-field>
 
                 <div class="text-center">
-                    <a href="" class="forget-password">Forget your password ?</a>
+                    <a href="" class="forget-password">Forgot your password ?</a>
                 </div>
 
             </md-dialog-content>
 
             <md-dialog-actions class="text-center">
 
-                <md-button class="md-rose md-sm md-square custom-btn" @click="showDialog = false">Sign in</md-button>
+                <md-button class="md-rose md-sm md-square custom-btn" @click="singup">Sign in</md-button>
             </md-dialog-actions>
         </md-dialog>
 
@@ -70,7 +83,27 @@
     export default {
         data(){
             return {
-                showDialog: false
+                showDialog: false,
+                email : null,
+                password : null,
+                touched: {
+                    email: false,
+                    password: false,
+                    companyName : false
+                },
+                modelValidations: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true,
+                        min: 8
+                    },
+                    companyName: {
+                        required: true,
+                    }
+                },
             }
         },
         components: {
@@ -80,8 +113,52 @@
             this.$store.registerModule("PublicEventPlannerVuex", PublicEventPlannerVuexModule);
         },
         methods: {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty']),
-        }
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setSingupModal']),
+            closeSingupModal(){
+                this.setSingupModal({showModal : false})
+            },
+            showSingupDialog(){
+                this.setSingupModal({showModal : true});
+
+            },
+            singup(){
+                let that = this;
+                this.$validator.validateAll().then(isValid => {
+                    if (isValid){
+                        that.$auth.signupOrSignin(that, this.email.toString().toLowerCase(), that.password, 'administrator', (data) => {
+                            that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
+                                that.$router.push({ path: '/event-created', query: {token: success.access_token} });
+                            }, (failure) => {
+
+                                if (failure.response.status === 401){
+                                    that.error = 'Sorry, wrong password, try again.';
+                                } else {
+                                    that.error = 'Temporary failure, try again later';
+                                    console.log(JSON.stringify(failure.response));
+                                }
+                            } );
+                        })
+                    } else {
+
+                    }
+                });
+            }
+        },computed : {
+            ...mapState('PublicEventPlannerVuex', [
+                'publicEventData',
+                'shoWSignupModal'
+            ])
+        }, watch: {
+            email() {
+                this.touched.email = true;
+            },
+            password() {
+                this.touched.password = true;
+            },
+            companyName() {
+                this.touched.companyName = true;
+            },
+        },
 
     };
 </script>

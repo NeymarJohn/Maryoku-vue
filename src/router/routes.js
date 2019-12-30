@@ -494,7 +494,7 @@ let EventPages = {
 };
 
 let PublicCreateEvent = {
-    path : "/app2",
+    path : "/app-public",
     component : CreateEvent,
     name : "CreateEvent",
     meta: {

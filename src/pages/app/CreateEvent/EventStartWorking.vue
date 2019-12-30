@@ -131,7 +131,7 @@
         },
 
         methods : {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty']),
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setSingupModal']),
 
             goToNext() {
 
@@ -148,7 +148,14 @@
                     if (isValid) {
                         this.setEventProperty({key: 'eventNeededServices', actualValue: this.startWorkingList});
 
-                        this.$router.push({ path: `/event-created`});
+                        if ( this.$auth.user.authenticated) {
+                            this.$router.push({ path: `/event-created`});
+
+                        } else {
+
+                            this.setSingupModal({showModal : true});
+                        }
+
 
 
                     } else {
@@ -159,13 +166,11 @@
             },
             skip() {
 
-            },
-            checkScale() {
-                console.log(this.eventScale);
             }
         },computed : {
             ...mapState('PublicEventPlannerVuex', [
                 'publicEventData',
+                'shoWSignupModal'
             ])
         }
     };

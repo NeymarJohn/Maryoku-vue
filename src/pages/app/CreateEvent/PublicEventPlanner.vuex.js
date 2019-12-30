@@ -36,11 +36,15 @@ export default {
                 eventDecisionFactor2 : 50,
                 eventDecisionFactor3 : 50,
                 eventDecisionFactor4 : 50,
-            }
+            },
+            shoWSignupModal : false
         };
     },
 
     mutations: {
+        setSingupModal(state, data) {
+            state.shoWSignupModal = data.showModal;
+        },
         setEventProperty(state, {key, actualValue}) {
             state.publicEventData[key] = actualValue;
         },

@@ -95,10 +95,10 @@
             }
         },
         created() {
-            this.$set(this,'eventScale1' ,this.eventDecisionFactors.eventDecisionFactor1);
-            this.$set(this,'eventScale2' ,this.eventDecisionFactors.eventDecisionFactor2);
-            this.$set(this,'eventScale3' ,this.eventDecisionFactors.eventDecisionFactor3);
-            this.$set(this,'eventScale4' ,this.eventDecisionFactors.eventDecisionFactor4);
+            this.$set(this,'eventScale1' ,this.publicEventData.eventDecisionFactor1);
+            this.$set(this,'eventScale2' ,this.publicEventData.eventDecisionFactor2);
+            this.$set(this,'eventScale3' ,this.publicEventData.eventDecisionFactor3);
+            this.$set(this,'eventScale4' ,this.publicEventData.eventDecisionFactor4);
         },
 
         methods : {
@@ -128,41 +128,29 @@
 
             },
             checkScale1() {
-                if ( this.eventScale1 >=50 ) {
-                    this.setEventProperty({key: 'eventDecisionFactor1', actualValue: "Authenticity & experience"});
-                } else {
-                    this.setEventProperty({key: 'eventDecisionFactor1', actualValue: "Convenience & Accessibility"});
-                }
+                this.setEventProperty({key: 'eventDecisionFactor1', actualValue: this.eventScale1});
+
 
                 this.setEventDecisionFactor({key: 'eventDecisionFactor1', actualValue : this.eventScale1});
             },
             checkScale2() {
 
-                if ( this.eventScale2 >=50 ) {
-                    this.setEventProperty({key: 'eventDecisionFactor2', actualValue: "New & adget"});
-                } else {
-                    this.setEventProperty({key: 'eventDecisionFactor2', actualValue: "Familiar & trusted"});
-                }
+
+                this.setEventProperty({key: 'eventDecisionFactor2', actualValue: this.eventScale2});
+
                 this.setEventDecisionFactor({key:'eventDecisionFactor2',actualValue : this.eventScale2});
 
             },
             checkScale3() {
 
-                if ( this.eventScale3 >=50 ) {
-                    this.setEventProperty({key: 'eventDecisionFactor3', actualValue: "Hight Value for Money"});
-                } else {
-                    this.setEventProperty({key: 'eventDecisionFactor3', actualValue: "Within budget"});
-                }
+                this.setEventProperty({key: 'eventDecisionFactor3', actualValue: this.eventScale3});
+
                 this.setEventDecisionFactor({key:'eventDecisionFactor3',actualValue : this.eventScale3});
 
             },
             checkScale4() {
+                this.setEventProperty({key: 'eventDecisionFactor4', actualValue: this.eventScale4});
 
-                if ( this.eventScale4 >=50 ) {
-                    this.setEventProperty({key: 'eventDecisionFactor4', actualValue: "Social & Green"});
-                } else {
-                    this.setEventProperty({key: 'eventDecisionFactor4', actualValue: "Meeting Requirements"});
-                }
 
                 this.setEventDecisionFactor({key:'eventDecisionFactor4',actualValue : this.eventScale4});
 
