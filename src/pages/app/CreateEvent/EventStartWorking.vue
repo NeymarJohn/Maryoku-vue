@@ -113,7 +113,7 @@
                         title : 'On day coordination',
                         desc : 'to match budget, concept and timing',
                         img : 'Component 51 – 4@2x.png',
-                        selected : true
+                        selected : false
                     }
                 ]
             }

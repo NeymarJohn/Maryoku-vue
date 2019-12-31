@@ -40,7 +40,7 @@
                     <span class="md-error" v-if="errors.has('budgetPerPerson')">This field is required</span>
 
                 </md-field>
-                <div class="field-small-note" v-if="publicEventData.expectedAttendacePercent"> <small>Guest estimation: {{ publicEventData.numberOfParticipants * (publicEventData.expectedAttendacePercent.value / 100) | numeral('0,0')}}</small> </div>
+                <div class="field-small-note" v-if="publicEventData.expectedAttendacePercent"> <small>Guest estimation: {{ Math.round(publicEventData.numberOfParticipants * (publicEventData.expectedAttendacePercent.value / 100))}}</small> </div>
 
                 <div class="form-actions two-btns">
                     <md-button class="md-default next-btn custom-btn"
@@ -134,7 +134,7 @@
 
             },
             totalBudgetChanged() {
-                this.eventData.budgetPerPerson = (this.eventData.totalBudget / this.publicEventData.numberOfParticipants) | numeral('0,0');
+                this.eventData.budgetPerPerson = Math.round(this.eventData.totalBudget / this.publicEventData.numberOfParticipants);
             },
             budgetPerPersonChanged() {
                 this.eventData.totalBudget = this.eventData.budgetPerPerson * this.publicEventData.numberOfParticipants;

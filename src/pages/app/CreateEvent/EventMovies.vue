@@ -91,14 +91,8 @@
                     {
                         image : 'amy-santiago.png',
                         tooltip : 'is a "by the book" type of cop but she takes it a step further by color-coding case files. With her, everything is calculated to perfection and if you want her approval, make sure your budget table is impeccable',
-                        title : 'Amy',
-                        author : 'Veep'
-                    },
-                    {
-                        image : 'amybrookheimer.jpg',
-                        tooltip : 'is hyper-competitive, has a deep needto please and can also be a catastrophist. She wants to be the best at everything, and if your event is not perfectly planned her stress levels will skyrocket ',
                         title : 'Amy Brookheimer',
-                        author : 'Brooklyn Nine-Nine'
+                        author : 'Veep'
                     },
                     {
                         image : 'captain-kirk2.png',
@@ -208,7 +202,7 @@
         width : 90%;
         margin : 0 auto;
         padding : 0 2em 5em;
-        min-height: auto;
+        min-height: 440px;
         height: auto;
 
         .divider {
@@ -225,6 +219,10 @@
 
 
     .movies-list {
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
 
         .movie-wallpaper {
 
@@ -249,10 +247,10 @@
     }
 
     .movie-item {
-        width: 164px;
+        width: 15%;
         display: inline-block;
         float : left;
-        margin : 0 1em 2em;
+        margin : 0 1% 2em;
         position: relative;
         height: 210px;
         border : 1px solid #aaa;
@@ -460,6 +458,13 @@
             visibility: visible;
             opacity: 1;
             transition: opacity .15s;
+        }
+    }
+
+    @media screen and (max-width: 500px) {
+        .movies-list {
+            display: block;
+
         }
     }
 

@@ -30,7 +30,7 @@
 
 
         <md-dialog :md-active.sync="shoWSignupModal" class="singin-form">
-            <md-dialog-title class="text-center">Sign in <button class="close-btn" @click="closeSingupModal"><md-icon>close</md-icon></button></md-dialog-title>
+            <md-dialog-title class="text-center">Sign up <button class="close-btn" @click="closeSingupModal"><md-icon>close</md-icon></button></md-dialog-title>
 
             <md-dialog-content>
                 <md-field class="purple-field">
@@ -64,11 +64,18 @@
                     <a href="" class="forget-password">Forgot your password ?</a>
                 </div>
 
+                <div class="divider-or text-center">
+                    Or
+                </div>
+
+                <md-button class="md-default md-sm md-square custom-btn google-singup" @click="authenticate('google')"> <md-icon><img src="/static/img/GoogleIcon.png" ></md-icon> Sign in with Google</md-button>
+
+
             </md-dialog-content>
 
             <md-dialog-actions class="text-center">
 
-                <md-button class="md-rose md-sm md-square custom-btn" @click="singup">Sign in</md-button>
+                <md-button class="md-rose md-sm md-square custom-btn" @click="singup">Sign Up</md-button>
             </md-dialog-actions>
         </md-dialog>
 
@@ -104,6 +111,7 @@
                         required: true,
                     }
                 },
+                serverURL: process.env.SERVER_URL,
             }
         },
         components: {
@@ -142,7 +150,12 @@
 
                     }
                 });
-            }
+            },authenticate(provider) {
+                this.loading = true;
+                let tenantId = document.location.hostname.replace(".maryoku.com","").replace(".","_");
+                const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`);
+                document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
+            },
         },computed : {
             ...mapState('PublicEventPlannerVuex', [
                 'publicEventData',
@@ -204,7 +217,7 @@
         }
 
         .custom-btn {
-            width: 256px;
+            width:100%;
         }
 
         .close-btn {
@@ -559,6 +572,7 @@
         .md-ripple {
             font-size: 15px;
             text-transform: initial;
+            font-weight: bold;
         }
 
         &.md-rose {
@@ -912,6 +926,57 @@
         }
     }
 
+    .divider-or {
+        position: relative;
+        color : #aaa;
+        font-size: 16px;
+        font-weight: 500;
+
+        &:before {
+            content: ' ';
+            position: absolute;
+            left : 0;
+            top : 50%;
+            width : 42%;
+            height: 1px;
+            background: #aaa;
+        }
+        &:after {
+            content: ' ';
+            position: absolute;
+            right : 0;
+            top : 50%;
+            width : 42%;
+            height: 1px;
+            background: #aaa;
+        }
+    }
+
+    .google-singup {
+
+        .md-ripple {
+            background: #BABABA;
+            font-weight: bold;
+        }
+
+        .md-button-content {
+            width : 100%;
+            justify-content: center;
+        }
+
+        .md-icon {
+            position: absolute;
+            left : 0;
+            top : 0;
+            img {
+                width: 44px !important;
+                max-width: inherit;
+            }
+        }
+    }
+
+
+
     @media screen and (max-width : 500px) {
 
         .create-event {
@@ -1009,7 +1074,11 @@
         }
 
         .movie-item {
-            width: 40% !important;
+            width: 48% !important;
+        }
+
+        .section-header {
+            margin-top : -1px;
         }
 
         .range-item .option {
