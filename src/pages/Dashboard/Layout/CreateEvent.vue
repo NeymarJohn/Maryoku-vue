@@ -9,12 +9,21 @@
                 </div>
                 <div class="header-actions md-layout-item md-size-50">
                     <ul class="actions-list unstyled">
-                        <li class="action-item" v-if="!$auth.user.authenticated">
-                            <md-button @click="showSingupDialog"> Sign up</md-button>
-                        </li>
-                        <li class="action-item" v-else>
-                            <md-button :to="{path: '/signout'}">Sing out</md-button>
-                        </li>
+                        <template v-if="$auth.user.authenticated === false">
+                            <li class="action-item" >
+                                <md-button @click="showSingupDialog"> Sign up</md-button>
+                            </li>
+                        </template>
+
+                        <template v-else-if="$auth.user.authenticated === true">
+                            <li class="action-item" >
+                                <md-button @click="logout">Sing out</md-button>
+                            </li>
+                            <li class="action-item" >
+                                <md-button @click="goToEvents">Go to events</md-button>
+                            </li>
+                        </template>
+
                     </ul>
                 </div>
             </div>
@@ -33,16 +42,15 @@
             <md-dialog-title class="text-center">Sign up <button class="close-btn" @click="closeSingupModal"><md-icon>close</md-icon></button></md-dialog-title>
 
             <md-dialog-content>
-                <md-field class="purple-field">
-                    <label>Name of the company</label>
-                    <md-input
-                        type="text"
-                        v-model="companyName"
-                        data-vv-name="companyName" required v-validate="modelValidations.companyName"
-                    ></md-input>
+<!--                <md-field class="purple-field">-->
+<!--                    <label>Name of the company</label>-->
+<!--                    <md-input-->
+<!--                        type="text"-->
+<!--                        v-model="companyName"-->
+<!--                    ></md-input>-->
 
-                </md-field>
-                <md-field class="purple-field">
+<!--                </md-field>-->
+                <md-field class="purple-field" :class="[{'md-valid': !errors.has('email') && touched.email},{'md-error': errors.has('email')}]">
                     <label>Email address</label>
                     <md-input
                         type="email"
@@ -51,7 +59,7 @@
                     ></md-input>
 
                 </md-field>
-                <md-field class="purple-field">
+                <md-field class="purple-field" :class="[{'md-valid': !errors.has('password') && touched.password},{'md-error': errors.has('password')}]">
                     <label>Password</label>
                     <md-input
                         type="password"
@@ -93,6 +101,7 @@
                 showDialog: false,
                 email : null,
                 password : null,
+                companyName : null,
                 touched: {
                     email: false,
                     password: false,
@@ -132,10 +141,14 @@
             singup(){
                 let that = this;
                 this.$validator.validateAll().then(isValid => {
+                    console.log('isValid => ',isValid);
                     if (isValid){
                         that.$auth.signupOrSignin(that, this.email.toString().toLowerCase(), that.password, 'administrator', (data) => {
                             that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
+
+                                this.closeSingupModal();
                                 that.$router.push({ path: '/event-created', query: {token: success.access_token} });
+
                             }, (failure) => {
 
                                 if (failure.response.status === 401){
@@ -156,6 +169,14 @@
                 const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`);
                 document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
             },
+            logout() {
+                this.$router.push({ path: '/signout'});
+
+            },
+            goToEvents() {
+                this.$router.push({ path: '/events'});
+
+            }
         },computed : {
             ...mapState('PublicEventPlannerVuex', [
                 'publicEventData',
@@ -269,6 +290,9 @@
                     list-style: none;
                     padding : 0;
                     margin : 0;
+                    li {
+                        display: inline-block;
+                    }
 
                     .md-button {
                         border : 1px solid #fff;
