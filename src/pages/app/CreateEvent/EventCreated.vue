@@ -35,7 +35,7 @@
             //create new event
 
 
-            this.$auth.currentUser(this, false, ()=>{
+            this.$auth.currentUser(this, true, ()=>{
                 let publicEventData = this.publicEventData;
                 delete publicEventData['id'];
                 new CalendarEvent(this.publicEventData).save().then(resp=>{

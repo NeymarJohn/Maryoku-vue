@@ -3,9 +3,7 @@
     <!--<div class="md-layout-item md-size-100 text-right">
       <md-button class="button-event-creatig" @click="openEventModal()">Create New Event</md-button>
     </div>-->
-      <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen>
-          <img src="/static/img/maryoku-loader.gif"/>
-      </vue-element-loading>
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
     <div class="md-layout-item md-size-100">
       <md-card v-if="upcomingEvents.length">
         <md-card-header class="md-card-header-icon md-card-header-rose">

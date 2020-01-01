@@ -106,10 +106,10 @@
                       </md-field>
                     </div>
                   </div>
-                  <div 
-                    class="list-item md-layout" 
+                  <div
+                    class="list-item md-layout"
                     :class="{'not-available' : item.itemNotAvailable}"
-                    v-for="(item,index) in proposalRequest.requirements" 
+                    v-for="(item,index) in proposalRequest.requirements"
                     :key="index"
                   >
                     <div class="requirement-title md-layout-item md-size-50 md-small-size-100">
@@ -217,7 +217,7 @@
                   <input type="file"
                     class="hide"
                     ref="eventFile"
-                    accept="image/gif, image/jpg, image/png, application/text, application/pdf" 
+                    accept="image/gif, image/jpg, image/png, application/text, application/pdf"
                     @change="onEventFilePicked">
                 </div>
               </div>
@@ -443,7 +443,7 @@
               </div>
               <div class="extra-items-wrapper">
                 <div class="extra-items"
-                  v-for="(req,rIndex) in proposalRequest.requirements" 
+                  v-for="(req,rIndex) in proposalRequest.requirements"
                   :key="rIndex"
                 >
                   <span>{{req.requirementTitle}}</span>
@@ -518,6 +518,8 @@
       }
     },
     created () {
+
+        console.log(this.proposalRequest);
 
     },
     mounted () {
@@ -644,7 +646,7 @@
           proposalRequest.insuranceDocument = e.target.result;*/
 
           return new ProposalRequestFile({
-            vendorProposalFile: e.target.result, 
+            vendorProposalFile: e.target.result,
             tag: 'insurance'
           }).for(proposalRequest).save().then(result => {
             this.isLoading = false
@@ -843,7 +845,7 @@
         new ProposalRequestComment(comment).for(
           new ProposalRequest({
             id: this.proposalRequest.id
-          }), 
+          }),
           new ProposalRequestRequirement({
             id: item.id
           })
@@ -902,7 +904,7 @@
       getParticipants() {
         const eventData = this.proposalRequest.eventData
         if (eventData.participantsType) {
-          return eventData.numberOfParticipants + eventData.participantsType  
+          return eventData.numberOfParticipants + eventData.participantsType
         } else {
           return eventData.numberOfParticipants
         }
@@ -925,8 +927,8 @@
     left: 0;
     right: 0;
     height: 100%;
-    width: 100%; 
-    background-color: rgba(0,0,0,0); 
+    width: 100%;
+    background-color: rgba(0,0,0,0);
     z-index: 9998;
   }
   .fw-bold {

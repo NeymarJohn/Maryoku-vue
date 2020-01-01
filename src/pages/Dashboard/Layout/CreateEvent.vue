@@ -141,7 +141,6 @@
             singup(){
                 let that = this;
                 this.$validator.validateAll().then(isValid => {
-                    console.log('isValid => ',isValid);
                     if (isValid){
                         that.$auth.signupOrSignin(that, this.email.toString().toLowerCase(), that.password, 'administrator', (data) => {
                             that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
