@@ -231,9 +231,7 @@
 
         .md-dialog-content {
             padding : 0;
-
-
-
+            overflow-x: hidden;
         }
 
         .custom-btn {
@@ -745,12 +743,12 @@
 
         .vs__dropdown-menu {
             position: absolute;
-            background: #fff;
+            background: #fff !important;
             list-style: none;
             padding : 0;
             margin : 0;
             width:100%;
-            z-index: 999999999999999999999;
+            z-index: 999999999999999999999 !important;
             border : 1px solid #aaa;
             border-radius: 10px;
             color : #606060;
