@@ -1,6 +1,8 @@
 <template>
   <div class="md-layout edit-event-details">
-    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
+      <vue-element-loading :active="isLoading" color="#FF547C" is-full-screen>
+          <img src="/static/img/maryoku-loader.gif"/>
+      </vue-element-loading>
     <div class="event-details-tabs">
       <!--<div class="md-layout">
         <div class="md-layout-item md-size-20 no-padding">
