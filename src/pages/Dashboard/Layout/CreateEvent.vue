@@ -42,14 +42,14 @@
             <md-dialog-title class="text-center">Sign up <button class="close-btn" @click="closeSingupModal"><md-icon>close</md-icon></button></md-dialog-title>
 
             <md-dialog-content>
-<!--                <md-field class="purple-field">-->
-<!--                    <label>Name of the company</label>-->
-<!--                    <md-input-->
-<!--                        type="text"-->
-<!--                        v-model="companyName"-->
-<!--                    ></md-input>-->
+                <md-field class="purple-field">
+                    <label>Name of the company</label>
+                    <md-input
+                        type="text"
+                        v-model="department"
+                    ></md-input>
 
-<!--                </md-field>-->
+                </md-field>
                 <md-field class="purple-field" :class="[{'md-valid': !errors.has('email') && touched.email},{'md-error': errors.has('email')}]">
                     <label>Email address</label>
                     <md-input
@@ -101,11 +101,11 @@
                 showDialog: false,
                 email : null,
                 password : null,
-                companyName : null,
+                department : null,
                 touched: {
                     email: false,
                     password: false,
-                    companyName : false
+                    department : false
                 },
                 modelValidations: {
                     email: {
@@ -116,7 +116,7 @@
                         required: true,
                         min: 8
                     },
-                    companyName: {
+                    department: {
                         required: true,
                     }
                 },
@@ -188,8 +188,8 @@
             password() {
                 this.touched.password = true;
             },
-            companyName() {
-                this.touched.companyName = true;
+            department() {
+                this.touched.department = true;
             },
         },
 

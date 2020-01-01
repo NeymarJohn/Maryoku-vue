@@ -519,8 +519,6 @@
     },
     created () {
 
-        console.log(this.proposalRequest);
-
     },
     mounted () {
       this.getVendorCategory()

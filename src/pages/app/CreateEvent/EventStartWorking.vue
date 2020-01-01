@@ -43,6 +43,7 @@
     import PublicEventPlannerVuexModule from "./PublicEventPlanner.vuex";
 
     import VTooltip from 'v-tooltip'
+    import _ from "underscore";
 
 
     export default {
@@ -121,10 +122,10 @@
         created() {
             // this.$set(this,'eventMovieId' ,this.publicEventData.eventMovieId);
 
-            if ( this.publicEventData.eventNeededServices ) {
-                this.$set(this,'startWorkingList' ,this.publicEventData.eventNeededServices);
-
-            }
+            // if ( this.publicEventData.eventNeededServices ) {
+            //     this.$set(this,'startWorkingList' ,this.publicEventData.eventNeededServices);
+            //
+            // }
 
 
 
@@ -146,7 +147,22 @@
                 this.$validator.validateAll().then(isValid => {
 
                     if (isValid) {
-                        this.setEventProperty({key: 'eventNeededServices', actualValue: this.startWorkingList});
+
+                        let eventNeededServices = [];
+
+
+                         _.each(this.startWorkingList,(item)=>{
+                             let aniArgs = {};
+
+                             aniArgs[item.title] =  item.selected;
+
+                             eventNeededServices.push(aniArgs);
+                         });
+
+                        console.log(eventNeededServices);
+
+
+                         this.setEventProperty({key: 'eventNeededServices', actualValue: eventNeededServices});
 
                         if ( this.$auth.user.authenticated) {
                             this.$router.push({ path: `/event-created`});
