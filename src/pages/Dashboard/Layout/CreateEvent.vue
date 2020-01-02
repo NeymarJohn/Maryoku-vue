@@ -770,8 +770,6 @@
                 display: none;
             }
 
-
-
             .md-icon {
                 color : $baseColor;
             }
