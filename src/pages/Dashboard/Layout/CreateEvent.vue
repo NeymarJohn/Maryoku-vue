@@ -748,7 +748,7 @@
             padding : 0;
             margin : 0;
             width:100%;
-            z-index: 999999999999999999999 !important;
+            z-index: 9999999999999999999999999999  !important;
             border : 1px solid #aaa;
             border-radius: 10px;
             color : #606060;
@@ -790,7 +790,7 @@
         padding : 0;
         margin : 0;
         width: 350px !important;
-        z-index: 9999999999999999999999;
+        z-index: 9999999999999999999999 !important;
         max-width: none;
 
         .md-menu-content-container {

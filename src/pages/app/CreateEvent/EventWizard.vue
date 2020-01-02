@@ -251,6 +251,7 @@
                 position: absolute;
                 left: 10px;
                 top: 6px;
+                display : inherit;
 
             }
             &:not(.custom-icon){
@@ -263,5 +264,9 @@
                 padding: 0 0 0 24px !important;
             }
         }
+    }
+
+    .md-datepicker .md-icon.md-date-icon~label {
+        left: 43px !important;
     }
 </style>
