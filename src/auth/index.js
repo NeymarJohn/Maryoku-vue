@@ -52,6 +52,17 @@ export default {
             });
     },
 
+    clientSignupOrSignin(context, email, password, department, callback) {
+        context.$http.post(`${REGISTRATION_URL}`, {username: email, password: password, department: department, role: 'client'}, {'ContentType' : 'application/json'})
+            .then((resp) => {
+                if (callback){
+                    callback(resp.data);
+                }
+            }, (resp) => {
+                context.error = resp.body;
+            });
+    },
+
     guestSignupOrSignin(context, details, callback) {
         context.$http.post(`${REGISTRATION_RSVP_URL}`, {username: details.email, password: details.password, role: details.role, eventId: details.eventId}, {'ContentType' : 'application/json'})
             .then((resp) => {

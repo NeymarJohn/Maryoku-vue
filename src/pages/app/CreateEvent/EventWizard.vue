@@ -115,11 +115,10 @@
 
                         this.setEventProperty({key: 'location', actualValue: this.eventData.location});
                         this.setEventProperty({key: 'eventType', actualValue: this.eventData.eventType});
-                        this.setEventProperty({key: 'date', actualValue: this.eventData.date});
+                        this.setEventProperty({key: 'eventStartMillis', actualValue: this.eventData.date.getTime()});
                         this.setEventProperty({key: 'eventDayPart', actualValue: this.eventData.eventDayPart});
                         this.setEventProperty({key: 'eventPlaceNeeded', actualValue: this.eventData.eventPlaceNeeded});
                         this.setEventProperty({key: 'flexibleWithDates', actualValue: this.eventData.flexibleWithDates});
-
                         this.$router.push({path: `/about-invited`})
 
                     } else {

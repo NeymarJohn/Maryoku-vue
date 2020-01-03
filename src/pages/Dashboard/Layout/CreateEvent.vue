@@ -72,7 +72,9 @@
                     <a href="" class="forget-password">Forgot your password ?</a>
                 </div>
 
-                <div class="divider-or text-center">
+                <md-button class="md-rose md-sm md-square custom-btn" @click="singup">Sign Up</md-button>
+
+                <div class="divider-or text-center" style="margin-top: 48px;">
                     Or
                 </div>
 
@@ -80,11 +82,6 @@
 
 
             </md-dialog-content>
-
-            <md-dialog-actions class="text-center">
-
-                <md-button class="md-rose md-sm md-square custom-btn" @click="singup">Sign Up</md-button>
-            </md-dialog-actions>
         </md-dialog>
 
 
@@ -142,7 +139,7 @@
                 let that = this;
                 this.$validator.validateAll().then(isValid => {
                     if (isValid){
-                        that.$auth.signupOrSignin(that, this.email.toString().toLowerCase(), that.password, 'administrator', (data) => {
+                        that.$auth.clientSignupOrSignin(that, this.email.toString().toLowerCase(), that.password, that.department, (data) => {
                             that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
 
                                 this.closeSingupModal();
@@ -162,7 +159,8 @@
 
                     }
                 });
-            },authenticate(provider) {
+            },
+            authenticate(provider) {
                 this.loading = true;
                 let tenantId = document.location.hostname.replace(".maryoku.com","").replace(".","_");
                 const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`);
@@ -181,7 +179,8 @@
                 'publicEventData',
                 'shoWSignupModal'
             ])
-        }, watch: {
+        },
+        watch: {
             email() {
                 this.touched.email = true;
             },
@@ -192,7 +191,9 @@
                 this.touched.department = true;
             },
         },
-
+        beforeRouteUpdate(to, from, next) {
+            next();
+        }
     };
 </script>
 <style lang="scss">

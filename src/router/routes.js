@@ -495,7 +495,7 @@ let EventPages = {
 
 let PublicCreateEvent = {
     path : "/app-public",
-    component : CreateEvent,
+    component : AuthLayout,
     name : "CreateEvent",
     meta: {
         auth: false

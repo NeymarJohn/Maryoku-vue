@@ -9,7 +9,7 @@ export default {
                 occasion: "",
                 occasionCache: "",
                 title: "New Event",
-                date: null,
+                eventStartMillis: null,
                 theme: "",
                 time: "",
                 duration: "",
@@ -61,7 +61,7 @@ export default {
             state.publicEventData['totalBudget'] = data.totalBudget;
             state.publicEventData['currency'] = data.currency;
             state.publicEventData['eventType'] = data.eventType;
-            state.publicEventData['date'] = data.eventStartMillis;
+            state.publicEventData['eventStartMillis'] = data.eventStartMillis;
             state.publicEventData['category'] = data.category;
             state.publicEventData['time'] = moment(data.eventStartMillis).format('h:00 A');
             state.publicEventData['duration'] = moment(data.eventEndMillis).diff(data.eventStartMillis, 'hours')
