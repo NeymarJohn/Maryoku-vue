@@ -260,7 +260,7 @@
         }
         &.md-has-value {
             .md-input {
-                padding: 0 0 0 24px !important;
+                padding: 0 0 0 37px !important;
             }
         }
     }
