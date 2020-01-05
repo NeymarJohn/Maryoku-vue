@@ -37,13 +37,17 @@ export default {
                 eventDecisionFactor3 : 50,
                 eventDecisionFactor4 : 50,
             },
-            shoWSignupModal : false
+            shoWSignupModal : false,
+            currentStep : '/create-event-wizard'
         };
     },
 
     mutations: {
         setSingupModal(state, data) {
             state.shoWSignupModal = data.showModal;
+        },
+        setCurrentStep(state, data) {
+            state.currentStep = data.currentPage;
         },
         setEventProperty(state, {key, actualValue}) {
             state.publicEventData[key] = actualValue;

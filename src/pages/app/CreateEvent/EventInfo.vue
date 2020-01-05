@@ -107,7 +107,7 @@
 
         },
         methods : {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty']),
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setCurrentStep']),
 
             goToNext() {
 
@@ -123,13 +123,11 @@
                         this.setEventProperty({key: 'numberOfParticipants', actualValue: this.eventData.numberOfParticipants});
                         this.setEventProperty({key: 'expectedAttendacePercent', actualValue: this.eventData.expectedAttendacePercent});
                         this.setEventProperty({key: 'internalEvent', actualValue: this.eventData.internalEvent});
-                        console.log(this.eventData);
-                        console.log(this.$store.state.PublicEventPlannerVuex.publicEventData);
-
+                        this.setCurrentStep({currentPage : '/event-budget'})
                         this.$router.push({ path: `/event-budget`});
 
-
                     } else {
+
                     }
 
                 });

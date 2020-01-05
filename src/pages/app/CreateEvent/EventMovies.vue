@@ -139,7 +139,7 @@
         },
 
         methods : {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty']),
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setCurrentStep']),
 
             goToNext() {
 
@@ -152,6 +152,7 @@
 
                     if (isValid) {
                         this.setEventProperty({key: 'eventMovieId', actualValue: this.eventMovieId});
+                        this.setCurrentStep({currentPage : '/event-scales'});
                         this.$router.push({ path: `/event-scales`});
 
 

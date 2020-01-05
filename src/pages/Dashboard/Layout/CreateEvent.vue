@@ -5,7 +5,7 @@
 
             <div class="header-content md-layout">
                 <div class="logo md-layout-item md-size-50">
-                    <img src="http://static.maryoku.com/storage/img/homepage/maryoku-logo-white@2x.png" width="118">
+                    <a href="/"><img src="http://static.maryoku.com/storage/img/homepage/maryoku-logo-white@2x.png" width="118"></a>
                 </div>
                 <div class="header-actions md-layout-item md-size-50">
                     <ul class="actions-list unstyled">
@@ -16,11 +16,13 @@
                         </template>
 
                         <template v-else-if="$auth.user.authenticated === true">
+
+                            <li class="user-info">
+                                <span>Hello {{$auth.user.displayName}}</span>
+                            </li>
+
                             <li class="action-item" >
                                 <md-button @click="logout">Sing out</md-button>
-                            </li>
-                            <li class="action-item" >
-                                <md-button @click="goToEvents">Go to events</md-button>
                             </li>
                         </template>
 
@@ -125,6 +127,8 @@
         },
         created () {
             this.$store.registerModule("PublicEventPlannerVuex", PublicEventPlannerVuexModule);
+
+            console.log(this.$auth.user);
         },
         methods: {
             ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setSingupModal']),
@@ -143,7 +147,7 @@
                             that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
 
                                 this.closeSingupModal();
-                                that.$router.push({ path: '/event-created', query: {token: success.access_token} });
+                                that.$router.push({ path: that.currentStep, query: {token: success.access_token} });
 
                             }, (failure) => {
 
@@ -169,15 +173,12 @@
             logout() {
                 this.$router.push({ path: '/signout'});
 
-            },
-            goToEvents() {
-                this.$router.push({ path: '/events'});
-
             }
         },computed : {
             ...mapState('PublicEventPlannerVuex', [
                 'publicEventData',
-                'shoWSignupModal'
+                'shoWSignupModal',
+                'currentStep'
             ])
         },
         watch: {
@@ -288,8 +289,19 @@
                     list-style: none;
                     padding : 0;
                     margin : 0;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-end;
+                    align-items: center;
+
                     li {
                         display: inline-block;
+
+                        &.user-info span {
+                            color : #fff;
+                            display: inline-block;
+                            padding: 0 1em;
+                        }
                     }
 
                     .md-button {
@@ -980,14 +992,15 @@
         }
 
         .md-button-content {
-            width : 100%;
+            width: 100%;
             justify-content: center;
         }
 
         .md-icon {
             position: absolute;
-            left : 0;
-            top : 0;
+            left: 0;
+            top: 0;
+
             img {
                 width: 44px !important;
                 max-width: inherit;

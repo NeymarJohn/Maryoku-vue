@@ -132,7 +132,7 @@
         },
 
         methods : {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty']),
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setCurrentStep']),
 
             goToNext() {
 
@@ -145,6 +145,7 @@
 
                     if (isValid) {
                         this.setEventProperty({key: 'eventSongId', actualValue: this.eventSongId});
+                        this.setCurrentStep({currentPage : '/event-movies'});
                         this.$router.push({ path: `/event-movies`});
 
 
@@ -156,6 +157,8 @@
             },
             skip() {
                 this.$router.push({ path: `/event-movies`});
+                this.setCurrentStep({currentPage : '/event-movies'});
+
             },
             songName(name){
                 console.log(name);

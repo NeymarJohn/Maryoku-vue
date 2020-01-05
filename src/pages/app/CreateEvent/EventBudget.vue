@@ -105,7 +105,7 @@
 
         },
         methods : {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty']),
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setCurrentStep']),
             goToNext() {
 
                 let vm = this;
@@ -119,7 +119,7 @@
 
                         this.setEventProperty({key: 'totalBudget', actualValue: this.eventData.totalBudget});
                         this.setEventProperty({key: 'budgetPerPerson', actualValue: this.eventData.budgetPerPerson});
-
+                        this.setCurrentStep({currentPage : 'event-vibe'});
                         this.$router.push({ path: `/event-vibe`});
 
 

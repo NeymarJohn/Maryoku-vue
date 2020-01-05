@@ -74,7 +74,7 @@
             </div>
         </div>
 
-        <go-back navigation="home"></go-back>
+        <go-back navigation=""></go-back>
 
     </div>
 </template>
@@ -102,7 +102,7 @@
             this.$set(this.eventData,'flexibleWithDates' ,this.publicEventData.flexibleWithDates);
         },
         methods: {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty']),
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setCurrentStep']),
             goToNext () {
 
                 let vm = this
@@ -119,6 +119,7 @@
                         this.setEventProperty({key: 'eventDayPart', actualValue: this.eventData.eventDayPart});
                         this.setEventProperty({key: 'eventPlaceNeeded', actualValue: this.eventData.eventPlaceNeeded});
                         this.setEventProperty({key: 'flexibleWithDates', actualValue: this.eventData.flexibleWithDates});
+                        this.setCurrentStep({currentPage : '/about-invited'});
                         this.$router.push({path: `/about-invited`})
 
                     } else {
@@ -206,7 +207,7 @@
                     }
                 },
                 locationsList: ['San Francisco, California', 'Los Angeles, California', 'Jacksonville, Florida', 'Miami, Florida', 'NYC, New York', 'Austin, Texas', 'Huston, Texas'],
-                eventTypes: ['Formal meeting', 'Offsite', 'Celebration / Party', 'Toast', 'Team Building', 'Customer event']
+                eventTypes: ['Formal meeting', 'Offsite', 'Celebration / Party', 'Toast', 'Team Building', 'Customer event','Out of office day activity']
                 ,
                 options: ['ameed', 'ahmad']
 

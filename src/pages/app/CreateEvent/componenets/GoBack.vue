@@ -5,8 +5,17 @@
 </template>
 
 <script>
+
+    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+    import PublicEventPlannerVuexModule from "../PublicEventPlanner.vuex";
+
     export default {
-        props : ["navigation"],
+        props : {
+            navigation : {
+                type : String,
+                default : '/'
+            }
+        },
         components: {
 
         },
@@ -17,8 +26,11 @@
             }
         },
         methods : {
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setCurrentStep']),
+
             goTo(){
                 console.log(this.navigation);
+                this.setCurrentStep({currentPage : this.navigation})
                 this.$router.push({ path: this.navigation});
             }
         }

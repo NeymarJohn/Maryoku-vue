@@ -19,7 +19,7 @@
 
                 <div class="range-item">
                     <div class="option left">Familiar & trusted</div>
-                    <div class="option right">New & adget</div>
+                    <div class="option right">New and edgy</div>
                     <input type="range" v-model="eventScale2" @change="checkScale2"/>
                 </div>
 
@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="range-item">
-                    <div class="option left">Meeting Requirements</div>
+                    <div class="option left">Meets Requirements</div>
                     <div class="option right">Social & Green</div>
                     <input type="range" v-model="eventScale4" @change="checkScale4"/>
                 </div>
@@ -102,7 +102,7 @@
         },
 
         methods : {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setEventDecisionFactor']),
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setEventDecisionFactor','setCurrentStep']),
 
             goToNext() {
 
@@ -115,6 +115,7 @@
                     let eventMovieId = this.boardSound[this.currentIndex];
                     if (isValid) {
                         //this.setEventProperty({key: 'eventMovieId', actualValue: eventMovieId});
+                        this.setCurrentStep({currentPage : '/event-start-working'});
                         this.$router.push({ path: `/event-start-working`});
 
 

@@ -82,37 +82,37 @@
                 startWorkingList : [
                     {
                         title : 'Concept and ideas',
-                        desc : 'we’ll need some more info for that',
+                        desc : 'Inspired by top creative directors',
                         img : 'Component 50 – 1@2x.png',
                         selected : true
                     },
                     {
                         title : 'Detailed Budget Table',
-                        desc : 'to match the concept',
+                        desc : 'Crafted brilliantly to get snap approval',
                         img : 'Component 52 – 4@2x.png',
                         selected : true
                     },
                     {
                         title : 'Event Timeline',
-                        desc : 'you’ll be able to edit it later',
+                        desc : 'Tailored for your event to ensure success',
                         img : 'Component 49 – 4@2x.png',
                         selected : true
                     },
                     {
                         title : 'Vendors proposals',
-                        desc : 'to match budget, concept and timing',
+                        desc : 'Available vendors that match your budget',
                         img : 'Component 51 – 4@2x.png',
                         selected : true
                     },
                     {
                         title : 'RSVP',
-                        desc : 'Campaign, invite and track attendance',
+                        desc : 'From event campaign to registration',
                         img : 'Component 48 – 8@2x.png',
                         selected : true
                     },
                     {
                         title : 'On day coordination',
-                        desc : 'to match budget, concept and timing',
+                        desc : 'By top coordinators familiar with your event',
                         img : 'Component 51 – 4@2x.png',
                         selected : false
                     }
@@ -132,7 +132,7 @@
         },
 
         methods : {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setSingupModal']),
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setSingupModal','setCurrentStep']),
 
             goToNext() {
 
@@ -159,8 +159,6 @@
                              eventNeededServices.push(aniArgs);
                          });
 
-                        console.log(eventNeededServices);
-
 
                          this.setEventProperty({key: 'eventNeededServices', actualValue: eventNeededServices});
 
@@ -168,11 +166,8 @@
                             this.$router.push({ path: `/event-created`});
 
                         } else {
-
                             this.setSingupModal({showModal : true});
                         }
-
-
 
                     } else {
                     }
