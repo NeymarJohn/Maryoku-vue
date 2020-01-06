@@ -159,6 +159,7 @@
                              eventNeededServices.push(aniArgs);
                          });
 
+                        this.setCurrentStep({currentPage : '/event-created'});
 
                          this.setEventProperty({key: 'eventNeededServices', actualValue: eventNeededServices});
 

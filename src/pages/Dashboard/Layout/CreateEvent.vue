@@ -173,7 +173,9 @@
                 document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
             },
             logout() {
-                this.$router.push({ path: '/signout'});
+
+                this.$auth.logout(this);
+                this.$ls.remove("user");
 
             }
         },computed : {

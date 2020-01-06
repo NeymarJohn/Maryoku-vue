@@ -238,6 +238,8 @@
 
             _calendar.calendarEvents().find(this.$route.params.id).then(event => {
               //this.event = event
+
+                console.log('event => ',event);
               this.eventId = event.id
               this.calendarEvent = event
               this.selectedComponents = event.components
