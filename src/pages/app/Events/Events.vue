@@ -29,7 +29,7 @@
               @click="routeToEvent(item.id, $event)"
             >
               <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
-              <md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>
+              <!--<md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>-->
               <md-table-cell md-label="Event Type">{{ item.eventType }}</md-table-cell>
               <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
               <md-table-cell md-label="Customer Name">{{ item.owner.department }}</md-table-cell>
@@ -37,8 +37,8 @@
                 md-label="Created By"
                 style="text-transform: capitalize;"
                 v-if="item.owner.id !== $auth.user.id"
-              >{{ item.owner.displayName }}</md-table-cell>
-              <md-table-cell md-label="Created By" v-else>You <span class="small text-primary" style="display: block;">{{ item.plannerEmail }}</span> </md-table-cell>
+              >{{ item.owner.displayName }} <span class="small text-primary" style="display: block;">{{ item.owner.emailAddress }}</span></md-table-cell>
+              <md-table-cell md-label="Created By" v-else>You <span class="small text-primary" style="display: block;">{{ item.owner.emailAddress }}</span> </md-table-cell>
               <md-table-cell md-label="# Participants">{{item.numberOfParticipants}}</md-table-cell>
               <md-table-cell md-label="Budget Per Participant">$ {{item.budgetPerPerson}}</md-table-cell>
               <md-table-cell md-label="Actions" style="white-space: nowrap;">

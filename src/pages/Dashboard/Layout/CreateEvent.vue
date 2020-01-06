@@ -41,8 +41,8 @@
 
 
         <md-dialog :md-active.sync="shoWSignupModal" class="singin-form">
+            <vue-element-loading :active="signUpLoading"><img src="/static/img/maryoku-loader.gif" ></vue-element-loading>
             <md-dialog-title class="text-center">Sign up <button class="close-btn" @click="closeSingupModal"><md-icon>close</md-icon></button></md-dialog-title>
-
             <md-dialog-content>
                 <md-field class="purple-field">
                     <label>Name of the company</label>
@@ -76,11 +76,11 @@
 
                 <md-button class="md-rose md-sm md-square custom-btn" @click="singup">Sign Up</md-button>
 
-                <div class="divider-or text-center" style="margin-top: 48px;">
+                <!--<div class="divider-or text-center" style="margin-top: 48px;">
                     Or
                 </div>
 
-                <md-button class="md-default md-sm md-square custom-btn google-singup" @click="authenticate('google')"> <md-icon><img src="/static/img/GoogleIcon.png" ></md-icon> Sign in with Google</md-button>
+                <md-button class="md-default md-sm md-square custom-btn google-singup" @click="authenticate('google')"> <md-icon><img src="/static/img/GoogleIcon.png" ></md-icon> Sign in with Google</md-button>-->
 
 
             </md-dialog-content>
@@ -97,6 +97,7 @@
     export default {
         data(){
             return {
+                signUpLoading: false,
                 showDialog: false,
                 email : null,
                 password : null,
@@ -143,14 +144,15 @@
                 let that = this;
                 this.$validator.validateAll().then(isValid => {
                     if (isValid){
+                        that.signUpLoading = true;
                         that.$auth.clientSignupOrSignin(that, this.email.toString().toLowerCase(), that.password, that.department, (data) => {
                             that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
 
                                 this.closeSingupModal();
                                 that.$router.push({ path: that.currentStep, query: {token: success.access_token} });
-
+                                that.signUpLoading = false;
                             }, (failure) => {
-
+                                that.signUpLoading = false;
                                 if (failure.response.status === 401){
                                     that.error = 'Sorry, wrong password, try again.';
                                 } else {

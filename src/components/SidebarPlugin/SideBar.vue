@@ -6,7 +6,7 @@
        :style="sidebarStyle">
 
     <div class="logo">
-      <a href="/" class="simple-text logo-mini">
+      <a href="/" class="simple-text logo-mini visible-on-sidebar-mini">
         <div class="logo-img">
           <img :src="logo">
           <!--<md-icon>calendar_today</md-icon>-->
@@ -14,7 +14,7 @@
       </a>
       <a href="/" class="simple-text logo-normal">
         <template v-if="$route.meta.rtlActive">{{rtlTitle}}</template>
-        <template v-else>{{title}}</template>
+        <template v-else><img style="width: 100px;" width="100px" :src="fullLogo"></template>
       </a>
       <div class="navbar-minimize">
         <md-button id="minimizeSidebar" class="md-round md-just-icon md-transparent" @click="minimizeSidebar">
@@ -83,8 +83,12 @@ export default {
     },
     logo: {
       type: String,
-      default: "http://static.maryoku.com/storage/img/calendar-loader-3.gif"
+      default: "http://static.maryoku.com/storage/maryoku+-+logo+square+dark%402x.png"
     },
+      fullLogo: {
+          type: String,
+          default: "http://static.maryoku.com/storage/maryoku+-+logo+dark%402x.png"
+      },
     sidebarLinks: {
       type: Array,
       default: () => []
