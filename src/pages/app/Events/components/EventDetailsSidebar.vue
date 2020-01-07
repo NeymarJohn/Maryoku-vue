@@ -122,10 +122,45 @@
                           </div>
                           <div class="md-layout-item">
                               <ul class="m-0 p-0" style="padding-left: 39px; margin: 0;">
-                                  <li>{{calendarEvent.eventDecisionFactor1 >= 50 ? 'Authenticity & experience' : 'Convenience & Accessibility'}} <b>({{calendarEvent.eventDecisionFactor1}})</b></li>
-                                  <li>{{calendarEvent.eventDecisionFactor2 >= 50 ? 'New and edgy' : 'Familiar & trusted'}} <b>({{calendarEvent.eventDecisionFactor2}})</b></li>
-                                  <li>{{calendarEvent.eventDecisionFactor3 >= 50 ? 'Hight Value for Money' : 'Within budget'}} <b>({{calendarEvent.eventDecisionFactor3}})</b></li>
-                                  <li>{{calendarEvent.eventDecisionFactor4 >= 50 ? 'Social & Green' : 'Meets Requirements'}} <b>({{calendarEvent.eventDecisionFactor4}})</b></li>
+
+                                  <template v-if="calendarEvent.eventDecisionFactor1 >= 50">
+                                      <li>Authenticity & experience <b>({{calendarEvent.eventDecisionFactor1}})</b></li>
+                                      <li>Convenience & Accessibility <b>({{100 - calendarEvent.eventDecisionFactor1}})</b></li>
+                                  </template>
+                                  <template v-else>
+                                      <li>Authenticity & experience <b>({{100 -  calendarEvent.eventDecisionFactor1}})</b></li>
+                                      <li>Convenience & Accessibility <b>({{calendarEvent.eventDecisionFactor1}})</b></li>
+                                  </template>
+
+
+                                  <template v-if="calendarEvent.eventDecisionFactor2 >= 50">
+                                      <li>New and edgy <b>({{calendarEvent.eventDecisionFactor2}})</b></li>
+                                      <li>Familiar & trusted <b>({{100 - calendarEvent.eventDecisionFactor2}})</b></li>
+                                  </template>
+                                  <template v-else>
+                                      <li>New and edgy <b>({{100 -  calendarEvent.eventDecisionFactor2}})</b></li>
+                                      <li>Familiar & trusted <b>({{calendarEvent.eventDecisionFactor2}})</b></li>
+                                  </template>
+
+                                  <template v-if="calendarEvent.eventDecisionFactor3 >= 50">
+                                      <li>Hight Value for Money <b>({{calendarEvent.eventDecisionFactor3}})</b></li>
+                                      <li>Within budget <b>({{100 - calendarEvent.eventDecisionFactor3}})</b></li>
+                                  </template>
+                                  <template v-else>
+                                      <li>Hight Value for Money <b>({{100 -  calendarEvent.eventDecisionFactor3}})</b></li>
+                                      <li>Within budget <b>({{calendarEvent.eventDecisionFactor3}})</b></li>
+                                  </template>
+
+                                  <template v-if="calendarEvent.eventDecisionFactor4 >= 50">
+                                      <li>Social & Green <b>({{calendarEvent.eventDecisionFactor4}})</b></li>
+                                      <li>Meets Requirements <b>({{100 - calendarEvent.eventDecisionFactor4}})</b></li>
+                                  </template>
+                                  <template v-else>
+                                      <li>Social & Green <b>({{100 -  calendarEvent.eventDecisionFactor4}})</b></li>
+                                      <li>Meets Requirements <b>({{calendarEvent.eventDecisionFactor4}})</b></li>
+                                  </template>
+
+
                               </ul>
                           </div>
 
