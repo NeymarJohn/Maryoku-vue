@@ -137,6 +137,7 @@ import moment from "moment";
 import VueElementLoading from "vue-element-loading";
 import swal from "sweetalert2";
 import TeamMember from '@/models/TeamMember';
+import _ from "underscore";
 
 export default {
   components: {
@@ -176,7 +177,10 @@ export default {
 
         let m = new CalendarEvent().for(_calendar).fetch(this, true);
         m.then(allEvents=>{
-          this.upcomingEvents = this.getExtraFields(allEvents);
+          this.upcomingEvents = this.getExtraFields(allEvents).reverse();
+
+          //this.upcomingEvents = _.sortBy(this.upcomingEvents, function(num){  return new Date(num.eventStartMillis); });
+
           this.isLoading = false;
         });
       }

@@ -31,7 +31,6 @@
                                @click="goToNext"
                                :class="[{'disabled': !eventSongId }]"> Next </md-button>
                 </div>
-
             </div>
         </div>
 

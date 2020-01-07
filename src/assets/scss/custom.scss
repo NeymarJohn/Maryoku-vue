@@ -2590,6 +2590,7 @@ iframe{
         .md-layout-item {
             padding : 0;
             text-align: left;
+            text-transform: capitalize;
 
             .md-caption {
                 text-align: left;
@@ -3712,6 +3713,26 @@ iframe{
 
     .md-button {
         text-transform: none;
+    }
+}
+
+
+.event-extra-info-card {
+    padding : 0;
+    margin: 0;
+    box-shadow: none;
+
+    .md-card-content {
+        padding : 0;
+    }
+    .md-card-actions {
+        margin: 0;
+    }
+
+    &:not(.md-expand-active) {
+        .md-card-expand-content {
+            margin-top: -335px !important;
+        }
     }
 }
 
