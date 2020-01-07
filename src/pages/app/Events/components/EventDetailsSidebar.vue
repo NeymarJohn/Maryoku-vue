@@ -42,7 +42,6 @@
                 </div>
             </div>
 
-
           <md-card class="event-extra-info-card">
               <md-card-expand>
                   <md-card-expand-content>
@@ -320,7 +319,8 @@
       routeName: null,
       budgetPerEmployee: 0,
       acceptedProposals: [],
-      paidProposals: []
+      paidProposals: [],
+        eventInfoCardExpanded : false
     }),
     methods: {
       ...mapMutations('EventPlannerVuex', [
