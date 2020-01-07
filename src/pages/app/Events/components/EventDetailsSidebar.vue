@@ -122,10 +122,10 @@
                           </div>
                           <div class="md-layout-item">
                               <ul class="m-0 p-0" style="padding-left: 39px; margin: 0;">
-                                  <li>{{calendarEvent.eventDecisionFactor1 >= 50 ? 'Authenticity & experience' : 'Convenience & Accessibility'}}</li>
-                                  <li>{{calendarEvent.eventDecisionFactor2 >= 50 ? 'New and edgy' : 'Familiar & trusted'}}</li>
-                                  <li>{{calendarEvent.eventDecisionFactor3 >= 50 ? 'Hight Value for Money' : 'Within budget'}}</li>
-                                  <li>{{calendarEvent.eventDecisionFactor4 >= 50 ? 'Social & Green' : 'Meets Requirements'}}</li>
+                                  <li>{{calendarEvent.eventDecisionFactor1 >= 50 ? 'Authenticity & experience' : 'Convenience & Accessibility'}} <b>({{calendarEvent.eventDecisionFactor1}})</b></li>
+                                  <li>{{calendarEvent.eventDecisionFactor2 >= 50 ? 'New and edgy' : 'Familiar & trusted'}} <b>({{calendarEvent.eventDecisionFactor2}})</b></li>
+                                  <li>{{calendarEvent.eventDecisionFactor3 >= 50 ? 'Hight Value for Money' : 'Within budget'}} <b>({{calendarEvent.eventDecisionFactor3}})</b></li>
+                                  <li>{{calendarEvent.eventDecisionFactor4 >= 50 ? 'Social & Green' : 'Meets Requirements'}} <b>({{calendarEvent.eventDecisionFactor4}})</b></li>
                               </ul>
                           </div>
 
