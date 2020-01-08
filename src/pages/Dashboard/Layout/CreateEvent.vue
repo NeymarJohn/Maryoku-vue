@@ -1086,6 +1086,7 @@
             left: 10px;
             right: 10px;
             width: auto;
+            z-index: 9999999;
         }
 
         .back-section {
@@ -1105,6 +1106,10 @@
             &:after {
                 display: none;
             }
+        }
+
+        .start-working-item .md-checkbox {
+            padding : 0 0.5em;
         }
 
         .form-section {
