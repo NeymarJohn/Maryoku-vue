@@ -4,10 +4,10 @@
         <div class="top-header">
 
             <div class="header-content md-layout">
-                <div class="logo md-layout-item md-size-50">
+                <div class="logo md-layout-item md-size-50 md-small-size-40">
                     <a href="/"><img src="http://static.maryoku.com/storage/img/homepage/maryoku-logo-white@2x.png" width="118"></a>
                 </div>
-                <div class="header-actions md-layout-item md-size-50">
+                <div class="header-actions md-layout-item md-size-50 md-small-size-60">
                     <ul class="actions-list unstyled">
                         <template v-if="$auth.user.authenticated === false">
                             <li class="action-item" >
@@ -1020,14 +1020,43 @@
             .top-header {
                 .logo {
                     img {
-                        width : 100px;
+                        width : 80px;
 
                     }
                 }
-                .header-actions ul .md-button {
-                    margin-top : -2px;
+                .header-actions {
+                    padding : 0;
+
+                    ul {
+                        .md-button {
+                            border : none;
+                            box-shadow: none;
+
+                            .md-ripple {
+                                padding : 6px 0 !important;
+                            }
+                        }
+                        li.user-info {
+                            span {
+                                font-size: 12px;
+                                padding: 0;
+                            }
+                        }
+                    }
+                }
+
+                .header-content {
+                    padding-top : 0.5em;
                 }
             }
+
+            .container {
+                padding: 0 8px;
+            }
+        }
+
+        .md-button.custom-btn {
+            width : 100%;
         }
 
         .form-group {
@@ -1041,26 +1070,33 @@
 
 
         .section-header {
+            border-radius: 0;
+            margin-bottom : 1em;
+
             .section-title {
                 font-size: 20px;
-                margin-top: 25px;
-                padding: 0 2em;
+                margin-top: 0;
+                padding: 0 1em;
             }
         }
 
         .form-section .form-actions  {
-            position: relative;
+            position: fixed;
+            flex-direction: column;
+            left: 10px;
+            right: 10px;
+            width: auto;
         }
 
         .back-section {
-            margin: 0 auto;
+            margin: 0;
             height: 30px;
             width: 30px;
-            left: 0;
+            left: 1em;
             right: 0;
             border-radius: 50%;
             background-color: #aaaaaa8c;
-            top: 30px;
+            top: 40px;
 
             .md-icon {
                 color : #fff;
@@ -1073,6 +1109,8 @@
 
         .form-section {
             width: 100% !important;
+            padding : 0 !important;
+            padding-bottom: 160px !important;
         }
 
         .form-actions{
@@ -1085,16 +1123,24 @@
 
                 .md-button.custom-btn {
                     min-width: auto;
-                    width: 50%;
+                    width: 100%;
                 }
             }
         }
+        .start-working-item .md-checkbox label {
+            padding-left: 54px !important;
+        }
         .vibe-item {
-            width: 48% !important;
-            margin-right: 2%;
-            margin-bottom: 1em;
+            width: 100% !important;
+            margin-right: 0;
+            margin-bottom: 0em;
+
+            display: flex !important;
+            flex-direction: row;
+
              .md-radio.with-border {
-                width: 100% !important;
+                width: 74% !important;
+                 margin-bottom: 0;
             }
             >span {
                 display: block;

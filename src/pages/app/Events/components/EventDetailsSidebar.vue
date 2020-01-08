@@ -130,7 +130,7 @@
                                   <template v-else>
                                       <li>Authenticity & experience <b>({{100 -  calendarEvent.eventDecisionFactor1}})</b></li>
                                       <li>Convenience & Accessibility <b>({{calendarEvent.eventDecisionFactor1}})</b></li>
-                                  </template>
+                                  </template>1
 
 
                                   <template v-if="calendarEvent.eventDecisionFactor2 >= 50">
