@@ -308,7 +308,7 @@
 </template>
 
 <script>
-import AsyncWorldMap from "@/components/WorldMap/AsyncWorldMap.vue";
+
 import {
   StatsCard,
   ChartCard,
@@ -325,8 +325,7 @@ export default {
     AnimatedNumber,
     ProductCard,
     GlobalSalesCard,
-    GlobalSalesTable,
-    AsyncWorldMap
+    GlobalSalesTable
   },
   data() {
     return {
