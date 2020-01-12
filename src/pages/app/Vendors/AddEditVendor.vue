@@ -1,6 +1,8 @@
 <template>
     <div class="vendor-editor">
-        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
+        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen>
+            <img src="static/img/maryoku-loader.gif"/>
+        </vue-element-loading>
 
         <div class="md-layout">
             <div class="md-layout-item md-size-15 md-medium-size-20">
@@ -132,7 +134,7 @@
             getVendor(vendorId) {
                 Vendors.find(vendorId).then(vendor => {
                     this.vendor = vendor
-                    this.vendor.vendorPropertyValues = {}
+                    //this.vendor.vendorPropertyValues = {}
                     this.vendorCategoryChanged(this.vendor.vendorCategory)
                     this.isLoading = false
                 })
@@ -153,10 +155,13 @@
             saveVendor(){
                 console.log("*** Save vendor: ");
                 console.log(JSON.stringify(this.vendor));
+                this.isLoading = true;
+
                 new Vendors(this.vendor).save().then(res=>{
                     console.log("*** Save vendor - done: ");
-                    console.log(JSON.stringify(this.vendor));
-                    //this.$router.push({name: 'EditVendor', params: {id: res.id}});
+                    console.log(JSON.stringify(res));
+                    this.$router.push({name: 'EditVendor', params: {id: res.item.id}});
+                    this.isLoading = false;
                 });
             },
             addVendor() {
