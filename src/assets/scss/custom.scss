@@ -3724,14 +3724,35 @@ iframe{
 
     .md-card-content {
         padding : 0;
+
+
     }
     .md-card-actions {
         margin: 0;
+
+        .md-button {
+            font-size: 20px;
+
+            .md-ripple {
+                padding: 0;
+                justify-content: flex-start;
+
+                .md-button-content {
+                    i {
+                        font-size: 25px !important;
+                    }
+                }
+            }
+        }
+    }
+
+    .md-card-expand-content {
+        display: block;
     }
 
     &:not(.md-expand-active) {
         .md-card-expand-content {
-            margin-top: -335px !important;
+            display: none;
         }
     }
 }

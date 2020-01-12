@@ -5,6 +5,7 @@ import VueAxios from 'vue-axios';
 import { Model } from 'vue-api-query';
 import DashboardPlugin from "./material-dashboard";
 import auth from './auth';
+import VueLazyLoad from 'vue-lazyload'
 
 // Plugins
 import App from "./App.vue";

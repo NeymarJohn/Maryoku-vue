@@ -18,9 +18,11 @@
   </div>
 </template>
 <script>
+import AsyncWorldMap from "@/components/WorldMap/AsyncWorldMap.vue";
 
 export default {
   components: {
+    AsyncWorldMap
   },
   data() {
     return {

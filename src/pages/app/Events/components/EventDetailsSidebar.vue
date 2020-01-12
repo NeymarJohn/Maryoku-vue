@@ -130,8 +130,7 @@
                                   <template v-else>
                                       <li>Authenticity & experience <b>({{100 -  calendarEvent.eventDecisionFactor1}})</b></li>
                                       <li>Convenience & Accessibility <b>({{calendarEvent.eventDecisionFactor1}})</b></li>
-                                  </template>1
-
+                                  </template>
 
                                   <template v-if="calendarEvent.eventDecisionFactor2 >= 50">
                                       <li>New and edgy <b>({{calendarEvent.eventDecisionFactor2}})</b></li>
@@ -191,7 +190,9 @@
 
                   <md-card-actions md-alignment="space-between">
                       <md-card-expand-trigger>
-                          <md-button class="md-sm">Show more</md-button>
+                          <md-button class="md-icon-button md-rose md-simple">
+                              <md-icon>keyboard_arrow_down</md-icon>
+                          </md-button>
                       </md-card-expand-trigger>
                   </md-card-actions>
               </md-card-expand>
@@ -390,9 +391,7 @@
 
             _calendar.calendarEvents().find(this.$route.params.id).then(event => {
               //this.event = event
-
-                console.log('event => ',event);
-              this.eventId = event.id
+                this.eventId = event.id
               this.calendarEvent = event
               this.selectedComponents = event.components
 
@@ -433,7 +432,8 @@
 
             this.budgetPerEmployee = evt.budgetPerPerson//this.totalRemainingBudget / evt.numberOfParticipants
             this.allocatedBudget = resp.totalAllocatedBudget
-            this.event.statistics['allocatedBudget'] = this.allocatedBudget
+            this.event.statistics['allocatedBudget'] = this.allocatedBudget;
+
           })
           .catch(error => {
             console.log(error)
@@ -507,7 +507,7 @@
       }
 
       this.$root.$on('RefreshStatistics', function () {
-        _self.getCalendarEventStatistics(_self.event)
+          _self.getCalendarEventStatistics(_self.event)
       })
 
       this.$root.$on('calendar-refresh-events', () => {
@@ -556,7 +556,7 @@
         }
       },
       getTotalRemainingBudget() {
-        return this.getTotalAmountByGuestType - this.getToBePaidAmount
+        return this.totalRemainingBudget;
       },
       getRemainingBudgetPerEmployee() {
         if (this.event.budgetPerPerson == 0) {

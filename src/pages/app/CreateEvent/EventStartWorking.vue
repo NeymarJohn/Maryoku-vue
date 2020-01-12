@@ -148,15 +148,10 @@
 
                     if (isValid) {
 
-                        let eventNeededServices = [];
-
+                        let eventNeededServices = {};
 
                          _.each(this.startWorkingList,(item)=>{
-                             let aniArgs = {};
-
-                             aniArgs[item.title] =  item.selected;
-
-                             eventNeededServices.push(aniArgs);
+                             eventNeededServices[item.title] =  item.selected;
                          });
 
                         this.setCurrentStep({currentPage : '/event-created'});
