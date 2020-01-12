@@ -81,7 +81,7 @@
                 default: () => {
                     return {
                         vendorCategory: null,
-                        vendorPropertiesValues: {}
+                        vendorPropertyValues: {}
                     }
                 }
             },
@@ -132,7 +132,7 @@
             getVendor(vendorId) {
                 Vendors.find(vendorId).then(vendor => {
                     this.vendor = vendor
-                    this.vendor.vendorPropertiesValues = {}
+                    this.vendor.vendorPropertyValues = {}
                     this.vendorCategoryChanged(this.vendor.vendorCategory)
                     this.isLoading = false
                 })
@@ -151,7 +151,13 @@
                 })
             },
             saveVendor(){
-
+                console.log("*** Save vendor: ");
+                console.log(JSON.stringify(this.vendor));
+                new Vendors(this.vendor).save().then(res=>{
+                    console.log("*** Save vendor - done: ");
+                    console.log(JSON.stringify(this.vendor));
+                    //this.$router.push({name: 'EditVendor', params: {id: res.id}});
+                });
             },
             addVendor() {
                 this.$validator.validateAll().then(res => {
