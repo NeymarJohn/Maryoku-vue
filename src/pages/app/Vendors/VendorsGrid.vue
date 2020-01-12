@@ -53,7 +53,7 @@
           </div>
         </h4>
         <div slot="description" class="card-description ">
-          <div class="maxh-20">
+          <div class="">
             <p>
               {{vendor.vendorTagLine}}
             </p>
