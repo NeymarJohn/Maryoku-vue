@@ -67,7 +67,7 @@
             <md-field>
                 <label>{{item.name}}</label>
                 <md-select v-model="vendor.vendorPropertyValues[item.id]" :name="item.id" :id="item.id" multiple>
-                    <md-option v-for="opt in item.selectionOptions" :value="opt.id">{{opt.title}}</md-option>
+                    <md-option v-for="opt in item.selectionOptions" :key="opt.id" :id="opt.id" :value="opt.id">{{opt.title}}</md-option>
                 </md-select>
             </md-field>
         </div>
