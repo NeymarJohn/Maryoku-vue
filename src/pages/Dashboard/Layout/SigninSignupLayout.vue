@@ -4,7 +4,7 @@
         <div class="top-header">
 
             <div class="header-content md-layout">
-                <div class="logo md-layout-item md-size-50 md-small-size-40">
+                <div class="logo md-layout-item md-size-50 md-small-size-100">
                     <a href="https://www.maryoku.com"><img src="http://static.maryoku.com/storage/img/homepage/maryoku-logo-white@2x.png" width="118"></a>
                 </div>
             </div>
@@ -224,115 +224,6 @@
             }
         }
     }
-
-    .md-checkbox.md-theme-default {
-
-        label {
-            color : #606060;
-        }
-
-        .md-checkbox-container {
-            border-radius: 7px;
-            width: 26px;
-            height: 26px;
-
-
-            &:after {
-                top: 4px;
-                left: 9px;
-            }
-        }
-
-        &:hover {
-            .md-checkbox-container {
-                background : none !important;
-                border: 1px solid $baseColor;
-
-                &:before {
-                    width: 20px;
-                    height: 20px;
-                    background: rgba(93, 33, 84, 0.81);
-                    border-radius: 5px;
-                    left: 12px;
-                    top: 12px;
-                }
-
-                &:after {
-                    opacity: 1;
-                    transform: rotate(45deg) scale3D(1,1,1);
-                    transition: .4s cubic-bezier(.25,.8,.25,1);
-                    top: 4px;
-                    left: 9px;
-                    border-color: #fff !important;
-
-                }
-            }
-            label {
-                color : $baseColor !important;
-            }
-        }
-        &.md-checked {
-            .md-checkbox-container {
-                background : none !important;
-                border: 1px solid $baseColor;
-
-                &:before {
-                    width: 20px;
-                    height: 20px;
-                    background: #5d2154;
-                    border-radius: 5px;
-                    left: 12px;
-                    top: 12px;
-                }
-
-                &:after {
-                    top: 4px;
-                    left: 9px;
-                }
-            }
-        }
-    }
-
-    .md-checkbox.md-checked .md-checkbox-container:after {
-        border-color : #fff !important;
-    }
-    .md-checkbox.md-checked .md-checkbox-label {
-        color : $baseColor;
-    }
-
-    .md-radio.md-checked .md-radio-container {
-        border: 1px solid $baseColor !important;
-        &:after {
-            background-color : $baseColor !important;
-        }
-    }
-
-    .md-radio.with-border {
-        border: 1px solid #aaaaaa;
-        padding: 1em 1em;
-        border-radius: 10px;
-
-        label {
-            color : #606060;
-            width: 100%;
-            display: inline-block;
-        }
-        .md-radio-container {
-            width:23px;
-            height: 23px;
-            min-width: auto;
-            top:0;
-        }
-
-        &.md-checked {
-            border: 1px solid $baseColor;
-
-            .md-radio-label {
-                color : $baseColor;
-            }
-        }
-    }
-
 
     .section-header {
         background: #5c2153;
@@ -591,157 +482,6 @@
     }
 
 
-    .md-menu-content:not(.md-select-menu), .md-select-menu {
-        box-shadow: none;
-        padding : 0;
-        margin : 0;
-        width: 350px !important;
-        z-index: 9999999999999999999999 !important;
-        max-width: none;
-
-        .md-menu-content-container {
-
-            margin : 0.5em 0 0;
-            border : 1px solid #606060;
-            border-radius: 10px;
-
-            .md-list {
-                padding : 0;
-
-                .md-list-item {
-                    margin: 0;
-                    padding : 0.2em 0.5em;
-
-                    &:not(:last-child) {
-                        margin-bottom: 5px;
-                        border-bottom : 1px solid #AAAAAA;
-                    }
-
-                    .md-list-item-button {
-                        background-color: transparent;
-                        //color: $gray-dark !important;
-                        border-radius: 3px;
-
-                        &:hover {
-                            background: none !important;
-                            color: $baseColor !important;
-                            box-shadow: none;
-                        }
-
-                        .md-list-item-content {
-                            min-height: 38px;
-                            font-size : 14px;
-                            color : #606060;
-
-                            span {
-                                top: auto;
-                                left: auto;
-                                right: 0;
-                                padding-left: 15px;
-                                padding-right: 0px;
-                                font-weight: bold;
-                                color : #606060;
-                            }
-                        }
-                    }
-
-                    &:hover {
-                        background: none !important;
-                        color: $baseColor !important;
-                        box-shadow: none;
-                    }
-
-                }
-            }
-        }
-    }
-
-    .md-datepicker-dialog.md-theme-default {
-
-        box-shadow: none;
-        border: 1px solid #606060;
-        border-radius: 14px;
-        z-index: 999999999999999;
-        height: auto;
-
-        .md-datepicker-header {
-            display: none;
-        }
-        .md-datepicker-body-footer {
-            display: none;
-        }
-
-        .md-datepicker-days .md-datepicker-day-button {
-            border-radius: 10px;
-            width: 35px;
-            min-width: 35px;
-            height: 35px;
-            line-height: 35px;
-            &.md-datepicker-selected {
-                background-color: $baseColor !important;
-                box-shadow: none;
-            }
-
-        }
-    }
-
-
-    .back-section {
-
-        position: absolute;
-        top : 130px;
-        height: calc(100% - 130px);
-        width : 100px;
-        display: flex;
-        flex : 1;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        transition: .4s cubic-bezier(.55,0,.55,.2);
-        cursor: pointer;
-
-        &:after {
-            content: ' ';
-            position: absolute;
-            left: -11px;
-            height: 80%;
-            width: 20px;
-            border-radius: 50%;
-            background-color: #aaa;
-            z-index: 999999;
-            opacity: 0.2;
-        }
-
-
-        .back-text {
-            display: none;
-            color : #606060;
-
-        }
-
-        &:hover {
-
-            .back-text {
-                display: inline-block;
-            }
-
-            &:after {
-                left: -241px;
-                width: 430px;
-            }
-        }
-    }
-
-    .md-select-menu .md-list-item.md-selected .md-list-item-button {
-        box-shadow: none !important;
-
-        .md-ripple {
-            .md-list-item-text {
-                color : $baseColor !important;
-            }
-        }
-    }
-
     .form-group {
         position: relative;
 
@@ -806,7 +546,11 @@
 
 
     @media screen and (max-width : 500px) {
-
+        .register-page {
+            .register-form {
+                width : 90%;
+            }
+        }
         .create-event {
             .top-header {
                 .logo {
