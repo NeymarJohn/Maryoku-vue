@@ -12,9 +12,6 @@ import HomeLayout from '@/pages/Dashboard/Layout/HomeLayout.vue';
 
 import Team from "@/pages/app/Team/Team.vue";
 import Members from "@/pages/app/Members/Members.vue";
-import Community from "@/pages/app/Community.vue";
-import CommunityNew from "@/pages/app/Community/Community-new.vue";
-import VendorsSuggested from "@/pages/app/Community/vendors-suggested/index.vue";
 
 import Events from "@/pages/app/Events/Events.vue";
 import CurrentEvents from "@/pages/app/Events/CurrentEvents.vue";
@@ -260,21 +257,6 @@ let appPages = {
       meta: {
         gtm: "Team"
       }
-    },
-    {
-      path: "/community",
-      name: "Community",
-      component: Community
-    },
-    {
-      path: "/vendors-suggested",
-      name: "VendorsSuggested",
-      component: VendorsSuggested
-    },
-    {
-      path: "/community-new",
-      name: "Community-new",
-      component: CommunityNew
     },
     {
       path: "/yearly-plan",
