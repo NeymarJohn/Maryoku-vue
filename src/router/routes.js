@@ -9,6 +9,7 @@ import MyCompanyNew from '@/pages/app/MyCompany/MyCompanyNew.vue';
 import CompanyDashboard from '@/pages/app/CompanyDashboard/CompanyDashboard.vue';
 import CreateEvent from '@/pages/Dashboard/Layout/CreateEvent.vue';
 import HomeLayout from '@/pages/Dashboard/Layout/HomeLayout.vue';
+import SigninSignupLayout from '@/pages/Dashboard/Layout/SigninSignupLayout.vue';
 
 import Team from "@/pages/app/Team/Team.vue";
 import Members from "@/pages/app/Members/Members.vue";
@@ -43,6 +44,7 @@ import EventScales from "@/pages/app/CreateEvent/EventScales.vue";
 import EventStartWorking from "@/pages/app/CreateEvent/EventStartWorking.vue";
 import EventCreated from "@/pages/app/CreateEvent/EventCreated.vue";
 import HomePage from "@/pages/app/HomePage/Home.vue";
+import publicRegister from "@/pages/app/SinginSingup/publicRegister.vue";
 
 // Dashboard pages
 import EmployeeMain from '@/pages/Dashboard/Pages/CommonInfoProfile/Employee.vue';
@@ -475,6 +477,26 @@ let EventPages = {
   ]
 };
 
+let SigninSignupPage = {
+    path : '/register',
+    component : SigninSignupLayout,
+    name : 'SigninSignupLayout',
+    meta : {
+        auth : false
+    },
+    children : [
+        {
+            path: "/register",
+            name: "publicRegister",
+            component: publicRegister,
+            meta: {
+                title: 'Public Register',
+                gtm: "Public Register",
+                auth: false
+            }
+        }
+    ]
+}
 let PublicCreateEvent = {
     path : "/app-public",
     component : CreateEvent,
@@ -643,7 +665,8 @@ const routes = [{
   EventPages,
   marketPlacePages,
     PublicCreateEvent,
-    HomePages
+    HomePages,
+    SigninSignupPage
 ];
 
 export default routes;
