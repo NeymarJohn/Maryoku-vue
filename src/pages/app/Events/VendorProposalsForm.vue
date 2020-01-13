@@ -186,6 +186,68 @@
           </md-card-content>
         </md-card>
         <!-- ./Dietary requirements -->
+
+
+          <div class="event-proposal-elements">
+              <!-- Vendor images -->
+              <md-card class="event-information-card">
+                  <md-card-content>
+                      <h4  class="title mb-12">Can you also provide these elements?</h4>
+                      <p>The client is also looking for the elements below, can you provide them</p>
+
+                      <div class="event-elements__list">
+                          <div class="event-element__item">
+                              <md-button class="md-primary"> <md-icon>add</md-icon> Bar</md-button>
+                          </div>
+                      </div>
+
+                  </md-card-content>
+              </md-card>
+              <!-- ./Vendor images -->
+              <!-- Vendor images -->
+              <!--<md-card class="event-information-card vendor-attachments">
+                <md-card-content>
+                    <div class="md-layout">
+                        <div class="md-layout-item md-size-100">
+                            <h4 class="title">Add Attachments</h4>
+                        </div>
+                    </div>
+                    <div class="md-layout">
+                        <div class="vendor-attachments-list">
+                            <div class="vendor-attachments-list_item">
+                                <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image"
+                                          @click="uploadInsurancePapers">
+                                    <md-icon>add</md-icon>
+                                </md-button>
+                                <input type="file" style="display: none;" ref="InsurancePapers"
+                                      @change="onInsurancePapersPicked">
+                                <div class="attachment-placeholder">Add <br>Insurance Papers</div>
+                            </div>
+                            <div class="vendor-attachments-list_item">
+                                <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image"
+                                          @click="uploadLicense">
+                                    <md-icon>add</md-icon>
+                                </md-button>
+                                <input type="file" style="display: none;" ref="license"
+                                      @change="onLicensePicked">
+                                <div class="attachment-placeholder">Add <br>License</div>
+                            </div>
+                            <div class="vendor-attachments-list_item">
+                                <md-button class="md-primary md-sm md-just-icon md-round add-vendor-image">
+                                    <md-icon>add</md-icon>
+                                </md-button>
+                                <div class="attachment-placeholder">Upload Other Documents</div>
+                            </div>
+                        </div>
+                    </div>
+                </md-card-content>
+
+                </md-card>-->
+              <!-- ./Vendor images -->
+          </div>
+
+
+
         <div class="vendor-images-attachments">
           <!-- Vendor images -->
           <md-card class="event-information-card vendor-images">
@@ -519,6 +581,8 @@
       }
     },
     created () {
+
+        console.log('proposalRequest => ',this.proposalRequest);
 
     },
     mounted () {

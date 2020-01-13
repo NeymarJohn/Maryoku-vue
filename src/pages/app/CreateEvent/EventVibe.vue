@@ -14,8 +14,8 @@
                 <div class="vibes-list">
                     <div class="vibe-item" v-for="(tone,index) in ringtonesList" :key="index">
 <!--                        <md-icon>pause_circle_filled</md-icon>-->
-                        <template v-if="currentIndex !== index" @click.prevent="playSong(index)"><md-icon class="play-icon">play_circle_filled</md-icon></template>
-                        <template v-else-if="currentIndex === index" @click.prevent="pauseSong(index)"><md-icon class="pause-icon">pause_circle_filled</md-icon></template>
+                        <span v-if="currentIndex !== index"  @click.prevent="playSong(index)" ><md-icon class="play-icon">play_circle_filled</md-icon></span>
+                        <span v-else-if="currentIndex === index"  @click.prevent="pauseSong(index)" ><md-icon class="pause-icon">pause_circle_filled</md-icon></span>
                         <md-radio v-model="eventSongId" :value="tone.name" class="with-border">
                             <small>{{tone.author}}</small><br>
                             {{tone.name}}
@@ -173,8 +173,14 @@
             },
             playSong (index) {
 
-                if ( this.currentIndex ) {
-                    this.boardSound[this.currentIndex].pause();
+                console.log(index);
+
+                // if ( this.currentIndex ) {
+                //     this.boardSound[this.currentIndex].pause();
+                // }
+
+                for (let i = 0; i< this.boardSound.length ; i++) {
+                    this.boardSound[i].pause();
                 }
 
                 this.boardSound[index].play();
