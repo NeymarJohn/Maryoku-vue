@@ -340,17 +340,17 @@
                   </md-field>
                 </div>
               </div>
-              <div class="md-layout-item md-size-10"></div>
-              <div class="terms-form md-layout-item md-size-40">
-                <h5>Deposit Cost</h5>
-                <div class="payments-notes-fields">
-                  <md-field class="with-bg">
-                    <label></label>
-                    <span class="md-prefix">$</span>
-                    <md-input type="number" v-model="proposalRequest.depositCost" @blur="updateProposalRequest()"></md-input>
-                  </md-field>
-                </div>
-              </div>
+<!--              <div class="md-layout-item md-size-10"></div>-->
+<!--              <div class="terms-form md-layout-item md-size-40">-->
+<!--                <h5>Deposit Cost</h5>-->
+<!--                <div class="payments-notes-fields">-->
+<!--                  <md-field class="with-bg">-->
+<!--                    <label></label>-->
+<!--                    <span class="md-prefix">$</span>-->
+<!--                    <md-input type="number" v-model="proposalRequest.depositCost" @blur="updateProposalRequest()"></md-input>-->
+<!--                  </md-field>-->
+<!--                </div>-->
+<!--              </div>-->
             </div>
           </md-card-content>
         </md-card>
@@ -445,6 +445,7 @@
                 <div class="extra-items"
                   v-for="(req,rIndex) in proposalRequest.requirements"
                   :key="rIndex"
+                     v-if="req.price || req.price * proposalRequest.eventData.numberOfParticipants"
                 >
                   <span>{{req.requirementTitle}}</span>
                   <span class="pull-right">${{req.priceUnit == 'total' ? req.price : req.price * proposalRequest.eventData.numberOfParticipants | withComma}}</span>
@@ -969,14 +970,15 @@
   .extra-items-wrapper {
     margin-bottom: 1em;
     max-height: 12em;
-    overflow: scroll;
-    border-bottom: 1px solid #c0c0c0ef;
+    overflow-y: auto;
 
     .extra-items {
       padding: 5px 0;
 
       &:last-child {
         padding-bottom: 1em;
+          border-bottom: 1px solid #c0c0c0ef;
+
       }
     }
   }
