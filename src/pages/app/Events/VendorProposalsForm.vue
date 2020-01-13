@@ -445,7 +445,6 @@
                 <div class="extra-items"
                   v-for="(req,rIndex) in proposalRequest.requirements"
                   :key="rIndex"
-                     v-if="req.price || req.price * proposalRequest.eventData.numberOfParticipants"
                 >
                   <span>{{req.requirementTitle}}</span>
                   <span class="pull-right">${{req.priceUnit == 'total' ? req.price : req.price * proposalRequest.eventData.numberOfParticipants | withComma}}</span>

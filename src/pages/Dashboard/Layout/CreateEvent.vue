@@ -5,7 +5,7 @@
 
             <div class="header-content md-layout">
                 <div class="logo md-layout-item md-size-50 md-small-size-40">
-                    <a href="/"><img src="http://static.maryoku.com/storage/img/homepage/maryoku-logo-white@2x.png" width="118"></a>
+                    <a href="https://www.maryoku.com"><img src="http://static.maryoku.com/storage/img/homepage/maryoku-logo-white@2x.png" width="118"></a>
                 </div>
                 <div class="header-actions md-layout-item md-size-50 md-small-size-60">
                     <ul class="actions-list unstyled">
