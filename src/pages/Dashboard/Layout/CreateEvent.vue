@@ -1086,7 +1086,7 @@
             left: 10px;
             right: 10px;
             width: auto;
-            z-index: 9999999;
+            z-index: 99999;
         }
 
         .back-section {
@@ -1115,7 +1115,7 @@
         .form-section {
             width: 100% !important;
             padding : 0 !important;
-            padding-bottom: 160px !important;
+            padding-bottom: 60px !important;
         }
 
         .form-actions{
@@ -1138,18 +1138,21 @@
         .vibe-item {
             width: 100% !important;
             margin-right: 0;
-            margin-bottom: 0em;
+            margin-bottom: 0;
 
             display: flex !important;
             flex-direction: row;
 
              .md-radio.with-border {
-                width: 74% !important;
+                width: 76% !important;
                  margin-bottom: 0;
             }
             >span {
-                display: block;
+                display: flex;
                 text-align: center;
+                flex: 1;
+                justify-content: center;
+                align-items: center;
                 .md-icon {
                     float: none;
                     margin: 0;
@@ -1203,6 +1206,38 @@
         }
 
 
+    }
+
+    @media screen and (max-width : 380px) {
+        .maryoku-field , .md-checkbox , .md-radio , .md-field {
+            input , label, .md-input {
+                font-size: 13px !important;
+            }
+        }
+        .md-datepicker .md-icon.md-date-icon ~ label {
+            font-size: 13px !important;
+        }
+
+        .md-field.purple-field:not(.with-icon) {
+            .md-input {
+                padding-left : 0.8em !important;
+            }
+            label {
+                left : 1.4em;
+            }
+        }
+        .maryoku-field > label {
+            left: 20px;
+        }
+        .md-dialog.singin-form {
+            padding : 2em 20px;
+            .custom-btn {
+                min-width: initial;
+            }
+        }
+        .md-dialog-container, .md-dialog-container .md-tabs {
+            width : 100%;
+        }
     }
 
 

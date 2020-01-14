@@ -232,7 +232,7 @@
 
                 label {
                     position: relative !important;
-                    padding-left : 64px !important;
+                    padding-left : 64px;
                     height: auto !important;
 
                     img {
