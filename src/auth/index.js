@@ -168,7 +168,7 @@ export default {
                         console.error(e);
                         this.unsetToken();
                         if (required) {
-                            //context.$router.push({path:'/signin'});
+                            context.$router.push({path:'/signin'});
                         }
                         if (cb){
                             cb();
