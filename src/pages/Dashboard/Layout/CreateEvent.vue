@@ -645,6 +645,7 @@
         font-family: 'Open Sans', sans-serif;
         cursor: pointer;
         position: relative;
+        height: 56px;
 
         .md-error:not(.md-input) {
             position: absolute;
@@ -712,6 +713,7 @@
                 width: 100%;
                 height: 100%;
                 border : none !important;
+                -webkit-appearance: none;
 
                 &:focus {
                     outline: none;
