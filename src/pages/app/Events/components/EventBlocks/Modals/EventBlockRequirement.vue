@@ -37,6 +37,7 @@
               </div>
             </div>
             <div class="md-layout-item md-size-100" >
+
               <!-- Multi Select Options list -->
               <template v-if="tempOptions.length">
                 <div class="multi-select-options">
@@ -49,7 +50,7 @@
                       @change="getSelectedOptions"
                       v-model="option.checked"
                       :key="option.id">{{ option.title }}</md-checkbox>
-                    <md-field>
+                    <md-field v-if=" requirementPropertiesType === 'multi-selection-with-amount'">
                       <md-input v-model="option.value" @change="getSelectedOptions"></md-input>
                     </md-field>
                   </div>
