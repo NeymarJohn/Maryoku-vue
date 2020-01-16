@@ -149,11 +149,9 @@
       },
       filterVendors(){
         this.filteredVendorsList = _.filter(this.vendorsList, (v)=>{
-          if (v) {
             let byDisplayName = v.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
-            let byCategory = v.vendorCategory.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
-            return byDisplayName || byCategory; 
-          }
+          let byCategory = v.vendorCategory.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
+          return byDisplayName || byCategory;
         });
       },
       isValidVendorWebsite(vendor) {

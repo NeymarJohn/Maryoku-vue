@@ -34,6 +34,7 @@
               <div class="proposal--title margin-bottom-lg">
                 <md-icon class="proposal--icon">date_range</md-icon>
                 <span>{{ eventDate }}</span>
+
               </div>
               <div class="md-layout align-with-title">
                 <div class="md-layout-item md-size-50 margin-bottom-md">
@@ -59,6 +60,15 @@
                   <div>Requirements</div>
                   <p class="proposal--title">{{ proposalRequest ? proposalRequest.requirements.length : '-' }}</p>
                 </div>
+
+                  <div class="md-layout-item md-size-100 margin-bottom-md alternative-date" v-if="proposalRequest.eventData.flexibleWithDates">
+                      <md-button class="md-primary" @click="suggestAnotherDay">Suggest another day</md-button>
+                        <br><br>
+                      <md-datepicker v-if="suggest" v-model="proposalRequest.suggestedDates" :md-disabled-dates="isDateDisabled">
+                          <label>Alternative date</label>
+                      </md-datepicker>
+
+                  </div>
               </div>
             </div>
             <div class="md-layout-item">
@@ -101,6 +111,11 @@
                   <p class="proposal--title">${{ proposalRequest ? proposalRequest.bidRange.high : '-' }}</p>
                 </div>
               </div>
+
+                <div class="proposal--title centered margin-bottom-lg">
+                    <span >Total Budget</span> <b>${{ proposalRequest.eventData.totalBudget }}</b>
+                </div>
+
               <div class="centered">
                 <md-button
                   v-if="!proposalRequest"
@@ -139,10 +154,13 @@
       return {
         showSkipLink: false,
         upcomingEvents: [],
-        vendor: null
+        vendor: null,
+          suggest : false
       }
     },
-    created() {},
+    created() {
+
+    },
     mounted() {
       this.getVendor()
 
@@ -174,6 +192,20 @@
           })
         }.bind(this))
       },
+        isDateDisabled(date) {
+
+            let startDate = new Date(this.proposalRequest.eventData.eventStartMillis);
+            let endDate = new Date(this.proposalRequest.eventData.eventStartMillis);
+            let numberOfDaysToAdd = 3;
+            startDate.setDate(startDate.getDate() - 4);
+            endDate.setDate(endDate.getDate() + numberOfDaysToAdd);
+
+            return !(date >= startDate && date <= endDate);
+        },
+        suggestAnotherDay() {
+          this.suggest = true;
+            this.proposalRequest.suggestedDates = new Date(this.proposalRequest.eventData.eventStartMillis);
+        }
     },
     computed: {
       eventDate() {
@@ -185,12 +217,12 @@
       getLocation() {
         console.log(this.proposalRequest)
         console.log(this.upcomingEvents)
-        console.log('test', this.upcomingEvents.filter( item => 
-          item.participantsType == this.proposalRequest.eventData.participantsType && 
+        console.log('test', this.upcomingEvents.filter( item =>
+          item.participantsType == this.proposalRequest.eventData.participantsType &&
           item.numberOfParticipants == this.proposalRequest.eventData.numberOfParticipants
           // item.participantsType == this.proposalRequest.eventData.participantsType &&
-          // item.eventStartMillis == this.proposalRequest.eventStartMillis && 
-          // item.eventEndMillis == this.proposalRequest.eventEndMillis 
+          // item.eventStartMillis == this.proposalRequest.eventStartMillis &&
+          // item.eventEndMillis == this.proposalRequest.eventEndMillis
         ))
 
         if (this.proposalRequest) {

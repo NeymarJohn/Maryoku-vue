@@ -6,182 +6,199 @@
       </div> -->
       <h4 class="title profile-title title-summary">
         Event Summary
-        <md-button 
-          class="md-sm md-simple md-just-icon pull-right clear-margins"
-          @click="openEventModal()"
-        >
-          <md-icon class="company-logo">create</md-icon>
-        </md-button>
+        <md-button class="md-sm md-simple md-just-icon pull-right clear-margins"  @click="openEventModal()"><md-icon class="company-logo">create</md-icon></md-button>
       </h4>
     </md-card-header>
     <md-card-content v-if="event">
       <div>
         <div class="md-layout event-info-section card-expansion">
-          <div class="md-layout-item summary-item">
-            <div class="md-layout-item title-text">
-              <i class="fa fa-calendar"></i>
+            <div class="md-layout-item summary-item">
+                <div class="md-layout-item title-text">
+                    <i class="fa fa-calendar"></i>
+                </div>
+                <div class="md-layout-item">
+                    {{calendarEvent.eventStartMillis | formatDate}},
+                    {{calendarEvent.eventStartMillis | formatTime}}
+                    ({{calendarEvent.eventStartMillis |
+                    formatDuration(calendarEvent.eventEndMillis)}}h)
+                </div>
             </div>
-            <div class="md-layout-item">
-              {{calendarEvent.eventStartMillis | formatDate}},
-              {{calendarEvent.eventStartMillis | formatTime}}
-              ({{calendarEvent.eventStartMillis |
-              formatDuration(calendarEvent.eventEndMillis)}}h)
-            </div>
-          </div>
 
-          <div class="md-layout-item summary-item">
-            <div class="md-layout-item title-text">
-              <i class="fa fa-map-marker-alt"></i>
+            <div class="md-layout-item summary-item">
+                <div class="md-layout-item title-text">
+                    <i class="fa fa-map-marker-alt"></i>
+                </div>
+                <div class="md-layout-item">
+                    {{calendarEvent.location}}
+                </div>
             </div>
-            <div class="md-layout-item">
-              {{calendarEvent.location}}
+
+            <div class="md-layout-item summary-item">
+                <div class="md-layout-item  title-text">
+                    <i class="fa fa-user"></i>
+                </div>
+                <div class="md-layout-item">
+                    {{calendarEvent.numberOfParticipants}} {{inviteeType(calendarEvent)}}
+                </div>
             </div>
-          </div>
-          <div class="md-layout-item summary-item">
-            <div class="md-layout-item  title-text">
-              <i class="fa fa-user"></i>
-            </div>
-            <div class="md-layout-item">
-              {{calendarEvent.numberOfParticipants}} {{inviteeType(calendarEvent)}}
-            </div>
-          </div>
+
           <md-card class="event-extra-info-card">
-            <md-card-expand>
-              <md-card-expand-content>
-                <md-card-content>
-                  <div class="md-layout-item summary-item">
-                    <div class="md-layout-item  title-text">
-                      <md-icon >wb_sunny</md-icon>
-                    </div>
-                    <div class="md-layout-item text-capitalize">
-                      {{calendarEvent.eventDayPart}}
-                    </div>
-                  </div>
-                  <div class="md-layout-item summary-item">
-                    <div class="md-layout-item  title-text">
-                      <md-icon v-if="calendarEvent.eventPlaceNeeded">check</md-icon>
-                      <md-icon v-else>close</md-icon>
-                    </div>
-                    <div class="md-layout-item text-capitalize">
-                      Have event place
-                    </div>
-                  </div>
-                  <div class="md-layout-item summary-item">
-                    <div class="md-layout-item  title-text">
-                      <md-icon v-if="calendarEvent.flexibleWithDates">check</md-icon>
-                      <md-icon v-else>close</md-icon>
-                    </div>
-                    <div class="md-layout-item text-capitalize">
-                      flexible with dates
-                    </div>
-                  </div>
-                  <div class="md-layout-item summary-item">
-                    <div class="md-layout-item  title-text">
-                      <md-icon v-if="calendarEvent.internalEvent">check</md-icon>
-                      <md-icon v-else>close</md-icon>
-                    </div>
-                    <div class="md-layout-item text-capitalize">
-                      Internal company event
-                    </div>
-                  </div>
-                  <div class="md-layout-item summary-item" v-if="calendarEvent.expectedAttendacePercent">
-                    <div class="md-layout-item  title-text">
-                      <i class="fa fa-percent"></i>
-                    </div>
-                    <div class="md-layout-item text-capitalize">
-                      ({{calendarEvent.expectedAttendacePercent}}) people you're expecting to show up
-                    </div>
-                  </div>
-                  <div class="md-layout-item summary-item" v-if="calendarEvent.eventSongId">
-                    <div class="md-layout-item  title-text">
-                      <md-icon >audiotrack</md-icon>
-                    </div>
-                    <div class="md-layout-item text-capitalize">
-                      {{calendarEvent.eventSongId}}
-                    </div>
-                  </div>
-                  <div class="md-layout-item summary-item" v-if="calendarEvent.eventMovieId">
-                    <div class="md-layout-item  title-text">
-                      <md-icon >videocam</md-icon>
-                    </div>
-                    <div class="md-layout-item text-capitalize">
-                      {{calendarEvent.eventMovieId}}
-                    </div>
-                  </div>
-                  <div class="md-layout-item summary-item">
-                    <div class="md-layout-item  title-text">
-                      <md-icon >linear_scale</md-icon>
-                    </div>
-                    <div class="md-layout-item text-capitalize">
-                      Decision Factors
-                    </div>
-                  </div>
-                  <div class="md-layout-item">
-                    <ul class="m-0 p-0" style="padding-left: 39px; margin: 0;">
-                      <template v-if="calendarEvent.eventDecisionFactor1 >= 50">
-                        <li>Authenticity & experience <b>({{calendarEvent.eventDecisionFactor1}})</b></li>
-                        <li>Convenience & Accessibility <b>({{100 - calendarEvent.eventDecisionFactor1}})</b></li>
-                      </template>
-                      <template v-else>
-                        <li>Authenticity & experience <b>({{100 -  calendarEvent.eventDecisionFactor1}})</b></li>
-                        <li>Convenience & Accessibility <b>({{calendarEvent.eventDecisionFactor1}})</b></li>
-                      </template>
-                      <template v-if="calendarEvent.eventDecisionFactor2 >= 50">
-                        <li>New and edgy <b>({{calendarEvent.eventDecisionFactor2}})</b></li>
-                        <li>Familiar & trusted <b>({{100 - calendarEvent.eventDecisionFactor2}})</b></li>
-                      </template>
-                      <template v-else>
-                        <li>New and edgy <b>({{100 -  calendarEvent.eventDecisionFactor2}})</b></li>
-                        <li>Familiar & trusted <b>({{calendarEvent.eventDecisionFactor2}})</b></li>
-                      </template>
-                      <template v-if="calendarEvent.eventDecisionFactor3 >= 50">
-                        <li>Hight Value for Money <b>({{calendarEvent.eventDecisionFactor3}})</b></li>
-                        <li>Within budget <b>({{100 - calendarEvent.eventDecisionFactor3}})</b></li>
-                      </template>
-                      <template v-else>
-                        <li>Hight Value for Money <b>({{100 -  calendarEvent.eventDecisionFactor3}})</b></li>
-                        <li>Within budget <b>({{calendarEvent.eventDecisionFactor3}})</b></li>
-                      </template>
-                      <template v-if="calendarEvent.eventDecisionFactor4 >= 50">
-                        <li>Social & Green <b>({{calendarEvent.eventDecisionFactor4}})</b></li>
-                        <li>Meets Requirements <b>({{100 - calendarEvent.eventDecisionFactor4}})</b></li>
-                      </template>
-                      <template v-else>
-                        <li>Social & Green <b>({{100 -  calendarEvent.eventDecisionFactor4}})</b></li>
-                        <li>Meets Requirements <b>({{calendarEvent.eventDecisionFactor4}})</b></li>
-                      </template>
-                    </ul>
-                  </div>
-                  <div class="md-layout-item summary-item">
-                    <div class="md-layout-item  title-text">
-                      <md-icon >event_note</md-icon>
-                    </div>
-                    <div class="md-layout-item text-capitalize">
-                      Event Needed Services
-                    </div>
-                  </div>
-                  <div class="md-layout-item">
-                    <ul class="m-0 p-0" style="padding-left: 39px; margin: 0;">
-                      <li v-for="(item,i,index) in calendarEvent.eventNeededServices" :key="index">{{i}}</li>
-                    </ul>
-                  </div>
-                  <!-- NOTE: just hiding it -->
-                  <!-- <div class="md-layout-item md-size-100">
-                    <md-button class="md-sm md-simple md-rose">
-                      <md-icon>cached</md-icon>
-                      Recurring weekly
-                    </md-button>
-                    </div> -->
-                </md-card-content>
-              </md-card-expand-content>
-              <md-card-actions md-alignment="space-between">
-                <md-card-expand-trigger>
-                  <md-button class="md-icon-button md-rose md-simple">
-                    <md-icon>keyboard_arrow_down</md-icon>
-                  </md-button>
-                </md-card-expand-trigger>
-              </md-card-actions>
-            </md-card-expand>
+              <md-card-expand>
+                  <md-card-expand-content>
+                      <md-card-content>
+                          <div class="md-layout-item summary-item">
+                              <div class="md-layout-item  title-text">
+                                  <md-icon >wb_sunny</md-icon>
+                              </div>
+                              <div class="md-layout-item text-capitalize">
+                                  {{calendarEvent.eventDayPart}}
+                              </div>
+                          </div>
+
+                          <div class="md-layout-item summary-item">
+                              <div class="md-layout-item  title-text">
+                                  <md-icon v-if="calendarEvent.eventPlaceNeeded">check</md-icon>
+                                  <md-icon v-else>close</md-icon>
+                              </div>
+                              <div class="md-layout-item text-capitalize">
+                                  Have event place
+                              </div>
+                          </div>
+                          <div class="md-layout-item summary-item">
+                              <div class="md-layout-item  title-text">
+                                  <md-icon v-if="calendarEvent.flexibleWithDates">check</md-icon>
+                                  <md-icon v-else>close</md-icon>
+                              </div>
+                              <div class="md-layout-item text-capitalize">
+                                  flexible with dates
+                              </div>
+                          </div>
+
+                          <div class="md-layout-item summary-item">
+                              <div class="md-layout-item  title-text">
+                                  <md-icon v-if="calendarEvent.internalEvent">check</md-icon>
+                                  <md-icon v-else>close</md-icon>
+                              </div>
+                              <div class="md-layout-item text-capitalize">
+                                  Internal company event
+                              </div>
+                          </div>
+
+
+                          <div class="md-layout-item summary-item" v-if="calendarEvent.expectedAttendacePercent">
+                              <div class="md-layout-item  title-text">
+                                  <i class="fa fa-percent"></i>
+                              </div>
+                              <div class="md-layout-item text-capitalize">
+                                  ({{calendarEvent.expectedAttendacePercent}}) people you're expecting to show up
+                              </div>
+                          </div>
+
+                          <div class="md-layout-item summary-item" v-if="calendarEvent.eventSongId">
+                              <div class="md-layout-item  title-text">
+                                  <md-icon >audiotrack</md-icon>
+                              </div>
+                              <div class="md-layout-item text-capitalize">
+                                  {{calendarEvent.eventSongId}}
+                              </div>
+                          </div>
+                          <div class="md-layout-item summary-item" v-if="calendarEvent.eventMovieId">
+                              <div class="md-layout-item  title-text">
+                                  <md-icon >videocam</md-icon>
+                              </div>
+                              <div class="md-layout-item text-capitalize">
+                                  {{calendarEvent.eventMovieId}}
+                              </div>
+                          </div>
+
+
+                          <div class="md-layout-item summary-item">
+                              <div class="md-layout-item  title-text">
+                                  <md-icon >linear_scale</md-icon>
+                              </div>
+                              <div class="md-layout-item text-capitalize">
+                                  Decision Factors
+                              </div>
+                          </div>
+                          <div class="md-layout-item">
+                              <ul class="m-0 p-0" style="padding-left: 39px; margin: 0;">
+
+                                  <template v-if="calendarEvent.eventDecisionFactor1 >= 50">
+                                      <li>Authenticity & experience <b>({{calendarEvent.eventDecisionFactor1}})</b></li>
+                                      <li>Convenience & Accessibility <b>({{100 - calendarEvent.eventDecisionFactor1}})</b></li>
+                                  </template>
+                                  <template v-else>
+                                      <li>Authenticity & experience <b>({{100 -  calendarEvent.eventDecisionFactor1}})</b></li>
+                                      <li>Convenience & Accessibility <b>({{calendarEvent.eventDecisionFactor1}})</b></li>
+                                  </template>
+
+                                  <template v-if="calendarEvent.eventDecisionFactor2 >= 50">
+                                      <li>New and edgy <b>({{calendarEvent.eventDecisionFactor2}})</b></li>
+                                      <li>Familiar & trusted <b>({{100 - calendarEvent.eventDecisionFactor2}})</b></li>
+                                  </template>
+                                  <template v-else>
+                                      <li>New and edgy <b>({{100 -  calendarEvent.eventDecisionFactor2}})</b></li>
+                                      <li>Familiar & trusted <b>({{calendarEvent.eventDecisionFactor2}})</b></li>
+                                  </template>
+
+                                  <template v-if="calendarEvent.eventDecisionFactor3 >= 50">
+                                      <li>Hight Value for Money <b>({{calendarEvent.eventDecisionFactor3}})</b></li>
+                                      <li>Within budget <b>({{100 - calendarEvent.eventDecisionFactor3}})</b></li>
+                                  </template>
+                                  <template v-else>
+                                      <li>Hight Value for Money <b>({{100 -  calendarEvent.eventDecisionFactor3}})</b></li>
+                                      <li>Within budget <b>({{calendarEvent.eventDecisionFactor3}})</b></li>
+                                  </template>
+
+                                  <template v-if="calendarEvent.eventDecisionFactor4 >= 50">
+                                      <li>Social & Green <b>({{calendarEvent.eventDecisionFactor4}})</b></li>
+                                      <li>Meets Requirements <b>({{100 - calendarEvent.eventDecisionFactor4}})</b></li>
+                                  </template>
+                                  <template v-else>
+                                      <li>Social & Green <b>({{100 -  calendarEvent.eventDecisionFactor4}})</b></li>
+                                      <li>Meets Requirements <b>({{calendarEvent.eventDecisionFactor4}})</b></li>
+                                  </template>
+
+
+                              </ul>
+                          </div>
+
+                          <div class="md-layout-item summary-item">
+                              <div class="md-layout-item  title-text">
+                                  <md-icon >event_note</md-icon>
+                              </div>
+                              <div class="md-layout-item text-capitalize">
+                                  Event Needed Services
+                              </div>
+                          </div>
+                          <div class="md-layout-item">
+                              <ul class="m-0 p-0" style="padding-left: 39px; margin: 0;">
+                                  <li v-for="(item,i,index) in calendarEvent.eventNeededServices" :key="index">{{i}}</li>
+                              </ul>
+                          </div>
+
+
+                          <!-- NOTE: just hiding it -->
+                          <!-- <div class="md-layout-item md-size-100">
+                            <md-button class="md-sm md-simple md-rose">
+                              <md-icon>cached</md-icon>
+                              Recurring weekly
+                            </md-button>
+                          </div> -->
+                      </md-card-content>
+                  </md-card-expand-content>
+
+                  <md-card-actions md-alignment="space-between">
+                      <md-card-expand-trigger>
+                          <md-button class="md-icon-button md-rose md-simple">
+                              <md-icon>keyboard_arrow_down</md-icon>
+                          </md-button>
+                      </md-card-expand-trigger>
+                  </md-card-actions>
+              </md-card-expand>
+
+
+
           </md-card>
         </div>
 
