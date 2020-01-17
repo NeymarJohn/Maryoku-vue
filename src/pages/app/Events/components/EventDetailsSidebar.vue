@@ -378,7 +378,7 @@
 
             _calendar.calendarEvents().find(this.$route.params.id).then(event => {
               //this.event = event
-                this.eventId = event.id
+              this.eventId = event.id
               this.calendarEvent = event
               this.selectedComponents = event.components
 
@@ -420,8 +420,7 @@
 
             this.budgetPerEmployee = evt.budgetPerPerson//this.totalRemainingBudget / evt.numberOfParticipants
             this.allocatedBudget = resp.totalAllocatedBudget
-            this.event.statistics['allocatedBudget'] = this.allocatedBudget;
-
+            this.event.statistics['allocatedBudget'] = this.allocatedBudget
           })
           .catch(error => {
             console.log(error)
