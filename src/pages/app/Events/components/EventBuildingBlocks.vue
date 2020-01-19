@@ -30,7 +30,7 @@
             <thead>
               <tr class="md-warning">
                 <th>Element</th>
-                <th>Brief</th>
+<!--                <th>Brief</th>-->
                 <th>Budget</th>
                 <th>Actual cost</th>
                 <th></th>
@@ -68,22 +68,22 @@
                       <i class="fa fa-user"></i> {{block.numberOfParticipants ? block.numberOfParticipants : event.numberOfParticipants}}
                     </span>
                   </td>
-                  <td class="fit-content">
-                    <template>
-                      <div v-if="block.valuesCount && block.proposalsState != 'get-offers'" class="cursor-pointer">
-                        <md-button class="md-simple md-xs requirements-cell-button no-padding"
-                                    @click="addRequirements(block)">
-                          <!-- {{`${block.valuesCount} selected`}} -->
-                          Edit
-                        </md-button>
-                      </div>
-                      <template v-else>
-                        <md-button class="md-info md-xs md-warning btn-add no-padding" @click="addRequirements(block)">
-                          Add+
-                        </md-button>
-                      </template>
-                    </template>
-                  </td>
+<!--                  <td class="fit-content">-->
+<!--                    <template>-->
+<!--                      <div v-if="block.valuesCount && block.proposalsState != 'get-offers'" class="cursor-pointer">-->
+<!--                        <md-button class="md-simple md-xs requirements-cell-button no-padding"-->
+<!--                                    @click="addRequirements(block)">-->
+<!--                          &lt;!&ndash; {{`${block.valuesCount} selected`}} &ndash;&gt;-->
+<!--                          Edit-->
+<!--                        </md-button>-->
+<!--                      </div>-->
+<!--                      <template v-else>-->
+<!--                        <md-button class="md-info md-xs md-warning btn-add no-padding" @click="addRequirements(block)">-->
+<!--                          Add+-->
+<!--                        </md-button>-->
+<!--                      </template>-->
+<!--                    </template>-->
+<!--                  </td>-->
                   <td
                     class="fit-content w-20 allocated-budget"
                     :class="{required : !block.allocatedBudget || block.allocatedBudget == 0}"
