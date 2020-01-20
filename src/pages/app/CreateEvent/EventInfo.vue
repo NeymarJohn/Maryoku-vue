@@ -32,7 +32,7 @@
                 </div>
 
 
-                <md-checkbox v-model="eventData.internalEvent">Internal company event</md-checkbox>
+<!--                <md-checkbox v-model="eventData.internalEvent">Internal company event</md-checkbox>-->
 
 
                 <div class="form-actions">

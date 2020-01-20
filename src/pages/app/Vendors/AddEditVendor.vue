@@ -161,7 +161,6 @@
                     console.log("*** Save vendor - done: ");
                     console.log(JSON.stringify(res));
                     this.$router.push({name: 'EditVendor', params: {id: res.item.id}});
-                    document.location.reload();
                     this.isLoading = false;
                 });
             },
