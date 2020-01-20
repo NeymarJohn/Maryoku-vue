@@ -336,7 +336,6 @@
   import moment from 'moment'
   import VueElementLoading from 'vue-element-loading'
   import Vendors from '@/models/Vendors'
-  import VendorPropertyField from './VendorPropertyField'
 
   //COMPONENTS
   import Icon from '@/components/Icon/Icon.vue'
@@ -351,7 +350,6 @@
       VendorSimilarProposals,
       VendorSimilarItem,
       VendorFeedbacks,
-      VendorPropertyField,
       Icon,
       LightBox
     },
@@ -372,7 +370,6 @@
         attachments: [],
         proposals: [],
         bgImages: [],
-        vendorPropertiesSections: [],
         defaultImg: 'http://static.maryoku.com/storage/img/lock.jpg',
         pricesAndRules: [],
         checkListItems: [],
@@ -399,7 +396,6 @@
 
       this.getVendor()
       this.getVendorProposals(this.$route.params.id)
-      this.vendorCategoryChanged(this.vendor.vendorCategory)
     },
     methods: {
       getVendor() {
@@ -409,15 +405,6 @@
             this.isLoading = false
           })
         }.bind(this))
-      },
-      vendorCategoryChanged(val) {
-        Vendors.params({
-          category: val
-        }).find('properties').then(vendorProperties => {
-          this.vendorPropertiesSections = vendorProperties
-        }, (error) => {
-          console.log(error)
-        })  
       },
       getVendorProposals(id) {
         this.isLoading = true;
