@@ -111,11 +111,6 @@
                   <p class="proposal--title">${{ proposalRequest ? proposalRequest.bidRange.high : '-' }}</p>
                 </div>
               </div>
-
-                <div class="proposal--title centered margin-bottom-lg">
-                    <span >Total Budget</span> <b>${{ proposalRequest.eventData.totalBudget }}</b>
-                </div>
-
               <div class="centered">
                 <md-button
                   v-if="!proposalRequest"

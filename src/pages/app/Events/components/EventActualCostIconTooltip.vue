@@ -1,12 +1,12 @@
 <template>
   <div class="md-layout actual-cost-wrapper">
-    <md-icon v-if="paidAmount > 0">{{icon}}</md-icon>
+    <md-icon v-if="showIcon">{{icon}}</md-icon>
     <md-tooltip md-direction="top">
       <div class="tooltip-wrapper">
         <strong>Down payment has been paid</strong>
         <span>Paid Amount: {{paidAmount | withComma}}</span>
         <span>Date: {{paidDate}}</span>
-      </div>           
+      </div>
     </md-tooltip>
   </div>
 </template>
@@ -31,6 +31,7 @@
       return {
         paidAmount: 0,
         paidDate: 'N/A',
+        showIcon: false
       }
     },
     mounted() {
@@ -59,7 +60,10 @@
             let proposals = []
 
             _.each(vendorsWithProposals, (v)=>{
-              if ( v.proposals[0].accepted ) {
+              // if ( v.proposals[0].accepted ) {
+              this.showIcon = v.proposals[0].accepted
+
+              if ( v.proposals[0].downPaymentStatus == 'paid' ) {
                 proposals = v.proposals
 
                 _.each(proposals, (p)=>{
