@@ -59,7 +59,6 @@
                 <div class="event-time">
                     <md-radio v-model="eventData.eventDayPart" value="day" class="with-border">Day event</md-radio>
                     <md-radio v-model="eventData.eventDayPart" value="night" class="with-border">Night event</md-radio>
-                    <md-radio v-model="eventData.eventDayPart" value="all" class="with-border">All day</md-radio>
                 </div>
 
 
@@ -75,7 +74,7 @@
             </div>
         </div>
 
-        <go-back navigation="https://www.maryoku.com/home.html" :home="true"></go-back>
+        <go-back navigation=""></go-back>
 
     </div>
 </template>
@@ -224,8 +223,8 @@
 <style lang="scss">
 
 
-    .form-section.event-basic-info {
-        width: 450px;
+    .form-section {
+        width: 350px;
         margin: 0 auto;
         padding: 0;
         min-height: 440px;
@@ -242,11 +241,7 @@
 
         .md-radio {
             margin-right: 0;
-            width : 31% !important;
-
-            &.with-border {
-                padding: 1em 0 1em 0.4em;
-            }
+            width: 47%;
         }
     }
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="register-section">
+    <div class="create-event">
 
         <div class="top-header">
 
@@ -62,7 +62,7 @@
         font-weight: 500;
         display: block;
     }
-    .register-section {
+    .create-event {
         .top-header {
             background: #5c2153;
             border-radius: 0 0 50% 50%;
@@ -551,7 +551,7 @@
                 width : 90%;
             }
         }
-        .register-section {
+        .create-event {
             .top-header {
                 .logo {
                     img {

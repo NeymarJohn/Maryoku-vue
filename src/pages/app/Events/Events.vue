@@ -40,8 +40,7 @@
               >{{ item.owner.displayName }} <span class="small text-primary" style="display: block;">{{ item.owner.emailAddress }}</span></md-table-cell>
               <md-table-cell md-label="Created By" v-else>You <span class="small text-primary" style="display: block;">{{ item.owner.emailAddress }}</span> </md-table-cell>
               <md-table-cell md-label="# Participants">{{item.numberOfParticipants}}</md-table-cell>
-                <md-table-cell md-label="Budget Per Participant">$ {{item.budgetPerPerson}}</md-table-cell>
-                <md-table-cell md-label="Location">{{item.location}}</md-table-cell>
+              <md-table-cell md-label="Budget Per Participant">$ {{item.budgetPerPerson}}</md-table-cell>
               <md-table-cell md-label="Actions" style="white-space: nowrap;">
                 <!--<md-button @click="viewEvent(item)" class="md-raised md-info md-icon-button">
                   <md-icon>visibility</md-icon>

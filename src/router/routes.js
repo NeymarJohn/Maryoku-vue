@@ -10,7 +10,6 @@ import CompanyDashboard from '@/pages/app/CompanyDashboard/CompanyDashboard.vue'
 import CreateEvent from '@/pages/Dashboard/Layout/CreateEvent.vue';
 import HomeLayout from '@/pages/Dashboard/Layout/HomeLayout.vue';
 import SigninSignupLayout from '@/pages/Dashboard/Layout/SigninSignupLayout.vue';
-import NewEventLayout from '@/pages/Dashboard/Layout/NewEventLayout.vue';
 
 import Team from "@/pages/app/Team/Team.vue";
 import Members from "@/pages/app/Members/Members.vue";
@@ -476,117 +475,6 @@ let EventPages = {
       },
     }
   ]
-};
-
-let NewEventPages = {
-    path: "/app2",
-    component: NewEventLayout,
-    name: "App2",
-    children: [{
-        path: "/events",
-        name: "Events",
-        component: Events,
-        meta: {
-            title: 'Our Events',
-            gtm: "Events"
-        },
-    },
-        {
-            path: "/events/proposal",
-            name: "EventProposal",
-            component: EventProposal,
-            meta: {
-                title: 'Event Proposal'
-            },
-        },
-        {
-            path: '/events/new',
-            name: 'NewEvent',
-            component: NewEvent,
-            meta: {
-                title: 'Create New Event'
-            },
-        },
-        {
-            path: "/events/:id/edit/details",
-            name: "EditEvent",
-            component: CurrentEvents,
-            meta: {
-                title: 'Event Details',
-                gtm: "Event Edit",
-                opaque: false
-            }
-        },
-        {
-            path: "/events/:id/edit/building-blocks",
-            name: "EditBuildingBlocks",
-            component: CurrentEvents,
-            meta: {
-                title: 'Building Blocks',
-                gtm: "Building Blocks",
-                opaque: false
-            },
-        },
-        {
-            path: "/events/:id/edit/timeline",
-            name: "EditTimeLine",
-            component: CurrentEvents,
-            meta: {
-                title: 'Timeline',
-                gtm: "Event Timeline",
-                opaque: false
-            },
-        },
-        {
-            path: "/events/:id/edit/invitees-management",
-            name: "InviteesManagement",
-            component: CurrentEvents,
-            meta: {
-                title: 'Automated Interactions',
-                gtm: "Event Edit",
-                opaque: false
-            },
-        },
-        {
-            path: "/events/:id/edit/event-invitees",
-            name: "EventInvitees",
-            component: CurrentEvents,
-            meta: {
-                title: 'Event Invitees',
-                gtm: "Event Invitees",
-                opaque: false
-            },
-        },
-
-        //Event Wizard
-        {
-            path: "/event-steps/:id",
-            name: "EventSteps",
-            component: EventSteps,
-            meta: {
-                title: 'Event Wizard',
-                gtm: "Event Wizard"
-            },
-        },
-        {
-            path: "/event/create",
-            name: "EventSteps",
-            component: EventSteps,
-            meta: {
-                title: 'Event Wizard',
-                gtm: "Event Wizard"
-            },
-        },
-        {
-            path: "/event/:id/edit",
-            name: "EventSteps",
-            component: EventSteps,
-            meta: {
-                title: 'Event Wizard',
-                gtm: "Event Wizard"
-            },
-        }
-    ]
 };
 
 let SigninSignupPage = {
