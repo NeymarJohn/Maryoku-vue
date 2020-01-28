@@ -47,7 +47,6 @@
             </div>
             <div class="md-layout-item  md-size-40">
                 <div class="card-section">
-                    asdasd
                 </div>
             </div>
         </div>
