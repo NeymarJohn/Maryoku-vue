@@ -1,5 +1,7 @@
 import Sidebar from "./SideBar.vue";
 import SidebarItem from "./SidebarItem.vue";
+import NewSidebar from "./NewSideBar.vue";
+
 
 const SidebarStore = {
   showSidebar: false,
@@ -42,7 +44,8 @@ const SidebarPlugin = {
         return this.$root.sidebarStore;
       }
     });
-    Vue.component("side-bar", Sidebar);
+      Vue.component("side-bar", Sidebar);
+      Vue.component("new-side-bar", NewSidebar);
     Vue.component("sidebar-item", SidebarItem);
   }
 };

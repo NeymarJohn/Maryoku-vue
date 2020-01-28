@@ -88,7 +88,9 @@
           </div>
           <div class="banner-description-body">
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+              <template v-if="vendor.vendorPropertyValues && vendorDescription">
+                {{vendor.vendorPropertyValues[vendorDescription.id]}}
+              </template>
             </p>
           </div>
         </div>
@@ -139,7 +141,7 @@
                   <div class="icon-text-vertical" v-for="(item, index) in vendorCapacities" :value="item" :key="index">
                     <md-icon>airline_seat_recline_extra</md-icon>
                     <h5>
-                      {{item.defaultValue}}
+                      {{vendor.vendorPropertyValues[item.id]}}
                     </h5>
                     <span>
                       {{item.name}}
@@ -292,7 +294,9 @@
               </div>
               <div class="tab-item-content-body">
                 <p>
-                  A 50% deposit will be due on or before 18/1/20. The remaining balance will b collected a week prior to the event. We accept all major credit cards and checks.
+                  <template v-if="vendor.vendorPropertyValues && vendorPaymentPolicy">
+                    {{vendor.vendorPropertyValues[vendorPaymentPolicy.id]}}
+                  </template>
                 </p>
               </div>
             </div>
@@ -306,7 +310,9 @@
               </div>
               <div class="tab-item-content-body">
                 <p>
-                  Be due on or before 18/1/20. The remaining balance will be collected a week prior to the vent. We accept... <a class="more">Read more</a>
+                  <template v-if="vendor.vendorPropertyValues && vendorCancellationPolicy">
+                    {{vendor.vendorPropertyValues[vendorCancellationPolicy.id]}}
+                  </template>
                 </p>
               </div>
             </div>
@@ -336,6 +342,7 @@
   import moment from 'moment'
   import VueElementLoading from 'vue-element-loading'
   import Vendors from '@/models/Vendors'
+  import VendorPropertyField from './VendorPropertyField'
 
   //COMPONENTS
   import Icon from '@/components/Icon/Icon.vue'
@@ -350,6 +357,7 @@
       VendorSimilarProposals,
       VendorSimilarItem,
       VendorFeedbacks,
+      VendorPropertyField,
       Icon,
       LightBox
     },
@@ -370,6 +378,7 @@
         attachments: [],
         proposals: [],
         bgImages: [],
+        vendorPropertiesItems: [],
         defaultImg: 'http://static.maryoku.com/storage/img/lock.jpg',
         pricesAndRules: [],
         checkListItems: [],
@@ -399,12 +408,24 @@
     },
     methods: {
       getVendor() {
-        this.$auth.currentUser(this, true, function () {
-          Vendors.find(this.$route.params.id).then(vendor => {
-            this.vendor = vendor
-            this.isLoading = false
-          })
-        }.bind(this))
+        Vendors.find(this.$route.params.id).then(vendor => {
+          this.vendor = vendor
+          this.vendorCategoryChanged(this.vendor.vendorCategory)
+          this.isLoading = false
+        })
+      },
+      vendorCategoryChanged(vendorCategory) {
+        Vendors.params({
+          category: vendorCategory
+        }).find('properties').then(vendorProperties => {
+          _.each(vendorProperties,(section)=>{
+            section.items.forEach( item => {
+              this.vendorPropertiesItems.push(item)
+            })
+          });
+        }, (error) => {
+          console.log(error)
+        })  
       },
       getVendorProposals(id) {
         this.isLoading = true;
@@ -452,17 +473,41 @@
         }
       },
       vendorCapacities: function() {
-        if (this.vendor.vendorProperties) {
-          return this.vendor.vendorProperties.filter( item => item.categoryTitle == 'Capacity')
+        if (this.vendorPropertiesItems) {
+          console.log(this.vendorPropertiesItems.filter( item => item.categoryTitle == 'Capacity'))
+          return this.vendorPropertiesItems.filter( item => item.categoryTitle == 'Capacity')
         } else {
-          return [];
+          return {}
         }
       },
-      vendorLogoImage: function() {
-        if (this.vendor.vendorProperties) {
-          return this.vendor.vendorProperties.filter( item => item.name == 'Logo' && item.type == 'image')
+      vendorDescription: function() {
+        if (this.vendorPropertiesItems) {
+          return this.vendorPropertiesItems.filter( item => item.name == 'Description')[0]
         } else {
-          return [];
+          return {}
+        }
+      },
+      vendorPaymentPolicy: function() {
+        if (this.vendorPropertiesItems) {
+          return this.vendorPropertiesItems.filter( item => item.name == 'Payment Policy')[0]
+        } else {
+          return {}
+        }
+      },
+      vendorCancellationPolicy: function() {
+        if (this.vendorPropertiesItems) {
+          return this.vendorPropertiesItems.filter( item => item.name == 'Cancellation policy')[0]
+        } else {
+          return {}
+        }
+      },
+      // "Courtesy save policy"
+      // "Number events per year"
+      vendorLogoImage: function() {
+        if (this.vendor.vendorPropertiesItems) {
+          return this.vendor.vendorPropertiesItems.filter( item => item.name == 'Logo' && item.type == 'image')
+        } else {
+          return {}
         }
       },
       vendorExtraImage: function() {
