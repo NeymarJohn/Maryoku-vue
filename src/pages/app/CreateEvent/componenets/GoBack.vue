@@ -13,7 +13,11 @@
         props : {
             navigation : {
                 type : String,
-                default : '/'
+                default : 'https://www.maryoku.com/home.html'
+            },
+            home : {
+                type : Boolean,
+                default : false
             }
         },
         components: {
@@ -21,8 +25,6 @@
         },
         data() {
             return {
-
-
             }
         },
         methods : {
@@ -30,8 +32,15 @@
 
             goTo(){
                 console.log(this.navigation);
-                this.setCurrentStep({currentPage : this.navigation})
-                this.$router.push({ path: this.navigation});
+                this.setCurrentStep({currentPage : this.navigation});
+
+                if ( this.home ) {
+                    console.log('i am here');
+                    location.href = this.navigation;
+                } else {
+                    this.$router.push({ path: this.navigation});
+
+                }
             }
         }
     };

@@ -63,6 +63,26 @@
                                         ></md-input>
                                     </md-field>
                                 </div>
+
+                                <div class="md-layout-item md-size-100 margin-bottom">
+                                    <md-field>
+                                        <label>Link</label>
+                                        <md-input
+                                            v-model="item.link"
+                                            type="text"
+                                        ></md-input>
+                                    </md-field>
+                                </div>
+                                <div class="md-layout-item md-size-100 ">
+                                    <label>Attchement</label>
+                                    <md-field>
+                                        <md-input
+                                            name="attachment"
+                                            type="file"
+                                            @change="onFileChange"
+                                        ></md-input>
+                                    </md-field>
+                                </div>
                             </md-card-content>
                             <md-card-actions md-alignment="right" style="border: none;">
                                 <md-button name="event-planner-tab-timeline-item-save" class="event-planner-tab-timeline-item-save md-danger md-simple"
@@ -210,7 +230,8 @@
             ],
             timelineItems: [],
             hoursArray: [],
-            disabledDragging : false
+            disabledDragging : false,
+            timelineAttachment : null
 
         }),
         methods: {
@@ -303,6 +324,7 @@
 
             },
             saveTimelineItem(item, index) {
+                console.log('ameed');
                 this.setItemLoading(item, true, true);
 
                 if ( !item.startTime || !item.endTime ||
@@ -325,6 +347,9 @@
                 let event = new CalendarEvent({id: this.event.id});
                 let order = ++index;
 
+                console.log('i am here => ' ,item);
+                console.log(this.timelineAttachment);
+
                 new EventTimelineItem({
                     event: {id: event.id},
                     title: item.title,
@@ -334,7 +359,9 @@
                     endTime: item.endTime,
                     order: order,
                     icon: item.icon,
-                    color: item.color
+                    color: item.color,
+                    link : item.link,
+                    attachment : this.timelineAttachment
                 }).for(calendar, event).save()
                     .then(res => {
 
@@ -348,6 +375,8 @@
                         this.disabledDragging = false;
                         this.$root.$emit("timeline-updated", this.timelineItems);
                     })
+
+                this.timelineAttachment = null;
 
             },
             updateTimelineItem(item) {
@@ -381,6 +410,8 @@
                 timelineItem.description = item.description;
                 timelineItem.startTime = item.startTime;
                 timelineItem.endTime = item.endTime;
+                timelineItem.link = item.link;
+                timelineItem.attachment = this.timelineAttachment;
 
                 timelineItem.save().then(res => {
                     this.getTimelineItems();
@@ -392,6 +423,9 @@
                     this.disabledDragging = false;
                     this.$root.$emit("timeline-updated", this.timelineItems);
                 })
+
+                this.timelineAttachment = null;
+
             },
             updateTimelineITemsOrder() {
                 this.isLoading = true;
@@ -439,7 +473,29 @@
                     this.$set(item, 'mode', 'edit');
                     this.$set(item, 'mode', 'saved');
                 }
-            }
+            },
+            onFileChange(e) {
+                let files = e.target.files || e.dataTransfer.files;
+                if (!files.length) return;
+                if (e.target.name) {
+                    this.createImage(files[0], "attachment");
+                } else {
+                    this.createImage(files[0]);
+                }
+            },
+            createImage(file, type) {
+                let reader = new FileReader();
+                let vm = this;
+
+                reader.onload = e => {
+                    if (type === "attachment") {
+                        vm.timelineAttachment = e.target.result;
+                    } else {
+                        //vm.imageRegular = e.target.result;
+                    }
+                };
+                reader.readAsDataURL(file);
+            },
 
         },
         created() {
