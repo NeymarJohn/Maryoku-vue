@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <div class="section-header">
+        <div class="section-header" style="margin-top: -50px !important;">
             <h2 class="section-title">Few steps to complete the background we need</h2>
             <div class="steps-wizard">
                 <ul class="steps-wizard-items">
