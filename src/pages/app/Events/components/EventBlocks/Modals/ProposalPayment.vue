@@ -158,10 +158,10 @@
     import EventBlockRequirements from '../Modals/EventBlockRequirements.vue'
     import EventComponentProposal from '@/models/EventComponentProposal';
 
-    //var stripe = Stripe('pk_test_Pf5EtcXWfAPTNuKeJ6IDqQPu00zkS2tASs');
+    var stripe = Stripe('pk_test_Pf5EtcXWfAPTNuKeJ6IDqQPu00zkS2tASs');
 
     // Create an instance of Elements.
-    //var elements = stripe.elements();
+    var elements = stripe.elements();
 
     var card = undefined;
 
@@ -225,11 +225,11 @@
                     }
                 };
 
-                //card = elements.create('card');
-                //card.mount(this.$refs.card);
+                card = elements.create('card');
+                card.mount(this.$refs.card);
 
 
-                //console.log('elements => ', elements);
+                console.log('elements => ', elements);
             },100);
 
 
@@ -240,7 +240,7 @@
             submitPayment(event) {
                 let self = this;
 
-                /*stripe.createToken(card).then(function(result) {
+                stripe.createToken(card).then(function(result) {
                     console.log(result);
                     if (result.error) {
                         self.hasCardErrors = true;
@@ -248,7 +248,7 @@
                         return;
                     }
 
-                });*/
+                });
             }
 
         },

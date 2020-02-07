@@ -6,7 +6,7 @@
       </div> -->
       <h4 class="title profile-title title-summary">
         Event Summary
-        <md-button 
+        <md-button
           class="md-sm md-simple md-just-icon pull-right clear-margins"
           @click="openEventModal()"
         >
@@ -194,12 +194,12 @@
           <div class="md-layout-item">
             <h5 class="title-budget-main">Remaining budget</h5>
             <h4 class="title budget">
-              <div 
+              <div
                 class="title"
                 :class="[{'title-budget-prise': percentage > 0, 'title-budget-prise-negative':percentage <= 0}]"
                 v-if="calendarEvent.budgetPerPerson * calendarEvent.numberOfParticipants"
               >
-                <animated-number 
+                <animated-number
                   ref="totalRemainingBudgetNumber"
                   :value="getTotalRemainingBudget"
                   prefix="$">
@@ -411,6 +411,7 @@
             this.totalRemainingBudget = evt.totalBudget - resp[0].totalAllocatedBudget
             this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants//evt.totalBudget - resp[0].totalAllocatedBudget
             this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
+
 
             if (this.percentage > 0) {
               this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-positive"}, {value: this.percentage, className:"budget-chart-slice-b-positive"}]
