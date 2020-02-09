@@ -1081,16 +1081,7 @@
                 padding: 0 1em;
             }
         }
-
-        .form-section .form-actions  {
-            position: fixed;
-            flex-direction: column;
-            left: 10px;
-            right: 10px;
-            width: auto;
-            z-index: 99999;
-        }
-
+        
         .back-section {
             margin: 0;
             height: 30px;

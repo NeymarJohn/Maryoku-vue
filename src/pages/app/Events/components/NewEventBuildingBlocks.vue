@@ -4,15 +4,15 @@
           <thead>
           <tr>
               <th width="40%">Categories</th>
-              <th>Planned</th>
-              <th>Actual</th>
-              <th>Status</th>
+              <th width="20%">Planned</th>
+              <th width="15%">Actual</th>
+              <th width="15%">Status</th>
               <th></th>
           </tr>
           </thead>
       </table>
       <table class="event-blocks__table event-block-table"
-             v-for="(block, index) in eventBuildingBlocks"
+             v-for="(block, index) in eventBuildingBlocks" :key="index"
       >
 
           <tbody >
@@ -20,8 +20,8 @@
           <template>
               <tr >
                   <td width="40%" class="vendor"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> {{block.title}}</td>
-                  <td class="planned">
-                      <label-edit v-if="!event.elementsBudgetPerGuest"
+                  <td class="planned" width="20%">
+                      <label-edit v-if="type == 'total'"
                                   :text="block.allocatedBudget"
                                   :field-name="block.componentId"
                                   :sub-description="elementsBudget"
@@ -47,8 +47,29 @@
                                   @text-updated-blur="blockBudgetChanged"
                                   @text-updated-enter="blockBudgetChanged"></label-edit>
                   </td>
-                  <td class="actual red-label"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+29.png"> $2000</td>
-                  <td class="status">
+                  <td class="actual red-label" width="15%">
+
+                      <template v-if="block.allocatedBudget">
+
+                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+29.png">
+                          <template v-if="block.winningProposalId">
+                              <md-button
+                                  class="md-simple actual-cost md-xs"
+                                  :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`"
+                              >
+                                  {{ event.elementsBudgetPerGuest ?  `$${(block.winingProposal.cost / event.numberOfParticipants).toFixed(2)}` : `$${block.winingProposal.cost.toFixed(2)}` }}
+                                  <md-icon >open_in_new</md-icon>
+                              </md-button>
+                          </template>
+                      </template>
+                      <!-- v-if="block.downPaymentStatus == 'accepted'" -->
+                      <event-actual-cost-icon-tooltip
+                          :icon="'credit_card'"
+                          :item="block"
+                          :event="event"
+                      />
+                  </td>
+                  <td class="status" width="15%">
                       <div >
                           <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">
                       </div>
@@ -67,14 +88,14 @@
                   <td>$80</td>
                   <td class="actual red-label" colspan="3"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+29.png"> $100</td>
               </tr>
-              <tr>
+              <tr class="item-actions">
                   <td class="see-proposals">
                       <div>Relish Caterers & Venues</div>
-                      <md-button class="md-rose md-simple">See Proposal</md-button>
+                      <md-button class="md-rose md-simple see-proposal" >See Proposal</md-button>
                   </td>
-                  <td colspan="4" class="text-right">
-                      <md-button class="md-simple">Edit Proposal</md-button>
-                      <md-button class="md-simple">Cancel Proposal</md-button>
+                  <td colspan="4"  class="actions-list text-right">
+                      <md-button class="md-simple" @click="reviewProposals(block)">Edit Proposal</md-button>
+                      <md-button class="md-simple" @click="deleteBlock(block.id)">Cancel Proposal</md-button>
                   </td>
               </tr>
           </template>
@@ -183,7 +204,7 @@
 
           <tr class="add-category">
               <td colspan="5">
-                  <md-button class="md-simple add-category-btn">
+                  <md-button class="md-simple add-category-btn" @click="showAddEventElementsModal()">
                       <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2019.svg"> Add new category
                   </md-button>
               </td>
@@ -194,7 +215,7 @@
                   <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2020.svg" width="20"> Taxes <span class="percent">18%</span>
               </td>
               <td>
-                  $300
+                  ${{totalBudgetTaxes}}
               </td>
               <td class="actual green-label"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png"> $100</td>
               <td></td>
@@ -206,8 +227,8 @@
           </tr>
           <tr class="total">
               <td class="total-title">Total</td>
-              <td class="total-value">$6000</td>
-              <td colspan="3">$3500</td>
+              <td class="total-value">${{totalBudget}}</td>
+              <td colspan="3">${{totalActual}}</td>
 
           </tr>
           </tbody>
@@ -254,7 +275,11 @@
           return {statistics: {}}
         }
       },
-      eventComponents: [Array, Function]
+      eventComponents: [Array, Function],
+        type  : {
+          type : String,
+            default : 'total'
+        }
     },
     data: () => ({
       // auth: auth,
@@ -264,7 +289,11 @@
       eventBuildingBlocksList: [],
       currentBlockId: null,
       elementsBudget: 'event',
-        show : false
+        show : false,
+        totalBudget : 0,
+        totalActual : 0,
+        totalBudgetTaxes : 0
+
 
     }),
     methods: {
@@ -326,15 +355,24 @@
       getEventBuildingBlocks() {
         if (!this.event.id) return;
 
+        let vm = this;
+
         this.isLoading = true;
 
         let res = this.event.components;
         this.$set(this, 'eventBuildingBlocks', res);
-          setTimeout(()=>{
+          setTimeout(()=> {
           this.isLoading = false;
         },500);
 
-          console.log(this.eventBuildingBlocks);
+          this.eventBuildingBlocks.forEach((item)=> {
+              console.log(item);
+
+              if (item.allocatedBudget) {
+                  vm.totalBudget +=item.allocatedBudget;
+                  vm.totalBudgetTaxes  += item.allocatedBudget * .18;
+              }
+          })
 
         this.$forceUpdate();
       },
@@ -383,7 +421,6 @@
         selected_block.values = block.values;
         selected_block.vendors = block.vendors;
 
-        console.log(val);
         if (val) {
           if (val.toString().toLowerCase() === 'click to set') {
             selected_block.allocatedBudget = null;
@@ -391,11 +428,11 @@
           } else {
 
               if ( block.allocatedBudget && block.numberOfParticipants ) {
-                  selected_block.allocatedBudget = !this.event.elementsBudgetPerGuest ? val : val * block.numberOfParticipants;
-                  block.allocatedBudget          = !this.event.elementsBudgetPerGuest ? val : val * block.numberOfParticipants;
+                  selected_block.allocatedBudget = this.type == 'total' ? val : val * block.numberOfParticipants;
+                  block.allocatedBudget          = this.type == 'total' ? val : val * block.numberOfParticipants;
               } else {
-                  selected_block.allocatedBudget = !this.event.elementsBudgetPerGuest ? val : val * this.event.numberOfParticipants;
-                  block.allocatedBudget          = !this.event.elementsBudgetPerGuest ? val : val * this.event.numberOfParticipants;
+                  selected_block.allocatedBudget = this.type == 'total' ? val : val * this.event.numberOfParticipants;
+                  block.allocatedBudget          = this.type == 'total' ? val : val * this.event.numberOfParticipants;
               }
 
           }
@@ -409,6 +446,8 @@
           this.$root.$emit('RefreshStatistics');
           this.getEventBuildingBlocks();
           this.$forceUpdate();
+
+          console.log(' selected block ', selected_block);
 
           let allocatedBudget = 0;
           this.eventBuildingBlocks.forEach(item => {
@@ -493,6 +532,8 @@
       }
     },
     created() {
+
+        console.log(this.event);
 
     },
     mounted() {

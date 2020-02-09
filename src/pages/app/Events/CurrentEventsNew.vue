@@ -97,15 +97,19 @@
                     >
                         <!-- here you can add your content for tab-content -->
                         <template slot="tab-pane-1">
-                            <new-event-building-blocks :event.sync="event" :event-components="selectedComponents"></new-event-building-blocks>
+                            <new-event-building-blocks :event.sync="event" :event-components="selectedComponents" type="total"></new-event-building-blocks>
                         </template>
                         <template slot="tab-pane-2">
-                            <new-event-building-blocks :event.sync="event" :event-components="selectedComponents"></new-event-building-blocks>
+                            <new-event-building-blocks :event.sync="event" :event-components="selectedComponents" type="perGuest"></new-event-building-blocks>
                         </template>
                     </tabs>
                 </div>
             </div>
         </div>
+
+
+        <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
+
 
 
     </div>
@@ -137,12 +141,16 @@
 
     //COMPONENTS
 
+    import UploadVendorsModal from '../Vendors/ImportVendors';
+
+
     export default {
         components: {
             Tabs,
             NewEventBuildingBlocks,
             ChartComponent,
-            ChartCard
+            ChartCard,
+            UploadVendorsModal
         },
 
         data () {

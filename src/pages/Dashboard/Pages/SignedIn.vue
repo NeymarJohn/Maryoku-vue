@@ -111,13 +111,14 @@
                         }
                     }
 
-                    if (!me.customer.onboarded) {
+                    /*if (!me.customer.onboarded) {
                         that.$router.push({ path: '/company-form' });
                     } else if (!me.onboarded) {
                         that.$router.push({ path: '/me-form' });
                     } else {
                         that.$router.push({ path: '/' });
-                    }
+                    }*/
+                    that.$router.push({ path: '/' });
                 });
             }
         },
