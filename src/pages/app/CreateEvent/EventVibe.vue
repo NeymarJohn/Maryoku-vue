@@ -221,6 +221,8 @@
         width: 50%;
         display: inline-block;
         float: left;
+        margin-bottom : 1em;
+
 
         .md-icon {
             font-size: 3rem !important;
@@ -252,6 +254,7 @@
             height: 52px;
             padding: 4px;
             width: 81%;
+            margin: 0 auto;
 
             &:hover {
                 border-color: $baseColor;

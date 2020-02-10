@@ -1081,7 +1081,7 @@
                 padding: 0 1em;
             }
         }
-        
+
         .back-section {
             margin: 0;
             height: 30px;
