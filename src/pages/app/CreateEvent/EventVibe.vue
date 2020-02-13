@@ -215,6 +215,7 @@
             font-weight: bold;
             text-align: center;
         }
+
     }
 
     .vibe-item {
