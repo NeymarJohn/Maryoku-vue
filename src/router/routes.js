@@ -50,6 +50,7 @@ import publicRegister from "@/pages/app/SinginSingup/publicRegister.vue";
 
 // New Event Pages
 import CurrentEventsNew from "@/pages/app/Events/CurrentEventsNew.vue";
+import EventTimeLineNew from "@/pages/app/Events/components/EventTimeLineNew.vue";
 
 // Dashboard pages
 import EmployeeMain from '@/pages/Dashboard/Pages/CommonInfoProfile/Employee.vue';
@@ -532,9 +533,9 @@ let NewEventPages = {
             },
         },
         {
-            path: "/events/:id/edit/timeline",
+            path: "/events/:id/edit/timeline/new",
             name: "EditTimeLine",
-            component: CurrentEvents,
+            component: EventTimeLineNew,
             meta: {
                 title: 'Timeline',
                 gtm: "Event Timeline",

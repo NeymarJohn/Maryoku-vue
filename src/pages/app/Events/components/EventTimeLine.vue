@@ -10,7 +10,7 @@
                 <div v-for="(block,index) in blocksList" :key="block.id" class="md-layout-item md-size-100">
 
                     <drag :transfer-data="{ block }" class="time-line-blocks_item "
-                          :style="`background: ` + block.color">
+                          :style="`border: 1px dashed ` + block.color + `; color :` + block.color">
                         <md-icon>{{block.icon}}</md-icon>
                         <h5>{{block.buildingBlockType}}</h5>
                     </drag>

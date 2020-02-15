@@ -1,5 +1,6 @@
 $yellow : #ffc001;
 $rose : #f51355;
+$green : #6ec37d;
 
 @font-face {
     font-family: 'Manrope-Bold';
@@ -521,3 +522,205 @@ $rose : #f51355;
 }
 
 
+.timeline-section {
+    position: relative;
+    padding: 0 0 0 18em;
+
+    .timeline-sidebar {
+        position: absolute;
+        left : -15px;
+        top : 0;
+        bottom : 0;
+        width : 294px;
+        background: #fff;
+    }
+
+    .summer-party {
+        background: #fff;
+        text-align: center;
+        padding : 1em 0 0.6em;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        box-shadow: 0 43px 41px 0 rgba(0, 0, 0, 0.16);
+
+        .title-label {
+            font-size: 17px;
+            font-weight: 800;
+            color: #050505;
+            text-transform: uppercase;
+
+            small {
+                font-weight: normal;
+                text-transform: initial;
+            }
+        }
+
+        .completion-progress {
+            width : 80%;
+            margin: 0.3em auto;
+            height: 8px;
+            border-radius: 100px;
+            background: #d8d8d8;
+
+            .progress-done {
+                height: 100%;
+                width : 30%;
+                border-radius: 100px;
+                background: $green;
+
+            }
+        }
+
+        .percentage {
+            ul {
+                list-style: none;
+                padding : 0;
+                margin : 0;
+                text-align: center;
+
+                li {
+                    display: inline-block;
+                    font-size: 15px;
+                    &.green-label {
+                        color : $green;
+                    }
+                    &:not(.green-label) {
+                        color: #050505;
+                        border-left : 1px solid #b7b7b7;
+                        padding-left: 0.6em;
+                        margin-left: 0.6em;
+                        font-size: 13px;
+                        line-height: 1;
+                    }
+                }
+            }
+        }
+
+        .small-label {
+            font-size: 13px;
+            color: #a0a0a0;
+        }
+    }
+
+    .event-elements {
+
+        &__item {
+            box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.12);
+            background-color: #ffffff;
+            border-left : 10px solid #818080;
+            margin-bottom : 0.4em;
+            padding: 1em 1.5em;
+
+            .item-title {
+                position: inherit;
+                img {
+                    margin-right : 0.4em;
+                }
+            }
+
+
+            &.complete {
+                background: rgba(56, 255, 126, 0.19);
+                border-left-color : $green;
+                text-decoration: line-through;
+            }
+
+            &.current {
+                border-left-color : $green;
+                font-size: 21px;
+                font-weight: 800;
+                position: relative;
+
+                &:before {
+                    content : ' ';
+                    position: absolute;
+                    width : 50%;
+                    height: 100%;
+                    background: rgba(56, 255, 126, 0.19);
+                    left : 0;
+                    top : 0;
+                    bottom : 0;
+                }
+            }
+        }
+    }
+}
+
+
+.timeline-lists-footer {
+    .footer-title {
+        font-size: 17px;
+        font-weight: 800;
+        color: #818080;
+    }
+
+    .back-to-top {
+        .md-ripple {
+            font-weight: bold;
+            text-transform: capitalize;
+            font-size: 15px;
+            padding  : 0 !important;
+            color : #f51355 !important;
+        }
+    }
+}
+
+.dragdrop-timeline-header {
+
+    background: #fff;
+    margin-bottom : 1em;
+
+    .header-title {
+        font-weight: 900;
+        border-bottom: 1px solid #cfcfcf;
+        padding: 1em 2em;
+    }
+    .section-desc {
+        padding : 1em 2em;
+        margin : 0;
+    }
+}
+.event-page-header {
+    background: #fff;
+    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+    height: 120px;
+    margin : 0 0;
+    max-width : none !important;
+
+
+}
+
+.event-page-header {
+    display: flex;
+    flex : 1;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding : 0 2em;
+
+    .md-button {
+        .md-ripple {
+            font-weight: bold;
+            text-transform: capitalize;
+            font-size: 15px;
+            color : #050505 !important;
+            padding: 6px 30px !important;
+        }
+
+        &.md-rose {
+            .md-ripple {
+                background : #f51355 !important;
+                color : #fff !important;
+            }
+        }
+
+        &.with-left-border {
+            border-left : 1px solid #7b7b7b;
+            border-radius: 0;
+        }
+    }
+
+
+}

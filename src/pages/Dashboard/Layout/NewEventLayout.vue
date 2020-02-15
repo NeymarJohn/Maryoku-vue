@@ -13,10 +13,10 @@
       </template>
     </new-side-bar>
     <div class="main-panel" style="height: 50%;">
-      <div class="top-navbar-section" style="background : #fff;">
-        <top-navbar></top-navbar>
-      </div>
-      <div :class="{content: !$route.meta.hideContent}" @click="toggleSidebar">
+<!--      <div class="top-navbar-section" style="background : #fff;">-->
+<!--        <top-navbar></top-navbar>-->
+<!--      </div>-->
+      <div :class="{content: !$route.meta.hideContent}" @click="toggleSidebar" style="padding-right : 0;">
         <zoom-center-transition :duration="200" mode="out-in">
           <!-- your content here -->
           <router-view></router-view>
