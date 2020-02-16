@@ -1,5 +1,10 @@
 <template>
     <div class="md-layout timeline-section">
+
+        <side-bar :event="event">
+
+        </side-bar>
+
         <div class="timeline-sidebar">
             <div class="summer-party">
                 <div class="title-label">summer party <small>checklist</small></div>
@@ -245,6 +250,9 @@
     import {Drag, Drop} from 'vue-drag-drop'
     import _ from 'underscore'
 
+    import SideBar from '../../../../components/SidebarPlugin/NewSideBar';
+    import SidebarItem from '../../../../components/SidebarPlugin/NewSidebarItem.vue';
+
     export default {
         name: 'event-time-line',
         components: {
@@ -252,7 +260,9 @@
             EventBlocks,
             draggable, Drag, Drop,
             SlideYDownTransition,
-            InputMask
+            InputMask,
+            SideBar,
+            SidebarItem
         },
         props: {
             // event: Object,

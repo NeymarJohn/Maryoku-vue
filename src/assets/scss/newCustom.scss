@@ -22,6 +22,11 @@ $green : #6ec37d;
     font-stretch: normal;
 }
 
+.sidebar-mini .main-panel {
+    width: calc(100% - 60px);
+}
+
+
 .new-event-side-bar {
 
     display: block;
