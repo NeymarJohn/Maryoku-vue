@@ -37,11 +37,9 @@
         <template v-if="addLink">
           <md-icon v-if="link.icon">{{link.icon}}</md-icon>
           <span class="sidebar-mini" v-else>{{linkPrefix}}</span>
-          <span class="sidebar-normal">{{link.name}}</span>
         </template>
         <template v-else>
           <md-icon>{{link.icon}}</md-icon>
-          <p>{{link.name}}</p>
         </template>
       </component>
     </slot>

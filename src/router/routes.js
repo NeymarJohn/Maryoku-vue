@@ -514,7 +514,7 @@ let NewEventPages = {
         },
         {
             path: "/events/:id/edit/details/new",
-            name: "EditEvent",
+            name: "EditEventNew",
             component: CurrentEventsNew,
             meta: {
                 title: 'Event Details',

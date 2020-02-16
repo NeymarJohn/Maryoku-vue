@@ -298,7 +298,7 @@ export default {
       return (event.eventEndMillis - event.eventStartMillis) / 3600000;
     },
     routeToEvent(eventId) {
-      this.$router.push({ name: "EditEvent", params: { id: eventId } });
+      this.$router.push({ name: "EditEventNew", params: { id: eventId } });
     },
     routeToPlanner() {
       this.$router.push({ name: "AnnualPlanner" });

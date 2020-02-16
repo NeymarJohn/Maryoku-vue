@@ -1,5 +1,5 @@
 <template>
-    <div class="sidebar new-event-side-bar"
+    <div class="new-event-side-bar"
          :data-color="activeColor"
          :data-background-color="backgroundColor">
 
@@ -10,19 +10,12 @@
             </md-button>
         </div>
         <div class="sidebar-wrapper" ref="sidebarScrollArea">
-            <slot></slot>
             <md-list class="nav">
-                <slot name="links">
-                    <sidebar-item v-for="(link, index) in sidebarLinks"
-                                  :key="link.name + index"
-                                  :link="link">
-
-                        <sidebar-item v-for="(subLink, index) in link.children"
-                                      :key="subLink.name + index"
-                                      :link="subLink">
-                        </sidebar-item>
-                    </sidebar-item>
-                </slot>
+                <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Create Event',  icon: 'outlined_flag', path: '/event/create'}"></sidebar-item>
+                <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Events List',  icon: 'check_circle_outline', path: '/events'}"></sidebar-item>
+                <sidebar-item name="left-menu-yearly-plan" class="left-menu-yearly-plan" :link="{name: 'Year Planner',  icon: 'attach_money', path: '/planner'}"></sidebar-item>
+                <sidebar-item name="left-menu-vendors-list" class="left-menu-vendors-list" :link="{name: 'Vendors Pool', icon: 'chat_bubble_outline', path: '/vendors-pool'}">
+                </sidebar-item>
             </md-list>
         </div>
         <div class="logo">
@@ -32,14 +25,13 @@
                     <!--<md-icon>calendar_today</md-icon>-->
                 </div>
             </a>
-            <a href="/" class="simple-text logo-normal">
-                <template v-if="$route.meta.rtlActive">{{rtlTitle}}</template>
-                <template v-else><img style="width: 100px;" width="100px" :src="fullLogo"></template>
-            </a>
         </div>
     </div>
 </template>
 <script>
+
+    import SidebarItem from './NewSidebarItem';
+
     export default {
         name: 'sidebar',
         props: {
@@ -94,6 +86,10 @@
             autoClose: {
                 type: Boolean,
                 default: true
+            },
+            event : {
+                type : Object,
+                default : {}
             }
         },
         provide () {
@@ -119,6 +115,9 @@
             if (this.$sidebar.showSidebar) {
                 this.$sidebar.showSidebar = false
             }
+        },
+        components : {
+            SidebarItem
         }
     }
 </script>

@@ -1,17 +1,17 @@
 <template>
-  <div  class="new-event-side-bar"  :class="[{'nav-open': $sidebar.showSidebar}, {'rtl': $route.meta.rtlActive}]">
+  <div   :class="[{'nav-open': $sidebar.showSidebar}, {'rtl': $route.meta.rtlActive}]">
     <notifications></notifications>
-    <new-side-bar>
-      <!--<user-menu></user-menu>-->
-      <mobile-menu></mobile-menu>
-      <template slot="links">
-        <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Create Event',  icon: 'event', path: '/event/create'}"></sidebar-item>
-        <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Events List',  icon: 'event', path: '/events'}"></sidebar-item>
-        <sidebar-item name="left-menu-yearly-plan" class="left-menu-yearly-plan" :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>
-        <sidebar-item name="left-menu-vendors-list" class="left-menu-vendors-list" :link="{name: 'Vendors Pool', icon: 'contacts', path: '/vendors-pool'}">
-        </sidebar-item>
-      </template>
-    </new-side-bar>
+<!--    <new-side-bar>-->
+<!--      &lt;!&ndash;<user-menu></user-menu>&ndash;&gt;-->
+<!--      <mobile-menu></mobile-menu>-->
+<!--      <template slot="links">-->
+<!--        <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Create Event',  icon: 'event', path: '/event/create'}"></sidebar-item>-->
+<!--        <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Events List',  icon: 'event', path: '/events'}"></sidebar-item>-->
+<!--        <sidebar-item name="left-menu-yearly-plan" class="left-menu-yearly-plan" :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>-->
+<!--        <sidebar-item name="left-menu-vendors-list" class="left-menu-vendors-list" :link="{name: 'Vendors Pool', icon: 'contacts', path: '/vendors-pool'}">-->
+<!--        </sidebar-item>-->
+<!--      </template>-->
+<!--    </new-side-bar>-->
     <div class="main-panel" style="height: 50%;">
 <!--      <div class="top-navbar-section" style="background : #fff;">-->
 <!--        <top-navbar></top-navbar>-->

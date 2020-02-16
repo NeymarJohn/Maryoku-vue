@@ -1,5 +1,10 @@
 <template>
     <div class="edit-event-details">
+
+        <side-bar :event="calendarEvent">
+
+        </side-bar>
+
         <!-- Event Header -->
         <div class="event-header d-flex justify-content-between">
             <div class="header-title">
@@ -143,6 +148,9 @@
 
     import UploadVendorsModal from '../Vendors/ImportVendors';
 
+    import SideBar from '../../../components/SidebarPlugin/NewSideBar';
+    import SidebarItem from '../../../components/SidebarPlugin/NewSidebarItem.vue';
+
 
     export default {
         components: {
@@ -150,7 +158,9 @@
             NewEventBuildingBlocks,
             ChartComponent,
             ChartCard,
-            UploadVendorsModal
+            UploadVendorsModal,
+            SideBar,
+            SidebarItem
         },
 
         data () {
