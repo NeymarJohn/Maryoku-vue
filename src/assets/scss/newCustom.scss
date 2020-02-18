@@ -142,20 +142,30 @@ $green : #6ec37d;
     }
 }
 
-.card-section {
-    border-radius: 3px;
-    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-    background-color: #ffffff;
-    margin-bottom : 1em;
+.edit-event-details {
 
-    .section-header {
-        border-bottom : 1px solid #e2e2e2;
-        padding: 10px;
-        font-family: 'Manrope-Bold',sans-serif;
-        font-size: 14px;
-        color: #050505;
+    .card-section {
+        border-radius: 3px;
+        box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+        background-color: #ffffff;
+        margin-bottom : 1em;
+
+        .section-header {
+            border-bottom : 1px solid #e2e2e2;
+            padding: 10px;
+            font-family: 'Manrope-Bold',sans-serif;
+            font-size: 14px;
+            color: #050505;
+            background: #fff !important;
+            text-align: left;
+            border-radius: 0;
+
+        }
     }
 }
+
+
+
 
 .budget-list {
     text-align: center;
