@@ -245,6 +245,10 @@ $green : #6ec37d;
     .md-card-tabs .tab-content {
         margin : 0 !important;
         background: none;
+
+        >div {
+            width : 100% !important;
+        }
     }
 
     .event-blocks__table {

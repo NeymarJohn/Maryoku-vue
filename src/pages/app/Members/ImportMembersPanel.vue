@@ -370,7 +370,7 @@
         }
     }
 
-    .md-list-item-container {
+    .import-members-modal .md-list-item-container {
         border-radius: 5px !important;
     }
 </style>

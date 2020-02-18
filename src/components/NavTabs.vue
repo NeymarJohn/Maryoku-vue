@@ -1,5 +1,5 @@
 <template>
-    <md-card class="md-card-tabs"
+    <md-card class="md-card-tabs" id="card-tabs-999"
              :class="[
       {'flex-column': flexColumn},
       {'nav-pills-icons': navPillsIcons},
@@ -91,7 +91,7 @@
 </script>
 
 <style lang="css">
-    .md-list-item-container {
+    #card-tabs-999 .md-list-item-container {
         border-radius: 5px !important;
     }
 </style>
