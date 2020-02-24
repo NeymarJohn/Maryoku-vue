@@ -1,7 +1,45 @@
 <template>
   <div class="md-layout">
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen/>
-
+    <!-- Publish Event Button -->
+    <div class="md-layout-item text-left">
+      <!--<md-button class="md-info event-planner-event-page-go-back" @click="goBack">
+        <md-icon>arrow_left</md-icon>Back
+        </md-button>-->
+      <md-button class="md-info event-planner-event-page-publish-event" @click="publishEvent">
+        Publish Event
+      </md-button>
+    </div>
+    <!-- ./Publish Event Button -->
+    <div class="md-layout-item md-size-100">
+      <md-card class="event-details">
+        <md-card-content class="md-layout" v-if="calendarEvent.id">
+          <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
+          <!-- Event Banner -->
+          <event-banner :event="calendarEvent"></event-banner>
+          <!-- ./Event Banner -->
+          <!-- Event Info -->
+          <div class="md-layout-item md-size-50">
+            <div class="event-title-date text-left">
+              <h4>
+                {{calendarEvent.title}}
+              </h4>
+              <div class="event-date">{{getEventDate(calendarEvent.eventStartMillis)}}</div>
+            </div>
+            <event-tabs :event="calendarEvent" ></event-tabs>
+            <event-images :event="calendarEvent"></event-images>
+            <event-questions-answers :event="calendarEvent"></event-questions-answers>
+          </div>
+          <!-- ./Event Info -->
+          <!-- Event TimeLine -->
+          <div class="md-layout-item md-size-50">
+            <event-time-line-items :event="calendarEvent"></event-time-line-items>
+          </div>
+          <!-- ./Event Timeline -->
+        </md-card-content>
+      </md-card>
+    </div>
+    <publish-event-modal :event.sync="calendarEvent" rel="publishEventModal"></publish-event-modal>
   </div>
 </template>
 

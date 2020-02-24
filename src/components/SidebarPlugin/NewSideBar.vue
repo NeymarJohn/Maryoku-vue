@@ -11,7 +11,7 @@
         </div>
         <div class="sidebar-wrapper" ref="sidebarScrollArea">
             <md-list class="nav">
-                <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Event Details',  icon: 'outlined_flag', path: '/events/' + event.id +'/edit/event'}"></sidebar-item>
+                <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Create Event',  icon: 'outlined_flag', path: '/event/create'}"></sidebar-item>
                 <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Events Lists',  icon: 'check_circle_outline', path: '/events/'+ event.id +'/edit/timeline/new'}"></sidebar-item>
                 <sidebar-item name="left-menu-yearly-plan" class="left-menu-yearly-plan" :link="{name: 'Event Budget',  icon: 'attach_money', path: '/events/'+ event.id +'/edit/details/new'}"></sidebar-item>
                 <sidebar-item name="left-menu-vendors-list" class="left-menu-vendors-list" :link="{name: 'Vendors Pool', icon: 'chat_bubble_outline', path: '/vendors-pool'}">

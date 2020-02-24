@@ -1,12 +1,47 @@
 <template>
-    <div class="md-layout new-event-details edit-event-details">
+    <div class="md-layout timeline-section">
 
         <side-bar :event="event">
 
         </side-bar>
 
-        <div class="event-details-header md-layout-item md-size-100"
-        >
+        <div class="timeline-sidebar">
+            <div class="summer-party">
+                <div class="title-label">summer party <small>checklist</small></div>
+                <div class="completion-progress">
+                    <div class="progress-done"></div>
+                </div>
+                <div class="percentage">
+                    <ul>
+                        <li class="green-label">56%</li>
+                        <li class="">17 of 26</li>
+                    </ul>
+                </div>
+                <div class="small-label">Things are warming up!</div>
+            </div>
+
+            <!-- Event Elements -->
+            <div class="event-elements">
+                <draggable :list="eventElements">
+                    <div class="event-elements__item" :class="item.status" v-for="(item,index) in eventElements"
+                         :key="index">
+                        <div class="item-title">
+                            <img v-if="item.status == 'complete'"
+                                 src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="15">
+                            {{item.title}}
+                        </div>
+                    </div>
+                </draggable>
+
+            </div>
+        </div>
+
+        <div class="event-page-header md-layout-item md-size-100">
+            <div class="header-main-actions">
+                <md-button class="md-rose">Save Changes</md-button>
+                <md-button class="md-default md-simple">back to first version</md-button>
+                <md-button class="md-default md-simple with-left-border">start from scratch</md-button>
+            </div>
             <div class="header-actions">
                 <ul>
                     <li><a href=""><i class="fa fa-download"></i></a></li>
@@ -14,396 +49,186 @@
                     <li><a href=""><i class="fa fa-download"></i></a></li>
                 </ul>
             </div>
-
-            <div class="event-header__count">
-                <div class="count-item">
-                    <div class="number">07</div>
-                    <div class="count-label">DAYS</div>
-                </div>
-                <div class="count-item divider">:</div>
-                <div class="count-item">
-                    <div class="number">11</div>
-                    <div class="count-label">HOURS</div>
-                </div>
-                <div class="count-item divider">:</div>
-                <div class="count-item">
-                    <div class="number">32</div>
-                    <div class="count-label">MINUTES</div>
-                </div>
-                <div class="count-item with-icon">
-                    <div class="icon"><img src="http://static.maryoku.com/storage/icons/event's+page/SVG/Asset%20152.svg" width="15"></div>
-                    <div class="count-label">To Event</div>
-                </div>
-            </div>
-
-            <div class="event-details-info d-flex justify-content-start">
-                <div class="event-title d-flex justify-content-center align-center"
-                     style="background : linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url(./static/img/Image-49.png) center center no-repeat"
-
-                >
-                    <h3>Event Title</h3>
-                    <md-button class="md-default md-simple edit-concept-btn">Edit Concept <md-icon>keyboard_arrow_right</md-icon></md-button>
-                </div>
-                <div class="event-items">
-                    <div class="event-items__item">
-                        <img src="http://static.maryoku.com/storage/icons/event's%20page/SVG/Asset%20155.svg" width="15"> <span>NBA Swags</span>
-                    </div>
-                    <div class="event-items__item">
-                        <img src="http://static.maryoku.com/storage/icons/event's+page/SVG/Asset%20155.svg" width="15"> <span>The Big Employees Tournament</span>
-
-                    </div>
-                    <div class="event-items__item">
-                        <img src="http://static.maryoku.com/storage/icons/event's+page/SVG/Asset%20155.svg" width="15"> <span>Pizza & Beer</span>
-                    </div>
-                    <div class="event-items__item">
-                        <img src="http://static.maryoku.com/storage/icons/event's+page/SVG/Asset%20155.svg" width="15"> <span>B-ball Themed Reception</span>
-
-                    </div>
-                    <div class="event-items__item">
-                        <img src="http://static.maryoku.com/storage/icons/event's+page/SVG/Asset%20155.svg" width="15"> <span>B-ball Decorated Tables</span>
-
-                    </div>
-                    <div class="event-items__item">
-                        <img src="s3://static.maryoku.com/storage/icons/Event%20Page/SVG/Asset%20155.svg" width="15"> <span>American B-ball Cupcake</span>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
 
-        <div class="md-layout justify-content-between" style="margin-top : 2em;">
-            <div class="md-layout-item md-size-40">
 
-                <div class="card-section">
-                    <div class="section-header">
-                        <md-icon>outlined_flag</md-icon> Event’s details
-                    </div>
+        <div class="md-layout-item md-xlarge-size-60 md-large-size-60 md-small-size-50 time-line-section mr-auto"
+             style="">
 
-                    <div class="card-content ">
+            <!--<md-button name="event-planner-tab-timeline-preview" class="event-planner-tab-timeline-preview md-info md-sm preview-event" @click="previewEvent">
+              Preview
+            </md-button>-->
 
-                        <div class="d-flex justify-content-start align-center">
-                            <div class="event-details-list">
-                                <ul class="list-items">
-                                    <li class="event-details-item">
-                                        <md-icon>wb_sunny</md-icon> <span>Day Time event</span>
-                                    </li>
-                                    <li class="event-details-item">
-                                        <md-icon>wb_sunny</md-icon> <span>Wednesday, December 25, 2019</span>
-                                    </li>
-                                    <li class="event-details-item">
-                                        <md-icon>wb_sunny</md-icon> <span>2,034 Invited</span>
-                                    </li>
-                                    <li class="event-details-item">
-                                        <md-icon>wb_sunny</md-icon> <span>Georgia Event Hall, San Diego</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="event-weather">
-                                <div class="event-weather__icon"><md-icon>wb_cloudy</md-icon></div>
-                                <div class="event-weather__status">Mostly Sunny</div>
-                                <div class="event-weather__degree">
-                                    <div class="degree-value">58</div>
-                                    <ul class="degree-types">
-                                        <li class="type red">F</li>
-                                        <li class="type">C</li>
-                                    </ul>
+            <drop @drop="handleDrop" style="height: 100%;">
+                <draggable :list="timelineItems" class="time-line-blocks_selected-items"
+                           :options="{disabled : disabledDragging}">
+                    <div v-for="(item,index) in timelineItems" :key="index"
+                         class="time-line-blocks_selected-items_item time-line-item">
+                        <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">{{item.icon}}
+                        </md-icon>
+                        <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit' "
+                                 :style="`border-left : 5px solid ` + item.color"
+                        >
+                            <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C"/>
+                            <md-card-content class="md-layout">
+                                <div class="md-layout-item md-size-50">
+                                    <md-field>
+                                        <input-mask v-focus placeholder="From Time e.g:08:00 AM" class="md-input"
+                                                    v-model="item.startTime" mask="99:99 aa" maskChar="_"></input-mask>
+                                    </md-field>
                                 </div>
-                                <div class="event-weather__details">
-                                    <div class="details-item">Precipitation: 10%</div>
-                                    <div class="details-item">Humidity: 38%</div>
-                                    <div class="details-item">Wind: 7 mph</div>
+                                <div class="md-layout-item md-size-50">
+                                    <md-field>
+                                        <input-mask placeholder="To Time e.g:10:00 PM" class="md-input"
+                                                    v-model="item.endTime" mask="99:99 aa" maskChar="_"></input-mask>
+                                    </md-field>
                                 </div>
-                            </div>
-                        </div>
+                                <div class="md-layout-item md-size-100">
+                                    <md-field>
+                                        <label>Title</label>
+                                        <md-input
+                                            v-model="item.title"
+                                            type="text"
+                                        ></md-input>
+                                    </md-field>
+                                </div>
+                                <div class="md-layout-item md-size-100">
+                                    <md-field>
+                                        <label>Description</label>
+                                        <md-input
+                                            v-model="item.description"
+                                            type="text"
+                                        ></md-input>
+                                    </md-field>
+                                </div>
+
+                                <div class="md-layout-item md-size-100 margin-bottom">
+                                    <md-field>
+                                        <label>Link</label>
+                                        <md-input
+                                            v-model="item.link"
+                                            type="text"
+                                        ></md-input>
+                                    </md-field>
+                                </div>
+                                <div class="md-layout-item md-size-100 ">
+                                    <label>Attchement</label>
+                                    <md-field>
+                                        <md-input
+                                            name="attachment"
+                                            type="file"
+                                            @change="onFileChange"
+                                        ></md-input>
+                                    </md-field>
+                                </div>
+                            </md-card-content>
+                            <md-card-actions md-alignment="right" style="border: none;">
+                                <md-button name="event-planner-tab-timeline-item-save"
+                                           class="event-planner-tab-timeline-item-save md-danger md-simple"
+                                           @click="cancelTimelineItem(item,index)">Cancel
+                                </md-button>
+                                <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-save"
+                                           class="event-planner-tab-timeline-item-save md-info" v-if="!item.dateCreated"
+                                           @click="saveTimelineItem(item,index)">Save
+                                </md-button>
+                                <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-edit"
+                                           class="event-planner-tab-timeline-item-edit md-info" v-else
+                                           @click="updateTimelineItem(item)">Save
+                                </md-button>
+                            </md-card-actions>
+
+                        </md-card>
+
+                        <md-card class="block-info" v-if="!item.mode || item.mode === 'saved' "
+                                 :style="`border-left : 5px solid ` + item.color">
+                            <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C"/>
+                            <md-card-content style="min-height: 80px;">
+                                <div class="item-title-and-time"
+                                >
+                                    <span class="item-time">{{ item.startTime }} - {{item.endTime}}</span>
+                                    <span class="item-title" style="font-weight: 500; display: inline-block;" v-if="item.title">
+                                      {{item.title }}
+                                    </span>
+                                    <p class="item-desc">
+                                        {{ item.description }}
+                                    </p>
+                                    <div class="location"  style="display : none;">
+                                        <md-icon>place</md-icon> 1419 Westwood Blvd Los Angeles | CA 90024-4911
+                                    </div>
+                                    <div class="attachment" style="display : none;">
+                                        <a href=""> <md-icon>attachment</md-icon> file name </a>
+                                    </div>
+                                    <md-button class="md-simple timeline-action"> Go To Proposal </md-button>
+                                    <br>
+                                    <md-button class="md-simple timeline-action"> Contact Vendor </md-button>
+                                </div>
+
+                                <div class="card-actions">
+                                    <md-button name="event-planner-tab-timeline-item-edit"
+                                               class="event-planner-tab-timeline-item-edit md-rose md-simple md-xs md-round"
+                                               @click="modifyItem(index)">
+
+                                        Edit
+
+                                    </md-button>
+                                    <md-button name="event-planner-tab-timeline-item-delete"
+                                               class="event-planner-tab-timeline-item-delete md-simple md-xs md-just-icon md-round"
+                                               @click="removeItem(item)">
+                                        <md-icon>delete_outline</md-icon>
+                                    </md-button>
+
+                                </div>
+
+                            </md-card-content>
+                        </md-card>
 
                     </div>
 
-                    <div class="card-footer">
-                        <div class="footer-content"></div>
-                        <div class="footer-actions">
-                            <md-button class="md-rose md-simple edit-btn"> Edit  <md-icon>keyboard_arrow_right</md-icon></md-button>
+                    <div class="time-line-blocks_selected-items_item" v-if="!timelineItems.length">
+                        <div class="drag-here">
+                            <p>
+                                <img src="http://static.maryoku.com/storage/img/drag_drop.png" alt="drag and drop"
+                                     style="width: 62px;"/>
+                            </p>
+                            <p style="font-style: italic; font-size: 18px;">
+                                Start building your event timeline by dropping timeline items here
+                            </p>
                         </div>
                     </div>
+                </draggable>
 
-
-
+                <div class="text-center timeline-lists-footer">
+                    <div class="footer-title">End</div>
+                    <md-button class="md-rose md-simple back-to-top"> <md-icon>expand_less</md-icon> Back to top </md-button>
                 </div>
-
-            </div>
-            <div class="md-layout-item  md-size-60">
-                <div class="card-section">
-                    <div class="section-header">
-                        <md-icon>attach_money</md-icon>Budget & Vendors
-                    </div>
-
-                    <div class="card-content">
-
-                        <div class="d-flex justify-content-between">
-                            <div class="budget-percentage ">
-
-                                <div class="chart-section d-flex justify-content-around align-center">
-
-                                    <div class="title title-budget-prise-negative"
-                                    >
-                                        <div class="budget-pie-container">
-                                            <chart-component
-                                                :chart-data="pieChart.data"
-                                                :chart-options="pieChart.options"
-                                                chart-type="Pie"
-                                                style="grid-column: 1; grid-row: 1; color:green"/>
-                                            <animated-number  ref="totalRemainingBudgetNumber"
-                                                              :value="90"
-                                                              class="percentage"
-                                                              prefix="%"></animated-number>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="chart-legends">
-                                        <div class="legend-item used">Used $3000</div>
-                                        <div class="legend-item remaining">Remaining $3000</div>
-                                    </div>
-
-                                </div>
-
-                                <div class="budget-details d-flex justify-content-start">
-                                    <div class="total-budget-value">$ 6,000</div>
-                                    <div class="total-budget"> Total Budget   <br> <md-button class="md-rose md-simple edit-total-budget"> Edit</md-button></div>
-                                </div>
-
-                            </div>
-
-                            <div class="booked-vendors">
-                                <div class="booked-vendors__header d-flex justify-content-start align-center">
-                                    <h3 class="header-title">Booked Vendors</h3>
-                                    <md-button class="md-rose md-simple"> Edit </md-button>
-                                </div>
-
-                                <div class="booked-vendors__items">
-                                    <div class="vendor-item completed">
-
-                                        <div class="vendor-completed">
-                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="15">
-                                        </div>
-                                        <div class="vendor-icon">
-                                            <img src="http://static.maryoku.com/storage/icons/timeline/svg/Asset%20135.svg" width="15">
-                                        </div>
-                                        <div class="vendor-title">Venue</div>
-
-                                    </div>
-
-                                    <div class="vendor-item completed">
-
-                                        <div class="vendor-completed">
-                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="15">
-                                        </div>
-                                        <div class="vendor-icon">
-                                            <img src="http://static.maryoku.com/storage/icons/timeline/svg/Asset%20135.svg" width="15">
-                                        </div>
-                                        <div class="vendor-title">Venue</div>
-
-                                    </div>
-
-                                    <div class="vendor-item">
-                                        <div class="vendor-completed">
-                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="15">
-                                        </div>
-                                        <div class="vendor-icon">
-                                            <img src="http://static.maryoku.com/storage/icons/timeline/svg/Asset%20135.svg" width="15">
-                                        </div>
-                                        <div class="vendor-title"> Band</div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                    <div class="card-footer">
-                        <div  class="footer-content">
-                            Band proposals are waiting for your respond
-                        </div>
-                        <div class="footer-actions">
-                            <md-button class="md-default md-simple edit-btn md-just-icon"> <md-icon>arrow_forward</md-icon></md-button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="md-layout-item  md-size-60">
-                <div class="card-section">
-                    <div class="section-header">
-                        <md-icon>attach_money</md-icon>Timeline
-                    </div>
-
-                    <div class="card-content">
-                        <div class="timeline-items">
-                            <div class="timeline-item d-flex justify-content-start">
-                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
-                                <div class="timeline-item_title">Gathering</div>
-                            </div>
-
-                            <div class="timeline-item d-flex justify-content-start">
-                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
-                                <div class="timeline-item_title">Gathering</div>
-                            </div>
-
-                            <div class="timeline-item d-flex justify-content-start">
-                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
-                                <div class="timeline-item_title">Gathering</div>
-                            </div>
-
-                            <div class="timeline-item d-flex justify-content-start">
-                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
-                                <div class="timeline-item_title">Gathering</div>
-                            </div>
-
-                            <div class="timeline-item d-flex justify-content-start">
-                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
-                                <div class="timeline-item_title">Gathering</div>
-                            </div>
-
-                            <div class="timeline-item d-flex justify-content-start">
-                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
-                                <div class="timeline-item_title">Gathering</div>
-                            </div>
-
-                            <div class="timeline-item d-flex justify-content-start">
-                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
-                                <div class="timeline-item_title">Gathering</div>
-                            </div>
-
-                            <div class="timeline-item d-flex justify-content-start">
-                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
-                                <div class="timeline-item_title">Gathering</div>
-                            </div>
-
-                            <div class="timeline-item d-flex justify-content-start">
-                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
-                                <div class="timeline-item_title">Gathering</div>
-                            </div>
-
-                            <div class="timeline-item d-flex justify-content-start">
-                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
-                                <div class="timeline-item_title">Gathering</div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="card-footer">
-                        <div  class="footer-content">
-                            <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="15">
-                             Good Job, you finished creating your timeline
-                        </div>
-                        <div class="footer-actions">
-                            <md-button class="md-rose md-simple edit-btn"> Edit <md-icon>keyboard_arrow_right</md-icon></md-button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="md-layout-item  md-size-40">
-                <div class="card-section">
-                    <div class="section-header">
-                        <md-icon>attach_money</md-icon>RSVP & Campaigns
-                    </div>
-
-                    <div class="card-content">
-
-                        <div class="text-center">
-                            <div class="guests-details d-flex justify-content-center align-center">
-                                <div class="total-budget-value">2,034</div>
-                                <div class="total-budget"> Total Guests   <br> <md-button class="md-rose md-simple edit-total-budget"> Edit</md-button></div>
-                            </div>
-
-                            <div class="guests-progress d-flex justify-content-center align-center">
-                                <div class="guests-progress__item green" style="width : 66%;">
-                                    <div class="value">1204</div>
-                                    <div class="progress" ></div>
-                                    <div class="percentage">66%</div>
-                                </div>
-                                <div class="guests-progress__item red" style="width : 21%;">
-                                    <div class="value">240</div>
-                                    <div class="progress" ></div>
-                                    <div class="percentage">21%</div>
-                                </div>
-                                <div class="guests-progress__item gray" style="width : 13%;">
-                                    <div class="value">120</div>
-                                    <div class="progress" ></div>
-                                    <div class="percentage">13%</div>
-                                </div>
-                            </div>
-
-                            <div class="guests-legends d-flex justify-content-center align-center">
-                                <div class="guests-legends__item green">
-                                    Yes <md-icon>keyboard_arrow_down</md-icon>
-                                </div>
-                                <div class="guests-legends__item red">
-                                    No <md-icon>keyboard_arrow_down</md-icon>
-                                </div>
-                                <div class="guests-legends__item gray">
-                                    No replay <md-icon>keyboard_arrow_down</md-icon>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="campaigns-section">
-                            <div class="section-title">Campaigns</div>
-                            <div class="campaigns-section__list">
-                                <div class="campaigns-section__item completed">
-                                    <div class="campaign-title">
-                                        <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="15">
-                                        “Save The Date” campaign
-                                    </div>
-                                    <md-button class="md-default md-simple"> Review </md-button>
-                                </div>
-                                <div class="campaigns-section__item completed">
-                                    <div class="campaign-title">
-                                        <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="15">
-                                        First teaser - RSVP
-                                    </div>
-                                    <md-button class="md-default md-simple"> Review </md-button>
-                                </div>
-                                <div class="campaigns-section__item ">
-                                    <div class="campaign-title">
-                                        Second teaser - RSVP
-                                    </div>
-                                    <md-button class="md-rose md-simple"> Create Campaign </md-button>
-                                </div>
-
-                                <div class="campaigns-section__item label-item">
-                                    <div class="campaign-title">
-                                        ‘Almost There’ Final Teaser
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-
-
-                    </div>
-
-                    <div class="card-footer">
-                        <div  class="footer-content">
-                            It’s time to create second teaser
-                        </div>
-                        <div class="footer-actions">
-                            <md-button class="md-default md-simple edit-btn md-just-icon"> <md-icon>arrow_forward</md-icon></md-button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+            </drop>
         </div>
+        <md-card
+            class="md-card-plain time-line-blocks md-layout-item md-xlarge-size-35 md-large-size-35 md-small-size-40" style="    margin-top: 16px;">
+            <md-card-content class="md-layout time-line-blocks_items">
+
+                <div class="dragdrop-timeline-header">
+                    <div class="header-title">  Add Time Slots</div>
+                    <p class="section-desc">
+                        Drag and drop the blocks to
+                        edit your timeline project
+                    </p>
+                </div>
 
 
+                <div v-for="(block,index) in blocksList" :key="block.id" class="md-layout-item md-size-100">
+
+                    <drag :transfer-data="{ block }" class="time-line-blocks_item "
+                          :style="`border: 1px dashed ` + block.color + `; color :` + block.color">
+                        <md-icon>{{block.icon}}</md-icon>
+                        <h5>{{block.buildingBlockType}}</h5>
+                    </drag>
+
+                </div>
+
+            </md-card-content>
+        </md-card>
     </div>
 
 </template>
@@ -422,10 +247,7 @@
     // import auth from '@/auth';
     import draggable from 'vuedraggable'
     import {Drag, Drop} from 'vue-drag-drop'
-    import _ from 'underscore';
-    import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
-    import ChartComponent from '@/components/Cards/ChartComponent'
-
+    import _ from 'underscore'
 
     import SideBar from '../../../components/SidebarPlugin/NewSideBar';
     import SidebarItem from '../../../components/SidebarPlugin/NewSidebarItem.vue';
@@ -433,9 +255,6 @@
     export default {
         name: 'event-time-line',
         components: {
-            AnimatedNumber,
-            ChartCard,
-            ChartComponent,
             VueElementLoading,
             draggable, Drag, Drop,
             SlideYDownTransition,
@@ -451,18 +270,6 @@
         data: () => ({
             // auth: auth,
             isLoading: true,
-            pieChart : {
-                data: {
-                    labels: [' ', ' '], // should be empty to remove text from chart
-                    series: [{value: 10, className: "budget-chart-slice-a-negative"},{value: 90, className: "budget-chart-slice-b-negative"}]
-                },
-                options: {
-                    padding: 0,
-                    height: 156,
-                    donut: true,
-                    donutWidth: 8,
-                }
-            },
             blocksList: [
                 {
                     id: 1,
