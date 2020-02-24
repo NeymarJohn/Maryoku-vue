@@ -38,7 +38,7 @@
   </md-card>
 </template>
 <script>
-import VueElementLoading from 'vue-element-loading';
+  import VueElementLoading from 'vue-element-loading';
 export default {
   name: "chart-card",
   components: {
