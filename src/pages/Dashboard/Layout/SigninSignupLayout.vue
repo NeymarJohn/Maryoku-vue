@@ -480,7 +480,6 @@
             }
         }
 
-
         .form-group {
             position: relative;
 
