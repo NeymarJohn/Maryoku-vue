@@ -67,7 +67,7 @@
                          class="time-line-blocks_selected-items_item time-line-item">
                         <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">{{item.icon}}
                         </md-icon>
-                        <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit' || true"
+                        <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit'"
                                  :style="`border-left : 5px solid ` + item.color"
                         >
                             <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C"/>
@@ -195,9 +195,9 @@
                                     <div class="attachment" style="display : none;">
                                         <a href=""> <md-icon>attachment</md-icon> file name </a>
                                     </div>
-                                    <md-button class="md-simple timeline-action"> Go To Proposal </md-button>
+                                    <md-button class="md-simple timeline-action"> <img :src="`${timelineIconsURL}Asset 48.svg`" width="20"> Go To Proposal </md-button>
                                     <br>
-                                    <md-button class="md-simple timeline-action"> Contact Vendor </md-button>
+                                    <md-button class="md-simple timeline-action"> <img :src="`${timelineIconsURL}Asset 47.svg`" width="20"> Contact Vendor </md-button>
                                 </div>
 
                                 <div class="card-actions">
