@@ -13,6 +13,17 @@
           display: ${item.allocatedBudget == null && totalValue !=0 ? 'none' : 'inherit'}
         `"
       ></circle>
+      <circle 
+        class="pie-chart-value" 
+        cx="50%" 
+        cy="50%" 
+        r="100"
+        :style="`
+          stroke-dasharray: 0 ${circleLength};
+          stroke: ${colors[0]};
+          display: ${totalValue ==0 ? 'none' : 'inherit'}
+        `"
+      ></circle>
     </svg>
     <div class="items-cont">
       <ul class="items-list">

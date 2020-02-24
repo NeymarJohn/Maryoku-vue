@@ -21,7 +21,7 @@ import EventGroups from "@/pages/app/Events/components/EventInvitees.vue";
 import NewEvent from "@/pages/app/Events/NewEvent.vue";
 import EditEvent from "@/pages/app/Events/EditEvent.vue";
 import EventDetails from "@/pages/app/Events/EventDetails.vue";
-import EditEventNew from "@/pages/app/Events/EditEventNew.vue";
+import EventDetailsNew from "@/pages/app/Events/EventDetailsNew.vue";
 import ShowEvent from "@/pages/app/Events/ShowEvent.vue";
 import VendorProposals from "@/pages/app/Events/VendorProposals.vue";
 import EventProposal from "@/pages/app/Events/EventProposal.vue";
@@ -520,6 +520,16 @@ let NewEventPages = {
                 title: 'Event Details',
                 gtm: "Event Edit",
                 opaque: false
+            }
+        },
+        {
+            path : "/events/:id/edit/event",
+            name : "EventDetailsNew",
+            component : EventDetailsNew,
+            meta : {
+                title  : 'Event Details',
+                gtm : "Event Edit",
+                opaque : false
             }
         },
         {

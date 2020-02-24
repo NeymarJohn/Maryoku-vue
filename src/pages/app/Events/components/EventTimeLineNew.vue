@@ -185,20 +185,20 @@
 
                     </div>
 
-                    <div class="time-line-blocks_selected-items_item" v-if="!timelineItems.length">
-                        <div class="drag-here">
-                            <p>
-                                <img src="http://static.maryoku.com/storage/img/drag_drop.png" alt="drag and drop"
-                                     style="width: 62px;"/>
-                            </p>
-                            <p style="font-style: italic; font-size: 18px;">
-                                Start building your event timeline by dropping timeline items here
-                            </p>
-                        </div>
-                    </div>
+<!--                    <div class="time-line-blocks_selected-items_item" v-if="!timelineItems.length">-->
+<!--                        <div class="drag-here">-->
+<!--                            <p>-->
+<!--                                <img src="http://static.maryoku.com/storage/img/drag_drop.png" alt="drag and drop"-->
+<!--                                     style="width: 62px;"/>-->
+<!--                            </p>-->
+<!--                            <p style="font-style: italic; font-size: 18px;">-->
+<!--                                Start building your event timeline by dropping timeline items here-->
+<!--                            </p>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </draggable>
 
-                <div class="text-center timeline-lists-footer">
+                <div class="text-center timeline-lists-footer" v-if="timelineItems.length">
                     <div class="footer-title">End</div>
                     <md-button class="md-rose md-simple back-to-top"> <md-icon>expand_less</md-icon> Back to top </md-button>
                 </div>
