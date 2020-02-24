@@ -67,73 +67,109 @@
                          class="time-line-blocks_selected-items_item time-line-item">
                         <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">{{item.icon}}
                         </md-icon>
-                        <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit' "
+                        <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit' || true"
                                  :style="`border-left : 5px solid ` + item.color"
                         >
                             <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C"/>
                             <md-card-content class="md-layout">
-                                <div class="md-layout-item md-size-50">
-                                    <md-field>
-                                        <input-mask v-focus placeholder="From Time e.g:08:00 AM" class="md-input"
-                                                    v-model="item.startTime" mask="99:99 aa" maskChar="_"></input-mask>
-                                    </md-field>
+                                <div class="md-layout-item md-size-100">
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" v-model="item.title">
+                                    </div>
                                 </div>
-                                <div class="md-layout-item md-size-50">
-                                    <md-field>
-                                        <input-mask placeholder="To Time e.g:10:00 PM" class="md-input"
-                                                    v-model="item.endTime" mask="99:99 aa" maskChar="_"></input-mask>
-                                    </md-field>
+                                <div class="md-layout-item md-size-45">
+
+                                    <div class="form-group">
+                                        <label>Start Time </label>
+                                       <div class="time-select-fields">
+                                           <input type="number" mask="99" v-model="item.startHour">
+                                           <span> : </span>
+                                           <input type="number" mask="99" v-model="item.startMinute">
+                                           <select v-model="item.startDuration">
+                                               <option value="am">AM</option>
+                                               <option value="PM">PM</option>
+                                           </select>
+                                       </div>
+                                    </div>
+<!--                                    <md-field>-->
+<!--                                        <input-mask v-focus placeholder="From Time e.g:08:00 AM" class="md-input"-->
+<!--                                                    v-model="item.startTime" mask="99:99 aa" maskChar="_"></input-mask>-->
+<!--                                    </md-field>-->
+                                </div>
+                                <div class="md-layout-item md-size-10 d-flex justify-content-center align-center" style="position : relative">
+                                    <div class="divider"></div>
+                                </div>
+                                <div class="md-layout-item md-size-45">
+                                    <div class="form-group">
+                                        <label>Finishes At</label>
+                                        <div class="time-select-fields">
+                                            <input type="number" mask="99" v-model="item.endHour">
+                                            <span> : </span>
+                                            <input type="number" mask="99" v-model="item.endMinute">
+                                            <select v-model="item.endDuration">
+                                                <option value="am">AM</option>
+                                                <option value="PM">PM</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+<!--                                    <md-field>-->
+<!--                                        <input-mask placeholder="To Time e.g:10:00 PM" class="md-input"-->
+<!--                                                    v-model="item.endTime" mask="99:99 aa" maskChar="_"></input-mask>-->
+<!--                                    </md-field>-->
                                 </div>
                                 <div class="md-layout-item md-size-100">
-                                    <md-field>
-                                        <label>Title</label>
-                                        <md-input
-                                            v-model="item.title"
-                                            type="text"
-                                        ></md-input>
-                                    </md-field>
-                                </div>
-                                <div class="md-layout-item md-size-100">
-                                    <md-field>
+                                    <div class="form-group">
                                         <label>Description</label>
-                                        <md-input
-                                            v-model="item.description"
-                                            type="text"
-                                        ></md-input>
-                                    </md-field>
+                                        <textarea row="100" type="text" class="form-control" v-model="item.description"></textarea>
+                                    </div>
                                 </div>
 
                                 <div class="md-layout-item md-size-100 margin-bottom">
-                                    <md-field>
-                                        <label>Link</label>
-                                        <md-input
-                                            v-model="item.link"
-                                            type="text"
-                                        ></md-input>
-                                    </md-field>
+                                    <div class="form-group with-icon">
+                                        <label>Location</label>
+                                        <div class="input-icon">
+                                            <img :src="`${timelineIconsURL}place.svg`" width="20">
+                                        </div>
+                                        <input type="text" class="form-control" v-model="item.location">
+                                    </div>
                                 </div>
                                 <div class="md-layout-item md-size-100 ">
-                                    <label>Attchement</label>
-                                    <md-field>
-                                        <md-input
+
+                                    <div class="form-group">
+                                        <label>Attach File  <small>*suggested</small></label>
+                                        <label class="upload-section" for="file">
+                                            <md-button class="md-rose md-outline md-simple md-sm">
+                                                Choose file
+                                            </md-button>
+                                            <div class="note">Drag your file here</div>
+                                        </label>
+
+                                        <input
+                                            style="display: none"
+                                            id="file"
                                             name="attachment"
                                             type="file"
                                             @change="onFileChange"
-                                        ></md-input>
-                                    </md-field>
+                                        ></input>
+
+                                    </div>
+
                                 </div>
                             </md-card-content>
-                            <md-card-actions md-alignment="right" style="border: none;">
+                            <md-card-actions md-alignment="right" style="border: none;" class="edit-timeline-footer">
                                 <md-button name="event-planner-tab-timeline-item-save"
-                                           class="event-planner-tab-timeline-item-save md-danger md-simple"
+                                           class="event-planner-tab-timeline-item-save md-default md-simple"
                                            @click="cancelTimelineItem(item,index)">Cancel
                                 </md-button>
                                 <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-save"
-                                           class="event-planner-tab-timeline-item-save md-info" v-if="!item.dateCreated"
+                                           class="event-planner-tab-timeline-item-save md-rose" v-if="!item.dateCreated"
                                            @click="saveTimelineItem(item,index)">Save
                                 </md-button>
                                 <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-edit"
-                                           class="event-planner-tab-timeline-item-edit md-info" v-else
+                                           class="event-planner-tab-timeline-item-edit md-rose" v-else
                                            @click="updateTimelineItem(item)">Save
                                 </md-button>
                             </md-card-actions>
@@ -365,7 +401,9 @@
                     title: 'Create event\'s banner',
                     status: 'not-complete'
                 }
-            ]
+            ],
+            timelineIconsURL : 'http://static.maryoku.com/storage/icons/timeline/svg/',
+
 
         }),
         methods: {
@@ -462,11 +500,10 @@
 
             },
             saveTimelineItem (item, index) {
-                console.log('ameed')
+
                 this.setItemLoading(item, true, true)
 
-                if (!item.startTime || !item.endTime ||
-                    (!item.title && !item.description)) {
+                if ((!item.title && !item.description)) {
 
                     this.$notify(
                         {
@@ -481,6 +518,8 @@
                     return
                 }
 
+
+
                 let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
                 let event = new CalendarEvent({id: this.event.id})
                 let order = ++index
@@ -493,8 +532,8 @@
                     title: item.title,
                     buildingBlockType: item.buildingBlockType,
                     description: item.description,
-                    startTime: item.startTime,
-                    endTime: item.endTime,
+                    startTime: item.startHour + ':' + item.startMinute + ' ' + item.startDuration,
+                    endTime: item.endHour + ':' + item.endMinute + ' ' + item.endDuration,
                     order: order,
                     icon: item.icon,
                     color: item.color,

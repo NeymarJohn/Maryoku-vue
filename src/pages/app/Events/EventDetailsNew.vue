@@ -31,7 +31,7 @@
                     <div class="count-label">MINUTES</div>
                 </div>
                 <div class="count-item with-icon">
-                    <div class="icon"><img src="http://static.maryoku.com/storage/icons/event's+page/SVG/Asset%20152.svg" width="15"></div>
+                    <div class="icon"><img :src="`${iconsURL}Asset%20152.svg`" width="20"></div>
                     <div class="count-label">To Event</div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
 
                 <div class="card-section">
                     <div class="section-header">
-                        <md-icon>outlined_flag</md-icon> Event’s details
+                        <img :src="`${iconsURL}Asset 162.svg`" > Event’s details
                     </div>
 
                     <div class="card-content ">
@@ -69,24 +69,24 @@
                             <div class="event-details-list">
                                 <ul class="list-items">
                                     <li class="event-details-item">
-                                        <md-icon>wb_sunny</md-icon> <span>{{event.eventDayPart}} Time event</span>
+                                        <img :src="`${iconsURL}sun.svg`" width="20"> <span>{{event.eventDayPart}} Time event</span>
                                     </li>
                                     <li class="event-details-item">
-                                        <md-icon>wb_sunny</md-icon> <span>{{event.eventStartMillis | formatDate}},
+                                        <img :src="`${iconsURL}Asset 165.svg`" width="20"> <span>{{event.eventStartMillis | formatDate}},
               {{event.eventStartMillis | formatTime}}
               ({{event.eventStartMillis |
               formatDuration(event.eventEndMillis)}}h)</span>
                                     </li>
                                     <li class="event-details-item">
-                                        <md-icon>wb_sunny</md-icon> <span>{{event.numberOfParticipants}} Invited</span>
+                                        <img :src="`${iconsURL}Asset 166.svg`" width="20"> <span>{{event.numberOfParticipants}} Invited</span>
                                     </li>
                                     <li class="event-details-item">
-                                        <md-icon>wb_sunny</md-icon> <span>{{event.location}}</span>
+                                        <img :src="`${iconsURL}Asset 167.svg`" width="20"> <span>{{event.location}}</span>
                                     </li>
                                 </ul>
                             </div>
                             <div class="event-weather">
-                                <div class="event-weather__icon"><md-icon>wb_cloudy</md-icon></div>
+                                <div class="event-weather__icon"><img :src="`${iconsURL}Asset 161.svg`" width="40"></div>
                                 <div class="event-weather__status">Mostly Sunny</div>
                                 <div class="event-weather__degree">
                                     <div class="degree-value">58</div>
@@ -120,7 +120,7 @@
             <div class="md-layout-item  md-size-60">
                 <div class="card-section">
                     <div class="section-header">
-                        <md-icon>attach_money</md-icon>Budget & Vendors
+                        <img :src="`${iconsURL}Group 3090.svg`" > Budget & Vendors
                     </div>
 
                     <div class="card-content">
@@ -188,6 +188,7 @@
 
                     <div class="card-footer">
                         <div  class="footer-content">
+                            <img :src="`${iconsURL}Group 1175.svg`" width="20">
                             Band proposals are waiting for your respond
                         </div>
                         <div class="footer-actions">
@@ -201,7 +202,7 @@
             <div class="md-layout-item  md-size-60">
                 <div class="card-section">
                     <div class="section-header">
-                        <md-icon>attach_money</md-icon>Timeline
+                        <img :src="`${timlineIconsURL}Group 2774.svg`" > Timeline
                     </div>
 
                     <div class="card-content">
@@ -216,7 +217,7 @@
 
                     <div class="card-footer">
                         <div  class="footer-content">
-                            <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="15">
+                            <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="20">
                              Good Job, you finished creating your timeline
                         </div>
                         <div class="footer-actions">
@@ -311,6 +312,8 @@
 
                     <div class="card-footer">
                         <div  class="footer-content">
+                            <img :src="`${iconsURL}Asset 150.svg`" width="20">
+
                             It’s time to create second teaser
                         </div>
                         <div class="footer-actions">
@@ -387,100 +390,12 @@
             pieChart : {
 
             },
-            blocksList: [
-                {
-                    id: 1,
-                    buildingBlockType: 'setup',
-                    icon: 'place',
-                    color: '#f44336'
-                },
-                {
-                    id: 2,
-                    buildingBlockType: 'activity',
-                    icon: 'notifications_active',
-                    color: '#4caf50'
-                },
-                {
-                    id: 3,
-                    buildingBlockType: 'meal',
-                    icon: 'restaurant',
-                    color: '#00bcd4'
-                },
-                {
-                    id: 4,
-                    buildingBlockType: 'DISCUSSION',
-                    icon: 'sms',
-                    color: '#ff9800'
-                },
-                {
-                    id: 5,
-                    buildingBlockType: 'TRANSPORTATION',
-                    icon: 'train',
-                    color: '#f44336'
-                },
-                {
-                    id: 6,
-                    buildingBlockType: 'RELAXATION',
-                    icon: 'weekend',
-                    color: '#4caf50'
-                },
-                {
-                    id: 7,
-                    buildingBlockType: 'ADD YOUR OWN',
-                    icon: 'add',
-                    color: '#00bcd4'
-                }
-            ],
             timelineItems: [],
             hoursArray: [],
             disabledDragging: false,
             timelineAttachment: null,
-            eventElements: [
-                {
-                    title: 'book catering',
-                    status: 'complete'
-                },
-                {
-                    title: 'book catering',
-                    status: 'complete'
-                },
-                {
-                    title: 'book catering',
-                    status: 'complete'
-                },
-                {
-                    title: 'Create Timeline',
-                    status: 'current'
-                },
-                {
-                    title: 'Hire DJ',
-                    status: 'not-complete'
-                },
-                {
-                    title: 'Hire photographer',
-                    status: 'not-complete'
-                },
-                {
-                    title: 'Research event insurance',
-                    status: 'not-complete'
-                },
-                {
-                    title: 'Book event transportation',
-                    status: 'not-complete'
-                },
-                {
-                    title: 'Create and send save-the-dates',
-                    status: 'not-complete'
-                },
-                {
-                    title: 'Review budget',
-                    status: 'not-complete'
-                },
-                {
-                    title: 'Create event\'s banner',
-                    status: 'not-complete'
-                }
-            ]
+            iconsURL : 'http://static.maryoku.com/storage/icons/Event%20Page/',
+            timlineIconsURL : 'http://static.maryoku.com/storage/icons/timeline/',
 
         }),
         methods: {

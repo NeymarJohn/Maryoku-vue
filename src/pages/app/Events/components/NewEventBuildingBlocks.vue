@@ -212,7 +212,7 @@
 
           <tr class="taxes">
               <td class="taxes-title">
-                  <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2020.svg" width="20"> Taxes <span class="percent">18%</span>
+                  <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2020.svg" width="20"> Tips <span class="percent">12%</span>
               </td>
               <td>
                   ${{totalBudgetTaxes}}
@@ -370,7 +370,7 @@
 
               if (item.allocatedBudget) {
                   vm.totalBudget +=item.allocatedBudget;
-                  vm.totalBudgetTaxes  += item.allocatedBudget * .18;
+                  vm.totalBudgetTaxes  += item.allocatedBudget * .12;
               }
           })
 
