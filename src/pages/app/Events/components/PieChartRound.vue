@@ -127,9 +127,11 @@
     },
     watch: {
       event(newVal, oldVal) {
+        console.log(this.eventBuildingBlocks)
         this.drawChart()
       },
       items(newVal, oldVal) {
+        console.log(this.eventBuildingBlocks)
         this.drawChart()
       },
     }

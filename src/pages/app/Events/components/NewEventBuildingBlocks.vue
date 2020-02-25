@@ -348,6 +348,7 @@
         },500);
 
         vm.totalBudget = 0
+        vm.totalBudgetTaxes = 0
 
         this.eventBuildingBlocks.forEach((item)=> {
           if (item.allocatedBudget) {
