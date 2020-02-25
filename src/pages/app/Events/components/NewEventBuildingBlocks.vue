@@ -1,239 +1,223 @@
 <template>
   <div class="">
-      <table class="event-blocks__table" >
-          <thead>
-          <tr>
-              <th width="40%">Categories</th>
-              <th width="20%">Planned</th>
-              <th width="15%">Actual</th>
-              <th width="15%">Status</th>
-              <th></th>
-          </tr>
-          </thead>
-      </table>
-      <table class="event-blocks__table event-block-table"
-             v-for="(block, index) in eventBuildingBlocks" :key="index"
+    <table class="event-blocks__table" >
+      <thead>
+        <tr>
+          <th width="40%">Categories</th>
+          <th width="20%">Planned</th>
+          <th width="15%">Actual</th>
+          <th width="15%">Status</th>
+          <th></th>
+        </tr>
+      </thead>
+    </table>
+    <table class="event-blocks__table event-block-table"
+      v-for="(block, index) in eventBuildingBlocks" :key="index"
       >
-
-          <tbody >
-
-          <template>
-              <tr >
-                  <td width="40%" class="vendor"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> {{block.title}}</td>
-                  <td class="planned" width="20%">
-                      <label-edit v-if="type == 'total'"
-                                  :text="block.allocatedBudget"
-                                  :field-name="block.componentId"
-                                  :sub-description="elementsBudget"
-                                  :currency="'$'"
-                                  :numeric="true"
-                                  @text-updated-blur="blockBudgetChanged"
-                                  @text-updated-enter="blockBudgetChanged"></label-edit>
-
-                      <label-edit v-else-if="block.allocatedBudget && block.numberOfParticipants"
-                                  :text="block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(2).toString() : ''"
-                                  :field-name="block.componentId"
-                                  :sub-description="elementsBudget"
-                                  :currency="'$'"
-                                  :numeric="true"
-                                  @text-updated-blur="blockBudgetChanged"
-                                  @text-updated-enter="blockBudgetChanged"></label-edit>
-                      <label-edit v-else
-                                  :text="block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : ''"
-                                  :field-name="block.componentId"
-                                  :sub-description="elementsBudget"
-                                  :currency="'$'"
-                                  :numeric="true"
-                                  @text-updated-blur="blockBudgetChanged"
-                                  @text-updated-enter="blockBudgetChanged"></label-edit>
-                  </td>
-                  <td class="actual red-label" width="15%">
-
-                      <template v-if="block.allocatedBudget">
-
-                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+29.png">
-                          <template v-if="block.winningProposalId">
-                              <md-button
-                                  class="md-simple actual-cost md-xs"
-                                  :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`"
-                              >
-                                  {{ event.elementsBudgetPerGuest ?  `$${(block.winingProposal.cost / event.numberOfParticipants).toFixed(2)}` : `$${block.winingProposal.cost.toFixed(2)}` }}
-                                  <md-icon >open_in_new</md-icon>
-                              </md-button>
-                          </template>
-                      </template>
-                      <!-- v-if="block.downPaymentStatus == 'accepted'" -->
-                      <event-actual-cost-icon-tooltip
-                          :icon="'credit_card'"
-                          :item="block"
-                          :event="event"
-                      />
-                  </td>
-                  <td class="status" width="15%">
-                      <div >
-                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">
-                      </div>
-                  </td>
-                  <td class="expand">
-                      <div @click="expandBlock(block)">
-                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">
-                      </div>
-                  </td>
-              </tr>
-          </template>
-
-          <template v-if="block.expanded">
-              <tr class="details-row" v-for="(requirement,index) in block.predefinedRequirements" :key="index">
-                  <td>{{requirement.title}}</td>
-                  <td>$80</td>
-                  <td class="actual red-label" colspan="3"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+29.png"> $100</td>
-              </tr>
-              <tr class="item-actions">
-                  <td class="see-proposals">
-                      <div>Relish Caterers & Venues</div>
-                      <md-button class="md-rose md-simple see-proposal" >See Proposal</md-button>
-                  </td>
-                  <td colspan="4"  class="actions-list text-right">
-                      <md-button class="md-simple" @click="reviewProposals(block)">Edit Proposal</md-button>
-                      <md-button class="md-simple" @click="deleteBlock(block.id)">Cancel Proposal</md-button>
-                  </td>
-              </tr>
-          </template>
-          </tbody>
-      </table>
-
-      <table class="event-blocks__table actions-table">
-
-          <tbody >
-          <!--                                <tr>-->
-          <!--                                    <td class="vendor completed"><img-->
-          <!--                                        src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png">-->
-          <!--                                        Catering-->
-          <!--                                    </td>-->
-          <!--                                    <td class="planned">$1500</td>-->
-          <!--                                    <td class="actual green-label"><img-->
-          <!--                                        src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png">-->
-          <!--                                        $1200-->
-          <!--                                    </td>-->
-          <!--                                    <td class="status">-->
-          <!--                                        <a href="">-->
-          <!--                                            <img-->
-          <!--                                                src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
-          <!--                                        </a>-->
-          <!--                                    </td>-->
-          <!--                                    <td class="expand">-->
-          <!--                                        <a href="">-->
-          <!--                                            <img-->
-          <!--                                                src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">-->
-          <!--                                        </a>-->
-          <!--                                    </td>-->
-          <!--                                </tr>-->
-          <!--                                </tbody>-->
-          <!--                                <tbody>-->
-
-
-          <!--                                <tr >-->
-          <!--                                    <td class="vendor completed"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> Catering</td>-->
-          <!--                                    <td class="planned">$1500</td>-->
-          <!--                                    <td class="actual green-label"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png"> $1200</td>-->
-          <!--                                    <td class="status">-->
-          <!--                                        <a href="">-->
-          <!--                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
-          <!--                                        </a>-->
-          <!--                                    </td>-->
-          <!--                                    <td class="expand">-->
-          <!--                                        <a href="">-->
-          <!--                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">-->
-          <!--                                        </a>-->
-          <!--                                    </td>-->
-          <!--                                </tr>-->
-          <!--                                <tr >-->
-          <!--                                    <td class="vendor completed"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> DJ</td>-->
-          <!--                                    <td class="planned">$1500</td>-->
-          <!--                                    <td class="actual"> $50</td>-->
-          <!--                                    <td class="status">-->
-          <!--                                        <md-button class="book-btn md-sm">Book</md-button>-->
-          <!--                                    </td>-->
-          <!--                                    <td class="expand">-->
-          <!--                                        <a href="">-->
-          <!--                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">-->
-          <!--                                        </a>-->
-          <!--                                    </td>-->
-          <!--                                </tr>-->
-          <!--                                <tr >-->
-          <!--                                    <td class="vendor completed"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> DJ</td>-->
-          <!--                                    <td class="planned">$1500</td>-->
-          <!--                                    <td class="actual"> $50</td>-->
-          <!--                                    <td class="status">-->
-          <!--                                        <md-button class="book-btn md-sm">Book</md-button>-->
-          <!--                                    </td>-->
-          <!--                                    <td class="expand">-->
-          <!--                                        <a href="">-->
-          <!--                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">-->
-          <!--                                        </a>-->
-          <!--                                    </td>-->
-          <!--                                </tr>-->
-
-          <!--                                <tr >-->
-          <!--                                    <td class="vendor"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> Photographer</td>-->
-          <!--                                    <td class="planned">$100</td>-->
-          <!--                                    <td class="actual"> $100</td>-->
-          <!--                                    <td class="status">-->
-          <!--                                        <md-button class="book-btn md-sm disabled">Book</md-button>-->
-          <!--                                    </td>-->
-          <!--                                    <td class="expand">-->
-          <!--                                        <a href="">-->
-          <!--                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">-->
-          <!--                                        </a>-->
-          <!--                                    </td>-->
-          <!--                                </tr>-->
-
-          <!--                                <tr >-->
-          <!--                                    <td class="vendor unexpected"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+18.png"> Unexpected</td>-->
-          <!--                                    <td class="planned">$100</td>-->
-          <!--                                    <td class="actual"> $100</td>-->
-          <!--                                    <td class="status">-->
-          <!--                                        <md-button class="use-btn md-sm">Use</md-button>-->
-          <!--                                    </td>-->
-          <!--                                    <td class="expand">-->
-          <!--                                        <a href="">-->
-          <!--                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">-->
-          <!--                                        </a>-->
-          <!--                                    </td>-->
-          <!--                                </tr>-->
-
-          <tr class="add-category">
-              <td colspan="5">
-                  <md-button class="md-simple add-category-btn" @click="showAddEventElementsModal()">
-                      <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2019.svg"> Add new category
+      <tbody >
+        <template>
+          <tr >
+            <td width="40%" class="vendor"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> {{block.title}}</td>
+            <td class="planned" width="20%">
+              <label-edit v-if="type == 'total'"
+                :text="block.allocatedBudget"
+                :field-name="block.componentId"
+                :sub-description="elementsBudget"
+                :currency="'$'"
+                :numeric="true"
+                @text-updated-blur="blockBudgetChanged"
+                @text-updated-enter="blockBudgetChanged"></label-edit>
+              <label-edit v-else-if="block.allocatedBudget && block.numberOfParticipants"
+                :text="block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(2).toString() : ''"
+                :field-name="block.componentId"
+                :sub-description="elementsBudget"
+                :currency="'$'"
+                :numeric="true"
+                @text-updated-blur="blockBudgetChanged"
+                @text-updated-enter="blockBudgetChanged"></label-edit>
+              <label-edit v-else
+                :text="block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : ''"
+                :field-name="block.componentId"
+                :sub-description="elementsBudget"
+                :currency="'$'"
+                :numeric="true"
+                @text-updated-blur="blockBudgetChanged"
+                @text-updated-enter="blockBudgetChanged"></label-edit>
+            </td>
+            <td class="actual red-label" width="15%">
+              <template v-if="block.allocatedBudget">
+                <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+29.png">
+                <template v-if="block.winningProposalId">
+                  <md-button
+                    class="md-simple actual-cost md-xs"
+                    :class="block.allocatedBudget < block.winingProposal.cost ? `md-danger` : `md-success`"
+                    >
+                    {{ event.elementsBudgetPerGuest ?  `$${(block.winingProposal.cost / event.numberOfParticipants).toFixed(2)}` : `$${block.winingProposal.cost.toFixed(2)}` }}
+                    <md-icon >open_in_new</md-icon>
                   </md-button>
-              </td>
+                </template>
+              </template>
+              <!-- v-if="block.downPaymentStatus == 'accepted'" -->
+              <event-actual-cost-icon-tooltip
+                :icon="'credit_card'"
+                :item="block"
+                :event="event"
+                />
+            </td>
+            <td class="status" width="15%">
+              <div >
+                <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">
+              </div>
+            </td>
+            <td class="expand">
+              <div @click="expandBlock(block)">
+                <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">
+              </div>
+            </td>
           </tr>
-
-          <tr class="taxes">
-              <td class="taxes-title">
-                  <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2020.svg" width="20"> Taxes <span class="percent">18%</span>
-              </td>
-              <td>
-                  ${{totalBudgetTaxes}}
-              </td>
-              <td class="actual green-label"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png"> $100</td>
-              <td></td>
-              <td class="expand">
-                  <a href="">
-                      <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">
-                  </a>
-              </td>
+        </template>
+        <template v-if="block.expanded">
+          <tr class="details-row" v-for="(requirement,index) in block.predefinedRequirements" :key="index">
+            <td>{{requirement.title}}</td>
+            <td>$80</td>
+            <td class="actual red-label" colspan="3"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+29.png"> $100</td>
           </tr>
-          <tr class="total">
-              <td class="total-title">Total</td>
-              <td class="total-value">${{totalBudget}}</td>
-              <td colspan="3">${{totalActual}}</td>
-
+          <tr class="item-actions">
+            <td class="see-proposals">
+              <div>Relish Caterers & Venues</div>
+              <md-button class="md-rose md-simple see-proposal" >See Proposal</md-button>
+            </td>
+            <td colspan="4"  class="actions-list text-right">
+              <md-button class="md-simple" @click="reviewProposals(block)">Edit Proposal</md-button>
+              <md-button class="md-simple" @click="deleteBlock(block.id)">Cancel Proposal</md-button>
+            </td>
           </tr>
-          </tbody>
-
-      </table>
+        </template>
+      </tbody>
+    </table>
+    <table class="event-blocks__table actions-table">
+      <tbody >
+        <!-- <tr>
+          <td class="vendor completed"><img
+            src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png">
+            Catering
+          </td>
+          <td class="planned">$1500</td>
+          <td class="actual green-label"><img
+            src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png">
+            $1200
+          </td>
+          <td class="status">
+            <a href="">
+            <img
+              src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">
+            </a>
+          </td>
+          <td class="expand">
+            <a href="">
+            <img
+              src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">
+            </a>
+          </td>
+        </tr>
+        </tbody>
+        <tbody>
+          <tr >
+            <td class="vendor completed"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> Catering</td>
+            <td class="planned">$1500</td>
+            <td class="actual green-label"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png"> $1200</td>
+            <td class="status">
+              <a href="">
+              <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">
+              </a>
+            </td>
+            <td class="expand">
+              <a href="">
+              <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">
+              </a>
+            </td>
+          </tr>
+          <tr >
+            <td class="vendor completed"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> DJ</td>
+            <td class="planned">$1500</td>
+            <td class="actual"> $50</td>
+            <td class="status">
+              <md-button class="book-btn md-sm">Book</md-button>
+            </td>
+            <td class="expand">
+              <a href="">
+              <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">
+              </a>
+            </td>
+          </tr>
+          <tr >
+            <td class="vendor completed"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> DJ</td>
+            <td class="planned">$1500</td>
+            <td class="actual"> $50</td>
+            <td class="status">
+              <md-button class="book-btn md-sm">Book</md-button>
+            </td>
+            <td class="expand">
+              <a href="">
+              <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">
+              </a>
+            </td>
+          </tr>
+          <tr >
+            <td class="vendor"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> Photographer</td>
+            <td class="planned">$100</td>
+            <td class="actual"> $100</td>
+            <td class="status">
+              <md-button class="book-btn md-sm disabled">Book</md-button>
+            </td>
+            <td class="expand">
+              <a href="">
+              <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">
+              </a>
+            </td>
+          </tr>
+          <tr >
+            <td class="vendor unexpected"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+18.png"> Unexpected</td>
+            <td class="planned">$100</td>
+            <td class="actual"> $100</td>
+            <td class="status">
+              <md-button class="use-btn md-sm">Use</md-button>
+            </td>
+            <td class="expand">
+              <a href="">
+              <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">
+              </a>
+            </td>
+          </tr> -->
+        <tr class="add-category">
+          <td colspan="5">
+            <md-button class="md-simple add-category-btn" @click="showAddEventElementsModal()">
+              <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2019.svg"> Add new category
+            </md-button>
+          </td>
+        </tr>
+        <tr class="taxes">
+          <td class="taxes-title">
+            <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2020.svg" width="20"> Tips <span class="percent">12%</span>
+          </td>
+          <td>
+            ${{totalBudgetTaxes}}
+          </td>
+          <td class="actual green-label"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png"> $100</td>
+          <td></td>
+          <td class="expand">
+            <a href="">
+            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">
+            </a>
+          </td>
+        </tr>
+        <tr class="total">
+          <td class="total-title">Total</td>
+          <td class="total-value">${{totalBudget}}</td>
+          <td colspan="3">${{totalActual}}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -289,12 +273,10 @@
       eventBuildingBlocksList: [],
       currentBlockId: null,
       elementsBudget: 'event',
-        show : false,
-        totalBudget : 0,
-        totalActual : 0,
-        totalBudgetTaxes : 0
-
-
+      show : false,
+      totalBudget : 0,
+      totalActual : 0,
+      totalBudgetTaxes : 0
     }),
     methods: {
       ...mapMutations('EventPlannerVuex', [
@@ -365,14 +347,14 @@
           this.isLoading = false;
         },500);
 
-          this.eventBuildingBlocks.forEach((item)=> {
-              console.log(item);
+        vm.totalBudget = 0
 
-              if (item.allocatedBudget) {
-                  vm.totalBudget +=item.allocatedBudget;
-                  vm.totalBudgetTaxes  += item.allocatedBudget * .18;
-              }
-          })
+        this.eventBuildingBlocks.forEach((item)=> {
+          if (item.allocatedBudget) {
+            vm.totalBudget = parseFloat(vm.totalBudget) + parseFloat(item.allocatedBudget)
+            vm.totalBudgetTaxes += item.allocatedBudget * .12
+          }
+        })
 
         this.$forceUpdate();
       },

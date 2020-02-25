@@ -9,7 +9,7 @@
         v-for="(item, index) in eventBuildingBlocks" :key="index"
         :style="`
           stroke-dasharray: ${dashArray[index]};
-          stroke: ${colors[index]};
+          stroke: ${colors[index%12]};
           display: ${item.allocatedBudget == null && totalValue !=0 ? 'none' : 'inherit'}
         `"
       ></circle>
@@ -28,7 +28,7 @@
     <div class="items-cont">
       <ul class="items-list">
         <li v-for="(item, index) in eventBuildingBlocks" :key="index">
-          <span :style="`background-color: ${colors[index]};`"></span>
+          <span :style="`background-color: ${colors[index%12]};`"></span>
           {{item.title}}
         </li>
       </ul>
