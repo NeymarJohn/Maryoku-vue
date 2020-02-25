@@ -428,6 +428,7 @@
           this.isLoading = false;
           this.$root.$emit('RefreshStatistics');
           this.getEventBuildingBlocks();
+          this.$root.$emit('event-building-block-budget-changed', this.eventBuildingBlocks)
           this.$forceUpdate();
 
           console.log(' selected block ', selected_block);

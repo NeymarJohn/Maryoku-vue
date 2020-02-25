@@ -93,10 +93,16 @@
           this.isLoading = false;
         },500);
 
+        // initialize
+        this.sortedData = []
+        this.dashArray = []
+        this.categories = []
+        this.totalValue = 0
+
         this.eventBuildingBlocks.forEach(item => {
           this.categories.push(item.title)
           if (item.allocatedBudget) {
-            this.totalValue += item.allocatedBudget
+            this.totalValue += parseFloat(item.allocatedBudget)
           }
         })
 
@@ -112,12 +118,12 @@
               ).map( 
                 eb => eb.allocatedBudget == null ? 0 : eb.allocatedBudget 
               ).reduce( function(total, val) {
-                return total + val
+                return parseFloat(total) + parseFloat(val)
               }, 0)
           })
         })
 
-        console.log(this.sortedData)
+        console.log(this.sortedData, this.totalValue)
 
         // Set dash on circle
         this.sortedData.forEach((item,index) => {
@@ -156,6 +162,10 @@
     },
     mounted() {
       this.drawChart()
+      this.$root.$on('event-building-block-budget-changed', (eventComponents)=>{
+        console.log('updated', eventComponents)
+        this.drawChart()
+      })
     },
     filters: {
 
