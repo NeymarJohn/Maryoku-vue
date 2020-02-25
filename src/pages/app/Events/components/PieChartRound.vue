@@ -132,7 +132,7 @@
             // Subtract current value from spaceLeft
             spaceLeft -= (item.budget / this.totalValue) * this.circleLength
 
-            if (!this.fillColor) {
+            if (item == this.sortedData.filter(sd => sd.budget != 0)[0]) {
               this.fillColor = this.colors[index]
             }
           } else {
@@ -140,20 +140,6 @@
           }
         })
 
-        // this.eventBuildingBlocks.forEach((item,index) => {
-        //   if (item.allocatedBudget) {
-        //     this.dashArray.push(spaceLeft+ " " + this.circleLength)
-        //     // Subtract current value from spaceLeft
-        //     spaceLeft -= (item.allocatedBudget / this.totalValue) * this.circleLength
-
-        //     if (!this.fillColor) {
-        //       this.fillColor = this.colors[index]
-        //     }
-        //   } else {
-        //     this.dashArray.push(spaceLeft+ " " + this.circleLength)
-        //   }
-        // })
-        console.log(this.dashArray)
         this.$forceUpdate()
       }
     },
@@ -163,7 +149,6 @@
     mounted() {
       this.drawChart()
       this.$root.$on('event-building-block-budget-changed', (eventComponents)=>{
-        console.log('updated', eventComponents)
         this.drawChart()
       })
     },
