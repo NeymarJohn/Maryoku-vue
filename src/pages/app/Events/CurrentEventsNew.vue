@@ -55,10 +55,7 @@
             Expenses
           </div>
           <div>
-            <pie-chart-round 
-              :event.sync="event"
-              :items="selectedComponents">
-            </pie-chart-round>
+            <pie-chart-round :items="selectedComponents"></pie-chart-round>
             <!-- <chart-card
               header-animation="false"
               :chart-data="pieChart.data"
@@ -264,10 +261,24 @@ export default {
           this.eventId = event.id
           this.calendarEvent = event
           new EventComponent().for(_calendar, event).get().then(components => {
-            this.event.components = components
-            this.selectedComponents = components
-            this.seriesData = components
+            this.event.components = components;
+            this.selectedComponents = components;
+
+            this.selectedComponents.forEach((comp) => {
+              if (!comp.allocatedBudget) {
+                this.seriesData.push(0)
+              } else {
+                this.totalBudget += comp.allocatedBudget
+                this.seriesData.push(comp.allocatedBudget)
+              }
+            })
           });
+
+          console.log('series', this.seriesData)
+
+          this.seriesData.forEach((s) => {
+            s = s / this.totalBudget
+          })
 
           console.log('series', this.seriesData)
 
@@ -390,11 +401,6 @@ export default {
           donutWidth: 45,
           animation: true
         }
-      }
-    },
-    categoryItems() {
-      return {
-        data: this.seriesData
       }
     }
   },
