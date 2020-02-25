@@ -6,11 +6,11 @@
         cx="50%" 
         cy="50%" 
         r="100"
-        v-for="(item, index) in eventBuildingBlocks" :key="index"
+        v-for="(item, index) in sortedData" :key="index"
         :style="`
           stroke-dasharray: ${dashArray[index]};
           stroke: ${colors[index%12]};
-          display: ${item.allocatedBudget == null && totalValue !=0 ? 'none' : 'inherit'}
+          display: ${item.budget == 0 && totalValue != 0 ? 'none' : 'inherit'}
         `"
       ></circle>
       <circle 
@@ -27,9 +27,9 @@
     </svg>
     <div class="items-cont">
       <ul class="items-list">
-        <li v-for="(item, index) in eventBuildingBlocks" :key="index">
+        <li v-for="(item, index) in sortedData" :key="index">
           <span :style="`background-color: ${colors[index%12]};`"></span>
-          {{item.title}}
+          {{item.category}}
         </li>
       </ul>
     </div>
@@ -59,18 +59,20 @@
         totalValue: 0,
         radius: 100,
         eventBuildingBlocks: [],
+        sortedData: [],
+        categories: [],
         fillColor: null,
         colors: [
           "#0FAC4C",
           "#FFC001",
-          "#A4A6A5",
-          "#00BFD2",
-          "#24C796",
-          "#FE537A",
           "#641956",
           "#F3423A",
           "#8CB9B4",
           "#43536A",
+          "#A4A6A5",
+          "#00BFD2",
+          "#24C796",
+          "#FE537A",
           "#D9FFE7",
           "#2CDE6B"
         ]
@@ -92,17 +94,37 @@
         },500);
 
         this.eventBuildingBlocks.forEach(item => {
+          this.categories.push(item.title)
           if (item.allocatedBudget) {
             this.totalValue += item.allocatedBudget
           }
         })
 
+        // remove duplicated categories
+        this.categories = [...new Set(this.categories)]
+        // sort data with updated categories
+        this.categories.forEach((category, cIndex) => {
+          this.sortedData.push({
+            category: category,
+            budget: // filter by category title and gather budget values, then get the sum of them
+              this.eventBuildingBlocks.filter( 
+                ebb => ebb.title == category 
+              ).map( 
+                eb => eb.allocatedBudget == null ? 0 : eb.allocatedBudget 
+              ).reduce( function(total, val) {
+                return total + val
+              }, 0)
+          })
+        })
+
+        console.log(this.sortedData)
+
         // Set dash on circle
-        this.eventBuildingBlocks.forEach((item,index) => {
-          if (item.allocatedBudget) {
+        this.sortedData.forEach((item,index) => {
+          if (item.budget) {
             this.dashArray.push(spaceLeft+ " " + this.circleLength)
             // Subtract current value from spaceLeft
-            spaceLeft -= (item.allocatedBudget / this.totalValue) * this.circleLength
+            spaceLeft -= (item.budget / this.totalValue) * this.circleLength
 
             if (!this.fillColor) {
               this.fillColor = this.colors[index]
@@ -112,6 +134,19 @@
           }
         })
 
+        // this.eventBuildingBlocks.forEach((item,index) => {
+        //   if (item.allocatedBudget) {
+        //     this.dashArray.push(spaceLeft+ " " + this.circleLength)
+        //     // Subtract current value from spaceLeft
+        //     spaceLeft -= (item.allocatedBudget / this.totalValue) * this.circleLength
+
+        //     if (!this.fillColor) {
+        //       this.fillColor = this.colors[index]
+        //     }
+        //   } else {
+        //     this.dashArray.push(spaceLeft+ " " + this.circleLength)
+        //   }
+        // })
         console.log(this.dashArray)
         this.$forceUpdate()
       }
@@ -127,11 +162,9 @@
     },
     watch: {
       event(newVal, oldVal) {
-        console.log(this.eventBuildingBlocks)
         this.drawChart()
       },
       items(newVal, oldVal) {
-        console.log(this.eventBuildingBlocks)
         this.drawChart()
       },
     }
