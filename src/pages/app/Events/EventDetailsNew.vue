@@ -1,5 +1,5 @@
 <template>
-    <div class="md-layout new-event-details edit-event-details" v-if="event">
+    <div class="md-layout new-event-details edit-event-details">
 
         <side-bar :event="event">
 
@@ -31,7 +31,7 @@
                     <div class="count-label">MINUTES</div>
                 </div>
                 <div class="count-item with-icon">
-                    <div class="icon"><img :src="`${iconsURL}Asset%20152.svg`" width="20"></div>
+                    <div class="icon"><img src="http://static.maryoku.com/storage/icons/event's+page/SVG/Asset%20152.svg" width="15"></div>
                     <div class="count-label">To Event</div>
                 </div>
             </div>
@@ -41,13 +41,30 @@
                      style="background : linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url(./static/img/Image-49.png) center center no-repeat"
 
                 >
-                    <h3>{{event.title}}</h3>
+                    <h3>Event Title</h3>
                     <md-button class="md-default md-simple edit-concept-btn">Edit Concept <md-icon>keyboard_arrow_right</md-icon></md-button>
                 </div>
                 <div class="event-items">
+                    <div class="event-items__item">
+                        <img src="http://static.maryoku.com/storage/icons/event's%20page/SVG/Asset%20155.svg" width="15"> <span>NBA Swags</span>
+                    </div>
+                    <div class="event-items__item">
+                        <img src="http://static.maryoku.com/storage/icons/event's+page/SVG/Asset%20155.svg" width="15"> <span>The Big Employees Tournament</span>
 
-                    <div class="event-items__item" v-for="(item,i,index) in event.eventNeededServices" :key="index">
-                        <img src="http://static.maryoku.com/storage/icons/event's%20page/SVG/Asset%20155.svg" width="15"> <span>{{i}}</span>
+                    </div>
+                    <div class="event-items__item">
+                        <img src="http://static.maryoku.com/storage/icons/event's+page/SVG/Asset%20155.svg" width="15"> <span>Pizza & Beer</span>
+                    </div>
+                    <div class="event-items__item">
+                        <img src="http://static.maryoku.com/storage/icons/event's+page/SVG/Asset%20155.svg" width="15"> <span>B-ball Themed Reception</span>
+
+                    </div>
+                    <div class="event-items__item">
+                        <img src="http://static.maryoku.com/storage/icons/event's+page/SVG/Asset%20155.svg" width="15"> <span>B-ball Decorated Tables</span>
+
+                    </div>
+                    <div class="event-items__item">
+                        <img src="s3://static.maryoku.com/storage/icons/Event%20Page/SVG/Asset%20155.svg" width="15"> <span>American B-ball Cupcake</span>
                     </div>
                 </div>
             </div>
@@ -60,7 +77,7 @@
 
                 <div class="card-section">
                     <div class="section-header">
-                        <img :src="`${iconsURL}Asset 162.svg`" > Event’s details
+                        <md-icon>outlined_flag</md-icon> Event’s details
                     </div>
 
                     <div class="card-content ">
@@ -69,24 +86,21 @@
                             <div class="event-details-list">
                                 <ul class="list-items">
                                     <li class="event-details-item">
-                                        <img :src="`${iconsURL}sun.svg`" width="20"> <span>{{event.eventDayPart}} Time event</span>
+                                        <md-icon>wb_sunny</md-icon> <span>Day Time event</span>
                                     </li>
                                     <li class="event-details-item">
-                                        <img :src="`${iconsURL}Asset 165.svg`" width="20"> <span>{{event.eventStartMillis | formatDate}},
-              {{event.eventStartMillis | formatTime}}
-              ({{event.eventStartMillis |
-              formatDuration(event.eventEndMillis)}}h)</span>
+                                        <md-icon>wb_sunny</md-icon> <span>Wednesday, December 25, 2019</span>
                                     </li>
                                     <li class="event-details-item">
-                                        <img :src="`${iconsURL}Asset 166.svg`" width="20"> <span>{{event.numberOfParticipants}} Invited</span>
+                                        <md-icon>wb_sunny</md-icon> <span>2,034 Invited</span>
                                     </li>
                                     <li class="event-details-item">
-                                        <img :src="`${iconsURL}Asset 167.svg`" width="20"> <span>{{event.location}}</span>
+                                        <md-icon>wb_sunny</md-icon> <span>Georgia Event Hall, San Diego</span>
                                     </li>
                                 </ul>
                             </div>
                             <div class="event-weather">
-                                <div class="event-weather__icon"><img :src="`${iconsURL}Asset 161.svg`" width="40"></div>
+                                <div class="event-weather__icon"><md-icon>wb_cloudy</md-icon></div>
                                 <div class="event-weather__status">Mostly Sunny</div>
                                 <div class="event-weather__degree">
                                     <div class="degree-value">58</div>
@@ -120,7 +134,7 @@
             <div class="md-layout-item  md-size-60">
                 <div class="card-section">
                     <div class="section-header">
-                        <img :src="`${iconsURL}Group 3090.svg`" > Budget & Vendors
+                        <md-icon>attach_money</md-icon>Budget & Vendors
                     </div>
 
                     <div class="card-content">
@@ -139,7 +153,7 @@
                                                 chart-type="Pie"
                                                 style="grid-column: 1; grid-row: 1; color:green"/>
                                             <animated-number  ref="totalRemainingBudgetNumber"
-                                                              :value="percentage"
+                                                              :value="90"
                                                               class="percentage"
                                                               prefix="%"></animated-number>
                                         </div>
@@ -147,14 +161,14 @@
                                     </div>
 
                                     <div class="chart-legends">
-                                        <div class="legend-item used">Used ${{event.totalBudget - getTotalRemainingBudget}}</div>
-                                        <div class="legend-item remaining">Remaining ${{getTotalRemainingBudget | withComma}}</div>
+                                        <div class="legend-item used">Used $3000</div>
+                                        <div class="legend-item remaining">Remaining $3000</div>
                                     </div>
 
                                 </div>
 
                                 <div class="budget-details d-flex justify-content-start">
-                                    <div class="total-budget-value">$ {{event.totalBudget | withComma}}</div>
+                                    <div class="total-budget-value">$ 6,000</div>
                                     <div class="total-budget"> Total Budget   <br> <md-button class="md-rose md-simple edit-total-budget"> Edit</md-button></div>
                                 </div>
 
@@ -166,19 +180,41 @@
                                     <md-button class="md-rose md-simple"> Edit </md-button>
                                 </div>
 
-                                <div class="booked-vendors__items" v-if="event.components">
-                                    <div class="vendor-item" :class="{'completed': block.status == 'completed'}" v-for="(block,index) in event.components" :key="index">
+                                <div class="booked-vendors__items">
+                                    <div class="vendor-item completed">
 
-                                        <div class="vendor-completed" v-if="block.status == 'completed'">
+                                        <div class="vendor-completed">
                                             <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="15">
                                         </div>
                                         <div class="vendor-icon">
                                             <img src="http://static.maryoku.com/storage/icons/timeline/svg/Asset%20135.svg" width="15">
                                         </div>
-                                        <div class="vendor-title">{{block.title}}</div>
+                                        <div class="vendor-title">Venue</div>
 
                                     </div>
 
+                                    <div class="vendor-item completed">
+
+                                        <div class="vendor-completed">
+                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="15">
+                                        </div>
+                                        <div class="vendor-icon">
+                                            <img src="http://static.maryoku.com/storage/icons/timeline/svg/Asset%20135.svg" width="15">
+                                        </div>
+                                        <div class="vendor-title">Venue</div>
+
+                                    </div>
+
+                                    <div class="vendor-item">
+                                        <div class="vendor-completed">
+                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="15">
+                                        </div>
+                                        <div class="vendor-icon">
+                                            <img src="http://static.maryoku.com/storage/icons/timeline/svg/Asset%20135.svg" width="15">
+                                        </div>
+                                        <div class="vendor-title"> Band</div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -188,7 +224,6 @@
 
                     <div class="card-footer">
                         <div  class="footer-content">
-                            <img :src="`${iconsURL}Group 1175.svg`" width="20">
                             Band proposals are waiting for your respond
                         </div>
                         <div class="footer-actions">
@@ -202,14 +237,59 @@
             <div class="md-layout-item  md-size-60">
                 <div class="card-section">
                     <div class="section-header">
-                        <img :src="`${timlineIconsURL}Group 2774.svg`" > Timeline
+                        <md-icon>attach_money</md-icon>Timeline
                     </div>
 
                     <div class="card-content">
                         <div class="timeline-items">
-                            <div class="timeline-item d-flex justify-content-start" v-for="(timeline,index) in event.timelineItems">
-                                <div class="timeline-item__time">{{timeline.startTime}} - {{timeline.endTime}}</div>
-                                <div class="timeline-item_title">{{timeline.title}}</div>
+                            <div class="timeline-item d-flex justify-content-start">
+                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
+                                <div class="timeline-item_title">Gathering</div>
+                            </div>
+
+                            <div class="timeline-item d-flex justify-content-start">
+                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
+                                <div class="timeline-item_title">Gathering</div>
+                            </div>
+
+                            <div class="timeline-item d-flex justify-content-start">
+                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
+                                <div class="timeline-item_title">Gathering</div>
+                            </div>
+
+                            <div class="timeline-item d-flex justify-content-start">
+                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
+                                <div class="timeline-item_title">Gathering</div>
+                            </div>
+
+                            <div class="timeline-item d-flex justify-content-start">
+                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
+                                <div class="timeline-item_title">Gathering</div>
+                            </div>
+
+                            <div class="timeline-item d-flex justify-content-start">
+                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
+                                <div class="timeline-item_title">Gathering</div>
+                            </div>
+
+                            <div class="timeline-item d-flex justify-content-start">
+                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
+                                <div class="timeline-item_title">Gathering</div>
+                            </div>
+
+                            <div class="timeline-item d-flex justify-content-start">
+                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
+                                <div class="timeline-item_title">Gathering</div>
+                            </div>
+
+                            <div class="timeline-item d-flex justify-content-start">
+                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
+                                <div class="timeline-item_title">Gathering</div>
+                            </div>
+
+                            <div class="timeline-item d-flex justify-content-start">
+                                <div class="timeline-item__time">8:00 AM - 8:30 AM</div>
+                                <div class="timeline-item_title">Gathering</div>
                             </div>
                         </div>
 
@@ -217,7 +297,7 @@
 
                     <div class="card-footer">
                         <div  class="footer-content">
-                            <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="20">
+                            <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="15">
                              Good Job, you finished creating your timeline
                         </div>
                         <div class="footer-actions">
@@ -238,7 +318,7 @@
 
                         <div class="text-center">
                             <div class="guests-details d-flex justify-content-center align-center">
-                                <div class="total-budget-value">{{event.numberOfParticipants | withComma}}</div>
+                                <div class="total-budget-value">2,034</div>
                                 <div class="total-budget"> Total Guests   <br> <md-button class="md-rose md-simple edit-total-budget"> Edit</md-button></div>
                             </div>
 
@@ -312,8 +392,6 @@
 
                     <div class="card-footer">
                         <div  class="footer-content">
-                            <img :src="`${iconsURL}Asset 150.svg`" width="20">
-
                             It’s time to create second teaser
                         </div>
                         <div class="footer-actions">
@@ -335,8 +413,6 @@
     import CalendarEvent from '@/models/CalendarEvent'
     import EventComponent from '@/models/EventComponent'
     import EventTimelineItem from '@/models/EventTimelineItem'
-    import CalendarEventStatistics from '@/models/CalendarEventStatistics'
-
     import moment from 'moment'
     import swal from 'sweetalert2'
     import {SlideYDownTransition} from 'vue2-transitions'
@@ -365,8 +441,7 @@
             SlideYDownTransition,
             InputMask,
             SideBar,
-            SidebarItem,
-            CalendarEventStatistics
+            SidebarItem
         },
         props: {
             // event: Object,
@@ -375,27 +450,113 @@
         },
         data: () => ({
             // auth: auth,
-            event : null,
-            eventId: null,
-            percentage: 0,
-            totalRemainingBudget: 0,
-            remainingBudgetPerEmployee: 0,
-            seriesData: [],
-            routeName: null,
-            budgetPerEmployee: 0,
-            acceptedProposals: [],
-            paidProposals: [],
-            eventInfoCardExpanded : false,
             isLoading: true,
             pieChart : {
-
+                data: {
+                    labels: [' ', ' '], // should be empty to remove text from chart
+                    series: [{value: 10, className: "budget-chart-slice-a-negative"},{value: 90, className: "budget-chart-slice-b-negative"}]
+                },
+                options: {
+                    padding: 0,
+                    height: 156,
+                    donut: true,
+                    donutWidth: 8,
+                }
             },
+            blocksList: [
+                {
+                    id: 1,
+                    buildingBlockType: 'setup',
+                    icon: 'place',
+                    color: '#f44336'
+                },
+                {
+                    id: 2,
+                    buildingBlockType: 'activity',
+                    icon: 'notifications_active',
+                    color: '#4caf50'
+                },
+                {
+                    id: 3,
+                    buildingBlockType: 'meal',
+                    icon: 'restaurant',
+                    color: '#00bcd4'
+                },
+                {
+                    id: 4,
+                    buildingBlockType: 'DISCUSSION',
+                    icon: 'sms',
+                    color: '#ff9800'
+                },
+                {
+                    id: 5,
+                    buildingBlockType: 'TRANSPORTATION',
+                    icon: 'train',
+                    color: '#f44336'
+                },
+                {
+                    id: 6,
+                    buildingBlockType: 'RELAXATION',
+                    icon: 'weekend',
+                    color: '#4caf50'
+                },
+                {
+                    id: 7,
+                    buildingBlockType: 'ADD YOUR OWN',
+                    icon: 'add',
+                    color: '#00bcd4'
+                }
+            ],
             timelineItems: [],
             hoursArray: [],
             disabledDragging: false,
             timelineAttachment: null,
-            iconsURL : 'http://static.maryoku.com/storage/icons/Event%20Page/',
-            timlineIconsURL : 'http://static.maryoku.com/storage/icons/timeline/',
+            eventElements: [
+                {
+                    title: 'book catering',
+                    status: 'complete'
+                },
+                {
+                    title: 'book catering',
+                    status: 'complete'
+                },
+                {
+                    title: 'book catering',
+                    status: 'complete'
+                },
+                {
+                    title: 'Create Timeline',
+                    status: 'current'
+                },
+                {
+                    title: 'Hire DJ',
+                    status: 'not-complete'
+                },
+                {
+                    title: 'Hire photographer',
+                    status: 'not-complete'
+                },
+                {
+                    title: 'Research event insurance',
+                    status: 'not-complete'
+                },
+                {
+                    title: 'Book event transportation',
+                    status: 'not-complete'
+                },
+                {
+                    title: 'Create and send save-the-dates',
+                    status: 'not-complete'
+                },
+                {
+                    title: 'Review budget',
+                    status: 'not-complete'
+                },
+                {
+                    title: 'Create event\'s banner',
+                    status: 'not-complete'
+                }
+            ]
 
         }),
         methods: {
@@ -515,6 +676,8 @@
                 let event = new CalendarEvent({id: this.event.id})
                 let order = ++index
 
+                console.log('i am here => ', item)
+                console.log(this.timelineAttachment)
 
                 new EventTimelineItem({
                     event: {id: event.id},
@@ -663,49 +826,6 @@
                 reader.readAsDataURL(file)
             },
 
-            getCalendarEventStatistics (evt) {
-                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-                let event = new CalendarEvent({id: evt.id});
-
-                if (!evt.id) { return }
-
-                new CalendarEventStatistics().for(calendar, event).get()
-                    .then(resp => {
-
-                        this.totalRemainingBudget = evt.totalBudget - resp[0].totalAllocatedBudget
-                        this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants//evt.totalBudget - resp[0].totalAllocatedBudget
-                        this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
-
-
-                        if (this.percentage > 0) {
-                            this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-negative"}, {value: this.percentage, className:"budget-chart-slice-b-negative"}]
-                        } else {
-                            this.seriesData =  [{value: 0.01, className: "budget-chart-slice-a-negative"},{value: 99.99, className: "budget-chart-slice-b-negative"}]
-                        }
-
-                        this.pieChart = {
-                            data: {
-                                labels: [' ', ' '], // should be empty to remove text from chart
-                                series: this.seriesData
-                            },
-                            options: {
-                                padding: 0,
-                                height: 156,
-                                donut: true,
-                                donutWidth: 8,
-                            }
-                        }
-
-                        this.budgetPerEmployee = evt.budgetPerPerson//this.totalRemainingBudget / evt.numberOfParticipants
-                        this.allocatedBudget = resp.totalAllocatedBudget
-                        this.event.statistics['allocatedBudget'] = this.allocatedBudget
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
-            },
-
-
         },
         created () {
             [...Array(12).keys()].map(x => x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined);
@@ -719,11 +839,7 @@
 
                 _calendar.calendarEvents().find(this.$route.params.id).then(event => {
 
-                    this.event = event;
-
-                    console.log(this.event);
-
-                    this.getCalendarEventStatistics(event);
+                    this.event = event
 
                     this.getTimelineItems()
 
@@ -749,77 +865,6 @@
                 this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', true)
                 this.getTimelineItems()
             }
-        },filters: {
-            formatDate: function (date) {
-                return moment(date).format('MMM Do YYYY')
-            },
-            formatTime: function (date) {
-                return moment(date).format('h:00 A')
-            },
-            formatDuration: function (startDate, endDate) {
-                return moment(endDate).diff(startDate, 'hours')
-            },
-            withComma(amount) {
-                return amount ? amount.toLocaleString() : 0
-            }
-        },
-        computed : {
-            getPaidAmount() {
-                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-                let event = new CalendarEvent({id: this.event.id})
-                let eventComponents = this.event.components
-                let paidAmount = 0
-                this.getAcceptedAndPaidProposals(calendar, event, eventComponents)
-
-                if (this.paidProposals.length > 0 ) {
-                    return this.paidProposals.reduce((p, item) => p + item.proposalCost, 0)
-                } else {
-                    return 0
-                }
-            },
-            getToBePaidAmount() {
-                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-                let event = new CalendarEvent({id: this.event.id})
-                let eventComponents = this.event.components
-                let toBePaidAmount = 0
-                this.getAcceptedAndPaidProposals(calendar, event, eventComponents)
-
-                if (this.acceptedProposals.length > 0 ) {
-                    return this.acceptedProposals.reduce((p, item) => p + item.proposalCost, 0)
-                } else {
-                    return 0
-                }
-            },
-            getTotalAmountByGuestType() {
-                if ( this.event.participantsType == 'Guests and spouse') {
-                    // return parseInt(this.event.numberOfParticipants * this.event.budgetPerPerson  * 2)
-                    return parseInt(this.event.totalBudget) * 2
-                } else {
-                    // return parseInt(this.event.numberOfParticipants * this.event.budgetPerPerson)
-                    return parseInt(this.event.totalBudget)
-                }
-            },
-            getTotalRemainingBudget() {
-                return this.totalRemainingBudget
-            },
-            getRemainingBudgetPerEmployee() {
-                if (this.event.budgetPerPerson == 0) {
-                    return 0
-                } else {
-                    if ( this.event.participantsType == 'Guests and spouse') {
-                        return this.getTotalRemainingBudget / this.event.numberOfParticipants / 2
-                    } else {
-                        return this.getTotalRemainingBudget / this.event.numberOfParticipants
-                    }
-                }
-            },
-            getPercentage() {
-                if (this.event.budgetPerPerson == 0) {
-                    return 0
-                } else {
-                    return (this.getTotalRemainingBudget / this.getTotalAmountByGuestType) * 100
-                }
-            },
         }
     }
 </script>

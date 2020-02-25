@@ -208,40 +208,9 @@
     @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Rubik:400,500,700&display=swap');
 
     .md-overlay {
-        z-index: 9 !important;
+        z-index: 99999;
 
     }
-
-
-    .md-datepicker-dialog.md-theme-default {
-
-        box-shadow: none;
-        border: 1px solid #606060;
-        border-radius: 14px;
-        z-index: 999999999999999;
-        height: auto;
-
-        .md-datepicker-header {
-            display: none;
-        }
-        .md-datepicker-body-footer {
-            display: none;
-        }
-
-        .md-datepicker-days .md-datepicker-day-button {
-            border-radius: 10px;
-            width: 35px;
-            min-width: 35px;
-            height: 35px;
-            line-height: 35px;
-            &.md-datepicker-selected {
-                background-color: $baseColor !important;
-                box-shadow: none;
-            }
-
-        }
-    }
-
     .md-dialog.singin-form {
 
         border-radius: 20px;
@@ -634,9 +603,6 @@
             }
         }
 
-
-
-
         .md-button.custom-btn {
             width: 256px;
             height: 56px;
@@ -837,6 +803,7 @@
             }
         }
 
+
         .md-menu-content:not(.md-select-menu), .md-select-menu {
             box-shadow: none;
             padding : 0;
@@ -901,6 +868,36 @@
                 }
             }
         }
+
+        .md-datepicker-dialog.md-theme-default {
+
+            box-shadow: none;
+            border: 1px solid #606060;
+            border-radius: 14px;
+            z-index: 999999999999999;
+            height: auto;
+
+            .md-datepicker-header {
+                display: none;
+            }
+            .md-datepicker-body-footer {
+                display: none;
+            }
+
+            .md-datepicker-days .md-datepicker-day-button {
+                border-radius: 10px;
+                width: 35px;
+                min-width: 35px;
+                height: 35px;
+                line-height: 35px;
+                &.md-datepicker-selected {
+                    background-color: $baseColor !important;
+                    box-shadow: none;
+                }
+
+            }
+        }
+
 
         .back-section {
 
