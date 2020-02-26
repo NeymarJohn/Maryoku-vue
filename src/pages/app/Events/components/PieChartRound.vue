@@ -6,11 +6,11 @@
         cx="50%" 
         cy="50%" 
         r="100"
-        v-for="(item, index) in items" :key="index"
+        v-for="(item, index) in sortedData" :key="index"
         :style="`
           stroke-dasharray: ${dashArray[index]};
-          stroke: ${colors[index]};
-          display: ${item.allocatedBudget == null && totalValue !=0 ? 'none' : 'inherit'}
+          stroke: ${colors[index%12]};
+          display: ${item.budget == 0 && totalValue != 0 ? 'none' : 'inherit'}
         `"
       ></circle>
       <circle 
@@ -18,18 +18,18 @@
         cx="50%" 
         cy="50%" 
         r="100"
+        v-if="!(totalValue == 0 || dashArray.length == 1)"
         :style="`
           stroke-dasharray: 0 ${circleLength};
-          stroke: ${colors[0]};
-          display: ${totalValue ==0 ? 'none' : 'inherit'}
+          stroke: ${fillColor};
         `"
       ></circle>
     </svg>
     <div class="items-cont">
       <ul class="items-list">
-        <li v-for="(item, index) in items" :key="index">
-          <span :style="`background-color: ${colors[index]};`"></span>
-          {{item.title}}
+        <li v-for="(item, index) in sortedData" :key="index">
+          <span :style="`background-color: ${colors[index%12]};`"></span>
+          {{item.category}}
         </li>
       </ul>
     </div>
@@ -40,67 +40,129 @@
 
   export default {
     props: {
-      items: {
-        default: [],
-        type: Array
-      }
+      event: {
+        type: Object,
+        default: () => {
+          return {statistics: {}}
+        }
+      },
+      items: [Array, Function],
+        type  : {
+          type : String,
+            default : 'total'
+        }
     },
     data() {
       return {
         dashArray: [],
+        circleLength: 0,
         totalValue: 0,
         radius: 100,
+        eventBuildingBlocks: [],
+        sortedData: [],
+        categories: [],
+        fillColor: null,
         colors: [
-          "red",
-          "green",
-          "brown",
-          "grey",
-          "purple",
-          "cadetblue",
-          "blue",
-          "gold",
-          "aqua",
-          "bisque",
-          "plum",
-          "lawngreen"
+          "#0FAC4C",
+          "#FFC001",
+          "#641956",
+          "#F3423A",
+          "#8CB9B4",
+          "#43536A",
+          "#A4A6A5",
+          "#00BFD2",
+          "#24C796",
+          "#FE537A",
+          "#D9FFE7",
+          "#2CDE6B"
         ]
       }
     },
     methods: {
       drawChart() {
-        let circleLength = Math.PI * (this.radius * 2),
-            spaceLeft = circleLength
+        if (!this.event.id) return;
 
-        this.items.forEach(item => {
+        let vm = this
+        this.isLoading = true
+        let res = this.event.components
+        this.circleLength = Math.PI * (this.radius * 2)
+        let spaceLeft = this.circleLength
+
+        // initialize
+        this.sortedData = []
+        this.dashArray = []
+        this.categories = []
+        this.eventBuildingBlocks = []
+        this.totalValue = 0
+
+        this.$set(this, 'eventBuildingBlocks', res);
+          setTimeout(()=> {
+          this.isLoading = false;
+        },500);
+
+        this.eventBuildingBlocks.forEach(item => {
+          this.categories.push(item.title)
           if (item.allocatedBudget) {
-            this.totalValue += item.allocatedBudget
+            this.totalValue += parseFloat(item.allocatedBudget)
           }
         })
-        console.log(this.totalValue, circleLength, spaceLeft)
+
+        // remove duplicated categories
+        this.categories = [...new Set(this.categories)]
+        // sort data with updated categories
+        this.categories.forEach((category, cIndex) => {
+          this.sortedData.push({
+            category: category,
+            budget: // filter by category title and gather budget values, then get the sum of them
+              this.eventBuildingBlocks.filter( 
+                ebb => ebb.title == category 
+              ).map( 
+                eb => eb.allocatedBudget == null ? 0 : eb.allocatedBudget 
+              ).reduce( function(total, val) {
+                return parseFloat(total) + parseFloat(val)
+              }, 0)
+          })
+        })
+
+        console.log(this.sortedData, this.totalValue)
 
         // Set dash on circle
-        this.items.forEach(item => {
-          if (item.allocatedBudget) {
-            this.dashArray.push(spaceLeft+ " " + circleLength)
+        this.sortedData.forEach((item,index) => {
+          if (item.budget) {
+            this.dashArray.push(spaceLeft+ " " + this.circleLength)
             // Subtract current value from spaceLeft
-            spaceLeft -= (item.allocatedBudget / this.totalValue) * circleLength
+            spaceLeft -= (item.budget / this.totalValue) * this.circleLength
+
+            if (item == this.sortedData.filter(sd => sd.budget != 0)[0]) {
+              this.fillColor = this.colors[index]
+            }
+          } else {
+            this.dashArray.push(spaceLeft+ " " + this.circleLength)
           }
         })
-        console.log(this.dashArray)
+
+        this.$forceUpdate()
       }
     },
     computed: {
       
     },
     mounted() {
-      console.log(this.items)
       this.drawChart()
+      this.$root.$on('event-building-block-budget-changed', (eventComponents)=>{
+        this.drawChart()
+      })
     },
     filters: {
 
     },
     watch: {
-
+      event(newVal, oldVal) {
+        this.drawChart()
+      },
+      items(newVal, oldVal) {
+        this.drawChart()
+      },
     }
   }
 </script>

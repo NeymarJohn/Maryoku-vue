@@ -4,27 +4,20 @@ $green : #6ec37d;
 
 @font-face {
     font-family: 'Manrope-Bold';
-    src: url('../fonts/manrope/fonts/otf/Manrope-Bold.otf') format('opentype'),
-    url('../fonts/manrope/fonts/web/Manrope-Bold.woff2') format('woff2'),
-    url('../fonts/manrope/fonts/ttf/Manrope-Bold.ttf')  format('truetype');
+    src: url('../fonts/manrope/ttf/Manrope-Bold.ttf');
     font-style: normal;
     font-stretch: normal;
 }
 
 @font-face {
     font-family: 'Manrope-ExtraBold';
-    src: url('../fonts/manrope/fonts/otf/Manrope-ExtraBold.otf') format('opentype'),
-    url('../fonts/manrope/fonts/web/Manrope-ExtraBold.woff2') format('woff2'),
-    url('../fonts/manrope/fonts/ttf/Manrope-ExtraBold.ttf')  format('truetype');
+    src: url('../fonts/manrope/ttf/Manrope-ExtraBold.ttf');
     font-style: normal;
     font-stretch: normal;
 }
-
 @font-face {
     font-family: 'Manrope-Regular';
-    src: url('../fonts/manrope/fonts/otf/Manrope-Regular.otf') format('opentype'),
-    url('../fonts/manrope/fonts/web/Manrope-Regular.woff2') format('woff2'),
-    url('../fonts/manrope/fonts/ttf/Manrope-Regular.ttf')  format('truetype');
+    src: url('../fonts/manrope/ttf/Manrope-Regular.ttf');
     font-style: normal;
     font-stretch: normal;
 }
@@ -32,6 +25,7 @@ $green : #6ec37d;
 .sidebar-mini .main-panel {
     width: calc(100% - 60px);
 }
+
 
 .new-event-side-bar {
 
@@ -289,12 +283,6 @@ $green : #6ec37d;
 
         }
 
-        .md-rose.md-simple {
-            .md-ripple {
-                color: #f51355 !important;
-            }
-        }
-
         &.event-block-table {
             position: relative;
 
@@ -430,11 +418,6 @@ $green : #6ec37d;
                     border-radius: 0 3px 3px 0;
                 }
 
-                &.actions {
-                    text-align: right;
-                    padding-right: 1em;
-                }
-
                 &.vendor {
                     font-family: 'Manrope-Bold',sans-serif;
                     font-size: 16px;
@@ -485,13 +468,10 @@ $green : #6ec37d;
                     .book-btn {
                         margin: 0;
                         .md-ripple {
-                            height: 36px;
                             border-radius: 2px;
                             background-color: $rose;
-                            padding: 0.9em 11px !important;
+                            padding: 0.9em 0 !important;
                             font-family: 'Manrope-Bold',sans-serif;
-                            font-size: 14px;
-                            font-family: 'Manrope-ExtraBold',sans-serif;
                         }
 
                         &.disabled {
@@ -585,8 +565,8 @@ $green : #6ec37d;
 
                     &:first-child {
                         border-right : 1px solid #707070;
-                        margin-right: 2em;
-                        padding-right: 1.9em;
+                        margin-right: 1em;
+                        padding-right: 1.4em;
                     }
 
                     .md-ripple {
@@ -599,28 +579,12 @@ $green : #6ec37d;
             }
         }
     }
-
-
-    .edit-requirement {
-        min-width: auto;
-        margin-left : 0.7em;
-
-        .md-ripple {
-            padding : 0 !important;
-            color : $rose;
-            text-transform: capitalize;
-            font-size: 12px;
-            font-family: 'Manrope-ExtraBold',sans-serif;
-        }
-    }
 }
 
 
 .timeline-section {
     position: relative;
     padding: 0 0 0 18em;
-    font-family: 'Manrope-Regular',sans-serif;
-
 
     .timeline-sidebar {
         position: absolute;
@@ -643,7 +607,7 @@ $green : #6ec37d;
 
         .title-label {
             font-size: 17px;
-            font-family: 'Manrope-ExtraBold',sans-serif;
+            font-weight: 800;
             color: #050505;
             text-transform: uppercase;
 
@@ -711,7 +675,6 @@ $green : #6ec37d;
 
             .item-title {
                 position: inherit;
-                font-family: 'Manrope-Regular',sans-serif;
                 img {
                     margin-right : 0.4em;
                 }
@@ -727,7 +690,7 @@ $green : #6ec37d;
             &.current {
                 border-left-color : $green;
                 font-size: 21px;
-                font-family: 'Manrope-ExtraBold',sans-serif;
+                font-weight: 800;
                 position: relative;
 
                 &:before {
@@ -749,7 +712,7 @@ $green : #6ec37d;
 .timeline-lists-footer {
     .footer-title {
         font-size: 17px;
-        font-family: 'Manrope-ExtraBold',sans-serif;
+        font-weight: 800;
         color: #818080;
     }
 
@@ -769,17 +732,11 @@ $green : #6ec37d;
     background: #fff;
     margin-bottom : 1em;
     width : 100%;
-    font-family: 'Manrope-Regular',sans-serif;
 
     .header-title {
-        font-family: 'Manrope-ExtraBold',sans-serif;
+        font-weight: 900;
         border-bottom: 1px solid #cfcfcf;
         padding: 1em 2em;
-
-        img {
-            width : 20px;
-            margin-right:  0.6em;
-        }
     }
     .section-desc {
         padding : 1em 2em;
@@ -834,7 +791,6 @@ $green : #6ec37d;
 
 .new-event-details {
 
-    font-family: 'Manrope-Regular',sans-serif;
 
     .title-budget-main {
         margin-top: 1.7em;
@@ -915,13 +871,12 @@ $green : #6ec37d;
 
             .edit-concept-btn {
                 .md-ripple {
-                    font-size: 14px;
-                    font-family: 'Manrope-ExtraBold',sans-serif;
+                    font-size: 16px;
+                    font-weight: 800;
                     color: #fff;
                     text-transform: capitalize;
                     padding : 0 !important;
                     text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                    font-family: 'Manrope-Bold',sans-serif;
                 }
 
                 .md-icon {
@@ -932,18 +887,18 @@ $green : #6ec37d;
 
         .event-items {
 
-            padding: 4em 3em 3em;
+            padding: 3em;
 
             &__item {
-                font-size: 15px;
+                font-size: 16px;
                 color: #050505;
                 display: inline-flex;
-                width : 26%;
+                width : 32%;
+
                 margin-bottom : 2em;
-                font-family: 'Manrope-Regular',sans-serif;
 
                 img {
-                    margin-right : 0.6em;
+                    margin-right : 0.4em;
                 }
 
                 &:not(:last-child) {
@@ -961,14 +916,17 @@ $green : #6ec37d;
         position: absolute;right : 1em;
         bottom : 0;
         background-color: #ffc001;
-        padding: 0.5em 1em;
+        padding: 0.5em 2em;
         width: 323px;
         height: 82.1px;
 
         .count-item {
             text-align: center;
 
-
+            &.with-icon {
+                border-left : 1px solid #fff;
+                padding-left : 0.5em;
+            }
 
             &.divider {
                 color: #fff;
@@ -979,11 +937,10 @@ $green : #6ec37d;
 
             .number {
                 text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                font-size: 27px;
+                font-size: 29px;
                 color: #ffffff;
                 font-weight: 600;
                 padding-top: 13px;
-                font-family: 'Manrope-Bold',sans-serif;
             }
 
             .icon {
@@ -993,30 +950,19 @@ $green : #6ec37d;
 
             .count-label {
                 text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                font-size: 12px;
+
+                font-family: 'HelveticaNeue';
+                font-size: 13px;
                 color: #fff;
-                margin-top:0.4em;
-            }
-
-            &.with-icon {
-                border-left: 1px solid #fff;
-                padding-left: 0.9em;
-                text-align: center;
-                width: 51px;
-                line-height: 12px;
-
-                .count-label {
-                    font-size: 10px;
-                }
+                margin-top:0.3em;
             }
         }
     }
 
     .card-section {
         .section-header {
-            padding : 1em 1.3em;
+            padding : 1em 2em;
             font-size: 20px;
-            font-family: 'Manrope-ExtraBold',sans-serif;
 
             .md-icon , img {
                 margin-right: 0.4em;
@@ -1060,9 +1006,8 @@ $green : #6ec37d;
 
                 .md-ripple {
                     text-transform: capitalize;
-                    font-family: 'Manrope-ExtraBold',sans-serif;
+                    font-weight: bold;
                     padding : 0 !important;
-                    font-size: 14px !important;
 
                 }
 
@@ -1086,7 +1031,7 @@ $green : #6ec37d;
         .list-items {
             padding : 0;
             list-style: none;
-            margin : 0 0 1.35em;
+            margin : 0;
 
             .event-details-item {
 
@@ -1098,9 +1043,9 @@ $green : #6ec37d;
                 }
 
                 span {
-                    font-size: 14px;
-                    font-family: 'Manrope-ExtraBold',sans-serif;
-                    margin-left: 1em;
+                    font-size: 15px;
+                    font-weight: 800;
+                    margin-left : 1em;
                     color: #050505;
                     text-transform: capitalize;
                 }
@@ -1116,9 +1061,9 @@ $green : #6ec37d;
         }
 
         &__status {
-            font-size: 15px;
+            font-size: 16px;
             color: #050505;
-            margin-top : 0.7em;
+            margin-top : 0.3em;
         }
 
         &__degree {
@@ -1127,7 +1072,7 @@ $green : #6ec37d;
             .degree {
                 &-value {
                     font-size: 40px;
-                    font-family: 'Manrope-ExtraBold',sans-serif;
+                    font-weight: 800;
                     color: #050505;
                     margin : 0.4em auto;
                 }
@@ -1159,12 +1104,8 @@ $green : #6ec37d;
         }
         &__details {
             .details-item {
-                font-size: 13px;
+                font-size: 14px;
                 color: #050505;
-
-                &:not(:last-child) {
-                    margin-bottom : 0.2em;
-                }
             }
         }
     }
@@ -1236,8 +1177,6 @@ $green : #6ec37d;
 
     .budget-details , .guests-details {
         margin-bottom: 2.5em;
-        margin-top:1em;
-
         .total-budget-value {
             font-size: 38px;
             font-weight: bold;
@@ -1275,7 +1214,7 @@ $green : #6ec37d;
 
             h3.header-title {
                 font-size: 18px;
-                font-family: 'Manrope-ExtraBold',sans-serif;
+                font-weight: 800;
                 color: #050505;
                 margin : 0 0.5em 0 0;
             }
@@ -1364,7 +1303,6 @@ $green : #6ec37d;
             &__time {
                 margin-right : 1em;
                 font-weight: bold;
-                font-family: 'Manrope-Extrabold';
             }
             &__title {
 
@@ -1485,7 +1423,7 @@ $green : #6ec37d;
 
         .section-title {
             font-size: 20px;
-            font-family: 'Manrope-ExtraBold',sans-serif;
+            font-weight: 800;
             color: #050505;
             margin-bottom : 1em;
         }
@@ -1500,13 +1438,10 @@ $green : #6ec37d;
             padding : 1.5em 0;
             border-top : 1px solid #e2e2e2;
 
-
             .campaign-title {
                 font-weight: bold;
                 color : #050505;
                 font-size: 14px;
-                font-family: 'Manrope-ExtraBold';
-
                 img {
                     margin-right : 0.6em;
                 }
@@ -1517,8 +1452,6 @@ $green : #6ec37d;
                     text-decoration: line-through;
                     color : #818080;
                     font-weight: normal;
-                    font-family: 'Manrope-Regular';
-
                 }
             }
 
@@ -1536,7 +1469,6 @@ $green : #6ec37d;
                     font-weight: bold;
                     font-size: 14px;
                     text-transform: capitalize;
-                    font-family: 'Manrope-ExtraBold';
                 }
 
                 &.md-default {
@@ -1562,11 +1494,6 @@ $green : #6ec37d;
 
 
 .time-line-blocks{
-
-    &_items {
-        max-width: 334px;
-        margin: 0 auto;
-    }
     &_selected-items {
         .form-group {
             margin-bottom: 2em;
@@ -1574,7 +1501,7 @@ $green : #6ec37d;
 
             label {
                 font-size: 14px;
-                font-family: 'Manrope-ExtraBold',sans-serif;
+                font-weight: 800;
                 color: #050505;
                 margin-bottom: 0.5em;
                 display: inline-block;
@@ -1672,7 +1599,7 @@ $green : #6ec37d;
                 display: inline-block;
                 margin : 0 0.5em;
                 font-size: 18px;
-                font-family: 'Manrope-ExtraBold',sans-serif;
+                font-weight: 800;
                 color : #050505;
             }
         }
@@ -1686,16 +1613,6 @@ $green : #6ec37d;
             left: 22px;
             bottom: 0;
             margin: auto;
-        }
-    }
-
-    &_item {
-        padding : 1.3em 3.5em;
-
-        h5 {
-            font-size: 17px;
-            font-family: 'Manrope-ExtraBold',sans-serif;
-            text-transform: capitalize;
         }
     }
 }
@@ -1715,302 +1632,6 @@ $green : #6ec37d;
         &.md-default {
             .md-ripple {
                 color: #000;
-            }
-        }
-    }
-}
-
-
-.add-category-model {
-
-    .modal-header .md-button .md-button-content i {
-        color: #000 !important;
-        opacity: 1;
-        font-size: 30px !important;
-    }
-
-    .modal-footer {
-        margin-top : 3em;
-
-        .md-button {
-
-            .md-ripple {
-                font-family: 'Manrope-Bold',sans-serif;
-                font-size: 14px;
-                font-family: 'Manrope-ExtraBold',sans-serif;
-                text-transform: capitalize;
-                width: 160px;
-                height: 44px;
-            }
-            &.add-category-btn {
-                .md-ripple {
-                    background : $rose;
-                }
-            }
-
-            &.cancel-btn {
-                .md-ripple {
-                    color : #050505;
-                }
-            }
-        }
-    }
-
-    .modal-body {
-        text-align: left;
-
-        .md-layout-item {
-            padding: 0 !important;
-        }
-
-        .maryoku-field {
-            font-family: 'Open Sans', sans-serif;
-            cursor: pointer;
-
-            .md-icon {
-                position: absolute;
-                left: 8px;
-                z-index: 2;
-            }
-
-            .v-select {
-                width : 100%;
-            }
-
-            .vs--open + label, .has-value + label {
-                top: 4px;
-                font-size: 12px;
-                color: gray !important;
-                left: 1.4rem;
-            }
-
-            .vs--open {
-                .vs__selected {
-                    color : #efefef;
-                }
-                .vs__open-indicator {
-                    display: none;
-                }
-            }
-
-            .vs__selected {
-                position: absolute;
-                top: 19px;
-                left: 23px;
-                z-index: 2;
-                color: #000;
-                font-family: 'Manrope-Regular',sans-serif;
-
-            }
-
-            .vs__selected-options {
-                position: relative;
-
-                input {
-                    min-height: 60px;
-                    border-radius: 3px;
-                    border: solid 0.5px #bcbcbc;
-                    background: #ffffff;
-                    width: 100%;
-                    padding: 0 1.5em;
-                    -webkit-appearance: none;
-                    box-shadow: none;
-
-                    &:focus {
-                        outline: none;
-                        box-shadow: none;
-                        background: #fff
-                    }
-                }
-            }
-
-            &.with-icon {
-
-                >label {
-                    left: 43px;
-                }
-
-                .vs--open + label, .has-value + label {
-                    left: 2.6rem;
-                }
-                .vs__selected-options {
-
-                    input {
-                        padding: 1.5em 6px 0.9em 42px;
-                    }
-                }
-
-                .vs__selected {
-
-                    left: 41px;
-                }
-
-            }
-
-            .vs__actions {
-                position: absolute;
-                top: 51px;
-                right: 33px;
-                z-index: 2;
-
-                .vs__clear {
-                    background: none !important;
-                    border : none !important;
-                    opacity: 0.3;
-                }
-            }
-
-            .vs__dropdown-menu {
-                position: absolute;
-                background: #fff !important;
-                list-style: none;
-                padding : 0;
-                margin : 0;
-                width:100%;
-                z-index: 9999999999999999999999999999  !important;
-                border : 1px solid #aaa;
-                border-radius: 0px;
-                color : #606060;
-                font-size: 16px;
-                font-family: 'Manrope-Regular',sans-serif;
-                height : 300px;
-                overflow-y: auto;
-
-                li {
-                    padding : 0.8em 1em;
-                    &:not(:last-child) {
-                        border-bottom : 1px solid #aaa;
-                    }
-                }
-
-            }
-
-            &.has-value {
-                background: #fff;
-                border-color : #000 !important;
-
-                .vs__open-indicator {
-                    display: none;
-                }
-
-                .md-icon {
-                    color : #000;
-                }
-            }
-            &:hover {
-                border-color : #000;
-                >label  , .md-icon {
-                    color : #000;
-                }
-            }
-        }
-
-        .form-group {
-            margin-bottom: 2em;
-            position: relative;
-
-            label {
-                font-size: 14px;
-                font-family: 'Manrope-ExtraBold',sans-serif;
-                color: #050505;
-                margin-bottom: 0.5em;
-                display: inline-block;
-
-                small {
-                    font-size: 12px;
-                    font-weight: normal;
-                    color: #050505;
-                    margin-left : 0.7em;
-                }
-            }
-
-            .upload-section {
-                width : 100%;
-                display: flex;
-                height: 115px;
-                border-radius: 3px;
-                border: dashed 1px #f51355;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-
-                .md-rose {
-                    .md-ripple {
-                        border : 1px solid #f51355;
-                        text-transform: capitalize;
-                        font-weight: bold;
-                        color : #f51355 !important;
-                    }
-                }
-
-                .note {
-                    font-size: 13px;
-                    font-weight: normal;
-                    color: #818080;
-                }
-            }
-
-            .form-control {
-                min-height: 60px;
-                border-radius: 3px;
-                border: solid 0.5px #bcbcbc;
-                background: #ffffff;
-                width: 100%;
-                padding: 0 1.5em;
-            }
-
-            textarea.form-control {
-                height: 124px;
-                padding-top: 1em;
-            }
-
-
-            &.with-icon {
-                .form-control {
-                    position : relative;
-                    padding-left: 50px;
-                }
-                .input-icon {
-                    position : absolute;
-                    left: 20px;
-                    top: 48px;
-                    z-index: 99999;
-                    img {
-                        width:  12px;
-                    }
-                }
-            }
-
-
-        }
-    }
-
-
-    &__header {
-        text-align: left;
-        width : 100%;
-        margin-bottom: 1em;
-
-        h2 {
-            margin : 0 0 0.4em 0;
-            font-size: 28px;
-            font-weight: 600;
-            color: #f51355;
-            text-transform: capitalize;
-
-            img {
-                width: 28px;
-                margin-top: -5px;
-                margin-right: 4px;
-            }
-        }
-        .header-description {
-            font-size: 14px;
-            color: #050505;
-
-            img {
-                width : 25px;
-                margin-right: 9px;
             }
         }
     }

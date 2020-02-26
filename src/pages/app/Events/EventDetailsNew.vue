@@ -153,7 +153,7 @@
 
                                 </div>
 
-                                <div class="budget-details d-flex justify-content-start align-center">
+                                <div class="budget-details d-flex justify-content-start">
                                     <div class="total-budget-value">$ {{event.totalBudget | withComma}}</div>
                                     <div class="total-budget"> Total Budget   <br> <md-button class="md-rose md-simple edit-total-budget"> Edit</md-button></div>
                                 </div>
