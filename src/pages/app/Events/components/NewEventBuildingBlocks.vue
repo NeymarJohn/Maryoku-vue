@@ -233,7 +233,7 @@
           </tr>
           <tr class="total">
               <td class="total-title">Total</td>
-              <td  >${{totalBudget}}</td>
+              <td  >${{parseInt(totalBudget)}}</td>
               <td colspan="3" class="total-value">${{totalActual}}</td>
           </tr>
           </tbody>
@@ -407,6 +407,7 @@
               this.event.components.splice(_.findIndex(this.eventBuildingBlocks, (b)=>{ return b.id === selected_block.id}),1);
               this.getEventBuildingBlocks();
               this.$root.$emit('RefreshStatistics');
+              this.$root.$emit('event-building-block-budget-changed', this.event.components)
               this.$forceUpdate()
 
               let allocatedBudget = 0;
@@ -515,15 +516,13 @@
             selected_block.allocatedBudget = null;
             block.allocatedBudget = null;
           } else {
-
-              if ( block.allocatedBudget && block.numberOfParticipants ) {
-                  selected_block.allocatedBudget = this.type == 'total' ? val : val * block.numberOfParticipants;
-                  block.allocatedBudget          = this.type == 'total' ? val : val * block.numberOfParticipants;
-              } else {
-                  selected_block.allocatedBudget = this.type == 'total' ? val : val * this.event.numberOfParticipants;
-                  block.allocatedBudget          = this.type == 'total' ? val : val * this.event.numberOfParticipants;
-              }
-
+            if ( block.allocatedBudget && block.numberOfParticipants ) {
+              selected_block.allocatedBudget = this.type == 'total' ? val : val * block.numberOfParticipants;
+              block.allocatedBudget          = this.type == 'total' ? val : val * block.numberOfParticipants;
+            } else {
+              selected_block.allocatedBudget = this.type == 'total' ? val : val * this.event.numberOfParticipants;
+              block.allocatedBudget          = this.type == 'total' ? val : val * this.event.numberOfParticipants;
+            }
           }
         } else {
           selected_block.allocatedBudget = null;
@@ -534,7 +533,7 @@
           this.isLoading = false;
           this.$root.$emit('RefreshStatistics');
           this.getEventBuildingBlocks();
-          this.$root.$emit('event-building-block-budget-changed', this.eventBuildingBlocks)
+          this.$root.$emit('event-building-block-budget-changed', this.event.components)
           this.$forceUpdate();
 
           console.log(' selected block ', selected_block);

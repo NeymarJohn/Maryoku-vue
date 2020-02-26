@@ -60,6 +60,10 @@
               Preview
             </md-button>-->
 
+            <div class="timeline-section-title">
+                <img :src="`${timelineIconsURL}Group 2774.svg`">Timeline
+            </div>
+
             <drop @drop="handleDrop" style="height: 100%;">
                 <draggable :list="timelineItems" class="time-line-blocks_selected-items"
                            :options="{disabled : disabledDragging}">
@@ -83,11 +87,9 @@
                                     <div class="form-group">
                                         <label>Start Time </label>
                                        <div class="time-select-fields">
-                                           <input type="number" mask="99" v-model="item.startHour">
-                                           <span> : </span>
-                                           <input type="number" mask="99" v-model="item.startMinute">
+                                           <input type="time"  v-model="item.startTime" class="without_ampm" >
                                            <select v-model="item.startDuration">
-                                               <option value="am">AM</option>
+                                               <option value="am" >AM</option>
                                                <option value="PM">PM</option>
                                            </select>
                                        </div>
@@ -104,9 +106,8 @@
                                     <div class="form-group">
                                         <label>Finishes At</label>
                                         <div class="time-select-fields">
-                                            <input type="number" mask="99" v-model="item.endHour">
-                                            <span> : </span>
-                                            <input type="number" mask="99" v-model="item.endMinute">
+                                            <input type="time"  v-model="item.endTime" class="without_ampm" >
+
                                             <select v-model="item.endDuration">
                                                 <option value="am">AM</option>
                                                 <option value="PM">PM</option>
@@ -329,25 +330,25 @@
                 },
                 {
                     id: 4,
-                    buildingBlockType: 'DISCUSSION',
+                    buildingBlockType: 'Discussion',
                     icon: 'sms',
                     color: '#ff9800'
                 },
                 {
                     id: 5,
-                    buildingBlockType: 'TRANSPORTATION',
+                    buildingBlockType: 'Transportation',
                     icon: 'train',
                     color: '#f44336'
                 },
                 {
                     id: 6,
-                    buildingBlockType: 'RELAXATION',
+                    buildingBlockType: 'Relaxation',
                     icon: 'weekend',
                     color: '#4caf50'
                 },
                 {
                     id: 7,
-                    buildingBlockType: 'ADD YOUR OWN',
+                    buildingBlockType: 'Other',
                     icon: 'add',
                     color: '#00bcd4'
                 }
@@ -403,6 +404,9 @@
                 }
             ],
             timelineIconsURL : 'http://static.maryoku.com/storage/icons/timeline/svg/',
+            menuIconsURL : 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
+            event : {}
+
 
 
         }),
@@ -413,15 +417,20 @@
              * @param event
              */
             handleDrop (data, event) {
+                console.log('handleDrop => ',data);
                 if (data) {
-                    let block = Object.assign({}, data.block)
-                    block.mode = 'edit'
-                    block.startTime = '08:00 am'
-                    block.endTime = '09:00 am'
-                    block.isItemLoading = false
+                    let block = Object.assign({}, data.block);
+                    block.mode = 'edit';
+                    block.startTime = '08:00';
+                    block.endTime = '09:00';
+                    block.title = block.buildingBlockType;
+                    block.startDuration = 'am';
+                    block.endDuration = 'am';
+
+                    block.isItemLoading = false;
                     if (this.timelineItems.length > 0) {
-                        block.startTime = this.$moment(this.timelineItems[this.timelineItems.length - 1].endTime, 'H:mm A').format('H:mm A')
-                        block.endTime = this.$moment(this.timelineItems[this.timelineItems.length - 1].endTime, 'H:mm A').add(1, 'hour').format('H:mm A')
+                        //block.startTime = this.$moment(this.timelineItems[this.timelineItems.length - 1].endTime, 'H:mm A').format('H:mm A')
+                        //block.endTime = this.$moment(this.timelineItems[this.timelineItems.length - 1].endTime, 'H:mm A').add(1, 'hour').format('H:mm A')
                     }
                     this.timelineItems.push(Object.assign({}, block))
                     this.disabledDragging = true
@@ -476,12 +485,9 @@
                 let event = new CalendarEvent({id: this.event.id})
 
                 new EventTimelineItem().for(calendar, event).get().then(res => {
-                    console.log(res)
                     this.timelineItems = _.sortBy(res, function (item) {
                         return item.order
                     })
-                    console.log(this.timelineItems)
-
                     this.isLoading = false
                     this.timelineItems.forEach((item) => {
                         item.isItemLoading = false
@@ -532,8 +538,10 @@
                     title: item.title,
                     buildingBlockType: item.buildingBlockType,
                     description: item.description,
-                    startTime: item.startHour + ':' + item.startMinute + ' ' + item.startDuration,
-                    endTime: item.endHour + ':' + item.endMinute + ' ' + item.endDuration,
+                    startTime: item.startTime,
+                    endTime: item.endTime,
+                    endDuration : item.endDuration,
+                    startDuration : item.startDuration,
                     order: order,
                     icon: item.icon,
                     color: item.color,

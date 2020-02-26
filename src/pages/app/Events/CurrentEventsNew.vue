@@ -29,8 +29,8 @@
                             <a href="">Edit</a>
                         </div>
                         <div class="budget-list__item">
-                            <div class="label-title">User</div>
-                            <div class="budget-value">${{calendarEvent.budgetPerPerson | withComma}}</div>
+                            <div class="label-title">Used</div>
+                            <div class="budget-value">${{calendarEvent.totalBudget - totalRemainingBudget | withComma}}</div>
                             <div class="percent">50%</div>
                         </div>
                         <div class="budget-list__item">
@@ -86,7 +86,7 @@
                     </div>
                 </div>
             </div>
-            <div class="md-layout-item  md-size-60">
+            <div class="md-layout-item  md-size-60" style="padding-right: 30px;">
                 <div class="event-blocks-table">
                     <tabs
                         :tab-name="['<img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
@@ -177,6 +177,7 @@
                 activeTab: 0,
                 totalBudget: 0,
                 menuIconsURL: 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
+
 
             }
         },

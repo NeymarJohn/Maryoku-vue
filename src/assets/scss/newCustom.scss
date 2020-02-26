@@ -625,6 +625,18 @@ $green : #6ec37d;
     padding: 0 0 0 18em;
     font-family: 'Manrope-Regular',sans-serif;
 
+    .timeline-section-title {
+        font-size: 18px;
+        color: #050505;
+        padding: 3px 5px 0;
+        margin-top: 2em;
+
+        img {
+            width : 20px;
+            margin-right : 0.6em;
+        }
+    }
+
 
     .timeline-sidebar {
         position: absolute;
@@ -810,11 +822,11 @@ $green : #6ec37d;
 
     .md-button {
         .md-ripple {
-            font-weight: bold;
+            font-family: 'Manrope-ExtraBold',sans-serif;
             text-transform: capitalize;
             font-size: 15px;
             color : #050505 !important;
-            padding: 6px 30px !important;
+            padding: 12px 40px !important;
         }
 
         &.md-rose {
@@ -1624,6 +1636,8 @@ $green : #6ec37d;
                 background: #ffffff;
                 width: 100%;
                 padding: 0 1.5em;
+                color: #050505;
+                font-size: 14px;
             }
 
             textarea.form-control {
@@ -1657,6 +1671,27 @@ $green : #6ec37d;
             justify-content: flex-start;
             align-items: center;
 
+
+            .without_ampm::-webkit-datetime-edit-ampm-field {
+                display: none;
+            }
+
+            input[type=time] {
+                width : 90%;
+                font-family: 'Manrope-Regular',sans-serif;
+                color: #050505;
+
+            }
+
+            input[type=time]::-webkit-clear-button {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                -o-appearance: none;
+                -ms-appearance:none;
+                appearance: none;
+                margin: -10px;
+            }
+
             input , select {
                 min-height: 60px;
                 border-radius: 3px;
@@ -1667,6 +1702,7 @@ $green : #6ec37d;
                 font-size: 14px;
                 min-width: 55px;
                 text-align: center;
+                color: #050505;
 
             }
             select {
@@ -1802,8 +1838,9 @@ $green : #6ec37d;
                 top: 19px;
                 left: 23px;
                 z-index: 2;
-                color: #000;
                 font-family: 'Manrope-Regular',sans-serif;
+                font-size: 17px;
+                color: #050505;
 
             }
 
@@ -1961,6 +1998,10 @@ $green : #6ec37d;
                 background: #ffffff;
                 width: 100%;
                 padding: 0 1.5em;
+                font-size: 15px;
+                color: #050505;
+                font-family: 'Manrope-Regular',sans-serif;
+
             }
 
             textarea.form-control {

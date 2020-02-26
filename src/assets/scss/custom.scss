@@ -1,6 +1,31 @@
 
 @import "./md/mixins/global";
+@font-face {
+    font-family: 'Manrope-Bold';
+    src: url('../fonts/manrope/fonts/otf/Manrope-Bold.otf') format('opentype'),
+    url('../fonts/manrope/fonts/web/Manrope-Bold.woff2') format('woff2'),
+    url('../fonts/manrope/fonts/ttf/Manrope-Bold.ttf')  format('truetype');
+    font-style: normal;
+    font-stretch: normal;
+}
 
+@font-face {
+    font-family: 'Manrope-ExtraBold';
+    src: url('../fonts/manrope/fonts/otf/Manrope-ExtraBold.otf') format('opentype'),
+    url('../fonts/manrope/fonts/web/Manrope-ExtraBold.woff2') format('woff2'),
+    url('../fonts/manrope/fonts/ttf/Manrope-ExtraBold.ttf')  format('truetype');
+    font-style: normal;
+    font-stretch: normal;
+}
+
+@font-face {
+    font-family: 'Manrope-Regular';
+    src: url('../fonts/manrope/fonts/otf/Manrope-Regular.otf') format('opentype'),
+    url('../fonts/manrope/fonts/web/Manrope-Regular.woff2') format('woff2'),
+    url('../fonts/manrope/fonts/ttf/Manrope-Regular.ttf')  format('truetype');
+    font-style: normal;
+    font-stretch: normal;
+}
 .md-field .md-error { // show md-error spans
     opacity: 1;
     margin-bottom: 6px;
@@ -1670,6 +1695,7 @@ $tooltip-border-color: $blue-grey-200 !default;
                         font-weight: 900;
                         border-radius: 100px;
                         margin-right: 0.7em;
+                        font-family: 'Manrope-ExtraBold',sans-serif;
                     }
                     .item-title {
                         opacity: 0.87;
@@ -1740,10 +1766,11 @@ $tooltip-border-color: $blue-grey-200 !default;
                     .event-planner-tab-timeline-item-edit {
                         min-width: auto;
                         margin-right : 0.7em;
+                        border-radius: 0;
                         .md-ripple {
                             font-weight: bold;
                             text-transform: capitalize;
-                            font-size: 18px;
+                            font-size: 15px;
                             padding  : 0 !important;
                             color : #f51355 !important;
                         }

@@ -396,6 +396,8 @@
             timelineAttachment: null,
             iconsURL : 'http://static.maryoku.com/storage/icons/Event%20Page/',
             timlineIconsURL : 'http://static.maryoku.com/storage/icons/timeline/',
+            menuIconsURL : 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
+
 
         }),
         methods: {
