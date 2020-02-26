@@ -12,7 +12,11 @@
           stroke: ${colors[index%12]};
           display: ${item.budget == 0 && totalValue != 0 ? 'none' : 'inherit'}
         `"
-      ></circle>
+      >
+        <title>
+          {{sortedData[index].category + '\r\n Planned budget \r\n $' + sortedData[index].budget}}
+        </title>
+      </circle>
       <circle 
         class="pie-chart-value" 
         cx="50%" 
@@ -23,7 +27,12 @@
           stroke-dasharray: 0 ${circleLength};
           stroke: ${fillColor};
         `"
-      ></circle>
+      >
+        <title>
+          {{endTooltip.category + '\r\n Planned budget \r\n $' + endTooltip.budget}}
+        </title>
+      </circle>
+      
     </svg>
     <div class="items-cont">
       <ul class="items-list">
@@ -62,6 +71,7 @@
         sortedData: [],
         categories: [],
         fillColor: null,
+        endTooltip: null,
         colors: [
           "#0FAC4C",
           "#FFC001",
@@ -135,6 +145,7 @@
 
             if (item == this.sortedData.filter(sd => sd.budget != 0)[0]) {
               this.fillColor = this.colors[index]
+              this.endTooltip = this.sortedData[index]
             }
           } else {
             this.dashArray.push(spaceLeft+ " " + this.circleLength)
@@ -178,6 +189,7 @@
     fill: none;
     stroke-width: 50;
     stroke-linecap: round;
+    opacity: 1;
   }
 
   .items-list {
