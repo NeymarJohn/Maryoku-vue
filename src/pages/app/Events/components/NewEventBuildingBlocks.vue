@@ -220,9 +220,9 @@
                   <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2020.svg" width="20"> Tips <span class="percent">12%</span>
               </td>
               <td>
-                  ${{totalBudgetTaxes}}
+                  ${{totalBudgetTaxes.toFixed(2)}}
               </td>
-              <td class="actual green-label"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png"> $100</td>
+              <td class="actual green-label"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png"> $0</td>
               <td></td>
               <td class="expand" style="    text-align: right;
     padding-right: 1em;">
@@ -359,6 +359,7 @@
         showCategoryModal : false,
         timelineIconsURL : 'http://static.maryoku.com/storage/icons/timeline/svg/',
         iconsURL : 'http://static.maryoku.com/storage/icons/Event%20Page/',
+        menuIconsURL : 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
         locationsList: ['San Francisco, California', 'Los Angeles, California', 'Jacksonville, Florida', 'Miami, Florida', 'NYC, New York', 'Austin, Texas', 'Huston, Texas'],
         categoryBuildingBlocks : null,
         filteredEventBlocks : null,
@@ -406,7 +407,6 @@
               this.event.components.splice(_.findIndex(this.eventBuildingBlocks, (b)=>{ return b.id === selected_block.id}),1);
               this.getEventBuildingBlocks();
               this.$root.$emit('RefreshStatistics');
-              this.$root.$emit('event-building-block-budget-changed', this.event.components)
               this.$forceUpdate()
 
               let allocatedBudget = 0;
@@ -433,6 +433,10 @@
 
         this.isLoading = true;
 
+           vm.totalBudget = 0;
+          vm.totalBudgetTaxes = 0;
+
+
         let res = this.event.components;
         this.$set(this, 'eventBuildingBlocks', res);
           setTimeout(()=> {
@@ -442,10 +446,21 @@
           this.eventBuildingBlocks.forEach((item)=> {
               console.log(item);
 
-              if (item.allocatedBudget) {
-                  vm.totalBudget +=item.allocatedBudget;
-                  vm.totalBudgetTaxes  += item.allocatedBudget * .12;
+              if ( item.allocatedBudget && vm.type == 'total' ) {
+                  console.log('total');
+                  vm.totalBudget += parseInt(item.allocatedBudget);
+                  vm.totalBudgetTaxes  += parseInt(item.allocatedBudget) * .12;
+
+              } else if ( item.allocatedBudget && item.numberOfParticipants ) {
+
+                  vm.totalBudget += parseInt(item.allocatedBudget)  / parseInt(item.numberOfParticipants).toFixed(2);
+                  vm.totalBudgetTaxes  += ( parseInt(item.allocatedBudget) / parseInt(item.numberOfParticipants)) * .12;
               }
+
+              // if (item.allocatedBudget) {
+              //     vm.totalBudget += parseInt(item.allocatedBudget);
+              //     vm.totalBudgetTaxes  += parseInt(item.allocatedBudget) * .12;
+              // }
           })
 
         this.$forceUpdate();
@@ -500,13 +515,15 @@
             selected_block.allocatedBudget = null;
             block.allocatedBudget = null;
           } else {
-            if ( block.allocatedBudget && block.numberOfParticipants ) {
-              selected_block.allocatedBudget = this.type == 'total' ? val : val * block.numberOfParticipants;
-              block.allocatedBudget          = this.type == 'total' ? val : val * block.numberOfParticipants;
-            } else {
-              selected_block.allocatedBudget = this.type == 'total' ? val : val * this.event.numberOfParticipants;
-              block.allocatedBudget          = this.type == 'total' ? val : val * this.event.numberOfParticipants;
-            }
+
+              if ( block.allocatedBudget && block.numberOfParticipants ) {
+                  selected_block.allocatedBudget = this.type == 'total' ? val : val * block.numberOfParticipants;
+                  block.allocatedBudget          = this.type == 'total' ? val : val * block.numberOfParticipants;
+              } else {
+                  selected_block.allocatedBudget = this.type == 'total' ? val : val * this.event.numberOfParticipants;
+                  block.allocatedBudget          = this.type == 'total' ? val : val * this.event.numberOfParticipants;
+              }
+
           }
         } else {
           selected_block.allocatedBudget = null;
@@ -517,7 +534,7 @@
           this.isLoading = false;
           this.$root.$emit('RefreshStatistics');
           this.getEventBuildingBlocks();
-          this.$root.$emit('event-building-block-budget-changed', this.event.components)
+          this.$root.$emit('event-building-block-budget-changed', this.eventBuildingBlocks)
           this.$forceUpdate();
 
           console.log(' selected block ', selected_block);
@@ -616,7 +633,7 @@
             let event = new CalendarEvent({id: this.event.id});
 
             let new_block = {
-                componentId: this.newBuildingBlock.category != 'Other' ? this.newBuildingBlock.category.replace(" ","").toLocaleLowerCase() : this.newBuildingBlock.name.replace(" ","").toLocaleLowerCase(),
+                componentId: this.newBuildingBlock.category != 'Other' ? this.newBuildingBlock.category.replace(/ /g, '').toLocaleLowerCase() : this.newBuildingBlock.name.replace(/ /g, '').toLocaleLowerCase(),
                 componentCategoryId: this.newBuildingBlock.categoryId,
                 todos: "",
                 values: "",

@@ -44,9 +44,9 @@
             </div>
             <div class="header-actions">
                 <ul>
-                    <li><a href=""><i class="fa fa-download"></i></a></li>
-                    <li><a href=""><i class="fa fa-download"></i></a></li>
-                    <li><a href=""><i class="fa fa-download"></i></a></li>
+                    <li><a href=""><img :src="`${menuIconsURL}Asset 9.svg`"></a></li>
+                    <li><a href=""><img :src="`${menuIconsURL}Asset 5.svg`"></a></li>
+                    <li><a href=""><img :src="`${menuIconsURL}Asset 8.svg`"></a></li>
                 </ul>
             </div>
         </div>

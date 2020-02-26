@@ -9,9 +9,9 @@
         >
             <div class="header-actions">
                 <ul>
-                    <li><a href=""><i class="fa fa-download"></i></a></li>
-                    <li><a href=""><i class="fa fa-download"></i></a></li>
-                    <li><a href=""><i class="fa fa-download"></i></a></li>
+                    <li><a href=""><img :src="`${menuIconsURL}Asset 9.svg`"></a></li>
+                    <li><a href=""><img :src="`${menuIconsURL}Asset 5.svg`"></a></li>
+                    <li><a href=""><img :src="`${menuIconsURL}Asset 8.svg`"></a></li>
                 </ul>
             </div>
 
@@ -153,7 +153,7 @@
 
                                 </div>
 
-                                <div class="budget-details d-flex justify-content-start align-center">
+                                <div class="budget-details d-flex justify-content-center align-center">
                                     <div class="total-budget-value">$ {{event.totalBudget | withComma}}</div>
                                     <div class="total-budget"> Total Budget   <br> <md-button class="md-rose md-simple edit-total-budget"> Edit</md-button></div>
                                 </div>
