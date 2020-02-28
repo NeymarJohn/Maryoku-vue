@@ -19,7 +19,7 @@
 
           <template>
               <tr >
-                  <td width="40%" class="vendor"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> {{block.title}}</td>
+                  <td width="40%" class="event-block-element" :class="block.title.toLowerCase().replace(/ /g, '-')"> <img :src="`http://static.maryoku.com/storage/icons/budget+screen/png/${block.title}.png`"> {{block.title}}</td>
                   <td class="planned" width="20%">
                       <label-edit v-if="type == 'total'"
                                   :text="block.allocatedBudget"

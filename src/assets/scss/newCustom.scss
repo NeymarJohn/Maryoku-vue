@@ -313,17 +313,6 @@ $green : #6ec37d;
             margin-bottom: 1em;
 
 
-            &:after {
-                width : 7px;
-                background: #641956;
-                height: 100%;
-                content : ' ';
-                position: absolute;
-                left : 0;
-                top : 0;
-                border-radius: 3px 0 0 3px;
-            }
-
         }
 
         td,th {
@@ -444,9 +433,119 @@ $green : #6ec37d;
                     padding-right: 1em;
                 }
 
-                &.vendor {
+                &.event-block-element {
                     font-family: 'Manrope-Bold',sans-serif;
                     font-size: 16px;
+                    position: relative;
+
+                    &:after {
+                        width : 7px;
+                        background: #641956;
+                        height: 100%;
+                        content : ' ';
+                        position: absolute;
+                        left : 0;
+                        top : 0;
+                        border-radius: 3px 0 0 3px;
+                    }
+
+                    &.venue {
+                        &:after {
+                            background: rgb(0,176,80);
+                        }
+                    }
+
+                    &.shipping {
+                        &:after {
+                            background: rgb(68,84,106);
+                        }
+                    }
+                    &.signage-printing {
+                        &:after {
+                            background: rgb(231,230,230);
+                        }
+                    }
+
+                    &.technology-service {
+                        &:after {
+                            background: rgb(255,192,0);
+                        }
+                    }
+
+                    &.food-beverage {
+                        &:after {
+                            background: rgb(255,82,124);
+                        }
+                    }
+
+                    &.security-services {
+                        &:after {
+                            background: rgb(165,165,165);
+                        }
+                    }
+                    &.audio-visual {
+                        &:after {
+                            background: rgb(32,202,151);
+                        }
+                    }
+                    &.decor {
+                        &:after {
+                            background: rgb(0,188,212);
+                        }
+                    }
+                    &.entertainment {
+                        &:after {
+                            background: rgb(100,25,86);
+                        }
+                    }
+                    &.equipment-retal {
+                        &:after {
+                            background: rgb(255,0,102);
+                        }
+                    }
+                    &.photography-videography {
+                        &:after {
+                            background: rgb(240,129,7);
+                        }
+                    }
+
+                    &.organization-fees {
+                        &:after {
+                            background: rgb(159,41,54);
+                        }
+                    }
+
+                    &.advertising-and-promotion {
+                        &:after {
+                            background: rgb(27,88,124);
+                        }
+                    }
+                    &.meeting-labor {
+                        &:after {
+                            background: rgb(78,133,60);
+                        }
+                    }
+
+                    &.corporate-social-responsibility {
+                        &:after {
+                            background: rgb(96,72,120);
+                        }
+                    }
+
+                    &.administration {
+                        &:after {
+                            background: rgb(193,152,89);
+                        }
+                    }
+
+                    &.transportation {
+                        &:after {
+                            background: rgb(24,151,113);
+                        }
+                    }
+
+
+
 
                     img {
                         width : 20px;
@@ -1676,7 +1775,8 @@ $green : #6ec37d;
             align-items: center;
 
 
-            .without_ampm::-webkit-datetime-edit-ampm-field {
+            .without_ampm::-webkit-datetime-edit-ampm-field,
+            .without_ampm::-moz-datetime-edit-ampm-field{
                 display: none;
             }
 
