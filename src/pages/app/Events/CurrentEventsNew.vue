@@ -26,7 +26,7 @@
                         <div class="budget-list__item">
                             <div class="label-title">Budget</div>
                             <div class="budget-value">${{calendarEvent.totalBudget | withComma}}</div>
-                            <a href="">Edit</a>
+                            <md-button class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true">Edit</md-button>
                         </div>
                         <div class="budget-list__item">
                             <div class="label-title">Used</div>
@@ -105,6 +105,81 @@
             </div>
         </div>
         <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
+
+
+
+        <modal v-if="showBudgetModal"  class="add-category-model">
+            <template slot="header">
+                <div class="add-category-model__header">
+                    <h2 class="black">  What is your new budget?</h2>
+                    <div class="header-description">  <img :src="`${iconsURL}Asset 150.svg`" width="20"> Increasing your budget to $ {{calendarEvent.totalBudget | withComma}} or more will allow you to get a videographer</div>
+                </div>
+                <md-button class="md-simple md-just-icon md-round modal-default-button" @click="showBudgetModal = false">
+                    <md-icon>clear</md-icon>
+                </md-button>
+            </template>
+            <template slot="body">
+                <div class="md-layout justify-content-center">
+
+                    <div class="md-layout-item md-size-60 margin-bottom justify-content-center">
+                        <div class="form-group with-icon budget-field">
+                            <div class="input-icon">
+                                <img :src="`${iconsURL}Group 3090.svg`" width="20">
+                            </div>
+                            <input type="text" class="form-control"  v-model="newBudget">
+                        </div>
+
+                        <div class="label-item label-success text-center" v-if="newBudget && newBudget > calendarEvent.totalBudget">
+                            <h4>
+                                Fantastic!
+                            </h4>
+                            <p>
+                                This budget is {{ 100 - parseInt( calendarEvent.totalBudget * 100 / newBudget)  }}% higher than average, your event is going to be wild!
+
+                            </p>
+                        </div>
+
+                        <div class="label-item label-warning text-center" v-if="newBudget && newBudget < calendarEvent.totalBudget">
+                            <p>
+                                <img :src="`${iconsURL}Group 1175.svg`" width="20"> This budget is {{ 100 - parseInt( newBudget * 100 / calendarEvent.totalBudget)  }}% lower than average for this type of event
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </template>
+            <template slot="footer">
+                <md-button class="md-default md-simple cancel-btn" @click="showBudgetModal = false">
+                    Cancel
+                </md-button>
+                <md-button class="md-rose add-category-btn " :class="{ 'disabled' : !newBudget }" @click="updateBudget">
+                    Save
+                </md-button>
+            </template>
+        </modal>
+
+        <modal v-if="budgetConfirmationModal"  class="add-category-model">
+            <template slot="header">
+                <div class="add-category-model__header">
+                    <h2 class="black">  Are you sure?</h2>
+                    <div class="header-description">  <img :src="`${iconsURL}Asset 150.svg`" width="20"> Decreasing your budget may cause program changes</div>
+                </div>
+                <md-button class="md-simple md-just-icon md-round modal-default-button" @click="budgetConfirmationModal = false">
+                    <md-icon>clear</md-icon>
+                </md-button>
+            </template>
+            <template slot="body">
+
+            </template>
+            <template slot="footer">
+                <md-button class="md-rose md-outline md-simple cancel-btn" @click="budgetConfirmationModal = false">
+                    Yes I’m sure
+                </md-button>
+                <md-button class="md-rose add-category-btn " :class="{ 'disabled' : !newBudget }" @click="updateBudget">
+                    No, take me back
+                </md-button>
+            </template>
+        </modal>
     </div>
 </template>
 
@@ -134,7 +209,8 @@
     } from 'vuex'
 
     import {
-        Tabs
+        Tabs,
+        Modal
     } from '@/components'
     import NewEventBuildingBlocks from './components/NewEventBuildingBlocks'
 
@@ -154,7 +230,8 @@
             UploadVendorsModal,
             SideBar,
             SidebarItem,
-            PieChartRound
+            PieChartRound,
+            Modal
         },
 
         data () {
@@ -177,6 +254,10 @@
                 activeTab: 0,
                 totalBudget: 0,
                 menuIconsURL: 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
+                iconsURL : 'http://static.maryoku.com/storage/icons/Event%20Page/',
+                showBudgetModal : false,
+                budgetConfirmationModal : false,
+                newBudget : null
 
 
             }
@@ -322,6 +403,38 @@
             },
             openUploadModal () {
                 this.$refs.uploadModal.toggleModal(true)
+            },
+            updateBudget () {
+
+
+
+                let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+                let editedEvent = new CalendarEvent({id: this.event.id});
+
+                editedEvent = this.event;
+                editedEvent.totalBudget = this.newBudget;
+
+                console.log(editedEvent);
+
+                editedEvent.for(_calendar).save().then(response => {
+
+                    this.showBudgetModal = false;
+                    this.getCalendarEventStatistics();
+
+
+                })
+                    .catch((error) => {
+                        console.log(error);
+
+                    });
+
+
+
+                if (this.newBudget < this.calendarEvent.totalBudget) {
+
+                } else {
+
+                }
             }
         },
         computed: {

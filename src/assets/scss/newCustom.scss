@@ -207,10 +207,15 @@ $green : #6ec37d;
             color: #050505;
             margin: 0.4em auto;
         }
-        a {
-            font-size: 13px;
-            font-family: 'Manrope-ExtraBold',sans-serif;
-            color: $rose !important;
+        .edit-budget {
+            .md-ripple {
+                font-size: 13px;
+                font-family: 'Manrope-ExtraBold',sans-serif;
+                color: $rose !important;
+                padding : 0 !important;
+                text-transform: capitalize;
+            }
+
         }
         .percent {
             font-size: 13px;
@@ -1730,7 +1735,7 @@ $green : #6ec37d;
     }
 
     &_item {
-        padding : 1.3em 3.5em;
+        padding : 1.3em 5em;
 
         h5 {
             font-size: 17px;
@@ -1775,7 +1780,6 @@ $green : #6ec37d;
         .md-button {
 
             .md-ripple {
-                font-family: 'Manrope-Bold',sans-serif;
                 font-size: 14px;
                 font-family: 'Manrope-ExtraBold',sans-serif;
                 text-transform: capitalize;
@@ -1785,6 +1789,12 @@ $green : #6ec37d;
             &.add-category-btn {
                 .md-ripple {
                     background : $rose;
+                }
+
+                &.disabled {
+                    .md-ripple {
+                        background: #d5d5d5;
+                    }
                 }
             }
 
@@ -2024,10 +2034,52 @@ $green : #6ec37d;
                         width:  12px;
                     }
                 }
+
+                &.budget-field {
+
+                    .form-control {
+                        text-align: center;
+                        font-size: 48px;
+                        height: 90px;
+                    }
+
+                    .input-icon {
+                        top: 28px;
+                        left: 35px;
+
+                        img {
+                            width : 17px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .label-item {
+            padding: 17px 10px;
+
+            h4 , p {
+                font-size: 12px;
+                font-weight: normal;
+                color: #050505;
             }
 
+            h4 {
+                font-family: 'Manrope-ExtraBold',sans-serif;
+                margin : 0;
 
+            }
+
+            &.label-success {
+                background: #d9ffe7;
+
+            }
+            &.label-warning {
+                background: #ffe5ec;
+
+            }
         }
+
     }
 
 
@@ -2042,6 +2094,11 @@ $green : #6ec37d;
             font-weight: 600;
             color: #f51355;
             text-transform: capitalize;
+
+            &.black {
+                color : #050505;
+                text-transform: initial;
+            }
 
             img {
                 width: 28px;

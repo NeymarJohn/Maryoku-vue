@@ -347,7 +347,7 @@
     import draggable from 'vuedraggable'
     import {Drag, Drop} from 'vue-drag-drop'
     import _ from 'underscore';
-    import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
+    import {LabelEdit, AnimatedNumber, StatsCard, ChartCard,Modal} from '@/components'
     import ChartComponent from '@/components/Cards/ChartComponent'
 
 
@@ -366,7 +366,8 @@
             InputMask,
             SideBar,
             SidebarItem,
-            CalendarEventStatistics
+            CalendarEventStatistics,
+            Modal
         },
         props: {
             // event: Object,
@@ -396,8 +397,7 @@
             timelineAttachment: null,
             iconsURL : 'http://static.maryoku.com/storage/icons/Event%20Page/',
             timlineIconsURL : 'http://static.maryoku.com/storage/icons/timeline/',
-            menuIconsURL : 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
-
+            menuIconsURL : 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/'
 
         }),
         methods: {

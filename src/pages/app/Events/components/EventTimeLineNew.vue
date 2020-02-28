@@ -258,7 +258,7 @@
 
                     <drag :transfer-data="{ block }" class="time-line-blocks_item "
                           :style="`border: 1px dashed ` + block.color + `; color :` + block.color">
-                        <md-icon>{{block.icon}}</md-icon>
+                        <img :src="`${timelineIconsURL}${block.icon} 47.svg`">
                         <h5>{{block.buildingBlockType}}</h5>
                     </drag>
 
@@ -313,44 +313,62 @@
                 {
                     id: 1,
                     buildingBlockType: 'setup',
-                    icon: 'place',
-                    color: '#f44336'
+                    icon: 'Asset 214',
+                    color: '#3a3838'
                 },
                 {
                     id: 2,
                     buildingBlockType: 'activity',
-                    icon: 'notifications_active',
-                    color: '#4caf50'
+                    icon: 'Asset 216',
+                    color: '#20c997'
                 },
                 {
                     id: 3,
                     buildingBlockType: 'meal',
-                    icon: 'restaurant',
-                    color: '#00bcd4'
+                    icon: 'Asset 210',
+                    color: '#f44336'
                 },
                 {
                     id: 4,
                     buildingBlockType: 'Discussion',
-                    icon: 'sms',
-                    color: '#ff9800'
+                    icon: 'Asset 213',
+                    color: '#ffc001'
+                },
+                {
+                    id: 8,
+                    buildingBlockType: 'Show',
+                    icon: 'Asset 209',
+                    color: '#00bcd4'
                 },
                 {
                     id: 5,
                     buildingBlockType: 'Transportation',
-                    icon: 'train',
-                    color: '#f44336'
+                    icon: 'Asset 208',
+                    color: '#44546a'
+                },
+                {
+                    id: 9,
+                    buildingBlockType: 'Lecture',
+                    icon: 'Asset 212',
+                    color: '#641956'
+                },
+                {
+                    id: 10,
+                    buildingBlockType: 'Break',
+                    icon: 'Asset 206',
+                    color: '#ff527c'
                 },
                 {
                     id: 6,
                     buildingBlockType: 'Relaxation',
-                    icon: 'weekend',
-                    color: '#4caf50'
+                    icon: 'Asset 207',
+                    color: '#0caf50'
                 },
                 {
                     id: 7,
                     buildingBlockType: 'Other',
-                    icon: 'add',
-                    color: '#00bcd4'
+                    icon: 'Asset 211',
+                    color: '#a5a5a5'
                 }
             ],
             timelineItems: [],

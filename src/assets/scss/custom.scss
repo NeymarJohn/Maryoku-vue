@@ -1597,11 +1597,12 @@ $tooltip-border-color: $blue-grey-200 !default;
             cursor: grabbing;
         }
 
-        .md-icon {
+        .md-icon , img {
             position: absolute;
-            left: 0.6em;
+            left: 1.6em;
             font-size: 22px !important;
             color : inherit !important;
+            width : 20px;
         }
 
         h5 {
