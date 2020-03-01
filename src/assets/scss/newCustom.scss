@@ -472,23 +472,24 @@ $green : #6ec37d;
                         }
                     }
 
-                    &.food-beverage {
+                    &.food-beverage , &.food{
                         &:after {
                             background: rgb(255,82,124);
                         }
                     }
 
-                    &.security-services {
+                    &.security-services , &.security {
                         &:after {
                             background: rgb(165,165,165);
                         }
                     }
-                    &.audio-visual {
+                    &.audio-visual , .swags {
                         &:after {
                             background: rgb(32,202,151);
                         }
                     }
-                    &.decor {
+                    &.decor , &.event-documentation , &.decoration
+                    {
                         &:after {
                             background: rgb(0,188,212);
                         }
@@ -503,9 +504,28 @@ $green : #6ec37d;
                             background: rgb(255,0,102);
                         }
                     }
-                    &.photography-videography {
+
+                    &.photography-videography , &.photographer {
                         &:after {
                             background: rgb(240,129,7);
+                        }
+                    }
+
+                    &.dj {
+                        &:after {
+                            background: #fe537a;
+                        }
+                    }
+
+                    &.catering , &.swags {
+                        &:after {
+                            background: #f3423a;
+                        }
+                    }
+
+                    &.rentals {
+                        &:after {
+                            background: #43536a;
                         }
                     }
 
@@ -520,7 +540,7 @@ $green : #6ec37d;
                             background: rgb(27,88,124);
                         }
                     }
-                    &.meeting-labor {
+                    &.meeting-labor , &.marketing-and-print {
                         &:after {
                             background: rgb(78,133,60);
                         }
@@ -532,7 +552,7 @@ $green : #6ec37d;
                         }
                     }
 
-                    &.administration {
+                    &.administration , &.beverage {
                         &:after {
                             background: rgb(193,152,89);
                         }
