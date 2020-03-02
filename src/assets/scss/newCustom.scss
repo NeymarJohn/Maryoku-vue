@@ -418,7 +418,6 @@ $green : #6ec37d;
             }
             td {
                 padding : 1.2em 0 1.2em 1.4em;
-                position: relative;
 
                 &:first-child {
                     border-radius: 3px 0 0 3px;
@@ -433,10 +432,9 @@ $green : #6ec37d;
                     padding-right: 1em;
                 }
 
-                &.event-block-element {
+                &.event-block-element  {
                     font-family: 'Manrope-Bold',sans-serif;
                     font-size: 16px;
-                    position: relative;
 
                     &:after {
                         width : 7px;
@@ -573,8 +571,8 @@ $green : #6ec37d;
                     }
 
                     &.unexpected {
-                        color : #24c796;
 
+                        color : #24c796;
                         &:after {
                             background: #24c796;
                         }
@@ -1762,6 +1760,8 @@ $green : #6ec37d;
                 padding: 0 1.5em;
                 color: #050505;
                 font-size: 14px;
+                font-family: 'Manrope-Regular',sans-serif;
+
             }
 
             textarea.form-control {
@@ -2210,11 +2210,10 @@ $green : #6ec37d;
             margin : 0 0 0.4em 0;
             font-size: 28px;
             font-weight: 600;
-            color: #f51355;
+            color : #050505;
             text-transform: capitalize;
 
             &.black {
-                color : #050505;
                 text-transform: initial;
             }
 

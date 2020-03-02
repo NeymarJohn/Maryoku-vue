@@ -1620,10 +1620,10 @@ $tooltip-border-color: $blue-grey-200 !default;
             position : relative;
             padding-left : 90px;
 
-            .md-icon.time-line-blocks_icon {
+            .time-line-blocks_icon {
                 position: absolute;
                 left : 0;
-                top: -4px;
+                top: 13px;
                 font-size : 35px !important;
                 width : 51px;
                 height : 51px;
@@ -1658,7 +1658,7 @@ $tooltip-border-color: $blue-grey-200 !default;
                     height: 100%;
                     border: 0.5px dashed #707070;
                     left: 25px;
-                    top: 76px;
+                    top: 63px;
 
                 }
                 .md-icon.time-line-blocks_icon {

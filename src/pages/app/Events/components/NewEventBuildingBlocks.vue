@@ -20,7 +20,7 @@
             <template>
                 <tr>
                     <td width="40%" class="event-block-element" :class="block.title.toLowerCase().replace(/ /g, '-')">
-                        <img :src="`http://static.maryoku.com/storage/icons/budget+screen/png/${block.title}.png`">
+                        <img :src="`http://static.maryoku.com/storage/icons/Budget Elements/${block.title}.svg`">
                         {{block.title}}
                     </td>
                     <td class="planned" width="20%">
@@ -92,10 +92,10 @@
 
             <template v-if="block.expanded">
                 <tr class="details-row" v-for="(requirement,index) in block.predefinedRequirements" :key="index">
-                    <td>{{requirement.title}}
+                    <td >{{requirement.title}}
                         <md-button class="md-rose md-simple md-sm edit-requirement">Edit</md-button>
                     </td>
-                    <td>$80</td>
+                    <td>$0</td>
                     <td class="actions" colspan="3">
                         <md-button class="md-just-icon md-sm md-simple"><img :src="`${timelineIconsURL}Asset 135.svg`">
                         </md-button>
@@ -115,9 +115,31 @@
             </tbody>
         </table>
 
+        <table class="event-blocks__table event-block-table">
+            <tbody>
+            <tr  >
+                <td class="event-block-element unexpected"  width="40%"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+18.png"> Unexpected</td>
+                <td class="planned" width="20%">$0</td>
+                <td class="actual" width="15%"> $0</td>
+                <td class="status" >
+                    <md-button class="use-btn md-sm">Use</md-button>
+                </td>
+                <td class="expand">
+                    <a href="">
+                        <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+
         <table class="event-blocks__table actions-table">
 
             <tbody>
+
+
+
             <!--                                <tr>-->
             <!--                                    <td class="vendor completed"><img-->
             <!--                                        src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png">-->
@@ -245,8 +267,8 @@
             </tr>
             <tr class="total">
                 <td class="total-title">Total</td>
-                <td>${{totalBudget}}</td>
-                <td colspan="3" class="total-value">${{totalActual}}</td>
+                <td>${{totalBudget | withComma}}</td>
+                <td colspan="3" class="total-value">${{totalActual | withComma}}</td>
             </tr>
             </tbody>
 
@@ -717,6 +739,11 @@
             },
             elementsBudget (val) {
                 this.switchingBudgetAndCost()
+            }
+        },
+        filters : {
+            withComma (amount) {
+                return amount ? amount.toLocaleString() : 0
             }
         }
     }

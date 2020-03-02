@@ -69,8 +69,7 @@
                            :options="{disabled : disabledDragging}">
                     <div v-for="(item,index) in timelineItems" :key="index"
                          class="time-line-blocks_selected-items_item time-line-item">
-                        <md-icon class="time-line-blocks_icon" :style="`background : ` + item.color">{{item.icon}}
-                        </md-icon>
+                        <img class="time-line-blocks_icon"  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`">
                         <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit'"
                                  :style="`border-left : 5px solid ` + item.color"
                         >
@@ -258,7 +257,7 @@
 
                     <drag :transfer-data="{ block }" class="time-line-blocks_item "
                           :style="`border: 1px dashed ` + block.color + `; color :` + block.color">
-                        <img :src="`${timelineIconsURL}${block.icon} 47.svg`">
+                        <img :src="`${newTimeLineIconsURL}${block.icon.toLowerCase()}.svg`">
                         <h5>{{block.buildingBlockType}}</h5>
                     </drag>
 
@@ -313,61 +312,61 @@
                 {
                     id: 1,
                     buildingBlockType: 'setup',
-                    icon: 'Asset 214',
+                    icon: 'Setup',
                     color: '#3a3838'
                 },
                 {
                     id: 2,
                     buildingBlockType: 'activity',
-                    icon: 'Asset 216',
+                    icon: 'Activity',
                     color: '#20c997'
                 },
                 {
                     id: 3,
                     buildingBlockType: 'meal',
-                    icon: 'Asset 210',
+                    icon: 'Meal',
                     color: '#f44336'
                 },
                 {
                     id: 4,
                     buildingBlockType: 'Discussion',
-                    icon: 'Asset 213',
+                    icon: 'Discussion',
                     color: '#ffc001'
                 },
                 {
                     id: 8,
                     buildingBlockType: 'Show',
-                    icon: 'Asset 209',
+                    icon: 'Show',
                     color: '#00bcd4'
                 },
                 {
                     id: 5,
                     buildingBlockType: 'Transportation',
-                    icon: 'Asset 208',
+                    icon: 'Transportation',
                     color: '#44546a'
                 },
                 {
                     id: 9,
                     buildingBlockType: 'Lecture',
-                    icon: 'Asset 212',
+                    icon: 'Lecture',
                     color: '#641956'
                 },
                 {
                     id: 10,
                     buildingBlockType: 'Break',
-                    icon: 'Asset 206',
+                    icon: 'Break',
                     color: '#ff527c'
                 },
                 {
                     id: 6,
                     buildingBlockType: 'Relaxation',
-                    icon: 'Asset 207',
+                    icon: 'Relaxation',
                     color: '#0caf50'
                 },
                 {
                     id: 7,
                     buildingBlockType: 'Other',
-                    icon: 'Asset 211',
+                    icon: 'other',
                     color: '#a5a5a5'
                 }
             ],
@@ -423,7 +422,8 @@
             ],
             timelineIconsURL : 'http://static.maryoku.com/storage/icons/timeline/svg/',
             menuIconsURL : 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
-            event : {}
+            event : {},
+            newTimeLineIconsURL : 'http://static.maryoku.com/storage/icons/Timeline-New/'
 
 
 

@@ -31,12 +31,12 @@
                         <div class="budget-list__item">
                             <div class="label-title">Used</div>
                             <div class="budget-value">${{calendarEvent.totalBudget - totalRemainingBudget | withComma}}</div>
-                            <div class="percent">50%</div>
+                            <div class="percent">{{ ( calendarEvent.totalBudget - totalRemainingBudget ) * 100 / calendarEvent.totalBudget}}%</div>
                         </div>
                         <div class="budget-list__item">
                             <div class="label-title">Remaining</div>
                             <div class="budget-value">${{totalRemainingBudget | withComma}}</div>
-                            <div class="percent">42%</div>
+                            <div class="percent">{{ (totalRemainingBudget * 100) / calendarEvent.totalBudget }}%</div>
                         </div>
                     </div>
                 </div>
