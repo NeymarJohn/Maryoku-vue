@@ -11,6 +11,9 @@
             </tr>
             </thead>
         </table>
+
+        <!-- Event Blocks -->
+        <draggable :list="eventBuildingBlocks">
         <table class="event-blocks__table event-block-table"
                v-for="(block, index) in eventBuildingBlocks" :key="index"
         >
@@ -114,7 +117,7 @@
             </template>
             </tbody>
         </table>
-
+        </draggable>
         <table class="event-blocks__table event-block-table">
             <tbody>
             <tr  >
@@ -356,6 +359,9 @@
     import _ from 'underscore'
     import {LabelEdit, AnimatedNumber, StatsCard, ChartCard} from '@/components'
 
+    import draggable from 'vuedraggable'
+    import {Drag, Drop} from 'vue-drag-drop'
+
     export default {
         name: 'event-building-blocks',
         components: {
@@ -367,7 +373,9 @@
             StatsCard,
             ChartCard,
             EventActualCostIconTooltip,
-            Modal
+            Modal,
+            draggable, Drag, Drop,
+
         },
         props: {
             event: {

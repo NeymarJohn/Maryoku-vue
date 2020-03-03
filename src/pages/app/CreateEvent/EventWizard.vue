@@ -208,7 +208,19 @@
                     }
                 },
                 locationsList: ['San Francisco, California', 'Los Angeles, California', 'Jacksonville, Florida', 'Miami, Florida', 'NYC, New York', 'Austin, Texas', 'Huston, Texas'],
-                eventTypes: ['Formal meeting', 'Offsite', 'Celebration / Party', 'Toast', 'Team Building', 'Customer event','Out of office day activity']
+                eventTypes: [
+                    'Reception',
+                    'Establishment / Activity day',
+                    'Offsite meeting',
+                    'Hackathon',
+                    'Networking Incentive meeting',
+                    'Fundraising',
+                    'Partner/Customer meeting',
+                    'Board meeting',
+                    'Product launch',
+                    'Awards / Recognition',
+                    'Other'
+                ]
                 ,
                 options: ['ameed', 'ahmad']
 

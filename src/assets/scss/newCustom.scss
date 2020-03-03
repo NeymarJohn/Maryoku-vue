@@ -772,7 +772,7 @@ $green : #6ec37d;
     .summer-party {
         background: #fff;
         text-align: center;
-        padding : 1em 0 0.6em;
+        padding : 1.5em 0 0.6em;
         position: absolute;
         left: 0;
         right: 0;
@@ -1854,7 +1854,7 @@ $green : #6ec37d;
     }
 
     &_item {
-        padding : 1.3em 5em;
+        padding : 1.3em 3em 1.3em 5em;
 
         h5 {
             font-size: 17px;
@@ -2232,5 +2232,16 @@ $green : #6ec37d;
                 margin-right: 9px;
             }
         }
+    }
+}
+
+
+.expand-sidebar {
+    position : absolute;
+    top : 0;
+    right : -19px;
+
+    img {
+        width : 14px;
     }
 }

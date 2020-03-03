@@ -34,6 +34,11 @@
 
     export default {
         name: 'sidebar',
+        data : () => {
+          return {
+              newTimeLineIconsURL : 'http://static.maryoku.com/storage/icons/Timeline-New/'
+          }
+        },
         props: {
             title: {
                 type: String,

@@ -7,6 +7,7 @@
 
         <div class="timeline-sidebar">
             <div class="summer-party">
+                <md-button class="md-default md-sm md-simple expand-sidebar"> <img :src="`${newTimeLineIconsURL}expand.svg`"></md-button>
                 <div class="title-label">summer party <small>checklist</small></div>
                 <div class="completion-progress">
                     <div class="progress-done"></div>
@@ -61,7 +62,7 @@
             </md-button>-->
 
             <div class="timeline-section-title">
-                <img :src="`${timelineIconsURL}Group 2774.svg`">Timeline
+                <img :src="`${newTimeLineIconsURL}timeline-title.svg`">Timeline
             </div>
 
             <drop @drop="handleDrop" style="height: 100%;">
@@ -245,7 +246,7 @@
             <md-card-content class="md-layout time-line-blocks_items">
 
                 <div class="dragdrop-timeline-header">
-                    <div class="header-title"> <img :src="`${timelineIconsURL}Asset 44.svg`"> Add Time Slots</div>
+                    <div class="header-title"> <img :src="`${newTimeLineIconsURL}add.svg`"> Add Time Slots</div>
                     <p class="section-desc">
                         Drag and drop the blocks to
                         edit your timeline project
@@ -347,8 +348,8 @@
                 },
                 {
                     id: 9,
-                    buildingBlockType: 'Lecture',
-                    icon: 'Lecture',
+                    buildingBlockType: 'Speaker / Keynote',
+                    icon: 'speaker',
                     color: '#641956'
                 },
                 {
