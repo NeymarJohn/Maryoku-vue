@@ -1,22 +1,22 @@
 <template>
   <div class="pie-chart-wrapper">
     <svg id="pie_chart" ref="pie_chart" width="100%" height="100%">
-      <g 
+      <g
         v-for="(item, index) in sortedData" :key="index"
         :ref="`tooltip_${index}`"
         @mousemove="setTooltipPos"
       >
-        <circle 
-          class="pie-chart-value" 
-          cx="50%" 
-          cy="50%" 
+        <circle
+          class="pie-chart-value"
+          cx="50%"
+          cy="50%"
           r="100"
           :style="`
             stroke-dasharray: ${dashArray[index]};
-            stroke: ${colors[index%12]};
+            stroke: ${item.color};
             display: ${item.budget == 0 && totalValue != 0 ? 'none' : 'inherit'}
           `"
-        /> 
+        />
         <g :transform="`translate(${x},${y})`" class="tooltip" visibility="hidden" ref="tooltip">
           <path id="svgMask" d="M3,72 L162,74 162,43 171,38 162,33 162,3 3,3 z" fill="#e6e5e5"/>
           <text id="tooltip" x="20" y="25" style="fill: #050505; font-family: 'Manrope'; font-size: 16px; font-weight: 800;">
@@ -27,10 +27,10 @@
         </g>
       </g>
       <g v-if="!(totalValue == 0 || dashArray.length == 1)">
-        <circle 
-          class="pie-chart-value" 
-          cx="50%" 
-          cy="50%" 
+        <circle
+          class="pie-chart-value"
+          cx="50%"
+          cy="50%"
           r="100"
           :style="`
             stroke-dasharray: 0 ${circleLength};
@@ -54,15 +54,16 @@
     <div class="items-cont">
       <ul class="items-list">
         <li v-for="(item, index) in sortedData" :key="index">
-          <span :style="`background-color: ${colors[index%12]};`"></span>
+          <span :style="`background-color: ${item.color};`"></span>
           {{item.category}}
         </li>
       </ul>
     </div>
-  </div>  
+  </div>
 </template>
 <script>
   import TWEEN from '@tweenjs/tween.js'
+  import _ from "underscore";
 
   export default {
     props: {
@@ -104,7 +105,46 @@
           "#FE537A",
           "#D9FFE7",
           "#2CDE6B"
-        ]
+        ],
+          allElements : [
+              {
+                  title : 'Venue',
+                  color : '#00B050'
+              },
+              {
+                  title : 'Event Documentation',
+                  color : '#00BCD4'
+              },
+              {
+                  title : 'Swags',
+                  color : '#F3423A'
+              },
+              {
+                  title : 'Marketing and Print',
+                  color : '#4E853C'
+              },
+              {
+                  title : 'Beverage',
+                  color : '#C19859'
+              },
+              {
+                  title : 'Security',
+                  color : '#A5A5A5'
+              },
+              {
+                  title : 'Rentals',
+                  color : '#43536A'
+              },
+              {
+                  title : 'Food',
+                  color : '#FF527C'
+              },
+              {
+                  title : 'Entertainment',
+                  color : '#641956'
+              }
+          ],
+          defaultColor : '#641956'
       }
     },
     methods: {
@@ -150,14 +190,17 @@
           this.sortedData.push({
             category: category,
             budget: // filter by category title and gather budget values, then get the sum of them
-              this.eventBuildingBlocks.filter( 
-                ebb => ebb.title == category 
-              ).map( 
-                eb => eb.allocatedBudget == null ? 0 : eb.allocatedBudget 
+              this.eventBuildingBlocks.filter(
+                ebb => ebb.title == category
+              ).map(
+                eb => eb.allocatedBudget == null ? 0 : eb.allocatedBudget
               ).reduce( function(total, val) {
                 return parseFloat(total) + parseFloat(val)
-              }, 0)
+              }, 0),
+              color : this.getElementColor(category)
           })
+
+            console.log('this.sortedData => ', this.sortedData);
         })
 
         console.log(this.sortedData, this.totalValue)
@@ -178,10 +221,15 @@
           }
         })
         this.$forceUpdate()
-      }
+      },
+        getElementColor(category) {
+
+          let element = _.findWhere(this.allElements, {title: category});
+          return element.color;
+        }
     },
     computed: {
-      
+
     },
     mounted() {
       this.drawChart()

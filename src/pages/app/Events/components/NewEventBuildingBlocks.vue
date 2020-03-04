@@ -124,10 +124,7 @@
                 <td class="event-block-element unexpected"  width="40%"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+18.png"> Unexpected</td>
                 <td class="planned" width="20%">$0</td>
                 <td class="actual" width="15%"> $0</td>
-                <td class="status" >
-                    <md-button class="use-btn md-sm">Use</md-button>
-                </td>
-                <td class="expand">
+                <td class="expand" rowspan="2" style="text-align: right; padding-right: 12px;">
                     <a href="">
                         <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">
                     </a>
