@@ -61,6 +61,28 @@
                             :event.sync="event"
                             :items="selectedComponents">
                         </pie-chart-round>
+                        <!-- <chart-card
+                          header-animation="false"
+                          :chart-data="pieChart.data"
+                          :chart-options="pieChart.options"
+                          chart-type="Pie"
+                          header-icon
+                          chart-inside-content
+                          background-color="green"
+                          v-if="this.totalBudget>0">
+                          <template slot="footer">
+                            <div class="md-layout">
+                              <div class="md-layout-item md-size-100">
+                                <h6 class="category"></h6>
+                              </div>
+                              <div class="md-layout-item">
+                                <i class="fa fa-circle text-info"></i> Apple
+                                <i class="fa fa-circle text-warning"></i> Samsung
+                                <i class="fa fa-circle text-danger"></i> Windows Phone
+                              </div>
+                            </div>
+                          </template>
+                        </chart-card> -->
                     </div>
                 </div>
             </div>
