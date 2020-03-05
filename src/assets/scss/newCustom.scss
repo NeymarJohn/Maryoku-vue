@@ -438,7 +438,7 @@ $green : #6ec37d;
 
                     &:after {
                         width : 7px;
-                        //background: #641956;
+                        background: #641956;
                         height: 100%;
                         content : ' ';
                         position: absolute;
@@ -447,7 +447,7 @@ $green : #6ec37d;
                         border-radius: 3px 0 0 3px;
                     }
 
-                    /* &.venue {
+                    &.venue {
                         &:after {
                             background: rgb(0,176,80);
                         }
@@ -560,7 +560,7 @@ $green : #6ec37d;
                         &:after {
                             background: rgb(24,151,113);
                         }
-                    } */
+                    }
 
 
 
@@ -571,11 +571,11 @@ $green : #6ec37d;
                     }
 
                     &.unexpected {
-                        border-left-color: #24c796 !important;
+
                         color : #24c796;
-                        /* &:after {
+                        &:after {
                             background: #24c796;
-                        } */
+                        }
                     }
                 }
 
