@@ -220,16 +220,16 @@
 
     .vibe-item {
         width: 50%;
-        display: inline-block;
+        display: flex;
         float: left;
-        margin-bottom : 1em;
+        margin-bottom: 1em;
+        flex: 1;
+        justify-content: center;
+        align-items: center;
 
 
         .md-icon {
             font-size: 3rem !important;
-            float: left;
-            margin-top: 0.6em;
-            margin-right: 0.4em;
             color: #AAAAAA !important;
 
             &:hover {

@@ -1141,8 +1141,8 @@
             .vibe-item {
                 width: 100% !important;
                 margin-right: 0;
-                margin-bottom: 0;
-
+                margin-bottom: 1em;
+                padding-right: 1em;
                 display: flex !important;
                 flex-direction: row;
 

@@ -90,7 +90,7 @@
                 moviesList : [
                     {
                         image : 'amy-santiago.png',
-                        tooltip : 'is a "by the book" type of cop but she takes it a step further by color-coding case files. With her, everything is calculated to perfection and if you want her approval, make sure your budget table is impeccable',
+                        tooltip : 'Amy is a "by the book" type of cop but she takes it a step further by color-coding case files. With her, everything is calculated to perfection a well crafted timeline will go a long way to get you approval',
                         title : 'Amy Brookheimer',
                         author : 'Veep'
                     },
@@ -102,31 +102,31 @@
                     },
                     {
                         image : 'dirty-harry2.png',
-                        tooltip : 'is not a "company man" and not a real team player (his partners got killed or wounded at an alarming rate). But, what he did have was laser focus on achieving his goals. His moto is: do what you have to do, and we bet if you do the plan he’ll approve it...or shoot you.  ',
+                        tooltip : 'Harry is not a "company man" and not a real team player (his partners got killed or wounded at an alarming rate). But what he did have, was laser focus on achieving his goals. His moto is: do what you have to do, he\'ll track RSVP like a hawk and threat to shoot non comers',
                         title : 'Inspector Harold Francis',
                         author : 'Dirty Harry'
                     },
                     {
                         image : 'jerry-seinfeld.png',
-                        tooltip : 'Seinfeld\'s is very meticulous about the cleanliness and organization of his apartment. He is stubborn and holds ontightly to his opinions. He isn\'t easy to convince, and your plan better be well organized before you seek his approval',
+                        tooltip : 'Seinfeld\'s is very meticulous about the cleanliness and organization of his apartment. He is stubborn and holds on tightly to his opinions. and so every vendor you select must be dead on for him to approve the plan',
                         title : 'Seinfeld',
                         author : 'Seinfeld'
                     },
                     {
                         image : 'joan-harris.jpg',
-                        tooltip : 'Joan Harris is a queen bee. She likes things the way she likes them. At times she can seem bossy or hard to please -- her standards are extremely high and you better have everything nailed before you show her your event plan',
+                        tooltip : 'Joan Harris is a queen bee. She likes things the way she likes them. At times she can seem bossy or hard to please -- her standards are extremely high and your budget better be impeccable for her to approve it',
                         title : 'Joan Harris',
                         author : 'Mad Men'
                     },
                     {
                         image : 'mirandapreistly.jpg',
-                        tooltip : 'Miranda Priestly personifies qualities of a classic A type boss: controlling, demanding and impossible to please. Her favorite words to utter, after all, are "do it correctly." You may try to, but we all know how this well end.',
+                        tooltip : 'Miranda Priestly personifies qualities of a classic A type boss: controlling, demanding and impossible to please. Her favorite words to utter, after all, are "do it correctly." You may try to, but we all know how this will end.',
                         title : 'Miranda Priestly',
                         author : 'The Devil Wears Prada'
                     },
                     {
                         image : 'soprano.png',
-                        tooltip : 'Tony Soprano doesn\'t like to wait and neither does your boss. Impatience is a key characteristic for him. Waiting for vendors’ proposals or a well crafted event plan can be equally frustrating for him',
+                        tooltip : 'Tony Soprano doesn\'t like to wait. Impatience is a key characteristic for him. visibility over how the plan is advancing will gain his trust and ensure a smooth approval',
                         title : 'Tony Soprano',
                         author : 'The Sopranos'
                     }

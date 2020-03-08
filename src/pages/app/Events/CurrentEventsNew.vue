@@ -61,28 +61,6 @@
                             :event.sync="event"
                             :items="selectedComponents">
                         </pie-chart-round>
-                        <!-- <chart-card
-                          header-animation="false"
-                          :chart-data="pieChart.data"
-                          :chart-options="pieChart.options"
-                          chart-type="Pie"
-                          header-icon
-                          chart-inside-content
-                          background-color="green"
-                          v-if="this.totalBudget>0">
-                          <template slot="footer">
-                            <div class="md-layout">
-                              <div class="md-layout-item md-size-100">
-                                <h6 class="category"></h6>
-                              </div>
-                              <div class="md-layout-item">
-                                <i class="fa fa-circle text-info"></i> Apple
-                                <i class="fa fa-circle text-warning"></i> Samsung
-                                <i class="fa fa-circle text-danger"></i> Windows Phone
-                              </div>
-                            </div>
-                          </template>
-                        </chart-card> -->
                     </div>
                 </div>
             </div>
@@ -180,6 +158,46 @@
                 </md-button>
             </template>
         </modal>
+
+
+        <modal v-if="editBudgetElementsModal"  class="add-category-model edit-elements-budget-modal">
+            <template slot="header">
+                <div class="add-category-model__header">
+                    <h2 class="black">  Edit budget per category</h2>
+                </div>
+                <md-button class="md-simple md-just-icon md-round modal-default-button" @click="editBudgetElementsModal = false">
+                    <md-icon>clear</md-icon>
+                </md-button>
+            </template>
+            <template slot="body">
+                <div class="event-blocks-table edit-elements-budget-table">
+                    <tabs
+                        :tab-name="['<img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
+                    >
+                        <!-- here you can add your content for tab-content -->
+                        <template slot="tab-pane-1">
+                            <edit-event-blocks-budget :event.sync="event" :event-components="selectedComponents"
+                                                       type="total"></edit-event-blocks-budget>
+                        </template>
+                        <template slot="tab-pane-2">
+                            <edit-event-blocks-budget :event.sync="event" :event-components="selectedComponents"
+                                                       type="perGuest"></edit-event-blocks-budget>
+                        </template>
+                    </tabs>
+                </div>
+
+            </template>
+            <template slot="footer">
+                <md-button class="md-default md-simple cancel-btn" @click="editBudgetElementsModal = false">
+                    Cancel
+                </md-button>
+                <md-button class="md-rose add-category-btn " @click="updateBudget">
+                    Save
+                </md-button>
+            </template>
+        </modal>
+
+
     </div>
 </template>
 
@@ -212,7 +230,8 @@
         Tabs,
         Modal
     } from '@/components'
-    import NewEventBuildingBlocks from './components/NewEventBuildingBlocks'
+    import NewEventBuildingBlocks from './components/NewEventBuildingBlocks';
+    import EditEventBlocksBudget from './components/EditEventBlocksBudget';
 
     //COMPONENTS
     import UploadVendorsModal from '../Vendors/ImportVendors'
@@ -231,7 +250,8 @@
             SideBar,
             SidebarItem,
             PieChartRound,
-            Modal
+            Modal,
+            EditEventBlocksBudget
         },
 
         data () {
@@ -243,6 +263,7 @@
                 eventId: null,
                 percentage: 0,
                 totalRemainingBudget: 0,
+                usedBudget : 0,
                 remainingBudgetPerEmployee: 0,
                 seriesData: [],
                 isLoading: false,
@@ -257,9 +278,8 @@
                 iconsURL : 'http://static.maryoku.com/storage/icons/Event%20Page/',
                 showBudgetModal : false,
                 budgetConfirmationModal : false,
-                newBudget : null
-
-
+                newBudget : null,
+                editBudgetElementsModal : false
             }
         },
         created () {

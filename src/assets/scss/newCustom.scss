@@ -295,6 +295,7 @@ $green : #6ec37d;
         &.actions-table {
             border-collapse: separate;
             border-spacing: 0 1em;
+            margin-top : -1em;
 
         }
 
@@ -681,6 +682,7 @@ $green : #6ec37d;
 
                 .vlabeledit .vlabeledit-label {
                     font-size: 14px;
+                    padding-left : 0;
                 }
             }
         }
@@ -737,6 +739,13 @@ $green : #6ec37d;
             text-transform: capitalize;
             font-size: 12px;
             font-family: 'Manrope-ExtraBold',sans-serif;
+        }
+    }
+
+    &.edit-elements-budget-table {
+        .md-card-tabs.md-card-plain .md-list, .edit-event-details .nav-tabs {
+            background: none !important;
+            box-shadow: none;
         }
     }
 }
@@ -1886,6 +1895,77 @@ $green : #6ec37d;
 
 
 .add-category-model {
+
+    &.edit-elements-budget-modal {
+        .modal-body {
+            padding-top : 0;
+            max-height: 490px;
+            overflow-y: auto;
+
+            input {
+                border-radius: 3px;
+                border: solid 0.5px #707070;
+                background-color: #ffffff;
+                width: 103px;
+                height: 34px;
+                font-size: 16px;
+                text-align: center;
+                color: #050505;
+            }
+
+            .event-blocks-table {
+                .md-card-tabs .tab-content {
+                    padding-top : 0;
+                }
+            }
+
+            .event-blocks__table {
+
+                background: none;
+                box-shadow: none;
+
+                &.event-block-table {
+                    border: solid 0.5px #cbcbcb;
+                }
+
+                &.event-block-header {
+                    margin-bottom : -1px;
+                    border: solid 0.5px #cbcbcb;
+
+                }
+
+                thead {
+                    tr {
+                        background: none;
+                        box-shadow: none;
+                    }
+                }
+
+                &.event-block-table {
+                    box-shadow: none;
+                    border-left : none;
+
+                    tbody {
+                        td.event-block-element:after {
+                            height: 103%;
+                            top: -1px;
+                        }
+                    }
+                }
+            }
+
+            table {
+                td {
+                    padding: 0.8em 0 0.8em 1.4em;
+                    &.planned {
+                        font-size: 16px;
+                        font-weight: bold;
+                        color: #050505;
+                    }
+                }
+            }
+        }
+    }
 
     .modal-header .md-button .md-button-content i {
         color: #000 !important;
