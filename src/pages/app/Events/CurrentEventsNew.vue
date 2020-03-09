@@ -279,7 +279,7 @@
                 showBudgetModal : false,
                 budgetConfirmationModal : false,
                 newBudget : null,
-                editBudgetElementsModal : true
+                editBudgetElementsModal : false
             }
         },
         created () {
