@@ -1,6 +1,7 @@
 $yellow : #ffc001;
 $rose : #f51355;
 $green : #6ec37d;
+$baseColor : #5c2153;
 
 @font-face {
     font-family: 'Manrope-Bold';
@@ -448,7 +449,7 @@ $green : #6ec37d;
                         border-radius: 3px 0 0 3px;
                     }
 
-                    &.venue {
+                     &.venue {
                         &:after {
                             background: rgb(0,176,80);
                         }
@@ -572,11 +573,11 @@ $green : #6ec37d;
                     }
 
                     &.unexpected {
-
+                        border-left-color: #24c796 !important;
                         color : #24c796;
-                        &:after {
+                        /* &:after {
                             background: #24c796;
-                        }
+                        } */
                     }
                 }
 
@@ -2325,3 +2326,4 @@ $green : #6ec37d;
         width : 14px;
     }
 }
+

@@ -248,7 +248,7 @@
         this.drawChart()
       },
     }
-  }
+  };
 </script>
 <style lang="scss" scoped>
   .pie-chart-wrapper {

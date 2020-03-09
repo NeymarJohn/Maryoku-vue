@@ -44,6 +44,7 @@ import EventMovies from "@/pages/app/CreateEvent/EventMovies.vue";
 import EventScales from "@/pages/app/CreateEvent/EventScales.vue";
 import EventStartWorking from "@/pages/app/CreateEvent/EventStartWorking.vue";
 import EventCreated from "@/pages/app/CreateEvent/EventCreated.vue";
+import EventSummery from "@/pages/app/CreateEvent/EventSummery.vue";
 import HomePage from "@/pages/app/HomePage/Home.vue";
 import publicRegister from "@/pages/app/SinginSingup/publicRegister.vue";
 
@@ -710,6 +711,16 @@ let PublicCreateEvent = {
             meta : {
                 title : "Event Created",
                 gmt : "Event Created",
+                auth: false
+            }
+        },
+        {
+            path : "/event-summery",
+            name : "Event Summery",
+            component : EventSummery,
+            meta : {
+                title : "Event Summery",
+                gmt : "Event Summery",
                 auth: false
             }
         }

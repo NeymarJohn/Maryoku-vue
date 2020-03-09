@@ -5,8 +5,9 @@ var webpack = require('webpack')
 
 module.exports = merge(devEnv, {
     NODE_ENV: '"testing"',
-    SERVER_URL: '"https://api-dev.maryoku.com"',
-    GOOGLE_API_KEY:'"AIzaSyD6JvMsiEN9jz3lfVbKlnUQhjZB6fgcCu8"',
+    SERVER_URL: '"http://localhost:8080"',
+    //SERVER_URL: '"https://api-dev.maryoku.com"',
+    GOOGLE_API_KEY: '"AIzaSyD6JvMsiEN9jz3lfVbKlnUQhjZB6fgcCu8"',
 
     plugins: [
         // ...

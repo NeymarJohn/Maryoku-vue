@@ -154,12 +154,12 @@
                              eventNeededServices[item.title] =  item.selected;
                          });
 
-                        this.setCurrentStep({currentPage : '/event-created'});
+                        this.setCurrentStep({currentPage : '/event-summery'});
 
                          this.setEventProperty({key: 'eventNeededServices', actualValue: eventNeededServices});
 
                         if ( this.$auth.user.authenticated) {
-                            this.$router.push({ path: `/event-created`});
+                            this.$router.push({ path: `/event-summery`});
 
                         } else {
                             this.setSingupModal({showModal : true});

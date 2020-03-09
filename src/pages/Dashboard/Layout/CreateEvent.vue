@@ -477,6 +477,8 @@
                 border-radius: 7px;
                 width: 26px;
                 height: 26px;
+                max-width: none;
+                min-width: auto;
 
 
                 &:after {
