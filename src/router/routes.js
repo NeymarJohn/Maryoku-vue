@@ -11,6 +11,8 @@ import CreateEvent from '@/pages/Dashboard/Layout/CreateEvent.vue';
 import HomeLayout from '@/pages/Dashboard/Layout/HomeLayout.vue';
 import SigninSignupLayout from '@/pages/Dashboard/Layout/SigninSignupLayout.vue';
 import NewEventLayout from '@/pages/Dashboard/Layout/NewEventLayout.vue';
+import ForVendorsLayout from '@/pages/Dashboard/Layout/ForVendorLayout.vue';
+import ForProposalsLayout from '@/pages/Dashboard/Layout/ForProposalsLayout.vue';
 
 import Team from "@/pages/app/Team/Team.vue";
 import Members from "@/pages/app/Members/Members.vue";
@@ -64,6 +66,10 @@ import Step2 from '@/pages/Dashboard/Pages/CommonInfoProfile/Step2.vue';
 import Invite from '@/pages/Dashboard/Pages/CommonInfoProfile/Invite.vue';
 import CreateWorkspace from '@/pages/Dashboard/Pages/CreateWorkspace';
 import ChooseWorkspace from '@/pages/Dashboard/Pages/ChooseWorkspace';
+
+// New Vendor Pages
+import ForVendors from "@/pages/app/Vendors/ForVendors.vue"
+import ForProposals from "@/pages/app/Vendors/ForProposals.vue"
 
 import GetStarted from '@/pages/app/GetStarted';
 import EmptyLayout from '../pages/Dashboard/Pages/EmptyLayout';
@@ -131,9 +137,45 @@ let authPages = {
         title: 'Choose Workspace',
         gtm: "ChooseWorkspace"
       }
-    },
+    }
   ]
 };
+
+let forVendors = {
+  path: "/",
+  component: ForVendorsLayout,
+  name: "ForVendors",
+  children: [
+    {
+      path: "/for-vendors",
+      name: "ForVendors",
+      component: ForVendors,
+      meta: {
+        auth: false,
+        title: 'For Vendors',
+        gtm: 'ForVendors'
+      },
+    },
+  ]
+}
+
+let forProposals = {
+  path: "/",
+  component: ForProposalsLayout,
+  name: "ForProposals",
+  children: [
+    {
+      path: "/for-proposals",
+      name: "ForProposals",
+      component: ForProposals,
+      meta: {
+        auth: false,
+        title: 'For Proposals',
+        gtm: 'ForProposals'
+      },
+    },
+  ]
+}
 
 let publicPages = {
   path: "/",
@@ -799,13 +841,15 @@ const routes = [{
   authPages,
   appPages,
   publicPages,
+  forVendors,
+  forProposals,
   emptyLayoutPages,
   EventPages,
   marketPlacePages,
-    PublicCreateEvent,
-    HomePages,
-    SigninSignupPage,
-    NewEventPages
+  PublicCreateEvent,
+  HomePages,
+  SigninSignupPage,
+  NewEventPages
 ];
 
 export default routes;
