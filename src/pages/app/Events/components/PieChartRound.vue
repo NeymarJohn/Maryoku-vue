@@ -200,10 +200,8 @@
               color : this.getElementColor(category)
           })
 
-            console.log('this.sortedData => ', this.sortedData);
-        })
+        });
 
-        console.log(this.sortedData, this.totalValue)
 
         // Set dash on circle
         this.sortedData.forEach((item,index) => {

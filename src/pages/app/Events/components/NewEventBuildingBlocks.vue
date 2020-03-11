@@ -494,6 +494,8 @@
                     this.isLoading = false
                 }, 500)
 
+              console.log(this.eventBuildingBlocks);
+
                 this.eventBuildingBlocks.forEach((item) => {
 
                     if (item.allocatedBudget && vm.type == 'total') {
@@ -505,7 +507,6 @@
                         vm.totalBudget += item.numberOfParticipants ? parseInt(item.allocatedBudget) / parseInt(item.numberOfParticipants) : parseInt(item.allocatedBudget) / parseInt(vm.event.numberOfParticipants);
                         vm.totalBudgetTaxes += item.numberOfParticipants ? (parseInt(item.allocatedBudget) / parseInt(item.numberOfParticipants)) * .12 : (parseInt(item.allocatedBudget) / parseInt(vm.event.numberOfParticipants)) * .12;
                     }
-                console.log('vm.totalBudget ',vm.totalBudget)
 
                     // if (item.allocatedBudget) {
                     //     vm.totalBudget += parseInt(item.allocatedBudget);
