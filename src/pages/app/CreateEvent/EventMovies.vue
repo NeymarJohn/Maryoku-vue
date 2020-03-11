@@ -90,7 +90,7 @@
                 moviesList : [
                     {
                         image : 'amy-santiago.png',
-                        tooltip : 'Amy is a "by the book" type of cop but she takes it a step further by color-coding case files. With her, everything is calculated to perfection a well crafted timeline will go a long way to get you approval',
+                        tooltip : 'Amy is a "by the book" type of cop but she takes it a step further by color-coding case files. With her, everything is calculated to perfection. A well crafted timeline will go a long way to get you approval',
                         title : 'Amy Brookheimer',
                         author : 'Veep'
                     },
@@ -102,13 +102,13 @@
                     },
                     {
                         image : 'dirty-harry2.png',
-                        tooltip : 'Harry is not a "company man" and not a real team player (his partners got killed or wounded at an alarming rate). But what he did have, was laser focus on achieving his goals. His moto is: do what you have to do, he\'ll track RSVP like a hawk and threat to shoot non comers',
+                        tooltip : 'Harry is not a "company man" and not a real team player (his partners got killed or wounded at an alarming rate). But, what he did have was laser focus on achieving his goals. His moto is do what you have to do, and we bet he\'ll track RSVP like a hawk and deal personally with non comers',
                         title : 'Inspector Harold Francis',
                         author : 'Dirty Harry'
                     },
                     {
                         image : 'jerry-seinfeld.png',
-                        tooltip : 'Seinfeld\'s is very meticulous about the cleanliness and organization of his apartment. He is stubborn and holds on tightly to his opinions. and so every vendor you select must be dead on for him to approve the plan',
+                        tooltip : 'Seinfeld is very meticulous about the cleanliness and organization of his apartment. He is stubborn and holds on tightly to his opinions. He isn\'t easy to convince so every vendor you select must be dead on for him to approve the plan',
                         title : 'Seinfeld',
                         author : 'Seinfeld'
                     },
@@ -126,7 +126,7 @@
                     },
                     {
                         image : 'soprano.png',
-                        tooltip : 'Tony Soprano doesn\'t like to wait. Impatience is a key characteristic for him. visibility over how the plan is advancing will gain his trust and ensure a smooth approval',
+                        tooltip : 'Tony Soprano doesn\'t like to wait, Impatience is a key characteristic for him. With visibility over how the plan is advancing, you will gain his trust and ensure a smooth approval',
                         title : 'Tony Soprano',
                         author : 'The Sopranos'
                     }
