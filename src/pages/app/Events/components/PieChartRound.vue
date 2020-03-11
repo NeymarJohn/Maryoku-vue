@@ -26,7 +26,7 @@
           </text>
         </g>
       </g>
-      <g v-if="!(totalValue == 0 || dashArray.length == 1)">
+      <!-- <g v-if="!(totalValue == 0 || dashArray.length == 1)">
         <circle
           class="pie-chart-value"
           cx="50%"
@@ -36,11 +36,11 @@
             stroke-dasharray: 0 ${circleLength};
             stroke: ${fillColor};
           `"
-        >
+        > -->
           <!-- <title>
             {{endTooltip.category + '\r\n Planned budget \r\n $' + endTooltip.budget}}
           </title> -->
-        </circle>
+        <!-- </circle>
         <g :transform="`translate(${x},${y})`" class="tooltip" visibility="hidden" ref="tooltip">
           <rect width="190" height="76" style="fill: #e6e5e5;"/>
           <text id="tooltip" x="20" y="25" style="fill: #050505; font-family: 'Manrope'; font-size: 16px; font-weight: 800;">
@@ -49,7 +49,7 @@
             <tspan x="20" dy="1.3em" style="font-size: 13px;font-weight: 300;">${{endTooltip.budget}}</tspan>
           </text>
         </g>
-      </g>
+      </g> -->
     </svg>
     <div class="items-cont">
       <ul class="items-list">
@@ -220,11 +220,10 @@
         })
         this.$forceUpdate()
       },
-        getElementColor(category) {
-
-          let element = _.findWhere(this.allElements, {title: category});
-          return element.color;
-        }
+      getElementColor(category) {
+        let element = _.findWhere(this.allElements, {title: category});
+        return element.color;
+      }
     },
     computed: {
 
