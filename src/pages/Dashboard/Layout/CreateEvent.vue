@@ -639,39 +639,7 @@
 
 
 
-        .md-button.custom-btn {
-            width: 256px;
-            height: 56px;
-            border-radius: 12px;
-            min-width: 256px;
 
-            .md-ripple {
-                font-size: 15px;
-                text-transform: initial;
-                font-weight: bold;
-            }
-
-            &.md-rose {
-                background-color: #FF0066 !important;
-                box-shadow: 0px 12px 24px #FF006633;
-
-                &:hover {
-                    margin-top:5px;
-                    background-color: #de0e43 !important;
-
-                }
-            }
-
-            &.md-default {
-                margin-right: 1em;
-            }
-
-
-
-            &.disabled, &.opacity-btn {
-                opacity: 0.3;
-            }
-        }
 
         .maryoku-field {
             margin : 0.5em 0 0;
@@ -1023,6 +991,41 @@
 
 
 
+    }
+
+
+    .md-button.custom-btn {
+        width: 256px;
+        height: 56px;
+        border-radius: 12px;
+        min-width: 256px;
+
+        .md-ripple {
+            font-size: 15px;
+            text-transform: initial;
+            font-weight: bold;
+        }
+
+        &.md-rose {
+            background-color: #FF0066 !important;
+            box-shadow: 0px 12px 24px #FF006633;
+
+            &:hover {
+                margin-top:5px;
+                background-color: #de0e43 !important;
+
+            }
+        }
+
+        &.md-default {
+            margin-right: 1em;
+        }
+
+
+
+        &.disabled, &.opacity-btn {
+            opacity: 0.3;
+        }
     }
 
 
