@@ -856,6 +856,7 @@ $baseColor : #5c2153;
             border-left : 10px solid #818080;
             margin-bottom : 0.4em;
             padding: 1em 1.5em;
+            cursor: pointer;
 
             .item-title {
                 position: inherit;
@@ -935,13 +936,30 @@ $baseColor : #5c2153;
     }
 }
 .event-page-header {
-    background: #fff;
-    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+
     height: 120px;
     margin : 0 0;
     max-width : none !important;
 
+    &.with-bg {
+        background: #fff;
+        box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+    }
 
+    h3 {
+        font-size: 28px;
+        font-weight: 800;
+        color: #050505;
+        margin : 0 0 0.2em;
+    }
+
+    p {
+        width: 327px;
+        font-size: 14px;
+        font-weight: normal;
+        color: #050505;
+        margin : 0;
+    }
 }
 
 .event-page-header {
@@ -2325,5 +2343,179 @@ $baseColor : #5c2153;
     img {
         width : 14px;
     }
+}
+
+
+.booking-section {
+    position: relative;
+    padding: 0 0 0 18em;
+    font-family: 'Manrope-Regular',sans-serif;
+
+    .booking-header {
+        padding: 0 1.3em 0 2em;
+        margin-bottom : 1em;
+
+        .header-title {
+            h4 {
+                margin : 0;
+                font-size: 18px;
+                font-weight: normal;
+                color: #050505;
+            }
+
+            img {
+                width : 20px;
+            }
+        }
+
+        .header-actions {
+            .md-default {
+                .md-ripple {
+                    text-transform: capitalize;
+                    color : #000;
+                    font-weight: bold;
+                    padding : 0 !important;
+                }
+
+                .md-icon {
+                    color : #000 !important;
+                }
+            }
+        }
+    }
+
+    &__actions {
+        width: 100%;
+        text-align: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 0 1.1em;
+        margin-bottom : 1em;
+
+        .md-button {
+            width : 47%;
+            height: 76px;
+
+            .md-ripple {
+                border-radius: 3px;
+                box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+                border: solid 1px #f51355;
+                background-color: #ffffff;
+                font-size: 14px;
+                font-weight: 800;
+                color: #f51355;
+                text-transform: initial;
+                letter-spacing: 1px;
+            }
+        }
+    }
+}
+
+.events-booking-items {
+    padding: 0 1.2em;
+    margin-bottom : 1em;
+
+    .booking-item {
+
+        border-radius: 3px;
+        box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+        background-color: #ffffff;
+        padding : 1.5em;
+
+        .event-image {
+
+            background-size: cover !important;
+            height: 200px;
+            position: relative;
+
+            .event-labels {
+                padding : 0;
+                margin : 0;
+                list-style: none;
+                position: absolute;
+                left : 0;
+                bottom :0;
+
+                .label-item {
+                    background: #fff;
+                    padding: 6px 17px;
+                    font-size: 12px;
+                    font-weight: bold;
+                    color: #050505;
+                    width: auto;
+                    float: left;
+                    clear: both;
+
+                    &.rose-label {
+                        color: #f51355;
+                    }
+
+                    &.special-offer {
+                        background: #ffc001;
+                        color : #fff;
+                    }
+
+                }
+            }
+        }
+
+        .price {
+            margin: 2em 0 0.8em;
+
+            small {
+                font-size: 14px;
+                color: #050505;
+            }
+        }
+        .price-value {
+            font-size: 25px;
+            font-weight: bold;
+            color: #050505;
+            margin-right: 0.2em;
+        }
+
+        .event-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #050505;
+            margin: 0;
+            height: 52px;
+        }
+
+        .probability {
+            font-size: 13px;
+            font-weight: 800;
+            color: #0fac4c;
+            margin: 0.5em 0 1em;
+        }
+
+        .event-info {
+            list-style: none;
+            padding : 0;
+            margin : 0;
+
+            &__item {
+                font-size: 12px;
+                color: #818080;
+            }
+        }
+        .event-desc {
+            font-size: 12px;
+            color: #050505;
+        }
+
+        .details-btn {
+            .md-ripple {
+                background-color: #f51355;
+                text-transform: capitalize;
+                font-weight: bold;
+                letter-spacing: 1px;
+            }
+        }
+
+
+    }
+
 }
 

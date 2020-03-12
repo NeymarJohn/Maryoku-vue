@@ -5,39 +5,9 @@
 
         </side-bar>
 
-        <div class="progress-sidebar">
-            <div class="summer-party">
-                <md-button class="md-default md-sm md-simple expand-sidebar"> <img :src="`${newTimeLineIconsURL}expand.svg`"></md-button>
-                <div class="title-label">summer party <small>checklist</small></div>
-                <div class="completion-progress">
-                    <div class="progress-done"></div>
-                </div>
-                <div class="percentage">
-                    <ul>
-                        <li class="green-label">56%</li>
-                        <li class="">17 of 26</li>
-                    </ul>
-                </div>
-                <div class="small-label">Things are warming up!</div>
-            </div>
+        <progress-sidebar></progress-sidebar>
 
-            <!-- Event Elements -->
-            <div class="event-elements">
-                <draggable :list="eventElements">
-                    <div class="event-elements__item" :class="item.status" v-for="(item,index) in eventElements"
-                         :key="index">
-                        <div class="item-title">
-                            <img v-if="item.status == 'complete'"
-                                 src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="15">
-                            {{item.title}}
-                        </div>
-                    </div>
-                </draggable>
-
-            </div>
-        </div>
-
-        <div class="event-page-header md-layout-item md-size-100">
+        <div class="event-page-header md-layout-item md-size-100 with-bg">
             <div class="header-main-actions">
                 <md-button class="md-rose">Save Changes</md-button>
                 <md-button class="md-default md-simple">back to first version</md-button>
@@ -289,6 +259,7 @@
 
     import SideBar from '../../../../components/SidebarPlugin/NewSideBar';
     import SidebarItem from '../../../../components/SidebarPlugin/NewSidebarItem.vue';
+    import ProgressSidebar from './progressSidebar';
 
     export default {
         name: 'event-time-line',
@@ -299,7 +270,8 @@
             SlideYDownTransition,
             InputMask,
             SideBar,
-            SidebarItem
+            SidebarItem,
+            ProgressSidebar
         },
         props: {
             // event: Object,

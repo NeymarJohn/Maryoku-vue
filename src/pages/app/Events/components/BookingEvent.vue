@@ -1,47 +1,19 @@
 <template>
-    <div class="md-layout timeline-section">
+    <div class="md-layout booking-section">
 
         <side-bar :event="event">
 
         </side-bar>
 
-        <div class="progress-sidebar">
-            <div class="summer-party">
-                <md-button class="md-default md-sm md-simple expand-sidebar"> <img :src="`${newTimeLineIconsURL}expand.svg`"></md-button>
-                <div class="title-label">summer party <small>checklist</small></div>
-                <div class="completion-progress">
-                    <div class="progress-done"></div>
-                </div>
-                <div class="percentage">
-                    <ul>
-                        <li class="green-label">56%</li>
-                        <li class="">17 of 26</li>
-                    </ul>
-                </div>
-                <div class="small-label">Things are warming up!</div>
-            </div>
-
-            <!-- Event Elements -->
-            <div class="event-elements">
-                <draggable :list="eventElements">
-                    <div class="event-elements__item" :class="item.status" v-for="(item,index) in eventElements"
-                         :key="index">
-                        <div class="item-title">
-                            <img v-if="item.status == 'complete'"
-                                 src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg" width="15">
-                            {{item.title}}
-                        </div>
-                    </div>
-                </draggable>
-
-            </div>
-        </div>
+        <progress-sidebar></progress-sidebar>
 
         <div class="event-page-header md-layout-item md-size-100">
-            <div class="header-main-actions">
-                <md-button class="md-rose">Save Changes</md-button>
-                <md-button class="md-default md-simple">back to first version</md-button>
-                <md-button class="md-default md-simple with-left-border">start from scratch</md-button>
+            <div class="header-title">
+                <h3>Hi Rachel</h3>
+                <p>
+                    We found the top 3 proposals for your event,
+                    Book now before it’s too late
+                </p>
             </div>
             <div class="header-actions">
                 <ul>
@@ -51,6 +23,113 @@
                 </ul>
             </div>
         </div>
+
+        <div class="booking-header d-flex justify-content-between md-layout-item md-size-100">
+            <div class="header-title">
+                <h4><img :src="`${newTimeLineIconsURL}timeline-title.svg`"> Book Venue</h4>
+            </div>
+            <div class="header-actions">
+                <md-button class="md-default md-simple">Compare Proposals <md-icon>keyboard_arrow_right</md-icon></md-button>
+            </div>
+        </div>
+
+
+
+        <!-- Event Booking Items -->
+        <div class="md-layout events-booking-items">
+
+            <div class="md-layout-item md-size-33">
+                <div class="booking-item ">
+                    <div class="event-image" style="background: url(https://bit.ly/2Q77CBI) center center no-repeat">
+
+                    </div>
+                    <div class="price"> <span class="price-value">$2,000</span> <small>For 3 hours</small> </div>
+                    <h4 class="event-title">Trump National Golf Club Philadelphia</h4>
+                    <div class="probability">Probability 92%</div>
+                    <ul class="event-info">
+                        <li class="event-info__item">575 Mission St.</li>
+                        <li class="event-info__item">San Francisco, CA 94105</li>
+                    </ul>
+                    <p class="event-desc">
+                        Trump National Golf Club is a wedding venue
+                        located in Pine Hill, New Jersey. This classic
+                        country club venue is a beautiful, exclusive
+                        location located atop…
+                    </p>
+
+                    <div class="item-actions text-right">
+                        <md-button class="md-rose details-btn"> Details & Booking</md-button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="md-layout-item md-size-33">
+                <div class="booking-item ">
+                    <div class="event-image" style="background: url(https://bit.ly/2Q77CBI) center center no-repeat">
+                        <ul class="event-labels">
+                            <div class="label-item rose-label">Venue + Catering Proposal </div>
+                        </ul>
+                    </div>
+                    <div class="price"> <span class="price-value">$2,000</span> <small>For 3 hours</small> </div>
+                    <h4 class="event-title">Relish caterers & venues</h4>
+                    <div class="probability">Probability 92%</div>
+                    <ul class="event-info">
+                        <li class="event-info__item">575 Mission St.</li>
+                        <li class="event-info__item">San Francisco, CA 94105</li>
+                    </ul>
+                    <p class="event-desc">
+                        Trump National Golf Club is a wedding venue
+                        located in Pine Hill, New Jersey. This classic
+                        country club venue is a beautiful, exclusive
+                        location located atop…
+                    </p>
+
+                    <div class="item-actions text-right">
+                        <md-button class="md-rose details-btn"> Details & Booking</md-button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="md-layout-item md-size-33">
+                <div class="booking-item ">
+                    <div class="event-image" style="background: url(https://bit.ly/2Q77CBI) center center no-repeat">
+                        <ul class="event-labels">
+                            <div class="label-item special-offer">Special Offer </div>
+                            <div class="label-item">Venue + Catering + DJ </div>
+                        </ul>
+                    </div>
+                    <div class="price"> <span class="price-value">$2,000</span> <small>For 3 hours</small> </div>
+                    <h4 class="event-title">Trump National Golf Club Philadelphia</h4>
+                    <div class="probability">Probability 92%</div>
+                    <ul class="event-info">
+                        <li class="event-info__item">575 Mission St.</li>
+                        <li class="event-info__item">San Francisco, CA 94105</li>
+                    </ul>
+                    <p class="event-desc">
+                        Trump National Golf Club is a wedding venue
+                        located in Pine Hill, New Jersey. This classic
+                        country club venue is a beautiful, exclusive
+                        location located atop…
+                    </p>
+
+                    <div class="item-actions text-right">
+                        <md-button class="md-rose details-btn"> Details & Booking</md-button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- ./Event Booking Items -->
+
+        <div class="booking-section__actions">
+            <md-button class="md-default ">I want something different</md-button>
+            <md-button class="md-default ">I already have a venue for my event</md-button>
+        </div>
+
+
+
 
     </div>
 
@@ -75,6 +154,7 @@
 
     import SideBar from '../../../../components/SidebarPlugin/NewSideBar';
     import SidebarItem from '../../../../components/SidebarPlugin/NewSidebarItem.vue';
+    import ProgressSidebar from './progressSidebar';
 
     export default {
         name: 'event-time-line',
@@ -85,7 +165,8 @@
             SlideYDownTransition,
             InputMask,
             SideBar,
-            SidebarItem
+            SidebarItem,
+            ProgressSidebar
         },
         props: {
             // event: Object,
@@ -211,9 +292,6 @@
             menuIconsURL : 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
             event : {},
             newTimeLineIconsURL : 'http://static.maryoku.com/storage/icons/Timeline-New/'
-
-
-
         }),
         methods: {
             /**
