@@ -2537,3 +2537,60 @@ $baseColor : #5c2153;
 
 }
 
+.sidebar-menu {
+    margin-left : 0.5em;
+    position: relative;
+
+    #minimizeSidebar {
+
+    }
+
+    .sidebar-menu {
+
+        &__list {
+            position : absolute;
+            left : 47px;
+            top : 0;
+            width : 373px;
+            background: #fff;
+            box-shadow: 0 0 17px 0 rgba(0, 0, 0, 0.16);
+            z-index: 99999999;
+        }
+
+        &__item {
+            padding : 2em;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            color: #050505;
+
+            .item-route {
+                font-size: 14px;
+                cursor: pointer;
+
+                img {
+                    width : 16px;
+                    margin-right : 0.9em;
+                }
+            }
+
+            .item-action {
+                font-size: 12px;
+                cursor: pointer;
+
+                img {
+                    width : 14px;
+                    margin-left : 0.4em;
+                }
+            }
+
+
+
+            &:not(:last-child) {
+                border-bottom : 1px solid #efefef;
+
+            }
+        }
+    }
+
+}

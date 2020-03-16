@@ -3,11 +3,44 @@
          :data-color="activeColor"
          :data-background-color="backgroundColor">
 
-        <div class="">
-            <md-button id="minimizeSidebar" class="md-round md-simple md-just-icon md-transparent" @click="minimizeSidebar">
-                <i class="material-icons text_align-center visible-on-sidebar-regular">more_vert</i>
-                <i class="material-icons design_bullet-list-67 visible-on-sidebar-mini">view_list</i>
+        <div class="sidebar-menu">
+            <md-button  v-if="toggleMenu == false" class="md-round md-simple md-just-icon md-transparent" @click="toggleMenu = true">
+                <img :src="`${menuIconsURL}Group 2763.svg`" width="20" style="width : 20px !important;">
             </md-button>
+            <md-button  v-else class="md-round md-simple md-just-icon md-transparent" @click="toggleMenu = false">
+                <img :src="`${menuIconsURL}Group 2763 (2).svg`" width="20" style="width : 20px !important;">
+            </md-button>
+
+            <div class="sidebar-menu__list"  v-if="toggleMenu">
+                <div class="sidebar-menu__item">
+                    <div class="item-route">
+                        <img :src="`${menuIconsURL}Asset 115.svg`"> Search
+                    </div>
+                </div>
+                <div class="sidebar-menu__item">
+                    <div class="item-route">
+                        <img :src="`${menuIconsURL}Asset 117.svg`"> Profile
+                    </div>
+                    <div class="item-action" @click="goTo('/signout')">
+                         Sign Out <img :src="`${menuIconsURL}Asset 118.svg`">
+                    </div>
+                </div>
+                <div class="sidebar-menu__item">
+                    <div class="item-route" @click="goTo('/events')">
+                        <img :src="`${menuIconsURL}Asset 114.svg`"> My Events
+                    </div>
+                </div>
+                <div class="sidebar-menu__item" @click="goTo('/settings')">
+                    <div class="item-route">
+                        <img :src="`${menuIconsURL}Asset 116.svg`"> Settings
+                    </div>
+                </div>
+                <div class="sidebar-menu__item">
+                    <div class="item-route">
+                        <img :src="`${menuIconsURL}Asset 117.svg`"> Help
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="sidebar-wrapper" ref="sidebarScrollArea">
             <md-list class="nav">
@@ -36,7 +69,10 @@
         name: 'sidebar',
         data : () => {
           return {
-              newTimeLineIconsURL : 'http://static.maryoku.com/storage/icons/Timeline-New/'
+              newTimeLineIconsURL : 'http://static.maryoku.com/storage/icons/Timeline-New/',
+              menuIconsURL : 'http://static.maryoku.com/storage/icons/menu _ checklist/SVG/',
+              toggleMenu : false
+
           }
         },
         props: {
@@ -107,6 +143,9 @@
                 if (this.$sidebar) {
                     this.$sidebar.toggleMinimize()
                 }
+            },
+            goTo(router){
+                this.$router.push(router);
             }
         },
         computed: {
