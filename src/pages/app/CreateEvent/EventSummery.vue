@@ -48,7 +48,7 @@
                         </div>
                         <div class="desc-item">
                             <div class="item-label">
-                                <md-checkbox v-model="agree">I’m agree to show this event in showcase in our library</md-checkbox>
+                                <md-checkbox v-model="agree">I agree to showcase this event in Maryoku library</md-checkbox>
 
                             </div>
                             <div class="item-value">-$60</div>
@@ -91,7 +91,7 @@
         },
         data() {
             return {
-                agree : false
+                agree : true
             }
         },
         created(){
