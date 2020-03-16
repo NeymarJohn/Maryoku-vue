@@ -1986,6 +1986,24 @@ $baseColor : #5c2153;
         }
     }
 
+
+    &.something-modal {
+        .modal-body {
+            padding-top: 0;
+            max-height: 490px;
+            overflow-y: auto;
+        }
+        .something-form {
+            .form-group {
+                width : 100%;
+
+                textarea.form-control {
+                    height : auto;
+                }
+            }
+        }
+    }
+
     .modal-header .md-button .md-button-content i {
         color: #000 !important;
         opacity: 1;

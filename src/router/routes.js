@@ -555,7 +555,7 @@ let NewEventPages = {
             },
         },
         {
-            path: "/events/:id/booking",
+            path: "/events/:id/booking/:blockId",
             name: "BookingEvent",
             component : BookingEvent,
             meta: {

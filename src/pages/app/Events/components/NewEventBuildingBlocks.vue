@@ -85,7 +85,10 @@
                     <td class="status" width="15%">
                         <div>
 
-                            <md-button class="book-btn md-sm disabled">Choose Vendor</md-button>
+                            <md-button class="book-btn md-sm"
+                                       :class="{'disabled' : block.proposalsState == 'get-offers'}"
+                                       @click="bookVendors(block)"
+                            >Book Vendors</md-button>
 
                             <!--                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
                         </div>
@@ -620,6 +623,11 @@
                 } else {
                     this.showRequirementsSidepanel(item)
                 }
+            },
+            bookVendors(item){
+                //go to booking page
+                this.$router.push(`/events/${this.event.id}/booking/${item.id}`);
+
             },
             reviewProposals (item, winnerId = null) {
                 window.currentPanel = this.$showPanel({

@@ -3,7 +3,7 @@
          :data-color="activeColor"
          :data-background-color="backgroundColor">
 
-        <div class="navbar-minimize">
+        <div class="">
             <md-button id="minimizeSidebar" class="md-round md-simple md-just-icon md-transparent" @click="minimizeSidebar">
                 <i class="material-icons text_align-center visible-on-sidebar-regular">more_vert</i>
                 <i class="material-icons design_bullet-list-67 visible-on-sidebar-mini">view_list</i>
