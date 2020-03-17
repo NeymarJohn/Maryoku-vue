@@ -18,7 +18,7 @@
         <!-- Event Elements -->
         <div class="event-elements">
             <draggable :list="eventElements">
-                <div class="event-elements__item" @click="goToRoute(item)" :class="item.status" v-for="(item,index) in eventElements"
+                <div class="event-elements__item" @click="goToRoute(item,index)" :class="item.status" v-for="(item,index) in eventElements"
                      :key="index">
                     <div class="item-title">
                         <img v-if="item.status == 'complete'"
@@ -73,84 +73,113 @@
             // auth: auth,
             isLoading: true,
             eventElements: [
-                {
-                    title: 'book catering',
-                    status: 'complete',
-                    route : 'booking'
-                },
-                {
-                    title: 'book catering',
-                    status: 'complete',
-                    route : 'booking'
-
-                },
-                {
-                    title: 'book catering',
-                    status: 'complete',
-                    route : 'booking'
-
-                },
+                // {
+                //     title: 'book catering',
+                //     status: 'complete',
+                //     route : 'booking'
+                // },
+                // {
+                //     title: 'book catering',
+                //     status: 'complete',
+                //     route : 'booking'
+                //
+                // },
+                // {
+                //     title: 'book catering',
+                //     status: 'complete',
+                //     route : 'booking'
+                //
+                // },
                 {
                     title: 'Create Timeline',
                     status: 'current',
                     route : 'edit/timeline/new'
 
                 },
-                {
-                    title: 'Hire DJ',
-                    status: 'not-complete',
-                    route : 'booking'
-
-                },
-                {
-                    title: 'Hire photographer',
-                    status: 'not-complete',
-                    route : 'booking'
-
-                },
+                // {
+                //     title: 'Hire DJ',
+                //     status: 'not-complete',
+                //     route : '/booking'
+                //
+                // },
+                // {
+                //     title: 'Hire photographer',
+                //     status: 'not-complete',
+                //     route : '/booking'
+                //
+                // },
                 {
                     title: 'Research event insurance',
                     status: 'not-complete',
-                    route : 'booking'
+                    route : '/booking'
 
                 },
-                {
-                    title: 'Book event transportation',
-                    status: 'not-complete',
-                    route : 'booking'
-
-                },
+                // {
+                //     title: 'Book event transportation',
+                //     status: 'not-complete',
+                //     route : '/booking'
+                //
+                // },
                 {
                     title: 'Create and send save-the-dates',
                     status: 'not-complete',
-                    route : 'booking'
+                    route : '/booking'
 
                 },
                 {
                     title: 'Review budget',
                     status: 'not-complete',
-                    route : 'booking'
+                    route : '/booking'
 
                 },
                 {
                     title: 'Create event\'s banner',
                     status: 'not-complete',
-                    route : 'booking'
+                    route : '/booking'
 
                 }
             ],
             timelineIconsURL : 'http://static.maryoku.com/storage/icons/timeline/svg/',
             menuIconsURL : 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
             event : {},
-            newTimeLineIconsURL : 'http://static.maryoku.com/storage/icons/Timeline-New/'
+            newTimeLineIconsURL : 'http://static.maryoku.com/storage/icons/Timeline-New/',
         }),
         methods: {
-            goToRoute(item) {
-                console.log(item);
-                console.log(this.event);
+            goToRoute(item,index) {
+                let vm = this;
 
                 this.$router.push(`/events/${this.event.id}/${item.route}`);
-            }
+
+                // _.each(vm.eventElements,function (item) {
+                //     item.status = 'not-completed'
+                // })
+
+                //vm.eventElements[index].status = 'current';
+
+                location.reload();
+            },
+            getEventBlocks(){
+
+                let vm = this;
+
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+                let event = new CalendarEvent({id: this.event.id});
+
+                new EventComponent().for(calendar, event).get().then(resp =>{
+
+                    _.map(resp,function (item) {
+
+                        vm.eventElements.push({
+                            title : 'Book ' + item.title,
+                            status : 'not-complete',
+                            route : 'booking/' + item.id
+                        })
+
+                        return item
+                    })
+
+                })
+            },
 
         },
         created () {
@@ -160,6 +189,8 @@
                 _calendar.calendarEvents().find(this.$route.params.id).then(event => {
 
                     this.event = event;
+
+                    this.getEventBlocks();
 
                     console.log(event);
                 })

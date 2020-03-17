@@ -772,8 +772,8 @@ $baseColor : #5c2153;
 }
 
 .progress-sidebar {
-    position: absolute;
-    left : -15px;
+    position: fixed;
+    left: 60px;
     top : 0;
     bottom : 0;
     width : 294px;
@@ -787,6 +787,7 @@ $baseColor : #5c2153;
         left: 0;
         right: 0;
         top: 0;
+        z-index: 999999;
         box-shadow: 0 43px 41px 0 rgba(0, 0, 0, 0.16);
 
         .title-label {
@@ -849,6 +850,10 @@ $baseColor : #5c2153;
     }
 
     .event-elements {
+        padding-top: 7.9em;
+        height: 100%;
+        overflow: auto;
+
 
         &__item {
             box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.12);
