@@ -351,22 +351,6 @@
 
             this.hoursArray.push();
 
-            console.log('i am created');
-
-
-
-        },
-        mounted () {
-            this.isLoading = true
-            // if (this.event && this.event.id){
-            //     this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
-            //     this.getTimelineItems();
-            // }
-
-
-            console.log('i am mounted');
-
-
             this.$auth.currentUser(this, true, function () {
                 let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
 
@@ -387,6 +371,14 @@
                     console.log(event)
                 })
             }.bind(this))
+
+        },
+        mounted () {
+            this.isLoading = true
+            // if (this.event && this.event.id){
+            //     this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
+            //     this.getTimelineItems();
+            // }
         },
         watch: {
             event (newVal, oldVal) {
