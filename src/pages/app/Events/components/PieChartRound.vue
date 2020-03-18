@@ -17,7 +17,7 @@
             display: ${item.budget == 0 && totalValue != 0 ? 'none' : 'inherit'}
           `"
         />
-        <g :transform="`translate(${x},${y})`" class="tooltip" visibility="hidden" ref="tooltip" :id="`gt_${index}`">
+        <g :transform="`translate(${x},${y})`" class="tooltip" visibility="hidden" ref="tooltip">
           <path id="svgMask" d="M3,72 L162,74 162,43 171,38 162,33 162,3 3,3 z" fill="#e6e5e5"/>
           <text id="tooltip" x="20" y="25" style="fill: #050505; font-family: 'Manrope'; font-size: 16px; font-weight: 800;">
             {{sortedData[index].category}}
@@ -25,9 +25,8 @@
             <tspan x="20" dy="1.3em" style="font-size: 13px;font-weight: 300;">${{sortedData[index].budget}}</tspan>
           </text>
         </g>
-        <use id="use" :xlink:href="`gt_${index}`"/>
       </g>
-      <g v-if="!(totalValue == 0 || dashArray.length == 1)" @mousemove="setTooltipPos">
+      <!-- <g v-if="!(totalValue == 0 || dashArray.length == 1)">
         <circle
           class="pie-chart-value"
           cx="50%"
@@ -37,20 +36,20 @@
             stroke-dasharray: 0 ${circleLength};
             stroke: ${fillColor};
           `"
-        >
+        > -->
           <!-- <title>
             {{endTooltip.category + '\r\n Planned budget \r\n $' + endTooltip.budget}}
           </title> -->
-        </circle>
+        <!-- </circle>
         <g :transform="`translate(${x},${y})`" class="tooltip" visibility="hidden" ref="tooltip">
-          <path id="svgMask" d="M3,72 L162,74 162,43 171,38 162,33 162,3 3,3 z" fill="#e6e5e5"/>
+          <rect width="190" height="76" style="fill: #e6e5e5;"/>
           <text id="tooltip" x="20" y="25" style="fill: #050505; font-family: 'Manrope'; font-size: 16px; font-weight: 800;">
             {{endTooltip.category}}
             <tspan x="20" dy="1.2em" style="font-size: 13px;font-weight: 300;">Planned budget</tspan>
             <tspan x="20" dy="1.3em" style="font-size: 13px;font-weight: 300;">${{endTooltip.budget}}</tspan>
           </text>
         </g>
-      </g>
+      </g> -->
     </svg>
     <div class="items-cont">
       <ul class="items-list">
@@ -198,7 +197,7 @@
               ).reduce( function(total, val) {
                 return parseFloat(total) + parseFloat(val)
               }, 0),
-            color : this.getElementColor(category)
+              color : this.getElementColor(category)
           })
 
         });
@@ -212,7 +211,7 @@
             spaceLeft -= (item.budget / this.totalValue) * this.circleLength
 
             if (item == this.sortedData.filter(sd => sd.budget != 0)[0]) {
-              this.fillColor = this.sortedData[index].color
+              this.fillColor = this.colors[index]
               this.endTooltip = this.sortedData[index]
             }
           } else {
