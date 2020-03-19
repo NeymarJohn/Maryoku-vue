@@ -1,11 +1,14 @@
 <template>
   <div class="input-proposal-sub-item-wrapper">
     <h6 class="title">{{title}}</h6>
-    <input type="text"
-            :name="name"
-            class="input-proposal"
-            :disabled="disabled"
-            :placeholder="placeholder" >
+    <input 
+      type="text"
+      :name="name"
+      class="input-proposal"
+      :disabled="disabled"
+      :placeholder="placeholder"
+      :style="`padding-left: ${icon ? '60px' : '26px'}`">
+    <md-icon v-if="icon">{{icon}}</md-icon>
   </div>
 </template>
 <script>
@@ -43,6 +46,11 @@
       padding: 22px 26px;
       font-size: 16px;
       width: 100%;
+    }
+    i {
+      position: absolute;
+      left: calc(3em + 16px);
+      margin-top: 12px;
     }
   }
 </style>

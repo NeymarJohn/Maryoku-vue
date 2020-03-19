@@ -1,13 +1,49 @@
 <template>
   <div class="proposal-item-wrapper">
-    <h3 class="title">{{category}}</h3>
-    <p>
-      Which element would you like to involve in your <strong>venue</strong> proposal?
-    </p>
-    <div class="add-attributes-cont">
-      
+    <div class="title-cont default" v-if="!isDropdown && !isCollapsed">
+      <h3 class="title">{{category}}</h3>
+      <p>
+        Which element would you like to involve in your <strong>venue</strong> proposal?
+      </p>
     </div>
-    <div class="add-attributes-cont">
+    <div v-else class="title-cont dropdown">
+      <div class="left-side">
+        <md-checkbox v-model="isDropdown">
+        </md-checkbox>
+        <h3 class="title"><md-icon>edit</md-icon>{{category}}</h3>
+      </div>
+      <div class="right-side">
+        <div class="budget-cont">
+          <span>Budget</span>
+          <span>400$</span>
+        </div>
+        <div class="proposal-range-cont">
+          <p>You're the First bidder</p>
+          <span v-if="proposalRange">Proposals range</span>
+          <span v-if="proposalRange">$290-$1200</span>
+        </div>
+        <md-icon>navigate_next</md-icon>
+      </div>
+    </div>
+    <div class="sub-items-cont" v-if="!isDropdown && !isCollapsed">
+      <select-proposal-sub-item
+        :active="true"
+        :item="`Tables And Chairs`">
+      </select-proposal-sub-item>
+      <select-proposal-sub-item
+        :active="true"
+        :item="`Dance Floor`">
+      </select-proposal-sub-item>
+      <select-proposal-sub-item
+        :active="false"
+        :item="`Plateware`">
+      </select-proposal-sub-item>
+      <select-proposal-sub-item
+        :active="true"
+        :item="`Flowers`">
+      </select-proposal-sub-item>
+    </div>
+    <div class="add-attributes-cont" v-if="!isDropdown && !isCollapsed">
       <input-proposal-sub-item
         :title="`Description`"
         :placeholder="`Type name of elements here`"
@@ -15,12 +51,12 @@
       </input-proposal-sub-item>
       <input-proposal-sub-item
         :title="`QTY`"
-        :placeholder="0"
+        :placeholder="`0`"
         :style="`width: calc(28% - 44px)`">
       </input-proposal-sub-item>
       <input-proposal-sub-item
         :title="`Price per unit`"
-        :placeholder="0"
+        :placeholder="`0`"
         :style="`width: 16%`">
       </input-proposal-sub-item>
       <input-proposal-sub-item
@@ -29,61 +65,98 @@
         :style="`width: 16%; margin-right: 0`">
       </input-proposal-sub-item>
     </div>
-    <div class="action-cont">
+    <div class="action-cont" v-if="!isDropdown && !isCollapsed">
       <a class="clear">Clear</a>
       <a class="add">Add This</a>
     </div>
-    <table class="table-sub-items">
-      <thead>
-        <tr>
-          <th>Description</th>
-          <th>QTY</th>
-          <th>Price per unit</th>
-          <th>Subtotal</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="active">
-          <td>Sound Equipment</td>
-          <td>1</td>
-          <td>$400</td>
-          <td>$400</td>
-          <td>
-            <md-icon>edit</md-icon>
-            <md-icon>delete</md-icon>
-          </td>
-        </tr>
-        <tr class="inactive">
-          <td>Sound Equipment</td>
-          <td>1</td>
-          <td>$400</td>
-          <td>$400</td>
-          <td>
-            <md-icon>edit</md-icon>
-            <md-icon>delete</md-icon>
-          </td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="3">Total</td>
-          <td colspan="2">$800.00</td>
-        </tr>
-      </tfoot>
-    </table>
+    <div class="editable-sub-items-cont" v-if="!isDropdown && !isCollapsed">
+      <div class="editable-sub-items-header">
+        <span>
+          Description
+        </span>
+        <span>
+          QTY
+        </span>
+        <span>
+          Price per unit
+        </span>
+        <span>
+          Subtotal
+        </span>
+      </div>
+      <editable-proposal-sub-item
+        :item="`Description`"
+        :qty="1"
+        :pricePerUnit="400"
+        :subtotal="400"
+        :active="true"
+        :isEdit="false"
+      >
+      </editable-proposal-sub-item>
+      <editable-proposal-sub-item
+        :item="`Sound Equipment`"
+        :qty="1"
+        :pricePerUnit="400"
+        :subtotal="400"
+        :active="true"
+        :isEdit="false"
+      >
+      </editable-proposal-sub-item>
+      <editable-proposal-sub-item
+        :item="`Description`"
+        :qty="1"
+        :pricePerUnit="400"
+        :subtotal="400"
+        :active="true"
+        :isEdit="false"
+      >
+      </editable-proposal-sub-item>
+      <editable-proposal-sub-item
+        :item="`Description`"
+        :qty="1"
+        :pricePerUnit="400"
+        :subtotal="400"
+        :active="true"
+        :isEdit="false"
+      >
+      </editable-proposal-sub-item>
+      <editable-proposal-sub-item
+        :item="`Description`"
+        :qty="1"
+        :pricePerUnit="400"
+        :subtotal="400"
+        :active="true"
+        :isEdit="false"
+      >
+      </editable-proposal-sub-item>
+      <div class="editable-sub-items-footer">
+        <span>
+          Total
+        </span>
+        <span>
+          $800.00
+        </span>
+      </div>
+    </div>
   </div>
 </template>
 <script>
   import InputProposalSubItem from '@/components/Inputs/InputProposalSubItem.vue'
+  import SelectProposalSubItem from './SelectProposalSubItem.vue'
+  import EditableProposalSubItem from './EditableProposalSubItem.vue'
 
   export default {
     name: 'proposal-item',
     components: {
-      InputProposalSubItem
+      InputProposalSubItem,
+      SelectProposalSubItem,
+      EditableProposalSubItem
     },
     props: {
-      category: String
+      category: String,
+      isCollapsed: Boolean,
+      isDropdown: Boolean,
+      proposalRange: Boolean,
     },
     data () {
       return {
@@ -112,17 +185,87 @@
     color: #050505;
     margin: 50px 0 30px 0;
 
-    h3.title {
-      font-weight: 800;
-      font-size: 30px;
-      margin: 0;
+    .title-cont {
+      h3.title {
+        font-weight: 800;
+        font-size: 30px;
+        margin: 0;
+      }
+
+      p {
+        font-size: 20px;
+        margin: 0;
+        margin-top: 23px;
+
+        strong {
+          font-weight: 800;
+        }
+      }
+
+      &.dropdown {
+        padding: 8px 8px 42px 0px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+
+        .left-side {
+          width: 50%;
+          h3 {
+            display: inline-block;
+            margin-left: 39px;
+
+            i {
+              margin-right: 22px;
+            }
+          }
+        }
+        .right-side {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .budget-cont {
+            span {
+              color: #818080;
+              &:first-child {
+                font-size: 14px;
+                margin-right: 1rem;
+              }
+              &:nth-child(2) {
+                font-size: 20px;
+                font-weight: 800;
+              }
+            }
+          }
+          .proposal-range-cont {
+            text-align: right;
+            margin-left: 65px;
+            p {
+              margin-top: 0;
+              font-size: 14px;
+            }
+            span {
+              font-size: 14px;
+              &:first-child {
+                color: #818080;
+              }
+              &:last-child {
+                color: #050505;
+                font-weight: 800;
+              }
+            }
+          }
+          i {
+            margin-left: 80px;
+          }
+        }
+      }
     }
 
-    p {
-      font-size: 20px;
-      strong {
-        font-weight: 800;
-      }
+    .sub-items-cont {
+      padding: 30px 0;
+      display: flex;
     }
 
     .add-attributes-cont {
@@ -149,46 +292,52 @@
         }
       }
     }
-    
-    .table-sub-items {
-      padding: 0;
-      margin-top: 68px;
-      border-top: 1px solid black;
-      width: calc(100% + 74px);
-      text-align: left;
 
-      thead {
-        padding: 0 34px;
-        tr {
-          th {
-            padding: 40px 0 26px 0;
+    .editable-sub-items-cont {
+      margin-top: 65px;
+
+      .editable-sub-items-header {
+        border-top: 1px solid #050505;
+        padding: 40px 34px 26px 34px;
+        margin-left: -34px;
+        margin-right: -40px;
+
+        span {
+          display: inline-block;
+          font-size: 20px;
+          font-weight: 800;
+
+          &:first-child {
+            width: 40%;
+          }
+          &:nth-child(2) {
+            width: 10%;
+          }
+          &:nth-child(3) {
+            width: 15%;
+          }
+          &:last-child {
+            margin-right: 0;
           }
         }
       }
-      tbody {
-        tr {
-          td {
-            border-top: 1px solid #050505;
-            font-size: 16px;
-            font-weight: bold;
-            padding: 46px 0;
-          }
-          &.inactive {
-            td {
-              border-top: 1px solid #818080;
-              color: #818080;
-            }
-          }
-        }
-      }
-      tfoot {
+      .editable-sub-items-footer {
+        box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
         background-color: #d5d5d5;
-        tr {
-          td {
-            font-size: 20px;
-            font-weight: 800;
-            padding: 34px 0;
-            border: none;
+        padding: 21px 34px;
+        margin-left: -34px;
+        margin-right: -40px;
+
+        span {
+          font-size: 20px;
+          font-weight: 800;
+          display: inline-block;
+
+          &:first-child {
+            width: 65%;
+          }
+          &:last-child {
+            width: calc(35% - 5px);
           }
         }
       }
