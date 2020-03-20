@@ -43,45 +43,45 @@
   </div>
 </template>
 <script>
-  import { Modal, ProductCard } from "@/components";
-  import CalendarEventImage from '@/models/CalendarEventImage';
-  import CalendarEvent from '@/models/CalendarEvent';
-  import Calendar from '@/models/Calendar';
-  import VueElementLoading from 'vue-element-loading';
-  import LightBox from 'vue-image-lightbox'
+import { Modal, ProductCard } from '@/components'
+import CalendarEventImage from '@/models/CalendarEventImage'
+import CalendarEvent from '@/models/CalendarEvent'
+import Calendar from '@/models/Calendar'
+import VueElementLoading from 'vue-element-loading'
+import LightBox from 'vue-image-lightbox'
 
-  export default {
-    name: 'event-gallery-modal',
-    components: {
-      Modal,
-      ProductCard,
-      VueElementLoading,
-      LightBox,
+export default {
+  name: 'event-gallery-modal',
+  components: {
+    Modal,
+    ProductCard,
+    VueElementLoading,
+    LightBox
+  },
+  props: {
+    uploadedImages: Array,
+    onFileChange: Function,
+    removeImage: Function,
+    isModalLoading: Boolean
+  },
+  data () {
+    return {
+      modalOpen: false,
+      regularImg: 'http://static.maryoku.com/storage/img/image_placeholder.jpg'
+    }
+  },
+  methods: {
+    noticeModalHide: function () {
+      this.modalOpen = false
     },
-    props: {
-      uploadedImages: Array,
-      onFileChange: Function,
-      removeImage: Function,
-      isModalLoading: Boolean,
+    toggleModal (show) {
+      this.modalOpen = show
     },
-    data() {
-      return {
-        modalOpen: false,
-        regularImg: "http://static.maryoku.com/storage/img/image_placeholder.jpg",
-      }
-    },
-    methods: {
-      noticeModalHide: function () {
-        this.modalOpen = false;
-      },
-      toggleModal(show) {
-        this.modalOpen = show;
-      },
-      openGallery(index) {
-        this.$refs.lightbox.showImage(index)
-      },
-    },
+    openGallery (index) {
+      this.$refs.lightbox.showImage(index)
+    }
   }
+}
 </script>
 <style lang="scss">
   @import 'vue-image-lightbox/dist/vue-image-lightbox.min.css';

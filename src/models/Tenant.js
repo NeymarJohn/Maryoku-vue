@@ -1,7 +1,7 @@
-import Model from './Model';
+import Model from './Model'
 
 export default class Tenant extends Model {
-    resource() {
-        return 'tenants'
-    }
+  resource () {
+    return 'tenants'
+  }
 }

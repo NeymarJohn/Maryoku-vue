@@ -1,4 +1,4 @@
-<template>  
+<template>
 <div >
 <div class='indecator-event-block' v-if='isRate&&isNoDataRate'>
 <div class='indicator-event-info-block-rate'>
@@ -12,7 +12,7 @@
 <div class='indicator-event-date-title'>{{eventDate}}</div>
 </div>
 <div v-if='isNoData'><span class='indicator-event-info-number-currentV'>{{currentValue}}</span>/<span class='indicator-event-info-number-total'>{{total}}</span></div>
-</div>           
+</div>
 <div class='indicator-block' v-if='!isRate&&isNoData'>
 <div class='indicator-line' :class='leftIndicatorStyle' :style="{  width: leftWidth + '%' }"/>
 <div class='indicator-line' :class='rightIndicatorStyle' :style="{  width: rightWidth + '%' }"/>
@@ -26,56 +26,53 @@
 </div>
 </template>
 <script>
-    export default {
-        name: "LineIndicator",                
-        data(){
-            return{
-                
-            }
-        },
-        props: {
-            text:String,
-            buttonStyle:String,
-            onClick:Function,            
-            total:String,
-            currentValue:String,
-            leftSide:Number,
-            leftIndicatorStyle:String,
-            rightIndicatorStyle:String,
-            isRate:Boolean,
-            eventDate:{type:String, default:''},
-            typeEvent:String,
-            categoryEvent:String
-        },
-        computed:{
-             leftWidth(){                  
-                     if(this.currentValue*100/this.total){
-                         return this.currentValue*100/this.total
-                     }else{
-                         return 0
-                     }         
-             },
-             rightWidth(){
-                  if(this.currentValue&&this.total){
-                     return 100-this.currentValue*100/this.total
-                 }else{
-                     return 100
-                 }                          
-                 
-             },
-             isNoData(){
-                 
-                 return Boolean(this.typeEvent&&this.currentValue&&this.total)
-             },
-             isNoDataRate(){                
-                 return Boolean(this.categoryEvent&&this.currentValue&&this.total)
-             }
-        }
-        ,
-        methods:{
-           
-        } 
-    };
+export default {
+  name: 'LineIndicator',
+  data () {
+    return {
+
+    }
+  },
+  props: {
+    text: String,
+    buttonStyle: String,
+    onClick: Function,
+    total: String,
+    currentValue: String,
+    leftSide: Number,
+    leftIndicatorStyle: String,
+    rightIndicatorStyle: String,
+    isRate: Boolean,
+    eventDate: {type: String, default: ''},
+    typeEvent: String,
+    categoryEvent: String
+  },
+  computed: {
+    leftWidth () {
+      if (this.currentValue * 100 / this.total) {
+        return this.currentValue * 100 / this.total
+      } else {
+        return 0
+      }
+    },
+    rightWidth () {
+      if (this.currentValue && this.total) {
+        return 100 - this.currentValue * 100 / this.total
+      } else {
+        return 100
+      }
+    },
+    isNoData () {
+      return Boolean(this.typeEvent && this.currentValue && this.total)
+    },
+    isNoDataRate () {
+      return Boolean(this.categoryEvent && this.currentValue && this.total)
+    }
+  },
+  methods: {
+
+  }
+}
 </script>
 <style lang="scss">
     .indicator-block{
@@ -86,7 +83,7 @@
     .icon-control-panel{
         cursor:pointer;
     }
-    .indicator-line{       
+    .indicator-line{
         height: 12px;;
     }
     .indecator-event-block{
@@ -96,7 +93,7 @@
     .indicator-event-date-title{
        font-size: 0.64rem;
         font-weight: 500;
-        color:#c6c6c6 
+        color:#c6c6c6
     }
     .indicator-event-type-title{
         width: 238px;
@@ -135,7 +132,7 @@
         font-stretch: normal;
         line-height: 1.71;
         letter-spacing: normal;
-        text-align: left;        
+        text-align: left;
         color: #000000;
     }
     .indicator-event-info-block-rate{

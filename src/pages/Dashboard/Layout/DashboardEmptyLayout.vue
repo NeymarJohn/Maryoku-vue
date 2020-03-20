@@ -150,29 +150,29 @@
 </template>
 <script>
 /* eslint-disable no-new */
-import PerfectScrollbar from "perfect-scrollbar";
-import "perfect-scrollbar/css/perfect-scrollbar.css";
+import PerfectScrollbar from 'perfect-scrollbar'
+import 'perfect-scrollbar/css/perfect-scrollbar.css'
 
-function hasElement(className) {
-  return document.getElementsByClassName(className).length > 0;
+import TopNavbar from './TopNavbar.vue'
+import ContentFooter from './ContentFooter.vue'
+import MobileMenu from './Extra/MobileMenu.vue'
+import UserMenu from './Extra/UserMenu.vue'
+import { ZoomCenterTransition } from 'vue2-transitions'
+
+function hasElement (className) {
+  return document.getElementsByClassName(className).length > 0
 }
 
-function initScrollbar(className) {
+function initScrollbar (className) {
   if (hasElement(className)) {
-    new PerfectScrollbar(`.${className}`);
+    new PerfectScrollbar(`.${className}`)
   } else {
     // try to init it later in case this component is loaded async
     setTimeout(() => {
-      initScrollbar(className);
-    }, 100);
+      initScrollbar(className)
+    }, 100)
   }
 }
-
-import TopNavbar from "./TopNavbar.vue";
-import ContentFooter from "./ContentFooter.vue";
-import MobileMenu from "./Extra/MobileMenu.vue";
-import UserMenu from "./Extra/UserMenu.vue";
-import { ZoomCenterTransition } from "vue2-transitions";
 // import auth from "src/auth";
 
 export default {
@@ -183,35 +183,35 @@ export default {
     UserMenu,
     ZoomCenterTransition
   },
-  data() {
+  data () {
     return {
       auth: auth
     }
   },
   methods: {
-    toggleSidebar() {
+    toggleSidebar () {
       if (this.$sidebar.showSidebar) {
-        this.$sidebar.displaySidebar(false);
+        this.$sidebar.displaySidebar(false)
       }
     }
   },
-  mounted() {
-    this.$auth.currentUser(this, true, function(){
-      let docClasses = document.body.classList;
-      let isWindows = navigator.platform.startsWith("Win");
+  mounted () {
+    this.$auth.currentUser(this, true, function () {
+      let docClasses = document.body.classList
+      let isWindows = navigator.platform.startsWith('Win')
       if (isWindows) {
         // if we are on windows OS we activate the perfectScrollbar function
-        initScrollbar("sidebar");
-        initScrollbar("sidebar-wrapper");
-        initScrollbar("main-panel");
+        initScrollbar('sidebar')
+        initScrollbar('sidebar-wrapper')
+        initScrollbar('main-panel')
 
-        docClasses.add("perfect-scrollbar-on");
+        docClasses.add('perfect-scrollbar-on')
       } else {
-        docClasses.add("perfect-scrollbar-off");
+        docClasses.add('perfect-scrollbar-off')
       }
-    });
+    })
   }
-};
+}
 </script>
 <style lang="scss">
   .menu-divider {

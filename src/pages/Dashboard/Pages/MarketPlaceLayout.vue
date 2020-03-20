@@ -19,7 +19,7 @@
   </div>
 </template>
 <script>
-import { ZoomCenterTransition } from "vue2-transitions";
+import { ZoomCenterTransition } from 'vue2-transitions'
 
 export default {
   components: {
@@ -28,7 +28,7 @@ export default {
   props: {
     backgroundColor: {
       type: String,
-      default: "black"
+      default: 'black'
     }
   },
   inject: {
@@ -36,90 +36,90 @@ export default {
       default: true
     }
   },
-  data() {
+  data () {
     return {
       responsive: false,
       showMenu: false,
       menuTransitionDuration: 250,
       pageTransitionDuration: 300,
       year: new Date().getFullYear()
-    };
+    }
   },
   computed: {
-    setBgImage() {
+    setBgImage () {
       let images = {
-        Pricing: "http://static.maryoku.com/storage/img/bg-pricing.jpg",
-        Login: "http://static.maryoku.com/storage/img/shutterstock_495639391.png",
-        Register: "http://static.maryoku.com/storage/img/shutterstock_495639391.png",
-        CreateWorkspace: "http://static.maryoku.com/storage/img/shutterstock_495639391.png",
-        SignIn: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
-        SignOut: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
-        GetStarted: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
-        SignedIn: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
-        Lock: "http://static.maryoku.com/storage/img/lock.jpg"
-      };
+        Pricing: 'http://static.maryoku.com/storage/img/bg-pricing.jpg',
+        Login: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
+        Register: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
+        CreateWorkspace: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
+        SignIn: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
+        SignOut: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
+        GetStarted: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
+        SignedIn: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
+        Lock: 'http://static.maryoku.com/storage/img/lock.jpg'
+      }
       return {
         backgroundImage: `url(${images[this.$route.name]})`
-      };
+      }
     },
-    setPageClass() {
-      return `${this.$route.name}-page`.toLowerCase();
+    setPageClass () {
+      return `${this.$route.name}-page`.toLowerCase()
     }
   },
   methods: {
-    toggleSidebarPage() {
+    toggleSidebarPage () {
       if (this.$sidebar.showSidebar) {
-        this.$sidebar.displaySidebar(false);
+        this.$sidebar.displaySidebar(false)
       }
     },
-    linkClick() {
+    linkClick () {
       if (
         this.autoClose &&
         this.$sidebar &&
         this.$sidebar.showSidebar === true
       ) {
-        this.$sidebar.displaySidebar(false);
+        this.$sidebar.displaySidebar(false)
       }
     },
-    toggleSidebar() {
-      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
+    toggleSidebar () {
+      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar)
     },
-    toggleNavbar() {
-      document.body.classList.toggle("nav-open");
-      this.showMenu = !this.showMenu;
+    toggleNavbar () {
+      document.body.classList.toggle('nav-open')
+      this.showMenu = !this.showMenu
     },
-    closeMenu() {
-      document.body.classList.remove("nav-open");
-      this.showMenu = false;
+    closeMenu () {
+      document.body.classList.remove('nav-open')
+      this.showMenu = false
     },
-    onResponsiveInverted() {
+    onResponsiveInverted () {
       if (window.innerWidth < 991) {
-        this.responsive = true;
+        this.responsive = true
       } else {
-        this.responsive = false;
+        this.responsive = false
       }
     }
   },
-  mounted() {
-    this.onResponsiveInverted();
-    window.addEventListener("resize", this.onResponsiveInverted);
+  mounted () {
+    this.onResponsiveInverted()
+    window.addEventListener('resize', this.onResponsiveInverted)
   },
-  beforeDestroy() {
-    this.closeMenu();
-    window.removeEventListener("resize", this.onResponsiveInverted);
+  beforeDestroy () {
+    this.closeMenu()
+    window.removeEventListener('resize', this.onResponsiveInverted)
   },
-  beforeRouteUpdate(to, from, next) {
+  beforeRouteUpdate (to, from, next) {
     // Close the mobile menu first then transition to next page
     if (this.showMenu) {
-      this.closeMenu();
+      this.closeMenu()
       setTimeout(() => {
-        next();
-      }, this.menuTransitionDuration);
+        next()
+      }, this.menuTransitionDuration)
     } else {
-      next();
+      next()
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 

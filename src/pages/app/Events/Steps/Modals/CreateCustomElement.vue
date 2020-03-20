@@ -24,92 +24,92 @@
   </div>
 </template>
 <script>
-  // import auth from '@/auth'
-  import {
-    mapState,
-    mapGetters,
-    mapMutations,
-    mapActions
-  } from 'vuex'
-  import CalendarEvent from '@/models/CalendarEvent'
-  import {
-    Modal
-  } from "@/components"
-  import Calendar from "@/models/Calendar"
-  import EventComponent from "@/models/EventComponent"
-  import swal from "sweetalert2"
-  import {
-    error
-  } from 'util'
-  import moment from 'moment'
+// import auth from '@/auth'
+import {
+  mapState,
+  mapGetters,
+  mapMutations,
+  mapActions
+} from 'vuex'
+import CalendarEvent from '@/models/CalendarEvent'
+import {
+  Modal
+} from '@/components'
+import Calendar from '@/models/Calendar'
+import EventComponent from '@/models/EventComponent'
+import swal from 'sweetalert2'
+import {
+  error
+} from 'util'
+import moment from 'moment'
 
-  export default {
-    components: {
-      Modal,
+export default {
+  components: {
+    Modal
+  },
+  props: {
+    event: Object
+  },
+  data: () => ({
+    // auth: auth,
+    error: '',
+    name: '',
+    calendar: null,
+    eventData: null
+  }),
+  created () {},
+  mounted () {
+    let vm = this
+  },
+  methods: {
+    ...mapMutations('EventPlannerVuex', ['setCustomElementModal']),
+    closeModal () {
+      this.$root.$emit('get-event-components')
+      this.setCustomElementModal({
+        showModal: false
+      })
     },
-    props: {
-      event: Object,
-    },
-    data: () => ({
-      // auth: auth,
-      error: '',
-      name: '',
-      calendar: null,
-      eventData: null
-    }),
-    created() {},
-    mounted() {
+    CreateCustomElement () {
+      console.log(this.event)
       let vm = this
-    },
-    methods: {
-      ...mapMutations('EventPlannerVuex', ['setCustomElementModal']),
-      closeModal() {
-        this.$root.$emit("get-event-components")
-        this.setCustomElementModal({
-          showModal: false
-        })
-      },
-      CreateCustomElement() {
-        console.log(this.event)
-        let vm = this
-        let new_block = {
-          componentId: 'custom',
-          todos: "",
-          values: "",
-          vendors: "",
-          calendarEvent: {
-            id: this.event.item.id
-          },
-          componentCategoryId: 'custom',
-          title: vm.name
-        }
-        console.log(new_block)
-        vm.$auth.currentUser(vm, true, () => {
-          vm.calendar = new Calendar({
-            id: vm.$auth.user.defaultCalendarId
-          })
-          vm.eventData = new CalendarEvent({
-            id: this.event.item.id
-          })
-          console.log(vm.calendar)
-          new EventComponent(new_block).for(vm.calendar, vm.eventData).save()
-            .then(resp => {
-              console.log(resp)
-              vm.$root.$emit("get-event-components")
-              vm.closeModal()
-            })
-            .catch(error => {
-              console.log(error)
-            })
-        })
+      let new_block = {
+        componentId: 'custom',
+        todos: '',
+        values: '',
+        vendors: '',
+        calendarEvent: {
+          id: this.event.item.id
+        },
+        componentCategoryId: 'custom',
+        title: vm.name
       }
-    },
-    computed: {
-      ...mapState('EventPlannerVuex', [
-        'CreateCustomElementModal',
-      ])
+      console.log(new_block)
+      vm.$auth.currentUser(vm, true, () => {
+        vm.calendar = new Calendar({
+          id: vm.$auth.user.defaultCalendarId
+        })
+        vm.eventData = new CalendarEvent({
+          id: this.event.item.id
+        })
+        console.log(vm.calendar)
+        new EventComponent(new_block).for(vm.calendar, vm.eventData).save()
+          .then(resp => {
+            console.log(resp)
+            vm.$root.$emit('get-event-components')
+            vm.closeModal()
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      })
     }
+  },
+  computed: {
+    ...mapState('EventPlannerVuex', [
+      'CreateCustomElementModal'
+    ])
   }
+}
 </script>
 
 <style lang="scss" scope>

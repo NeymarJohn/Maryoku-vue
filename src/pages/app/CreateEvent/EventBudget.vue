@@ -52,8 +52,6 @@
                                :class="[{'disabled': !eventData.budgetPerPerson || !eventData.totalBudget}]"> Next </md-button>
                 </div>
 
-
-
             </div>
         </div>
 
@@ -64,91 +62,77 @@
 
 <script>
 
-    import GoBack from './componenets/GoBack';
-    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-    import PublicEventPlannerVuexModule from "./PublicEventPlanner.vuex";
-    import numeral from 'numeral';
+import GoBack from './componenets/GoBack'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import PublicEventPlannerVuexModule from './PublicEventPlanner.vuex'
+import numeral from 'numeral'
 
+export default {
+  components: {
+    GoBack
+  },
+  data () {
+    return {
 
+      step: 3,
+      haveEventPlace: false,
+      flexibleWithDates: false,
+      eventTime: null,
+      eventData: {
 
-    export default {
-        components: {
-            GoBack
+      },
+      modelValidations: {
+        totalBudget: {
+          required: true
         },
-        data() {
-            return {
-
-                step : 3,
-                haveEventPlace : false,
-                flexibleWithDates : false,
-                eventTime : null,
-                eventData : {
-
-                },
-                modelValidations: {
-                    totalBudget : {
-                        required: true,
-                    },
-                    budgetPerPerson: {
-                        required: true,
-                    }
-                },
-                buttonLabel : 'Build my budget'
-
-            }
-        },
-        created(){
-
-            this.$set(this.eventData,'totalBudget' ,this.publicEventData.totalBudget);
-            this.$set(this.eventData,'budgetPerPerson' ,this.publicEventData.budgetPerPerson);
-
-
-        },
-        methods : {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setCurrentStep']),
-            goToNext() {
-
-                let vm = this;
-
-                this.cerrors = {};
-                this.validating = true;
-
-                this.$validator.validateAll().then(isValid => {
-                    if (isValid) {
-
-
-                        this.setEventProperty({key: 'totalBudget', actualValue: this.eventData.totalBudget});
-                        this.setEventProperty({key: 'budgetPerPerson', actualValue: this.eventData.budgetPerPerson});
-                        this.setCurrentStep({currentPage : 'event-vibe'});
-                        this.$router.push({ path: `/event-vibe`});
-
-
-                    } else {
-                    }
-
-                });
-
-            },
-            skip() {
-                this.$router.push({ path: `/event-vibe`});
-
-            },
-            totalBudgetChanged() {
-                this.eventData.budgetPerPerson = Math.round(this.eventData.totalBudget / this.publicEventData.numberOfParticipants);
-            },
-            budgetPerPersonChanged() {
-                this.eventData.totalBudget = this.eventData.budgetPerPerson * this.publicEventData.numberOfParticipants;
-
-            }
-        },computed : {
-            ...mapState('PublicEventPlannerVuex', [
-                'publicEventData',
-            ])
+        budgetPerPerson: {
+          required: true
         }
-    };
+      },
+      buttonLabel: 'Build my budget'
+
+    }
+  },
+  created () {
+    this.$set(this.eventData, 'totalBudget', this.publicEventData.totalBudget)
+    this.$set(this.eventData, 'budgetPerPerson', this.publicEventData.budgetPerPerson)
+  },
+  methods: {
+    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
+    goToNext () {
+      let vm = this
+
+      this.cerrors = {}
+      this.validating = true
+
+      this.$validator.validateAll().then(isValid => {
+        if (isValid) {
+          this.setEventProperty({key: 'totalBudget', actualValue: this.eventData.totalBudget})
+          this.setEventProperty({key: 'budgetPerPerson', actualValue: this.eventData.budgetPerPerson})
+          this.setCurrentStep({currentPage: 'event-vibe'})
+          this.$router.push({ path: `/event-vibe`})
+        } else {
+        }
+      })
+    },
+    skip () {
+      this.$router.push({ path: `/event-vibe`})
+    },
+    totalBudgetChanged () {
+      this.eventData.budgetPerPerson = Math.round(this.eventData.totalBudget / this.publicEventData.numberOfParticipants)
+    },
+    budgetPerPersonChanged () {
+      this.eventData.totalBudget = this.eventData.budgetPerPerson * this.publicEventData.numberOfParticipants
+    }
+  },
+  computed: {
+    ...mapState('PublicEventPlannerVuex', [
+      'publicEventData'
+    ])
+  }
+}
 </script>
 <style lang="scss">
-
 
     .form-section {
         width : 30%;

@@ -1,147 +1,147 @@
-import Calendar from '@/models/Calendar';
-import Currency from '@/models/Currency';
+import Calendar from '@/models/Calendar'
+import Currency from '@/models/Currency'
 import EventTheme from '@/models/EventTheme'
-import EventComponent from '@/models/EventComponent';
+import EventComponent from '@/models/EventComponent'
 
 const state = {
-    currentUser: {
+  currentUser: {
 
-    },
-    param1: "test param",
-    eventData: {
-      id: null,
-      occasion: "",
-      occasionCache: "",
-      title: "New Event",
-      date: null,
-      time: "",
-      duration: "",
-      numberOfParticipants: "",
-      status: "draft",
-      totalBudget: "",
-      currency: "",
-      location: "",
-      eventType: null,
-      category: null,
-      components: null,
-    },
-    components: [],
-    vendorsList: null,
-    currencies: [],
-    categories: [],
-    eventTypes: [],
-    eventThemes: [],
-    calendarId: null,
+  },
+  param1: 'test param',
+  eventData: {
+    id: null,
+    occasion: '',
+    occasionCache: '',
+    title: 'New Event',
+    date: null,
+    time: '',
+    duration: '',
+    numberOfParticipants: '',
+    status: 'draft',
+    totalBudget: '',
+    currency: '',
+    location: '',
+    eventType: null,
+    category: null,
+    components: null
+  },
+  components: [],
+  vendorsList: null,
+  currencies: [],
+  categories: [],
+  eventTypes: [],
+  eventThemes: [],
+  calendarId: null
 }
 
 const getters = {
-  getCurrenciesList:(state)=>{
-    return state.currencies;
+  getCurrenciesList: (state) => {
+    return state.currencies
   },
-  getCategoriesList:(state)=>{
-    return state.categories;
+  getCategoriesList: (state) => {
+    return state.categories
   },
-  getEventTypesList:(state)=>{
+  getEventTypesList: (state) => {
     return state.eventTypes
   },
-  getEventThemesList:(state)=>{
-    return state.eventThemes;
+  getEventThemesList: (state) => {
+    return state.eventThemes
   },
-  getComponentsList:(state)=>{
-    return state.components;
-  },
+  getComponentsList: (state) => {
+    return state.components
+  }
 
 }
 
 const actions = {
-    getEventThemes({commit,state}, ctx){
+  getEventThemes ({commit, state}, ctx) {
     new EventTheme()
       .fetch(ctx, false)
-      .then(res=>{
-          commit("setEventThemes" , res)
+      .then(res => {
+        commit('setEventThemes', res)
       })
-      .catch(e=>{
-          commit("setEventThemes" , [])
+      .catch(e => {
+        commit('setEventThemes', [])
       })
   },
-  async getCurrencies({commit,state}, ctx){
+  async getCurrencies ({commit, state}, ctx) {
     new Currency()
       .fetch(ctx, false)
-      .then(res=>{
-          commit("setCurrencies" , res)
+      .then(res => {
+        commit('setCurrencies', res)
       })
-      .catch(e=>{
-          commit("setCurrencies" , [])
+      .catch(e => {
+        commit('setCurrencies', [])
       })
   },
-  async getCategories({commit,state}, {data, ctx}){
-    let _calendar = new Calendar({id: data});
+  async getCategories ({commit, state}, {data, ctx}) {
+    let _calendar = new Calendar({id: data})
     _calendar.categories().fetch(ctx, false).then(res => {
-        commit("setCategories" , res)
+      commit('setCategories', res)
     })
-    .catch(e=>{
-      commit("setCategories" , [])
-    });
-  },
-  async getEventTypes({commit,state},{data, ctx}){
-    let _calendar = new Calendar({id: data});
-    _calendar.eventTypes().fetch(ctx, false).then(res => {
-        commit("setEventTypes" , res)
-    })
-    .catch(e=>{
-      commit("setEventTypes" , [])
-    });
-  },
-  async getComponents({commit,state}, ctx){
-    new EventComponent()
-      .fetch(ctx,false)
-      .then(res=>{
-          commit("setComponents" , res)
+      .catch(e => {
+        commit('setCategories', [])
       })
-      .catch(e=>{
-          commit("setComponents" , [])
+  },
+  async getEventTypes ({commit, state}, {data, ctx}) {
+    let _calendar = new Calendar({id: data})
+    _calendar.eventTypes().fetch(ctx, false).then(res => {
+      commit('setEventTypes', res)
+    })
+      .catch(e => {
+        commit('setEventTypes', [])
+      })
+  },
+  async getComponents ({commit, state}, ctx) {
+    new EventComponent()
+      .fetch(ctx, false)
+      .then(res => {
+        commit('setComponents', res)
+      })
+      .catch(e => {
+        commit('setComponents', [])
       })
   }
 }
 
 const mutations = {
-      setCurrencies(state,currencies){
-        state.currencies = currencies
-      },
-      setCategories(state,categories){
-        state.categories = categories
-      },
-      setEventTypes(state,eventTypes){
-        state.eventTypes = eventTypes
-      },
-      setEventThemes(state,eventThemes){
-        state.eventThemes = eventThemes
-      },
-      setComponents(state,components){
-        state.components = components
-      },
-      updateEventData(state, params) {
-        state.eventData.components[params.index] = params.data;
-      },
-      removeSubComponent(state, params) {
-        state.eventData.components[params.component][params.type].splice(params.item, 1);
-      },
-      updateComponent(state, params) {
-        state.eventData.components.push(params);
-      },
-      removeComponent(state, params) {
-        state.eventData.components.splice(params.index, 1);
-      },
-      setCurrentUserData(state, data){
-        state.currentUser = data;
-      },
+  setCurrencies (state, currencies) {
+    state.currencies = currencies
+  },
+  setCategories (state, categories) {
+    state.categories = categories
+  },
+  setEventTypes (state, eventTypes) {
+    state.eventTypes = eventTypes
+  },
+  setEventThemes (state, eventThemes) {
+    state.eventThemes = eventThemes
+  },
+  setComponents (state, components) {
+    state.components = components
+  },
+  updateEventData (state, params) {
+    state.eventData.components[params.index] = params.data
+  },
+  removeSubComponent (state, params) {
+    state.eventData.components[params.component][params.type].splice(params.item, 1)
+  },
+  updateComponent (state, params) {
+    state.eventData.components.push(params)
+  },
+  removeComponent (state, params) {
+    state.eventData.components.splice(params.index, 1)
+  },
+  setCurrentUserData (state, data) {
+    state.currentUser = data
+  }
 
 }
 
 export default {
-    namespaced:true,
-    state,
-    getters,
-    actions,
-    mutations
+  namespaced: true,
+  state,
+  getters,
+  actions,
+  mutations
 }

@@ -34,13 +34,13 @@ export default {
     }
   },
   methods: {
-    closeModal: function() {
+    closeModal: function () {
       if (this.allowClickOutside) {
-        this.$emit('close');
+        this.$emit('close')
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

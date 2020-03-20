@@ -14,18 +14,18 @@
   </div>
 </template>
 <script>
-import { LockCard } from "@/components";
+import { LockCard } from '@/components'
 export default {
   components: {
     LockCard
   },
-  data() {
+  data () {
     return {
       password: null,
-      image: "http://static.maryoku.com/storage/img/faces/avatar.jpg"
-    };
+      image: 'http://static.maryoku.com/storage/img/faces/avatar.jpg'
+    }
   }
-};
+}
 </script>
 <style>
 </style>

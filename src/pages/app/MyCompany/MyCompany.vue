@@ -22,12 +22,12 @@
 </template>
 
 <script>
-  import { Tabs, NavTabsCard } from "@/components";
-  import MyCompanyDashboard from "src/pages/app/MyCompany/MyCompanyDashboard.vue";
-  import MyCompanyApprovals from "src/pages/app/MyCompany/MyCompanyApprovals.vue";
-  import MyCompanyProfile from "src/pages/app/MyCompany/MyCompanyProfile.vue";
-  import MyCompanyBilling from "src/pages/app/MyCompany/MyCompanyBilling.vue";
-  import MyCompanySettings from "src/pages/app/MyCompany/MyCompanySettings.vue";
+import { Tabs, NavTabsCard } from '@/components'
+import MyCompanyDashboard from 'src/pages/app/MyCompany/MyCompanyDashboard.vue'
+import MyCompanyApprovals from 'src/pages/app/MyCompany/MyCompanyApprovals.vue'
+import MyCompanyProfile from 'src/pages/app/MyCompany/MyCompanyProfile.vue'
+import MyCompanyBilling from 'src/pages/app/MyCompany/MyCompanyBilling.vue'
+import MyCompanySettings from 'src/pages/app/MyCompany/MyCompanySettings.vue'
 
 export default {
   components: {
@@ -39,26 +39,26 @@ export default {
     MyCompanyBilling,
     MyCompanySettings
   },
-  data() {
+  data () {
     return {
       firstTabs: [
         {
           tab: 'Sign contract for "What are conference organizers afraid of?"'
         },
         {
-          tab: "Lines From Great Russian Literature? Or E-mails From My Boss?"
+          tab: 'Lines From Great Russian Literature? Or E-mails From My Boss?'
         },
         {
           tab:
-            "Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit"
+            'Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit'
         }
-      ],
-    };
+      ]
+    }
   },
   methods: {
-    onSelect: function(items) {
-      this.selected = items;
-    },
+    onSelect: function (items) {
+      this.selected = items
+    }
   }
-};
+}
 </script>

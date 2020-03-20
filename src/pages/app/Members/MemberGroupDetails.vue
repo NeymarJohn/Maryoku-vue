@@ -106,224 +106,223 @@
     </div>
 </template>
 <script>
-    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
 
-    import TeamMember from '@/models/TeamMember';
-    import Team from '@/models/Team';
-    import LabelEdit from '@/components/LabelEdit';
-    import _  from 'underscore';
-    import swal from "sweetalert2";
-    import MemberEditorPanel from './MemberEditorPanel';
-    import ImportMembersPanel from './ImportMembersPanel';
+import TeamMember from '@/models/TeamMember'
+import Team from '@/models/Team'
+import LabelEdit from '@/components/LabelEdit'
+import _ from 'underscore'
+import swal from 'sweetalert2'
+import MemberEditorPanel from './MemberEditorPanel'
+import ImportMembersPanel from './ImportMembersPanel'
 
-    export default {
-        name: 'member-group-details',
-        components: { LabelEdit, MemberEditorPanel, ImportMembersPanel },
-        props: {
-            groupData: {
-                type: Object
-            },
-            allMembers: Array,
-            rolesList: Array,
-            permissionsList: Array,
-            groupsList: Array
-        },
-        data(){
-            return {
-                working: false,
-                noActions: false,
-                availableMembers: []
-            };
-        },
-        mounted(){
-            if (!this.groupData){
-                this.working = true;
-            }
-        },
-        methods: {
-            ...mapMutations('teams', ['setImportModal']),
-            refreshList(force){
-                this.working = false;
-                this.updateAvailableMembers();
-            },
-            inviteMembers(){
-                let groupsWithoutAll = _.filter(this.groupsList, (g)=>{ return g.id !== 'all'});
-                let groups = [];
-
-                if (this.groupData.id !== 'all'){
-                    groups.push(this.groupData);
-                } else if (groupsWithoutAll.length > 0){
-                    groups.push(groupsWithoutAll[0]);
-                }
-
-                window.currentPanel = this.$showPanel({
-                    component: MemberEditorPanel,
-                    cssClass: "md-layout-item md-size-40 transition36 ",
-                    openOn: "right",
-                    props: {
-                        team: this.groupData,
-                        teamMember: { id: 'new', permissions: "view", role: 'employee', groups: groups},
-                        permissionsList: this.permissionsList,
-                        rolesList: this.rolesList,
-                        groupsList: groupsWithoutAll
-                    }
-                });
-                this.$root.$on("member-added",(item)=>{
-                    if (this.groupData.id ==='all'){
-                        this.groupData.members.unshift(item);
-                        this.saveGroup();
-                    }
-                    this.$emit('group-member-removed', item);
-                });
-            },
-            editMember(member){
-                let groupsWithoutAll = _.filter(this.groupsList, (g)=>{ return g.id !== 'all'});
-                window.currentPanel = this.$showPanel({
-                    component: MemberEditorPanel,
-                    cssClass: "md-layout-item md-size-40 transition36 ",
-                    openOn: "right",
-                    props: {
-                        team: this.groupData,
-                        teamMember: member,
-                        editMode: true,
-                        permissionsList: this.permissionsList,
-                        rolesList: this.rolesList,
-                        groupsList: groupsWithoutAll
-                    }
-                });
-            },
-            uploadMembers(){
-                this.$refs.importModalOpen.toggleModal(true);
-                // window.currentPanel = this.$showPanel({
-                //     component: ImportMembersPanel,
-                //     cssClass: "md-layout-item md-size-100 h65 transition36",
-                //     openOn: "bottom",
-                //     props: {
-                //
-                //     }
-                // });
-            },
-            addMember(){
-                if (this.groupData.members.length && this.groupData.members[0].id === 'new') return;
-
-                this.groupData.members.unshift({id:'new',firstName:null,lastName:null,emailAddress: null});
-            },
-            cancelAddMember(){
-                if (this.groupData.members.length && this.groupData.members[0].id !== 'new') return;
-
-                this.groupData.members.shift();
-            },
-            saveMember(item){
-                this.noActions = true;
-                if (item.id === 'new'){
-                    item.id = null;
-                    delete item['id'];
-
-                    new TeamMember(item).for(new Team(this.groupData)).save().then(res=>{
-                        this.groupData.members.shift();
-                        this.groupData.members.push(res);
-                        this.saveGroup();
-                        this.updateAvailableMembers();
-                        this.noActions = false;
-                    });
-                } else {
-                    new TeamMember(item).save().then(res=>{
-                        this.groupData.members.push(res);
-                        this.saveGroup();
-                        this.updateAvailableMembers();
-                        this.noActions = false;
-                    });
-                }
-            },
-            removeMember(item){
-
-                swal({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-           type: "warning",
-        showCancelButton: true,
- confirmButtonClass: "md-button md-success confirm-btn-bg btn-fill",
-        cancelButtonClass: "md-button md-danger cancel-btn-bg btn-fill",
-                    confirmButtonText: "Yes, delete it!"
-                }).then(async result => {
-                    if (result.value) {
-                        this.noActions = true;
-                        if (this.groupData.id === 'all'){ // Delete this team member
-                            new TeamMember(item).delete().then(res=>{
-                                let index = _.findIndex(this.groupData.members,(i)=>{return i.id === item.id});
-                                this.groupData.members.splice(index,1);
-                                this.$emit('group-member-removed', item);
-                                this.saveGroup();
-                                this.updateAvailableMembers();
-                                this.working = true;
-                                this.noActions = false;
-                            });
-                        } else { // Remove from this group
-                            new TeamMember(item).for(new Team(this.groupData)).delete().then(res=>{
-                                let index = _.findIndex(this.groupData.members,(i)=>{return i.id === item.id});
-                                this.groupData.members.splice(index,1);
-                                this.$emit('group-member-removed', item);
-                                this.saveGroup();
-                                this.updateAvailableMembers();
-                                this.noActions = false;
-                            });
-                        }
-                    }
-                });
-            },
-            selectMember(item){
-                this.saveMember(item);
-            },
-            saveGroup(){
-                this.$emit('group-members-changed', this.groupData);
-            },
-            selectGroup(group){
-                this.$emit('group-selected', group);
-            },
-            memberDetailsChanged(val, fieldName, item) {
-                item[fieldName] = val;
-                new TeamMember(item).save().then(res=>{
-                    this.saveGroup();
-                    this.noActions = false;
-                });
-            },
-            updateAvailableMembers(){
-                this.availableMembers = _.filter(this.allMembers,(i)=>{ return  !_.findWhere(this.groupData.members,{id: i.id} )});
-            },
-            availableRoleIdToTitle(roleId){
-                let role = _.findWhere(this.rolesList, {id: roleId});
-                return role ? role.title : roleId;
-            },
-            permissionTitles(permissions){
-                let permissionsArray = permissions ? permissions.split(",") : [];
-                let permissionsTitles = [];
-
-                permissionsArray.forEach((permission)=>{
-                    let availablePermission = _.findWhere(this.permissionsList, {id: permission});
-                    if (availablePermission) {
-                        permissionsTitles.push(availablePermission.title);
-                    }
-                });
-
-                return permissionsTitles.join(", ");
-            }
-        },
-        watch: {
-            groupData(newVal, oldVal){
-                if (this.groupData) {
-                    if (!this.groupData.members) {
-                        this.groupData.members = [];
-                    }
-                    this.refreshList(false);
-                }
-            }
-        },
-        computed: {
-            ...mapState("teamVuex", [
-                "importModalOpen"
-            ]),
-        }
+export default {
+  name: 'member-group-details',
+  components: { LabelEdit, MemberEditorPanel, ImportMembersPanel },
+  props: {
+    groupData: {
+      type: Object
+    },
+    allMembers: Array,
+    rolesList: Array,
+    permissionsList: Array,
+    groupsList: Array
+  },
+  data () {
+    return {
+      working: false,
+      noActions: false,
+      availableMembers: []
     }
+  },
+  mounted () {
+    if (!this.groupData) {
+      this.working = true
+    }
+  },
+  methods: {
+    ...mapMutations('teams', ['setImportModal']),
+    refreshList (force) {
+      this.working = false
+      this.updateAvailableMembers()
+    },
+    inviteMembers () {
+      let groupsWithoutAll = _.filter(this.groupsList, (g) => { return g.id !== 'all' })
+      let groups = []
+
+      if (this.groupData.id !== 'all') {
+        groups.push(this.groupData)
+      } else if (groupsWithoutAll.length > 0) {
+        groups.push(groupsWithoutAll[0])
+      }
+
+      window.currentPanel = this.$showPanel({
+        component: MemberEditorPanel,
+        cssClass: 'md-layout-item md-size-40 transition36 ',
+        openOn: 'right',
+        props: {
+          team: this.groupData,
+          teamMember: { id: 'new', permissions: 'view', role: 'employee', groups: groups},
+          permissionsList: this.permissionsList,
+          rolesList: this.rolesList,
+          groupsList: groupsWithoutAll
+        }
+      })
+      this.$root.$on('member-added', (item) => {
+        if (this.groupData.id === 'all') {
+          this.groupData.members.unshift(item)
+          this.saveGroup()
+        }
+        this.$emit('group-member-removed', item)
+      })
+    },
+    editMember (member) {
+      let groupsWithoutAll = _.filter(this.groupsList, (g) => { return g.id !== 'all' })
+      window.currentPanel = this.$showPanel({
+        component: MemberEditorPanel,
+        cssClass: 'md-layout-item md-size-40 transition36 ',
+        openOn: 'right',
+        props: {
+          team: this.groupData,
+          teamMember: member,
+          editMode: true,
+          permissionsList: this.permissionsList,
+          rolesList: this.rolesList,
+          groupsList: groupsWithoutAll
+        }
+      })
+    },
+    uploadMembers () {
+      this.$refs.importModalOpen.toggleModal(true)
+      // window.currentPanel = this.$showPanel({
+      //     component: ImportMembersPanel,
+      //     cssClass: "md-layout-item md-size-100 h65 transition36",
+      //     openOn: "bottom",
+      //     props: {
+      //
+      //     }
+      // });
+    },
+    addMember () {
+      if (this.groupData.members.length && this.groupData.members[0].id === 'new') return
+
+      this.groupData.members.unshift({id: 'new', firstName: null, lastName: null, emailAddress: null})
+    },
+    cancelAddMember () {
+      if (this.groupData.members.length && this.groupData.members[0].id !== 'new') return
+
+      this.groupData.members.shift()
+    },
+    saveMember (item) {
+      this.noActions = true
+      if (item.id === 'new') {
+        item.id = null
+        delete item['id']
+
+        new TeamMember(item).for(new Team(this.groupData)).save().then(res => {
+          this.groupData.members.shift()
+          this.groupData.members.push(res)
+          this.saveGroup()
+          this.updateAvailableMembers()
+          this.noActions = false
+        })
+      } else {
+        new TeamMember(item).save().then(res => {
+          this.groupData.members.push(res)
+          this.saveGroup()
+          this.updateAvailableMembers()
+          this.noActions = false
+        })
+      }
+    },
+    removeMember (item) {
+      swal({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonClass: 'md-button md-success confirm-btn-bg btn-fill',
+        cancelButtonClass: 'md-button md-danger cancel-btn-bg btn-fill',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(async result => {
+        if (result.value) {
+          this.noActions = true
+          if (this.groupData.id === 'all') { // Delete this team member
+            new TeamMember(item).delete().then(res => {
+              let index = _.findIndex(this.groupData.members, (i) => { return i.id === item.id })
+              this.groupData.members.splice(index, 1)
+              this.$emit('group-member-removed', item)
+              this.saveGroup()
+              this.updateAvailableMembers()
+              this.working = true
+              this.noActions = false
+            })
+          } else { // Remove from this group
+            new TeamMember(item).for(new Team(this.groupData)).delete().then(res => {
+              let index = _.findIndex(this.groupData.members, (i) => { return i.id === item.id })
+              this.groupData.members.splice(index, 1)
+              this.$emit('group-member-removed', item)
+              this.saveGroup()
+              this.updateAvailableMembers()
+              this.noActions = false
+            })
+          }
+        }
+      })
+    },
+    selectMember (item) {
+      this.saveMember(item)
+    },
+    saveGroup () {
+      this.$emit('group-members-changed', this.groupData)
+    },
+    selectGroup (group) {
+      this.$emit('group-selected', group)
+    },
+    memberDetailsChanged (val, fieldName, item) {
+      item[fieldName] = val
+      new TeamMember(item).save().then(res => {
+        this.saveGroup()
+        this.noActions = false
+      })
+    },
+    updateAvailableMembers () {
+      this.availableMembers = _.filter(this.allMembers, (i) => { return !_.findWhere(this.groupData.members, {id: i.id}) })
+    },
+    availableRoleIdToTitle (roleId) {
+      let role = _.findWhere(this.rolesList, {id: roleId})
+      return role ? role.title : roleId
+    },
+    permissionTitles (permissions) {
+      let permissionsArray = permissions ? permissions.split(',') : []
+      let permissionsTitles = []
+
+      permissionsArray.forEach((permission) => {
+        let availablePermission = _.findWhere(this.permissionsList, {id: permission})
+        if (availablePermission) {
+          permissionsTitles.push(availablePermission.title)
+        }
+      })
+
+      return permissionsTitles.join(', ')
+    }
+  },
+  watch: {
+    groupData (newVal, oldVal) {
+      if (this.groupData) {
+        if (!this.groupData.members) {
+          this.groupData.members = []
+        }
+        this.refreshList(false)
+      }
+    }
+  },
+  computed: {
+    ...mapState('teamVuex', [
+      'importModalOpen'
+    ])
+  }
+}
 </script>
 <style lang="scss" scoped>
     @import '@/assets/scss/md/_colors.scss';

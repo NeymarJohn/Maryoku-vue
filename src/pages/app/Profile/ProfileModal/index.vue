@@ -68,15 +68,15 @@
     </modal>
   </div>
 </template>
-   
+
 <script>
 import {
   Modal
-} from "@/components";
+} from '@/components'
 
 export default {
 
-  data() {
+  data () {
     return {
       birthdayDate: null,
       workingSinceDate: null,
@@ -95,7 +95,7 @@ export default {
   },
 
   methods: {
-    closeModal() {
+    closeModal () {
       this.$emit('closePersonalInformationModal')
     }
   }

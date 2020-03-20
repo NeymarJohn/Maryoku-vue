@@ -3,15 +3,15 @@ import VendorCategories from './VendorCategories'
 import ProposalRequest from './ProposalRequest'
 
 export default class Vendors extends Model {
-  resource() {
+  resource () {
     return 'vendors'
   }
 
-  categories() {
+  categories () {
     return this.hasMany(VendorCategories)
   }
-  
-  proposalRequests() {
+
+  proposalRequests () {
     return this.hasMany(ProposalRequest)
   }
 }

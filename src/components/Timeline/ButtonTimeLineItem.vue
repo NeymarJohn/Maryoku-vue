@@ -18,19 +18,19 @@
 </template>
 <script>
 export default {
-  name: "button-time-line-item",
+  name: 'button-time-line-item',
   props: {
     inverted: Boolean,
     badgeType: {
       type: String,
-      default: "success"
+      default: 'success'
     },
     badgeIcon: {
       type: String,
-      default: ""
+      default: ''
     }
   }
-};
+}
 </script>
 <style>
 </style>

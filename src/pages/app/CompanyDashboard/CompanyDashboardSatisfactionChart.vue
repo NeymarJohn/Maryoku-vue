@@ -47,87 +47,86 @@
   </md-card>
 </template>
 <script>
-  // import auth from '@/auth';
-  import moment from "moment";
-  import VueElementLoading from 'vue-element-loading';
-  import {
+// import auth from '@/auth';
+import moment from 'moment'
+import VueElementLoading from 'vue-element-loading'
+import {
 
-  } from "@/components";
-  export default {
-    name: "company-dashboard-satisfaction-chart",
-    components: {
-      VueElementLoading
+} from '@/components'
+export default {
+  name: 'company-dashboard-satisfaction-chart',
+  components: {
+    VueElementLoading
+  },
+  props: {
+    satisfactionRatesPerYearMonth: {
+      type: Object
+    }
+  },
+  watch: {
+    satisfactionRatesPerYearMonth (newVal, oldVal) {
+      this.updateItems()
+    }
+  },
+  data () {
+    return {
+      // auth: auth,
+      loading: true,
+      items: [],
+      itemsPerMonth: {},
+      amount2: 20,
+      avgAttendanceSatisfaction: 0,
+      filterMonth: (moment().month() + 1).padStart(2, '0'),
+      filterYear: moment().year()
+    }
+  },
+  methods: {
+    filterMonthChanged (e) {
+      this.loading = true
+      this.updateItems()
     },
-    props: {
-      satisfactionRatesPerYearMonth: {
-        type: Object
-      }
-    },
-    watch: {
-      satisfactionRatesPerYearMonth(newVal, oldVal){
-        this.updateItems();
-      }
-    },
-    data() {
-      return {
-        // auth: auth,
-        loading: true,
-        items: [],
-        itemsPerMonth: {},
-        amount2: 20,
-        avgAttendanceSatisfaction: 0,
-        filterMonth: (moment().month()+1).padStart(2,"0"),
-        filterYear: moment().year()
-      };
-    },
-    methods: {
-      filterMonthChanged(e){
-        this.loading = true;
-        this.updateItems();
-      },
-      updateItems(){
-        if (this.satisfactionRatesPerYearMonth && this.satisfactionRatesPerYearMonth[this.filterYear]) {
-          let keys = Object.keys(this.satisfactionRatesPerYearMonth[this.filterYear]);
-          if (keys.length > 0) {
-            for (const key of keys) {
-              let contents = this.satisfactionRatesPerYearMonth[this.filterYear][key];
-              let contentsArray = [];
-              let types = Object.keys(contents);
-              for (const type of types) {
-                contentsArray.push({
-                  text: type,
-                  value: contents[type]
-                })
-              }
-              this.itemsPerMonth[key] = contentsArray;
+    updateItems () {
+      if (this.satisfactionRatesPerYearMonth && this.satisfactionRatesPerYearMonth[this.filterYear]) {
+        let keys = Object.keys(this.satisfactionRatesPerYearMonth[this.filterYear])
+        if (keys.length > 0) {
+          for (const key of keys) {
+            let contents = this.satisfactionRatesPerYearMonth[this.filterYear][key]
+            let contentsArray = []
+            let types = Object.keys(contents)
+            for (const type of types) {
+              contentsArray.push({
+                text: type,
+                value: contents[type]
+              })
             }
-          }
-
-          let value = this.itemsPerMonth[this.filterMonth];
-          if (value) {
-            this.items = value;
-
-            let totalValues = 0;
-            let countValues = 0;
-
-            this.items.forEach((item)=>{
-              totalValues += item.value;
-              countValues += 1;
-            });
-
-            this.avgAttendanceSatisfaction = totalValues / countValues;
-
-          } else {
-            this.items = [];
-
-            this.avgAttendanceSatisfaction = 0;
+            this.itemsPerMonth[key] = contentsArray
           }
         }
 
-        this.loading = false;
+        let value = this.itemsPerMonth[this.filterMonth]
+        if (value) {
+          this.items = value
+
+          let totalValues = 0
+          let countValues = 0
+
+          this.items.forEach((item) => {
+            totalValues += item.value
+            countValues += 1
+          })
+
+          this.avgAttendanceSatisfaction = totalValues / countValues
+        } else {
+          this.items = []
+
+          this.avgAttendanceSatisfaction = 0
+        }
       }
+
+      this.loading = false
     }
-  };
+  }
+}
 </script>
 <style lang="scss" scoped>
 

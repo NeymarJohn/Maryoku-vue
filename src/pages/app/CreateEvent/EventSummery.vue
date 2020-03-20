@@ -19,14 +19,12 @@
                     </div>
                 </div>
 
-
                 <div class="wizard small row ">
                     <a href="">Within 24 hour</a>
                     <a href="">+ 12 hour</a>
                     <a href="">+ 12 hour</a>
                     <a href="">Within a week</a>
                 </div>
-
 
                 <div class="event-dashboard-desc">
                     <img src="https://www.maryoku.com/img/events-img3.png">
@@ -61,7 +59,6 @@
                             <div class="item-value">$0</div>
                         </div>
 
-
                         <md-button
                             @click="createEvent"
                             class="md-rose next-btn custom-btn">Submit
@@ -76,50 +73,44 @@
 
 <script>
 
-    import GoBack from './componenets/GoBack';
-    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-    import PublicEventPlannerVuexModule from "./PublicEventPlanner.vuex";
-    import numeral from 'numeral';
-    import EventComponent from '@/models/EventComponent'
-    import CalendarEvent from '@/models/CalendarEvent';
-    import Calendar from "@/models/Calendar";
+import GoBack from './componenets/GoBack'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import PublicEventPlannerVuexModule from './PublicEventPlanner.vuex'
+import numeral from 'numeral'
+import EventComponent from '@/models/EventComponent'
+import CalendarEvent from '@/models/CalendarEvent'
+import Calendar from '@/models/Calendar'
 
+export default {
+  components: {
+    GoBack
+  },
+  data () {
+    return {
+      agree: true
+    }
+  },
+  created () {
+    // create new event
 
-    export default {
-        components: {
-            GoBack
-        },
-        data() {
-            return {
-                agree : true
-            }
-        },
-        created(){
+    this.$auth.currentUser(this, false, () => {
 
-            //create new event
+    })
+  },
+  methods: {
 
+    createEvent () {
+      this.$router.push({ path: `/event-created`})
+    }
 
-            this.$auth.currentUser(this, false, ()=>{
+  },
+  computed: {
+    ...mapState('PublicEventPlannerVuex', [
+      'publicEventData'
+    ])
+  }
 
-
-            });
-
-
-
-        },
-        methods : {
-
-            createEvent() {
-                this.$router.push({ path: `/event-created`});
-            }
-
-        },computed : {
-            ...mapState('PublicEventPlannerVuex', [
-                'publicEventData',
-            ])
-        }
-
-    };
+}
 </script>
 <style lang="scss">
     $baseColor : #5c2153;
@@ -163,7 +154,6 @@
                     width : 648px;
                     margin-bottom : 1em;
 
-
                     &__item {
                         height : 100px;
                         padding : 0 2em;
@@ -184,7 +174,6 @@
                     align-items: center;
                     justify-content: flex-start;
                     margin-top : 3em;
-
 
                     img {
                         width: 348px;
@@ -219,7 +208,6 @@
                     padding : 2em;
                     width: 348px;
 
-
                     .price-desc {
 
                         border-bottom: 1px dashed #cdcdcd;
@@ -237,7 +225,6 @@
                             .md-checkbox.md-theme-default label {
                                 color : #641956;
                                 font-weight: 600;
-
 
                             }
                         }
@@ -261,7 +248,6 @@
                 }
             }
         }
-
 
         .wizard a {
             padding: 17px 12px;
@@ -287,8 +273,6 @@
             color : #fff !important;
         }
 
-
-
         .wizard a:not(:first-child) {
         }
 
@@ -308,7 +292,6 @@
             right: -28px;
             z-index: 2;
         }
-
 
         .wizard a {
             &:first-child {
@@ -360,6 +343,5 @@
         }
 
     }
-
 
 </style>

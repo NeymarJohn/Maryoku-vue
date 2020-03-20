@@ -1,22 +1,22 @@
-<template>  
+<template>
 <md-button @click.prevent='triggerFunc' :class='buttonStyle'>{{text}}</md-button>
 </template>
 <script>
-    export default {
-        name: "Button",        
-        model: {
-        },
-        props: {
-            text:String,
-            buttonStyle:String,
-            onClick:Function
-        },
-        methods:{
-            triggerFunc:function(){
-                this.onClick()
-            }
-        } 
-    };
+export default {
+  name: 'Button',
+  model: {
+  },
+  props: {
+    text: String,
+    buttonStyle: String,
+    onClick: Function
+  },
+  methods: {
+    triggerFunc: function () {
+      this.onClick()
+    }
+  }
+}
 </script>
 <style lang="scss">
     .input-default{
@@ -29,4 +29,3 @@
         color:red;
     }
 </style>
-

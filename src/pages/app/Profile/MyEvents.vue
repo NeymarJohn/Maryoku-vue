@@ -24,55 +24,54 @@
 </template>
 
 <script>
-    import {
-        Collapse
-    } from "@/components";
-    import EventDetails from "./EventDetails"
+import {
+  Collapse
+} from '@/components'
+import EventDetails from './EventDetails'
 
-    import VueElementLoading from 'vue-element-loading';
+import VueElementLoading from 'vue-element-loading'
 
-    export default {
-        components: {
-            Collapse,
-            EventDetails,
-            VueElementLoading
-        },
-        data() {
-            return {
-                isLoading: true,
-                events: [],
-                eventLocation: '',
-                eventDate: '',
-                eventDressCode: '',
-                emptyEvents:'',
-                eventTitleFromCollaps: ''
-            }
-        },
-        props: {
-            userInfo: Object
-        },
-        mounted() {
-            if (!this.userInfo){
-                this.isLoading = true;
-            } else {
-                this.events = this.userInfo.myEvents || [];
-                this.isLoading = false;
-                console.log(JSON.stringify(this.events, null, 4));
-            }
-        },
-
-        watch: {
-            userInfo(newVal, oldVal) {
-                this.events = newVal.myEvents || [];
-                this.emptyEvents = this.events.length === 0;
-                this.isLoading = false;
-              
-            }
-        },
-        methods: {
-
-        }
+export default {
+  components: {
+    Collapse,
+    EventDetails,
+    VueElementLoading
+  },
+  data () {
+    return {
+      isLoading: true,
+      events: [],
+      eventLocation: '',
+      eventDate: '',
+      eventDressCode: '',
+      emptyEvents: '',
+      eventTitleFromCollaps: ''
     }
+  },
+  props: {
+    userInfo: Object
+  },
+  mounted () {
+    if (!this.userInfo) {
+      this.isLoading = true
+    } else {
+      this.events = this.userInfo.myEvents || []
+      this.isLoading = false
+      console.log(JSON.stringify(this.events, null, 4))
+    }
+  },
+
+  watch: {
+    userInfo (newVal, oldVal) {
+      this.events = newVal.myEvents || []
+      this.emptyEvents = this.events.length === 0
+      this.isLoading = false
+    }
+  },
+  methods: {
+
+  }
+}
 </script>
 
 <style lang="scss">

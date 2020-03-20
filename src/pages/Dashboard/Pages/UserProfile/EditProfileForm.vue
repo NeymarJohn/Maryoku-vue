@@ -81,14 +81,14 @@
 </template>
 <script>
 export default {
-  name: "edit-profile-form",
+  name: 'edit-profile-form',
   props: {
     headerColor: {
       type: String,
-      default: ""
+      default: ''
     }
   },
-  data() {
+  data () {
     return {
       username: null,
       disabled: null,
@@ -101,14 +101,14 @@ export default {
       code: null,
       aboutme:
         "Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."
-    };
+    }
   },
   methods: {
-    getClass: function(headerColor) {
-      return "md-card-header-" + headerColor + "";
+    getClass: function (headerColor) {
+      return 'md-card-header-' + headerColor + ''
     }
   }
-};
+}
 </script>
 <style>
 </style>

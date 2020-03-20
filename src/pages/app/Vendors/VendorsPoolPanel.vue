@@ -21,33 +21,32 @@
     </div>
 </template>
 <script>
-  import VueElementLoading from 'vue-element-loading';
-  import VendorsPool from './VendorsPool';
+import VueElementLoading from 'vue-element-loading'
+import VendorsPool from './VendorsPool'
 
-  export default {
-    name: "vendors-pool-panel",
-    components: {
-      VueElementLoading,
-      VendorsPool
-    },
-    data() {
-      return {
-        working: false
-      };
-    },
-    mounted() {
+export default {
+  name: 'vendors-pool-panel',
+  components: {
+    VueElementLoading,
+    VendorsPool
+  },
+  data () {
+    return {
+      working: false
+    }
+  },
+  mounted () {
 
-    },
-    methods: {
-      closePanel() {
-        this.$emit("closePanel");
-      },
-    },
-    computed: {},
-    watch: {}
-  };
+  },
+  methods: {
+    closePanel () {
+      this.$emit('closePanel')
+    }
+  },
+  computed: {},
+  watch: {}
+}
 </script>
 <style lang="scss" scoped>
-
 
 </style>

@@ -178,11 +178,11 @@
 </template>
 
 <script>
-//HELPER_FUNC
+// HELPER_FUNC
 import {
   isWrong
 } from '@/utils/helperFunction'
-//COMPONENTS
+// COMPONENTS
 import InputText from '@/components/Inputs/InputText.vue'
 import Datepicker from '@/components/Datepicker/Datepicker.vue'
 import Select from '@/components/Select/Select.vue'
@@ -205,21 +205,21 @@ export default {
     InputText,
     Modal
   },
-  data() {
+  data () {
     return {
       role: null,
       event_list: [{
-        title: "Christian holidays",
-        name: "Christian holidays"
+        title: 'Christian holidays',
+        name: 'Christian holidays'
       }, {
-        title: "Jewish holidays",
-        name: "Jewish holidays"
+        title: 'Jewish holidays',
+        name: 'Jewish holidays'
       }, {
-        title: "Muslim holidays",
-        name: "Muslim holidays"
+        title: 'Muslim holidays',
+        name: 'Muslim holidays'
       }, {
-        title: "Hindu holidays",
-        name: "Muslim holidays"
+        title: 'Hindu holidays',
+        name: 'Muslim holidays'
       }],
       select_holiday: '',
       bithday: '',
@@ -266,8 +266,8 @@ export default {
       console.log(value, this.add_dates)
       console.log(this.add_dates.filter((item) => item.description !== value))
       this.add_dates = this.add_dates.filter((item) => item.description !== value)
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="scss">

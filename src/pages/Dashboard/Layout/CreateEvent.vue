@@ -37,9 +37,6 @@
             <router-view></router-view>
         </FadeTransition>
 
-
-
-
         <md-dialog :md-active.sync="shoWSignupModal" class="singin-form">
             <vue-element-loading :active="signUpLoading"><img src="/static/img/maryoku-loader.gif" ></vue-element-loading>
             <md-dialog-title class="text-center">Sign up <button class="close-btn" @click="closeSingupModal"><md-icon>close</md-icon></button></md-dialog-title>
@@ -82,124 +79,119 @@
 
                 <md-button class="md-default md-sm md-square custom-btn google-singup" @click="authenticate('google')"> <md-icon><img src="/static/img/GoogleIcon.png" ></md-icon> Sign in with Google</md-button>-->
 
-
             </md-dialog-content>
         </md-dialog>
-
 
     </div>
 </template>
 <script>
-    import { FadeTransition } from "vue2-transitions";
-    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-    import PublicEventPlannerVuexModule from "../../../pages/app/CreateEvent/PublicEventPlanner.vuex";
+import { FadeTransition } from 'vue2-transitions'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import PublicEventPlannerVuexModule from '../../../pages/app/CreateEvent/PublicEventPlanner.vuex'
 
-    export default {
-        data(){
-            return {
-                signUpLoading: false,
-                showDialog: false,
-                email : null,
-                password : null,
-                department : null,
-                touched: {
-                    email: false,
-                    password: false,
-                    department : false
-                },
-                modelValidations: {
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    password: {
-                        required: true,
-                        min: 8
-                    },
-                    department: {
-                        required: true,
-                    }
-                },
-                serverURL: process.env.SERVER_URL,
-            }
+export default {
+  data () {
+    return {
+      signUpLoading: false,
+      showDialog: false,
+      email: null,
+      password: null,
+      department: null,
+      touched: {
+        email: false,
+        password: false,
+        department: false
+      },
+      modelValidations: {
+        email: {
+          required: true,
+          email: true
         },
-        components: {
-            FadeTransition
+        password: {
+          required: true,
+          min: 8
         },
-        created () {
-            this.$store.registerModule("PublicEventPlannerVuex", PublicEventPlannerVuexModule);
-
-            console.log(this.$auth.user);
-        },
-        methods: {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setSingupModal']),
-            closeSingupModal(){
-                this.setSingupModal({showModal : false})
-            },
-            showSingupDialog(){
-                this.setSingupModal({showModal : true});
-
-            },
-            singup(){
-                let that = this;
-                this.$validator.validateAll().then(isValid => {
-                    if (isValid){
-                        that.signUpLoading = true;
-                        that.$auth.clientSignupOrSignin(that, this.email.toString().toLowerCase(), that.password, that.department, (data) => {
-                            that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
-
-                                this.closeSingupModal();
-                                that.$router.push({ path: that.currentStep, query: {token: success.access_token} });
-                                that.signUpLoading = false;
-                            }, (failure) => {
-                                that.signUpLoading = false;
-                                if (failure.response.status === 401){
-                                    that.error = 'Sorry, wrong password, try again.';
-                                } else {
-                                    that.error = 'Temporary failure, try again later';
-                                    console.log(JSON.stringify(failure.response));
-                                }
-                            } );
-                        })
-                    } else {
-
-                    }
-                });
-            },
-            authenticate(provider) {
-                this.loading = true;
-                let tenantId = document.location.hostname.replace(".maryoku.com","").replace(".","_");
-                const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`);
-                document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
-            },
-            logout() {
-
-                this.$auth.logout(this);
-                this.$ls.remove("user");
-
-            }
-        },computed : {
-            ...mapState('PublicEventPlannerVuex', [
-                'publicEventData',
-                'shoWSignupModal',
-                'currentStep'
-            ])
-        },
-        watch: {
-            email() {
-                this.touched.email = true;
-            },
-            password() {
-                this.touched.password = true;
-            },
-            department() {
-                this.touched.department = true;
-            },
-        },
-        beforeRouteUpdate(to, from, next) {
-            next();
+        department: {
+          required: true
         }
-    };
+      },
+      serverURL: process.env.SERVER_URL
+    }
+  },
+  components: {
+    FadeTransition
+  },
+  created () {
+    this.$store.registerModule('PublicEventPlannerVuex', PublicEventPlannerVuexModule)
+
+    console.log(this.$auth.user)
+  },
+  methods: {
+    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setSingupModal']),
+    closeSingupModal () {
+      this.setSingupModal({showModal: false})
+    },
+    showSingupDialog () {
+      this.setSingupModal({showModal: true})
+    },
+    singup () {
+      let that = this
+      this.$validator.validateAll().then(isValid => {
+        if (isValid) {
+          that.signUpLoading = true
+          that.$auth.clientSignupOrSignin(that, this.email.toString().toLowerCase(), that.password, that.department, (data) => {
+            that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
+              this.closeSingupModal()
+              that.$router.push({ path: that.currentStep, query: {token: success.access_token} })
+              that.signUpLoading = false
+            }, (failure) => {
+              that.signUpLoading = false
+              if (failure.response.status === 401) {
+                that.error = 'Sorry, wrong password, try again.'
+              } else {
+                that.error = 'Temporary failure, try again later'
+                console.log(JSON.stringify(failure.response))
+              }
+            })
+          })
+        } else {
+
+        }
+      })
+    },
+    authenticate (provider) {
+      this.loading = true
+      let tenantId = document.location.hostname.replace('.maryoku.com', '').replace('.', '_')
+      const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`)
+      document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`
+    },
+    logout () {
+      this.$auth.logout(this)
+      this.$ls.remove('user')
+    }
+  },
+  computed: {
+    ...mapState('PublicEventPlannerVuex', [
+      'publicEventData',
+      'shoWSignupModal',
+      'currentStep'
+    ])
+  },
+  watch: {
+    email () {
+      this.touched.email = true
+    },
+    password () {
+      this.touched.password = true
+    },
+    department () {
+      this.touched.department = true
+    }
+  },
+  beforeRouteUpdate (to, from, next) {
+    next()
+  }
+}
 </script>
 <style lang="scss">
 
@@ -211,7 +203,6 @@
         z-index: 9 !important;
 
     }
-
 
     .md-datepicker-dialog.md-theme-default {
 
@@ -249,7 +240,6 @@
         width: 428px;
         z-index: 9999999;
         height: auto;
-
 
         .md-dialog-container {
         }
@@ -289,8 +279,6 @@
             padding : 8px 0;
             margin-top : 3em;
         }
-
-
 
     }
 
@@ -348,9 +336,6 @@
                 }
             }
         }
-
-
-
 
         .md-field {
             font-family: 'Open Sans', sans-serif;
@@ -480,7 +465,6 @@
                 max-width: none;
                 min-width: auto;
 
-
                 &:after {
                     top: 4px;
                     left: 9px;
@@ -577,7 +561,6 @@
             }
         }
 
-
         .section-header {
             background: #5c2153;
             padding : 0.5em 0 1em;
@@ -632,14 +615,8 @@
                 flex: 1;
                 justify-content: center;
 
-
             }
         }
-
-
-
-
-
 
         .maryoku-field {
             margin : 0.5em 0 0;
@@ -898,7 +875,6 @@
                 opacity: 0.2;
             }
 
-
             .back-text {
                 display: none;
                 color : #606060;
@@ -991,7 +967,6 @@
 
     }
 
-
     .md-button.custom-btn {
         width: 256px;
         height: 56px;
@@ -1019,13 +994,10 @@
             margin-right: 1em;
         }
 
-
-
         &.disabled, &.opacity-btn {
             opacity: 0.3;
         }
     }
-
 
     @media screen and (max-width : 500px) {
 
@@ -1067,8 +1039,6 @@
                 padding: 0 8px;
             }
 
-
-
             .md-button.custom-btn {
                 width : 100%;
             }
@@ -1081,7 +1051,6 @@
                     width : 100%;
                 }
             }
-
 
             .section-header {
                 border-radius: 0;
@@ -1213,9 +1182,6 @@
 
         }
 
-
-
-
     }
 
     @media screen and (max-width : 380px) {
@@ -1251,7 +1217,5 @@
             }
         }
     }
-
-
 
 </style>
