@@ -31,50 +31,49 @@
 </template>
 
 <script>
-  // import auth from '@/auth';
-  import VueElementLoading from 'vue-element-loading';
+// import auth from '@/auth';
+import VueElementLoading from 'vue-element-loading'
 
-
-  export default {
-    name: 'month-select-panel',
-    components: {
-      VueElementLoading,
-    },
-    props: {
-      currentYear: Number,
-      currentMonth : Number,
-      monthCounts: Object,
-    },
-    data() {
-      return {
-        ready: false,
-        // auth: auth,
-        isLoading: true,
-        months: this.$moment.months(),
-      }
-    },
-    created() {
-
-    },
-    mounted(){
-      this.ready = true;
-      this.isLoading = false;
-    },
-    methods: {
-      prevYear() {
-        this.currentYear--
-      },
-      nextYear() {
-        this.currentYear++
-      }
-    },
-    computed: {
-
-    },
-    watch: {
-
+export default {
+  name: 'month-select-panel',
+  components: {
+    VueElementLoading
+  },
+  props: {
+    currentYear: Number,
+    currentMonth: Number,
+    monthCounts: Object
+  },
+  data () {
+    return {
+      ready: false,
+      // auth: auth,
+      isLoading: true,
+      months: this.$moment.months()
     }
-  };
+  },
+  created () {
+
+  },
+  mounted () {
+    this.ready = true
+    this.isLoading = false
+  },
+  methods: {
+    prevYear () {
+      this.currentYear--
+    },
+    nextYear () {
+      this.currentYear++
+    }
+  },
+  computed: {
+
+  },
+  watch: {
+
+  }
+}
 </script>
 <style scoped lang="scss">
   $btn-color: #fff;

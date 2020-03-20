@@ -50,150 +50,140 @@
 
 <script>
 
-    import GoBack from './componenets/GoBack';
-    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import GoBack from './componenets/GoBack'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
-    import PublicEventPlannerVuexModule from "./PublicEventPlanner.vuex";
+import PublicEventPlannerVuexModule from './PublicEventPlanner.vuex'
 
-    import VTooltip from 'v-tooltip'
+import VTooltip from 'v-tooltip'
 
+export default {
+  components: {
+    GoBack,
+    VTooltip
+  },
+  data () {
+    return {
 
-    export default {
-        components: {
-            GoBack,
-            VTooltip
+      step: 5,
+      haveEventPlace: false,
+      flexibleWithDates: false,
+      eventTime: null,
+      eventData: {
+
+      },
+      modelValidations: {
+        totalBudget: {
+          required: true
         },
-        data() {
-            return {
-
-                step : 5,
-                haveEventPlace : false,
-                flexibleWithDates : false,
-                eventTime : null,
-                eventData : {
-
-                },
-                modelValidations: {
-                    totalBudget : {
-                        required: true,
-                    },
-                    budgetPerPerson: {
-                        required: true,
-                    }
-                },
-                buttonLabel : 'Skip',
-                moviesPostersURL : 'http://static.maryoku.com/storage/movies/',
-                eventMovieId : null,
-                boardSound:  [],
-                currentIndex : null,
-                isPaused : false,
-                moviesList : [
-                    {
-                        image : 'amy-santiago.png',
-                        tooltip : 'Amy is a "by the book" type of cop but she takes it a step further by color-coding case files. With her, everything is calculated to perfection. A well crafted timeline will go a long way to get you approval',
-                        title : 'Amy Brookheimer',
-                        author : 'Veep'
-                    },
-                    {
-                        image : 'captain-kirk2.png',
-                        tooltip : '"Star Trek" is all about going boldly where no one has gone before -- and nobody is bolder than Captain James T. Kirk. To please him you’d have to come up with fresh ideas, edgy concepts and flawless plan to execute',
-                        title : 'Captain Kirk',
-                        author : 'Star Trek'
-                    },
-                    {
-                        image : 'dirty-harry2.png',
-                        tooltip : 'Harry is not a "company man" and not a real team player (his partners got killed or wounded at an alarming rate). But, what he did have was laser focus on achieving his goals. His moto is do what you have to do, and we bet he\'ll track RSVP like a hawk and deal personally with non comers',
-                        title : 'Inspector Harold Francis',
-                        author : 'Dirty Harry'
-                    },
-                    {
-                        image : 'jerry-seinfeld.png',
-                        tooltip : 'Seinfeld is very meticulous about the cleanliness and organization of his apartment. He is stubborn and holds on tightly to his opinions. He isn\'t easy to convince so every vendor you select must be dead on for him to approve the plan',
-                        title : 'Seinfeld',
-                        author : 'Seinfeld'
-                    },
-                    {
-                        image : 'joan-harris.jpg',
-                        tooltip : 'Joan Harris is a queen bee. She likes things the way she likes them. At times she can seem bossy or hard to please -- her standards are extremely high and your budget better be impeccable for her to approve it',
-                        title : 'Joan Harris',
-                        author : 'Mad Men'
-                    },
-                    {
-                        image : 'mirandapreistly.jpg',
-                        tooltip : 'Miranda Priestly personifies qualities of a classic A type boss: controlling, demanding and impossible to please. Her favorite words to utter, after all, are "do it correctly." You may try to, but we all know how this will end.',
-                        title : 'Miranda Priestly',
-                        author : 'The Devil Wears Prada'
-                    },
-                    {
-                        image : 'soprano.png',
-                        tooltip : 'Tony Soprano doesn\'t like to wait, Impatience is a key characteristic for him. With visibility over how the plan is advancing, you will gain his trust and ensure a smooth approval',
-                        title : 'Tony Soprano',
-                        author : 'The Sopranos'
-                    }
-                ]
-            }
-        },
-        created() {
-            this.$set(this,'eventMovieId' ,this.publicEventData.eventMovieId);
-
-        },
-
-        methods : {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setCurrentStep']),
-
-            goToNext() {
-
-                let vm = this;
-
-                this.cerrors = {};
-                this.validating = true;
-
-                this.$validator.validateAll().then(isValid => {
-
-                    if (isValid) {
-                        this.setEventProperty({key: 'eventMovieId', actualValue: this.eventMovieId});
-                        this.setCurrentStep({currentPage : '/event-scales'});
-                        this.$router.push({ path: `/event-scales`});
-
-
-                    } else {
-                    }
-
-                });
-
-            },
-            skip() {
-
-            },
-            songName(name){
-                console.log(name);
-
-                var newStr = name.replace(/_/g, " ");
-                return newStr.replace(".mp3","");
-
-            },
-
-            pauseSong(index) {
-                this.boardSound[index].pause();
-                this.currentIndex = null;
-            },
-            playSong (index) {
-
-                if ( this.currentIndex ) {
-                    this.boardSound[this.currentIndex].pause();
-                }
-
-                this.boardSound[index].play();
-
-                this.currentIndex = index;
-
-            }
-        },computed : {
-            ...mapState('PublicEventPlannerVuex', [
-                'publicEventData',
-            ])
+        budgetPerPerson: {
+          required: true
         }
-    };
+      },
+      buttonLabel: 'Skip',
+      moviesPostersURL: 'http://static.maryoku.com/storage/movies/',
+      eventMovieId: null,
+      boardSound: [],
+      currentIndex: null,
+      isPaused: false,
+      moviesList: [
+        {
+          image: 'amy-santiago.png',
+          tooltip: 'Amy is a "by the book" type of cop but she takes it a step further by color-coding case files. With her, everything is calculated to perfection. A well crafted timeline will go a long way to get you approval',
+          title: 'Amy Brookheimer',
+          author: 'Veep'
+        },
+        {
+          image: 'captain-kirk2.png',
+          tooltip: '"Star Trek" is all about going boldly where no one has gone before -- and nobody is bolder than Captain James T. Kirk. To please him you’d have to come up with fresh ideas, edgy concepts and flawless plan to execute',
+          title: 'Captain Kirk',
+          author: 'Star Trek'
+        },
+        {
+          image: 'dirty-harry2.png',
+          tooltip: 'Harry is not a "company man" and not a real team player (his partners got killed or wounded at an alarming rate). But, what he did have was laser focus on achieving his goals. His moto is do what you have to do, and we bet he\'ll track RSVP like a hawk and deal personally with non comers',
+          title: 'Inspector Harold Francis',
+          author: 'Dirty Harry'
+        },
+        {
+          image: 'jerry-seinfeld.png',
+          tooltip: 'Seinfeld is very meticulous about the cleanliness and organization of his apartment. He is stubborn and holds on tightly to his opinions. He isn\'t easy to convince so every vendor you select must be dead on for him to approve the plan',
+          title: 'Seinfeld',
+          author: 'Seinfeld'
+        },
+        {
+          image: 'joan-harris.jpg',
+          tooltip: 'Joan Harris is a queen bee. She likes things the way she likes them. At times she can seem bossy or hard to please -- her standards are extremely high and your budget better be impeccable for her to approve it',
+          title: 'Joan Harris',
+          author: 'Mad Men'
+        },
+        {
+          image: 'mirandapreistly.jpg',
+          tooltip: 'Miranda Priestly personifies qualities of a classic A type boss: controlling, demanding and impossible to please. Her favorite words to utter, after all, are "do it correctly." You may try to, but we all know how this will end.',
+          title: 'Miranda Priestly',
+          author: 'The Devil Wears Prada'
+        },
+        {
+          image: 'soprano.png',
+          tooltip: 'Tony Soprano doesn\'t like to wait, Impatience is a key characteristic for him. With visibility over how the plan is advancing, you will gain his trust and ensure a smooth approval',
+          title: 'Tony Soprano',
+          author: 'The Sopranos'
+        }
+      ]
+    }
+  },
+  created () {
+    this.$set(this, 'eventMovieId', this.publicEventData.eventMovieId)
+  },
+
+  methods: {
+    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
+
+    goToNext () {
+      let vm = this
+
+      this.cerrors = {}
+      this.validating = true
+
+      this.$validator.validateAll().then(isValid => {
+        if (isValid) {
+          this.setEventProperty({key: 'eventMovieId', actualValue: this.eventMovieId})
+          this.setCurrentStep({currentPage: '/event-scales'})
+          this.$router.push({ path: `/event-scales`})
+        } else {
+        }
+      })
+    },
+    skip () {
+
+    },
+    songName (name) {
+      console.log(name)
+
+      var newStr = name.replace(/_/g, ' ')
+      return newStr.replace('.mp3', '')
+    },
+
+    pauseSong (index) {
+      this.boardSound[index].pause()
+      this.currentIndex = null
+    },
+    playSong (index) {
+      if (this.currentIndex) {
+        this.boardSound[this.currentIndex].pause()
+      }
+
+      this.boardSound[index].play()
+
+      this.currentIndex = index
+    }
+  },
+  computed: {
+    ...mapState('PublicEventPlannerVuex', [
+      'publicEventData'
+    ])
+  }
+}
 </script>
 <style lang="scss">
 
@@ -217,7 +207,6 @@
             text-align: center;
         }
     }
-
 
     .movies-list {
 
@@ -353,11 +342,6 @@
 
     }
 
-
-
-
-
-
     .tooltip {
 
         display: block;
@@ -468,6 +452,5 @@
 
         }
     }
-
 
 </style>

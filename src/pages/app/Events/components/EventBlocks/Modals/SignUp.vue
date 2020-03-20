@@ -35,7 +35,6 @@
                         Sign up
                     </md-button>
 
-
                     <h4 class="mt-3">or sign up using Google / Linkedin</h4>
                     <md-button class="md-just-icon-social md-google" @click="authenticate('google')">
                         <i class="fab fa-google-plus-g" style="font-size: 42px !important;width: 80px;height: 42px;"></i>
@@ -51,109 +50,106 @@
 </template>
 <script>
 
-    import { Modal } from '@/components';
+import { Modal } from '@/components'
 
-    export default {
-        components: {
-            Modal,
-        },
-        props: {
-            event: Object,
-            isGoing : [Boolean,String],
-            signUpModal: false
+export default {
+  components: {
+    Modal
+  },
+  props: {
+    event: Object,
+    isGoing: [Boolean, String],
+    signUpModal: false
 
-        },
-        data: () => ({
+  },
+  data: () => ({
 
-            error:'',
-            email: null,
-            password: null,
-            username: null,
-            modelValidations: {
-                email: {
-                    required: true,
-                    email: true
-                },
-                password: {
-                    required: true,
-                    min: 8
-                },
-                username : {
-                    required: true,
-                }
-            },
-            touched: {
-                email: false,
-                password: false,
-                username: false
-            }
-        }),
+    error: '',
+    email: null,
+    password: null,
+    username: null,
+    modelValidations: {
+      email: {
+        required: true,
+        email: true
+      },
+      password: {
+        required: true,
+        min: 8
+      },
+      username: {
+        required: true
+      }
+    },
+    touched: {
+      email: false,
+      password: false,
+      username: false
+    }
+  }),
 
-        created() {
+  created () {
 
+  },
+  mounted () {
 
-        },
-        mounted() {
+  },
+  methods: {
+    closeModal () {
+      this.setSignUpModal({showModal: false})
+    },
+    authenticate (provider) {
+      this.loading = true
+      const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`)
+      document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?callback=${callback}`
+    },
+    signup () {
+      this.$parent.isLoading = true
 
-        },
-        methods: {
-            closeModal() {
-                this.setSignUpModal({showModal: false});
-            },
-            authenticate(provider) {
-                this.loading = true;
-                const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`);
-                document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?callback=${callback}`;
-            },
-            signup(){
-                this.$parent.isLoading = true;
+      this.$validator.validateAll().then(isValid => {
+        if (isValid) {
+          this.$auth.signupOrSignin(this, this.email, this.password, (data) => {
+            this.$auth.login(this, {username: this.email, password: this.password}, (success) => {
+              // this.$router.push({ path: '/signedin', query: {token: success.access_token} });
+              // hide singup modal
+              this.closeModal()
 
-                this.$validator.validateAll().then(isValid => {
-                    if (isValid){
-                        this.$auth.signupOrSignin(this, this.email, this.password, (data) => {
-                            this.$auth.login(this, {username: this.email, password: this.password}, (success) => {
-                                //this.$router.push({ path: '/signedin', query: {token: success.access_token} });
-                                //hide singup modal
-                                this.closeModal();
+              // show Dietary Constraints Modal
+              this.setDietaryConstraintsModal({showModal: true})
 
-                                //show Dietary Constraints Modal
-                                this.setDietaryConstraintsModal({showModal : true});
-
-                                this.$parent.isLoading = false;
-
-
-                            }, (failure) => {
-
-                                this.$parent.isLoading = false;
-                                if (failure.response.status === 401){
-                                    this.error = 'Sorry, wrong password, try again.';
-                                } else {
-                                    this.error = 'Temporary failure, try again later';
-                                    console.log(JSON.stringify(failure.response));
-                                }
-                            } );
-                        })
-                    } else {
-                        this.loading = false;
-                    }
-                });
-            }
-        },
-        computed: {
-
-        },watch: {
-            email() {
-                this.touched.email = true;
-            },
-            password() {
-                this.touched.password = true;
-            },
-            username() {
-                this.touched.username = true;
-            },
+              this.$parent.isLoading = false
+            }, (failure) => {
+              this.$parent.isLoading = false
+              if (failure.response.status === 401) {
+                this.error = 'Sorry, wrong password, try again.'
+              } else {
+                this.error = 'Temporary failure, try again later'
+                console.log(JSON.stringify(failure.response))
+              }
+            })
+          })
+        } else {
+          this.loading = false
         }
+      })
+    }
+  },
+  computed: {
 
-    };
+  },
+  watch: {
+    email () {
+      this.touched.email = true
+    },
+    password () {
+      this.touched.password = true
+    },
+    username () {
+      this.touched.username = true
+    }
+  }
+
+}
 </script>
 <style lang="scss" scope>
     .md-datepicker {

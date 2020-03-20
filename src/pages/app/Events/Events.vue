@@ -3,9 +3,9 @@
     <!--<div class="md-layout-item md-size-100 text-right">
       <md-button class="button-event-creatig" @click="openEventModal()">Create New Event</md-button>
     </div>-->
-      <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen>
-          <img src="/static/img/maryoku-loader.gif"/>
-      </vue-element-loading>
+    <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen>
+      <img src="/static/img/maryoku-loader.gif" />
+    </vue-element-loading>
     <div class="md-layout-item md-size-100">
       <md-card v-if="upcomingEvents.length">
         <md-card-header class="md-card-header-icon md-card-header-rose">
@@ -15,7 +15,7 @@
           <h4 class="title">Upcoming Events</h4>
         </md-card-header>
         <md-card-content>
-          <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
+          <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
           <md-table
             v-model="upcomingEvents"
             table-header-color="rose"
@@ -37,21 +37,34 @@
                 md-label="Created By"
                 style="text-transform: capitalize;"
                 v-if="item.owner.id !== $auth.user.id"
-              >{{ item.owner.displayName }} <span class="small text-primary" style="display: block;">{{ item.owner.emailAddress }}</span></md-table-cell>
-              <md-table-cell md-label="Created By" v-else>You <span class="small text-primary" style="display: block;">{{ item.owner.emailAddress }}</span> </md-table-cell>
+              >
+                {{ item.owner.displayName }}
+                <span
+                  class="small text-primary"
+                  style="display: block;"
+                >{{ item.owner.emailAddress }}</span>
+              </md-table-cell>
+              <md-table-cell md-label="Created By" v-else>
+                You
+                <span
+                  class="small text-primary"
+                  style="display: block;"
+                >{{ item.owner.emailAddress }}</span>
+              </md-table-cell>
               <md-table-cell md-label="# Participants">{{item.numberOfParticipants}}</md-table-cell>
-                <md-table-cell md-label="Budget Per Participant">$ {{item.budgetPerPerson}}</md-table-cell>
-                <md-table-cell md-label="Location">{{item.location}}</md-table-cell>
+              <md-table-cell md-label="Budget Per Participant">$ {{item.budgetPerPerson}}</md-table-cell>
+              <md-table-cell md-label="Location">{{item.location}}</md-table-cell>
               <md-table-cell md-label="Actions" style="white-space: nowrap;">
                 <!--<md-button @click="viewEvent(item)" class="md-raised md-info md-icon-button">
                   <md-icon>visibility</md-icon>
                 </md-button>-->
-                <md-button  @click="editEvent($event, item)" class="md-info md-just-icon md-round">
+                <md-button @click="editEvent($event, item)" class="md-info md-just-icon md-round">
                   <md-icon>edit</md-icon>
                 </md-button>
                 <md-button
                   @click="showDeleteAlert($event, item)"
-                  class="md-danger md-just-icon md-round">
+                  class="md-danger md-just-icon md-round"
+                >
                   <md-icon>delete</md-icon>
                 </md-button>
 
@@ -70,7 +83,7 @@
       <md-card class="md-card-plain" v-if="!upcomingEvents.length && !isLoading">
         <md-card-content>
           <div class="text-center">
-            <img src="http://static.maryoku.com/storage/img/calendar.png" style="width: 120px;">
+            <img src="http://static.maryoku.com/storage/img/calendar.png" style="width: 120px;" />
             <h4>You do not have any events planned yet</h4>
             <md-button class="md-info" @click="routeToNewEvent">
               <md-icon>event</md-icon>Create New Event
@@ -100,7 +113,7 @@
       @click="routeToEvent(event.id)"
     >
       <product-card header-animation="true">
-        <img class="img" slot="imageHeader" :src="imageHref(event.coverImage)">
+        <img class="img" slot="imageHeader" :src="imageHref(event.coverImage)" />
 
         <h4 slot="title" class="title">
           <a @click="routeToEvent(event.id)">{{ event.title }}</a>
@@ -124,21 +137,21 @@
 
 <script>
 // import auth from '@/auth';
-import Vue from 'vue';
-import { Tabs, ProductCard } from "@/components";
+import Vue from 'vue'
+import { Tabs, ProductCard } from '@/components'
 
-import EventSidePanel from "@/pages/app/Events/EventSidePanel";
+import EventSidePanel from '@/pages/app/Events/EventSidePanel'
 
-import EventModal from "./EventModal/";
-import { mapMutations, mapGetters } from "vuex";
-import EventPlannerVuexModule from "./EventPlanner.vuex";
-import Calendar from "@/models/Calendar";
-import CalendarEvent from "@/models/CalendarEvent";
-import moment from "moment";
-import VueElementLoading from "vue-element-loading";
-import swal from "sweetalert2";
-import TeamMember from '@/models/TeamMember';
-import _ from "underscore";
+import EventModal from './EventModal/'
+import { mapMutations, mapGetters } from 'vuex'
+import EventPlannerVuexModule from './EventPlanner.vuex'
+import Calendar from '@/models/Calendar'
+import CalendarEvent from '@/models/CalendarEvent'
+import moment from 'moment'
+import VueElementLoading from 'vue-element-loading'
+import swal from 'sweetalert2'
+import TeamMember from '@/models/TeamMember'
+import _ from 'underscore'
 
 export default {
   components: {
@@ -147,79 +160,75 @@ export default {
     VueElementLoading,
     EventModal
   },
-  created() {
-    this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
+  created () {
+    this.$store.registerModule('EventPlannerVuex', EventPlannerVuexModule)
   },
-  computed: {
-  },
-  mounted() {
-    this.$auth.currentUser(
-      this,
-      true,
-      () => {
-        this.$store.dispatch("user/getUserFromApi");
-        let that = this;
-        setTimeout(()=>{
-          that.$store.dispatch(
-            "event/getCategories",
-            this.$auth.user.defaultCalendarId,
-            that
-          );
-          that.$store.dispatch(
-            "event/getEventTypes",
-            this.$auth.user.defaultCalendarId,
-            that
-          );
-          that.$store.dispatch("event/getCurrencies",that);
-          that.$store.dispatch("event/getEventThemes",that);
-        }, 100);
+  computed: {},
+  mounted () {
+    this.$auth.currentUser(this, true, () => {
+      this.$store.dispatch('user/getUserFromApi')
+      let that = this
+      setTimeout(() => {
+        that.$store.dispatch(
+          'event/getCategories',
+          this.$auth.user.defaultCalendarId,
+          that
+        )
+        that.$store.dispatch(
+          'event/getEventTypes',
+          this.$auth.user.defaultCalendarId,
+          that
+        )
+        that.$store.dispatch('event/getCurrencies', that)
+        that.$store.dispatch('event/getEventThemes', that)
+      }, 100)
 
-        let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+      let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
 
-        let m = new CalendarEvent().for(_calendar).fetch(this, true);
-        m.then(allEvents=>{
-          this.upcomingEvents = this.getExtraFields(allEvents).reverse();
+      let m = new CalendarEvent().for(_calendar).fetch(this, true)
+      m.then(allEvents => {
+        this.upcomingEvents = this.getExtraFields(allEvents).reverse()
 
-          //this.upcomingEvents = _.sortBy(this.upcomingEvents, function(num){  return new Date(num.eventStartMillis); });
+        // this.upcomingEvents = _.sortBy(this.upcomingEvents, function(num){  return new Date(num.eventStartMillis); });
 
-          this.isLoading = false;
-        });
-      }
-    );
+        this.isLoading = false
+      })
+    })
 
-    if (this.$route.params.mode && this.$route.params.mode == "create-event") {
-      this.openEventModal();
+    if (this.$route.params.mode && this.$route.params.mode === 'create-event') {
+      this.openEventModal()
     }
   },
-  updated() {},
-  data() {
+  updated () {},
+  data () {
     return {
       // auth: auth,
-      product3: "http://static.maryoku.com/storage/img/shutterstock_289440710.png",
+      product3:
+        'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
       recentEvents: [],
       upcomingEvents: [],
       isLoading: true
-    };
+    }
   },
 
   methods: {
-    ...mapMutations("EventPlannerVuex", [
-      "setEventModal",
-      "setEditMode",
-      "setModalSubmitTitle",
-      "setEventModalAndEventData",
-      "setNumberOfParticipants"
+    ...mapMutations('EventPlannerVuex', [
+      'setEventModal',
+      'setEditMode',
+      'setModalSubmitTitle',
+      'setEventModalAndEventData',
+      'setNumberOfParticipants'
     ]),
-    openEventModal() {
-      this.setModalSubmitTitle("Save");
-      this.setEditMode({ editMode: false });
+    openEventModal () {
+      this.setModalSubmitTitle('Save')
+      this.setEditMode({ editMode: false })
 
       window.currentPanel = this.$showPanel({
         component: EventModal,
-        cssClass: "md-layout-item md-size-45 transition36 bg-grey",
-        openOn: "right",
+        cssClass: 'md-layout-item md-size-45 transition36 bg-grey',
+        openOn: 'right',
         props: {}
-      });
+      })
     },
     // getCalendarEvents() {
     //   console.log(this.$store.state.user.defaultCalendarId)
@@ -247,70 +256,70 @@ export default {
     //       this.isLoading = false;
     //     });
     // },
-    showDeleteAlert(e, ev) {
-      const _this = this;
-      e.stopPropagation();
+    showDeleteAlert (e, ev) {
+      const _this = this
+      e.stopPropagation()
       swal({
-        title: "Are you sure?",
+        title: 'Are you sure?',
         text: `You won't be able to revert this!`,
         showCancelButton: true,
-        type: "warning",
+        type: 'warning',
         showCancelButton: true,
-        confirmButtonClass: "md-button md-success confirm-btn-bg ",
-        cancelButtonClass: "md-button md-danger cancel-btn-bg",
-        confirmButtonText: "Yes, delete it!",
+        confirmButtonClass: 'md-button md-success confirm-btn-bg ',
+        cancelButtonClass: 'md-button md-danger cancel-btn-bg',
+        confirmButtonText: 'Yes, delete it!',
         buttonsStyling: false
       }).then(result => {
         if (result.value) {
-          _this.isLoading = true;
+          _this.isLoading = true
           let event = _this.upcomingEvents.find(e => {
-            return e.id === ev.id;
-          });
+            return e.id === ev.id
+          })
           ev.delete()
             .then(result => {
               _this.upcomingEvents.splice(
                 this.upcomingEvents.indexOf(event),
                 1
-              );
-              _this.isLoading = false;
+              )
+              _this.isLoading = false
             })
             .catch(() => {
-              _this.isLoading = false;
-            });
+              _this.isLoading = false
+            })
         }
-      });
+      })
     },
-    editEvent(ev, event) {
-      if (ev.target.tagName === "I") {
-        ev.stopPropagation();
-        this.$router.push({name: 'EditEvent', params: {id: event.id}});
+    editEvent (ev, event) {
+      if (ev.target.tagName === 'I') {
+        ev.stopPropagation()
+        this.$router.push({ name: 'EditEvent', params: { id: event.id } })
       }
     },
-    viewEvent(event) {
-      this.$router.push(`/events/${event.id}`);
+    viewEvent (event) {
+      this.$router.push(`/events/${event.id}`)
     },
-    imageHref(image) {
+    imageHref (image) {
       return image && image.href
         ? `${process.env.SERVER_URL}${image.href}`
-        : this.product3;
+        : this.product3
     },
-    duration(event) {
-      return (event.eventEndMillis - event.eventStartMillis) / 3600000;
+    duration (event) {
+      return (event.eventEndMillis - event.eventStartMillis) / 3600000
     },
-    routeToEvent(eventId) {
-      this.$router.push({ name: "EditEventNew", params: { id: eventId } });
+    routeToEvent (eventId) {
+      this.$router.push({ name: 'EditEventNew', params: { id: eventId } })
     },
-    routeToPlanner() {
-      this.$router.push({ name: "AnnualPlanner" });
+    routeToPlanner () {
+      this.$router.push({ name: 'AnnualPlanner' })
     },
-    refreshEvents() {
-      this.getCalendarEvents();
+    refreshEvents () {
+      this.getCalendarEvents()
     },
-    openEventSidePanel(options) {
+    openEventSidePanel (options) {
       window.currentPanel = this.$showPanel({
         component: EventSidePanel,
-        cssClass: "md-layout-item md-size-40 transition36 ",
-        openOn: "right",
+        cssClass: 'md-layout-item md-size-40 transition36 ',
+        openOn: 'right',
         disableBgClick: false,
         props: {
           modalSubmitTitle: options.modalSubmitTitle,
@@ -322,30 +331,29 @@ export default {
           occasionsOptions: this.occasionsArray,
           openInPlannerOption: options.editMode
         }
-      });
+      })
     },
-    openEditEventModal: function(item) {
+    openEditEventModal: function (item) {
       if (!item.editable) {
-        item.occasion = item.title;
+        item.occasion = item.title
       }
-      debugger;
-      this.setEventModalAndEventData({ eventData: item });
-      this.setModalSubmitTitle("Save");
+      debugger
+      this.setEventModalAndEventData({ eventData: item })
+      this.setModalSubmitTitle('Save')
       this.openEventSidePanel({
-        modalSubmitTitle: "Save",
+        modalSubmitTitle: 'Save',
         editMode: true,
         eventData: item
-      });
-
+      })
     },
-    routeToNewEvent() {
+    routeToNewEvent () {
       window.currentPanel = this.$showPanel({
         component: EventSidePanel,
-        cssClass: "md-layout-item md-size-40 transition36 ",
-        openOn: "right",
+        cssClass: 'md-layout-item md-size-40 transition36 ',
+        openOn: 'right',
         disableBgClick: false,
         props: {
-          modalSubmitTitle: "Save",
+          modalSubmitTitle: 'Save',
           editMode: false,
           sourceEventData: {
             eventStartMillis: new Date().getTime(),
@@ -355,10 +363,10 @@ export default {
           occasionsOptions: null,
           openInPlannerOption: false
         }
-      });
+      })
     },
-    getExtraFields(allEvents) {
-      allEvents.forEach((item) => {
+    getExtraFields (allEvents) {
+      allEvents.forEach(item => {
         TeamMember.find(item.owner.id).then(owner => {
           Vue.set(item, 'customerName', owner.customer.name)
           Vue.set(item, 'plannerEmail', owner.emailAddress)
@@ -369,16 +377,16 @@ export default {
   },
 
   filters: {
-    moment: function(date) {
-      return moment(date).format("MMMM Do, GGGG");
+    moment: function (date) {
+      return moment(date).format('MMMM Do, GGGG')
     }
   },
   watch: {
-    upcomingEvents(newVal, oldVal) {
-      this.isLoading = false;
+    upcomingEvents (newVal, oldVal) {
+      this.isLoading = false
     }
   }
-};
+}
 </script>
 
 <style lang="scss">
@@ -402,7 +410,6 @@ export default {
     text-align: right;
   }
 }
-
 
 .text-link {
   text-decoration: underline;

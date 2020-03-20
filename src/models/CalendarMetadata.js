@@ -1,27 +1,27 @@
-import Model from './Model';
-import CalendarYear from './CalendarYear';
-import CalendarEventType from './CalendarEventType';
-import CalendarCountry from './CalendarCountry';
-import CalendarHoliday from './CalendarHoliday';
+import Model from './Model'
+import CalendarYear from './CalendarYear'
+import CalendarEventType from './CalendarEventType'
+import CalendarCountry from './CalendarCountry'
+import CalendarHoliday from './CalendarHoliday'
 
 export default class CalendarMetadata extends Model {
-    resource() {
-        return 'metadata'
-    }
-
-  years(){
-    return this.years;
+  resource () {
+    return 'metadata'
   }
 
-  eventTypes(){
-    return this.eventTypes;
+  years () {
+    return this.years
   }
 
-  countries(){
-    return this.countries;
+  eventTypes () {
+    return this.eventTypes
   }
 
-  holidays(){
-    return this.holidays;
+  countries () {
+    return this.countries
+  }
+
+  holidays () {
+    return this.holidays
   }
 }

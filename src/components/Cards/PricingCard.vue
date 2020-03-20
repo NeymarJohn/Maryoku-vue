@@ -15,18 +15,18 @@
 </template>
 <script>
 export default {
-  name: "pricing-card",
+  name: 'pricing-card',
   props: {
     cardClass: {
       type: String,
-      default: ""
+      default: ''
     },
     iconColor: {
       type: String,
-      default: ""
+      default: ''
     }
   }
-};
+}
 </script>
 <style>
 </style>

@@ -48,19 +48,19 @@
 </template>
 
 <script>
-  export default {
-    components: {
-    },
-    data() {
-      return {
-        companyName: '',
-        officeLocations: '',
-        outMotto: ''
-      };
-    },
-    methods: {
+export default {
+  components: {
+  },
+  data () {
+    return {
+      companyName: '',
+      officeLocations: '',
+      outMotto: ''
     }
-  };
+  },
+  methods: {
+  }
+}
 </script>
 <style lang="scss">
 

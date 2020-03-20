@@ -12,21 +12,21 @@
     </div>
 </template>
 <script>
-    export default {
-        name: "input-text",
-        model: {
-        },
-        props: {
-            name: String,
-            title: String,
-            placeholder: String,
-            icon: String,
-            disabled: Boolean
-        },
-        methods: {
+export default {
+  name: 'input-text',
+  model: {
+  },
+  props: {
+    name: String,
+    title: String,
+    placeholder: String,
+    icon: String,
+    disabled: Boolean
+  },
+  methods: {
 
-        }
-    };
+  }
+}
 </script>
 <style>
     .input-default{

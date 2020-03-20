@@ -91,249 +91,247 @@
   </div>
 </template>
 <script>
-  import { Modal } from "@/components";
-  import Vue from 'vue';
-  import Vendors from '@/models/Vendors';
-  import VueElementLoading from 'vue-element-loading';
+import { Modal } from '@/components'
+import Vue from 'vue'
+import Vendors from '@/models/Vendors'
+import VueElementLoading from 'vue-element-loading'
 
-  export default {
-    name: 'event-modal-vendor',
-    components: {
-      Modal,
-      VueElementLoading,
-    },
-    props: {
-      vendorItem: Object,
-      componentIndex: Number,
-      vendorIndex: Number,
-      shouldUpdate: Boolean,
-      updateVendor: Function
-    },
-    data() {
-      return {
-        isLoading: false,
-        modalOpen: false,
-        form: {
-          id: null,
-          name: null,
-          email: null,
-          contactPerson: null,
-          phone: null,
-          cost: null,
+export default {
+  name: 'event-modal-vendor',
+  components: {
+    Modal,
+    VueElementLoading
+  },
+  props: {
+    vendorItem: Object,
+    componentIndex: Number,
+    vendorIndex: Number,
+    shouldUpdate: Boolean,
+    updateVendor: Function
+  },
+  data () {
+    return {
+      isLoading: false,
+      modalOpen: false,
+      form: {
+        id: null,
+        name: null,
+        email: null,
+        contactPerson: null,
+        phone: null,
+        cost: null
+      },
+      modelValidations: {
+        name: {
+          required: true
         },
-        modelValidations: {
-          name: {
-            required: true,
-          },
-          email: {
+        email: {
 
-          },
-          contactPerson: {
-
-          },
-          phone: {
-
-          },
-          cost: {
-            required: true,
-            min_value: 0,
-            max_value: 100000,
-          },
         },
-        selectedFromVendors: true, // for disabled/enabled inputs' state
-        changedVendorItem: null,
-      }
-    },
-    watch: {
-      vendorItem: function(val) {
-        this.changedVendorItem = null;
-        this.selectedFromVendors = true;
-        this.form.id = 'vendorItemId' in val ? val.vendorItemId : null;
-        this.form.name = 'vendorDisplayName' in val ? val.vendorDisplayName : '';
-        this.form.contactPerson = 'contactPerson' in val ? new Date(val.contactPerson) : '';
-        this.form.email = 'vendorMainEmail' in val ? val.vendorMainEmail : '';
-        this.form.phone = 'vendorMainPhoneNumber' in val ? val.vendorMainPhoneNumber : '';
-        this.form.cost = 'cost' in val ? val.cost : '';
-      }
-    },
-    methods: {
-      noticeModalHide() {
-        this.modalOpen = false;
-      },
-      toggleModal(show) {
-        this.modalOpen = show;
-      },
-      validateModalForm() {
-        this.$validator.validateAll().then(isValid => {
-          if (isValid) {
-            let store = this.$store.state.eventData.components[this.componentIndex];
-            let vendorId = null;
+        contactPerson: {
 
-            // TODO: optimize
-            // if editing existing
-            if (this.vendorIndex !== null && this.vendorIndex > -1) {
-              if (this.selectedFromVendors) { //if selected from vendors list
-                vendorId = this.changedVendorItem ? this.changedVendorItem.id : this.vendorItem.id;
+        },
+        phone: {
 
-                Vue.set(store.vendors, this.vendorIndex, {
-                  id: this.form.id,
-                  vendorId: vendorId,
-                  cost: +this.form.cost
-                });
-                if (this.shouldUpdate) {
-                  this.$props.updateVendor(store, {id: this.form.id, vendorId: vendorId, cost: +this.form.cost}, this.vendorIndex)
-                }
-
-                this.$store.commit('updateEventData', {index: this.componentIndex, data: store});
-                this.clearForm();
-                this.modalOpen = false;
-              }  else if (!this.selectedFromVendors) { // and CREATE NEW vendor
-                this.isLoading = true;
-                let newVendor = new Vendors({
-                  vendorDisplayName: this.form.name,
-                  vendorMainEmail: this.form.email,
-                  vendorMainPhoneNumber: this.form.phone,
-                  vendorInvoiceName: this.form.contactPerson,
-                  productsCategory: 'HARDCODED DATA FROM EVENT',
-                  vendorAvailabilityOptions: 'HARDCODED DATA FROM EVENT',
-                  vendorCategory: 'HARDCODED DATA FROM EVENT',
-                  vendorCancellationPolicy: 'HARDCODED DATA FROM EVENT',
-                  vendorCity: 'HARDCODED DATA FROM EVENT',
-                  vendorRefundPolicy: 'HARDCODED DATA FROM EVENT',
-                });
-                newVendor.save().then((response) => {
-                  if (response) {
-                    this.isLoading = false;
-                    vendorId = response.id;
-                    this.$store.state.vendorsList.push(response);
-
-                    Vue.set(store.vendors, this.vendorIndex, {
-                      id: this.form.id,
-                      vendorId: vendorId,
-                      cost: +this.form.cost
-                    });
-                    if (this.shouldUpdate) {
-                      this.$props.updateVendor(store, {id: this.form.id, vendorId: vendorId, cost: +this.form.cost}, this.vendorIndex)
-                    }
-
-                    this.$store.commit('updateEventData', {index: this.componentIndex, data: store});
-                    this.clearForm();
-                    this.modalOpen = false;
-                  }
-                })
-                .catch((error) => {
-                  console.log(error);
-                  this.isLoading = false;
-                });
-              }
-            } else { // if create new
-              if (this.selectedFromVendors) { // and select vendor from existing
-
-                vendorId = this.changedVendorItem.id;
-
-                store.vendors.push({
-                  vendorId: vendorId,
-                  cost: +this.form.cost
-                });
-                if (this.shouldUpdate) {
-                  this.$props.updateVendor(store, {vendorId: vendorId, cost: +this.form.cost}, this.vendorIndex)
-                }
-
-                this.$store.commit('updateEventData', {index: this.componentIndex, data: store});
-                this.clearForm();
-                this.modalOpen = false;
-
-              } else { // and create new vendor
-                this.isLoading = true;
-                let newVendor = new Vendors({
-                  vendorDisplayName: this.form.name,
-                  vendorMainEmail: this.form.email,
-                  vendorMainPhoneNumber: this.form.phone,
-                  vendorInvoiceName: this.form.contactPerson,
-                  productsCategory: 'HARDCODED DATA FROM EVENT',
-                  vendorAvailabilityOptions: 'HARDCODED DATA FROM EVENT',
-                  vendorCategory: 'HARDCODED DATA FROM EVENT',
-                  vendorCancellationPolicy: 'HARDCODED DATA FROM EVENT',
-                  vendorCity: 'HARDCODED DATA FROM EVENT',
-                  vendorRefundPolicy: 'HARDCODED DATA FROM EVENT',
-                });
-                newVendor.save().then((response) => {
-                  if (response) {
-                    this.isLoading = false;
-                    vendorId = response.id;
-                    this.$store.state.vendorsList.push(response);
-
-                    store.vendors.push({
-                      vendorId: vendorId,
-                      cost: +this.form.cost
-                    });
-                    if (this.shouldUpdate) {
-                      this.$props.updateVendor(store, {vendorId: vendorId, cost: +this.form.cost}, this.vendorIndex)
-                    }
-
-                    this.$store.commit('updateEventData', {index: this.componentIndex, data: store});
-                    this.clearForm();
-                    this.modalOpen = false;
-                  }
-                })
-                .catch((error) => {
-                  console.log(error);
-                  this.isLoading = false;
-                });
-              }
-            }
-          } else {
-            this.showNotify();
-          }
-        });
-      },
-
-      clearForm() {
-        this.form = {
-          id: null,
-          name: null,
-          email: null,
-          contactPerson:  null,
-          phone: null,
-          cost: null,
-        };
-      },
-      setVendor(selectedName) {
-        this.changedVendorItem = this.$store.state.vendorsList.find((val) => val.vendorDisplayName === selectedName);
-
-        if (this.changedVendorItem) {
-          this.selectedFromVendors = true;
-          this.form.email = 'vendorMainEmail' in this.changedVendorItem ? this.changedVendorItem.vendorMainEmail : '';
-          this.form.contactPerson = 'vendorInvoiceName' in this.changedVendorItem ? this.changedVendorItem.vendorInvoiceName : '';
-          this.form.phone = 'vendorMainPhoneNumber' in this.changedVendorItem ? this.changedVendorItem.vendorMainPhoneNumber : '';
-        } else {
-          this.changedVendorItem = null;
-          this.selectedFromVendors = false;
-          this.form.email = '';
-          this.form.contactPerson = '';
-          this.form.phone = '';
+        },
+        cost: {
+          required: true,
+          min_value: 0,
+          max_value: 100000
         }
       },
-      showNotify() {
-        this.$notify({
-          message: 'Please, check all required fields',
-          icon: "warning",
-          horizontalAlign: 'center',
-          verticalAlign: 'top',
-          type: 'danger',
-        });
-      },
-      mdOpened:function() {
-        this.form.name += " ";
-        this.form.name = this.form.name.substring(0, this.form.name.length - 1)
+      selectedFromVendors: true, // for disabled/enabled inputs' state
+      changedVendorItem: null
+    }
+  },
+  watch: {
+    vendorItem: function (val) {
+      this.changedVendorItem = null
+      this.selectedFromVendors = true
+      this.form.id = 'vendorItemId' in val ? val.vendorItemId : null
+      this.form.name = 'vendorDisplayName' in val ? val.vendorDisplayName : ''
+      this.form.contactPerson = 'contactPerson' in val ? new Date(val.contactPerson) : ''
+      this.form.email = 'vendorMainEmail' in val ? val.vendorMainEmail : ''
+      this.form.phone = 'vendorMainPhoneNumber' in val ? val.vendorMainPhoneNumber : ''
+      this.form.cost = 'cost' in val ? val.cost : ''
+    }
+  },
+  methods: {
+    noticeModalHide () {
+      this.modalOpen = false
+    },
+    toggleModal (show) {
+      this.modalOpen = show
+    },
+    validateModalForm () {
+      this.$validator.validateAll().then(isValid => {
+        if (isValid) {
+          let store = this.$store.state.eventData.components[this.componentIndex]
+          let vendorId = null
+
+          // TODO: optimize
+          // if editing existing
+          if (this.vendorIndex !== null && this.vendorIndex > -1) {
+            if (this.selectedFromVendors) { // if selected from vendors list
+              vendorId = this.changedVendorItem ? this.changedVendorItem.id : this.vendorItem.id
+
+              Vue.set(store.vendors, this.vendorIndex, {
+                id: this.form.id,
+                vendorId: vendorId,
+                cost: +this.form.cost
+              })
+              if (this.shouldUpdate) {
+                this.$props.updateVendor(store, {id: this.form.id, vendorId: vendorId, cost: +this.form.cost}, this.vendorIndex)
+              }
+
+              this.$store.commit('updateEventData', {index: this.componentIndex, data: store})
+              this.clearForm()
+              this.modalOpen = false
+            } else if (!this.selectedFromVendors) { // and CREATE NEW vendor
+              this.isLoading = true
+              let newVendor = new Vendors({
+                vendorDisplayName: this.form.name,
+                vendorMainEmail: this.form.email,
+                vendorMainPhoneNumber: this.form.phone,
+                vendorInvoiceName: this.form.contactPerson,
+                productsCategory: 'HARDCODED DATA FROM EVENT',
+                vendorAvailabilityOptions: 'HARDCODED DATA FROM EVENT',
+                vendorCategory: 'HARDCODED DATA FROM EVENT',
+                vendorCancellationPolicy: 'HARDCODED DATA FROM EVENT',
+                vendorCity: 'HARDCODED DATA FROM EVENT',
+                vendorRefundPolicy: 'HARDCODED DATA FROM EVENT'
+              })
+              newVendor.save().then((response) => {
+                if (response) {
+                  this.isLoading = false
+                  vendorId = response.id
+                  this.$store.state.vendorsList.push(response)
+
+                  Vue.set(store.vendors, this.vendorIndex, {
+                    id: this.form.id,
+                    vendorId: vendorId,
+                    cost: +this.form.cost
+                  })
+                  if (this.shouldUpdate) {
+                    this.$props.updateVendor(store, {id: this.form.id, vendorId: vendorId, cost: +this.form.cost}, this.vendorIndex)
+                  }
+
+                  this.$store.commit('updateEventData', {index: this.componentIndex, data: store})
+                  this.clearForm()
+                  this.modalOpen = false
+                }
+              })
+                .catch((error) => {
+                  console.log(error)
+                  this.isLoading = false
+                })
+            }
+          } else { // if create new
+            if (this.selectedFromVendors) { // and select vendor from existing
+              vendorId = this.changedVendorItem.id
+
+              store.vendors.push({
+                vendorId: vendorId,
+                cost: +this.form.cost
+              })
+              if (this.shouldUpdate) {
+                this.$props.updateVendor(store, {vendorId: vendorId, cost: +this.form.cost}, this.vendorIndex)
+              }
+
+              this.$store.commit('updateEventData', {index: this.componentIndex, data: store})
+              this.clearForm()
+              this.modalOpen = false
+            } else { // and create new vendor
+              this.isLoading = true
+              let newVendor = new Vendors({
+                vendorDisplayName: this.form.name,
+                vendorMainEmail: this.form.email,
+                vendorMainPhoneNumber: this.form.phone,
+                vendorInvoiceName: this.form.contactPerson,
+                productsCategory: 'HARDCODED DATA FROM EVENT',
+                vendorAvailabilityOptions: 'HARDCODED DATA FROM EVENT',
+                vendorCategory: 'HARDCODED DATA FROM EVENT',
+                vendorCancellationPolicy: 'HARDCODED DATA FROM EVENT',
+                vendorCity: 'HARDCODED DATA FROM EVENT',
+                vendorRefundPolicy: 'HARDCODED DATA FROM EVENT'
+              })
+              newVendor.save().then((response) => {
+                if (response) {
+                  this.isLoading = false
+                  vendorId = response.id
+                  this.$store.state.vendorsList.push(response)
+
+                  store.vendors.push({
+                    vendorId: vendorId,
+                    cost: +this.form.cost
+                  })
+                  if (this.shouldUpdate) {
+                    this.$props.updateVendor(store, {vendorId: vendorId, cost: +this.form.cost}, this.vendorIndex)
+                  }
+
+                  this.$store.commit('updateEventData', {index: this.componentIndex, data: store})
+                  this.clearForm()
+                  this.modalOpen = false
+                }
+              })
+                .catch((error) => {
+                  console.log(error)
+                  this.isLoading = false
+                })
+            }
+          }
+        } else {
+          this.showNotify()
+        }
+      })
+    },
+
+    clearForm () {
+      this.form = {
+        id: null,
+        name: null,
+        email: null,
+        contactPerson: null,
+        phone: null,
+        cost: null
       }
     },
-    computed: {
-      vendorsList() {
-        return this.$store.state.vendorsList.map((val) => val.vendorDisplayName);
+    setVendor (selectedName) {
+      this.changedVendorItem = this.$store.state.vendorsList.find((val) => val.vendorDisplayName === selectedName)
+
+      if (this.changedVendorItem) {
+        this.selectedFromVendors = true
+        this.form.email = 'vendorMainEmail' in this.changedVendorItem ? this.changedVendorItem.vendorMainEmail : ''
+        this.form.contactPerson = 'vendorInvoiceName' in this.changedVendorItem ? this.changedVendorItem.vendorInvoiceName : ''
+        this.form.phone = 'vendorMainPhoneNumber' in this.changedVendorItem ? this.changedVendorItem.vendorMainPhoneNumber : ''
+      } else {
+        this.changedVendorItem = null
+        this.selectedFromVendors = false
+        this.form.email = ''
+        this.form.contactPerson = ''
+        this.form.phone = ''
       }
+    },
+    showNotify () {
+      this.$notify({
+        message: 'Please, check all required fields',
+        icon: 'warning',
+        horizontalAlign: 'center',
+        verticalAlign: 'top',
+        type: 'danger'
+      })
+    },
+    mdOpened: function () {
+      this.form.name += ' '
+      this.form.name = this.form.name.substring(0, this.form.name.length - 1)
+    }
+  },
+  computed: {
+    vendorsList () {
+      return this.$store.state.vendorsList.map((val) => val.vendorDisplayName)
     }
   }
+}
 </script>
 <style lang="scss">
 

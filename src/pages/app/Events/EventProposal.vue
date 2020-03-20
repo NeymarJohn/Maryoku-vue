@@ -67,101 +67,98 @@
       </div>
     </div>
 
-
-
   </div>
 </template>
 
 <script>
-  import Vue from 'vue';
-  import VueLazyLoad from 'vue-lazyload';
-  import LightBox from 'vue-image-lightbox'
-  import { Slider } from "@/components";
+import Vue from 'vue'
+import VueLazyLoad from 'vue-lazyload'
+import LightBox from 'vue-image-lightbox'
+import { Slider } from '@/components'
 
-
-  Vue.use(VueLazyLoad);
-  export default {
-    components: {
-      LightBox,
-      Slider
+Vue.use(VueLazyLoad)
+export default {
+  components: {
+    LightBox,
+    Slider
+  },
+  methods: {
+    openGallery (index) {
+      this.$refs.lightbox.showImage(index)
     },
-    methods: {
-      openGallery(index) {
-        this.$refs.lightbox.showImage(index)
-      },
-      changeCurrentImage(index) {
-        this.currentImage = this.images[index];
-        this.currentIndex = index;
-      }
-    },
-    data() {
-      return {
-        proposalData: {
-          name: null,
-          rate: null,
-          budget: null,
-          cheaper: null,
-          includes: null,
-        },
-        images: [
-          {
-            thumb: 'https://s3-us-west-1.amazonaws.com/powr/defaults/image-slider2.jpg',
-            src: 'https://s3-us-west-1.amazonaws.com/powr/defaults/image-slider2.jpg',
-            caption: '<h4>Elephant</h4>',
-          },
-          {
-            thumb: 'https://i-kinhdoanh.vnecdn.net/2018/06/18/1-1529296929_680x0.jpg',
-            src: 'https://i-kinhdoanh.vnecdn.net/2018/06/18/1-1529296929_680x0.jpg',
-            caption: '<h4>Messi</h4>',
-          },
-          {
-            thumb: 'https://i-thethao.vnecdn.net/2018/05/27/775162441-MR-2031-8E033EFCEBB928DC12A2A0AA3CEC4C33-21885-1527376486_680x0.jpg',
-            src: 'https://i-thethao.vnecdn.net/2018/05/27/775162441-MR-2031-8E033EFCEBB928DC12A2A0AA3CEC4C33-21885-1527376486_680x0.jpg',
-            caption: '<h4>Bale and Marcelo</h4>',
-          },
-          {
-            thumb: 'https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379562_680x0.png',
-            src: 'https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379562_680x0.png',
-            caption: '<h4>Madrid crowd</h4>',
-          },
-          {
-            thumb: 'https://i-thethao.vnecdn.net/2018/05/27/000-15E0DG-1527379049_680x0.jpg',
-            src: 'https://i-thethao.vnecdn.net/2018/05/27/000-15E0DG-1527379049_680x0.jpg',
-            caption: '<h4>Zidane</h4>',
-          },
-          {
-            thumb: 'https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379346_680x0.png',
-            src: 'https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379346_680x0.png',
-            caption: '<h4>Bale kissed the cup</h4>',
-          },
-
-        ],
-        currentImage: null,
-        currentIndex: null,
-        sliderCheaper: null,
-        checked: true,
-      }
-    },
-    mounted() {
-      this.currentImage = this.images[0];
-      this.currentIndex = 0;
-      this.proposalData = {
-        name: 'Event name',
-        rate: 7.2,
-        budget: 3100,
-        cheaper: 50,
-        included: [
-          'Premium Bar',
-          '500 Guests',
-          'Event Manager',
-          'Cleaning Services',
-          'Internet',
-          'Sound and Light',
-        ]
-      }
-      this.sliderCheaper = this.proposalData.cheaper;
+    changeCurrentImage (index) {
+      this.currentImage = this.images[index]
+      this.currentIndex = index
     }
+  },
+  data () {
+    return {
+      proposalData: {
+        name: null,
+        rate: null,
+        budget: null,
+        cheaper: null,
+        includes: null
+      },
+      images: [
+        {
+          thumb: 'https://s3-us-west-1.amazonaws.com/powr/defaults/image-slider2.jpg',
+          src: 'https://s3-us-west-1.amazonaws.com/powr/defaults/image-slider2.jpg',
+          caption: '<h4>Elephant</h4>'
+        },
+        {
+          thumb: 'https://i-kinhdoanh.vnecdn.net/2018/06/18/1-1529296929_680x0.jpg',
+          src: 'https://i-kinhdoanh.vnecdn.net/2018/06/18/1-1529296929_680x0.jpg',
+          caption: '<h4>Messi</h4>'
+        },
+        {
+          thumb: 'https://i-thethao.vnecdn.net/2018/05/27/775162441-MR-2031-8E033EFCEBB928DC12A2A0AA3CEC4C33-21885-1527376486_680x0.jpg',
+          src: 'https://i-thethao.vnecdn.net/2018/05/27/775162441-MR-2031-8E033EFCEBB928DC12A2A0AA3CEC4C33-21885-1527376486_680x0.jpg',
+          caption: '<h4>Bale and Marcelo</h4>'
+        },
+        {
+          thumb: 'https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379562_680x0.png',
+          src: 'https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379562_680x0.png',
+          caption: '<h4>Madrid crowd</h4>'
+        },
+        {
+          thumb: 'https://i-thethao.vnecdn.net/2018/05/27/000-15E0DG-1527379049_680x0.jpg',
+          src: 'https://i-thethao.vnecdn.net/2018/05/27/000-15E0DG-1527379049_680x0.jpg',
+          caption: '<h4>Zidane</h4>'
+        },
+        {
+          thumb: 'https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379346_680x0.png',
+          src: 'https://i-thethao.vnecdn.net/2018/05/27/Screen-Shot-2018-05-27-at-7-1527379346_680x0.png',
+          caption: '<h4>Bale kissed the cup</h4>'
+        }
+
+      ],
+      currentImage: null,
+      currentIndex: null,
+      sliderCheaper: null,
+      checked: true
+    }
+  },
+  mounted () {
+    this.currentImage = this.images[0]
+    this.currentIndex = 0
+    this.proposalData = {
+      name: 'Event name',
+      rate: 7.2,
+      budget: 3100,
+      cheaper: 50,
+      included: [
+        'Premium Bar',
+        '500 Guests',
+        'Event Manager',
+        'Cleaning Services',
+        'Internet',
+        'Sound and Light'
+      ]
+    }
+    this.sliderCheaper = this.proposalData.cheaper
   }
+}
 </script>
 
 <style lang="scss">

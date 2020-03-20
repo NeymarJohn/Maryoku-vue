@@ -47,109 +47,104 @@
 </template>
 
 <script>
-  import VueElementLoading from 'vue-element-loading';
-  import StatsCard from '../../../components/Cards/StatsCard';
-  import personalInformationModal from './ProfileModal';
-  import {LabelEdit} from '@/components';
-  import Me from '@/models/Me';
-  export default {
-    components: {
-      StatsCard,
-      personalInformationModal,
-      LabelEdit,
-      VueElementLoading,
-      Me
-    },
-    mounted(){
+import VueElementLoading from 'vue-element-loading'
+import StatsCard from '../../../components/Cards/StatsCard'
+import personalInformationModal from './ProfileModal'
+import {LabelEdit} from '@/components'
+import Me from '@/models/Me'
+export default {
+  components: {
+    StatsCard,
+    personalInformationModal,
+    LabelEdit,
+    VueElementLoading,
+    Me
+  },
+  mounted () {
 
+  },
+  props: {
+    userInfo: Object,
+    isLoading: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  data () {
+    return {
+      imageUrl: null,
+      personalModalFlag: false,
+      flag: false,
+      dialogConfirmFlag: false,
+      dialogMessage: '',
+      alretExceedPictureSize: false
+    }
+  },
+  methods: {
+    userValueChanged (val, fieldName) {
+      this.userInfo[fieldName] = val
+      let user = {id: this.userInfo.id}
+      user[fieldName] = val
+      this.isLoading = true
+      new Me(user).save().then(res => {
+        this.isLoading = false
+        this.$notify(
+          {
+            message: 'Profile saved successfully',
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'success'
+          })
+      })
     },
-    props: {
-      userInfo: Object,
-      isLoading: {
-        type: Boolean,
-        default: false
+    uploadImage () {
+      this.$refs.inputFile.click()
+    },
+
+    onFilePicked (event) {
+      let file = event.target.files || event.dataTransfer.files
+      if (!file.length) {
+        return
       }
-    },
+      if (file[0].size <= 500000) {
+        let url = URL.createObjectURL(file[0])
+        this.imageUrl = url
 
-    data() {
-      return {
-        imageUrl: null,
-        personalModalFlag: false,
-        flag: false,
-        dialogConfirmFlag:false,
-        dialogMessage:"",
-        alretExceedPictureSize:false
-      }
-    },
-    methods: {
-      userValueChanged(val, fieldName) {
-        this.userInfo[fieldName] = val;
-        let user = {id: this.userInfo.id};
-        user[fieldName] = val;
-        this.isLoading = true;
-        new Me(user).save().then(res => {
-          this.isLoading = false;
-          this.$notify(
-            {
-              message: "Profile saved successfully",
-              horizontalAlign: 'center',
-              verticalAlign: 'top',
-              type: 'success'
-            })
-        });
-      },
-      uploadImage() {
-        this.$refs.inputFile.click();
-
-      },
-
-      onFilePicked(event) {
-        let file = event.target.files || event.dataTransfer.files;
-        if (!file.length) {
-          return;
-        }
-        if (file[0].size <= 500000){
-          let url = URL.createObjectURL(file[0]);
-          this.imageUrl = url
-
-        const formData = new FormData();
-        formData.append("images", file[0], file[0].name) // TODO :: send this object once we have api for userPorfile photo
-      }else{
+        const formData = new FormData()
+        formData.append('images', file[0], file[0].name) // TODO :: send this object once we have api for userPorfile photo
+      } else {
         this.alretExceedPictureSize = true
       }
-
-      },
-
-      hidePersonalInfoModal() {
-
-        this.flag = !this.flag
-
-      },
-
-      showPersonalModal(){
-
-        this.flag = true
-      },
-
-      showRemoveConfirmDialog(){
-        this.dialogMessage="Are you sure you want delete profile picture ?"
-        this.dialogConfirmFlag =  true
-      },
-
-      confirmDelete(){
-        this.imageUrl = null
-        this.dialogConfirmFlag = false
-      },
-      onCancel(){
-        this.dialogConfirmFlag = false
-      }
-
     },
-    watch: {
-      userInfo(newVal, oldVal){ }
+
+    hidePersonalInfoModal () {
+      this.flag = !this.flag
+    },
+
+    showPersonalModal () {
+      this.flag = true
+    },
+
+    showRemoveConfirmDialog () {
+      this.dialogMessage = 'Are you sure you want delete profile picture ?'
+      this.dialogConfirmFlag = true
+    },
+
+    confirmDelete () {
+      this.imageUrl = null
+      this.dialogConfirmFlag = false
+    },
+    onCancel () {
+      this.dialogConfirmFlag = false
     }
 
+  },
+  watch: {
+    userInfo (newVal, oldVal) { }
   }
+
+}
 </script>
 
 <style lang="scss" scoped>

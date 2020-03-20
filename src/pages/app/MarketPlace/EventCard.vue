@@ -12,13 +12,13 @@
                 <md-button>Action</md-button>
                 <md-button>Action</md-button>
               </md-card-actions>
-     
+
           </md-card>
 </div>
-         
+
 </template>
 <script>
 export default {
-  name: "event-card"
-};
+  name: 'event-card'
+}
 </script>

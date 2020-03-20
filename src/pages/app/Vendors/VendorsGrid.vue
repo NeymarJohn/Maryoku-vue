@@ -85,95 +85,95 @@
   </div>
 </template>
 <script>
-  import { categoryTitle, categoryColor } from './helpers'
-  import _ from 'underscore';
+import { categoryTitle, categoryColor } from './helpers'
+import _ from 'underscore'
 
-  import {
+import {
+  ProductCard,
+  AnimatedNumber
+} from '@/components'
+
+export default {
+  components: {
     ProductCard,
     AnimatedNumber
-  } from "@/components";
-
-  export default {
-    components: {
-      ProductCard,
-      AnimatedNumber,
-    },
-    props: ['vendorsList', 'ratings', 'buildingBlocksList'],
-    data() {
-      return {
-        searchQuery: "",
-        filteredVendorsList: [],
-        modelValidations: {
-          vendorWebsite: {
-            url: {require_protocol: true },
-            regex: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,=.]+$/gm,
-            min: 10 // http://x.x
-          }
-        },
-        bgImages : [
-          'http://static.maryoku.com/storage/img/lock.jpg',
-          'http://static.maryoku.com/storage/img/login.jpg',
-          'http://static.maryoku.com/storage/img/register.jpg',
-          'http://static.maryoku.com/storage/img/bg-pricing.jpg',
-          'http://static.maryoku.com/storage/img/bg3.jpg',
-          'http://static.maryoku.com/storage/img/bg9.jpg',
-          'http://static.maryoku.com/storage/img/card-1.jpg',
-          'http://static.maryoku.com/storage/img/card-2.jpg',
-          'http://static.maryoku.com/storage/img/card-3.jpg',
-          'http://static.maryoku.com/storage/img/sidebar-1.jpg',
-          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
-          'http://static.maryoku.com/storage/img/sidebar-3.jpg',
-          'http://static.maryoku.com/storage/img/sidebar-4.jpg',
-          'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
-          'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
-          'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
-          'http://static.maryoku.com/storage/img/shutterstock_740167702.png'
-        ]
-      }
-    },
-    mounted() {
-      this.filteredVendorsList = this.vendorsList;
-    },
-    methods: {
-      categoryTitle,
-      categoryColor,
-      editVendorDetails (vendor) {
-        this.$emit('editVendorDetails', vendor);
-      },
-      routeToVendor(vendorId) {
-        this.$router.push({ name: "VendorDetails", params: { id: vendorId } });
-      },
-      vendorMainImage(vendor){
-        const rndInt = Math.floor(Math.random() * this.bgImages.length);
-        return this.bgImages[rndInt];
-      },
-      filterVendors(){
-        this.filteredVendorsList = _.filter(this.vendorsList, (v)=>{
-          // let byDisplayName = v.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
-          let byCategory = v.vendorCategory.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
-          return byCategory; 
-        });
-      },
-      isValidVendorWebsite(vendor) {
-        if (vendor.vendorWebsite) {
-          return vendor.vendorWebsite.indexOf('http://') > -1 || vendor.vendorWebsite.indexOf('https://') > -1
-        }
-        return false
-      }
-    },
-    watch: {
-      searchQuery(newVal, oldVal){
-        if (newVal === '') {
-          this.filteredVendorsList = this.vendorsList;
-        } else {
-          this.filterVendors();
+  },
+  props: ['vendorsList', 'ratings', 'buildingBlocksList'],
+  data () {
+    return {
+      searchQuery: '',
+      filteredVendorsList: [],
+      modelValidations: {
+        vendorWebsite: {
+          url: {require_protocol: true },
+          regex: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,=.]+$/gm,
+          min: 10 // http://x.x
         }
       },
-      vendorsList(newVal, oldVal){
-        this.filterVendors();
+      bgImages: [
+        'http://static.maryoku.com/storage/img/lock.jpg',
+        'http://static.maryoku.com/storage/img/login.jpg',
+        'http://static.maryoku.com/storage/img/register.jpg',
+        'http://static.maryoku.com/storage/img/bg-pricing.jpg',
+        'http://static.maryoku.com/storage/img/bg3.jpg',
+        'http://static.maryoku.com/storage/img/bg9.jpg',
+        'http://static.maryoku.com/storage/img/card-1.jpg',
+        'http://static.maryoku.com/storage/img/card-2.jpg',
+        'http://static.maryoku.com/storage/img/card-3.jpg',
+        'http://static.maryoku.com/storage/img/sidebar-1.jpg',
+        'http://static.maryoku.com/storage/img/sidebar-2.jpg',
+        'http://static.maryoku.com/storage/img/sidebar-3.jpg',
+        'http://static.maryoku.com/storage/img/sidebar-4.jpg',
+        'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
+        'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
+        'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
+        'http://static.maryoku.com/storage/img/shutterstock_740167702.png'
+      ]
+    }
+  },
+  mounted () {
+    this.filteredVendorsList = this.vendorsList
+  },
+  methods: {
+    categoryTitle,
+    categoryColor,
+    editVendorDetails (vendor) {
+      this.$emit('editVendorDetails', vendor)
+    },
+    routeToVendor (vendorId) {
+      this.$router.push({ name: 'VendorDetails', params: { id: vendorId } })
+    },
+    vendorMainImage (vendor) {
+      const rndInt = Math.floor(Math.random() * this.bgImages.length)
+      return this.bgImages[rndInt]
+    },
+    filterVendors () {
+      this.filteredVendorsList = _.filter(this.vendorsList, (v) => {
+        // let byDisplayName = v.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
+        let byCategory = v.vendorCategory.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1
+        return byCategory
+      })
+    },
+    isValidVendorWebsite (vendor) {
+      if (vendor.vendorWebsite) {
+        return vendor.vendorWebsite.indexOf('http://') > -1 || vendor.vendorWebsite.indexOf('https://') > -1
       }
+      return false
+    }
+  },
+  watch: {
+    searchQuery (newVal, oldVal) {
+      if (newVal === '') {
+        this.filteredVendorsList = this.vendorsList
+      } else {
+        this.filterVendors()
+      }
+    },
+    vendorsList (newVal, oldVal) {
+      this.filterVendors()
     }
   }
+}
 </script>
 <style lang="scss" scoped>
   @import '@/assets/scss/md/_colors.scss';

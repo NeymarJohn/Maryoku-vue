@@ -19,11 +19,11 @@
 </template>
 <script>
 export default {
-  name: "drop-down",
+  name: 'drop-down',
   props: {
     direction: {
       type: String,
-      default: "down"
+      default: 'down'
     },
     multiLevel: {
       type: Boolean,
@@ -36,33 +36,33 @@ export default {
       default: false
     }
   },
-  data() {
+  data () {
     return {
       isOpen: false
-    };
+    }
   },
   methods: {
-    toggleDropDown() {
+    toggleDropDown () {
       if (!this.hover) {
         if (this.multiLevel) {
-          this.isOpen = true;
+          this.isOpen = true
         } else {
-          this.isOpen = !this.isOpen;
+          this.isOpen = !this.isOpen
         }
       }
     },
-    hoverToggleDropDown() {
+    hoverToggleDropDown () {
       if (this.hover) {
         if (this.multiLevel) {
-          this.isOpen = true;
+          this.isOpen = true
         } else {
-          this.isOpen = !this.isOpen;
+          this.isOpen = !this.isOpen
         }
       }
     },
-    closeDropDown() {
-      this.isOpen = false;
+    closeDropDown () {
+      this.isOpen = false
     }
   }
-};
+}
 </script>

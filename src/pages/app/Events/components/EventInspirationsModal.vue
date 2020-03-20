@@ -46,49 +46,49 @@
   </div>
 </template>
 <script>
-  import { Modal, ProductCard } from "@/components";
-  import CalendarEventInspiration from '@/models/CalendarEventInspiration';
-  import CalendarEvent from '@/models/CalendarEvent';
-  import Calendar from '@/models/Calendar';
-  import VueElementLoading from 'vue-element-loading';
+import { Modal, ProductCard } from '@/components'
+import CalendarEventInspiration from '@/models/CalendarEventInspiration'
+import CalendarEvent from '@/models/CalendarEvent'
+import Calendar from '@/models/Calendar'
+import VueElementLoading from 'vue-element-loading'
 
-  export default {
-    name: 'event-modal-inspirations',
-    components: {
-      Modal,
-      ProductCard,
-      VueElementLoading,
+export default {
+  name: 'event-modal-inspirations',
+  components: {
+    Modal,
+    ProductCard,
+    VueElementLoading
+  },
+  data () {
+    return {
+      modalOpen: false,
+      inspirations: [],
+      isLoading: true
+    }
+  },
+  methods: {
+    noticeModalHide: function () {
+      this.modalOpen = false
     },
-    data() {
-      return {
-        modalOpen: false,
-        inspirations: [],
-        isLoading: true,
-      }
+    toggleModal: function (show) {
+      this.modalOpen = show
     },
-    methods: {
-      noticeModalHide: function () {
-        this.modalOpen = false;
-      },
-      toggleModal: function (show) {
-        this.modalOpen = show;
-      },
-      openNewTab(link) {
-        window.open(link, true);
-      }
-    },
-    created() {
+    openNewTab (link) {
+      window.open(link, true)
+    }
+  },
+  created () {
     let inspirations = new CalendarEvent({id: this.$route.params.id}).inspirations()
       .custom(`${process.env.SERVER_URL}/1/calendars/${this.$store.state.calendarId}/events/${this.$route.params.id}/inspirations`).get().then(response => {
-        this.inspirations = response;
-        this.isLoading = false;
+        this.inspirations = response
+        this.isLoading = false
       })
       .catch((error) => {
-        console.log(error);
-        this.isLoading = false;
-      });
-    },
+        console.log(error)
+        this.isLoading = false
+      })
   }
+}
 </script>
 <style lang="scss">
   .inspirations-modal {

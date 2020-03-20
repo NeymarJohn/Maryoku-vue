@@ -45,107 +45,103 @@
 </template>
 <script>
 
-    export default {
-        name: 'sign-in-sign-up-panel',
-        components: {},
-        props: {
-            eventId: String
+export default {
+  name: 'sign-in-sign-up-panel',
+  components: {},
+  props: {
+    eventId: String
+  },
+  data () {
+    return {
+      serverURL: process.env.SERVER_URL,
+      working: false,
+      error: '',
+      email: null,
+      password: null,
+      username: null,
+      modelValidations: {
+        email: {
+          required: true,
+          email: true
         },
-        data() {
-            return {
-                serverURL: process.env.SERVER_URL,
-                working: false,
-                error:'',
-                email: null,
-                password: null,
-                username: null,
-                modelValidations: {
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    password: {
-                        required: true,
-                        min: 8
-                    },
-                    username : {
-                        required: true,
-                    }
-                },
-                touched: {
-                    email: false,
-                    password: false,
-                    username: false
+        password: {
+          required: true,
+          min: 8
+        },
+        username: {
+          required: true
+        }
+      },
+      touched: {
+        email: false,
+        password: false,
+        username: false
+      }
+    }
+  },
+  mounted () {
+
+  },
+  methods: {
+    closePanel () {
+      this.$emit('closePanel')
+    },
+    authenticate (provider) {
+      this.loading = true
+      const callback = btoa(`${document.location.href}?token=`)
+      document.location.href = `${this.serverURL}/oauth/authenticate/${provider}?callback=${callback}`
+    },
+    signup () {
+      this.working = true
+
+      this.$validator.validateAll().then(isValid => {
+        if (isValid) {
+          this.$auth.guestSignupOrSignin(this, {email: this.email, password: this.password, role: 'view', eventId: this.eventId}, (res) => {
+            let statusCode = res.status || (res.response && res.response.status) || 401
+
+            if (statusCode === 406) {
+              this.error = 'This email is not listed for this event.'
+              this.$forceUpdate()
+              this.working = false
+            } else if (statusCode === 401) {
+              this.error = 'Sorry, wrong password, try again.'
+              this.$forceUpdate()
+              this.working = false
+            } else if (statusCode === 200) {
+              this.$auth.login(this, {
+                username: this.email,
+                password: this.password
+              }, (success) => {
+                // this.$router.push({ path: '/signedin', query: {token: success.access_token} });
+                // hide singup modal
+
+                this.$root.$emit('signed-in', success.access_token)
+                this.closePanel()
+                this.working = false
+                // show Dietary Constraints Modal
+                // this.setDietaryConstraintsModal({showModal : true});
+              }, (failure) => {
+                this.working = false
+                if (failure.response.status === 401) {
+                  this.error = 'Sorry, wrong password, try again.'
+                  this.$forceUpdate()
+                } else {
+                  this.error = 'Temporary failure, try again later'
+                  console.log(JSON.stringify(failure.response))
+                  this.$forceUpdate()
                 }
-            };
-        },
-        mounted() {
-
-        },
-        methods: {
-            closePanel(){
-                this.$emit('closePanel');
-            },
-            authenticate(provider) {
-                this.loading = true;
-                const callback = btoa(`${document.location.href}?token=`);
-                document.location.href = `${this.serverURL}/oauth/authenticate/${provider}?callback=${callback}`;
-            },
-            signup(){
-                this.working = true;
-
-                this.$validator.validateAll().then(isValid => {
-                    if (isValid){
-                        this.$auth.guestSignupOrSignin(this, {email: this.email, password: this.password, role: 'view', eventId: this.eventId}, (res) => {
-
-                            let statusCode = res.status || (res.response && res.response.status) || 401;
-
-                            if (statusCode === 406){
-                                this.error = 'This email is not listed for this event.';
-                                this.$forceUpdate();
-                                this.working = false;
-                            } else if (statusCode === 401) {
-                                this.error = 'Sorry, wrong password, try again.';
-                                this.$forceUpdate();
-                                this.working = false;
-                            } else if (statusCode === 200) {
-                                this.$auth.login(this, {
-                                    username: this.email,
-                                    password: this.password
-                                }, (success) => {
-                                    //this.$router.push({ path: '/signedin', query: {token: success.access_token} });
-                                    //hide singup modal
-
-                                    this.$root.$emit('signed-in', success.access_token);
-                                    this.closePanel();
-                                    this.working = false;
-                                    //show Dietary Constraints Modal
-                                    //this.setDietaryConstraintsModal({showModal : true});
-
-
-                                }, (failure) => {
-
-                                    this.working = false;
-                                    if (failure.response.status === 401) {
-                                        this.error = 'Sorry, wrong password, try again.';
-                                        this.$forceUpdate();
-                                    } else {
-                                        this.error = 'Temporary failure, try again later';
-                                        console.log(JSON.stringify(failure.response));
-                                        this.$forceUpdate();
-                                    }
-                                });
-                            }
-                        });
-                    } else {
-                        this.working = false;
-                    }
-                });
+              })
             }
-        },
-        computed: {},
-        watch: {}
-    };
+          })
+        } else {
+          this.working = false
+        }
+      })
+    }
+  },
+  computed: {},
+  watch: {}
+}
 </script>
 <style lang="scss" scoped>
     @import '@/assets/scss/md/_colors.scss';

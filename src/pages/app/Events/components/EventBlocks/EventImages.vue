@@ -43,133 +43,131 @@
   </div>
 </template>
 <script>
-  import {
-    mapState,
-    mapGetters,
-    mapMutations,
-    mapActions
-  } from 'vuex';
-  import Calendar from "@/models/Calendar"
-  import CalendarEvent from "@/models/CalendarEvent"
-  import EventComponent from "@/models/EventComponent";
-  import CalendarEventPageImage from "@/models/CalendarEventPageImage"
-  import VueElementLoading from 'vue-element-loading';
-  // import auth from '@/auth';
-  import swal from "sweetalert2";
+import {
+  mapState,
+  mapGetters,
+  mapMutations,
+  mapActions
+} from 'vuex'
+import Calendar from '@/models/Calendar'
+import CalendarEvent from '@/models/CalendarEvent'
+import EventComponent from '@/models/EventComponent'
+import CalendarEventPageImage from '@/models/CalendarEventPageImage'
+import VueElementLoading from 'vue-element-loading'
+// import auth from '@/auth';
+import swal from 'sweetalert2'
 
-  export default {
-    name: 'event-images',
-    components: {
-      VueElementLoading
+export default {
+  name: 'event-images',
+  components: {
+    VueElementLoading
+  },
+  props: {
+    event,
+    readonly: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data: () => ({
+    // auth: auth,
+    eventImages: [],
+    serverUrl: process.env.SERVER_URL,
+    imagePreview: null,
+    isLoading: false,
+    selectedImage: null
+  }),
+  methods: {
+    uploadEventImage (imageId = null) {
+      this.selectedImage = typeof imageId !== 'object' ? imageId : null
+      this.$refs.eventFile.click()
     },
-    props: {
-      event,
-      readonly: {
-        type: Boolean,
-        default: false
+
+    onEventFilePicked (event) {
+      let file = event.target.files || event.dataTransfer.files
+      if (!file.length) {
+        return
+      }
+
+      if (file[0].size <= 5000000) { // 5mb
+        this.createImage(file[0])
+      } else {
+        this.alretExceedPictureSize = true
+        this.$notify({
+          message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
+          horizontalAlign: 'center',
+          verticalAlign: 'top',
+          type: 'warning'
+        })
       }
     },
-    data: () => ({
-      // auth: auth,
-      eventImages: [],
-      serverUrl: process.env.SERVER_URL,
-      imagePreview: null,
-      isLoading: false,
-      selectedImage: null
-    }),
-    methods: {
-      uploadEventImage(imageId = null) {
-        this.selectedImage = typeof imageId != 'object' ? imageId : null;
-        this.$refs.eventFile.click();
-      },
+    createImage (file, type) {
+      let reader = new FileReader()
+      let vm = this
 
-      onEventFilePicked(event) {
-        let file = event.target.files || event.dataTransfer.files;
-        if (!file.length) {
-          return;
-        }
+      this.isLoading = true
 
-        if (file[0].size <= 5000000) { // 5mb
-          this.createImage(file[0]);
-        } else {
-          this.alretExceedPictureSize = true
-          this.$notify({
-            message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'warning'
-          })
-        }
-      },
-      createImage(file, type) {
-        let reader = new FileReader();
-        let vm = this;
-
-        this.isLoading = true;
-
-        reader.onload = e => {
-          const calendar = new Calendar({
-            id: this.$auth.user.defaultCalendarId
-          });
-          const event = new CalendarEvent({
-            id: this.event.id
-          });
-          if (this.selectedImage != null) {
-            this.removeEventImage(this.selectedImage);
-            this.selectedImage = null;
-          }
-
-          return new CalendarEventPageImage({
-            featuredImageFile: e.target.result
-          }).for(calendar, event).save().then(result => {
-            vm.event.eventPage.images.push({
-              id: result.id
-            });
-
-            vm.isLoading = false;
-
-          })
-          .catch((error) => {
-            vm.isLoading = false;
-
-            console.log(error);
-          });
-        };
-        reader.readAsDataURL(file);
-      },
-      removeEventImage(index) {
+      reader.onload = e => {
         const calendar = new Calendar({
           id: this.$auth.user.defaultCalendarId
-        });
+        })
         const event = new CalendarEvent({
           id: this.event.id
-        });
-
-        this.isLoading = true;
+        })
+        if (this.selectedImage != null) {
+          this.removeEventImage(this.selectedImage)
+          this.selectedImage = null
+        }
 
         return new CalendarEventPageImage({
-          id: this.event.eventPage.images[index].id
-        }).for(calendar, event).delete().then(result => {
+          featuredImageFile: e.target.result
+        }).for(calendar, event).save().then(result => {
+          vm.event.eventPage.images.push({
+            id: result.id
+          })
 
-          this.event.eventPage.images.splice(index, 1);
-          this.isLoading = false;
+          vm.isLoading = false
         })
-        .catch((error) => {
-          console.log(error);
-        });
-      },
-      previewImage(image) {
-        this.imagePreview = image;
-      },
-      closePreviewModal() {
-        this.imagePreview = null;
+          .catch((error) => {
+            vm.isLoading = false
+
+            console.log(error)
+          })
       }
+      reader.readAsDataURL(file)
     },
-    created() {
+    removeEventImage (index) {
+      const calendar = new Calendar({
+        id: this.$auth.user.defaultCalendarId
+      })
+      const event = new CalendarEvent({
+        id: this.event.id
+      })
+
+      this.isLoading = true
+
+      return new CalendarEventPageImage({
+        id: this.event.eventPage.images[index].id
+      }).for(calendar, event).delete().then(result => {
+        this.event.eventPage.images.splice(index, 1)
+        this.isLoading = false
+      })
+        .catch((error) => {
+          console.log(error)
+        })
     },
-    mounted() {
+    previewImage (image) {
+      this.imagePreview = image
     },
-    computed: {
+    closePreviewModal () {
+      this.imagePreview = null
     }
+  },
+  created () {
+  },
+  mounted () {
+  },
+  computed: {
   }
+}
 </script>

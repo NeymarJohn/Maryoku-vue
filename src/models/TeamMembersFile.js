@@ -1,7 +1,7 @@
 import Model from './Model'
 
 export default class TeamMembersFile extends Model {
-  resource() {
+  resource () {
     return 'teamMembersFile'
   }
 }

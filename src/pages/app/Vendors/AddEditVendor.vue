@@ -55,171 +55,171 @@
 </template>
 
 <script>
-  import moment from 'moment'
-  import VueElementLoading from 'vue-element-loading'
-  import VendorPropertyField from './VendorPropertyField'
-  import Vendors from '@/models/Vendors'
+import moment from 'moment'
+import VueElementLoading from 'vue-element-loading'
+import VendorPropertyField from './VendorPropertyField'
+import Vendors from '@/models/Vendors'
 
-  //COMPONENTS
-  import Icon from '@/components/Icon/Icon.vue'
-  import LightBox from 'vue-image-lightbox'
-  import {
-    SlideYDownTransition
-  } from 'vue2-transitions'
+// COMPONENTS
+import Icon from '@/components/Icon/Icon.vue'
+import LightBox from 'vue-image-lightbox'
+import {
+  SlideYDownTransition
+} from 'vue2-transitions'
 
-  export default {
-    components: {
-      VueElementLoading,
-      VendorPropertyField,
-    },
-    props: {
-      vendor: {
-        type: Object,
-        default: () => {
-          return {
-            vendorCategory: null,
-            vendorPropertyValues: {}
-          }
+export default {
+  components: {
+    VueElementLoading,
+    VendorPropertyField
+  },
+  props: {
+    vendor: {
+      type: Object,
+      default: () => {
+        return {
+          vendorCategory: null,
+          vendorPropertyValues: {}
         }
-      },
-      creation_mode: false
-    },
-    data() {
-      return {
-        isLoading: true,
-        categoryPropertiesLoading: false,
-        categories: [],
-        vendorPropertiesSections: {},
-        selectedField: null
       }
     },
-    created() {
-      Vendors.find('categories').then(categories => {
-        this.categories = categories
-      }, (error) => {
-        console.log(error)
-      })
-    },
-    mounted() {
-      this.isLoading = false
-      this.$auth.currentUser(this, true, () => {
-        if (!this.creation_mode && this.$route.params.id !== undefined) {
-          this.getVendor(this.$route.params.id);
-        } else {
-          this.vendor.vendorCategory = 'venue'
-          this.vendorCategoryChanged(this.vendor.vendorCategory)
-        }
-      })
-    },
-    methods: {
-      scrollToHash(hash) {
-        setTimeout(() => {
-          /*document.getElementById(hash).scrollIntoView({
+    creation_mode: false
+  },
+  data () {
+    return {
+      isLoading: true,
+      categoryPropertiesLoading: false,
+      categories: [],
+      vendorPropertiesSections: {},
+      selectedField: null
+    }
+  },
+  created () {
+    Vendors.find('categories').then(categories => {
+      this.categories = categories
+    }, (error) => {
+      console.log(error)
+    })
+  },
+  mounted () {
+    this.isLoading = false
+    this.$auth.currentUser(this, true, () => {
+      if (!this.creation_mode && this.$route.params.id !== undefined) {
+        this.getVendor(this.$route.params.id)
+      } else {
+        this.vendor.vendorCategory = 'venue'
+        this.vendorCategoryChanged(this.vendor.vendorCategory)
+      }
+    })
+  },
+  methods: {
+    scrollToHash (hash) {
+      setTimeout(() => {
+        /* document.getElementById(hash).scrollIntoView({
               behavior: 'smooth' // smooth scroll
           });
           */
 
-          const theElement = document.getElementById(hash);
-          const y = theElement.getBoundingClientRect().top + window.pageYOffset;
-          const yOffset = -50;
-          window.scrollTo({
-            top: y + yOffset,
-            behavior: 'smooth'
-          });
-        }, 1)
-      },
-      getVendor(vendorId) {
-        Vendors.find(vendorId).then(vendor => {
-          this.vendor = vendor
-          //this.vendor.vendorPropertyValues = {}
-          this.vendorCategoryChanged(this.vendor.vendorCategory)
-          this.isLoading = false
+        const theElement = document.getElementById(hash)
+        const y = theElement.getBoundingClientRect().top + window.pageYOffset
+        const yOffset = -50
+        window.scrollTo({
+          top: y + yOffset,
+          behavior: 'smooth'
         })
-      },
-      vendorCategoryChanged(val) {
-        this.categoryPropertiesLoading = true
-        this.vendorPropertiesSections = []
-        Vendors.params({
-          category: val
-        }).find('properties').then(vendorProperties => {
-          this.vendorPropertiesSections = vendorProperties
-          this.categoryPropertiesLoading = false
-        }, (error) => {
-          console.log(error)
-          this.categoryPropertiesLoading = false
-        })
-      },
-      saveVendor() {
-        console.log("*** Save vendor: ");
-        console.log(JSON.stringify(this.vendor));
-        this.isLoading = true;
-        new Vendors(this.vendor).save().then(res=>{
-          console.log("*** Save vendor - done: ");
-          console.log(JSON.stringify(res));
-          this.$router.push({name: 'EditVendor', params: {id: res.item.id}});
-          document.location.reload();
-          this.isLoading = false;
-        });
-      },
-      addVendor() {
-        this.$validator.validateAll().then(res => {
-          if (res) {
-            let newVendor = new Vendors({})
+      }, 1)
+    },
+    getVendor (vendorId) {
+      Vendors.find(vendorId).then(vendor => {
+        this.vendor = vendor
+        // this.vendor.vendorPropertyValues = {}
+        this.vendorCategoryChanged(this.vendor.vendorCategory)
+        this.isLoading = false
+      })
+    },
+    vendorCategoryChanged (val) {
+      this.categoryPropertiesLoading = true
+      this.vendorPropertiesSections = []
+      Vendors.params({
+        category: val
+      }).find('properties').then(vendorProperties => {
+        this.vendorPropertiesSections = vendorProperties
+        this.categoryPropertiesLoading = false
+      }, (error) => {
+        console.log(error)
+        this.categoryPropertiesLoading = false
+      })
+    },
+    saveVendor () {
+      console.log('*** Save vendor: ')
+      console.log(JSON.stringify(this.vendor))
+      this.isLoading = true
+      new Vendors(this.vendor).save().then(res => {
+        console.log('*** Save vendor - done: ')
+        console.log(JSON.stringify(res))
+        this.$router.push({name: 'EditVendor', params: {id: res.item.id}})
+        document.location.reload()
+        this.isLoading = false
+      })
+    },
+    addVendor () {
+      this.$validator.validateAll().then(res => {
+        if (res) {
+          let newVendor = new Vendors({})
 
-            newVendor.attach(this.vendor).then((res) => {
-              this.$emit('vendorCreated')
-              this.$emit('selectVendor', res.data.item)
-              this.$notify({
-                message: 'Vendor created successfully!',
-                horizontalAlign: 'center',
-                verticalAlign: 'top',
-                type: 'success'
-              })
-            })
-          } else {
-            this.$emit('on-validated', res)
-            return res
-          }
-        })
-      },
-      updateVendor() {
-        Vendors.find(this.vendor.id).then(newVendor => {
-          newVendor.vendorDisplayName = this.vendor.vendorDisplayName
-          newVendor.vendorAddressLine1 = this.vendor.vendorAddressLine1
-          newVendor.vendorCategory = this.vendor.vendorCategory
-          newVendor.rank = this.vendor.rank
-          newVendor.avgScore = this.vendor.avgScore
-          newVendor.vendorWebsite = this.vendor.vendorWebsite
-          newVendor.vendorMainEmail = this.vendor.vendorMainEmail
-          newVendor.vendorMainPhoneNumber = this.vendor.vendorMainPhoneNumber
-          newVendor.vendorTagging = this.vendor.vendorTagging
-
-          if (this.errors.items.length === 0) {
-            newVendor.save()
-
+          newVendor.attach(this.vendor).then((res) => {
+            this.$emit('vendorCreated')
+            this.$emit('selectVendor', res.data.item)
             this.$notify({
-              message: 'Vendor Updated Successfully!',
+              message: 'Vendor created successfully!',
               horizontalAlign: 'center',
               verticalAlign: 'top',
               type: 'success'
             })
-          } else {
-            this.$notify({
-              message: this.errors.items[0].msg,
-              horizontalAlign: 'center',
-              verticalAlign: 'top',
-              type: 'danger'
-            })
-          }
-
-          this.selectedField = null
-        });
-      }
+          })
+        } else {
+          this.$emit('on-validated', res)
+          return res
+        }
+      })
     },
-    computed: {},
-    filters: {},
-    watch: {},
-  }
+    updateVendor () {
+      Vendors.find(this.vendor.id).then(newVendor => {
+        newVendor.vendorDisplayName = this.vendor.vendorDisplayName
+        newVendor.vendorAddressLine1 = this.vendor.vendorAddressLine1
+        newVendor.vendorCategory = this.vendor.vendorCategory
+        newVendor.rank = this.vendor.rank
+        newVendor.avgScore = this.vendor.avgScore
+        newVendor.vendorWebsite = this.vendor.vendorWebsite
+        newVendor.vendorMainEmail = this.vendor.vendorMainEmail
+        newVendor.vendorMainPhoneNumber = this.vendor.vendorMainPhoneNumber
+        newVendor.vendorTagging = this.vendor.vendorTagging
+
+        if (this.errors.items.length === 0) {
+          newVendor.save()
+
+          this.$notify({
+            message: 'Vendor Updated Successfully!',
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            message: this.errors.items[0].msg,
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'danger'
+          })
+        }
+
+        this.selectedField = null
+      })
+    }
+  },
+  computed: {},
+  filters: {},
+  watch: {}
+}
 </script>
 
 <style lang="scss" scoped>

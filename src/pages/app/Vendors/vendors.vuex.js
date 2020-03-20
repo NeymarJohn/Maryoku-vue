@@ -1,6 +1,6 @@
 export default {
   namespaced: true,
-  state() {
+  state () {
     return {
       vendorsMemberData: {
         vendorDisplayName: null,
@@ -15,25 +15,25 @@ export default {
         vendorCity: 'test',
         vendorRefundPolicy: 'test'
       },
-        csvFile: null
-    };
+      csvFile: null
+    }
   },
   mutations: {
-    setMemberProperty(state, {key, actualValue}) {
-      state.vendorsMemberData[key] = actualValue;
+    setMemberProperty (state, {key, actualValue}) {
+      state.vendorsMemberData[key] = actualValue
     },
-    setFileToState(state, file) {
-      state.csvFile = file;
+    setFileToState (state, file) {
+      state.csvFile = file
     },
-    resetForm(state){
-      state.vendorsMemberData.vendorDisplayName = null;
-      state.vendorsMemberData.productsCategory = null;
-      state.vendorsMemberData.vendorWebsite = null;
-      state.vendorsMemberData.vendorAddressLine1 = null;
-      state.vendorsMemberData.vendorMainEmail = null;
-      state.vendorsMemberData.vendorMainPhoneNumber = null;
+    resetForm (state) {
+      state.vendorsMemberData.vendorDisplayName = null
+      state.vendorsMemberData.productsCategory = null
+      state.vendorsMemberData.vendorWebsite = null
+      state.vendorsMemberData.vendorAddressLine1 = null
+      state.vendorsMemberData.vendorMainEmail = null
+      state.vendorsMemberData.vendorMainPhoneNumber = null
     }
   },
 
   actions: {}
-};
+}

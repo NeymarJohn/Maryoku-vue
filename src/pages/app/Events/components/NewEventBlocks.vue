@@ -68,155 +68,147 @@
       </div>
 </template>
 <script>
-  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-  import Calendar from "@/models/Calendar"
-  import CalendarEvent from "@/models/CalendarEvent";
-  import EventComponent from "@/models/EventComponent";
-  import EventComponentValue from "@/models/EventComponentValue";
-  import EventComponentVendor from "@/models/EventComponentVendor";
-  import VueElementLoading from 'vue-element-loading';
-  // import auth from '@/auth';
-  import ManageProposals from './EventBlocks/ManageProposals.vue';
-  import swal from "sweetalert2";
-  import {LabelEdit} from '@/components';
+import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+import Calendar from '@/models/Calendar'
+import CalendarEvent from '@/models/CalendarEvent'
+import EventComponent from '@/models/EventComponent'
+import EventComponentValue from '@/models/EventComponentValue'
+import EventComponentVendor from '@/models/EventComponentVendor'
+import VueElementLoading from 'vue-element-loading'
+// import auth from '@/auth';
+import ManageProposals from './EventBlocks/ManageProposals.vue'
+import swal from 'sweetalert2'
+import {LabelEdit} from '@/components'
 
-  export default {
-    name: 'event-blocks',
-    components: {
-        VueElementLoading,
-        ManageProposals,
-        LabelEdit
+export default {
+  name: 'event-blocks',
+  components: {
+    VueElementLoading,
+    ManageProposals,
+    LabelEdit
+  },
+  props: {
+    selectedBlock: Object,
+    event: Object
+  },
+  data: () => ({
+    // auth: auth,
+    isLoading: true,
+    eventBlocks: [],
+    prioritiesList: [
+      {
+        label: 'Preferred',
+        value: 'Preferred'
+      },
+      {
+        label: 'Nice to have',
+        value: 'Nice to have'
+      },
+      {
+        label: 'Must have',
+        value: 'Must have'
+      }
+    ],
+    blockVendors: []
+  }),
+  methods: {
+    goBack () {
+      this.$emit('go-to-building-blocks', {})
     },
-    props: {
-        selectedBlock : Object,
-        event : Object
+    getBuildingBlockValues () {
+      let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+      let event = new CalendarEvent({id: this.event.id})
+      let selected_block = new EventComponent({id: this.selectedBlock.id})
+
+      new EventComponentValue().for(calendar, event, selected_block).get().then(values => {
+        this.eventBlocks = values
+      })
     },
-    data: () => ({
-        // auth: auth,
-        isLoading:true,
-        eventBlocks : [],
-        prioritiesList : [
-            {
-                label : 'Preferred',
-                value : 'Preferred'
-            },
-            {
-                label : 'Nice to have',
-                value : 'Nice to have'
-            },
-            {
-                label : 'Must have',
-                value : 'Must have'
-            }
-        ],
-        blockVendors : []
-    }),
-    methods: {
-        goBack() {
-            this.$emit('go-to-building-blocks',{})
-        },
-        getBuildingBlockValues(){
-            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-            let event = new CalendarEvent({id: this.event.id});
-            let selected_block = new EventComponent({id : this.selectedBlock.id});
+    addNewValue () {
+      this.$parent.isLoading = true
 
-            new EventComponentValue().for(calendar, event, selected_block).get().then(values => {
-                this.eventBlocks = values;
-            });
-        },
-        addNewValue(){
+      this.saveAllValues()
 
-            this.$parent.isLoading = true;
+      let new_value = {
+        eventComponent: { id: this.selectedBlock.id }
+      }
 
-            this.saveAllValues();
+      let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+      let event = new CalendarEvent({id: this.event.id})
+      let selected_block = new EventComponent({id: this.selectedBlock.id})
 
-            let new_value = {
-                eventComponent: { id: this.selectedBlock.id }
-            }
+      new EventComponentValue(new_value).for(calendar, event, selected_block).save().then(res => {
+        this.$parent.isLoading = false
+        this.getBuildingBlockValues()
+      })
+    },
+    deleteValue (valueId) {
+      swal({
+        title: 'Are you sure?',
+        text: `You won't be able to revert this!`,
+        showCancelButton: true,
+        confirmButtonClass: 'md-button md-success',
+        cancelButtonClass: 'md-button md-danger',
+        confirmButtonText: 'Yes, delete it!',
+        buttonsStyling: false
+      }).then(result => {
+        if (result.value) {
+          this.$parent.isLoading = true
+          let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+          let event = new CalendarEvent({id: this.event.id})
+          let selected_block = new EventComponent({id: this.selectedBlock.id})
 
-            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-            let event = new CalendarEvent({id: this.event.id});
-            let selected_block = new EventComponent({id : this.selectedBlock.id});
+          let value = new EventComponentValue({id: valueId})
 
-            new EventComponentValue(new_value).for(calendar, event, selected_block).save().then(res => {
-
-                this.$parent.isLoading = false;
-                this.getBuildingBlockValues();
-            });
-        },
-        deleteValue(valueId){
-            swal({
-                title: "Are you sure?",
-                text: `You won't be able to revert this!`,
-                showCancelButton: true,
-                confirmButtonClass: "md-button md-success",
-                cancelButtonClass: "md-button md-danger",
-                confirmButtonText: "Yes, delete it!",
-                buttonsStyling: false
-            }).then(result => {
-                if (result.value) {
-
-                    this.$parent.isLoading = true;
-                    let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-                    let event = new CalendarEvent({id: this.event.id});
-                    let selected_block = new EventComponent({id : this.selectedBlock.id});
-
-                    let value = new EventComponentValue({id : valueId});
-
-                    value.for(calendar,event,selected_block).delete().then(resp => {
-                        this.getBuildingBlockValues();
-                        this.$parent.isLoading = false;
-                        this.$forceUpdate();
-                    })
-                        .catch(error => {
-                            console.log(error);
-                        })
-                }
-            });
-
-        },
-        editValue(item){
-
-            this.$parent.isLoading = true;
-
-            let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-            let event = new CalendarEvent({id: this.event.id});
-            let selected_block = new EventComponent({id : this.selectedBlock.id});
-            let value = new EventComponentValue({id : item.id});
-
-            value.title = item.title;
-            value.priority = item.priority;
-
-            value.for(calendar,event,selected_block).save().then(resp => {
-                this.$parent.isLoading = false;
-            })
-                .catch(error => {
-                    console.log(error);
-                    this.$parent.isLoading = false;
-
-                })
-        },
-        saveAllValues () {
-            let _self = this;
-            this.eventBlocks.forEach(block => {
-                _self.editValue(block);
+          value.for(calendar, event, selected_block).delete().then(resp => {
+            this.getBuildingBlockValues()
+            this.$parent.isLoading = false
+            this.$forceUpdate()
+          })
+            .catch(error => {
+              console.log(error)
             })
         }
-
-
+      })
     },
-    created() {
+    editValue (item) {
+      this.$parent.isLoading = true
 
+      let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+      let event = new CalendarEvent({id: this.event.id})
+      let selected_block = new EventComponent({id: this.selectedBlock.id})
+      let value = new EventComponentValue({id: item.id})
+
+      value.title = item.title
+      value.priority = item.priority
+
+      value.for(calendar, event, selected_block).save().then(resp => {
+        this.$parent.isLoading = false
+      })
+        .catch(error => {
+          console.log(error)
+          this.$parent.isLoading = false
+        })
     },
-    mounted() {
-        this.isLoading = false;
-        this.getBuildingBlockValues();
-
-    },
-    computed: {
-
+    saveAllValues () {
+      let _self = this
+      this.eventBlocks.forEach(block => {
+        _self.editValue(block)
+      })
     }
+
+  },
+  created () {
+
+  },
+  mounted () {
+    this.isLoading = false
+    this.getBuildingBlockValues()
+  },
+  computed: {
+
   }
+}
 </script>
 <style lang="scss">
     .mt-auto {

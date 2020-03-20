@@ -16,32 +16,30 @@
             <router-view></router-view>
         </FadeTransition>
 
-
-
     </div>
 </template>
 <script>
-    import { FadeTransition } from "vue2-transitions";
-    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-    import PublicEventPlannerVuexModule from "../../../pages/app/CreateEvent/PublicEventPlanner.vuex";
+import { FadeTransition } from 'vue2-transitions'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import PublicEventPlannerVuexModule from '../../../pages/app/CreateEvent/PublicEventPlanner.vuex'
 
-    export default {
-        data(){
-            return {
-            }
-        },
-        components: {
-            FadeTransition
-        },
-        created () {
-         },
-        methods: {
+export default {
+  data () {
+    return {
+    }
+  },
+  components: {
+    FadeTransition
+  },
+  created () {
+  },
+  methods: {
 
-        },
-        beforeRouteUpdate(to, from, next) {
-            next();
-        }
-    };
+  },
+  beforeRouteUpdate (to, from, next) {
+    next()
+  }
+}
 </script>
 <style lang="scss">
 
@@ -278,7 +276,6 @@
                 flex: 1;
                 justify-content: center;
 
-
             }
         }
 
@@ -308,8 +305,6 @@
             &.md-default {
                 margin-right: 1em;
             }
-
-
 
             &.disabled, &.opacity-btn {
                 opacity: 0.3;
@@ -543,10 +538,6 @@
 
     }
 
-
-
-
-
     @media screen and (max-width : 500px) {
         .register-page {
             .register-form {
@@ -554,9 +545,6 @@
             }
         }
         .register-section {
-
-
-
 
             .md-button.custom-btn {
                 width : 100%;
@@ -570,7 +558,6 @@
                     width : 100%;
                 }
             }
-
 
             .section-header {
                 border-radius: 0;
@@ -705,8 +692,6 @@
                 padding : 0px;
             }
 
-
-
             .top-header {
                 .logo {
                     img {
@@ -745,10 +730,6 @@
             }
         }
 
-
-
     }
-
-
 
 </style>

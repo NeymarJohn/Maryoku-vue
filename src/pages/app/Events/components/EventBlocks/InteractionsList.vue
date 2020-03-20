@@ -70,98 +70,98 @@
     </div>
 </template>
 <script>
-    import EventInteraction from '@/models/EventInteraction';
-    import InteractionPreview from './InteractionPreview';
-    import Calendar from '@/models/Calendar';
+import EventInteraction from '@/models/EventInteraction'
+import InteractionPreview from './InteractionPreview'
+import Calendar from '@/models/Calendar'
 
-    export default {
-        name: 'interactions-list',
-        components: {
-            InteractionPreview
-        },
-        props: {
-            eventData: {
-                type: Object,
-                default: ()=>{ return { title: ''};}
-            }
-        },
-        data() {
-            return {
-                working: false,
-                possibleInteractionsList: [],
-                visibleInteraction: { title: ''}
-            };
-        },
-        mounted(){
-            this.working = true;
-            if (this.eventData){
-                this.refreshList(false);
-            }
-        },
-        watch: {
-            eventData(newVal, oldVal){
-                this.refreshList(false);
-            }
-        },
-        methods: {
-            refreshList(force){
-                new EventInteraction().get().then(res=>{
-                    this.possibleInteractionsList = res;
-
-                    this.possibleInteractionsList.forEach(possibleInteraction=>{
-                        possibleInteraction.event = {id: this.eventData.id};
-                    });
-
-                    let firstEnabledInteraction = null;
-                    new EventInteraction().for(new Calendar({id: this.$auth.user.defaultCalendarId}),this.eventData).get().then(interactions=>{
-                        interactions.forEach(interaction=>{
-                            this.possibleInteractionsList.forEach(possibleInteraction=>{
-                                if (possibleInteraction.templateId === interaction.templateId){
-                                    Object.assign(possibleInteraction, interaction);
-
-                                    if (possibleInteraction.enabled && !firstEnabledInteraction){
-                                        firstEnabledInteraction = possibleInteraction;
-                                    }
-                                }
-                            });
-                        });
-                        this.editInteraction(firstEnabledInteraction || this.possibleInteractionsList[0]);
-                        this.working = false;
-                    });
-                }).catch((e)=>{
-                    console.error(e);
-                    this.working = false;
-                });
-            },
-            editInteraction(item){
-                if (item.editMode) return;
-
-                this.possibleInteractionsList.forEach((interaction)=>{
-                    interaction.editMode = false;
-                });
-                item.editMode = true;
-                this.visibleInteraction = item;
-                if (!item.id){ //Existing
-                    Object.assign(this.visibleInteraction, {templateImage: item.options[0],sendDaysBeforeEvent: 15, line1: item.title, line2: this.$moment(this.eventData.eventStartMillis).format('MM-DD-YYYY'), line3: this.eventData.title});
-                }
-                this.$forceUpdate();
-            },
-            saveInteraction(item){
-                console.log(JSON.stringify(item));
-                this.working = true;
-                new EventInteraction(item).for(new Calendar({id: this.$auth.user.defaultCalendarId}),this.eventData).save().then(res=>{
-                    this.working = false;
-                }).catch((e)=>{
-                    console.error(e);
-                    this.working = false;
-                });
-            },
-            enable(e, item){
-                item.enabled = e;
-                this.$forceUpdate();
-            }
-        }
+export default {
+  name: 'interactions-list',
+  components: {
+    InteractionPreview
+  },
+  props: {
+    eventData: {
+      type: Object,
+      default: () => { return { title: ''} }
     }
+  },
+  data () {
+    return {
+      working: false,
+      possibleInteractionsList: [],
+      visibleInteraction: { title: ''}
+    }
+  },
+  mounted () {
+    this.working = true
+    if (this.eventData) {
+      this.refreshList(false)
+    }
+  },
+  watch: {
+    eventData (newVal, oldVal) {
+      this.refreshList(false)
+    }
+  },
+  methods: {
+    refreshList (force) {
+      new EventInteraction().get().then(res => {
+        this.possibleInteractionsList = res
+
+        this.possibleInteractionsList.forEach(possibleInteraction => {
+          possibleInteraction.event = {id: this.eventData.id}
+        })
+
+        let firstEnabledInteraction = null
+        new EventInteraction().for(new Calendar({id: this.$auth.user.defaultCalendarId}), this.eventData).get().then(interactions => {
+          interactions.forEach(interaction => {
+            this.possibleInteractionsList.forEach(possibleInteraction => {
+              if (possibleInteraction.templateId === interaction.templateId) {
+                Object.assign(possibleInteraction, interaction)
+
+                if (possibleInteraction.enabled && !firstEnabledInteraction) {
+                  firstEnabledInteraction = possibleInteraction
+                }
+              }
+            })
+          })
+          this.editInteraction(firstEnabledInteraction || this.possibleInteractionsList[0])
+          this.working = false
+        })
+      }).catch((e) => {
+        console.error(e)
+        this.working = false
+      })
+    },
+    editInteraction (item) {
+      if (item.editMode) return
+
+      this.possibleInteractionsList.forEach((interaction) => {
+        interaction.editMode = false
+      })
+      item.editMode = true
+      this.visibleInteraction = item
+      if (!item.id) { // Existing
+        Object.assign(this.visibleInteraction, {templateImage: item.options[0], sendDaysBeforeEvent: 15, line1: item.title, line2: this.$moment(this.eventData.eventStartMillis).format('MM-DD-YYYY'), line3: this.eventData.title})
+      }
+      this.$forceUpdate()
+    },
+    saveInteraction (item) {
+      console.log(JSON.stringify(item))
+      this.working = true
+      new EventInteraction(item).for(new Calendar({id: this.$auth.user.defaultCalendarId}), this.eventData).save().then(res => {
+        this.working = false
+      }).catch((e) => {
+        console.error(e)
+        this.working = false
+      })
+    },
+    enable (e, item) {
+      item.enabled = e
+      this.$forceUpdate()
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
     @import '@/assets/scss/md/_colors.scss';

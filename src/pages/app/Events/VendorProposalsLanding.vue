@@ -34,12 +34,13 @@
               <div class="proposal--title margin-bottom-lg">
                 <md-icon class="proposal--icon">date_range</md-icon>
                 <span>{{ eventDate }}</span>
-
               </div>
               <div class="md-layout align-with-title">
                 <div class="md-layout-item md-size-50 margin-bottom-md">
                   <div>Guests</div>
-                  <p class="proposal--title">{{ proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' }}</p>
+                  <p
+                    class="proposal--title"
+                  >{{ proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' }}</p>
                 </div>
                 <div
                   v-if="proposalRequest.bidderRank > 1"
@@ -58,17 +59,26 @@
                 </div>
                 <div class="md-layout-item md-size-50 margin-bottom-md">
                   <div>Requirements</div>
-                  <p class="proposal--title">{{ proposalRequest ? proposalRequest.requirements.length : '-' }}</p>
+                  <p
+                    class="proposal--title"
+                  >{{ proposalRequest ? proposalRequest.requirements.length : '-' }}</p>
                 </div>
 
-                  <div class="md-layout-item md-size-100 margin-bottom-md alternative-date" v-if="proposalRequest.eventData.flexibleWithDates">
-                      <md-button class="md-primary" @click="suggestAnotherDay">Suggest another day</md-button>
-                        <br><br>
-                      <md-datepicker v-if="suggest" v-model="proposalRequest.suggestedDates" :md-disabled-dates="isDateDisabled">
-                          <label>Alternative date</label>
-                      </md-datepicker>
-
-                  </div>
+                <div
+                  class="md-layout-item md-size-100 margin-bottom-md alternative-date"
+                  v-if="proposalRequest.eventData.flexibleWithDates"
+                >
+                  <md-button class="md-primary" @click="suggestAnotherDay">Suggest another day</md-button>
+                  <br />
+                  <br />
+                  <md-datepicker
+                    v-if="suggest"
+                    v-model="proposalRequest.suggestedDates"
+                    :md-disabled-dates="isDateDisabled"
+                  >
+                    <label>Alternative date</label>
+                  </md-datepicker>
+                </div>
               </div>
             </div>
             <div class="md-layout-item">
@@ -91,7 +101,9 @@
                 </div>
                 <div v-else class="md-layout-item margin-bottom-md md-size-20">
                   <div>Min</div>
-                  <p class="proposal--title">${{ proposalRequest ? proposalRequest.bidRange.low : '-' }}</p>
+                  <p
+                    class="proposal--title"
+                  >${{ proposalRequest ? proposalRequest.bidRange.low : '-' }}</p>
                 </div>
                 <div class="md-layout-item margin-bottom-md md-size-30">
                   <div class="arrow"></div>
@@ -108,13 +120,16 @@
                 </div>
                 <div v-else class="md-layout-item margin-bottom-md md-size-20">
                   <div>Max</div>
-                  <p class="proposal--title">${{ proposalRequest ? proposalRequest.bidRange.high : '-' }}</p>
+                  <p
+                    class="proposal--title"
+                  >${{ proposalRequest ? proposalRequest.bidRange.high : '-' }}</p>
                 </div>
               </div>
 
-                <div class="proposal--title centered margin-bottom-lg">
-                    <span >Total Budget</span> <b>${{ proposalRequest.eventData.totalBudget }}</b>
-                </div>
+              <div class="proposal--title centered margin-bottom-lg">
+                <span>Total Budget</span>
+                <b>${{ proposalRequest.eventData.totalBudget }}</b>
+              </div>
 
               <div class="centered">
                 <md-button
@@ -141,179 +156,188 @@
 </template>
 
 <script>
-  import moment from 'moment'
-  import Vendors from '@/models/Vendors'
-  import Calendar from '@/models/Calendar'
-  import CalendarEvent from '@/models/CalendarEvent'
+import moment from 'moment'
+import Vendors from '@/models/Vendors'
+import Calendar from '@/models/Calendar'
+import CalendarEvent from '@/models/CalendarEvent'
 
-  export default {
-    props: ['proposalRequest', 'proposals', 'firstTime'],
-    components: {},
+export default {
+  props: ['proposalRequest', 'proposals', 'firstTime'],
+  components: {},
 
-    data() {
-      return {
-        showSkipLink: false,
-        upcomingEvents: [],
-        vendor: null,
-          suggest : false
-      }
+  data () {
+    return {
+      showSkipLink: false,
+      upcomingEvents: [],
+      vendor: null,
+      suggest: false
+    }
+  },
+  created () {},
+  mounted () {
+    this.getVendor()
+
+    let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
+
+    let m = new CalendarEvent().for(_calendar).fetch(this, true)
+    m.then(allEvents => {
+      console.log(allEvents)
+      this.upcomingEvents = allEvents
+      this.isLoading = false
+    })
+  },
+  methods: {
+    goToDetails () {
+      this.$emit('goToDetails')
     },
-    created() {
-
+    onSkipToAnotherEventRequest () {
+      let index = _.findIndex(
+        this.proposals,
+        pr => pr.id === this.proposalRequest.id
+      )
+      let nextIndex = (index + 1) % this.proposals.length
+      this.$emit('requestAnotherProposal', this.proposals[nextIndex].id)
     },
-    mounted() {
-      this.getVendor()
-
-      let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-
-      let m = new CalendarEvent().for(_calendar).fetch(this, true)
-      m.then(allEvents=>{
-        console.log(allEvents)
-        this.upcomingEvents = allEvents
-        this.isLoading = false
-      })
-    },
-    methods: {
-      goToDetails() {
-        this.$emit('goToDetails')
-      },
-      onSkipToAnotherEventRequest() {
-        let index = _.findIndex(
-          this.proposals,
-          pr => pr.id == this.proposalRequest.id
-        )
-        let nextIndex = (index + 1) % this.proposals.length
-        this.$emit('requestAnotherProposal', this.proposals[nextIndex].id)
-      },
-      getVendor() {
-        this.$auth.currentUser(this, true, function () {
+    getVendor () {
+      this.$auth.currentUser(
+        this,
+        true,
+        function () {
           Vendors.find(this.proposalRequest.vendorId).then(vendor => {
             this.vendor = vendor
           })
-        }.bind(this))
-      },
-        isDateDisabled(date) {
-
-            let startDate = new Date(this.proposalRequest.eventData.eventStartMillis);
-            let endDate = new Date(this.proposalRequest.eventData.eventStartMillis);
-            let numberOfDaysToAdd = 3;
-            startDate.setDate(startDate.getDate() - 4);
-            endDate.setDate(endDate.getDate() + numberOfDaysToAdd);
-
-            return !(date >= startDate && date <= endDate);
-        },
-        suggestAnotherDay() {
-          this.suggest = true;
-            this.proposalRequest.suggestedDates = new Date(this.proposalRequest.eventData.eventStartMillis);
-        }
+        }.bind(this)
+      )
     },
-    computed: {
-      eventDate() {
-        if (!this.proposalRequest) return '-'
+    isDateDisabled (date) {
+      let startDate = new Date(this.proposalRequest.eventData.eventStartMillis)
+      let endDate = new Date(this.proposalRequest.eventData.eventStartMillis)
+      let numberOfDaysToAdd = 3
+      startDate.setDate(startDate.getDate() - 4)
+      endDate.setDate(endDate.getDate() + numberOfDaysToAdd)
 
-        let date = new Date(this.proposalRequest.eventData.eventStartMillis)
-        return moment(date).format('MMM D, YYYY [at] hh:mma')
-      },
-      getLocation() {
-        console.log(this.proposalRequest)
-        console.log(this.upcomingEvents)
-        console.log('test', this.upcomingEvents.filter( item =>
-          item.participantsType == this.proposalRequest.eventData.participantsType &&
-          item.numberOfParticipants == this.proposalRequest.eventData.numberOfParticipants
-          // item.participantsType == this.proposalRequest.eventData.participantsType &&
-          // item.eventStartMillis == this.proposalRequest.eventStartMillis &&
-          // item.eventEndMillis == this.proposalRequest.eventEndMillis
-        ))
+      return !(date >= startDate && date <= endDate)
+    },
+    suggestAnotherDay () {
+      this.suggest = true
+      this.proposalRequest.suggestedDates = new Date(
+        this.proposalRequest.eventData.eventStartMillis
+      )
+    }
+  },
+  computed: {
+    eventDate () {
+      if (!this.proposalRequest) return '-'
 
-        if (this.proposalRequest) {
-          return this.proposalRequest.eventData.location || '-'
-        } else {
-          return '-'
-        }
+      let date = new Date(this.proposalRequest.eventData.eventStartMillis)
+      return moment(date).format('MMM D, YYYY [at] hh:mma')
+    },
+    getLocation () {
+      console.log(this.proposalRequest)
+      console.log(this.upcomingEvents)
+      console.log(
+        'test',
+        this.upcomingEvents.filter(
+          item =>
+            item.participantsType ===
+              this.proposalRequest.eventData.participantsType &&
+            item.numberOfParticipants ===
+              this.proposalRequest.eventData.numberOfParticipants
+          // item.participantsType===this.proposalRequest.eventData.participantsType &&
+          // item.eventStartMillis===this.proposalRequest.eventStartMillis &&
+          // item.eventEndMillis===this.proposalRequest.eventEndMillis
+        )
+      )
+
+      if (this.proposalRequest) {
+        return this.proposalRequest.eventData.location || '-'
+      } else {
+        return '-'
       }
     }
   }
+}
 </script>
 <style lang="scss" scoped>
-  @import "@/assets/scss/md/_colors.scss";
-  @import "@/assets/scss/md/_variables.scss";
+@import "@/assets/scss/md/_colors.scss";
+@import "@/assets/scss/md/_variables.scss";
 
-  .md-success {
-    color: $green-700 !important;
+.md-success {
+  color: $green-700 !important;
+}
+
+.title {
+  font-weight: bold;
+}
+
+h4 {
+  margin: 0;
+}
+
+p {
+  margin: 10px 0 0 0;
+}
+
+.margin-bottom-lg {
+  margin-bottom: 30px;
+}
+
+.margin-bottom-md {
+  margin-bottom: 20px;
+}
+
+.margin-right-sm {
+  margin-right: 10px;
+}
+
+.proposals--card {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.proposal--title {
+  font-size: 20px;
+  font-weight: 400;
+
+  .proposal--icon {
+    margin-right: 5px;
+    margin-top: -5px;
   }
+}
 
-  .title {
-    font-weight: bold;
-  }
+.align-with-title {
+  padding-left: 34px;
+}
 
-  h4 {
-    margin: 0;
-  }
+.separated {
+  border-right: 1px solid $input-border;
+}
 
-  p {
-    margin: 10px 0 0 0;
-  }
+.centered {
+  text-align: center;
+}
 
-  .margin-bottom-lg {
-    margin-bottom: 30px;
-  }
+.arrow {
+  border-bottom: 1px solid $grey-600;
+  position: relative;
+  top: 46px;
+  width: 60px;
+  margin: auto;
 
-  .margin-bottom-md {
-    margin-bottom: 20px;
-  }
-
-  .margin-right-sm {
-    margin-right: 10px;
-  }
-
-  .proposals--card {
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-
-  .proposal--title {
-    font-size: 20px;
-    font-weight: 400;
-
-    .proposal--icon {
-      margin-right: 5px;
-      margin-top: -5px;
-    }
-  }
-
-  .align-with-title {
-    padding-left: 34px;
-  }
-
-  .separated {
-    border-right: 1px solid $input-border;
-  }
-
-  .centered {
-    text-align: center;
-  }
-
-  .arrow {
+  &::after {
+    content: " ";
+    position: absolute;
+    width: 7px;
+    height: 7px;
     border-bottom: 1px solid $grey-600;
-    position: relative;
-    top: 46px;
-    width: 60px;
-    margin: auto;
-
-    &::after {
-      content: " ";
-      position: absolute;
-      width: 7px;
-      height: 7px;
-      border-bottom: 1px solid $grey-600;
-      border-right: 1px solid $grey-600;
-      transform: rotate(-45deg);
-      bottom: -4px;
-      right: 0px;
-    }
+    border-right: 1px solid $grey-600;
+    transform: rotate(-45deg);
+    bottom: -4px;
+    right: 0px;
   }
+}
 
-  .pt-24 {
-    padding-top: 24px;
-  }
+.pt-24 {
+  padding-top: 24px;
+}
 </style>

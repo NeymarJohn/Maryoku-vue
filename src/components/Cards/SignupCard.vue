@@ -18,8 +18,8 @@
 
 <script>
 export default {
-  name: "signup-card"
-};
+  name: 'signup-card'
+}
 </script>
 
 <style lang="css">

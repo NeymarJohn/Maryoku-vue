@@ -100,44 +100,44 @@
   </md-table>-->
 </template>
 <script>
-  import { categoryTitle } from './helpers'
+import { categoryTitle } from './helpers'
 
-  export default {
-    props: ['vendorsList', 'buildingBlocksList'],
-    data() {
-      return {
-        searchQuery: "",
-        filteredVendorsList: []
-      }
+export default {
+  props: ['vendorsList', 'buildingBlocksList'],
+  data () {
+    return {
+      searchQuery: '',
+      filteredVendorsList: []
+    }
+  },
+  mounted () {
+    this.filteredVendorsList = this.vendorsList
+  },
+  methods: {
+    categoryTitle,
+    editVendorDetails (vendor) {
+      this.$emit('editVendorDetails', vendor)
     },
-    mounted() {
-      this.filteredVendorsList = this.vendorsList;
+    routeToVendor (vendorId) {
+      this.$router.push({ name: 'VendorDetails', params: { id: vendorId } })
     },
-    methods: {
-      categoryTitle,
-      editVendorDetails (vendor) {
-        this.$emit('editVendorDetails', vendor);
-      },
-      routeToVendor(vendorId) {
-        this.$router.push({ name: "VendorDetails", params: { id: vendorId } });
-      },
-      remove (vendor) {
-        this.$emit('delete', vendor);
-      },
-      filterVendors(){
-        this.filteredVendorsList = _.filter(this.vendorsList, (v)=>{
-          let byDisplayName = v.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
-          let byCategory = v.vendorCategory.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
-          return byDisplayName || byCategory;
-        });
-      },
+    remove (vendor) {
+      this.$emit('delete', vendor)
     },
-    watch: {
-      searchQuery(newVal, oldVal){
-        this.filterVendors();
-      },
+    filterVendors () {
+      this.filteredVendorsList = _.filter(this.vendorsList, (v) => {
+        let byDisplayName = v.vendorDisplayName.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1
+        let byCategory = v.vendorCategory.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1
+        return byDisplayName || byCategory
+      })
+    }
+  },
+  watch: {
+    searchQuery (newVal, oldVal) {
+      this.filterVendors()
     }
   }
+}
 </script>
 <style lang="scss" scoped>
 </style>

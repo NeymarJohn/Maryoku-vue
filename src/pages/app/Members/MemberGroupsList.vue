@@ -57,100 +57,100 @@
 </template>
 <script>
 
-    import TeamMember from '@/models/TeamMember';
-    import Team from '@/models/Team';
+import TeamMember from '@/models/TeamMember'
+import Team from '@/models/Team'
 
-    import MemberGroupDetails from './MemberGroupDetails';
-    import LabelEdit from '@/components/LabelEdit';
-    import _ from 'underscore';
-    import swal from "sweetalert2";
+import MemberGroupDetails from './MemberGroupDetails'
+import LabelEdit from '@/components/LabelEdit'
+import _ from 'underscore'
+import swal from 'sweetalert2'
 
-    export default {
-        name: 'member-groups-list',
-        components: {
-            LabelEdit,
-            MemberGroupDetails
-        },
-        props: {
-        },
-        data() {
-            return {
-                working: false,
-                noActions: false,
-                visibleGroup: null,
-                groupsList: [],
-                allMembers: [],
-                rolesList: [
-                    { id: 'ADMIN', title: 'Administrator'},
-                    { id: 'co_producer', title: 'Co-Producer'},
-                    { id: 'manager', title: 'Manager'},
-                    { id: 'team_leader', title: 'Team Leader'},
-                    { id: 'employee', title: 'Employee'},
-                    { id: 'guest', title: 'Guest'}
-                ],
-                permissionsList: [
-                    { id: 'view', title: 'View', checked: false},
-                    { id: 'create', title: 'Create', checked: false},
-                    { id: 'edit', title: 'Edit', checked: false},
-                    { id: 'request_budget', title: 'Request Budget', checked: false},
-                    { id: 'sign_off', title: 'Sign-Off', checked: false},
-                    { id: 'vote', title: 'Vote', checked: false}
-                ]
-            };
-        },
-        mounted(){
-            this.working = true;
-            this.$auth.currentUser(this, true, ()=>{
-                this.refreshList(false);
-            });
+export default {
+  name: 'member-groups-list',
+  components: {
+    LabelEdit,
+    MemberGroupDetails
+  },
+  props: {
+  },
+  data () {
+    return {
+      working: false,
+      noActions: false,
+      visibleGroup: null,
+      groupsList: [],
+      allMembers: [],
+      rolesList: [
+        { id: 'ADMIN', title: 'Administrator'},
+        { id: 'co_producer', title: 'Co-Producer'},
+        { id: 'manager', title: 'Manager'},
+        { id: 'team_leader', title: 'Team Leader'},
+        { id: 'employee', title: 'Employee'},
+        { id: 'guest', title: 'Guest'}
+      ],
+      permissionsList: [
+        { id: 'view', title: 'View', checked: false},
+        { id: 'create', title: 'Create', checked: false},
+        { id: 'edit', title: 'Edit', checked: false},
+        { id: 'request_budget', title: 'Request Budget', checked: false},
+        { id: 'sign_off', title: 'Sign-Off', checked: false},
+        { id: 'vote', title: 'Vote', checked: false}
+      ]
+    }
+  },
+  mounted () {
+    this.working = true
+    this.$auth.currentUser(this, true, () => {
+      this.refreshList(false)
+    })
 
-            this.$root.$on('refresh-members', (force)=>{
-                this.refreshList(force);
-            });
-            //this.refreshList();
-        },
-        watch: {
+    this.$root.$on('refresh-members', (force) => {
+      this.refreshList(force)
+    })
+    // this.refreshList();
+  },
+  watch: {
 
-        },
-        methods: {
-            refreshList(force){
-                this.working = true;
-                this.visibleGroup = null;
-                this.loadAllMembers(force);
-            },
-            loadAllMembers(force){
-                TeamMember.fetch(this, force).then(allMembers=>{
-                    this.allMembers = allMembers;
-                    this.loadTeams(force);
-                });
-            },
-            loadTeams(force){
-                Team.fetch(this,force).then(teams => {
-                    this.groupsList = teams;
-                    if (!_.findWhere(this.groupsList, {id: 'all'})) {
-                        this.groupsList.splice(0, 0, {
-                            id: 'all',
-                            name: 'All members',
-                            builtIn: true
-                        });
-                    }
-                    this.groupDetails(this.groupsList[0]);
-                    this.working = false;
-                });
-            },
-            createNewGroup(){
-                if (!this.groupsList.length || this.groupsList[0].id !== 'new'){
-                    this.groupsList.splice(1, 0 ,{id: 'new',title:'',selected: false});
-                }
-            },
-            saveGroup(item){
-                Team.save(this, item).then(team=>{
-                    this.groupsList.splice(1, 0 , team);
-                    this.groupDetails(team);
-                });
-            },
-            updateGroups(item){
-                /*if (this.visibleGroup.id === 'all'){
+  },
+  methods: {
+    refreshList (force) {
+      this.working = true
+      this.visibleGroup = null
+      this.loadAllMembers(force)
+    },
+    loadAllMembers (force) {
+      TeamMember.fetch(this, force).then(allMembers => {
+        this.allMembers = allMembers
+        this.loadTeams(force)
+      })
+    },
+    loadTeams (force) {
+      Team.fetch(this, force).then(teams => {
+        this.groupsList = teams
+        if (!_.findWhere(this.groupsList, {id: 'all'})) {
+          this.groupsList.splice(0, 0, {
+            id: 'all',
+            name: 'All members',
+            builtIn: true
+          })
+        }
+        this.groupDetails(this.groupsList[0])
+        this.working = false
+      })
+    },
+    createNewGroup () {
+      if (!this.groupsList.length || this.groupsList[0].id !== 'new') {
+        this.groupsList.splice(1, 0, {id: 'new', title: '', selected: false})
+      }
+    },
+    saveGroup (item) {
+      Team.save(this, item).then(team => {
+        this.groupsList.splice(1, 0, team)
+        this.groupDetails(team)
+      })
+    },
+    updateGroups (item) {
+      /* if (this.visibleGroup.id === 'all'){
                     this.groupsList.forEach((g)=>{
                         let index = _.findIndex(g.members, (m)=>{ return m.id === item.id; });
                         if (index > -1){
@@ -159,79 +159,78 @@
                     });
 
                     this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
-                }*/
-                this.refreshList(true);
-            },
-            updateGroup(item){
-                if (item.id !== 'all'){
-                    new Team(item).save().then(res=>{
-                        let itemIndex = _.findIndex(this.groupsList, (g)=>{ return g.id === item.id; });
-                        if (itemIndex > -1){
-                            this.groupsList[itemIndex] = item;
-                        }
-                        //this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
-                        this.groupDetails(item);
-                    });
-                } else {
-                    let itemIndex = _.findIndex(this.groupsList, (g)=>{ return g.id === item.id; });
-                    if (itemIndex > -1){
-                        this.groupsList[itemIndex] = item;
-                    }
-                    //this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
-                    this.groupDetails(item);
-                }
-            },
-            deleteGroup(item){
-                if (item.builtIn) return;
+                } */
+      this.refreshList(true)
+    },
+    updateGroup (item) {
+      if (item.id !== 'all') {
+        new Team(item).save().then(res => {
+          let itemIndex = _.findIndex(this.groupsList, (g) => { return g.id === item.id })
+          if (itemIndex > -1) {
+            this.groupsList[itemIndex] = item
+          }
+          // this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
+          this.groupDetails(item)
+        })
+      } else {
+        let itemIndex = _.findIndex(this.groupsList, (g) => { return g.id === item.id })
+        if (itemIndex > -1) {
+          this.groupsList[itemIndex] = item
+        }
+        // this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
+        this.groupDetails(item)
+      }
+    },
+    deleteGroup (item) {
+      if (item.builtIn) return
 
-                swal({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                 type: "warning",
+      swal({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        type: 'warning',
         showCancelButton: true,
- confirmButtonClass: "md-button md-success confirm-btn-bg btn-fill",
-        cancelButtonClass: "md-button md-danger cancel-btn-bg btn-fill",
-                    confirmButtonText: "Yes, delete it!"
-                }).then(async result => {
-                    if (result.value) {
-                        if (this.visibleGroup && this.visibleGroup.id === item.id){
-                            this.visibleGroup = this.groupsList.length ? this.groupsList[0] : null;
-                        }
-                        new Team(item).delete().then(res=>{
-                            let index = _.findIndex(this.groupsList, (g)=>{ return g.id === item.id});
-                            this.groupsList.splice(index,1);
-                            //this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
-                        });
-                    }
-                });
-            },
-            groupDetails(item){
-                if (item.id === 'all'){
-                    item.members = this.allMembers;
-                }
-                this.visibleGroup = item;
-            },
-            selectGroup(item){
-                this.visibleGroup = _.findWhere(this.groupsList, {id: item.id});
-            },
-            groupNameChanged(val, fieldName,item) {
-                item[fieldName] = val;
+        confirmButtonClass: 'md-button md-success confirm-btn-bg btn-fill',
+        cancelButtonClass: 'md-button md-danger cancel-btn-bg btn-fill',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(async result => {
+        if (result.value) {
+          if (this.visibleGroup && this.visibleGroup.id === item.id) {
+            this.visibleGroup = this.groupsList.length ? this.groupsList[0] : null
+          }
+          new Team(item).delete().then(res => {
+            let index = _.findIndex(this.groupsList, (g) => { return g.id === item.id })
+            this.groupsList.splice(index, 1)
+            // this.$ls.set("teams", this.groupsList, 1000 * 60 * 10);
+          })
+        }
+      })
+    },
+    groupDetails (item) {
+      if (item.id === 'all') {
+        item.members = this.allMembers
+      }
+      this.visibleGroup = item
+    },
+    selectGroup (item) {
+      this.visibleGroup = _.findWhere(this.groupsList, {id: item.id})
+    },
+    groupNameChanged (val, fieldName, item) {
+      item[fieldName] = val
 
-                if (item.id === 'new') {
-                    item.id = null;
-                    delete item['id'];
-                    this.groupsList.splice(1,1);
-                    this.saveGroup(item);
-                } else {
-                    this.updateGroup(item);
-                }
+      if (item.id === 'new') {
+        item.id = null
+        delete item['id']
+        this.groupsList.splice(1, 1)
+        this.saveGroup(item)
+      } else {
+        this.updateGroup(item)
+      }
+    },
+    changeGroupSelection ($event, item) {
 
-            },
-            changeGroupSelection($event, item){
-
-            }
-        },
     }
+  }
+}
 </script>
 <style lang="scss" scoped>
     @import '@/assets/scss/md/_colors.scss';

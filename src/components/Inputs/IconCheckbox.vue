@@ -19,9 +19,9 @@
 </template>
 <script>
 export default {
-  name: "icon-checkbox",
+  name: 'icon-checkbox',
   model: {
-    prop: "checked"
+    prop: 'checked'
   },
   props: {
     checked: {
@@ -34,11 +34,11 @@ export default {
     disabled: Boolean
   },
   methods: {
-    updateValue() {
-      this.$emit("input", !this.checked);
+    updateValue () {
+      this.$emit('input', !this.checked)
     }
   }
-};
+}
 </script>
 <style>
 </style>

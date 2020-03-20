@@ -41,159 +41,147 @@
 
 <script>
 
-    import GoBack from './componenets/GoBack';
-    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import GoBack from './componenets/GoBack'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
-    import PublicEventPlannerVuexModule from "./PublicEventPlanner.vuex";
+import PublicEventPlannerVuexModule from './PublicEventPlanner.vuex'
 
+export default {
+  components: {
+    GoBack
+  },
+  data () {
+    return {
 
-    export default {
-        components: {
-            GoBack
+      step: 4,
+      haveEventPlace: false,
+      flexibleWithDates: false,
+      eventTime: null,
+      eventData: {
+
+      },
+      modelValidations: {
+        totalBudget: {
+          required: true
         },
-        data() {
-            return {
-
-                step : 4,
-                haveEventPlace : false,
-                flexibleWithDates : false,
-                eventTime : null,
-                eventData : {
-
-                },
-                modelValidations: {
-                    totalBudget : {
-                        required: true,
-                    },
-                    budgetPerPerson: {
-                        required: true,
-                    }
-                },
-                buttonLabel : 'Skip',
-                ringtonesURL : 'http://static.maryoku.com/storage/ringtones/',
-                ringtonesList : [
-                    {
-                        name : '9 to 5',
-                        author : 'Dolly Parton'
-                    },
-                    {
-                        name : 'Money Money Money',
-                        author : 'Abba'
-                    },
-                    {
-                        name : 'Don\'t worry be happy',
-                        author : 'bobby McFerrin'
-                    },
-                    {
-                        name : 'We\'ve Only Just Begun',
-                        author : 'the Carpenters'
-                    },
-                    {
-                        name : 'We Are The Champions',
-                        author : 'Queen'
-                    },
-                    {
-                        name : 'A Change Would Do You Good',
-                        author : 'Sheryl Crow'
-                    },
-                    {
-                        name : 'Eight days a week',
-                        author : 'The Beatles'
-                    },
-                    {
-                        name : 'We Are Family',
-                        author : 'Sister Sledge'
-                    }
-                ],
-                eventSongId : null,
-                boardSound:  [],
-                currentIndex : null,
-                isPaused : false
-            }
-        },
-        created() {
-
-            this.boardSound = [
-                new Audio("http://static.maryoku.com/storage/ringtones/9_to_5_1605.mp3"),
-                new Audio("http://static.maryoku.com/storage/ringtones/abba_money_money_money_ringtone.mp3"),
-                new Audio("http://static.maryoku.com/storage/ringtones/bobby_mcferrin_dont_worry_be_happy.mp3"),
-                new Audio("http://static.maryoku.com/storage/ringtones/carpenters_weve_only_just_begun.mp3"),
-                new Audio("http://static.maryoku.com/storage/ringtones/queen_we_are_the_champions_ringtone.mp3"),
-                new Audio("http://static.maryoku.com/storage/ringtones/sheryl_crow_a_change_would_do_you_good_b_w_music_video.mp3"),
-                new Audio("http://static.maryoku.com/storage/ringtones/the_beatles_eight_days_a_week.mp3"),
-                new Audio("http://static.maryoku.com/storage/ringtones/we_are_family_v2_53802.mp3"),
-            ]
-
-            console.log(this.publicEventData.eventSongId);
-
-            this.$set(this,'eventSongId' ,this.publicEventData.eventSongId);
-
-        },
-
-        methods : {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setCurrentStep']),
-
-            goToNext() {
-
-                let vm = this;
-
-                this.cerrors = {};
-                this.validating = true;
-
-                this.$validator.validateAll().then(isValid => {
-
-                    if (isValid) {
-                        this.setEventProperty({key: 'eventSongId', actualValue: this.eventSongId});
-                        this.setCurrentStep({currentPage : '/event-movies'});
-                        this.$router.push({ path: `/event-movies`});
-
-
-                    } else {
-                    }
-
-                });
-
-            },
-            skip() {
-                this.$router.push({ path: `/event-movies`});
-                this.setCurrentStep({currentPage : '/event-movies'});
-
-            },
-            songName(name){
-                console.log(name);
-
-                var newStr = name.replace(/_/g, " ");
-                return newStr.replace(".mp3","");
-
-            },
-
-            pauseSong(index) {
-                this.boardSound[index].pause();
-                this.currentIndex = null;
-            },
-            playSong (index) {
-
-                console.log(index);
-
-                // if ( this.currentIndex ) {
-                //     this.boardSound[this.currentIndex].pause();
-                // }
-
-                for (let i = 0; i< this.boardSound.length ; i++) {
-                    this.boardSound[i].pause();
-                }
-
-                this.boardSound[index].play();
-
-                this.currentIndex = index;
-
-            }
-        },computed : {
-            ...mapState('PublicEventPlannerVuex', [
-                'publicEventData',
-            ])
+        budgetPerPerson: {
+          required: true
         }
-    };
+      },
+      buttonLabel: 'Skip',
+      ringtonesURL: 'http://static.maryoku.com/storage/ringtones/',
+      ringtonesList: [
+        {
+          name: '9 to 5',
+          author: 'Dolly Parton'
+        },
+        {
+          name: 'Money Money Money',
+          author: 'Abba'
+        },
+        {
+          name: 'Don\'t worry be happy',
+          author: 'bobby McFerrin'
+        },
+        {
+          name: 'We\'ve Only Just Begun',
+          author: 'the Carpenters'
+        },
+        {
+          name: 'We Are The Champions',
+          author: 'Queen'
+        },
+        {
+          name: 'A Change Would Do You Good',
+          author: 'Sheryl Crow'
+        },
+        {
+          name: 'Eight days a week',
+          author: 'The Beatles'
+        },
+        {
+          name: 'We Are Family',
+          author: 'Sister Sledge'
+        }
+      ],
+      eventSongId: null,
+      boardSound: [],
+      currentIndex: null,
+      isPaused: false
+    }
+  },
+  created () {
+    this.boardSound = [
+      new Audio('http://static.maryoku.com/storage/ringtones/9_to_5_1605.mp3'),
+      new Audio('http://static.maryoku.com/storage/ringtones/abba_money_money_money_ringtone.mp3'),
+      new Audio('http://static.maryoku.com/storage/ringtones/bobby_mcferrin_dont_worry_be_happy.mp3'),
+      new Audio('http://static.maryoku.com/storage/ringtones/carpenters_weve_only_just_begun.mp3'),
+      new Audio('http://static.maryoku.com/storage/ringtones/queen_we_are_the_champions_ringtone.mp3'),
+      new Audio('http://static.maryoku.com/storage/ringtones/sheryl_crow_a_change_would_do_you_good_b_w_music_video.mp3'),
+      new Audio('http://static.maryoku.com/storage/ringtones/the_beatles_eight_days_a_week.mp3'),
+      new Audio('http://static.maryoku.com/storage/ringtones/we_are_family_v2_53802.mp3')
+    ]
+
+    console.log(this.publicEventData.eventSongId)
+
+    this.$set(this, 'eventSongId', this.publicEventData.eventSongId)
+  },
+
+  methods: {
+    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
+
+    goToNext () {
+      let vm = this
+
+      this.cerrors = {}
+      this.validating = true
+
+      this.$validator.validateAll().then(isValid => {
+        if (isValid) {
+          this.setEventProperty({key: 'eventSongId', actualValue: this.eventSongId})
+          this.setCurrentStep({currentPage: '/event-movies'})
+          this.$router.push({ path: `/event-movies`})
+        } else {
+        }
+      })
+    },
+    skip () {
+      this.$router.push({ path: `/event-movies`})
+      this.setCurrentStep({currentPage: '/event-movies'})
+    },
+    songName (name) {
+      console.log(name)
+
+      var newStr = name.replace(/_/g, ' ')
+      return newStr.replace('.mp3', '')
+    },
+
+    pauseSong (index) {
+      this.boardSound[index].pause()
+      this.currentIndex = null
+    },
+    playSong (index) {
+      console.log(index)
+
+      // if ( this.currentIndex ) {
+      //     this.boardSound[this.currentIndex].pause();
+      // }
+
+      for (let i = 0; i < this.boardSound.length; i++) {
+        this.boardSound[i].pause()
+      }
+
+      this.boardSound[index].play()
+
+      this.currentIndex = index
+    }
+  },
+  computed: {
+    ...mapState('PublicEventPlannerVuex', [
+      'publicEventData'
+    ])
+  }
+}
 </script>
 <style lang="scss">
 
@@ -226,7 +214,6 @@
         flex: 1;
         justify-content: center;
         align-items: center;
-
 
         .md-icon {
             font-size: 3rem !important;

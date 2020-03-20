@@ -85,27 +85,26 @@
   </div>
 </template>
 <script>
-  import VueElementLoading from 'vue-element-loading';
-  import CompanyDashboardInfo from "../CompanyDashboard/CompanyDashboardInfo.vue";
-  import {LabelEdit} from '@/components';
+import VueElementLoading from 'vue-element-loading'
+import CompanyDashboardInfo from '../CompanyDashboard/CompanyDashboardInfo.vue'
+import {LabelEdit} from '@/components'
 
-  export default {
-    components: {
-      VueElementLoading,
-      CompanyDashboardInfo,
-      LabelEdit
-    },
-    data() {
-      return {
-      }
-
-    },
-    methods: {
-      closePanel(){
-        this.$emit("closePanel");
-      }
+export default {
+  components: {
+    VueElementLoading,
+    CompanyDashboardInfo,
+    LabelEdit
+  },
+  data () {
+    return {
+    }
+  },
+  methods: {
+    closePanel () {
+      this.$emit('closePanel')
     }
   }
+}
 </script>
 <style lang="scss" scoped>
 
