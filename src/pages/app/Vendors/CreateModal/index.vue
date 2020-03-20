@@ -132,217 +132,227 @@
 </template>
 
 <script>
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import vendorsVuex from '../vendors.vuex'
-import { Modal } from '@/components'
-import swal from 'sweetalert2'
-import Vendors from '@/models/Vendors'
-import VendorCategories from '@/models/VendorCategories'
-import {SlideYDownTransition} from 'vue2-transitions'
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+    import vendorsVuex from '../vendors.vuex';
+    import { Modal } from "@/components";
+    import swal from "sweetalert2";
+    import Vendors from "@/models/Vendors";
+    import VendorCategories from "@/models/VendorCategories";
+    import {SlideYDownTransition} from "vue2-transitions";
 
-export default {
-  components: {
-    Modal,
-    SlideYDownTransition
 
-  },
-  data () {
-    return {
-      inviteModalOpen: false,
-      single: null,
-      vendorCategory: [],
-      categories: [
-        'Space / Venue ',
-        'Catering',
-        'Services ',
-        'Products Rental / Purchase'
-      ],
-      touched: {
-        displayName: false,
-        vendorAddress: false,
-        vendorEmail: false,
-        webSite: false,
-        vendorPhoneNumber: false
+    export default {
+        components: {
+          Modal,
+          SlideYDownTransition
+
+        },
+        data() {
+            return {
+              inviteModalOpen: false,
+              single: null,
+              vendorCategory: [],
+              categories: [
+                'Space / Venue ',
+                'Catering',
+                'Services ',
+                'Products Rental / Purchase'
+              ],
+              touched: {
+                displayName: false,
+                vendorAddress: false,
+                vendorEmail: false,
+                webSite: false,
+                vendorPhoneNumber: false
+              },
+              modelValidations: {
+                displayName: {
+                  required: true,
+                  min: 5
+                },
+                vendorAddress: {
+                  required: true,
+                  min: 5
+                },
+                vendorEmail: {
+                  required: true,
+                  email: true
+                },
+                webSite: {
+                  required: true,
+                  min: 5
+                },
+                vendorPhoneNumber: {
+                  required: true,
+                  min: 5
+                }
+              }
+            }
+        },
+        created() {
+            this.$store.registerModule('vendors', vendorsVuex);
+
+            Vendors.find('categories').then(categories => {
+            this.vendorCategory = categories;
+
+          }, (error) => {
+            console.log(error)
+          });
+
+        },
+      destroyed() {
+        console.log(this.$store);
+        console.log(this.vendorsMemberData)
+
+        this.$store.unregisterModule('vendors', vendorsVuex);
       },
-      modelValidations: {
-        displayName: {
-          required: true,
-          min: 5
+        computed: {
+            ...mapState('vendors', ['vendorsMemberData']),
+
+          name: {
+            get() {
+              return this.vendorsMemberData.vendorDisplayName
+            },
+            set(value) {
+              this.setMemberProperty({key: 'vendorDisplayName', actualValue: value})
+            },
+
+          },
+
+          address: {
+            get() {
+              return this.vendorsMemberData.vendorAddressLine1
+            },
+            set(value) {
+              this.setMemberProperty({key: 'vendorAddressLine1', actualValue: value})
+            },
+
+          },
+          email: {
+            get() {
+              return this.vendorsMemberData.vendorMainEmail
+            },
+            set(value) {
+              this.setMemberProperty({key: 'vendorMainEmail', actualValue: value})
+            }
+          },
+          category: {
+            get() {
+              return this.vendorsMemberData.productsCategory
+            },
+            set(value) {
+              this.setMemberProperty({key: 'productsCategory', actualValue: value})
+            }
+          },
+          web: {
+            get() {
+              return this.vendorsMemberData.vendorWebsite
+            },
+            set(value) {
+              this.setMemberProperty({key: 'vendorWebsite', actualValue: value})
+            }
+          },
+          phoneNumber: {
+            get() {
+              return this.vendorsMemberData.vendorMainPhoneNumber
+            },
+            set(value) {
+              this.setMemberProperty({key: 'vendorMainPhoneNumber', actualValue: value})
+            }
+          }
+
         },
-        vendorAddress: {
-          required: true,
-          min: 5
-        },
-        vendorEmail: {
-          required: true,
-          email: true
-        },
-        webSite: {
-          required: true,
-          min: 5
-        },
-        vendorPhoneNumber: {
-          required: true,
-          min: 5
+        methods: {
+        ...mapMutations('vendors', [
+            'setMemberProperty'
+          ]),
+            getError(fieldName) {
+            return this.errors.first(fieldName);
+          },
+          validate() {
+            return this.$validator.validateAll().then(res => {
+              this.$emit("on-validated", res);
+              return res;
+            });
+          },
+            noticeModalHide: function () {
+                this.inviteModalOpen = false;
+            },
+            toggleModal: function (show, ref) {
+                this.inviteModalOpen = show;
+              setTimeout(() => {this.$refs.focusable.$el.focus();}, 100);
+            },
+          closeModal(){
+            this.inviteModalOpen = false;
+          },
+            validateStep(ref) {
+                return this.$refs[ref].validate();
+            },
+            onStepValidated(validated, model) {
+                this.wizardModel = {...this.wizardModel, ...model};
+            },
+
+            async addVendor() {
+              this.$validator.validateAll().then(res => {
+
+                if(res){
+                  this.inviteModalOpen = false;
+                  let vendor = new Vendors({});
+
+                this.vendorsMemberData.vendorContactPerson = [{
+                    name : null,
+                    email : null,
+                    phone_number : null
+                }];
+
+                    this.vendorsMemberData.vendorAttachments = [{
+                        path : null
+                    }];
+
+
+                this.vendorsMemberData.vendorTagging = [];
+
+
+                  vendor.attach(this.vendorsMemberData).then(() => {
+                    this.$emit('vendorCreated')
+                    this.$notify(
+                      {
+                        message: 'Vendor created successfully!',
+                        horizontalAlign: 'center',
+                        verticalAlign: 'top',
+                        type: 'success'
+                      })
+
+                  });
+
+
+                }else {
+                  this.$emit("on-validated", res);
+                  return res;
+                }
+
+            });
         }
+        },
+    watch: {
+      displayName() {
+        this.touched.displayName = true;
+      },
+      vendorAddress() {
+        this.touched.vendorAddress = true;
+      },
+      vendorEmail() {
+        this.touched.vendorEmail = true;
+      },
+
+      webSite() {
+        this.touched.webSite = true;
+      },
+      vendorPhoneNumber() {
+        this.touched.vendorPhoneNumber = true;
       }
     }
-  },
-  created () {
-    this.$store.registerModule('vendors', vendorsVuex)
-
-    Vendors.find('categories').then(categories => {
-      this.vendorCategory = categories
-    }, (error) => {
-      console.log(error)
-    })
-  },
-  destroyed () {
-    console.log(this.$store)
-    console.log(this.vendorsMemberData)
-
-    this.$store.unregisterModule('vendors', vendorsVuex)
-  },
-  computed: {
-    ...mapState('vendors', ['vendorsMemberData']),
-
-    name: {
-      get () {
-        return this.vendorsMemberData.vendorDisplayName
-      },
-      set (value) {
-        this.setMemberProperty({key: 'vendorDisplayName', actualValue: value})
-      }
-
-    },
-
-    address: {
-      get () {
-        return this.vendorsMemberData.vendorAddressLine1
-      },
-      set (value) {
-        this.setMemberProperty({key: 'vendorAddressLine1', actualValue: value})
-      }
-
-    },
-    email: {
-      get () {
-        return this.vendorsMemberData.vendorMainEmail
-      },
-      set (value) {
-        this.setMemberProperty({key: 'vendorMainEmail', actualValue: value})
-      }
-    },
-    category: {
-      get () {
-        return this.vendorsMemberData.productsCategory
-      },
-      set (value) {
-        this.setMemberProperty({key: 'productsCategory', actualValue: value})
-      }
-    },
-    web: {
-      get () {
-        return this.vendorsMemberData.vendorWebsite
-      },
-      set (value) {
-        this.setMemberProperty({key: 'vendorWebsite', actualValue: value})
-      }
-    },
-    phoneNumber: {
-      get () {
-        return this.vendorsMemberData.vendorMainPhoneNumber
-      },
-      set (value) {
-        this.setMemberProperty({key: 'vendorMainPhoneNumber', actualValue: value})
-      }
-    }
-
-  },
-  methods: {
-    ...mapMutations('vendors', [
-      'setMemberProperty'
-    ]),
-    getError (fieldName) {
-      return this.errors.first(fieldName)
-    },
-    validate () {
-      return this.$validator.validateAll().then(res => {
-        this.$emit('on-validated', res)
-        return res
-      })
-    },
-    noticeModalHide: function () {
-      this.inviteModalOpen = false
-    },
-    toggleModal: function (show, ref) {
-      this.inviteModalOpen = show
-      setTimeout(() => { this.$refs.focusable.$el.focus() }, 100)
-    },
-    closeModal () {
-      this.inviteModalOpen = false
-    },
-    validateStep (ref) {
-      return this.$refs[ref].validate()
-    },
-    onStepValidated (validated, model) {
-      this.wizardModel = {...this.wizardModel, ...model}
-    },
-
-    async addVendor () {
-      this.$validator.validateAll().then(res => {
-        if (res) {
-          this.inviteModalOpen = false
-          let vendor = new Vendors({})
-
-          this.vendorsMemberData.vendorContactPerson = [{
-            name: null,
-            email: null,
-            phone_number: null
-          }]
-
-          this.vendorsMemberData.vendorAttachments = [{
-            path: null
-          }]
-
-          this.vendorsMemberData.vendorTagging = []
-
-          vendor.attach(this.vendorsMemberData).then(() => {
-            this.$emit('vendorCreated')
-            this.$notify(
-              {
-                message: 'Vendor created successfully!',
-                horizontalAlign: 'center',
-                verticalAlign: 'top',
-                type: 'success'
-              })
-          })
-        } else {
-          this.$emit('on-validated', res)
-          return res
-        }
-      })
-    }
-  },
-  watch: {
-    displayName () {
-      this.touched.displayName = true
-    },
-    vendorAddress () {
-      this.touched.vendorAddress = true
-    },
-    vendorEmail () {
-      this.touched.vendorEmail = true
-    },
-
-    webSite () {
-      this.touched.webSite = true
-    },
-    vendorPhoneNumber () {
-      this.touched.vendorPhoneNumber = true
-    }
-  }
-}
+    };
 </script>
 <style>
     .swal2-container{

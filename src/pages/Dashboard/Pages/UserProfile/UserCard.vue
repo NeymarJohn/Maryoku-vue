@@ -16,26 +16,26 @@
 </template>
 <script>
 export default {
-  name: 'user-card',
+  name: "user-card",
   props: {
     cardUserImage: {
       type: String,
-      default: 'http://static.maryoku.com/storage/img/faces/marc.jpg'
+      default: "http://static.maryoku.com/storage/img/faces/marc.jpg"
     },
     buttonColor: {
       type: String,
-      default: ''
+      default: ""
     }
   },
-  data () {
-    return {}
+  data() {
+    return {};
   },
   methods: {
-    getColorButton: function (buttonColor) {
-      return 'md-' + buttonColor + ''
+    getColorButton: function(buttonColor) {
+      return "md-" + buttonColor + "";
     }
   }
-}
+};
 </script>
 <style>
 </style>

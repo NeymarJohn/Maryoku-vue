@@ -20,30 +20,30 @@
 
 <script>
 export default {
-  name: 'login-card',
+  name: "login-card",
   props: {
     headerColor: {
       type: String,
-      default: ''
+      default: ""
     }
   },
-  data () {
+  data() {
     return {
       cardHidden: true
-    }
+    };
   },
-  beforeMount () {
-    setTimeout(this.showCard, 400)
+  beforeMount() {
+    setTimeout(this.showCard, 400);
   },
   methods: {
-    showCard: function () {
-      this.cardHidden = false
+    showCard: function() {
+      this.cardHidden = false;
     },
-    getClass: function (headerColor) {
-      return 'md-card-header-' + headerColor + ''
+    getClass: function(headerColor) {
+      return "md-card-header-" + headerColor + "";
     }
   }
-}
+};
 </script>
 
 <style lang="css">

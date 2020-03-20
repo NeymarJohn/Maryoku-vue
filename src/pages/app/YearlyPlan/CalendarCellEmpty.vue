@@ -3,27 +3,27 @@
   </td>
 </template>
 <script>
-export default {
-  name: 'empty-cell',
-  components: {
+  export default {
+    name: 'empty-cell',
+    components: {
 
-  },
-  props: {
+    },
+    props: {
 
-  },
-  methods: {
+    },
+    methods: {
 
-  },
-  created () {
+    },
+    created() {
 
-  },
-  mounted () {
+    },
+    mounted() {
 
-  },
-  computed: {
+    },
+    computed: {
 
+    }
   }
-}
 </script>
 <style lang="scss">
   .empty-cell {

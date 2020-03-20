@@ -24,33 +24,33 @@
 </template>
 <script>
 
-export default {
-  name: 'editable-event',
-  components: {
+  export default {
+    name: 'editable-event',
+    components: {
 
-  },
-  props: {
-    calendarEvents: {
-      type: Object
     },
-    theDate: String,
-    dayOnMonth: String
-  },
-  methods: {
+    props: {
+      calendarEvents: {
+        type: Object
+      },
+      theDate: String,
+      dayOnMonth: String,
+    },
+    methods: {
 
-  },
-  created () {
+    },
+    created() {
 
-  },
-  mounted () {
+    },
+    mounted() {
 
-  },
-  computed: {
-    cellContents () {
-      return this.calendarEvents.editables[0].title
+    },
+    computed: {
+      cellContents() {
+        return this.calendarEvents.editables[0].title;
+      }
     }
   }
-}
 </script>
 <style lang="scss">
   .editable-cell {

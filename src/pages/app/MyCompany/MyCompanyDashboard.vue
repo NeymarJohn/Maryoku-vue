@@ -107,33 +107,33 @@
 
 <script>
 
-import {
-  StatsCard,
-  ChartCard,
-  AnimatedNumber,
-  Slider,
-  Collapse
-} from '@/components'
-
-export default {
-  components: {
+  import {
     StatsCard,
     ChartCard,
     AnimatedNumber,
     Slider,
     Collapse
-  },
-  data () {
-    return {
-      sliders: {
-        simple: 26,
-        rangeSlider: [20, 60]
-      }
+  } from "@/components";
+
+  export default {
+    components: {
+      StatsCard,
+      ChartCard,
+      AnimatedNumber,
+      Slider,
+      Collapse
+    },
+    data() {
+      return {
+        sliders: {
+          simple: 26,
+          rangeSlider: [20, 60]
+        }
+      };
+    },
+    methods: {
     }
-  },
-  methods: {
-  }
-}
+  };
 </script>
 <style lang="scss" scoped>
   .noUi-horizontal {

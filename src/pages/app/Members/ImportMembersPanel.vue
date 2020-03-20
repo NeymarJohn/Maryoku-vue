@@ -131,215 +131,217 @@
 </template>
 <script>
 
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import teamsModule from '../Team/team.vuex'
-import { NavTabs, Tabs, Modal} from '@/components'
-import draggable from 'vuedraggable'
-import { Drag, Drop } from 'vue-drag-drop'
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+    import teamsModule from "../Team/team.vuex";
+    import { NavTabs, Tabs ,Modal} from '@/components';
+    import draggable from 'vuedraggable';
+    import { Drag, Drop } from 'vue-drag-drop';
 
-import TeamMembersFile from '@/models/TeamMembersFile'
+    import TeamMembersFile from '@/models/TeamMembersFile';
 
-export default {
-  name: 'import-members-panel',
-  components: {
-    Tabs,
-    NavTabs,
-    draggable,
-    Drag,
-    Drop,
-    Modal
-  },
-  data () {
-    return {
-      importModalOpen: false,
-      working: false,
-      noActions: false,
-      currentStep: 1,
-      finalResult: {
-        processed: 0,
-        total: 0,
-        duplicates: 0
-      },
-      csvUploading: false,
-      parseCSV: [],
-      mappedColumns: [],
-      sortOrders: {},
-      sortKey: '',
-      rawCSVFile: null,
-      databaseMemberColumns: [
-        {
-          displayName: 'First Name',
-          name: 'firstName',
-          value: 'firstName',
-          mandatory: true
-
+    export default {
+        name: 'import-members-panel',
+        components: {
+            Tabs,
+            NavTabs,
+            draggable, Drag, Drop,Modal
         },
-        {
-          displayName: 'Last Name',
-          name: 'lastName',
-          value: 'lastName',
-          mandatory: true
+        data(){
+            return {
+                importModalOpen : false,
+                working: false,
+                noActions: false,
+                currentStep: 1,
+                finalResult: {
+                    processed: 0,
+                    total: 0,
+                    duplicates: 0,
+                },
+                csvUploading: false,
+                parseCSV: [],
+                mappedColumns: [],
+                sortOrders: {},
+                sortKey: '',
+                rawCSVFile: null,
+                databaseMemberColumns: [
+                    {
+                        displayName: 'First Name',
+                        name: 'firstName',
+                        value: 'firstName',
+                        mandatory: true
 
-        },
-        {
-          displayName: 'Email Address',
-          name: 'emailAddress',
-          value: 'emailAddress',
-          mandatory: true
+                    },
+                    {
+                        displayName: 'Last Name',
+                        name: 'lastName',
+                        value: 'lastName',
+                        mandatory: true
 
-        },
-        {
-          displayName: 'Group',
-          name: 'group',
-          value: 'group',
-          mandatory: false
+                    },
+                    {
+                        displayName: 'Email Address',
+                        name: 'emailAddress',
+                        value: 'emailAddress',
+                        mandatory: true
 
-        },
-        {
-          displayName: 'Role',
-          name: 'role',
-          value: 'role',
-          mandatory: false
+                    },
+                    {
+                        displayName: 'Group',
+                        name: 'group',
+                        value: 'group',
+                        mandatory: false
 
-        },
-        {
-          displayName: 'Permissions',
-          name: 'permissions',
-          value: 'permissions',
-          mandatory: false
+                    },
+                    {
+                        displayName: 'Role',
+                        name: 'role',
+                        value: 'role',
+                        mandatory: false
 
-        }
-      ]
-    }
-  },
-  created () {
-    this.$store.registerModule('teamVuex', teamsModule)
-  },
-  methods: {
-    ...mapMutations('teamVuex', ['setImportModal']),
-    closeModal () {
-      this.importModalOpen = false
-    },
-    noticeModalHide: function () {
-      this.importModalOpen = false
-    },
-    toggleModal: function (show) {
-      this.importModalOpen = show
-    },
-    handleDrop (data, event) {
-      this.sendCSVFile(event.dataTransfer.files[0])
-    },
-    nextStep () {
-      this.csvUploading = true
-      this.updateColumns()
-    },
-    updateColumns () {
-      this.updateVendorsFile().then(isUpdated => {
-        if (isUpdated) {
-          this.currentStep++
-          this.$root.$emit('switch-panel', 2)
-          this.csvUploading = false
-        }
-      })
-    },
-    closePanel () {
-      this.$emit('closePanel')
-    },
-    async sendCSVFile (file) {
-      this.csvUploading = true
-      let reader = new FileReader()
-      let _this = this
+                    },
+                    {
+                        displayName: 'Permissions',
+                        name: 'permissions',
+                        value: 'permissions',
+                        mandatory: false
 
-      reader.onload = e => {
-        let membersFile = new TeamMembersFile({membersFile: e.target.result})
-        membersFile.save().then(result => {
-          _this.parseCSV = result
-          _this.parseCSV.newColumns = []
-          _this.parseCSV.columns.map((item, index) => {
-            if (item !== '' && !item.toString().toLowerCase().startsWith('unknown')) {
-              let mapping = {}
-              _this.databaseMemberColumns[index].value = item
-              _this.parseCSV.newColumns.push(mapping)
+                    }
+                ],
             }
-            _this.mappedColumns.push({})
-          })
-          _this.csvUploading = false
-          this.$notify({
-            message: 'Members file is uploaded successfully',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'success'
-          })
-          this.currentStep++
-          this.$root.$emit('switch-panel', 1)
-        }).catch((error) => {
-          _this.csvUploading = false
-          this.$notify({
-            message: 'Members file is not uploaded, please try again',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'warning'
-          })
+        },
+        created(){
+            this.$store.registerModule('teamVuex', teamsModule);
+        },
+        methods: {
+            ...mapMutations('teamVuex', ['setImportModal']),
+            closeModal(){
+                this.importModalOpen = false;
+            },
+            noticeModalHide: function () {
+                this.importModalOpen = false;
+            },
+            toggleModal: function (show) {
+                this.importModalOpen = show;
+            },
+            handleDrop(data, event) {
+                this.sendCSVFile(event.dataTransfer.files[0])
+            },
+            nextStep(){
+                this.csvUploading = true;
+                this.updateColumns();
+            },
+            updateColumns(){
+                this.updateVendorsFile().then( isUpdated => {
+                    if (isUpdated) {
+                        this.currentStep++;
+                        this.$root.$emit('switch-panel', 2);
+                        this.csvUploading = false;
+                    }
+                });
+            },
+            closePanel(){
+                this.$emit("closePanel");
+            },
+            async sendCSVFile(file) {
+                this.csvUploading = true;
+                let reader = new FileReader();
+                let _this = this;
 
-          console.log(error)
-        })
-      }
-      reader.readAsDataURL(file)
-    },
-    updateVendorsFile: async function () {
-      if (!this.parseCSV.id) {
-        return true
-      }
-      let membersFile = await TeamMembersFile.find(this.parseCSV.id)
-      let columnsMapping = []
-      let mapping = {}
-      this.parseCSV.columns.map((item, index) => {
-        if (item !== '' && !item.toString().toLowerCase().startsWith('unknown')) {
-          mapping[item] = this.mappedColumns[index].value
+                reader.onload = e => {
+                    let membersFile = new TeamMembersFile({membersFile: e.target.result});
+                    membersFile.save().then(result => {
+                        _this.parseCSV = result;
+                        _this.parseCSV.newColumns = [];
+                        _this.parseCSV.columns.map((item, index) => {
+                            if (item !== '' && !item.toString().toLowerCase().startsWith("unknown")) {
+                                let mapping = {};
+                                _this.databaseMemberColumns[index].value = item;
+                                _this.parseCSV.newColumns.push(mapping);
+
+                            }
+                            _this.mappedColumns.push({});
+                        });
+                        _this.csvUploading = false;
+                        this.$notify({
+                            message: 'Members file is uploaded successfully' ,
+                            horizontalAlign: 'center',
+                            verticalAlign: 'top',
+                            type: 'success'
+                        });
+                        this.currentStep++;
+                        this.$root.$emit('switch-panel', 1);
+                    }).catch((error) => {
+                        _this.csvUploading = false;
+                        this.$notify({
+                            message: 'Members file is not uploaded, please try again' ,
+                            horizontalAlign: 'center',
+                            verticalAlign: 'top',
+                            type: 'warning'
+                        });
+
+                        console.log(error);
+                    });
+                };
+                reader.readAsDataURL(file);
+            },
+            updateVendorsFile: async function () {
+                if (!this.parseCSV.id) {
+                    return true;
+                }
+                let membersFile = await TeamMembersFile.find(this.parseCSV.id);
+                let columnsMapping = [];
+                let mapping  = {};
+                this.parseCSV.columns.map((item, index) => {
+
+                    if (item !== '' && !item.toString().toLowerCase().startsWith("unknown") ) {
+                        mapping[item] = this.mappedColumns[index].value
+
+                    }
+                });
+                membersFile.columnsMapping = mapping;
+                //validate column mapping
+                if(!this.validateColumnsMapping(mapping)){
+                    return false
+                }
+                this.finalResult = await membersFile.save();
+
+                this.$root.$emit('refresh-members', true);
+
+                return true
+
+            },
+            validateColumnsMapping(mapping){
+                let _this = this;
+                let memberColumns = this.databaseMemberColumns;
+                let isValid = true;
+                for (let i = 0; i < memberColumns.length; i++) {
+
+                    if(memberColumns[i].mandatory){
+                        if (Object.values(mapping).indexOf(memberColumns[i].name) === -1) {
+                            this.$notify(
+                                {
+                                    message: 'Field ' + memberColumns[i].displayName + ' is mandatory.' ,
+                                    horizontalAlign: 'center',
+                                    verticalAlign: 'top',
+                                    type: 'warning'
+                                });
+                            isValid = false;
+                            break;
+                        }
+                    }
+                }
+
+                return isValid;
+            },
+            sortBy: function (key) {
+                let vm = this;
+                vm.sortKey = key;
+                vm.sortOrders[key] = vm.sortOrders[key] * -1
+            },
+            setCSV(event, id) {
+            },
         }
-      })
-      membersFile.columnsMapping = mapping
-      // validate column mapping
-      if (!this.validateColumnsMapping(mapping)) {
-        return false
-      }
-      this.finalResult = await membersFile.save()
-
-      this.$root.$emit('refresh-members', true)
-
-      return true
-    },
-    validateColumnsMapping (mapping) {
-      let _this = this
-      let memberColumns = this.databaseMemberColumns
-      let isValid = true
-      for (let i = 0; i < memberColumns.length; i++) {
-        if (memberColumns[i].mandatory) {
-          if (Object.values(mapping).indexOf(memberColumns[i].name) === -1) {
-            this.$notify(
-              {
-                message: 'Field ' + memberColumns[i].displayName + ' is mandatory.',
-                horizontalAlign: 'center',
-                verticalAlign: 'top',
-                type: 'warning'
-              })
-            isValid = false
-            break
-          }
-        }
-      }
-
-      return isValid
-    },
-    sortBy: function (key) {
-      let vm = this
-      vm.sortKey = key
-      vm.sortOrders[key] = vm.sortOrders[key] * -1
-    },
-    setCSV (event, id) {
     }
-  }
-}
 </script>
 <style lang="scss" scoped>
 

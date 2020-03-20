@@ -22,36 +22,40 @@
       </div>
 </template>
 <script>
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import Calendar from '@/models/Calendar'
-import EventComponent from '@/models/EventComponent'
-// import auth from '@/auth';
-import moment from 'moment'
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import Calendar from "@/models/Calendar"
+  import EventComponent from "@/models/EventComponent";
+  // import auth from '@/auth';
+  import moment from "moment";
 
-export default {
-  name: 'event-page-routes',
-  components: {
 
-  },
-  props: {
-    event
-  },
-  data: () => ({
-    // auth: auth,
-    routeName: null
-  }),
-  methods: {
-    goToComponent (route) {
-      this.$router.push({ path: `/events/` + this.event.id + route })
-      location.reload()
+  export default {
+    name: 'event-page-routes',
+    components: {
+
+    },
+    props: {
+        event
+    },
+    data: () => ({
+        // auth: auth,
+        routeName : null
+    }),
+    methods: {
+      goToComponent (route) {
+          this.$router.push({ path: `/events/`+ this.event.id + route });
+          location.reload();
+      }
+
+    },
+    created() {
+        this.routeName = this.$route.name;
+
+
+    },
+    mounted() {
+
+
     }
-
-  },
-  created () {
-    this.routeName = this.$route.name
-  },
-  mounted () {
-
   }
-}
 </script>

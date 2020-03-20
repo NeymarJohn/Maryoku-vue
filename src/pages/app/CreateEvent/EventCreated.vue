@@ -14,42 +14,47 @@
 
 <script>
 
-import GoBack from './componenets/GoBack'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import PublicEventPlannerVuexModule from './PublicEventPlanner.vuex'
-import numeral from 'numeral'
-import EventComponent from '@/models/EventComponent'
-import CalendarEvent from '@/models/CalendarEvent'
-import Calendar from '@/models/Calendar'
+    import GoBack from './componenets/GoBack';
+    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+    import PublicEventPlannerVuexModule from "./PublicEventPlanner.vuex";
+    import numeral from 'numeral';
+    import EventComponent from '@/models/EventComponent'
+    import CalendarEvent from '@/models/CalendarEvent';
+    import Calendar from "@/models/Calendar";
 
-export default {
-  components: {
-    GoBack
-  },
-  data () {
-    return {}
-  },
-  created () {
-    // create new event
 
-    this.$auth.currentUser(this, false, () => {
-      let publicEventData = this.publicEventData
-      delete publicEventData['id']
-      new CalendarEvent(this.publicEventData).save().then(resp => {
-        console.log(resp)
-      })
-    })
-  },
-  methods: {
+    export default {
+        components: {
+            GoBack
+        },
+        data() {
+            return {}
+        },
+        created(){
 
-  },
-  computed: {
-    ...mapState('PublicEventPlannerVuex', [
-      'publicEventData'
-    ])
-  }
+            //create new event
 
-}
+
+            this.$auth.currentUser(this, false, ()=>{
+                let publicEventData = this.publicEventData;
+                delete publicEventData['id'];
+                new CalendarEvent(this.publicEventData).save().then(resp=>{
+                    console.log(resp);
+                });
+            });
+
+
+
+        },
+        methods : {
+
+        },computed : {
+            ...mapState('PublicEventPlannerVuex', [
+                'publicEventData',
+            ])
+        }
+
+    };
 </script>
 <style lang="scss">
     $baseColor : #5c2153;

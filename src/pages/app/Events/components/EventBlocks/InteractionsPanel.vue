@@ -21,38 +21,39 @@
 </template>
 <script>
 
-import Calendar from '@/models/Calendar'
-import CalendarEvent from '@/models/CalendarEvent'
-import VueElementLoading from 'vue-element-loading'
-import EventInteraction from '@/models/EventInteraction'
+  import Calendar from "@/models/Calendar"
+  import CalendarEvent from "@/models/CalendarEvent"
+  import VueElementLoading from 'vue-element-loading';
+  import EventInteraction from "@/models/EventInteraction";
 
-import InteractionsList from './InteractionsList'
+  import InteractionsList from './InteractionsList';
 
-export default {
-  name: 'interctions-panel',
-  components: {
-    VueElementLoading,
-    InteractionsList
-  },
-  props: {
-    eventData: Object
-  },
-  data: () => ({
+  export default {
+    name: 'interctions-panel',
+    components: {
+      VueElementLoading,
+      InteractionsList
+    },
+    props: {
+      eventData: Object
+    },
+    data: () => ({
 
-    working: true
-  }),
-  methods: {
-    closePanel () {
-      this.$emit('closePanel')
+      working: true,
+    }),
+    methods: {
+      closePanel(){
+        this.$emit("closePanel");
+      }
+    },
+    created() {
+    },
+    mounted() {
+      this.working = false;
+
+    },
+    computed: {},
+    watch: {
     }
-  },
-  created () {
-  },
-  mounted () {
-    this.working = false
-  },
-  computed: {},
-  watch: {
   }
-}
 </script>

@@ -19,73 +19,73 @@
   </div>
 </template>
 <script>
-import VueElementLoading from 'vue-element-loading'
-// import auth from '@/auth';
-import Me from '@/models/Me'
-import _ from 'underscore'
+  import VueElementLoading from 'vue-element-loading';
+  // import auth from '@/auth';
+  import Me from '@/models/Me';
+  import _ from "underscore";
 
-export default {
-  components: {
-    VueElementLoading
-  },
-  props: {
-    userInfo: Object,
-    isLoading: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data () {
-    return {
-      // auth: auth,
-      holidayGroups: [
-        { id: 'christian', title: 'Christian', flagOn: false },
-        { id: 'islam', title: 'Islam', flagOn: false },
-        { id: 'hindu', title: 'Hindu', flagOn: false },
-        { id: 'buddhism', title: 'Buddhism', flagOn: false },
-        { id: 'taoism', title: 'Taoism', flagOn: false },
-        { id: 'shinto', title: 'Shinto', flagOn: false },
-        { id: 'sikhism', title: 'Sikhism', flagOn: false },
-        { id: 'judaism', title: 'Judaism', flagOn: false }
-      ]
-    }
-  },
-  methods: {
-    toggleHolidayGroup (index) {
-      this.updateUser()
+  export default {
+    components : {
+      VueElementLoading
     },
-    updateUser () {
-      let holidays = []
-      for (let i = 0; i < this.holidayGroups.length; i++) {
-        if (this.holidayGroups[i].flagOn) {
-          holidays.push(this.holidayGroups[i].id)
-        }
+    props: {
+      userInfo: Object,
+      isLoading: {
+        type: Boolean,
+        default: false
       }
-      this.isLoading = true
-      new Me({id: this.userInfo.id, celebratedHolidaysGroups: holidays}).save().then(res => {
-        this.isLoading = false
-        this.$notify(
-          {
-            message: 'Profile saved successfully',
-            horizontalAlign: 'right',
-            verticalAlign: 'top',
-            type: 'success'
-          })
-      })
-    }
-  },
-  watch: {
-    userInfo (newVal, oldVal) {
-      let holidays = newVal.celebratedHolidaysGroups
-      if (holidays) {
-        for (let i = 0; i < holidays.length; i++) {
-          let item = _.findWhere(this.holidayGroups, {id: holidays[i]})
-          item.flagOn = true
+    },
+    data(){
+      return{
+        // auth: auth,
+        holidayGroups: [
+          { id: "christian", title: "Christian", flagOn: false },
+          { id: "islam", title: "Islam", flagOn: false },
+          { id: "hindu", title: "Hindu", flagOn: false },
+          { id: "buddhism", title: "Buddhism", flagOn: false },
+          { id: "taoism", title: "Taoism", flagOn: false },
+          { id: "shinto", title: "Shinto", flagOn: false },
+          { id: "sikhism", title: "Sikhism", flagOn: false },
+          { id: "judaism", title: "Judaism", flagOn: false }
+        ]
+      }
+    },
+    methods: {
+      toggleHolidayGroup(index){
+        this.updateUser();
+      },
+      updateUser() {
+        let holidays = [];
+        for (let i=0; i < this.holidayGroups.length; i++){
+          if (this.holidayGroups[i].flagOn){
+            holidays.push(this.holidayGroups[i].id);
+          }
+        }
+        this.isLoading = true;
+        new Me({id: this.userInfo.id, celebratedHolidaysGroups: holidays}).save().then(res =>{
+          this.isLoading = false;
+          this.$notify(
+            {
+              message: "Profile saved successfully",
+              horizontalAlign: 'right',
+              verticalAlign: 'top',
+              type: 'success'
+            })
+        });
+      }
+    },
+    watch: {
+      userInfo(newVal, oldVal){
+        let holidays = newVal.celebratedHolidaysGroups;
+        if (holidays){
+          for (let i=0; i < holidays.length; i++){
+            let item = _.findWhere(this.holidayGroups, {id: holidays[i]});
+            item.flagOn = true;
+          }
         }
       }
     }
   }
-}
 </script>
 <style lang="scss" scoped>
 

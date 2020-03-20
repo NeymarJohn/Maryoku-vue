@@ -31,7 +31,9 @@
                     <span class="md-error" v-if="errors.has('expectedAttendacePercent')">This field is required</span>
                 </div>
 
+
 <!--                <md-checkbox v-model="eventData.internalEvent">Internal company event</md-checkbox>-->
+
 
                 <div class="form-actions">
                     <md-button class="md-rose next-btn custom-btn"
@@ -39,96 +41,107 @@
                                :class="[{'disabled': !eventData.numberOfParticipants || !eventData.expectedAttendacePercent}]"> Next </md-button>
                 </div>
 
+
+
             </div>
         </div>
 
         <go-back navigation="create-event-wizard"></go-back>
+
 
     </div>
 </template>
 
 <script>
 
-import GoBack from './componenets/GoBack'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import PublicEventPlannerVuexModule from './PublicEventPlanner.vuex'
+    import GoBack from './componenets/GoBack';
+    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+    import PublicEventPlannerVuexModule from "./PublicEventPlanner.vuex";
 
-export default {
-  components: {
-    GoBack
-  },
-  data () {
-    return {
-      step: 2,
-      haveEventPlace: false,
-      flexibleWithDates: false,
-      eventTime: null,
-      eventDate: null,
-      eventData: {},
-      expectingPeople: ['80% - 85%', '85% - 90%', '90% - 95%', '95% - 100%'],
-      expectingPeopleList: [
-        {
-          label: '80% - 85%',
-          value: 85
+
+    export default {
+        components: {
+            GoBack
         },
-        {
-          label: '85% - 90%',
-          value: 90
+        data() {
+            return {
+                step : 2,
+                haveEventPlace : false,
+                flexibleWithDates : false,
+                eventTime : null,
+                eventDate : null,
+                eventData : {},
+                expectingPeople : ["80% - 85%","85% - 90%","90% - 95%","95% - 100%"],
+                expectingPeopleList : [
+                    {
+                        label : '80% - 85%',
+                        value : 85
+                    },
+                    {
+                        label : '85% - 90%',
+                        value : 90
+                    },
+                    {
+                        label : '90% - 95%',
+                        value : 95
+                    },
+                    {
+                        label : '95% - 100%',
+                        value : 100
+                    }
+                ],
+                modelValidations: {
+                    numberOfParticipants: {
+                        required: true,
+                    },
+                    expectedAttendacePercent: {
+                        required: true,
+                    }
+                },
+            }
         },
-        {
-          label: '90% - 95%',
-          value: 95
+        created() {
+            this.$set(this.eventData,'numberOfParticipants' ,this.publicEventData.numberOfParticipants);
+            this.$set(this.eventData,'expectedAttendacePercent' ,this.publicEventData.expectedAttendacePercent);
+            this.$set(this.eventData,'internalEvent' ,this.publicEventData.internalEvent);
+
         },
-        {
-          label: '95% - 100%',
-          value: 100
+        methods : {
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setCurrentStep']),
+
+            goToNext() {
+
+                let vm = this;
+
+                this.cerrors = {};
+                this.validating = true;
+
+
+
+                this.$validator.validateAll().then(isValid => {
+                    if (isValid) {
+                        this.setEventProperty({key: 'numberOfParticipants', actualValue: this.eventData.numberOfParticipants});
+                        this.setEventProperty({key: 'expectedAttendacePercent', actualValue: this.eventData.expectedAttendacePercent});
+                        this.setEventProperty({key: 'internalEvent', actualValue: this.eventData.internalEvent});
+                        this.setCurrentStep({currentPage : '/event-budget'})
+                        this.$router.push({ path: `/event-budget`});
+
+                    } else {
+
+                    }
+
+                });
+
+            },
+        },computed : {
+            ...mapState('PublicEventPlannerVuex', [
+                'publicEventData',
+            ])
         }
-      ],
-      modelValidations: {
-        numberOfParticipants: {
-          required: true
-        },
-        expectedAttendacePercent: {
-          required: true
-        }
-      }
-    }
-  },
-  created () {
-    this.$set(this.eventData, 'numberOfParticipants', this.publicEventData.numberOfParticipants)
-    this.$set(this.eventData, 'expectedAttendacePercent', this.publicEventData.expectedAttendacePercent)
-    this.$set(this.eventData, 'internalEvent', this.publicEventData.internalEvent)
-  },
-  methods: {
-    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
-
-    goToNext () {
-      let vm = this
-
-      this.cerrors = {}
-      this.validating = true
-
-      this.$validator.validateAll().then(isValid => {
-        if (isValid) {
-          this.setEventProperty({key: 'numberOfParticipants', actualValue: this.eventData.numberOfParticipants})
-          this.setEventProperty({key: 'expectedAttendacePercent', actualValue: this.eventData.expectedAttendacePercent})
-          this.setEventProperty({key: 'internalEvent', actualValue: this.eventData.internalEvent})
-          this.setCurrentStep({currentPage: '/event-budget'})
-          this.$router.push({ path: `/event-budget`})
-        } else {
-
-        }
-      })
-    }
-  },
-  computed: {
-    ...mapState('PublicEventPlannerVuex', [
-      'publicEventData'
-    ])
-  }
-}
+    };
 </script>
 <style lang="scss">
+
 
     .form-section {
         width : 30%;

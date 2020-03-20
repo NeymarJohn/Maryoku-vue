@@ -20,56 +20,59 @@
     </div>
 </template>
 <script>
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import Calendar from '@/models/Calendar'
-import CalendarEvent from '@/models/CalendarEvent'
-import EventComponent from '@/models/EventComponent'
-import EventTimelineItem from '@/models/EventTimelineItem'
-import moment from 'moment'
-import swal from 'sweetalert2'
-import {SlideYDownTransition} from 'vue2-transitions'
-import InputMask from 'vue-input-mask'
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+    import Calendar from "@/models/Calendar";
+    import CalendarEvent from "@/models/CalendarEvent";
+    import EventComponent from "@/models/EventComponent";
+    import EventTimelineItem from '@/models/EventTimelineItem';
+    import moment from 'moment';
+    import swal from "sweetalert2";
+    import {SlideYDownTransition} from "vue2-transitions";
+    import InputMask from 'vue-input-mask';
 
-import VueElementLoading from 'vue-element-loading'
-// import auth from '@/auth';
-import EventTimeLine from './EventTimeLine'
-import draggable from 'vuedraggable'
-import {Drag, Drop} from 'vue-drag-drop'
-import _ from 'underscore'
 
-export default {
-  name: 'event-time-line-panel',
-  components: {
-    VueElementLoading,
-    EventTimeLine,
-    SlideYDownTransition,
-    InputMask
-  },
-  props: {
-    event: Object
+    import VueElementLoading from 'vue-element-loading';
+    // import auth from '@/auth';
+    import EventTimeLine from "./EventTimeLine";
+    import draggable from 'vuedraggable';
+    import {Drag, Drop} from 'vue-drag-drop';
+    import _ from 'underscore';
 
-  },
-  data: () => ({
-    // auth: auth,
-    isLoading: true
+    export default {
+        name: 'event-time-line-panel',
+        components: {
+            VueElementLoading,
+            EventTimeLine,
+            SlideYDownTransition,
+            InputMask
+        },
+        props: {
+            event: Object,
 
-  }),
-  methods: {
-    closePanel () {
-      this.$emit('closePanel')
+        },
+        data: () => ({
+            // auth: auth,
+            isLoading: true,
+
+
+        }),
+        methods: {
+            closePanel(){
+                this.$emit("closePanel");
+            }
+
+        },
+        created() {
+
+
+        },
+        mounted() {
+
+        },
+        watch: {
+
+        }
     }
-
-  },
-  created () {
-
-  },
-  mounted () {
-
-  },
-  watch: {
-
-  }
-}
 </script>
 <style lang="scss">
 

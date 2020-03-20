@@ -243,221 +243,229 @@
 </template>
 
 <script>
-// import auth from '@/auth';
-import Calendar from '@/models/Calendar'
-import CalendarEvent from '@/models/CalendarEvent'
-import CalendarMetadata from '@/models/CalendarMetadata'
-import VueElementLoading from 'vue-element-loading'
-import ChartComponent from '@/components/Cards/ChartComponent'
-import NonEditableEvent from './CalendarCellNonEditableEvent'
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import yearlyPlanVuexModule from './yearlyPlan.vuex'
-import EmptyCell from './CalendarCellEmpty'
-import EditableEvent from './CalendarCellEditableEvent'
+  // import auth from '@/auth';
+  import Calendar from '@/models/Calendar';
+  import CalendarEvent from '@/models/CalendarEvent';
+  import CalendarMetadata from '@/models/CalendarMetadata';
+  import VueElementLoading from 'vue-element-loading';
+  import ChartComponent from '@/components/Cards/ChartComponent';
+  import NonEditableEvent from './CalendarCellNonEditableEvent';
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import yearlyPlanVuexModule from './yearlyPlan.vuex'
+  import EmptyCell from './CalendarCellEmpty';
+  import EditableEvent from './CalendarCellEditableEvent';
 
-export default {
-  components: {
-    EditableEvent,
-    EmptyCell,
-    NonEditableEvent,
-    VueElementLoading,
-    ChartComponent
-  },
-  data () {
-    return {
-      ready: false,
-      // auth: auth,
-      isLoading: true,
-      filtersChanged: false,
-      selectedYear: this.$route.params.year || new Date().getFullYear(),
-      years: [],
-      eventTypes: [],
-      selectedEventTypes: [],
-      countries: [],
-      selectedCountries: [],
-      holidays: [],
-      selectedHolidays: [],
-      holidaysSelectDisplayed: true,
-      yearlyCalendarDays: null,
-      weekendDays: [false, false, false, false, false, true, true],
-      form: {
-        eventName: ''
-      },
-      modelValidations: {
-        eventName: {
-          required: true
-        }
-      },
-      months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      weekDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-    }
-  },
-  created () {
-    this.$store.registerModule('yearlyPlanVuex', yearlyPlanVuexModule)
-  },
-  mounted () {
-    this.ready = false
-    this.filtersChanged = false
-    // this.$store.state.calendarId = this.$auth.user.defaultCalendarId;
-    this.$auth.currentUser(this, true, function () {
-      let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-
-      _calendar.metadata().get().then(metadatas => {
-        let metadata = metadatas[0]
-
-        this.years = metadata.years
-        this.selectedYear = new Date().getFullYear()
-
-        this.eventTypes = metadata.eventTypes
-        this.selectedEventTypes = this.eventTypes.map(function (entry) { return entry.item })
-        this.holidaysSelectDisplayed = true
-
-        this.countries = metadata.countries
-        this.selectedCountries = this.countries.map(function (entry) { return entry.item })
-
-        this.holidays = metadata.holidays
-        this.selectedHolidays = this.holidays.map(function (entry) { return entry.item })
-
-        this.ready = true
-        this.selectYear()
-      })
-    }.bind(this))
-  },
-  methods: {
-    selectYear ($e) {
-      if (!this.ready) return
-      this.filtersChanged = false
-      this.isLoading = true
-      let filters = { filters: {
-        year: parseInt(this.selectedYear),
-        holidays: this.holidaysSelectDisplayed ? this.selectedHolidays : [],
-        countries: this.selectedCountries,
-        eventTypes: this.selectedEventTypes
-      }}
-      let calendarId = this.$auth.user.defaultCalendarId
-      this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.$auth.getAuthHeader() })
-        .then(response => response.data)
-        .then((json) => {
-          let eventsMap = {}
-          if (json.events) {
-            json.events.forEach(function (event) {
-              let eventStartMillis = event.eventStartMillis
-              let eventStartDate = new Date(eventStartMillis)
-              let eventDateStamp = `${eventStartDate.getFullYear()}${eventStartDate.getMonth().padStart(2, '0')}${eventStartDate.getDate().padStart(2, '0')}`
-              if (eventsMap[eventDateStamp] === undefined) {
-                eventsMap[eventDateStamp] = {
-                  editables: [],
-                  nonEditables: []
-                }
-              }
-              console.log('editable ' + event.editable)
-              if (event.editable) {
-                eventsMap[eventDateStamp].editables.push(new CalendarEvent(event))
-              } else {
-                eventsMap[eventDateStamp].nonEditables.push(new CalendarEvent(event))
-              }
-            })
-          }
-
-          this.yearlyCalendarDays = this.calcCalendarDays(this.selectedYear, eventsMap)
-          this.isLoading = false
-        })
+  export default {
+    components: {
+      EditableEvent,
+      EmptyCell,
+      NonEditableEvent,
+      VueElementLoading,
+      ChartComponent,
     },
-    selectEventTypes ($e) {
-      this.holidaysSelectDisplayed = this.selectedEventTypes.indexOf('Holiday') > -1
-      this.selectYear(null)
-    },
-    selectCountries ($e) {
-      this.selectYear(null)
-    },
-    selectHolidays ($e) {
-      this.selectYear(null)
-    },
-    routeToNewEvent () {
-      this.$store.state.eventData = {
-        id: null,
-        calendar: {id: null},
-        title: 'Jamil',
-        eventStartMillis: null,
-        eventEndMillis: null,
-        eventType: null,
-        numberOfParticipants: null,
-        totalBudget: null,
-        status: null,
-        components: null
-      },
-      this.$router.push({ path: `/events/new` })
-    },
-    calcCalendarDays (year, eventsMap) {
-      let calDays = []
-      let hasMoreDays = {}
-      let monthCounters = []
+    data() {
 
-      for (let monthCounter = 0; monthCounter < 12; monthCounter++) {
-        let theDate = new Date(year, monthCounter + 1, 0, 0, 0, 0, 0)
-        monthCounters[monthCounter] = { counter: 1, lastMonthDay: theDate.getDate()}
-      }
-
-      let preventLoop = 0
-
-      while (Object.keys(hasMoreDays).length < 12 && preventLoop < 3650) {
-        preventLoop++
-
-        for (let weekday = 0; weekday < 7; weekday++) {
-          let weekdayObj = {}
-          for (let month = 0; month < 12; month++) {
-            if (monthCounters[month].counter <= monthCounters[month].lastMonthDay) {
-              let theDate = new Date(year, month, monthCounters[month].counter, 0, 0, 0, 0)
-
-              if (theDate.getDay() === weekday) {
-                weekdayObj[month] = { exists: true, dayOnMonth: `${theDate.getDate()}`}
-                monthCounters[month].counter++
-
-                let theDateStamp = `${theDate.getFullYear()}${theDate.getMonth().padStart(2, '0')}${theDate.getDate().padStart(2, '0')}`
-                weekdayObj[month].calendarEvents = eventsMap[theDateStamp]
-              } else {
-                weekdayObj[month] = {exists: false}
-              }
-            } else {
-              weekdayObj[month] = {exists: false}
-              hasMoreDays[month] = ''
-            }
-
-            if (Object.keys(hasMoreDays).length === 12) {
-              break
-            }
-          }
-
-          if (Object.keys(hasMoreDays).length === 12) {
-            break
-          }
-          calDays.push({year: year, weekday: weekday, weekdayObj: weekdayObj})
-        }
-      }
-
-      console.log(calDays)
-
-      return calDays
-    }
-  },
-  computed: {
-    ...mapState('yearlyPlanVuex', ['filtersData']),
-    pieChart () {
       return {
-        data: {
-          labels: [' ', ' '], // should be empty to remove text from chart
-          series: [8900, 780]
+        ready: false,
+        // auth: auth,
+        isLoading: true,
+        filtersChanged: false,
+        selectedYear: this.$route.params.year || new Date().getFullYear(),
+        years: [],
+        eventTypes: [],
+        selectedEventTypes: [],
+        countries: [],
+        selectedCountries: [],
+        holidays: [],
+        selectedHolidays: [],
+        holidaysSelectDisplayed: true,
+        yearlyCalendarDays: null,
+        weekendDays : [false, false, false, false, false, true, true],
+        form: {
+          eventName: ""
         },
-        options: {
-          padding: 0,
-          height: 80,
-          donut: true,
-          donutWidth: 10
-        }
+        modelValidations: {
+          eventName: {
+            required: true,
+          }
+        },
+        months : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        weekDays : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
       }
+    },
+    created() {
+      this.$store.registerModule('yearlyPlanVuex', yearlyPlanVuexModule);
+    },
+    mounted(){
+      this.ready = false;
+      this.filtersChanged = false;
+      //this.$store.state.calendarId = this.$auth.user.defaultCalendarId;
+      this.$auth.currentUser(this, true, function() {
+
+        let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+
+        _calendar.metadata().get().then(metadatas => {
+
+          let metadata = metadatas[0];
+
+          this.years = metadata.years;
+          this.selectedYear = new Date().getFullYear();
+
+          this.eventTypes = metadata.eventTypes;
+          this.selectedEventTypes = this.eventTypes.map(function(entry){ return entry.item;});
+          this.holidaysSelectDisplayed = true;
+
+          this.countries = metadata.countries;
+          this.selectedCountries = this.countries.map(function(entry){ return entry.item;});
+
+          this.holidays = metadata.holidays;
+          this.selectedHolidays = this.holidays.map(function(entry){ return entry.item;});
+
+          this.ready = true;
+          this.selectYear();
+        });
+
+      }.bind(this))
+    },
+    methods: {
+      selectYear($e) {
+        if (!this.ready) return;
+        this.filtersChanged = false;
+        this.isLoading = true;
+        let filters = { filters: {
+            year: parseInt(this.selectedYear),
+            holidays: this.holidaysSelectDisplayed ? this.selectedHolidays : [],
+            countries: this.selectedCountries,
+            eventTypes: this.selectedEventTypes
+          }};
+        let calendarId = this.$auth.user.defaultCalendarId;
+        this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.$auth.getAuthHeader() })
+          .then(response => response.data)
+          .then((json) => {
+            let eventsMap = {};
+            if (json.events) {
+              json.events.forEach(function(event){
+                let eventStartMillis = event.eventStartMillis;
+                let eventStartDate = new Date(eventStartMillis);
+                let eventDateStamp = `${eventStartDate.getFullYear()}${eventStartDate.getMonth().padStart(2,'0')}${eventStartDate.getDate().padStart(2,'0')}`;
+                if (eventsMap[eventDateStamp] === undefined){
+                  eventsMap[eventDateStamp] = {
+                    editables: [],
+                    nonEditables: []
+                  };
+                }
+                console.log("editable " + event.editable);
+                if (event.editable) {
+                  eventsMap[eventDateStamp].editables.push(new CalendarEvent(event));
+                } else {
+                  eventsMap[eventDateStamp].nonEditables.push(new CalendarEvent(event));
+                }
+              });
+            }
+
+            this.yearlyCalendarDays = this.calcCalendarDays(this.selectedYear, eventsMap);
+            this.isLoading = false;
+          });
+      },
+      selectEventTypes($e) {
+        this.holidaysSelectDisplayed = this.selectedEventTypes.indexOf("Holiday") > -1;
+        this.selectYear(null);
+      },
+      selectCountries($e) {
+        this.selectYear(null);
+      },
+      selectHolidays($e) {
+        this.selectYear(null);
+      },
+      routeToNewEvent() {
+        this.$store.state.eventData = {
+          id: null,
+          calendar: {id: null},
+          title: "Jamil",
+          eventStartMillis: null,
+          eventEndMillis: null,
+          eventType: null,
+          numberOfParticipants: null,
+          totalBudget: null,
+          status: null,
+          components: null,
+        },
+          this.$router.push({ path: `/events/new` });
+      },
+      calcCalendarDays(year, eventsMap) {
+
+        let calDays = [];
+        let hasMoreDays = {};
+        let monthCounters = [];
+
+        for (let monthCounter=0; monthCounter < 12; monthCounter++) {
+          let theDate = new Date(year, monthCounter+1,0,0,0,0,0);
+          monthCounters[monthCounter] = { counter: 1, lastMonthDay: theDate.getDate()};
+        }
+
+        let preventLoop = 0;
+
+        while (Object.keys(hasMoreDays).length < 12 && preventLoop < 3650) {
+
+          preventLoop++;
+
+          for (let weekday=0; weekday < 7; weekday++){
+            let weekdayObj = {};
+            for (let month=0; month < 12; month++){
+              if (monthCounters[month].counter <= monthCounters[month].lastMonthDay) {
+                let theDate = new Date(year, month, monthCounters[month].counter, 0, 0, 0, 0);
+
+                if (theDate.getDay() === weekday) {
+                  weekdayObj[month] = { exists: true, dayOnMonth: `${theDate.getDate()}`};
+                  monthCounters[month].counter++;
+
+                  let theDateStamp = `${theDate.getFullYear()}${theDate.getMonth().padStart(2,'0')}${theDate.getDate().padStart(2,'0')}`;
+                  weekdayObj[month].calendarEvents = eventsMap[theDateStamp];
+
+                } else {
+                  weekdayObj[month] = {exists: false};
+                }
+              } else {
+                weekdayObj[month] = {exists: false};
+                hasMoreDays[month] = '';
+              }
+
+              if (Object.keys(hasMoreDays).length === 12){
+                break;
+              }
+            }
+
+            if (Object.keys(hasMoreDays).length === 12){
+              break;
+            }
+            calDays.push({year: year, weekday: weekday, weekdayObj: weekdayObj});
+          }
+
+        }
+
+        console.log(calDays)
+
+        return calDays;
+      }
+    },
+    computed: {
+      ...mapState('yearlyPlanVuex', ['filtersData']),
+      pieChart() {
+        return {
+          data: {
+            labels: [" ", " "], // should be empty to remove text from chart
+            series: [8900, 780]
+          },
+          options: {
+            padding: 0,
+            height: 80,
+            donut: true,
+            donutWidth: 10
+          }
+        }
+      },
     }
-  }
-}
+  };
 </script>
 <style lang="scss">
 

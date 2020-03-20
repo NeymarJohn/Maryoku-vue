@@ -16,17 +16,17 @@
 </template>
 
 <script>
-export default {
-  components: {
-  },
-  data () {
-    return {
+  export default {
+    components: {
+    },
+    data() {
+      return {
 
+      };
+    },
+    methods: {
     }
-  },
-  methods: {
-  }
-}
+  };
 </script>
 <style lang="scss">
 

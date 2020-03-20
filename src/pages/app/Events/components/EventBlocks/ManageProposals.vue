@@ -55,100 +55,104 @@
 </template>
 
 <script>
-import {
-  mapState,
-  mapGetters,
-  mapMutations,
-  mapActions
-} from 'vuex'
-import Calendar from '@/models/Calendar'
-import CalendarEvent from '@/models/CalendarEvent'
-import EventComponent from '@/models/EventComponent'
-import EventComponentVendor from '@/models/EventComponentVendor'
-import VueElementLoading from 'vue-element-loading'
-// import auth from '@/auth'
+  import {
+    mapState,
+    mapGetters,
+    mapMutations,
+    mapActions
+  } from 'vuex'
+  import Calendar from '@/models/Calendar'
+  import CalendarEvent from '@/models/CalendarEvent'
+  import EventComponent from '@/models/EventComponent'
+  import EventComponentVendor from '@/models/EventComponentVendor'
+  import VueElementLoading from 'vue-element-loading'
+  // import auth from '@/auth'
 
-import UploadVendorsModal from '../../../Vendors/ImportVendors'
-import ManageBlockVendors from './Modals/ManageBlockVendors.vue'
-import ViewProposals from './Modals/ViewProposals.vue'
+  import UploadVendorsModal from '../../../Vendors/ImportVendors'
+  import ManageBlockVendors from './Modals/ManageBlockVendors.vue'
+  import ViewProposals from './Modals/ViewProposals.vue'
 
-export default {
-  name: 'event-blocks',
-  components: {
-    VueElementLoading,
-    UploadVendorsModal,
-    ManageBlockVendors,
-    ViewProposals
-  },
-  props: {
-    selectedBlock: Object,
-    event: Object
-  },
-  data: () => ({
-    // auth: auth,
-    isLoading: true,
-    blockVendors: []
-  }),
-  methods: {
-    openUploadModal () {
-      this.$refs.uploadModal.toggleModal(true)
+  export default {
+    name: 'event-blocks',
+    components: {
+      VueElementLoading,
+      UploadVendorsModal,
+      ManageBlockVendors,
+      ViewProposals
     },
-    manageBlockVendors () {
-      window.currentPanel = this.$showPanel({
-        component: ManageBlockVendors,
-        cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
-        openOn: 'right',
-        props: {
-          event: this.event,
-          selectedBlock: this.selectedBlock
-        }
-      })
+    props: {
+      selectedBlock: Object,
+      event: Object
     },
-    getBlockVendors () {
-      let calendar = new Calendar({
-        id: this.$auth.user.defaultCalendarId
-      })
-      let event = new CalendarEvent({
-        id: this.event.id
-      })
-      let selected_block = new EventComponent({
-        id: this.selectedBlock.id
-      })
-
-      new EventComponentVendor().for(calendar, event, selected_block).get()
-        .then(resp => {
-          this.blockVendors = resp
+    data: () => ({
+      // auth: auth,
+      isLoading: true,
+      blockVendors: []
+    }),
+    methods: {
+      openUploadModal() {
+        this.$refs.uploadModal.toggleModal(true)
+      },
+      manageBlockVendors() {
+        window.currentPanel = this.$showPanel({
+          component: ManageBlockVendors,
+          cssClass: 'md-layout-item md-size-55 transition36 bg-grey',
+          openOn: 'right',
+          props: {
+            event: this.event,
+            selectedBlock: this.selectedBlock
+          }
         })
-        .catch(error => {
-          console.log('EventComponentVendor error =>', error)
+      },
+      getBlockVendors() {
+
+        let calendar = new Calendar({
+          id: this.$auth.user.defaultCalendarId
         })
+        let event = new CalendarEvent({
+          id: this.event.id
+        })
+        let selected_block = new EventComponent({
+          id: this.selectedBlock.id
+        })
+
+        new EventComponentVendor().for(calendar, event, selected_block).get()
+          .then(resp => {
+            this.blockVendors = resp
+          })
+          .catch(error => {
+
+            console.log('EventComponentVendor error =>', error)
+
+          })
+      },
+      viewProposals(item) {
+        window.currentPanel = this.$showPanel({
+          component: ViewProposals,
+          cssClass: 'md-layout-item md-size-45 transition36 bg-grey',
+          openOn: 'right',
+          props: {
+            event: this.event,
+            vendor: item
+          }
+        })
+      }
+
     },
-    viewProposals (item) {
-      window.currentPanel = this.$showPanel({
-        component: ViewProposals,
-        cssClass: 'md-layout-item md-size-45 transition36 bg-grey',
-        openOn: 'right',
-        props: {
-          event: this.event,
-          vendor: item
-        }
-      })
-    }
-
-  },
-  created () {},
-  mounted () {
-    this.isLoading = false
-    this.getBlockVendors()
-
-    this.$root.$on('VendorAdded', () => {
+    created() {},
+    mounted() {
+      this.isLoading = false
       this.getBlockVendors()
-    })
-  },
-  computed: {
 
+      this.$root.$on('VendorAdded', () => {
+        this.getBlockVendors()
+      })
+
+    },
+    computed: {
+
+    }
   }
-}
 </script>
 
 <style lang="scss" scoped>

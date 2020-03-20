@@ -37,98 +37,98 @@
     </div>
 </template>
 <script>
-// import auth from '@/auth';
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import CalendarEvent from '@/models/CalendarEvent'
-import {Modal} from '@/components'
-import Calendar from '@/models/Calendar'
-import EventComponent from '@/models/EventComponent'
+    // import auth from '@/auth';
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+    import CalendarEvent from '@/models/CalendarEvent';
+    import {Modal} from "@/components";
+    import Calendar from "@/models/Calendar";
+    import EventComponent from "@/models/EventComponent";
 
-import swal from 'sweetalert2'
-import {error} from 'util'
-import moment from 'moment'
+    import swal from "sweetalert2";
+    import {error} from 'util';
+    import moment from 'moment';
 
-export default {
-  components: {
-    Modal
-  },
-  props: {
-    event: Object,
-    isGoing: [Boolean, String]
+    export default {
+        components: {
+            Modal,
+        },
+        props: {
+            event: Object,
+            isGoing : [Boolean,String]
 
-  },
-  data: () => ({
-    // auth: auth,
-    error: '',
-    showOnIcon: true,
-    showOffIcon: false,
-    dietaryIconOnFirstList: [
-      {
-        on: 'sugar_free_off',
-        off: 'sugar_free_on',
-        flagOn: true
+        },
+        data: () => ({
+            // auth: auth,
+            error:'',
+            showOnIcon:true,
+            showOffIcon:false,
+            dietaryIconOnFirstList:[
+                {
+                    on:"sugar_free_off",
+                    off:"sugar_free_on",
+                    flagOn:true
 
-      },
-      {
-        on: 'egg_free_off',
-        off: 'egg_free_on',
-        flagOn: true
+                },
+                {
+                    on:"egg_free_off",
+                    off:"egg_free_on",
+                    flagOn:true
 
-      },
-      {
-        on: 'gluten_free_off',
-        off: 'gluten_free_on',
-        flagOn: true
-      }
+                },
+                {
+                    on:"gluten_free_off",
+                    off:"gluten_free_on",
+                    flagOn:true
+                }
 
-    ],
-    dietaryIconOnSecondList: [
-      {
-        on: 'gmo_free_off',
-        off: 'gmo_free_on',
-        flagOn: true
-      },
-      {
-        on: 'peanut_free_off',
-        off: 'peanut_free_on',
-        flagOn: true
-      },
-      {
-        on: 'lactose_free_off',
-        off: 'lactose_free_on',
-        flagOn: true
-      }
-    ]
-  }),
+            ],
+            dietaryIconOnSecondList:[
+                {
+                    on:"gmo_free_off",
+                    off:"gmo_free_on",
+                    flagOn:true
+                },
+                {
+                    on:"peanut_free_off",
+                    off:"peanut_free_on",
+                    flagOn:true
+                },
+                {
+                    on:"lactose_free_off",
+                    off:"lactose_free_on",
+                    flagOn:true
+                }
+            ]
+        }),
 
-  created () {
-  },
-  mounted () {
+        created() {
+        },
+        mounted() {
 
-  },
-  methods: {
-    ...mapMutations('EventPlannerVuex', ['setDietaryConstraintsModal']),
-    closeModal () {
-      this.setDietaryConstraintsModal({showModal: false})
-    },
-    toggleFlagFirstList (index) {
-      this.dietaryIconOnFirstList[index].flagOn = !this.dietaryIconOnFirstList[index].flagOn
-    },
+        },
+        methods: {
+            ...mapMutations('EventPlannerVuex', ['setDietaryConstraintsModal']),
+            closeModal() {
+                this.setDietaryConstraintsModal({showModal: false});
+            },
+            toggleFlagFirstList(index){
+                this.dietaryIconOnFirstList[index].flagOn=!this.dietaryIconOnFirstList[index].flagOn
+            },
 
-    toggleFlagSecondList (index) {
-      this.dietaryIconOnSecondList[index].flagOn = !this.dietaryIconOnSecondList[index].flagOn
-    },
-    send () {
-      this.closeModal()
-    }
-  },
-  computed: {
-    ...mapState('EventPlannerVuex', [
-      'DietaryConstraintsModal'
-    ])
-  }
+            toggleFlagSecondList(index){
+                this.dietaryIconOnSecondList[index].flagOn=!this.dietaryIconOnSecondList[index].flagOn
+            },
+            send(){
+                this.closeModal();
+            }
+        },
+        computed: {
+            ...mapState('EventPlannerVuex', [
+                'DietaryConstraintsModal',
+            ])
+        }
 
-}
+    };
 </script>
 <style lang="scss" scope>
     .md-datepicker {

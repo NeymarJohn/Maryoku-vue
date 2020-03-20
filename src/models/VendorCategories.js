@@ -1,7 +1,7 @@
 import Model from './Model'
 
 export default class VendorCategories extends Model {
-  resource () {
+  resource() {
     return 'categories'
   }
 }

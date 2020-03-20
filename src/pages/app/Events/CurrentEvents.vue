@@ -163,243 +163,246 @@
 
 <script>
 
-import EventModal from './EventModal/'
-import EventPlannerVuexModule from './EventPlanner.vuex'
+  import EventModal from './EventModal/'
+  import EventPlannerVuexModule from './EventPlanner.vuex'
 
-// MAIN MODULES
-import ChartComponent from '@/components/Cards/ChartComponent'
-// import auth from '@/auth';
-import moment from 'moment'
-import VueElementLoading from 'vue-element-loading'
-import Calendar from '@/models/Calendar'
-import CalendarEvent from '@/models/CalendarEvent'
-import CalendarEventStatistics from '@/models/CalendarEventStatistics'
-import EventComponent from '@/models/EventComponent'
-import {mapState, mapMutations, mapGetters, mapActions} from 'vuex'
+  //MAIN MODULES
+  import ChartComponent from '@/components/Cards/ChartComponent'
+  // import auth from '@/auth';
+  import moment from 'moment'
+  import VueElementLoading from 'vue-element-loading'
+  import Calendar from '@/models/Calendar'
+  import CalendarEvent from '@/models/CalendarEvent'
+  import CalendarEventStatistics from '@/models/CalendarEventStatistics'
+  import EventComponent from '@/models/EventComponent'
+  import {mapState, mapMutations, mapGetters, mapActions} from 'vuex'
 
-// COMPONENTS
-import {AnimatedNumber, NavTabs} from '@/components'
-import Icon from '@/components/Icon/Icon.vue'
-import EventElements from './EventElements.vue'
-import EventBlocks from './components/NewEventBlocks'
-import EventBuildingBlocks from './components/EventBuildingBlocks'
-import EventTimeLine from './components/EventTimeLine.vue'
-import InviteesManagement from './components/EventBlocks/InviteesManagement.vue'
-import InviteesManagementV2 from './components/EventBlocks/InviteesManagementV2.vue'
-import EventInvitees from './components/EventInvitees.vue'
-import EventDetailsSidebar from './components/EventDetailsSidebar'
-import EventDetails from './EventDetails'
+  //COMPONENTS
+  import {AnimatedNumber, NavTabs} from '@/components'
+  import Icon from '@/components/Icon/Icon.vue'
+  import EventElements from './EventElements.vue'
+  import EventBlocks from './components/NewEventBlocks'
+  import EventBuildingBlocks from './components/EventBuildingBlocks'
+  import EventTimeLine from './components/EventTimeLine.vue'
+  import InviteesManagement from './components/EventBlocks/InviteesManagement.vue'
+  import InviteesManagementV2 from './components/EventBlocks/InviteesManagementV2.vue'
+  import EventInvitees from './components/EventInvitees.vue'
+  import EventDetailsSidebar from './components/EventDetailsSidebar'
+  import EventDetails from './EventDetails'
 
-import EventPageRoutes from './components/EventPageRoutes.vue'
-import MdCardContent
-  from '../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue'
-import {Tabs} from '@/components'
-import UploadVendorsModal from '../Vendors/ImportVendors'
+  import EventPageRoutes from './components/EventPageRoutes.vue'
+  import MdCardContent
+    from '../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue'
+  import {Tabs} from '@/components'
+  import UploadVendorsModal from '../Vendors/ImportVendors';
 
-export default {
-  components: {
-    MdCardContent,
-    NavTabs,
-    EventBuildingBlocks,
-    VueElementLoading,
-    ChartComponent,
-    AnimatedNumber,
-    Icon,
-    EventElements,
-    EventBlocks,
-    EventModal,
-    EventTimeLine,
-    InviteesManagement,
-    EventPageRoutes,
-    InviteesManagementV2,
-    EventInvitees,
-    Tabs,
-    EventDetailsSidebar,
-    EventDetails,
-    UploadVendorsModal
-  },
 
-  data () {
-    return {
-      // auth: auth,
-      calendarEvent: {},
-      selectedComponents: [],
-      currentTab: 'blocks',
-      eventId: null,
-      percentage: 0,
-      totalRemainingBudget: 0,
-      remainingBudgetPerEmployee: 0,
-      seriesData: [],
-      isLoading: false,
-      event: {statistics: {}},
-      routeName: null,
-      budgetPerEmployee: 0,
-      activeTab: 0
-    }
-  },
-  created () {
-    this.routeName = this.$route.name
-  },
-  mounted () {
-    let _self = this
-    this.isLoading = true
-
-    this.getEvent()
-    const tab = this.$route.query.t || 0
-    if (this.$refs.eventPlannerTabs) {
-      this.$refs.eventPlannerTabs.$emit('event-planner-nav-switch-panel', tab)
-    }
-
-    if (this.components.length === 0) {
-      this.$store.dispatch('event/getComponents', this)
-      this.$store.dispatch('event/getCategories', {data: this.$auth.user.defaultCalendarId, ctx: this})
-      this.$store.dispatch('event/getEventTypes', {data: this.$auth.user.defaultCalendarId, ctx: this})
-      this.$store.dispatch('event/getCurrencies', this)
-      this.$store.dispatch('event/getEventThemes', this)
-    }
-
-    this.$root.$on('calendar-refresh-events', () => {
-      console.log('i am here')
-      this.getEvent()
-    })
-  },
-  methods: {
-    ...mapMutations('EventPlannerVuex', [
-      'setEventModal',
-      'setEditMode',
-      'setModalSubmitTitle',
-      'setEventModalAndEventData',
-      'setNumberOfParticipants',
-      'setEventData'
-    ]),
-    getEvent () {
-      this.$auth.currentUser(this, true, function () {
-        let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-
-        _calendar.calendarEvents().find(this.$route.params.id).then(event => {
-          this.event = event
-          this.eventId = event.id
-          this.calendarEvent = event
-          new EventComponent().for(_calendar, event).get().then(components => {
-            this.event.components = components
-            this.selectedComponents = components
-          })
-
-          this.getCalendarEventStatistics(event)
-
-          this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
-          this.isLoading = false
-          console.log(event)
-        })
-      }.bind(this))
+  export default {
+    components: {
+      MdCardContent,
+      NavTabs,
+      EventBuildingBlocks,
+      VueElementLoading,
+      ChartComponent,
+      AnimatedNumber,
+      Icon,
+      EventElements,
+      EventBlocks,
+      EventModal,
+      EventTimeLine,
+      InviteesManagement,
+      EventPageRoutes,
+      InviteesManagementV2,
+      EventInvitees,
+      Tabs,
+      EventDetailsSidebar,
+      EventDetails,
+      UploadVendorsModal
     },
-    selectServices () {
-      this.$refs.eventPlannerTabs.$emit('event-planner-nav-switch-panel', 1)
-    },
-    selectTimeline () {
-      this.$root.$emit('event-planner-nav-switch-panel', 2)
-    },
-    selectInviteesManagement () {
-      this.$root.$emit('event-planner-nav-switch-panel', 3)
-    },
-    selectEventPage () {
-      this.$root.$emit('event-planner-nav-switch-panel', 4)
-    },
-    selectTab (tab) {
-      this.currentTab = tab
-    },
-    selectedTab (tab) {
-      return this.currentTab === tab
-    },
-    resetTab () {
-      this.currentTab = null
-    },
-    openEventModal () {
-      // window.currentPanel = this.$showPanel({
-      //     component: EventSidePanel,
-      //     cssClass: 'md-layout-item md-size-40 transition36 ',
-      //     openOn: 'right',
-      //     disableBgClick: true,
-      //     props: {
-      //         modalSubmitTitle: 'Save',
-      //         editMode: true,
-      //         sourceEventData: this.event
-      //     }
-      // })
 
-      this.setEventData(this.event)
-      this.setEventModal({showModal: true})
-      this.setModalSubmitTitle('Save')
-      this.setEditMode({editMode: true})
-    },
-    refreshEvents () {
-      this.getCalendarEvents()
-    },
-    goToComponent (route) {
-      this.$router.push({path: `/events/` + this.event.id + route})
-      location.reload()
-    },
-    getCalendarEventStatistics (evt) {
-      let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-      let event = new CalendarEvent({id: this.event.id})
-
-      new CalendarEventStatistics().for(calendar, event).get()
-        .then(resp => {
-          this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget// evt.totalBudget - resp[0].totalAllocatedBudget;
-          this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants// evt.totalBudget - resp[0].totalAllocatedBudget;
-          this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
-          this.seriesData = [(100 - this.percentage), this.percentage]
-          this.budgetPerEmployee = evt.budgetPerPerson// this.totalRemainingBudget / evt.numberOfParticipants;
-          this.allocatedBudget = resp.totalAllocatedBudget
-          this.event.statistics['allocatedBudget'] = this.allocatedBudget
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    },
-    openUploadModal () {
-      this.$refs.uploadModal.toggleModal(true)
-    }
-  },
-  computed: {
-    ...mapState('EventPlannerVuex', [
-      'eventData',
-      'eventModalOpen',
-      'modalTitle',
-      'modalSubmitTitle',
-      'editMode'
-    ]),
-    ...mapGetters({
-      components: 'event/getComponentsList'
-    }),
-    pieChart () {
+    data () {
       return {
-        data: {
-          labels: [' ', ' '], // should be empty to remove text from chart
-          series: this.seriesData
-        },
-        options: {
-          padding: 0,
-          height: 156,
-          donut: true,
-          donutWidth: 15
+        // auth: auth,
+        calendarEvent: {},
+        selectedComponents: [],
+        currentTab: 'blocks',
+        eventId: null,
+        percentage: 0,
+        totalRemainingBudget: 0,
+        remainingBudgetPerEmployee: 0,
+        seriesData: [],
+        isLoading: false,
+        event: {statistics: {}},
+        routeName: null,
+        budgetPerEmployee: 0,
+        activeTab : 0
+      }
+    },
+    created () {
+      this.routeName = this.$route.name;
+    },
+    mounted () {
+      let _self = this
+      this.isLoading = true;
+
+      this.getEvent()
+      const tab = this.$route.query.t || 0;
+      if (this.$refs.eventPlannerTabs) {
+        this.$refs.eventPlannerTabs.$emit('event-planner-nav-switch-panel', tab);
+      }
+
+      if (this.components.length === 0) {
+        this.$store.dispatch('event/getComponents', this)
+        this.$store.dispatch('event/getCategories', {data: this.$auth.user.defaultCalendarId, ctx: this})
+        this.$store.dispatch('event/getEventTypes', {data: this.$auth.user.defaultCalendarId, ctx: this})
+        this.$store.dispatch('event/getCurrencies', this)
+        this.$store.dispatch('event/getEventThemes', this);
+      }
+
+      this.$root.$on('calendar-refresh-events',()=>{
+          console.log('i am here');
+        this.getEvent();
+      })
+    },
+    methods: {
+      ...mapMutations('EventPlannerVuex', [
+        'setEventModal',
+        'setEditMode',
+        'setModalSubmitTitle',
+        'setEventModalAndEventData',
+        'setNumberOfParticipants',
+        'setEventData'
+      ]),
+      getEvent () {
+        this.$auth.currentUser(this, true, function () {
+          let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+
+          _calendar.calendarEvents().find(this.$route.params.id).then(event => {
+
+            this.event = event
+            this.eventId = event.id
+            this.calendarEvent = event
+            new EventComponent().for(_calendar, event).get().then(components =>{
+              this.event.components = components;
+              this.selectedComponents = components;
+            })
+
+            this.getCalendarEventStatistics(event)
+
+            this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
+            this.isLoading = false;
+            console.log(event);
+          })
+        }.bind(this))
+      },
+      selectServices(){
+        this.$refs.eventPlannerTabs.$emit("event-planner-nav-switch-panel", 1);
+      },
+      selectTimeline(){
+        this.$root.$emit("event-planner-nav-switch-panel", 2);
+      },
+      selectInviteesManagement(){
+        this.$root.$emit("event-planner-nav-switch-panel", 3);
+      },
+      selectEventPage(){
+        this.$root.$emit("event-planner-nav-switch-panel", 4);
+      },
+      selectTab (tab) {
+        this.currentTab = tab
+      },
+      selectedTab (tab) {
+        return this.currentTab === tab
+      },
+      resetTab () {
+        this.currentTab = null
+      },
+      openEventModal () {
+        // window.currentPanel = this.$showPanel({
+        //     component: EventSidePanel,
+        //     cssClass: 'md-layout-item md-size-40 transition36 ',
+        //     openOn: 'right',
+        //     disableBgClick: true,
+        //     props: {
+        //         modalSubmitTitle: 'Save',
+        //         editMode: true,
+        //         sourceEventData: this.event
+        //     }
+        // })
+
+        this.setEventData(this.event)
+        this.setEventModal({showModal: true})
+        this.setModalSubmitTitle('Save')
+        this.setEditMode({editMode: true})
+      },
+      refreshEvents () {
+        this.getCalendarEvents()
+      },
+      goToComponent (route) {
+        this.$router.push({path: `/events/` + this.event.id + route})
+        location.reload()
+      },
+      getCalendarEventStatistics (evt) {
+
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+        let event = new CalendarEvent({id: this.event.id})
+
+        new CalendarEventStatistics().for(calendar, event).get()
+          .then(resp => {
+            this.totalRemainingBudget = (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget//evt.totalBudget - resp[0].totalAllocatedBudget;
+            this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants//evt.totalBudget - resp[0].totalAllocatedBudget;
+            this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
+            this.seriesData = [(100 - this.percentage), this.percentage]
+            this.budgetPerEmployee = evt.budgetPerPerson//this.totalRemainingBudget / evt.numberOfParticipants;
+            this.allocatedBudget = resp.totalAllocatedBudget
+            this.event.statistics['allocatedBudget'] = this.allocatedBudget
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      },
+      openUploadModal(){
+        this.$refs.uploadModal.toggleModal(true);
+      }
+    },
+    computed: {
+      ...mapState('EventPlannerVuex', [
+        'eventData',
+        'eventModalOpen',
+        'modalTitle',
+        'modalSubmitTitle',
+        'editMode'
+      ]),
+      ...mapGetters({
+        components: 'event/getComponentsList'
+      }),
+      pieChart () {
+        return {
+          data: {
+            labels: [' ', ' '], // should be empty to remove text from chart
+            series: this.seriesData
+          },
+          options: {
+            padding: 0,
+            height: 156,
+            donut: true,
+            donutWidth: 15,
+          }
         }
       }
-    }
-  },
-  filters: {
-    formatDate: function (date) {
-      return moment(date).format('MMM Do YYYY ')
     },
-    formatTime: function (date) {
-      return moment(date).format('h:00 A')
+    filters: {
+      formatDate: function (date) {
+        return moment(date).format('MMM Do YYYY ')
+      },
+      formatTime: function (date) {
+        return moment(date).format('h:00 A')
+      },
+      formatDuration: function (startDate, endDate) {
+        return moment(endDate).diff(startDate, 'hours')
+      }
     },
-    formatDuration: function (startDate, endDate) {
-      return moment(endDate).diff(startDate, 'hours')
-    }
-  },
-  watch: {}
-}
+    watch: {},
+  }
 </script>
 
 <style scoped>
@@ -411,3 +414,4 @@ export default {
         background-color: transparent !important;
     }
 </style>
+

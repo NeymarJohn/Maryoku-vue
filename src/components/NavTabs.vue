@@ -40,54 +40,54 @@
 </template>
 
 <script>
-export default {
-  name: 'nav-tabs',
-  props: {
-    navigationDisabled: Boolean,
-    flexColumn: Boolean,
-    navPillsIcons: Boolean,
-    plain: Boolean,
-    tabName: Array,
-    tabIcon: Array,
-    colorButton: {
-      type: String,
-      default: ''
-    }
-  },
-  data () {
-    return {
-      activePanel: this.tabName[0]
-    }
-  },
-  mounted () {
-    this.$root.$on('switch-panel', (index) => {
-      this.switchPanel(this.tabName[index])
-    })
-  },
-  beforeDestroy () {
-    this.$root.$off('switch-panel')
-  },
-  computed: {},
-  methods: {
-    ignore (panel) {
-      if (!this.navigationDisabled) {
-        this.switchPanel(panel)
-      }
-    },
-    switchPanel (panel) {
-      this.activePanel = panel
-    },
-    isActivePanel (panel) {
-      return this.activePanel === panel
-    },
-    getColorButton: function (colorButton) {
-      return 'md-' + colorButton + ''
-    },
-    getTabContent: function (index) {
-      return 'tab-pane-' + index + ''
-    }
-  }
-}
+    export default {
+        name: 'nav-tabs',
+        props: {
+            navigationDisabled: Boolean,
+            flexColumn: Boolean,
+            navPillsIcons: Boolean,
+            plain: Boolean,
+            tabName: Array,
+            tabIcon: Array,
+            colorButton: {
+                type: String,
+                default: ""
+            }
+        },
+        data() {
+            return {
+                activePanel: this.tabName[0]
+            };
+        },
+        mounted(){
+            this.$root.$on('switch-panel',(index)=>{
+                this.switchPanel(this.tabName[index]);
+            })
+        },
+        beforeDestroy(){
+            this.$root.$off('switch-panel');
+        },
+        computed: {},
+        methods: {
+            ignore(panel){
+                if (!this.navigationDisabled) {
+                    this.switchPanel(panel)
+                }
+            },
+            switchPanel(panel) {
+                this.activePanel = panel;
+            },
+            isActivePanel(panel) {
+                return this.activePanel === panel;
+            },
+            getColorButton: function(colorButton) {
+                return "md-" + colorButton + "";
+            },
+            getTabContent: function(index) {
+                return "tab-pane-" + index + "";
+            }
+        }
+    };
 </script>
 
 <style lang="css">

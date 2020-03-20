@@ -7,15 +7,15 @@
 </template>
 <script>
 export default {
-  name: 'time-line',
+  name: "time-line",
   props: {
     plain: Boolean,
     type: {
       type: String,
-      default: ''
+      default: ""
     }
   }
-}
+};
 </script>
 <style>
 </style>

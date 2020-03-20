@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import _ from 'underscore'
+import _ from 'underscore';
 
 export default {
   props: {
@@ -53,7 +53,7 @@ export default {
     tabIcon: Array,
     colorButton: {
       type: String,
-      default: ''
+      default: ""
     },
     syncRouter: Boolean,
     activeTab: {
@@ -61,35 +61,35 @@ export default {
       default: 0
     }
   },
-  data () {
+  data() {
     return {
       activePanel: this.tabName[this.activeTab]
-    }
+    };
   },
   computed: {},
-  created () {
-    console.log(this.tabName[this.activeTab])
+  created() {
+    console.log(this.tabName[this.activeTab]);
   },
-  mounted () {
+  mounted() {
     this.$on('event-planner-nav-switch-panel', (index) => {
-      this.switchPanel(this.tabName[index])
+      this.switchPanel(this.tabName[index]);
     })
 
     this.$root.$on('goToTab', (value) => {
       this.activePanel = value
-    })
+    });
 
     if (this.syncRouter) {
-      this.switchPanel(this.$route.query.t || 0)
+      this.switchPanel(this.$route.query.t || 0);
     }
   },
   methods: {
-    switchPanel (panel) {
-      this.activePanel = panel
+    switchPanel(panel) {
+      this.activePanel = panel;
       if (this.syncRouter && this.activePanel) {
         let panelIndex = _.findIndex(this.tabName, (t) => {
-          return t === this.activePanel
-        })
+          return t === this.activePanel;
+        });
         if (panelIndex > -1) {
           this.$router.push({
             query: {
@@ -99,17 +99,17 @@ export default {
         }
       }
     },
-    isActivePanel (panel) {
-      return this.activePanel === panel
+    isActivePanel(panel) {
+      return this.activePanel === panel;
     },
     getColorButton: function (colorButton) {
-      return 'md-' + colorButton + ''
+      return "md-" + colorButton + "";
     },
     getTabContent: function (index) {
-      return 'tab-pane-' + index + ''
+      return "tab-pane-" + index + "";
     }
   }
-}
+};
 </script>
 
 <style lang="css">

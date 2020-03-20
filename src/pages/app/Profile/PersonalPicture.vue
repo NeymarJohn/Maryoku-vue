@@ -55,16 +55,17 @@
 }
 </style>
 
+
 <script>
-import { LabelEdit } from '@/components'
-import Me from '@/models/Me'
-import UserFile from '@/models/UserFile'
-import swal from 'sweetalert2'
+import { LabelEdit } from "@/components";
+import Me from "@/models/Me";
+import UserFile from '@/models/UserFile';
+import swal from "sweetalert2";
 export default {
   components: {
     Me
   },
-  mounted () {},
+  mounted() {},
   props: {
     userInfo: Object,
     isLoading: {
@@ -73,100 +74,109 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       imageUrl: null,
       alretExceedPictureSize: false
-    }
+    };
   },
   methods: {
-    onFileChange (event) {
-      let file = event.target.files || event.dataTransfer.files
+    onFileChange(event) {
+      let file = event.target.files || event.dataTransfer.files;
       if (!file.length) {
-        return
+        return;
       }
       if (file[0].size <= 500000) {
-        let url = URL.createObjectURL(file[0])
-        this.imageUrl = url
-        this.sendImage(file[0])
+        let url = URL.createObjectURL(file[0]);
+        this.imageUrl = url;
+        this.sendImage(file[0]);
       } else {
-        this.alretExceedPictureSize = true
+        this.alretExceedPictureSize = true;
       }
     },
-    clearImg () {
-      swal({
-        title: 'Are you sure you want remove it?',
-        text: ``,
-        showCancelButton: true,
-        confirmButtonClass: 'md-button md-success',
-        cancelButtonClass: 'md-button md-danger',
-        confirmButtonText: 'Yes, delete it!',
-        buttonsStyling: false
-      }).then(result => {
-        if (result.value) {
-          this.loaded = false
-          this.imageUrl = ''
-        }
-      })
-    },
-    showRemoveConfirmDialog () {
-      this.dialogMessage = 'Are you sure you want delete profile picture ?'
-      this.dialogConfirmFlag = true
-    },
+    clearImg(){
+            swal({
+                    title: "Are you sure you want remove it?",
+                    text: ``,
+                    showCancelButton: true,
+                    confirmButtonClass: "md-button md-success",
+                    cancelButtonClass: "md-button md-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    buttonsStyling: false
+                }).then(result => {
+                    if (result.value) {
 
-    confirmDelete () {
-      this.imageUrl = null
-      this.dialogConfirmFlag = false
-    },
-    onCancel () {
-      this.dialogConfirmFlag = false
-    },
-    async sendImage (file) {
-      this.csvUploading = true
-      let reader = new FileReader()
-      let _this = this
+ this.loaded = false;
+        this.imageUrl = ''
 
-      reader.onload = e => {
-        let UserFile = new UserFile({userFile: e.target.result})
-        UserFile.save().then(result => {
-          this.$notify({
-            message: 'profile Picture is uploaded successfully',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'success'
-          })
-          this.currentStep++
-          this.$root.$emit('switch-panel', 1)
-        }).catch((error) => {
-          _this.csvUploading = false
-          this.$notify({
-            message: 'profile Picture is not uploaded, please try again',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'warning'
-          })
 
-          console.log(error)
-        })
-      }
-      reader.readAsDataURL(file)
+                    }
+                });
+
+
     },
+        showRemoveConfirmDialog(){
+        this.dialogMessage="Are you sure you want delete profile picture ?"
+        this.dialogConfirmFlag =  true
+      },
 
-    removeImage: function (type) {
-      // sremoveImagehowRemoveConfirmDialog()
-      swal({
-        title: 'Are you sure?',
-        text: `You won't be able to revert this!`,
-        showCancelButton: true,
-        confirmButtonClass: 'md-button md-success',
-        cancelButtonClass: 'md-button md-danger',
-        confirmButtonText: 'Yes, delete it!',
-        buttonsStyling: false
-      }).then(result => {
-        if (result.value) {
-          this.loaded = false
-        }
-      })
+      confirmDelete(){
+        this.imageUrl = null
+        this.dialogConfirmFlag = false
+      },
+      onCancel(){
+        this.dialogConfirmFlag = false
+      },
+      async sendImage(file) {
+                this.csvUploading = true;
+                let reader = new FileReader();
+                let _this = this;
+
+                reader.onload = e => {
+                    let UserFile = new UserFile({userFile: e.target.result});
+                    UserFile.save().then(result => {
+                    this.$notify({
+                            message: 'profile Picture is uploaded successfully' ,
+                            horizontalAlign: 'center',
+                            verticalAlign: 'top',
+                            type: 'success'
+                        });
+                        this.currentStep++;
+                        this.$root.$emit('switch-panel', 1);
+                    }).catch((error) => {
+                        _this.csvUploading = false;
+                        this.$notify({
+                            message: 'profile Picture is not uploaded, please try again' ,
+                            horizontalAlign: 'center',
+                            verticalAlign: 'top',
+                            type: 'warning'
+                        });
+
+                        console.log(error);
+                    });
+                };
+                reader.readAsDataURL(file);
+            },
+
+    removeImage: function(type) {
+       // sremoveImagehowRemoveConfirmDialog()
+              swal({
+                    title: "Are you sure?",
+                    text: `You won't be able to revert this!`,
+                    showCancelButton: true,
+                    confirmButtonClass: "md-button md-success",
+                    cancelButtonClass: "md-button md-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    buttonsStyling: false
+                }).then(result => {
+                    if (result.value) {
+
+ this.loaded = false;
+
+
+                    }
+                });
+
 
       // let customer = this.$auth.user.customer;
       // new CustomerFile({id: customer.logoFileId}).delete().then(res => {
@@ -180,9 +190,9 @@ export default {
     }
   },
   watch: {
-    userInfo (newVal, oldVal) {}
+    userInfo(newVal, oldVal) {}
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

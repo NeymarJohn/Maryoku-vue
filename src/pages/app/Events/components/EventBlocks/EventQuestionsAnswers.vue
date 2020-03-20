@@ -25,56 +25,58 @@
   </div>
 </template>
 <script>
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import Calendar from '@/models/Calendar'
-import EventComponent from '@/models/EventComponent'
-import VueElementLoading from 'vue-element-loading'
-// import auth from '@/auth';
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import Calendar from "@/models/Calendar"
+  import EventComponent from "@/models/EventComponent";
+  import VueElementLoading from 'vue-element-loading';
+  // import auth from '@/auth';
 
-import { Collapse } from '@/components'
+  import { Collapse } from "@/components";
 
-// COMPONENTS
-import EditQuestionsAndAnswers from './Modals/EditQuestionsAndAnswers.vue'
+  //COMPONENTS
+  import EditQuestionsAndAnswers from './Modals/EditQuestionsAndAnswers.vue';
 
-export default {
-  name: 'event-questions-answers',
-  components: {
-    Collapse,
-    EditQuestionsAndAnswers
-  },
-  props: {
-    event,
-    readonly: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data: () => ({
-    editMode: false,
-    headers: [],
-    qnas: [],
-    isLoading: false
+  export default {
+    name: 'event-questions-answers',
+    components: {
+      Collapse,
+      EditQuestionsAndAnswers
+    },
+    props: {
+      event,
+      readonly : {
+          type : Boolean,
+          default : false
+      }
+    },
+    data: () => ({
+      editMode : false,
+      headers : [],
+      qnas : [],
+        isLoading  : false,
 
-  }),
-  methods: {
+    }),
+    methods: {
 
-  },
-  created () {
-    this.qnas = this.event.eventPage.qnas
-  },
-  mounted () {
+    },
+    created() {
 
-  },
-  computed: {
-    questionsAndAnswersList () {
-      let questions = []
-      let index = 1
-      this.qnas.forEach(item => {
-        questions.push({title: `Q${index++}: ${item.question}`})
-      })
+      this.qnas = this.event.eventPage.qnas
 
-      return questions
+    },
+    mounted() {
+
+    },
+    computed: {
+      questionsAndAnswersList() {
+        let questions = [];
+        let index = 1;
+        this.qnas.forEach(item => {
+          questions.push({title : `Q${index++}: ${item.question}`});
+        });
+
+        return questions;
+      }
     }
   }
-}
 </script>

@@ -15,40 +15,40 @@
   </div>
 </template>
 <script>
-// MAIN MODULES
-import moment from 'moment'
+//MAIN MODULES
+import moment from "moment";
 
 export default {
-  name: 'event-paid-total-amounts',
-  props: {
-    paid: Number,
+  name:'event-paid-total-amounts',
+  props:{
+    paid: Number, 
     total: Number,
     toBePaid: Number
   },
-  components: {
+  components: {   
   },
-  data () {
+  data() {
     return {
 
-    }
+    };
   },
-  mounted () {
+  mounted() {
   },
   methods: {
   },
-  computed: {
-    percentageStyle () {
+  computed: {    
+    percentageStyle() {
       const percentage = 100 / this.total * this.paid
       return {
         width: percentage > 100 ? '100%' : percentage + '%'
-      }
+      };
     }
   },
   filters: {
   },
   watch: {
-  }
-}
+  },  
+};
 </script>
 
 <style lang="scss" scoped>

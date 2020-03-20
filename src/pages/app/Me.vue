@@ -64,15 +64,15 @@
 </template>
 
 <script>
-import Calendar from 'src/models/Calendar'
-import CalendarEvent from 'src/models/CalendarEvent'
+  import Calendar from "src/models/Calendar";
+  import CalendarEvent from "src/models/CalendarEvent";
 
-export default {
-  components: {
-  },
-  mounted () {
-    // Query events example
-    /* Calendar.get().then(calendars => {
+  export default {
+    components: {
+    },
+    mounted() {
+      //Query events example
+      /*Calendar.get().then(calendars => {
         let eventQuery = new CalendarEventQuery().for(calendars[0]);
         eventQuery.attach({ ourEvents: true }).then(response => {
           console.log(response.data.events);
@@ -81,91 +81,91 @@ export default {
         });
       }, (error) => {
         console.error(error);
-      }); */
+      });*/
 
-    // Calendar.get().then(calendars => {
-    //   let newEvent = new CalendarEvent({ /* ... */}).for(calendars[0]);
-    //   newEvent.save();
+      // Calendar.get().then(calendars => {
+      //   let newEvent = new CalendarEvent({ /* ... */}).for(calendars[0]);
+      //   newEvent.save();
 
-    // }, (error) => {
-    //   console.error(error);
-    // });
-  },
-  data () {
-    return {
-      todoToday: [
-        {
-          id: 1,
-          what: 'Do something great',
-          event: '4th July',
-          when: '9:00',
-          icon1: 'add_alert'
-        },
-        {
-          id: 2,
-          what: 'Something even better',
-          event: 'Happy Hour',
-          when: '10:00',
-          icon1: 'add_alert'
-        }
-
-      ],
-      todoTomorrow: [
-        {
-          id: 1,
-          what: 'Do something great',
-          event: "Women's day",
-          when: '9:00',
-          icon1: 'add_alert'
-        },
-        {
-          id: 2,
-          what: 'Something even better',
-          event: 'Off-Site',
-          when: '10:00',
-          icon1: 'add_alert'
-        }
-
-      ]
-    }
-  },
-  methods: {
-    getClass: function (item, id) {
-      let classes = ''
-      switch (item) {
-        case 'person': {
-          classes = 'md-info'
-          break
-        }
-        case 'edit': {
-          classes = 'md-success'
-          break
-        }
-        case 'close': {
-          classes = 'md-danger'
-          break
-        }
-      }
-      switch (id) {
-        case 1:
-        case 5: {
-          break
-        }
-        case 2:
-        case 4: {
-          classes = `${classes} md-round`
-          break
-        }
-        case 3: {
-          classes = `${classes} md-simple`
-          break
-        }
-      }
-      return classes
+      // }, (error) => {
+      //   console.error(error);
+      // });
     },
-    getAlignClasses: ({ id }) => ({
-      'text-right': id
-    })
-  }
-}
+    data() {
+      return {
+        todoToday: [
+          {
+            id: 1,
+            what: "Do something great",
+            event: "4th July",
+            when: "9:00",
+            icon1: "add_alert"
+          },
+          {
+            id: 2,
+            what: "Something even better",
+            event: "Happy Hour",
+            when: "10:00",
+            icon1: "add_alert"
+          }
+
+        ],
+        todoTomorrow: [
+          {
+            id: 1,
+            what: "Do something great",
+            event: "Women's day",
+            when: "9:00",
+            icon1: "add_alert"
+          },
+          {
+            id: 2,
+            what: "Something even better",
+            event: "Off-Site",
+            when: "10:00",
+            icon1: "add_alert"
+          }
+
+        ],
+      };
+    },
+    methods: {
+      getClass: function(item, id) {
+        let classes = "";
+        switch (item) {
+          case "person": {
+            classes = "md-info";
+            break;
+          }
+          case "edit": {
+            classes = "md-success";
+            break;
+          }
+          case "close": {
+            classes = "md-danger";
+            break;
+          }
+        }
+        switch (id) {
+          case 1:
+          case 5: {
+            break;
+          }
+          case 2:
+          case 4: {
+            classes = `${classes} md-round`;
+            break;
+          }
+          case 3: {
+            classes = `${classes} md-simple`;
+            break;
+          }
+        }
+        return classes;
+      },
+      getAlignClasses: ({ id }) => ({
+        "text-right": id
+      }),
+    }
+  };
 </script>

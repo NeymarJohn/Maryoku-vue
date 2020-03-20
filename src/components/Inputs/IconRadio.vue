@@ -19,39 +19,39 @@
     </div>
 </template>
 <script>
-export default {
-  name: 'icon-radio',
+    export default {
+        name: "icon-radio",
 
-  props: {
-    checked: {
-      type: Boolean,
-      default: false
-    },
-    label: String,
-    name: String,
-    title: String,
-    icon: String,
-    disabled: Boolean
-  },
+        props: {
+            checked: {
+                type: Boolean,
+                default: false
+            },
+            label: String,
+            name: String,
+            title: String,
+            icon: String,
+            disabled: Boolean
+        },
 
-  computed: {
-    radioButtonValue: {
-      get: function () {
-        return this.value
-      },
-      set: function () {
-        // Communicate the change to parent component so that selectedValue can be updated
-        this.$emit('change', this.label)
-      }
-    }
-  },
-  methods: {
+        computed: {
+            radioButtonValue: {
+                get: function () {
+                    return this.value
+                },
+                set: function () {
+                    // Communicate the change to parent component so that selectedValue can be updated
+                    this.$emit("change", this.label)
+                }
+            }
+        },
+        methods: {
 
-    updateValue () {
-      this.$emit('input', {checked: true, label: this.label})
-    }
-  }
-}
+            updateValue() {
+                this.$emit("input", {checked: true, label: this.label});
+            }
+        }
+    };
 </script>
 <style>
 </style>

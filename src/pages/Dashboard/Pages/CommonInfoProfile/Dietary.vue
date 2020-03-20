@@ -100,6 +100,7 @@
         <ButtonDiv buttonStyle='dietary_buttonStyle' text='skip' :onClick='onSkip'/>
         <Button text='next' :onClick='onNext' class="md-success md-fileinput button-md-common"/>
 
+
 </div>
 </div>
 <div class='dietary_logo-main'>
@@ -244,51 +245,54 @@ import Button from '@/components/Button/Button.vue'
 import Icon from '@/components/Icon/Icon.vue'
 
 export default {
-  name: 'Employee',
-  props: {
-    officeManager: String
-  },
-  components: {
-    InputText,
-    Select,
-    Title,
-    ButtonDiv,
-    Icon,
-    Button
-  },
-  data () {
-    return {
-      role: null,
-      dietary: [],
-      another_food: ''
-    }
-  },
-  mounted: function () {
-    const onboardingPath = this.$store.getters['user/getUser'].onboardingPath
-    this.role = onboardingPath
-  },
-  methods: {
-    onSkip: function () {
-      this.$router.push('/company')
+    name:'Employee',
+    props:{
+       officeManager:String
     },
-    onSelect: function (food) {
-      if (!this.dietary.includes(food)) {
-        this.dietary.push(food)
-      } else {
-        this.dietary = this.dietary.filter(item => item !== food)
-      }
-    },
-    onChange: function (value, name) {
-      this[name] = value
-    },
-    onNext: function () {
-      const data = {}
-      data['dietary'] = this.dietary
-      data['another_food'] = this.another_food
-      this.$store.dispatch('user/sendCompanyInfo', data)
-      this.$router.push('/company')
-    }
-  }
+    components:{
+   InputText,
+   Select,
+   Title,
+   ButtonDiv,
+   Icon,
+   Button
+},
+     data(){
+                return {
+                        role: null,
+                        dietary:[],
+                        another_food:''
+                }
+        }
+        ,
+        mounted:function(){
+                const onboardingPath= this.$store.getters['user/getUser'].onboardingPath
+                this.role=onboardingPath
+        },
+        methods: {
+                onSkip:function(){
+                        this.$router.push('/company')
+                },
+                onSelect:function(food){
+                        if(!this.dietary.includes(food)){
+                              this.dietary.push(food)
+                        }else{
+                             this.dietary=this.dietary.filter(item=>item!==food)
+
+                        }
+
+                },
+                onChange:function(value, name){
+                 this[name]=value
+
+         },onNext:function(){
+                  const data={}
+                        data['dietary']= this.dietary
+                        data['another_food']=this.another_food
+                        this.$store.dispatch("user/sendCompanyInfo",data)
+                        this.$router.push('/company')
+         }
+        }
 
 }
 </script>

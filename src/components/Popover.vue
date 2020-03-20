@@ -27,11 +27,11 @@ export default {
     }
   },
   methods: {
-    closeModal: function () {
-      this.$emit('close')
+    closeModal: function() {
+      this.$emit("close");
     }
   }
-}
+};
 </script>
 
 <style lang="scss">

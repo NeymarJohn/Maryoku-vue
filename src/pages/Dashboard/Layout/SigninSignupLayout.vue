@@ -16,30 +16,32 @@
             <router-view></router-view>
         </FadeTransition>
 
+
+
     </div>
 </template>
 <script>
-import { FadeTransition } from 'vue2-transitions'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import PublicEventPlannerVuexModule from '../../../pages/app/CreateEvent/PublicEventPlanner.vuex'
+    import { FadeTransition } from "vue2-transitions";
+    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+    import PublicEventPlannerVuexModule from "../../../pages/app/CreateEvent/PublicEventPlanner.vuex";
 
-export default {
-  data () {
-    return {
-    }
-  },
-  components: {
-    FadeTransition
-  },
-  created () {
-  },
-  methods: {
+    export default {
+        data(){
+            return {
+            }
+        },
+        components: {
+            FadeTransition
+        },
+        created () {
+         },
+        methods: {
 
-  },
-  beforeRouteUpdate (to, from, next) {
-    next()
-  }
-}
+        },
+        beforeRouteUpdate(to, from, next) {
+            next();
+        }
+    };
 </script>
 <style lang="scss">
 
@@ -276,6 +278,7 @@ export default {
                 flex: 1;
                 justify-content: center;
 
+
             }
         }
 
@@ -305,6 +308,8 @@ export default {
             &.md-default {
                 margin-right: 1em;
             }
+
+
 
             &.disabled, &.opacity-btn {
                 opacity: 0.3;
@@ -538,6 +543,10 @@ export default {
 
     }
 
+
+
+
+
     @media screen and (max-width : 500px) {
         .register-page {
             .register-form {
@@ -545,6 +554,9 @@ export default {
             }
         }
         .register-section {
+
+
+
 
             .md-button.custom-btn {
                 width : 100%;
@@ -558,6 +570,7 @@ export default {
                     width : 100%;
                 }
             }
+
 
             .section-header {
                 border-radius: 0;
@@ -692,6 +705,8 @@ export default {
                 padding : 0px;
             }
 
+
+
             .top-header {
                 .logo {
                     img {
@@ -730,6 +745,10 @@ export default {
             }
         }
 
+
+
     }
+
+
 
 </style>

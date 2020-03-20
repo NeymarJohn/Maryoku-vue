@@ -38,6 +38,7 @@
                     <span class="md-error" v-if="errors.has('eventType')">This field is required</span>
                 </div>
 
+
                 <div class="form-group">
                     <md-datepicker
                         class="purple-field with-icon datepicker-field"
@@ -61,6 +62,7 @@
                     <md-radio v-model="eventData.eventDayPart" value="all" class="with-border">All day</md-radio>
                 </div>
 
+
                 <div class="form-actions">
                     <md-button
                         class="md-rose next-btn custom-btn"
@@ -68,6 +70,7 @@
                         :class="[{'disabled': !eventData.location || !eventData.eventType || !eventData.date}]"> Next
                     </md-button>
                 </div>
+
 
             </div>
         </div>
@@ -79,150 +82,159 @@
 
 <script>
 
-import GoBack from './componenets/GoBack'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+    import GoBack from './componenets/GoBack'
+    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
-import Vue from 'vue'
-import vSelect from 'vue-select'
+    import Vue from 'vue'
+    import vSelect from 'vue-select'
 
-Vue.component('v-select', vSelect)
+    Vue.component('v-select', vSelect)
 
-export default {
-  components: {
-    GoBack
-  },
-  created () {
-    this.$set(this.eventData, 'location', this.publicEventData.location)
-    this.$set(this.eventData, 'eventType', this.publicEventData.eventType)
-    this.$set(this.eventData, 'date', this.publicEventData.date)
-    this.$set(this.eventData, 'eventDayPart', this.publicEventData.eventDayPart)
-    this.$set(this.eventData, 'eventPlaceNeeded', this.publicEventData.eventPlaceNeeded)
-    this.$set(this.eventData, 'flexibleWithDates', this.publicEventData.flexibleWithDates)
-  },
-  methods: {
-    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setCurrentStep']),
-    goToNext () {
-      let vm = this
-
-      this.cerrors = {}
-      this.validating = true
-
-      this.$validator.validateAll().then(isValid => {
-        if (isValid) {
-          this.setEventProperty({key: 'location', actualValue: this.eventData.location})
-          this.setEventProperty({key: 'eventType', actualValue: this.eventData.eventType})
-          this.setEventProperty({key: 'eventStartMillis', actualValue: this.eventData.date.getTime()})
-          this.setEventProperty({key: 'eventDayPart', actualValue: this.eventData.eventDayPart})
-          this.setEventProperty({key: 'eventPlaceNeeded', actualValue: this.eventData.eventPlaceNeeded})
-          this.setEventProperty({key: 'flexibleWithDates', actualValue: this.eventData.flexibleWithDates})
-          this.setCurrentStep({currentPage: '/about-invited'})
-          this.$router.push({path: `/about-invited`})
-        } else {
-          this.showNotify()
-        }
-      })
-    },
-    validateDate () {
-      return this.$refs.datePicker.$el.classList.contains('md-has-value')
-    },
-    validateAndSubmit () {
-      // this.$emit('goToNextPage');
-      //  return;
-      let vm = this
-
-      this.cerrors = {}
-      this.validating = true
-
-      this.$validator.validateAll().then(isValid => {
-        if (isValid) {
-          // this.$parent.isLoading = true;
-
-          if (this.eventId) {
-            vm.updateEvent()
-          } else {
-            vm.createEvent()
-          }
-        } else {
-          this.showNotify()
-        }
-      })
-
-      if (!this.eventType) {
-
-      } else {
-        // this.$emit('goToNextPage');
-      }
-    },
-    showNotify () {
-      this.$notify({
-        message: 'Please, check all required fields',
-        icon: 'warning',
-        horizontalAlign: 'center',
-        verticalAlign: 'top',
-        type: 'danger'
-      })
-    }
-  },
-  data () {
-    return {
-      selectedCountry: null,
-      selectedEmployee: null,
-      countries: [
-        'Algeria',
-        'Argentina',
-        'Brazil',
-        'Canada',
-        'Italy',
-        'Japan',
-        'United Kingdom',
-        'United States'
-      ],
-      step: 1,
-      haveEventPlace: false,
-      flexibleWithDates: false,
-      eventTime: null,
-      eventDate: null,
-      eventData: {
-        location: null
-      },
-      modelValidations: {
-        location: {
-          required: true
+    export default {
+        components: {
+            GoBack
         },
-        date: {
-          required: true
+        created(){
+            this.$set(this.eventData,'location' ,this.publicEventData.location);
+            this.$set(this.eventData,'eventType' ,this.publicEventData.eventType);
+            this.$set(this.eventData,'date' ,this.publicEventData.date);
+            this.$set(this.eventData,'eventDayPart' ,this.publicEventData.eventDayPart);
+            this.$set(this.eventData,'eventPlaceNeeded' ,this.publicEventData.eventPlaceNeeded);
+            this.$set(this.eventData,'flexibleWithDates' ,this.publicEventData.flexibleWithDates);
         },
-        eventType: {
-          required: true
+        methods: {
+            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setCurrentStep']),
+            goToNext () {
+
+                let vm = this
+
+                this.cerrors = {}
+                this.validating = true
+
+                this.$validator.validateAll().then(isValid => {
+                    if (isValid) {
+
+                        this.setEventProperty({key: 'location', actualValue: this.eventData.location});
+                        this.setEventProperty({key: 'eventType', actualValue: this.eventData.eventType});
+                        this.setEventProperty({key: 'eventStartMillis', actualValue: this.eventData.date.getTime()});
+                        this.setEventProperty({key: 'eventDayPart', actualValue: this.eventData.eventDayPart});
+                        this.setEventProperty({key: 'eventPlaceNeeded', actualValue: this.eventData.eventPlaceNeeded});
+                        this.setEventProperty({key: 'flexibleWithDates', actualValue: this.eventData.flexibleWithDates});
+                        this.setCurrentStep({currentPage : '/about-invited'});
+                        this.$router.push({path: `/about-invited`})
+
+                    } else {
+                        this.showNotify()
+                    }
+
+                })
+
+            },
+            validateDate () {
+                return this.$refs.datePicker.$el.classList.contains('md-has-value')
+            },
+            validateAndSubmit () {
+
+                // this.$emit('goToNextPage');
+                //  return;
+                let vm = this
+
+                this.cerrors = {}
+                this.validating = true
+
+                this.$validator.validateAll().then(isValid => {
+                    if (isValid) {
+                        //this.$parent.isLoading = true;
+
+                        if (this.eventId) {
+                            vm.updateEvent()
+                        } else {
+                            vm.createEvent()
+                        }
+
+                    } else {
+                        this.showNotify()
+                    }
+
+                })
+
+                if (!this.eventType) {
+
+                } else {
+                    //this.$emit('goToNextPage');
+                }
+            },
+            showNotify () {
+                this.$notify({
+                    message: 'Please, check all required fields',
+                    icon: 'warning',
+                    horizontalAlign: 'center',
+                    verticalAlign: 'top',
+                    type: 'danger',
+                })
+            },
+        },
+        data () {
+            return {
+                selectedCountry: null,
+                selectedEmployee: null,
+                countries: [
+                    'Algeria',
+                    'Argentina',
+                    'Brazil',
+                    'Canada',
+                    'Italy',
+                    'Japan',
+                    'United Kingdom',
+                    'United States'
+                ],
+                step: 1,
+                haveEventPlace: false,
+                flexibleWithDates: false,
+                eventTime: null,
+                eventDate: null,
+                eventData: {
+                    location: null
+                },
+                modelValidations: {
+                    location: {
+                        required: true,
+                    },
+                    date: {
+                        required: true,
+                    },
+                    eventType: {
+                        required: true,
+                    }
+                },
+                locationsList: ['San Francisco, California', 'Los Angeles, California', 'Jacksonville, Florida', 'Miami, Florida', 'NYC, New York', 'Austin, Texas', 'Huston, Texas'],
+                eventTypes: [
+                    'Reception',
+                    'Establishment / Activity day',
+                    'Offsite meeting',
+                    'Hackathon',
+                    'Networking Incentive meeting',
+                    'Fundraising',
+                    'Partner/Customer meeting',
+                    'Board meeting',
+                    'Product launch',
+                    'Awards / Recognition',
+                    'Other'
+                ]
+                ,
+                options: ['ameed', 'ahmad']
+
+            }
+        }, computed: {
+            ...mapState('PublicEventPlannerVuex', [
+                'publicEventData',
+            ])
         }
-      },
-      locationsList: ['San Francisco, California', 'Los Angeles, California', 'Jacksonville, Florida', 'Miami, Florida', 'NYC, New York', 'Austin, Texas', 'Huston, Texas'],
-      eventTypes: [
-        'Reception',
-        'Establishment / Activity day',
-        'Offsite meeting',
-        'Hackathon',
-        'Networking Incentive meeting',
-        'Fundraising',
-        'Partner/Customer meeting',
-        'Board meeting',
-        'Product launch',
-        'Awards / Recognition',
-        'Other'
-      ],
-      options: ['ameed', 'ahmad']
 
     }
-  },
-  computed: {
-    ...mapState('PublicEventPlannerVuex', [
-      'publicEventData'
-    ])
-  }
-
-}
 </script>
 <style lang="scss">
+
 
     .form-section.event-basic-info {
         width: 450px;
@@ -230,7 +242,9 @@ export default {
         padding: 0;
         min-height: 440px;
 
+
     }
+
 
     .event-time {
         display: flex;

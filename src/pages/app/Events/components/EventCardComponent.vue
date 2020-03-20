@@ -196,198 +196,200 @@
 
 <script>
 
-import {
-  NavTabsCard
-  , TimeLineItem } from '@/components'
-import EventModalInspirations from './EventInspirationsModal'
-import EventModalTodo from './EventTodoModal'
-import EventModalVendor from './EventVendorModal'
-import EventModalComponents from './EventComponentsModal'
-import EventTodoRow from './EventTodoRow.vue'
-import EventTabs from './EventTabs.vue'
-import swal from 'sweetalert2'
-import moment from 'moment'
+  import {
+    NavTabsCard
+  } from "@/components";
+  import EventModalInspirations from './EventInspirationsModal';
+  import EventModalTodo from './EventTodoModal';
+  import EventModalVendor from './EventVendorModal';
+  import EventModalComponents from './EventComponentsModal';
+  import EventTodoRow from './EventTodoRow.vue';
+  import EventTabs from './EventTabs.vue';
+  import swal from "sweetalert2";
+  import moment from 'moment';
+  import { TimeLineItem } from "@/components";
 
-export default {
-  components: {
-    NavTabsCard,
-    EventModalInspirations,
-    EventModalTodo,
-    EventModalVendor,
-    EventModalComponents,
-    EventTodoRow,
-    TimeLineItem,
-    EventTabs
-  },
-  props: {
-    componentIndex: Number,
-    componentObject: Object,
-    readonly: Boolean,
-    shouldUpdate: Boolean,
-    updateVendor: Function,
-    updateComponent: Function,
-    updateTodo: Function,
-    deleteVendor: Function,
-    deleteTodo: Function,
-    deleteComponentItem: Function,
-    deleteComponent: Function,
-    tabName: String
-  },
-  name: 'event-card-component',
-  data: function () {
-    return {
-      vendorsObjectsArray: [],
-      vendorItem: null,
-      vendorIndex: null,
-      componentItem: null,
-      componentItemIndex: null,
-      todoItem: null,
-      todoIndex: null
-    }
-  },
-  mounted () {
-    this.getVendorObjectsArray()
-  },
-  computed: {
-    componentTitle () {
-      let componentId = this.componentObject.componentId
-      let o = {}
+  export default {
+    components: {
+      NavTabsCard,
+      EventModalInspirations,
+      EventModalTodo,
+      EventModalVendor,
+      EventModalComponents,
+      EventTodoRow,
+      TimeLineItem,
+      EventTabs,
+    },
+    props: {
+      componentIndex: Number,
+      componentObject: Object,
+      readonly: Boolean,
+      shouldUpdate: Boolean,
+      updateVendor: Function,
+      updateComponent: Function,
+      updateTodo: Function,
+      deleteVendor: Function,
+      deleteTodo: Function,
+      deleteComponentItem: Function,
+      deleteComponent: Function,
+      tabName: String,
+    },
+    name: 'event-card-component',
+    data: function() {
+      return {
+        vendorsObjectsArray: [],
+        vendorItem: null,
+        vendorIndex: null,
+        componentItem: null,
+        componentItemIndex: null,
+        todoItem: null,
+        todoIndex: null
+      }
+    },
+    mounted() {
+      this.getVendorObjectsArray();
+    },
+    computed: {
+      componentTitle() {
+        let componentId = this.componentObject.componentId;
+        let o = {};
 
-      this.$store.state.componentsList.some(function (val) {
-        if (val.id === componentId) {
-          return o = val
-        } else if (val.childComponents) {
-          return o = val.childComponents.find(x => x.id === componentId)
+        this.$store.state.componentsList.some(function(val) {
+          if (val.id === componentId) {
+            return o = val;
+          } else if (val.childComponents) {
+            return o = val.childComponents.find(x => x.id === componentId);
+          }
+        });
+
+        return o ? o.value || o.title : '';
+      }
+    },
+    watch: {
+      componentObject: {
+        handler: function(before, after) {
+          this.getVendorObjectsArray();
+        },
+        deep: true,
+      }
+    },
+    methods: {
+      findIcon(object) {
+        let obj = '';
+        if (this.$store.state.componentsList) {
+          obj = this.$store.state.componentsList.find(e => { return e.id === object.componentId })
+          if (!obj) {
+            let child = this.$store.state.componentsList.map(e => {
+              return e.childComponents ? e.childComponents : {}
+            });
+            obj = child.flat().find(e => { return e.id === object.componentId })
+          }
         }
-      })
-
-      return o ? o.value || o.title : ''
-    }
-  },
-  watch: {
-    componentObject: {
-      handler: function (before, after) {
-        this.getVendorObjectsArray()
+        return obj ? obj.icon : 'card_travel'
       },
-      deep: true
-    }
-  },
-  methods: {
-    findIcon (object) {
-      let obj = ''
-      if (this.$store.state.componentsList) {
-        obj = this.$store.state.componentsList.find(e => { return e.id === object.componentId })
-        if (!obj) {
-          let child = this.$store.state.componentsList.map(e => {
-            return e.childComponents ? e.childComponents : {}
-          })
-          obj = child.flat().find(e => { return e.id === object.componentId })
+      getVendorObjectsArray() {
+        let _this = this;
+        this.vendorsObjectsArray = [];
+        if (this.componentObject) {
+          this.componentObject.vendors.forEach(function (vendorItem) {
+            let vendorObj = Object.assign({}, _this.$store.state.vendorsList.find((val) => val.id === vendorItem.vendorId));
+            vendorObj.cost = vendorItem.cost;
+            vendorObj.vendorItemId = vendorItem.id;
+
+            _this.vendorsObjectsArray.push(vendorObj);
+          });
         }
-      }
-      return obj ? obj.icon : 'card_travel'
-    },
-    getVendorObjectsArray () {
-      let _this = this
-      this.vendorsObjectsArray = []
-      if (this.componentObject) {
-        this.componentObject.vendors.forEach(function (vendorItem) {
-          let vendorObj = Object.assign({}, _this.$store.state.vendorsList.find((val) => val.id === vendorItem.vendorId))
-          vendorObj.cost = vendorItem.cost
-          vendorObj.vendorItemId = vendorItem.id
+      },
 
-          _this.vendorsObjectsArray.push(vendorObj)
-        })
-      }
-    },
+      showInspirations() {
+        this.$refs.inspirationsModal.toggleModal(true);
+      },
+      showModalVendors(item, index) {
+        if (!this.readonly) {
+          this.vendorItem = item;
+          this.vendorIndex = index;
+          this.$refs.vendorsModal.toggleModal(true);
+        }
+      },
+      showModalComponent(item, index) {
+        if (!this.readonly) {
+          this.componentItem = item;
+          this.componentItemIndex = index;
+          this.$refs.componentsModal.toggleModal(true);
+        }
+      },
+      showModalTodo(todo, index) {
+        if (!this.readonly) {
+          this.todoItem = todo;
+          this.todoIndex = index;
+          this.$refs.todoModal.toggleModal(true);
+        }
+      },
+      showSwalItems(e, itemIndex, arrayTitle) {
+        e.stopPropagation();
+        swal({
+          title: "Are you sure?",
+          text: `You won't be able to revert this!`,
+          showCancelButton: true,
+          confirmButtonClass: "md-button md-success",
+          cancelButtonClass: "md-button md-danger",
+          confirmButtonText: "Yes, delete it!",
+          buttonsStyling: false
+        }).then(result => {
+          if (result.value) {
+            let store = this.$store.state.eventData.components[this.componentIndex];
 
-    showInspirations () {
-      this.$refs.inspirationsModal.toggleModal(true)
-    },
-    showModalVendors (item, index) {
-      if (!this.readonly) {
-        this.vendorItem = item
-        this.vendorIndex = index
-        this.$refs.vendorsModal.toggleModal(true)
-      }
-    },
-    showModalComponent (item, index) {
-      if (!this.readonly) {
-        this.componentItem = item
-        this.componentItemIndex = index
-        this.$refs.componentsModal.toggleModal(true)
-      }
-    },
-    showModalTodo (todo, index) {
-      if (!this.readonly) {
-        this.todoItem = todo
-        this.todoIndex = index
-        this.$refs.todoModal.toggleModal(true)
-      }
-    },
-    showSwalItems (e, itemIndex, arrayTitle) {
-      e.stopPropagation()
-      swal({
-        title: 'Are you sure?',
-        text: `You won't be able to revert this!`,
-        showCancelButton: true,
-        confirmButtonClass: 'md-button md-success',
-        cancelButtonClass: 'md-button md-danger',
-        confirmButtonText: 'Yes, delete it!',
-        buttonsStyling: false
-      }).then(result => {
-        if (result.value) {
-          let store = this.$store.state.eventData.components[this.componentIndex]
-
-          if (this.shouldUpdate) {
-            switch (arrayTitle) {
-              case 'vendors':
-                this.$props.deleteVendor(store, {id: store.vendors[itemIndex].id})
-                break
-              case 'todos':
-                this.$props.deleteTodo(store, {id: store.todos[itemIndex].id})
-                break
-              case 'values':
-                this.$props.deleteComponentItem(store, {id: store.values[itemIndex].id})
-                break
-              default:
-                break
+            if (this.shouldUpdate) {
+              switch(arrayTitle) {
+                case 'vendors':
+                  this.$props.deleteVendor(store, {id: store.vendors[itemIndex].id})
+                  break;
+                case 'todos':
+                  this.$props.deleteTodo(store, {id: store.todos[itemIndex].id})
+                  break;
+                case 'values':
+                  this.$props.deleteComponentItem(store, {id: store.values[itemIndex].id})
+                  break;
+                default:
+                  break;
+              }
             }
+            this.$store.commit('removeSubComponent', {component: this.componentIndex, type: arrayTitle, item: itemIndex});
           }
-          this.$store.commit('removeSubComponent', {component: this.componentIndex, type: arrayTitle, item: itemIndex})
-        }
-      })
-    },
-    showSwalComponent () {
-      swal({
-        title: 'Are you sure?',
-        text: `You won't be able to revert this!`,
-        showCancelButton: true,
-        confirmButtonClass: 'md-button md-success',
-        cancelButtonClass: 'md-button md-danger',
-        confirmButtonText: 'Yes, delete it!',
-        buttonsStyling: false
-      }).then(result => {
-        if (result.value) {
-          if (this.shouldUpdate) {
-            this.$props.deleteComponent(this.componentObject)
-          }
-          this.$store.commit('removeComponent', {index: this.componentIndex})
-        }
-      })
-    },
-    sentProposalRequest (event) {
-      event.stopPropagation()
-      let routeData = this.$router.resolve({ path: '/events/proposal' })
-      window.open(routeData.href, '_blank')
-    }
-  },
+        });
+      },
+      showSwalComponent() {
+        swal({
+          title: "Are you sure?",
+          text: `You won't be able to revert this!`,
+          showCancelButton: true,
+          confirmButtonClass: "md-button md-success",
+          cancelButtonClass: "md-button md-danger",
+          confirmButtonText: "Yes, delete it!",
+          buttonsStyling: false
+        }).then(result => {
+          if (result.value) {
 
-  filters: {
-    moment: function (date) {
-      return moment(date).format('YYYY-MM-DD')
+            if (this.shouldUpdate) {
+              this.$props.deleteComponent(this.componentObject);
+            }
+            this.$store.commit('removeComponent', {index: this.componentIndex});
+          }
+        });
+      },
+      sentProposalRequest(event) {
+        event.stopPropagation();
+        let routeData = this.$router.resolve({ path: "/events/proposal" });
+        window.open(routeData.href, '_blank');
+      },
+    },
+
+    filters: {
+      moment: function (date) {
+        return moment(date).format('YYYY-MM-DD');
+      }
     }
   }
-}
 </script>
 <style lang="scss">
   .md-tabs-content table thead {

@@ -58,131 +58,131 @@
   </chart-card>
 </template>
 <script>
-// import auth from '@/auth';
-import Chartist from 'chartist'
-import moment from 'moment'
-import VueElementLoading from 'vue-element-loading'
+  // import auth from '@/auth';
+  import Chartist from "chartist";
+  import moment from "moment";
+  import VueElementLoading from 'vue-element-loading';
 
-import {
-  ChartCard
-} from '@/components'
+  import {
+    ChartCard
+  } from "@/components";
 
-export default {
-  name: 'company-dashboard-events-chart',
-  components: {
-    ChartCard,
-    VueElementLoading
-  },
-  props: {
-    currentYear: {
-      type: String,
-      default: 0
+  export default {
+    name: "company-dashboard-events-chart",
+    components: {
+      ChartCard,
+      VueElementLoading
     },
-    currentYearEventsCount: {
-      type: Number,
-      default: 0
-    },
-    numberOfEventsPerYear: {
-      type: Object,
-      default: () => { return {} }
-    },
-    numberOfEventsPerYearMonth: {
-      type: Object,
-      default: () => { return {} }
-    }
-  },
-  watch: {
-    numberOfEventsPerYear (newVal, oldVal) {
-      this.loading = false
-      let labels = []
-      let series = []
-      let keys = Object.keys(newVal)
-      if (keys.length > 0) {
-        for (const key of keys) {
-          labels.push(key)
-          series.push(newVal[key])
-        }
-      }
-
-      this.byYearData = {
-        labels: labels,
-        series: [series]
-      }
-
-      if (!this.displayByYearOrMonth) {
-        this.colouredLineChart.data = this.byYearData
+    props: {
+      currentYear: {
+        type: String,
+        default: 0
+      },
+      currentYearEventsCount : {
+        type: Number,
+        default: 0
+      },
+      numberOfEventsPerYear: {
+        type: Object,
+        default: ()=>{ return {}}
+      },
+      numberOfEventsPerYearMonth: {
+        type: Object,
+        default: ()=>{ return {}}
       }
     },
-    numberOfEventsPerYearMonth (newVal, oldVal) {
-      let labels = []
-      let series = []
-      let keys = Object.keys(newVal)
-      if (keys.length > 0) {
-        keys = keys.sort()
-        for (const key of keys) {
-          let parts = key.split('__')
-          if (parts[0] === '2019') {
-            labels.push(`${parts[0]}-${parts[1]}`)
-            series.push(newVal[key])
+    watch: {
+      numberOfEventsPerYear(newVal, oldVal){
+        this.loading = false;
+        let labels = [];
+        let series = [];
+        let keys = Object.keys(newVal);
+        if (keys.length > 0){
+          for (const key of keys) {
+            labels.push(key);
+            series.push(newVal[key]);
           }
         }
-      }
 
-      this.byYearMonthData = {
-        labels: labels,
-        series: [series]
-      }
+        this.byYearData = {
+          labels: labels,
+          series : [series]
+        };
 
-      if (this.displayByYearOrMonth) {
-        this.colouredLineChart.data = this.byYearMonthData
-      }
-    },
-    displayByYearOrMonth (newVal, oldVal) {
-      if (newVal) {
-        this.colouredLineChart.data = this.byYearMonthData
-      } else {
-        this.colouredLineChart.data = this.byYearData
-      }
-    }
-  },
-  data () {
-    return {
-      // auth: auth,
-      loading: true,
-      displayByYearOrMonth: false,
-      byYearData: { labels: [], series: [[]]},
-      byYearMonthData: { labels: [], series: [[]]},
-      filterYear: moment().year(),
-      filterMonth: '1',
-      colouredLineChart: {
-        data: {
-          labels: [
-          ],
-          series: [[]]
-        },
-        options: {
-          lineSmooth: this.$Chartist.Interpolation.cardinal({
-            tension: 1
-          }),
-          axisY: {
-            showGrid: true,
-            offset: 40
-          },
-          axisX: {
-            showGrid: false
-          },
-          low: 0,
-          /* high: 50, */
-          showPoint: true,
-          height: '100%',
-          plugins: [
-            // this.$Chartist.plugins.tooltip()
-          ]
+        if (!this.displayByYearOrMonth){
+          this.colouredLineChart.data = this.byYearData;
+        }
+      },
+      numberOfEventsPerYearMonth(newVal, oldVal){
+        let labels = [];
+        let series = [];
+        let keys = Object.keys(newVal);
+        if (keys.length > 0){
+          keys = keys.sort();
+          for (const key of keys) {
+            let parts = key.split("__");
+            if (parts[0] === '2019') {
+              labels.push(`${parts[0]}-${parts[1]}`);
+              series.push(newVal[key]);
+            }
+          }
+        }
+
+        this.byYearMonthData = {
+          labels: labels,
+          series : [series]
+        };
+
+        if (this.displayByYearOrMonth){
+          this.colouredLineChart.data = this.byYearMonthData;
+        }
+      },
+      displayByYearOrMonth(newVal, oldVal){
+        if (newVal){
+          this.colouredLineChart.data = this.byYearMonthData;
+        } else {
+          this.colouredLineChart.data = this.byYearData;
         }
       }
+    },
+    data() {
+      return {
+        // auth: auth,
+        loading: true,
+        displayByYearOrMonth: false,
+        byYearData: { labels: [], series: [[]]},
+        byYearMonthData: { labels: [], series: [[]]},
+        filterYear: moment().year(),
+        filterMonth: "1",
+        colouredLineChart: {
+          data: {
+            labels: [
+            ],
+            series: [[]]
+          },
+          options: {
+            lineSmooth: this.$Chartist.Interpolation.cardinal({
+              tension: 1
+            }),
+            axisY: {
+              showGrid: true,
+              offset: 40
+            },
+            axisX: {
+              showGrid: false
+            },
+            low: 0,
+            /*high: 50,*/
+            showPoint: true,
+            height: "100%",
+            plugins: [
+              //this.$Chartist.plugins.tooltip()
+            ]
+          }
+        },
+      };
     }
-  }
-}
+  };
 </script>
 <style lang="scss" scoped>
 

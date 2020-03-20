@@ -70,107 +70,107 @@
   </div>
 </template>
 <script>
-import { Modal } from '@/components'
-import Vue from 'vue'
+  import { Modal } from "@/components";
+  import Vue from 'vue';
 
-export default {
-  name: 'event-modal-todo',
-  props: {
-    todoItem: Object,
-    todoIndex: Number,
-    componentIndex: Number,
-    shouldUpdate: Boolean,
-    updateTodo: Function
-  },
-  components: {
-    Modal
-  },
-  data () {
-    return {
-      modalOpen: false,
-      form: {
-        id: null,
-        title: null,
-        dueDateMillis: null,
-        assignee: null,
-        status: null
+  export default {
+    name: 'event-modal-todo',
+    props: {
+      todoItem: Object,
+      todoIndex: Number,
+      componentIndex: Number,
+      shouldUpdate: Boolean,
+      updateTodo: Function,
+    },
+    components: {
+      Modal,
+    },
+    data() {
+      return {
+        modalOpen: false,
+        form: {
+          id: null,
+          title: null,
+          dueDateMillis: null,
+          assignee:  null,
+          status: null,
+        },
+        modelValidations: {
+          title: {
+            required: true,
+          },
+          assignee: {
+            required: true,
+          },
+          status: {
+            required: true,
+          },
+        }
+      }
+    },
+    watch: {
+      todoItem: function(val) {
+        this.form.id = 'id' in val ? val.id : null;
+        this.form.title = 'title' in val ? val.title : '';
+        this.form.dueDateMillis = 'dueDateMillis' in val ? new Date(val.dueDateMillis) : '';
+        this.form.assignee = 'assignee' in val ? val.assignee : '';
+        this.form.status = 'status' in val ? val.status : '';
+      }
+    },
+    methods: {
+      noticeModalHide() {
+        this.clearForm();
+        this.modalOpen = false;
       },
-      modelValidations: {
-        title: {
-          required: true
-        },
-        assignee: {
-          required: true
-        },
-        status: {
-          required: true
-        }
-      }
-    }
-  },
-  watch: {
-    todoItem: function (val) {
-      this.form.id = 'id' in val ? val.id : null
-      this.form.title = 'title' in val ? val.title : ''
-      this.form.dueDateMillis = 'dueDateMillis' in val ? new Date(val.dueDateMillis) : ''
-      this.form.assignee = 'assignee' in val ? val.assignee : ''
-      this.form.status = 'status' in val ? val.status : ''
-    }
-  },
-  methods: {
-    noticeModalHide () {
-      this.clearForm()
-      this.modalOpen = false
-    },
-    toggleModal (show) {
-      this.modalOpen = show
-    },
-    clearForm () {
-      this.form = {
-        id: null,
-        title: null,
-        dueDateMillis: null,
-        assignee: null,
-        status: null
-      }
-    },
-    validateModalForm () {
-      this.$validator.validateAll().then(isValid => {
-        if (isValid) {
-          // transform date to timestamp
-          this.form.dueDateMillis = new Date(this.form.dueDateMillis).getTime()
+      toggleModal(show) {
+        this.modalOpen = show;
+      },
+      clearForm() {
+        this.form = {
+          id: null,
+          title: null,
+          dueDateMillis: null,
+          assignee:  null,
+          status: null,
+        };
+      },
+      validateModalForm() {
+        this.$validator.validateAll().then(isValid => {
+          if (isValid) {
+            // transform date to timestamp
+            this.form.dueDateMillis = new Date(this.form.dueDateMillis).getTime();
 
-          let store = this.$store.state.eventData.components[this.componentIndex]
-          if (this.todoIndex !== null) {
-            Vue.set(store.todos, this.todoIndex, this.form)
+            let store = this.$store.state.eventData.components[this.componentIndex];
+            if (this.todoIndex !== null) {
+              Vue.set(store.todos, this.todoIndex, this.form);
+            } else {
+              delete this.form.id; // remove id for new item
+              store.todos.push(this.form);
+            }
+
+            if (this.shouldUpdate) {
+              this.$props.updateTodo(store, this.form, this.todoIndex)
+            }
+
+            this.$store.commit('updateEventData', {index: this.componentIndex, data: store})
+            this.clearForm();
+            this.modalOpen = false;
           } else {
-            delete this.form.id // remove id for new item
-            store.todos.push(this.form)
+            this.showNotify();
           }
-
-          if (this.shouldUpdate) {
-            this.$props.updateTodo(store, this.form, this.todoIndex)
-          }
-
-          this.$store.commit('updateEventData', {index: this.componentIndex, data: store})
-          this.clearForm()
-          this.modalOpen = false
-        } else {
-          this.showNotify()
-        }
-      })
-    },
-    showNotify () {
-      this.$notify({
-        message: 'Please, check all required fields',
-        icon: 'warning',
-        horizontalAlign: 'center',
-        verticalAlign: 'top',
-        type: 'danger'
-      })
+        });
+      },
+      showNotify() {
+        this.$notify({
+          message: 'Please, check all required fields',
+          icon: "warning",
+          horizontalAlign: 'center',
+          verticalAlign: 'top',
+          type: 'danger',
+        });
+      },
     }
   }
-}
 </script>
 <style lang="scss">
 

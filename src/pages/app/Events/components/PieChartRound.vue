@@ -2,8 +2,7 @@
   <div class="pie-chart-wrapper">
     <svg id="pie_chart" ref="pie_chart" width="100%" height="100%">
       <g
-        v-for="(item, index) in sortedData"
-        :key="index"
+        v-for="(item, index) in sortedData" :key="index"
         :ref="`tooltip_${index}`"
         @mousemove="setTooltipPos"
       >
@@ -15,35 +14,19 @@
           :style="`
             stroke-dasharray: ${dashArray[index]};
             stroke: ${item.color};
-            display: ${item.budget===0 && totalValue != 0 ? 'none' : 'inherit'}
+            display: ${item.budget == 0 && totalValue != 0 ? 'none' : 'inherit'}
           `"
         />
-        <g
-          :transform="`translate(${x},${y})`"
-          class="tooltip"
-          visibility="hidden"
-          ref="tooltip"
-          :id="`gt_${index}`"
-        >
-          <path id="svgMask" d="M3,72 L162,74 162,43 171,38 162,33 162,3 3,3 z" fill="#e6e5e5" />
-          <text
-            id="tooltip"
-            x="20"
-            y="25"
-            style="fill: #050505; font-family: 'Manrope'; font-size: 16px; font-weight: 800;"
-          >
+        <g :transform="`translate(${x},${y})`" class="tooltip" visibility="hidden" ref="tooltip">
+          <path id="svgMask" d="M3,72 L162,74 162,43 171,38 162,33 162,3 3,3 z" fill="#e6e5e5"/>
+          <text id="tooltip" x="20" y="25" style="fill: #050505; font-family: 'Manrope'; font-size: 16px; font-weight: 800;">
             {{sortedData[index].category}}
             <tspan x="20" dy="1.2em" style="font-size: 13px;font-weight: 300;">Planned budget</tspan>
-            <tspan
-              x="20"
-              dy="1.3em"
-              style="font-size: 13px;font-weight: 300;"
-            >${{sortedData[index].budget}}</tspan>
+            <tspan x="20" dy="1.3em" style="font-size: 13px;font-weight: 300;">${{sortedData[index].budget}}</tspan>
           </text>
         </g>
-        <use id="use" :xlink:href="`gt_${index}`" />
       </g>
-      <g v-if="!(totalValue===0 || dashArray.length===1)" @mousemove="setTooltipPos">
+      <!-- <g v-if="!(totalValue == 0 || dashArray.length == 1)">
         <circle
           class="pie-chart-value"
           cx="50%"
@@ -53,29 +36,20 @@
             stroke-dasharray: 0 ${circleLength};
             stroke: ${fillColor};
           `"
-        >
+        > -->
           <!-- <title>
             {{endTooltip.category + '\r\n Planned budget \r\n $' + endTooltip.budget}}
-          </title>-->
-        </circle>
+          </title> -->
+        <!-- </circle>
         <g :transform="`translate(${x},${y})`" class="tooltip" visibility="hidden" ref="tooltip">
-          <path id="svgMask" d="M3,72 L162,74 162,43 171,38 162,33 162,3 3,3 z" fill="#e6e5e5" />
-          <text
-            id="tooltip"
-            x="20"
-            y="25"
-            style="fill: #050505; font-family: 'Manrope'; font-size: 16px; font-weight: 800;"
-          >
+          <rect width="190" height="76" style="fill: #e6e5e5;"/>
+          <text id="tooltip" x="20" y="25" style="fill: #050505; font-family: 'Manrope'; font-size: 16px; font-weight: 800;">
             {{endTooltip.category}}
             <tspan x="20" dy="1.2em" style="font-size: 13px;font-weight: 300;">Planned budget</tspan>
-            <tspan
-              x="20"
-              dy="1.3em"
-              style="font-size: 13px;font-weight: 300;"
-            >${{endTooltip.budget}}</tspan>
+            <tspan x="20" dy="1.3em" style="font-size: 13px;font-weight: 300;">${{endTooltip.budget}}</tspan>
           </text>
         </g>
-      </g>
+      </g> -->
     </svg>
     <div class="items-cont">
       <ul class="items-list">
@@ -88,222 +62,227 @@
   </div>
 </template>
 <script>
-import TWEEN from '@tweenjs/tween.js'
-import _ from 'underscore'
+  import TWEEN from '@tweenjs/tween.js'
+  import _ from "underscore";
 
-export default {
-  props: {
-    event: {
-      type: Object,
-      default: () => {
-        return { statistics: {} }
+  export default {
+    props: {
+      event: {
+        type: Object,
+        default: () => {
+          return {statistics: {}}
+        }
+      },
+      items: [Array, Function],
+        type  : {
+          type : String,
+            default : 'total'
+        }
+    },
+    data() {
+      return {
+        dashArray: [],
+        circleLength: 0,
+        totalValue: 0,
+        radius: 100,
+        eventBuildingBlocks: [],
+        sortedData: [],
+        categories: [],
+        fillColor: null,
+        endTooltip: null,
+        x: 0,
+        y: 0,
+        colors: [
+          "#0FAC4C",
+          "#FFC001",
+          "#641956",
+          "#F3423A",
+          "#8CB9B4",
+          "#43536A",
+          "#A4A6A5",
+          "#00BFD2",
+          "#24C796",
+          "#FE537A",
+          "#D9FFE7",
+          "#2CDE6B"
+        ],
+          allElements : [
+              {
+                  title : 'Venue',
+                  color : '#00B050'
+              },
+              {
+                  title : 'Event Documentation',
+                  color : '#00BCD4'
+              },
+              {
+                  title : 'Swags',
+                  color : '#F3423A'
+              },
+              {
+                  title : 'Marketing and Print',
+                  color : '#4E853C'
+              },
+              {
+                  title : 'Beverage',
+                  color : '#C19859'
+              },
+              {
+                  title : 'Security',
+                  color : '#A5A5A5'
+              },
+              {
+                  title : 'Rentals',
+                  color : '#43536A'
+              },
+              {
+                  title : 'Food',
+                  color : '#FF527C'
+              },
+              {
+                  title : 'Entertainment',
+                  color : '#641956'
+              }
+          ],
+          defaultColor : '#641956'
       }
     },
-    items: [Array, Function],
-    type: {
-      type: String,
-      default: 'total'
-    }
-  },
-  data () {
-    return {
-      dashArray: [],
-      circleLength: 0,
-      totalValue: 0,
-      radius: 100,
-      eventBuildingBlocks: [],
-      sortedData: [],
-      categories: [],
-      fillColor: null,
-      endTooltip: null,
-      x: 0,
-      y: 0,
-      colors: [
-        '#0FAC4C',
-        '#FFC001',
-        '#641956',
-        '#F3423A',
-        '#8CB9B4',
-        '#43536A',
-        '#A4A6A5',
-        '#00BFD2',
-        '#24C796',
-        '#FE537A',
-        '#D9FFE7',
-        '#2CDE6B'
-      ],
-      allElements: [
-        {
-          title: 'Venue',
-          color: '#00B050'
-        },
-        {
-          title: 'Event Documentation',
-          color: '#00BCD4'
-        },
-        {
-          title: 'Swags',
-          color: '#F3423A'
-        },
-        {
-          title: 'Marketing and Print',
-          color: '#4E853C'
-        },
-        {
-          title: 'Beverage',
-          color: '#C19859'
-        },
-        {
-          title: 'Security',
-          color: '#A5A5A5'
-        },
-        {
-          title: 'Rentals',
-          color: '#43536A'
-        },
-        {
-          title: 'Food',
-          color: '#FF527C'
-        },
-        {
-          title: 'Entertainment',
-          color: '#641956'
-        }
-      ],
-      defaultColor: '#641956'
-    }
-  },
-  methods: {
-    setTooltipPos: function (event) {
-      let CTM = this.$refs.pie_chart.getScreenCTM()
+    methods: {
+      setTooltipPos: function(event) {
+        let CTM = this.$refs.pie_chart.getScreenCTM(),
+            mouseX = (event.clientX - CTM.e) / CTM.a,
+            mouseY = (event.clientY - CTM.f) / CTM.d
+        this.x = mouseX - 173 / CTM.a
+        this.y = mouseY - 40 / CTM.d
+      },
+      drawChart() {
+        if (!this.event.id) return;
 
-      let mouseX = (event.clientX - CTM.e) / CTM.a
+        let vm = this
+        this.isLoading = true
+        let res = this.event.components
+        this.circleLength = Math.PI * (this.radius * 2)
+        let spaceLeft = this.circleLength
 
-      let mouseY = (event.clientY - CTM.f) / CTM.d
-      this.x = mouseX - 173 / CTM.a
-      this.y = mouseY - 40 / CTM.d
-    },
-    drawChart () {
-      if (!this.event.id) return
+        // initialize
+        this.sortedData = []
+        this.dashArray = []
+        this.categories = []
+        this.eventBuildingBlocks = []
+        this.totalValue = 0
 
-      let vm = this
-      this.isLoading = true
-      let res = this.event.components
-      this.circleLength = Math.PI * (this.radius * 2)
-      let spaceLeft = this.circleLength
+        this.$set(this, 'eventBuildingBlocks', res);
+          setTimeout(()=> {
+          this.isLoading = false;
+        },500);
 
-      // initialize
-      this.sortedData = []
-      this.dashArray = []
-      this.categories = []
-      this.eventBuildingBlocks = []
-      this.totalValue = 0
-
-      this.$set(this, 'eventBuildingBlocks', res)
-      setTimeout(() => {
-        this.isLoading = false
-      }, 500)
-
-      this.eventBuildingBlocks.forEach(item => {
-        this.categories.push(item.title)
-        if (item.allocatedBudget) {
-          this.totalValue += parseFloat(item.allocatedBudget)
-        }
-      })
-
-      // remove duplicated categories
-      this.categories = [...new Set(this.categories)]
-      // sort data with updated categories
-      this.categories.forEach((category, cIndex) => {
-        this.sortedData.push({
-          category: category,
-          // filter by category title and gather budget values, then get the sum of them
-          budget: this.eventBuildingBlocks
-            .filter(ebb => ebb.title === category)
-            .map(eb => (eb.allocatedBudget === null ? 0 : eb.allocatedBudget))
-            .reduce(function (total, val) {
-              return parseFloat(total) + parseFloat(val)
-            }, 0),
-          color: this.getElementColor(category)
-        })
-      })
-
-      // Set dash on circle
-      this.sortedData.forEach((item, index) => {
-        if (item.budget) {
-          this.dashArray.push(spaceLeft + ' ' + this.circleLength)
-          // Subtract current value from spaceLeft
-          spaceLeft -= (item.budget / this.totalValue) * this.circleLength
-
-          if (item === this.sortedData.filter(sd => sd.budget != 0)[0]) {
-            this.fillColor = this.sortedData[index].color
-            this.endTooltip = this.sortedData[index]
+        this.eventBuildingBlocks.forEach(item => {
+          this.categories.push(item.title)
+          if (item.allocatedBudget) {
+            this.totalValue += parseFloat(item.allocatedBudget)
           }
-        } else {
-          this.dashArray.push(spaceLeft + ' ' + this.circleLength)
-        }
+        })
+
+        // remove duplicated categories
+        this.categories = [...new Set(this.categories)]
+        // sort data with updated categories
+        this.categories.forEach((category, cIndex) => {
+          this.sortedData.push({
+            category: category,
+            budget: // filter by category title and gather budget values, then get the sum of them
+              this.eventBuildingBlocks.filter(
+                ebb => ebb.title == category
+              ).map(
+                eb => eb.allocatedBudget == null ? 0 : eb.allocatedBudget
+              ).reduce( function(total, val) {
+                return parseFloat(total) + parseFloat(val)
+              }, 0),
+              color : this.getElementColor(category)
+          })
+
+        });
+
+
+        // Set dash on circle
+        this.sortedData.forEach((item,index) => {
+          if (item.budget) {
+            this.dashArray.push(spaceLeft+ " " + this.circleLength)
+            // Subtract current value from spaceLeft
+            spaceLeft -= (item.budget / this.totalValue) * this.circleLength
+
+            if (item == this.sortedData.filter(sd => sd.budget != 0)[0]) {
+              this.fillColor = this.colors[index]
+              this.endTooltip = this.sortedData[index]
+            }
+          } else {
+            this.dashArray.push(spaceLeft+ " " + this.circleLength)
+          }
+        })
+        this.$forceUpdate()
+      },
+      getElementColor(category) {
+        let element = _.findWhere(this.allElements, {title: category});
+        return element.color;
+      }
+    },
+    computed: {
+
+    },
+    mounted() {
+      this.drawChart()
+      this.$root.$on('event-building-block-budget-changed', (eventComponents)=>{
+        this.drawChart()
       })
-      this.$forceUpdate()
     },
-    getElementColor (category) {
-      let element = _.findWhere(this.allElements, { title: category })
-      return element.color
-    }
-  },
-  computed: {},
-  mounted () {
-    this.drawChart()
-    this.$root.$on('event-building-block-budget-changed', eventComponents => {
-      this.drawChart()
-    })
-  },
-  filters: {},
-  watch: {
-    event (newVal, oldVal) {
-      this.drawChart()
+    filters: {
+
     },
-    items (newVal, oldVal) {
-      this.drawChart()
+    watch: {
+      event(newVal, oldVal) {
+        this.drawChart()
+      },
+      items(newVal, oldVal) {
+        this.drawChart()
+      },
     }
-  }
-}
+  };
 </script>
 <style lang="scss" scoped>
-.pie-chart-wrapper {
-  padding-bottom: 1em;
-}
+  .pie-chart-wrapper {
+    padding-bottom: 1em;
+  }
 
-#pie_chart {
-  height: 300px;
-}
-.pie-chart-value {
-  fill: none;
-  stroke-width: 50;
-  stroke-linecap: round;
-  opacity: 1;
+  #pie_chart {
+    height: 300px;
+  }
+  .pie-chart-value {
+    fill: none;
+    stroke-width: 50;
+    stroke-linecap: round;
+    opacity: 1;
 
-  &:hover {
-    & + g {
-      visibility: visible;
+    &:hover {
+      & + g {
+        visibility: visible;
+      }
     }
   }
-}
 
-.items-list {
-  list-style: none;
-  padding: 0px 3rem;
-  li {
-    width: calc(50% - 5px);
-    display: inline-block;
-    padding: 5px 15px;
-
-    span {
-      width: 10px;
-      height: 10px;
-      display: block;
-      border-radius: 5px;
+  .items-list {
+    list-style: none;
+    padding: 0px 3rem;
+    li {
+      width: calc(50% - 5px);
       display: inline-block;
+      padding: 5px 15px;
+
+      span {
+        width: 10px;
+        height: 10px;
+        display: block;
+        border-radius: 5px;
+        display: inline-block;
+      }
     }
   }
-}
 </style>

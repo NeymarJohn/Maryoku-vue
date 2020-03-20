@@ -25,7 +25,7 @@
                     <div class="star-rating">
                       <label class="star-rating__star"
                         v-for="(rating, rIndex) in ratings"
-                        :value="rating"
+                        :value="rating" 
                         :key="rIndex"
                         :class="{'is-selected' : ((proposal.vendor.rank >= rating) && proposal.vendor.rank != null)}"
                       >
@@ -58,7 +58,7 @@
                             <li>
                               <div class="details-label">Cancellation Policy</div>
                               <div class="details-desc">
-                                {{proposal.candellationPolicy}}
+                                {{proposal.candellationPolicy}} 
                                 <md-button class="md-rose md-sm md-simple no-uppercase">(Learn more)</md-button>
                               </div>
                             </li>
@@ -90,7 +90,7 @@
                         </md-card-content>
                       </md-card>
                       <div class="payment-policy">
-                        By accepting the proposal, you agree to its terms and cancellation policy. Not sure what’s included in this proposal?
+                        By accepting the proposal, you agree to its terms and cancellation policy. Not sure what’s included in this proposal? 
                         <md-button class="md-rose md-sm md-simple no-uppercase">Learn more</md-button>
                       </div>
                     </div>
@@ -109,99 +109,99 @@
 </template>
 
 <script>
-// import auth from '@/auth';
-import Vue from 'vue'
-import {
-  mapState,
-  mapGetters,
-  mapMutations,
-  mapActions
-} from 'vuex'
-import CalendarEvent from '@/models/CalendarEvent'
-import Calendar from '@/models/Calendar'
-import EventComponent from '@/models/EventComponent'
-import {
-  Tabs
-} from '@/components'
+  // import auth from '@/auth';
+  import Vue from 'vue'
+  import {
+    mapState,
+    mapGetters,
+    mapMutations,
+    mapActions
+  } from 'vuex'
+  import CalendarEvent from '@/models/CalendarEvent'
+  import Calendar from "@/models/Calendar"
+  import EventComponent from "@/models/EventComponent"
+  import {
+    Tabs
+  } from '@/components'
 
-import swal from 'sweetalert2'
-import {
-  error
-} from 'util'
-import moment from 'moment'
-import VueElementLoading from 'vue-element-loading'
-import _ from 'underscore'
-import ViewProposal from './ViewProposal.vue'
-import EventBlockRequirements from '../Modals/EventBlockRequirements.vue'
-import EventComponentProposal from '@/models/EventComponentProposal'
-import ProposalPayment from './ProposalPayment'
+  import swal from "sweetalert2"
+  import {
+    error
+  } from 'util'
+  import moment from 'moment'
+  import VueElementLoading from 'vue-element-loading'
+  import _ from "underscore"
+  import ViewProposal from './ViewProposal.vue'
+  import EventBlockRequirements from '../Modals/EventBlockRequirements.vue'
+  import EventComponentProposal from '@/models/EventComponentProposal'
+  import ProposalPayment from './ProposalPayment'
 
-export default {
-  components: {
-    VueElementLoading,
-    Tabs,
-    EventBlockRequirements,
-    ProposalPayment
-  },
-  props: {
-    event: Object,
-    selectedBlock: Object,
-    proposal: Object,
-    winnerId: {
-      type: String,
-      default: null
-    }
-  },
-  data: () => ({
-    // auth: auth,
-    isLoaded: false,
-    proposalsToDisplay: 1,
-    ratings: [1, 2, 3, 4, 5],
-    feedbackRating: 3,
-    proposalAccepted: false,
-    image: 'https://i.imgur.com/HhqxVCW.jpg',
-    name: 'Shut up and take my money!',
-    description: 'Cats are the best dog!',
-    currency: 'PHP',
-    amount: 99999
-  }),
-  created () {
-  },
-  mounted () {
-    EventComponentProposal.find(this.proposal.id)
-      .then(resp => {
-        this.proposal.accepted = resp.accepted
-      })
-      .catch(error => {
-        console.log(' error here   -->>>  ', error)
-      })
-
-    this.proposalAccepted = this.proposal.accepted
-  },
-  methods: {
-    closePanel () {
-      this.$emit('closePanel')
+  export default {
+    components: {
+      VueElementLoading,
+      Tabs,
+      EventBlockRequirements,
+      ProposalPayment
     },
-    getDate (eventStartMillis) {
-      let x = new Date(eventStartMillis)
-      return moment(x).format('MMMM D, YYYY')
+    props: {
+      event: Object,
+      selectedBlock: Object,
+      proposal: Object,
+      winnerId: {
+        type: String,
+        default: null
+      }
     },
-    acceptProposal (boolean) {
-      let proposal = new EventComponentProposal({
-        id: this.proposal.id
-      })
+    data: () => ({
+      // auth: auth,
+      isLoaded: false,
+      proposalsToDisplay: 1,
+      ratings: [1, 2, 3, 4, 5],
+      feedbackRating: 3,
+      proposalAccepted: false,
+      image: 'https://i.imgur.com/HhqxVCW.jpg',
+      name: 'Shut up and take my money!',
+      description: 'Cats are the best dog!',
+      currency: 'PHP',
+      amount: 99999
+    }),
+    created() {
+    },
+    mounted() {
+      EventComponentProposal.find(this.proposal.id)
+        .then(resp => {
+          this.proposal.accepted = resp.accepted
+        })
+        .catch(error => {
+          console.log(' error here   -->>>  ', error)
+        })
 
-      proposal.accepted = boolean
-      this.proposalAccepted = boolean
+      this.proposalAccepted = this.proposal.accepted
+    },
+    methods: {
+      closePanel() {
+        this.$emit("closePanel")
+      },
+      getDate(eventStartMillis) {
+        let x = new Date(eventStartMillis)
+        return moment(x).format('MMMM D, YYYY')
+      },
+      acceptProposal(boolean) {
+        let proposal = new EventComponentProposal({
+          id: this.proposal.id
+        })
 
-      proposal.save().then((resp) => {
-        console.log(resp)
-      }).catch((error) => {
-        console.log(error)
-      })
+        proposal.accepted = boolean
+        this.proposalAccepted = boolean
+
+        proposal.save().then((resp) => {
+          console.log(resp)
+        }).catch((error) => {
+          console.log(error)
+        })
+      }
+    },
+    computed: {
     }
-  },
-  computed: {
   }
-}
 </script>

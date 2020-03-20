@@ -102,146 +102,149 @@
 </template>
 
 <script>
-import {Modal, SimpleWizard, WizardTab} from '@/components'
-import swal from 'sweetalert2'
-import Vendors from '@/models/Vendors'
-import RankingModal from './RankingModal'
-import TagsModal from './TagsModal'
-import ClickOutside from 'vue-click-outside'
+    import {Modal, SimpleWizard, WizardTab} from "@/components";
+    import swal from "sweetalert2";
+    import Vendors from "@/models/Vendors";
+    import RankingModal from './RankingModal';
+    import TagsModal from './TagsModal';
+    import ClickOutside from 'vue-click-outside'
 
-export default {
-  components: {
-    Modal,
-    SimpleWizard,
-    WizardTab,
-    TagsModal,
-    RankingModal,
-    ClickOutside
-  },
-  props: {
-    vendorsList: {
-      type: Array,
-      default: () => {
-        return {}
-      }
-    },
-    tooltipModels: {
-      type: Array,
-      default: () => {
-        return {}
-      }
-    },
-    item: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    }
-  },
-  created () {
+    export default {
+        components: {
+            Modal,
+            SimpleWizard,
+            WizardTab,
+            TagsModal,
+            RankingModal,
+            ClickOutside
+        },
+        props: {
+            vendorsList: {
+                type: Array,
+                default: () => {
+                    return {};
+                }
+            },
+          tooltipModels: {
+            type: Array,
+            default: () => {
+              return {};
+            }
+          },
+            item: {
+                type: Object,
+                default: () => {
+                    return {};
+                }
+            }
+        },
+      created() {
 
-  },
-  data () {
-    return {
-      tagsModalOpen: false,
-      openPopup: false,
-      openPopupTags: false,
-      tags: [],
-      tag: ' ',
-      name: 'Direction',
-      ratings: [1, 2, 3, 4, 5]
+      },
+        data() {
+            return {
+              tagsModalOpen: false,
+              openPopup: false,
+              openPopupTags: false,
+              tags: [],
+              tag: ' ',
+              name: 'Direction',
+                    ratings: [1, 2, 3, 4, 5],
 
-    }
-  },
-  methods: {
-    openInviteModal () {
-      this.$refs.inviteModal.toggleModal(true)
-    },
-    setRanking: function (value, index) {
-      if (!this.disabled) {
-        this.temp_value = value
-        console.log(value, 'temp_value')
-        return this.rankingParameters[index].value = value
-      }
-    },
+            }
+        },
+        methods: {
+            openInviteModal(){
+              this.$refs.inviteModal.toggleModal(true);
+            },
+          setRanking: function(value, index) {
+            if (!this.disabled) {
+              this.temp_value = value;
+              console.log(value, 'temp_value');
+              return this.rankingParameters[index].value = value;
+            }
+          },
 
-    openTagsModal () {
-      this.$refs.tagsModal.toggleModal(true)
-    },
-    noticeModalHide: function () {
-      this.inviteModalOpen = false
-    },
-    toggleModal: function (show) {
-      this.inviteModalOpen = show
-    },
-    noticeModalHide: function () {
-      this.tagsModalOpen = false
-    },
-    toggleModal: function (show) {
-      this.tagsModalOpen = show
-    },
-    validateStep (ref) {
-      return this.$refs[ref].validate()
-    },
-    onStepValidated (validated, model) {
-      this.wizardModel = {...this.wizardModel, ...model}
-    },
-    wizardComplete () {
-      swal('Good job!', 'You clicked the finish button!', 'success')
-    },
-    openPopover (index) {
-      this.tooltipModels[index].value = !this.tooltipModels[index].value && (this.openPopup = true)
+          openTagsModal(){
+            this.$refs.tagsModal.toggleModal(true);
+          },
+            noticeModalHide: function () {
+                this.inviteModalOpen = false;
+            },
+            toggleModal: function (show) {
+                this.inviteModalOpen = show;
+            },
+              noticeModalHide: function () {
+                this.tagsModalOpen = false;
+              },
+              toggleModal: function (show) {
+                this.tagsModalOpen = show;
+              },
+            validateStep(ref) {
+                return this.$refs[ref].validate();
+            },
+            onStepValidated(validated, model) {
+                this.wizardModel = {...this.wizardModel, ...model};
+            },
+            wizardComplete() {
+                swal("Good job!", "You clicked the finish button!", "success");
+            },
+          openPopover(index){
+            this.tooltipModels[index].value = !this.tooltipModels[index].value && (this.openPopup = true);
 
-      this.tooltipModels.map((item, itemIndex) => {
-        if (index !== itemIndex) {
-          this.tooltipModels[itemIndex].value = false
-        }
-      })
-    },
-    openPopoverTags (index) {
-      this.tooltipModels[index].value = !this.tooltipModels[index].value && (this.openPopupTags = true)
-
-      this.tooltipModels.map((item, itemIndex) => {
-        if (index !== itemIndex) {
-          this.tooltipModels[itemIndex].value = false
-        }
-      })
-    },
-    closeModal () {
-      this.openPopup = false
-    },
-    closeTagsModal () {
-      this.openPopupTags = false
-    },
-    deleteVendor (id) {
-      swal({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonClass: 'md-button md-success confirm-btn-bg  btn-fill',
-        cancelButtonClass: 'md-button md-danger cancel-btn-bg btn-fill',
-        confirmButtonText: 'Yes, delete it!'
-      }).then(async (result) => {
-        if (result.value) {
-          let vendor = await Vendors.find(id)
-          vendor.delete()
-
-          let vendorIndex = this.vendorsList.findIndex(obj => obj.id === id)
-
-          this.vendorsList.splice(vendorIndex, 1)
-          this.$notify(
-            {
-              message: 'Vendor deleted successfully!',
-              horizontalAlign: 'center',
-              verticalAlign: 'top',
-              type: 'success'
+            this.tooltipModels.map((item, itemIndex) => {
+              if (index !== itemIndex) {
+                this.tooltipModels[itemIndex].value = false;
+              }
             })
+
+          },
+          openPopoverTags(index){
+            this.tooltipModels[index].value = !this.tooltipModels[index].value && (this.openPopupTags = true);
+
+            this.tooltipModels.map((item, itemIndex) => {
+              if (index !== itemIndex) {
+                this.tooltipModels[itemIndex].value = false;
+              }
+            })
+
+          },
+          closeModal(){
+            this.openPopup = false;
+          },
+          closeTagsModal(){
+            this.openPopupTags = false;
+          },
+           deleteVendor(id){
+            swal({
+              title: 'Are you sure?',
+              text: "You won't be able to revert this!",
+        type: "warning",
+        showCancelButton: true,
+ confirmButtonClass: "md-button md-success confirm-btn-bg  btn-fill",
+        cancelButtonClass: "md-button md-danger cancel-btn-bg btn-fill",  
+              confirmButtonText: 'Yes, delete it!'
+            }).then(async (result) => {
+              if (result.value) {
+                let vendor = await Vendors.find(id);
+                vendor.delete();
+
+                let vendorIndex = this.vendorsList.findIndex(obj => obj.id === id);
+
+                this.vendorsList.splice(vendorIndex, 1);
+                this.$notify(
+                  {
+                    message: 'Vendor deleted successfully!',
+                    horizontalAlign: 'center',
+                    verticalAlign: 'top',
+                    type: 'success'
+                  })
+              }
+            })
+
+          }
         }
-      })
-    }
-  }
-}
+    };
 </script>
 <style lang="scss">
 .md-table-cell-container{
@@ -357,6 +360,7 @@ export default {
         display: inline-block;
         margin-top: 5px;
     }
+
 
 }
     .popup-box{

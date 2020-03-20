@@ -138,96 +138,99 @@
 </template>
 
 <script>
-import VueElementLoading from 'vue-element-loading'
-import PersonalInformation from './PersonalInformation.vue'
-import CompanyDashboardInfo from '../CompanyDashboard/CompanyDashboardInfo.vue'
-import MyEvents from './MyEvents.vue'
-import DietaryConstraints from './DietaryConstraints.vue'
-import MySpecialDates from './MySpecialDates.vue'
-import HolidaysCelebrate from './HolidaysCelebrate.vue'
-import {LabelEdit, Tabs } from '@/components'
-import { EditProfileForm, UserCard } from '@/pages'
+  import VueElementLoading from 'vue-element-loading';
+  import PersonalInformation from "./PersonalInformation.vue";
+  import CompanyDashboardInfo from "../CompanyDashboard/CompanyDashboardInfo.vue";
+  import MyEvents from "./MyEvents.vue";
+  import DietaryConstraints from "./DietaryConstraints.vue";
+  import MySpecialDates from "./MySpecialDates.vue";
+  import HolidaysCelebrate from './HolidaysCelebrate.vue';
+  import {LabelEdit} from '@/components';
+  import { EditProfileForm, UserCard } from "@/pages";
 
-// import auth from '@/auth';
-import {
-  mapGetters
-} from 'vuex'
+  // import auth from '@/auth';
+  import {
+    mapGetters
+  } from 'vuex';
 
-export default {
-  components: {
-    VueElementLoading,
-    PersonalInformation,
-    MyEvents,
-    DietaryConstraints,
-    MySpecialDates,
-    HolidaysCelebrate,
-    Tabs,
-    EditProfileForm,
-    UserCard,
-    CompanyDashboardInfo,
-    LabelEdit
-  },
-  data () {
-    return {
-      // auth: auth,
-      chips: []
-    }
-  },
+  import { Tabs } from "@/components";
 
-  computed: {
-    ...mapGetters({
-      upComingEvents: 'user/getUpcomingEvents'
-      // user:'user/getUser'
-    })
-
-  },
-  mounted () {
-    // TODO : user state should be reviewed
-    this.$auth.currentUser(this, true, () => {
-      this.$store.dispatch('user/getUserFromApi')
-    })
-  },
-  methods: {
-    onFileChange (e) {
-      let files = e.target.files || e.dataTransfer.files
-      if (!files.length) return
-      this.createImage(files[0])
+  export default {
+    components: {
+      VueElementLoading,
+      PersonalInformation,
+      MyEvents,
+      DietaryConstraints,
+      MySpecialDates,
+      HolidaysCelebrate,
+      Tabs,
+      EditProfileForm,
+      UserCard,
+      CompanyDashboardInfo,
+      LabelEdit
     },
-    createImage (file, type) {
-      let reader = new FileReader()
-      let vm = this
-
-      reader.onload = e => {
-        this.loaded = false
-        return new CustomerFile({customerFile: e.target.result}).save().then(result => {
-          let customer = this.$auth.user.customer
-          customer.logoFileId = result.id
-          new Customer({id: customer.id, logoFileId: result.id}).save()
-          this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg'
-          this.companyProfile.logoFileId = customer.logoFileId
-          this.loaded = true
-        })
-          .catch((error) => {
-            console.log(error)
-            this.loaded = true
-          })
+    data() {
+      return {
+        // auth: auth,
+        chips: []
       }
-      reader.readAsDataURL(file)
+
     },
-    removeImage: function (type) {
-      this.loaded = false
-      let customer = this.$auth.user.customer
-      new CustomerFile({id: customer.logoFileId}).delete().then(res => {
-        this.loaded = true
-        customer.logoFileId = null
-        this.companyProfile.logoFileId = undefined
-        this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg'
-      }).catch((error) => {
-        this.loaded = true
+
+    computed: {
+      ...mapGetters({
+        upComingEvents: 'user/getUpcomingEvents',
+        // user:'user/getUser'
+      }),
+
+    },
+    mounted() {
+      // TODO : user state should be reviewed
+      this.$auth.currentUser(this, true, () => {
+        this.$store.dispatch("user/getUserFromApi");
       })
+    },
+    methods: {
+      onFileChange(e) {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) return;
+        this.createImage(files[0]);
+      },
+      createImage(file, type) {
+        let reader = new FileReader();
+        let vm = this;
+
+        reader.onload = e => {
+          this.loaded = false;
+          return new CustomerFile({customerFile: e.target.result}).save().then(result => {
+            let customer = this.$auth.user.customer;
+            customer.logoFileId = result.id;
+            new Customer({id: customer.id, logoFileId: result.id}).save();
+            this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg';
+            this.companyProfile.logoFileId = customer.logoFileId;
+            this.loaded = true;
+          })
+            .catch((error) => {
+              console.log(error);
+              this.loaded = true;
+            });
+        };
+        reader.readAsDataURL(file);
+      },
+      removeImage: function(type) {
+        this.loaded = false;
+        let customer = this.$auth.user.customer;
+        new CustomerFile({id: customer.logoFileId}).delete().then(res => {
+          this.loaded = true;
+          customer.logoFileId = null;
+          this.companyProfile.logoFileId = undefined;
+          this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg';
+        }).catch((error) => {
+          this.loaded = true;
+        });
+      },
     }
-  }
-}
+  };
 </script>
 <style lang="scss" scoped>
   .md-card-tabs  {

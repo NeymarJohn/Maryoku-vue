@@ -31,42 +31,43 @@
 </template>
 
 <script>
-export default {
-  components: {
+    export default {
+        components:{
 
-  },
-  data () {
-    return {
-      title: '',
-      selectedDate: null,
-      dialogFlag: false,
-      disableChangeDataFlag: false,
-      indexItem: null
+        },
+        data() {
+            return {
+                title: '',
+                selectedDate: null,
+                dialogFlag:false,
+                disableChangeDataFlag:false,
+                indexItem:null
+            }
+        },
+        props:{
+            item:Object,
+            index:Number,
+            DateList:Array
+        },
+        methods:{
+            saveItem(index){
+                this.DateList[index].editable = true
+            },
+            deleteItem(index){
+                this.dialogFlag = !this.dialogFlag
+                 this.indexItem = index
+
+            },
+            disagreeRemoveItem(){
+                this.dialogFlag = false
+            },
+            confirmDelete(){
+                this.dialogFlag = false
+                this.DateList.splice(this.indexItem,1);
+                this.indexItem = null ;
+            }
+        }
     }
-  },
-  props: {
-    item: Object,
-    index: Number,
-    DateList: Array
-  },
-  methods: {
-    saveItem (index) {
-      this.DateList[index].editable = true
-    },
-    deleteItem (index) {
-      this.dialogFlag = !this.dialogFlag
-      this.indexItem = index
-    },
-    disagreeRemoveItem () {
-      this.dialogFlag = false
-    },
-    confirmDelete () {
-      this.dialogFlag = false
-      this.DateList.splice(this.indexItem, 1)
-      this.indexItem = null
-    }
-  }
-}
 </script>
 
 <style lang="scss">

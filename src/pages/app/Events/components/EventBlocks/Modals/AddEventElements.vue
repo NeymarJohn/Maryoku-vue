@@ -42,26 +42,27 @@ import {
   mapGetters,
   mapMutations,
   mapActions
-} from 'vuex'
-import CalendarEvent from '@/models/CalendarEvent'
-import EventPageHeaderImage from '@/models/EventPageHeaderImage'
+} from 'vuex';
+import CalendarEvent from '@/models/CalendarEvent';
+import EventPageHeaderImage from '@/models/EventPageHeaderImage';
 import {
   Modal
-} from '@/components'
-import Calendar from '@/models/Calendar'
-import EventComponent from '@/models/EventComponent'
-import swal from 'sweetalert2'
+} from "@/components";
+import Calendar from "@/models/Calendar";
+import EventComponent from "@/models/EventComponent";
+import swal from "sweetalert2";
 import {
   error
-} from 'util'
-import moment from 'moment'
-import draggable from 'vuedraggable'
+} from 'util';
+import moment from 'moment';
+import draggable from 'vuedraggable';
 import {
   Drag,
   Drop
-} from 'vue-drag-drop'
-import VueElementLoading from 'vue-element-loading'
-import _ from 'underscore'
+} from 'vue-drag-drop';
+import VueElementLoading from 'vue-element-loading';
+import _ from "underscore";
+
 
 export default {
   components: {
@@ -72,112 +73,113 @@ export default {
   },
   props: {
     event: Object,
-    eventBuildingBlocks: Array
+      eventBuildingBlocks : Array
   },
   data: () => ({
     categoryBuildingBlocks: [],
     isLoaded: false,
     filteredEventBlocks: [],
     selectedItems: [],
-    selectedItemsRequests: []
+    selectedItemsRequests: [],
   }),
 
-  created () {
+  created() {
 
   },
-  mounted () {
-    this.getCategoryBlocks()
+  mounted() {
+    this.getCategoryBlocks();
   },
   methods: {
     ...mapMutations('EventPlannerVuex', ['addNewEventElementModal']),
-    closeModal () {
+    closeModal() {
       this.addNewEventElementModal({
         showModal: false
-      })
+      });
     },
-    closePanel (payload) {
-      this.$emit('closePanel', payload)
+    closePanel(payload) {
+      this.$emit("closePanel", payload);
     },
 
-    getCategoryBlocks () {
+    getCategoryBlocks() {
       EventComponent.get()
         .then(res => {
           setTimeout(() => {
-            this.isLoaded = true
-          }, 500)
+            this.isLoaded = true;
+          }, 500);
 
-          this.categoryBuildingBlocks = res
-          this.filteredEventBlocks = this.categoryBuildingBlocks
+          this.categoryBuildingBlocks = res;
+          this.filteredEventBlocks = this.categoryBuildingBlocks;
           console.log('filteredEventBlocks => ', this.filteredEventBlocks)
+
         })
         .catch(error => {
-          console.log('Error ', error)
+          console.log('Error ', error);
         })
     },
-    handleDrop (data, event) {
-      // this.$parent.isLoading = true;
-      this.addElement(data.item)
+    handleDrop(data, event) {
+      //this.$parent.isLoading = true;
+      this.addElement(data.item);
     },
-    addSelectedElements () {
+    addSelectedElements() {
       let calendar = new Calendar({
         id: this.$auth.user.defaultCalendarId
-      })
+      });
       let event = new CalendarEvent({
         id: this.event.id
-      })
+      });
 
       this.selectedItems.forEach(item => {
         let new_item = {
           componentId: item.id,
           componentCategoryId: item.categoryId,
-          todos: '',
-          values: '',
-          vendors: '',
+          todos: "",
+          values: "",
+          vendors: "",
           calendarEvent: {
             id: event.id
           }
         }
-        this.selectedItemsRequests.push(new EventComponent(new_item).for(calendar, event).save())
+        this.selectedItemsRequests.push(new EventComponent(new_item).for(calendar, event).save());
       })
 
       Promise.all(
         this.selectedItemsRequests
       )
-        .then((res) => {
-          this.selectedItemsRequests = []
-          this.$parent.isLoading = false
+      .then((res) => {
+        this.selectedItemsRequests = [];
+        this.$parent.isLoading = false;
 
-          // this.addNewEventElementModal({
-          //   showModal: false
-          // });
+        // this.addNewEventElementModal({
+        //   showModal: false
+        // });
 
-          new EventComponent().for(calendar, event).get().then(events => {
-            this.$emit('closePanel', events.filter(e => res.map(r => { return r.item.id }).includes(e.id)))
-          })
-        })
-        .catch(error => {
-          console.log('Error while saving ', error)
-        })
+        new EventComponent().for(calendar, event).get().then(events => {
+          this.$emit("closePanel", events.filter(e => res.map(r => { return r.item.id }).includes(e.id)));
+        });
+      })
+      .catch(error => {
+        console.log('Error while saving ', error);
+      })
     },
-    isElementSelected (item) {
-      return this.selectedItems.includes(item)
+    isElementSelected(item) {
+      return this.selectedItems.includes(item);
     },
-    addElement (item) {
+    addElement(item) {
       if (this.selectedItems.includes(item)) {
-        this.selectedItems.splice(this.selectedItems.indexOf(item), 1)
+        this.selectedItems.splice(this.selectedItems.indexOf(item), 1);
       } else {
-        this.selectedItems.push(item)
+        this.selectedItems.push(item);
       }
     },
-    isElementAdded (item) {
-      return _.findWhere(this.eventBuildingBlocks, { title: item.title })
-    }
+      isElementAdded(item) {
+        return _.findWhere(this.eventBuildingBlocks,{ title : item.title });
+      }
   },
   computed: {
   },
   watch: {
   }
-}
+};
 </script>
 <style lang="scss" scope>
   .md-datepicker {
@@ -240,6 +242,7 @@ export default {
       background-color: #9a9a9a!important;
       color: white!important;
     }
+
 
   }
 </style>

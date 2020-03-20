@@ -41,75 +41,76 @@
   </md-card>
 </template>
 <script>
-// import auth from '@/auth';
-import moment from 'moment'
-import VueElementLoading from 'vue-element-loading'
-import {
+  // import auth from '@/auth';
+  import moment from "moment";
+  import VueElementLoading from 'vue-element-loading';
+  import {
 
-} from '@/components'
-export default {
-  name: 'company-dashboard-participants-chart',
-  components: {
-    VueElementLoading
-  },
-  props: {
-    participantsPerEventPerYearMonthEventType: {
-      type: Object
-    }
-  },
-  watch: {
-    participantsPerEventPerYearMonthEventType (newVal, oldVal) {
-      this.loading = true
-      this.updateItems()
-    }
-  },
-  data () {
-    return {
-      // auth: auth,
-      loading: true,
-      items: [],
-      itemsPerMonth: {},
-      amount2: 20,
-      filterMonth: (moment().month() + 1).padStart(2, '0'),
-      filterYear: moment().year()
-    }
-  },
-  methods: {
-    filterMonthChanged (e) {
-      this.loading = true
-      this.updateItems()
+  } from "@/components";
+  export default {
+    name: "company-dashboard-participants-chart",
+    components: {
+      VueElementLoading
     },
-    updateItems () {
-      if (this.participantsPerEventPerYearMonthEventType && this.participantsPerEventPerYearMonthEventType[this.filterYear]) {
-        let keys = Object.keys(this.participantsPerEventPerYearMonthEventType[this.filterYear])
-        if (keys.length > 0) {
-          for (const key of keys) {
-            let contents = this.participantsPerEventPerYearMonthEventType[this.filterYear][key]
-            let contentsArray = []
-            let types = Object.keys(contents)
-            for (const type of types) {
-              contentsArray.push({
-                text: type,
-                invited: contents[type].Invited,
-                actual: contents[type].Actual,
-                theDate: ''
-              })
-            }
-            this.itemsPerMonth[key] = contentsArray
-          }
-        }
-
-        let value = this.itemsPerMonth[this.filterMonth]
-        if (value) {
-          this.items = value
-        } else {
-          this.items = []
-        }
+    props: {
+      participantsPerEventPerYearMonthEventType: {
+        type: Object
       }
-      this.loading = false
+    },
+    watch: {
+      participantsPerEventPerYearMonthEventType(newVal, oldVal){
+        this.loading = true;
+        this.updateItems();
+      }
+    },
+    data() {
+      return {
+        // auth: auth,
+        loading: true,
+        items: [],
+        itemsPerMonth: {},
+        amount2: 20,
+        filterMonth: (moment().month()+1).padStart(2,"0"),
+        filterYear: moment().year()
+      };
+    },
+    methods: {
+      filterMonthChanged(e){
+        this.loading = true;
+        this.updateItems();
+      },
+      updateItems(){
+        if (this.participantsPerEventPerYearMonthEventType && this.participantsPerEventPerYearMonthEventType[this.filterYear]) {
+          let keys = Object.keys(this.participantsPerEventPerYearMonthEventType[this.filterYear]);
+          if (keys.length > 0) {
+            for (const key of keys) {
+              let contents = this.participantsPerEventPerYearMonthEventType[this.filterYear][key];
+              let contentsArray = [];
+              let types = Object.keys(contents);
+              for (const type of types) {
+                contentsArray.push({
+                  text: type,
+                  invited: contents[type].Invited,
+                  actual: contents[type].Actual,
+                  theDate: ""
+                })
+              }
+              this.itemsPerMonth[key] = contentsArray;
+            }
+          }
+
+          let value = this.itemsPerMonth[this.filterMonth];
+          if (value) {
+            this.items = value;
+          } else {
+            this.items = [];
+          }
+
+        }
+        this.loading = false;
+      }
     }
-  }
-}
+  };
 </script>
 <style lang="scss" scoped>
   .md-menu.md-select {

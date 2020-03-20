@@ -69,76 +69,76 @@
 </template>
 
 <script>
-// import auth from '@/auth';
-import VueElementLoading from 'vue-element-loading'
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import AnnualPlannerVuexModule from './AnnualPlanner.vuex'
-import EventModal from './EventModal/'
-import moment from 'moment'
+  // import auth from '@/auth';
+  import VueElementLoading from 'vue-element-loading';
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import AnnualPlannerVuexModule from './AnnualPlanner.vuex';
+  import EventModal from './EventModal/';
+  import moment from 'moment';
 
-export default {
-  name: 'month-events-panel',
-  components: {
-    EventModal,
-    VueElementLoading
-  },
-  props: {
-    calendarEvents: {
-      type: Object
+  export default {
+    name: 'month-events-panel',
+    components: {
+      EventModal,
+      VueElementLoading,
     },
-    openEditEventModal: {
-      type: Function
+    props: {
+      calendarEvents: {
+        type: Object
+      },
+      openEditEventModal: {
+        type: Function
+      },
+      openOccasionEventModal: {
+        type: Function
+      },
     },
-    openOccasionEventModal: {
-      type: Function
+    data() {
+      return {
+        formData: null,
+        ready: false,
+        // auth: auth,
+        isLoading: true,
+        months: this.$moment.months(),
+        dates: Object.keys(this.calendarEvents),
+      }
+    },
+    created() {
+      this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule);
+    },
+    mounted(){
+      this.ready = true;
+      this.isLoading = false;
+    },
+    methods: {
+      ...mapActions('AnnualPlannerVuex', ['setEventModalAndEventData']),
+      // openEditEventModal: function (show, item) {
+      //   if (!item.editable){
+      //     item.occasion = item.title;
+      //   }
+      //   this.setEventModalAndEventData({eventData: item});
+      // },
+      colorWithCategory(category) {
+        let filterCategories = this.categories.filter(c => c.id === category);
+        return filterCategories[0] != null ? `${filterCategories[0].color}!important;` : '';
+      }
+    },
+    computed: {
+      ...mapGetters({
+        categories: 'event/getCategoriesList',
+      }),
+    },
+    watch: {
+      calendarEvents(oldValue, newValue) {
+        this.dates = Object.keys(this.calendarEvents);
+      }
+    },
+    filters: {
+      formatDate: function (date) {
+        return moment(date).format('MMMM Do, GGGG');
+      },
     }
-  },
-  data () {
-    return {
-      formData: null,
-      ready: false,
-      // auth: auth,
-      isLoading: true,
-      months: this.$moment.months(),
-      dates: Object.keys(this.calendarEvents)
-    }
-  },
-  created () {
-    this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule)
-  },
-  mounted () {
-    this.ready = true
-    this.isLoading = false
-  },
-  methods: {
-    ...mapActions('AnnualPlannerVuex', ['setEventModalAndEventData']),
-    // openEditEventModal: function (show, item) {
-    //   if (!item.editable){
-    //     item.occasion = item.title;
-    //   }
-    //   this.setEventModalAndEventData({eventData: item});
-    // },
-    colorWithCategory (category) {
-      let filterCategories = this.categories.filter(c => c.id === category)
-      return filterCategories[0] != null ? `${filterCategories[0].color}!important;` : ''
-    }
-  },
-  computed: {
-    ...mapGetters({
-      categories: 'event/getCategoriesList'
-    })
-  },
-  watch: {
-    calendarEvents (oldValue, newValue) {
-      this.dates = Object.keys(this.calendarEvents)
-    }
-  },
-  filters: {
-    formatDate: function (date) {
-      return moment(date).format('MMMM Do, GGGG')
-    }
-  }
-}
+  };
 </script>
 <style lang="scss">
   .md-simple.month-day-button {

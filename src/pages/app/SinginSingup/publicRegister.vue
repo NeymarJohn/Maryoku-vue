@@ -41,91 +41,92 @@
 
 <script>
 
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import numeral from 'numeral'
-import EventComponent from '@/models/EventComponent'
-import CalendarEvent from '@/models/CalendarEvent'
-import Calendar from '@/models/Calendar'
+    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+    import numeral from 'numeral';
+    import EventComponent from '@/models/EventComponent'
+    import CalendarEvent from '@/models/CalendarEvent';
+    import Calendar from "@/models/Calendar";
 
-export default {
-  components: {
 
-  },
-  data () {
-    return {
-      email: null,
-      password: null,
-      department: null,
-      touched: {
-        email: false,
-        password: false,
-        department: false
-      },
-      modelValidations: {
-        email: {
-          required: true,
-          email: true
+    export default {
+        components: {
+
         },
-        password: {
-          required: true,
-          min: 8
+        data() {
+            return {
+                email : null,
+                password : null,
+                department : null,
+                touched: {
+                    email: false,
+                    password: false,
+                    department : false
+                },
+                modelValidations: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true,
+                        min: 8
+                    },
+                    department: {
+                        required: true,
+                    }
+                },
+                serverURL: process.env.SERVER_URL,
+            }
         },
-        department: {
-          required: true
-        }
-      },
-      serverURL: process.env.SERVER_URL
-    }
-  },
-  created () {
-    // create new event
-  },
-  methods: {
-    singup () {
-      let that = this
-      this.$validator.validateAll().then(isValid => {
-        if (isValid) {
-          that.signUpLoading = true
-          that.$auth.clientSignupOrSignin(that, this.email.toString().toLowerCase(), that.password, that.department, (data) => {
-            that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
-              that.$router.push({ path: '/', query: {token: success.access_token} })
-              that.signUpLoading = false
-            }, (failure) => {
-              that.signUpLoading = false
-              if (failure.response.status === 401) {
-                that.error = 'Sorry, wrong password, try again.'
-              } else {
-                that.error = 'Temporary failure, try again later'
-                console.log(JSON.stringify(failure.response))
-              }
-            })
-          })
-        } else {
+        created(){
+            //create new event
+        },
+        methods : {
+            singup(){
+                let that = this;
+                this.$validator.validateAll().then(isValid => {
+                    if (isValid){
+                        that.signUpLoading = true;
+                        that.$auth.clientSignupOrSignin(that, this.email.toString().toLowerCase(), that.password, that.department, (data) => {
+                            that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
 
-        }
-      })
-    },
-    authenticate (provider) {
-      this.loading = true
-      let tenantId = document.location.hostname.replace('.maryoku.com', '').replace('.', '_')
-      const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`)
-      document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`
-    }
+                                that.$router.push({ path: '/', query: {token: success.access_token} });
+                                that.signUpLoading = false;
+                            }, (failure) => {
+                                that.signUpLoading = false;
+                                if (failure.response.status === 401){
+                                    that.error = 'Sorry, wrong password, try again.';
+                                } else {
+                                    that.error = 'Temporary failure, try again later';
+                                    console.log(JSON.stringify(failure.response));
+                                }
+                            } );
+                        })
+                    } else {
 
-  },
-  watch: {
-    email () {
-      this.touched.email = true
-    },
-    password () {
-      this.touched.password = true
-    },
-    department () {
-      this.touched.department = true
-    }
-  }
+                    }
+                });
+            },
+            authenticate(provider) {
+                this.loading = true;
+                let tenantId = document.location.hostname.replace(".maryoku.com","").replace(".","_");
+                const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`);
+                document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
+            },
 
-}
+        },watch: {
+            email() {
+                this.touched.email = true;
+            },
+            password() {
+                this.touched.password = true;
+            },
+            department() {
+                this.touched.department = true;
+            },
+        },
+
+    };
 </script>
 <style lang="scss">
     $baseColor : #5c2153;

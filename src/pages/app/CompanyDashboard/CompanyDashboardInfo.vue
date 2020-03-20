@@ -45,132 +45,132 @@
   </md-card>
 </template>
 <script>
-// import auth from '@/auth';
-import {LabelEdit} from '@/components'
-import CustomerFile from '@/models/CustomerFile'
-import Customer from '@/models/Customer'
-import VueElementLoading from 'vue-element-loading'
+  // import auth from '@/auth';
+  import {LabelEdit} from '@/components';
+  import CustomerFile from '@/models/CustomerFile';
+  import Customer from '@/models/Customer';
+  import VueElementLoading from 'vue-element-loading';
 
-export default {
-  name: 'company-dashboard-info',
-  components: {
-    LabelEdit,
-    VueElementLoading
-  },
-  data () {
-    return {
-      // auth: auth,
-      loaded: false,
-      logoButtonsVisible: false,
-      companyProfile: {
-        id: null,
-        name: '',
-        mainAddress: {onelineAddress: ''},
-        numberOfEmployees: '',
-        industry: '',
-        mainPhoneNumber: '',
-        mainEmailAddress: '',
-        mainWebSiteAddress: '',
-        companyLogo: undefined,
-        logoFileId: undefined
-      }
-    }
-  },
-  mounted () {
-    this.$auth.currentUser(this, true, () => {
-      let customer = this.$auth.user.customer
-      this.companyProfile.id = customer.id
-      this.companyProfile.name = customer.name
-      this.mainAddress = { onelineAddress: customer.mainAddress ? customer.mainAddress.onelineAddress : '' }
-      this.companyProfile.numberOfEmployees = customer.numberOfEmployees
-      this.companyProfile.industry = customer.industry
-      this.companyProfile.logoFileId = customer.logoFileId
-      this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg'
+  export default {
+    name: "company-dashboard-info",
+    components: {
+      LabelEdit,
+      VueElementLoading
+    },
+    data() {
+      return {
+        // auth: auth,
+        loaded: false,
+        logoButtonsVisible: false,
+        companyProfile: {
+          id: null,
+          name: "",
+          mainAddress: {onelineAddress: ""},
+          numberOfEmployees: "",
+          industry: "",
+          mainPhoneNumber: "",
+          mainEmailAddress: "",
+          mainWebSiteAddress: "",
+          companyLogo: undefined,
+          logoFileId: undefined
+        }
+      };
+    },
+    mounted(){
+      this.$auth.currentUser(this, true, () => {
+        let customer = this.$auth.user.customer;
+        this.companyProfile.id = customer.id;
+        this.companyProfile.name = customer.name;
+        this.mainAddress = { onelineAddress: customer.mainAddress ? customer.mainAddress.onelineAddress : '' };
+        this.companyProfile.numberOfEmployees = customer.numberOfEmployees;
+        this.companyProfile.industry = customer.industry;
+        this.companyProfile.logoFileId = customer.logoFileId;
+        this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg';
 
-      this.loaded = true
-    })
-  },
-  methods: {
-    onMouseOver: function () {
-      this.logoButtonsVisible = true
+        this.loaded = true;
+      });
     },
-    onMouseLeave: function () {
-      this.logoButtonsVisible = false
-    },
-    companyValueChanged (val, fieldName) {
-      this.companyProfile[fieldName] = val
-      this.saveCompanyDetails()
-    },
-    saveCompanyDetails () {
-      let customer = this.$auth.user.customer
-      new Customer(this.companyProfile).save().then(res => {
-        /* this.$notify(
+    methods: {
+      onMouseOver: function() {
+        this.logoButtonsVisible = true;
+      },
+      onMouseLeave: function() {
+        this.logoButtonsVisible = false;
+      },
+      companyValueChanged(val, fieldName) {
+        this.companyProfile[fieldName] = val;
+        this.saveCompanyDetails();
+      },
+      saveCompanyDetails() {
+        let customer = this.$auth.user.customer;
+        new Customer(this.companyProfile).save().then(res=>{
+          /*this.$notify(
             {
               message: 'Saved successfully!',
               horizontalAlign: 'center',
               verticalAlign: 'top',
               type: 'success'
-            }) */
-      })
-    },
-    onFileChange (e) {
-      let files = e.target.files || e.dataTransfer.files
-      if (!files.length) return
-      this.createImage(files[0])
-    },
-    createImage (file, type) {
-      let reader = new FileReader()
-      let vm = this
+            })*/
+        });
+      },
+      onFileChange(e) {
+        let files = e.target.files || e.dataTransfer.files;
+        if (!files.length) return;
+        this.createImage(files[0]);
+      },
+      createImage(file, type) {
+        let reader = new FileReader();
+        let vm = this;
 
-      reader.onload = e => {
-        this.loaded = false
-        return new CustomerFile({customerFile: e.target.result}).save().then(result => {
-          let customer = this.$auth.user.customer
+        reader.onload = e => {
+          this.loaded = false;
+          return new CustomerFile({customerFile: e.target.result}).save().then(result => {
+            let customer = this.$auth.user.customer;
 
-          if (customer.logoFileId) {
-            new CustomerFile({id: customer.logoFileId}).delete().then(deleteResult => {
-              customer.logoFileId = result.id
-              new Customer({id: customer.id, logoFileId: result.id}).save()
-              this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg'
-              this.companyProfile.logoFileId = customer.logoFileId
-              this.$auth.user.customer.logoFileId = customer.logoFileId
-              this.$ls.set('user', this.$auth.user, 1000 * 60 * 10)
-              this.loaded = true
-            })
-          } else {
-            customer.logoFileId = result.id
-            new Customer({id: customer.id, logoFileId: result.id}).save()
-            this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg'
-            this.companyProfile.logoFileId = customer.logoFileId
-            this.$auth.user.customer.logoFileId = customer.logoFileId
-            this.$ls.set('user', this.$auth.user, 1000 * 60 * 10)
-            this.loaded = true
-          }
-        })
-          .catch((error) => {
-            console.log(error)
-            this.loaded = true
+            if (customer.logoFileId){
+                new CustomerFile({id: customer.logoFileId}).delete().then( deleteResult => {
+                    customer.logoFileId = result.id;
+                    new Customer({id: customer.id, logoFileId: result.id}).save();
+                    this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg';
+                    this.companyProfile.logoFileId = customer.logoFileId;
+                    this.$auth.user.customer.logoFileId = customer.logoFileId;
+                    this.$ls.set("user", this.$auth.user, 1000 * 60 * 10);
+                    this.loaded = true;
+                })
+            } else {
+                customer.logoFileId = result.id;
+                new Customer({id: customer.id, logoFileId: result.id}).save();
+                this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg';
+                this.companyProfile.logoFileId = customer.logoFileId;
+                this.$auth.user.customer.logoFileId = customer.logoFileId;
+                this.$ls.set("user", this.$auth.user, 1000 * 60 * 10);
+                this.loaded = true;
+            }
           })
-      }
-      reader.readAsDataURL(file)
-    },
-    openLogoImageInput () {
-      this.$refs.logoImageInput.click()
-    },
-    removeImage: function (type) {
-      this.loaded = false
-      let customer = this.$auth.user.customer
-      new CustomerFile({id: customer.logoFileId}).delete().then(res => {
-        this.loaded = true
-        customer.logoFileId = null
-        this.companyProfile.logoFileId = undefined
-        this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg'
-      }).catch((error) => {
-        this.loaded = true
-      })
+            .catch((error) => {
+              console.log(error);
+              this.loaded = true;
+            });
+        };
+        reader.readAsDataURL(file);
+      },
+        openLogoImageInput(){
+            this.$refs.logoImageInput.click();
+        },
+      removeImage: function(type) {
+        this.loaded = false;
+        let customer = this.$auth.user.customer;
+        new CustomerFile({id: customer.logoFileId}).delete().then(res => {
+          this.loaded = true;
+          customer.logoFileId = null;
+          this.companyProfile.logoFileId = undefined;
+          this.companyProfile.companyLogo = customer.logoFileId ? `${process.env.SERVER_URL}/1/customerFiles/${customer.logoFileId}` : 'http://static.maryoku.com/storage/img/image_placeholder.jpg';
+        }).catch((error) => {
+          this.loaded = true;
+        });
+      },
     }
-  }
-}
+  };
 </script>
 <style lang="scss" scoped>
   .divider {
