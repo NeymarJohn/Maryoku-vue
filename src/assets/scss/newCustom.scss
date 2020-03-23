@@ -993,6 +993,18 @@ $baseColor : #5c2153;
                 background : #f51355 !important;
                 color : #fff !important;
             }
+
+            &.md-outline {
+                box-shadow: none !important;
+                background: none !important;
+
+                .md-ripple {
+                    background: none !important;
+                    color : #f51355 !important;
+                    border : 1px solid #f51355;
+                    border-radius: 4px;
+                }
+            }
         }
 
         &.with-left-border {
@@ -2894,6 +2906,11 @@ $baseColor : #5c2153;
                         padding: 8px 20px;
                         font-weight: 400;
                         text-transform: capitalize;
+
+                        .md-icon {
+                            color: #f51355 !important;
+                            font-size: 18px !important;
+                        }
                     }
                 }
             }

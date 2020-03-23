@@ -6,7 +6,7 @@
         <div class="event-page-header with-bg d-flex justify-content-between">
             <div class="header-main-actions">
                 <md-button class="md-default md-simple">back</md-button>
-                <md-button class="md-rose">Request Proposal</md-button>
+                <md-button class="md-rose md-outline">Request Proposal</md-button>
 
             </div>
             <div class="header-actions">
@@ -57,22 +57,17 @@
 
                     <md-button class="md-rose md-raised md-outline"> More About Us </md-button>
 
+                    <div class="loading" v-if="vendorProposal.proposals[0].attachements.length && !fetchingAllAttachments">
+                        Loading ...
+                    </div>
 
-
-                    <carousel :items="3" :margin="25" :dots="false" :nav="false" class="proposal-images">
+                    <carousel :items="3" :margin="25" :dots="false" :nav="false" class="proposal-images" v-if="fetchingAllAttachments">
 
                         <template slot="prev"><span class="prev"> <md-icon>keyboard_arrow_left</md-icon> </span></template>
 
-                        <div class="item" style="background: url('https://placeimg.com/200/200/any?1') center center no-repeat; ">
-
-                        </div>
-                        <div class="item" style="background: url('https://placeimg.com/200/200/any?2') center center no-repeat; ">
-
-                        </div>
-                        <div class="item" style="background: url('https://placeimg.com/200/200/any?3') center center no-repeat; ">
-
-                        </div>
-                        <div class="item" style="background: url('https://placeimg.com/200/200/any?4') center center no-repeat; ">
+                        <div class="item"
+                             v-for="(item,index) in images" :key="index"
+                             :style="`background: url(${item.src}) center center no-repeat; `">
 
                         </div>
 
@@ -131,21 +126,20 @@
                 </div>
 
 
-                <div class="proposal-section attachments-section">
+                <div class="proposal-section attachments-section" v-if="attachedFiles.length">
                     <div class="proposal-section__title">
                         Attachments
                     </div>
 
                     <ul class="attachments-list_items">
-                        <li class="attachments-list_item">
-                            <a href="">Kosher_certificate.pdf</a>
+
+                        <li class="attachments-list_item" v-for="(item,index) in attachedFiles" :key="index">
+                            <a target="_blank" :href="`${item.fullPath}`">
+                                <md-icon>attach_file</md-icon>
+                                {{item.tag ? item.tag.replace(/_/g," ") : `Attachment${index+1}`}}
+                            </a>
                         </li>
-                        <li class="attachments-list_item">
-                            <a href="">Kosher_certificate.pdf</a>
-                        </li>
-                        <li class="attachments-list_item">
-                            <a href="">Kosher_certificate.pdf</a>
-                        </li>
+
                     </ul>
 
 
@@ -308,7 +302,12 @@
                 menuIconsURL: 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
                 iconsURL : 'http://static.maryoku.com/storage/icons/Event%20Page/',
                 vendorProposal : {},
-                extraTotal : 0
+                extraTotal : 0,
+                serverUrl: process.env.SERVER_URL,
+                images: [],
+                attachedFiles: [],
+                fetchingAllAttachments : false
+
             }
         },
         created () {
@@ -325,9 +324,6 @@
                     this.event = event
 
                     this.getEvent();
-
-
-                    console.log(event)
                 })
             }.bind(this))
 
@@ -365,7 +361,12 @@
 
                         _.each(extras,function(item){
                             vm.extraTotal+=item.price;
-                        })
+                        });
+
+                        vm.getImages();
+
+
+                        console.log('extras => ',extras);
 
                     })
                     .catch(error => {
@@ -404,6 +405,43 @@
                 //     .catch(error => {
                 //         console.log(' error here   -->>>  ', error)
                 //     })
+            },
+            getImages () {
+                let vm = this;
+                this.images = []
+                this.attachedFiles = [];
+
+                this.vendorProposal.proposals[0].attachements.forEach((item,index) => {
+                    const fullPath = `${this.serverUrl}/1/proposal-requests/${vm.$route.params.proposalId}/files/${item.id}`
+
+                    this.$http
+                        .get(fullPath, { headers: this.$auth.getAuthHeader() })
+                        .then(response => {
+                            if (response && response.headers) {
+                                if (response.headers['content-type'].indexOf('image') > -1) {
+                                    this.images.push({
+                                        thumb: fullPath,
+                                        src: fullPath,
+                                        caption: '',
+                                        srcset: ''
+                                    })
+                                } else {
+                                    this.attachedFiles.push({
+                                        fullPath: fullPath,
+                                        tag: item.tag,
+                                        name: item.name
+                                    })
+                                }
+                            }
+
+                            if ( index+1 == vm.vendorProposal.proposals[0].attachements.length) {
+
+                                setTimeout(function () {
+                                    vm.fetchingAllAttachments = true;
+                                },2000)
+                            }
+                        })
+                });
             }
         },
         computed: {
