@@ -139,7 +139,7 @@ export default {
         },
         {
           title: 'Equipment Rental',
-          color: 'e7e6e6'
+          color: '#e7e6e6'
         },
         {
           title: 'Venue Rental',
@@ -158,7 +158,7 @@ export default {
           color: '#20c997'
         },
         {
-          title: 'Audio Visual/staging',
+          title: 'Audio Visual/Staging Services',
           color: '#00bcd4'
         },
         {
@@ -203,7 +203,7 @@ export default {
         },
         {
           title: 'Unexpected',
-          color: '#6f3b55'
+          color: '#24c796'
         }
       ],
       defaultColor: '#641956'
@@ -221,6 +221,8 @@ export default {
     },
     drawChart () {
       if (!this.event.id) return
+
+      let vm = this
       this.isLoading = true
       let res = this.event.components
       this.circleLength = Math.PI * (this.radius * 2)
@@ -249,17 +251,17 @@ export default {
       this.categories = [...new Set(this.categories)]
       console.log('categories', this.categories)
       // sort data with updated categories
-        this.eventBuildingBlocks.forEach((category, cIndex) => {
+      this.categories.forEach((category, cIndex) => {
         this.sortedData.push({
-          category: category.title,
+          category: category,
           // filter by category title and gather budget values, then get the sum of them
           budget: this.eventBuildingBlocks
-            .filter(ebb => ebb.title === category.title)
+            .filter(ebb => ebb.title === category)
             .map(eb => (eb.allocatedBudget === null ? 0 : eb.allocatedBudget))
             .reduce(function (total, val) {
               return parseFloat(total) + parseFloat(val)
             }, 0),
-          color: category.color
+          color: this.getElementColor(category)
         })
       })
 

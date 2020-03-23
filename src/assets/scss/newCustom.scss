@@ -308,10 +308,13 @@ $baseColor : #5c2153;
 
         &.event-block-table {
             position: relative;
+
             box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
             background: #fff;
             border-radius: 3px;
             margin-bottom: 1em;
+
+
         }
 
         td,th {
@@ -434,148 +437,139 @@ $baseColor : #5c2153;
                 &.event-block-element  {
                     font-family: 'Manrope-Bold',sans-serif;
                     font-size: 16px;
-                    position: relative;
 
-                    .left-border {
-                        background: rgb(100, 25, 86);
-                        height: 100%;
+                    &:after {
                         width : 7px;
+                        background: #641956;
+                        height: 100%;
+                        content : ' ';
                         position: absolute;
                         left : 0;
                         top : 0;
-                        bottom : 0;
-                        border-top-left-radius: 3px;
-                        border-bottom-left-radius: 3px;
+                        border-radius: 3px 0 0 3px;
                     }
 
-                    //&:after {
-                    //    width : 7px;
-                    //    background: #641956;
-                    //    height: 100%;
-                    //    content : ' ';
-                    //    position: absolute;
-                    //    left : 0;
-                    //    top : 0;
-                    //    border-radius: 3px 0 0 3px;
-                    //}
-                    //
-                    // &.venue , &.venue-rental {
-                    //    &:after {
-                    //        background: rgb(0,176,80);
-                    //    }
-                    //}
-                    //
-                    //&.shipping {
-                    //    &:after {
-                    //        background: rgb(68,84,106);
-                    //    }
-                    //}
-                    //&.signage-printing {
-                    //    &:after {
-                    //        background: rgb(231,230,230);
-                    //    }
-                    //}
-                    //
-                    //&.technology-service {
-                    //    &:after {
-                    //        background: rgb(255,192,0);
-                    //    }
-                    //}
-                    //
-                    //&.food-beverage, &.food--beverage , &.food{
-                    //    &:after {
-                    //        background: rgb(255,82,124);
-                    //    }
-                    //}
-                    //
-                    //&.security-services , &.security {
-                    //    &:after {
-                    //        background: rgb(165,165,165);
-                    //    }
-                    //}
-                    //&.audio-visual , .swags {
-                    //    &:after {
-                    //        background: rgb(32,202,151);
-                    //    }
-                    //}
-                    //&.decor , &.event-documentation , &.decoration
-                    //{
-                    //    &:after {
-                    //        background: rgb(0,188,212);
-                    //    }
-                    //}
-                    //&.entertainment {
-                    //    &:after {
-                    //        background: rgb(100,25,86);
-                    //    }
-                    //}
-                    //&.equipment-rental {
-                    //    &:after {
-                    //        background: rgb(255,0,102);
-                    //    }
-                    //}
-                    //
-                    //&.photography-videography , &.photographer {
-                    //    &:after {
-                    //        background: rgb(240,129,7);
-                    //    }
-                    //}
-                    //
-                    //&.dj {
-                    //    &:after {
-                    //        background: #fe537a;
-                    //    }
-                    //}
-                    //
-                    //&.catering , &.swags ,  &.swag {
-                    //    &:after {
-                    //        background: #f3423a;
-                    //    }
-                    //}
-                    //
-                    //&.rentals {
-                    //    &:after {
-                    //        background: #43536a;
-                    //    }
-                    //}
-                    //
-                    //&.organization-fees {
-                    //    &:after {
-                    //        background: rgb(159,41,54);
-                    //    }
-                    //}
-                    //
-                    //&.advertising-and-promotion {
-                    //    &:after {
-                    //        background: rgb(27,88,124);
-                    //    }
-                    //}
-                    //&.meeting-labor , &.marketing-and-print {
-                    //    &:after {
-                    //        background: rgb(78,133,60);
-                    //    }
-                    //}
-                    //
-                    //&.corporate-social-responsibility {
-                    //    &:after {
-                    //        background: rgb(96,72,120);
-                    //    }
-                    //}
-                    //
-                    //&.administration , &.beverage {
-                    //    &:after {
-                    //        background: rgb(193,152,89);
-                    //    }
-                    //}
-                    //
-                    //&.transportation {
-                    //    &:after {
-                    //        background: rgb(24,151,113);
-                    //    }
-                    //}
+                     &.venue , &.venue-rental {
+                        &:after {
+                            background: #ffc000;
+                        }
+                    }
 
+                    &.shipping {
+                        &:after {
+                            background: #1D9A78;
+                        }
+                    }
+                    &.signage-printing {
+                        &:after {
+                            background: #00b050;
+                        }
+                    }
 
+                    &.technology-service {
+                        &:after {
+                            background: #C490AA;
+                        }
+                    }
 
+                    &.food-beverage, &.food--beverage , &.food{
+                        &:after {
+                            background: #ff527c;
+                        }
+                    }
+
+                    &.security-services , &.security {
+                        &:after {
+                            background: #689331;
+                        }
+                    }
+                    &.swags, &.swag {
+                        &:after {
+                            background: #44546a;
+                        }
+                    }
+                    &.audio-visual-staging-services{
+                        &:after {
+                            background: #00bcd4;
+                        }
+                    }
+                    &.decor , &.event-documentation , &.decoration
+                    {
+                        &:after {
+                            background: #641956;
+                        }
+                    }
+                    &.entertainment {
+                        &:after {
+                            background: #20c997;
+                        }
+                    }
+                    &.equipment-rental {
+                        &:after {
+                            background: #d3d2d2;
+                        }
+                    }
+
+                    &.Videography--photography , &.photographer {
+                        &:after {
+                            background: #7f7f7f;
+                        }
+                    }
+
+                    &.dj {
+                        &:after {
+                            background: #fe537a;
+                        }
+                    }
+
+                    &.catering , &.swags ,  &.swag {
+                        &:after {
+                            background: #f3423a;
+                        }
+                    }
+
+                    &.rentals {
+                        &:after {
+                            background: #43536a;
+                        }
+                    }
+
+                    &.organization-fees {
+                        &:after {
+                            background: rgb(159,41,54);
+                        }
+                    }
+
+                    &.advertising-and-promotion {
+                        &:after {
+                            background: #a5a5a5;
+                        }
+                    }
+                    &.meeting-labor ,
+                    &.marketing-and-print ,
+                    &.meeting-organization-fee{
+                        &:after {
+                            background: #B74919;
+                        }
+                    }
+
+                    &.corporate-social-responsibility {
+                        &:after {
+                            background: #f19d19;
+                        }
+                    }
+
+                    &.administration , &.beverage {
+                        &:after {
+                            background: #8BC145;
+                        }
+                    }
+
+                    &.transportation , &.transportation--tour-operator-services {
+                        &:after {
+                            background: #ff0066;
+                        }
+                    }
 
                     img {
                         width : 20px;

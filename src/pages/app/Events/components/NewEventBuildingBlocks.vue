@@ -25,8 +25,8 @@
               <td
                 width="40%"
                 class="event-block-element"
+                :class="block.title ? block.title.toLowerCase().replace(/ /g, '-').replace('&', '').replace('/', '-') : ''"
               >
-                  <div class="left-border" :style="`background : ${block.color}`"></div>
                 <img
                   :src="`http://static.maryoku.com/storage/icons/Budget Elements/${block.title}.svg`"
                 />
@@ -146,9 +146,7 @@
       <tbody>
         <tr>
           <td class="event-block-element unexpected" width="40%">
-              <div class="left-border" :style="`background : #24c796`"></div>
-
-              <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+18.png" /> Unexpected
+            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+18.png" /> Unexpected
           </td>
           <td class="planned" width="20%">$0</td>
           <td class="actual" width="15%">$0</td>
@@ -341,7 +339,7 @@
         </div>
       </template>
       <template slot="footer">
-        <md-button class="md-default md-simple cancel-btn" @click="showCategoryModal = false">Cancel</md-button>
+        <md-button class="md-default md-simple cancel-btn" @click>Cancel</md-button>
         <md-button class="md-rose add-category-btn" @click="addBuildingBlock">Add Category</md-button>
       </template>
     </modal>
