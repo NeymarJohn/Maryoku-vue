@@ -49,9 +49,10 @@ import HomePage from '@/pages/app/HomePage/Home.vue'
 import publicRegister from '@/pages/app/SinginSingup/publicRegister.vue'
 
 // New Event Pages
-import CurrentEventsNew from '@/pages/app/Events/CurrentEventsNew.vue'
-import EventTimeLineNew from '@/pages/app/Events/components/EventTimeLineNew.vue'
-import BookingEvent from '@/pages/app/Events/components/BookingEvent.vue'
+import CurrentEventsNew from "@/pages/app/Events/CurrentEventsNew.vue"
+import EventTimeLineNew from "@/pages/app/Events/components/EventTimeLineNew.vue"
+import BookingEvent from "@/pages/app/Events/components/BookingEvent.vue"
+import EventProposalDetails from "@/pages/app/Events/components/EventProposalDetails.vue"
 
 // Dashboard pages
 import EmployeeMain from '@/pages/Dashboard/Pages/CommonInfoProfile/Employee.vue'
@@ -561,6 +562,16 @@ let NewEventPages = {
       gtm: 'Booking Event',
       opaque: false
     }
+  },
+  {
+      path: '/events/:id/proposal-details/:vendorId/:proposalId',
+      name: 'EventProposalDetails',
+      component : EventProposalDetails,
+      meta: {
+          title: 'EventProposalDetails',
+          gtm: 'Event Proposal Details',
+          opaque: false
+      },
   },
   {
     path: '/events/:id/edit/invitees-management',
