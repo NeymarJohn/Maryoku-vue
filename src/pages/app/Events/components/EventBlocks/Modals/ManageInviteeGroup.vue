@@ -31,53 +31,54 @@
   </div>
 </template>
 <script>
-import VueElementLoading from 'vue-element-loading'
-import PersonalInformation from './PersonalInformation.vue'
-import MyEvents from './MyEvents.vue'
-import DietaryConstraints from './DietaryConstraints.vue'
-import MySpecialDates from './MySpecialDates.vue'
-import HolidaysCelebrate from './HolidaysCelebrate.vue'
-import {LabelEdit} from '@/components'
-import Me from '@/models/Me'
-// import auth from '@/auth';
-import {
-  mapGetters
-} from 'vuex'
+  import VueElementLoading from 'vue-element-loading';
+  import PersonalInformation from "./PersonalInformation.vue";
+  import MyEvents from "./MyEvents.vue";
+  import DietaryConstraints from "./DietaryConstraints.vue";
+  import MySpecialDates from "./MySpecialDates.vue";
+  import HolidaysCelebrate from './HolidaysCelebrate.vue';
+  import {LabelEdit} from '@/components';
+  import Me from '@/models/Me';
+  // import auth from '@/auth';
+  import {
+    mapGetters
+  } from 'vuex';
 
-export default {
-  components: {
-    VueElementLoading,
-    PersonalInformation,
-    MyEvents,
-    DietaryConstraints,
-    MySpecialDates,
-    HolidaysCelebrate,
-    LabelEdit
-  },
-  data () {
-    return {
-      // auth: auth,
-      upComingEvents: [],
-      userInfo: {},
-      isLoading: false
-    }
-  },
-  computed: {
+  export default {
+    components: {
+      VueElementLoading,
+      PersonalInformation,
+      MyEvents,
+      DietaryConstraints,
+      MySpecialDates,
+      HolidaysCelebrate,
+      LabelEdit
+    },
+    data() {
+      return {
+        // auth: auth,
+        upComingEvents: [],
+        userInfo: {},
+        isLoading: false,
+      }
 
-  },
-  mounted () {
-    this.isLoading = true
-    new Me().get().then(me => {
-      this.userInfo = me[0]
-      this.isLoading = false
-    })
-  },
-  methods: {
-    closePanel () {
-      this.$emit('closePanel')
+    },
+    computed: {
+
+    },
+    mounted() {
+      this.isLoading = true;
+      new Me().get().then(me => {
+        this.userInfo = me[0];
+        this.isLoading = false;
+      })
+    },
+    methods: {
+      closePanel(){
+        this.$emit("closePanel");
+      }
     }
   }
-}
 </script>
 <style lang="scss" scoped>
 </style>

@@ -294,7 +294,7 @@
     .open > &.dropdown-toggle:hover {
       background-color: $btn-color !important;
 
-      @if $btn-color==$white-color {
+      @if $btn-color == $white-color {
         &,
         i{
           color: $gray-light !important;

@@ -28,173 +28,176 @@
 </template>
 
 <script>
-// import auth from '@/auth';
-import VueElementLoading from 'vue-element-loading'
-import ChartComponent from '@/components/Cards/ChartComponent'
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import AnnualPlannerVuexModule from './AnnualPlanner.vuex'
-import moment from 'moment'
-import {
-  AnimatedNumber
-} from '@/components'
-import BudgetPanel from './BudgetPanel'
-import CalendarPanel from './CalendarPanel'
-import Calendar from '@/models/Calendar'
-import Tour from '@/models/Tour'
-import Me from '@/models/Me'
+    // import auth from '@/auth';
+    import VueElementLoading from 'vue-element-loading';
+    import ChartComponent from '@/components/Cards/ChartComponent';
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+    import AnnualPlannerVuexModule from './AnnualPlanner.vuex';
+    import moment from 'moment';
+    import {
+        AnimatedNumber
+    } from "@/components";
+    import BudgetPanel from './BudgetPanel';
+    import CalendarPanel from './CalendarPanel';
+    import Calendar from '@/models/Calendar';
+    import Tour from '@/models/Tour';
+    import Me from '@/models/Me';
 
-export default {
-  components: {
-    CalendarPanel,
-    BudgetPanel,
-    VueElementLoading,
-    ChartComponent,
-    AnimatedNumber
-  },
-  data () {
-    return {
-      ready: false,
-      // auth: auth,
-      isLoading: true,
-      monthRows: [],
-      currentMonthName: '',
-      currentMonth: 0,
-      currentYear: 0,
-      statisticsData: null,
-      months: this.$moment.months(),
-      firstDayOfTheWeek: 'monday',
-      monthCounts: {},
-      queryInProgress: false,
-      metaDataInProgress: false,
-      plannerPageVisited: true,
-      tourSteps: []
-    }
-  },
-  created () {
-    this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule)
-
-    this.checkSelectedYearMonth()
-  },
-  mounted () {
-    if (this.metaDataInProgress) return
-
-    this.ready = false
-    this.isLoading = true
-    if (this.categories.length === 0 || this.eventTypes.length === 0 || this.currencies.length === 0) {
-      this.metaDataInProgress = true
-
-      this.$auth.currentUser(this, true, () => {
-        this.$store.dispatch('event/getCategories', {data: this.$auth.user.defaultCalendarId, ctx: this})
-        this.$store.dispatch('event/getEventTypes', {data: this.$auth.user.defaultCalendarId, ctx: this})
-        this.$store.dispatch('event/getCurrencies', this)
-        this.$store.dispatch('event/getEventThemes', this)
-
-        this.metaDataInProgress = false
-
-        if (!this.$auth.user.me.plannerPageVisited) {
-          Tour.params({page: 'planner'}).get().then(steps => {
-            this.tourSteps = []
-            console.log('steps', steps)
-
-            for (let i in steps) {
-              let obj = {
-                target: steps[i].target || null,
-                content: steps[i].content || null,
-                classes: steps[i].cssClass || null,
-                params: {
-                  placement: steps[i].placement || null
-                }
-              }
-
-              this.tourSteps.push(obj)
+    export default {
+        components: {
+            CalendarPanel,
+            BudgetPanel,
+            VueElementLoading,
+            ChartComponent,
+            AnimatedNumber
+        },
+        data() {
+            return {
+                ready: false,
+                // auth: auth,
+                isLoading: true,
+                monthRows: [],
+                currentMonthName: '',
+                currentMonth: 0,
+                currentYear: 0,
+                statisticsData: null,
+                months: this.$moment.months(),
+                firstDayOfTheWeek: 'monday',
+                monthCounts: {},
+                queryInProgress: false,
+                metaDataInProgress: false,
+                plannerPageVisited: true,
+                tourSteps: []
             }
+        },
+        created() {
+            this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule);
 
-            this.$tours['plannerTour'].start()
+            this.checkSelectedYearMonth();
+        },
+        mounted(){
+            if (this.metaDataInProgress) return;
 
-            Me.find(this.$auth.user.me.id).then((user) => {
-              user.plannerPageVisited = true
-              user.save()
-            })
+            this.ready = false;
+            this.isLoading = true;
+            if (this.categories.length === 0 || this.eventTypes.length === 0 || this.currencies.length === 0) {
+                this.metaDataInProgress = true;
 
-            this.$auth.user.me.plannerPageVisited = true
-          })
+                this.$auth.currentUser(this, true, () => {
+                    this.$store.dispatch("event/getCategories", {data: this.$auth.user.defaultCalendarId, ctx: this});
+                    this.$store.dispatch("event/getEventTypes", {data: this.$auth.user.defaultCalendarId, ctx: this});
+                    this.$store.dispatch("event/getCurrencies", this);
+                    this.$store.dispatch("event/getEventThemes", this);
+
+                    this.metaDataInProgress = false;
+
+                    if (!this.$auth.user.me.plannerPageVisited) {
+                        Tour.params({page: 'planner'}).get().then(steps => {
+                            this.tourSteps = [];
+                            console.log('steps', steps);
+
+                            for (let i in steps) {
+                                let obj = {
+                                    target: steps[i].target || null,
+                                    content: steps[i].content || null,
+                                    classes: steps[i].cssClass || null,
+                                    params: {
+                                        placement: steps[i].placement || null
+                                    }
+                                };
+
+                                this.tourSteps.push(obj);
+                            }
+
+                            this.$tours['plannerTour'].start();
+
+                            Me.find(this.$auth.user.me.id).then((user) => {
+                                user.plannerPageVisited = true;
+                                user.save();
+                            });
+
+                            this.$auth.user.me.plannerPageVisited = true;
+
+                        })
+                    }
+
+                });
+            }
+        },
+        methods: {
+            monthCount() {
+
+                this.$auth.currentUser(this, true, function() {
+                    if (this.queryInProgress) return;
+                    this.queryInProgress = true;
+                    Calendar.params({year: this.$route.params.year}).find(this.$auth.user.defaultCalendarId).then(function(calendar){
+                        this.firstDayOfTheWeek = calendar.firstDayOfWeek;
+                        this.monthCounts = calendar.monthCounts;
+
+                        let statistics = calendar.statistics;
+                        let statisticMap = {};
+
+                        statistics.forEach(function(data){
+                            statisticMap[data.item] = data.value
+                        });
+
+                        this.statisticsData = statisticMap;
+
+                        this.checkSelectedYearMonth();
+
+                        this.ready = true;
+                        this.isLoading = false;
+                        this.queryInProgress = false;
+                    }.bind(this));
+                }.bind(this))
+            },
+            checkSelectedYearMonth(){
+                let yearParam = this.$route.params.year;
+                let monthParam = this.$route.params.month;
+                let redirect = false;
+
+                if (yearParam === undefined || isNaN(yearParam)){
+                    yearParam = moment().format('YYYY');
+                    redirect = true;
+                }
+
+                if (monthParam === undefined || isNaN(yearParam)){
+                    monthParam = moment().format('M');
+                    redirect = true;
+                }
+
+                if (redirect) {
+                    this.$router.push({
+                        path: `/planner/${yearParam}/${monthParam}`
+                    });
+                } else {
+                    this.selectYearMonth(yearParam, monthParam);
+                }
+            },
+            selectYearMonth(year, month){
+                let selectedMoment = moment().date(1).month(month-1).year(year);
+                let currentMonth = selectedMoment.month();
+                this.currentMonthName = selectedMoment.format('MMMM');
+                this.currentMonth = currentMonth+1;
+                this.currentYear = year;
+            },
+        },
+        computed: {
+            ...mapState('AnnualPlannerVuex', ['filtersData']),
+            ...mapGetters({
+                categories: 'event/getCategoriesList',
+                currencies: 'event/getCurrenciesList',
+                eventTypes: 'event/getEventTypesList'
+            }),
+        },
+        watch: {
+            '$route' (to, from) {
+                // react to route changes...
+                this.checkSelectedYearMonth();
+                this.monthCount();
+            }
         }
-      })
-    }
-  },
-  methods: {
-    monthCount () {
-      this.$auth.currentUser(this, true, function () {
-        if (this.queryInProgress) return
-        this.queryInProgress = true
-        Calendar.params({year: this.$route.params.year}).find(this.$auth.user.defaultCalendarId).then(function (calendar) {
-          this.firstDayOfTheWeek = calendar.firstDayOfWeek
-          this.monthCounts = calendar.monthCounts
-
-          let statistics = calendar.statistics
-          let statisticMap = {}
-
-          statistics.forEach(function (data) {
-            statisticMap[data.item] = data.value
-          })
-
-          this.statisticsData = statisticMap
-
-          this.checkSelectedYearMonth()
-
-          this.ready = true
-          this.isLoading = false
-          this.queryInProgress = false
-        }.bind(this))
-      }.bind(this))
-    },
-    checkSelectedYearMonth () {
-      let yearParam = this.$route.params.year
-      let monthParam = this.$route.params.month
-      let redirect = false
-
-      if (yearParam === undefined || isNaN(yearParam)) {
-        yearParam = moment().format('YYYY')
-        redirect = true
-      }
-
-      if (monthParam === undefined || isNaN(yearParam)) {
-        monthParam = moment().format('M')
-        redirect = true
-      }
-
-      if (redirect) {
-        this.$router.push({
-          path: `/planner/${yearParam}/${monthParam}`
-        })
-      } else {
-        this.selectYearMonth(yearParam, monthParam)
-      }
-    },
-    selectYearMonth (year, month) {
-      let selectedMoment = moment().date(1).month(month - 1).year(year)
-      let currentMonth = selectedMoment.month()
-      this.currentMonthName = selectedMoment.format('MMMM')
-      this.currentMonth = currentMonth + 1
-      this.currentYear = year
-    }
-  },
-  computed: {
-    ...mapState('AnnualPlannerVuex', ['filtersData']),
-    ...mapGetters({
-      categories: 'event/getCategoriesList',
-      currencies: 'event/getCurrenciesList',
-      eventTypes: 'event/getEventTypesList'
-    })
-  },
-  watch: {
-    '$route' (to, from) {
-      // react to route changes...
-      this.checkSelectedYearMonth()
-      this.monthCount()
-    }
-  }
-}
+    };
 </script>
 <style lang="scss">
     .side-padding {

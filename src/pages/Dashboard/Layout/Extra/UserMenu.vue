@@ -57,7 +57,7 @@
   </div>
 </template>
 <script>
-import { CollapseTransition } from 'vue2-transitions'
+import { CollapseTransition } from "vue2-transitions";
 // import auth from 'src/auth';
 
 export default {
@@ -67,39 +67,39 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Tania Andrew'
+      default: "Tania Andrew"
     },
     rtlTitle: {
       type: String,
-      default: 'تانيا أندرو'
+      default: "تانيا أندرو"
     },
     avatar: {
       type: String,
-      default: 'http://static.maryoku.com/storage/img/faces/avatar.jpg'
+      default: "http://static.maryoku.com/storage/img/faces/avatar.jpg"
     }
   },
-  data () {
+  data() {
     return {
       isClosed: true,
       auth
-    }
+    };
   },
   methods: {
-    clicked: function (e) {
-      e.preventDefault()
+    clicked: function(e) {
+      e.preventDefault();
     },
-    toggleMenu: function () {
-      this.isClosed = !this.isClosed
+    toggleMenu: function() {
+      this.isClosed = !this.isClosed;
     },
-    signout (e) {
-      this.$auth.logout(this)
+    signout(e){
+      this.$auth.logout(this);
     },
-    gotoMyProfile () {
-      // this.$router.push('/pages/user');
+    gotoMyProfile() {
+      //this.$router.push('/pages/user');
       this.$router.push('/employee-form')
     }
   }
-}
+};
 </script>
 <style>
 .collapsed {

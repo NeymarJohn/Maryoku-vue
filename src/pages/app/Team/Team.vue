@@ -43,25 +43,25 @@
 
 <script>
 // import auth from '@/auth';
-import InviteModal from './InviteModal/'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import TeamTable from './Table'
-import Team from '@/models/Team'
-import teamVuexModule from './team.vuex'
-import VueElementLoading from 'vue-element-loading'
-import { Pagination } from '@/components'
-import { paginationMixin } from '@/mixins/pagination'
+import InviteModal from "./InviteModal/";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import TeamTable from "./Table";
+import Team from "@/models/Team";
+import teamVuexModule from "./team.vuex";
+import VueElementLoading from "vue-element-loading";
+import { Pagination } from "@/components";
+import { paginationMixin } from "@/mixins/pagination";
 
 export default {
   components: {
     InviteModal,
-    'team-table': TeamTable,
-    //  UploadModal,
+    "team-table": TeamTable,
+  //  UploadModal,
     VueElementLoading,
     Pagination
   },
   mixins: [paginationMixin],
-  data () {
+  data() {
     return {
       // auth: auth,
       team: {},
@@ -83,33 +83,33 @@ export default {
         { id: 'view', title: 'View'},
         { id: 'vote', title: 'Vote'}
       ]
-    }
+    };
   },
-  created () {
-    this.$store.registerModule('teamVuex', teamVuexModule)
+  created() {
+    this.$store.registerModule("teamVuex", teamVuexModule);
 
     this.$auth.currentUser(
       this,
       true,
-      function () {
-        this.fetchData(this.pagination.from)
+      function() {
+        this.fetchData(this.pagination.from);
       }.bind(this)
-    )
+    );
   },
-  destroyed () {
-    this.$store.unregisterModule('teamVuex')
+  destroyed() {
+    this.$store.unregisterModule("teamVuex");
   },
   methods: {
-    ...mapMutations('teamVuex', [
-      'resetForm',
-      'setInviteModal',
-      'setEditMode',
-      'setModalTitle',
-      'setMemberProperty'
+    ...mapMutations("teamVuex", [
+      "resetForm",
+      "setInviteModal",
+      "setEditMode",
+      "setModalTitle",
+      "setMemberProperty"
     ]),
-    fetchData (page) {
-      this.teamMembersLoading = true
-      /* Team.get().then(teams => {
+    fetchData(page) {
+      this.teamMembersLoading = true;
+      /*Team.get().then(teams => {
           this.team = teams[0];
           teams[0].members().get().then(members => {
             this.teamMembers = members;
@@ -117,83 +117,83 @@ export default {
           });
         }, (error) => {
           console.log(error)
-        }); */
+        });*/
 
-      let currentUserId = this.$auth.user.id
+      let currentUserId = this.$auth.user.id;
       new Team({ id: this.$auth.user.defaultGroupId })
         .members()
         .page(Number(page))
         .limit(this.pagination.limit)
         .get()
         .then(members => {
-          /* let result = members[0].results.filter(function(item, pos) {
+          /*let result = members[0].results.filter(function(item, pos) {
             return item.id != currentUserId;
-          }); */
+          });*/
 
-          this.teamMembers = members[0].results
-          this.updatePagination(members[0].model)
-          this.teamMembersLoading = false
-        })
+          this.teamMembers = members[0].results;
+          this.updatePagination(members[0].model);
+          this.teamMembersLoading = false;
+        });
     },
     // openUploadModal(){
     //    // this.$refs.uploadModal.toggleModal(true);
     // },
 
-    openUploadModalSidePanel () {
-      this.resetForm()
-      this.setMemberProperty({ key: 'role', actualValue: 'co_producer' })
-      this.setMemberProperty({ key: 'permissions', actualValue: ['sign_off'] })
+openUploadModalSidePanel() {
+      this.resetForm();
+      this.setMemberProperty({ key: "role", actualValue: "co_producer" });
+      this.setMemberProperty({ key: "permissions", actualValue: ["sign_off"] });
 
       // this.setInviteModal({ showModal: true })
-      this.setEditMode({ editMode: false })
-      this.setModalTitle('Invite your Team')
+      this.setEditMode({ editMode: false });
+      this.setModalTitle("Invite your Team");
       window.currentPanel = this.$showPanel({
         component: UploadModal,
-        cssClass: 'md-layout-item md-size-40 transition36 ',
-        openOn: 'right',
+        cssClass: "md-layout-item md-size-40 transition36 ",
+        openOn: "right",
         props: {
           membersRefresh: () => this.fetchData(this.pagination.from),
           team: this.team
         }
-      })
+      });
     },
-    openTeamInviteSidePanel () {
-      this.resetForm()
-      this.setMemberProperty({ key: 'role', actualValue: 'co_producer' })
-      this.setMemberProperty({ key: 'permissions', actualValue: ['view'] })
+    openTeamInviteSidePanel() {
+      this.resetForm();
+      this.setMemberProperty({ key: "role", actualValue: "co_producer" });
+      this.setMemberProperty({ key: "permissions", actualValue: ["view"] });
 
       // this.setInviteModal({ showModal: true })
-      this.setEditMode({ editMode: false })
-      this.setModalTitle('Invite your Team')
+      this.setEditMode({ editMode: false });
+      this.setModalTitle("Invite your Team");
       window.currentPanel = this.$showPanel({
         component: InviteModal,
-        cssClass: 'md-layout-item md-size-40 transition36 ',
-        openOn: 'right',
+        cssClass: "md-layout-item md-size-40 transition36 ",
+        openOn: "right",
         props: {
           membersRefresh: () => this.fetchData(this.pagination.page),
           team: this.team,
           availablePermissions: this.permissions
         }
-      })
+      });
     },
-    openEditTeamInviteSidePanel (showModal, teamMember) {
+    openEditTeamInviteSidePanel(showModal, teamMember) {
       // this.setInviteModalAndTeamMember({showModal: show, teamMember: item})
       window.currentPanel = this.$showPanel({
         component: InviteModal,
-        cssClass: 'md-layout-item md-size-40 transition36 ',
-        openOn: 'right',
+        cssClass: "md-layout-item md-size-40 transition36 ",
+        openOn: "right",
         props: {
 
           membersRefresh: () => this.fetchData(this.pagination.page),
           team: teamMember,
           availablePermissions: this.permissions
         }
-      })
+      });
     },
 
-    openInviteModal () {}
+    openInviteModal() {}
   }
-}
+};
 </script>
 <style >
 .md-table-head-label {

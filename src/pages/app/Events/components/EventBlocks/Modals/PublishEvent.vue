@@ -46,84 +46,84 @@
     </div>
 </template>
 <script>
-// import auth from '@/auth';
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import CalendarEvent from '@/models/CalendarEvent'
-import {Modal} from '@/components'
-import Calendar from '@/models/Calendar'
-import EventComponent from '@/models/EventComponent'
+    // import auth from '@/auth';
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+    import CalendarEvent from '@/models/CalendarEvent';
+    import {Modal} from "@/components";
+    import Calendar from "@/models/Calendar";
+    import EventComponent from "@/models/EventComponent";
 
-import swal from 'sweetalert2'
-import {error} from 'util'
-import moment from 'moment'
+    import swal from "sweetalert2";
+    import {error} from 'util';
+    import moment from 'moment';
 
-export default {
-  components: {
-    Modal
-  },
-  props: {
-    event: Object
+    export default {
+        components: {
+            Modal,
+        },
+        props: {
+            event: Object
 
-  },
-  data: () => ({
-    // auth: auth,
-    publishUrl: '',
-    copyDone: false
-  }),
+        },
+        data: () => ({
+            // auth: auth,
+            publishUrl : '',
+            copyDone: false
+        }),
 
-  created () {
+        created() {
 
-  },
-  mounted () {
+        },
+        mounted() {
 
-  },
-  methods: {
-    ...mapMutations('EventPlannerVuex', ['setPublishEventModal']),
-    closeModal () {
-      this.setPublishEventModal({ showModal: false })
-    },
-    copyLink () {
-      let testingCodeToCopy = document.querySelector('#event-link')
-      testingCodeToCopy.setAttribute('type', 'text')
-      testingCodeToCopy.select()
+        },
+        methods: {
+            ...mapMutations('EventPlannerVuex', ['setPublishEventModal']),
+            closeModal(){
+                this.setPublishEventModal({ showModal: false });
+            },
+            copyLink () {
+                let testingCodeToCopy = document.querySelector('#event-link');
+                testingCodeToCopy.setAttribute('type', 'text');
+                testingCodeToCopy.select();
 
-      try {
-        var successful = document.execCommand('copy')
-        if (successful) {
-          this.copyDone = true
-          setTimeout(() => {
-            this.copyDone = false
-          }, 2500)
+                try {
+                    var successful = document.execCommand('copy');
+                    if (successful) {
+                        this.copyDone = true;
+                        setTimeout(() => {
+                            this.copyDone = false;
+                        }, 2500);
+                    }
+                } catch (err) {
+                    //alert('Oops, unable to copy');
+                }
+            },
+            openInNewTab(){
+                window.open(this.publishUrl, '_blank');
+            }
+
+        },
+        computed: {
+            ...mapState('EventPlannerVuex', [
+                'publishEventModal',
+            ])
+        },
+        watch: {
+            event(newVal, oldVal){
+                this.publishUrl = `${document.location.protocol}//${document.location.hostname}${document.location.port ? ':'+document.location.port : ''}/#/events/${this.event.id}/public`;
+            },
+            publishEventModal(newVal, oldVal){
+              if (newVal){
+                  let that = this;
+                  setTimeout(()=>{
+                      let testingCodeToSelect = document.querySelector('#event-link');
+                      testingCodeToSelect.select();
+                  },100);
+              }
+            }
         }
-      } catch (err) {
-        // alert('Oops, unable to copy');
-      }
-    },
-    openInNewTab () {
-      window.open(this.publishUrl, '_blank')
-    }
-
-  },
-  computed: {
-    ...mapState('EventPlannerVuex', [
-      'publishEventModal'
-    ])
-  },
-  watch: {
-    event (newVal, oldVal) {
-      this.publishUrl = `${document.location.protocol}//${document.location.hostname}${document.location.port ? ':' + document.location.port : ''}/#/events/${this.event.id}/public`
-    },
-    publishEventModal (newVal, oldVal) {
-      if (newVal) {
-        let that = this
-        setTimeout(() => {
-          let testingCodeToSelect = document.querySelector('#event-link')
-          testingCodeToSelect.select()
-        }, 100)
-      }
-    }
-  }
-}
+    };
 </script>
 <style lang="scss" scoped>
     @import '@/assets/scss/md/_colors.scss';

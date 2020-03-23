@@ -80,180 +80,180 @@
   </div>
 </template>
 <script>
-import { Modal } from '@/components'
-import EventComponent from '@/models/EventComponent'
-import EventComponentProperty from '@/models/EventComponentProperty'
-import VueElementLoading from 'vue-element-loading'
-import Vue from 'vue'
+  import { Modal } from "@/components";
+  import EventComponent from '@/models/EventComponent';
+  import EventComponentProperty from '@/models/EventComponentProperty';
+  import VueElementLoading from 'vue-element-loading';
+  import Vue from 'vue';
 
-export default {
-  name: 'event-modal-components',
-  props: {
-    componentItem: Object,
-    component: Object,
-    componentIndex: Number,
-    componentItemIndex: Number,
-    componentId: String,
-    shouldUpdate: Boolean,
-    updateComponent: Function
-  },
-  components: {
-    Modal,
-    VueElementLoading
-  },
-  data () {
-    return {
-      isLoading: true,
-      modalOpen: false,
-      form: {
-        id: null,
-        title: '',
-        value: null,
-        comment: null
-      },
-      modelValidations: {
-        title: {
-          required: true
-        },
-        value: {
-          required: true
-        },
-        comment: {
-          required: true
-        }
-      },
-      propertyValuesObjects: [],
-      propertyValues: [],
-      propertyValuesArray: [],
-      list: [
-        {id: 1, name: 'Chicago Bulls', desc: 'bbb'},
-        {id: 2, name: 'Cleveland Cavaliers', desc: 'aaa'}
-      ]
-    }
-  },
-  methods: {
-    noticeModalHide () {
-      this.modalOpen = false
+  export default {
+    name: 'event-modal-components',
+    props: {
+      componentItem: Object,
+      component: Object,
+      componentIndex: Number,
+      componentItemIndex: Number,
+      componentId: String,
+      shouldUpdate: Boolean,
+      updateComponent: Function,
     },
-    toggleModal (show) {
-      this.modalOpen = show
+    components: {
+      Modal,
+      VueElementLoading,
     },
-    validateModalForm () {
-      this.$validator.validateAll().then(isValid => {
-        if (isValid) {
-          let store = this.$store.state.eventData.components[this.componentIndex]
-          this.form.propertyId = 'custom'
+    data() {
+      return {
+        isLoading: true,
+        modalOpen: false,
+        form: {
+          id: null,
+          title: "",
+          value: null,
+          comment: null,
+        },
+        modelValidations: {
+          title: {
+            required: true,
+          },
+          value: {
+            required: true,
+          },
+          comment: {
+            required: true,
+          }
+        },
+        propertyValuesObjects: [],
+        propertyValues: [],
+        propertyValuesArray: [],
+        list: [
+          {id:1 ,name:'Chicago Bulls',desc:'bbb'},
+          {id:2 ,name:'Cleveland Cavaliers',desc:'aaa'},
+        ]
+      }
+    },
+    methods: {
+      noticeModalHide() {
+        this.modalOpen = false;
+      },
+      toggleModal(show) {
+        this.modalOpen = show;
+      },
+      validateModalForm() {
+        this.$validator.validateAll().then(isValid => {
+          if (isValid) {
+            let store = this.$store.state.eventData.components[this.componentIndex];
+            this.form.propertyId = 'custom';
 
-          if (this.componentItemIndex !== null) {
-            Vue.set(store.values, this.componentItemIndex, this.form)
+            if (this.componentItemIndex !== null) {
+              Vue.set(store.values, this.componentItemIndex, this.form);
+            } else {
+              delete this.form.id; // remove id key
+              this.form.propertyId = 'custom';
+              store.values.push(this.form);
+            }
+
+            if (this.shouldUpdate) {
+              this.$props.updateComponent(store, this.form, this.componentItemIndex);
+            }
+
+            this.$store.commit('updateEventData', {index: this.componentIndex, data: store})
+            this.clearForm();
+            this.modalOpen = false;
           } else {
-            delete this.form.id // remove id key
-            this.form.propertyId = 'custom'
-            store.values.push(this.form)
+            this.showNotify();
           }
+        });
+      },
+      clearForm() {
+        this.form = {
+          id: null,
+          title: null,
+          value: null,
+          comment:  null,
+        };
+      },
+      setValue(selectedProperty) {
+        let changedPropertyItem = this.propertyValuesObjects.find((val) => val.title === selectedProperty);
 
-          if (this.shouldUpdate) {
-            this.$props.updateComponent(store, this.form, this.componentItemIndex)
-          }
-
-          this.$store.commit('updateEventData', {index: this.componentIndex, data: store})
-          this.clearForm()
-          this.modalOpen = false
+        if (changedPropertyItem) {
+          this.propertyValuesArray = 'possibleValues' in changedPropertyItem ? changedPropertyItem.possibleValues.map((val) => val.title) : [];
         } else {
-          this.showNotify()
+          this.propertyValuesArray = [];
         }
-      })
-    },
-    clearForm () {
-      this.form = {
-        id: null,
-        title: null,
-        value: null,
-        comment: null
-      }
-    },
-    setValue (selectedProperty) {
-      let changedPropertyItem = this.propertyValuesObjects.find((val) => val.title === selectedProperty)
+      },
+      showNotify() {
+        this.$notify({
+          message: 'Please, check all required fields',
+          icon: "warning",
+          horizontalAlign: 'center',
+          verticalAlign: 'top',
+          type: 'danger',
+        });
+      },
+      mdOpenedTitle:function() {
+        this.form.title += " ";
+        this.form.title = this.form.title.substring(0, this.form.title.length - 1)
+      },
+      mdOpenedValue:function() {
+        this.form.value += " ";
+        this.form.value = this.form.value.substring(0, this.form.value.length - 1)
+      },
+      getEventComponentProperty() {
+        let eventProperty = new EventComponentProperty().for(new EventComponent({id: this.component.componentId}));
 
-      if (changedPropertyItem) {
-        this.propertyValuesArray = 'possibleValues' in changedPropertyItem ? changedPropertyItem.possibleValues.map((val) => val.title) : []
-      } else {
-        this.propertyValuesArray = []
-      }
-    },
-    showNotify () {
-      this.$notify({
-        message: 'Please, check all required fields',
-        icon: 'warning',
-        horizontalAlign: 'center',
-        verticalAlign: 'top',
-        type: 'danger'
-      })
-    },
-    mdOpenedTitle: function () {
-      this.form.title += ' '
-      this.form.title = this.form.title.substring(0, this.form.title.length - 1)
-    },
-    mdOpenedValue: function () {
-      this.form.value += ' '
-      this.form.value = this.form.value.substring(0, this.form.value.length - 1)
-    },
-    getEventComponentProperty () {
-      let eventProperty = new EventComponentProperty().for(new EventComponent({id: this.component.componentId}))
-
-      eventProperty.get().then(eventProperties => {
-        this.propertyValuesObjects = eventProperties
-        this.propertyValues = []
-        eventProperties.forEach((eventProperty) => {
-          /* let p = {
+        eventProperty.get().then(eventProperties => {
+          this.propertyValuesObjects = eventProperties;
+          this.propertyValues = [];
+          eventProperties.forEach((eventProperty) => {
+            /*let p = {
               id: eventProperty.id,
                 title: eventProperty.title
-            }; */
-          if (eventProperty.type === 'Group') {
-            // p["list"] = [];
+            };*/
+            if (eventProperty.type === "Group"){
+              //p["list"] = [];
 
-            eventProperty.childProperties.forEach((childProperty) => {
-              let childP = {
-                id: childProperty.id,
-                title: childProperty.title,
-                group: eventProperty.title
-              }
-              this.propertyValues.push(childP)
-            })
-          }
-          // this.propertyValues.push(p);
+              eventProperty.childProperties.forEach((childProperty) => {
+                let childP = {
+                  id: childProperty.id,
+                  title: childProperty.title,
+                  group: eventProperty.title
+                };
+               this.propertyValues.push(childP);
+              });
+            }
+            //this.propertyValues.push(p);
+          });
+          this.isLoading = false;
         })
-        this.isLoading = false
-      })
-        .catch((error) => {
-          console.log(error)
-          this.isLoading = false
+          .catch((error) => {
+            console.log(error);
+            this.isLoading = false;
+          });
+      },
+    },
+    mounted() {
+      if (this.$store.state.componentsList === null) {
+        EventComponent.get().then((componentsList) => {
+          this.$store.state.componentsList = componentsList;
+          this.getEventComponentProperty();
         })
-    }
-  },
-  mounted () {
-    if (this.$store.state.componentsList === null) {
-      EventComponent.get().then((componentsList) => {
-        this.$store.state.componentsList = componentsList
-        this.getEventComponentProperty()
-      })
-        .catch((error) => {
-          console.log(error)
-          this.isLoading = false
-        })
-    } else {
-      this.getEventComponentProperty()
-    }
-  },
-  watch: {
-    componentItem: function (val) {
-      this.form.id = 'id' in val ? val.id : null
-      this.form.title = 'title' in val ? val.title : ''
-      this.form.value = 'value' in val ? val.value : ''
-      this.form.comment = 'comment' in val ? val.comment : ''
-    }
+          .catch((error) => {
+            console.log(error);
+            this.isLoading = false;
+          });
+      } else {
+        this.getEventComponentProperty();
+      }
+    },
+    watch: {
+      componentItem: function(val) {
+        this.form.id = 'id' in val ? val.id : null;
+        this.form.title = 'title' in val ? val.title : '';
+        this.form.value = 'value' in val ? val.value : '';
+        this.form.comment = 'comment' in val ? val.comment : '';
+      },
+    },
   }
-}
 </script>
 <style lang="scss">
   .change-icon-order {

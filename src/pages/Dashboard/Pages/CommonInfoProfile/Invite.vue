@@ -58,10 +58,10 @@
 </div>
 </template>
 <script>
-// HELPER FUNC
+//HELPER FUNC
 import {isWrong} from '@/utils/helperFunction'
 
-// COMPONENTS
+//COMPONENTS
 import InputText from '@/components/Inputs/InputText.vue'
 import Select from '@/components/Select/Select.vue'
 import Title from '@/components/Title/Title.vue'
@@ -69,55 +69,57 @@ import ButtonDiv from '@/components/Button/ButtonDiv.vue'
 import Button from '@/components/Button/Button.vue'
 
 export default {
-  name: 'Employee',
-  props: {
-    officeManager: String
-  },
-  components: {
-    InputText,
-    Select,
-    Title,
-    ButtonDiv,
-    Button
-  },
-  data () {
-    return {
-      employee_email: '',
-      isErrors: false
-    }
-  },
-  methods: {
-    onSkip: function () {
-      this.$router.push('/officeManager-form')
+    name:'Employee',
+    props:{
+       officeManager:String
     },
-    onChange: function (value, name) {
-      this[name] = value
-    },
-    UploadCSV: function () {
-      document.getElementById('csv-upload').click()
-    },
-    onFileChange: function (e) {
-      console.log(e, '@ eto func')
-      const reader = new FileReader()
-      reader.onload = e => {
-        console.log(e.target.result)
-      }
-      reader.readAsDataURL(e.target.files[0])
-    },
-    onSend: function () {
-      if (this.employee_email) {
-        const massages = this.employee_email.split(',').map(item => item.trim())
-        this.$store.dispatch('user/sendEvent', massages)
-      }
-    },
-    onNext: function () {
-      if (this.employee_email) {
-        const massages = this.employee_email.split(',').map(item => item.trim())
-        this.$store.dispatch('user/sendEvent', massages)
-      }
-      this.$router.push('/officeManager-form')
-    }
-  }
+    components:{
+   InputText,
+   Select,
+   Title,
+   ButtonDiv,
+   Button
+},
+data(){
+        return{
+               employee_email:'',
+               isErrors:false
+        }
+}
+,
+ methods: {
+         onSkip:function(){
+            this.$router.push('/officeManager-form')
+         }
+         ,
+         onChange:function(value, name){
+                 this[name]=value
+
+         },
+         UploadCSV:function(){
+                 document.getElementById('csv-upload').click()
+         }
+         ,onFileChange:function(e){
+                console.log(e,'@ eto func')
+                 const reader=new FileReader();
+                 reader.onload= e =>{
+                         console.log(e.target.result)
+                 }
+                 reader.readAsDataURL(e.target.files[0]);
+         },onSend:function(){
+                 if(this.employee_email){
+                      const massages=this.employee_email.split(',').map(item=>item.trim())
+                      this.$store.dispatch("user/sendEvent",massages)
+                 }
+         },
+         onNext:function(){
+                 if(this.employee_email){
+                      const massages=this.employee_email.split(',').map(item=>item.trim())
+                      this.$store.dispatch("user/sendEvent",massages)
+                 }
+                  this.$router.push('/officeManager-form')
+         }
+ },
 
 }
 </script>

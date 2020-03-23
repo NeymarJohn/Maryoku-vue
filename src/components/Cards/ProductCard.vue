@@ -42,48 +42,48 @@
 
 <script>
 export default {
-  name: 'product-card',
+  name: "product-card",
   props: {
     headerAnimation: {
       type: String,
-      default: 'true'
+      default: "true"
     }
   },
-  data () {
+  data() {
     return {
       hoverCount: 0,
       imgHovered: false,
       fixedHeader: false
-    }
+    };
   },
   computed: {
-    headerDown () {
-      return false // this.hoverCount > 15;
+    headerDown() {
+      return false; //this.hoverCount > 15;
     }
   },
   methods: {
-    headerBack: function () {
-      this.fixedHeader = false
+    headerBack: function() {
+      this.fixedHeader = false;
     },
-    fixHeader: function () {
-      this.hoverCount = 0
-      this.fixedHeader = true
+    fixHeader: function() {
+      this.hoverCount = 0;
+      this.fixedHeader = true;
 
-      setTimeout(this.headerBack, 480)
+      setTimeout(this.headerBack, 480);
     },
-    onMouseOver: function () {
-      if (this.headerAnimation === 'true') {
-        this.imgHovered = true
-        this.hoverCount++
+    onMouseOver: function() {
+      if (this.headerAnimation === "true") {
+        this.imgHovered = true;
+        this.hoverCount++;
       }
     },
-    onMouseLeave: function () {
-      if (this.headerAnimation === 'true') {
-        this.imgHovered = false
+    onMouseLeave: function() {
+      if (this.headerAnimation === "true") {
+        this.imgHovered = false;
       }
     }
   }
-}
+};
 </script>
 
 <style lang="scss">

@@ -30,24 +30,24 @@
   </div>
 </template>
 <script>
-import VueElementLoading from 'vue-element-loading'
+  import VueElementLoading from 'vue-element-loading'
 
-export default {
-  name: 'vendor-feedbacks',
-  components: {
-    VueElementLoading
-  },
-  props: {
-    feedbacks: Array,
-    ratings: Array
-  },
-  data: () => ({
-    isLoading: true
-  }),
-  mounted () {
-    this.isLoading = false
+  export default {
+    name: 'vendor-feedbacks',
+    components: {
+      VueElementLoading,
+    },
+    props: {
+      feedbacks: Array,
+      ratings: Array
+    },
+    data: () => ({
+      isLoading:true,
+    }),
+    mounted() {
+      this.isLoading = false;
+    },
   }
-}
 </script>
 <style lang="scss" scoped>
   @import "@/assets/scss/md/_variables.scss";
@@ -58,7 +58,7 @@ export default {
   .feedbacks-wrapper {
     display: flex;
     flex-direction: column;
-
+    
     .md-card {
       flex-basis: 100%;
       margin: 0;

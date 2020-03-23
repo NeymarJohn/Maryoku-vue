@@ -41,63 +41,69 @@
     </div>
 </template>
 <script>
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import Calendar from '@/models/Calendar'
-import CalendarEvent from '@/models/CalendarEvent'
-import EventComponent from '@/models/EventComponent'
-import VueElementLoading from 'vue-element-loading'
-// import auth from '@/auth';
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import Calendar from "@/models/Calendar";
+  import CalendarEvent from "@/models/CalendarEvent";
+  import EventComponent from "@/models/EventComponent";
+  import VueElementLoading from 'vue-element-loading';
+  // import auth from '@/auth';
 
-// COMPONENTS
-import { Tabs } from '@/components'
+  //COMPONENTS
+  import { Tabs } from "@/components";
 
-export default {
-  name: 'event-tabs',
-  components: {
-    Tabs
-  },
-  props: {
-    event,
-    readonly: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data: () => ({
-    editMode: false
-  }),
-  methods: {
-    toggleEditMode () {
-      this.editMode = !this.editMode
+
+  export default {
+    name: 'event-tabs',
+    components: {
+        Tabs
     },
-    editEventInfo () {
-      this.$parent.isLoading = true
+    props: {
+        event,
+        readonly : {
+            type : Boolean,
+            default : false
+        }
+    },
+    data: () => ({
+        editMode : false
+    }),
+    methods: {
+        toggleEditMode() {
+            this.editMode = !this.editMode;
+        },
+        editEventInfo() {
+            this.$parent.isLoading = true;
 
-      let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-      let editedEvent = new CalendarEvent({id: this.event.id})
 
-      editedEvent = this.event
-      editedEvent.eventPage.meetingPlaceDescription = this.event.eventPage.meetingPlaceDescription
-      editedEvent.eventPage.whenToArrive = this.event.eventPage.whenToArrive
-      editedEvent.eventPage.whatYouNeedToKnow = this.event.eventPage.whatYouNeedToKnow
-      delete editedEvent['owner']
-      editedEvent.save().then(response => {
-        this.toggleEditMode()
-      })
-        .catch((error) => {
-          console.log(error)
-        })
+            let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+            let editedEvent = new CalendarEvent({id: this.event.id});
+
+            editedEvent = this.event;
+            editedEvent.eventPage.meetingPlaceDescription = this.event.eventPage.meetingPlaceDescription;
+            editedEvent.eventPage.whenToArrive = this.event.eventPage.whenToArrive;
+            editedEvent.eventPage.whatYouNeedToKnow = this.event.eventPage.whatYouNeedToKnow;
+            delete editedEvent['owner'];
+            editedEvent.save().then(response => {
+
+                this.toggleEditMode();
+
+            })
+                .catch((error) => {
+                    console.log(error);
+
+                });
+
+        }
+
+    },
+    created() {
+
+    },
+    mounted() {
+
+    },
+    computed: {
+
     }
-
-  },
-  created () {
-
-  },
-  mounted () {
-
-  },
-  computed: {
-
   }
-}
 </script>

@@ -60,205 +60,228 @@
     </div>
 </template>
 <script>
-// import auth from '@/auth';
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import CalendarEvent from '@/models/CalendarEvent'
-import Calendar from '@/models/Calendar'
-import EventComponent from '@/models/EventComponent'
-import Vendors from '@/models/Vendors'
-import EventComponentVendor from '@/models/EventComponentVendor'
-import { paginationMixin } from '@/mixins/pagination'
-import { Pagination } from '@/components'
+    // import auth from '@/auth';
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+    import CalendarEvent from '@/models/CalendarEvent';
+    import Calendar from "@/models/Calendar";
+    import EventComponent from "@/models/EventComponent";
+    import Vendors from "@/models/Vendors";
+    import EventComponentVendor from "@/models/EventComponentVendor";
+    import { paginationMixin } from '@/mixins/pagination'
+    import { Pagination } from "@/components"
 
-import VendorsTable from '../../../../Vendors/Table/vendorsList'
-import UploadVendorsModal from '../../../../Vendors/ImportVendors'
-import MdCardContent from '../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue'
 
-import swal from 'sweetalert2'
-import {error} from 'util'
-import moment from 'moment'
-import VueElementLoading from 'vue-element-loading'
-import _ from 'underscore'
+    import VendorsTable from '../../../../Vendors/Table/vendorsList';
+    import UploadVendorsModal from '../../../../Vendors/ImportVendors';
+    import MdCardContent from "../../../../../../../node_modules/vue-material/src/components/MdCard/MdCardContent/MdCardContent.vue";
 
-export default {
-  components: {
-    MdCardContent,
-    VueElementLoading,
-    Pagination,
-    VendorsTable,
-    UploadVendorsModal
-  },
-  props: {
-    event: Object,
-    selectedBlock: Object
+    import swal from "sweetalert2";
+    import {error} from 'util';
+    import moment from 'moment';
+    import VueElementLoading from 'vue-element-loading';
+    import _ from "underscore";
 
-  },
-  data: () => ({
-    // auth: auth,
-    isLoading: false,
-    vendorsList: null,
-    pagination: {
-      limit: 10,
-      total: 0,
-      page: 1
-    },
-    tooltipModels: []
 
-  }),
-  mixins: [paginationMixin],
+    export default {
+        components: {
+            MdCardContent,
+            VueElementLoading,
+            Pagination,
+            VendorsTable,
+            UploadVendorsModal
+        },
+        props: {
+            event: Object,
+            selectedBlock : Object
 
-  created () {
-    this.$auth.currentUser(this, true, function () {
-      this.fetchData(0)
-    }.bind(this))
-  },
-  mounted () {
+        },
+        data: () => ({
+            // auth: auth,
+            isLoading : false,
+            vendorsList : null,
+            pagination : {
+                limit : 10,
+                total : 0,
+                page : 1
+            },
+            tooltipModels: [],
 
-  },
-  methods: {
 
-    closePanel () {
-      this.$emit('closePanel')
-      this.$root.$emit('VendorAdded')
-      this.$root.$emit('refreshBuildingBlock')
-    },
-    fetchData (page) {
-      this.loadingData = true
-      this.isLoading = true
+        }),
+        mixins: [paginationMixin],
 
-      Vendors.page(page)
-        .limit(this.pagination.limit)
-        .get().then(vendors => {
-          this.isLoading = false
+        created() {
+            this.$auth.currentUser(this, true, function(){
+                this.fetchData(0);
+            }.bind(this));
+        },
+        mounted() {
 
-          this.vendorsList = vendors[0].results
-          this.pagination.total = this.vendorsList.length
 
-          this.updatePagination(vendors[0].model)
-          this.loadingData = false
-          this.vendorsList.map((item, index) => {
-            this.tooltipModels.push({
-              value: false,
-              textarea: '',
-              rankingParameters: [
-                {
-                  name: 'Overal Experience',
-                  parameterName: 'overal_experience',
-                  value: ''
-                },
-                {
-                  name: 'Cleanliness and Maintenance',
-                  parameterName: 'cleanliness_and_maintenance',
-                  value: ''
+        },
+        methods: {
 
-                },
-                {
-                  name: 'Accuracy',
-                  parameterName: 'accuracy',
-                  value: ''
+            closePanel(){
+                this.$emit("closePanel");
+                this.$root.$emit('VendorAdded');
+                this.$root.$emit('refreshBuildingBlock');
 
-                },
-                {
-                  name: 'Value for money',
-                  parameterName: 'value_for_money',
-                  value: ''
+            },
+            fetchData(page) {
+                this.loadingData = true;
+                this.isLoading = true;
 
-                }, {
-                  name: 'Service',
-                  parameterName: 'service',
-                  value: ''
 
-                },
-                {
-                  name: 'Location & Parking',
-                  parameterName: 'location_parking',
-                  value: ''
+                Vendors.page(page)
+                    .limit(this.pagination.limit)
+                    .get().then(vendors => {
 
-                }
+                    this.isLoading = false;
 
-              ]
 
-            })
-          })
-        }, (error) => {
-          console.log(error)
-        })
-    },
-    onSelectVendor (data) {
-      this.isLoading = true
+                    this.vendorsList = vendors[0].results;
+                    this.pagination.total = this.vendorsList.length;
 
-      let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-      let event = new CalendarEvent({id: this.event.id})
-      let selected_block = new EventComponent({id: this.selectedBlock.id})
+                    this.updatePagination(vendors[0].model)
+                    this.loadingData = false;
+                    this.vendorsList.map((item, index) => {
+                        this.tooltipModels.push({
+                            value: false,
+                            textarea: '',
+                            rankingParameters: [
+                                {
+                                    name: 'Overal Experience',
+                                    parameterName: 'overal_experience',
+                                    value: ''
+                                },
+                                {
+                                    name: 'Cleanliness and Maintenance',
+                                    parameterName: 'cleanliness_and_maintenance',
+                                    value: ''
 
-      let vendor = {}
-      vendor.vendorId = data.id
+                                },
+                                {
+                                    name: 'Accuracy',
+                                    parameterName: 'accuracy',
+                                    value: ''
 
-      new EventComponentVendor(vendor).for(calendar, event, selected_block).save()
-        .then(resp => {
-          this.isLoading = false
-          this.$notify(
-            {
-              message: 'Vendor added successfully',
-              horizontalAlign: 'center',
-              verticalAlign: 'top',
-              type: 'success'
-            })
-        })
-        .catch(error => {
-          this.isLoading = false
+                                },
+                                {
+                                    name: 'Value for money',
+                                    parameterName: 'value_for_money',
+                                    value: ''
 
-          console.log('EventComponentVendor error =>', error)
+                                }, {
+                                    name: 'Service',
+                                    parameterName: 'service',
+                                    value: ''
 
-          this.$notify(
-            {
-              message: 'Error while trying to add vendor, try again!',
-              horizontalAlign: 'center',
-              verticalAlign: 'top',
-              type: 'danger'
-            })
-        })
-    },
-    openUploadModal () {
-      this.$refs.uploadModal.toggleModal(true)
-    },
-    onRemoveVendor (data) {
-      this.isLoading = true
+                                },
+                                {
+                                    name: 'Location & Parking',
+                                    parameterName: 'location_parking',
+                                    value: ''
 
-      let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-      let event = new CalendarEvent({id: this.event.id})
-      let selected_block = new EventComponent({id: this.selectedBlock.id})
+                                },
 
-      let vendor = new EventComponentVendor({id: data.id})
 
-      vendor.for(calendar, event, selected_block).delete()
-        .then(resp => {
-          this.isLoading = false
-          this.$notify(
-            {
-              message: 'Vendor deleted successfully',
-              horizontalAlign: 'center',
-              verticalAlign: 'top',
-              type: 'success'
-            })
-        })
-        .catch(error => {
-          this.isLoading = false
+                            ],
 
-          console.log('EventComponentVendor error =>', error)
+                        })
+                    });
 
-          this.$notify(
-            {
-              message: 'Error while trying to delete vendor, try again!',
-              horizontalAlign: 'center',
-              verticalAlign: 'top',
-              type: 'danger'
-            })
-        })
-    }
-  },
-  computed: {
+                }, (error) => {
+                    console.log(error)
+                });
+            },
+            onSelectVendor(data) {
 
-  }
-}
+
+                this.isLoading = true;
+
+
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+                let event = new CalendarEvent({id: this.event.id});
+                let selected_block = new EventComponent({id : this.selectedBlock.id});
+
+                let vendor = {};
+                vendor.vendorId = data.id;
+
+                new EventComponentVendor(vendor).for(calendar, event, selected_block).save()
+                    .then(resp => {
+
+                        this.isLoading = false;
+                        this.$notify(
+                            {
+                                message: 'Vendor added successfully',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'success'
+                            })
+
+                    })
+                    .catch(error => {
+                        this.isLoading = false;
+
+
+                        console.log('EventComponentVendor error =>',error);
+
+                        this.$notify(
+                            {
+                                message: 'Error while trying to add vendor, try again!',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'danger'
+                            })
+
+                    })
+
+            },
+            openUploadModal(){
+                this.$refs.uploadModal.toggleModal(true);
+            },
+            onRemoveVendor(data){
+
+                this.isLoading = true;
+
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+                let event = new CalendarEvent({id: this.event.id});
+                let selected_block = new EventComponent({id : this.selectedBlock.id});
+
+                let vendor = new EventComponentVendor({id : data.id});
+
+                vendor.for(calendar, event, selected_block).delete()
+                    .then(resp => {
+                        this.isLoading = false;
+                        this.$notify(
+                            {
+                                message: 'Vendor deleted successfully',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'success'
+                            })
+
+                    })
+                    .catch(error => {
+
+                        this.isLoading = false;
+
+
+                        console.log('EventComponentVendor error =>',error);
+
+                        this.$notify(
+                            {
+                                message: 'Error while trying to delete vendor, try again!',
+                                horizontalAlign: 'center',
+                                verticalAlign: 'top',
+                                type: 'danger'
+                            })
+
+                    })
+            }
+        },
+        computed: {
+
+        }
+    };
 </script>

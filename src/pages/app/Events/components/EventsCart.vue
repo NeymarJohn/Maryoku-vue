@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout">
+  <div class="md-layout">    
     <div class="md-layout-item md-size-25">
     <md-card class="md-card-profile">
         <div class='event-cart-header title-block'>
@@ -7,17 +7,17 @@
         <div class='title'>{{title}}</div>
         </div>
         <div class='button-block'>
-            <div>
-            <md-icon class='icon'>attach_file</md-icon>
+            <div>             
+            <md-icon class='icon'>attach_file</md-icon> 
             </div>
-            <div class='message-block'>
+            <div class='message-block'>           
             <md-icon class='icon'>speaker_notes</md-icon>
             <div class='message-count-block'>            3
             </div>
             </div>
-            <div>
+            <div>           
             <md-icon class='icon'>restore_from_trash</md-icon>
-            </div>
+            </div>          
         </div>
         </div>
          <md-card-content>
@@ -46,44 +46,45 @@
          <div>
          </div>
         </md-card-content>
-       </md-card>
+       </md-card>     
     </div>
   </div>
 </template>
 <script>
-// MAIN MODULES
-import moment from 'moment'
+//MAIN MODULES
+import moment from "moment";
 
-// COMPONENTS
+//COMPONENTS
+
 
 export default {
-  name: 'event-cart',
-  props: {
-    title: {type: String, default: 'test'}
+  name:'event-cart',
+  props:{
+       title:{type:String, default:'test'}     
+    },
+  components: {   
+   
   },
-  components: {
 
-  },
-
-  data () {
+  data() {
     return {
-
-    }
+            
+    };
   },
-  mounted () {
-
+  mounted() {
+   
   },
   methods: {
-
+   
   },
-  computed: {
+  computed: {    
   },
   filters: {
-
+    
   },
   watch: {
-  }
-}
+  },  
+};
 </script>
 
 <style lang="scss" scoped>
@@ -95,10 +96,10 @@ export default {
     display: flex;
     justify-content: space-between;
     }
-    .title-div{
+    .title-div{      
     display: flex;
     align-items: center;
-    .title{
+    .title{        
         opacity: 0.8;
         font-family: 'Roboto';
         font-size: 18px;
@@ -111,15 +112,15 @@ export default {
         color: rgba(255, 255, 255, 0.8);
         margin-left: 15px;
     }
-    }
+    }    
 
 }
 .button-block{
     display: flex;
     align-items: center;
   .button-height{
-      height: 20px;
-
+      height: 20px;      
+     
 }
 }
 

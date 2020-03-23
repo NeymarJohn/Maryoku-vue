@@ -40,125 +40,134 @@
     </div>
 </template>
 <script>
-// import auth from '@/auth';
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import CalendarEvent from '@/models/CalendarEvent'
-import EventPageHeaderImage from '@/models/EventPageHeaderImage'
-import {Modal} from '@/components'
-import Calendar from '@/models/Calendar'
-import EventComponent from '@/models/EventComponent'
+    // import auth from '@/auth';
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+    import CalendarEvent from '@/models/CalendarEvent';
+    import EventPageHeaderImage from '@/models/EventPageHeaderImage';
+    import {Modal} from "@/components";
+    import Calendar from "@/models/Calendar";
+    import EventComponent from "@/models/EventComponent";
 
-import swal from 'sweetalert2'
-import {error} from 'util'
-import moment from 'moment'
-import draggable from 'vuedraggable'
-import {Drag, Drop} from 'vue-drag-drop'
-import VueElementLoading from 'vue-element-loading'
+    import swal from "sweetalert2";
+    import {error} from 'util';
+    import moment from 'moment';
+    import draggable from 'vuedraggable';
+    import {Drag, Drop} from 'vue-drag-drop';
+    import VueElementLoading from 'vue-element-loading';
 
-export default {
-  components: {
-    draggable, Drag, Drop, VueElementLoading
+    export default {
+        components: {
+            draggable, Drag, Drop,VueElementLoading
 
-  },
-  props: {
-    event: Object
-  },
-  data: () => ({
-    // auth: auth,
-    categoryBuildingBlocks: [],
-    isLoaded: false,
-    filteredEventBlocks: [],
-    searchQuery: ''
+        },
+        props: {
+            event: Object,
+        },
+        data: () => ({
+            // auth: auth,
+            categoryBuildingBlocks: [],
+            isLoaded : false,
+            filteredEventBlocks  : [],
+            searchQuery : ''
 
-  }),
+        }),
 
-  created () {
+        created() {
 
-  },
-  mounted () {
-    this.getCategoryBlocks()
-  },
-  methods: {
-    ...mapMutations('EventPlannerVuex', ['setBuildingBlockModal']),
-    closeModal () {
-      this.setBuildingBlockModal({showModal: false})
-    },
-    closePanel (payload) {
-      this.$emit('closePanel', payload)
-    },
-    addBuildingBlock (item) {
-      // Save event interaction
-      let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-      let event = new CalendarEvent({id: this.event.id})
+        },
+        mounted() {
 
-      let new_block = {
-        componentId: item.id,
-        componentCategoryId: item.categoryId,
-        todos: '',
-        values: '',
-        vendors: '',
-        calendarEvent: {id: event.id}
-      }
+            this.getCategoryBlocks();
 
-      new EventComponent(new_block).for(calendar, event).save().then(res => {
-        this.$parent.isLoading = false
+        },
+        methods: {
+            ...mapMutations('EventPlannerVuex', ['setBuildingBlockModal']),
+            closeModal() {
+                this.setBuildingBlockModal({showModal: false});
+            },
+            closePanel(payload){
+                this.$emit("closePanel", payload);
+            },
+            addBuildingBlock(item) {
 
-        this.setBuildingBlockModal({showModal: false})
+                // Save event interaction
+                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+                let event = new CalendarEvent({id: this.event.id});
 
-        new EventComponent().for(calendar, event).find(res.item.id).then(item => {
-          this.$emit('closePanel', item)
-        })
-        this.$root.$emit('refreshBuildingBlock')
-      })
-        .catch(error => {
-          console.log('Error while saving ', error)
-        })
-    },
-    getCategoryBlocks () {
-      EventComponent.get()
-        .then(res => {
-          setTimeout(() => {
-            this.isLoaded = true
-          }, 500)
+                let new_block = {
+                    componentId: item.id,
+                    componentCategoryId: item.categoryId,
+                    todos: "",
+                    values: "",
+                    vendors: "",
+                    calendarEvent: {id: event.id}
+                }
 
-          this.categoryBuildingBlocks = res
-          this.filteredEventBlocks = this.categoryBuildingBlocks
-        })
-        .catch(error => {
-          console.log('Error ', error)
-        })
-    },
-    handleDrop (data, event) {
-      this.$parent.isLoading = true
+                new EventComponent(new_block).for(calendar, event).save().then(res => {
+                    this.$parent.isLoading = false;
 
-      let block = data.item ? data.item : data.item1
+                    this.setBuildingBlockModal({showModal: false});
 
-      if (block) {
-        this.addBuildingBlock(block)
-      } else {
-        this.$parent.isLoading = false
-      }
-    },
-    addBlock (item) {
-      this.addBuildingBlock(item)
-    },
-    filterEventElements () {
-      this.filteredEventBlocks = _.filter(this.categoryBuildingBlocks, (v) => {
-        return v.title.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1
-      })
-    }
-  },
-  computed: {
-    ...mapState('EventPlannerVuex', [
-      'addBuildingBlockModal'
-    ])
-  },
-  watch: {
-    searchQuery (newVal, oldVal) {
-      this.filterEventElements()
-    }
-  }
-}
+                    new EventComponent().for(calendar, event).find(res.item.id).then(item => {
+                      this.$emit("closePanel", item);
+                    });
+                    this.$root.$emit('refreshBuildingBlock');
+
+                })
+                    .catch(error => {
+                        console.log('Error while saving ', error);
+                    })
+
+            },
+            getCategoryBlocks() {
+                EventComponent.get()
+                    .then(res => {
+                        setTimeout( ()=>{
+                            this.isLoaded = true;
+                        } ,500);
+
+                        this.categoryBuildingBlocks = res;
+                        this.filteredEventBlocks = this.categoryBuildingBlocks;
+
+                    })
+                    .catch(error => {
+                        console.log('Error ', error);
+                    })
+            },
+            handleDrop(data, event) {
+
+                this.$parent.isLoading = true;
+
+                let block = data.item ? data.item : data.item1;
+
+                if (block) {
+                    this.addBuildingBlock(block);
+                } else {
+                    this.$parent.isLoading = false;
+
+                }
+
+            },
+            addBlock(item) {
+                this.addBuildingBlock(item);
+            },
+            filterEventElements(){
+                this.filteredEventBlocks = _.filter(this.categoryBuildingBlocks, (v)=>{
+                    return v.title.toString().toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1;
+                });
+            }
+        },
+        computed: {
+            ...mapState('EventPlannerVuex', [
+                'addBuildingBlockModal',
+            ])
+        },
+        watch : {
+            searchQuery(newVal, oldVal){
+                this.filterEventElements();
+            },
+        }
+    };
 </script>
 <style lang="scss" scope>
     .md-datepicker {

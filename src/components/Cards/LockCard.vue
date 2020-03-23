@@ -19,27 +19,27 @@
 
 <script>
 export default {
-  name: 'lock-card',
+  name: "lock-card",
   props: {
     imageProfile: {
       type: String,
-      default: ''
+      default: ""
     }
   },
-  data () {
+  data() {
     return {
       cardHidden: true
-    }
+    };
   },
-  beforeMount () {
-    setTimeout(this.showCard, 400)
+  beforeMount() {
+    setTimeout(this.showCard, 400);
   },
   methods: {
-    showCard: function () {
-      this.cardHidden = false
+    showCard: function() {
+      this.cardHidden = false;
     }
   }
-}
+};
 </script>
 
 <style lang="css">

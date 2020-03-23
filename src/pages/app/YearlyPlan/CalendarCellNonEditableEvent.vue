@@ -21,37 +21,37 @@
   </td>
 </template>
 <script>
-import CalendarEvent from '@/models/CalendarEvent'
+  import CalendarEvent from '@/models/CalendarEvent'
 
-export default {
-  name: 'non-editable-event',
-  components: {
+  export default {
+    name: 'non-editable-event',
+    components: {
 
-  },
-  props: {
-    calendarEvents: {
-      type: Object
     },
-    theDate: String,
-    dayOnMonth: String
-  },
-  methods: {
-    createEventFor (event) {
-      this.$router.push({ name: 'NewEvent', params: {selectedDate: this.theDate, selectedOccasion: event.title }})
-    }
-  },
-  created () {
+    props: {
+      calendarEvents: {
+        type: Object
+      },
+      theDate: String,
+      dayOnMonth: String,
+    },
+    methods: {
+      createEventFor(event){
+        this.$router.push({ name: 'NewEvent', params: {selectedDate: this.theDate, selectedOccasion: event.title }});
+      }
+    },
+    created() {
 
-  },
-  mounted () {
+    },
+    mounted() {
 
-  },
-  computed: {
-    cellContents () {
-      return this.calendarEvents.nonEditables[0].title
+    },
+    computed: {
+      cellContents() {
+        return this.calendarEvents.nonEditables[0].title;
+      },
     }
   }
-}
 </script>
 <style lang="scss">
   .non-editable-cell {

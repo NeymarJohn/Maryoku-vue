@@ -52,100 +52,100 @@
   </div>
 </template>
 <script>
-import { ZoomCenterTransition } from 'vue2-transitions'
+  import { ZoomCenterTransition } from "vue2-transitions";
 
-export default {
-  components: {
-    ZoomCenterTransition
-  },
-  props: {
-    backgroundColor: {
-      type: String,
-      default: 'black'
-    }
-  },
-  inject: {
-    autoClose: {
-      default: true
-    }
-  },
-  data () {
-    return {
-      responsive: false,
-      showMenu: false,
-      menuTransitionDuration: 250,
-      pageTransitionDuration: 300,
-      year: new Date().getFullYear()
-    }
-  },
-  computed: {
-    setBgImage () {
-      let images = {
-        Company: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
-        MeForm: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png'
+  export default {
+    components: {
+      ZoomCenterTransition
+    },
+    props: {
+      backgroundColor: {
+        type: String,
+        default: "black"
       }
+    },
+    inject: {
+      autoClose: {
+        default: true
+      }
+    },
+    data() {
       return {
-        backgroundImage: `url(${images[this.$route.name]})`
+        responsive: false,
+        showMenu: false,
+        menuTransitionDuration: 250,
+        pageTransitionDuration: 300,
+        year: new Date().getFullYear()
+      };
+    },
+    computed: {
+      setBgImage() {
+        let images = {
+          Company: "http://static.maryoku.com/storage/img/shutterstock_732491308.png",
+          MeForm: "http://static.maryoku.com/storage/img/shutterstock_495639391.png",
+        };
+        return {
+          backgroundImage: `url(${images[this.$route.name]})`
+        };
+      },
+      setPageClass() {
+        return `${this.$route.name}-page`.toLowerCase();
       }
     },
-    setPageClass () {
-      return `${this.$route.name}-page`.toLowerCase()
-    }
-  },
-  methods: {
-    toggleSidebarPage () {
-      if (this.$sidebar.showSidebar) {
-        this.$sidebar.displaySidebar(false)
-      }
-    },
-    linkClick () {
-      if (
-        this.autoClose &&
+    methods: {
+      toggleSidebarPage() {
+        if (this.$sidebar.showSidebar) {
+          this.$sidebar.displaySidebar(false);
+        }
+      },
+      linkClick() {
+        if (
+          this.autoClose &&
           this.$sidebar &&
           this.$sidebar.showSidebar === true
-      ) {
-        this.$sidebar.displaySidebar(false)
+        ) {
+          this.$sidebar.displaySidebar(false);
+        }
+      },
+      toggleSidebar() {
+        this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
+      },
+      toggleNavbar() {
+        document.body.classList.toggle("nav-open");
+        this.showMenu = !this.showMenu;
+      },
+      closeMenu() {
+        document.body.classList.remove("nav-open");
+        this.showMenu = false;
+      },
+      onResponsiveInverted() {
+        if (window.innerWidth < 991) {
+          this.responsive = true;
+        } else {
+          this.responsive = false;
+        }
       }
     },
-    toggleSidebar () {
-      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar)
+    mounted() {
+      this.onResponsiveInverted();
+      window.addEventListener("resize", this.onResponsiveInverted);
     },
-    toggleNavbar () {
-      document.body.classList.toggle('nav-open')
-      this.showMenu = !this.showMenu
+    beforeDestroy() {
+      this.closeMenu();
+      window.removeEventListener("resize", this.onResponsiveInverted);
     },
-    closeMenu () {
-      document.body.classList.remove('nav-open')
-      this.showMenu = false
-    },
-    onResponsiveInverted () {
-      if (window.innerWidth < 991) {
-        this.responsive = true
+    beforeRouteUpdate(to, from, next) {
+      // Close the mobile menu first then transition to next page
+      if (this.showMenu) {
+        this.closeMenu();
+        setTimeout(() => {
+          next();
+        }, this.menuTransitionDuration);
       } else {
-        this.responsive = false
+        next();
       }
     }
-  },
-  mounted () {
-    this.onResponsiveInverted()
-    window.addEventListener('resize', this.onResponsiveInverted)
-  },
-  beforeDestroy () {
-    this.closeMenu()
-    window.removeEventListener('resize', this.onResponsiveInverted)
-  },
-  beforeRouteUpdate (to, from, next) {
-    // Close the mobile menu first then transition to next page
-    if (this.showMenu) {
-      this.closeMenu()
-      setTimeout(() => {
-        next()
-      }, this.menuTransitionDuration)
-    } else {
-      next()
-    }
-  }
-}
+  };
 </script>
 <style lang="scss" scoped>
   $scaleSize: 0.1;

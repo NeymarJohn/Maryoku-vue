@@ -34,6 +34,7 @@
 
                 <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Create Event',  icon: 'event', path: '/event/create'}"></sidebar-item>
 
+
                 <li class="menu-divider"></li>
 
                 <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Events List',  icon: 'event', path: '/events'}"></sidebar-item>
@@ -53,6 +54,7 @@
                 <!--<li class="menu-divider"></li>
 
                 -->
+
 
                 <!--<sidebar-item :link="{name: 'Team', icon: 'group_add', path: '/team'}">
                 </sidebar-item>-->
@@ -171,120 +173,120 @@
     </div>
 </template>
 <script>
-/* eslint-disable no-new */
-import PerfectScrollbar from 'perfect-scrollbar'
-import 'perfect-scrollbar/css/perfect-scrollbar.css'
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import Calendar from '@/models/Calendar'
-import CalendarEvent from '@/models/CalendarEvent'
+  /* eslint-disable no-new */
+  import PerfectScrollbar from "perfect-scrollbar";
+  import "perfect-scrollbar/css/perfect-scrollbar.css";
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import Calendar from '@/models/Calendar';
+  import CalendarEvent from '@/models/CalendarEvent';
 
-import EventModal from '../../app/Events/EventModal/'
-import EventPlannerVuexModule from '../../app/Events/EventPlanner.vuex'
+  import EventModal from "../../app/Events/EventModal/";
+  import EventPlannerVuexModule from '../../app/Events/EventPlanner.vuex';
 
-import TopNavbar from './TopNavbar.vue'
-import ContentFooter from './ContentFooter.vue'
-import MobileMenu from './Extra/MobileMenu.vue'
-import UserMenu from './Extra/UserMenu.vue'
-import { ZoomCenterTransition } from 'vue2-transitions'
-// import auth from "src/auth";
-import EventSidePanel from '@/pages/app/Events/EventSidePanel'
-
-function hasElement (className) {
-  return document.getElementsByClassName(className).length > 0
-}
-
-function initScrollbar (className) {
-  if (hasElement(className)) {
-    new PerfectScrollbar(`.${className}`)
-  } else {
-    // try to init it later in case this component is loaded async
-    setTimeout(() => {
-      initScrollbar(className)
-    }, 100)
+  function hasElement(className) {
+    return document.getElementsByClassName(className).length > 0;
   }
-}
 
-export default {
-  components: {
-    TopNavbar,
-    ContentFooter,
-    MobileMenu,
-    UserMenu,
-    ZoomCenterTransition
-  },
-  data () {
-    return {
-      // auth: auth,
-      event: null,
-      createEventModalOpen: false
+  function initScrollbar(className) {
+    if (hasElement(className)) {
+      new PerfectScrollbar(`.${className}`);
+    } else {
+      // try to init it later in case this component is loaded async
+      setTimeout(() => {
+        initScrollbar(className);
+      }, 100);
     }
-  },
-  methods: {
-    ...mapMutations('EventPlannerVuex', [
-      'setEventModal',
-      'setEditMode',
-      'setModalSubmitTitle',
-      'setEventModalAndEventData',
-      'setNumberOfParticipants'
-    ]),
-    toggleSidebar () {
-      if (this.$sidebar.showSidebar) {
-        this.$sidebar.displaySidebar(false)
+  }
+
+  import TopNavbar from "./TopNavbar.vue";
+  import ContentFooter from "./ContentFooter.vue";
+  import MobileMenu from "./Extra/MobileMenu.vue";
+  import UserMenu from "./Extra/UserMenu.vue";
+  import { ZoomCenterTransition } from "vue2-transitions";
+  // import auth from "src/auth";
+  import EventSidePanel from '@/pages/app/Events/EventSidePanel';
+
+  export default {
+    components: {
+      TopNavbar,
+      ContentFooter,
+      MobileMenu,
+      UserMenu,
+      ZoomCenterTransition
+    },
+    data() {
+      return {
+        // auth: auth,
+        event : null,
+        createEventModalOpen: false
       }
     },
-    openEventModal () {
-      this.setModalSubmitTitle('Create')
-      let now = new Date()
-      this.createEventModalOpen = true
-      window.currentPanel = this.$showPanel({
-        component: EventSidePanel,
-        cssClass: 'md-layout-item md-size-40 transition36 ',
-        openOn: 'right',
-        disableBgClick: false,
-        props: {
-          modalSubmitTitle: 'Save',
-          editMode: false,
-          sourceEventData: {eventStartMillis: new Date().getTime(), numberOfParticipants: this.$auth.user.customer.numberOfEmployees},
-          refreshEvents: null,
-          year: now.getFullYear(),
-          month: now.getMonth(),
-          occasionsOptions: this.occasionsArray,
-          openInPlannerOption: false
+    methods: {
+      ...mapMutations("EventPlannerVuex", [
+        "setEventModal",
+        "setEditMode",
+        "setModalSubmitTitle",
+        "setEventModalAndEventData",
+        "setNumberOfParticipants"
+      ]),
+      toggleSidebar() {
+        if (this.$sidebar.showSidebar) {
+          this.$sidebar.displaySidebar(false);
         }
-      })
+      },openEventModal() {
+        this.setModalSubmitTitle("Create");
+        let now = new Date();
+        this.createEventModalOpen = true;
+        window.currentPanel = this.$showPanel({
+          component: EventSidePanel,
+          cssClass: 'md-layout-item md-size-40 transition36 ',
+          openOn: 'right',
+          disableBgClick: false,
+          props: {
+            modalSubmitTitle: 'Save',
+            editMode: false,
+            sourceEventData: {eventStartMillis: new Date().getTime(), numberOfParticipants: this.$auth.user.customer.numberOfEmployees},
+            refreshEvents: null,
+            year: now.getFullYear(),
+            month: now.getMonth(),
+            occasionsOptions: this.occasionsArray,
+            openInPlannerOption: false
+          }
+        });
 
-      window.currentPanel.promise.then(res => {
-        this.createEventModalOpen = false
-      })
+        window.currentPanel.promise.then(res=>{
+          this.createEventModalOpen = false;
+        });
+      }
+
+    },
+    created(){
+      this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
+    },
+    mounted() {
+
+
+      /*  NEET CODE REVIEW !!!!!!!!!!!!!!!!!!!!*/
+
+      // this.$auth.currentUser(this, true, function(){
+      //   let docClasses = document.body.classList;
+      //   let isWindows = navigator.platform.startsWith("Win");
+      //   if (isWindows) {
+      //     // if we are on windows OS we activate the perfectScrollbar function
+      //     initScrollbar("sidebar");
+      //     initScrollbar("sidebar-wrapper");
+      //     initScrollbar("main-panel");
+
+      //     docClasses.add("perfect-scrollbar-on");
+      //   } else {
+      //     docClasses.add("perfect-scrollbar-off");
+      //   }
+      // });
+    },
+    computed:{
+
     }
-
-  },
-  created () {
-    this.$store.registerModule('EventPlannerVuex', EventPlannerVuexModule)
-  },
-  mounted () {
-
-    /*  NEET CODE REVIEW !!!!!!!!!!!!!!!!!!!! */
-
-    // this.$auth.currentUser(this, true, function(){
-    //   let docClasses = document.body.classList;
-    //   let isWindows = navigator.platform.startsWith("Win");
-    //   if (isWindows) {
-    //     // if we are on windows OS we activate the perfectScrollbar function
-    //     initScrollbar("sidebar");
-    //     initScrollbar("sidebar-wrapper");
-    //     initScrollbar("main-panel");
-
-    //     docClasses.add("perfect-scrollbar-on");
-    //   } else {
-    //     docClasses.add("perfect-scrollbar-off");
-    //   }
-    // });
-  },
-  computed: {
-
-  }
-}
+  };
 </script>
 <style lang="scss" scoped>
     .menu-divider {
@@ -317,5 +319,6 @@ export default {
     .main-panel .zoomOut {
         animation-name: zoomOut95;
     }
+
 
 </style>

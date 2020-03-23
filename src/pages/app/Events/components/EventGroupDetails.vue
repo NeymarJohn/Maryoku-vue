@@ -80,118 +80,118 @@
 </template>
 <script>
 
-import EventInteraction from '@/models/EventInteraction'
-import Calendar from '@/models/Calendar'
-import GroupMembersPanel from './GroupMembersPanel'
-import EventInvitee from '@/models/EventInvitee'
-import LabelEdit from '@/components/LabelEdit'
-import _ from 'underscore'
+  import EventInteraction from '@/models/EventInteraction';
+  import Calendar from '@/models/Calendar';
+  import GroupMembersPanel from './GroupMembersPanel';
+  import EventInvitee from '@/models/EventInvitee';
+  import LabelEdit from '@/components/LabelEdit';
+  import _  from 'underscore';
 
-export default {
-  name: 'event-group-details',
-  components: { LabelEdit },
-  props: {
-    eventData: {
-      type: Object,
-      default: () => { return { title: ''} }
-    },
-    groupData: {
-      type: Object
-    }
-  },
-  data () {
-    return {
-      working: true,
-      noActions: false,
-      allInvitees: [],
-      availableInvitees: []
-    }
-  },
-  mounted () {
-    if (this.eventData) {
-      this.working = false
-    }
-  },
-  methods: {
-    addMember () {
-      if (this.groupData.invitees.length && this.groupData.invitees[0].id === 'new') return
-
-      this.groupData.invitees.unshift({id: 'new', firstName: null, lastName: null, emailAddress: null})
-    },
-    cancelAddMember () {
-      if (this.groupData.invitees.length && this.groupData.invitees[0].id !== 'new') return
-
-      this.groupData.invitees.shift()
-    },
-    saveMember (item) {
-      this.noActions = true
-      if (item.id === 'new') {
-        item.id = null
-        delete item['id']
-        alert(JSON.stringify(this.groupData))
-        new EventInvitee(item).for(this.groupData).save().then(res => {
-          this.groupData.invitees.shift()
-          this.groupData.invitees.push(res)
-          this.updateAvailableMembers()
-        }).finally(() => {
-          this.noActions = false
-        })
-      } else {
-        new EventInvitee(item).for(this.groupData).save().then(res => {
-          this.groupData.invitees.push(res)
-          this.updateAvailableMembers()
-        }).finally(() => {
-          this.noActions = false
-        })
+  export default {
+    name: 'event-group-details',
+    components: { LabelEdit },
+    props: {
+      eventData: {
+        type: Object,
+        default: ()=>{ return { title: ''};}
+      },
+      groupData: {
+        type: Object
       }
     },
-    removeMember (item) {
-      this.noActions = true
-      new EventInvitee(item).for(this.groupData).delete().then(res => {
-        let index = _.findIndex(this.groupData.invitees, (i) => { return i.id === item.id })
-        this.groupData.invitees.splice(index, 1)
-        this.updateAvailableMembers()
-        this.noActions = false
-      })
+    data(){
+      return {
+        working: true,
+        noActions: false,
+        allInvitees: [],
+        availableInvitees: []
+      };
     },
-    selectMember (item) {
-      this.saveMember(item)
+    mounted(){
+      if (this.eventData){
+        this.working = false;
+      }
     },
-    assignMembers () {
-      window.currentPanel = this.$showPanel({
-        component: GroupMembersPanel,
-        cssClass: 'md-layout-item md-size-50 transition36 bg-grey',
-        openOn: 'right',
-        disableBgClick: false,
-        props: {
-          eventData: this.eventData,
-          groupData: this.groupData
+    methods: {
+      addMember(){
+        if (this.groupData.invitees.length && this.groupData.invitees[0].id === 'new') return;
+
+        this.groupData.invitees.unshift({id:'new',firstName:null,lastName:null,emailAddress: null});
+      },
+      cancelAddMember(){
+        if (this.groupData.invitees.length && this.groupData.invitees[0].id !== 'new') return;
+
+        this.groupData.invitees.shift();
+      },
+      saveMember(item){
+        this.noActions = true;
+        if (item.id === 'new'){
+          item.id = null;
+          delete item['id'];
+          alert(JSON.stringify(this.groupData));
+          new EventInvitee(item).for(this.groupData).save().then(res=>{
+            this.groupData.invitees.shift();
+            this.groupData.invitees.push(res);
+            this.updateAvailableMembers();
+          }).finally(()=>{
+            this.noActions = false;
+          });
+        } else {
+          new EventInvitee(item).for(this.groupData).save().then(res=>{
+            this.groupData.invitees.push(res);
+            this.updateAvailableMembers();
+          }).finally(()=>{
+            this.noActions = false;
+          });
         }
-      })
-    },
-    saveGroup () {
+      },
+      removeMember(item){
+        this.noActions = true;
+        new EventInvitee(item).for(this.groupData).delete().then(res=>{
+          let index = _.findIndex(this.groupData.invitees,(i)=>{return i.id === item.id});
+          this.groupData.invitees.splice(index,1);
+          this.updateAvailableMembers();
+          this.noActions = false;
+        });
+      },
+      selectMember(item){
+        this.saveMember(item);
+      },
+      assignMembers(){
+        window.currentPanel = this.$showPanel({
+          component: GroupMembersPanel,
+          cssClass: 'md-layout-item md-size-50 transition36 bg-grey',
+          openOn: 'right',
+          disableBgClick: false,
+          props: {
+            eventData: this.eventData,
+            groupData: this.groupData
+          }
+        });
+      },
+      saveGroup(){
 
-    },
-    memberDetailsChanged (val, fieldName, item) {
-      item[fieldName] = val
-    },
-    updateAvailableMembers () {
-      this.availableInvitees = _.filter(this.allInvitees, (i) => { return !_.findWhere(this.groupData.invitees, {id: i.id}) })
-    }
-  },
-  watch: {
-    groupData (newVal, oldVal) {
-      if (!this.groupData.invitees) {
-        this.groupData.invitees = []
+      },
+      memberDetailsChanged(val, fieldName, item) {
+        item[fieldName] = val;
+      },
+      updateAvailableMembers(){
+        this.availableInvitees = _.filter(this.allInvitees,(i)=>{ return  !_.findWhere(this.groupData.invitees,{id: i.id} )});
       }
-      new EventInvitee().get().then(res => {
-        this.allInvitees = res
-        this.updateAvailableMembers()
-        this.working = false
-      })
+    },
+    watch: {
+      groupData(newVal, oldVal){
+        if (!this.groupData.invitees){
+          this.groupData.invitees = [];
+        }
+        new EventInvitee().get().then(res =>{
+          this.allInvitees = res;
+          this.updateAvailableMembers();
+          this.working = false;
+        })
+      }
     }
   }
-}
 </script>
 <style lang="scss" scoped>
   @import '@/assets/scss/md/_colors.scss';

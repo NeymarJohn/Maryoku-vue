@@ -58,27 +58,28 @@
 </template>
 
 <script>
-import CreateModal from './CreateModal'
+import CreateModal from './CreateModal';
 import {
   mapState,
   mapGetters,
   mapMutations,
   mapActions
-} from 'vuex'
-import VendorsTable from './Table/vendorsList'
-import companyForm from './Form/companyForm.vue'
-import UploadModal from './ImportVendors'
+} from 'vuex';
+import VendorsTable from './Table/vendorsList';
+import companyForm from './Form/companyForm.vue';
+import UploadModal from './ImportVendors';
 import {
   Pagination
-} from '@/components'
-import Vendors from '@/models/Vendors'
-import EventComponent from '@/models/EventComponent'
-import VendorCategories from '@/models/VendorCategories'
-import VueElementLoading from 'vue-element-loading'
+} from "@/components"
+import Vendors from "@/models/Vendors";
+import EventComponent from "@/models/EventComponent";
+import VendorCategories from "@/models/VendorCategories";
+import VueElementLoading from 'vue-element-loading';
 // import auth from '@/auth';
 import {
   paginationMixin
 } from '@/mixins/pagination'
+
 
 export default {
   components: {
@@ -87,10 +88,10 @@ export default {
     VueElementLoading,
     UploadModal,
     Pagination,
-    companyForm
+    companyForm,
   },
   mixins: [paginationMixin],
-  data () {
+  data() {
     return {
       // auth: auth,
       vendorsList: [],
@@ -105,30 +106,30 @@ export default {
       myVendors: false
     }
   },
-  created () {
+  created() {
     this.$auth.currentUser(this, true, function () {
-      this.fetchData(0)
-    }.bind(this))
+      this.fetchData(0);
+    }.bind(this));
   },
   methods: {
     ...mapMutations('vendors', ['resetForm']),
 
-    fetchData (page, catId = '') {
-      this.loadingData = true
+    fetchData(page, catId = "") {
+      this.loadingData = true;
 
       new EventComponent().get().then(res => {
-        let list = []
+        let list = [];
         res.forEach((parentBuildingBlock) => {
-          /* parentBuildingBlock.childComponents.forEach((bb)=>{
+          /*parentBuildingBlock.childComponents.forEach((bb)=>{
               list.push({id: bb.id, value: bb.title});
-          }); */
+          });*/
           list.push({
             id: parentBuildingBlock.id,
             value: parentBuildingBlock.value
-          })
-        })
-        this.buildingBlocksList = list
-      })
+          });
+        });
+        this.buildingBlocksList = list;
+      });
 
       Vendors.page(page)
         .limit(this.pagination.limit)
@@ -137,81 +138,85 @@ export default {
           'shared': !this.myVendors
         })
         .get().then(vendors => {
-          this.vendorsList = vendors[0].results
+
+          this.vendorsList = vendors[0].results;
 
           this.updatePagination(vendors[0].model)
-          this.loadingData = false
+          this.loadingData = false;
+
 
           this.vendorsList.map((item, index) => {
             this.tooltipModels.push({
               value: false,
               textarea: '',
               rankingParameters: [{
-                name: 'Overal Experience',
-                parameterName: 'overal_experience',
-                value: ''
-              },
-              {
-                name: 'Cleanliness and Maintenance',
-                parameterName: 'cleanliness_and_maintenance',
-                value: ''
+                  name: 'Overal Experience',
+                  parameterName: 'overal_experience',
+                  value: ''
+                },
+                {
+                  name: 'Cleanliness and Maintenance',
+                  parameterName: 'cleanliness_and_maintenance',
+                  value: ''
 
-              },
-              {
-                name: 'Accuracy',
-                parameterName: 'accuracy',
-                value: ''
+                },
+                {
+                  name: 'Accuracy',
+                  parameterName: 'accuracy',
+                  value: ''
 
-              },
-              {
-                name: 'Value for money',
-                parameterName: 'value_for_money',
-                value: ''
+                },
+                {
+                  name: 'Value for money',
+                  parameterName: 'value_for_money',
+                  value: ''
 
-              }, {
-                name: 'Service',
-                parameterName: 'service',
-                value: ''
+                }, {
+                  name: 'Service',
+                  parameterName: 'service',
+                  value: ''
 
-              },
-              {
-                name: 'Location & Parking',
-                parameterName: 'location_parking',
-                value: ''
+                },
+                {
+                  name: 'Location & Parking',
+                  parameterName: 'location_parking',
+                  value: ''
 
-              }
+                },
 
-              ]
+
+              ],
 
             })
-          })
+          });
         }, (error) => {
           console.log(error)
-        })
+        });
     },
-    openInviteModal () {
+    openInviteModal() {
       //        this.$refs.inviteModal.toggleModal(true);
       //        this.resetForm();
-      this.$set(this, 'vendor_selected', false)
-      this.$set(this, 'selected_vendor', {})
-      this.$set(this, 'add_vendor', true)
-      this.$refs.VendorsTable.resetSelectedVendor({})
+      this.$set(this, 'vendor_selected', false);
+      this.$set(this, 'selected_vendor', {});
+      this.$set(this, 'add_vendor', true);
+      this.$refs.VendorsTable.resetSelectedVendor({});
     },
-    openUploadModal () {
-      this.$refs.uploadModal.toggleModal(true)
+    openUploadModal() {
+      this.$refs.uploadModal.toggleModal(true);
     },
-    onSelectVendor (data) {
-      this.$set(this, 'vendor_selected', true)
-      this.$set(this, 'selected_vendor', data)
-      this.$set(this, 'add_vendor', false)
+    onSelectVendor(data) {
+      this.$set(this, 'vendor_selected', true);
+      this.$set(this, 'selected_vendor', data);
+      this.$set(this, 'add_vendor', false);
+
     },
-    onCloseVendorForm (data) {
-      this.$set(this, 'vendor_selected', false)
-      this.$set(this, 'selected_vendor', {})
-      this.$set(this, 'add_vendor', false)
+    onCloseVendorForm(data) {
+      this.$set(this, 'vendor_selected', false);
+      this.$set(this, 'selected_vendor', {});
+      this.$set(this, 'add_vendor', false);
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .md-table-head-label {

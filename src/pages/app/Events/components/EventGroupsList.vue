@@ -87,106 +87,106 @@
   </div>
 </template>
 <script>
-import EventInteraction from '@/models/EventInteraction'
-import EventGroupDetails from './EventGroupDetails'
-import Calendar from '@/models/Calendar'
-import EventInviteeGroup from '@/models/EventInviteeGroup'
-import LabelEdit from '@/components/LabelEdit'
-import _ from 'underscore'
-import swal from 'sweetalert2'
+  import EventInteraction from '@/models/EventInteraction';
+  import EventGroupDetails from './EventGroupDetails';
+  import Calendar from '@/models/Calendar';
+  import EventInviteeGroup from '@/models/EventInviteeGroup';
+  import LabelEdit from '@/components/LabelEdit';
+  import _ from 'underscore';
+  import swal from "sweetalert2";
 
-export default {
-  name: 'event-groups-list',
-  components: {
-    LabelEdit,
-    EventGroupDetails
-  },
-  props: {
-    eventData: {
-      type: Object,
-      default: () => { return { title: ''} }
-    }
-  },
-  data () {
-    return {
-      working: false,
-      groupsList: [],
-      visibleGroup: null
-    }
-  },
-  mounted () {
-    this.working = true
-    if (this.eventData) {
-      this.refreshList()
-    }
-  },
-  watch: {
-    eventData (newVal, oldVal) {
-      this.refreshList()
-    }
-  },
-  methods: {
-    refreshList () {
-      this.working = true
-      new EventInviteeGroup().get().then(res => {
-        this.groupsList = res
-        this.working = false
-        if (this.groupsList.length) {
-          this.groupDetails(this.groupsList[0])
-        }
-      })
+  export default {
+    name: 'event-groups-list',
+    components: {
+      LabelEdit,
+      EventGroupDetails
     },
-    createNewGroup () {
-      if (!this.groupsList.length || this.groupsList[0].id !== 'new') {
-        this.groupsList.unshift({id: 'new', title: '', selected: false})
+    props: {
+      eventData: {
+        type: Object,
+        default: ()=>{ return { title: ''};}
       }
     },
-    saveGroup (item) {
-      new EventInviteeGroup(item).save().then(res => {
-        // this.working = false;
-        this.groupsList.unshift(res.item)
-        this.groupDetails(res.item)
-      })
+    data() {
+      return {
+        working: false,
+        groupsList: [],
+        visibleGroup: null
+      };
     },
-    deleteGroup (item) {
-      swal({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonClass: 'md-button md-success btn-fill',
-        cancelButtonClass: 'md-button md-danger btn-fill',
-        confirmButtonText: 'Yes, delete it!'
-      }).then(async result => {
-        if (result.value) {
-          if (this.visibleGroup && this.visibleGroup.id === item.id) {
-            this.visibleGroup = this.groupsList.length ? this.groupsList[0] : null
+    mounted(){
+      this.working = true;
+      if (this.eventData){
+        this.refreshList();
+      }
+    },
+    watch: {
+      eventData(newVal, oldVal){
+        this.refreshList();
+      }
+    },
+    methods: {
+      refreshList(){
+        this.working = true;
+        new EventInviteeGroup().get().then(res=>{
+          this.groupsList = res;
+          this.working = false;
+          if (this.groupsList.length) {
+            this.groupDetails(this.groupsList[0]);
           }
-          new EventInviteeGroup(item).delete().then(res => {
-            let index = _.findIndex(this.groupsList, (g) => { return g.id === item.id })
-            this.groupsList.splice(index, 1)
-          })
+        });
+      },
+      createNewGroup(){
+        if (!this.groupsList.length || this.groupsList[0].id !== 'new'){
+          this.groupsList.unshift({id: 'new',title:'',selected: false});
         }
-      })
-    },
-    groupDetails (item) {
-      this.visibleGroup = item
-    },
-    groupNameChanged (val, fieldName, item) {
-      item[fieldName] = val
+      },
+      saveGroup(item){
+        new EventInviteeGroup(item).save().then(res=>{
+          //this.working = false;
+          this.groupsList.unshift(res.item);
+          this.groupDetails(res.item);
+        });
+      },
+      deleteGroup(item){
+        swal({
+          title: "Are you sure?",
+          text: "You won't be able to revert this!",
+          type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+          confirmButtonText: "Yes, delete it!"
+        }).then(async result => {
+          if (result.value) {
+            if (this.visibleGroup && this.visibleGroup.id === item.id){
+              this.visibleGroup = this.groupsList.length ? this.groupsList[0] : null;
+            }
+            new EventInviteeGroup(item).delete().then(res=>{
+              let index = _.findIndex(this.groupsList, (g)=>{ return g.id === item.id});
+              this.groupsList.splice(index,1);
+            });
+          }
+        });
+      },
+      groupDetails(item){
+        this.visibleGroup = item;
+      },
+      groupNameChanged(val, fieldName,item) {
+        item[fieldName] = val;
 
-      if (item.id === 'new') {
-        item.id = null
-        delete item['id']
-        this.groupsList.shift()
+        if (item.id === 'new') {
+          item.id = null;
+          delete item['id'];
+          this.groupsList.shift();
+        }
+        this.saveGroup(item);
+      },
+      changeGroupSelection($event, item){
+
       }
-      this.saveGroup(item)
     },
-    changeGroupSelection ($event, item) {
-
-    }
   }
-}
 </script>
 <style lang="scss" scoped>
   @import '@/assets/scss/md/_colors.scss';

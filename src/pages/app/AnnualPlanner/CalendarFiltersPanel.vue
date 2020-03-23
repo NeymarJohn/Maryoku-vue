@@ -9,41 +9,43 @@
 </template>
 
 <script>
-// import auth from '@/auth';
-import VueElementLoading from 'vue-element-loading'
+  // import auth from '@/auth';
+  import VueElementLoading from 'vue-element-loading';
 
-export default {
-  name: 'calendar-filters-panel',
-  components: {
-    VueElementLoading
-  },
-  props: {
 
-  },
-  data () {
-    return {
-      ready: false,
-      // auth: auth,
-      isLoading: true
+  export default {
+    name: 'calendar-filters-panel',
+    components: {
+      VueElementLoading,
+    },
+    props: {
+
+    },
+    data() {
+
+      return {
+        ready: false,
+        // auth: auth,
+        isLoading: true
+      }
+    },
+    created() {
+
+    },
+    mounted(){
+      this.ready = true;
+      this.isLoading = false;
+    },
+    methods: {
+
+    },
+    computed: {
+
+    },
+    watch: {
+
     }
-  },
-  created () {
-
-  },
-  mounted () {
-    this.ready = true
-    this.isLoading = false
-  },
-  methods: {
-
-  },
-  computed: {
-
-  },
-  watch: {
-
-  }
-}
+  };
 </script>
 <style lang="scss">
 

@@ -11,6 +11,7 @@
         </md-select>
       </md-field>
 
+
       <md-button native-type="submit" @click="openImageGallery" class="md-success">
         Image Gallery
         <span class="badge md-round md-info" v-if="uploadedImages.length">{{ uploadedImages.length }}</span>
@@ -29,84 +30,84 @@
 </template>
 
 <script>
-import CalendarEvent from '@/models/CalendarEvent'
-import CalendarEventImage from '@/models/CalendarEventImage'
-import Calendar from '@/models/Calendar'
-import EventGalleryModal from './EventGalleryModal'
+  import CalendarEvent from '@/models/CalendarEvent';
+  import CalendarEventImage from '@/models/CalendarEventImage';
+  import Calendar from '@/models/Calendar';
+  import EventGalleryModal from './EventGalleryModal';
 
-export default {
-  name: 'event-actions-show',
-  components: {
-    EventGalleryModal
-  },
-  props: {
-    event: Object
-  },
-  data: () => ({
-    uploadedImages: [],
-    isModalLoading: false
-  }),
-  created () {
-    this.isModalLoading = true
+  export default {
+    name: 'event-actions-show',
+    components: {
+      EventGalleryModal,
+    },
+    props: {
+      event: Object
+    },
+    data: () => ({
+      uploadedImages: [],
+      isModalLoading: false,
+    }),
+    created() {
+      this.isModalLoading = true;
 
-    if (this.$store.state.calendarId === null) {
-      Calendar.get().then((calendars) => {
-        this.$store.state.calendarId = calendars[0].id
-        this.getEventImages()
-      })
-        .catch((error) => {
-          console.log(error)
-          this.isModalLoading = false
+      if (this.$store.state.calendarId === null) {
+        Calendar.get().then((calendars) => {
+          this.$store.state.calendarId = calendars[0].id;
+          this.getEventImages();
         })
-    } else {
-      this.getEventImages()
-    }
-  },
-  methods: {
-    getEventImages () {
-      CalendarEvent.custom(`${process.env.SERVER_URL}/1/calendars/${this.$store.state.calendarId}/events/${this.$route.params.id}/images/`).get().then(images => {
-        this.uploadedImages = images.map((image) => {
-          return {
-            'src': `${process.env.SERVER_URL}${image.href}`,
-            'thumb': `${process.env.SERVER_URL}${image.href}`,
-            'id': image.id
+          .catch((error) => {
+            console.log(error);
+            this.isModalLoading = false;
+          });
+      } else {
+        this.getEventImages();
+      }
+    },
+    methods: {
+      getEventImages() {
+        CalendarEvent.custom(`${process.env.SERVER_URL}/1/calendars/${this.$store.state.calendarId}/events/${this.$route.params.id}/images/`).get().then(images => {
+          this.uploadedImages = images.map((image) => {
+            return {
+              'src': `${process.env.SERVER_URL}${image.href}`,
+              'thumb': `${process.env.SERVER_URL}${image.href}`,
+              'id': image.id
+            }
+          });
+          this.isModalLoading = false;
+        })
+          .catch((error) => {
+            console.log(error);
+            this.isModalLoading = false;
+          });
+      },
+      editEvent() {
+        this.$router.push({ path: `/events/${this.$route.params.id}/edit` });
+      },
+      updateEvent(status) {
+        let _calendar = new Calendar({id: this.$store.state.calendarId});
+        let editedEvent = new CalendarEvent({id: this.event.id});
+
+        editedEvent.eventStatus = status;
+        editedEvent.for(_calendar).save().then(response => {
+        })
+          .catch((error) => {
+            console.log(error);
+          });
+      },
+      openImageGallery() {
+        this.$refs.galleryModal.toggleModal(true);
+      },
+    },
+    watch: {
+      'event.eventStatus': {
+        handler: function(newVal) {
+          if (newVal != '' && newVal != undefined) {
+            return this.updateEvent(newVal);
           }
-        })
-        this.isModalLoading = false
-      })
-        .catch((error) => {
-          console.log(error)
-          this.isModalLoading = false
-        })
-    },
-    editEvent () {
-      this.$router.push({ path: `/events/${this.$route.params.id}/edit` })
-    },
-    updateEvent (status) {
-      let _calendar = new Calendar({id: this.$store.state.calendarId})
-      let editedEvent = new CalendarEvent({id: this.event.id})
-
-      editedEvent.eventStatus = status
-      editedEvent.for(_calendar).save().then(response => {
-      })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-    openImageGallery () {
-      this.$refs.galleryModal.toggleModal(true)
-    }
-  },
-  watch: {
-    'event.eventStatus': {
-      handler: function (newVal) {
-        if (newVal != '' && newVal != undefined) {
-          return this.updateEvent(newVal)
         }
       }
-    }
+    },
   }
-}
 </script>
 
 <style lang="scss">

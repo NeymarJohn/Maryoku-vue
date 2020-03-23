@@ -1,17 +1,17 @@
-import Model from './Model'
-import ProposalRequestComment from './ProposalRequestComment'
-import ProposalRequestRequirement from './ProposalRequestRequirement'
+import Model from './Model';;
+import ProposalRequestComment from './ProposalRequestComment';
+import ProposalRequestRequirement from './ProposalRequestRequirement';
 
 export default class ProposalRequest extends Model {
-  resource () {
+  resource() {
     return 'proposal-requests'
   }
 
-  comments () {
+  comments() {
     return this.hasMany(ProposalRequestComment)
   }
 
-  requirements () {
+  requirements() {
     return this.hasMany(ProposalRequestRequirement)
   }
 }

@@ -17,40 +17,40 @@
 </template>
 <script>
 
-export default {
-  name: 'event-confirmation',
-  components: {
+    export default {
+        name: 'event-confirmation',
+        components: {
 
-  },
-  props: {
-    event,
-    userInfo: Object,
-    userResponse: Object
-  },
-  data: () => ({
-    isLoading: false
-  }),
-  methods: {
-    showSignIn () {
-      this.$root.$emit('event-confirmation', null)
-    },
-    confirmGoing (isGoing) {
-      this.$root.$emit('event-confirmation', isGoing)
+        },
+        props: {
+            event,
+            userInfo: Object,
+            userResponse: Object
+        },
+        data: () => ({
+            isLoading: false
+        }),
+        methods: {
+            showSignIn(){
+                this.$root.$emit("event-confirmation", null);
+            },
+            confirmGoing(isGoing){
+                this.$root.$emit("event-confirmation", isGoing);
+            }
+
+        },
+        created() {
+
+        },
+        mounted() {
+
+        },
+        watch: {
+            userResponse(newVal, oldVal){
+                this.isLoading = false;
+            }
+        }
     }
-
-  },
-  created () {
-
-  },
-  mounted () {
-
-  },
-  watch: {
-    userResponse (newVal, oldVal) {
-      this.isLoading = false
-    }
-  }
-}
 </script>
 <style lang="scss" scoped>
 

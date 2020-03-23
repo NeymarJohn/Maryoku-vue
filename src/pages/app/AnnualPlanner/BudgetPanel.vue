@@ -116,199 +116,203 @@
 </template>
 
 <script>
-// import auth from '@/auth';
-import ChartComponent from '@/components/Cards/ChartComponent'
-import Calendar from '@/models/Calendar'
-import Customer from '@/models/Customer'
-import numeral from 'numeral'
+    // import auth from '@/auth';
+    import VueElementLoading from 'vue-element-loading';
+    import ChartComponent from '@/components/Cards/ChartComponent';
+    import Calendar from '@/models/Calendar';
+    import Customer from '@/models/Customer';
+    import numeral from 'numeral';
 
-import {
-  AnimatedNumber,
-  LabelEdit
-} from '@/components'
+    import {
+        AnimatedNumber,
+        LabelEdit
+    } from "@/components";
 
-export default {
-  name: 'budget-panel',
-  components: {
-    ChartComponent,
-    AnimatedNumber,
-    LabelEdit
-  },
-  props: {
-    month: {
-      type: Number
-    },
-    year: {
-      type: Number
-    },
-    statistics: {
-      type: Object
-    }
-  },
-  data () {
-    return {
-      fieldName: '',
-      ready: false,
-      // auth: auth,
-      isLoading: true,
-      budgetType: false,
-      statisticData: {},
-      editAnnualBudgetPerEmployee: false,
-      editNumberOfEmployees: false,
-      editAnnualBudget: false,
-      annualBudgetPerEmployee: 0,
-      numberOfEmployees: 0,
-      annualBudget: 0,
-      countEvents: 0,
-      totalRemainingBudget: 0,
-      percentage: 0,
-      remainingBudgetPerEmployee: 0,
-      seriesData: [],
-      annualBudgetCache: null,
-      annualBudgetPerEmployeeCache: null,
-      modelValidations: {
-        annualBudgetPerEmployee: {
-          required: true,
-          min_value: 1,
-          max_value: 1000000
+
+    export default {
+        name: 'budget-panel',
+        components: {
+            VueElementLoading,
+            ChartComponent,
+            AnimatedNumber,
+            LabelEdit
         },
-        annualBudget: {
-          required: true,
-          min_value: 1,
-          max_value: 1000000
+        props: {
+            month : {
+                type: Number
+            },
+            year: {
+                type: Number
+            },
+            statistics: {
+                type: Object
+            }
         },
-        numberOfEmployees: {
-          required: true,
-          min_value: 1,
-          max_value: 1000000
-        }
-      }
-    }
-  },
-  created () {
-    this.queryBudgetInfo()
-  },
-  mounted () {
-    this.ready = true
-    this.isLoading = true
-    this.queryInProgress = false
-  },
-  methods: {
-    saveBudgeData (val, fieldName) {
-      this.isLoading = true
-      this.fieldName = fieldName
-      if (fieldName === 'annualBudget') {
-        this.annualBudget = Number(val)
-        this.annualBudgetPerEmployee = this.annualBudget / this.numberOfEmployees
-      } else if (fieldName === 'numberOfEmployees') {
-        this.numberOfEmployees = Number(val)
-      } else if (fieldName === 'annualBudgetPerEmployee') {
-        this.annualBudgetPerEmployee = Number(val)
-      }
-
-      this.$auth.user.customer.numberOfEmployees = this.numberOfEmployees
-      this.$ls.set('user', this.$auth.user, 1000 * 60 * 10)
-
-      let calendarId = this.$auth.user.defaultCalendarId
-      let calendar = new Calendar({id: calendarId, annualBudgetPerEmployee: Number(this.annualBudgetPerEmployee)})
-      let customer = new Customer({id: this.$auth.user.customer.id, numberOfEmployees: Number(this.numberOfEmployees)})
-
-      customer.save().then(customerResponse => {
-        this.numberOfEmployees = customerResponse.item.numberOfEmployees
-        calendar.save().then(response => {
-          // const fieldName = this.fieldName;
-          this.$emit('month-count')
-          // this.queryBudgetInfo();
-          this.isLoading = false
-          this.closeEditMode()
-        }).catch(error => {
-          console.error(error)
-          this.resetField()
-        })
-      }).catch(error => {
-        console.error(error)
-        this.resetField()
-      })
-    },
-    queryBudgetInfo () {
-      if (!this.queryInProgress) {
-        this.queryInProgress = true
-        if (this.statistics) {
-          this.annualBudget = this.statistics.annualBudget | numeral('0,0')
-          this.numberOfEmployees = this.$auth.user.customer.numberOfEmployees | numeral('0,0')
-          this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee | numeral('0,0')
-
-          this.totalRemainingBudget = this.statistics.annualBudget - (this.statistics.annualBudgetPerEmployeeAllocated * this.numberOfEmployees)// this.statistics.annualBudgetAllocated;
-          this.remainingBudgetPerEmployee = this.statistics.annualBudgetPerEmployee - this.statistics.annualBudgetPerEmployeeAllocated
-          this.countEvents = this.statistics.numberOfEvents
-          this.percentage = ((this.remainingBudgetPerEmployee / this.annualBudgetPerEmployee) * 100).toFixed(2) // 100 - ((this.statistics.annualBudgetAllocated / this.statistics.annualBudget) * 100).toFixed(2);
-          if (this.percentage > 0) {
-            this.seriesData = [{value: (100 - this.percentage), className: 'budget-chart-slice-a-positive'}, {value: this.percentage, className: 'budget-chart-slice-b-positive'}]
-          } else {
-            this.seriesData = [{value: 0.01, className: 'budget-chart-slice-a-negative'}, {value: 99.99, className: 'budget-chart-slice-b-negative'}]
-          }
-          this.annualBudgetCache = this.annualBudget
-          this.annualBudgetPerEmployeeCache = this.annualBudgetPerEmployee
-        }
-        this.queryInProgress = false
-      }
-      this.isLoading = false
-    },
-    closeEditMode (val = undefined, fieldName = undefined) {
-      /* if (fieldName==='annualBudget') {
+        data() {
+            return {
+                fieldName: '',
+                ready: false,
+                // auth: auth,
+                isLoading: true,
+                budgetType: false,
+                statisticData: {},
+                editAnnualBudgetPerEmployee: false,
+                editNumberOfEmployees: false,
+                editAnnualBudget: false,
+                annualBudgetPerEmployee: 0,
+                numberOfEmployees: 0,
+                annualBudget: 0,
+                countEvents: 0,
+                totalRemainingBudget: 0,
+                percentage: 0,
+                remainingBudgetPerEmployee: 0,
+                seriesData: [],
+                annualBudgetCache: null,
+                annualBudgetPerEmployeeCache: null,
+                modelValidations: {
+                    annualBudgetPerEmployee: {
+                        required: true,
+                        min_value: 1,
+                        max_value: 1000000,
+                    },
+                    annualBudget: {
+                        required: true,
+                        min_value: 1,
+                        max_value: 1000000,
+                    },
+                    numberOfEmployees: {
+                        required: true,
+                        min_value: 1,
+                        max_value: 1000000,
+                    },
+                },
+            }
+        },
+        created() {
+            this.queryBudgetInfo();
+        },
+        mounted(){
+            this.ready = true;
+            this.isLoading = true;
+            this.queryInProgress = false;
+        },
+        methods: {
+            saveBudgeData (val, fieldName) {
+                this.isLoading = true;
+                this.fieldName = fieldName;
+                if (fieldName == 'annualBudget') {
                     this.annualBudget = Number(val);
-                } else if (fieldName==='numberOfEmployees') {
+                    this.annualBudgetPerEmployee = this.annualBudget / this.numberOfEmployees
+                } else if (fieldName == 'numberOfEmployees') {
                     this.numberOfEmployees = Number(val);
-                } else if (fieldName==='annualBudgetPerEmployee') {
+                } else if (fieldName == 'annualBudgetPerEmployee') {
                     this.annualBudgetPerEmployee = Number(val);
-                } */
-      this.editAnnualBudgetPerEmployee = false
-      this.editNumberOfEmployees = false
-      this.editAnnualBudget = false
-    },
-    resetField () {
-      this.annualBudget = this.annualBudgetCache
-      this.annualBudgetPerEmployee = this.annualBudgetPerEmployeeCache
-      this.closeEditMode()
-    },
-    openEditAnnualBudgetPerEmployee () {
-      this.editAnnualBudgetPerEmployee = true
-    },
-    openEditNumberOfEmployees () {
-      this.editNumberOfEmployees = true
-    },
-    openEditAnnualBudget () {
-      this.editAnnualBudget = true
-    }
-  },
-  computed: {
-    pieChart () {
-      return {
-        data: {
-          labels: [' ', ' '], // should be empty to remove text from chart
-          series: this.seriesData
+                }
+
+                this.$auth.user.customer.numberOfEmployees = this.numberOfEmployees;
+                this.$ls.set("user", this.$auth.user, 1000 * 60 * 10);
+
+                let calendarId = this.$auth.user.defaultCalendarId;
+                let calendar = new Calendar({id: calendarId, annualBudgetPerEmployee:  Number(this.annualBudgetPerEmployee)});
+                let customer = new Customer({id: this.$auth.user.customer.id, numberOfEmployees: Number(this.numberOfEmployees)});
+
+                customer.save().then(customerResponse => {
+                    this.numberOfEmployees = customerResponse.item.numberOfEmployees;
+                    calendar.save().then(response => {
+                        // const fieldName = this.fieldName;
+                        this.$emit("month-count");
+                        // this.queryBudgetInfo();
+                        this.isLoading = false;
+                        this.closeEditMode();
+                    }).catch(error => {
+                        console.error(error);
+                        this.resetField();
+
+                    });
+                }).catch(error => {
+                    console.error(error);
+                    this.resetField();
+                });
+            },
+            queryBudgetInfo(){
+                if (!this.queryInProgress){
+                    this.queryInProgress = true;
+                    if (this.statistics) {
+                        this.annualBudget = this.statistics.annualBudget | numeral('0,0');
+                        this.numberOfEmployees = this.$auth.user.customer.numberOfEmployees | numeral('0,0');
+                        this.annualBudgetPerEmployee = this.statistics.annualBudgetPerEmployee | numeral('0,0');
+
+                        this.totalRemainingBudget = this.statistics.annualBudget - (this.statistics.annualBudgetPerEmployeeAllocated*this.numberOfEmployees);//this.statistics.annualBudgetAllocated;
+                        this.remainingBudgetPerEmployee = this.statistics.annualBudgetPerEmployee - this.statistics.annualBudgetPerEmployeeAllocated;
+                        this.countEvents = this.statistics.numberOfEvents;
+                        this.percentage = ((this.remainingBudgetPerEmployee / this.annualBudgetPerEmployee)*100).toFixed(2); //100 - ((this.statistics.annualBudgetAllocated / this.statistics.annualBudget) * 100).toFixed(2);
+                        if (this.percentage > 0) {
+                            this.seriesData = [{value: (100-this.percentage), className:"budget-chart-slice-a-positive"}, {value: this.percentage, className:"budget-chart-slice-b-positive"}];
+                        } else {
+                            this.seriesData =  [{value: 0.01, className: "budget-chart-slice-a-negative"},{value: 99.99, className: "budget-chart-slice-b-negative"}];
+                        }
+                        this.annualBudgetCache = this.annualBudget;
+                        this.annualBudgetPerEmployeeCache = this.annualBudgetPerEmployee;
+                    }
+                    this.queryInProgress = false;
+                }
+                this.isLoading = false;
+            },
+            closeEditMode(val = undefined, fieldName = undefined) {
+                /*if (fieldName == 'annualBudget') {
+                    this.annualBudget = Number(val);
+                } else if (fieldName == 'numberOfEmployees') {
+                    this.numberOfEmployees = Number(val);
+                } else if (fieldName == 'annualBudgetPerEmployee') {
+                    this.annualBudgetPerEmployee = Number(val);
+                }*/
+                this.editAnnualBudgetPerEmployee = false;
+                this.editNumberOfEmployees = false;
+                this.editAnnualBudget = false;
+            },
+            resetField() {
+                this.annualBudget = this.annualBudgetCache;
+                this.annualBudgetPerEmployee = this.annualBudgetPerEmployeeCache;
+                this.closeEditMode();
+            },
+            openEditAnnualBudgetPerEmployee(){
+                this.editAnnualBudgetPerEmployee = true;
+            },
+            openEditNumberOfEmployees(){
+                this.editNumberOfEmployees = true;
+            },
+            openEditAnnualBudget(){
+                this.editAnnualBudget = true;
+            },
         },
-        options: {
-          padding: 0,
-          height: 120,
-          donut: true,
-          donutWidth: 12
+        computed: {
+            pieChart() {
+                return {
+                    data: {
+                        labels: [" ", " "], // should be empty to remove text from chart
+                        series: this.seriesData
+                    },
+                    options: {
+                        padding: 0,
+                        height: 120,
+                        donut: true,
+                        donutWidth: 12
+                    }
+                }
+            },
+        },
+        watch: {
+            year(newVal, oldVal){
+                this.queryBudgetInfo();
+            },
+            month(newVal, oldVal){
+                this.queryBudgetInfo();
+            },
+            statistics(newVal, oldVal){
+                this.queryBudgetInfo();
+            }
         }
-      }
-    }
-  },
-  watch: {
-    year (newVal, oldVal) {
-      this.queryBudgetInfo()
-    },
-    month (newVal, oldVal) {
-      this.queryBudgetInfo()
-    },
-    statistics (newVal, oldVal) {
-      this.queryBudgetInfo()
-    }
-  }
-}
+    };
 </script>
 
 <style scoped lang="scss">

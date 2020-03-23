@@ -123,12 +123,14 @@
 
                                 </div>
 
+
                             </md-card-content>
                         </md-card>
 
                         <div class="payment-policy">
                             By clicking pay now, you agree to pay the total amount shown, which includes tax and service Fee.
                         </div>
+
 
                     </div>
                 </div>
@@ -139,100 +141,106 @@
 </template>
 
 <script>
-// import auth from '@/auth';
-import Vue from 'vue'
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import CalendarEvent from '@/models/CalendarEvent'
-import Calendar from '@/models/Calendar'
-import EventComponent from '@/models/EventComponent'
-import {Tabs} from '@/components'
+    // import auth from '@/auth';
+    import Vue from 'vue';
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+    import CalendarEvent from '@/models/CalendarEvent';
+    import Calendar from "@/models/Calendar";
+    import EventComponent from "@/models/EventComponent";
+    import {Tabs} from '@/components'
 
-import swal from 'sweetalert2'
-import {error} from 'util'
-import moment from 'moment'
-import VueElementLoading from 'vue-element-loading'
-import _ from 'underscore'
-import ViewProposal from './ViewProposal.vue'
-import EventBlockRequirements from '../Modals/EventBlockRequirements.vue'
-import EventComponentProposal from '@/models/EventComponentProposal'
+    import swal from "sweetalert2";
+    import {error} from 'util';
+    import moment from 'moment';
+    import VueElementLoading from 'vue-element-loading';
+    import _ from "underscore";
+    import ViewProposal from './ViewProposal.vue'
+    import EventBlockRequirements from '../Modals/EventBlockRequirements.vue'
+    import EventComponentProposal from '@/models/EventComponentProposal';
 
-// var stripe = Stripe('pk_test_Pf5EtcXWfAPTNuKeJ6IDqQPu00zkS2tASs');
+    //var stripe = Stripe('pk_test_Pf5EtcXWfAPTNuKeJ6IDqQPu00zkS2tASs');
 
-// Create an instance of Elements.
-// var elements = stripe.elements();
+    // Create an instance of Elements.
+    //var elements = stripe.elements();
 
-var card = undefined
+    var card = undefined;
 
-export default {
-  components: {
-    VueElementLoading,
-    Tabs,
-    EventBlockRequirements
-  },
-  props: {
-    event: Object,
-    selectedBlock: Object,
-    proposal: Object,
-    winnerId: {
-      type: String,
-      default: null
-    }
-  },
-  data: () => ({
-    // auth: auth,
-    isLoaded: false,
-    proposalsToDisplay: 1,
-    ratings: [1, 2, 3, 4, 5],
-    feedbackRating: 3,
-    proposalAccepted: false,
-    image: 'https://i.imgur.com/HhqxVCW.jpg',
-    name: 'Shut up and take my money!',
-    description: 'Cats are the best dog!',
-    currency: 'PHP',
-    amount: 99999
-  }),
-
-  created () {
-
-  },
-  mounted () {
-    setTimeout(() => {
-      // Custom styling can be passed to options when creating an Element.
-      // (Note that this demo uses a wider set of styles than the guide below.)
-      var style = {
-        base: {
-          color: '#32325d',
-          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-          fontSmoothing: 'antialiased',
-          fontSize: '16px',
-          '::placeholder': {
-            color: '#aab7c4'
-          },
-          ':-webkit-autofill': {
-            color: '#32325d'
-          }
+    export default {
+        components: {
+            VueElementLoading,
+            Tabs,
+            EventBlockRequirements
         },
-        invalid: {
-          color: '#fa755a',
-          iconColor: '#fa755a',
-          ':-webkit-autofill': {
-            color: '#fa755a'
-          }
-        }
-      }
+        props: {
+            event: Object,
+            selectedBlock : Object,
+            proposal : Object,
+            winnerId : {
+                type : String,
+                default : null
+            }
+        },
+        data: () => ({
+            // auth: auth,
+            isLoaded : false,
+            proposalsToDisplay : 1,
+            ratings: [1, 2, 3, 4, 5],
+            feedbackRating : 3,
+            proposalAccepted : false,
+            image: 'https://i.imgur.com/HhqxVCW.jpg',
+            name: 'Shut up and take my money!',
+            description: 'Cats are the best dog!',
+            currency: 'PHP',
+            amount: 99999
+        }),
 
-      // card = elements.create('card');
-      // card.mount(this.$refs.card);
+        created() {
 
-      // console.log('elements => ', elements);
-    }, 100)
-  },
-  methods: {
+        },
+        mounted() {
 
-    submitPayment (event) {
-      let self = this
+            setTimeout(()=>{
 
-      /* stripe.createToken(card).then(function(result) {
+                // Custom styling can be passed to options when creating an Element.
+                // (Note that this demo uses a wider set of styles than the guide below.)
+                var style = {
+                    base: {
+                        color: '#32325d',
+                        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+                        fontSmoothing: 'antialiased',
+                        fontSize: '16px',
+                        '::placeholder': {
+                            color: '#aab7c4'
+                        },
+                        ':-webkit-autofill': {
+                            color: '#32325d',
+                        },
+                    },
+                    invalid: {
+                        color: '#fa755a',
+                        iconColor: '#fa755a',
+                        ':-webkit-autofill': {
+                            color: '#fa755a',
+                        },
+                    }
+                };
+
+                //card = elements.create('card');
+                //card.mount(this.$refs.card);
+
+
+                //console.log('elements => ', elements);
+            },100);
+
+
+
+        },
+        methods: {
+
+            submitPayment(event) {
+                let self = this;
+
+                /*stripe.createToken(card).then(function(result) {
                     console.log(result);
                     if (result.error) {
                         self.hasCardErrors = true;
@@ -240,12 +248,12 @@ export default {
                         return;
                     }
 
-                }); */
-    }
+                });*/
+            }
 
-  },
-  computed: {
+        },
+        computed: {
 
-  }
-}
+        }
+    };
 </script>

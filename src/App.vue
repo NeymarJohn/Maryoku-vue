@@ -1,86 +1,89 @@
 <template>
-  <div>
-    <slideout-panel></slideout-panel>
-    <router-view></router-view>
-  </div>
+    <div>
+        <slideout-panel></slideout-panel>
+        <router-view></router-view>
+    </div>
 </template>
 
 <script>
-// import auth from '@/auth';
-// import Model from '@/models/Model'
+  // import auth from '@/auth';
+  import Model from '@/models/Model';
 
-export default {
-  components: {},
-  data () {
-    return {
-      // auth: auth
-    }
-  },
-  created () {},
-  mounted () {
-    let before = new Date()
-    const that = this
-    if (window.focusEventListener != null) {
-      window.removeEventListener('focus', window.focusEventListener)
-      window.focusEventListener = null
-    }
-    window.focusEventListener = window.addEventListener('focus', function () {
-      const now = new Date()
-      if (now.getTime() - before.getTime() >= 300000) {
-        that.$auth.currentUser(that, true)
-      } else {
-        before = new Date()
+  export default {
+    components: {
+
+    },
+    data(){
+      return {
+        //auth: auth
       }
-    })
+    },
+    created() {
+    },
+    mounted(){
+      let before = new Date();
+      const that = this;
+      if (window.focusEventListener != null){
+        window.removeEventListener('focus', window.focusEventListener);
+        window.focusEventListener = null;
+      }
+      window.focusEventListener = window.addEventListener('focus', function(){
+        const now = new Date();
+        if ((now.getTime() - before.getTime()) >= 300000) {
+          that.$auth.currentUser(that,true);
+        } else {
+          before = new Date();
+        }
+      });
 
-    let initialMessage = document.getElementById('initial-message')
-    if (initialMessage) {
-      initialMessage.remove()
+      let initialMessage = document.getElementById("initial-message");
+      if (initialMessage){
+        initialMessage.remove();
+      }
     }
-  }
-}
+  };
 </script>
 <style lang="scss">
-.slideout.transition36 {
-  transition: transform 0.36s ease-out !important;
-}
-.slideout.w100 {
-  width: 100% !important;
-}
-.slideout.w75 {
-  width: 75% !important;
-}
+    .slideout.transition36 {
+        transition: transform 0.36s ease-out !important;
+    }
+    .slideout.w100{
+        width: 100% !important;
+    }
+    .slideout.w75{
+        width: 75% !important;
+    }
 
-.slideout.w50 {
-  width: 50% !important;
-}
+    .slideout.w50{
+        width: 50% !important;
+    }
 
-.slideout.w25 {
-  width: 25% !important;
-}
+    .slideout.w25{
+        width: 25% !important;
+    }
 
-.slideout.h25 {
-  height: 25% !important;
-}
+    .slideout.h25{
+        height: 25% !important;
+    }
 
-.slideout.h50 {
-  height: 50% !important;
-}
+    .slideout.h50{
+        height: 50% !important;
+    }
 
-.slideout.h65 {
-  height: 65% !important;
-}
+    .slideout.h65{
+        height: 65% !important;
+    }
 
-.slideout.h75 {
-  height: 75% !important;
-  padding-left: 89px;
-}
+    .slideout.h75{
+        height: 75% !important;
+        padding-left: 89px;
+    }
 
-.slideout.h100 {
-  height: 100% !important;
-}
+    .slideout.h100{
+        height: 100% !important;
+    }
 
-.slideout.bg-grey {
-  background-color: #eeeeee !important;
-}
+    .slideout.bg-grey {
+        background-color: #EEEEEE !important;
+    }
 </style>

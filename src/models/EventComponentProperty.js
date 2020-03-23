@@ -1,15 +1,16 @@
-import Model from './Model'
+import Model from './Model';
 
 export default class EventComponentProperty extends Model {
-  resource () {
+  resource() {
     return 'properties'
   }
 
-  asMenuOption () {
+  asMenuOption(){
+
     let menuOption = {
       id: this.id,
       title: this.title
-    }
+    };
 
     return menuOption
   }

@@ -46,105 +46,105 @@
     </div>
 </template>
 <script>
-import VueElementLoading from 'vue-element-loading'
-import swal from 'sweetalert2'
-import companyForm from './Form/companyForm.vue'
-import UploadModal from './ImportVendors'
-import VendorsGrid from './VendorsGrid'
-import VendorsList from './VendorsList'
+    import VueElementLoading from 'vue-element-loading';
+    import swal from "sweetalert2";
+    import companyForm from './Form/companyForm.vue';
+    import UploadModal from './ImportVendors';
+    import VendorsGrid from './VendorsGrid';
+    import VendorsList from './VendorsList';
 
-import Vendors from '@/models/Vendors'
-import EventComponent from '@/models/EventComponent'
-import _ from 'underscore'
+    import Vendors from '@/models/Vendors';
+    import EventComponent from '@/models/EventComponent';
+    import _ from 'underscore';
 
-export default {
-  name: 'vendors-pool',
-  components: {
-    VueElementLoading,
-    companyForm,
-    UploadModal,
-    VendorsGrid,
-    VendorsList
-  },
-  props: {
-    inPanel: Boolean
-  },
-  data () {
-    return {
-      view: 'grid', // {grid, list}
-      working: false,
-      vendorsList: [],
-      buildingBlocksList: [],
-      ratings: [1, 2, 3, 4, 5],
-      searchTerm: ''
-    }
-  },
-  mounted () {
-    this.working = true
-    this.$auth.currentUser(this, true, () => {
-      Vendors.find('categories').then(res => {
-        let list = []
-        _.each(res, (parentBuildingBlock) => {
-          /* parentBuildingBlock.childComponents.forEach((bb)=>{
+    export default {
+        name: "vendors-pool",
+        components: {
+            VueElementLoading,
+            companyForm,
+            UploadModal,
+            VendorsGrid,
+            VendorsList
+        },
+        props: {
+            inPanel: Boolean
+        },
+        data() {
+            return {
+                view: "grid", //{grid, list}
+                working: false,
+                vendorsList: [],
+                buildingBlocksList: [],
+                ratings: [1, 2, 3, 4, 5],
+                searchTerm: ""
+            };
+        },
+        mounted() {
+            this.working = true;
+            this.$auth.currentUser(this, true, ()=>{
+                Vendors.find('categories').then(res=>{
+                    let list = [];
+                    _.each(res, (parentBuildingBlock)=>{
+                        /*parentBuildingBlock.childComponents.forEach((bb)=>{
                             list.push({id: bb.id, value: bb.title});
-                        }); */
-          list.push({id: parentBuildingBlock.id, value: parentBuildingBlock.value})
-        })
+                        });*/
+                        list.push({id: parentBuildingBlock.id, value: parentBuildingBlock.value});
+                    });
 
-        this.buildingBlocksList = list
+                    this.buildingBlocksList = list;
 
-        new Vendors().limit(1000).get().then((vendors) => {
-          this.vendorsList = vendors[0].results
-          this.working = false
-        })
-      })
-    })
-  },
-  methods: {
-    changeView (view) {
-      this.view = view
-    },
-    showDeleteAlert (vendor) {
-      swal({
-        title: 'Are you sure?',
-        text: `You won't be able to revert this!`,
-        showCancelButton: true,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonClass: 'md-button md-success confirm-btn-bg ',
-        cancelButtonClass: 'md-button md-danger cancel-btn-bg',
-        confirmButtonText: 'Yes, delete it!',
-        buttonsStyling: false
-      }).then(result => {
-        if (result.value) {
-          this.working = true
+                    new Vendors().limit(1000).get().then((vendors) => {
+                        this.vendorsList = vendors[0].results;
+                        this.working = false;
+                    });
+                });
+            });
+        },
+        methods: {
+            changeView (view) {
+                this.view = view;
+            },
+            showDeleteAlert(vendor) {
+                swal({
+                    title: "Are you sure?",
+                    text: `You won't be able to revert this!`,
+                    showCancelButton: true,
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "md-button md-success confirm-btn-bg ",
+                    cancelButtonClass: "md-button md-danger cancel-btn-bg",
+                    confirmButtonText: "Yes, delete it!",
+                    buttonsStyling: false
+                }).then(result => {
+                    if (result.value) {
+                        this.working = true;
 
-          vendor.delete()
-            .then(result => {
-              let indx = _.findIndex(this.vendorsList, {id: vendor.id})
-              this.vendorsList.splice(indx, 1)
-              this.working = false
-            })
-            .catch(() => {
-              this.working = false
-            })
-        }
-      })
-    },
+                        vendor.delete()
+                            .then(result => {
+                                let indx = _.findIndex(this.vendorsList, {id: vendor.id});
+                                this.vendorsList.splice(indx, 1);
+                                this.working = false;
+                            })
+                            .catch(() => {
+                                this.working = false;
+                            });
+                    }
+                });
+            },
 
-    editVendorDetails (vendor) {
-      this.$router.push({ name: 'EditVendor', params: { id: vendor.id, creation_mode: false } })
-    },
-    addNewVendor () {
-      this.$router.push({ name: 'CreateVendor', props: { default: true, creation_mode: true } })
-    },
-    openUploadModal () {
-      this.$refs.uploadModal.toggleModal(true)
-    }
-  },
-  computed: {},
-  watch: {}
-}
+            editVendorDetails(vendor){
+                this.$router.push({ name: "EditVendor", params: { id: vendor.id, creation_mode: false } });
+            },
+            addNewVendor() {
+                this.$router.push({ name: "CreateVendor", props: { default: true, creation_mode: true } });
+            },
+            openUploadModal(){
+                this.$refs.uploadModal.toggleModal(true);
+            },
+        },
+        computed: {},
+        watch: {}
+    };
 </script>
 <style lang="scss" scoped>
     @import '@/assets/scss/md/_colors.scss';

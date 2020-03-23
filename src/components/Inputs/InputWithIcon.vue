@@ -1,4 +1,4 @@
-<template>
+<template>  
 <div :class='inputBlock'>
 <img :class="imgStyle" :src='srcLogo'>
 <input
@@ -11,30 +11,30 @@
 </div>
 </template>
 <script>
-export default {
-  name: 'InputWithIcon',
-  model: {
-  },
-  props: {
-    name: String,
-    srcLogo: String,
-    value: String,
-    type: String,
-    onChange: Function,
-    inputBlock: String,
-    placeholder: String,
-    inputStyle: String,
-    disabled: Boolean,
-    imgStyle: String,
-    inputStyle: String
-
-  },
-  methods: {
-    triggerFunc: function (event) {
-      this.onChange(event.target.value, event.target.name)
-    }
-  }
-}
+    export default {
+        name: "InputWithIcon",        
+        model: {
+        },
+        props: {
+            name:String,
+            srcLogo:String,
+            value:String,
+            type:String,
+            onChange: Function,
+            inputBlock: String,
+            placeholder: String,
+            inputStyle: String,
+            disabled: Boolean,
+            imgStyle: String,
+            inputStyle: String
+            
+        },
+        methods: {
+            triggerFunc:function(event){                                     
+                this.onChange(event.target.value,event.target.name)
+            }
+        }
+    };
 </script>
 <style lang="scss">
     .input-default{
@@ -47,3 +47,5 @@ export default {
         color:red;
     }
 </style>
+
+

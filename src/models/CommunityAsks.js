@@ -2,11 +2,11 @@ import Model from './Model'
 import CommunityAnswers from './CommunityAnswers'
 
 export default class CommunityAsks extends Model {
-  resource () {
+  resource() {
     return 'asks'
   }
 
-  answers () {
+  answers() {
     return this.hasMany(CommunityAnswers)
   }
 }

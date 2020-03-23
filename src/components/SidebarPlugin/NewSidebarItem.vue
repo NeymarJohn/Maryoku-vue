@@ -46,10 +46,10 @@
   </component>
 </template>
 <script>
-import { CollapseTransition } from 'vue2-transitions'
+import { CollapseTransition } from "vue2-transitions";
 
 export default {
-  name: 'sidebar-item',
+  name: "sidebar-item",
   components: {
     CollapseTransition
   },
@@ -62,18 +62,18 @@ export default {
       type: Object,
       default: () => {
         return {
-          name: '',
-          path: '',
+          name: "",
+          path: "",
           children: []
-        }
+        };
       }
     }
   },
-  provide () {
+  provide() {
     return {
       addLink: this.addChild,
       removeLink: this.removeChild
-    }
+    };
   },
   inject: {
     addLink: { default: null },
@@ -82,99 +82,99 @@ export default {
       default: true
     }
   },
-  data () {
+  data() {
     return {
       children: [],
       collapsed: true
-    }
+    };
   },
   computed: {
-    baseComponent () {
-      return this.isMenu || this.link.isRoute ? 'li' : 'router-link'
+    baseComponent() {
+      return this.isMenu || this.link.isRoute ? "li" : "router-link";
     },
-    linkPrefix () {
+    linkPrefix() {
       if (this.link.name) {
-        let words = this.link.name.split(' ')
-        return words.map(word => word.substring(0, 1)).join('')
+        let words = this.link.name.split(" ");
+        return words.map(word => word.substring(0, 1)).join("");
       }
     },
-    isMenu () {
-      return this.children.length > 0 || this.menu === true
+    isMenu() {
+      return this.children.length > 0 || this.menu === true;
     },
-    isActive () {
+    isActive() {
       if (this.$route.path.startsWith(this.link.path)) {
-        this.link.active = true
-        return true
+        this.link.active = true;
+        return true;
       }
 
       if (this.$route && this.$route.path) {
         let matchingRoute = this.children.find(c =>
           this.$route.path.startsWith(c.link.path)
-        )
+        );
         if (matchingRoute !== undefined) {
-          return true
+          return true;
         }
       }
-      return false
+      return false;
     }
   },
   methods: {
-    addChild (item) {
-      const index = this.$slots.default.indexOf(item.$vnode)
-      this.children.splice(index, 0, item)
+    addChild(item) {
+      const index = this.$slots.default.indexOf(item.$vnode);
+      this.children.splice(index, 0, item);
     },
-    removeChild (item) {
-      const tabs = this.children
-      const index = tabs.indexOf(item)
-      tabs.splice(index, 1)
+    removeChild(item) {
+      const tabs = this.children;
+      const index = tabs.indexOf(item);
+      tabs.splice(index, 1);
     },
-    elementType (link, isParent = true) {
+    elementType(link, isParent = true) {
       if (link.isRoute === false) {
-        return isParent ? 'li' : 'a'
+        return isParent ? "li" : "a";
       } else {
-        return 'router-link'
+        return "router-link";
       }
     },
-    linkAbbreviation (name) {
-      const matches = name.match(/\b(\w)/g)
-      return matches.join('')
+    linkAbbreviation(name) {
+      const matches = name.match(/\b(\w)/g);
+      return matches.join("");
     },
-    linkClick () {
+    linkClick() {
       if (
         this.autoClose &&
         this.$sidebar &&
         this.$sidebar.showSidebar === true
       ) {
-        this.$sidebar.displaySidebar(false)
+        this.$sidebar.displaySidebar(false);
       }
     },
-    collapseMenu () {
-      this.collapsed = !this.collapsed
+    collapseMenu() {
+      this.collapsed = !this.collapsed;
     },
-    collapseSubMenu (link) {
-      link.collapsed = !link.collapsed
+    collapseSubMenu(link) {
+      link.collapsed = !link.collapsed;
     }
   },
-  mounted () {
+  mounted() {
     if (this.addLink) {
-      this.addLink(this)
+      this.addLink(this);
     }
     if (this.link.collapsed !== undefined) {
-      this.collapsed = this.link.collapsed
+      this.collapsed = this.link.collapsed;
     }
     if (this.isActive && this.isMenu) {
-      this.collapsed = false
+      this.collapsed = false;
     }
   },
-  destroyed () {
+  destroyed() {
     if (this.$el && this.$el.parentNode) {
-      this.$el.parentNode.removeChild(this.$el)
+      this.$el.parentNode.removeChild(this.$el);
     }
     if (this.removeLink) {
-      this.removeLink(this)
+      this.removeLink(this);
     }
   }
-}
+};
 </script>
 <style>
 .sidebar-menu-item {

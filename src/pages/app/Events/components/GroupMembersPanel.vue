@@ -45,62 +45,63 @@
 </template>
 <script>
 
-import EventInvitee from '@/models/EventInvitee'
+  import EventInvitee from '@/models/EventInvitee';
 
-export default {
-  name: 'group-member-panel',
-  props: {
-    eventData: {
-      type: Object,
-      default: () => { return { title: ''} }
-    },
-    groupData: {
-      type: Object
-    }
-  },
-  data () {
-    return {
-      working: true,
-      allInvitees: [],
-      inviteeTemplate: {
-        firstName: null,
-        lastName: null,
-        emailAddress: null
+  export default {
+    name: 'group-member-panel',
+    props: {
+      eventData: {
+        type: Object,
+        default: ()=>{ return { title: ''};}
+      },
+      groupData: {
+        type: Object
       }
-    }
-  },
-  mounted () {
-    if (this.eventData) {
-      if (this.groupData) {
-        this.working = false
+    },
+    data(){
+      return {
+        working: true,
+        allInvitees: [],
+        inviteeTemplate: {
+          firstName: null,
+          lastName: null,
+          emailAddress: null,
+        }
+      };
+    },
+    mounted(){
+      if (this.eventData){
+        if (this.groupData){
+          this.working = false;
+        }
       }
-    }
-  },
-  methods: {
-    closePanel () {
-      this.$emit('closePanel')
     },
-    addMember () {
-      this.allInvitees.unshift({
-        id: 'new',
-        firstName: null,
-        lastName: null,
-        emailAddress: null
-      })
-    },
-    importInvitees () {
+    methods: {
+      closePanel(){
+        this.$emit("closePanel");
+      },
+      addMember(){
+        this.allInvitees.unshift({
+          id: 'new',
+          firstName: null,
+          lastName: null,
+          emailAddress: null,
+        });
+      },
+      importInvitees(){
 
-    }
-  },
-  watch: {
-    groupData (newVal, oldVal) {
-      new EventInvitee().get().then(res => {
-        this.allInvitees = res
-        this.working = false
-      })
+      }
+    },
+    watch: {
+      groupData(newVal, oldVal){
+
+        new EventInvitee().get().then(res =>{
+          this.allInvitees = res;
+          this.working = false;
+        })
+      }
     }
   }
-}
 </script>
 <style lang="scss" scoped>
 

@@ -114,281 +114,282 @@
 </template>
 
 <script>
-// import auth from '@/auth';
-import EventModal from './EventModal/'
-import VueElementLoading from 'vue-element-loading'
-import ChartComponent from '@/components/Cards/ChartComponent'
-import CalendarFiltersPanel from './CalendarFiltersPanel'
-import moment from 'moment'
-import CalendarEvent from '@/models/CalendarEvent'
-import Currency from '@/models/Currency'
-import Calendar from '@/models/Calendar'
+    // import auth from '@/auth';
+    import EventModal from './EventModal/';
+    import VueElementLoading from 'vue-element-loading';
+    import ChartComponent from '@/components/Cards/ChartComponent';
+    import CalendarFiltersPanel from './CalendarFiltersPanel';
+    import moment from 'moment';
+    import CalendarEvent from '@/models/CalendarEvent';
+    import Currency from "@/models/Currency";
+    import Calendar from "@/models/Calendar";
 
-import {
-  AnimatedNumber
-} from '@/components'
+    import {
+        AnimatedNumber
+    } from "@/components";
 
-import FiltersPanel from './FiltersPanel'
-import MonthSelectPanel from './MonthSelectPanel'
-import MonthEventsPanel from './MonthEventsPanel'
-import EventSidePanel from '../Events/EventSidePanel'
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import AnnualPlannerVuexModule from './AnnualPlanner.vuex'
-import { log } from 'util'
+    import FiltersPanel from './FiltersPanel';
+    import MonthSelectPanel from './MonthSelectPanel';
+    import MonthEventsPanel from './MonthEventsPanel';
+    import EventSidePanel from '../Events/EventSidePanel';
+    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+    import AnnualPlannerVuexModule from './AnnualPlanner.vuex';
+import { log } from 'util';
 
-export default {
-  name: 'calendar-panel',
-  components: {
-    MonthEventsPanel,
-    MonthSelectPanel,
-    FiltersPanel,
-    VueElementLoading,
-    ChartComponent,
-    AnimatedNumber,
-    CalendarFiltersPanel,
-    EventModal
-  },
-  props: {
-    month: {
-      type: Number
-    },
-    year: {
-      type: Number
-    },
-    dayInMonth: {
-      type: String
-    },
-    firstDayOfTheWeek: {
-      type: String
-    },
-    monthCounts: {
-      type: Object
-    }
-  },
-  data () {
-    return {
-      ready: false,
-      // auth: auth,
-      isLoading: true,
-      monthRows: [],
-      currentMonthName: '',
-      currentMonth: 0,
-      currentYear: 0,
-      value: [1],
-      multiple: true,
-      calendarEvents: {},
-      occasionsArray: [],
-      holidaysSelectDisplayed: true,
-      selectedCountries: true,
-      selectedCategories: true,
-      weekDays: [],
-      queryInProgress: false
-    }
-  },
-  created () {
-    this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule)
-  },
-  mounted () {
-    this.ready = true
-    this.isLoading = true
-    this.weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  },
-  methods: {
-    ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'setEditMode', 'setModalSubmitTitle', 'setEventModalAndEventData', 'setEventDate', 'setNumberOfParticipants']),
-    ...mapActions('AnnualPlannerVuex', ['setEventModalAndEventData']),
 
-    exportToExcel () {
-      let calendarId = this.$auth.user.defaultCalendarId
-
-      window.open(
-        `${process.env.SERVER_URL}/1/calendars/${calendarId}/export/${this.year}`
-      )
-    },
-    refreshEvents () {
-      this.selectYearMonth(this.year, this.month)
-      this.queryEvents()
-      this.$emit('month-count')
-    },
-    selectYearMonth (year, month) {
-      let selectedMoment = moment().date(1).month(month - 1).year(year)
-      let currentMonth = selectedMoment.month()
-      this.currentMonthName = selectedMoment.format('MMMM')
-      this.currentMonth = currentMonth + 1
-      this.currentYear = year
-
-      const filtersData = this.$store.state.AnnualPlannerVuex.filtersData
-
-      filtersData.year = parseInt(year)
-      filtersData.month = parseInt(month)
-      // console.log(`working with ${year} as year and ${month} as month, days in month: ${daysInMonth} , first date week day is: ${selectedMoment.weekday()}. `);
-    },
-    queryEvents () {
-      if (this.queryInProgress) return
-      this.queryInProgress = true
-      setTimeout(() => {
-        this.isLoading = true
-        const storage = this.$store.state.AnnualPlannerVuex.filtersData
-
-        let filters = { filters: {
-          year: storage.year,
-          month: storage.month,
-          holidays: this.holidaysSelectDisplayed ? storage.holidays : [],
-          countries: this.selectedCountries ? storage.countries : [],
-          categories: this.selectedCategories ? storage.categories : []
-        }}
-        let calendarId = this.$auth.user.defaultCalendarId
-        this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.$auth.getAuthHeader() })
-          .then((response) => {
-            let eventsMap = {}
-            let occasionsArray = []
-            if (response.data.events) {
-              response.data.events.forEach(function (event) {
-                let eventStartMillis = event.eventStartMillis
-                let eventStartDate = new Date(eventStartMillis)
-                let eventDateStamp = moment(eventStartDate).format('YYYYMMDD')
-                if (eventsMap[eventDateStamp] === undefined) {
-                  eventsMap[eventDateStamp] = {
-                    editables: [],
-                    nonEditables: []
-                  }
-                }
-
-                if (event.editable) {
-                  eventsMap[eventDateStamp].editables.push(new CalendarEvent(event))
-                } else {
-                  eventsMap[eventDateStamp].nonEditables.push(new CalendarEvent(event))
-                  occasionsArray.push({id: event.eventStartMillis, value: event.title, category: event.category})
-                }
-              })
-            }
-
-            occasionsArray.sort(function (a, b) { return a.id - b.id })
-            this.occasionsArray = occasionsArray
-            this.calendarEvents = eventsMap
-            this.generateRows(this.year, this.month)
-
-            this.isLoading = false
-            this.queryInProgress = false
-            this.ready = true
-          }).catch((error) => {
-            console.log(error)
-          })
-      }, 1500)
-    },
-    generateRows (year, month) {
-      let selectedMoment = moment().date(1).month(month - 1).year(year)
-
-      let daysInMonth = selectedMoment.daysInMonth()
-      let currentMonth = selectedMoment.month()
-      let currentYear = selectedMoment.year()
-
-      this.monthRows = []
-      let currentMoment = moment(selectedMoment)
-
-      for (var rowIdx = 0; rowIdx < 6; rowIdx++) { // 5 rows
-        let row = []
-        for (var dayIdx = 0; dayIdx < 7; dayIdx++) { // 7 days
-          let isToday = moment().isSame(currentMoment, 'day')
-          if (currentMoment.date() === 1 && currentMoment.month() === currentMonth && currentMoment.year() === currentYear) {
-            if (currentMoment.weekday() === dayIdx) {
-              row.push({dayInMonth: currentMoment.date(), ...this.selectedDay(currentMoment), isToday})
-              currentMoment = currentMoment.add(1, 'day')
-            } else {
-              row.push(0)
-            }
-          } else if (this.selectedDay(currentMoment).hasEvents) {
-            row.push({dayInMonth: currentMoment.date(), hasEvents: true, events: this.selectedDay(currentMoment).events, isToday})
-            currentMoment = currentMoment.add(1, 'day')
-          } else if (currentMoment.date() <= daysInMonth && currentMoment.month() === currentMonth && currentMoment.year() === currentYear) {
-            row.push({dayInMonth: currentMoment.date(), hasEvents: false, isToday})
-            currentMoment = currentMoment.add(1, 'day')
-          } else {
-            row.push(0)
-          }
-        }
-
-        this.monthRows.push(row)
-      }
-    },
-    selectedDay (currentMoment) {
-      let currentDay = moment(currentMoment).format('YYYYMMDD')
-      let eventsMap = Object.keys(this.calendarEvents)
-      let calendarEventsMap = {}
-
-      if (eventsMap.includes(currentDay)) {
-        calendarEventsMap = {'hasEvents': true, 'events': this.calendarEvents[currentDay]}
-      }
-
-      return calendarEventsMap
-    },
-    openEventSidePanel (options) {
-      window.currentPanel = this.$showPanel({
-        component: EventSidePanel,
-        cssClass: 'md-layout-item md-size-40 transition36 ',
-        openOn: 'right',
-        disableBgClick: false,
+    export default {
+        name: 'calendar-panel',
+        components: {
+            MonthEventsPanel,
+            MonthSelectPanel,
+            FiltersPanel,
+            VueElementLoading,
+            ChartComponent,
+            AnimatedNumber,
+            CalendarFiltersPanel,
+            EventModal
+        },
         props: {
-          modalSubmitTitle: options.modalSubmitTitle,
-          editMode: options.editMode,
-          sourceEventData: options.eventData,
-          refreshEvents: this.refreshEvents,
-          year: this.year,
-          month: this.month,
-          occasionsOptions: this.occasionsArray,
-          openInPlannerOption: options.editMode
+            month : {
+                type: Number
+            },
+            year: {
+                type: Number
+            },
+            dayInMonth: {
+                type: String
+            },
+            firstDayOfTheWeek: {
+                type: String
+            },
+            monthCounts: {
+                type: Object
+            },
+        },
+        data() {
+            return {
+                ready: false,
+                // auth: auth,
+                isLoading: true,
+                monthRows: [],
+                currentMonthName: '',
+                currentMonth: 0,
+                currentYear: 0,
+                value: [1],
+                multiple: true,
+                calendarEvents: {},
+                occasionsArray: [],
+                holidaysSelectDisplayed: true,
+                selectedCountries: true,
+                selectedCategories: true,
+                weekDays: [],
+                queryInProgress: false,
+            }
+        },
+        created() {
+            this.$store.registerModule('AnnualPlannerVuex', AnnualPlannerVuexModule);
+        },
+        mounted(){
+            this.ready = true;
+            this.isLoading = true;
+            this.weekDays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        },
+        methods: {
+            ...mapMutations('AnnualPlannerVuex', ['setEventModal', 'setEditMode', 'setModalSubmitTitle', 'setEventModalAndEventData', 'setEventDate', 'setNumberOfParticipants']),
+            ...mapActions('AnnualPlannerVuex', ['setEventModalAndEventData']),
 
+            exportToExcel() {
+                let calendarId = this.$auth.user.defaultCalendarId;
+
+                window.open(
+                    `${process.env.SERVER_URL}/1/calendars/${calendarId}/export/${this.year}`
+                );
+            },
+            refreshEvents(){
+                this.selectYearMonth(this.year, this.month);
+                this.queryEvents();
+                this.$emit("month-count");
+            },
+            selectYearMonth(year, month){
+                let selectedMoment = moment().date(1).month(month-1).year(year);
+                let currentMonth = selectedMoment.month();
+                this.currentMonthName = selectedMoment.format('MMMM');
+                this.currentMonth = currentMonth+1;
+                this.currentYear = year;
+
+                const filtersData = this.$store.state.AnnualPlannerVuex.filtersData;
+
+                filtersData.year = parseInt(year);
+                filtersData.month = parseInt(month);
+                //console.log(`working with ${year} as year and ${month} as month, days in month: ${daysInMonth} , first date week day is: ${selectedMoment.weekday()}. `);
+            },
+            queryEvents() {
+                if (this.queryInProgress) return;
+                this.queryInProgress = true;
+                setTimeout(()=>{
+                    this.isLoading = true;
+                    const storage = this.$store.state.AnnualPlannerVuex.filtersData;
+
+                    let filters = { filters: {
+                            year: storage.year,
+                            month: storage.month,
+                            holidays: this.holidaysSelectDisplayed ? storage.holidays : [],
+                            countries: this.selectedCountries ? storage.countries : [],
+                            categories: this.selectedCategories ? storage.categories : []
+                        }};
+                    let calendarId = this.$auth.user.defaultCalendarId;
+                    this.$http.post(`${process.env.SERVER_URL}/1/calendars/${calendarId}/events?q=`, filters, { headers: this.$auth.getAuthHeader() })
+                        .then((response) => {
+                            let eventsMap = {};
+                            let occasionsArray = [];
+                            if (response.data.events) {
+                                response.data.events.forEach(function(event){
+                                    let eventStartMillis = event.eventStartMillis;
+                                    let eventStartDate = new Date(eventStartMillis);
+                                    let eventDateStamp = moment(eventStartDate).format('YYYYMMDD');
+                                    if (eventsMap[eventDateStamp] === undefined){
+                                        eventsMap[eventDateStamp] = {
+                                            editables: [],
+                                            nonEditables: []
+                                        };
+                                    }
+
+                                    if (event.editable) {
+                                        eventsMap[eventDateStamp].editables.push(new CalendarEvent(event));
+                                    } else {
+                                        eventsMap[eventDateStamp].nonEditables.push(new CalendarEvent(event));
+                                        occasionsArray.push({id: event.eventStartMillis, value: event.title,  category: event.category});
+                                    }
+                                });
+                            }
+
+                            occasionsArray.sort(function(a, b){return a.id-b.id});
+                            this.occasionsArray = occasionsArray;
+                            this.calendarEvents = eventsMap;
+                            this.generateRows(this.year, this.month);
+
+                            this.isLoading = false;
+                            this.queryInProgress = false;
+                            this.ready = true;
+                        }).catch((error) => {
+                        console.log(error);
+                    });
+                }, 1500);
+            },
+            generateRows(year, month) {
+                let selectedMoment = moment().date(1).month(month-1).year(year);
+
+                let daysInMonth = selectedMoment.daysInMonth();
+                let currentMonth = selectedMoment.month();
+                let currentYear = selectedMoment.year();
+
+                this.monthRows = [];
+                let currentMoment = moment(selectedMoment);
+
+                for (var rowIdx = 0; rowIdx < 6; rowIdx++){ // 5 rows
+                    let row = [];
+                    for (var dayIdx = 0; dayIdx < 7; dayIdx++) { // 7 days
+                        let isToday = moment().isSame(currentMoment, 'day');
+                        if (currentMoment.date() === 1 && currentMoment.month() === currentMonth && currentMoment.year() === currentYear) {
+                            if (currentMoment.weekday() === dayIdx){
+                                row.push({dayInMonth: currentMoment.date(), ...this.selectedDay(currentMoment), isToday});
+                                currentMoment = currentMoment.add(1, 'day');
+                            } else {
+                                row.push(0);
+                            }
+                        } else if (this.selectedDay(currentMoment).hasEvents) {
+                            row.push({dayInMonth: currentMoment.date(), hasEvents: true, events: this.selectedDay(currentMoment).events, isToday});
+                            currentMoment = currentMoment.add(1, 'day');
+                        } else if (currentMoment.date() <= daysInMonth && currentMoment.month() === currentMonth && currentMoment.year() === currentYear){
+                            row.push({dayInMonth: currentMoment.date(), hasEvents: false, isToday});
+                            currentMoment = currentMoment.add(1, 'day');
+                        } else {
+                            row.push(0);
+                        }
+                    }
+
+                    this.monthRows.push(row);
+                }
+            },
+            selectedDay(currentMoment) {
+                let currentDay = moment(currentMoment).format('YYYYMMDD');
+                let eventsMap = Object.keys(this.calendarEvents);
+                let calendarEventsMap = {}
+
+                if (eventsMap.includes(currentDay)) {
+                    calendarEventsMap = {'hasEvents': true, 'events': this.calendarEvents[currentDay]}
+                }
+
+                return calendarEventsMap;
+            },
+            openEventSidePanel(options) {
+                window.currentPanel = this.$showPanel({
+                    component: EventSidePanel,
+                    cssClass: 'md-layout-item md-size-40 transition36 ',
+                    openOn: 'right',
+                    disableBgClick: false,
+                    props: {
+                        modalSubmitTitle: options.modalSubmitTitle,
+                        editMode: options.editMode,
+                        sourceEventData: options.eventData,
+                        refreshEvents: this.refreshEvents,
+                        year: this.year,
+                        month: this.month,
+                        occasionsOptions: this.occasionsArray,
+                        openInPlannerOption: options.editMode
+
+                    }
+                });
+            },
+            openNewEventModal(currentDate){
+                this.setModalSubmitTitle('Save');
+                this.setEditMode({ editMode: false });
+                this.setNumberOfParticipants({numberOfParticipants: this.$auth.user.customer.numberOfEmployees});
+                this.setEventDate({date: currentDate ? currentDate : null});
+                this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: false, eventData: {eventStartMillis: currentDate ? currentDate.getTime() : new Date().getTime(), numberOfParticipants: this.$auth.user.customer.numberOfEmployees} })
+            },
+            openEditEventModal: function (item) {
+                if (!item.editable){
+                    item.occasion = item.title;
+                }
+                this.setEventModalAndEventData({eventData: item});
+                this.setModalSubmitTitle('Save');
+                this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: true, eventData: item })
+            },
+            openOccasionEventModal: function (item) {
+                if (!item.editable){
+                    item.occasion = item.title;
+                }
+                this.setEventModalAndEventData({eventData: item});
+                this.setModalSubmitTitle('Save');
+                this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: false, eventData: item })
+            },
+            fullDateWithDay(day) {
+                return moment().date(day).month(this.month-1).year(this.year).toDate();
+            },
+            colorWithCategory(category) {
+                let filterCategories = this.categories.filter(c => c.id === category);
+                return filterCategories[0] != null ? `${filterCategories[0].color} !important;` : '';
+            }
+        },
+        computed: {
+            ...mapState('AnnualPlannerVuex', ['filtersData']),
+            ...mapGetters({
+                categories: 'event/getCategoriesList',
+                customer:'user/getCustomer'
+            }),
+        },
+        watch: {
+            year(newVal, oldVal){
+                this.selectYearMonth(this.year, this.month);
+                this.queryEvents();
+            },
+            month(newVal, oldVal){
+                this.selectYearMonth(this.year, this.month);
+                this.queryEvents();
+            },
         }
-      })
-    },
-    openNewEventModal (currentDate) {
-      this.setModalSubmitTitle('Save')
-      this.setEditMode({ editMode: false })
-      this.setNumberOfParticipants({numberOfParticipants: this.$auth.user.customer.numberOfEmployees})
-      this.setEventDate({date: currentDate || null})
-      this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: false, eventData: {eventStartMillis: currentDate ? currentDate.getTime() : new Date().getTime(), numberOfParticipants: this.$auth.user.customer.numberOfEmployees} })
-    },
-    openEditEventModal: function (item) {
-      if (!item.editable) {
-        item.occasion = item.title
-      }
-      this.setEventModalAndEventData({eventData: item})
-      this.setModalSubmitTitle('Save')
-      this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: true, eventData: item })
-    },
-    openOccasionEventModal: function (item) {
-      if (!item.editable) {
-        item.occasion = item.title
-      }
-      this.setEventModalAndEventData({eventData: item})
-      this.setModalSubmitTitle('Save')
-      this.openEventSidePanel({ modalSubmitTitle: 'Save', editMode: false, eventData: item })
-    },
-    fullDateWithDay (day) {
-      return moment().date(day).month(this.month - 1).year(this.year).toDate()
-    },
-    colorWithCategory (category) {
-      let filterCategories = this.categories.filter(c => c.id === category)
-      return filterCategories[0] != null ? `${filterCategories[0].color} !important;` : ''
-    }
-  },
-  computed: {
-    ...mapState('AnnualPlannerVuex', ['filtersData']),
-    ...mapGetters({
-      categories: 'event/getCategoriesList',
-      customer: 'user/getCustomer'
-    })
-  },
-  watch: {
-    year (newVal, oldVal) {
-      this.selectYearMonth(this.year, this.month)
-      this.queryEvents()
-    },
-    month (newVal, oldVal) {
-      this.selectYearMonth(this.year, this.month)
-      this.queryEvents()
-    }
-  }
-}
+    };
 </script>
 <style lang="scss" >
     .md-button.md-just-icon {

@@ -1,55 +1,57 @@
 <template>
-  <div class="md-layout">
+  <div class="md-layout">    
     <div class="md-layout-item md-size-100">
     <md-card class="md-card-profile">
         <div class="logo-block inform">
           <div class="event-planer-logo details">
             <md-icon class="company-logo">format_list_numbered</md-icon>
           </div>
-          <div class="event-title inform-title">Event Information</div>
+          <div class="event-title inform-title">Event Information</div>                 
         </div>
            <div>
                 <md-button  class="event-info-color-button" >Create Event Timeline</md-button>
-      </div>
+      </div> 
         <div>
         <event-cart/>
-        </div>
-       </md-card>
+        </div>     
+       </md-card>     
     </div>
   </div>
 </template>
 <script>
-// MAIN MODULES
-import moment from 'moment'
+//MAIN MODULES
+import moment from "moment";
 import EventsCart from './components/EventsCart.vue'
 
-// COMPONENTS
+//COMPONENTS
+
 
 export default {
-  name: 'EventElements',
-  components: {
-    'event-cart': EventsCart
+  name:'EventElements',
+  components: {   
+   'event-cart':EventsCart
   },
 
-  data () {
+
+  data() {
     return {
-
-    }
+            
+    };
   },
-  mounted () {
-
+  mounted() {
+   
   },
   methods: {
-
+   
   },
-  computed: {
+  computed: {    
   },
   filters: {
-
+    
   },
   watch: {
-  }
-}
+  },  
+};
 </script>
 
 <style lang="scss" scoped>
@@ -58,7 +60,7 @@ export default {
 }
 .event-info-color-button>.md-ripple{
     background:#ee4784 !important;
-
+     
 }
 .inform{
       justify-content:start;
@@ -67,5 +69,6 @@ export default {
 .inform-title{
   margin-left:15px;
 }
+
 
 </style>

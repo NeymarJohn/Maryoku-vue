@@ -39,194 +39,199 @@
 </template>
 
 <script>
-import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-import vendorsVuex from '../vendors.vuex'
-import Popover from '@/components/Popover'
-import swal from 'sweetalert2'
-import Vendors from '@/models/Vendors'
-import {SlideYDownTransition} from 'vue2-transitions'
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+  import vendorsVuex from '../vendors.vuex';
+  import Popover from "@/components/Popover";
+  import swal from "sweetalert2";
+  import Vendors from "@/models/Vendors";
+  import {SlideYDownTransition} from "vue2-transitions";
 
-export default {
-  components: {
-    'popover': Popover,
-    SlideYDownTransition
 
-  },
-  props: {
-    'name': String,
-    'value': null,
-    'id': String,
-    'required': Boolean
-  },
-  data () {
-    return {
-      rankingParameters: [
-        {
-          name: 'Overal Experience',
-          parameterName: 'overal_experience',
-          value: ''
-        },
-        {
-          name: 'Cleanliness and Maintenance',
-          parameterName: 'cleanliness_and_maintenance',
-          value: ''
+  export default {
+    components: {
+      'popover': Popover,
+      SlideYDownTransition
 
-        },
-        {
-          name: 'Accuracy',
-          parameterName: 'accuracy',
-          value: ''
-
-        },
-        {
-          name: 'Value for money',
-          parameterName: 'value_for_money',
-          value: ''
-
-        }, {
-          name: 'Service',
-          parameterName: 'service',
-          value: ''
-
-        },
-        {
-          name: 'Location & Parking',
-          parameterName: 'location_parking',
-          value: ''
-
-        }
-
-      ],
-      temp_value: null,
-      name: 'md-transparent',
-      value1: null,
-      value2: null,
-      ratings: [1, 2, 3, 4, 5],
-      inviteModalOpen: false,
-      single: null,
-      categories: [
-        'Space / Venue ',
-        'Catering',
-        'Content ',
-        'Services ',
-        'Products Rental / Purchase'
-      ]
-    }
-  },
-  created () {
-    console.log(this.$store)
-    this.$store.registerModule('vendors', vendorsVuex)
-  },
-  destroyed () {
-    console.log(this.$store)
-    console.log(this.vendorsMemberData)
-
-    this.$store.unregisterModule('vendors', vendorsVuex)
-  },
-  computed: {
-    ...mapState('vendors', ['vendorsMemberData'])
-
-    //      name: {
-    //        get() {
-    //          return this.vendorsMemberData.vendorDisplayName
-    //        },
-    //        set(value) {
-    //          this.setMemberProperty({key: 'vendorDisplayName', actualValue: value})
-    //        },
-    //
-    //      },
-    //
-    //      address: {
-    //        get() {
-    //          return this.vendorsMemberData.vendorAddressLine1
-    //        },
-    //        set(value) {
-    //          this.setMemberProperty({key: 'vendorAddressLine1', actualValue: value})
-    //        },
-    //
-    //      },
-    //      email: {
-    //        get() {
-    //          return this.vendorsMemberData.vendorMainEmail
-    //        },
-    //        set(value) {
-    //          this.setMemberProperty({key: 'vendorMainEmail', actualValue: value})
-    //        }
-    //      },
-    //      category: {
-    //        get() {
-    //          return this.vendorsMemberData.productsCategory
-    //        },
-    //        set(value) {
-    //          this.setMemberProperty({key: 'productsCategory', actualValue: value})
-    //        }
-    //      },
-    //      web: {
-    //        get() {
-    //          return this.vendorsMemberData.vendorWebsite
-    //        },
-    //        set(value) {
-    //          this.setMemberProperty({key: 'vendorWebsite', actualValue: value})
-    //        }
-    //      },
-    //      phoneNumber: {
-    //        get() {
-    //          return this.vendorsMemberData.vendorMainPhoneNumber
-    //        },
-    //        set(value) {
-    //          this.setMemberProperty({key: 'vendorMainPhoneNumber', actualValue: value})
-    //        }
-    //      }
-
-  },
-  methods: {
-    ...mapMutations('vendors', [
-      'setMemberProperty'
-    ]),
-    noticeModalHide: function () {
-      this.inviteModalOpen = false
     },
-    toggleModal: function (show) {
-      this.inviteModalOpen = show
+    props: {
+      'name': String,
+      'value': null,
+      'id': String,
+      'required': Boolean
     },
-    closeModal () {
-      this.inviteModalOpen = false
-    },
-    async addVendor () {
-      let vendor = new Vendors({})
+    data() {
+      return {
+        rankingParameters: [
+          {
+            name: 'Overal Experience',
+            parameterName: 'overal_experience',
+            value: ''
+          },
+          {
+            name: 'Cleanliness and Maintenance',
+            parameterName: 'cleanliness_and_maintenance',
+            value: ''
 
-      vendor.attach(this.vendorsMemberData)
-    },
+          },
+          {
+            name: 'Accuracy',
+            parameterName: 'accuracy',
+            value: ''
 
-    setRanking: function (value, index) {
-      if (!this.disabled) {
-        this.temp_value = value
-        console.log(value, 'temp_value')
-        return this.rankingParameters[index].value = value
+          },
+          {
+            name: 'Value for money',
+            parameterName: 'value_for_money',
+            value: ''
+
+          }, {
+            name: 'Service',
+            parameterName: 'service',
+            value: ''
+
+          },
+          {
+            name: 'Location & Parking',
+            parameterName: 'location_parking',
+            value: ''
+
+          },
+
+
+        ],
+        temp_value: null,
+        name: 'md-transparent',
+        value1: null,
+        value2: null,
+        ratings: [1, 2, 3, 4, 5],
+        inviteModalOpen: false,
+        single: null,
+        categories: [
+          'Space / Venue ',
+          'Catering',
+          'Content ',
+          'Services ',
+          'Products Rental / Purchase'
+        ],
       }
+    },
+    created() {
+      console.log(this.$store);
+      this.$store.registerModule('vendors', vendorsVuex);
+    },
+    destroyed() {
+      console.log(this.$store);
+      console.log(this.vendorsMemberData)
+
+      this.$store.unregisterModule('vendors', vendorsVuex);
+    },
+    computed: {
+      ...mapState('vendors', ['vendorsMemberData']),
+
+//      name: {
+//        get() {
+//          return this.vendorsMemberData.vendorDisplayName
+//        },
+//        set(value) {
+//          this.setMemberProperty({key: 'vendorDisplayName', actualValue: value})
+//        },
+//
+//      },
+//
+//      address: {
+//        get() {
+//          return this.vendorsMemberData.vendorAddressLine1
+//        },
+//        set(value) {
+//          this.setMemberProperty({key: 'vendorAddressLine1', actualValue: value})
+//        },
+//
+//      },
+//      email: {
+//        get() {
+//          return this.vendorsMemberData.vendorMainEmail
+//        },
+//        set(value) {
+//          this.setMemberProperty({key: 'vendorMainEmail', actualValue: value})
+//        }
+//      },
+//      category: {
+//        get() {
+//          return this.vendorsMemberData.productsCategory
+//        },
+//        set(value) {
+//          this.setMemberProperty({key: 'productsCategory', actualValue: value})
+//        }
+//      },
+//      web: {
+//        get() {
+//          return this.vendorsMemberData.vendorWebsite
+//        },
+//        set(value) {
+//          this.setMemberProperty({key: 'vendorWebsite', actualValue: value})
+//        }
+//      },
+//      phoneNumber: {
+//        get() {
+//          return this.vendorsMemberData.vendorMainPhoneNumber
+//        },
+//        set(value) {
+//          this.setMemberProperty({key: 'vendorMainPhoneNumber', actualValue: value})
+//        }
+//      }
+
+    },
+    methods: {
+      ...mapMutations('vendors', [
+        'setMemberProperty'
+      ]),
+      noticeModalHide: function () {
+        this.inviteModalOpen = false;
+      },
+      toggleModal: function (show) {
+        this.inviteModalOpen = show;
+      },
+      closeModal(){
+        this.inviteModalOpen = false;
+      },
+      async addVendor() {
+
+        let vendor = new Vendors({});
+
+        vendor.attach(this.vendorsMemberData);
+
+
+      },
+
+      setRanking: function(value, index) {
+        if (!this.disabled) {
+          this.temp_value = value;
+          console.log(value, 'temp_value');
+          return this.rankingParameters[index].value = value;
+        }
+      }
+    },
+    watch: {
+//      displayName() {
+//        this.touched.displayName = true;
+//      },
+//      vendorAddress() {
+//        this.touched.vendorAddress = true;
+//      },
+//      vendorEmail() {
+//        this.touched.vendorEmail = true;
+//      },
+//      vendorCategory() {
+//        this.touched.username = true;
+//      },
+//      webSite() {
+//        this.touched.webSite = true;
+//      },
+//      vendorPhoneNumber() {
+//        this.touched.vendorPhoneNumber = true;
+//      }
     }
-  },
-  watch: {
-    //      displayName() {
-    //        this.touched.displayName = true;
-    //      },
-    //      vendorAddress() {
-    //        this.touched.vendorAddress = true;
-    //      },
-    //      vendorEmail() {
-    //        this.touched.vendorEmail = true;
-    //      },
-    //      vendorCategory() {
-    //        this.touched.username = true;
-    //      },
-    //      webSite() {
-    //        this.touched.webSite = true;
-    //      },
-    //      vendorPhoneNumber() {
-    //        this.touched.vendorPhoneNumber = true;
-    //      }
-  }
-}
+  };
 </script>
 <style lang="scss">
   .swal2-container{
@@ -327,6 +332,7 @@ export default {
       display: inline-block;
       margin-top: 5px;
     }
+
 
   }
 </style>

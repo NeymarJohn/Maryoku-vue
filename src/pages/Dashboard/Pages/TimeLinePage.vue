@@ -61,42 +61,42 @@
   </div>
 </template>
 <script>
-import { TimeLine, TimeLineItem, Badge } from '@/components'
+import { TimeLine, TimeLineItem, Badge } from "@/components";
 export default {
   components: {
     TimeLine,
     TimeLineItem,
     Badge
   },
-  data () {
+  data() {
     return {
       responsive: false
-    }
+    };
   },
   computed: {
-    simpleTimeline () {
+    simpleTimeline() {
       if (this.responsive) {
-        return 'simple'
+        return "simple";
       }
     }
   },
   methods: {
-    onResponsiveInverted () {
+    onResponsiveInverted() {
       if (window.innerWidth < 768) {
-        this.responsive = true
+        this.responsive = true;
       } else {
-        this.responsive = false
+        this.responsive = false;
       }
     }
   },
-  mounted () {
-    this.onResponsiveInverted()
-    window.addEventListener('resize', this.onResponsiveInverted)
+  mounted() {
+    this.onResponsiveInverted();
+    window.addEventListener("resize", this.onResponsiveInverted);
   },
-  beforeDestroy () {
-    window.removeEventListener('resize', this.onResponsiveInverted)
+  beforeDestroy() {
+    window.removeEventListener("resize", this.onResponsiveInverted);
   }
-}
+};
 </script>
 <style>
 </style>

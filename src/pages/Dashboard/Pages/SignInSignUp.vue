@@ -52,118 +52,119 @@
     </div>
 </template>
 <script>
-import { SignupCard } from '@/components'
-// import auth from '@/auth';
-import VueElementLoading from 'vue-element-loading'
-import Tenant from '@/models/Tenant'
+    import { SignupCard } from "@/components";
+    // import auth from '@/auth';
+    import VueElementLoading from 'vue-element-loading';
+    import Tenant from '@/models/Tenant';
 
-export default {
-  components: {
-    SignupCard,
-    VueElementLoading
-  },
-  methods: {
-    authenticate (provider) {
-      this.loading = true
-      let tenantId = document.location.hostname.replace('.maryoku.com', '').replace('.', '_')
-      const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`)
-      document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`
-    },
-    signup () {
-      this.loading = true
-      let that = this
-      this.$validator.validateAll().then(isValid => {
-        if (isValid) {
-          that.$auth.signupOrSignin(that, this.email.toString().toLowerCase(), that.password, 'administrator', (data) => {
-            that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
-              that.$router.push({ path: '/signedin', query: {token: success.access_token} })
-            }, (failure) => {
-              that.loading = false
-              if (failure.response.status === 401) {
-                that.error = 'Sorry, wrong password, try again.'
-              } else {
-                that.error = 'Temporary failure, try again later'
-                console.log(JSON.stringify(failure.response))
-              }
-            })
-          })
-        } else {
-          that.loading = false
-        }
-      })
-    }
-  },
-  created () {
-    const givenToken = this.$route.query.token
-    this.$auth.setToken(givenToken)
-    this.$auth.currentUser(this, true)
-    /* let tenantId = document.location.hostname.replace(".maryoku.com","");
+    export default {
+        components: {
+            SignupCard,
+            VueElementLoading
+        },
+        methods: {
+            authenticate(provider) {
+                this.loading = true;
+                let tenantId = document.location.hostname.replace(".maryoku.com","").replace(".","_");
+                const callback = btoa(`${document.location.protocol}//${document.location.hostname}:${document.location.port}/#/signedin?token=`);
+                document.location.href = `${this.$data.serverURL}/oauth/authenticate/${provider}?tenantId=${tenantId}&callback=${callback}`;
+            },
+            signup(){
+                this.loading = true;
+                let that = this;
+                this.$validator.validateAll().then(isValid => {
+
+                    if (isValid){
+                        that.$auth.signupOrSignin(that, this.email.toString().toLowerCase(), that.password, 'administrator', (data) => {
+                            that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
+                                that.$router.push({ path: '/signedin', query: {token: success.access_token} });
+                            }, (failure) => {
+                                that.loading = false;
+                                if (failure.response.status === 401){
+                                    that.error = 'Sorry, wrong password, try again.';
+                                } else {
+                                    that.error = 'Temporary failure, try again later';
+                                    console.log(JSON.stringify(failure.response));
+                                }
+                            } );
+                        })
+                    } else {
+                        that.loading = false;
+                    }
+                });
+            }
+        },
+        created() {
+            const givenToken = this.$route.query.token;
+            this.$auth.setToken(givenToken);
+            this.$auth.currentUser(this, true);
+            /*let tenantId = document.location.hostname.replace(".maryoku.com","");
             new Tenant().find(tenantId).then(res =>{
               if (!res.status){
                 this.$router.push({name:"CreateWorkspace"});
               }
-            }); */
-  },
-  watch: {
-    email () {
-      this.touched.email = true
-    },
-    password () {
-      this.touched.password = true
-    }
-  },
-  data () {
-    return {
-      error: '',
-      loading: false,
-      firstname: null,
-      terms: false,
-      email: null,
-      password: null,
-      serverURL: process.env.SERVER_URL,
-      // auth: auth,
-      touched: {
-        email: false,
-        password: false
-      },
-      modelValidations: {
-        email: {
-          required: true,
-          email: true
+            });*/
         },
-        password: {
-          required: true,
-          min: 8
-        }
-      },
-      contentLeft: [
-        {
-          colorIcon: 'icon-success',
-          icon: 'color_lens',
-          title: 'Get Inspired',
-          description:
+        watch: {
+            email() {
+                this.touched.email = true;
+            },
+            password() {
+                this.touched.password = true;
+            },
+        },
+        data() {
+            return {
+                error: '',
+                loading: false,
+                firstname: null,
+                terms: false,
+                email: null,
+                password: null,
+                serverURL: process.env.SERVER_URL,
+                // auth: auth,
+                touched: {
+                    email: false,
+                    password: false
+                },
+                modelValidations: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true,
+                        min: 8
+                    }
+                },
+                contentLeft: [
+                    {
+                        colorIcon: "icon-success",
+                        icon: "color_lens",
+                        title: "Get Inspired",
+                        description:
                             "Why struggle to find good ideas for your company's next event, when you can simply browse through other companies' events, see what worked for them and adjust those ideas to your needs."
-        },
+                    },
 
-        {
-          colorIcon: 'icon-danger',
-          icon: 'calendar_today',
-          title: 'Plan Ahead',
-          description:
-                            'Making the best of your annual budget is so much easier when you have visibility over all year occasions combined with insights on industry benchmark.'
-        },
+                    {
+                        colorIcon: "icon-danger",
+                        icon: "calendar_today",
+                        title: "Plan Ahead",
+                        description:
+                            "Making the best of your annual budget is so much easier when you have visibility over all year occasions combined with insights on industry benchmark."
+                    },
 
-        {
-          colorIcon: 'icon-info',
-          icon: 'developer_board',
-          title: 'Work Less',
-          description:
-                            'Stop spending hours on phone calls, emails, quotes and invoices. Locate ranked suppliers and have them work for you.'
+                    {
+                        colorIcon: "icon-info",
+                        icon: "developer_board",
+                        title: "Work Less",
+                        description:
+                            "Stop spending hours on phone calls, emails, quotes and invoices. Locate ranked suppliers and have them work for you."
+                    }
+                ]
+            };
         }
-      ]
-    }
-  }
-}
+    };
 </script>
 <style scoped>
     p.description {

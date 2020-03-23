@@ -62,15 +62,15 @@
 </template>
 
 <script>
-import { Modal, SimpleWizard, WizardTab, LabelEdit } from '@/components'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-import swal from 'sweetalert2'
-import Teams from '@/models/Team'
-import TeamMember from '@/models/TeamMember'
-import indexVuexModule from '@/store/index'
+import { Modal, SimpleWizard, WizardTab, LabelEdit } from "@/components";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import swal from "sweetalert2";
+import Teams from "@/models/Team";
+import TeamMember from "@/models/TeamMember";
+import indexVuexModule from "@/store/index";
 // import auth from '@/auth';
-import _ from 'underscore'
-import moment from 'moment'
+import _ from 'underscore';
+import moment from 'moment';
 
 export default {
   components: {
@@ -87,13 +87,13 @@ export default {
     teamMembers: {
       type: Array,
       default: () => {
-        return {}
+        return {};
       }
     },
     item: {
       type: Object,
       default: () => {
-        return {}
+        return {};
       }
     },
     availableRoles: Array,
@@ -103,112 +103,112 @@ export default {
       required: true
     }
   },
-  data () {
+  data() {
     return {
       // auth: auth,
       selected: [],
       hideBtn: false,
       openPopover: false
-    }
+    };
   },
   filters: {
     moment: function (date) {
-      return moment(date).format('MMMM Do, GGGG')
+      return moment(date).format('MMMM Do, GGGG');
     }
   },
   methods: {
-    ...mapActions('teamVuex', ['setInviteModalAndTeamMember']),
-    teamMemberDetailsChanged (val, fieldName, item) {
+    ...mapActions("teamVuex", ["setInviteModalAndTeamMember"]),
+    teamMemberDetailsChanged(val, fieldName, item){
 
     },
-    onSelect (items) {
-      this.selected = items
+    onSelect(items) {
+      this.selected = items;
     },
-    closePopup () {
-      this.openPopover = false
+    closePopup() {
+      this.openPopover = false;
     },
-    openPopup () {
-      this.openPopover = true
+    openPopup() {
+      this.openPopover = true;
     },
-    getAlternateLabel (count) {
-      let plural = ''
+    getAlternateLabel(count) {
+      let plural = "";
 
       if (count > 1) {
-        plural = 's'
+        plural = "s";
       }
 
-      return `${count} User${plural} selected`
+      return `${count} User${plural} selected`;
     },
-    toggleEditModal: function (show, item) {
-      this.setInviteModalAndTeamMember({ showModal: show, teamMember: item })
-      this.openEditTeamInviteSidePanel(show, item)
+    toggleEditModal: function(show, item) {
+      this.setInviteModalAndTeamMember({ showModal: show, teamMember: item });
+      this.openEditTeamInviteSidePanel(show, item);
     },
-    async deleteTeam (id) {
-      let team = await Teams.first(id)
-      team.delete()
-      let teamIndex = this.teamMembers.findIndex(obj => obj.id === id)
+    async deleteTeam(id) {
+      let team = await Teams.first(id);
+      team.delete();
+      let teamIndex = this.teamMembers.findIndex(obj => obj.id === id);
 
-      this.teamMembers.splice(teamIndex, 1)
+      this.teamMembers.splice(teamIndex, 1);
     },
-    changeRollAndPermission () {},
-    async deleteTeamMember (teamMember) {
+    changeRollAndPermission() {},
+    async deleteTeamMember(teamMember) {
       swal({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "You won't be able to revert this!",
-        type: 'warning',
+        type: "warning",
         showCancelButton: true,
-        confirmButtonClass: 'md-button md-success confirm-btn-bg btn-fill',
-        cancelButtonClass: 'md-button md-danger cancel-btn-bg btn-fill',
-        confirmButtonText: 'Yes, delete it!'
+ confirmButtonClass: "md-button md-success confirm-btn-bg btn-fill",
+        cancelButtonClass: "md-button md-danger cancel-btn-bg btn-fill",  
+        confirmButtonText: "Yes, delete it!"
       }).then(async result => {
         if (result.value) {
-          let notifySuccessMessage = 'Team member deleted successfully!'
+          let notifySuccessMessage = "Team member deleted successfully!";
 
-          this.deleteMember(teamMember)
-          this.$emit('membersRefresh')
+          this.deleteMember(teamMember);
+          this.$emit("membersRefresh");
 
           this.$notify({
-            message: 'Team member deleted successfully!',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'success'
-          })
+            message: "Team member deleted successfully!",
+            horizontalAlign: "center",
+            verticalAlign: "top",
+            type: "success"
+          });
         }
-      })
+      });
     },
-    async deleteAllTeamMember (teamMember) {
+    async deleteAllTeamMember(teamMember) {
       swal({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "You won't be able to revert this!",
-        type: 'warning',
+        type: "warning",
         showCancelButton: true,
-        confirmButtonClass: 'md-button md-success btn-fill',
-        cancelButtonClass: 'md-button md-danger btn-fill',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonClass: "md-button md-success btn-fill",
+        cancelButtonClass: "md-button md-danger btn-fill",
+        confirmButtonText: "Yes, delete it!"
       }).then(async result => {
         if (result.value) {
-          let notifySuccessMessage = 'Team member deleted successfully!'
+          let notifySuccessMessage = "Team member deleted successfully!";
 
           this.selected.forEach((item, index) => {
-            this.deleteMember(item)
-          })
+            this.deleteMember(item);
+          });
 
-          this.$emit('membersRefresh')
+          this.$emit("membersRefresh");
 
           this.$notify({
-            message: 'Team members deleted successfully!',
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'success'
-          })
+            message: "Team members deleted successfully!",
+            horizontalAlign: "center",
+            verticalAlign: "top",
+            type: "success"
+          });
 
-          this.selected = []
+          this.selected = [];
         }
-      })
+      });
     },
-    async deleteMember (teamMember) {
-      let team = await Teams.first()
-      let member = await TeamMembers.find(teamMember.id)
+    async deleteMember(teamMember) {
+      let team = await Teams.first();
+      let member = await TeamMembers.find(teamMember.id);
 
       member
         .for(team)
@@ -216,32 +216,32 @@ export default {
         .then(response => {
           let teamMemberIndex = this.teamMembers.findIndex(
             obj => obj.id === teamMember.id
-          )
-          this.teamMembers.splice(teamMemberIndex)
+          );
+          this.teamMembers.splice(teamMemberIndex);
         })
         .catch(error => {
-          console.log(error)
-        })
-    },
-    availableRoleIdToTitle (roleId) {
-      let role = _.findWhere(this.availableRoles, {id: roleId})
-      return role ? role.title : roleId
-    },
-    permissionTitles (permissions) {
-      let permissionsArray = permissions ? permissions.split(',') : []
-      let permissionsTitles = []
+          console.log(error);
+        });
+      },
+      availableRoleIdToTitle(roleId){
+        let role = _.findWhere(this.availableRoles, {id: roleId});
+        return role ? role.title : roleId;
+      },
+      permissionTitles(permissions){
+        let permissionsArray = permissions ? permissions.split(",") : [];
+        let permissionsTitles = [];
 
-      permissionsArray.forEach((permission) => {
-        let availablePermission = _.findWhere(this.availablePermissions, {id: permission})
-        if (availablePermission) {
-          permissionsTitles.push(availablePermission.title)
-        }
-      })
+        permissionsArray.forEach((permission)=>{
+          let availablePermission = _.findWhere(this.availablePermissions, {id: permission});
+          if (availablePermission) {
+            permissionsTitles.push(availablePermission.title);
+          }
+        });
 
-      return permissionsTitles.join(', ')
+        return permissionsTitles.join(", ");
+      }
     }
-  }
-}
+  };
 </script>
 <style>
 .pad-20 {

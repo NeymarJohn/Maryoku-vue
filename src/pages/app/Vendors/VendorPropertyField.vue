@@ -87,26 +87,26 @@
 </template>
 
 <script>
-export default {
-  name: '',
-  components: {},
-  props: {
-    item: Object,
-    vendor: Object
-  },
-  data () {
-    return {}
-  },
-  created () {
-    if (this.item.type === 'multiple-selection' || this.item.type === 'multi-selection') {
-      this.vendor.vendorPropertyValues[this.item.id] = []
-    }
-  },
-  mounted () {},
-  methods: {},
-  computed: {},
-  watch: {}
-}
+  export default {
+    name: '',
+    components: {},
+    props: {
+      item: Object,
+      vendor: Object
+    },
+    data() {
+      return {}
+    },
+    created() {
+      if (this.item.type === 'multiple-selection' || this.item.type === 'multi-selection') {
+        this.vendor.vendorPropertyValues[this.item.id] = [];
+      }
+    },
+    mounted() {},
+    methods: {},
+    computed: {},
+    watch: {}
+  }
 </script>
 
 <style lang="scss" scoped>

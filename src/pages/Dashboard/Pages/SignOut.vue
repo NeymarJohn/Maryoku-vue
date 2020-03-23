@@ -9,46 +9,48 @@
     </div>
 </template>
 <script>
-export default {
-  components: {
+    export default {
+        components: {
 
-  },
-  methods: {
-  },
-  created () {
-    const that = this
-    setTimeout(() => {
-      this.$auth.logout(this)
-      this.$ls.remove('user')
+        },
+        methods: {
+        },
+        created() {
+            const that = this;
+            setTimeout(() => {
+                this.$auth.logout(this);
+                this.$ls.remove("user");
 
-      if (process.env.NODE_ENV === 'production') {
-        try {
-          window.heap.resetIdentity()
-        } catch (e) { console.error(e) }
+                if (process.env.NODE_ENV === 'production') {
+                    try {
+                        window.heap.resetIdentity();
+                    } catch (e) { console.error(e);}
 
-        try {
-          this.$Tawk.$endChat()
-        } catch (e) {
-          console.error(e)
+                    try {
+                        this.$Tawk.$endChat();
+                    } catch (e) {
+                        console.error(e);
+                    }
+
+                    this.$gtm.trackEvent({
+                        event: 'user_signed_out', // Event type [default = 'interaction'] (Optional)
+                        category: 'Users',
+                        action: 'signout',
+                        label: 'User Signed Out',
+                        value: this.$auth.user.emailAddress,
+                        noninteraction: false // Optional
+                    });
+                }
+
+
+            },1500)
+        },
+        data() {
+            return {
+                serverURL: process.env.SERVER_URL,
+            };
         }
-
-        this.$gtm.trackEvent({
-          event: 'user_signed_out', // Event type [default = 'interaction'] (Optional)
-          category: 'Users',
-          action: 'signout',
-          label: 'User Signed Out',
-          value: this.$auth.user.emailAddress,
-          noninteraction: false // Optional
-        })
-      }
-    }, 1500)
-  },
-  data () {
-    return {
-      serverURL: process.env.SERVER_URL
-    }
-  }
-}
+    };
 </script>
 <style>
 </style>

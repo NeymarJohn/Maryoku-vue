@@ -26,21 +26,21 @@ export default {
   },
   methods: {
   },
-  created () {
-    const that = this
-    /* setTimeout(() => {
+  created() {
+    const that = this;
+    /*setTimeout(() => {
       const givenToken = that.$route.query.token;
       that.$auth.setToken(givenToken);
       that.$auth.currentUser(that, true);
-    },2500) */
+    },2500)*/
   },
-  data () {
+  data() {
     return {
       serverURL: process.env.SERVER_URL,
       auth: auth
-    }
+    };
   }
-}
+};
 </script>
 <style>
 </style>

@@ -12,19 +12,19 @@
 
 <script>
 export default {
-  name: 'global-sales-card',
+  name: "global-sales-card",
   props: {
     headerColor: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   methods: {
-    getClass: function (headerColor) {
-      return 'md-card-header-' + headerColor + ''
+    getClass: function(headerColor) {
+      return "md-card-header-" + headerColor + "";
     }
   }
-}
+};
 </script>
 
 <style lang="css">

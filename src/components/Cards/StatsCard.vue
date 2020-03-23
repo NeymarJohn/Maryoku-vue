@@ -11,17 +11,17 @@
 </template>
 <script>
 export default {
-  name: 'stats-card',
+  name: "stats-card",
   props: {
     headerColor: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   methods: {
-    getClass: function (headerColor) {
-      return 'md-card-header-' + headerColor + ''
+    getClass: function(headerColor) {
+      return "md-card-header-" + headerColor + "";
     }
   }
-}
+};
 </script>

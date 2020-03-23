@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+  import moment from 'moment';
 export default {
 
   name: 'event-todo-row',
@@ -23,11 +23,11 @@ export default {
     todoIndex: Number,
     showModalTodo: Function,
     showSwal: Function,
-    readonly: Boolean
+    readonly: Boolean,
   },
   filters: {
     moment: function (date) {
-      return moment(date).format('YYYY-MM-DD')
+      return moment(date).format('YYYY-MM-DD');
     }
   }
 
