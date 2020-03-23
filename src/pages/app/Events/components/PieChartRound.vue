@@ -270,7 +270,7 @@ export default {
           // Subtract current value from spaceLeft
           spaceLeft -= (item.budget / this.totalValue) * this.circleLength
 
-          if (item === this.sortedData.filter(sd => sd.budget != 0)[0]) {
+          if (item === this.sortedData.filter(sd => sd.budget !== 0)[0]) {
             this.fillColor = this.sortedData[index].color
             this.endTooltip = this.sortedData[index]
           }
