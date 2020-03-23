@@ -283,9 +283,7 @@ export default {
     getElementColor (category) {
       let element = _.findWhere(this.allElements, { title: category })
       if (element === undefined) {
-        element = {
-          color: this.allElements.defaultColor
-        }
+        return this.defaultColor
       }
       return element.color
     }
