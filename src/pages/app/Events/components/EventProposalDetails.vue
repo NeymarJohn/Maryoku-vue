@@ -31,15 +31,15 @@
                         <ul class="event-details">
                             <li class="event-details__item">
                                 <label>Name</label>
-                                <div class="info-text">March Madness event</div>
+                                <div class="info-text">{{event.title}}</div>
                             </li>
                             <li class="event-details__item">
                                 <label>Date</label>
-                                <div class="info-text">December 25,2019</div>
+                                <div class="info-text">{{event.eventStartMillis | formatDate}}</div>
                             </li>
                             <li class="event-details__item">
                                 <label>Guest Arrival Time</label>
-                                <div class="info-text">11:00 AM</div>
+                                <div class="info-text">{{event.eventStartMillis | formatTime}}</div>
                             </li>
                         </ul>
                     </div>
@@ -189,16 +189,14 @@
                     <div class="additional-info">
                         <div class="additional-info__title">Additional</div>
                         <div class="additional-info__content">
-                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                            labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                            et ea rebum. Stet clita kasd gubergren, no
+                            {{vendorProposal.proposals[0].candellationPolicy}}
                         </div>
                     </div>
 
 
                     <div class="signature-section">
                         <div class="signature-section__vendor">
-                            Relish caterers & venues
+                            {{vendorProposal.vendor.vendorDisplayName}}
                         </div>
                         <div class="signature-section__image">
                             <img src="https://bit.ly/3doZIxt">
@@ -213,14 +211,14 @@
                     </div>
 
                     <ul class="contact-list_items d-flex justify-content-start">
-                        <li class="contact-list_item">
-                            <a href=""><img :src="`${menuIconsURL}Group 1014.svg`"> Relish@venue@hotmail.com</a>
+                        <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainEmail">
+                            <a href=""><img :src="`${menuIconsURL}Group 1014.svg`"> {{vendorProposal.vendor.vendorMainEmail}}</a>
                         </li>
-                        <li class="contact-list_item">
-                            <a href=""><img :src="`${menuIconsURL}Group 1014.svg`"> 575 Mission St. San Francisco, CA 94105</a>
+                        <li class="contact-list_item" v-if="vendorProposal.vendor.vendorAddressLine1">
+                            <a href=""><img :src="`${menuIconsURL}Group 1014.svg`"> {{vendorProposal.vendor.vendorAddressLine1}} {{vendorProposal.vendor.vendorAddressLine2}}</a>
                         </li>
-                        <li class="contact-list_item">
-                            <a href=""><img :src="`${menuIconsURL}Group 1014.svg`"> 077-3000293</a>
+                        <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
+                            <a href=""><img :src="`${menuIconsURL}Group 1014.svg`"> {{vendorProposal.vendor.vendorMainPhoneNumber}}</a>
                         </li>
                     </ul>
                 </div>
@@ -354,9 +352,6 @@
                 let event = new CalendarEvent({id: this.event.id})
                 let selected_block = new EventComponent({id: this.$route.params.vendorId})
 
-                console.log(this.$route.params.vendorId);
-                console.log(this.$route.params.proposalId);
-
                 new EventComponentVendor().for(calendar, event, selected_block).get()
                     .then(resp => {
 
@@ -371,9 +366,6 @@
                         _.each(extras,function(item){
                             vm.extraTotal+=item.price;
                         })
-
-
-                        console.log('vendorProposal => ',vm.vendorProposal);
 
                     })
                     .catch(error => {
