@@ -25,8 +25,8 @@
               <td
                 width="40%"
                 class="event-block-element"
-                :class="block.title.toLowerCase().replace(/ /g, '-')"
               >
+                  <div class="left-border" :style="`background : ${block.color}`"></div>
                 <img
                   :src="`http://static.maryoku.com/storage/icons/Budget Elements/${block.title}.svg`"
                 />
@@ -146,7 +146,9 @@
       <tbody>
         <tr>
           <td class="event-block-element unexpected" width="40%">
-            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+18.png" /> Unexpected
+              <div class="left-border" :style="`background : #24c796`"></div>
+
+              <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+18.png" /> Unexpected
           </td>
           <td class="planned" width="20%">$0</td>
           <td class="actual" width="15%">$0</td>
@@ -260,8 +262,7 @@
         <tr class="add-category">
           <td colspan="5">
             <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
-              <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2019.svg" /> Add new
-              category
+              <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2019.svg" /> Add new category
             </md-button>
           </td>
         </tr>
@@ -340,7 +341,7 @@
         </div>
       </template>
       <template slot="footer">
-        <md-button class="md-default md-simple cancel-btn" @click>Cancel</md-button>
+        <md-button class="md-default md-simple cancel-btn" @click="showCategoryModal = false">Cancel</md-button>
         <md-button class="md-rose add-category-btn" @click="addBuildingBlock">Add Category</md-button>
       </template>
     </modal>
