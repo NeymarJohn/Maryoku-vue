@@ -1,6 +1,6 @@
 <template>
   <div class="pie-chart-wrapper">
-    <svg id="pie_chart" ref="pie_chart" width="100%" height="100%">
+    <svg id="pie_chart" ref="pie_chart" width="100%" height="100%" v-if="sortedData">
       <g
         v-for="(item, index) in sortedData"
         :key="index"
@@ -88,7 +88,7 @@
   </div>
 </template>
 <script>
-import TWEEN from '@tweenjs/tween.js'
+
 import _ from 'underscore'
 
 export default {
@@ -134,40 +134,76 @@ export default {
       ],
       allElements: [
         {
-          title: 'Venue',
-          color: '#00B050'
-        },
-        {
-          title: 'Event Documentation',
-          color: '#00BCD4'
-        },
-        {
           title: 'Swags',
-          color: '#F3423A'
+          color: '#44546a'
         },
         {
-          title: 'Marketing and Print',
-          color: '#4E853C'
+          title: 'Equipment Rental',
+          color: 'e7e6e6'
         },
         {
-          title: 'Beverage',
-          color: '#C19859'
+          title: 'Venue Rental',
+          color: '#ffc000'
         },
         {
-          title: 'Security',
-          color: '#A5A5A5'
+          title: 'Food & Beverage',
+          color: '#ff527c'
         },
         {
-          title: 'Rentals',
-          color: '#43536A'
-        },
-        {
-          title: 'Food',
-          color: '#FF527C'
+          title: 'Advertising & Promotion',
+          color: '#a5a5a5'
         },
         {
           title: 'Entertainment',
+          color: '#20c997'
+        },
+        {
+          title: 'Audio Visual/staging',
+          color: '#00bcd4'
+        },
+        {
+          title: 'Decor',
           color: '#641956'
+        },
+        {
+          title: 'Signage/Printing',
+          color: '#00b050'
+        },
+        {
+          title: 'Transportation & Tour operator services',
+          color: '#ff0066'
+        },
+        {
+          title: 'Shipping',
+          color: '#1D9A78'
+        },
+        {
+          title: 'Administration',
+          color: '#8BC145'
+        },
+        {
+          title: 'Security Services',
+          color: '#689331'
+        },
+        {
+          title: 'Corporate Social Responsibility',
+          color: '#f19d19'
+        },
+        {
+          title: 'Meeting Organization fee',
+          color: '#B74919'
+        },
+        {
+          title: 'Technology Services',
+          color: '#C490AA'
+        },
+        {
+          title: 'Videography & Photography',
+          color: '#7f7f7f'
+        },
+        {
+          title: 'Unexpected',
+          color: '#6f3b55'
         }
       ],
       defaultColor: '#641956'
@@ -185,8 +221,6 @@ export default {
     },
     drawChart () {
       if (!this.event.id) return
-
-      let vm = this
       this.isLoading = true
       let res = this.event.components
       this.circleLength = Math.PI * (this.radius * 2)
@@ -213,6 +247,7 @@ export default {
 
       // remove duplicated categories
       this.categories = [...new Set(this.categories)]
+      console.log('categories', this.categories)
       // sort data with updated categories
       this.categories.forEach((category, cIndex) => {
         this.sortedData.push({
@@ -247,6 +282,11 @@ export default {
     },
     getElementColor (category) {
       let element = _.findWhere(this.allElements, { title: category })
+      if (element === undefined) {
+        element = {
+          color: this.allElements.defaultColor
+        }
+      }
       return element.color
     }
   },
