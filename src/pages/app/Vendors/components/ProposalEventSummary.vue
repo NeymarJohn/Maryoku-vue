@@ -39,8 +39,8 @@
           <h4>
             Dear Rachel,
           </h4>
-          <p>
-            Relish caters & venus is pleased to provide you with the attached catering proposal for you, wichi is currently scheduled to be held on at.
+          <p @mouseover="mouseOver()" @mouseleave="mouseLeave()">
+            Relish caters & venus is pleased to provide you with the attached catering proposal for you, which is currently scheduled to be held on at.
             <br/>
             Sincerely,
             <strong>Relish cateres & venues</strong>
@@ -129,8 +129,8 @@
             <p><strong>If</strong> the client cancel the vent after 3 weeks before the event</p>
           </div>
           <div class="semi-column">
-            <p><strong>Than</strong> the client wil pay full deposite</p>
-            <p><strong>Than</strong> the client wil pay full deposite</p>
+            <p><strong>Than</strong> the client will pay full deposite</p>
+            <p><strong>Than</strong> the client will pay full deposite</p>
           </div>
           <div class="additional">
             <h6>Additional</h6>
@@ -172,8 +172,13 @@
     <modal v-if="savedItModal" class="saved-it-modal">
       <template slot="header">
         <div class="saved-it-modal__header">
-          <div class="header-description">
-            Saved It!
+          <h3 v-if="isTimeUp">Time Is Up!</h3>
+          <h3 v-else>Saved It!</h3>
+          <div v-if="isTimeUp" class="header-description">
+            The deadline for submitting this prposal has passed. But no worries! We weill be with you soon with the next one.
+          </div>
+          <div v-else class="header-description">
+            You can return to it till the deadline!
           </div>
         </div>
         <button class="close" @click="hideModal()">
@@ -182,58 +187,28 @@
       </template>
       <template slot="body">
         <div class="saved-it-modal__body">
-          <vendor-bid-time-counter
-            :days="4" 
-            :hours="0" 
-            :minutes="0" 
-            :seconds="0"
-          />
+          <div v-if="isTimeUp" class="time-cont">
+            <vendor-bid-time-counter
+              :days="0" 
+              :hours="0" 
+              :minutes="0" 
+              :seconds="0"
+            />
+          </div>
+          <div v-else class="time-cont">
+            <vendor-bid-time-counter
+              :days="4" 
+              :hours="0" 
+              :minutes="0" 
+              :seconds="0"
+            />
+          </div>
         </div>
       </template>
       <template slot="footer">
         <div class="saved-it-modal__footer">
-          <button class="cool" @click="hideModal()">Cool, Thanks</button>
-        </div>
-      </template>
-    </modal>
-    <modal v-if="fullDetailsModal" class="full-details-modal">
-      <template slot="header">
-        <div class="full-details-modal__header">
-          <div class="header-description">
-            Lorem 
-          </div>
-        </div>
-        <button class="close" @click="hideModal()">
-          <md-icon>clear</md-icon>
-        </button>
-      </template>
-      <template slot="body">
-        <div class="full-details-modal__body">
-          <ul>
-            <li>
-              <md-icon>calendar_today</md-icon> <span><strong>Date:</strong> December 25-26, 2019</span>
-            </li>
-            <li>
-              <md-icon>access_time</md-icon> <span><strong>Time:</strong> December 25-26, 2019</span>
-            </li>
-            <li>
-              <md-icon>location_on</md-icon> <span><strong>Address:</strong> December 25-26, 2019</span>
-            </li>
-            <li>
-              <md-icon>people</md-icon> <span><strong>Guests:</strong> December 25-26, 2019</span>
-            </li>
-            <li>
-              <md-icon>outlined_flag</md-icon> <span><strong>Type:</strong> December 25-26, 2019</span>
-            </li>
-            <li>
-              <md-icon>person_add</md-icon> <span><strong>Invited:</strong> December 25-26, 2019</span>
-            </li>
-          </ul>
-        </div>
-      </template>
-      <template slot="footer">
-        <div class="full-details-modal__footer">
-          <a class="hide-full" @click="hideModal()">Hide Full Details<md-icon>keyboard_arrow_up</md-icon></a>
+          <button v-if="isTimeUp" class="cool" @click="hideModal()">Ok, Thanks</button>
+          <button v-else class="cool" @click="hideModal()">Cool, Thanks</button>
         </div>
       </template>
     </modal>
@@ -259,21 +234,27 @@
     data () {
       return {
         currentTab: 1,
-        fullDetailsModal: false,
         savedItModal: false,
+        isTimeUp: false,
+        hover: false,
       }
     },
     methods: {
       hideModal() {
-        this.fullDetailsModal = false
         this.savedItModal = false
+      },
+      mouseOver() {
+        this.hover = true
+      },
+      mouseLeave() {
+        this.hover= false
       }
     },
     created() {
     },
     mounted() {
-      this.fullDetailsModal = false
       this.savedItModal = false
+      this.isTimeUp = true
     },
     computed: {
     },
@@ -387,6 +368,10 @@
 
           strong {
             font-weight: 800;
+          }
+
+          &:hover {
+            border: 1px solid black;
           }
         }
         span {
@@ -641,12 +626,19 @@
       }
     }
 
-    .full-details-modal {
+    .saved-it-modal {
       &__header {
         width: 100%;
-        padding: 55px 295px 24px 31px;
+        padding: 55px 31px 24px 31px;
+        text-align: center;
+        h3 {
+          font-size: 30px;
+          font-weight: bold;
+          color: #f51355;
+        }
         .header-description {
-          font-size: 16px;
+          font-size: 20px;
+          color: #050505;
         }
         & + .close {
           background: transparent;
@@ -659,41 +651,16 @@
         }
       }
       &__body {
-        ul {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-          padding-bottom: 26px;
-
-          li {
-            padding-left: 31px;
-            text-align: left;
-            margin-bottom: 50px;
-
-            span {
-              font-size: 20px;
-              strong {
-                font-weight: bold;
-              }
-            }
-
-            i {
-              font-size: 18px!important;
-              margin-right: 26px;
-              position: relative;
-              top: -3px;
-            }
-
-            &:last-child {
-              margin-bottom: 0;
-            }
-          }
+        .time-cont {
+          max-width: 320px;
+          margin: 0 auto;
         }
       }
       &__footer {
         padding: 10px 40px 40px 40px;
       }
     }
+
     .cool {
       font-size: 16px;
       font-weight: 800;

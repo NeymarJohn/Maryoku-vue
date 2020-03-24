@@ -56,10 +56,12 @@
                       (this.hours * 60 * 60 * 1000) +
                       (this.minutes * 60 * 1000) +
                       (this.seconds * 1000)
-      this.timerCount();
-      this.interval = setInterval(() => {
+      if (this.totalTime != 0) {
         this.timerCount();
-      }, 1000);
+        this.interval = setInterval(() => {
+          this.timerCount();
+        }, 1000);
+      }
     },
     computed: {
     },

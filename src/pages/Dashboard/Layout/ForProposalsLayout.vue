@@ -15,6 +15,9 @@
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         </p>
+        <div class="a-right">
+          <a class="see-full" @click="fullDetailsModal=true">See Full Details<md-icon>keyboard_arrow_right</md-icon></a>
+        </div>
         <div class="pull-bottom-right">
           <vendor-bid-time-counter
             :days="4" 
@@ -33,17 +36,59 @@
         <md-icon>navigate_before</md-icon> Back
       </div>
       <div class="next-cont">
-        <span>You can return to it till the deadline</span>
-        <a class="save"><md-icon>save</md-icon> Save for later</a>
+        <span>You can return to it till the deadline!</span>
+        <a class="save" @click="saveProposal()"><md-icon>save</md-icon> Save for later</a>
         <a class="next">Next</a>
       </div>
     </section>
+    <modal v-if="fullDetailsModal" class="full-details-modal">
+      <template slot="header">
+        <div class="full-details-modal__header">
+          <div class="header-description">
+            Lorem 
+          </div>
+        </div>
+        <button class="close" @click="hideModal()">
+          <md-icon>clear</md-icon>
+        </button>
+      </template>
+      <template slot="body">
+        <div class="full-details-modal__body">
+          <ul>
+            <li>
+              <md-icon>calendar_today</md-icon> <span><strong>Date:</strong> December 25-26, 2019</span>
+            </li>
+            <li>
+              <md-icon>access_time</md-icon> <span><strong>Time:</strong> December 25-26, 2019</span>
+            </li>
+            <li>
+              <md-icon>location_on</md-icon> <span><strong>Address:</strong> December 25-26, 2019</span>
+            </li>
+            <li>
+              <md-icon>people</md-icon> <span><strong>Guests:</strong> December 25-26, 2019</span>
+            </li>
+            <li>
+              <md-icon>outlined_flag</md-icon> <span><strong>Type:</strong> December 25-26, 2019</span>
+            </li>
+            <li>
+              <md-icon>person_add</md-icon> <span><strong>Invited:</strong> December 25-26, 2019</span>
+            </li>
+          </ul>
+        </div>
+      </template>
+      <template slot="footer">
+        <div class="full-details-modal__footer">
+          <a class="see-full" @click="hideModal()">Hide Full Details<md-icon>keyboard_arrow_up</md-icon></a>
+        </div>
+      </template>
+    </modal>
   </div>
 </template>
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
   import Calendar from '@/models/Calendar';
   import CalendarEvent from '@/models/CalendarEvent';
+  import { Modal } from '@/components'
 
   import TopNavbar from "./TopNavbar.vue";
   import ContentFooter from "./ContentFooter.vue";
@@ -58,17 +103,26 @@
       ContentFooter,
       MobileMenu,
       VendorBidTimeCounter,
-      UserMenu
+      UserMenu,
+      Modal
     },
     data() {
       return {
+        fullDetailsModal: false,
       }
     },
     methods: {
+      hideModal() {
+        this.fullDetailsModal = false
+      },
+      saveProposal() {
+        console.log(this.step)
+      }
     },
     created(){
     },
     mounted() {
+      this.fullDetailsModal = false
     },
     computed:{
     }
@@ -140,7 +194,16 @@
           font-size: 16px;
           font-weight: normal;
           color: #050505;
-          max-width: 720px;
+          max-width: 990px;
+        }
+        .a-right {
+          text-align: right;
+          max-width: 990px;
+
+          i {
+            position: relative;
+            top: -1px;
+          }
         }
         .pull-bottom-right {
           position: absolute;
@@ -201,6 +264,69 @@
             }
           }
         }
+      }
+    }
+    .full-details-modal {
+      &__header {
+        width: 100%;
+        padding: 55px 295px 24px 31px;
+        .header-description {
+          font-size: 16px;
+        }
+        & + .close {
+          background: transparent;
+          border: none;
+          position: absolute;
+          top: 61px;
+          right: 60px;
+          color: #050505;
+          cursor: pointer;
+        }
+      }
+      &__body {
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          padding-bottom: 26px;
+
+          li {
+            padding-left: 31px;
+            text-align: left;
+            margin-bottom: 50px;
+
+            span {
+              font-size: 20px;
+              strong {
+                font-weight: bold;
+              }
+            }
+
+            i {
+              font-size: 18px!important;
+              margin-right: 26px;
+              position: relative;
+              top: -3px;
+            }
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
+      &__footer {
+        padding: 10px 40px 40px 40px;
+      }
+    }
+    .see-full {
+      font-size: 16px;
+      font-weight: 800;
+      color: #f51355;
+      cursor: pointer;
+
+      i {
+        color: #f51355;
       }
     }
   }
