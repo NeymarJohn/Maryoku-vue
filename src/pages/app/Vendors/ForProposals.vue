@@ -63,7 +63,12 @@
         </div>
       </div>
       <div class="md-layout-item md-size-30">
-        <proposal-budget-summary></proposal-budget-summary>
+        <proposal-budget-summary
+          :bundleDiscount="true"
+          :warning="true"
+          :additional="true"
+          :isEdit="true"
+        ></proposal-budget-summary>
       </div>
     </div>
   </div>
