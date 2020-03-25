@@ -14,46 +14,46 @@
   </div>
 </template>
 <script>
-  // import auth from '@/auth';
-  import CompanyDashboardInfo from "./CompanyDashboardInfo";
-  import CompanyDashboardEventsChart from "./CompanyDashboardEventsChart";
-  import CompanyDashboardEventTypesChart from "./CompanyDashboardEventTypesChart";
-  import CompanyDashboardParticipantsChart from "./CompanyDashboardParticipantsChart";
-  import CompanyDashboardSatisfactionChart from "./CompanyDashboardSatisfactionChart";
-  import CompanyDashboardCostsChart from "./CompanyDashboardCostsChart";
+// import auth from '@/auth';
+import CompanyDashboardInfo from './CompanyDashboardInfo'
+import CompanyDashboardEventsChart from './CompanyDashboardEventsChart'
+import CompanyDashboardEventTypesChart from './CompanyDashboardEventTypesChart'
+import CompanyDashboardParticipantsChart from './CompanyDashboardParticipantsChart'
+import CompanyDashboardSatisfactionChart from './CompanyDashboardSatisfactionChart'
+import CompanyDashboardCostsChart from './CompanyDashboardCostsChart'
 
-  import Customer from "@/models/Customer";
+import Customer from '@/models/Customer'
 
-  import moment from 'moment';
+import moment from 'moment'
 
-  export default {
-    components: {
-      CompanyDashboardInfo,
-      CompanyDashboardEventsChart,
-      CompanyDashboardEventTypesChart,
-      CompanyDashboardParticipantsChart,
-      CompanyDashboardSatisfactionChart,
-      CompanyDashboardCostsChart
-    },
-    data() {
-      return {
-        // auth: auth,
-        statistics: {numberOfEventsPerYear : {}, satisfactionRatesPerYearMonth: {}, participantsPerEventPerYearMonthEventType: {}},
-        currentYear: moment().year().toString()
-      };
-    },
-    mounted() {
-      this.$auth.currentUser(this, true, () => {
-        new Customer({id: this.$auth.user.customer.id})
-          .statistics()
-          .get()
-          .then(res=>{
-            this.statistics = res[0];
-          })
-          .catch(e=>console.log(e,'chart api errors'))
-      });
+export default {
+  components: {
+    CompanyDashboardInfo,
+    CompanyDashboardEventsChart,
+    CompanyDashboardEventTypesChart,
+    CompanyDashboardParticipantsChart,
+    CompanyDashboardSatisfactionChart,
+    CompanyDashboardCostsChart
+  },
+  data () {
+    return {
+      // auth: auth,
+      statistics: {numberOfEventsPerYear: {}, satisfactionRatesPerYearMonth: {}, participantsPerEventPerYearMonthEventType: {}},
+      currentYear: moment().year().toString()
     }
-  };
+  },
+  mounted () {
+    this.$auth.currentUser(this, true, () => {
+      new Customer({id: this.$auth.user.customer.id})
+        .statistics()
+        .get()
+        .then(res => {
+          this.statistics = res[0]
+        })
+        .catch(e => console.log(e, 'chart api errors'))
+    })
+  }
+}
 </script>
 <style lang="scss" scoped>
 

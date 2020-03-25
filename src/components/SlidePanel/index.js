@@ -1,5 +1,5 @@
-import VueSlideoutPanel from './components/SlideoutPanel';
-import vueSlideoutPanelService from './service';
+import VueSlideoutPanel from './components/SlideoutPanel'
+import vueSlideoutPanelService from './service'
 
 // expose component and service to global scope
 if (typeof window !== 'undefined' && window.Vue) {
@@ -8,22 +8,22 @@ if (typeof window !== 'undefined' && window.Vue) {
   }
 
   window.Vue.use({
-    install(NewVue) {
-      NewVue.component('slideout-panel', VueSlideoutPanel);
-      NewVue.prototype.$showPanel = vueSlideoutPanelService.showPanel;
-      NewVue.prototype.$showPanelStack = vueSlideoutPanelService.showPanelStack;
+    install (NewVue) {
+      NewVue.component('slideout-panel', VueSlideoutPanel)
+      NewVue.prototype.$showPanel = vueSlideoutPanelService.showPanel
+      NewVue.prototype.$showPanelStack = vueSlideoutPanelService.showPanelStack
     }
-  });
+  })
 
-  window.vueSlideoutPanelService = vueSlideoutPanelService;
+  window.vueSlideoutPanelService = vueSlideoutPanelService
 }
 
 export default {
-  install: function(NewVue) {
-    NewVue.component('slideout-panel', VueSlideoutPanel);
-    NewVue.prototype.$showPanel = vueSlideoutPanelService.showPanel;
-    NewVue.prototype.$showPanelStack = vueSlideoutPanelService.showPanelStack;
+  install: function (NewVue) {
+    NewVue.component('slideout-panel', VueSlideoutPanel)
+    NewVue.prototype.$showPanel = vueSlideoutPanelService.showPanel
+    NewVue.prototype.$showPanelStack = vueSlideoutPanelService.showPanelStack
   },
   VueSlideoutPanel,
   vueSlideoutPanelService
-};
+}

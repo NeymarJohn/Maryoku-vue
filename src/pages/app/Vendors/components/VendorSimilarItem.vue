@@ -28,33 +28,33 @@
   </div>
 </template>
 <script>
-  import VueElementLoading from 'vue-element-loading'
+import VueElementLoading from 'vue-element-loading'
 
-  export default {
-    name: 'vendor-similar-item',
-    components: {
-      VueElementLoading,
-    },
-    props: {
-      similarItems: Array,
-      ratings: Array
-    },
-    data: () => ({
-      isLoading:true,
-    }),
-    methods: {
-    },
-    created() {
+export default {
+  name: 'vendor-similar-item',
+  components: {
+    VueElementLoading
+  },
+  props: {
+    similarItems: Array,
+    ratings: Array
+  },
+  data: () => ({
+    isLoading: true
+  }),
+  methods: {
+  },
+  created () {
 
-    },
-    mounted() {
-      this.isLoading = false;
-    },
-    computed: {
-    },
-    watch: {
-    }
+  },
+  mounted () {
+    this.isLoading = false
+  },
+  computed: {
+  },
+  watch: {
   }
+}
 </script>
 <style lang="scss" scoped>
   @import "@/assets/scss/md/_variables.scss";

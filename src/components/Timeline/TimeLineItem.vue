@@ -20,7 +20,7 @@
 </template>
 <script>
 export default {
-  name: "time-line-item",
+  name: 'time-line-item',
   props: {
     inverted: Boolean,
     transparent: {
@@ -29,14 +29,14 @@ export default {
     },
     badgeType: {
       type: String,
-      default: "success"
+      default: 'success'
     },
     badgeIcon: {
       type: String,
-      default: ""
+      default: ''
     }
   }
-};
+}
 </script>
 <style>
   .hide {

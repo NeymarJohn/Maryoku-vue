@@ -63,37 +63,37 @@
   </div>
 </template>
 <script>
-import EventSidePanel from "@/pages/app/Events/EventSidePanel";
-import EventCard from "./EventCard.vue";
+import EventSidePanel from '@/pages/app/Events/EventSidePanel'
+import EventCard from './EventCard.vue'
 export default {
   components: {
     EventCard
   },
-  data() {
+  data () {
     return {
       items: [
-        { message: "Foo" },
-        { message: "Bar" },
-        { message: "Bar" },
-        { message: "Bar" },
-        { message: "Bar" },
-        { message: "Bar" }
+        { message: 'Foo' },
+        { message: 'Bar' },
+        { message: 'Bar' },
+        { message: 'Bar' },
+        { message: 'Bar' },
+        { message: 'Bar' }
       ]
-    };
+    }
   },
-  mounted() {
-    this.$auth.currentUser(this, true, () => {});
+  mounted () {
+    this.$auth.currentUser(this, true, () => {})
   },
   methods: {
-    openEventModal() {},
-    openYearPlanner() {
-      this.$router.push({ path: `/planner` });
+    openEventModal () {},
+    openYearPlanner () {
+      this.$router.push({ path: `/planner` })
     },
-    openVendorsUpload() {
-      this.$router.push({ path: `/vendors` });
+    openVendorsUpload () {
+      this.$router.push({ path: `/vendors` })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .get-started {

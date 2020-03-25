@@ -33,7 +33,6 @@
             </div>
         </div>
 
-
         <!-- Event Booking Items -->
         <div class="md-layout events-booking-items" v-if="proposals.length">
 
@@ -52,7 +51,7 @@
                     <p class="event-desc">{{proposal.proposals[0].aboutUsMessage}}</p>
 
                     <div class="item-actions text-right">
-                        <md-button class="md-rose details-btn"> Details & Booking</md-button>
+                        <md-button class="md-rose details-btn" @click="proposalDetails(proposal)"> Details & Booking</md-button>
                     </div>
                 </div>
             </div>
@@ -64,8 +63,6 @@
             <md-button class="md-default " @click="showSomethingModal = true">I want something different</md-button>
             <md-button class="md-default " @click="showShareVendorModal = true">I already have a venue for my event</md-button>
         </div>
-
-
 
         <modal v-if="showSomethingModal" class="add-category-model something-modal">
             <template slot="header">
@@ -87,7 +84,6 @@
                     </div>
                 </div>
 
-
             </template>
             <template slot="footer">
                 <md-button class="md-default md-simple cancel-btn" @click="showSomethingModal = false">
@@ -98,8 +94,6 @@
                 </md-button>
             </template>
         </modal>
-
-
 
         <modal v-if="showShareVendorModal" class="add-category-model something-modal">
             <template slot="header">
@@ -192,214 +186,218 @@
             </template>
         </modal>
 
-
-
     </div>
 
 </template>
 <script>
-    import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-    import Calendar from '@/models/Calendar'
-    import CalendarEvent from '@/models/CalendarEvent'
-    import EventComponent from '@/models/EventComponent'
-    import EventTimelineItem from '@/models/EventTimelineItem'
-    import moment from 'moment'
-    import swal from 'sweetalert2'
-    import {SlideYDownTransition} from 'vue2-transitions'
-    import InputMask from 'vue-input-mask'
+import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+import Calendar from '@/models/Calendar'
+import CalendarEvent from '@/models/CalendarEvent'
+import EventComponent from '@/models/EventComponent'
+import EventTimelineItem from '@/models/EventTimelineItem'
+import moment from 'moment'
+import swal from 'sweetalert2'
+import {SlideYDownTransition} from 'vue2-transitions'
+import InputMask from 'vue-input-mask'
 
-    import VueElementLoading from 'vue-element-loading'
-    // import auth from '@/auth';
-    import EventBlocks from '../components/NewEventBlocks'
-    import draggable from 'vuedraggable'
-    import {Drag, Drop} from 'vue-drag-drop'
-    import _ from 'underscore'
-    import {Modal} from '@/components'
-    import EventComponentVendor from '@/models/EventComponentVendor'
-    import EventComponentProperty from '@/models/EventComponentProperty';
+import VueElementLoading from 'vue-element-loading'
+// import auth from '@/auth';
+import EventBlocks from '../components/NewEventBlocks'
+import draggable from 'vuedraggable'
+import {Drag, Drop} from 'vue-drag-drop'
+import _ from 'underscore'
+import {Modal} from '@/components'
+import EventComponentVendor from '@/models/EventComponentVendor'
+import EventComponentProperty from '@/models/EventComponentProperty'
 
+import SideBar from '../../../../components/SidebarPlugin/NewSideBar'
+import SidebarItem from '../../../../components/SidebarPlugin/NewSidebarItem.vue'
+import ProgressSidebar from './progressSidebar'
 
-    import SideBar from '../../../../components/SidebarPlugin/NewSideBar';
-    import SidebarItem from '../../../../components/SidebarPlugin/NewSidebarItem.vue';
-    import ProgressSidebar from './progressSidebar';
+export default {
+  name: 'event-time-line',
+  components: {
+    VueElementLoading,
+    EventBlocks,
+    draggable,
+    Drag,
+    Drop,
+    SlideYDownTransition,
+    InputMask,
+    SideBar,
+    SidebarItem,
+    ProgressSidebar,
+    Modal
+  },
+  props: {
 
-    export default {
-        name: 'event-time-line',
-        components: {
-            VueElementLoading,
-            EventBlocks,
-            draggable, Drag, Drop,
-            SlideYDownTransition,
-            InputMask,
-            SideBar,
-            SidebarItem,
-            ProgressSidebar,
-            Modal
-        },
-        props: {
+  },
+  data: () => ({
+    // auth: auth,
+    isLoading: true,
+    timelineItems: [],
+    hoursArray: [],
+    disabledDragging: false,
+    somethingMessage: null,
+    timelineAttachment: null,
+    event: {},
+    timelineIconsURL: 'http://static.maryoku.com/storage/icons/timeline/svg/',
+    menuIconsURL: 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
+    iconsURL: 'http://static.maryoku.com/storage/icons/Event%20Page/',
+    newTimeLineIconsURL: 'http://static.maryoku.com/storage/icons/Timeline-New/',
+    showSomethingModal: false,
+    showShareVendorModal: false,
+    blockVendors: null,
+    selectedBlock: {},
+    proposals: []
 
+  }),
+  methods: {
+      onFileChange (e) {
+          let files = e.target.files || e.dataTransfer.files
+          if (!files.length) return
+          if (e.target.name) {
+              this.createImage(files[0], 'attachment')
+          } else {
+              this.createImage(files[0])
+          }
+      },
+      createImage (file, type) {
+          let reader = new FileReader()
+          let vm = this
 
-        },
-        data: () => ({
-            // auth: auth,
-            isLoading: true,
-            timelineItems: [],
-            hoursArray: [],
-            disabledDragging: false,
-            somethingMessage : null,
-            timelineAttachment: null,
-            event: {},
-            timelineIconsURL : 'http://static.maryoku.com/storage/icons/timeline/svg/',
-            menuIconsURL : 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
-            iconsURL: 'http://static.maryoku.com/storage/icons/Event%20Page/',
-            newTimeLineIconsURL : 'http://static.maryoku.com/storage/icons/Timeline-New/',
-            showSomethingModal : false,
-            showShareVendorModal : false,
-            blockVendors : null,
-            selectedBlock : {},
-            proposals : [],
+          reader.onload = e => {
+              if (type === 'attachment') {
+                  vm.timelineAttachment = e.target.result
+              } else {
+                  // vm.imageRegular = e.target.result;
+              }
+          }
+          reader.readAsDataURL(file)
+      },
+      getSelectedBlock () {
+          let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+          let event = new CalendarEvent({id: this.event.id})
 
-        }),
-        methods: {
+          new EventComponent().for(calendar, event).get().then(resp => {
+              this.selectedBlock = _.findWhere(resp, {id: this.$route.params.blockId})
+          })
+      },
+      getBlockVendors () {
+          if (true) {
+              let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+              let event = new CalendarEvent({id: this.event.id})
+              let selected_block = new EventComponent({id: this.$route.params.blockId})
 
-            onFileChange (e) {
-                let files = e.target.files || e.dataTransfer.files
-                if (!files.length) return
-                if (e.target.name) {
-                    this.createImage(files[0], 'attachment')
-                } else {
-                    this.createImage(files[0])
-                }
-            },
-            createImage (file, type) {
-                let reader = new FileReader()
-                let vm = this
+              new EventComponentVendor().for(calendar, event, selected_block).get()
+                  .then(resp => {
+                      this.isLoading = false
+                      this.selectedBlock.vendors = resp
+                      this.selectedBlock.vendorsCount = resp.length
+                      this.blockVendors = resp
 
-                reader.onload = e => {
-                    if (type === 'attachment') {
-                        vm.timelineAttachment = e.target.result
-                    } else {
-                        //vm.imageRegular = e.target.result;
-                    }
-                }
-                reader.readAsDataURL(file)
-            },
-            getSelectedBlock(){
+                      let vendorsWithProposals = _.filter(this.blockVendors, function (item) {
+                          return item.proposals && item.proposals.length
+                      })
+                      // let vendorsWithSentStatus = _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
+                      // let vendorsWithNoStatus   = _.filter(this.blockVendors, function(item){ return !item.proposals });
 
-                let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-                let event = new CalendarEvent({id: this.event.id});
+                      // this.filteredBlockVendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
 
-                new EventComponent().for(calendar, event).get().then(resp =>{
-                    this.selectedBlock = _.findWhere(resp,{id : this.$route.params.blockId});
-                })
-            },
-            getBlockVendors() {
+                      let proposals = []
+                      _.each(vendorsWithProposals, (v) => {
+                          proposals.push(v.proposals[0])
+                      })
+                      this.selectedBlock.proposals = proposals
+                      this.selectedBlock.proposalsCount = proposals.length
 
-                if (true){
-                    let calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-                    let event = new CalendarEvent({id: this.event.id});
-                    let selected_block = new EventComponent({id : this.$route.params.blockId});
+                      // this.vendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
+                      this.proposals = vendorsWithProposals;
+                      console.log(this.proposals);
+                  })
+                  .catch(error => {
+                      this.isLoading = false
+                      console.log('EventComponentVendor error =>', error)
+                  })
+          } else {
+              this.blockVendors = this.selectedBlock.vendors
 
-                    new EventComponentVendor().for(calendar, event, selected_block).get()
-                        .then(resp => {
+              // console.log('blockVendors => ',this.blockVendors);
+              let vendorsWithProposals = _.filter(this.blockVendors, function (item) {
+                  return item.proposals && item.proposals.length
+              })
+              let vendorsWithSentStatus = _.filter(this.blockVendors, function (item) {
+                  return item.proposals && !item.proposals.length
+              })
+              let vendorsWithNoStatus = _.filter(this.blockVendors, function (item) {
+                  return !item.proposals
+              })
 
-                            this.isLoading = false;
-                            this.selectedBlock.vendors = resp;
-                            this.selectedBlock.vendorsCount = resp.length;
-                            this.blockVendors = resp;
+              this.filteredBlockVendors = _.union(vendorsWithProposals, vendorsWithSentStatus, vendorsWithNoStatus)
+              this.isLoading = false
+          }
+      },
+      proposalDetails(proposal) {
+          this.$router.push('/events/' + this.event.id + '/proposal-details/' + this.$route.params.blockId + '/' + proposal.proposals[0].id );
+      }
+  },
+  created () {
+    [...Array(12).keys()].map(x => x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined);
+    [...Array(12).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`));
+    [...Array(8).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`))
 
-                            let vendorsWithProposals  = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
-                            //let vendorsWithSentStatus = _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
-                            //let vendorsWithNoStatus   = _.filter(this.blockVendors, function(item){ return !item.proposals });
+    this.hoursArray.push()
 
-                            //this.filteredBlockVendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
+    console.log('i am created')
+  },
+  mounted () {
+    this.isLoading = true
+    // if (this.event && this.event.id){
+    //     this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
+    //     this.getTimelineItems();
+    // }
 
-                            let proposals = [];
-                            _.each(vendorsWithProposals, (v)=>{
-                                proposals.push(v.proposals[0]);
-                            });
-                            this.selectedBlock.proposals = proposals;
-                            this.selectedBlock.proposalsCount = proposals.length;
+    console.log('i am mounted')
 
-                            //this.vendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
-                            this.proposals = vendorsWithProposals;
-                        })
-                        .catch(error => {
-                            this.isLoading = false;
-                            console.log('EventComponentVendor error =>',error)
-                        });
-                } else {
-                    this.blockVendors = this.selectedBlock.vendors;
+    this.$auth.currentUser(this, true, function () {
+      let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
 
-                    // console.log('blockVendors => ',this.blockVendors);
-                    let vendorsWithProposals = _.filter(this.blockVendors, function(item){ return item.proposals && item.proposals.length; });
-                    let vendorsWithSentStatus =  _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
-                    let vendorsWithNoStatus =  _.filter(this.blockVendors, function(item){ return !item.proposals });
+      _calendar.calendarEvents().find(this.$route.params.id).then(event => {
+        this.event = event
 
-                    this.filteredBlockVendors = _.union( vendorsWithProposals,vendorsWithSentStatus,vendorsWithNoStatus);
-                    this.isLoading = false;
-                }
+        this.getBlockVendors()
 
-                //this.isLoading = this.filteredBlockVendors.length <= 0;
-            },
+        this.getSelectedBlock()
 
-        },
-        created () {
-            [...Array(12).keys()].map(x => x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined);
-            [...Array(12).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 PM`) : this.hoursArray.push(`${x}:00 PM`));
-            [...Array(8).keys()].map(x => x === 0 ? this.hoursArray.push(`12:00 AM`) : this.hoursArray.push(`${x}:00 AM`))
+        // new EventComponent().for(_calendar, event).get().then(components => {
+        //     this.event.components = components
+        //     this.selectedComponents = components
+        // })
 
-            this.hoursArray.push();
-
-            this.$auth.currentUser(this, true, function () {
-                let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-
-                _calendar.calendarEvents().find(this.$route.params.id).then(event => {
-
-                    this.event = event
-
-                    this.getBlockVendors();
-
-                    this.getSelectedBlock();
-
-
-                    // new EventComponent().for(_calendar, event).get().then(components => {
-                    //     this.event.components = components
-                    //     this.selectedComponents = components
-                    // })
-
-                    console.log(event)
-                })
-            }.bind(this))
-
-        },
-        mounted () {
-            this.isLoading = true
-            // if (this.event && this.event.id){
-            //     this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
-            //     this.getTimelineItems();
-            // }
-        },
-        watch: {
-            event (newVal, oldVal) {
-                this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', true)
-            }
-        },
-        filters: {
-            formatDate: function (date) {
-                return moment(date).format('MMM Do YYYY ')
-            },
-            formatTime: function (date) {
-                return moment(date).format('h:00 A')
-            },
-            formatDuration: function (startDate, endDate) {
-                return moment(endDate).diff(startDate, 'hours')
-            },
-            withComma (amount) {
-                return amount ? amount.toLocaleString() : 0
-            }
-        },
+        console.log(event)
+      })
+    }.bind(this))
+  },
+  watch: {
+    event (newVal, oldVal) {
+      this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', true)
     }
+  },
+  filters: {
+    formatDate: function (date) {
+      return moment(date).format('MMM Do YYYY ')
+    },
+    formatTime: function (date) {
+      return moment(date).format('h:00 A')
+    },
+    formatDuration: function (startDate, endDate) {
+      return moment(endDate).diff(startDate, 'hours')
+    },
+    withComma (amount) {
+      return amount ? amount.toLocaleString() : 0
+    }
+  }
+}
 </script>
 <style lang="scss">
 

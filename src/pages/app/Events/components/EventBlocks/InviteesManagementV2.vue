@@ -8,36 +8,35 @@
 </template>
 <script>
 
-  import Calendar from "@/models/Calendar"
-  import CalendarEvent from "@/models/CalendarEvent"
-  import VueElementLoading from 'vue-element-loading';
-  import EventInteraction from "@/models/EventInteraction";
+import Calendar from '@/models/Calendar'
+import CalendarEvent from '@/models/CalendarEvent'
+import VueElementLoading from 'vue-element-loading'
+import EventInteraction from '@/models/EventInteraction'
 
-  import InteractionsList from './InteractionsList';
-  export default {
-    name: 'invitees-management-v2',
-    components: {
-      VueElementLoading,
-      InteractionsList
-    },
-    props: {
-      eventData: Object
-    },
-    data: () => ({
+import InteractionsList from './InteractionsList'
+export default {
+  name: 'invitees-management-v2',
+  components: {
+    VueElementLoading,
+    InteractionsList
+  },
+  props: {
+    eventData: Object
+  },
+  data: () => ({
 
-      isLoading: true,
-    }),
-    methods: {
+    isLoading: true
+  }),
+  methods: {
 
-    },
-    created() {
-    },
-    mounted() {
-      this.isLoading = false;
-
-    },
-    computed: {},
-    watch: {
-    }
+  },
+  created () {
+  },
+  mounted () {
+    this.isLoading = false
+  },
+  computed: {},
+  watch: {
   }
+}
 </script>

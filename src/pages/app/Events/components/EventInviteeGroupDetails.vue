@@ -28,22 +28,22 @@
 </template>
 
 <script>
-    export default {
-        name: 'event-invitee-group-details',
-        props: {
-            group: Object
-        },
-        data(){
-            return {
-                noActions: false
-            }
-        },
-        methods: {
-            unselectMember(member){
-                this.$emit("unselect-member", member);
-            }
-        }
-    };
+export default {
+  name: 'event-invitee-group-details',
+  props: {
+    group: Object
+  },
+  data () {
+    return {
+      noActions: false
+    }
+  },
+  methods: {
+    unselectMember (member) {
+      this.$emit('unselect-member', member)
+    }
+  }
+}
 </script>
 
 <style scoped>

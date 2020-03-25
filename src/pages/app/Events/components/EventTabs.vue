@@ -66,31 +66,31 @@ export default {
     showSwalComponent: Function,
     colorButton: {
       type: String,
-      default: ""
+      default: ''
     }
   },
   name: 'event-tabs',
-  data() {
+  data () {
     return {
       activePanel: this.tabName[0]
-    };
+    }
   },
   computed: {},
   methods: {
-    switchPanel(panel) {
-      this.activePanel = panel;
+    switchPanel (panel) {
+      this.activePanel = panel
     },
-    isActivePanel(panel) {
-      return this.activePanel === panel;
+    isActivePanel (panel) {
+      return this.activePanel === panel
     },
-    getColorButton: function(colorButton) {
-      return "md-" + colorButton + "";
+    getColorButton: function (colorButton) {
+      return 'md-' + colorButton + ''
     },
-    getTabContent: function(index) {
-      return "tab-pane-" + index + "";
+    getTabContent: function (index) {
+      return 'tab-pane-' + index + ''
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

@@ -117,134 +117,131 @@
       </div>
 </template>
 <script>
-  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-  import Calendar from "@/models/Calendar"
-  import EventComponent from "@/models/EventComponent";
-  // import auth from '@/auth';
-  import moment from "moment";
-  import ChartComponent from "@/components/Cards/ChartComponent";
-  import {
-      ChartCard,
-      AnimatedNumber
-  } from "@/components";
+import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+import Calendar from '@/models/Calendar'
+import EventComponent from '@/models/EventComponent'
+// import auth from '@/auth';
+import moment from 'moment'
+import ChartComponent from '@/components/Cards/ChartComponent'
+import {
+  ChartCard,
+  AnimatedNumber
+} from '@/components'
 
-  export default {
-    name: 'sticky-budget',
-    components: {
-        ChartComponent,
-        AnimatedNumber,
-        ChartCard
+export default {
+  name: 'sticky-budget',
+  components: {
+    ChartComponent,
+    AnimatedNumber,
+    ChartCard
+  },
+  props: {
+    event
+  },
+  data: () => ({
+    // auth: auth,
+    selectedComponents: [],
+    currentTab: 'blocks',
+    eventId: null,
+    percentage: 0,
+    totalRemainingBudget: 0,
+    seriesData: [],
+    calendarEvent: {},
+    buildingBlocksList: [],
+    expanded: false,
+    expandButtonText: 'VIEW FULL EVENT DETAILS',
+    expandButtonIcon: 'arrow_upward'
+  }),
+  methods: {
+    getEvent () {
+      this.$auth.currentUser(this, true, function () {
+        let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+
+        _calendar.calendarEvents().find(this.$route.params.id).then(event => {
+          this.eventId = event.id
+          this.calendarEvent = event
+          this.totalRemainingBudget = event.totalBudget - event.allocatedBudget
+          this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2)
+          this.seriesData = [(100 - this.percentage), this.percentage]
+        })
+      }.bind(this))
     },
-    props: {
-        event
-    },
-    data: () => ({
-        // auth: auth,
-        selectedComponents: [],
-        currentTab: 'blocks',
-        eventId: null,
-        percentage: 0,
-        totalRemainingBudget: 0,
-        seriesData: [],
-        calendarEvent : {},
-        buildingBlocksList : [],
-        expanded : false,
-        expandButtonText : 'VIEW FULL EVENT DETAILS',
-        expandButtonIcon  : 'arrow_upward'
-    }),
-    methods: {
-        getEvent() {
-            this.$auth.currentUser(this, true, function() {
-                let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
+    toggleExpanded () {
+      this.expanded = !this.expanded
 
-                _calendar.calendarEvents().find(this.$route.params.id).then(event => {
-                    this.eventId = event.id;
-                    this.calendarEvent = event;
-                    this.totalRemainingBudget = event.totalBudget - event.allocatedBudget;
-                    this.percentage = 100 - ((event.allocatedBudget / event.totalBudget) * 100).toFixed(2);
-                    this.seriesData = [(100 - this.percentage), this.percentage];
-                });
-            }.bind(this));
-        },
-        toggleExpanded(){
-            this.expanded = !this.expanded;
-
-            if ( this.expanded ) {
-                this.expandButtonText = 'HIDE FULL EVENT DETAILS';
-                this.expandButtonIcon = 'arrow_downward';
-            } else {
-                this.expandButtonText = 'VIEW FULL EVENT DETAILS';
-                this.expandButtonIcon = 'arrow_upward';
-            }
-        }
-    },
-    created() {
-
-        this.getEvent();
-
-    },
-    mounted() {
-
-        EventComponent.get()
-            .then(res=> {
-                this.$set(this,'buildingBlocksList',res);
-            })
-            .catch(error => {
-                console.log('Error ', error);
-            })
-
-        console.log('calendarEvent => ',this.calendarEvent);
-
-    },
-    computed: {
-
-        pieChart() {
-            return {
-                data: {
-                    labels: [" ", " "], // should be empty to remove text from chart
-                    series: this.seriesData
-                },
-                options: {
-                    padding: 0,
-                    height: 156,
-                    donut: true,
-                    donutWidth: 15,
-                }
-            };
-        },
-        dataCompletedTasksChart() {
-            return {
-                data: {
-                    labels: ["12am", "3pm", "6pm", "9pm", "12pm", "3am", "6am", "9am"],
-                    series: [[230, 750, 450, 300, 280, 240, 200, 190]]
-                },
-
-                options: {
-                    lineSmooth: this.$Chartist.Interpolation.cardinal({
-                        tension: 0
-                    }),
-                    low: 0,
-                    high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-                    chartPadding: {
-                        top: 0,
-                        right: 0,
-                        bottom: 0,
-                        left: 0
-                    }
-                }
-            }
-        },
-
-    },filters: {
-          formatDate: function (date) {
-              return moment(date).format('MMM D, YYYY');
-          },
-          formatTime: function(date) {
-              return moment(date).format('h:00 A')
-          },
-          formatDuration: function(startDate, endDate) {
-              return moment(endDate).diff(startDate, 'hours')
-          }
+      if (this.expanded) {
+        this.expandButtonText = 'HIDE FULL EVENT DETAILS'
+        this.expandButtonIcon = 'arrow_downward'
+      } else {
+        this.expandButtonText = 'VIEW FULL EVENT DETAILS'
+        this.expandButtonIcon = 'arrow_upward'
       }
+    }
+  },
+  created () {
+    this.getEvent()
+  },
+  mounted () {
+    EventComponent.get()
+      .then(res => {
+        this.$set(this, 'buildingBlocksList', res)
+      })
+      .catch(error => {
+        console.log('Error ', error)
+      })
+
+    console.log('calendarEvent => ', this.calendarEvent)
+  },
+  computed: {
+
+    pieChart () {
+      return {
+        data: {
+          labels: [' ', ' '], // should be empty to remove text from chart
+          series: this.seriesData
+        },
+        options: {
+          padding: 0,
+          height: 156,
+          donut: true,
+          donutWidth: 15
+        }
+      }
+    },
+    dataCompletedTasksChart () {
+      return {
+        data: {
+          labels: ['12am', '3pm', '6pm', '9pm', '12pm', '3am', '6am', '9am'],
+          series: [[230, 750, 450, 300, 280, 240, 200, 190]]
+        },
+
+        options: {
+          lineSmooth: this.$Chartist.Interpolation.cardinal({
+            tension: 0
+          }),
+          low: 0,
+          high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+          chartPadding: {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          }
+        }
+      }
+    }
+
+  },
+  filters: {
+    formatDate: function (date) {
+      return moment(date).format('MMM D, YYYY')
+    },
+    formatTime: function (date) {
+      return moment(date).format('h:00 A')
+    },
+    formatDuration: function (startDate, endDate) {
+      return moment(endDate).diff(startDate, 'hours')
+    }
   }
+}
 </script>

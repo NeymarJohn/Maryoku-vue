@@ -34,75 +34,71 @@
     </div>
 </template>
 <script>
-  // import auth from '@/auth';
-  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-  import CalendarEvent from '@/models/CalendarEvent';
-  import {Modal} from "@/components";
-  import Calendar from "@/models/Calendar";
-  import EventComponent from "@/models/EventComponent";
+// import auth from '@/auth';
+import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+import CalendarEvent from '@/models/CalendarEvent'
+import {Modal} from '@/components'
+import Calendar from '@/models/Calendar'
+import EventComponent from '@/models/EventComponent'
 
-  import swal from "sweetalert2";
-  import { error } from 'util';
-  import moment from 'moment';
+import swal from 'sweetalert2'
+import { error } from 'util'
+import moment from 'moment'
 
-  export default {
-    components: {
-      Modal,
-    },
-    props: {
-      event : Object
+export default {
+  components: {
+    Modal
+  },
+  props: {
+    event: Object
 
-    },
-    data: () => ({
-      // auth: auth,
-        questionsList : [],
-        questionTemplate : {
-          question : '',
-          answer  : ''
-        }
-    }),
-
-    created() {
-        this.questionsList = this.event.eventPage.qnas || [];
-
-    },
-    mounted() {
-
-    },
-    methods: {
-        saveQuestoinsList () {
-            this.$parent.isLoading = true;
-            let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId});
-            let editedEvent = new CalendarEvent({
-                id: this.event.id,
-                eventPage: {
-                    id: this.event.eventPage.id,
-                    qnas: this.questionsList
-                }
-            });
-
-            editedEvent.for(_calendar).save().then(response => {
-                console.log(response);
-                this.$parent.isLoading = false;
-                this.$parent.editMode = false;
-                this.$root.$emit('refreshEvent');
-
-            })
-                .catch((error) => {
-                    console.log(error);
-
-                });
-
-        },
-        addQuestion () {
-            let block = Object.assign({}, this.questionTemplate);
-            this.questionsList.push(block);
-        },
-        removeQuestion (index) {
-            this.questionsList.splice(index, 1);
-        }
+  },
+  data: () => ({
+    // auth: auth,
+    questionsList: [],
+    questionTemplate: {
+      question: '',
+      answer: ''
     }
-  };
+  }),
+
+  created () {
+    this.questionsList = this.event.eventPage.qnas || []
+  },
+  mounted () {
+
+  },
+  methods: {
+    saveQuestoinsList () {
+      this.$parent.isLoading = true
+      let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+      let editedEvent = new CalendarEvent({
+        id: this.event.id,
+        eventPage: {
+          id: this.event.eventPage.id,
+          qnas: this.questionsList
+        }
+      })
+
+      editedEvent.for(_calendar).save().then(response => {
+        console.log(response)
+        this.$parent.isLoading = false
+        this.$parent.editMode = false
+        this.$root.$emit('refreshEvent')
+      })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    addQuestion () {
+      let block = Object.assign({}, this.questionTemplate)
+      this.questionsList.push(block)
+    },
+    removeQuestion (index) {
+      this.questionsList.splice(index, 1)
+    }
+  }
+}
 </script>
 <style lang="scss" scope>
   .md-datepicker {

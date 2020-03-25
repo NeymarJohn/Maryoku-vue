@@ -9,79 +9,75 @@
     </div>
 </template>
 <script>
-    // import auth from '@/auth';
-    import SockJS from 'sockjs-client'; //NEW: SockJS & Stomp instead of socket.io
-    import Stomp from 'stompjs';
-    import TenantUser from '@/models/TenantUser';
-    import Model from '@/models/Model';
+// import auth from '@/auth';
+import SockJS from 'sockjs-client' // NEW: SockJS & Stomp instead of socket.io
+import Stomp from 'stompjs'
+import TenantUser from '@/models/TenantUser'
+import Model from '@/models/Model'
 
-    export default {
-        components: {
+export default {
+  components: {
 
-        },
-        methods: {
-        },
-        created() {
-            const givenToken = this.$route.query.token;
-            this.$auth.setToken(givenToken);
-            this.$auth.setHeaders(this);
+  },
+  methods: {
+  },
+  created () {
+    const givenToken = this.$route.query.token
+    this.$auth.setToken(givenToken)
+    this.$auth.setHeaders(this)
 
-            const that = this;
+    const that = this
 
-            let tenantId = document.location.hostname.replace(".maryoku.com","");
-            let isPrimeTenant = tenantId === 'dev' || tenantId === 'app';
-            if (isPrimeTenant) {
+    let tenantId = document.location.hostname.replace('.maryoku.com', '')
+    let isPrimeTenant = tenantId === 'dev' || tenantId === 'app'
+    if (isPrimeTenant) {
+      this.$cookies.set('at', givenToken, '1m', '', 'maryoku.com', true)
 
-                this.$cookies.set('at', givenToken, '1m', '', 'maryoku.com', true);
+      new TenantUser().find(givenToken).then(res => {
+        if (res.status) {
+          if (res.tenantIds.length === 1) {
+            that.$http.defaults.headers.common['gorm-tenantid'] = res.tenantIds[0]
+            that.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0]
+            // Model.$http.defaults.headers.common['gorm-tenantid'] = res.tenantIds[0];
+            // Model.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
+            let hostname = document.location.hostname
+            hostname = hostname.replace('app.', '')
+            document.location.href = `${document.location.protocol}//${res.tenantIds[0]}.${hostname}:${document.location.port}/#/signedin?token=${givenToken}`
+          } else {
+            that.$router.push({name: 'ChooseWorkspace'})
+          }
+        } else {
+          this.$gtm.trackEvent({
+            event: 'new_registration', // Event type [default = 'interaction'] (Optional)
+            category: 'User',
+            action: 'register',
+            label: 'New User Registered',
+            value: this.$auth.user.emailAddress,
+            noninteraction: false // Optional
+          })
+          that.$router.push({name: 'CreateWorkspace'})
+        }
+      })
+    } else {
+      let tenantId = document.location.hostname.replace('.dev.maryoku.com', '')
+      tenantId = tenantId.replace('.maryoku.com', '')
 
-                new TenantUser().find(givenToken).then(res => {
-                    if (res.status){
-                        if (res.tenantIds.length === 1) {
-                            that.$http.defaults.headers.common['gorm-tenantid'] = res.tenantIds[0];
-                            that.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
-                            //Model.$http.defaults.headers.common['gorm-tenantid'] = res.tenantIds[0];
-                            //Model.$http.defaults.headers.common.gorm_tenantid = res.tenantIds[0];
-                            let hostname = document.location.hostname;
-                            hostname = hostname.replace("app.","");
-                            document.location.href = `${document.location.protocol}//${res.tenantIds[0]}.${hostname}:${document.location.port}/#/signedin?token=${givenToken}`;
-                        } else {
-                            that.$router.push({name: 'ChooseWorkspace'});
-                        }
-                    } else {
-                        this.$gtm.trackEvent({
-                            event: 'new_registration', // Event type [default = 'interaction'] (Optional)
-                            category: 'User',
-                            action: 'register',
-                            label: 'New User Registered',
-                            value: this.$auth.user.emailAddress,
-                            noninteraction: false // Optional
-                        });
-                        that.$router.push({name: 'CreateWorkspace'});
-                    }
-                });
+      that.$http.defaults.headers.common['gorm-tenantid'] = tenantId
+      that.$http.defaults.headers.common.gorm_tenantid = tenantId
+      // Model.$http.defaults.headers.common['gorm-tenantid'] = tenantId;
+      // Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
 
-            } else {
+      that.$auth.currentUser(that, true, function () {
+        that.$gtm.trackEvent({
+          event: 'user_signed_in', // Event type [default = 'interaction'] (Optional)
+          category: 'Users',
+          action: 'signin',
+          label: 'User Signed In',
+          value: that.$auth.user.emailAddress,
+          noninteraction: false // Optional
+        })
 
-                let tenantId = document.location.hostname.replace( ".dev.maryoku.com","");
-                tenantId = tenantId.replace(".maryoku.com","");
-
-                that.$http.defaults.headers.common['gorm-tenantid'] = tenantId;
-                that.$http.defaults.headers.common.gorm_tenantid = tenantId;
-                //Model.$http.defaults.headers.common['gorm-tenantid'] = tenantId;
-                //Model.$http.defaults.headers.common.gorm_tenantid = tenantId;
-
-                that.$auth.currentUser(that, true, function () {
-
-                    that.$gtm.trackEvent({
-                        event: 'user_signed_in', // Event type [default = 'interaction'] (Optional)
-                        category: 'Users',
-                        action: 'signin',
-                        label: 'User Signed In',
-                        value: that.$auth.user.emailAddress,
-                        noninteraction: false // Optional
-                    });
-
-                    /*const socket = new SockJS(`${process.env.SERVER_URL}/stomp`);
+        /* const socket = new SockJS(`${process.env.SERVER_URL}/stomp`);
                   const client = Stomp.over(socket);
 
                   client.connect({}, () => {
@@ -91,43 +87,43 @@
                     });
                   }, (error) => {
                     console.error('unable to connect : ' + error);
-                  });*/
+                  }); */
 
-                    let me = that.$auth.user.me;
+        let me = that.$auth.user.me
 
-                    if (process.env.NODE_ENV === 'production') {
-                        try {
-                            window.heap.identify(that.$auth.user.email);
-                        } catch (e) {
-                            console.error(e);
-                        }
-                        try {
-                            that.$Tawk.$updateChatUser({
-                                name: that.$auth.user.displayName,
-                                email: that.$auth.user.email
-                            });
-                        } catch (e) {
-                            console.error(e);
-                        }
-                    }
+        if (process.env.NODE_ENV === 'production') {
+          try {
+            window.heap.identify(that.$auth.user.email)
+          } catch (e) {
+            console.error(e)
+          }
+          try {
+            that.$Tawk.$updateChatUser({
+              name: that.$auth.user.displayName,
+              email: that.$auth.user.email
+            })
+          } catch (e) {
+            console.error(e)
+          }
+        }
 
-                    /*if (!me.customer.onboarded) {
+        /* if (!me.customer.onboarded) {
                         that.$router.push({ path: '/company-form' });
                     } else if (!me.onboarded) {
                         that.$router.push({ path: '/me-form' });
                     } else {
                         that.$router.push({ path: '/' });
-                    }*/
-                    that.$router.push({ path: '/' });
-                });
-            }
-        },
-        data() {
-            return {
-                serverURL: process.env.SERVER_URL
-            };
-        }
-    };
+                    } */
+        that.$router.push({ path: '/' })
+      })
+    }
+  },
+  data () {
+    return {
+      serverURL: process.env.SERVER_URL
+    }
+  }
+}
 </script>
 <style>
 </style>

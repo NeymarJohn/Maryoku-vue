@@ -37,150 +37,140 @@
 
 <script>
 
-    import GoBack from './componenets/GoBack';
-    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import GoBack from './componenets/GoBack'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
-    import PublicEventPlannerVuexModule from "./PublicEventPlanner.vuex";
+import PublicEventPlannerVuexModule from './PublicEventPlanner.vuex'
 
-    import VTooltip from 'v-tooltip'
-    import _ from "underscore";
+import VTooltip from 'v-tooltip'
+import _ from 'underscore'
 
+export default {
+  components: {
+    GoBack,
+    VTooltip
+  },
+  data () {
+    return {
 
-    export default {
-        components: {
-            GoBack,
-            VTooltip
+      step: 7,
+      haveEventPlace: false,
+      flexibleWithDates: false,
+      eventTime: null,
+      concept: false,
+      eventScale2: null,
+      eventScale3: null,
+      eventScale4: null,
+      eventData: {
+
+      },
+      modelValidations: {
+        totalBudget: {
+          required: true
         },
-        data() {
-            return {
-
-                step : 7,
-                haveEventPlace : false,
-                flexibleWithDates : false,
-                eventTime : null,
-                concept : false,
-                eventScale2 : null,
-                eventScale3 : null,
-                eventScale4 : null,
-                eventData : {
-
-                },
-                modelValidations: {
-                    totalBudget : {
-                        required: true,
-                    },
-                    budgetPerPerson: {
-                        required: true,
-                    }
-                },
-                buttonLabel : 'Skip',
-                moviesPostersURL : 'http://static.maryoku.com/storage/movies/',
-                eventMovieId : null,
-                boardSound:  [],
-                currentIndex : null,
-                isPaused : false,
-                startWorkingList : [
-                    {
-                        title : 'Concept and ideas',
-                        desc : 'Inspired by top creative directors',
-                        img : 'Component 50 – 1@2x.png',
-                        selected : true
-                    },
-                    {
-                        title : 'Detailed Budget Table',
-                        desc : 'Crafted brilliantly to get snap approval',
-                        img : 'Component 52 – 4@2x.png',
-                        selected : true
-                    },
-                    {
-                        title : 'Event Timeline',
-                        desc : 'Tailored for your event to ensure success',
-                        img : 'Component 49 – 4@2x.png',
-                        selected : true
-                    },
-                    {
-                        title : 'Vendors proposals',
-                        desc : 'Available vendors that match your budget',
-                        img : 'Component 51 – 4@2x.png',
-                        selected : true
-                    },
-                    {
-                        title : 'RSVP',
-                        desc : 'From event campaign to registration',
-                        img : 'Component 48 – 8@2x.png',
-                        selected : true
-                    },
-                    {
-                        title : 'On day coordination',
-                        desc : 'By top coordinators familiar with your event',
-                        img : 'Component 51 – 4@2x.png',
-                        selected : false
-                    }
-                ]
-            }
-        },
-        created() {
-            // this.$set(this,'eventMovieId' ,this.publicEventData.eventMovieId);
-
-            // if ( this.publicEventData.eventNeededServices ) {
-            //     this.$set(this,'startWorkingList' ,this.publicEventData.eventNeededServices);
-            //
-            // }
-
-
-
-        },
-
-        methods : {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setSingupModal','setCurrentStep']),
-
-            goToNext() {
-
-                let vm = this;
-
-                this.cerrors = {};
-                this.validating = true;
-
-
-                //open the modal
-
-                this.$validator.validateAll().then(isValid => {
-
-                    if (isValid) {
-
-                        let eventNeededServices = {};
-
-                         _.each(this.startWorkingList,(item)=>{
-                             eventNeededServices[item.title] =  item.selected;
-                         });
-
-                        this.setCurrentStep({currentPage : '/event-summery'});
-
-                         this.setEventProperty({key: 'eventNeededServices', actualValue: eventNeededServices});
-
-                        if ( this.$auth.user.authenticated) {
-                            this.$router.push({ path: `/event-summery`});
-
-                        } else {
-                            this.setSingupModal({showModal : true});
-                        }
-
-                    } else {
-                    }
-
-                });
-
-            },
-            skip() {
-
-            }
-        },computed : {
-            ...mapState('PublicEventPlannerVuex', [
-                'publicEventData',
-                'shoWSignupModal'
-            ])
+        budgetPerPerson: {
+          required: true
         }
-    };
+      },
+      buttonLabel: 'Skip',
+      moviesPostersURL: 'http://static.maryoku.com/storage/movies/',
+      eventMovieId: null,
+      boardSound: [],
+      currentIndex: null,
+      isPaused: false,
+      startWorkingList: [
+        {
+          title: 'Concept and ideas',
+          desc: 'Inspired by top creative directors',
+          img: 'Component 50 – 1@2x.png',
+          selected: true
+        },
+        {
+          title: 'Detailed Budget Table',
+          desc: 'Crafted brilliantly to get snap approval',
+          img: 'Component 52 – 4@2x.png',
+          selected: true
+        },
+        {
+          title: 'Event Timeline',
+          desc: 'Tailored for your event to ensure success',
+          img: 'Component 49 – 4@2x.png',
+          selected: true
+        },
+        {
+          title: 'Vendors proposals',
+          desc: 'Available vendors that match your budget',
+          img: 'Component 51 – 4@2x.png',
+          selected: true
+        },
+        {
+          title: 'RSVP',
+          desc: 'From event campaign to registration',
+          img: 'Component 48 – 8@2x.png',
+          selected: true
+        },
+        {
+          title: 'On day coordination',
+          desc: 'By top coordinators familiar with your event',
+          img: 'Component 51 – 4@2x.png',
+          selected: false
+        }
+      ]
+    }
+  },
+  created () {
+    // this.$set(this,'eventMovieId' ,this.publicEventData.eventMovieId);
+
+    // if ( this.publicEventData.eventNeededServices ) {
+    //     this.$set(this,'startWorkingList' ,this.publicEventData.eventNeededServices);
+    //
+    // }
+
+  },
+
+  methods: {
+    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setSingupModal', 'setCurrentStep']),
+
+    goToNext () {
+      let vm = this
+
+      this.cerrors = {}
+      this.validating = true
+
+      // open the modal
+
+      this.$validator.validateAll().then(isValid => {
+        if (isValid) {
+          let eventNeededServices = {}
+
+          _.each(this.startWorkingList, (item) => {
+            eventNeededServices[item.title] = item.selected
+          })
+
+          this.setCurrentStep({currentPage: '/event-summery'})
+
+          this.setEventProperty({key: 'eventNeededServices', actualValue: eventNeededServices})
+
+          if (this.$auth.user.authenticated) {
+            this.$router.push({ path: `/event-summery`})
+          } else {
+            this.setSingupModal({showModal: true})
+          }
+        } else {
+        }
+      })
+    },
+    skip () {
+
+    }
+  },
+  computed: {
+    ...mapState('PublicEventPlannerVuex', [
+      'publicEventData',
+      'shoWSignupModal'
+    ])
+  }
+}
 </script>
 <style lang="scss">
 
@@ -229,7 +219,6 @@
 
                 }
 
-
                 label {
                     position: relative !important;
                     padding-left : 64px;
@@ -259,12 +248,9 @@
 
                 }
 
-
             }
-
 
         }
     }
-
 
 </style>

@@ -56,81 +56,79 @@
 </template>
 <script>
 
-  import EventInteraction from '@/models/EventInteraction';
-  import Calendar from '@/models/Calendar';
+import EventInteraction from '@/models/EventInteraction'
+import Calendar from '@/models/Calendar'
 
-  export default {
-    name: 'interaction-preview',
-    props: {
-      eventData: {
-        type: Object,
-        default: ()=>{ return { title: ''};}
-      },
-      interactionData: {
-        type: Object,
-        default: ()=>{return { title: ''};}
-      }
+export default {
+  name: 'interaction-preview',
+  props: {
+    eventData: {
+      type: Object,
+      default: () => { return { title: ''} }
     },
-    data(){
-      return {
-        selectedTemplateId: 'interaction-1',
-        working: true
-      };
-    },
-    mounted(){
-    },
-    methods: {
-      updatePreview(val) {
-        var ifrm = document.getElementById('kfrm');
-        if (ifrm && val) {
-          ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
+    interactionData: {
+      type: Object,
+      default: () => { return { title: ''} }
+    }
+  },
+  data () {
+    return {
+      selectedTemplateId: 'interaction-1',
+      working: true
+    }
+  },
+  mounted () {
+  },
+  methods: {
+    updatePreview (val) {
+      var ifrm = document.getElementById('kfrm')
+      if (ifrm && val) {
+        ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument
 
-          if (ifrm) {
+        if (ifrm) {
+          this.$http.get(`http://static.maryoku.com/storage/img/interactions/${val.templateImage || val.options[0]}.html`).then(res => {
+            let content = res.data
+            content = content.replace('{{{line1}}}', val.line1)
+            content = content.replace('{{{line2}}}', val.line2)
+            content = content.replace('{{{line3}}}', val.line3)
+            content = content.replace('{{{button}}}', '')
+            ifrm.document.open()
+            ifrm.document.write(content)
+            ifrm.document.close()
 
-            this.$http.get(`http://static.maryoku.com/storage/img/interactions/${val.templateImage || val.options[0]}.html`).then(res=>{
-
-              let content = res.data;
-              content = content.replace("{{{line1}}}",val.line1);
-              content = content.replace("{{{line2}}}",val.line2);
-              content = content.replace("{{{line3}}}",val.line3);
-              content = content.replace("{{{button}}}",'');
-              ifrm.document.open();
-              ifrm.document.write(content);
-              ifrm.document.close();
-
-              this.working = false;
-            });
-          }
+            this.working = false
+          })
         }
-      },
-      selectTemplateImage(templateId){
-        this.interactionData.templateImage = templateId;
-        this.selectedTemplateId = templateId;
-        this.updatePreview(this.interactionData);
-      },
-      saveInteraction(){
-        console.log(JSON.stringify(this.interactionData));
-        this.working = true;
-        new EventInteraction(this.interactionData).for(new Calendar({id: this.$auth.user.defaultCalendarId}),this.eventData).save().then(res=>{
-          this.working = false;
-        }).catch((e)=>{
-          console.error(e);
-          this.working = false;
-        });
       }
     },
-    watch: {
-      interactionData(newVal, oldVal){
-        this.working = true;
-        setTimeout(()=>{
-          if (newVal) {
-            this.selectedTemplateId = newVal.templateImage || 'interaction-1';
-            this.updatePreview(newVal);
-          }
-        }, 500);
-      }
+    selectTemplateImage (templateId) {
+      this.interactionData.templateImage = templateId
+      this.selectedTemplateId = templateId
+      this.updatePreview(this.interactionData)
+    },
+    saveInteraction () {
+      console.log(JSON.stringify(this.interactionData))
+      this.working = true
+      new EventInteraction(this.interactionData).for(new Calendar({id: this.$auth.user.defaultCalendarId}), this.eventData).save().then(res => {
+        this.working = false
+      }).catch((e) => {
+        console.error(e)
+        this.working = false
+      })
+    }
+  },
+  watch: {
+    interactionData (newVal, oldVal) {
+      this.working = true
+      setTimeout(() => {
+        if (newVal) {
+          this.selectedTemplateId = newVal.templateImage || 'interaction-1'
+          this.updatePreview(newVal)
+        }
+      }, 500)
     }
   }
+}
 </script>
 <style lang="scss" scoped>
 

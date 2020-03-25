@@ -44,12 +44,12 @@
   </div>
 </template>
 <script>
-import { SignupCard } from "@/components";
+import { SignupCard } from '@/components'
 export default {
   components: {
     SignupCard
   },
-  data() {
+  data () {
     return {
       firstname: null,
       boolean: false,
@@ -57,54 +57,54 @@ export default {
       password: null,
       contentLeft: [
         {
-          colorIcon: "icon-success",
-          icon: "color_lens",
-          title: "Get Inspired",
+          colorIcon: 'icon-success',
+          icon: 'color_lens',
+          title: 'Get Inspired',
           description:
             "Why struggle to find good ideas for your company's next event, when you can simply browse through other companies' events, see what worked for them and adjust those ideas to your needs."
         },
 
         {
-          colorIcon: "icon-danger",
-          icon: "calendar_today",
-          title: "Plan Ahead",
+          colorIcon: 'icon-danger',
+          icon: 'calendar_today',
+          title: 'Plan Ahead',
           description:
-            "Making the best of your annual budget is so much easier when you have visibility over all year occasions combined with insights on industry benchmark."
+            'Making the best of your annual budget is so much easier when you have visibility over all year occasions combined with insights on industry benchmark.'
         },
 
         {
-          colorIcon: "icon-info",
-          icon: "developer_board",
-          title: "Work Less",
+          colorIcon: 'icon-info',
+          icon: 'developer_board',
+          title: 'Work Less',
           description:
-            "Stop spending hours on phone calls, emails, quotes and invoices. Locate ranked suppliers and have them work for you."
+            'Stop spending hours on phone calls, emails, quotes and invoices. Locate ranked suppliers and have them work for you.'
         }
       ],
       inputs: [
         {
-          icon: "face",
-          name: "First Name...",
-          nameAttr: "firstname",
-          type: "text"
+          icon: 'face',
+          name: 'First Name...',
+          nameAttr: 'firstname',
+          type: 'text'
         },
 
         {
-          icon: "email",
-          name: "Email...",
-          nameAttr: "email",
-          type: "email"
+          icon: 'email',
+          name: 'Email...',
+          nameAttr: 'email',
+          type: 'email'
         },
 
         {
-          icon: "lock_outline",
-          name: "Password..",
-          nameAttr: "password",
-          type: "password"
+          icon: 'lock_outline',
+          name: 'Password..',
+          nameAttr: 'password',
+          type: 'password'
         }
       ]
-    };
+    }
   }
-};
+}
 </script>
 <style>
 </style>

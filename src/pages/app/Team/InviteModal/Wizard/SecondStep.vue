@@ -40,68 +40,66 @@
     </div>
 </template>
 <script>
-  import { IconCheckbox } from "@/components";
-  import  IconRadio from "@/components/Inputs/IconRadio";
-  import teamVuexModule from '../../team.vuex'
-  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
+import { IconCheckbox } from '@/components'
+import IconRadio from '@/components/Inputs/IconRadio'
+import teamVuexModule from '../../team.vuex'
+import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
 
-  export default {
-    components: {
-      IconCheckbox,
-      IconRadio
-    },
-    data() {
-      return {
-        selectedValue: 'Design',
-          radioButtons: {
-              design:  false,
-              develop: false,
-              code:    false
-          }
-
-      };
-    },
-    computed: {
-      ...mapState('teamVuex', ['teamMemberData']),
-      role: {
-        get() {
-          return this.teamMemberData.role
-        },
-        set(value) {
-          this.setMemberProperty({key: 'role', actualValue: value})
-        }
+export default {
+  components: {
+    IconCheckbox,
+    IconRadio
+  },
+  data () {
+    return {
+      selectedValue: 'Design',
+      radioButtons: {
+        design: false,
+        develop: false,
+        code: false
       }
 
-    },
-    created () {
-      this.$store.registerModule('teamVuex', teamVuexModule);
-    },
-    methods: {
-      ...mapMutations('teamVuex', [
-        'setMemberProperty',
-      ]),
-      updateValue(dataObject) {
-          for (var property in this.radioButtons) {
-              console.log(this.radioButtons[property])
-
-              if (this.radioButtons.hasOwnProperty(property)) {
-                  if (property === dataObject.label) {
-                      this.radioButtons[property] = true;
-                  } else {
-                      this.radioButtons[property] = false;
-
-                  }
-              }false
-          }
-          this.setMemberProperty({key: 'role', actualValue: dataObject.label})
-
+    }
+  },
+  computed: {
+    ...mapState('teamVuex', ['teamMemberData']),
+    role: {
+      get () {
+        return this.teamMemberData.role
       },
-      validate() {
-        this.$emit("on-validated", true, this.model);
-        return Promise.resolve(true);
+      set (value) {
+        this.setMemberProperty({key: 'role', actualValue: value})
       }
     }
-  };
+
+  },
+  created () {
+    this.$store.registerModule('teamVuex', teamVuexModule)
+  },
+  methods: {
+    ...mapMutations('teamVuex', [
+      'setMemberProperty'
+    ]),
+    updateValue (dataObject) {
+      for (var property in this.radioButtons) {
+        console.log(this.radioButtons[property])
+
+        if (this.radioButtons.hasOwnProperty(property)) {
+          if (property === dataObject.label) {
+            this.radioButtons[property] = true
+          } else {
+            this.radioButtons[property] = false
+          }
+        }false
+      }
+      this.setMemberProperty({key: 'role', actualValue: dataObject.label})
+    },
+    validate () {
+      this.$emit('on-validated', true, this.model)
+      return Promise.resolve(true)
+    }
+  }
+}
 </script>
 <style>
 </style>

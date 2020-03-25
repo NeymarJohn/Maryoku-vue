@@ -51,118 +51,105 @@
 
 <script>
 
-    import GoBack from './componenets/GoBack';
-    import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import GoBack from './componenets/GoBack'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
-    import PublicEventPlannerVuexModule from "./PublicEventPlanner.vuex";
+import PublicEventPlannerVuexModule from './PublicEventPlanner.vuex'
 
-    import VTooltip from 'v-tooltip'
+import VTooltip from 'v-tooltip'
 
+export default {
+  components: {
+    GoBack,
+    VTooltip
+  },
+  data () {
+    return {
 
-    export default {
-        components: {
-            GoBack,
-            VTooltip
+      step: 6,
+      haveEventPlace: false,
+      flexibleWithDates: false,
+      eventTime: null,
+      eventScale1: null,
+      eventScale2: null,
+      eventScale3: null,
+      eventScale4: null,
+      eventData: {
+
+      },
+      modelValidations: {
+        totalBudget: {
+          required: true
         },
-        data() {
-            return {
-
-                step : 6,
-                haveEventPlace : false,
-                flexibleWithDates : false,
-                eventTime : null,
-                eventScale1 : null,
-                eventScale2 : null,
-                eventScale3 : null,
-                eventScale4 : null,
-                eventData : {
-
-                },
-                modelValidations: {
-                    totalBudget : {
-                        required: true,
-                    },
-                    budgetPerPerson: {
-                        required: true,
-                    }
-                },
-                buttonLabel : 'Skip',
-                moviesPostersURL : 'http://static.maryoku.com/storage/movies/',
-                eventMovieId : null,
-                boardSound:  [],
-                currentIndex : null,
-                isPaused : false,
-            }
-        },
-        created() {
-            this.$set(this,'eventScale1' ,this.publicEventData.eventDecisionFactor1);
-            this.$set(this,'eventScale2' ,this.publicEventData.eventDecisionFactor2);
-            this.$set(this,'eventScale3' ,this.publicEventData.eventDecisionFactor3);
-            this.$set(this,'eventScale4' ,this.publicEventData.eventDecisionFactor4);
-        },
-
-        methods : {
-            ...mapMutations('PublicEventPlannerVuex', ['setEventProperty','setEventDecisionFactor','setCurrentStep']),
-
-            goToNext() {
-
-                let vm = this;
-
-                this.cerrors = {};
-                this.validating = true;
-
-                this.$validator.validateAll().then(isValid => {
-                    let eventMovieId = this.boardSound[this.currentIndex];
-                    if (isValid) {
-                        //this.setEventProperty({key: 'eventMovieId', actualValue: eventMovieId});
-                        this.setCurrentStep({currentPage : '/event-start-working'});
-                        this.$router.push({ path: `/event-start-working`});
-
-
-                    } else {
-                    }
-
-                });
-
-            },
-            skip() {
-
-            },
-            checkScale1() {
-                this.setEventProperty({key: 'eventDecisionFactor1', actualValue: this.eventScale1});
-
-
-                this.setEventDecisionFactor({key: 'eventDecisionFactor1', actualValue : this.eventScale1});
-            },
-            checkScale2() {
-
-
-                this.setEventProperty({key: 'eventDecisionFactor2', actualValue: this.eventScale2});
-
-                this.setEventDecisionFactor({key:'eventDecisionFactor2',actualValue : this.eventScale2});
-
-            },
-            checkScale3() {
-
-                this.setEventProperty({key: 'eventDecisionFactor3', actualValue: this.eventScale3});
-
-                this.setEventDecisionFactor({key:'eventDecisionFactor3',actualValue : this.eventScale3});
-
-            },
-            checkScale4() {
-                this.setEventProperty({key: 'eventDecisionFactor4', actualValue: this.eventScale4});
-
-
-                this.setEventDecisionFactor({key:'eventDecisionFactor4',actualValue : this.eventScale4});
-
-            }
-        },computed : {
-            ...mapState('PublicEventPlannerVuex', [
-                'publicEventData',
-                'eventDecisionFactors'
-            ])
+        budgetPerPerson: {
+          required: true
         }
-    };
+      },
+      buttonLabel: 'Skip',
+      moviesPostersURL: 'http://static.maryoku.com/storage/movies/',
+      eventMovieId: null,
+      boardSound: [],
+      currentIndex: null,
+      isPaused: false
+    }
+  },
+  created () {
+    this.$set(this, 'eventScale1', this.publicEventData.eventDecisionFactor1)
+    this.$set(this, 'eventScale2', this.publicEventData.eventDecisionFactor2)
+    this.$set(this, 'eventScale3', this.publicEventData.eventDecisionFactor3)
+    this.$set(this, 'eventScale4', this.publicEventData.eventDecisionFactor4)
+  },
+
+  methods: {
+    ...mapMutations('PublicEventPlannerVuex', ['setEventProperty', 'setEventDecisionFactor', 'setCurrentStep']),
+
+    goToNext () {
+      let vm = this
+
+      this.cerrors = {}
+      this.validating = true
+
+      this.$validator.validateAll().then(isValid => {
+        let eventMovieId = this.boardSound[this.currentIndex]
+        if (isValid) {
+          // this.setEventProperty({key: 'eventMovieId', actualValue: eventMovieId});
+          this.setCurrentStep({currentPage: '/event-start-working'})
+          this.$router.push({ path: `/event-start-working`})
+        } else {
+        }
+      })
+    },
+    skip () {
+
+    },
+    checkScale1 () {
+      this.setEventProperty({key: 'eventDecisionFactor1', actualValue: this.eventScale1})
+
+      this.setEventDecisionFactor({key: 'eventDecisionFactor1', actualValue: this.eventScale1})
+    },
+    checkScale2 () {
+      this.setEventProperty({key: 'eventDecisionFactor2', actualValue: this.eventScale2})
+
+      this.setEventDecisionFactor({key: 'eventDecisionFactor2', actualValue: this.eventScale2})
+    },
+    checkScale3 () {
+      this.setEventProperty({key: 'eventDecisionFactor3', actualValue: this.eventScale3})
+
+      this.setEventDecisionFactor({key: 'eventDecisionFactor3', actualValue: this.eventScale3})
+    },
+    checkScale4 () {
+      this.setEventProperty({key: 'eventDecisionFactor4', actualValue: this.eventScale4})
+
+      this.setEventDecisionFactor({key: 'eventDecisionFactor4', actualValue: this.eventScale4})
+    }
+  },
+  computed: {
+    ...mapState('PublicEventPlannerVuex', [
+      'publicEventData',
+      'eventDecisionFactors'
+    ])
+  }
+}
 </script>
 <style lang="scss">
 
@@ -242,7 +229,6 @@
         background: #AAAAAA;
     }
 
-
     input[type=range]::-moz-range-track {
         width: 100%;
         height: 2px;
@@ -262,8 +248,6 @@
         margin-top: -12px;
         border : 1px solid #f4f4f4;
     }
-
-
 
     input[type=range]::-ms-track {
         width: 100%;
@@ -301,7 +285,5 @@
     input[type=range]:focus::-ms-fill-upper {
         background: #AAAAAA;
     }
-
-
 
 </style>

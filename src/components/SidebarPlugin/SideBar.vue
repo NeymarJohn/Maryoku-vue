@@ -43,52 +43,52 @@
 </template>
 <script>
 export default {
-  name: "sidebar",
+  name: 'sidebar',
   props: {
     title: {
       type: String,
-      default: "maryoku"
+      default: 'maryoku'
     },
     rtlTitle: {
       type: String,
-      default: "maryoku"
+      default: 'maryoku'
     },
     activeColor: {
       type: String,
-      default: "rose",
+      default: 'rose',
       validator: value => {
         let acceptedValues = [
-          "",
-          "primary",
-          "azure",
-          "green",
-          "orange",
-          "danger",
-          "rose"
-        ];
-        return acceptedValues.indexOf(value) !== -1;
+          '',
+          'primary',
+          'azure',
+          'green',
+          'orange',
+          'danger',
+          'rose'
+        ]
+        return acceptedValues.indexOf(value) !== -1
       }
     },
     backgroundImage: {
       type: String,
-      default: "http://static.maryoku.com/storage/img/sidebar-2.jpg"
+      default: 'http://static.maryoku.com/storage/img/sidebar-2.jpg'
     },
     backgroundColor: {
       type: String,
-      default: "white",
+      default: 'white',
       validator: value => {
-        let acceptedValues = ["", "black", "white", "red"];
-        return acceptedValues.indexOf(value) !== -1;
+        let acceptedValues = ['', 'black', 'white', 'red']
+        return acceptedValues.indexOf(value) !== -1
       }
     },
     logo: {
       type: String,
-      default: "http://static.maryoku.com/storage/maryoku+-+logo+square+dark%402x.png"
+      default: 'http://static.maryoku.com/storage/maryoku+-+logo+square+dark%402x.png'
     },
-      fullLogo: {
-          type: String,
-          default: "http://static.maryoku.com/storage/maryoku+-+logo+dark%402x.png"
-      },
+    fullLogo: {
+      type: String,
+      default: 'http://static.maryoku.com/storage/maryoku+-+logo+dark%402x.png'
+    },
     sidebarLinks: {
       type: Array,
       default: () => []
@@ -98,31 +98,31 @@ export default {
       default: true
     }
   },
-  provide() {
+  provide () {
     return {
       autoClose: this.autoClose
-    };
+    }
   },
   methods: {
-    minimizeSidebar() {
+    minimizeSidebar () {
       if (this.$sidebar) {
-        this.$sidebar.toggleMinimize();
+        this.$sidebar.toggleMinimize()
       }
     }
   },
   computed: {
-    sidebarStyle() {
+    sidebarStyle () {
       return {
         backgroundImage: `url(${this.backgroundImage})`
-      };
+      }
     }
   },
-  beforeDestroy() {
+  beforeDestroy () {
     if (this.$sidebar.showSidebar) {
-      this.$sidebar.showSidebar = false;
+      this.$sidebar.showSidebar = false
     }
   }
-};
+}
 </script>
 <style>
 @media (min-width: 992px) {

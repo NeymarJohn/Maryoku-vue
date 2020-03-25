@@ -3,11 +3,11 @@ import Model from './Model'
 import CommunityAsk from './CommunityAsk'
 
 export default class CommunityGroup extends Model {
-  resource() {
+  resource () {
     return 'communityGroups'
   }
 
-  asks() {
+  asks () {
     return this.hasMany(CommunityAsk)
   }
 }
