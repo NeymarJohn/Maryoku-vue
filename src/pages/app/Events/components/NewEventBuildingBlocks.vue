@@ -170,8 +170,17 @@
             <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+18.png" /> Unexpected
           </td>
           <td class="planned" width="20%">$0</td>
-          <td class="actual" width="15%">$0</td>
-          <td class="expand" rowspan="2" style="text-align: right; padding-right: 12px;">
+          <td class="actual" width="15%" >$0</td>
+            <td class="status" width="15%">
+                <div style="visibility: hidden">
+                    <md-button
+                        class="book-btn md-sm"
+                    >Book Vendors</md-button>
+
+                    <!--                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
+                </div>
+            </td>
+          <td class="expand"  >
             <a href>
               <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
             </a>
@@ -287,20 +296,27 @@
         </tr>
 
         <tr class="taxes">
-          <td class="taxes-title">
+          <td class="taxes-title" width="40%">
             <img
               src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
               width="20"
             /> Tips
             <span class="percent">12%</span>
           </td>
-          <td>${{totalBudgetTaxes.toFixed(2)}}</td>
-          <td class="actual green-label">
+          <td width="20%">${{totalBudgetTaxes.toFixed(2)}}</td>
+          <td class="actual green-label" width="15%">
             <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png" /> $0
           </td>
-          <td></td>
-          <td class="expand" style="    text-align: right;
-    padding-right: 1em;">
+            <td class="status" width="15%">
+                <div style="visibility: hidden">
+                    <md-button
+                        class="book-btn md-sm"
+                    >Book Vendors</md-button>
+
+                    <!--                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
+                </div>
+            </td>
+          <td class="expand">
             <a href>
               <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
             </a>

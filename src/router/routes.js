@@ -72,13 +72,6 @@ import MarketPlaceLayout from '../pages/Dashboard/Pages/MarketPlaceLayout'
 
 import MyEvents from '@/pages/app/Guest/MyEvents.vue'
 import MarketPlace from '@/pages/app/MarketPlace/MarketPlace.vue'
-
-// New Vendor Pages
-import ForVendorLayout from '@/pages/Dashboard/Layout/ForVendorLayout.vue'
-import ForProposalsLayout from '@/pages/Dashboard/Layout/ForProposalsLayout.vue'
-import ForVendors from "@/pages/app/Vendors/ForVendors.vue"
-import ForProposals from "@/pages/app/Vendors/ForProposals.vue"
-
 const SignInSignUp = () =>
   import('@/pages/Dashboard/Pages/SignInSignUp.vue')
 const SignOut = () =>
@@ -184,43 +177,6 @@ let publicPages = {
     }, */
   ]
 }
-
-let forVendors = {
-  path: "/",
-  component: ForVendorLayout,
-  name: "ForVendors",
-  children: [
-    {
-      path: "/for-vendors",
-      name: "ForVendors",
-      component: ForVendors,
-      meta: {
-        auth: false,
-        title: 'For Vendors',
-        gtm: 'ForVendors'
-      },
-    },
-  ]
-}
-
-let forProposals = {
-  path: "/",
-  component: ForProposalsLayout,
-  name: "ForProposals",
-  children: [
-    {
-      path: "/for-proposals",
-      name: "ForProposals",
-      component: ForProposals,
-      meta: {
-        auth: false,
-        title: 'For Proposals',
-        gtm: 'ForProposals'
-      },
-    },
-  ]
-}
-
 let marketPlacePages = {
   path: '/',
   component: MarketPlaceLayout,
@@ -850,28 +806,25 @@ const appCurrentInfo = {
   ]
 }
 
-const routes = [
-  {
-    path: '/',
-    redirect: '/events',
-    name: 'Root',
-    meta: {
-      gtm: 'Root'
-    }
-  },
-  appCurrentInfo,
-  authPages,
-  appPages,
-  publicPages,
-  emptyLayoutPages,
-  EventPages,
-  marketPlacePages,
-  PublicCreateEvent,
-  HomePages,
-  SigninSignupPage,
-  forVendors,
-  forProposals,
-  NewEventPages
+const routes = [{
+  path: '/',
+  redirect: '/events',
+  name: 'Root',
+  meta: {
+    gtm: 'Root'
+  }
+},
+appCurrentInfo,
+authPages,
+appPages,
+publicPages,
+emptyLayoutPages,
+EventPages,
+marketPlacePages,
+PublicCreateEvent,
+HomePages,
+SigninSignupPage,
+NewEventPages
 ]
 
 export default routes
