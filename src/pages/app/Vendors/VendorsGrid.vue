@@ -53,9 +53,6 @@
           </div>
         </h4>
         <div slot="description" class="card-description ">
-          <a class="price" @click="goTo('/for-proposals')" target="_blank">New Proposal Page</a>
-          <br/>
-          <a class="price" @click="goTo('/for-vendors')" target="_blank">New Vendor Page</a>
           <div class="">
             <p>
               {{vendor.vendorTagLine}}
@@ -163,9 +160,6 @@ export default {
       }
       return false
     },
-    goTo (router) {
-      this.$router.push(router)
-    }
   },
   watch: {
     searchQuery (newVal, oldVal) {
@@ -275,10 +269,5 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  .card-description {
-    a {
-      cursor: pointer;
-    }
   }
 </style>
