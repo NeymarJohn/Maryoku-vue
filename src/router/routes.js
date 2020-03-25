@@ -1,18 +1,16 @@
-import DashboardLayout from '@/pages/Dashboard/Layout/DashboardLayout.vue';
-import EventLayout from '@/pages/Dashboard/Layout/EventLayout.vue';
-import AuthLayout from '@/pages/Dashboard/Pages/AuthLayout.vue';
-import PublicLayout from '@/pages/Dashboard/Pages/PublicLayout.vue';
-import Me from '@/pages/app/Me.vue';
-import Profile from '@/pages/app/Profile/index.vue';
-import MyCompany from '@/pages/app/MyCompany/MyCompany.vue';
-import MyCompanyNew from '@/pages/app/MyCompany/MyCompanyNew.vue';
-import CompanyDashboard from '@/pages/app/CompanyDashboard/CompanyDashboard.vue';
-import CreateEvent from '@/pages/Dashboard/Layout/CreateEvent.vue';
-import HomeLayout from '@/pages/Dashboard/Layout/HomeLayout.vue';
-import SigninSignupLayout from '@/pages/Dashboard/Layout/SigninSignupLayout.vue';
-import NewEventLayout from '@/pages/Dashboard/Layout/NewEventLayout.vue';
-import ForVendorsLayout from '@/pages/Dashboard/Layout/ForVendorLayout.vue';
-import ForProposalsLayout from '@/pages/Dashboard/Layout/ForProposalsLayout.vue';
+import DashboardLayout from '@/pages/Dashboard/Layout/DashboardLayout.vue'
+import EventLayout from '@/pages/Dashboard/Layout/EventLayout.vue'
+import AuthLayout from '@/pages/Dashboard/Pages/AuthLayout.vue'
+import PublicLayout from '@/pages/Dashboard/Pages/PublicLayout.vue'
+import Me from '@/pages/app/Me.vue'
+import Profile from '@/pages/app/Profile/index.vue'
+import MyCompany from '@/pages/app/MyCompany/MyCompany.vue'
+import MyCompanyNew from '@/pages/app/MyCompany/MyCompanyNew.vue'
+import CompanyDashboard from '@/pages/app/CompanyDashboard/CompanyDashboard.vue'
+import CreateEvent from '@/pages/Dashboard/Layout/CreateEvent.vue'
+import HomeLayout from '@/pages/Dashboard/Layout/HomeLayout.vue'
+import SigninSignupLayout from '@/pages/Dashboard/Layout/SigninSignupLayout.vue'
+import NewEventLayout from '@/pages/Dashboard/Layout/NewEventLayout.vue'
 
 import Team from '@/pages/app/Team/Team.vue'
 import Members from '@/pages/app/Members/Members.vue'
@@ -68,12 +66,18 @@ import Invite from '@/pages/Dashboard/Pages/CommonInfoProfile/Invite.vue'
 import CreateWorkspace from '@/pages/Dashboard/Pages/CreateWorkspace'
 import ChooseWorkspace from '@/pages/Dashboard/Pages/ChooseWorkspace'
 
+import GetStarted from '@/pages/app/GetStarted'
+import EmptyLayout from '../pages/Dashboard/Pages/EmptyLayout'
+import MarketPlaceLayout from '../pages/Dashboard/Pages/MarketPlaceLayout'
+
+import MyEvents from '@/pages/app/Guest/MyEvents.vue'
+import MarketPlace from '@/pages/app/MarketPlace/MarketPlace.vue'
 
 // New Vendor Pages
+import ForVendorLayout from '@/pages/Dashboard/Layout/ForVendorLayout.vue'
+import ForProposalsLayout from '@/pages/Dashboard/Layout/ForProposalsLayout.vue'
 import ForVendors from "@/pages/app/Vendors/ForVendors.vue"
 import ForProposals from "@/pages/app/Vendors/ForProposals.vue"
-
-import GetStarted from '@/pages/app/GetStarted'
 
 const SignInSignUp = () =>
   import('@/pages/Dashboard/Pages/SignInSignUp.vue')
@@ -87,90 +91,54 @@ let authPages = {
   component: AuthLayout,
   name: 'Authentication',
   children: [{
-      path: "/signin",
-      name: "SignIn",
-      component: SignInSignUp,
-      meta: {
-        auth: false,
-        gtm: "SignIn"
-      }
-    },
-    {
-      path: "/signout",
-      name: "SignOut",
-      component: SignOut,
-      meta: {
-        auth: false,
-        title: 'Sign Out',
-        gtm: "SignOut"
-      }
-    },
-    {
-      path: "/signedin",
-      name: "SignedIn",
-      component: SignedIn,
-      meta: {
-        auth: false,
-        title: 'Signed In',
-        gtm: "SignedIn"
-      }
-    },
-    {
-      path: "/create-workspace",
-      name: "CreateWorkspace",
-      component: CreateWorkspace,
-      meta: {
-        auth: false,
-        title: 'Create Workspace',
-        gtm: "CreateWorkspace"
-      }
-    },
-    {
-      path: "/choose-workspace",
-      name: "ChooseWorkspace",
-      component: ChooseWorkspace,
-      meta: {
-        auth: false,
-        title: 'Choose Workspace',
-        gtm: "ChooseWorkspace"
-      }
+    path: '/signin',
+    name: 'SignIn',
+    component: SignInSignUp,
+    meta: {
+      auth: false,
+      gtm: 'SignIn'
     }
-  ]
-}
-
-let forVendors = {
-  path: "/",
-  component: ForVendorsLayout,
-  name: "ForVendors",
-  children: [
-    {
-      path: "/for-vendors",
-      name: "ForVendors",
-      component: ForVendors,
-      meta: {
-        auth: false,
-        title: 'For Vendors',
-        gtm: 'ForVendors'
-      },
-    },
-  ]
-}
-
-let forProposals = {
-  path: "/",
-  component: ForProposalsLayout,
-  name: "ForProposals",
-  children: [
-    {
-      path: "/for-proposals",
-      name: "ForProposals",
-      component: ForProposals,
-      meta: {
-        auth: false,
-        title: 'For Proposals',
-        gtm: 'ForProposals'
-      },
-    },
+  },
+  {
+    path: '/signout',
+    name: 'SignOut',
+    component: SignOut,
+    meta: {
+      auth: false,
+      title: 'Sign Out',
+      gtm: 'SignOut'
+    }
+  },
+  {
+    path: '/signedin',
+    name: 'SignedIn',
+    component: SignedIn,
+    meta: {
+      auth: false,
+      title: 'Signed In',
+      gtm: 'SignedIn'
+    }
+  },
+  {
+    path: '/create-workspace',
+    name: 'CreateWorkspace',
+    component: CreateWorkspace,
+    meta: {
+      auth: false,
+      title: 'Create Workspace',
+      gtm: 'CreateWorkspace'
+    }
+  },
+  {
+    path: '/choose-workspace',
+    name: 'ChooseWorkspace',
+    component: ChooseWorkspace,
+    meta: {
+      auth: false,
+      title: 'Choose Workspace',
+      gtm: 'ChooseWorkspace'
+    }
+  }
   ]
 }
 
@@ -216,6 +184,43 @@ let publicPages = {
     }, */
   ]
 }
+
+let forVendors = {
+  path: "/",
+  component: ForVendorLayout,
+  name: "ForVendors",
+  children: [
+    {
+      path: "/for-vendors",
+      name: "ForVendors",
+      component: ForVendors,
+      meta: {
+        auth: false,
+        title: 'For Vendors',
+        gtm: 'ForVendors'
+      },
+    },
+  ]
+}
+
+let forProposals = {
+  path: "/",
+  component: ForProposalsLayout,
+  name: "ForProposals",
+  children: [
+    {
+      path: "/for-proposals",
+      name: "ForProposals",
+      component: ForProposals,
+      meta: {
+        auth: false,
+        title: 'For Proposals',
+        gtm: 'ForProposals'
+      },
+    },
+  ]
+}
+
 let marketPlacePages = {
   path: '/',
   component: MarketPlaceLayout,
@@ -845,27 +850,28 @@ const appCurrentInfo = {
   ]
 }
 
-const routes = [{
-    path: "/",
-    redirect: "/events",
-    name: "Root",
+const routes = [
+  {
+    path: '/',
+    redirect: '/events',
+    name: 'Root',
     meta: {
-      gtm: "Root"
+      gtm: 'Root'
     }
   },
   appCurrentInfo,
   authPages,
   appPages,
   publicPages,
-  forVendors,
-  forProposals,
   emptyLayoutPages,
   EventPages,
   marketPlacePages,
   PublicCreateEvent,
   HomePages,
   SigninSignupPage,
+  forVendors,
+  forProposals,
   NewEventPages
-];
+]
 
 export default routes
