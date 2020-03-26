@@ -460,19 +460,29 @@ export default {
         this.timelineItems = _.sortBy(res, function (item) {
           return item.order
         })
+
+          this.timeline[0].items = _.sortBy(res, function (item) {
+              return item.order
+          })
         this.isLoading = false
         this.timelineItems.forEach((item) => {
           item.isItemLoading = false
         })
+
+          this.timeline[0].items.forEach((item) => {
+              item.isItemLoading = false
+          })
         this.event.timelineItems = this.timelineItems
         this.$root.$emit('timeline-updated', this.timelineItems)
       })
     },
     cancelTimelineItem (item, index) {
       if (item.dateCreated) {
-        this.$set(this.timelineItems[index], 'mode', 'saved')
+          this.$set(this.timelineItems[index], 'mode', 'saved')
+          this.$set(this.timeline[0].items[index], 'mode', 'saved')
       } else {
-        this.timelineItems.splice(index, 1)
+          this.timelineItems.splice(index, 1)
+          this.timeline[0].items.splice(index, 1)
       }
       this.disabledDragging = false
     },

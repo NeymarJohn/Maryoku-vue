@@ -1930,7 +1930,7 @@ $baseColor : #5c2153;
             .form-control {
                 min-height: 60px;
                 border-radius: 3px;
-                border: solid 0.5px #bcbcbc;
+                border: solid 1px #bcbcbc;
                 background: #ffffff;
                 width: 100%;
                 padding: 0 1.5em;
@@ -1995,7 +1995,7 @@ $baseColor : #5c2153;
             input , select {
                 min-height: 60px;
                 border-radius: 3px;
-                border: solid 0.5px #bcbcbc;
+                border: solid 1px #bcbcbc;
                 background: #ffffff;
                 padding: 0 12px;
                 height: 66px;
@@ -3352,7 +3352,7 @@ $baseColor : #5c2153;
             margin-bottom : 0.2em !important;
         }
     }
-    #swal2-content {
+    #swal2-conselected-itemstent {
         text-align: left !important;
         font-size: 14px;
         color: #050505;
