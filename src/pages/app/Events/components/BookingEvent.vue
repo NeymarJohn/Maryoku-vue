@@ -51,7 +51,7 @@
                     <p class="event-desc">{{proposal.proposals[0].aboutUsMessage}}</p>
 
                     <div class="item-actions text-right">
-                        <md-button class="md-rose details-btn" @click="proposalDetails(proposal)"> Details & Booking</md-button>
+                        <md-button class="md-rose details-btn"> Details & Booking</md-button>
                     </div>
                 </div>
             </div>
@@ -253,93 +253,85 @@ export default {
 
   }),
   methods: {
-      onFileChange (e) {
-          let files = e.target.files || e.dataTransfer.files
-          if (!files.length) return
-          if (e.target.name) {
-              this.createImage(files[0], 'attachment')
-          } else {
-              this.createImage(files[0])
-          }
-      },
-      createImage (file, type) {
-          let reader = new FileReader()
-          let vm = this
 
-          reader.onload = e => {
-              if (type === 'attachment') {
-                  vm.timelineAttachment = e.target.result
-              } else {
-                  // vm.imageRegular = e.target.result;
-              }
-          }
-          reader.readAsDataURL(file)
-      },
-      getSelectedBlock () {
-          let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-          let event = new CalendarEvent({id: this.event.id})
-
-          new EventComponent().for(calendar, event).get().then(resp => {
-              this.selectedBlock = _.findWhere(resp, {id: this.$route.params.blockId})
-          })
-      },
-      getBlockVendors () {
-          if (true) {
-              let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-              let event = new CalendarEvent({id: this.event.id})
-              let selected_block = new EventComponent({id: this.$route.params.blockId})
-
-              new EventComponentVendor().for(calendar, event, selected_block).get()
-                  .then(resp => {
-                      this.isLoading = false
-                      this.selectedBlock.vendors = resp
-                      this.selectedBlock.vendorsCount = resp.length
-                      this.blockVendors = resp
-
-                      let vendorsWithProposals = _.filter(this.blockVendors, function (item) {
-                          return item.proposals && item.proposals.length
-                      })
-                      // let vendorsWithSentStatus = _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
-                      // let vendorsWithNoStatus   = _.filter(this.blockVendors, function(item){ return !item.proposals });
-
-                      // this.filteredBlockVendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
-
-                      let proposals = []
-                      _.each(vendorsWithProposals, (v) => {
-                          proposals.push(v.proposals[0])
-                      })
-                      this.selectedBlock.proposals = proposals
-                      this.selectedBlock.proposalsCount = proposals.length
-
-                      // this.vendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
-                      this.proposals = vendorsWithProposals;
-                      console.log(this.proposals);
-                  })
-                  .catch(error => {
-                      this.isLoading = false
-                      console.log('EventComponentVendor error =>', error)
-                  })
-          } else {
-              this.blockVendors = this.selectedBlock.vendors
-
-              // console.log('blockVendors => ',this.blockVendors);
-              let vendorsWithProposals = _.filter(this.blockVendors, function (item) {
-                  return item.proposals && item.proposals.length
-              })
-              let vendorsWithSentStatus = _.filter(this.blockVendors, function (item) {
-                  return item.proposals && !item.proposals.length
-              })
-              let vendorsWithNoStatus = _.filter(this.blockVendors, function (item) {
-                  return !item.proposals
-              })
-
-              this.filteredBlockVendors = _.union(vendorsWithProposals, vendorsWithSentStatus, vendorsWithNoStatus)
-              this.isLoading = false
-          }
-      },
-      proposalDetails(proposal) {
-          this.$router.push('/events/' + this.event.id + '/proposal-details/' + this.$route.params.blockId + '/' + proposal.proposals[0].id );
+    onFileChange (e) {
+      let files = e.target.files || e.dataTransfer.files
+      if (!files.length) return
+      if (e.target.name) {
+        this.createImage(files[0], 'attachment')
+      } else {
+        this.createImage(files[0])
       }
+    },
+    createImage (file, type) {
+      let reader = new FileReader()
+      let vm = this
+
+      reader.onload = e => {
+        if (type === 'attachment') {
+          vm.timelineAttachment = e.target.result
+        } else {
+          // vm.imageRegular = e.target.result;
+        }
+      }
+      reader.readAsDataURL(file)
+    },
+    getSelectedBlock () {
+      let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+      let event = new CalendarEvent({id: this.event.id})
+
+      new EventComponent().for(calendar, event).get().then(resp => {
+        this.selectedBlock = _.findWhere(resp, {id: this.$route.params.blockId})
+      })
+    },
+    getBlockVendors () {
+      if (true) {
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+        let event = new CalendarEvent({id: this.event.id})
+        let selected_block = new EventComponent({id: this.$route.params.blockId})
+
+        new EventComponentVendor().for(calendar, event, selected_block).get()
+          .then(resp => {
+            this.isLoading = false
+            this.selectedBlock.vendors = resp
+            this.selectedBlock.vendorsCount = resp.length
+            this.blockVendors = resp
+
+            let vendorsWithProposals = _.filter(this.blockVendors, function (item) { return item.proposals && item.proposals.length })
+            // let vendorsWithSentStatus = _.filter(this.blockVendors, function(item){ return item.proposals && !item.proposals.length; });
+            // let vendorsWithNoStatus   = _.filter(this.blockVendors, function(item){ return !item.proposals });
+
+            // this.filteredBlockVendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
+
+            let proposals = []
+            _.each(vendorsWithProposals, (v) => {
+              proposals.push(v.proposals[0])
+            })
+            this.selectedBlock.proposals = proposals
+            this.selectedBlock.proposalsCount = proposals.length
+
+            // this.vendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
+            this.proposals = vendorsWithProposals
+          })
+          .catch(error => {
+            this.isLoading = false
+            console.log('EventComponentVendor error =>', error)
+          })
+      } else {
+        this.blockVendors = this.selectedBlock.vendors
+
+        // console.log('blockVendors => ',this.blockVendors);
+        let vendorsWithProposals = _.filter(this.blockVendors, function (item) { return item.proposals && item.proposals.length })
+        let vendorsWithSentStatus = _.filter(this.blockVendors, function (item) { return item.proposals && !item.proposals.length })
+        let vendorsWithNoStatus = _.filter(this.blockVendors, function (item) { return !item.proposals })
+
+        this.filteredBlockVendors = _.union(vendorsWithProposals, vendorsWithSentStatus, vendorsWithNoStatus)
+        this.isLoading = false
+      }
+
+      // this.isLoading = this.filteredBlockVendors.length <= 0;
+    }
+
   },
   created () {
     [...Array(12).keys()].map(x => x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined);

@@ -25,7 +25,7 @@
               <td
                 width="40%"
                 class="event-block-element"
-                :class="block.title ? block.title.toLowerCase().replace(/ /g, '-').replace('&', '').replace('/', '-') : ''"
+                :class="block.title.toLowerCase().replace(/ /g, '-')"
               >
                 <img
                   :src="`http://static.maryoku.com/storage/icons/Budget Elements/${block.title}.svg`"
@@ -33,25 +33,6 @@
                 {{block.title}}
               </td>
               <td class="planned" width="20%">
-
-                  <template v-if="type==='total'">
-                      $ {{block.allocatedBudget ? block.allocatedBudget : 0}}
-                  </template>
-                  <template v-else-if="block.allocatedBudget && block.numberOfParticipants">
-                      $ {{block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(2).toString() : 0}}
-                  </template>
-                  <template v-else>
-                      $ {{block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : 0}}
-                  </template>
-
-                  <md-button class="md-rose md-sm md-simple edit-budget" v-if="!block.editBudget" @click="showEditElementBudget(block)"> Edit </md-button>
-
-                  <div class="edit-element-budget" v-if="block.editBudget">
-                      <input v-model="block.newBudget">
-                      <md-button class="md-default md-simple md-sm" @click="showEditElementBudget(block)">cancel</md-button>
-                      <md-button class="md-rose md-sm" @click="editElementBudget(block)">save</md-button>
-                  </div>
-                  <!--
                 <label-edit
                   v-if="type==='total'"
                   :text="block.allocatedBudget"
@@ -83,8 +64,6 @@
                   @text-updated-blur="blockBudgetChanged"
                   @text-updated-enter="blockBudgetChanged"
                 ></label-edit>
-
-                -->
               </td>
               <td class="actual red-label" width="15%">
                 <template v-if="block.allocatedBudget">
@@ -170,17 +149,8 @@
             <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+18.png" /> Unexpected
           </td>
           <td class="planned" width="20%">$0</td>
-          <td class="actual" width="15%" >$0</td>
-            <td class="status" width="15%">
-                <div style="visibility: hidden">
-                    <md-button
-                        class="book-btn md-sm"
-                    >Book Vendors</md-button>
-
-                    <!--                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
-                </div>
-            </td>
-          <td class="expand"  >
+          <td class="actual" width="15%">$0</td>
+          <td class="expand" rowspan="2" style="text-align: right; padding-right: 12px;">
             <a href>
               <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
             </a>
@@ -296,27 +266,20 @@
         </tr>
 
         <tr class="taxes">
-          <td class="taxes-title" width="40%">
+          <td class="taxes-title">
             <img
               src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
               width="20"
             /> Tips
             <span class="percent">12%</span>
           </td>
-          <td width="20%">${{totalBudgetTaxes.toFixed(2)}}</td>
-          <td class="actual green-label" width="15%">
+          <td>${{totalBudgetTaxes.toFixed(2)}}</td>
+          <td class="actual green-label">
             <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png" /> $0
           </td>
-            <td class="status" width="15%">
-                <div style="visibility: hidden">
-                    <md-button
-                        class="book-btn md-sm"
-                    >Book Vendors</md-button>
-
-                    <!--                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
-                </div>
-            </td>
-          <td class="expand">
+          <td></td>
+          <td class="expand" style="    text-align: right;
+    padding-right: 1em;">
             <a href>
               <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
             </a>
@@ -376,7 +339,7 @@
         </div>
       </template>
       <template slot="footer">
-        <md-button class="md-default md-simple cancel-btn" @click>Cancel</md-button>
+        <md-button class="md-default md-simple cancel-btn" @click="showCategoryModal = false">Cancel</md-button>
         <md-button class="md-rose add-category-btn" @click="addBuildingBlock">Add Category</md-button>
       </template>
     </modal>
@@ -384,49 +347,33 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapMutations, mapGetters, mapActions } from 'vuex'
 import swal from 'sweetalert2'
 import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
 import EventComponent from '@/models/EventComponent'
-import VueElementLoading from 'vue-element-loading'
 import {
   Modal,
-  LabelEdit,
-  AnimatedNumber,
-  StatsCard,
-  ChartCard
+  LabelEdit
 } from '@/components'
 
 // import auth from '@/auth';
-import EventBlocks from '../components/NewEventBlocks'
 import AddBuildingBlockModal from '../components/EventBlocks/Modals/AddBuildingBlocks.vue'
 import AddEventElementsModal from '../components/EventBlocks/Modals/AddEventElements.vue'
-import EventBlockRequirements from '../components/EventBlocks/Modals/EventBlockRequirements.vue'
 import EventActualCostIconTooltip from '../components/EventActualCostIconTooltip.vue'
 import EventBlockVendors from './EventBlocks/Modals/EventBlockVendors.vue'
 import ViewProposals from './EventBlocks/Modals/ViewProposals.vue'
-import EventComponentVendor from '@/models/EventComponentVendor'
 import _ from 'underscore'
 
 import draggable from 'vuedraggable'
-import { Drag, Drop } from 'vue-drag-drop'
 
 export default {
   name: 'event-building-blocks',
   components: {
-    VueElementLoading,
-    EventBlocks,
-    AddBuildingBlockModal,
     LabelEdit,
-    AnimatedNumber,
-    StatsCard,
-    ChartCard,
     EventActualCostIconTooltip,
     Modal,
-    draggable,
-    Drag,
-    Drop
+    draggable
   },
   props: {
     event: {
@@ -475,8 +422,14 @@ export default {
       budget: ''
     }
   }),
+  computed: {
+    ...mapGetters({
+      components: 'event/getComponentsList'
+    })
+  },
   methods: {
     ...mapMutations('EventPlannerVuex', ['setBuildingBlockModal']),
+    ...mapActions('event', ['getComponents']),
     expandBlock (item) {
       if (item.expanded) {
         item.expanded = false
@@ -488,24 +441,6 @@ export default {
       }
       this.$forceUpdate()
     },
-      showEditElementBudget(item){
-          if (item.editBudget) {
-              item.editBudget = false
-          } else {
-              this.eventBuildingBlocks.forEach(g => {
-                  g.editBudget = false
-              })
-              item.editBudget = true
-          }
-
-          if ( item.allocatedBudget ) {
-
-              item.newBudget = item.allocatedBudget
-          } else {
-              item.newBudget = 0;
-          }
-          this.$forceUpdate()
-      },
     deleteBlock (blockId) {
       swal({
         title: 'Are you sure?',
@@ -523,16 +458,16 @@ export default {
             id: this.$auth.user.defaultCalendarId
           })
           let event = new CalendarEvent({ id: this.event.id })
-          let selected_block = new EventComponent({ id: blockId })
+          let selectedBlock = new EventComponent({ id: blockId })
 
-          selected_block
+          selectedBlock
             .for(calendar, event)
             .delete()
             .then(resp => {
               this.isLoading = false
               this.event.components.splice(
                 _.findIndex(this.eventBuildingBlocks, b => {
-                  return b.id === selected_block.id
+                  return b.id === selectedBlock.id
                 }),
                 1
               )
@@ -635,72 +570,6 @@ export default {
         this.getEventBuildingBlocks()
       })
     },
-
-      editElementBudget(block){
-
-          let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-          let event = new CalendarEvent({ id: this.event.id })
-          let selected_block = new EventComponent({ id: block.id })
-
-          selected_block.calendarEvent = block.calendarEvent
-          selected_block.componentId = block.componentId
-          selected_block.icon = block.icon
-          selected_block.color = block.color
-          selected_block.todos = block.todos
-          selected_block.values = block.values
-          selected_block.vendors = block.vendors
-
-          if (block.allocatedBudget && block.numberOfParticipants) {
-              selected_block.allocatedBudget =
-                  this.type === 'total' ? block.newBudget : block.newBudget * block.numberOfParticipants
-              block.allocatedBudget =
-                  this.type === 'total' ? block.newBudget : block.newBudget * block.numberOfParticipants
-          } else {
-              selected_block.allocatedBudget =
-                  this.type === 'total'
-                      ? block.newBudget
-                      : block.newBudget * this.event.numberOfParticipants
-              block.allocatedBudget =
-                  this.type === 'total'
-                      ? block.newBudget
-                      : block.newBudget * this.event.numberOfParticipants
-          }
-
-
-
-
-          selected_block
-              .for(calendar, event)
-              .save()
-              .then(resp => {
-                  this.isLoading = false
-                  this.$root.$emit('RefreshStatistics')
-                  this.getEventBuildingBlocks()
-                  this.$root.$emit(
-                      'event-building-block-budget-changed',
-                      this.event.components
-                  )
-                  this.$forceUpdate()
-
-                  let allocatedBudget = 0
-                  this.eventBuildingBlocks.forEach(item => {
-                      if (item.allocatedBudget) {
-                          allocatedBudget += Number(item.allocatedBudget)
-                      }
-                  })
-
-                  this.allocatedBudget = allocatedBudget;
-
-                  this.showEditElementBudget(block);
-              })
-              .catch(error => {
-                  console.log(error)
-              })
-
-
-
-      },
-
     blockBudgetChanged (val, index) {
       let block = _.find(this.eventBuildingBlocks, function (item) {
         return item.componentId === index
@@ -708,28 +577,28 @@ export default {
 
       let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
       let event = new CalendarEvent({ id: this.event.id })
-      let selected_block = new EventComponent({ id: block.id })
+      let selectedBlock = new EventComponent({ id: block.id })
 
-      selected_block.calendarEvent = block.calendarEvent
-      selected_block.componentId = block.componentId
-      selected_block.icon = block.icon
-      selected_block.color = block.color
-      selected_block.todos = block.todos
-      selected_block.values = block.values
-      selected_block.vendors = block.vendors
+      selectedBlock.calendarEvent = block.calendarEvent
+      selectedBlock.componentId = block.componentId
+      selectedBlock.icon = block.icon
+      selectedBlock.color = block.color
+      selectedBlock.todos = block.todos
+      selectedBlock.values = block.values
+      selectedBlock.vendors = block.vendors
 
       if (val) {
         if (val.toString().toLowerCase() === 'click to set') {
-          selected_block.allocatedBudget = null
+          selectedBlock.allocatedBudget = null
           block.allocatedBudget = null
         } else {
           if (block.allocatedBudget && block.numberOfParticipants) {
-            selected_block.allocatedBudget =
+            selectedBlock.allocatedBudget =
               this.type === 'total' ? val : val * block.numberOfParticipants
             block.allocatedBudget =
               this.type === 'total' ? val : val * block.numberOfParticipants
           } else {
-            selected_block.allocatedBudget =
+            selectedBlock.allocatedBudget =
               this.type === 'total'
                 ? val
                 : val * this.event.numberOfParticipants
@@ -740,11 +609,11 @@ export default {
           }
         }
       } else {
-        selected_block.allocatedBudget = null
+        selectedBlock.allocatedBudget = null
         block.allocatedBudget = null
       }
 
-      selected_block
+      selectedBlock
         .for(calendar, event)
         .save()
         .then(resp => {
@@ -867,38 +736,22 @@ export default {
     },
 
     addBuildingBlock () {
-      let vm = this
-
       // Save event interaction
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
       let event = new CalendarEvent({ id: this.event.id })
+      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
 
-      let new_block = {
+      let newBlock = {
         componentId:
-          this.newBuildingBlock.category != 'Other'
-            ? this.newBuildingBlock.category
-              .replace(/ /g, '')
-              .toLocaleLowerCase()
-            : this.newBuildingBlock.name.replace(/ /g, '').toLocaleLowerCase(),
-        componentCategoryId: this.newBuildingBlock.categoryId,
-        todos: '',
-        values: '',
-        vendors: '',
-        calendarEvent: { id: event.id }
+          _.findWhere(this.components, {title: this.newBuildingBlock.category}).id,
+        // componentCategoryId: this.newBuildingBlock.categoryId,
+        calendarEvent: { id: event.id },
+        allocatedBudget: this.newBuildingBlock.budget
       }
-
-      new EventComponent(new_block)
+      new EventComponent(newBlock)
         .for(calendar, event)
         .save()
         .then(res => {
           this.showCategoryModal = false
-          //
-          // setTimeout(function(){
-          //
-          //     vm.getEventBuildingBlocks();
-          //
-          // },2000);
-
           location.reload()
         })
         .catch(error => {
@@ -922,13 +775,9 @@ export default {
         })
     }
   },
-  created () {
-
-  },
   mounted () {
     this.getEventBuildingBlocks()
     this.getCategoryBlocks()
-
     this.$on('refreshBuildingBlock', () => {
       this.getEventBuildingBlocks()
     })

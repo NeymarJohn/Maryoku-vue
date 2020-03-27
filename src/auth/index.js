@@ -2,8 +2,6 @@
   process.env.NODE_ENV === 'production'
     ? {SCHEME: 'https', HOSTNAME: 'api.maryoku.com'}
     : {SCHEME: 'http', HOSTNAME: process.env.SERVER_URL} */
-import { Model } from 'vue-api-query'
-import ME from '@/models/Me'
 import store from '../store'
 
 const { HOSTNAME } = { HOSTNAME: process.env.SERVER_URL }
