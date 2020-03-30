@@ -159,7 +159,7 @@ export default {
         return vendor.vendorWebsite.indexOf('http://') > -1 || vendor.vendorWebsite.indexOf('https://') > -1
       }
       return false
-    }
+    },
   },
   watch: {
     searchQuery (newVal, oldVal) {

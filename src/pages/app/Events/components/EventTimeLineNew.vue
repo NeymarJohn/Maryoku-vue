@@ -1,5 +1,5 @@
 <template>
-    <div class="md-layout timeline-section">
+    <div class="md-layout timeline-section with-progress-bar">
 
         <side-bar :event="event">
 
@@ -9,7 +9,7 @@
 
         <div class="event-page-header md-layout-item md-size-100 with-bg">
             <div class="header-main-actions">
-                <md-button class="md-rose">Save Changes</md-button>
+                <md-button class="md-rose" @click="saveTimeline">Save Changes</md-button>
                 <md-button class="md-default md-simple">back to first version</md-button>
                 <md-button class="md-default md-simple with-left-border">start from scratch</md-button>
             </div>
@@ -33,180 +33,195 @@
                 <img :src="`${newTimeLineIconsURL}timeline-title.svg`">Timeline
             </div>
 
-            <drop @drop="handleDrop" style="height: 100%;">
-                <draggable :list="timelineItems" class="time-line-blocks_selected-items"
-                           :options="{disabled : disabledDragging}">
-                    <div v-for="(item,index) in timelineItems" :key="index"
-                         class="time-line-blocks_selected-items_item time-line-item">
-                        <img class="time-line-blocks_icon"  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`">
-                        <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit'"
-                                 :style="`border-left : 5px solid ` + item.color"
-                        >
-                            <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C"/>
-                            <md-card-content class="md-layout">
-                                <div class="md-layout-item md-size-100">
-                                    <div class="form-group">
-                                        <label>Name</label>
-                                        <input type="text" class="form-control" v-model="item.title">
-                                    </div>
-                                </div>
-                                <div class="md-layout-item md-size-45">
-
-                                    <div class="form-group">
-                                        <label>Start Time </label>
-                                       <div class="time-select-fields">
-                                           <input type="time"  v-model="item.startTime" class="without_ampm" >
-                                           <select v-model="item.startDuration">
-                                               <option value="am" >AM</option>
-                                               <option value="PM">PM</option>
-                                           </select>
-                                       </div>
-                                    </div>
-<!--                                    <md-field>-->
-<!--                                        <input-mask v-focus placeholder="From Time e.g:08:00 AM" class="md-input"-->
-<!--                                                    v-model="item.startTime" mask="99:99 aa" maskChar="_"></input-mask>-->
-<!--                                    </md-field>-->
-                                </div>
-                                <div class="md-layout-item md-size-10 d-flex justify-content-center align-center" style="position : relative">
-                                    <div class="divider"></div>
-                                </div>
-                                <div class="md-layout-item md-size-45">
-                                    <div class="form-group">
-                                        <label>Finishes At</label>
-                                        <div class="time-select-fields">
-                                            <input type="time"  v-model="item.endTime" class="without_ampm" >
-
-                                            <select v-model="item.endDuration">
-                                                <option value="am">AM</option>
-                                                <option value="PM">PM</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-<!--                                    <md-field>-->
-<!--                                        <input-mask placeholder="To Time e.g:10:00 PM" class="md-input"-->
-<!--                                                    v-model="item.endTime" mask="99:99 aa" maskChar="_"></input-mask>-->
-<!--                                    </md-field>-->
-                                </div>
-                                <div class="md-layout-item md-size-100">
-                                    <div class="form-group">
-                                        <label>Description</label>
-                                        <textarea row="100" type="text" class="form-control" v-model="item.description"></textarea>
-                                    </div>
-                                </div>
-
-                                <div class="md-layout-item md-size-100 margin-bottom">
-                                    <div class="form-group with-icon">
-                                        <label>Location</label>
-                                        <div class="input-icon">
-                                            <img :src="`${timelineIconsURL}place.svg`" width="20">
-                                        </div>
-                                        <input type="text" class="form-control" v-model="item.location">
-                                    </div>
-                                </div>
-                                <div class="md-layout-item md-size-100 ">
-
-                                    <div class="form-group">
-                                        <label>Attach File  <small>*suggested</small></label>
-                                        <label class="upload-section" for="file">
-                                            <md-button class="md-rose md-outline md-simple md-sm">
-                                                Choose file
-                                            </md-button>
-                                            <div class="note">Drag your file here</div>
-                                        </label>
-
-                                        <input
-                                            style="display: none"
-                                            id="file"
-                                            name="attachment"
-                                            type="file"
-                                            @change="onFileChange"
-                                        ></input>
-
-                                    </div>
-
-                                </div>
-                            </md-card-content>
-                            <md-card-actions md-alignment="right" style="border: none;" class="edit-timeline-footer">
-                                <md-button name="event-planner-tab-timeline-item-save"
-                                           class="event-planner-tab-timeline-item-save md-default md-simple"
-                                           @click="cancelTimelineItem(item,index)">Cancel
-                                </md-button>
-                                <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-save"
-                                           class="event-planner-tab-timeline-item-save md-rose" v-if="!item.dateCreated"
-                                           @click="saveTimelineItem(item,index)">Save
-                                </md-button>
-                                <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-edit"
-                                           class="event-planner-tab-timeline-item-edit md-rose" v-else
-                                           @click="updateTimelineItem(item)">Save
-                                </md-button>
-                            </md-card-actions>
-
-                        </md-card>
-
-                        <md-card class="block-info" v-if="!item.mode || item.mode === 'saved' "
-                                 :style="`border-left : 5px solid ` + item.color">
-                            <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C"/>
-                            <md-card-content style="min-height: 80px;">
-                                <div class="item-title-and-time"
-                                     >
-                                    <span class="item-time">{{ item.startTime }} - {{item.endTime}}</span>
-                                    <span class="item-title" style="font-weight: 500; display: inline-block;" v-if="item.title">
-                                      {{item.title }}
-                                    </span>
-                                    <p class="item-desc">
-                                        {{ item.description }}
-                                    </p>
-                                    <div class="location"  style="display : none;">
-                                        <md-icon>place</md-icon> 1419 Westwood Blvd Los Angeles | CA 90024-4911
-                                    </div>
-                                    <div class="attachment" style="display : none;">
-                                        <a href=""> <md-icon>attachment</md-icon> file name </a>
-                                    </div>
-                                    <md-button class="md-simple timeline-action"> <img :src="`${timelineIconsURL}Asset 48.svg`" width="20"> Go To Proposal </md-button>
-                                    <br>
-                                    <md-button class="md-simple timeline-action"> <img :src="`${timelineIconsURL}Asset 47.svg`" width="20"> Contact Vendor </md-button>
-                                </div>
-
-                                <div class="card-actions">
-                                    <md-button name="event-planner-tab-timeline-item-edit"
-                                               class="event-planner-tab-timeline-item-edit md-rose md-simple md-xs md-round"
-                                               @click="modifyItem(index)">
-
-                                        Edit
-
-                                    </md-button>
-                                    <md-button name="event-planner-tab-timeline-item-delete"
-                                               class="event-planner-tab-timeline-item-delete md-simple md-xs md-just-icon md-round"
-                                               @click="removeItem(item)">
-                                        <md-icon>delete_outline</md-icon>
-                                    </md-button>
-
-                                </div>
-
-                            </md-card-content>
-                        </md-card>
-
+            <div class="timeline-items-list">
+                <div class="timeline-items-list__item" v-for="(timelineItem,indx) in timeline" :key="indx">
+                    <div class="item-header">
+                        <div class="header-title">Day {{numberToWord(indx + 1)}} {{timelineItem.date}}</div>
+                        <div class="header-actions">
+                            <md-button class="md-default md-simple md-just-icon" @click="addTimelineItem">
+                                <md-icon>add_circle</md-icon>
+                            </md-button>
+                            <md-button class="md-default md-simple md-just-icon" @click="removeTimelineItem(indx)">
+                                <md-icon>delete_outline</md-icon>
+                            </md-button>
+                        </div>
                     </div>
 
-<!--                    <div class="time-line-blocks_selected-items_item" v-if="!timelineItems.length">-->
-<!--                        <div class="drag-here">-->
-<!--                            <p>-->
-<!--                                <img src="http://static.maryoku.com/storage/img/drag_drop.png" alt="drag and drop"-->
-<!--                                     style="width: 62px;"/>-->
-<!--                            </p>-->
-<!--                            <p style="font-style: italic; font-size: 18px;">-->
-<!--                                Start building your event timeline by dropping timeline items here-->
-<!--                            </p>-->
-<!--                        </div>-->
-<!--                    </div>-->
-                </draggable>
+                    <drop @drop="handleDrop(indx, ...arguments)" style="height: 100%; min-height: 50px;" :data-index="indx">
+                        <draggable :list="timelineItem.items" class="time-line-blocks_selected-items"
+                                   :options="{disabled : disabledDragging}">
+                            <div v-for="(item,index) in timelineItem.items" :key="index"
+                                 class="time-line-blocks_selected-items_item time-line-item">
+                                <img class="time-line-blocks_icon"  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`">
+                                <md-card class="block-form" v-if="!item.dateCreated || item.mode === 'edit'"
+                                         :style="`border-left : 5px solid ` + item.color"
+                                >
+                                    <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C"/>
+                                    <md-card-content class="md-layout">
+                                        <div class="md-layout-item md-size-100">
+                                            <div class="form-group">
+                                                <label>Name</label>
+                                                <input type="text" class="form-control" v-model="item.title">
+                                            </div>
+                                        </div>
+                                        <div class="md-layout-item md-size-45">
 
-                <div class="text-center timeline-lists-footer" v-if="timelineItems.length">
-                    <div class="footer-title">End</div>
-                    <md-button class="md-rose md-simple back-to-top"> <md-icon>expand_less</md-icon> Back to top </md-button>
+                                            <div class="form-group">
+                                                <label>Start Time </label>
+                                                <div class="time-select-fields">
+                                                    <input type="time"  v-model="item.startTime" class="without_ampm" >
+                                                    <select v-model="item.startDuration">
+                                                        <option value="am" >AM</option>
+                                                        <option value="PM">PM</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <!--                                    <md-field>-->
+                                            <!--                                        <input-mask v-focus placeholder="From Time e.g:08:00 AM" class="md-input"-->
+                                            <!--                                                    v-model="item.startTime" mask="99:99 aa" maskChar="_"></input-mask>-->
+                                            <!--                                    </md-field>-->
+                                        </div>
+                                        <div class="md-layout-item md-size-10 d-flex justify-content-center align-center" style="position : relative">
+                                            <div class="divider"></div>
+                                        </div>
+                                        <div class="md-layout-item md-size-45">
+                                            <div class="form-group">
+                                                <label>Finishes At</label>
+                                                <div class="time-select-fields">
+                                                    <input type="time"  v-model="item.endTime" class="without_ampm" >
+
+                                                    <select v-model="item.endDuration">
+                                                        <option value="am">AM</option>
+                                                        <option value="PM">PM</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <!--                                    <md-field>-->
+                                            <!--                                        <input-mask placeholder="To Time e.g:10:00 PM" class="md-input"-->
+                                            <!--                                                    v-model="item.endTime" mask="99:99 aa" maskChar="_"></input-mask>-->
+                                            <!--                                    </md-field>-->
+                                        </div>
+                                        <div class="md-layout-item md-size-100">
+                                            <div class="form-group">
+                                                <label>Description</label>
+                                                <textarea row="100" type="text" class="form-control" v-model="item.description"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="md-layout-item md-size-100 margin-bottom">
+                                            <div class="form-group with-icon">
+                                                <label>Location</label>
+                                                <div class="input-icon">
+                                                    <img :src="`${timelineIconsURL}place.svg`" width="20">
+                                                </div>
+                                                <input type="text" class="form-control" v-model="item.location">
+                                            </div>
+                                        </div>
+                                        <div class="md-layout-item md-size-100 ">
+
+                                            <div class="form-group">
+                                                <label>Attach File  <small>*suggested</small></label>
+                                                <label class="upload-section" for="file">
+                                                    <md-button class="md-rose md-outline md-simple md-sm">
+                                                        Choose file
+                                                    </md-button>
+                                                    <div class="note">Drag your file here</div>
+                                                </label>
+
+                                                <input
+                                                    style="display: none"
+                                                    id="file"
+                                                    name="attachment"
+                                                    type="file"
+                                                    @change="onFileChange"
+                                                ></input>
+
+                                            </div>
+
+                                        </div>
+                                    </md-card-content>
+                                    <md-card-actions md-alignment="right" style="border: none;" class="edit-timeline-footer">
+                                        <md-button name="event-planner-tab-timeline-item-save"
+                                                   class="event-planner-tab-timeline-item-save md-default md-simple"
+                                                   @click="cancelTimelineItem(item,index)">Cancel
+                                        </md-button>
+                                        <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-save"
+                                                   class="event-planner-tab-timeline-item-save md-rose" v-if="!item.dateCreated"
+                                                   @click="saveTimelineItem(item,index)">Save
+                                        </md-button>
+                                        <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-edit"
+                                                   class="event-planner-tab-timeline-item-edit md-rose" v-else
+                                                   @click="updateTimelineItem(item)">Save
+                                        </md-button>
+                                    </md-card-actions>
+
+                                </md-card>
+
+                                <md-card class="block-info" v-if="!item.mode || item.mode === 'saved' "
+                                         :style="`border-left : 5px solid ` + item.color">
+                                    <vue-element-loading :active.sync="item.isItemLoading" spinner="ring" color="#FF547C"/>
+                                    <md-card-content style="min-height: 80px;">
+                                        <div class="item-title-and-time"
+                                        >
+                                            <span class="item-time">{{ item.startTime }} - {{item.endTime}}</span>
+                                            <span class="item-title" style="font-weight: 500; display: inline-block;" v-if="item.title">
+                                      {{item.title }}
+                                    </span>
+                                            <p class="item-desc">
+                                                {{ item.description }}
+                                            </p>
+                                            <div class="location"  style="display : none;">
+                                                <md-icon>place</md-icon> 1419 Westwood Blvd Los Angeles | CA 90024-4911
+                                            </div>
+                                            <div class="attachment" style="display : none;">
+                                                <a href=""> <md-icon>attachment</md-icon> file name </a>
+                                            </div>
+                                            <md-button class="md-simple timeline-action"> <img :src="`${timelineIconsURL}Asset 48.svg`" width="20"> Go To Proposal </md-button>
+                                            <br>
+                                            <md-button class="md-simple timeline-action"> <img :src="`${timelineIconsURL}Asset 47.svg`" width="20"> Contact Vendor </md-button>
+                                        </div>
+
+                                        <div class="card-actions">
+                                            <md-button name="event-planner-tab-timeline-item-edit"
+                                                       class="event-planner-tab-timeline-item-edit md-rose md-simple md-xs md-round"
+                                                       @click="modifyItem(index)">
+
+                                                Edit
+
+                                            </md-button>
+                                            <md-button name="event-planner-tab-timeline-item-delete"
+                                                       class="event-planner-tab-timeline-item-delete md-simple md-xs md-just-icon md-round"
+                                                       @click="removeItem(item)">
+                                                <md-icon>delete_outline</md-icon>
+                                            </md-button>
+
+                                        </div>
+
+                                    </md-card-content>
+                                </md-card>
+
+                            </div>
+
+                            <!--                    <div class="time-line-blocks_selected-items_item" v-if="!timelineItems.length">-->
+                            <!--                        <div class="drag-here">-->
+                            <!--                            <p>-->
+                            <!--                                <img src="http://static.maryoku.com/storage/img/drag_drop.png" alt="drag and drop"-->
+                            <!--                                     style="width: 62px;"/>-->
+                            <!--                            </p>-->
+                            <!--                            <p style="font-style: italic; font-size: 18px;">-->
+                            <!--                                Start building your event timeline by dropping timeline items here-->
+                            <!--                            </p>-->
+                            <!--                        </div>-->
+                            <!--                    </div>-->
+                        </draggable>
+
+
+                    </drop>
+
                 </div>
-            </drop>
+
+            </div>
         </div>
         <md-card
             class="md-card-plain time-line-blocks md-layout-item md-xlarge-size-35 md-large-size-35 md-small-size-40" style="    margin-top: 16px;">
@@ -232,6 +247,14 @@
 
             </md-card-content>
         </md-card>
+
+        <div class="md-layout-item md-size-100 text-center">
+            <md-button class="md-rose save-timeline" @click="saveTimeline">Save Changes</md-button>
+            <div class="text-center timeline-lists-footer" v-if="timeline.length">
+                <div class="footer-title">End</div>
+                <md-button class="md-rose md-simple back-to-top"> <md-icon>expand_less</md-icon> Back to top </md-button>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -284,55 +307,55 @@ export default {
         id: 1,
         buildingBlockType: 'setup',
         icon: 'Setup',
-        color: '#3a3838'
+        color: '#ffc001'
       },
+        {
+            id: 6,
+            buildingBlockType: 'Relaxation',
+            icon: 'Relaxation',
+            color: '#0caf50'
+        },
+        {
+            id: 8,
+            buildingBlockType: 'Show',
+            icon: 'Show',
+            color: '#00bcd4'
+        },
       {
         id: 2,
         buildingBlockType: 'activity',
         icon: 'Activity',
         color: '#20c997'
       },
+        {
+            id: 9,
+            buildingBlockType: 'Speaker / Keynote',
+            icon: 'speaker',
+            color: '#641956'
+        },
+        {
+            id: 10,
+            buildingBlockType: 'Break',
+            icon: 'Break',
+            color: '#ff527c'
+        },
       {
         id: 3,
         buildingBlockType: 'meal',
         icon: 'Meal',
         color: '#f44336'
       },
+        {
+            id: 5,
+            buildingBlockType: 'Transportation',
+            icon: 'Transportation',
+            color: '#44546a'
+        },
       {
         id: 4,
         buildingBlockType: 'Discussion',
         icon: 'Discussion',
-        color: '#ffc001'
-      },
-      {
-        id: 8,
-        buildingBlockType: 'Show',
-        icon: 'Show',
-        color: '#00bcd4'
-      },
-      {
-        id: 5,
-        buildingBlockType: 'Transportation',
-        icon: 'Transportation',
-        color: '#44546a'
-      },
-      {
-        id: 9,
-        buildingBlockType: 'Speaker / Keynote',
-        icon: 'speaker',
-        color: '#641956'
-      },
-      {
-        id: 10,
-        buildingBlockType: 'Break',
-        icon: 'Break',
-        color: '#ff527c'
-      },
-      {
-        id: 6,
-        buildingBlockType: 'Relaxation',
-        icon: 'Relaxation',
-        color: '#0caf50'
+        color: '#3a3838'
       },
       {
         id: 7,
@@ -345,66 +368,31 @@ export default {
     hoursArray: [],
     disabledDragging: false,
     timelineAttachment: null,
-    eventElements: [
-      {
-        title: 'book catering',
-        status: 'complete'
-      },
-      {
-        title: 'book catering',
-        status: 'complete'
-      },
-      {
-        title: 'book catering',
-        status: 'complete'
-      },
-      {
-        title: 'Create Timeline',
-        status: 'current'
-      },
-      {
-        title: 'Hire DJ',
-        status: 'not-complete'
-      },
-      {
-        title: 'Hire photographer',
-        status: 'not-complete'
-      },
-      {
-        title: 'Research event insurance',
-        status: 'not-complete'
-      },
-      {
-        title: 'Book event transportation',
-        status: 'not-complete'
-      },
-      {
-        title: 'Create and send save-the-dates',
-        status: 'not-complete'
-      },
-      {
-        title: 'Review budget',
-        status: 'not-complete'
-      },
-      {
-        title: 'Create event\'s banner',
-        status: 'not-complete'
-      }
-    ],
     timelineIconsURL: 'http://static.maryoku.com/storage/icons/timeline/svg/',
     menuIconsURL: 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
     event: {},
-    newTimeLineIconsURL: 'http://static.maryoku.com/storage/icons/Timeline-New/'
+    newTimeLineIconsURL: 'http://static.maryoku.com/storage/icons/Timeline-New/',
+      timeline : [
+          {
+              date : '20/04/2020',
+              items : [],
+              itemDay : null
+          }
+      ],
+      a : ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ','eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '],
+      b : ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety']
 
   }),
   methods: {
     /**
-             * Handle drop block to time line items
-             * @param data
-             * @param event
-             */
-    handleDrop (data, event) {
-      console.log('handleDrop => ', data)
+     * Handle drop block to time line items
+     * @param data
+     * @param event
+     */
+    handleDrop (index, data) {
+        console.log('handleDrop => ', data);
+        console.log('index => ', index);
+
       if (data) {
         let block = Object.assign({}, data.block)
         block.mode = 'edit'
@@ -419,7 +407,7 @@ export default {
           // block.startTime = this.$moment(this.timelineItems[this.timelineItems.length - 1].endTime, 'H:mm A').format('H:mm A')
           // block.endTime = this.$moment(this.timelineItems[this.timelineItems.length - 1].endTime, 'H:mm A').add(1, 'hour').format('H:mm A')
         }
-        this.timelineItems.push(Object.assign({}, block))
+        this.timeline[index].items.push(Object.assign({}, block))
         this.disabledDragging = true
       } else {
         setTimeout(this.updateTimelineITemsOrder, 100)
@@ -472,19 +460,29 @@ export default {
         this.timelineItems = _.sortBy(res, function (item) {
           return item.order
         })
+
+          this.timeline[0].items = _.sortBy(res, function (item) {
+              return item.order
+          })
         this.isLoading = false
         this.timelineItems.forEach((item) => {
           item.isItemLoading = false
         })
+
+          this.timeline[0].items.forEach((item) => {
+              item.isItemLoading = false
+          })
         this.event.timelineItems = this.timelineItems
         this.$root.$emit('timeline-updated', this.timelineItems)
       })
     },
     cancelTimelineItem (item, index) {
       if (item.dateCreated) {
-        this.$set(this.timelineItems[index], 'mode', 'saved')
+          this.$set(this.timelineItems[index], 'mode', 'saved')
+          this.$set(this.timeline[0].items[index], 'mode', 'saved')
       } else {
-        this.timelineItems.splice(index, 1)
+          this.timelineItems.splice(index, 1)
+          this.timeline[0].items.splice(index, 1)
       }
       this.disabledDragging = false
     },
@@ -508,9 +506,6 @@ export default {
       let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
       let event = new CalendarEvent({id: this.event.id})
       let order = ++index
-
-      console.log('i am here => ', item)
-      console.log(this.timelineAttachment)
 
       new EventTimelineItem({
         event: {id: event.id},
@@ -650,7 +645,57 @@ export default {
         }
       }
       reader.readAsDataURL(file)
-    }
+    },
+      formatDate(date) {
+          return moment(date).format('MM/DD/YY')
+      },
+      numberToWord(num) {
+
+        let vm = this;
+
+          if ((num = num.toString()).length > 9) return 'overflow';
+          let n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+          if (!n) return; var str = '';
+          str += (n[1] != 0) ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + ' ' + vm.a[n[1][1]]) + 'crore ' : '';
+          str += (n[2] != 0) ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + ' ' + vm.a[n[2][1]]) + 'lakh ' : '';
+          str += (n[3] != 0) ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + ' ' + vm.a[n[3][1]]) + 'thousand ' : '';
+          str += (n[4] != 0) ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + ' ' + vm.a[n[4][1]]) + 'hundred ' : '';
+          str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (vm.a[Number(n[5])] || vm.b[n[5][0]] + ' ' + vm.a[n[5][1]]) : '';
+          return str;
+
+      },
+      addTimelineItem() {
+
+        let timelineLength = this.timeline.length - 1;
+
+        this.timeline.push({
+            date : this.formatDate(this.timeline[timelineLength].itemDay + (1000 * 60 * 60 * 24)),
+            items: [],
+            itemDay : this.timeline[timelineLength].itemDay + (1000 * 60 * 60 * 24)
+
+        })
+      },
+      removeTimelineItem(index) {
+          this.timeline.splice(index, 1)
+      },
+      saveTimeline(){
+
+          swal({
+              title: 'Saved It!',
+              showCloseButton: true,
+              text : 'We’ll update the related vendors',
+              confirmButtonClass: 'md-button md-rose',
+              cancelButtonClass: 'md-button md-rose',
+              confirmButtonText: 'Cool, Thanks',
+              buttonsStyling: false
+          }).then(result => {
+
+          })
+              .catch(err => {
+                  console.log(err)
+              })
+
+      }
 
   },
   created () {
@@ -664,7 +709,12 @@ export default {
       let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
 
       _calendar.calendarEvents().find(this.$route.params.id).then(event => {
-        this.event = event
+        this.event = event;
+
+        this.timeline[0].date = this.formatDate(this.event.eventStartMillis);
+        this.timeline[0].itemDay = this.event.eventStartMillis;
+
+        console.log(this.timeline[0]);
 
         this.getTimelineItems()
 
