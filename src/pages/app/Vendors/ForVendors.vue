@@ -4,18 +4,31 @@
       So what are the details?
     </h4>
     <div class="main-cont">
-      <h3>march madness event</h3>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-      </p>
-      <div class="summary-cont">
-        <ul>
-          <li><i class="material-icons">event</i> <br/><br/> December 25, 2019</li>
-          <li><i class="material-icons">wb_sunny</i> <br/><br/> Day Time event</li>
-          <li><i class="material-icons">alarm</i> <br/><br/> 6 Hours</li>
-          <li><i class="material-icons">supervised_user_circle</i> <br/><br/> 2,034 Guests</li>
-          <li><i class="material-icons">location_on</i> <br/><br/> San Diego</li>
-        </ul>
+      <div class="one-row">
+        <div class="left-side">
+          <h3>march madness</h3>
+          <h4>a microsoft marketing event</h4>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          </p>
+        </div>
+        <div class="right-side">
+          <div class="summary-cont">
+            <ul>
+              <li><img :src="`${iconsUrl}Asset 268.svg`"> <strong>Date:</strong>December 25, 2019</li>
+              <li><img :src="`${iconsUrl}Asset 278.svg`"> <strong>Time:</strong>10:00AM - 4:00PM</li>
+              <li><img :src="`${iconsUrl}Asset 271.svg`"> <strong>Address:</strong>575 Mission St. San Franciso, CA 94105</li>
+              <li><img :src="`${iconsUrl}Asset 270.svg`"> <strong>Guests:</strong>2,034</li>
+              <li><img :src="`${iconsUrl}Asset 262.svg`"> <strong>Type:</strong>Establishment / Activity day</li>
+              <li><img :src="`${iconsUrl}Asset 262.svg`"> <strong>Invited:</strong>Employees + Partners</li>
+              <li>
+                <div class="new-time">
+                  Already Booked? <a @click="showChooseDateModal()">Suggest New time</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
       <hr/>
       <vendor-budget-list
@@ -28,18 +41,26 @@
       <h3>
         Would you like to submit your bid?
       </h3>
-      <p>
-        You're the <strong>4th</strong> catering & venue <strong>bidder</strong>
-      </p>
+      <md-checkbox class="check-condition" v-model="isAgree">
+        <span class="regular">I accept <span class="condition">Maryoku's Terms & Conditions</span></span>
+      </md-checkbox>
     </div>
     <div class="action-cont">
-      <a class="another-date" @click="showChooseDateModal()">Suggest Another Date</a>
+      <!-- <a class="another-date" @click="showChooseDateModal()">Suggest Another Date</a> -->
       <button class="no" @click="showNotBiddingModal">
         Thank You, But No.
       </button>
-      <button class="yes">
-        Submit Proposal
+      <button class="no no-border" @click="showNotBiddingModal">
+        Refer Another Vendor <img :src="`${iconsUrl}Asset 268.svg`">
       </button>
+      <div class="with-description">
+        <p>
+          You're the 4th catering & venue bidder
+        </p>
+        <button class="yes">
+          Submit Proposal
+        </button>
+      </div>
     </div>
     <modal v-if="notBiddingModal" class="not-bidding-modal">
       <template slot="header">
@@ -145,16 +166,21 @@ export default {
     return {
       vendors: [
         {
+          img: "http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/Asset 275.svg",
           category: "Venue", 
           budget: 1100
         },
         {
+          img: "http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/Asset 274.svg",
           category: "Catering", 
           budget: 1300
         }
       ],
       notBiddingModal: false,
       chooseDateModal: false,
+      iconsUrl: 'http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/',
+      isAgree: false,
+      // http://static.maryoku.com/storage/icons/Vendor/Landing%20page/Asset 500.svg
     }
   },
   created() {
@@ -188,9 +214,10 @@ export default {
     background-color: #ffffff;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     border-radius: 3px;
-    max-width: 80%;
+    max-width: calc(100% - 128px);
     margin: -64px auto 0 auto;
     padding: 83px 114px;
+    font-family: 'Manrope-Regular', sans-serif;
     
     h4 {
       margin: 0;
@@ -207,98 +234,141 @@ export default {
       padding: 60px;
       color: #050505;
 
-      h3 {
-        margin: 0;
-        text-transform: uppercase;
-        font-family: 'Cooperative';
-      }
-      p {
-        font-size: 16px;
-        max-width: 80%;
-      }
-      .summary-cont {
-        ul {
-          display: flex;
-          list-style: none;
-          padding: 0;
-          justify-content: center;
-          align-items: center;
-          margin: 3rem 0;
-          li {
-            flex: 1;
-            border-right: 1px solid #707070;
-            border-radius: 3px;
-            text-align: center;
-            padding: 1rem;
-            font-size: 22px;
-            font-weight: 800;
+      .one-row {
+        display: flex;
+        align-items: flex-start;
 
-            i {
-              font-size: 36px;
-            }
-
-            &:last-child {
-              border: none;
-            }
+        .left-side {
+          padding-right: 50px;
+          border-right: 1px solid #050505;
+          h3 {
+            margin: 0;
+            text-transform: uppercase;
+            font-family: 'Cooperative-Regular', sans-serif;
+            font-size: 44px;
+            font-weight: normal;
           }
+          h4 {
+            margin: 0;
+            text-transform: capitalize;
+            font-size: 20px;
+            margin-top: 19px;
+            margin-bottom: 37px;
+          }
+          p {
+            font-size: 16px;
+            max-width: 426px;
+          }
+        }
+        .right-side {
+          padding: 50px 80px 0px 76px;
+
+          .summary-cont {
+            ul {
+              list-style: none;
+              padding: 0;
+              margin: 0;
+
+              li {
+                font-size: 20px;
+                margin-bottom: 53px;
+
+                img {
+                  width: 15.4px;
+                  height: 19.2px;
+                  margin-right: 13px;
+                }
+                strong {
+                  margin-right: 18px;
+                  min-width: 86px;
+                  display: inline-block;
+                }
+                .new-time {
+                  background-color: #ffedb7;
+                  padding: 23px 35px 22px 35px;
+                  font-size: 16px;
+                  font-weight: 800;
+                  display: inline-block;
+
+                  a {
+                    margin-left: 15px;
+                    cursor: pointer;
+                    color: #f51355;
+                  }
+                }
+              }
+            }
+          } 
         }
       }
     }
 
     .rank-cont {
       color: #050505;
-      padding: 5em 0 0 0;
+      padding-top: 84px;
       h3 {
         font-size: 40px;
         font-weight: bold;
         line-height: 1.68;
         margin: 0;
+        margin-bottom: 30px;
       }
-      p {
-        font-size: 22px;
-        font-weight: 400;
-        list-style: 1.32;
-        strong {
-          font-weight: 800;
+      .check-condition {
+        font-size: 20px;
+
+        span.regular {
+          padding-left: 14px;
+          color: #050505;
+        }
+
+        span.condition {
+          text-decoration: underline;
+          font-weight: bold;
+          color: #050505;
         }
       }
     }
     
     .action-cont {
       text-align: right;
-      padding: 6em 0;
-      .another-date {
-        font-size: 20px;
-        color: #f51355;
-        font-weight: 800;
-        text-decoration: underline;
-        cursor: pointer;
-        padding: 0 2rem;
-        margin-right: 23px;
-      }
+      padding-top: 130px;
       .no {
-        min-width: 382px;
-        padding: 20px 0;
+        padding: 25px 75px;
         color: #f51355;
         font-size: 20px;
         font-weight: 800;
-        border-radius: 3px;
-        border: 1px solid #f51355;
-        box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-        margin-right: 23px;
-        cursor: pointer;
-      }
-      .yes {
-        min-width: 382px;
-        padding: 20px 0;
-        font-size: 20px;
-        font-weight: 800;
-        letter-spacing: 0.42px;
         border: none;
-        border-radius: 3px;
-        color: #ffffff;
-        background-color: #f51355;
         cursor: pointer;
+        border-right: 1px solid #707070;
+        text-decoration: underline;
+
+        img {
+          padding-left: 19px;
+          width: 36px;
+        }
+      }
+      .no-border {
+        border: none!important;
+      }
+      .with-description {
+        display: inline-block;
+        text-align: center;
+        p {
+          font-size: 22px;
+          margin-bottom: 31px;
+        }
+        .yes {
+          min-width: 473px;
+          padding: 20px 0;
+          font-size: 20px;
+          font-weight: 800;
+          letter-spacing: 0.42px;
+          border: none;
+          border-radius: 3px;
+          color: #ffffff;
+          background-color: #f51355;
+          cursor: pointer;
+        }
       }
     }
 
