@@ -3,6 +3,7 @@
     <section class="header-wrapper">
       <div class="proposal-banner">
         <h2>march madness</h2>
+        <h5>Microsoft marketing event</h5>
       </div>
       <div class="summary-cont">
         <ul>
@@ -145,21 +146,30 @@
         background-image: url('http://static.maryoku.com/storage/img/lock.jpg');
         clip-path: circle(111% at 0% 50%);
         shape-outside: circle(111% at 0% 50%) border-box;
-        width: 450px;
         background-size: cover;
         background-repeat: no-repeat;
         display: block;
         float: left;
-        padding: 94px 0;
+        padding: 90px 96px;
+        color: #ffffff;
+        width: 495px;
+        height: 273px;
 
         h2 {
           font-size: 50px;
           text-shadow: 0 3px 6px rgba(0, 0, 0, 0.77);
-          font-family: Cooperative;
+          font-family: 'Cooperative-Regular', sans-serif;
           font-size: 50px;
           text-transform: uppercase;
-          color: #ffffff;
           margin: 0;
+        }
+        h5 {
+          margin-top: 8px;
+          margin-bottom: 0;
+          font-family: 'Manrope-Regular', sans-serif;
+          font-size: 20px;
+          font-weight: bold;
+          text-shadow: 0 3px 6px rgba(0, 0, 0, 0.77);
         }
       }
       .summary-cont {

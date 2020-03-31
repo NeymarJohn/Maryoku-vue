@@ -90,6 +90,7 @@
 <script>
 
 import _ from 'underscore'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -131,80 +132,6 @@ export default {
         '#FE537A',
         '#D9FFE7',
         '#2CDE6B'
-      ],
-      allElements: [
-        {
-          title: 'Swags',
-          color: '#44546a'
-        },
-        {
-          title: 'Equipment Rental',
-          color: '#e7e6e6'
-        },
-        {
-          title: 'Venue Rental',
-          color: '#ffc000'
-        },
-        {
-          title: 'Food & Beverage',
-          color: '#ff527c'
-        },
-        {
-          title: 'Advertising & Promotion',
-          color: '#a5a5a5'
-        },
-        {
-          title: 'Entertainment',
-          color: '#20c997'
-        },
-        {
-          title: 'Audio Visual/Staging Services',
-          color: '#00bcd4'
-        },
-        {
-          title: 'Decor',
-          color: '#641956'
-        },
-        {
-          title: 'Signage/Printing',
-          color: '#00b050'
-        },
-        {
-          title: 'Transportation & Tour operator services',
-          color: '#ff0066'
-        },
-        {
-          title: 'Shipping',
-          color: '#1D9A78'
-        },
-        {
-          title: 'Administration',
-          color: '#8BC145'
-        },
-        {
-          title: 'Security Services',
-          color: '#689331'
-        },
-        {
-          title: 'Corporate Social Responsibility',
-          color: '#f19d19'
-        },
-        {
-          title: 'Meeting Organization fee',
-          color: '#B74919'
-        },
-        {
-          title: 'Technology Services',
-          color: '#C490AA'
-        },
-        {
-          title: 'Videography & Photography',
-          color: '#7f7f7f'
-        },
-        {
-          title: 'Unexpected',
-          color: '#24c796'
-        }
       ],
       defaultColor: '#641956'
     }
@@ -249,7 +176,6 @@ export default {
 
       // remove duplicated categories
       this.categories = [...new Set(this.categories)]
-      console.log('categories', this.categories)
       // sort data with updated categories
       this.categories.forEach((category, cIndex) => {
         this.sortedData.push({
@@ -283,14 +209,18 @@ export default {
       this.$forceUpdate()
     },
     getElementColor (category) {
-      let element = _.findWhere(this.allElements, { title: category })
+      let element = _.findWhere(this.components, { title: category })
       if (element === undefined) {
         return this.defaultColor
       }
       return element.color
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      components: 'event/getComponentsList'
+    })
+  },
   mounted () {
     this.drawChart()
     this.$root.$on('event-building-block-budget-changed', eventComponents => {

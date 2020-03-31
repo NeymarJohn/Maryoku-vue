@@ -26,7 +26,7 @@
                 <md-button class="md-default md-simple back-btn">Back</md-button>
             </div>
             <div class="proposal-page_header d-flex justify-content-start">
-                <div class="vendor-title"><a href="javascript:void(0)">{{vendorProposal.vendor.vendorDisplayName}}</a> Proposal</div>
+                <div class="vendor-title"><img :src="`${submitProposalIcon}Asset 307.svg`"><a href="javascript:void(0)">{{vendorProposal.vendor.vendorDisplayName}}</a> Proposal</div>
             </div>
             <div class="proposal-content">
                 <div class="proposal-header" style="background : url('https://bit.ly/392ygCu') center center no-repeat;">
@@ -90,7 +90,7 @@
                         </div>
                         <template v-if="vendorProposal.proposals[0].included.length">
                             <div class="proposal-includes__item" v-for="(item,index) in vendorProposal.proposals[0].included" :key="index">
-                                <img :src="`${menuIconsURL}Group 1014.svg`"> {{item.requirementTitle}}
+                                <img :src="`${submitProposalIcon}Group 4781.svg`"> {{item.requirementTitle}}
                             </div>
                         </template>
 
@@ -100,7 +100,7 @@
 
                 <div class="proposal-section pricing-section">
                     <div class="proposal-section__title">
-                        Pricing <small>*We work only with our catering</small>
+                        <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2010.svg" width="12"> Pricing <small>*We work only with our catering</small>
                     </div>
 
                     <table class="pricing-section__table">
@@ -153,7 +153,7 @@
 
                 <div class="proposal-section policy-section">
                     <div class="proposal-section__title">
-                        Our Policy
+                        <img :src="`${submitProposalIcon}Asset 287.svg`" width="20"> Our Policy
                     </div>
 
                     <div class="proposal-section__subtitle">
@@ -212,13 +212,13 @@
 
                     <ul class="contact-list_items d-flex justify-content-start">
                         <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainEmail">
-                            <a href=""><img :src="`${menuIconsURL}Group 1014.svg`"> {{vendorProposal.vendor.vendorMainEmail}}</a>
+                            <a href=""><img :src="`${submitProposalIcon}Asset 286.svg`"> {{vendorProposal.vendor.vendorMainEmail}}</a>
                         </li>
                         <li class="contact-list_item" v-if="vendorProposal.vendor.vendorAddressLine1">
-                            <a href=""><img :src="`${menuIconsURL}Group 1014.svg`"> {{vendorProposal.vendor.vendorAddressLine1}} {{vendorProposal.vendor.vendorAddressLine2}}</a>
+                            <a href=""><img :src="`${submitProposalIcon}Asset 285.svg`"> {{vendorProposal.vendor.vendorAddressLine1}} {{vendorProposal.vendor.vendorAddressLine2}}</a>
                         </li>
                         <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
-                            <a href=""><img :src="`${menuIconsURL}Group 1014.svg`"> {{vendorProposal.vendor.vendorMainPhoneNumber}}</a>
+                            <a href=""><img :src="`${submitProposalIcon}Asset 284.svg`"> {{vendorProposal.vendor.vendorMainPhoneNumber}}</a>
                         </li>
                     </ul>
                 </div>
@@ -326,6 +326,7 @@
                 budgetPerEmployee: 0,
                 menuIconsURL: 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
                 iconsURL : 'http://static.maryoku.com/storage/icons/Event%20Page/',
+                submitProposalIcon : 'http://static.maryoku.com/storage/icons/Submit%20Proposal/',
                 vendorProposal : {},
                 extraTotal : 0,
                 serverUrl: process.env.SERVER_URL,

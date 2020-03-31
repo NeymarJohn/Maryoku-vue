@@ -42,8 +42,13 @@
         Would you like to submit your bid?
       </h3>
       <md-checkbox class="check-condition" v-model="isAgree">
-        <span class="regular">I accept <span class="condition">Maryoku's Terms & Conditions</span></span>
+        <span class="regular" @mouseover="conditionTooltip=true" @mouseleave="conditionTooltip=false">
+          I accept <span class="condition">Maryoku's Terms & Conditions</span>
+        </span>
       </md-checkbox>
+      <div class="condition-tooltip" v-if="conditionTooltip">
+        <img :src="`${iconsUrl}Asset 268.svg`"> Please indicate that you accept the Terms & Conditions
+      </div>
     </div>
     <div class="action-cont">
       <!-- <a class="another-date" @click="showChooseDateModal()">Suggest Another Date</a> -->
@@ -51,7 +56,16 @@
         Thank You, But No.
       </button>
       <button class="no no-border" @click="showNotBiddingModal">
-        Refer Another Vendor <img :src="`${iconsUrl}Asset 268.svg`">
+        Refer Another Vendor 
+        <div class="refer-tooltip" v-if="referTooltip">
+          <h5>Refer a new vendor <br/>and get a commission!</h5>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
+        </div>
+        <img 
+          :src="`${iconsUrl}Asset 268.svg`" 
+          @mouseover="referTooltip=true"
+          @mouseleave="referTooltip=false"
+        >
       </button>
       <div class="with-description">
         <p>
@@ -180,6 +194,8 @@ export default {
       chooseDateModal: false,
       iconsUrl: 'http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/',
       isAgree: false,
+      referTooltip: false,
+      conditionTooltip: false,
       // http://static.maryoku.com/storage/icons/Vendor/Landing%20page/Asset 500.svg
     }
   },
@@ -327,6 +343,34 @@ export default {
           color: #050505;
         }
       }
+      .condition-tooltip {
+        position: absolute;
+        background-color: #ffedb7;
+        padding: 18px 29px 18px 29px;
+        color: #050505;
+        font-size: 14px;
+        margin-left: -40px;
+        margin-top: 10px;
+        img {
+          margin-right: 12px;
+          width: 27px;
+        }
+        &::after{
+          content: '';
+          position: absolute;
+          width: 0;
+          height: 0;
+          top: 4px;
+          left: 70px;
+          box-sizing: border-box;
+          
+          border: 12px solid black;
+          border-color: transparent transparent #ffedb7 #ffedb7;
+          
+          transform-origin: 0 0;
+          transform: rotate(135deg);
+        }
+      }
     }
     
     .action-cont {
@@ -349,6 +393,43 @@ export default {
       }
       .no-border {
         border: none!important;
+      }
+      .refer-tooltip {
+        position: absolute;
+        background-color: #ffedb7;
+        max-width: 301px;
+        padding: 26px 36px 36px 36px;
+        color: #050505;
+        margin-top: -260px;
+
+        h5 {
+          margin: 0;
+          font-size: 20px;
+          font-weight: 800;
+          margin-bottom: 22px;
+          text-transform: capitalize;
+        }
+        p {
+          font-size: 16px;
+          font-weight: normal;
+          line-break: 1.63;
+        }
+        &::after{
+          content: '';
+          position: absolute;
+          width: 0;
+          height: 0;
+          margin-left: -0.5em;
+          bottom: -20px;
+          left: 80%;
+          box-sizing: border-box;
+          
+          border: 12px solid black;
+          border-color: transparent transparent #ffedb7 #ffedb7;
+          
+          transform-origin: 0 0;
+          transform: rotate(-45deg);
+        }
       }
       .with-description {
         display: inline-block;
