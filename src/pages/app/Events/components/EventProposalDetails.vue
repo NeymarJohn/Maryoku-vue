@@ -29,116 +29,87 @@
                 <div class="vendor-title"><img :src="`${submitProposalIcon}Asset 307.svg`"><a href="javascript:void(0)">{{vendorProposal.vendor.vendorDisplayName}}</a> Proposal</div>
             </div>
             <div class="proposal-content">
-
-                <div class="proposal-info">
-                    <div class="proposal-header" style="background : url('https://bit.ly/392ygCu') center center no-repeat;">
-                        <div class="event-info">
-                            <div class="section-header d-flex justify-content-start">
-                                <h3>Event Information & Details</h3> <div class="alert alert-danger"> This proposal is 2 days before your original date </div>
-                            </div>
-                            <ul class="event-details">
-                                <li class="event-details__item">
-                                    <label>Name</label>
-                                    <div class="info-text">{{event.title}}</div>
-                                </li>
-                                <li class="event-details__item">
-                                    <label>Date</label>
-                                    <div class="info-text">{{event.eventStartMillis | formatDate}}</div>
-                                </li>
-                                <li class="event-details__item">
-                                    <label>Guest Arrival Time</label>
-                                    <div class="info-text">{{event.eventStartMillis | formatTime}}</div>
-                                </li>
-                            </ul>
+                <div class="proposal-header" style="background : url('https://bit.ly/392ygCu') center center no-repeat;">
+                    <div class="event-info">
+                        <div class="section-header d-flex justify-content-start">
+                            <h3>Event Information & Details</h3> <div class="alert alert-danger"> This proposal is 2 days before your original date </div>
                         </div>
-                    </div>
-
-                    <div class="proposal-body">
-                        <h1>Dear Rachel, </h1>
-                        <p>
-                             {{vendorProposal.proposals[0].personalMessage}}
-                            <br>
-                            <br>
-                            Sincerely,
-                            <span class="proposal-title">{{vendorProposal.vendor.vendorDisplayName}}</span>
-                        </p>
-
-                        <md-button class="md-rose md-raised md-outline"> More About Us </md-button>
-
-                        <!--                    <div class="loading" v-if="vendorProposal.proposals[0].attachements.length && !fetchingAllAttachments">-->
-                        <!--                        Loading ...-->
-                        <!--                    </div>-->
-
-                        <!--                    <carousel :items="3" :margin="25" :dots="false" :nav="false" class="proposal-images" v-if="fetchingAllAttachments">-->
-
-                        <!--                        <template slot="prev"><span class="prev"> <md-icon>keyboard_arrow_left</md-icon> </span></template>-->
-
-                        <!--                        <div class="item"-->
-                        <!--                             v-for="(item,index) in images" :key="index"-->
-                        <!--                             :style="`background: url(${item.src}) center center no-repeat; `">-->
-
-                        <!--                        </div>-->
-
-                        <!--                        <template slot="next"><span class="next"> <md-icon>keyboard_arrow_right</md-icon> </span></template>-->
-
-                        <!--                    </carousel>-->
-
-
-
-                        <!--                    <div class="proposal-includes">-->
-
-                        <!--                        <div class="proposal-includes__title">-->
-                        <!--                            What Do We Include In This Proposal?-->
-                        <!--                        </div>-->
-                        <!--                        <template v-if="vendorProposal.proposals[0].included.length">-->
-                        <!--                            <div class="proposal-includes__item" v-for="(item,index) in vendorProposal.proposals[0].included" :key="index">-->
-                        <!--                                <img :src="`${submitProposalIcon}Group 4781.svg`"> {{item.requirementTitle}}-->
-                        <!--                            </div>-->
-                        <!--                        </template>-->
-
-                        <!--                    </div>-->
-
-                    </div>
-
-                    <div class="proposal-section contact-section">
-                        <div class="proposal-section__title">
-                            Contact Us
-                        </div>
-
-                        <ul class="contact-list_items d-flex justify-content-start">
-                            <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainEmail">
-                                <a href=""><img :src="`${submitProposalIcon}Asset 286.svg`"> {{vendorProposal.vendor.vendorMainEmail}}</a>
+                        <ul class="event-details">
+                            <li class="event-details__item">
+                                <label>Name</label>
+                                <div class="info-text">{{event.title}}</div>
                             </li>
-                            <li class="contact-list_item" v-if="vendorProposal.vendor.vendorAddressLine1">
-                                <a href=""><img :src="`${submitProposalIcon}Asset 285.svg`"> {{vendorProposal.vendor.vendorAddressLine1}} {{vendorProposal.vendor.vendorAddressLine2}}</a>
+                            <li class="event-details__item">
+                                <label>Date</label>
+                                <div class="info-text">{{event.eventStartMillis | formatDate}}</div>
                             </li>
-                            <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
-                                <a href=""><img :src="`${submitProposalIcon}Asset 284.svg`"> {{vendorProposal.vendor.vendorMainPhoneNumber}}</a>
+                            <li class="event-details__item">
+                                <label>Guest Arrival Time</label>
+                                <div class="info-text">{{event.eventStartMillis | formatTime}}</div>
                             </li>
                         </ul>
                     </div>
                 </div>
 
+                <div class="proposal-body">
+                    <h1>Dear Rachel, </h1>
+                    <p>
+                         {{vendorProposal.proposals[0].personalMessage}}
+                        <br>
+                        <br>
+                        Sincerely,
+                        <span class="proposal-title">{{vendorProposal.vendor.vendorDisplayName}}</span>
+                    </p>
+
+                    <md-button class="md-rose md-raised md-outline"> More About Us </md-button>
+
+                    <div class="loading" v-if="vendorProposal.proposals[0].attachements.length && !fetchingAllAttachments">
+                        Loading ...
+                    </div>
+
+                    <carousel :items="3" :margin="25" :dots="false" :nav="false" class="proposal-images" v-if="fetchingAllAttachments">
+
+                        <template slot="prev"><span class="prev"> <md-icon>keyboard_arrow_left</md-icon> </span></template>
+
+                        <div class="item"
+                             v-for="(item,index) in images" :key="index"
+                             :style="`background: url(${item.src}) center center no-repeat; `">
+
+                        </div>
+
+                        <template slot="next"><span class="next"> <md-icon>keyboard_arrow_right</md-icon> </span></template>
+
+                    </carousel>
+
+
+
+                    <div class="proposal-includes">
+
+                        <div class="proposal-includes__title">
+                            What Do We Include In This Proposal?
+                        </div>
+                        <template v-if="vendorProposal.proposals[0].included.length">
+                            <div class="proposal-includes__item" v-for="(item,index) in vendorProposal.proposals[0].included" :key="index">
+                                <img :src="`${submitProposalIcon}Group 4781.svg`"> {{item.requirementTitle}}
+                            </div>
+                        </template>
+
+                    </div>
+
+                </div>
 
                 <div class="proposal-section pricing-section">
                     <div class="proposal-section__title">
-                        <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2010.svg" width="12"> Pricing & Details <small>*We work only with our catering</small>
+                        <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2010.svg" width="12"> Pricing <small>*We work only with our catering</small>
                     </div>
 
                     <table class="pricing-section__table">
                         <tbody>
                         <template v-if="extraMissingRequirements.length">
                             <tr class="element-block" v-for="(item,index) in extraMissingRequirements" :key="index">
-                                <td class="select-item">
-                                    <input class="styled-checkbox" :id="`checkbox-${index}`" type="checkbox" :value="item.id">
-                                    <label :for="`checkbox-${index}`"></label>
-                                </td>
-                                <td class="element-title">{{item.requirementTitle}} <span class="element-duration">For Whole Event</span></td>
-                                <td class="element-value">
-                                    <div class="element-price">${{item.price | withComma}}</div>
-                                    <div class="discount-details">(10% off) <span>${{item.price | withComma}}</span></div>
-                                </td>
-                                <td class="view-element"><md-button class="md-just-icon md-rose md-outline"><img :src="`${submitProposalIcon}Component 36.svg`"></md-button></td>
+                                <td class="element-title">{{item.requirementTitle}}</td>
+                                <td class="element-value">${{item.price | withComma}}</td>
+                                <td class="view-element"><md-button class="md-just-icon md-rose md-outline"><md-icon>keyboard_arrow_right</md-icon></md-button></td>
                             </tr>
                         </template>
 <!--                        <tr class="element-block bundle-offer">-->
@@ -147,12 +118,12 @@
 <!--                            <td class="view-element"></td>-->
 <!--                        </tr>-->
                         <tr class="taxes">
-                            <td colspan="2">Taxes <span class="taxes-value">18%</span></td>
+                            <td>Taxes <span class="taxes-value">18%</span></td>
                             <td>${{(extraTotal * .18) | withComma}}</td>
                             <td></td>
                         </tr>
                         <tr class="total">
-                            <td colspan="2">Total</td>
+                            <td>Total</td>
                             <td>${{(extraTotal + extraTotal * .18) | withComma}}</td>
                             <td></td>
                         </tr>
@@ -174,7 +145,10 @@
                                 {{item.tag ? item.tag.replace(/_/g," ") : `Attachment${index+1}`}}
                             </a>
                         </li>
+
                     </ul>
+
+
                 </div>
 
                 <div class="proposal-section policy-section">
@@ -182,56 +156,71 @@
                         <img :src="`${submitProposalIcon}Asset 287.svg`" width="20"> Our Policy
                     </div>
 
-
-                    <div class="policy-content">
-
-                        <div class="proposal-section__subtitle">
-                            <div class="subtitle">Are deposit is:</div>
-                            <div class="desc">50% of the total event</div>
-                        </div>
-
-                        <div class="side-label">
-                            <div class="label-value">Our cancellation approach</div>
-                        </div>
-
-                        <div class="proposal-section__subtitle">
-                            <div class="subtitle">We allow free cancellation until:</div>
-                            <div class="desc">30 days before the event</div>
-                        </div>
-
-                        <div class="policies-list">
-                            <div class="policies-list__item">
-                                <b>If</b> the client cancel the event after 3 weeks before the event
-                            </div>
-                            <div class="policies-list__item">
-                                <b>Then</b> the client will pay full deposit
-                            </div>
-                            <div class="policies-list__item">
-                                <b>If</b> the client cancel the event after two weeks before the event
-                            </div>
-                            <div class="policies-list__item">
-                                <b>Then</b> the client will pay full price
-                            </div>
-                        </div>
-
-                        <div class="additional-info">
-                            <div class="additional-info__title">Additional</div>
-                            <div class="additional-info__content">
-                                {{vendorProposal.proposals[0].candellationPolicy}}
-                            </div>
-                        </div>
-
-                        <div class="signature-section">
-                            <div class="signature-section__vendor">
-                                {{vendorProposal.vendor.vendorDisplayName}}
-                            </div>
-                            <div class="signature-section__image">
-                                <img src="https://bit.ly/3doZIxt">
-                            </div>
-                        </div>
-
+                    <div class="proposal-section__subtitle">
+                        <div class="subtitle">Are deposit is:</div>
+                        <div class="desc">50% of the total event</div>
                     </div>
 
+                    <div class="side-label">
+                        <div class="label-value">Our cancellation approach</div>
+                    </div>
+
+
+                    <div class="proposal-section__subtitle">
+                        <div class="subtitle">We allow free cancellation until:</div>
+                        <div class="desc">30 days before the event</div>
+                    </div>
+
+                    <div class="policies-list">
+                        <div class="policies-list__item">
+                            <b>If</b> the client cancel the event after 3 weeks before the event
+                        </div>
+                        <div class="policies-list__item">
+                            <b>Than</b> the client will pay full deposit
+                        </div>
+                        <div class="policies-list__item">
+                            <b>If</b> the client cancel the event after two weeks before the event
+                        </div>
+                        <div class="policies-list__item">
+                            <b>Than</b> the client will pay full price
+                        </div>
+                    </div>
+
+                    <div class="additional-info">
+                        <div class="additional-info__title">Additional</div>
+                        <div class="additional-info__content">
+                            {{vendorProposal.proposals[0].candellationPolicy}}
+                        </div>
+                    </div>
+
+
+                    <div class="signature-section">
+                        <div class="signature-section__vendor">
+                            {{vendorProposal.vendor.vendorDisplayName}}
+                        </div>
+                        <div class="signature-section__image">
+                            <img src="https://bit.ly/3doZIxt">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="proposal-section contact-section">
+                    <div class="proposal-section__title">
+                        Contact Us
+                    </div>
+
+                    <ul class="contact-list_items d-flex justify-content-start">
+                        <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainEmail">
+                            <a href=""><img :src="`${submitProposalIcon}Asset 286.svg`"> {{vendorProposal.vendor.vendorMainEmail}}</a>
+                        </li>
+                        <li class="contact-list_item" v-if="vendorProposal.vendor.vendorAddressLine1">
+                            <a href=""><img :src="`${submitProposalIcon}Asset 285.svg`"> {{vendorProposal.vendor.vendorAddressLine1}} {{vendorProposal.vendor.vendorAddressLine2}}</a>
+                        </li>
+                        <li class="contact-list_item" v-if="vendorProposal.vendor.vendorMainPhoneNumber">
+                            <a href=""><img :src="`${submitProposalIcon}Asset 284.svg`"> {{vendorProposal.vendor.vendorMainPhoneNumber}}</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
 

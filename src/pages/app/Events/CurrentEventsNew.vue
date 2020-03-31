@@ -198,22 +198,15 @@
 </template>
 
 <script>
-import EventModal from './EventModal/'
-import EventPlannerVuexModule from './EventPlanner.vuex'
 
 // MAIN MODULES
-import ChartComponent from '@/components/Cards/ChartComponent'
-
 import {
-  ChartCard
-  ,
   Tabs,
   Modal
 } from '@/components'
 
 // import auth from '@/auth';
 import moment from 'moment'
-import VueElementLoading from 'vue-element-loading'
 import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
 import CalendarEventStatistics from '@/models/CalendarEventStatistics'
@@ -221,8 +214,7 @@ import EventComponent from '@/models/EventComponent'
 import {
   mapState,
   mapMutations,
-  mapGetters,
-  mapActions
+  mapGetters
 } from 'vuex'
 
 import NewEventBuildingBlocks from './components/NewEventBuildingBlocks'
@@ -232,18 +224,14 @@ import EditEventBlocksBudget from './components/EditEventBlocksBudget'
 import UploadVendorsModal from '../Vendors/ImportVendors'
 
 import SideBar from '../../../components/SidebarPlugin/NewSideBar'
-import SidebarItem from '../../../components/SidebarPlugin/NewSidebarItem.vue'
 import PieChartRound from './components/PieChartRound.vue'
 
 export default {
   components: {
     Tabs,
     NewEventBuildingBlocks,
-    ChartComponent,
-    ChartCard,
     UploadVendorsModal,
     SideBar,
-    SidebarItem,
     PieChartRound,
     Modal,
     EditEventBlocksBudget
@@ -281,7 +269,6 @@ export default {
     this.routeName = this.$route.name
   },
   mounted () {
-    let _self = this
     this.isLoading = true
 
     this.getEvent()
@@ -305,7 +292,6 @@ export default {
     }
 
     this.$root.$on('calendar-refresh-events', () => {
-      console.log('i am here')
       this.getEvent()
     })
   },
@@ -337,7 +323,6 @@ export default {
 
           this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', this.routeName === 'InviteesManagement' || this.routeName === 'EventInvitees')
           this.isLoading = false
-          console.log(event)
         })
       }.bind(this))
     },
@@ -424,8 +409,6 @@ export default {
 
       editedEvent = this.event
       editedEvent.totalBudget = this.newBudget
-
-      console.log(editedEvent)
 
       editedEvent.for(_calendar).save().then(response => {
         this.showBudgetModal = false

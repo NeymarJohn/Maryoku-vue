@@ -509,94 +509,93 @@ $baseColor : #5c2153;
                         border-radius: 3px 0 0 3px;
                     }
 
-                     &.venue , &.venue-rental {
+                    &.venue , &.venue-rental {
                         &:after {
-                            background: #ffc000;
+                            background: rgb(255, 192, 0);
                         }
                     }
 
                     &.shipping {
                         &:after {
-                            background: #1D9A78;
+                            background: rgb(29, 154, 120);
                         }
                     }
                     &.signage-printing {
                         &:after {
-                            background: #00b050;
+                            background: rgb(0, 176, 80);
                         }
                     }
 
-                    &.technology-service {
+                    &.technology-services {
                         &:after {
-                            background: #C490AA;
+                            background: rgb(196, 144, 170);
                         }
                     }
 
-                    &.food-beverage, &.food--beverage , &.food{
+                    &.food-and-beverage{
                         &:after {
-                            background: #ff527c;
+                            background: rgb(255, 82, 124);
                         }
                     }
 
-                    &.security-services , &.security {
+                    &.security-services{
                         &:after {
-                            background: #689331;
+                            background: rgb(104, 147, 49);
                         }
                     }
                     &.swags, &.swag {
                         &:after {
-                            background: #44546a;
+                            background: rgb(68, 84, 106);
                         }
                     }
                     &.audio-visual-staging-services{
                         &:after {
-                            background: #00bcd4;
+                            background: rgb(0, 188, 212);
                         }
                     }
-                    &.decor , &.event-documentation , &.decoration
-                    {
+                    &.decor {
                         &:after {
-                            background: #641956;
+                            background: rgb(100, 25, 86);
                         }
                     }
                     &.entertainment {
                         &:after {
-                            background: #20c997;
+                            background: rgb(32, 201, 151);
                         }
                     }
                     &.equipment-rental {
                         &:after {
-                            background: #d3d2d2;
+                            background: rgb(231, 230, 230);
                         }
                     }
 
-                    &.Videography--photography , &.photographer {
+                    &.videography-and-photography{
                         &:after {
-                            background: #7f7f7f;
+                            background: rgb(127, 127, 127);
                         }
                     }
 
-                    &.dj {
-                        &:after {
-                            background: #fe537a;
-                        }
-                    }
+                    // &.dj {
+                    //     &:after {
+                    //         background: #fe537a;
+                    //     }
+                    // }
 
-                    &.catering , &.swags ,  &.swag {
-                        &:after {
-                            background: #f3423a;
-                        }
-                    }
+                    // &.catering {
+                    //     &:after {
+                    //         background: #f3423a;
+                    //     }
+                    // }
 
-                    &.rentals {
-                        &:after {
-                            background: #43536a;
-                        }
-                    }
+                    // &.rentals {
+                    //     &:after {
+                    //         background: #43536a;
+                    //     }
+                    // }
 
-                    &.organization-fees {
+                    &.meeting-organization-fees {
                         &:after {
-                            background: rgb(159,41,54);
+                            background: rgb(183, 73, 25);
                         }
                     }
 
@@ -606,28 +605,28 @@ $baseColor : #5c2153;
                         }
                     }
                     &.meeting-labor ,
-                    &.marketing-and-print ,
+                    &.advertising-and-promotion ,
                     &.meeting-organization-fee{
                         &:after {
-                            background: #B74919;
+                            background: rgb(165, 165, 165);
                         }
                     }
 
                     &.corporate-social-responsibility {
                         &:after {
-                            background: #f19d19;
+                            background: rgb(241, 157, 25);
                         }
                     }
 
-                    &.administration , &.beverage {
+                    &.administration {
                         &:after {
-                            background: #8BC145;
+                            background: rgb(139, 193, 69);
                         }
                     }
 
                     &.transportation , &.transportation--tour-operator-services {
                         &:after {
-                            background: #ff0066;
+                            background: rgb(255, 0, 102);
                         }
                     }
 
@@ -2756,13 +2755,9 @@ $baseColor : #5c2153;
         }
 
         .proposal-content {
+            background: #fff;
+            max-width : 1100px;
             margin : 0 2em;
-
-
-            .proposal-info {
-                background: #fff;
-                box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-            }
 
             .proposal-header {
                 background-size : cover !important;
@@ -2832,7 +2827,7 @@ $baseColor : #5c2153;
             }
 
             .proposal-body {
-                padding : 1em 2.5em;
+                padding : 1em 2em;
 
                 h1 {
                     margin : 1em 0 0;
@@ -2919,6 +2914,9 @@ $baseColor : #5c2153;
 
             .proposal-section {
 
+                border-top : 1px solid #808181;
+                padding : 2em 20px;
+
                 &__title {
                     font-size: 20px;
                     font-weight: 800;
@@ -2928,51 +2926,39 @@ $baseColor : #5c2153;
                     }
 
                     small {
-                        margin-top:0.5em;
                         font-size: 14px;
                         color: #050505;
-                        display: block;
+                        margin-left : 0.5em;
                     }
-                }
-
-                &.contact-section {
-                    border-top : 1px solid #808181;
-                    padding : 2em 2.5em;
                 }
             }
 
 
             .pricing-section {
 
-                margin-top : 4em;
 
 
                 &__table {
                     width : 100%;
-                    border-collapse: separate;
-                    border-spacing: 0 1em;
-
+                    border : 1px solid #050505;
+                    border-collapse: collapse;
                     margin-top: 1em;
 
                     tr {
-
-                        height: 90px !important;
-
                         td {
                             padding: 20px 25px;
 
-                            &:nth-child(3){
+                            &:nth-child(2){
                                 text-align: right;
                             }
                         }
                     }
 
                     .element-block {
+                        border-bottom : 1px solid #050505;
                         font-weight: 800;
                         color: #050505;
-                        border-radius: 3px 3px 0 0;
-                        box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-                        background-color: #ffffff;
+                        background-color: #f7f7f7;
 
                         &.bundle-offer {
                             background-color : #ffedb7;
@@ -2996,109 +2982,18 @@ $baseColor : #5c2153;
                             }
                         }
 
-                        .styled-checkbox {
-                            position: absolute; // take it out of document flow
-                            opacity: 0; // hide it
-
-                            & + label {
-                                position: relative;
-                                cursor: pointer;
-                                padding: 0;
-                            }
-
-                            // Box.
-                            & + label:before {
-                                content: '';
-                                margin-right: 10px;
-                                display: inline-block;
-                                vertical-align: text-top;
-                                width: 25px;
-                                height: 25px;
-                                background: white;
-                                border: 2px solid #a0a0a0;
-                                border-radius: 2px;
-                            }
-
-                            // Box hover
-                            &:hover + label:before {
-                                border-color: $rose;
-                            }
-
-
-                            // Box checked
-                            &:checked + label:before {
-                                border-color: $rose;
-                            }
-
-                            // Disabled state label.
-                            &:disabled + label {
-                                color: #b8b8b8;
-                                cursor: auto;
-                            }
-
-                            // Disabled box.
-                            &:disabled + label:before {
-                                box-shadow: none;
-                                background: #ddd;
-                            }
-
-                            // Checkmark. Could be replaced with an image
-                            &:checked + label:after {
-                                content: '';
-                                position: absolute;
-                                left: 7px;
-                                top: 12px;
-                                background: $rose;
-                                width: 2px;
-                                height: 2px;
-                                box-shadow:
-                                    -2px 0 0 $rose,
-                                    2px 0 0 $rose,
-                                    4px 0 0 $rose,
-                                    4px -2px 0 $rose,
-                                    4px -4px 0 $rose,
-                                    4px -6px 0 $rose,
-                                    4px -8px 0 $rose,
-                                    4px -10px 0 $rose;
-                                transform: rotate(45deg);
-                            }
-                        }
-
-                        .select-item {
-                            padding-right: 0;
-                        }
-
                         .element-title {
                             font-size: 28px;
                             width : 84%;
-
-                            .element-duration {
-                                font-size: 18px;
-                                font-weight: normal;
-                                margin-left : 4em;
-                            }
                         }
 
                         .element-value {
                             font-size: 18px;
-                            width : 15%;
-
-                            .discount-details {
-                                font-size: 12px;
-                                color : #707070;
-
-                                span {
-                                    text-decoration: line-through;
-                                }
-                            }
+                            width: 8%;
                         }
 
                         .view-element {
                             width : 8%;
-
-                            img {
-                                width : 20px;
-                            }
                         }
 
                     }
@@ -3154,10 +3049,6 @@ $baseColor : #5c2153;
 
 
             .policy-section {
-
-                margin-top : 4em;
-
-
                 .proposal-section__subtitle {
 
                     color: #050505;
@@ -3184,24 +3075,16 @@ $baseColor : #5c2153;
                         content : ' ';
                         position : absolute;
                         background-color: #ededed;
-                        width: 288px;
+                        width: 258px;
                         height: 53px;
                         top: -15px;
-                        left: -2.5em;
+                        left: -20px;
                     }
 
                     .label-value {
                         position: relative;
                         z-index: 999;
                     }
-                }
-
-                .policy-content {
-                    margin-top : 1.5em;
-                    background: #fff;
-                    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-                    padding : 2em 2.5em;
-
                 }
             }
 
