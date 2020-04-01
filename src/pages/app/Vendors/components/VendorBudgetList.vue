@@ -1,11 +1,8 @@
 <template>
   <div class="vendor-budget-list-wrapper">
-    <h4><img :src="`${iconsUrl}Asset 276.svg`"> {{title}}</h4>
-    <div class="total">
-      <strong>Total Event Budget:</strong>$5,000
-    </div>
+    <h4>$ {{title}}</h4>
     <p>
-      <img :src="`${iconsUrl}Asset 262.svg`">{{description}}
+      {{description}}
     </p>
     <div class="budget-list">
       <div class="items">
@@ -14,13 +11,13 @@
           v-for="(vendor, vIndex) in items" 
           :key="vIndex"
         >
-          <span><img :src="vendor.img">{{vendor.category}}</span>
-          <span>${{vendor.budget | withComma}}</span>
+          <span>{{vendor.category}}</span>
+          <span>${{vendor.budget}}</span>
         </div>
       </div>
       <div class="total">
         <span>Total</span>
-        <span>$2,400</span>
+        <span>$2400</span>
       </div>
     </div>
   </div>
@@ -40,7 +37,6 @@
     },
     data: () => ({
       isLoading:true,
-      iconsUrl: 'http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/'
     }),
     methods: {
     },
@@ -52,11 +48,6 @@
     },
     computed: {
     },
-    filters: {
-      withComma (amount) {
-        return amount ? amount.toLocaleString() : 0
-      }
-    },
     watch: {
     }
   }
@@ -65,40 +56,14 @@
   @import "@/assets/scss/md/_variables.scss";
   @import "@/assets/scss/md/_colors.scss";
   .vendor-budget-list-wrapper {
-    font-family: 'Manrope-Regular', sans-serif!important;
-
     h4 {
       font-size: 22px;
       color: #050505;
-      font-weight: 800;
-      margin-top: 83px;
-      margin-bottom: 20px;
-
-      img {
-        width: 15.7px;
-        margin-right: 15px;
-        position: relative;
-        top: -3px;
-      }
-    }
-    .total {
-      margin: 0;
-      font-size: 20px;
-      strong {
-        margin-right: 26px;
-        font-weight: 600;
-      }
-      font-weight: 500;
+      font-weight: bold;
     }
     p {
       font-size: 16px;
-      margin-top: 23px;
-      margin-bottom: 33px;
-
-      img {
-        width: 27px;
-        margin-right: 12px;
-      }
+      margin-bottom: 4rem;
     }
     .budget-list {
       max-width: 65%;
@@ -120,11 +85,6 @@
           span {
             font-size: 20px;
             font-weight: 800;
-
-            img {
-              width: 28.4px;
-              margin-right: 30px;
-            }
 
             &:last-child {
               font-weight: 400;
@@ -148,7 +108,10 @@
 
         span {
           font-size: 22px;
-          font-weight: 800;
+
+          &:last-child {
+            font-weight: 800;
+          }
         }
       }
     }    

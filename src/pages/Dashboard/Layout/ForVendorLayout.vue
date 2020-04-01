@@ -45,7 +45,7 @@
             </p>
           </li>
           <li>
-            <img :src="`${iconsUrl}Asset 273.svg`">
+            <span class="lt">></span>
           </li>
         </ul>
       </div>
@@ -74,7 +74,6 @@
     },
     data() {
       return {
-        iconsUrl: 'http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/'
       }
     },
     methods: {
@@ -158,12 +157,6 @@
               background-color: #ffffff;
               border-radius: 50%;
             }
-            &:last-child {
-              img {
-                width: 37px;
-                cursor: pointer;
-              }
-            }
           }
         } 
       }
@@ -173,16 +166,14 @@
       background-repeat: no-repeat;
       background-size: cover;
       text-align: center;
-      padding: 230px 0 214px 0;
+      padding: 230px 0;
       color: #ffffff;
 
       h3 {
-        font-family: 'Manrope-Regular', sans-serif;
         font-size: 60px;
         font-weight: bold;
       }
       p {
-        font-family: 'Manrope-Regular', sans-serif;
         font-size: 22px;
         font-weight: 500;
         line-height: 1.95;
@@ -205,7 +196,6 @@
         min-width: 382px;
         padding: 20px 0;
         cursor: pointer;
-        border-radius: 3px;
       }
     }
   }
