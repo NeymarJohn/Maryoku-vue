@@ -51,11 +51,10 @@
       </div>
     </div>
     <div class="action-cont">
-      <!-- <a class="another-date" @click="showChooseDateModal()">Suggest Another Date</a> -->
       <button class="no" @click="showNotBiddingModal">
         Thank You, But No.
       </button>
-      <button class="no no-border" @click="showNotBiddingModal">
+      <button class="no no-border" @click="showReferModal">
         Refer Another Vendor 
         <div class="refer-tooltip" v-if="referTooltip">
           <h5>Refer a new vendor <br/>and get a commission!</h5>
@@ -76,12 +75,59 @@
         </button>
       </div>
     </div>
-    <modal v-if="notBiddingModal" class="not-bidding-modal">
+    <modal v-if="referModal" class="refer-vendor-modal" container-class="modal-container sl">
+      <template slot="header">
+        <div class="refer-vendor-modal__header">
+          <h3>Refer a vendor</h3>
+          <div class="header-description">
+            <p>
+              Add the vendor's info
+            </p>
+          </div>
+        </div>
+        <button class="close" @click="hideModal()">
+          <md-icon>clear</md-icon>
+        </button>
+      </template>
+      <template slot="body">
+        <div class="refer-vendor-modal__body">
+          <input-proposal-sub-item
+            :title="`Vendor's Name`"
+            :placeholder="`Type vendor's name here`"
+            :style="`width: 100%`"
+          />
+          <input-proposal-sub-item
+            :title="`Category`"
+            :placeholder="``"
+            :style="`width: 100%`"
+          />
+          <input-proposal-sub-item
+            :title="`Email`"
+            :placeholder="`Type your email address here`"
+            :style="`width: 100%`"
+            :img="`${iconsUrl}Asset 263.svg`"
+          />
+          <input-proposal-sub-item
+            :title="`Link to Website`"
+            :placeholder="`Paste link here`"
+            :style="`width: 100%`"
+            :img="`${iconsUrl}Asset 262.svg`"
+          />
+        </div>
+      </template>
+      <template slot="footer">
+        <div class="refer-vendor-modal__footer">
+          <a class="cancel" @click="hideModal()">Cancel</a>
+          <a class="cool" @click="hideModal()">Refer</a>
+        </div>
+      </template>
+    </modal>
+    <modal v-if="notBiddingModal" class="not-bidding-modal" container-class="modal-container lg">
       <template slot="header">
         <div class="not-bidding-modal__header">
           <h3>
-            We are sorry to hear you're not bidding,<br/>
-            and would love to know, what's the reason?
+            <strong>We are sorry to hear you're not bidding,</strong><br/>
+            and would love to know, <strong>what's the reason?</strong>
           </h3>
           <div class="header-description">
             You can choose more than one
@@ -95,24 +141,44 @@
         <div class="not-bidding-modal__body">
           <ul>
             <li>
-              <md-checkbox class="md-warning">
-                I'm fully booked around the date of the event
+              <md-checkbox 
+                v-model="reasonIsDate" 
+                :style="`border-color: ${reasonIsDate ? '#fc1355!important;' : 'inherit'}`"
+              >
+                <span class="colored" :class="[{'bold': reasonIsDate}]">I'm fully booked around the date of the event</span>
               </md-checkbox>
               <a class="another-date" @click="showChooseDateModal()">Suggest Another Date</a>
             </li>
             <li>
-              <md-checkbox class="md-warning">
-                I'm way out of your budget
+              <md-checkbox 
+                v-model="reasonIsBudget"
+                :style="`border-color: ${reasonIsBudget ? '#fc1355!important;' : 'inherit'}`"
+              >
+                <span class="colored" :class="[{'bold': reasonIsBudget}]">I'm way out of your budget</span>
               </md-checkbox>
             </li>
             <li>
-              <md-checkbox class="md-warning">
-                I don't think my services are compatible to your requirements
+              <md-checkbox 
+                v-model="reasonIsService"
+                :style="`border-color: ${reasonIsService ? '#fc1355!important;' : 'inherit'}`"
+              >
+                <span class="colored" :class="[{'bold': reasonIsService}]">I don't think my services are compatible to your requirements</span>
               </md-checkbox>
             </li>
             <li>
-              <md-checkbox class="md-warning">
-                Other
+              <md-checkbox 
+                v-model="reasonIsInfo"
+                :style="`border-color: ${reasonIsInfo ? '#fc1355!important;' : 'inherit'}`"
+              >
+                <span class="colored" :class="[{'bold': reasonIsInfo}]">I don't enough information about the event</span>
+              </md-checkbox>
+            </li>
+            <li>
+              <md-checkbox 
+                v-model="reasonIsOther"
+                :style="`border-color: ${reasonIsOther ? '#fc1355!important;' : 'inherit'}`"
+              >
+                <span class="colored" :class="[{'bold': reasonIsOther}]">Other</span>
               </md-checkbox>
             </li>
           </ul>
@@ -122,11 +188,45 @@
       <template slot="footer">
         <div class="not-bidding-modal__footer">
           <button class="cancel" @click="hideModal()">Cancel</button>
-          <button class="send">Send</button>
+          <div class="refer-another-vendor-cont">
+            <img class="hand" :src="`${iconsUrl}Asset 268.svg`">
+            <a @click="showReferModal()">Refer Another Vendor</a>
+            <img class="question" :src="`${iconsUrl}Asset 268.svg`">
+          </div>
+          <button class="cool" @click="showSorryModal()">Send</button>
         </div>
       </template>
     </modal>
-    <modal v-if="chooseDateModal" class="choose-date-modal">
+    <modal v-if="sorryModal" class="sorry-modal" container-class="modal-container lg">
+      <template slot="header">
+        <div class="sorry-modal__header">
+          <div class="left-side">
+            <img :src="`${iconsUrl}Asset 268.svg`">
+          </div>
+          <div class="right-side">
+            <h3>
+              We are sorry, but someone else got there <br/>before you and already won this bid
+            </h3>
+            <div class="header-description">
+              But no worries! We will be with you soon with the next one
+            </div>
+          </div>
+        </div>
+        <button class="close" @click="hideModal()">
+          <md-icon>clear</md-icon>
+        </button>
+      </template>
+      <template slot="body">
+        <div class="sorry-modal__body">
+        </div>
+      </template>
+      <template slot="footer">
+        <div class="sorry-modal__footer">
+          <button class="cool" @click="hideModal()">OK, Thanks</button>
+        </div>
+      </template>
+    </modal>
+    <modal v-if="chooseDateModal" class="choose-date-modal" container-class="modal-container lg">
       <template slot="header">
         <div class="choose-date-modal__header">
           <h3>
@@ -167,6 +267,7 @@ import VendorPropertyField from './VendorPropertyField'
 
 //COMPONENTS
 import Icon from '@/components/Icon/Icon.vue'
+import InputProposalSubItem from '@/components/Inputs/InputProposalSubItem.vue'
 import VendorBudgetList from './components/VendorBudgetList.vue'
 import { Modal } from '@/components'
 
@@ -174,6 +275,7 @@ export default {
   components: {
     Modal,
     VueElementLoading,
+    InputProposalSubItem,
     VendorBudgetList
   },
   data() {
@@ -192,6 +294,13 @@ export default {
       ],
       notBiddingModal: false,
       chooseDateModal: false,
+      referModal: false,
+      sorryModal: false,
+      reasonIsDate: false,
+      reasonIsBudget: false,
+      reasonIsService: false,
+      reasonIsInfo: false,
+      reasonIsOther: false,
       iconsUrl: 'http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/',
       isAgree: false,
       referTooltip: false,
@@ -207,6 +316,8 @@ export default {
     hideModal() {
       this.chooseDateModal = false
       this.notBiddingModal = false
+      this.referModal = false
+      this.sorryModal = false
     },
     showNotBiddingModal() {
       this.hideModal()
@@ -215,6 +326,14 @@ export default {
     showChooseDateModal() {
       this.hideModal()
       this.chooseDateModal = true
+    },
+    showReferModal() {
+      this.hideModal()
+      this.referModal = true
+    },
+    showSorryModal() {
+      this.hideModal()
+      this.sorryModal = true
     }
   },
   computed: {
@@ -234,7 +353,7 @@ export default {
     margin: -64px auto 0 auto;
     padding: 83px 114px;
     font-family: 'Manrope-Regular', sans-serif;
-    
+
     h4 {
       margin: 0;
       font-size: 22px;
@@ -453,15 +572,78 @@ export default {
       }
     }
 
+    .refer-vendor-modal {
+      &__header {
+        width: 100%;
+        padding: 36px 36px 0;
+        h3 {
+          color: #050505;
+          font-size: 30px;
+          font-weight: 800;
+          margin: 0;
+        }
+        .header-description {
+          p {
+            font-size: 16px;
+            font-weight: normal;
+            line-height: 1.29;
+            margin-top: 8px;
+            margin-bottom: 0;
+          }
+        }
+        & + .close {
+          background: transparent;
+          border: none;
+          position: absolute;
+          top: 61px;
+          right: 50px;
+          color: #050505;
+          cursor: pointer;
+        }
+      }
+      &__body {
+        padding: 16px 40px 0 40px;
+
+        .input-proposal-sub-item-wrapper {
+          margin-bottom: 40px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+      &__footer {
+        width: 100%;
+        text-align: right;
+        margin: 0 36px;
+        margin-top: -16px;
+        padding: 63px 0px 40px 40px;
+        .cancel {
+          font-size: 16px;
+          font-weight: bold;
+          color: #050505;
+          background-color: transparent;
+          padding: 8px 36px;
+          cursor: pointer;
+          border: none;
+        }
+      }
+    }
+
     .not-bidding-modal {
+      font-family: 'Manrope-Regular', sans-serif;
       &__header {
         width: 100%;
         padding: 40px 40px 0;
         h3 {
           font-size: 30px;
           color: #050505;
+          font-weight: normal;
           line-height: 1.53;
           margin: 0;
+          strong {
+            font-weight: bold;
+          }
         }
         p {
           font-size: 14px;
@@ -486,6 +668,15 @@ export default {
           text-align: left;
 
           li {
+            span {
+              &.colored {
+                color: #050505;
+                padding-left: 14px;
+              }
+              &.bold {
+                font-weight: 800;
+              }
+            }
             &:first-child {
               display: flex;
               align-items: center;
@@ -495,13 +686,14 @@ export default {
                 font-weight: 800;
                 text-decoration: underline;
                 cursor: pointer;
-                padding: 0 2rem;
+                padding-left: 18px;
                 margin-right: 23px;
               }
             }
           }
         }
         textarea {
+          font-family: 'Manrope-Regular', sans-serif;
           margin-left: 28px;
           margin-top: 1em;
           width: calc(100% - 28px);
@@ -510,6 +702,93 @@ export default {
           border: solid 1px #707070;
           padding: 1rem;
         }
+      }
+      &__footer {
+        padding: 10px 40px 40px 40px;
+        display: flex;
+        align-items: center;
+
+        .cancel {
+          font-size: 16px;
+          font-weight: bold;
+          color: #050505;
+          background-color: transparent;
+          padding: 8px 36px;
+          cursor: pointer;
+          border: none;
+          border-right: 1px solid #707070;
+        }
+        .refer-another-vendor-cont {
+          margin: 0 30px;
+          .hand {
+            width: 52px;
+            margin-right: 14px;
+          }
+          .question {
+            width: 27px;
+            margin-left: 9px;
+          }
+          a {
+            font-size: 16px;
+            font-weight: 800;
+            text-decoration: underline;
+            cursor: pointer;
+            color: #f51355;
+          }
+        }
+        .send {
+          font-size: 16px;
+          font-weight: 800;
+          color: #ffffff;
+          background-color: #f51355;
+          border-radius: 3px;
+          padding: 8px 36px;
+          cursor: pointer;
+          border: none;
+        }
+      }
+    }
+
+    .sorry-modal {
+      &__header {
+        width: 100%;
+        padding: 40px 40px 0;
+        display: flex;
+
+        .left-side {
+          img {
+            width: 92px;
+            margin-right: 50px;
+          }
+        }
+
+        .right-side {
+          h3 {
+            font-size: 30px;
+            color: #f51355;
+            font-weight: bold;
+            line-height: 1.53;
+            margin: 0;
+          }
+          .header-description {
+            margin-top: 20px;
+            font-size: 20px;
+            line-height: 1.29;
+          }
+        }
+        
+        & + .close {
+          background: transparent;
+          border: none;
+          position: absolute;
+          top: 61px;
+          right: 60px;
+          color: #050505;
+          cursor: pointer;
+        }
+      }
+      &__body {
+        padding: 10px 40px;
       }
       &__footer {
         padding: 10px 40px 40px 40px;
@@ -584,6 +863,17 @@ export default {
           border: none;
         }
       }
+    }
+    .cool {
+      font-size: 16px;
+      font-weight: 800;
+      color: #ffffff;
+      background-color: #f51355;
+      border-radius: 3px;
+      padding: 8px 36px;
+      cursor: pointer;
+      border: none;
+      max-height: 44px;
     }
   }
 </style>
