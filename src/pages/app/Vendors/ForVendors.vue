@@ -19,7 +19,7 @@
             <ul>
               <li><img :src="`${iconsUrl}Path 251.svg`"> <strong>Date:</strong>December 25, 2019</li>
               <li><img :src="`${iconsUrl}Group 6085.svg`"> <strong>Time:</strong>10:00AM - 4:00PM</li>
-              <li><img :src="`${iconsUrl}Asset 506.svg`"> <strong>Address:</strong>575 Mission St. San Franciso, CA 94105</li>
+              <li><img :src="`${iconsUrl}Asset 506.svg`"> <strong>Address:</strong><span>575 Mission St. San Franciso, CA 94105 75 Mission St. San Franciso, CA 94105</span></li>
               <li><img :src="`${iconsUrl}Asset 505.svg`"> <strong>Guests:</strong>{{ 2034 | withComma }}</li>
               <li><img :src="`${iconsUrl}Path 1942.svg`"> <strong>Type:</strong>Establishment / Activity day</li>
               <li><img :src="`${iconsUrl}Path 1383.svg`"> <strong>Invited:</strong>Employees + Partners</li>
@@ -149,7 +149,8 @@
               >
                 <span class="colored" :class="[{'bold': reasonIsDate}]">I'm fully booked around the date of the event</span>
               </md-checkbox>
-              <a class="another-date" @click="showChooseDateModal()">Suggest Another Date</a>
+              <a class="another-date" @click="showChooseDateModal()" v-if="vendor.category == 'venue'">Suggest Another Date</a>
+              <a class="another-date" @click="showChooseDateModal()" v-else>Suggest Another Time</a>
             </li>
             <li>
               <md-checkbox 
@@ -303,6 +304,10 @@ export default {
           budget: 1300
         }
       ],
+      vendor: {
+        category: 'catering'
+      },
+      category: null,
       notBiddingModal: false,
       chooseDateModal: false,
       referModal: false,
@@ -445,6 +450,11 @@ export default {
                     cursor: pointer;
                     color: #f51355;
                   }
+                }
+                span {
+                  max-width: 500px;
+                  display: inline-block;
+                  vertical-align: middle;
                 }
               }
             }

@@ -7,7 +7,7 @@
             <a href="https://www.maryoku.com"><img src="https://www.maryoku.com/img/maryoku-logo.png"/></a>
           </li>
           <li>
-            ABOUT US
+            <a href="https://www.maryoku.com" target="_blank">ABOUT US</a>
           </li>
         </ul>
       </div>
@@ -45,7 +45,7 @@
             </p>
           </li>
           <li>
-            <img :src="`${iconsUrl}Asset 273.svg`">
+            <a href="https://www.maryoku.com/for-vendors.html"><img :src="`${iconsUrl}Asset 273.svg`"></a>
           </li>
         </ul>
       </div>
@@ -118,6 +118,12 @@
             padding-left: 0;
             padding-right: 2rem;
             border-right: 3px solid #ffffff;
+          }
+          a {
+            color: #ffffff;
+            &:hover {
+              color: #707070;
+            }
           }
         }
       }
