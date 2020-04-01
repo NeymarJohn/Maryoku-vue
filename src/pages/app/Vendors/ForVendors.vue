@@ -10,6 +10,8 @@
           <h4>a microsoft marketing event</h4>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            <br/>
+            <br/>
           </p>
         </div>
         <div class="right-side">
@@ -230,9 +232,10 @@
       <template slot="header">
         <div class="choose-date-modal__header">
           <h3>
-            What is our new time suggestion?
+            What is your new time suggestion?
           </h3>
           <div class="header-description">
+            <img :src="`${iconsUrl}Asset 268.svg`">
             A new time suggestion would be possible up to three days before or after the original event
           </div>
         </div>
@@ -242,17 +245,25 @@
       </template>
       <template slot="body">
         <div class="choose-date-modal__body">
-          <md-datepicker
-            ref="datePicker"
-            v-validate= ""
-          >
-          </md-datepicker>
+          <div class="left-side">
+          </div>
+          <div class="right-side">
+            <img :src="`${iconsUrl}Asset 278.svg`">
+            <div class="time" value="08:00">
+              <span>08</span>
+              <span>:</span>
+              <span>00</span>
+            </div>
+            <div class="pm" >
+              <span>AM</span>
+            </div>
+          </div>
         </div>
       </template>
       <template slot="footer">
         <div class="choose-date-modal__footer">
           <button class="cancel" @click="hideModal()">Cancel</button>
-          <button class="send">Suggest Date</button>
+          <button class="send" @click="hideModal()">Create Proposal With This Time</button>
         </div>
       </template>
     </modal>
@@ -393,6 +404,7 @@ export default {
           p {
             font-size: 16px;
             max-width: 426px;
+            line-height: 1.69;
           }
         }
         .right-side {
@@ -820,9 +832,18 @@ export default {
         padding: 40px 40px 0;
         h3 {
           font-size: 30px;
+          font-weight: 800;
           color: #050505;
           line-height: 1.53;
           margin: 0;
+        }
+        .header-description {
+          margin-top: 20px;
+          font-size: 14px;
+          img {
+            width: 27px;
+            margin-right: 15px;
+          }
         }
         p {
           font-size: 14px;
@@ -839,7 +860,37 @@ export default {
         }
       }
       &__body {
-        padding: 10px 40px;
+        padding: 36px 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .left-side {
+          margin-right: 60px;
+        }
+        .right-side {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          img {
+            width: 23px;
+            margin-right: 24px;
+          }
+          .time {
+            padding: 15px 32px;
+            border-radius: 3px;
+            font-size: 30px;
+            border: solid 0.5px #707070;
+            max-width: 183px;
+            margin-right: 13px;
+          }
+          .pm {
+            padding: 15px 24px;
+            font-size: 30px;
+            border-radius: 3px;
+            border: solid 0.5px #707070;
+          }
+        }
       }
       &__footer {
         padding: 10px 40px 40px 40px;
