@@ -30,6 +30,15 @@ $baseColor : #5c2153;
     font-stretch: normal;
 }
 
+@font-face {
+    font-family: 'Cooperative-Regular';
+    src: url('../fonts/cooperative/fonts/otf/Cooperative-Regular.otf') format('opentype'),
+    url('../fonts/cooperative/fonts/web/Cooperative-Regular.woff') format('woff2'),
+    url('../fonts/cooperative/fonts/ttf/Cooperative-Regular.ttf')  format('truetype');
+    font-style: normal;
+    font-stretch: normal;
+}
+
 .sidebar-mini .main-panel {
     width : calc(100% - 60px);
     background-color : #f5f5f5;

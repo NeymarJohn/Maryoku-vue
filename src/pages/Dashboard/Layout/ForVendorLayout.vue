@@ -30,7 +30,7 @@
       <p>
         We found you could fit perfectly for our event with your <strong>Venue & Catering</strong> services.
       </p>
-      <button type="submit" class="submit">Submit Now</button>
+      <button type="submit" class="submit" @click="goTo('/for-proposals')">Submit Now</button>
     </div>
     <router-view></router-view>
     <section class="footer-wrapper">
@@ -45,7 +45,7 @@
             </p>
           </li>
           <li>
-            <span class="lt">></span>
+            <img :src="`${iconsUrl}Asset 273.svg`">
           </li>
         </ul>
       </div>
@@ -74,9 +74,13 @@
     },
     data() {
       return {
+        iconsUrl: 'http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/'
       }
     },
     methods: {
+      goTo (router) {
+        this.$router.push(router)
+      }
     },
     created(){
     },
@@ -157,6 +161,12 @@
               background-color: #ffffff;
               border-radius: 50%;
             }
+            &:last-child {
+              img {
+                width: 37px;
+                cursor: pointer;
+              }
+            }
           }
         } 
       }
@@ -166,14 +176,16 @@
       background-repeat: no-repeat;
       background-size: cover;
       text-align: center;
-      padding: 230px 0;
+      padding: 230px 0 214px 0;
       color: #ffffff;
 
       h3 {
+        font-family: 'Manrope-Regular', sans-serif;
         font-size: 60px;
         font-weight: bold;
       }
       p {
+        font-family: 'Manrope-Regular', sans-serif;
         font-size: 22px;
         font-weight: 500;
         line-height: 1.95;
@@ -196,6 +208,7 @@
         min-width: 382px;
         padding: 20px 0;
         cursor: pointer;
+        border-radius: 3px;
       }
     }
   }

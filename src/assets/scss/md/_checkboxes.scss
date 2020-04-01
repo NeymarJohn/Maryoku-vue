@@ -10,7 +10,8 @@
 
   &.md-checked .md-checkbox-container{
     &:after{
-      border-color: $brand-primary !important;
+      // border-color: $brand-primary !important;
+      border-color: #fc1355 !important;
       top: 1px;
       left: 6px;
     }
