@@ -7,14 +7,14 @@
       {{qty}}
     </div>
     <div class="price-cont">
-      $ {{pricePerUnit | withComma}}
+      {{pricePerUnit}}
     </div>
     <div class="total-cont">
-      $ {{subtotal | withComma}}
+      {{subtotal}}
     </div>
     <div class="action-cont">
-      <img class="edit" src="http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 585.svg"/>
-      <img class="trash" src="http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 586.svg"/>
+      <md-icon>edit</md-icon>
+      <md-icon>delete</md-icon>
     </div>
   </div>
 </template>
@@ -42,11 +42,6 @@
     },
     mounted() {
     },
-    filters: {
-      withComma (amount) {
-        return amount ? amount.toLocaleString() : 0
-      }
-    },
     computed: {
     },
     watch: {
@@ -56,9 +51,8 @@
 <style lang="scss" scoped>
   .editable-proposal-sub-item-wrapper {
     display: flex;
-    padding: 46px 40px;
-    border: 1px solid #707070;
-    border-bottom: none;
+    padding: 46px 0;
+    border-top: 1px solid #050505;
     font-family: 'Manrope-Regular', sans-serif;
     font-size: 16px;
     font-weight: 600;
@@ -79,13 +73,6 @@
       &.action-cont {
         text-align: right;
         width: 15%;
-        .edit {
-          width: 21px;
-          margin-right: 31px;
-        }
-        .trash {
-          width: 21px;
-        }
       }
     }
   }

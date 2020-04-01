@@ -1,12 +1,9 @@
 <template>
   <div class="proposal-item-wrapper">
     <div class="title-cont default" v-if="!isDropdown && !isCollapsed">
-      <div class="with-subtitle">
-        <h3 class="title"><img :src="img"/>{{category}}</h3>
-        <h5>{{subTitle}}</h5>
-      </div>
+      <h3 class="title">{{category}}</h3>
       <p>
-        Which element would you like to involve in your <strong>{{category}}</strong> proposal?
+        Which element would you like to involve in your <strong>venue</strong> proposal?
       </p>
     </div>
     <div v-else class="title-cont dropdown">
@@ -70,7 +67,7 @@
     </div>
     <div class="action-cont" v-if="!isDropdown && !isCollapsed">
       <a class="clear">Clear</a>
-      <a class="add" :class="[{'active': isAllFilledInfo}]">Add This</a>
+      <a class="add">Add This</a>
     </div>
     <div class="editable-sub-items-cont" v-if="!isDropdown && !isCollapsed">
       <div class="editable-sub-items-header">
@@ -88,7 +85,7 @@
         </span>
       </div>
       <editable-proposal-sub-item
-        :item="`Plateware`"
+        :item="`Description`"
         :qty="1"
         :pricePerUnit="400"
         :subtotal="400"
@@ -97,7 +94,34 @@
       >
       </editable-proposal-sub-item>
       <editable-proposal-sub-item
-        :item="`Chairs`"
+        :item="`Sound Equipment`"
+        :qty="1"
+        :pricePerUnit="400"
+        :subtotal="400"
+        :active="true"
+        :isEdit="false"
+      >
+      </editable-proposal-sub-item>
+      <editable-proposal-sub-item
+        :item="`Description`"
+        :qty="1"
+        :pricePerUnit="400"
+        :subtotal="400"
+        :active="true"
+        :isEdit="false"
+      >
+      </editable-proposal-sub-item>
+      <editable-proposal-sub-item
+        :item="`Description`"
+        :qty="1"
+        :pricePerUnit="400"
+        :subtotal="400"
+        :active="true"
+        :isEdit="false"
+      >
+      </editable-proposal-sub-item>
+      <editable-proposal-sub-item
+        :item="`Description`"
         :qty="1"
         :pricePerUnit="400"
         :subtotal="400"
@@ -106,24 +130,12 @@
       >
       </editable-proposal-sub-item>
       <div class="editable-sub-items-footer">
-        <div class="row">
-          <img :src="`${iconUrl}Asset 612.svg`"/>
-          <span>Add Discount</span>
-          <img :src="`${iconUrl}Asset 585.svg`"/>
-        </div>
-        <div class="row">
-          <img :src="`${iconUrl}Asset 613.svg`"/>
-          <span>Add Taxes</span>
-          <img :src="`${iconUrl}Asset 585.svg`"/>
-        </div>
-        <div class="">
-          <span>
-            Total
-          </span>
-          <span>
-            $800.00
-          </span>
-        </div>
+        <span>
+          Total
+        </span>
+        <span>
+          $800.00
+        </span>
       </div>
     </div>
   </div>
@@ -145,13 +157,9 @@
       isCollapsed: Boolean,
       isDropdown: Boolean,
       proposalRange: Boolean,
-      subTitle: String,
-      img: String,
     },
     data () {
       return {
-        isAllFilledInfo: false,
-        iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
       }
     },
     methods: {
@@ -178,29 +186,14 @@
     margin: 50px 0 30px 0;
 
     .title-cont {
-      .with-subtitle {
-        display: flex;
-        align-items: center;
-
-        h3.title {
-          font-weight: 800;
-          font-size: 30px;
-          margin: 0;
-          margin-right: 20px;
-          
-          img {
-            width: 28.4px;
-            margin-right: 19px;
-          }
-        }
-
-        h5 {
-          font-size: 20px;
-          margin: 0;
-        }
+      h3.title {
+        font-weight: 800;
+        font-size: 30px;
+        margin: 0;
       }
+
       p {
-        font-size: 16px;
+        font-size: 20px;
         margin: 0;
         margin-top: 23px;
 
@@ -296,13 +289,6 @@
           border-radius: 3px;
           padding: 8px 32px;
           color: #ffffff;
-          max-height: 38px;
-          cursor: pointer;
-
-          &.active {
-            background-color: #f51355;
-            color: #ffffff;
-          }
         }
       }
     }
@@ -312,11 +298,13 @@
 
       .editable-sub-items-header {
         border-top: 1px solid #050505;
-        padding: 40px 40px 30px 40px;
-        
+        padding: 40px 34px 26px 34px;
+        margin-left: -34px;
+        margin-right: -40px;
+
         span {
           display: inline-block;
-          font-size: 16px;
+          font-size: 20px;
           font-weight: 800;
 
           &:first-child {
@@ -336,28 +324,9 @@
       .editable-sub-items-footer {
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
         background-color: #d5d5d5;
-        padding: 21px 40px;
-
-        .row {
-          img {
-            width: 15px;
-          }
-          span {
-            color: #818080;
-          }
-          .item-cont {
-            width: calc(40% + 9px);
-          }
-          .qty-cont {
-            width: calc(10% + 2px);
-          }
-          .price-cont {
-            width: calc(15% + 1px);
-          }
-          .total-cont {
-            width: calc(15% + 1px);
-          }
-        }
+        padding: 21px 34px;
+        margin-left: -34px;
+        margin-right: -40px;
 
         span {
           font-size: 20px;

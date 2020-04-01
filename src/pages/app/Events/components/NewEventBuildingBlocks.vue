@@ -28,7 +28,7 @@
                 :class="block.title ? block.title.toLowerCase().replace(/ /g, '-').replace('&', '').replace('/', '-') : ''"
               >
                 <img
-                  :src="`http://static.maryoku.com/storage/icons/Budget Elements/${block.componentId}.svg`"
+                  :src="`http://static.maryoku.com/storage/icons/Budget Elements/${block.title}.svg`"
                 />
                 {{block.title}}
               </td>
