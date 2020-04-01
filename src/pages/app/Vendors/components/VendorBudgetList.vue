@@ -1,11 +1,11 @@
 <template>
   <div class="vendor-budget-list-wrapper">
-    <h4><img :src="`${iconsUrl}Asset 276.svg`"> {{title}}</h4>
+    <h4><img :src="`${iconsUrl}Asset 500.svg`"> {{title}}</h4>
     <div class="total">
       <strong>Total Event Budget:</strong>$5,000
     </div>
     <p>
-      <img :src="`${iconsUrl}Asset 262.svg`">{{description}}
+      <img :src="`${iconsUrl}Group 5180.svg`">{{description}}
     </p>
     <div class="budget-list">
       <div class="items">
@@ -40,7 +40,7 @@
     },
     data: () => ({
       isLoading:true,
-      iconsUrl: 'http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/'
+      iconsUrl: 'http://static.maryoku.com/storage/icons/NewLandingPage/'
     }),
     methods: {
     },

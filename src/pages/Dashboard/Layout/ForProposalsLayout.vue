@@ -7,11 +7,16 @@
       </div>
       <div class="summary-cont">
         <ul>
-          <li><i class="material-icons">event</i> December 25, 2019</li>
-          <li><i class="material-icons">location_on</i> San Diego</li>
-          <li><i class="material-icons">supervised_user_circle</i> 2,034 Guests</li>
-          <li><i class="material-icons">alarm</i> 6 Hours</li>
-          <li><i class="material-icons">wb_sunny</i> Day Time event</li>
+          <li :class="[{'with-help': dateTooltip}]" @mouseover="dateTooltip=true" @mouseleave="dateTooltip=false">
+            <img :src="`${proposalIconsUrl}Path 251 (2).svg`"/> December 25, 2019 <img v-if="dateTooltip" class="question" :src="`${landingIconsUrl}Group 1175 (10).svg`">
+            <div class="date-tooltip" v-if="dateTooltip">
+              <h3>Your Time Suggestion</h3>
+              <p>Client will get this proposal with <br/> your new suggested date</p>
+            </div>
+          </li>
+          <li><img :src="`${proposalIconsUrl}Group 6085 (2).svg`"/> 10:00AM - 4:00PM</li>
+          <li><img :src="`${proposalIconsUrl}Asset 573.svg`"/> San Diego</li>
+          <li><img :src="`${proposalIconsUrl}Asset 572.svg`"/> 2,034 </li>
         </ul>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -31,6 +36,12 @@
     </section>
     <div class="main-cont">
       <router-view></router-view>
+      <div class="back-to-top">
+        <span>END</span>
+        <div class="row" @click="scrollToTop()">
+          <md-icon>keyboard_arrow_up</md-icon> Back To Top
+        </div>
+      </div>
     </div>
     <section class="footer-wrapper">
       <div class="prev-cont">
@@ -42,11 +53,11 @@
         <a class="next">Next</a>
       </div>
     </section>
-    <modal v-if="fullDetailsModal" class="full-details-modal">
+    <modal v-if="fullDetailsModal" class="full-details-modal" container-class="modal-container ml">
       <template slot="header">
         <div class="full-details-modal__header">
           <div class="header-description">
-            Lorem 
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
           </div>
         </div>
         <button class="close" @click="hideModal()">
@@ -57,22 +68,22 @@
         <div class="full-details-modal__body">
           <ul>
             <li>
-              <md-icon>calendar_today</md-icon> <span><strong>Date:</strong> December 25-26, 2019</span>
+              <img :src="`${landingIconsUrl}Path 251.svg`"> <span><strong>Date:</strong> December 25-26, 2019</span>
             </li>
             <li>
-              <md-icon>access_time</md-icon> <span><strong>Time:</strong> December 25-26, 2019</span>
+              <img :src="`${landingIconsUrl}Group 6085.svg`"> <span><strong>Time:</strong> 10:00AM - 4:00PM</span>
             </li>
             <li>
-              <md-icon>location_on</md-icon> <span><strong>Address:</strong> December 25-26, 2019</span>
+              <img :src="`${landingIconsUrl}Asset 506.svg`"> <span><strong>Address:</strong> Relish Caterers & Venues - 575 Mission St. San Francisco, CA 94105</span>
             </li>
             <li>
-              <md-icon>people</md-icon> <span><strong>Guests:</strong> December 25-26, 2019</span>
+              <img :src="`${landingIconsUrl}Asset 505.svg`"> <span><strong>Guests:</strong> {{ 2034 | withComma }}</span>
             </li>
             <li>
-              <md-icon>outlined_flag</md-icon> <span><strong>Type:</strong> December 25-26, 2019</span>
+              <img :src="`${landingIconsUrl}Path 1942.svg`"> <span><strong>Type:</strong> Establishment / Activity Day</span>
             </li>
             <li>
-              <md-icon>person_add</md-icon> <span><strong>Invited:</strong> December 25-26, 2019</span>
+              <img :src="`${landingIconsUrl}Path 1383.svg`"> <span><strong>Invited:</strong> Employees + Partners</span>
             </li>
           </ul>
         </div>
@@ -110,6 +121,9 @@
     data() {
       return {
         fullDetailsModal: false,
+        proposalIconsUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
+        landingIconsUrl: 'http://static.maryoku.com/storage/icons/NewLandingPage/',
+        dateTooltip: false,
       }
     },
     methods: {
@@ -118,12 +132,20 @@
       },
       saveProposal() {
         console.log(this.step)
+      },
+      scrollToTop() {
+        window.scrollTo(0,0);
       }
     },
     created(){
     },
     mounted() {
       this.fullDetailsModal = false
+    },
+    filters: {
+      withComma (amount) {
+        return amount ? amount.toLocaleString() : 0
+      }
     },
     computed:{
     }
@@ -176,7 +198,7 @@
         font-family: 'Manrope-Regular', sans-serif;
         width: calc( 100% - 454px );
         display: inline-block;
-        padding-top: 67px;
+        padding-top: 47px;
         padding-left: 41px;
 
         ul {
@@ -189,14 +211,74 @@
           color: #050505;
 
           li {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: bold;
-            padding-right: 2rem;
+            padding: 9px 25px;
             display: flex;
+            margin-right: 40px;
+
+            img {
+              width: 20px;
+              margin-right: 10px;
+            }
             
             i {
               color: #818080;
               padding-right: 8px;
+            }
+
+            &.with-help {
+              background: #ffedb7;
+              cursor: pointer;
+
+              img {
+                &.question {
+                  margin-left: 12px;
+                  margin-right: 0;
+                }
+              }
+
+              .date-tooltip {
+                position: absolute;
+                background-color: #ffedb7;
+                padding: 24px 32px;
+                color: #050505;
+                font-size: 14px;
+                margin-left: 140px;
+                margin-top: 50px;
+                text-align: center;
+
+                h3 {
+                  font-size: 20px;
+                  font-weight: 800;
+                  margin-top: 0;
+                  margin-bottom: 17px;
+                }
+                p {
+                  font-size: 16px;
+                  margin: 0;
+                }
+                
+                &::after{
+                  content: '';
+                  position: absolute;
+                  width: 0;
+                  height: 0;
+                  top: 4px;
+                  left: 70px;
+                  box-sizing: border-box;
+                  
+                  border: 12px solid black;
+                  border-color: transparent transparent #ffedb7 #ffedb7;
+                  
+                  transform-origin: 0 0;
+                  transform: rotate(135deg);
+                }
+              }
+            }
+
+            &:last-child {
+              margin-right: 0;
             }
           }
         }
@@ -205,6 +287,8 @@
           font-weight: normal;
           color: #050505;
           max-width: 990px;
+          margin-top: 21px;
+          margin-bottom: 26px;
         }
         .a-right {
           text-align: right;
@@ -224,7 +308,31 @@
     }
     .main-cont {
       margin-top: 263px;
+      margin-bottom: 90px;
       width: 100%;
+
+      .back-to-top {
+        margin: 0 auto;
+        margin-top: 36px;
+        text-align: center;
+        
+        span {
+          display: inline-block;
+          color: #818080;
+          font-size: 20px;
+          font-weight: 800;
+          margin-bottom: 22px;
+        }
+        .row {
+          cursor: pointer;
+          font-size: 20px;
+          font-weight: 800;
+          color: #f51355;
+          i {
+            color: #f51355;
+          }
+        }
+      }
     }
     section.footer-wrapper {
       padding: 33px 63px 34px 64px;
@@ -282,6 +390,8 @@
         padding: 55px 295px 24px 31px;
         .header-description {
           font-size: 16px;
+          line-height: 1.69;
+          max-width: 750px;
         }
         & + .close {
           background: transparent;
@@ -305,18 +415,22 @@
             text-align: left;
             margin-bottom: 50px;
 
+            strong {
+              min-width: 86px;
+              margin-right: 20px;
+              display: inline-block;
+            }
+
+            img {
+              width: 18px;
+              margin-right: 26px;
+            }
+
             span {
               font-size: 20px;
               strong {
                 font-weight: bold;
               }
-            }
-
-            i {
-              font-size: 18px!important;
-              margin-right: 26px;
-              position: relative;
-              top: -3px;
             }
 
             &:last-child {

@@ -110,7 +110,7 @@ export default {
     }.bind(this));
   },
   mounted () {
-    this.step = 3
+    this.step = 1
     this.event = {
       name: "March Madness event",
       date: "December 25, 2019",

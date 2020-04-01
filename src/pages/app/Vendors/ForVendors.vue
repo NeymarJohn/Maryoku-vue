@@ -17,12 +17,12 @@
         <div class="right-side">
           <div class="summary-cont">
             <ul>
-              <li><img :src="`${iconsUrl}Asset 268.svg`"> <strong>Date:</strong>December 25, 2019</li>
-              <li><img :src="`${iconsUrl}Asset 278.svg`"> <strong>Time:</strong>10:00AM - 4:00PM</li>
-              <li><img :src="`${iconsUrl}Asset 271.svg`"> <strong>Address:</strong>575 Mission St. San Franciso, CA 94105</li>
-              <li><img :src="`${iconsUrl}Asset 270.svg`"> <strong>Guests:</strong>2,034</li>
-              <li><img :src="`${iconsUrl}Asset 262.svg`"> <strong>Type:</strong>Establishment / Activity day</li>
-              <li><img :src="`${iconsUrl}Asset 262.svg`"> <strong>Invited:</strong>Employees + Partners</li>
+              <li><img :src="`${iconsUrl}Path 251.svg`"> <strong>Date:</strong>December 25, 2019</li>
+              <li><img :src="`${iconsUrl}Group 6085.svg`"> <strong>Time:</strong>10:00AM - 4:00PM</li>
+              <li><img :src="`${iconsUrl}Asset 506.svg`"> <strong>Address:</strong>575 Mission St. San Franciso, CA 94105</li>
+              <li><img :src="`${iconsUrl}Asset 505.svg`"> <strong>Guests:</strong>{{ 2034 | withComma }}</li>
+              <li><img :src="`${iconsUrl}Path 1942.svg`"> <strong>Type:</strong>Establishment / Activity day</li>
+              <li><img :src="`${iconsUrl}Path 1383.svg`"> <strong>Invited:</strong>Employees + Partners</li>
               <li>
                 <div class="new-time">
                   Already Booked? <a @click="showChooseDateModal()">Suggest New time</a>
@@ -49,7 +49,7 @@
         </span>
       </md-checkbox>
       <div class="condition-tooltip" v-if="conditionTooltip">
-        <img :src="`${iconsUrl}Asset 268.svg`"> Please indicate that you accept the Terms & Conditions
+        <img :src="`${iconsUrl}Group 1175 (10).svg`"> Please indicate that you accept the Terms & Conditions
       </div>
     </div>
     <div class="action-cont">
@@ -63,7 +63,7 @@
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
         </div>
         <img 
-          :src="`${iconsUrl}Asset 268.svg`" 
+          :src="`${iconsUrl}Group 5522.svg`" 
           @mouseover="referTooltip=true"
           @mouseleave="referTooltip=false"
         >
@@ -107,13 +107,13 @@
             :title="`Email`"
             :placeholder="`Type your email address here`"
             :style="`width: 100%`"
-            :img="`${iconsUrl}Asset 263.svg`"
+            :img="`${iconsUrl}Asset 499.svg`"
           />
           <input-proposal-sub-item
             :title="`Link to Website`"
             :placeholder="`Paste link here`"
             :style="`width: 100%`"
-            :img="`${iconsUrl}Asset 262.svg`"
+            :img="`${iconsUrl}Asset 498.svg`"
           />
         </div>
       </template>
@@ -191,9 +191,9 @@
         <div class="not-bidding-modal__footer">
           <button class="cancel" @click="hideModal()">Cancel</button>
           <div class="refer-another-vendor-cont">
-            <img class="hand" :src="`${iconsUrl}Asset 268.svg`">
+            <img class="hand" :src="`${iconsUrl}Group 5649 (2).svg`">
             <a @click="showReferModal()">Refer Another Vendor</a>
-            <img class="question" :src="`${iconsUrl}Asset 268.svg`">
+            <img class="question" :src="`${iconsUrl}Group 5522.svg`">
           </div>
           <button class="cool" @click="showSorryModal()">Send</button>
         </div>
@@ -203,7 +203,7 @@
       <template slot="header">
         <div class="sorry-modal__header">
           <div class="left-side">
-            <img :src="`${iconsUrl}Asset 268.svg`">
+            <img :src="`${iconsUrl}Group 5811.svg`">
           </div>
           <div class="right-side">
             <h3>
@@ -235,7 +235,7 @@
             What is your new time suggestion?
           </h3>
           <div class="header-description">
-            <img :src="`${iconsUrl}Asset 268.svg`">
+            <img :src="`${iconsUrl}Group 1175 (9).svg`">
             A new time suggestion would be possible up to three days before or after the original event
           </div>
         </div>
@@ -248,7 +248,7 @@
           <div class="left-side">
           </div>
           <div class="right-side">
-            <img :src="`${iconsUrl}Asset 278.svg`">
+            <img :src="`${iconsUrl}Group 6085.svg`">
             <div class="time" value="08:00">
               <span>08</span>
               <span>:</span>
@@ -293,12 +293,12 @@ export default {
     return {
       vendors: [
         {
-          img: "http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/Asset 275.svg",
+          img: "http://static.maryoku.com/storage/icons/NewLandingPage/Asset 516.svg",
           category: "Venue", 
           budget: 1100
         },
         {
-          img: "http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/Asset 274.svg",
+          img: "http://static.maryoku.com/storage/icons/NewLandingPage/Asset 515.svg",
           category: "Catering", 
           budget: 1300
         }
@@ -312,7 +312,7 @@ export default {
       reasonIsService: false,
       reasonIsInfo: false,
       reasonIsOther: false,
-      iconsUrl: 'http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/',
+      iconsUrl: 'http://static.maryoku.com/storage/icons/NewLandingPage/',
       isAgree: false,
       referTooltip: false,
       conditionTooltip: false,
@@ -349,10 +349,13 @@ export default {
   },
   computed: {
   },
-  watch: {
-  },
   filters: {
+    withComma (amount) {
+      return amount ? amount.toLocaleString() : 0
+    }
   },
+  watch: {
+  }
 };
 </script>
 <style lang="scss" scoped>
