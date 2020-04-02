@@ -9,7 +9,7 @@
           <span v-if="step == 0"><i>&#8226;</i></span> 
           <span v-else><md-icon>check</md-icon></span>
           <br/>
-          Proposal Your Bid
+          Proposal <br/>Your Bid
         </li>
         <li :class="[
           { active: step >= 3 },
@@ -18,7 +18,7 @@
         ]">
           <span v-if="step >=3"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span> 
-          <br/> Additional Services
+          <br/> Additional <br/>Services
         </li>
         <li :class="[
           { current: step >= 3 },
@@ -26,7 +26,7 @@
         ]"> 
           <span v-if="step >= 3"><i>&#8226;</i></span> 
           <span v-else><i>&#8226;</i></span> 
-          <br/>Preview Proposal
+          <br/>Preview <br/>Proposal
         </li>
       </ul>
     </div>
@@ -97,7 +97,7 @@
 
           &.active, &.current {
             span {
-              background: #e0ae17;
+              background: #ffc001;
               i {
                 color: white;
                 position: relative;
@@ -121,8 +121,9 @@
               i {
                 color: #707070;
                 position: relative;
-                top: 5px;
+                top: 2px;
                 font-size: 50px;
+                font-style: normal;
               }
             }
           }
@@ -139,15 +140,15 @@
             content: none;
           }
           &.active, &.current {
-            color:#e0ae17;
+            color:#ffc001;
           }
           &.active:before, &.current:before {
-            background-color: #e0ae17;
+            background-color: #ffc001;
             color: white;
             
           }
           &.active:after, &.current:after {
-            background-color:#e0ae17;
+            background-color:#ffc001;
           }
         }
       }

@@ -2,13 +2,13 @@
   <div class="vendor-bid-time-counter-wrapper">
     <div class="time-cont">
       <ul>
-        <li>{{d | attachZero }}<br/><span>Days</span></li>
+        <li class="fix-digit">{{d | attachZero }}<br/><span>Days</span></li>
         <li>:</li>
-        <li>{{h | attachZero }}<br/><span>Hours</span></li>
+        <li class="fix-digit">{{h | attachZero }}<br/><span>Hours</span></li>
         <li>:</li>
-        <li>{{m | attachZero }}<br/><span>Min</span></li>
+        <li class="fix-digit">{{m | attachZero }}<br/><span>Min</span></li>
         <li>:</li>
-        <li>{{s | attachZero }}<br/><span>Sec</span></li>
+        <li class="fix-digit">{{s | attachZero }}<br/><span>Sec</span></li>
       </ul>
     </div>
     <div class="action-cont">
@@ -83,7 +83,7 @@
     color: #ffffff;
 
     .time-cont {
-      padding: 15px 34px 9px 34px;
+      padding: 18px 34px 9px 34px;
       font-size: 30px;
       font-weight: bold;
       ul {
@@ -92,15 +92,19 @@
         list-style: none;
         display: flex;
         li {
-          padding-right: 16px;
+          margin-right: 16px;
 
           span {
             font-size: 14px;
             font-weight: normal;
           }
 
+          &.fix-digit {
+            width: 36px;
+          }
+
           &:last-child {
-            padding-right: 0;
+            margin-right: 0;
           }
         }
       }

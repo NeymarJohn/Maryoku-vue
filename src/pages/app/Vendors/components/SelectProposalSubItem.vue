@@ -1,7 +1,7 @@
 <template>
   <div class="select-proposal-sub-item-wrapper">
     <div v-if="active" class="active">
-      {{item}} <md-icon>add_circle</md-icon>
+      {{item}} <img src="http://static.maryoku.com/storage/icons/NewSubmitPorposal/Group 3668 (2).svg"/>
     </div>
     <div v-else class="inactive">
       {{item}} <md-icon>close</md-icon>
@@ -49,11 +49,12 @@
       &.active {
         border: solid 1px #f51355;
         color: #f51355;
+        display: flex;
+        align-items: center;
 
-        i {
-          color: #f51355;
-          margin-left: 8px;
-          margin-top: -3px;
+        img {
+          width: 26px;
+          margin-left: 10px;
         }
       }
       &.inactive {

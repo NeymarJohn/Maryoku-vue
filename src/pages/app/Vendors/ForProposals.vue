@@ -4,24 +4,25 @@
       <div class="md-layout-item md-size-70">
         <proposal-steps :step="step"></proposal-steps>
         <div class="step-wrapper" v-if="step < 2">
+          <proposal-add-personal-message
+            :title="`Let's begin with a perosnal message`"
+            :desc="`Write something nice, we'll add it to the final proposal`"
+            :img="`${iconUrl}Asset 611.svg`"
+          ></proposal-add-personal-message>
           <proposal-item
             :category="`Venue`"
+            :subTitle="`For Whole Event`"
+            :img="`${iconUrl}Asset 614.svg`"
+            :step="step"
           >
           </proposal-item>
-          <proposal-title-with-icon
-            :icon="`message`"
-            :title="`Add Personal message`"
-            :desc="`*suggested`"
-          ></proposal-title-with-icon>
-          <proposal-add-personal-message
-            :desc="`Write something nice, we'll add it to the final proposal`"
-          ></proposal-add-personal-message>
-          <proposal-title-with-icon
-            :icon="`attachment`"
-            :title="`Add Files`"
-            :desc="`First mandatory files, and than other`"
-          ></proposal-title-with-icon>
-          <proposal-add-files></proposal-add-files>
+          <proposal-item
+            :category="`Catering`"
+            :subTitle="`9:00 AM - 12:00AM`"
+            :img="`${iconUrl}Asset 615.svg`"
+            :step="step"
+          >
+          </proposal-item>
         </div>
         <div class="step-wrapper" v-if="step == 2">
           <h3>
@@ -102,7 +103,8 @@ export default {
   },
   data() {
     return {
-      step: 0
+      step: 0,
+      iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
     }
   },
   created() {
@@ -110,7 +112,7 @@ export default {
     }.bind(this));
   },
   mounted () {
-    this.step = 3
+    this.step = 1
     this.event = {
       name: "March Madness event",
       date: "December 25, 2019",

@@ -26,6 +26,15 @@
     font-style: normal;
     font-stretch: normal;
 }
+@font-face {
+    font-family: 'Cooperative-Regular';
+    src: url('../fonts/cooperative/fonts/otf/Cooperative-Regular.otf') format('opentype'),
+    url('../fonts/cooperative/fonts/web/Cooperative-Regular.woff') format('woff2'),
+    url('../fonts/cooperative/fonts/ttf/Cooperative-Regular.ttf')  format('truetype');
+    font-style: normal;
+    font-stretch: normal;
+}
+
 .md-field .md-error { // show md-error spans
     opacity: 1;
     margin-bottom: 6px;
