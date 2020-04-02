@@ -44,13 +44,33 @@
       </div>
     </div>
     <section class="footer-wrapper">
-      <div class="prev-cont">
+      <div class="prev-cont" @click="back()">
         <md-icon>navigate_before</md-icon> Back
       </div>
       <div class="next-cont">
         <span>You can return to it till the deadline!</span>
-        <a class="save" @click="saveProposal()"><md-icon>save</md-icon> Save for later</a>
-        <a class="next">Next</a>
+        <a 
+          class="save" 
+          @click="saveProposal()"
+        >
+          <img :src="`${proposalIconsUrl}Asset 610.svg`"/> Save for later
+        </a>
+        <a 
+          class="next" 
+          @click="saveProposal()" 
+          :class="[{'active': selectedServices.length > 0}]" 
+          v-if="step==1"
+        >
+          Next
+        </a>
+        <a 
+          class="next active" 
+          @click="saveProposal()" 
+          v-if="step==2"
+        >
+          No Thanks
+          <md-icon>keyboard_arrow_right</md-icon>
+        </a>
       </div>
     </section>
     <modal v-if="fullDetailsModal" class="full-details-modal" container-class="modal-container ml">
@@ -124,6 +144,8 @@
         proposalIconsUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
         landingIconsUrl: 'http://static.maryoku.com/storage/icons/NewLandingPage/',
         dateTooltip: false,
+        selectedServices: [],
+        step: 1,
       }
     },
     methods: {
@@ -131,7 +153,16 @@
         this.fullDetailsModal = false
       },
       saveProposal() {
-        console.log(this.step)
+        this.$root.$emit('next-step-vendor-proposal')
+        if (this.step > 0 && this.step < 5) {
+          this.step++
+        }
+      },
+      back() {
+        this.$root.$emit('prev-step-vendor-proposal')
+        if (this.step > 1) {
+          this.step--
+        }
       },
       scrollToTop() {
         window.scrollTo(0,0);
@@ -369,8 +400,9 @@
             color: #f51355;
             margin-right: 41px;
 
-            i {
-              color: #f51355!important;
+            img {
+              width: 25px;
+              margin-right: 12px;
             }
           }
           &.next {
@@ -451,6 +483,13 @@
 
       i {
         color: #f51355;
+      }
+    }
+    .active {
+      background-color: #f51355!important;
+
+      i {
+        color: #ffffff!important;
       }
     }
   }

@@ -29,13 +29,15 @@
             Can you also provide these services for this event?
           </h3>
           <p>
-            Did you know? Adding vendors gets your fair commission if they get picked!
+            <img :src="`${iconUrl}Group 5280 (5).svg`"/>Did you know? Adding vendors gets your fair commission if they get picked!
           </p>
           <proposal-item
             :category="`Photographer`"
             :isCollapsed="true"
             :isDropdown="true"
             :proposalRange="false"
+            :img="`${iconUrl}Asset 607.svg`"
+            :step="step"
           >
           </proposal-item>
           <proposal-item
@@ -43,6 +45,8 @@
             :isCollapsed="true"
             :isDropdown="true"
             :proposalRange="true"
+            :img="`${iconUrl}Asset 606.svg`"
+            :step="step"
           >
           </proposal-item>
           <proposal-item
@@ -50,6 +54,8 @@
             :isCollapsed="true"
             :isDropdown="true"
             :proposalRange="true"
+            :img="`${iconUrl}Asset 605.svg`"
+            :step="step"
           >
           </proposal-item>
           <refer-new-vendor></refer-new-vendor>
@@ -118,6 +124,18 @@ export default {
       date: "December 25, 2019",
       arrival_time: "11:00AM"
     }
+    this.$root.$on('next-step-vendor-proposal', () => {
+      console.log('next')
+      if (this.step == 1) {
+        this.step = 2
+      }
+    })
+    this.$root.$on('prev-step-vendor-proposal', () => {
+      console.log('prev')
+      if (this.step > 1) {
+        this.step--
+      }
+    })
   },
   methods: {
     
@@ -147,6 +165,11 @@ export default {
         font-size: 14px;
         font-weight: normal;
         margin: 0;
+
+        img {
+          width: 27px;
+          margin-right: 15px;
+        }
       }
     }
   }

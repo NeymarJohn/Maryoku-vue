@@ -93,11 +93,14 @@
             border-radius: 50%;
             z-index: 2;
             position: relative;
+            margin-bottom: 8px;
+            color: #e0ae17;
           }
 
           &.active, &.current {
             span {
               background: #ffc001;
+              box-shadow: 0 3px 9px 0 rgba(0, 0, 0, 0.26);
               i {
                 color: white;
                 position: relative;
@@ -110,8 +113,12 @@
             span {
               i {
                 position: relative;
-                top: 5px;
-                font-size: 24px;
+                top: 3px;
+                left: 0;
+                font-size: 30px;
+                font-style: normal;
+                display: inline;
+                text-shadow: 0 2px 3px rgba(0, 0, 0, 0.42);
               }
             }
           }
@@ -140,7 +147,7 @@
             content: none;
           }
           &.active, &.current {
-            color:#ffc001;
+            color:#e0ae17;
           }
           &.active:before, &.current:before {
             background-color: #ffc001;

@@ -1,6 +1,10 @@
 <template>
   <div class="proposal-item-wrapper">
-    <div class="title-cont default" :class="[{'pb-40': isVCollapsed}]" @click="isVCollapsed=!isVCollapsed">
+    <div class="title-cont default" 
+      :class="[{'pb-40': isVCollapsed}]" 
+      @click="isVCollapsed=!isVCollapsed"
+      v-if="step==1"
+    >
       <div class="with-subtitle">
         <div class="text-cont">
           <h3 class="title"><img :src="img"/>{{category}}</h3>
@@ -123,26 +127,28 @@
         </div>
       </div>
     </div>
-    <div class="title-cont dropdown" v-if="step == 2">
+    <div class="title-cont dropdown" v-if="step == 2" @click="isChecked=!isChecked">
       <div class="left-side">
-        <md-checkbox v-model="isDropdown">
-        </md-checkbox>
-        <h3 class="title"><md-icon>edit</md-icon>{{category}}</h3>
+        <div class="check-cont">
+          <img v-if="isChecked" :src="`${iconUrl}Group 6258 (2).svg`"/>
+          <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`"/>
+        </div>
+        <h3 class="title"><img :src="img"/>{{category}}</h3>
       </div>
       <div class="right-side">
         <div class="budget-cont">
           <span>Budget</span>
-          <span>400$</span>
+          <span>$400.00</span>
         </div>
         <div class="proposal-range-cont">
           <p>You're the First bidder</p>
           <span v-if="proposalRange">Proposals range</span>
           <span v-if="proposalRange">$290-$1200</span>
         </div>
-        <md-icon>navigate_next</md-icon>
+        <img :src="`${iconUrl}Component 36 (2).svg`"/>
       </div>
     </div>
-    <div class="sub-items-cont" v-if="step == 2">
+    <!-- <div class="sub-items-cont" v-if="step == 2">
       <select-proposal-sub-item
         :active="true"
         :item="`Tables And Chairs`">
@@ -185,7 +191,7 @@
     <div class="action-cont" v-if="step == 2">
       <a class="clear">Clear</a>
       <a class="add" :class="[{'active': isAllFilledInfo}]">Add This</a>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -214,6 +220,7 @@
         isAllFilledInfo: false,
         iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
         isVCollapsed: false,
+        isChecked: false,
       }
     },
     methods: {
@@ -290,19 +297,32 @@
         cursor: pointer;
 
         .left-side {
-          width: 50%;
+          width: 100%;
+          display: flex;
+          align-items: center;
+
+          .check-cont {
+            img {
+              width: 33px;
+            }
+          }
           h3 {
             display: inline-block;
-            margin-left: 39px;
+            margin: 0;
 
-            i {
+            img {
+              width: 34px;
+              margin-left: 55px;
               margin-right: 22px;
+              position: relative;
+              top: -2px;
             }
           }
         }
         .right-side {
           display: flex;
-          justify-content: space-between;
+          width: 100%;
+          justify-content: flex-end;
           align-items: center;
 
           .budget-cont {
@@ -336,8 +356,9 @@
               }
             }
           }
-          i {
-            margin-left: 80px;
+          img {
+            width: 12px;
+            margin-left: 50px;
           }
         }
       }
