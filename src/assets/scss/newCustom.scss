@@ -988,12 +988,15 @@ $baseColor : #5c2153;
             background-color: #ffffff;
             border-left : 10px solid #818080;
             margin-bottom : 0.4em;
-            padding: 1em 1.5em;
+            padding: 1em 30px;
             cursor: pointer;
 
             .item-title {
                 position: inherit;
                 font-family: 'Manrope-Regular',sans-serif;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
                 img {
                     margin-right : 0.4em;
                 }
@@ -1008,10 +1011,18 @@ $baseColor : #5c2153;
 
             &.current {
                 border-left-color : $green;
-                font-size: 21px;
+                // font-size: 21px;
                 font-family: 'Manrope-ExtraBold',sans-serif;
                 position: relative;
-
+                font-size: 22px;
+                font-weight: 800;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: 1.32;
+                letter-spacing: normal;
+                text-align: left;
+                color: #050505;
+                
                 &:before {
                     content : ' ';
                     position: absolute;
