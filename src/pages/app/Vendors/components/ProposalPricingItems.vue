@@ -222,7 +222,7 @@
         .editable-sub-items-header {
           padding: 0px 34px 26px 34px;
           margin-left: -34px;
-          margin-right: -40px;
+          margin-right: -34px;
 
           span {
             display: inline-block;

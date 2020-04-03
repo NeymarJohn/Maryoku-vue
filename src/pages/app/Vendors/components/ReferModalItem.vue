@@ -2,9 +2,9 @@
   <div class="refer-modal-item-wrapper">
     <div class="title-cont" @click="isSelected=!isSelected">
       <div class="left-side">
-        <md-checkbox v-model="isSelected">
-        </md-checkbox>
-        <h3 class="title"><md-icon>edit</md-icon>{{category}}</h3>
+        <img v-if="isSelected" :src="`${iconUrl}Group 6258 (2).svg`"/>
+        <img v-else :src="`${iconUrl}Rectangle 1245 (2).svg`"/>
+        <h3 class="title"><img :src="img"/>{{category}}</h3>
       </div>
       <div class="right-side">
         <md-icon v-if="isSelected">navigate_next</md-icon>
@@ -20,13 +20,13 @@
       <input-proposal-sub-item
         :title="`Email`"
         :placeholder="``"
-        :icon="`email`"
+        :img="`${iconUrl}Asset 620.svg`"
       >
       </input-proposal-sub-item>
       <input-proposal-sub-item
         :title="`Link to Website`"
         :placeholder="`Paste link here`"
-        :icon="`wifi_tethering`"
+        :img="`${iconUrl}Asset 619.svg`"
       >
       </input-proposal-sub-item>
     </div>
@@ -41,7 +41,9 @@
       InputProposalSubItem
     },
     props: {
-      category: String
+      category: String,
+      img: String,
+      iconUrl: String,
     },
     data () {
       return {
@@ -78,6 +80,10 @@
         display: flex;
         align-items: center;
 
+        img {
+          width: 33px;
+        }
+
         .title {
           i {
             margin-right: 22px;
@@ -89,6 +95,14 @@
           margin: 0;
           font-size: 20px;
           font-weight: 800;
+
+          img {
+            width: 34px;
+            margin-left: 55px;
+            margin-right: 22px;
+            top: -2px;
+            position: relative;
+          }
         }
       }
     }
