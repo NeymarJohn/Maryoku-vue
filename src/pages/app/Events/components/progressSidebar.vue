@@ -26,7 +26,7 @@
         <div
           class="event-elements__item"
           @click="goToRoute(item,index)"
-          :class="item.status"
+          :class="item.status + ' progress_' + item.progress"
           v-for="(item,index) in eventElements"
           :key="index"
         >
@@ -86,6 +86,12 @@ export default {
     isLoading: true,
     eventElements: [
       // {
+      //   title: 'Set event conept',
+      //   status: 'current',
+      //   route: 'edit/timeline/new',
+      //   progress: 100
+      // },
+      // {
       //     title: 'book catering',
       //     status: 'complete',
       //     route : 'booking'
@@ -94,19 +100,16 @@ export default {
       //     title: 'book catering',
       //     status: 'complete',
       //     route : 'booking'
-      //
+      
       // },
       // {
       //     title: 'book catering',
       //     status: 'complete',
       //     route : 'booking'
-      //
+      
       // },
-      {
-        title: 'Create Timeline',
-        status: 'current',
-        route: 'edit/timeline/new'
-      },
+      
+      
       // {
       //     title: 'Hire DJ',
       //     status: 'not-complete',
@@ -119,32 +122,40 @@ export default {
       //     route : '/booking'
       //
       // },
-      {
-        title: 'Research event insurance',
-        status: 'not-complete',
-        route: '/booking'
-      },
+      // {
+      //   title: 'Research event insurance',
+      //   status: 'not-complete',
+      //   route: '/booking',
+      // },
       // {
       //     title: 'Book event transportation',
       //     status: 'not-complete',
       //     route : '/booking'
       //
       // },
-      {
-        title: 'Create and send save-the-dates',
-        status: 'not-complete',
-        route: '/booking'
-      },
-      {
-        title: 'Review budget',
-        status: 'not-complete',
-        route: '/booking'
-      },
-      {
-        title: "Create event's banner",
-        status: 'not-complete',
-        route: '/booking'
-      }
+      // {
+      //   title: 'Create and send save-the-dates',
+      //   status: 'not-complete',
+      //   route: '/booking'
+      // },
+      // {
+      //   title: 'Approve Budget',
+      //   status: 'current',
+      //   route: '/booking',
+      //   progress: 75
+      // },
+      // {
+      //   title: 'Generate timeline',
+      //   status: 'current',
+      //   route: 'edit/timeline/new',
+      //   progress: 50
+      // },
+      // {
+      //   title: 'Book Venue',
+      //   status: 'current',
+      //   route: 'edit/timeline/new',
+      //   progress: 25
+      // },
     ],
     timelineIconsURL: 'http://static.maryoku.com/storage/icons/timeline/svg/',
     menuIconsURL:
@@ -172,20 +183,38 @@ export default {
       let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
       let event = new CalendarEvent({ id: this.event.id })
 
-      new EventComponent()
-        .for(calendar, event)
-        .get()
-        .then(resp => {
-          _.map(resp, function (item) {
+      console.log(calendar);
+      console.log(event);
+      this.$http.get(`${process.env.SERVER_URL}/1/calendars/${calendar.id}/events/${event.id}/progress`, {}, { headers: this.$auth.getAuthHeader() })
+        .then(response => response.data)
+        .then((json) => {
+          console.log("progres",json);
+          _.map(json, function (item) {
             vm.eventElements.push({
-              title: 'Book ' + item.title,
-              status: 'not-complete',
+              title: item.title,
+              status: item.status,
+              progress: item.progress,
               route: 'booking/' + item.id
             })
 
             return item
           })
         })
+
+      // new EventComponent()
+      //   .for(calendar, event)
+      //   .get()
+      //   .then(resp => {
+      //     _.map(resp, function (item) {
+      //       vm.eventElements.push({
+      //         title: 'Book ' + item.title,
+      //         status: 'not-complete',
+      //         route: 'booking/' + item.id
+      //       })
+
+      //       return item
+      //     })
+      //   })
     }
   },
   created () {
@@ -194,7 +223,6 @@ export default {
       true,
       function () {
         let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-
         _calendar
           .calendarEvents()
           .find(this.$route.params.id)

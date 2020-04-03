@@ -9,7 +9,7 @@
           <span v-if="step == 0"><i>&#8226;</i></span> 
           <span v-else><md-icon>check</md-icon></span>
           <br/>
-          Proposal <br/>Your Bid
+          Proposal Your Bid
         </li>
         <li :class="[
           { active: step >= 3 },
@@ -18,7 +18,7 @@
         ]">
           <span v-if="step >=3"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span> 
-          <br/> Additional <br/>Services
+          <br/> Additional Services
         </li>
         <li :class="[
           { current: step >= 3 },
@@ -26,7 +26,7 @@
         ]"> 
           <span v-if="step >= 3"><i>&#8226;</i></span> 
           <span v-else><i>&#8226;</i></span> 
-          <br/>Preview <br/>Proposal
+          <br/>Preview Proposal
         </li>
       </ul>
     </div>
@@ -93,14 +93,11 @@
             border-radius: 50%;
             z-index: 2;
             position: relative;
-            margin-bottom: 8px;
-            color: #e0ae17;
           }
 
           &.active, &.current {
             span {
-              background: #ffc001;
-              box-shadow: 0 3px 9px 0 rgba(0, 0, 0, 0.26);
+              background: #e0ae17;
               i {
                 color: white;
                 position: relative;
@@ -113,12 +110,8 @@
             span {
               i {
                 position: relative;
-                top: 3px;
-                left: 0;
-                font-size: 30px;
-                font-style: normal;
-                display: inline;
-                text-shadow: 0 2px 3px rgba(0, 0, 0, 0.42);
+                top: 5px;
+                font-size: 24px;
               }
             }
           }
@@ -128,9 +121,8 @@
               i {
                 color: #707070;
                 position: relative;
-                top: 2px;
+                top: 5px;
                 font-size: 50px;
-                font-style: normal;
               }
             }
           }
@@ -150,12 +142,12 @@
             color:#e0ae17;
           }
           &.active:before, &.current:before {
-            background-color: #ffc001;
+            background-color: #e0ae17;
             color: white;
             
           }
           &.active:after, &.current:after {
-            background-color:#ffc001;
+            background-color:#e0ae17;
           }
         }
       }
