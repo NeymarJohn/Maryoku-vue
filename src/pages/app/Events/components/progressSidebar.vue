@@ -201,20 +201,20 @@ export default {
           })
         })
 
-      // new EventComponent()
-      //   .for(calendar, event)
-      //   .get()
-      //   .then(resp => {
-      //     _.map(resp, function (item) {
-      //       vm.eventElements.push({
-      //         title: 'Book ' + item.title,
-      //         status: 'not-complete',
-      //         route: 'booking/' + item.id
-      //       })
+      new EventComponent()
+        .for(calendar, event)
+        .get()
+        .then(resp => {
+          _.map(resp, function (item) {
+            vm.eventElements.push({
+              title: 'Book ' + item.title,
+              status: 'not-complete',
+              route: 'booking/' + item.id
+            })
 
-      //       return item
-      //     })
-      //   })
+            return item
+          })
+        })
     }
   },
   created () {
