@@ -162,6 +162,7 @@
     }
 
     .title-cont {
+      padding-top: 37px;
       text-align: center;
 
       h3 {

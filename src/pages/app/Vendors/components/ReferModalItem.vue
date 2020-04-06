@@ -7,8 +7,12 @@
         <h3 class="title"><img :src="img"/>{{category}}</h3>
       </div>
       <div class="right-side">
-        <md-icon v-if="isSelected">navigate_next</md-icon>
-        <md-icon v-else>keyboard_arrow_down</md-icon>
+        <img 
+          :src="`${iconUrl}Component 36 (2).svg`"
+          :style="`transform: ${isSelected ? 'rotate(90deg)' : ''}`"
+        />
+        <!-- <md-icon v-if="!isSelected">navigate_next</md-icon>
+        <md-icon v-else>keyboard_arrow_down</md-icon> -->
       </div>
     </div>
     <div class="vendor-info-cont" v-if="isSelected">
@@ -103,6 +107,11 @@
             top: -2px;
             position: relative;
           }
+        }
+      }
+      .right-side {
+        img {
+          width: 12px;
         }
       }
     }

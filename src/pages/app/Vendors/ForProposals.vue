@@ -64,7 +64,8 @@
           <proposal-event-summary
             :title="`Event Information & Details`"
             :eventData="event"
-            :isEdit="false"
+            :isEdit="false" 
+            :iconUrl="iconUrl"
           >
           </proposal-event-summary>          
         </div>
@@ -126,15 +127,17 @@ export default {
     }
     this.$root.$on('next-step-vendor-proposal', () => {
       console.log('next')
-      if (this.step == 1) {
-        this.step = 2
+      if (this.step > 0 && this.step < 4) {
+        this.step++
       }
+      console.log('wrapperStep', this.step)
     })
     this.$root.$on('prev-step-vendor-proposal', () => {
       console.log('prev')
       if (this.step > 1) {
         this.step--
       }
+      console.log('wrapperStep', this.step)
     })
   },
   methods: {

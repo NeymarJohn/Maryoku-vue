@@ -3,12 +3,14 @@
     <div class="pricing-item">
       <div class="summary" @click="isExpanded=!isExpanded">
         <div class="left">
-          <md-icon>home</md-icon><h3>Venue</h3><span>For Whole Event</span>
+          <img v-if="itemType=='price'" :src="categoryIcon"/><h3>Venue</h3><span>For Whole Event</span>
         </div>
         <div class="right">
           <span v-if="!isExpanded">$400.00</span>
-          <md-icon v-if="!isExpanded">navigate_next</md-icon>
-          <md-icon v-else>keyboard_arrow_down</md-icon>
+          <img 
+            :src="`${iconUrl}Component 36 (2).svg`"
+            :style="`transform: ${isExpanded ? 'rotate(90deg)' : ''}`"
+          />
         </div>
       </div>
       <div v-if="isExpanded" class="subitems">
@@ -96,20 +98,7 @@
         </div>
       </div>
     </div>
-    <div class="pricing-item">
-      <div class="summary">
-        <div class="left">
-          <md-icon>web</md-icon><h3>Catering</h3><span>9:00AM-12:00AM</span>
-        </div>
-        <div class="right">
-          <span>$400.00</span>
-          <md-icon>navigate_next</md-icon>
-        </div>
-      </div>
-      <div class="">
-      </div>
-    </div>
-    <div class="tax-cont">
+    <!-- <div class="tax-cont">
       <div class="left">
         <span>Taxes</span>
         <span>18%</span>
@@ -133,14 +122,14 @@
           $1,600.00
         </span>
       </div>
-    </div>
+    </div> -->
   </div>    
 </template>
 <script>
   import EditableProposalSubItem from './EditableProposalSubItem.vue'
 
   export default {
-    name: 'proposal-pricing-items',
+    name: 'proposal-pricing-item',
     components: {
       EditableProposalSubItem
     },
@@ -149,6 +138,9 @@
       isCollapsed: Boolean,
       isDropdown: Boolean,
       proposalRange: Boolean,
+      iconUrl: String,
+      categoryIcon: String,
+      itemType: String,
     },
     data () {
       return {
@@ -170,17 +162,16 @@
 </script>
 <style lang="scss" scoped>
   .proposal-pricing-items-wrapper {
-    background-color: #f7f7f7;
-    border: solid 0.75px #050505;
+    background-color: #ffffff;
     font-family: 'Manrope-Regular', sans-serif;
     color: #050505;
-    margin-top: 30px;
-    margin-bottom: 20px;
+    margin: 30px 0;
 
     .pricing-item {
       padding: 46px 40px 48px 40px;
-      background-color: #f7f7f7;
-      border: solid 0.75px #050505;
+      background-color: #ffffff;
+      box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+      border-radius: 3px;
 
       .summary {
         display: flex;
@@ -194,24 +185,27 @@
 
           h3 {
             margin: 0;
-            margin-left: 16px;
+            margin-left: 30px;
             font-size: 30px;
             font-weight: 800;
           }
           span {
             font-size: 20px;
-            margin-left: 20px;
+            margin-left: 30px;
+          }
+          img {
+            width: 28px;
+
           }
         }
         .right {
-          i {
-            color: #f51355;
-            font-weight: 800;
+          img {
+            width: 12px;
+            margin-left: 50px;
           }
           span {
             font-size: 20px;
             font-weight: 800;
-            margin-right: 100px;
           }
         }
       }
@@ -282,10 +276,6 @@
             }
           }
         }
-      }
-
-      &:first-child {
-        border-top: solid 1.5px;
       }
     }
 

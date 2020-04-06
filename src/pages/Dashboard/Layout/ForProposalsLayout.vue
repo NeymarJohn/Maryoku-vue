@@ -38,6 +38,7 @@
       <router-view></router-view>
       <div class="back-to-top">
         <span>END</span>
+        <br/>
         <div class="row" @click="scrollToTop()">
           <md-icon>keyboard_arrow_up</md-icon> Back To Top
         </div>
@@ -74,7 +75,7 @@
         <a 
           class="next active" 
           @click="saveProposal()" 
-          v-if="step==3"
+          v-if="step>=3"
         >
           Submit Proposal
         </a>
@@ -161,15 +162,17 @@
       },
       saveProposal() {
         this.$root.$emit('next-step-vendor-proposal')
-        if (this.step > 0 && this.step < 5) {
+        if (this.step > 0 && this.step < 4) {
           this.step++
         }
+        console.log('layoutStep', this.step)
       },
       back() {
         this.$root.$emit('prev-step-vendor-proposal')
         if (this.step > 1) {
           this.step--
         }
+        console.log('layoutStep', this.step)
       },
       scrollToTop() {
         window.scrollTo(0,0);
@@ -362,6 +365,7 @@
           margin-bottom: 22px;
         }
         .row {
+          display: inline-block;
           cursor: pointer;
           font-size: 20px;
           font-weight: 800;
