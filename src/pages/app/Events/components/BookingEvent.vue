@@ -26,7 +26,7 @@
 
         <div class="booking-header d-flex justify-content-between md-layout-item md-size-100">
             <div class="header-title">
-                <h4><img :src="`${newTimeLineIconsURL}timeline-title.svg`"> Book {{selectedBlock.title}}</h4>
+                <h4><img :src="`${budgetElementsIConsURL}venue.svg`"> Book {{selectedBlock.title}}</h4>
             </div>
             <div class="header-actions">
                 <md-button class="md-default md-simple">Compare Proposals <md-icon>keyboard_arrow_right</md-icon></md-button>
@@ -245,6 +245,7 @@ export default {
     menuIconsURL: 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
     iconsURL: 'http://static.maryoku.com/storage/icons/Event%20Page/',
     newTimeLineIconsURL: 'http://static.maryoku.com/storage/icons/Timeline-New/',
+    budgetElementsIConsURL: 'http://static.maryoku.com/storage/icons/Budget+Elements/',
     showSomethingModal: false,
     showShareVendorModal: false,
     blockVendors: null,
