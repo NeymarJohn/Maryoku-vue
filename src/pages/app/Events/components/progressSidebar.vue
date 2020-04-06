@@ -26,7 +26,7 @@
         <div
           class="event-elements__item"
           @click="goToRoute(item,index)"
-          :class="isActiveRoute(item)"
+          :class="item.status"
           v-for="(item,index) in eventElements"
           :key="index"
         >
@@ -36,7 +36,6 @@
               src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg"
               width="15"
             />
-            <img :src="item.icon" v-if="isActiveRoute(item)" width="25"/>
             {{item.title}}
           </div>
         </div>
@@ -86,26 +85,65 @@ export default {
     // auth: auth,
     isLoading: true,
     eventElements: [
+      // {
+      //     title: 'book catering',
+      //     status: 'complete',
+      //     route : 'booking'
+      // },
+      // {
+      //     title: 'book catering',
+      //     status: 'complete',
+      //     route : 'booking'
+      //
+      // },
+      // {
+      //     title: 'book catering',
+      //     status: 'complete',
+      //     route : 'booking'
+      //
+      // },
       {
-        title: 'Set event conept',
-        status: 'not-complete',
-        route: 'edit/event',
-        icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
-        progress: 0
-      },
-      {
-        title: 'Approve Budget',
-        status: 'not-complete',
-        route: 'edit/details/new',
-        icon: 'http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2010.svg',
-        progress: 0
-      },
-      {
-        title: 'Generate timeline',
+        title: 'Create Timeline',
         status: 'current',
-        route: 'edit/timeline/new',
-        icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
-        progress: 0
+        route: 'edit/timeline/new'
+      },
+      // {
+      //     title: 'Hire DJ',
+      //     status: 'not-complete',
+      //     route : '/booking'
+      //
+      // },
+      // {
+      //     title: 'Hire photographer',
+      //     status: 'not-complete',
+      //     route : '/booking'
+      //
+      // },
+      {
+        title: 'Research event insurance',
+        status: 'not-complete',
+        route: '/booking'
+      },
+      // {
+      //     title: 'Book event transportation',
+      //     status: 'not-complete',
+      //     route : '/booking'
+      //
+      // },
+      {
+        title: 'Create and send save-the-dates',
+        status: 'not-complete',
+        route: '/booking'
+      },
+      {
+        title: 'Review budget',
+        status: 'not-complete',
+        route: '/booking'
+      },
+      {
+        title: "Create event's banner",
+        status: 'not-complete',
+        route: '/booking'
       }
     ],
     timelineIconsURL: 'http://static.maryoku.com/storage/icons/timeline/svg/',
@@ -114,17 +152,7 @@ export default {
     event: {},
     newTimeLineIconsURL: 'http://static.maryoku.com/storage/icons/Timeline-New/'
   }),
-  computed: {
-
-  },
   methods: {
-    isActiveRoute(item) {
-      console.log(this.$router.history.current.path);
-      if (this.$router.history.current.path.indexOf(item.route) > -1) {
-        return "current";
-      } 
-      return "";
-    },
     goToRoute (item, index) {
       let vm = this
 
@@ -152,8 +180,7 @@ export default {
             vm.eventElements.push({
               title: 'Book ' + item.title,
               status: 'not-complete',
-              route: 'booking/' + item.id,
-              icon: 'http://static.maryoku.com/storage/icons/Budget+Elements/venue.svg',
+              route: 'booking/' + item.id
             })
 
             return item
@@ -167,6 +194,7 @@ export default {
       true,
       function () {
         let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
+
         _calendar
           .calendarEvents()
           .find(this.$route.params.id)

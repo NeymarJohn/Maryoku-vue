@@ -3,7 +3,6 @@
     <h6>If you can't, Maybe someone else you know can?</h6>
     <div class="refer-cont">
       <div class="img-cont">
-        <img :src="`${iconUrl}Group 5649 (3).svg`"/>
       </div>
       <div class="left-side">
         <h4>Refer a new vendor <br/>and get a commission</h4>
@@ -16,13 +15,10 @@
         <a @click="referModal=true">refer a vendor <md-icon>navigate_next</md-icon></a>
       </div>
     </div>
-    <modal v-if="referModal" class="refer-vendor-modal" container-class="modal-container sl">
+    <modal v-if="referModal" class="refer-vendor-modal">
       <template slot="header">
         <div class="refer-vendor-modal__header">
-          <div class="title-cont">
-            <img :src="`${iconUrl}Group 5649 (3).svg`"/>
-            <h3>Refer a new vendor <br/>and get a commission!</h3>
-          </div>
+          <h3>Refer a new vendor <br/>and get a commission</h3>
           <div class="header-description">
             <p>
               Mark the related service and fill the vendor's details
@@ -30,26 +26,14 @@
           </div>
         </div>
         <button class="close" @click="hideModal()">
-          <img :src="`${iconUrl}Group 3671 (2).svg`"/>
+          <md-icon>clear</md-icon>
         </button>
       </template>
       <template slot="body">
         <div class="refer-vendor-modal__body">
-          <refer-modal-item 
-            :category="`Photographer`"
-            :iconUrl="iconUrl"
-            :img="`${iconUrl}Asset 607.svg`"
-          />
-          <refer-modal-item 
-            :category="`Bar`"
-            :iconUrl="iconUrl"
-            :img="`${iconUrl}Asset 606.svg`"
-          />
-          <refer-modal-item 
-            :category="`Dj`"
-            :iconUrl="iconUrl"
-            :img="`${iconUrl}Asset 605.svg`"
-          />
+          <refer-modal-item :category="`Photographer`"></refer-modal-item>
+          <refer-modal-item :category="`Bar`"></refer-modal-item>
+          <refer-modal-item :category="`Dj`"></refer-modal-item>
         </div>
       </template>
       <template slot="footer">
@@ -59,27 +43,24 @@
         </div>
       </template>
     </modal>
-    <modal v-if="thanksModal" class="thank-you-modal" container-class="modal-container sl">
+    <modal v-if="thanksModal" class="thank-you-modal">
       <template slot="header">
         <div class="thank-you-modal__header">
-          <div class="title-cont">
-            <img :src="`${iconUrl}Group 5676 (2).svg`"/>
-          </div>
+          <h3>
+            Thank You!
+          </h3>
           <div class="header-description">
-            <h3>
-              Thank You!
-            </h3>
-            <p>
-              We will let you know if this vendor is hired & credit you for your help!
-            </p>
           </div>
         </div>
         <button class="close" @click="hideModal()">
-          <img :src="`${iconUrl}Group 3671 (2).svg`"/>
+          <md-icon>clear</md-icon>
         </button>
       </template>
       <template slot="body">
         <div class="thank-you-modal__body">
+          <p>
+            We will let you know if this vendor is hired & credit you for your help!
+          </p>
         </div>
       </template>
       <template slot="footer">
@@ -105,8 +86,7 @@
     data () {
       return {
         referModal: false,
-        thanksModal: false,
-        iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
+        thanksModal: false
       }
     },
     methods: {
@@ -139,8 +119,6 @@
       font-size: 16px;
       font-weight: bold;
       text-transform: none;
-      margin-top: 60px;
-      margin-bottom: 30px;
     }
     .refer-cont {
       display: flex;
@@ -150,11 +128,6 @@
 
       .img-cont {
         margin-right: 33px;
-
-        img {
-          width: 84px;
-          margin-right: 33px;
-        }
       }
       .left-side {
         padding-right: 36px;
@@ -205,24 +178,11 @@
       &__header {
         width: 100%;
         padding: 36px 36px 0;
-        .title-cont {
-          display: flex;
-          align-items: center;
-
-          img {
-            width: 84px;
-            margin-right: 30px;
-          }
-        }
         h3 {
           font-size: 30px;
           color: #f51355;
           font-weight: 800;
           margin: 0;
-          text-transform: capitalize;
-          img {
-            width: 84px;
-          }
         }
         .header-description {
           p {
@@ -241,9 +201,6 @@
           right: 50px;
           color: #050505;
           cursor: pointer;
-          img {
-            width: 20px;
-          }
         }
       }
       &__body {
@@ -270,33 +227,13 @@
     .thank-you-modal {
       &__header {
         width: 100%;
-        display: flex;
         padding: 36px 53px 0;
-
-        .title-cont {
-          img {
-            width: 90px;
-            margin-right: 50px;
-          }
+        h3 {
+          font-size: 30px;
+          font-weight: 800;
+          color: #f51355;
+          margin: 0;
         }
-        .header-description {
-          h3 {
-            font-size: 30px;
-            font-weight: 800;
-            color: #f51355;
-            margin: 0;
-            margin-bottom: 20px;
-          }
-          p {
-            text-align: left;
-            font-size: 20px;
-            line-height: 1.55;
-            margin: 0;
-            margin-top: -4px;
-            width: 60%;
-          }
-        }
-
         & + .close {
           background: transparent;
           border: none;
@@ -305,13 +242,18 @@
           right: 60px;
           color: #050505;
           cursor: pointer;
-          img {
-            width: 20px;
-          }
         }
       }
       &__body {
         padding-left: 53px;
+        p {
+          text-align: left;
+          font-size: 20px;
+          line-height: 1.55;
+          margin: 0;
+          margin-top: -4px;
+          width: 60%;
+        }
       }
       &__footer {
         padding: 10px 40px 40px 40px;

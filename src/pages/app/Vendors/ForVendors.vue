@@ -17,12 +17,12 @@
         <div class="right-side">
           <div class="summary-cont">
             <ul>
-              <li><img :src="`${iconsUrl}Path 251.svg`"> <strong>Date:</strong>December 25, 2019</li>
-              <li><img :src="`${iconsUrl}Group 6085.svg`"> <strong>Time:</strong>10:00AM - 4:00PM</li>
-              <li><img :src="`${iconsUrl}Asset 506.svg`"> <strong>Address:</strong><span>575 Mission St. San Franciso, CA 94105 75 Mission St. San Franciso, CA 94105</span></li>
-              <li><img :src="`${iconsUrl}Asset 505.svg`"> <strong>Guests:</strong>{{ 2034 | withComma }}</li>
-              <li><img :src="`${iconsUrl}Path 1942.svg`"> <strong>Type:</strong>Establishment / Activity day</li>
-              <li><img :src="`${iconsUrl}Path 1383.svg`"> <strong>Invited:</strong>Employees + Partners</li>
+              <li><img :src="`${iconsUrl}Asset 268.svg`"> <strong>Date:</strong>December 25, 2019</li>
+              <li><img :src="`${iconsUrl}Asset 278.svg`"> <strong>Time:</strong>10:00AM - 4:00PM</li>
+              <li><img :src="`${iconsUrl}Asset 271.svg`"> <strong>Address:</strong>575 Mission St. San Franciso, CA 94105</li>
+              <li><img :src="`${iconsUrl}Asset 270.svg`"> <strong>Guests:</strong>2,034</li>
+              <li><img :src="`${iconsUrl}Asset 262.svg`"> <strong>Type:</strong>Establishment / Activity day</li>
+              <li><img :src="`${iconsUrl}Asset 262.svg`"> <strong>Invited:</strong>Employees + Partners</li>
               <li>
                 <div class="new-time">
                   Already Booked? <a @click="showChooseDateModal()">Suggest New time</a>
@@ -49,7 +49,7 @@
         </span>
       </md-checkbox>
       <div class="condition-tooltip" v-if="conditionTooltip">
-        <img :src="`${iconsUrl}Group 1175 (10).svg`"> Please indicate that you accept the Terms & Conditions
+        <img :src="`${iconsUrl}Asset 268.svg`"> Please indicate that you accept the Terms & Conditions
       </div>
     </div>
     <div class="action-cont">
@@ -63,7 +63,7 @@
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
         </div>
         <img 
-          :src="`${iconsUrl}Group 5522.svg`" 
+          :src="`${iconsUrl}Asset 268.svg`" 
           @mouseover="referTooltip=true"
           @mouseleave="referTooltip=false"
         >
@@ -72,7 +72,7 @@
         <p>
           You're the 4th catering & venue bidder
         </p>
-        <button class="yes" @click="goTo('/for-proposals')">
+        <button class="yes">
           Submit Proposal
         </button>
       </div>
@@ -88,7 +88,7 @@
           </div>
         </div>
         <button class="close" @click="hideModal()">
-          <img :src="`${iconsUrl}Group 3602.svg`"/>
+          <md-icon>clear</md-icon>
         </button>
       </template>
       <template slot="body">
@@ -107,13 +107,13 @@
             :title="`Email`"
             :placeholder="`Type your email address here`"
             :style="`width: 100%`"
-            :img="`${iconsUrl}Asset 499.svg`"
+            :img="`${iconsUrl}Asset 263.svg`"
           />
           <input-proposal-sub-item
             :title="`Link to Website`"
             :placeholder="`Paste link here`"
             :style="`width: 100%`"
-            :img="`${iconsUrl}Asset 498.svg`"
+            :img="`${iconsUrl}Asset 262.svg`"
           />
         </div>
       </template>
@@ -136,7 +136,7 @@
           </div>
         </div>
         <button class="close" @click="hideModal()">
-          <img :src="`${iconsUrl}Group 3602.svg`"/>
+          <md-icon>clear</md-icon>
         </button>
       </template>
       <template slot="body">
@@ -149,8 +149,7 @@
               >
                 <span class="colored" :class="[{'bold': reasonIsDate}]">I'm fully booked around the date of the event</span>
               </md-checkbox>
-              <a class="another-date" @click="showChooseDateModal()" v-if="vendor.category == 'venue'">Suggest Another Date</a>
-              <a class="another-date" @click="showChooseDateModal()" v-else>Suggest Another Time</a>
+              <a class="another-date" @click="showChooseDateModal()">Suggest Another Date</a>
             </li>
             <li>
               <md-checkbox 
@@ -192,9 +191,9 @@
         <div class="not-bidding-modal__footer">
           <button class="cancel" @click="hideModal()">Cancel</button>
           <div class="refer-another-vendor-cont">
-            <img class="hand" :src="`${iconsUrl}Group 5649 (2).svg`">
+            <img class="hand" :src="`${iconsUrl}Asset 268.svg`">
             <a @click="showReferModal()">Refer Another Vendor</a>
-            <img class="question" :src="`${iconsUrl}Group 5522.svg`">
+            <img class="question" :src="`${iconsUrl}Asset 268.svg`">
           </div>
           <button class="cool" @click="showSorryModal()">Send</button>
         </div>
@@ -204,7 +203,7 @@
       <template slot="header">
         <div class="sorry-modal__header">
           <div class="left-side">
-            <img :src="`${iconsUrl}Group 5811.svg`">
+            <img :src="`${iconsUrl}Asset 268.svg`">
           </div>
           <div class="right-side">
             <h3>
@@ -216,7 +215,7 @@
           </div>
         </div>
         <button class="close" @click="hideModal()">
-          <img :src="`${iconsUrl}Group 3602.svg`"/>
+          <md-icon>clear</md-icon>
         </button>
       </template>
       <template slot="body">
@@ -236,12 +235,12 @@
             What is your new time suggestion?
           </h3>
           <div class="header-description">
-            <img :src="`${iconsUrl}Group 1175 (9).svg`">
+            <img :src="`${iconsUrl}Asset 268.svg`">
             A new time suggestion would be possible up to three days before or after the original event
           </div>
         </div>
         <button class="close" @click="hideModal()">
-          <img :src="`${iconsUrl}Group 3602.svg`"/>
+          <md-icon>clear</md-icon>
         </button>
       </template>
       <template slot="body">
@@ -249,7 +248,7 @@
           <div class="left-side">
           </div>
           <div class="right-side">
-            <img :src="`${iconsUrl}Group 6085.svg`">
+            <img :src="`${iconsUrl}Asset 278.svg`">
             <div class="time" value="08:00">
               <span>08</span>
               <span>:</span>
@@ -294,20 +293,16 @@ export default {
     return {
       vendors: [
         {
-          img: "http://static.maryoku.com/storage/icons/NewLandingPage/Asset 516.svg",
+          img: "http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/Asset 275.svg",
           category: "Venue", 
           budget: 1100
         },
         {
-          img: "http://static.maryoku.com/storage/icons/NewLandingPage/Asset 515.svg",
+          img: "http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/Asset 274.svg",
           category: "Catering", 
           budget: 1300
         }
       ],
-      vendor: {
-        category: 'catering'
-      },
-      category: null,
       notBiddingModal: false,
       chooseDateModal: false,
       referModal: false,
@@ -317,7 +312,7 @@ export default {
       reasonIsService: false,
       reasonIsInfo: false,
       reasonIsOther: false,
-      iconsUrl: 'http://static.maryoku.com/storage/icons/NewLandingPage/',
+      iconsUrl: 'http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/',
       isAgree: false,
       referTooltip: false,
       conditionTooltip: false,
@@ -350,20 +345,14 @@ export default {
     showSorryModal() {
       this.hideModal()
       this.sorryModal = true
-    },
-    goTo (router) {
-      this.$router.push(router)
     }
   },
   computed: {
   },
-  filters: {
-    withComma (amount) {
-      return amount ? amount.toLocaleString() : 0
-    }
-  },
   watch: {
-  }
+  },
+  filters: {
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -454,11 +443,6 @@ export default {
                     color: #f51355;
                   }
                 }
-                span {
-                  max-width: 500px;
-                  display: inline-block;
-                  vertical-align: middle;
-                }
               }
             }
           } 
@@ -532,7 +516,6 @@ export default {
         cursor: pointer;
         border-right: 1px solid #707070;
         text-decoration: underline;
-        background: transparent;
 
         img {
           padding-left: 19px;
@@ -628,9 +611,6 @@ export default {
           right: 50px;
           color: #050505;
           cursor: pointer;
-          img {
-            width: 20px;
-          }
         }
       }
       &__body {
@@ -689,9 +669,6 @@ export default {
           right: 60px;
           color: #050505;
           cursor: pointer;
-          img {
-            width: 20px;
-          }
         }
       }
       &__body {
@@ -820,9 +797,6 @@ export default {
           right: 60px;
           color: #050505;
           cursor: pointer;
-          img {
-            width: 20px;
-          }
         }
       }
       &__body {
@@ -883,9 +857,6 @@ export default {
           right: 60px;
           color: #050505;
           cursor: pointer;
-          img {
-            width: 20px;
-          }
         }
       }
       &__body {

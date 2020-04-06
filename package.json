@@ -23,7 +23,7 @@
         "fullcalendar": "3.9.0",
         "fuse.js": "3.3.0",
         "google-maps": "3.3.0",
-        "html2canvas": "^1.0.0-rc.3",
+        "html2canvas": "^1.0.0-rc.5",
         "ignore-loader": "^0.1.2",
         "jquery": "^3.4.1",
         "jspdf": "^1.5.3",
