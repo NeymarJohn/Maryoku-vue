@@ -53,6 +53,7 @@ import CurrentEventsNew from "@/pages/app/Events/CurrentEventsNew.vue"
 import EventTimeLineNew from "@/pages/app/Events/components/EventTimeLineNew.vue"
 import BookingEvent from "@/pages/app/Events/components/BookingEvent.vue"
 import EventProposalDetails from "@/pages/app/Events/components/EventProposalDetails.vue"
+import ExportTimeLine from "@/pages/app/Events/components/ExportTimeLine.vue"
 
 // Dashboard pages
 import EmployeeMain from '@/pages/Dashboard/Pages/CommonInfoProfile/Employee.vue'
@@ -598,6 +599,16 @@ let NewEventPages = {
     }
   },
   {
+      path: '/events/:id/edit/timeline/export',
+      name: 'EditTimeLine',
+      component: ExportTimeLine,
+      meta: {
+          title: 'Timeline',
+          gtm: 'Event Timeline',
+          opaque: false
+      }
+  },
+  {
     path: '/events/:id/booking/:blockId',
     name: 'BookingEvent',
     component: BookingEvent,
@@ -668,6 +679,7 @@ let NewEventPages = {
   }
   ]
 }
+
 
 let SigninSignupPage = {
   path: '/register',

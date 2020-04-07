@@ -11,8 +11,6 @@
           :src="`${iconUrl}Component 36 (2).svg`"
           :style="`transform: ${isSelected ? 'rotate(90deg)' : ''}`"
         />
-        <!-- <md-icon v-if="!isSelected">navigate_next</md-icon>
-        <md-icon v-else>keyboard_arrow_down</md-icon> -->
       </div>
     </div>
     <div class="vendor-info-cont" v-if="isSelected">

@@ -51,6 +51,7 @@
           :subtotal="400"
           :active="true"
           :isEdit="false"
+          :step="3"
         >
         </editable-proposal-sub-item>
         <editable-proposal-sub-item
@@ -60,6 +61,7 @@
           :subtotal="400"
           :active="true"
           :isEdit="false"
+          :step="3"
         >
         </editable-proposal-sub-item>
         <editable-proposal-sub-item
@@ -69,6 +71,7 @@
           :subtotal="400"
           :active="true"
           :isEdit="false"
+          :step="3"
         >
         </editable-proposal-sub-item>
         <editable-proposal-sub-item
@@ -78,6 +81,7 @@
           :subtotal="400"
           :active="true"
           :isEdit="false"
+          :step="3"
         >
         </editable-proposal-sub-item>
         <editable-proposal-sub-item
@@ -87,21 +91,39 @@
           :subtotal="400"
           :active="true"
           :isEdit="false"
+          :step="3"
         >
         </editable-proposal-sub-item>
-        <div class="bundle-discount">
-          <div class="left">
-            <span>
-              Discount 
-            </span>
-            <span>
-              10%
-            </span>
+        <div class="discount-tax-wrapper">
+          <div class="item">
+            <div class="left">
+              <span>
+                Discount 
+              </span>
+              <span>
+                10%
+              </span>
+            </div>
+            <div class="right">
+              <span>
+                -$160.00
+              </span>
+            </div>
           </div>
-          <div class="right">
-            <span>
-              $160.00
-            </span>
+          <div class="item">
+            <div class="left">
+              <span>
+                Taxes
+              </span>
+              <span>
+                18%
+              </span>
+            </div>
+            <div class="right">
+              <span>
+                $200.00
+              </span>
+            </div>
           </div>
         </div>
         <div class="editable-sub-items-footer">
@@ -112,42 +134,92 @@
             $800.00
           </span>
         </div>
+        <div class="services-check-list-wrapper">
+          <h4>What do we include in this proposal?</h4>
+          <div class="check-list-cont">
+            <ul>
+              <li>
+                <check-list-item
+                  :name="`Set up`"
+                  :iconUrl="iconUrl"
+                  :desc="`Lorem`"
+                ></check-list-item>
+              </li>
+              <li>
+                <check-list-item
+                  :name="`In-house bar services`"
+                  :qty="2"
+                  :iconUrl="iconUrl"
+                  :desc="`Lorem`"
+                ></check-list-item>
+              </li>
+              <li>
+                <check-list-item
+                  :name="`Linens`"
+                  :iconUrl="iconUrl"
+                  :desc="`Lorem`"
+                ></check-list-item>
+              </li>
+              <!-- <li>
+                <a class="add-service"><img :src="`${iconUrl}Asset 567.svg`"/>Add Another</a>
+              </li> -->
+            </ul>
+          </div>
+        </div>
+        <div class="extras-wrapper">
+          <h4><img :src="`${iconUrl}Asset 576.svg`"/>Extras</h4>
+          <p>We suggest these features to the client with this proposal</p>
+          <div class="extra-items">
+            <check-list-item
+              :name="`Lorem`"
+              :iconUrl="iconUrl"
+              :desc="`Lorem`"
+              :extra="true"
+              :price="`$100.00`"
+            ></check-list-item>
+            <check-list-item
+              :name="`Lorem`"
+              :iconUrl="iconUrl"
+              :desc="`Lorem`"
+              :extra="true"
+              :price="`$100.00`"
+            ></check-list-item>
+            <check-list-item
+              :name="`Lorem`"
+              :iconUrl="iconUrl"
+              :desc="`Lorem`"
+              :extra="true"
+              :price="`$100.00`"
+            ></check-list-item>
+          </div>
+        </div>
+        <div class="attachments-cont">
+          <h4>Attachments</h4>
+          <div class="files-cont">
+            <div class="item">
+              <img :src="`${iconUrl}Asset 578.svg`"/> Kosher_certificate.pdf
+            </div>
+            <div class="item">
+              <img :src="`${iconUrl}Asset 578.svg`"/> Kosher_certificate.pdf
+            </div>
+            <div class="item">
+              <img :src="`${iconUrl}Asset 578.svg`"/> Kosher_certificate.pdf
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <!-- <div class="tax-cont">
-      <div class="left">
-        <span>Taxes</span>
-        <span>18%</span>
-      </div>
-      <div class="right">
-        <span>$200.00</span>
-      </div>
-    </div>
-    <div class="total-cont">
-      <div class="left">
-        <span>
-          Total Bundle
-        </span>
-      </div>
-      <div class="right">
-        <span class="org-price">
-          $1,800
-        </span>
-        <br/>
-        <span class="discounted">
-          $1,600.00
-        </span>
-      </div>
-    </div> -->
   </div>    
 </template>
 <script>
   import EditableProposalSubItem from './EditableProposalSubItem.vue'
+  import CheckListItem from './CheckListItem.vue'
 
   export default {
     name: 'proposal-pricing-item',
     components: {
-      EditableProposalSubItem
+      EditableProposalSubItem,
+      CheckListItem,
     },
     props: {
       category: String,
@@ -304,12 +376,11 @@
       }
 
       .subitems {
+        background: #f7f7f7;
         margin-top: 30px;
 
         .editable-sub-items-header {
-          padding: 0px 34px 26px 34px;
-          margin-left: -34px;
-          margin-right: -34px;
+          padding: 40px 34px 26px 34px;
 
           span {
             display: inline-block;
@@ -317,46 +388,52 @@
             font-weight: 800;
 
             &:first-child {
-              width: 40%;
+              width: calc(100% - 375px - 155px - 150px);
             }
             &:nth-child(2) {
-              width: 10%;
+              margin-right: 170px;
             }
             &:nth-child(3) {
-              width: 15%;
+              margin-right: 150px;
             }
             &:last-child {
-              margin-right: 0;
+              margin-right: 155px;
             }
           }
         }
-        .bundle-discount {
-          padding: 34px 38px 34px 38px;
-          margin: 0 -40px;
+        .discount-tax-wrapper {
+          padding: 0 38px;
+          background: #ededed;
           border-top: 1.5px solid #818080;
-          display: flex;
-          justify-content: space-between;
-          font-size: 16px;
-          font-weight: 800;
-          color: #818080;
 
-          .left {
-            span {
-              &:first-child {
-                margin-right: 48px;
+          .item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            font-weight: 800;
+            color: #818080;
+            padding: 24px 0;
+            .left {
+              span {
+                &:first-child {
+                  margin-right: 48px;
+                }
               }
             }
-          }
-          .right {
-            span {
-              margin-right: 325px;
+            .right {
+              span {
+                margin-right: 155px;
+              }
+            }
+            &:first-child {
+              border-bottom: 1px solid #707070;
             }
           }
         }
         .editable-sub-items-footer {
-          padding: 37px 38px 0 38px;
-          margin: 0 -40px;
-          border-top: 1.5px solid #818080;
+          background: #424242;
+          color: white;
+          padding: 20px 40px;      
           display: flex;
           justify-content: space-between;
 
@@ -365,26 +442,129 @@
             font-weight: 800;
 
             &:last-child {
-              margin-right: 325px;
+              margin-right: 155px;
+            }
+          }
+        }
+      }
+      .services-check-list-wrapper {
+        background-color: #ffffff;
+        padding: 50px 0px 60px 0px;
+        display: flex;
+        flex-wrap: wrap;
+
+        h4 {
+          text-transform: capitalize;
+          font-size: 22px;
+          font-weight: 800;
+          margin: 0 0 32px 0;
+        }
+        .check-list-cont {
+          width: 100%;
+          ul {
+            padding: 0;
+            list-style: none;
+            -webkit-column-count: 2;
+            -moz-column-count: 2;
+            column-count: 2;
+            list-style-position: inside;
+            li {
+              a {
+                &.add-service {
+                  cursor: pointer;
+                  display: inline-block;
+                  padding: 15px 40px;
+                  img {
+                    width: 10px;
+                    margin-right: 10px;
+                  }
+                  font-size: 14px;
+                  border: 1px dashed #f51355;
+                  border-radius: 3px;
+                }
+              }
+              &:first-child, &:nth-child(2n) {
+                margin-left: 0!important;
+                margin-right: 70px;
+              }
+              &:nth-child(2n+1) {
+                margin-left: 60px;
+              }
+              &:nth-child(2n) {
+                &:after {
+                  content: "";
+                  background-color: #000;
+                  position: absolute;
+                  width: 1px;
+                  height: auto;
+                  display: block;
+                }
+              }
+            }
+          }
+        }
+      }
+      .extras-wrapper {
+        margin-left: -60px;
+        margin-right: -50px;
+        padding: 60px;
+        background: #ffffff;
+        border-top: 1px solid #818080;
+        h4 {
+          font-size: 22px;
+          font-weight: 800;
+          margin: 0;
+
+          img {
+            width: 14px;
+            margin-right: 16px;
+            top: -2px;
+            position: relative;
+          }
+        }
+        p {
+          margin-top: 13px;
+          margin-bottom: 35px;
+          font-size: 16px;
+        }
+        .extra-items {
+          width: 75%;
+        }
+      }
+      .attachments-cont {
+        margin-left: -60px;
+        margin-right: -50px;
+        padding: 60px;
+        background: #ffffff;
+        border-top: 1px solid #818080;
+        h4 {
+          font-size: 22px;
+          font-weight: 800;
+          margin: 0;
+          margin-bottom: 30px;
+        }
+        .files-cont {
+          display: flex;
+          .item {
+            border: 1px solid #f51355;
+            color: #f51355;
+            border-radius: 3px;
+            font-size: 16px;
+            padding: 18px 30px;
+            margin-right: 40px;
+
+            img {
+              width: 12px;
+              margin-right: 10px;
+              transform: rotate(45deg);
+            }
+
+            &:last-child {
+              margin-right: 0;
             }
           }
         }
       }
     }
-
-    .tax-cont {
-      padding: 22px 40px 25px 40px;
-      border: solid 0.75px #050505;
-      background-color: #e0e0e0;
-      color: #818080;
-      font-size: 16px;
-      font-weight: 800;
-      display: flex;
-      justify-content: space-between;
-
-      .right {
-        margin-right: 130px;
-      }
-    }    
   }
 </style>

@@ -65,38 +65,6 @@
             <md-icon>keyboard_arrow_right</md-icon>
           </a>
         </div> -->
-        <!-- <div class="check-list-wrapper">
-          <h4>What do we inlcude in this proposal?</h4>
-          <ul>
-            <li>
-              <md-icon>check_circle</md-icon> Set up
-            </li>
-            <li>
-              <md-icon>check_circle</md-icon> Clean up
-            </li>
-            <li>
-              <md-icon>check_circle</md-icon> In-house bar services
-            </li>
-            <li>
-              <md-icon>check_circle</md-icon> Tables
-            </li>
-            <li>
-              <md-icon>check_circle</md-icon> Set up
-            </li>
-            <li>
-              <md-icon>check_circle</md-icon> Clean up
-            </li>
-            <li>
-              <md-icon>check_circle</md-icon> In-house bar services
-            </li>
-            <li>
-              <md-icon>check_circle</md-icon> Tables
-            </li>
-            <li>
-              <md-icon>check_circle</md-icon> Set up
-            </li>
-          </ul>
-        </div> -->
       </div>
 
       <div class="pricing-cont">
@@ -131,20 +99,6 @@
           :itemType="`total`"
         ></proposal-pricing-item>
       </div>
-      <!-- <div class="attachments-cont">
-        <h4>Attachments</h4>
-        <div class="files-cont">
-          <div class="item">
-            <md-icon>attach_file</md-icon> Kosher_certificate.pdf
-          </div>
-          <div class="item">
-            <md-icon>attach_file</md-icon> Kosher_certificate.pdf
-          </div>
-          <div class="item">
-            <md-icon>attach_file</md-icon> Kosher_certificate.pdf
-          </div>
-        </div>
-      </div> -->
       <div class="policy-cont">
         <div class="title">
           <h4><img :src="`${iconUrl}Asset 594.svg`"/> Our Policy</h4>
@@ -518,36 +472,6 @@
         font-weight: normal;
         margin-top: 14px;
         margin-bottom: 30px;
-      }
-    }
-
-    .attachments-cont {
-      padding: 60px 0;
-      border-top: 1px solid #818080;
-      h4 {
-        font-size: 22px;
-        font-weight: 800;
-        margin: 0;
-        margin-bottom: 30px;
-      }
-      .files-cont {
-        display: flex;
-        .item {
-          border: 1px solid #f51355;
-          color: #f51355;
-          border-radius: 3px;
-          font-size: 16px;
-          padding: 18px 30px;
-          margin-right: 40px;
-
-          i {
-            color: #f51355;
-          }
-
-          &:last-child {
-            margin-right: 0;
-          }
-        }
       }
     }
 

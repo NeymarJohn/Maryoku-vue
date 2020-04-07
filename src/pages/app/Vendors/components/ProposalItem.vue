@@ -86,6 +86,7 @@
         :subtotal="400"
         :active="true"
         :isEdit="false"
+        :step="1"
       >
       </editable-proposal-sub-item>
       <editable-proposal-sub-item
@@ -95,6 +96,7 @@
         :subtotal="400"
         :active="true"
         :isEdit="false"
+        :step="1"
       >
       </editable-proposal-sub-item>
       <div class="tax-discount-wrapper">

@@ -15,15 +15,14 @@
             </div>
             <div class="header-actions">
                 <ul>
-                    <li><a href=""><img :src="`${menuIconsURL}Asset 9.svg`"></a></li>
+                    <li><a href="javascript:void(0)" @click="download"><img :src="`${menuIconsURL}Asset 9.svg`"></a></li>
                     <li><a href=""><img :src="`${menuIconsURL}Asset 5.svg`"></a></li>
-                    <li><a href=""><img :src="`${menuIconsURL}Asset 8.svg`"></a></li>
+                    <li ><a href=""><img :src="`${menuIconsURL}Asset 8.svg`"></a></li>
                 </ul>
             </div>
         </div>
 
-        <div class="md-layout-item md-xlarge-size-60 md-large-size-60 md-small-size-50 time-line-section mr-auto"
-             style="">
+        <div class="md-layout-item md-xlarge-size-60 md-large-size-60 md-small-size-50 time-line-section mr-auto" ref="content">
 
             <!--<md-button name="event-planner-tab-timeline-preview" class="event-planner-tab-timeline-preview md-info md-sm preview-event" @click="previewEvent">
               Preview
@@ -34,6 +33,7 @@
             </div>
 
             <div class="timeline-items-list">
+
                 <div class="timeline-items-list__item" v-for="(timelineItem,indx) in timeline" :key="indx">
                     <div class="item-header">
                         <div class="header-title">Day {{numberToWord(indx + 1)}} {{timelineItem.date}}</div>
@@ -280,6 +280,11 @@ import SideBar from '../../../../components/SidebarPlugin/NewSideBar'
 import SidebarItem from '../../../../components/SidebarPlugin/NewSidebarItem.vue'
 import ProgressSidebar from './progressSidebar'
 
+
+import jsPDF from 'jspdf'
+import html2canvas from "html2canvas"
+
+
 export default {
   name: 'event-time-line',
   components: {
@@ -384,6 +389,11 @@ export default {
 
   }),
   methods: {
+
+      download() {
+          this.$router.push({path: `/events/` + this.event.id + `/edit/timeline/export`})
+
+      },
     /**
      * Handle drop block to time line items
      * @param data
