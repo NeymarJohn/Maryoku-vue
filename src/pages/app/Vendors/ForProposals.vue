@@ -4,40 +4,37 @@
       <div class="md-layout-item md-size-70">
         <proposal-steps :step="step"></proposal-steps>
         <div class="step-wrapper" v-if="step < 2">
-          <proposal-add-personal-message
-            :title="`Let's begin with a perosnal message`"
-            :desc="`Write something nice, we'll add it to the final proposal`"
-            :img="`${iconUrl}Asset 611.svg`"
-          ></proposal-add-personal-message>
           <proposal-item
             :category="`Venue`"
-            :subTitle="`For Whole Event`"
-            :img="`${iconUrl}Asset 614.svg`"
-            :step="step"
           >
           </proposal-item>
-          <proposal-item
-            :category="`Catering`"
-            :subTitle="`9:00 AM - 12:00AM`"
-            :img="`${iconUrl}Asset 615.svg`"
-            :step="step"
-          >
-          </proposal-item>
+          <proposal-title-with-icon
+            :icon="`message`"
+            :title="`Add Personal message`"
+            :desc="`*suggested`"
+          ></proposal-title-with-icon>
+          <proposal-add-personal-message
+            :desc="`Write something nice, we'll add it to the final proposal`"
+          ></proposal-add-personal-message>
+          <proposal-title-with-icon
+            :icon="`attachment`"
+            :title="`Add Files`"
+            :desc="`First mandatory files, and than other`"
+          ></proposal-title-with-icon>
+          <proposal-add-files></proposal-add-files>
         </div>
         <div class="step-wrapper" v-if="step == 2">
           <h3>
             Can you also provide these services for this event?
           </h3>
           <p>
-            <img :src="`${iconUrl}Group 5280 (5).svg`"/>Did you know? Adding vendors gets your fair commission if they get picked!
+            Did you know? Adding vendors gets your fair commission if they get picked!
           </p>
           <proposal-item
             :category="`Photographer`"
             :isCollapsed="true"
             :isDropdown="true"
             :proposalRange="false"
-            :img="`${iconUrl}Asset 607.svg`"
-            :step="step"
           >
           </proposal-item>
           <proposal-item
@@ -45,8 +42,6 @@
             :isCollapsed="true"
             :isDropdown="true"
             :proposalRange="true"
-            :img="`${iconUrl}Asset 606.svg`"
-            :step="step"
           >
           </proposal-item>
           <proposal-item
@@ -54,8 +49,6 @@
             :isCollapsed="true"
             :isDropdown="true"
             :proposalRange="true"
-            :img="`${iconUrl}Asset 605.svg`"
-            :step="step"
           >
           </proposal-item>
           <refer-new-vendor></refer-new-vendor>
@@ -64,8 +57,7 @@
           <proposal-event-summary
             :title="`Event Information & Details`"
             :eventData="event"
-            :isEdit="false" 
-            :iconUrl="iconUrl"
+            :isEdit="false"
           >
           </proposal-event-summary>          
         </div>
@@ -110,8 +102,7 @@ export default {
   },
   data() {
     return {
-      step: 0,
-      iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
+      step: 0
     }
   },
   created() {
@@ -119,33 +110,12 @@ export default {
     }.bind(this));
   },
   mounted () {
-    this.step = 0
+    this.step = 3
     this.event = {
       name: "March Madness event",
       date: "December 25, 2019",
       arrival_time: "11:00AM"
     }
-    this.$root.$on('next-step-vendor-proposal', () => {
-      console.log('next')
-
-      if (this.step == 0) {
-        this.step = 2
-      } else if (this.step > -1 && this.step < 3) {
-        this.step++
-      }
-
-      console.log('wrapperStep', this.step)
-    })
-    this.$root.$on('prev-step-vendor-proposal', () => {
-      console.log('prev')
-
-      if (this.step == 2) {
-        this.step = 0
-      } else if (this.step > 0) {
-        this.step--
-      }
-      console.log('wrapperStep', this.step)
-    })
   },
   methods: {
     
@@ -175,11 +145,6 @@ export default {
         font-size: 14px;
         font-weight: normal;
         margin: 0;
-
-        img {
-          width: 27px;
-          margin-right: 15px;
-        }
       }
     }
   }
