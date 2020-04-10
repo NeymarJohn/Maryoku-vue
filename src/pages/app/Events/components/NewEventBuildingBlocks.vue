@@ -38,10 +38,10 @@
                       $ {{block.allocatedBudget ? block.allocatedBudget : 0}}
                   </template>
                   <template v-else-if="block.allocatedBudget && block.numberOfParticipants">
-                      $ {{block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(2).toString() : 0}}
+                      $ {{block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(0).toString() : 0}}
                   </template>
                   <template v-else>
-                      $ {{block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : 0}}
+                      $ {{block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(0).toString() : 0}}
                   </template>
 
                   <md-button class="md-rose md-sm md-simple edit-budget" v-if="!block.editBudget" @click="showEditElementBudget(block)"> Edit </md-button>
