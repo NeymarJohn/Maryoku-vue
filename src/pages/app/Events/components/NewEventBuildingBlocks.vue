@@ -163,7 +163,7 @@
         </tbody>
       </table>
     </draggable>
-    <table class="event-blocks__table event-block-table">
+    <!-- <table class="event-blocks__table event-block-table">
       <tbody>
         <tr>
           <td class="event-block-element unexpected" width="40%">
@@ -175,10 +175,10 @@
                 <div style="visibility: hidden">
                     <md-button
                         class="book-btn md-sm"
-                    >Book Vendors</md-button>
+                    >Book Vendors</md-button> -->
 
                     <!--                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
-                </div>
+                <!-- </div>
             </td>
           <td class="expand"  >
             <a href>
@@ -187,7 +187,7 @@
           </td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
 
     <table class="event-blocks__table actions-table">
       <tbody>

@@ -153,7 +153,7 @@ export default {
               title: 'Book ' + item.title,
               status: 'not-complete',
               route: 'booking/' + item.id,
-              icon: 'http://static.maryoku.com/storage/icons/Budget+Elements/venue.svg',
+              icon: `http://static.maryoku.com/storage/icons/Budget+Elements/${item.componentId}.svg`,
             })
 
             return item
