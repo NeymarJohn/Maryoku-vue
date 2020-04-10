@@ -35,7 +35,7 @@
               <td class="planned" width="20%">
 
                   <template v-if="type==='total'">
-                      $ {{block.allocatedBudget ? block.allocatedBudget : 0}}
+                      $ {{block.allocatedBudget ? block.allocatedBudget : 0 | withComma}}
                   </template>
                   <template v-else-if="block.allocatedBudget && block.numberOfParticipants">
                       $ {{block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(0).toString() : 0}}
@@ -303,7 +303,7 @@
             /> Tips
             <span class="percent">12%</span>
           </td>
-          <td width="20%">${{totalBudgetTaxes.toFixed(2)}}</td>
+          <td width="20%">${{Math.round(totalBudgetTaxes) | withComma}}</td>
           <td class="actual green-label" width="15%">
             <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png" /> $0
           </td>
@@ -324,7 +324,7 @@
         </tr>
         <tr class="total">
           <td class="total-title">Total</td>
-          <td>${{totalBudget | withComma}}</td>
+          <td>${{Math.round(totalBudget) | withComma}}</td>
           <td colspan="3" class="total-value">${{totalActual | withComma}}</td>
         </tr>
       </tbody>
