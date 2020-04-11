@@ -150,44 +150,103 @@
               </td>
             </tr>
             <tr class="item-actions">
-              <!--                  <td class="see-proposals">-->
-              <!--                      <div>Relish Caterers & Venues</div>-->
-              <!--                      <md-button class="md-rose md-simple see-proposal" >See Proposal</md-button>-->
-              <!--                  </td>-->
-              <td colspan="5" class="actions-list text-right">
-                <md-button class="md-rose md-simple" @click="reviewProposals(block)">Add My Vendor</md-button>
-                <md-button class="md-rose md-simple" @click="deleteBlock(block.id)">Delete Category</md-button>
-              </td>
+                <template v-if="block.proposalsState==='get-offers'">
+                    <td colspan="5" class="actions-list text-right">
+                        <md-button class="md-rose md-simple" @click="reviewProposals(block)">Add My Vendor</md-button>
+                        <md-button class="md-rose md-simple" @click="deleteBlock(block.id)">Delete Category</md-button>
+                    </td>
+                </template>
+                <template v-else>
+                    <td class="see-proposals">
+                        <div>Relish Caterers & Venues</div>
+                        <md-button class="md-rose md-simple see-proposal" >View Contract</md-button>
+                    </td>
+                    <td colspan="4" class="actions-list text-right">
+                        <md-button class="md-default md-simple" @click="reviewProposals(block)">Request Changes</md-button>
+                        <md-button class="md-default md-simple" @click="deleteBlock(block.id)">Cancel Vendor</md-button>
+                    </td>
+                </template>
             </tr>
           </template>
         </tbody>
       </table>
     </draggable>
-    <!-- <table class="event-blocks__table event-block-table">
-      <tbody>
-        <tr>
-          <td class="event-block-element unexpected" width="40%">
-            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+18.png" /> Unexpected
-          </td>
-          <td class="planned" width="20%">$0</td>
-          <td class="actual" width="15%" >$0</td>
-            <td class="status" width="15%">
-                <div style="visibility: hidden">
-                    <md-button
-                        class="book-btn md-sm"
-                    >Book Vendors</md-button> -->
+      <table class="event-blocks__table event-block-table">
+          <tbody>
+          <tr class="taxes">
+              <td class="taxes-title" width="40%">
+                  <img
+                      src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
+                      width="20"
+                  /> Extras
+              </td>
+              <td width="20%">${{Math.round(totalBudgetTaxes) | withComma}}</td>
+              <td class="actual green-label" width="15%">
 
-                    <!--                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
-                <!-- </div>
-            </td>
-          <td class="expand"  >
-            <a href>
-              <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table> -->
+              </td>
+              <td class="status" width="15%">
+                  <div style="visibility: hidden">
+                      <md-button
+                          class="book-btn md-sm"
+                      >Book Vendors</md-button>
+
+                      <!--                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
+                  </div>
+              </td>
+              <td class="expand">
+                  <a href="javascript:void(0)" @click="expandExtras = !expandExtras">
+                      <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
+                  </a>
+              </td>
+          </tr>
+          <template v-if="expandExtras">
+              <tr class="taxes">
+                  <td class="taxes-title" width="40%">
+                      <img
+                          src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
+                          width="20"
+                      /> Tips
+                      <span class="percent">18%</span>
+                  </td>
+                  <td width="20%">${{Math.round(totalBudgetTaxes) | withComma}}</td>
+                  <td class="actual green-label" width="15%">
+                      <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png" /> $0
+                  </td>
+                  <td class="status" colspan="2">
+                      <div style="visibility: hidden">
+                          <md-button
+                              class="book-btn md-sm"
+                          >Book Vendors</md-button>
+
+                          <!--                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
+                      </div>
+                  </td>
+              </tr>
+              <tr class="taxes fees-row">
+                  <td class="taxes-title" width="40%">
+                      <img
+                          src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
+                          width="20"
+                      /> Fees
+                      <span class="percent">3%</span>
+                  </td>
+                  <td width="20%">${{Math.round(totalBudgetFees) | withComma}}</td>
+                  <td class="actual green-label" width="15%">
+                      <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png" /> $0
+                  </td>
+                  <td class="status" colspan="2">
+                      <div style="visibility: hidden">
+                          <md-button
+                              class="book-btn md-sm"
+                          >Book Vendors</md-button>
+                      </div>
+                  </td>
+              </tr>
+          </template>
+
+          </tbody>
+      </table>
+
 
     <table class="event-blocks__table actions-table">
       <tbody>
@@ -287,46 +346,28 @@
         <!--                                    </td>-->
         <!--                                </tr>-->
 
-        <tr class="add-category">
-          <td colspan="5">
-            <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
-              <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2019.svg" /> Add new category
-            </md-button>
-          </td>
-        </tr>
 
-        <tr class="taxes">
-          <td class="taxes-title" width="40%">
-            <img
-              src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
-              width="20"
-            /> Tips
-            <span class="percent">12%</span>
-          </td>
-          <td width="20%">${{Math.round(totalBudgetTaxes) | withComma}}</td>
-          <td class="actual green-label" width="15%">
-            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png" /> $0
-          </td>
-            <td class="status" width="15%">
-                <div style="visibility: hidden">
-                    <md-button
-                        class="book-btn md-sm"
-                    >Book Vendors</md-button>
 
-                    <!--                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
-                </div>
+        <tr class="unused-budget">
+            <td class="title" width="40%">
+                <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2019.svg" /> Unused Budget
             </td>
-          <td class="expand">
-            <a href>
-              <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
-            </a>
-          </td>
+            <td colspan="4">$100</td>
         </tr>
         <tr class="total">
-          <td class="total-title">Total</td>
-          <td>${{Math.round(totalBudget) | withComma}}</td>
+          <td class="total-title" width="40%">Total</td>
+          <td width="20%">${{Math.round(totalBudget) | withComma}}</td>
           <td colspan="3" class="total-value">${{totalActual | withComma}}</td>
         </tr>
+
+        <tr class="add-category">
+            <td colspan="5">
+                <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
+                    <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2019.svg" /> Add new category
+                </md-button>
+            </td>
+        </tr>
+
       </tbody>
     </table>
 
@@ -436,7 +477,8 @@ export default {
     show: false,
     totalBudget: 0,
     totalActual: 0,
-    totalBudgetTaxes: 0,
+      totalBudgetTaxes: 0,
+      totalBudgetFees: 0,
     showCategoryModal: false,
     timelineIconsURL: 'http://static.maryoku.com/storage/icons/timeline/svg/',
     iconsURL: 'http://static.maryoku.com/storage/icons/Event%20Page/',
@@ -457,7 +499,8 @@ export default {
       category: '',
       name: '',
       budget: ''
-    }
+    },
+      expandExtras: false
   }),
   computed: {
     ...mapGetters({
@@ -558,6 +601,7 @@ export default {
 
       vm.totalBudget = 0
       vm.totalBudgetTaxes = 0
+      vm.totalBudgetFees = 0
 
       let res = this.event.components
       this.$set(this, 'eventBuildingBlocks', res)
@@ -569,7 +613,8 @@ export default {
       this.eventBuildingBlocks.forEach(item => {
         if (item.allocatedBudget && vm.type === 'total') {
           vm.totalBudget += parseInt(item.allocatedBudget)
-          vm.totalBudgetTaxes += parseInt(item.allocatedBudget) * 0.12
+          vm.totalBudgetTaxes += parseInt(item.allocatedBudget) * 0.18
+          vm.totalBudgetFees += parseInt(item.allocatedBudget) * 0.03
         } else if (item.allocatedBudget) {
           vm.totalBudget += item.numberOfParticipants
             ? parseInt(item.allocatedBudget) /
@@ -583,6 +628,13 @@ export default {
             : (parseInt(item.allocatedBudget) /
                 parseInt(vm.event.numberOfParticipants)) *
               0.12
+            vm.totalBudgetFees += item.numberOfParticipants
+                ? (parseInt(item.allocatedBudget) /
+                parseInt(item.numberOfParticipants)) *
+                0.03
+                : (parseInt(item.allocatedBudget) /
+                parseInt(vm.event.numberOfParticipants)) *
+                0.03
         }
 
         // if (item.allocatedBudget) {

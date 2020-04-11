@@ -48,6 +48,18 @@ $baseColor : #5c2153;
     min-height: auto;
 }
 
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+    background: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
 .new-event-side-bar {
 
     display: block;
@@ -420,6 +432,36 @@ $baseColor : #5c2153;
                     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
                     background: #fff;
                     border-radius: 3px;
+
+                    td {
+                        border: solid 1px $rose;
+                    }
+
+                    .md-button{
+                        .md-ripple {
+                            font-size: 16px;
+                        }
+                    }
+                }
+
+                &.unused-budget {
+                    box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+                    background: #fff;
+                    border-radius: 3px;
+                    color : #0047cc;
+
+                    .title {
+                        font-family: 'Manrope-Bold', sans-serif;
+                        color : #0047cc;
+                        .taxes-title {
+                            font-size: 16px;
+                        }
+                    }
+
+                    img {
+                        width : 20px;
+                        margin-right : 0.5em;
+                    }
                 }
 
                 &.details-row {
@@ -460,21 +502,34 @@ $baseColor : #5c2153;
                 }
 
                 &.taxes {
-                    background: none;
-                    box-shadow: none;
-                    border-radius: 0;
 
-                    td {
-                        border-top : 1px solid #707070;
-                        border-bottom : 1px solid #707070;
-
-                        &:first-child {
-                            border-left : 1px solid #707070;
+                    &.fees-row {
+                        position: relative;
+                        &:after {
+                            width: 95%;
+                            background: #e2e2e2;
+                            height: 1px;
+                            content: ' ';
+                            position: absolute;
+                            left: 0;
+                            margin: 0 auto;
+                            right: 0;
                         }
-                        &:last-child {
-                            border-right : 1px solid #707070;
-                        }
+                    }
 
+
+                    .taxes-title {
+
+                        &:after {
+                            width : 7px;
+                            background: #818080;
+                            height: 100%;
+                            content : ' ';
+                            position: absolute;
+                            left : 0;
+                            top : 0;
+                            border-radius: 3px 0 0 3px;
+                        }
                     }
                 }
 
@@ -484,9 +539,9 @@ $baseColor : #5c2153;
 
                     td {
                         color : #fff;
-                        padding: 0.8em 0 0.8em 1.4em !important;
+                        padding: 1.3em 0 1.3em 1.4em !important;
                         &.total-title {
-                            font-size: 13px;
+                            font-size: 18px;
                             font-family: 'Manrope-Bold',sans-serif;
                         }
                         &.total-value {
@@ -770,6 +825,20 @@ $baseColor : #5c2153;
         }
 
         .item-actions {
+
+            position: relative;
+
+            &:after {
+                width: 95%;
+                background: #ababab;
+                height: 1px;
+                content: ' ';
+                position: absolute;
+                left: 0;
+                margin: 0 auto;
+                right: 0;
+            }
+
             .see-proposals {
                 padding-left : 4em;
 
@@ -788,7 +857,7 @@ $baseColor : #5c2153;
             }
             .actions-list {
                 padding-right : 2em;
-                padding-top: 2.8em;
+                padding-top: 1em;
 
                 .md-button {
                     border-radius: 0;
@@ -841,7 +910,7 @@ $baseColor : #5c2153;
     .timeline-section-title {
         font-size: 18px;
         color: #050505;
-        padding: 3px 5px 0;
+        padding: 3px 0 0;
         margin-top: 2em;
 
         img {
@@ -929,7 +998,7 @@ $baseColor : #5c2153;
     left: 60px;
     top : 0;
     bottom : 0;
-    width : 294px;
+    width : 303px;
     background: #fff;
 
     .summer-party {
@@ -938,7 +1007,7 @@ $baseColor : #5c2153;
         padding : 1.5em 0 0.6em;
         position: absolute;
         left: 0;
-        right: 0;
+        right: 7px;
         top: 0;
         z-index: 999999;
         box-shadow: 0 43px 41px 0 rgba(0, 0, 0, 0.16);
@@ -1007,7 +1076,6 @@ $baseColor : #5c2153;
         height: 100%;
         overflow: auto;
 
-
         &__item {
             box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.12);
             background-color: #ffffff;
@@ -1047,7 +1115,7 @@ $baseColor : #5c2153;
                 letter-spacing: normal;
                 text-align: left;
                 color: #050505;
-                
+
                 &:before {
                     content : ' ';
                     position: absolute;
@@ -1158,7 +1226,7 @@ $baseColor : #5c2153;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding : 0 2em;
+    padding : 0 3em;
 
     .md-button {
         .md-ripple {
