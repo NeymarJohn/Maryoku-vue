@@ -60,6 +60,7 @@ $baseColor : #5c2153;
     box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
 
+
 .new-event-side-bar {
 
     display: block;
@@ -432,7 +433,6 @@ $baseColor : #5c2153;
                     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
                     background: #fff;
                     border-radius: 3px;
-
                     td {
                         border: solid 1px $rose;
                     }
@@ -442,6 +442,7 @@ $baseColor : #5c2153;
                             font-size: 16px;
                         }
                     }
+
                 }
 
                 &.unused-budget {
@@ -502,34 +503,40 @@ $baseColor : #5c2153;
                 }
 
                 &.taxes {
+                    background: none;
+                    box-shadow: none;
+                    border-radius: 0;
 
-                    &.fees-row {
-                        position: relative;
-                        &:after {
-                            width: 95%;
-                            background: #e2e2e2;
-                            height: 1px;
-                            content: ' ';
-                            position: absolute;
-                            left: 0;
-                            margin: 0 auto;
-                            right: 0;
+                    td {
+
+                        &.fees-row {
+                            position: relative;
+                            &:after {
+                                width: 95%;
+                                background: #e2e2e2;
+                                height: 1px;
+                                content: ' ';
+                                position: absolute;
+                                left: 0;
+                                margin: 0 auto;
+                                right: 0;
+                            }
                         }
-                    }
 
+                        .taxes-title {
 
-                    .taxes-title {
-
-                        &:after {
-                            width : 7px;
-                            background: #818080;
-                            height: 100%;
-                            content : ' ';
-                            position: absolute;
-                            left : 0;
-                            top : 0;
-                            border-radius: 3px 0 0 3px;
+                            &:after {
+                                width : 7px;
+                                background: #818080;
+                                height: 100%;
+                                content : ' ';
+                                position: absolute;
+                                left : 0;
+                                top : 0;
+                                border-radius: 3px 0 0 3px;
+                            }
                         }
+
                     }
                 }
 
@@ -857,7 +864,7 @@ $baseColor : #5c2153;
             }
             .actions-list {
                 padding-right : 2em;
-                padding-top: 1em;
+                padding-top: 2.8em;
 
                 .md-button {
                     border-radius: 0;
@@ -1075,6 +1082,7 @@ $baseColor : #5c2153;
         padding-top: 7.9em;
         height: 100%;
         overflow: auto;
+
 
         &__item {
             box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.12);
