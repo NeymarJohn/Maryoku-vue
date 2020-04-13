@@ -1,21 +1,21 @@
 <template>
   <div class="vendor-budget-list-wrapper">
-    <h4><img :src="`${iconsUrl}Asset 276.svg`"> {{title}}</h4>
+    <h4><img :src="`${iconsUrl}Asset 500.svg`"> {{title}}</h4>
     <div class="total">
       <strong>Total Event Budget:</strong>$5,000
     </div>
     <p>
-      <img :src="`${iconsUrl}Asset 262.svg`">{{description}}
+      <img :src="`${iconsUrl}Group 5180.svg`">{{description}}
     </p>
     <div class="budget-list">
       <div class="items">
         <div 
           class="item" 
-          v-for="(vendor, vIndex) in items" 
-          :key="vIndex"
+          v-for="(r, ri) in requirements" 
+          :key="ri"
         >
-          <span><img :src="vendor.img">{{vendor.category}}</span>
-          <span>${{vendor.budget | withComma}}</span>
+          <span><img :src="r.img">{{r.requirementTitle}}</span>
+          <span>${{r.price | withComma}}</span>
         </div>
       </div>
       <div class="total">
@@ -40,15 +40,20 @@
     },
     data: () => ({
       isLoading:true,
-      iconsUrl: 'http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/'
+      requirements: [],
+      iconsUrl: 'http://static.maryoku.com/storage/icons/NewLandingPage/'
     }),
-    methods: {
-    },
     created() {
 
     },
     mounted() {
       this.isLoading = false;
+      this.getRequirements()
+    },
+    methods: {
+      getRequirements() {
+        this.requirements = this.items[0].requirements
+      }
     },
     computed: {
     },

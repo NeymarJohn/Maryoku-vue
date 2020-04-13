@@ -205,7 +205,7 @@ export default {
 
       this.isLoading = true
       let value = new EventComponent({
-        componentId: item.key,
+        componentId: item.id,
         todos: [],
         values: [],
         vendors: [],

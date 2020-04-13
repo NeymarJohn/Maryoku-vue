@@ -30,7 +30,7 @@
             >
               <md-table-cell md-label="Event Name">{{ item.title }}</md-table-cell>
               <!--<md-table-cell md-label="Occasion">{{ item.occasion }}</md-table-cell>-->
-              <md-table-cell md-label="Event Type">{{item.eventType?item.eventType.name:item.eventType }}</md-table-cell>
+              <md-table-cell md-label="Event Type">{{ item.eventType }}</md-table-cell>
               <md-table-cell md-label="Date">{{ item.eventStartMillis | moment }}</md-table-cell>
               <md-table-cell md-label="Customer Name">{{ item.owner.department }}</md-table-cell>
               <md-table-cell
