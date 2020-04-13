@@ -196,7 +196,7 @@ export default {
       }
 
       this.$store.commit('updateComponent', {
-        componentId: item.id,
+        componentId: item.key,
         icon: item.icon,
         color: item.color,
         todos: [],

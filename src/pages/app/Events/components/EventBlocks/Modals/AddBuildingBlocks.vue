@@ -92,7 +92,7 @@ export default {
       let event = new CalendarEvent({id: this.event.id})
 
       let new_block = {
-        componentId: item.id,
+        componentId: item.key,
         componentCategoryId: item.categoryId,
         todos: '',
         values: '',
