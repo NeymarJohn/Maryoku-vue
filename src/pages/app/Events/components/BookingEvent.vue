@@ -11,7 +11,7 @@
             <div class="header-title">
                 <h3>Hi Rachel</h3>
                 <p>
-                    We found the top {{selectedBlock.proposalsCount}} proposals for your event,
+                    We found the top {{selectedBlock.proposalsCount}} proposals for your event,<br>
                     Book now before it’s too late
                 </p>
             </div>
