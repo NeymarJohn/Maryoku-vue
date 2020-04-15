@@ -128,7 +128,7 @@ export default {
 
       this.selectedItems.forEach(item => {
         let new_item = {
-          componentId: item.id,
+          componentId: item.key,
           componentCategoryId: item.categoryId,
           todos: '',
           values: '',

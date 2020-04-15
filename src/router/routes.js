@@ -144,80 +144,65 @@ let authPages = {
 }
 
 let publicPages = {
-  path: "/",
-  component: ForVendorLayout,
-  name: "ForVendors",
-  children: [
-    {
-      path: '/vendors/:vendorId/proposal-request/:id',
-      name: 'ForVendors',
-      component: ForVendors,
-      meta: {
-        auth: false,
-        title: 'For Vendors',
-        gtm: 'ForVendors'
-      },
+  path: '/',
+  component: PublicLayout,
+  name: 'Public',
+  children: [{
+    path: '/events/:id/public',
+    name: 'ShowEvent',
+    component: ShowEvent,
+    meta: {
+      auth: false,
+      title: 'Event',
+      gtm: 'Event'
     }
-  ]
-  // path: '/',
-  // component: PublicLayout,
-  // name: 'Public',
-  // children: [{
-  //   path: '/events/:id/public',
-  //   name: 'ShowEvent',
-  //   component: ShowEvent,
-  //   meta: {
-  //     auth: false,
-  //     title: 'Event',
-  //     gtm: 'Event'
-  //   }
-  // },
-  // {
-  //   path: '/proposal-request/:id',
-  //   name: 'VendorProposals2',
-  //   component: VendorProposals,
-  //   meta: {
-  //     auth: false,
-  //     title: 'Vendor Proposals',
-  //     gtm: 'VendorProposals'
-  //   }
-  // },
-  // {
-  //   path: '/vendors/:vendorId/proposal-request/:id',
-  //   name: 'VendorProposals',
-  //   component: VendorProposals,
-  //   meta: {
-  //     auth: false,
-  //     title: 'Vendor Proposals',
-  //     gtm: 'VendorProposals'
-  //   }
-  // }
+  },
+  {
+    path: '/proposal-request/:id',
+    name: 'VendorProposals2',
+    component: VendorProposals,
+    meta: {
+      auth: false,
+      title: 'Vendor Proposals',
+      gtm: 'VendorProposals'
+    }
+  },
+  {
+    path: '/vendors/:vendorId/proposal-request/:id',
+    name: 'VendorProposals',
+    component: VendorProposals,
+    meta: {
+      auth: false,
+      title: 'Vendor Proposals',
+      gtm: 'VendorProposals'
+    }
+  }
     /* {
       path: "/get-started",
       name: "GetStarted",
       component: Onboarding,
       meta: {auth: false, title: 'Get Started', gtm: "GetStarted"}
     }, */
-  // ]
+  ]
 }
 
-// let forVendors = {
-//   path: "/",
-//   component: ForVendorLayout,
-//   name: "ForVendors",
-//   children: [
-//     {
-//       path: "/for-vendors",
-//       name: "ForVendors",
-//       component: ForVendors,
-//       meta: {
-//         auth: false,
-//         title: 'For Vendors',
-//         gtm: 'ForVendors'
-//       },
-//     },
-//   ]
-// }
+let forVendors = {
+  path: "/",
+  component: ForVendorLayout,
+  name: "ForVendors",
+  children: [
+    {
+      path: "/for-vendors",
+      name: "ForVendors",
+      component: ForVendors,
+      meta: {
+        auth: false,
+        title: 'For Vendors',
+        gtm: 'ForVendors'
+      },
+    },
+  ]
+}
 
 let forProposals = {
   path: "/",
@@ -896,7 +881,7 @@ const routes = [
   PublicCreateEvent,
   HomePages,
   SigninSignupPage,
-  // forVendors,
+  forVendors,
   forProposals,
   NewEventPages
 ]

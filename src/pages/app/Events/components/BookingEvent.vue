@@ -26,7 +26,7 @@
 
         <div class="booking-header d-flex justify-content-between md-layout-item md-size-100">
             <div class="header-title">
-                <h4><img :src="`${budgetElementsIConsURL}venue.svg`"> Book {{selectedBlock.title}}</h4>
+                <h4><img :src="`${budgetElementsIConsURL}${selectedBlock.componentId}.svg`"> Book {{selectedBlock.title}}</h4>
             </div>
             <div class="header-actions">
                 <md-button class="md-default md-simple">Compare Proposals <md-icon>keyboard_arrow_right</md-icon></md-button>
