@@ -370,14 +370,15 @@
               <div class="input-icon">
                 <img :src="`${iconsURL}Group 3090.svg`" width="20" />
               </div>
-              <input type="text" class="form-control" v-model="newBuildingBlock.budget" />
+              <input type="number" class="form-control" v-model="newBuildingBlock.budget" />
+              <div class="md-error" v-if="remainingBudget < newBuildingBlock.budget">This budget should be less than the remaining.</div>
             </div>
           </div>
         </div>
       </template>
       <template slot="footer">
         <md-button class="md-default md-simple cancel-btn" @click="showCategoryModal = false">Cancel</md-button>
-        <md-button class="md-rose add-category-btn" @click="addBuildingBlock">Add Category</md-button>
+        <md-button :disabled="remainingBudget < newBuildingBlock.budget"  class="md-rose add-category-btn" @click="addBuildingBlock">Add Category</md-button>
       </template>
     </modal>
   </div>
@@ -429,6 +430,7 @@ export default {
     // auth: auth,
     isLoading: false,
     allocatedBudget: 0,
+    remainingBudget: 0,
     eventBuildingBlocks: [],
     eventBuildingBlocksList: [],
     currentBlockId: null,
@@ -545,6 +547,14 @@ export default {
             })
         }
       })
+    },
+    getRemainingBudget () {
+      if (!this.event) return;
+      if (!this.event.components) return;
+      this.allocatedBudget = this.event.components.reduce((s,item)=>{
+        return s + item.allocatedBudget
+      }, 0)
+      this.remainingBudget = this.event.totalBudget - this.allocatedBudget;
     },
     /**
      * Get Event building blocks
@@ -850,16 +860,22 @@ export default {
 
     addBuildingBlock () {
       // Save event interaction
+      console.log(this.event);
       let event = new CalendarEvent({ id: this.event.id })
       let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
 
+      if (this.remainingBudget < this.newBuildingBlock.budget) {
+        return;
+      }
+
       let newBlock = {
         componentId:
-          _.findWhere(this.components, {title: this.newBuildingBlock.category}).id,
+          _.findWhere(this.components, {title: this.newBuildingBlock.category}).key,
         // componentCategoryId: this.newBuildingBlock.categoryId,
         calendarEvent: { id: event.id },
         allocatedBudget: this.newBuildingBlock.budget
       }
+      
       new EventComponent(newBlock)
         .for(calendar, event)
         .save()
@@ -889,6 +905,7 @@ export default {
     }
   },
   mounted () {
+    this.getRemainingBudget()
     this.getEventBuildingBlocks()
     this.getCategoryBlocks()
     this.$on('refreshBuildingBlock', () => {
@@ -899,10 +916,12 @@ export default {
     event (newVal, oldVal) {
       // Get default event building blocks
       this.getEventBuildingBlocks()
+      this.getRemainingBudget()
     },
     eventComponents (newVal, oldVal) {
       // Get default event building blocks
       this.getEventBuildingBlocks()
+      this.getRemainingBudget()
     },
     elementsBudget (val) {
       this.switchingBudgetAndCost()

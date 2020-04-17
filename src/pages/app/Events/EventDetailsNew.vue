@@ -3,49 +3,6 @@
     <side-bar :event="event"></side-bar>
 
     <div class="event-details-header md-layout-item md-size-100">
-      <div class="header-actions">
-        <ul>
-          <li>
-            <a href>
-              <img :src="`${menuIconsURL}Asset 9.svg`" />
-            </a>
-          </li>
-          <li>
-            <a href>
-              <img :src="`${menuIconsURL}Asset 5.svg`" />
-            </a>
-          </li>
-          <li>
-            <a href>
-              <img :src="`${menuIconsURL}Asset 8.svg`" />
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="event-header__count">
-        <div class="count-item">
-          <div class="number">07</div>
-          <div class="count-label">DAYS</div>
-        </div>
-        <div class="count-item divider">:</div>
-        <div class="count-item">
-          <div class="number">11</div>
-          <div class="count-label">HOURS</div>
-        </div>
-        <div class="count-item divider">:</div>
-        <div class="count-item">
-          <div class="number">32</div>
-          <div class="count-label">MINUTES</div>
-        </div>
-        <div class="count-item with-icon">
-          <div class="icon">
-            <img :src="`${iconsURL}Asset%20152.svg`" width="20" />
-          </div>
-          <div class="count-label">To Event</div>
-        </div>
-      </div>
-
       <div class="event-details-info d-flex justify-content-start">
         <div
           class="event-title d-flex justify-content-center align-center"
@@ -57,7 +14,7 @@
             <md-icon>keyboard_arrow_right</md-icon>
           </md-button>
         </div>
-        <div class="event-items">
+        <!-- <div class="event-items">
           <div
             class="event-items__item"
             v-for="(item,i,index) in event.eventNeededServices"
@@ -69,77 +26,163 @@
             />
             <span>{{i}}</span>
           </div>
+        </div> -->
+        <div class="header-detail">
+          <div class="md-layout-item md-size-80">
+            <div class="header-info-section">
+              <div class="status-bar">
+                <div class="description">
+                  <span class="status-title">STATUS</span>
+                  <span class="status-info">
+                    <span class="status-percentage">22%</span> | <span class="status-tasks">4 tasks of 26</span>
+                  </span>
+                </div>
+                <div class="bar">
+                  <div class="progress-bar">
+                    <div class="guests-progress d-flex justify-content-center align-center">
+                      <div class="guests-progress__item header-status red" style="width : 22%; height:8px">
+                        <div class="progress"></div>
+                      </div>
+                      <div class="guests-progress__item header-status gray" style="width : 78%; height:8px">
+                        <div class="progress"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="section-header">
+                <img :src="`${iconsURL}Asset 162.svg`" /> Event’s details
+                Notice that the date has changed
+              </div>
+              <div class="card-content">
+                  <div class="event-details-list">
+                    <ul class="list-items">
+                      
+                      <li class="event-details-item">
+                        <img :src="`${iconsURL}Asset 165.svg`" width="20" />
+                        <span>
+                          {{event.eventStartMillis | formatDate}},
+                          {{event.eventStartMillis | formatTime}}
+                          ({{event.eventStartMillis |
+                          formatDuration(event.eventEndMillis)}}h)
+                        </span>
+                      </li>
+                      <li class="event-details-item">
+                        <img :src="`${iconsURL}Asset 166.svg`" width="20" />
+                        <span>{{event.numberOfParticipants}} Invited</span>
+                      </li>
+                      <li class="event-details-item">
+                       <img :src="`${iconsURL}Asset 162.svg`" width="20" />
+                        <span>Establishment / Activity day</span>
+                      </li>
+                    </ul>
+                    <ul class="list-items">
+                      <li class="event-details-item">
+                        <img :src="`${iconsURL}Asset 167.svg`" width="20" />
+                        <span>{{event.location}}</span>
+                      </li>
+                      <li class="event-details-item">
+                        <img :src="`${iconsURL}sun.svg`" width="20" />
+                        <span>{{event.eventDayPart}} Time event</span>
+                      </li>
+                      <li class="event-details-item">
+                        <md-button class="md-rose md-simple edit-btn">
+                          Edit Details
+                          <md-icon>keyboard_arrow_right</md-icon>
+                        </md-button>
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- <div class="event-weather">
+                    <div class="event-weather__icon">
+                      <img :src="`${iconsURL}Asset 161.svg`" width="40" />
+                    </div>
+                    <div class="event-weather__status">Mostly Sunny</div>
+                    <div class="event-weather__degree">
+                      <div class="degree-value">58</div>
+                      <ul class="degree-types">
+                        <li class="type red">F</li>
+                        <li class="type">C</li>
+                      </ul>
+                    </div>
+                    <div class="event-weather__details">
+                      <div class="details-item">Precipitation: 10%</div>
+                      <div class="details-item">Humidity: 38%</div>
+                      <div class="details-item">Wind: 7 mph</div>
+                    </div>
+                  </div> -->
+              </div>
+            </div>
+          </div>
         </div>
+        <div class="header-actions">
+          <ul>
+            <li>
+              <a href>
+                <img :src="`${menuIconsURL}Asset 9.svg`" />
+              </a>
+            </li>
+            <li>
+              <a href>
+                <img :src="`${menuIconsURL}Asset 5.svg`" />
+              </a>
+            </li>
+            <li>
+              <a href>
+                <img :src="`${menuIconsURL}Asset 8.svg`" />
+              </a>
+            </li>
+          </ul>
+          
+        </div>
+        
+
       </div>
+      <div class="event-header__count">
+          <div class="count-item">
+            <div class="number">07</div>
+            <div class="count-label">DAYS</div>
+          </div>
+          <div class="count-item divider">:</div>
+          <div class="count-item">
+            <div class="number">11</div>
+            <div class="count-label">HOURS</div>
+          </div>
+          <div class="count-item divider">:</div>
+          <div class="count-item">
+            <div class="number">32</div>
+            <div class="count-label">MINUTES</div>
+          </div>
+          <div class="count-item with-icon">
+            <div class="icon">
+              <img :src="`${iconsURL}Asset%20152.svg`" width="20" />
+            </div>
+            <div class="count-label">To Event</div>
+          </div>
+        </div>
     </div>
 
-    <div class="md-layout justify-content-between" style="margin-top : 2em;">
-      <div class="md-layout-item md-size-40">
+    <div class="md-layout justify-content-between notes" style="margin-top : 2em;">
+      <div class="md-layout-item md-size-25">
         <div class="card-section">
           <div class="section-header">
-            <img :src="`${iconsURL}Asset 162.svg`" /> Event’s details
+            <img :src="`${iconsURL}Asset 162.svg`" /> Notes
           </div>
 
           <div class="card-content">
             <div class="d-flex justify-content-start align-center">
-              <div class="event-details-list">
-                <ul class="list-items">
-                  <li class="event-details-item">
-                    <img :src="`${iconsURL}sun.svg`" width="20" />
-                    <span>{{event.eventDayPart}} Time event</span>
-                  </li>
-                  <li class="event-details-item">
-                    <img :src="`${iconsURL}Asset 165.svg`" width="20" />
-                    <span>
-                      {{event.eventStartMillis | formatDate}},
-                      {{event.eventStartMillis | formatTime}}
-                      ({{event.eventStartMillis |
-                      formatDuration(event.eventEndMillis)}}h)
-                    </span>
-                  </li>
-                  <li class="event-details-item">
-                    <img :src="`${iconsURL}Asset 166.svg`" width="20" />
-                    <span>{{event.numberOfParticipants}} Invited</span>
-                  </li>
-                  <li class="event-details-item">
-                    <img :src="`${iconsURL}Asset 167.svg`" width="20" />
-                    <span>{{event.location}}</span>
-                  </li>
-                </ul>
-              </div>
-              <div class="event-weather">
-                <div class="event-weather__icon">
-                  <img :src="`${iconsURL}Asset 161.svg`" width="40" />
-                </div>
-                <div class="event-weather__status">Mostly Sunny</div>
-                <div class="event-weather__degree">
-                  <div class="degree-value">58</div>
-                  <ul class="degree-types">
-                    <li class="type red">F</li>
-                    <li class="type">C</li>
-                  </ul>
-                </div>
-                <div class="event-weather__details">
-                  <div class="details-item">Precipitation: 10%</div>
-                  <div class="details-item">Humidity: 38%</div>
-                  <div class="details-item">Wind: 7 mph</div>
-                </div>
-              </div>
+              <input type="text" class="form-control input-new-note" v-model="notes.newNote" placeholder="Add new note" />
             </div>
-          </div>
-
-          <div class="card-footer">
-            <div class="footer-content"></div>
-            <div class="footer-actions">
-              <md-button class="md-rose md-simple edit-btn">
-                Edit
-                <md-icon>keyboard_arrow_right</md-icon>
-              </md-button>
+            <div class>
+              <md-radio v-model="radio" :value="false">Lorem ipsum dolor sit amet sit</md-radio>
+              <md-radio v-model="radio" value="my-radio">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed</md-radio>
+              <md-radio v-model="radio" :value="objA">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</md-radio>
+              <md-radio v-model="radio" :value="objB">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</md-radio>
             </div>
           </div>
         </div>
       </div>
-      <div class="md-layout-item md-size-60">
+      <div class="md-layout-item md-size-75">
         <div class="card-section">
           <div class="section-header">
             <img :src="`${iconsURL}Group 3090.svg`" /> Budget & Vendors
@@ -147,8 +190,15 @@
 
           <div class="card-content">
             <div class="d-flex justify-content-between">
+              <div class="budget-details">
+                <div>Total Budget</div>
+                <div class="total-budget-value">
+                  $ {{event.totalBudget | withComma}}
+                </div>
+                <md-button class="md-rose md-simple edit-total-budget">Edit</md-button>
+              </div>
               <div class="budget-percentage">
-                <div class="chart-section d-flex justify-content-around align-center">
+                <div class="chart-section">
                   <div class="title title-budget-prise-negative">
                     <div class="budget-pie-container">
                       <chart-component
@@ -167,32 +217,40 @@
                   </div>
 
                   <div class="chart-legends">
-                    <div
-                      class="legend-item used"
-                    >Used ${{event.totalBudget - getTotalRemainingBudget}}</div>
-                    <div
-                      class="legend-item remaining"
-                    >Remaining ${{getTotalRemainingBudget | withComma}}</div>
-                  </div>
-                </div>
-
-                <div class="budget-details d-flex justify-content-center align-center">
-                  <div class="total-budget-value">$ {{event.totalBudget | withComma}}</div>
-                  <div class="total-budget">
-                    Total Budget
-                    <br />
-                    <md-button class="md-rose md-simple edit-total-budget">Edit</md-button>
+                    <div class="legend-item used">
+                      Used ${{event.totalBudget - getTotalRemainingBudget}}
+                    </div>
+                    <div class="legend-item remaining">
+                      Remaining ${{getTotalRemainingBudget | withComma}}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div class="booked-vendors">
+              <div class="book-venue">
                 <div class="booked-vendors__header d-flex justify-content-start align-center">
-                  <h3 class="header-title">Booked Vendors</h3>
-                  <md-button class="md-rose md-simple">Edit</md-button>
+                  <img src="http://static.maryoku.com/storage/icons/Budget Elements/venuerental.svg" width="20px">
+                  <h3 class="header-title">Choose your next venue</h3>
+                </div>
+                <div class="book-items d-flex align-center">
+                  <div class="venue-item">
+                    <span class="budget">$2,300</span>
+                    <div class="description">Trump National Golf Club Philadelphia</div>
+                  </div>
+                  <div class="venue-item">
+                    <span class="budget">$2,500</span>
+                    <div class="description">Trump National Golf Club Philadelphia</div>
+                  </div>
+                  <div class="venue-item">
+                    <span class="budget">$1,900</span>
+                    <div class="description">Del Frisco’s Double Eagle Steakhouse San Diego</div>
+                  </div>
                 </div>
 
-                <div class="booked-vendors__items" v-if="event.components">
+                <md-button class="md-rose md-simple edit-btn md-flat btn-outlined">
+                  Book Venue
+                </md-button>
+                <!-- <div class="booked-vendors__items" v-if="event.components">
                   <div
                     class="vendor-item"
                     :class="{'completed': block.status==='completed'}"
@@ -213,7 +271,7 @@
                     </div>
                     <div class="vendor-title">{{block.title}}</div>
                   </div>
-                </div>
+                </d> -->
               </div>
             </div>
           </div>
@@ -221,7 +279,7 @@
           <div class="card-footer">
             <div class="footer-content">
               <img :src="`${iconsURL}Group 1175.svg`" width="20" />
-              Band proposals are waiting for your respond
+              Venue proposals are waiting for your respond
             </div>
             <div class="footer-actions">
               <md-button class="md-default md-simple edit-btn md-just-icon">
@@ -232,10 +290,10 @@
         </div>
       </div>
 
-      <div class="md-layout-item md-size-60">
+      <div class="md-layout-item md-size-25">
         <div class="card-section">
           <div class="section-header">
-            <img :src="`${timlineIconsURL}Group 2774.svg`" /> Timeline
+            <img :src="`${timlineIconsURL}timeline-title.svg`" /> Timeline
           </div>
 
           <div class="card-content">
@@ -251,12 +309,14 @@
           </div>
 
           <div class="card-footer">
-            <div class="footer-content">
+            <div class="footer-content d-flex align-center">
               <img
                 src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg"
                 width="20"
               />
-              Good Job, you finished creating your timeline
+              <div>
+                Good Job, you finished creating your timeline
+              </div>
             </div>
             <div class="footer-actions">
               <md-button class="md-rose md-simple edit-btn">
@@ -268,54 +328,66 @@
         </div>
       </div>
 
-      <div class="md-layout-item md-size-40">
+      <div class="md-layout-item md-size-75">
         <div class="card-section">
           <div class="section-header">
             <md-icon>attach_money</md-icon>RSVP & Campaigns
+            <div class="header-info">
+              Status:
+              <span class="status"> Final </span>
+            </div>
           </div>
 
-          <div class="card-content">
-            <div class="text-center">
-              <div class="guests-details d-flex justify-content-center align-center">
-                <div class="total-budget-value">{{event.numberOfParticipants | withComma}}</div>
+          <div class="card-content rsvp">
+            <div class="d-flex justify-center align-center">
+              <div class="guests-details text-center">
+                <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+26.png">
                 <div class="total-budget">
                   Total Guests
-                  <br />
-                  <md-button class="md-rose md-simple edit-total-budget">Edit</md-button>
+                </div>
+                <div class="total-budget-value">{{event.numberOfParticipants | withComma}}</div>
+                <md-button class="md-rose md-simple edit-total-budget">Edit</md-button>
+              </div>
+              <div class="progress-bar">
+                <div class="guests-progress d-flex justify-content-center align-center">
+                  <div class="guests-progress__item green" style="width : 66%;">
+                    <div class="value">1204</div>
+                    <div class="progress"></div>
+                    <div class="percentage">66%</div>
+                  </div>
+                  <div class="guests-progress__item red" style="width : 21%;">
+                    <div class="value">240</div>
+                    <div class="progress"></div>
+                    <div class="percentage">21%</div>
+                  </div>
+                  <div class="guests-progress__item gray" style="width : 13%;">
+                    <div class="value">120</div>
+                    <div class="progress"></div>
+                    <div class="percentage">13%</div>
+                  </div>
+                </div>
+
+                <div class="guests-legends d-flex justify-content-center align-center">
+                  <div class="guests-legends__item green">
+                    Yes
+                    <md-icon>keyboard_arrow_down</md-icon>
+                  </div>
+                  <div class="guests-legends__item red">
+                    No
+                    <md-icon>keyboard_arrow_down</md-icon>
+                  </div>
+                  <div class="guests-legends__item gray">
+                    No replay
+                    <md-icon>keyboard_arrow_down</md-icon>
+                  </div>
                 </div>
               </div>
-
-              <div class="guests-progress d-flex justify-content-center align-center">
-                <div class="guests-progress__item green" style="width : 66%;">
-                  <div class="value">1204</div>
-                  <div class="progress"></div>
-                  <div class="percentage">66%</div>
-                </div>
-                <div class="guests-progress__item red" style="width : 21%;">
-                  <div class="value">240</div>
-                  <div class="progress"></div>
-                  <div class="percentage">21%</div>
-                </div>
-                <div class="guests-progress__item gray" style="width : 13%;">
-                  <div class="value">120</div>
-                  <div class="progress"></div>
-                  <div class="percentage">13%</div>
-                </div>
-              </div>
-
-              <div class="guests-legends d-flex justify-content-center align-center">
-                <div class="guests-legends__item green">
-                  Yes
-                  <md-icon>keyboard_arrow_down</md-icon>
-                </div>
-                <div class="guests-legends__item red">
-                  No
-                  <md-icon>keyboard_arrow_down</md-icon>
-                </div>
-                <div class="guests-legends__item gray">
-                  No replay
-                  <md-icon>keyboard_arrow_down</md-icon>
-                </div>
+              <div class="teaser">
+                <span>Create your "Don't forget" teaser</span>
+                and send it to those who didn't respond yet
+                <md-button class="md-rose md-simple edit-btn md-flat btn-outlined">
+                  Create Campaign
+                </md-button>
               </div>
             </div>
 
@@ -441,9 +513,13 @@ export default {
     disabledDragging: false,
     timelineAttachment: null,
     iconsURL: 'http://static.maryoku.com/storage/icons/Event%20Page/',
-    timlineIconsURL: 'http://static.maryoku.com/storage/icons/timeline/',
+    timlineIconsURL: 'http://static.maryoku.com/storage/icons/Timeline-New/',
     menuIconsURL:
-      'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/'
+      'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
+    notes: {
+      newNote: ""
+    },
+    radio: false
   }),
   methods: {
     /**
@@ -785,7 +861,7 @@ export default {
               padding: 0,
               height: 156,
               donut: true,
-              donutWidth: 8
+              donutWidth: 34
             }
           }
 
@@ -945,5 +1021,204 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+  .status-bar {
+    .status-info {
+      margin-left: 40%;
+    }
+  }
+  .md-radio {
+    display: flex;
+    margin: 50px 0px;
+
+
+  }
+  .md-radio-container {
+      border: 1px solid rgba(0, 0, 0, 0.54) !important;
+      width: 30px;
+      min-width: 30px;
+      height: 30px;
+      top: 2px;
+      -webkit-transition: .2s !important;
+      transition: .2s !important;
+  }
+  .budget-details {
+    text-align: center;
+  }
+  .total-budget-value {
+    white-space: nowrap;
+  }
+  .budget-total {
+    padding: 0 20px;
+    flex-grow: 1;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    .budget-details {
+      height: max-content;
+      line-height: 2.5rem;
+    }
+  }
+  .budget-percentage {
+    padding: 0 20px;
+    border-left: 1px solid #e2e2e2;
+    border-right: 1px solid #e2e2e2;
+    flex-grow: 1;
+    .chart-legends{
+      margin: auto;
+    }
+  }
+  .book-venue {
+    flex-grow: 2;
+    max-width: 50%;
+    padding: 0 20px;
+    .booked-vendors__header{
+      margin:40px 40px 10px;
+    }
+    .venue-item {
+      border-radius: 3px;
+      border: solid 0.5px #707070;
+      flex-grow: 1;
+      margin: 8px;
+      width: 139px;
+      height: 161px;
+      text-align: center;
+      padding:16px;
+      .budget {
+        font-size: 20px;
+        font-weight: 800;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.3;
+        letter-spacing: normal;
+        text-align: right;
+        color: #050505;
+      }
+      .description {
+        margin-top:16px;
+        font-size: 16px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.38;
+        letter-spacing: normal;
+        text-align: center;
+        color: #050505;
+      }
+    }
+    
+  }
+  .btn-outlined {
+    margin: auto;
+    border-radius: 3px;
+    border: solid 1px #f51355;
+    margin-left: 50%;
+    box-sizing: border-box;
+    transform: translateX(-50%);
+  }
+  .rsvp {
+    .guests-details{
+      width: 25%;
+      padding: 10px 30px;
+    }
+    .progress-bar {
+      width: 50%;
+      border-left: 1px solid #e2e2e2;
+      border-right: 1px solid #e2e2e2;
+      padding: 10px 30px;
+    }
+    .teaser {
+      width: 25%;
+      padding: 20px 50px;
+    }
+  }
+  .guests-progress {
+    .header-status{
+        .progress {
+          height:10px;
+        }
+    }
+  }
+  .guests-progress {
+      &__item {
+          &:first-child {
+            z-index:10;
+            .progress {
+              border-radius: 100px;
+            }
+          }
+          &:nth-child(2) {
+            z-index:5;
+            .progress {
+              border-radius: 0 100px  100px 0;
+              &::before {
+                background-color: inherit;
+                content: '';
+                width: 50px;
+                height: 100%;
+                display: block;
+                transform: translateX(-30px);
+                z-index:5;
+              }
+            }
+          }
+          &:last-child {
+            z-index: 1;
+            .progress {
+              border-radius: 0 100px  100px 0;
+              &::before {
+                background-color: inherit;
+                content: '';
+                width: 50px;
+                height: 100%;
+                display: block;
+                transform: translateX(-30px);
+              }
+            }
+          }
+          .value {
+              font-weight: bold;
+              color : #050505;
+              font-size: 14px;
+          }
+
+          .progress {
+              height: 30px;
+              margin : 0.6em 0;
+          }
+          .percentage {
+              font-weight: bold;
+              font-size: 14px;
+          }
+
+          &.green {
+              .progress {
+                  background-color: #2cde6b;
+              }
+              .percentage {
+                  color : #2cde6b;
+              }
+          }
+          &.red {
+              .progress {
+                  background-color: #f51355;
+
+              }
+              .percentage {
+                  color : #f51355;
+              }
+
+          }
+          &.gray {
+              .progress {
+                  background-color: #d5d5d5;
+              }
+              .percentage {
+                  color : #d5d5d5;
+              }
+          }
+      }
+  }
+
+    
 </style>

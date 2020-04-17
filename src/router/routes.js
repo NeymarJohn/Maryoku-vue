@@ -52,7 +52,6 @@ import publicRegister from '@/pages/app/SinginSingup/publicRegister.vue'
 import CurrentEventsNew from "@/pages/app/Events/CurrentEventsNew.vue"
 import EventTimeLineNew from "@/pages/app/Events/components/EventTimeLineNew.vue"
 import BookingEvent from "@/pages/app/Events/components/BookingEvent.vue"
-import ChooseEventConcept from "@/pages/app/Events/components/ChooseEventConcept.vue"
 import EventProposalDetails from "@/pages/app/Events/components/EventProposalDetails.vue"
 import ExportTimeLine from "@/pages/app/Events/components/ExportTimeLine.vue"
 
@@ -618,16 +617,6 @@ let NewEventPages = {
       gtm: 'Booking Event',
       opaque: false
     }
-  },
-  {
-      path: '/events/:id/choose-concept',
-      name: 'ChooseEventConcept',
-      component: ChooseEventConcept,
-      meta: {
-          title: 'Choose Concept',
-          gtm: 'Choose Concept',
-          opaque: false
-      }
   },
   {
       path: '/events/:id/proposal-details/:vendorId/:proposalId',

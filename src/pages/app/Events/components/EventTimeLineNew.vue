@@ -33,16 +33,30 @@
             </div>
 
             <div class="timeline-items-list">
-
                 <div class="timeline-items-list__item" v-for="(timelineItem,indx) in timeline" :key="indx">
                     <div class="item-header">
-                        <div class="header-title">Day {{numberToWord(indx + 1)}} {{timelineItem.date}}</div>
+                        <div  class="header-title">
+                          <div class="time-line-date" v-if="!timelineItem.isEditable"> 
+                            Day {{numberToWord(indx + 1)}}  
+                            {{formatDate(timelineItem.itemDay)}}
+                            <!-- <md-button class="md-rose md-simple md-sm edit-budget" @click="editTimeline(indx)">Edit</md-button> -->
+                          </div>
+                          <div class="time-line-edit" v-if="timelineItem.isEditable">
+                            <md-datepicker v-model="timeline[indx].itemDay" :md-disabled-dates="getDisabledDates(indx)" :md-closed="closeEditTimeline(indx)"> </md-datepicker>
+                          </div> 
+                        </div>
                         <div class="header-actions">
-                            <md-button class="md-default md-simple md-just-icon" @click="addTimelineItem">
+                            <md-button class="md-default md-simple md-just-icon" @click="addTimelineItem(indx)">
                                 <md-icon>add_circle</md-icon>
                             </md-button>
                             <md-button class="md-default md-simple md-just-icon" @click="removeTimelineItem(indx)">
                                 <md-icon>delete_outline</md-icon>
+                            </md-button>
+                            <md-button class="md-default md-simple md-just-icon" @click="editTimeline(indx)" v-if="!timelineItem.isEditable">
+                                <md-icon>edit</md-icon>
+                            </md-button>
+                            <md-button class="md-default md-simple md-just-icon" @click="editTimeline(indx)" v-if="timelineItem.isEditable">
+                                <md-icon>check</md-icon>
                             </md-button>
                         </div>
                     </div>
@@ -148,7 +162,7 @@
                                         </md-button>
                                         <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-save"
                                                    class="event-planner-tab-timeline-item-save md-rose" v-if="!item.dateCreated"
-                                                   @click="saveTimelineItem(item,index)">Save
+                                                   @click="saveTimelineItem(item,index,timelineItem.itemDay)">Save
                                         </md-button>
                                         <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-edit"
                                                    class="event-planner-tab-timeline-item-edit md-rose" v-else
@@ -307,6 +321,7 @@ export default {
   data: () => ({
     // auth: auth,
     isLoading: true,
+    selectedDate:"",
     blocksList: [
       {
         id: 1,
@@ -444,9 +459,11 @@ export default {
 
             timelineItem.delete().then(result => {
               this.getTimelineItems()
+              this.setItemLoading(item, false, false);
             }).catch(error => {
               console.log(error)
               this.$root.$emit('timeline-updated', this.timelineItems)
+              this.setItemLoading(item, false, false);
             })
           }
         })
@@ -471,17 +488,37 @@ export default {
           return item.order
         })
 
-          this.timeline[0].items = _.sortBy(res, function (item) {
-              return item.order
-          })
+        this.timeline[0].items = _.sortBy(res, function (item) {
+            return item.order
+        })
         this.isLoading = false
+        var timelines = {};
+        // define timelines
         this.timelineItems.forEach((item) => {
           item.isItemLoading = false
+          if (!timelines[item.plannedDate]) timelines[item.plannedDate] = [];
+          item.isItemLoading = false;
+          timelines[item.plannedDate].push(item); 
         })
 
-          this.timeline[0].items.forEach((item) => {
-              item.isItemLoading = false
+        if (timelines.length > 0) {
+          this.timeline = [];
+          Object.keys(timelines).forEach((itemDay, index) => {
+            this.timeline.push({
+              itemDay: parseInt(itemDay),
+              isEditable: false,
+              items : timelines[itemDay]
+            })
           })
+        }
+        
+       
+        this.timeline = _.sortBy(this.timeline, function(item) {
+          return item.itemDay;
+        })
+        this.timeline[0].items.forEach((item) => {
+            item.isItemLoading = false
+        })
         this.event.timelineItems = this.timelineItems
         this.$root.$emit('timeline-updated', this.timelineItems)
       })
@@ -496,9 +533,16 @@ export default {
       }
       this.disabledDragging = false
     },
-    saveTimelineItem (item, index) {
-      this.setItemLoading(item, true, true)
-
+    saveTimelineItem (item, index, timelineDate) {
+      console.log(item, index);
+      console.log(timelineDate);
+      this.setItemLoading(item, true, true);
+      var plannedDate = 0;
+      if (typeof(timelineDate) == 'number') {
+        plannedDate = timelineDate;
+      } else if (timelineDate){
+        plannedDate = timelineDate.getTime();
+      }
       if ((!item.title && !item.description)) {
         this.$notify(
           {
@@ -530,17 +574,20 @@ export default {
         icon: item.icon,
         color: item.color,
         link: item.link,
-        attachment: this.timelineAttachment
+        attachment: this.timelineAttachment,
+        plannedDate : plannedDate
       }).for(calendar, event).save()
         .then(res => {
           this.getTimelineItems()
           this.disabledDragging = false
           this.$root.$emit('timeline-updated', this.timelineItems)
+          this.setItemLoading(item, false, true)
         })
         .catch(error => {
           console.log(error)
           this.disabledDragging = false
           this.$root.$emit('timeline-updated', this.timelineItems)
+          this.setItemLoading(item, false, true)
         })
 
       this.timelineAttachment = null
@@ -657,7 +704,13 @@ export default {
       reader.readAsDataURL(file)
     },
       formatDate(date) {
-          return moment(date).format('MM/DD/YY')
+        console.log(date);
+        console.log(new Date(date));
+        if (typeof(date) == 'number') {
+          console.log(moment(new Date(date)).format('MM/DD/YY') );
+          return moment(new Date(date)).format('MM/DD/YY') 
+        }
+        return moment(date).format('MM/DD/YY')
       },
       numberToWord(num) {
 
@@ -674,22 +727,54 @@ export default {
           return str;
 
       },
-      addTimelineItem() {
-
+      addTimelineItem(index) {
         let timelineLength = this.timeline.length - 1;
-
-        this.timeline.push({
-            date : this.formatDate(this.timeline[timelineLength].itemDay + (1000 * 60 * 60 * 24)),
-            items: [],
-            itemDay : this.timeline[timelineLength].itemDay + (1000 * 60 * 60 * 24)
-
+        // const isInsertable = this.timeline.length - 1 == index;
+        console.log(this.timeline[index].itemDay );
+        console.log(typeof(this.timeline[index].itemDay ));
+        let nextDay = 0;
+        if (typeof(this.timeline[index].itemDay ) == "number")
+          nextDay = this.timeline[index].itemDay + (1000 * 60 * 60 * 24);
+        else 
+          nextDay = this.timeline[index].itemDay.getTime() + (1000 * 60 * 60 * 24);
+          
+        if (this.timeline[index+1] && this.formatDate(this.timeline[index+1].itemDay) === this.formatDate(nextDay)) {
+          return;
+        }
+        this.timeline.forEach((item,index) => {
+          this.timeline[index].isEditable = false;
+        })
+        console.log(this.timeline);
+        console.log(this.timeline[index].itemDay);
+        console.log(nextDay);
+        this.timeline.splice(index + 1, 0, {
+            date : this.formatDate(nextDay),
+            items : [],
+            itemDay : nextDay,
+            isEditable : true
         })
       },
       removeTimelineItem(index) {
-          this.timeline.splice(index, 1)
+        swal({
+          title: 'Are you sure you want to say goodbye to your changes?',
+          text: 'Your changes will be deleted after that',
+          showCancelButton: true,
+          showCloseButton: true,
+          confirmButtonClass: "md-button  md-raised md-primary",
+          cancelButtonClass: "md-button ",
+          confirmButtonText: "Yes I'm sure",
+          buttonsStyling: false
+        })
+        .then(result => {
+         
+        })
+        .catch(err => {
+          console.log(err)
+        })
+
       },
       saveTimeline(){
-
+        
           swal({
               title: 'Saved It!',
               showCloseButton: true,
@@ -699,12 +784,47 @@ export default {
               confirmButtonText: 'Cool, Thanks',
               buttonsStyling: false
           }).then(result => {
-
-          })
-              .catch(err => {
+            
+          }).catch(err => {
                   console.log(err)
               })
 
+      },
+
+      onConfirm () {
+        this.value = 'Agreed'
+      },
+      onCancel () {
+        this.value = 'Disagreed'
+      },
+      editTimeline (index) {
+        if (!this.timeline[index]) return;
+        const isEdit = this.timeline[index].isEditable;
+        this.timeline.forEach((item,index) => {
+          this.timeline[index].isEditable = false;
+        })
+        this.timeline[index].isEditable = !isEdit;
+        
+        console.log("forceUpdate");
+        this.$forceUpdate()
+      },
+      closeEditTimeline (index) {
+        // this.timeline[index].isEditable = false;
+        console.log("forceUpdate - 1");
+        // this.$forceUpdate()
+      },
+      getDisabledDates (index) {
+        console.log(index);
+        const vm = this;
+        const checkDate = function(date) {
+          if (index == 0) {
+            return false;
+          }
+          if (!vm.timeline[index + 1])
+            return date.getTime() <= vm.timeline[index - 1].itemDay;
+          return date.getTime() <= vm.timeline[index - 1].itemDay || date.getTime() >= vm.timeline[index + 1].itemDay;
+        }
+        return checkDate;
       }
 
   },
@@ -723,7 +843,7 @@ export default {
 
         this.timeline[0].date = this.formatDate(this.event.eventStartMillis);
         this.timeline[0].itemDay = this.event.eventStartMillis;
-
+        // this.timeline[0]
         console.log(this.timeline[0]);
 
         this.getTimelineItems()
@@ -736,14 +856,30 @@ export default {
         console.log(event)
       })
     }.bind(this))
+
+    // this.dateFormat="DD/MM/YYYY"
   },
   mounted () {
     this.isLoading = true
+    // if (this.$material.locale.dateFormat !== "DD/MM/YY"){ 
+    //   this.$material.locale.dateFormat = "DD/MM/YY"
+    // }
+    // console.log("mounted");
     // if (this.event && this.event.id){
     //     this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
     //     this.getTimelineItems();
     // }
   },
+  // computed: {
+  //   dateFormat: {
+  //     get () {
+  //       return this.$material.locale.dateFormat
+  //     },
+  //     set (val) {
+  //       this.$material.locale.dateFormat = val
+  //     }
+  //   }
+  // },
   watch: {
     event (newVal, oldVal) {
       this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', true)
@@ -752,6 +888,6 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-
+<style scoped lang="scss">
+  $btn-color: #fff;
 </style>
