@@ -86,7 +86,7 @@
                         <span>{{event.eventDayPart}} Time event</span>
                       </li>
                       <li class="event-details-item">
-                        <md-button class="md-rose md-simple edit-btn">
+                        <md-button class="md-rose md-simple edit-btn" @click="showEditDetailModal=true">
                           Edit Details
                           <md-icon>keyboard_arrow_right</md-icon>
                         </md-button>
@@ -162,7 +162,7 @@
         </div>
     </div>
 
-    <div class="md-layout justify-content-between notes" style="margin-top : 2em;">
+    <div class="md-layout justify-content-between notes" style="margin:2em 50px;">
       <div class="md-layout-item md-size-25">
         <div class="card-section">
           <div class="section-header">
@@ -383,8 +383,9 @@
                 </div>
               </div>
               <div class="teaser">
-                <span>Create your "Don't forget" teaser</span>
-                and send it to those who didn't respond yet
+                <img src="http://static.maryoku.com/storage/icons/Event Page/Group 6044.svg" width="50"/>
+                <div class="campaign-description-1">Create your <br/> "Don't forget" teaser</div>
+                <div class="campaign-description-2">and send it to those who didn't respond yet</div>
                 <md-button class="md-rose md-simple edit-btn md-flat btn-outlined">
                   Create Campaign
                 </md-button>
@@ -440,6 +441,86 @@
         </div>
       </div>
     </div>
+    <modal v-if="showEditDetailModal" class="edit-event-model">
+      <template slot="header">
+        <div class="edit-event-model__header">
+          <h2>
+            Edit event's detail
+          </h2>
+          <div class="header-description">
+            <img :src="`${iconsURL}Group 1175.svg`" width="20" /> Changing the time on your status might cause price changes
+          </div>
+        </div>
+        <md-button
+          class="md-simple md-just-icon md-round modal-default-button"
+          @click="showEditDetailModal = false"
+        >
+          <md-icon>clear</md-icon>
+        </md-button>
+      </template>
+      <template slot="body">
+        <div class="md-layout">
+          <div class="md-layout-item md-size-100">
+            <div class="d-flex justify-content-between">
+              <md-radio v-model="radio" :value="false">Day Time event</md-radio>
+              <md-radio v-model="radio" value="my-radio">Eventing event</md-radio>
+              <md-radio v-model="radio" :value="objA">A whole day or more</md-radio>
+            </div>
+          </div>
+          <div class="md-layout-item md-size-100 text-left">
+            <label class="">Event Type</label>
+            <div class="form-group maryoku-field">
+              <md-field class="mt-0 mb-2">
+                <md-select v-model="eventType">
+                  <md-option
+                    v-for="(type,index) in eventTypes"
+                    :key="index"
+                    :value="type.id"
+                  >
+                    {{ type.name }}
+                  </md-option>
+                </md-select>
+              </md-field>
+              <!-- <v-select v-model="event.type" :options="eventTypes"></v-select> -->
+            </div>
+          </div>
+          <div class="md-layout-item md-size-100 text-left">
+            <label>Date</label>
+            <div class="form-group">
+              <md-datepicker
+                :class="[{'md-error': (event.date)}]"
+                v-model="event.date"
+                data-vv-name="date"
+                ref="datePicker"
+                required>
+              </md-datepicker>
+            </div>
+          </div> 
+          <div class="md-layout-item md-size-100 margin-bottom text-left">
+            <label>Number Of Guests</label>
+            <div class="form-group with-icon">
+              <div class="input-icon">
+                <img :src="`${iconsURL}Group 3090.svg`" width="20" />
+              </div>
+              <input type="number" class="form-control" v-model="event.numberOfParticipants" />
+            </div>
+          </div>
+          <div class="md-layout-item md-size-100 margin-bottom text-left">
+            <label>Location</label>
+            <div class="form-group with-icon">
+              <div class="input-icon">
+                <img :src="`${iconsURL}Group 3090.svg`" width="20" />
+              </div>
+              <input type="text" class="form-control" v-model="event.location" />
+            </div>
+          </div>
+        </div>
+      </template>
+      <template slot="footer">
+        <md-button class="md-default md-simple cancel-btn" @click="showEditDetailModal=false">Cancel</md-button>
+        <md-button class="md-red add-category-btn" @click="showEditDetailModal=false">Save</md-button>
+      </template>
+    </modal>
   </div>
 </template>
 <script>
@@ -468,7 +549,7 @@ import {
   Modal
 } from '@/components'
 import ChartComponent from '@/components/Cards/ChartComponent'
-
+import EditEventDetailModal from '@/components/Modals/EditEventDetailModal'
 import SideBar from '../../../components/SidebarPlugin/NewSideBar'
 import SidebarItem from '../../../components/SidebarPlugin/NewSidebarItem.vue'
 
@@ -519,7 +600,8 @@ export default {
     notes: {
       newNote: ""
     },
-    radio: false
+    radio: false,
+    showEditDetailModal: false
   }),
   methods: {
     /**
@@ -859,7 +941,7 @@ export default {
             },
             options: {
               padding: 0,
-              height: 156,
+              height: 220,
               donut: true,
               donutWidth: 34
             }
@@ -875,6 +957,11 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch('event/getEventTypes', {
+      data: this.$auth.user.defaultCalendarId,
+      ctx: this
+    });
+
     [...Array(12).keys()].map(x =>
       x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined
     );
@@ -955,6 +1042,9 @@ export default {
     }
   },
   computed: {
+     ...mapGetters({
+      eventTypes: 'event/getEventTypesList'
+    }),
     getPaidAmount () {
       let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
       let event = new CalendarEvent({ id: this.event.id })
@@ -1071,9 +1161,12 @@ export default {
   .book-venue {
     flex-grow: 2;
     max-width: 50%;
-    padding: 0 20px;
+    padding: 0 2em 0 4em;
     .booked-vendors__header{
       margin:40px 40px 10px;
+    }
+    .book-items {
+      margin-bottom: 40px;
     }
     .venue-item {
       border-radius: 3px;
@@ -1105,6 +1198,7 @@ export default {
         text-align: center;
         color: #050505;
       }
+      
     }
     
   }
@@ -1115,6 +1209,14 @@ export default {
     margin-left: 50%;
     box-sizing: border-box;
     transform: translateX(-50%);
+    font-size: 15px;
+    font-weight: 800;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.33;
+    letter-spacing: 0.32px;
+    text-align: center;
+    color: #f51355;
   }
   .rsvp {
     .guests-details{
@@ -1130,6 +1232,29 @@ export default {
     .teaser {
       width: 25%;
       padding: 20px 50px;
+      text-align: center;
+      .campaign-description-1{
+        font-size: 20px;
+        font-weight: 800;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.35;
+        letter-spacing: 0.42px;
+        text-align: center;
+        color: #000000;
+        margin:10px 0;
+      }
+      .campaign-description-2{
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.57;
+        letter-spacing: 0.29px;
+        text-align: center;
+        color: #000000;
+        margin:0px 0px 10px;
+      }
     }
   }
   .guests-progress {
@@ -1220,5 +1345,6 @@ export default {
       }
   }
 
+  
     
 </style>
