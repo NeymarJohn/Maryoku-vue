@@ -488,9 +488,10 @@ export default {
           return item.order
         })
 
-        this.timeline[0].items = _.sortBy(res, function (item) {
-            return item.order
-        })
+        // this.timeline[0].items = _.sortBy(res, function (item) {
+        //     return item.order
+        // })
+        
         this.isLoading = false
         var timelines = {};
         // define timelines
@@ -501,9 +502,10 @@ export default {
           timelines[item.plannedDate].push(item); 
         })
 
-        if (timelines.length > 0) {
+        if (Object.keys(timelines).length > 0) {
           this.timeline = [];
           Object.keys(timelines).forEach((itemDay, index) => {
+            console.log( index);
             this.timeline.push({
               itemDay: parseInt(itemDay),
               isEditable: false,
@@ -511,14 +513,12 @@ export default {
             })
           })
         }
-        
-       
         this.timeline = _.sortBy(this.timeline, function(item) {
           return item.itemDay;
         })
-        this.timeline[0].items.forEach((item) => {
-            item.isItemLoading = false
-        })
+        // this.timeline[0].items.forEach((item) => {
+        //     item.isItemLoading = false
+        // })
         this.event.timelineItems = this.timelineItems
         this.$root.$emit('timeline-updated', this.timelineItems)
       })
@@ -534,8 +534,6 @@ export default {
       this.disabledDragging = false
     },
     saveTimelineItem (item, index, timelineDate) {
-      console.log(item, index);
-      console.log(timelineDate);
       this.setItemLoading(item, true, true);
       var plannedDate = 0;
       if (typeof(timelineDate) == 'number') {
