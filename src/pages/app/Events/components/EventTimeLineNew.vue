@@ -49,7 +49,7 @@
                             <md-button class="md-default md-simple md-just-icon" @click="addTimelineItem(indx)">
                                 <md-icon>add_circle</md-icon>
                             </md-button>
-                            <md-button class="md-default md-simple md-just-icon" @click="removeTimelineItem(indx)">
+                            <md-button class="md-default md-simple md-just-icon" @click="askRemoveTimelineItem(indx)">
                                 <md-icon>delete_outline</md-icon>
                             </md-button>
                             <md-button class="md-default md-simple md-just-icon" @click="editTimeline(indx)" v-if="!timelineItem.isEditable">
@@ -161,11 +161,11 @@
                                                    @click="cancelTimelineItem(item,index)">Cancel
                                         </md-button>
                                         <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-save"
-                                                   class="event-planner-tab-timeline-item-save md-rose" v-if="!item.dateCreated"
+                                                   class="event-planner-tab-timeline-item-save md-red" v-if="!item.dateCreated"
                                                    @click="saveTimelineItem(item,index,timelineItem.itemDay)">Save
                                         </md-button>
                                         <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-edit"
-                                                   class="event-planner-tab-timeline-item-edit md-rose" v-else
+                                                   class="event-planner-tab-timeline-item-edit md-red" v-else
                                                    @click="updateTimelineItem(item)">Save
                                         </md-button>
                                     </md-card-actions>
@@ -191,14 +191,14 @@
                                             <div class="attachment" style="display : none;">
                                                 <a href=""> <md-icon>attachment</md-icon> file name </a>
                                             </div>
-                                            <md-button class="md-simple timeline-action"> <img :src="`${timelineIconsURL}Asset 48.svg`" width="20"> Go To Proposal </md-button>
+                                            <md-button class="md-simple timeline-action"> <img :src="`${timelineIconsURL}GoToProposal.svg`" width="20"> Go To Proposal </md-button>
                                             <br>
-                                            <md-button class="md-simple timeline-action"> <img :src="`${timelineIconsURL}Asset 47.svg`" width="20"> Contact Vendor </md-button>
+                                            <md-button class="md-simple timeline-action"> <img :src="`${timelineIconsURL}ContactVendor.svg`" width="20"> Contact Vendor </md-button>
                                         </div>
 
                                         <div class="card-actions">
                                             <md-button name="event-planner-tab-timeline-item-edit"
-                                                       class="event-planner-tab-timeline-item-edit md-rose md-simple md-xs md-round"
+                                                       class="event-planner-tab-timeline-item-edit md-red md-simple md-xs md-round"
                                                        @click="modifyItem(index)">
 
                                                 Edit
@@ -269,6 +269,30 @@
                 <md-button class="md-rose md-simple back-to-top"> <md-icon>expand_less</md-icon> Back to top </md-button>
             </div>
         </div>
+
+        <!-- Confirm Modal-->
+        <modal v-if="showDeleteConfirmModal" class="delete-timeline-model">
+          <template slot="header">
+            <div class="maryoku-modal-header delete-timeline-model__header">
+              <h2>
+                Are you sure you want to say <br/> goodbye to your changes?
+              </h2>
+              <div class="header-description">
+                Your changes will be deleted after that
+              </div>
+              <md-button
+                class="md-simple md-just-icon md-round modal-default-button modal-close-button"
+                @click="showDeleteConfirmModal = false"
+              >
+                <md-icon>clear</md-icon>
+              </md-button>
+            </div>
+          </template>
+          <template slot="footer">
+            <md-button class="md-default md-simple cancel-btn" @click="showDeleteConfirmModal=false">Cancel</md-button>
+            <md-button class="md-red add-category-btn" @click="removeTimelineItem">Yes,I'm sure</md-button>
+          </template>
+        </modal>
     </div>
 
 </template>
@@ -282,6 +306,10 @@ import moment from 'moment'
 import swal from 'sweetalert2'
 import {SlideYDownTransition} from 'vue2-transitions'
 import InputMask from 'vue-input-mask'
+import {
+    Modal,
+    LabelEdit
+  } from '@/components'
 
 import VueElementLoading from 'vue-element-loading'
 // import auth from '@/auth';
@@ -311,7 +339,8 @@ export default {
     InputMask,
     SideBar,
     SidebarItem,
-    ProgressSidebar
+    ProgressSidebar,
+    Modal
   },
   props: {
     // event: Object,
@@ -391,6 +420,8 @@ export default {
     timelineIconsURL: 'http://static.maryoku.com/storage/icons/timeline/svg/',
     menuIconsURL: 'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
     event: {},
+    showDeleteConfirmModal: false, 
+    indexOfDeleteItem: -1,
     newTimeLineIconsURL: 'http://static.maryoku.com/storage/icons/Timeline-New/',
       timeline : [
           {
@@ -402,7 +433,9 @@ export default {
       a : ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ','eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '],
       b : ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety']
 
-  }),
+  
+    
+    }),
   methods: {
 
       download() {
@@ -752,24 +785,12 @@ export default {
             isEditable : true
         })
       },
-      removeTimelineItem(index) {
-        swal({
-          title: 'Are you sure you want to say goodbye to your changes?',
-          text: 'Your changes will be deleted after that',
-          showCancelButton: true,
-          showCloseButton: true,
-          confirmButtonClass: "md-button  md-raised md-primary",
-          cancelButtonClass: "md-button ",
-          confirmButtonText: "Yes I'm sure",
-          buttonsStyling: false
-        })
-        .then(result => {
-         
-        })
-        .catch(err => {
-          console.log(err)
-        })
-
+      askRemoveTimelineItem(index) {
+        this.indexOfDeleteItem = index;
+        this.showDeleteConfirmModal = true;
+      },
+      removeTimelineItem() {
+        
       },
       saveTimeline(){
         
@@ -777,8 +798,8 @@ export default {
               title: 'Saved It!',
               showCloseButton: true,
               text : 'We’ll update the related vendors',
-              confirmButtonClass: 'md-button md-rose',
-              cancelButtonClass: 'md-button md-rose',
+              confirmButtonClass: 'md-button md-red',
+              cancelButtonClass: 'md-button md-red',
               confirmButtonText: 'Cool, Thanks',
               buttonsStyling: false
           }).then(result => {
@@ -888,4 +909,5 @@ export default {
 </script>
 <style scoped lang="scss">
   $btn-color: #fff;
+
 </style>

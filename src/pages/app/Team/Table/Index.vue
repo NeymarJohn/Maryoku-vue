@@ -27,7 +27,7 @@
           <div class="md-layout-item"></div>
         </div>
         <div class="popup-footer">
-          <md-button class="move-left md-rose md-simple" @click="closePopup">Close</md-button>
+          <md-button class="move-left md-red md-simple" @click="closePopup">Close</md-button>
           <md-button class="btn-success md-success">Submit</md-button>
         </div>
       </div>

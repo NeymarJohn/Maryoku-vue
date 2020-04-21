@@ -51,15 +51,20 @@
                 </div>
               </div>
               <div class="section-header">
-                <img :src="`${iconsURL}Asset 162.svg`" /> Event’s details
-                Notice that the date has changed
+                <img :src="`${iconsURL}flag-dark.svg`" /> Event’s details
+
+                <label class="header-tip">
+                  <img :src="`${iconsURL}warning-circle-gray.svg`" />
+                  Notice that the date has changed
+                </label>
+               
               </div>
               <div class="card-content">
                   <div class="event-details-list">
                     <ul class="list-items">
                       
                       <li class="event-details-item">
-                        <img :src="`${iconsURL}Asset 165.svg`" width="20" />
+                        <img :src="`${iconsURL}calendar-gray.svg`" width="20" />
                         <span>
                           {{event.eventStartMillis | formatDate}},
                           {{event.eventStartMillis | formatTime}}
@@ -68,17 +73,17 @@
                         </span>
                       </li>
                       <li class="event-details-item">
-                        <img :src="`${iconsURL}Asset 166.svg`" width="20" />
+                        <img :src="`${iconsURL}users-gray.svg`" width="20" />
                         <span>{{event.numberOfParticipants}} Invited</span>
                       </li>
                       <li class="event-details-item">
-                       <img :src="`${iconsURL}Asset 162.svg`" width="20" />
-                        <span>Establishment / Activity day</span>
+                       <img :src="`${iconsURL}flag-gray.svg`" width="20" />
+                        <span>{{event.eventType.name}}</span>
                       </li>
                     </ul>
                     <ul class="list-items">
                       <li class="event-details-item">
-                        <img :src="`${iconsURL}Asset 167.svg`" width="20" />
+                        <img :src="`${iconsURL}location-gray.svg`" width="20" />
                         <span>{{event.location}}</span>
                       </li>
                       <li class="event-details-item">
@@ -119,17 +124,17 @@
           <ul>
             <li>
               <a href>
-                <img :src="`${menuIconsURL}Asset 9.svg`" />
+                <img :src="`${iconsURL}download-dark.svg`" />
               </a>
             </li>
             <li>
               <a href>
-                <img :src="`${menuIconsURL}Asset 5.svg`" />
+                <img :src="`${iconsURL}share-dark.svg`" />
               </a>
             </li>
             <li>
               <a href>
-                <img :src="`${menuIconsURL}Asset 8.svg`" />
+                <img :src="`${iconsURL}message-dark.svg`" />
               </a>
             </li>
           </ul>
@@ -155,7 +160,7 @@
           </div>
           <div class="count-item with-icon">
             <div class="icon">
-              <img :src="`${iconsURL}Asset%20152.svg`" width="20" />
+              <img :src="`${iconsURL}timer-white.svg`" width="20" />
             </div>
             <div class="count-label">To Event</div>
           </div>
@@ -166,7 +171,10 @@
       <div class="md-layout-item md-size-25">
         <div class="card-section">
           <div class="section-header">
-            <img :src="`${iconsURL}Asset 162.svg`" /> Notes
+            <img :src="`${iconsURL}note-dark.svg`" /> Notes
+            <button class="md-rose md-simple notes-filter-btn" @click="showEditDetailModal=true">
+              <img :src="`${iconsURL}filter-dark.svg`" width="20" />
+            </button>
           </div>
 
           <div class="card-content">
@@ -174,8 +182,8 @@
               <input type="text" class="form-control input-new-note" v-model="notes.newNote" placeholder="Add new note" />
             </div>
             <div class>
-              <md-radio v-model="radio" :value="false">Lorem ipsum dolor sit amet sit</md-radio>
-              <md-radio v-model="radio" value="my-radio">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed</md-radio>
+              <md-radio v-model="radio" :value="false">Lorem ipsum dolor sit amet sit  </md-radio>
+              <md-radio v-model="radio" value="my-radio">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed</md-radio> 
               <md-radio v-model="radio" :value="objA">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</md-radio>
               <md-radio v-model="radio" :value="objB">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</md-radio>
             </div>
@@ -185,7 +193,8 @@
       <div class="md-layout-item md-size-75">
         <div class="card-section">
           <div class="section-header">
-            <img :src="`${iconsURL}Group 3090.svg`" /> Budget & Vendors
+            <img :src="`${iconsURL}budget-dark.svg`" /> Budget & Vendors
+            <!-- <img :src="`${iconsURL}Asset 453.svg`" /> -->
           </div>
 
           <div class="card-content">
@@ -229,7 +238,7 @@
 
               <div class="book-venue">
                 <div class="booked-vendors__header d-flex justify-content-start align-center">
-                  <img src="http://static.maryoku.com/storage/icons/Budget Elements/venuerental.svg" width="20px">
+                  <img src="http://static.maryoku.com/storage/icons/Event Page/home-dark.svg" width="20px">
                   <h3 class="header-title">Choose your next venue</h3>
                 </div>
                 <div class="book-items d-flex align-center">
@@ -278,7 +287,7 @@
 
           <div class="card-footer">
             <div class="footer-content">
-              <img :src="`${iconsURL}Group 1175.svg`" width="20" />
+              <img :src="`${iconsURL}warning-circle-gray.svg`" width="20" />
               Venue proposals are waiting for your respond
             </div>
             <div class="footer-actions">
@@ -441,34 +450,43 @@
         </div>
       </div>
     </div>
+
+
     <modal v-if="showEditDetailModal" class="edit-event-model">
       <template slot="header">
-        <div class="edit-event-model__header">
+        <div class="edit-event-model__header maryoku-modal-header">
           <h2>
             Edit event's detail
           </h2>
           <div class="header-description">
-            <img :src="`${iconsURL}Group 1175.svg`" width="20" /> Changing the time on your status might cause price changes
+            <img :src="`${iconsURL}warning-circle-gray.svg`" width="20" /> 
+            <span>Changing the time on your status might cause price changes</span>
           </div>
+          <md-button
+            class="md-simple md-just-icon md-round modal-default-button"
+            @click="showEditDetailModal = false"
+          >
+            <md-icon>clear</md-icon>
+          </md-button>
         </div>
-        <md-button
-          class="md-simple md-just-icon md-round modal-default-button"
-          @click="showEditDetailModal = false"
-        >
-          <md-icon>clear</md-icon>
-        </md-button>
       </template>
       <template slot="body">
         <div class="md-layout">
           <div class="md-layout-item md-size-100">
             <div class="d-flex justify-content-between">
-              <md-radio v-model="radio" :value="false">Day Time event</md-radio>
-              <md-radio v-model="radio" value="my-radio">Eventing event</md-radio>
+              <md-radio v-model="radio" :value="false">
+                <img :src="`${iconsURL}sun-dark.svg`" width="25" style="margin:0 10px"/> 
+                <span>Day Time event</span>
+              </md-radio>
+              <md-radio v-model="radio" value="my-radio">
+                <img :src="`${iconsURL}night-dark.svg`" width="20" style="margin:0 10px" /> 
+                <span>Eventing event</span>
+              </md-radio>
               <md-radio v-model="radio" :value="objA">A whole day or more</md-radio>
             </div>
           </div>
-          <div class="md-layout-item md-size-100 text-left">
-            <label class="">Event Type</label>
+          <!-- <div class="md-layout-item md-size-100 text-left">
+            <label class="evnet-detail-label">Event Type</label>
             <div class="form-group maryoku-field">
               <md-field class="mt-0 mb-2">
                 <md-select v-model="eventType">
@@ -481,35 +499,52 @@
                   </md-option>
                 </md-select>
               </md-field>
-              <!-- <v-select v-model="event.type" :options="eventTypes"></v-select> -->
+              <v-select v-model="event.type" :options="eventTypes"></v-select>
+            </div>
+          </div> -->
+          <div class="md-layout-item md-size-50 text-left">
+            <label class="evnet-detail-label">Event Type</label>
+            <div class="form-group maryoku-field" v-if="event.eventType">
+              <!-- <v-select v-model="event.type" :options="eventTypes" item-text="name"></v-select> -->
+              <v-select
+                :options="eventTypes.map(item=>{return item.name})"
+                name="category"
+                v-model="event.eventType.name"
+                v-validate="'required'"
+                item-text="name"
+                ></v-select>
             </div>
           </div>
-          <div class="md-layout-item md-size-100 text-left">
-            <label>Date</label>
+          <div class="md-layout-item md-size-50 text-left"></div>
+          <div class="md-layout-item md-size-50 text-left md-offset-50">
+            <label class="evnet-detail-label">Date</label>
             <div class="form-group">
               <md-datepicker
                 :class="[{'md-error': (event.date)}]"
-                v-model="event.date"
+                v-model="event.eventStartMillis"
                 data-vv-name="date"
+                md-immediately="true"
                 ref="datePicker"
+                md-model-type="number"
                 required>
               </md-datepicker>
             </div>
           </div> 
-          <div class="md-layout-item md-size-100 margin-bottom text-left">
-            <label>Number Of Guests</label>
+          <div class="md-layout-item md-size-50 text-left"></div>
+          <div class="md-layout-item md-size-50 margin-bottom text-left">
+            <label class="evnet-detail-label">Number Of Guests</label>
             <div class="form-group with-icon">
               <div class="input-icon">
-                <img :src="`${iconsURL}Group 3090.svg`" width="20" />
+                <img :src="`${iconsURL}users-dark.svg`" width="20" />
               </div>
               <input type="number" class="form-control" v-model="event.numberOfParticipants" />
             </div>
           </div>
           <div class="md-layout-item md-size-100 margin-bottom text-left">
-            <label>Location</label>
+            <label class="evnet-detail-label">Location</label>
             <div class="form-group with-icon">
               <div class="input-icon">
-                <img :src="`${iconsURL}Group 3090.svg`" width="20" />
+                <img :src="`${iconsURL}location-dark.svg`" width="20" />
               </div>
               <input type="text" class="form-control" v-model="event.location" />
             </div>
@@ -1015,6 +1050,8 @@ export default {
     //     this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
     //     this.getTimelineItems();
     // }
+    console.log(this.eventTypes);
+    console.log(event);
   },
   watch: {
     event (newVal, oldVal) {
@@ -1117,12 +1154,7 @@ export default {
       margin-left: 40%;
     }
   }
-  .md-radio {
-    display: flex;
-    margin: 50px 0px;
 
-
-  }
   .md-radio-container {
       border: 1px solid rgba(0, 0, 0, 0.54) !important;
       width: 30px;
@@ -1162,6 +1194,9 @@ export default {
     flex-grow: 2;
     max-width: 50%;
     padding: 0 2em 0 4em;
+    .header-title {
+      padding-left:15px;
+    }
     .booked-vendors__header{
       margin:40px 40px 10px;
     }
@@ -1170,7 +1205,7 @@ export default {
     }
     .venue-item {
       border-radius: 3px;
-      border: solid 0.5px #707070;
+      border: solid 0.5px rgba(0, 0, 0, 0.08);
       flex-grow: 1;
       margin: 8px;
       width: 139px;
@@ -1217,6 +1252,7 @@ export default {
     letter-spacing: 0.32px;
     text-align: center;
     color: #f51355;
+    text-transform: unset;
   }
   .rsvp {
     .guests-details{
@@ -1345,6 +1381,48 @@ export default {
       }
   }
 
-  
-    
+  .header-tip {
+    img {
+      margin-right: 15px;
+    }
+    font-family: 'Manrope-Regular',sans-serif;
+    padding-left: 40px;
+    font-size: 16px;
+    line-height: 1.31;
+    letter-spacing: normal;
+    text-align: left;
+    color: #050505;
+  }
+
+  .notes {
+    .notes-filter-btn {
+      border: none;
+      background: none;
+      float: right;
+    }
+    .md-radio {
+      display: flex;
+      margin: 50px 0px;
+    }
+  }
+  .edit-event-model {
+    .header-description {
+      span {
+        padding-left: 10px;
+      }
+    }
+    .evnet-detail-label {
+      font-size: 16px;
+      font-weight: 800;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.31;
+      letter-spacing: normal;
+      text-align: left;
+      color: #050505;
+      margin-top: 42px;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+  }
 </style>

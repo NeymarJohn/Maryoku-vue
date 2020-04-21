@@ -38,3 +38,33 @@ $baseColor : #5c2153;
     font-style: normal;
     font-stretch: normal;
 }
+
+.md-radio {
+  .md-radio-container {
+    min-width: 30px;
+    height: 30px;
+    top: -5px;
+    border-color: #f51355 !important;
+  }
+  &.md-theme-default.md-checked{
+    .md-radio-container {
+      border-color: #f51355 !important;
+    }
+  } 
+  &.md-checked {
+    .md-radio-container:after {
+      background-color: #f51355 !important;
+      right: 4px;
+      bottom: 4px;
+      top: 4px;
+      left: 4px;
+    }
+  }
+}
+
+
+.md-datepicker-dialog {
+  .md-datepicker-header {
+    display: none;
+  }
+}
