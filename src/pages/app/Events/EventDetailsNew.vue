@@ -77,7 +77,7 @@
                         <span>{{event.numberOfParticipants}} Invited</span>
                       </li>
                       <li class="event-details-item">
-                       <img :src="`${iconsURL}flag-gray.svg`" width="20" />
+                       <img :src="`${iconsURL}flag-dark.svg`" width="20" />
                         <span>{{event.eventType.name}}</span>
                       </li>
                     </ul>
@@ -160,7 +160,7 @@
           </div>
           <div class="count-item with-icon">
             <div class="icon">
-              <img :src="`${iconsURL}timer-white.svg`" width="20" />
+              <img :src="`${iconsURL}calendar-gray.svg`" width="20" />
             </div>
             <div class="count-label">To Event</div>
           </div>
@@ -438,7 +438,7 @@
 
           <div class="card-footer">
             <div class="footer-content">
-              <img :src="`${iconsURL}Asset 150.svg`" width="20" />
+              <img :src="`${iconsURL}warning-circle-gray.svg`" width="20" />
               It’s time to create second teaser
             </div>
             <div class="footer-actions">
