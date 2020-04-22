@@ -78,7 +78,10 @@
                                         <div class="md-layout-item md-size-45">
 
                                             <div class="form-group">
-                                                <label>Start Time </label>
+                                                <label> 
+                                                  <!-- <img class="time-line-blocks_icon"  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`"> -->
+                                                  Start At 
+                                                </label>
                                                 <div class="time-select-fields">
                                                     <input type="time"  v-model="item.startTime" class="without_ampm" >
                                                     <select v-model="item.startDuration">
@@ -97,7 +100,10 @@
                                         </div>
                                         <div class="md-layout-item md-size-45">
                                             <div class="form-group">
-                                                <label>Finishes At</label>
+                                                <label>
+                                                  <!-- <img class="time-line-blocks_icon"  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`"> -->
+                                                  Finishes At
+                                                  </label>
                                                 <div class="time-select-fields">
                                                     <input type="time"  v-model="item.endTime" class="without_ampm" >
 
@@ -126,7 +132,7 @@
                                                 <div class="input-icon">
                                                     <img :src="`${timelineIconsURL}place.svg`" width="20">
                                                 </div>
-                                                <input type="text" class="form-control" v-model="item.location">
+                                                <input type="text" class="form-control" v-model="item.location" placeholder="Type name or address ">
                                             </div>
                                         </div>
                                         <div class="md-layout-item md-size-100 ">
@@ -134,10 +140,11 @@
                                             <div class="form-group">
                                                 <label>Attach File  <small>*suggested</small></label>
                                                 <label class="upload-section" for="file">
-                                                    <div class="md-rose md-outline md-simple md-sm">
+                                                    <div class="md-rose md-outline md-simple md-sm attachment">
+                                                        <md-icon>attachment</md-icon>
                                                         {{item.attachmentName?item.attachmentName:"Choose file"}}
                                                     </div>
-                                                    <div class="note">Drag your file here</div>
+                                                    <!-- <div class="note">Drag your file here</div> -->
                                                 </label>
 
                                                 <input

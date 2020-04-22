@@ -913,7 +913,7 @@
                 }
                 &:after {
                     left : 0;
-                    width : 37%;
+                    width : 35%;
                 }
                 &:before {
                     right: 35px;
@@ -928,7 +928,7 @@
                 }
                 .header-actions {
                     position: absolute;
-                    right : -25px;
+                    right : -5px;
                     top : 8px;
 
                     .md-button {
@@ -2095,12 +2095,17 @@
                 flex-direction: column;
 
                 .md-rose {
-                    .md-ripple {
                         border : 1px solid #f51355;
                         text-transform: capitalize;
                         font-weight: bold;
                         color : #f51355 !important;
-                    }
+                        border-radius: 3px;
+                        padding: 4px 20px;
+                        i {
+                            color : #f51355 !important;
+                            font-size: 24px;
+                            transform: rotate(-90deg);
+                        }
                 }
 
                 .note {
@@ -2111,20 +2116,23 @@
             }
 
             .form-control {
-                min-height: 60px;
+                min-height: 52px;
                 border-radius: 3px;
                 border: solid 1px #bcbcbc;
                 background: #ffffff;
                 width: 100%;
                 padding: 0 1.5em;
                 color: #050505;
-                font-size: 14px;
+                font-size: 16px;
                 font-family: 'Manrope-Regular',sans-serif;
 
             }
 
             textarea.form-control {
                 padding-top: 1em;
+                min-height: 75px;
+                line-height: 1.2em;
+                font-size: 14px;
             }
 
 
@@ -2176,12 +2184,12 @@
             }
 
             input , select {
-                min-height: 60px;
+                min-height: 52px;
                 border-radius: 3px;
                 border: solid 1px #bcbcbc;
                 background: #ffffff;
                 padding: 0 12px;
-                height: 66px;
+                height: 52px;
                 font-size: 14px;
                 min-width: 55px;
                 text-align: center;
