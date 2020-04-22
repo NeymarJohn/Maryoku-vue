@@ -53,9 +53,6 @@
   &.sl {
     max-width: 900px;
   }
-  &.ml {
-    max-width: 1102px;
-  }
 }
 
 .modal-container-wizard {
@@ -73,6 +70,7 @@
   // border-radius: 6px;
   border: none;
 }
+
 .modal-header{
   display: flex;
   align-items: center;
@@ -81,13 +79,27 @@
   border-top-left-radius: .3rem;
   border-top-right-radius: .3rem;
 
-  .md-button .md-button-content i{
-    font-size: 16px !important;
-    opacity: .5;
-
-    &:hover,
-    &:focus{
+  .modal-close-button {
+    right: 30px;
+    top: 30px;
+    i {
+      font-size: 35px !important;
       opacity: 1;
+      color: #050505 !important;
+    }
+  }
+  .md-button {
+    right: 30px;
+    top: 30px;
+    .md-button-content i{
+      // font-size: 16px !important;
+      font-size: 35px !important;
+      opacity: 1;
+      color: #050505 !important;
+      &:hover,
+      &:focus{
+        opacity: 1;
+      }
     }
   }
 }

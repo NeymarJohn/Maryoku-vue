@@ -8,7 +8,7 @@
       <div class="md-toolbar-section-start event-top-bar">
         <h3 v-if="topBarTitle" class="md-title">{{topBarTitle}}</h3>
         <!--<drop-down direction="down" v-if="topBarTitle" :has-caret="false" :hover="true">
-          <md-button slot="title" class="md-button md-simple md-rose dropdown-toggle md-tiny" data-toggle="dropdown" style="border-radius: 3px 3px 0 0; text-transform: capitalize; font-size: 18px !important; font-weight: 400 !important;">
+          <md-button slot="title" class="md-button md-simple md-red dropdown-toggle md-tiny" data-toggle="dropdown" style="border-radius: 3px 3px 0 0; text-transform: capitalize; font-size: 18px !important; font-weight: 400 !important;">
             {{topBarTitle}}
           </md-button>
           <div  class="dropdown-menu" style="margin-top: 5px; border-radius: 0 5px 5px 5px !important; padding: 24px;min-width: 480px;max-width: 580px;">
@@ -48,7 +48,7 @@
                   </div>
 
                   <div class="md-layout-item md-size-100">
-                    <md-button class="md-sm md-simple md-rose">
+                    <md-button class="md-sm md-simple md-red">
                       <md-icon>cached</md-icon> Recurring weekly
                     </md-button>
                   </div>

@@ -140,7 +140,7 @@
                                         <div class="element-price">${{800 | withComma}}</div>
                                         <div class="discount-details">(10% off) <span>${{1100 | withComma}}</span></div>
                                     </div>
-                                    <div class="view-element"><md-button class="md-just-icon md-rose md-outline" :class="{expanded : expand}" @click="expand = !expand"><img :src="`${submitProposalIcon}Component 36.svg`"></md-button></div>
+                                    <div class="view-element"><md-button class="md-just-icon md-red md-outline" :class="{expanded : expand}" @click="expand = !expand"><img :src="`${submitProposalIcon}Component 36.svg`"></md-button></div>
                                 </div>
                             </div>
                             <!-- Expanded Section -->
@@ -336,7 +336,7 @@
                                     <div class="element-price">${{item.price | withComma}}</div>
                                     <div class="discount-details">(10% off) <span>${{item.price | withComma}}</span></div>
                                 </td>
-                                <td class="view-element"><md-button class="md-just-icon md-rose md-outline"><img :src="`${submitProposalIcon}Component 36.svg`"></md-button></td>
+                                <td class="view-element"><md-button class="md-just-icon md-red md-outline"><img :src="`${submitProposalIcon}Component 36.svg`"></md-button></td>
                             </tr>
                         </template>
 <!--                        <tr class="element-block bundle-offer">-->

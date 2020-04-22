@@ -124,7 +124,7 @@
                 </div>
             </template>
             <template slot="footer">
-                <md-button class="move-left md-rose md-simple" @click="closeModal">Close</md-button>
+                <md-button class="move-left md-red md-simple" @click="closeModal">Close</md-button>
                 <md-button class="md-rose text-rose pull-right" @click="addVendor">Create</md-button>
             </template>
         </modal>

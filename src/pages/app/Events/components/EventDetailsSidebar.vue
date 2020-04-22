@@ -203,7 +203,7 @@
                   </div>
                   <!-- NOTE: just hiding it -->
                   <!-- <div class="md-layout-item md-size-100">
-                    <md-button class="md-sm md-simple md-rose">
+                    <md-button class="md-sm md-simple md-red">
                       <md-icon>cached</md-icon>
                       Recurring weekly
                     </md-button>
@@ -212,7 +212,7 @@
               </md-card-expand-content>
               <md-card-actions md-alignment="space-between">
                 <md-card-expand-trigger>
-                  <md-button class="md-icon-button md-rose md-simple">
+                  <md-button class="md-icon-button md-red md-simple">
                     <md-icon>keyboard_arrow_down</md-icon>
                   </md-button>
                 </md-card-expand-trigger>

@@ -11,7 +11,7 @@
             <div class="header-title">
                 <h3>Hi Rachel</h3>
                 <p>
-                    We found the top {{selectedBlock.proposalsCount}} proposals for your event,
+                    We found the top {{selectedBlock.proposalsCount}} proposals for your event,<br>
                     Book now before it’s too late
                 </p>
             </div>
@@ -26,7 +26,7 @@
 
         <div class="booking-header d-flex justify-content-between md-layout-item md-size-100">
             <div class="header-title">
-                <h4><img :src="`${budgetElementsIConsURL}venue.svg`"> Book {{selectedBlock.title}}</h4>
+                <h4><img :src="`${budgetElementsIConsURL}${selectedBlock.componentId}.svg`"> Book {{selectedBlock.title}}</h4>
             </div>
             <div class="header-actions">
                 <md-button class="md-default md-simple">Compare Proposals <md-icon>keyboard_arrow_right</md-icon></md-button>
@@ -120,7 +120,7 @@
                         <div class="form-group with-icon">
                             <label>Price of the service</label>
                             <div class="input-icon">
-                                <img :src="`${iconsURL}Group 3090.svg`" width="20" style="opacity: 0.5">
+                                <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5">
                             </div>
                             <input type="text" class="form-control" placeholder="Type number here">
                         </div>
@@ -129,7 +129,7 @@
                         <div class="form-group with-icon">
                             <label>Location</label>
                             <div class="input-icon">
-                                <img :src="`${iconsURL}Group 3090.svg`" width="20" style="opacity: 0.5">
+                                <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5">
                             </div>
                             <input type="text" class="form-control" placeholder="">
                         </div>
@@ -138,7 +138,7 @@
                         <div class="form-group with-icon">
                             <label>Phone</label>
                             <div class="input-icon">
-                                <img :src="`${iconsURL}Group 3090.svg`" width="20" style="opacity: 0.5">
+                                <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5">
                             </div>
                             <input type="text" class="form-control" placeholder="Type number here">
                         </div>
@@ -147,7 +147,7 @@
                         <div class="form-group with-icon">
                             <label>Email</label>
                             <div class="input-icon">
-                                <img :src="`${iconsURL}Group 3090.svg`" width="20" style="opacity: 0.5">
+                                <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5">
                             </div>
                             <input type="text" class="form-control" placeholder="Type email address here">
                         </div>
