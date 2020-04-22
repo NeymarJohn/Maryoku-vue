@@ -189,9 +189,10 @@
                                                 {{ item.attachmentName }}
                                               </span>
                                             </p>
-                                            <div class="location"  style="display : none;">
-                                                <md-icon>place</md-icon> 1419 Westwood Blvd Los Angeles | CA 90024-4911
-                                            </div>
+                                            <p class="item-location" v-if="item.location" >
+                                                <img :src="`${timelineIconsURL}place.svg`" width="20" style="width:18px">
+                                                <span>{{ item.location }}</span>
+                                            </p>
                                             <div class="attachment" style="display : none;">
                                                 <a href=""> <md-icon>attachment</md-icon> file name </a>
                                             </div>
@@ -660,6 +661,7 @@ export default {
       timelineItem.startTime = item.startTime
       timelineItem.endTime = item.endTime
       timelineItem.link = item.link
+      timelineItem.location = item.location
       timelineItem.attachment = item.attachment
       timelineItem.attachmentName = item.attachmentName
 
