@@ -77,7 +77,7 @@
                         <span>{{event.numberOfParticipants}} Invited</span>
                       </li>
                       <li class="event-details-item">
-                       <img :src="`${iconsURL}flag-dark.svg`" width="20" />
+                       <img :src="`${iconsURL}flag-gray.svg`" width="20" />
                         <span>{{event.eventType.name}}</span>
                       </li>
                     </ul>
@@ -160,7 +160,7 @@
           </div>
           <div class="count-item with-icon">
             <div class="icon">
-              <img :src="`${iconsURL}calendar-gray.svg`" width="20" />
+              <img :src="`${iconsURL}timer-white.svg`" width="20" />
             </div>
             <div class="count-label">To Event</div>
           </div>
@@ -287,7 +287,7 @@
 
           <div class="card-footer">
             <div class="footer-content">
-              <img :src="`${iconsURL}warning-circle-gray.svg`" width="20" />
+              <img :src="`${iconsURL}light.svg`" width="20" />
               Venue proposals are waiting for your respond
             </div>
             <div class="footer-actions">
@@ -907,6 +907,7 @@ export default {
     onFileChange (e) {
       let files = e.target.files || e.dataTransfer.files
       if (!files.length) return
+      console.log(e.target.name);
       if (e.target.name) {
         this.createImage(files[0], 'attachment')
       } else {
@@ -919,6 +920,7 @@ export default {
 
       reader.onload = e => {
         if (type === 'attachment') {
+          console.log(e.target);
           vm.timelineAttachment = e.target.result
         } else {
           // vm.imageRegular = e.target.result;

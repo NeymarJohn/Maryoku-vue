@@ -902,26 +902,22 @@
 
         &__item {
             padding-bottom : 1em;
-
             .item-header {
                 position: relative;
                 text-align: center;
-
-
                 &:after,&:before {
                     content : ' ';
                     position: absolute;
                     top : 19px;
                     border : 0.5px solid #a0a0a0;
                 }
-
                 &:after {
                     left : 0;
                     width : 37%;
                 }
                 &:before {
-                    right: 56px;
-                    width: 28%;
+                    right: 35px;
+                    width: 35%;
                 }
 
                 .header-title {
@@ -940,7 +936,6 @@
                         width : auto;
                         height : auto;
                         min-width: auto;
-
                         .md-ripple {
                             padding : 0 !important;
                         }
@@ -948,24 +943,34 @@
                 }
             }
             .time-line-edit {
-                max-width: 100px;
+                max-width: 150px;
                 margin: auto;
                 .md-input {
                     font-size: 14px;
                     padding:0;
                     padding-left:10px;
                     margin:0;
+                    font-weight: 800;
+                    -webkit-text-fill-color:#a0a0a0 !important;
+                    color: #a0a0a0 !important;
+                    border:none;
                 }
                 .md-icon, .md-icon-button {
                     display: none;
 
                 }
-                .md-datepicker:before, .md-datepicker:after {
-                    width: calc(100% - 0px);
-                    margin-left: 0;
+                .md-datepicker {
+                    margin-left: -135px !important;
+                    opacity: 0;
+                    &:before, &:after {
+                        width: calc(100% - 0px);
+                        margin-left: 0;
+                        display: none;
+                    }
                 }
                 .md-field {
                     margin: 0px;
+                    padding: 0;
                 }
             }
             .time-line-date {
@@ -976,7 +981,6 @@
         }
 
     }
-
     .save-timeline {
         margin : 1em auto 2em;
         .md-ripple {
@@ -984,11 +988,8 @@
             text-transform: capitalize;
             font-weight: 800;
             font-family: 'Manrope-ExtraBold',sans-serif;
-
         }
     }
-
-
     &.export-section {
         padding : 0;
         width: calc(100% + 74px);

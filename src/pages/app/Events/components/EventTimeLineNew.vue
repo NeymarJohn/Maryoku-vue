@@ -36,13 +36,16 @@
                 <div class="timeline-items-list__item" v-for="(timelineItem,indx) in timeline" :key="indx">
                     <div class="item-header">
                         <div  class="header-title">
-                          <div class="time-line-date" v-if="!timelineItem.isEditable"> 
-                            Day {{numberToWord(indx + 1)}}  
-                            {{formatDate(timelineItem.itemDay)}}
-                            <!-- <md-button class="md-rose md-simple md-sm edit-budget" @click="editTimeline(indx)">Edit</md-button> -->
-                          </div>
-                          <div class="time-line-edit" v-if="timelineItem.isEditable">
-                            <md-datepicker v-model="timeline[indx].itemDay" :md-disabled-dates="getDisabledDates(indx)" :md-closed="closeEditTimeline(indx)"> </md-datepicker>
+                          <div class="time-line-edit d-flex justify-content-center align-center" > 
+                            <label style="white-space:nowrap; padding-right:10px">Day {{numberToWord(indx + 1)}} </label>
+                            <div>{{formatDate(timelineItem.itemDay)}}</div>
+                            <md-datepicker 
+                              v-model="timeline[indx].itemDay" 
+                              :md-disabled-dates="getDisabledDates(indx)" 
+                              :md-closed="closeEditTimeline(indx)" 
+                              md-immediately
+                              md-model-type="number"
+                            > </md-datepicker>
                           </div> 
                         </div>
                         <div class="header-actions">
@@ -51,12 +54,6 @@
                             </md-button>
                             <md-button class="md-default md-simple md-just-icon" @click="askRemoveTimelineItem(indx)">
                                 <md-icon>delete_outline</md-icon>
-                            </md-button>
-                            <md-button class="md-default md-simple md-just-icon" @click="editTimeline(indx)" v-if="!timelineItem.isEditable">
-                                <md-icon>edit</md-icon>
-                            </md-button>
-                            <md-button class="md-default md-simple md-just-icon" @click="editTimeline(indx)" v-if="timelineItem.isEditable">
-                                <md-icon>check</md-icon>
                             </md-button>
                         </div>
                     </div>
@@ -137,9 +134,9 @@
                                             <div class="form-group">
                                                 <label>Attach File  <small>*suggested</small></label>
                                                 <label class="upload-section" for="file">
-                                                    <md-button class="md-rose md-outline md-simple md-sm">
-                                                        Choose file
-                                                    </md-button>
+                                                    <div class="md-rose md-outline md-simple md-sm">
+                                                        {{item.attachmentName?item.attachmentName:"Choose file"}}
+                                                    </div>
                                                     <div class="note">Drag your file here</div>
                                                 </label>
 
@@ -148,8 +145,8 @@
                                                     id="file"
                                                     name="attachment"
                                                     type="file"
-                                                    @change="onFileChange"
-                                                ></input>
+                                                    :data-item="item.id"
+                                                    @change="onFileChange"/>
 
                                             </div>
 
@@ -182,8 +179,15 @@
                                             <span class="item-title" style="font-weight: 500; display: inline-block;" v-if="item.title">
                                       {{item.title }}
                                     </span>
+                                            
                                             <p class="item-desc">
-                                                {{ item.description }}
+                                              {{ item.description }}
+                                            </p>
+                                            <p class="item-attachment" v-if="item.attachmentName">
+                                              <span>
+                                                <md-icon>attachment</md-icon>
+                                                {{ item.attachmentName }}
+                                              </span>
                                             </p>
                                             <div class="location"  style="display : none;">
                                                 <md-icon>place</md-icon> 1419 Westwood Blvd Los Angeles | CA 90024-4911
@@ -199,7 +203,7 @@
                                         <div class="card-actions">
                                             <md-button name="event-planner-tab-timeline-item-edit"
                                                        class="event-planner-tab-timeline-item-edit md-red md-simple md-xs md-round"
-                                                       @click="modifyItem(index)">
+                                                       @click="modifyItem(item)">
 
                                                 Edit
 
@@ -505,8 +509,11 @@ export default {
           this.$root.$emit('timeline-updated', this.timelineItems)
         })
     },
-    modifyItem (index) {
+    modifyItem (item) {
+      console.log(this.timelineItems[index])
+      const index = this.timelineItems.findIndex((it)=> it.id===item.id)
       this.$set(this.timelineItems[index], 'mode', 'edit')
+      console.log(this.timelineItems[index])
       this.disabledDragging = true
     },
     previewEvent () {
@@ -606,6 +613,7 @@ export default {
         color: item.color,
         link: item.link,
         attachment: this.timelineAttachment,
+        attachmentName: this.timelineAttachmentName,
         plannedDate : plannedDate
       }).for(calendar, event).save()
         .then(res => {
@@ -652,7 +660,8 @@ export default {
       timelineItem.startTime = item.startTime
       timelineItem.endTime = item.endTime
       timelineItem.link = item.link
-      timelineItem.attachment = this.timelineAttachment
+      timelineItem.attachment = item.attachment
+      timelineItem.attachmentName = item.attachmentName
 
       timelineItem.save().then(res => {
         this.getTimelineItems()
@@ -712,11 +721,21 @@ export default {
         this.$set(item, 'mode', 'saved')
       }
     },
-    onFileChange (e) {
-      let files = e.target.files || e.dataTransfer.files
+    onFileChange(event)  {
+      let files = event.target.files || event.dataTransfer.files
       if (!files.length) return
-      if (e.target.name) {
-        this.createImage(files[0], 'attachment')
+      if (event.target.name) {
+        const itemId = event.target.getAttribute('data-item');
+        const itemIndex = this.timelineItems.findIndex(it=>it.id === itemId)
+        if (itemIndex >= 0) {
+          let reader = new FileReader()
+          let vm = this
+          reader.onload = e => {
+            this.timelineItems[itemIndex].attachmentName = files[0].name
+            this.timelineItems[itemIndex].attachment = e.target.result
+          }
+          reader.readAsDataURL(files[0])
+        }
       } else {
         this.createImage(files[0])
       }
@@ -728,6 +747,7 @@ export default {
       reader.onload = e => {
         if (type === 'attachment') {
           vm.timelineAttachment = e.target.result
+          vm.timelineAttachmentName = file.name
         } else {
           // vm.imageRegular = e.target.result;
         }
@@ -775,9 +795,6 @@ export default {
         this.timeline.forEach((item,index) => {
           this.timeline[index].isEditable = false;
         })
-        console.log(this.timeline);
-        console.log(this.timeline[index].itemDay);
-        console.log(nextDay);
         this.timeline.splice(index + 1, 0, {
             date : this.formatDate(nextDay),
             items : [],
@@ -790,10 +807,15 @@ export default {
         this.showDeleteConfirmModal = true;
       },
       removeTimelineItem() {
-        
+        if ( this.timeline[this.indexOfDeleteItem].items.length === 0 ) {
+          this.timeline.splice(this.indexOfDeleteItem, 1);
+          this.indexOfDeleteItem = -1;
+          this.showDeleteConfirmModal = false;
+        } else {
+
+        }
       },
       saveTimeline(){
-        
           swal({
               title: 'Saved It!',
               showCloseButton: true,
@@ -889,16 +911,16 @@ export default {
     //     this.getTimelineItems();
     // }
   },
-  // computed: {
-  //   dateFormat: {
-  //     get () {
-  //       return this.$material.locale.dateFormat
-  //     },
-  //     set (val) {
-  //       this.$material.locale.dateFormat = val
-  //     }
-  //   }
-  // },
+  computed: {
+    dateFormat: {
+      get () {
+        return this.$material.locale.dateFormat
+      },
+      set (val) {
+        this.$material.locale.dateFormat = val
+      }
+    }
+  },
   watch: {
     event (newVal, oldVal) {
       this.$root.$emit('set-title', this.event, this.routeName === 'EditBuildingBlocks', true)
