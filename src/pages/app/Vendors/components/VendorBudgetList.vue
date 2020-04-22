@@ -1,26 +1,30 @@
 <template>
   <div class="vendor-budget-list-wrapper">
-    <h4><img :src="`${iconsUrl}Asset 276.svg`"> {{title}}</h4>
+    <h4><img :src="`${iconsUrl}Asset 500.svg`"> {{title}}</h4>
     <div class="total">
-      <strong>Total Event Budget:</strong>$5,000
+      <strong>Total Event Budget:</strong>${{ total | withComma }}
     </div>
     <p>
-      <img :src="`${iconsUrl}Asset 262.svg`">{{description}}
+      <img :src="`${iconsUrl}Group 5180.svg`">{{description}}
     </p>
     <div class="budget-list">
       <div class="items">
         <div 
           class="item" 
-          v-for="(vendor, vIndex) in items" 
-          :key="vIndex"
+          v-for="(r, ri) in requirements" 
+          :key="ri"
         >
-          <span><img :src="vendor.img">{{vendor.category}}</span>
-          <span>${{vendor.budget | withComma}}</span>
+          <span>
+            <img v-if="r.category=='food'" :src="`${iconsUrl}Asset 515.svg`">
+            <img v-else :src="`${iconsUrl}Asset 516.svg`">
+            {{r.category}}
+          </span>
+          <span>${{r.price | withComma}}</span>
         </div>
       </div>
       <div class="total">
         <span>Total</span>
-        <span>$2,400</span>
+        <span>${{ total | withComma }}</span>
       </div>
     </div>
   </div>
@@ -36,19 +40,30 @@
     props: {
       title: String, 
       description: String,
-      items: Array
+      total: Number,
+      category: String,
+      categoryCost: Number,
     },
     data: () => ({
       isLoading:true,
-      iconsUrl: 'http://static.maryoku.com/storage/icons/Vendor%20Landing%20Page/'
+      requirements: [],
+      iconsUrl: 'http://static.maryoku.com/storage/icons/NewLandingPage/'
     }),
-    methods: {
-    },
     created() {
 
     },
     mounted() {
       this.isLoading = false;
+      this.getRequirements()
+      console.log(this.requirements)
+    },
+    methods: {
+      getRequirements() {
+        this.requirements = [{
+          category: this.category,
+          price: this.categoryCost
+        }]
+      }
     },
     computed: {
     },
@@ -120,6 +135,7 @@
           span {
             font-size: 20px;
             font-weight: 800;
+            text-transform: capitalize;
 
             img {
               width: 28.4px;

@@ -81,10 +81,6 @@
     @include btn-styles($brand-rose);
   }
 
-  &.md-red {
-    @include btn-styles($brand-red);
-  }
-
   &.md-purple{
     @include btn-styles($brand-purple);
   }

@@ -75,7 +75,7 @@
                     :key="index"
                     :value="type.id"
                   >
-                    {{ type.name }}
+                    {{ type.item }}
                   </md-option>
                 </md-select>
               </md-field>

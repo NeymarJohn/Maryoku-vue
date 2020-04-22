@@ -100,7 +100,7 @@
                     <div class="md-layout-item md-size-60 margin-bottom justify-content-center">
                         <div class="form-group with-icon budget-field">
                             <div class="input-icon">
-                                <img :src="`${iconsURL}budget-dark.svg`" width="20">
+                                <img :src="`${iconsURL}Group 3090.svg`" width="20">
                             </div>
                             <input type="text" class="form-control"  v-model="newBudget">
                         </div>
@@ -117,7 +117,7 @@
 
                         <div class="label-item label-warning text-center" v-if="newBudget && newBudget < calendarEvent.totalBudget">
                             <p>
-                                <img :src="`${iconsURL}warning-circle-gray.svg`" width="20"> This budget is {{ 100 - parseInt( newBudget * 100 / calendarEvent.totalBudget)  }}% lower than average for this type of event
+                                <img :src="`${iconsURL}Group 1175.svg`" width="20"> This budget is {{ 100 - parseInt( newBudget * 100 / calendarEvent.totalBudget)  }}% lower than average for this type of event
                             </p>
                         </div>
                     </div>

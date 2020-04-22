@@ -7,10 +7,10 @@
     <div class="sidebar-menu">
       <md-button
         v-if="toggleMenu===false"
-        class="md-round md-simple md-just-icon md-transparent menu-button"
+        class="md-round md-simple md-just-icon md-transparent"
         @click="toggleMenu = true"
       >
-        <img :src="`${menuIconsURL}Group 2763.svg`" width="30" style="width : 30px !important;" />
+        <img :src="`${menuIconsURL}Group 2763.svg`" width="20" style="width : 20px !important;" />
       </md-button>
       <md-button
         v-else
@@ -192,11 +192,6 @@ export default {
 }
 </script>
 <style>
-.menu-button {
-  border-radius: 30px;
-  width: calc(100% - 0.5em) !important;
-  margin: 30px 0px !important;
-}
 @media (min-width: 992px) {
   .navbar-search-form-mobile,
   .nav-mobile-menu {

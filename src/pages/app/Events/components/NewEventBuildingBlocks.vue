@@ -35,13 +35,13 @@
               <td class="planned" width="20%">
 
                   <template v-if="type==='total'">
-                      $ {{block.allocatedBudget ? block.allocatedBudget : 0 | withComma}}
+                      $ {{block.allocatedBudget ? block.allocatedBudget : 0}}
                   </template>
                   <template v-else-if="block.allocatedBudget && block.numberOfParticipants">
-                      $ {{block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(0).toString() : 0}}
+                      $ {{block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(2).toString() : 0}}
                   </template>
                   <template v-else>
-                      $ {{block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(0).toString() : 0}}
+                      $ {{block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : 0}}
                   </template>
 
                   <md-button class="md-rose md-sm md-simple edit-budget" v-if="!block.editBudget" @click="showEditElementBudget(block)"> Edit </md-button>
@@ -163,7 +163,7 @@
         </tbody>
       </table>
     </draggable>
-    <!-- <table class="event-blocks__table event-block-table">
+    <table class="event-blocks__table event-block-table">
       <tbody>
         <tr>
           <td class="event-block-element unexpected" width="40%">
@@ -175,10 +175,10 @@
                 <div style="visibility: hidden">
                     <md-button
                         class="book-btn md-sm"
-                    >Book Vendors</md-button> -->
+                    >Book Vendors</md-button>
 
                     <!--                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
-                <!-- </div>
+                </div>
             </td>
           <td class="expand"  >
             <a href>
@@ -187,7 +187,7 @@
           </td>
         </tr>
       </tbody>
-    </table> -->
+    </table>
 
     <table class="event-blocks__table actions-table">
       <tbody>
@@ -303,7 +303,7 @@
             /> Tips
             <span class="percent">12%</span>
           </td>
-          <td width="20%">${{Math.round(totalBudgetTaxes) | withComma}}</td>
+          <td width="20%">${{totalBudgetTaxes.toFixed(2)}}</td>
           <td class="actual green-label" width="15%">
             <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png" /> $0
           </td>
@@ -324,7 +324,7 @@
         </tr>
         <tr class="total">
           <td class="total-title">Total</td>
-          <td>${{Math.round(totalBudget) | withComma}}</td>
+          <td>${{totalBudget | withComma}}</td>
           <td colspan="3" class="total-value">${{totalActual | withComma}}</td>
         </tr>
       </tbody>
@@ -338,7 +338,7 @@
             category
           </h2>
           <div class="header-description">
-            <img :src="`${iconsURL}warning-circle-gray.svg`" width="20" /> Adding expenses
+            <img :src="`${iconsURL}Group 1175.svg`" width="20" /> Adding expenses
             to your project might cause program changes
           </div>
         </div>
@@ -368,17 +368,16 @@
             <div class="form-group with-icon">
               <label>Budget</label>
               <div class="input-icon">
-                <img :src="`${iconsURL}budget-dark.svg`" width="20" />
+                <img :src="`${iconsURL}Group 3090.svg`" width="20" />
               </div>
-              <input type="number" class="form-control" v-model="newBuildingBlock.budget" />
-              <div class="md-error" v-if="remainingBudget < newBuildingBlock.budget">This budget should be less than the remaining.</div>
+              <input type="text" class="form-control" v-model="newBuildingBlock.budget" />
             </div>
           </div>
         </div>
       </template>
       <template slot="footer">
         <md-button class="md-default md-simple cancel-btn" @click="showCategoryModal = false">Cancel</md-button>
-        <md-button :disabled="remainingBudget < newBuildingBlock.budget"  class="md-rose add-category-btn" @click="addBuildingBlock">Add Category</md-button>
+        <md-button class="md-rose add-category-btn" @click="addBuildingBlock">Add Category</md-button>
       </template>
     </modal>
   </div>
@@ -430,7 +429,6 @@ export default {
     // auth: auth,
     isLoading: false,
     allocatedBudget: 0,
-    remainingBudget: 0,
     eventBuildingBlocks: [],
     eventBuildingBlocksList: [],
     currentBlockId: null,
@@ -547,14 +545,6 @@ export default {
             })
         }
       })
-    },
-    getRemainingBudget () {
-      if (!this.event) return;
-      if (!this.event.components) return;
-      this.allocatedBudget = this.event.components.reduce((s,item)=>{
-        return s + item.allocatedBudget
-      }, 0)
-      this.remainingBudget = this.event.totalBudget - this.allocatedBudget;
     },
     /**
      * Get Event building blocks
@@ -860,22 +850,16 @@ export default {
 
     addBuildingBlock () {
       // Save event interaction
-      console.log(this.event);
       let event = new CalendarEvent({ id: this.event.id })
       let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
 
-      if (this.remainingBudget < this.newBuildingBlock.budget) {
-        return;
-      }
-
       let newBlock = {
         componentId:
-          _.findWhere(this.components, {title: this.newBuildingBlock.category}).key,
+          _.findWhere(this.components, {title: this.newBuildingBlock.category}).id,
         // componentCategoryId: this.newBuildingBlock.categoryId,
         calendarEvent: { id: event.id },
         allocatedBudget: this.newBuildingBlock.budget
       }
-      
       new EventComponent(newBlock)
         .for(calendar, event)
         .save()
@@ -905,7 +889,6 @@ export default {
     }
   },
   mounted () {
-    this.getRemainingBudget()
     this.getEventBuildingBlocks()
     this.getCategoryBlocks()
     this.$on('refreshBuildingBlock', () => {
@@ -916,12 +899,10 @@ export default {
     event (newVal, oldVal) {
       // Get default event building blocks
       this.getEventBuildingBlocks()
-      this.getRemainingBudget()
     },
     eventComponents (newVal, oldVal) {
       // Get default event building blocks
       this.getEventBuildingBlocks()
-      this.getRemainingBudget()
     },
     elementsBudget (val) {
       this.switchingBudgetAndCost()

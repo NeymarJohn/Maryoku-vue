@@ -87,9 +87,9 @@ export default {
     isLoading: true,
     eventElements: [
       {
-        title: 'Choose Concept',
+        title: 'Set event conept',
         status: 'not-complete',
-        route: 'choose-concept',
+        route: 'edit/event',
         icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
         progress: 0
       },
@@ -122,7 +122,7 @@ export default {
       console.log(this.$router.history.current.path);
       if (this.$router.history.current.path.indexOf(item.route) > -1) {
         return "current";
-      }
+      } 
       return "";
     },
     goToRoute (item, index) {
@@ -153,7 +153,7 @@ export default {
               title: 'Book ' + item.title,
               status: 'not-complete',
               route: 'booking/' + item.id,
-              icon: `http://static.maryoku.com/storage/icons/Budget+Elements/${item.componentId}.svg`,
+              icon: 'http://static.maryoku.com/storage/icons/Budget+Elements/venue.svg',
             })
 
             return item
