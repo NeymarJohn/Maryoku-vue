@@ -91,7 +91,7 @@
                         <span>{{event.eventDayPart}} Time event</span>
                       </li>
                       <li class="event-details-item">
-                        <md-button class="md-rose md-simple edit-btn" @click="showEditDetailModal=true">
+                        <md-button class="md-rose md-simple edit-btn" @click="openEditDetail">
                           Edit Details
                           <md-icon>keyboard_arrow_right</md-icon>
                         </md-button>
@@ -474,15 +474,15 @@
         <div class="md-layout">
           <div class="md-layout-item md-size-100">
             <div class="d-flex justify-content-between">
-              <md-radio v-model="radio" :value="false">
+              <md-radio v-model="editEvent.eventDayPart" value="daytime">
                 <img :src="`${iconsURL}sun-dark.svg`" width="25" style="margin:0 10px"/> 
                 <span>Day Time event</span>
               </md-radio>
-              <md-radio v-model="radio" value="my-radio">
+              <md-radio v-model="editEvent.eventDayPart" value="evening">
                 <img :src="`${iconsURL}night-dark.svg`" width="20" style="margin:0 10px" /> 
-                <span>Eventing event</span>
+                <span>Evening event</span>
               </md-radio>
-              <md-radio v-model="radio" :value="objA">A whole day or more</md-radio>
+              <md-radio v-model="editEvent.eventDayPart" value="wholeday">A whole day or more</md-radio>
             </div>
           </div>
           <!-- <div class="md-layout-item md-size-100 text-left">
@@ -499,17 +499,17 @@
                   </md-option>
                 </md-select>
               </md-field>
-              <v-select v-model="event.type" :options="eventTypes"></v-select>
+              <v-select v-model="editEvent.type" :options="eventTypes"></v-select>
             </div>
           </div> -->
           <div class="md-layout-item md-size-50 text-left">
             <label class="evnet-detail-label">Event Type</label>
-            <div class="form-group maryoku-field" v-if="event.eventType">
-              <!-- <v-select v-model="event.type" :options="eventTypes" item-text="name"></v-select> -->
+            <div class="form-group maryoku-field" v-if="editEvent.eventType">
+              <!-- <v-select v-model="editEvent.type" :options="eventTypes" item-text="name"></v-select> -->
               <v-select
                 :options="eventTypes.map(item=>{return item.name})"
                 name="category"
-                v-model="event.eventType.name"
+                v-model="editEvent.eventType.name"
                 v-validate="'required'"
                 item-text="name"
                 ></v-select>
@@ -520,12 +520,10 @@
             <label class="evnet-detail-label">Date</label>
             <div class="form-group">
               <md-datepicker
-                :class="[{'md-error': (event.date)}]"
-                v-model="event.eventStartMillis"
+                :class="[{'md-error': (editEvent.date)}]"
+                v-model="editEvent.eventStartMillis"
                 data-vv-name="date"
-                md-immediately="true"
-                ref="datePicker"
-                md-model-type="number"
+                md-immediately
                 required>
               </md-datepicker>
             </div>
@@ -537,7 +535,7 @@
               <div class="input-icon">
                 <img :src="`${iconsURL}users-dark.svg`" width="20" />
               </div>
-              <input type="number" class="form-control" v-model="event.numberOfParticipants" />
+              <input type="number" class="form-control" v-model="editEvent.numberOfParticipants" />
             </div>
           </div>
           <div class="md-layout-item md-size-100 margin-bottom text-left">
@@ -546,14 +544,14 @@
               <div class="input-icon">
                 <img :src="`${iconsURL}location-dark.svg`" width="20" />
               </div>
-              <input type="text" class="form-control" v-model="event.location" />
+              <input type="text" class="form-control" v-model="editEvent.location" />
             </div>
           </div>
         </div>
       </template>
       <template slot="footer">
         <md-button class="md-default md-simple cancel-btn" @click="showEditDetailModal=false">Cancel</md-button>
-        <md-button class="md-red add-category-btn" @click="showEditDetailModal=false">Save</md-button>
+        <md-button class="md-red add-category-btn" @click="updateEvent">Save</md-button>
       </template>
     </modal>
   </div>
@@ -612,6 +610,7 @@ export default {
   data: () => ({
     // auth: auth,
     event: null,
+    editEvent: null,
     eventId: null,
     percentage: 0,
     totalRemainingBudget: 0,
@@ -991,6 +990,36 @@ export default {
         .catch(error => {
           console.log(error)
         })
+    },
+    openEditDetail () {
+      this.editEvent = {
+        eventDayPart : this.event.eventDayPart,
+        eventType: this.event.eventType,
+        eventStartMillis : this.event.eventStartMillis,
+        numberOfParticipants: this.event.numberOfParticipants,
+        location: this.event.location
+      }
+      console.log(this.event.eventStartMillis);
+      this.showEditDetailModal = true
+    },
+    updateEvent () {
+      // 
+      const updateEvent = {...this.event, ...this.editEvent}
+      const eventType = this.eventTypes.find(it=>it.name === updateEvent.eventType.name)
+      updateEvent.eventType = eventType
+      console.log(eventType);
+      let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+      updateEvent.eventStartMillis = updateEvent.eventStartMillis.getTime();
+      new CalendarEvent(updateEvent)
+      .for(calendar).save()
+      .then(res=>{
+        // console.log(res);
+        this.event = res;
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+      this.showEditDetailModal = false
     }
   },
   created () {
