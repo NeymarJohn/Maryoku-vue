@@ -899,9 +899,12 @@
 
     .timeline-items-list {
         margin-top:1em;
-
+        height: 100%;
         &__item {
             padding-bottom : 1em;
+            &:last-child {
+                height:100%;
+            }
             .item-header {
                 position: relative;
                 text-align: center;

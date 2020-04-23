@@ -142,8 +142,9 @@
                                                 <label class="upload-section" for="file">
                                                     <div class="md-rose md-outline md-simple md-sm attachment">
                                                         <md-icon>attachment</md-icon>
-                                                        {{item.attachmentName?item.attachmentName:"Choose file"}}
+                                                        Choose file
                                                     </div>
+                                                    {{ item.attachmentName }}
                                                     <!-- <div class="note">Drag your file here</div> -->
                                                 </label>
 
@@ -162,7 +163,7 @@
                                     <md-card-actions md-alignment="right" style="border: none;" class="edit-timeline-footer">
                                         <md-button name="event-planner-tab-timeline-item-save"
                                                    class="event-planner-tab-timeline-item-save md-default md-simple"
-                                                   @click="cancelTimelineItem(item,index)">Cancel
+                                                   @click="cancelTimelineItem(item, indx, index)">Cancel
                                         </md-button>
                                         <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-save"
                                                    class="event-planner-tab-timeline-item-save md-red" v-if="!item.dateCreated"
@@ -571,13 +572,14 @@ export default {
         this.$root.$emit('timeline-updated', this.timelineItems)
       })
     },
-    cancelTimelineItem (item, index) {
+    cancelTimelineItem (item, timelineIndex, itemIndexOfTimeline) {
+      const itemIndex = this.timelineItems.findIndex(it=>it.id===item.id);
       if (item.dateCreated) {
-          this.$set(this.timelineItems[index], 'mode', 'saved')
-          this.$set(this.timeline[0].items[index], 'mode', 'saved')
+          this.$set(this.timelineItems[itemIndex], 'mode', 'saved')
+          this.$set(this.timeline[timelineIndex].items[itemIndexOfTimeline], 'mode', 'saved')
       } else {
-          this.timelineItems.splice(index, 1)
-          this.timeline[0].items.splice(index, 1)
+          // this.timelineItems.splice(itemIndex, 1)
+          this.timeline[timelineIndex].items.splice(itemIndexOfTimeline, 1)
       }
       this.disabledDragging = false
     },
