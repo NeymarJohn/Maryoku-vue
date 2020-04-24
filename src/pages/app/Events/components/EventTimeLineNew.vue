@@ -33,32 +33,32 @@
             </div>
 
             <div class="timeline-items-list">
-                <div class="timeline-items-list__item" v-for="(timelineItem,indx) in timeline" :key="indx">
+                <div class="timeline-items-list__item" v-for="(timelineItem,timelineIndex) in timeline" :key="timelineIndex">
                     <div class="item-header">
                         <div  class="header-title">
                           <div class="time-line-edit d-flex justify-content-center align-center" > 
-                            <label style="white-space:nowrap; padding-right:10px">Day {{numberToWord(indx + 1)}} </label>
+                            <label style="white-space:nowrap; padding-right:10px">Day {{numberToWord(timelineIndex + 1)}} </label>
                             <div>{{formatDate(timelineItem.itemDay)}}</div>
                             <md-datepicker 
-                              v-model="timeline[indx].itemDay" 
-                              :md-disabled-dates="getDisabledDates(indx)" 
-                              :md-closed="closeEditTimeline(indx)" 
+                              v-model="timeline[timelineIndex].itemDay" 
+                              :md-disabled-dates="getDisabledDates(timelineIndex)" 
+                              :md-closed="closeEditTimeline(timelineIndex)" 
                               md-immediately
                               md-model-type="number"
                             > </md-datepicker>
                           </div> 
                         </div>
                         <div class="header-actions">
-                            <md-button class="md-default md-simple md-just-icon" @click="addTimelineItem(indx)">
+                            <md-button class="md-default md-simple md-just-icon" @click="addTimelineItem(timelineIndex)">
                                 <md-icon>add_circle</md-icon>
                             </md-button>
-                            <md-button class="md-default md-simple md-just-icon" @click="askRemoveTimelineItem(indx)">
+                            <md-button class="md-default md-simple md-just-icon" @click="askRemoveTimelineItem(timelineIndex)">
                                 <md-icon>delete_outline</md-icon>
                             </md-button>
                         </div>
                     </div>
 
-                    <drop @drop="handleDrop(indx, ...arguments)" style="height: 100%; min-height: 50px;" :data-index="indx">
+                    <drop @drop="handleDrop(timelineIndex, ...arguments)" style="height: 100%; min-height: 50px;" :data-index="timelineIndex">
                         <draggable :list="timelineItem.items" class="time-line-blocks_selected-items"
                                    :options="{disabled : disabledDragging}">
                             <div v-for="(item,index) in timelineItem.items" :key="index"
@@ -142,9 +142,9 @@
                                                 <label class="upload-section" for="file">
                                                     <div class="md-rose md-outline md-simple md-sm attachment">
                                                         <md-icon>attachment</md-icon>
-                                                        Choose file
+                                                        Choose file(10MB)
                                                     </div>
-                                                    {{ item.attachmentName }}
+                                                    {{ item.originalAttachmentName }}
                                                     <!-- <div class="note">Drag your file here</div> -->
                                                 </label>
 
@@ -154,6 +154,8 @@
                                                     name="attachment"
                                                     type="file"
                                                     :data-item="item.id"
+                                                    :data-timelineindex="timelineIndex"
+                                                    :data-itemIndex="index"
                                                     @change="onFileChange"/>
 
                                             </div>
@@ -163,11 +165,11 @@
                                     <md-card-actions md-alignment="right" style="border: none;" class="edit-timeline-footer">
                                         <md-button name="event-planner-tab-timeline-item-save"
                                                    class="event-planner-tab-timeline-item-save md-default md-simple"
-                                                   @click="cancelTimelineItem(item, indx, index)">Cancel
+                                                   @click="cancelTimelineItem(item, timelineIndex, index)">Cancel
                                         </md-button>
                                         <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-save"
                                                    class="event-planner-tab-timeline-item-save md-red" v-if="!item.dateCreated"
-                                                   @click="saveTimelineItem(item,index,timelineItem.itemDay)">Save
+                                                   @click="saveTimelineItem(item, index, timelineItem.itemDay)">Save
                                         </md-button>
                                         <md-button :disabled="item.isItemLoading" name="event-planner-tab-timeline-item-edit"
                                                    class="event-planner-tab-timeline-item-edit md-red" v-else
@@ -191,10 +193,10 @@
                                             <p class="item-desc">
                                               {{ item.description }}
                                             </p>
-                                            <p class="item-attachment" v-if="item.attachmentName">
-                                              <span>
+                                            <p class="item-attachment" v-if="item.originalAttachmentName">
+                                              <span @click="openAttachment(item.attachmentURL)" class="attachment-link">
                                                 <md-icon>attachment</md-icon>
-                                                {{ item.attachmentName }}
+                                                {{ item.originalAttachmentName }}
                                               </span>
                                             </p>
                                             <p class="item-location" v-if="item.location" >
@@ -466,13 +468,15 @@ export default {
 
       if (data) {
         let block = Object.assign({}, data.block)
+        block.id = new Date().getTime()  //add temp id
         block.mode = 'edit'
         block.startTime = '08:00'
         block.endTime = '09:00'
         block.title = block.buildingBlockType
         block.startDuration = 'am'
         block.endDuration = 'am'
-
+        block.originalAttachmentName = ""
+        block.attachment = "none"
         block.isItemLoading = false
         if (this.timelineItems.length > 0) {
           // block.startTime = this.$moment(this.timelineItems[this.timelineItems.length - 1].endTime, 'H:mm A').format('H:mm A')
@@ -609,7 +613,7 @@ export default {
       let event = new CalendarEvent({id: this.event.id})
       let order = ++index
 
-      new EventTimelineItem({
+      const newTimeline = {
         event: {id: event.id},
         title: item.title,
         buildingBlockType: item.buildingBlockType,
@@ -622,24 +626,29 @@ export default {
         icon: item.icon,
         color: item.color,
         link: item.link,
-        attachment: this.timelineAttachment,
-        attachmentName: this.timelineAttachmentName,
+        originalAttachmentName: item.originalAttachmentName,
         plannedDate : plannedDate
-      }).for(calendar, event).save()
-        .then(res => {
-          this.getTimelineItems()
-          this.disabledDragging = false
-          this.$root.$emit('timeline-updated', this.timelineItems)
-          this.setItemLoading(item, false, true)
-        })
-        .catch(error => {
-          console.log(error)
-          this.disabledDragging = false
-          this.$root.$emit('timeline-updated', this.timelineItems)
-          this.setItemLoading(item, false, true)
-        })
+      }
+      this.uploadAttachment(item.attachment, item.attachmentName, (res) => {
+        newTimeline.attachmentURL = res.data.upload.path
+        newTimeline.attachmentName = res.data.upload.name
+        new EventTimelineItem(newTimeline).for(calendar, event).save()
+          .then(res => {
+            this.getTimelineItems()
+            this.disabledDragging = false
+            this.$root.$emit('timeline-updated', this.timelineItems)
+            this.setItemLoading(item, false, true)
+          })
+          .catch(error => {
+            console.log(error)
+            this.disabledDragging = false
+            this.$root.$emit('timeline-updated', this.timelineItems)
+            this.setItemLoading(item, false, true)
+          })
 
-      this.timelineAttachment = null
+        this.timelineAttachment = null
+      })
+      
     },
     updateTimelineItem (item) {
       this.setItemLoading(item, true, true)
@@ -671,20 +680,45 @@ export default {
       timelineItem.endTime = item.endTime
       timelineItem.link = item.link
       timelineItem.location = item.location
-      timelineItem.attachment = item.attachment
-      timelineItem.attachmentName = item.attachmentName
+      // timelineItem.attachment = item.attachment
+      timelineItem.originalAttachmentName = item.originalAttachmentName
 
-      timelineItem.save().then(res => {
-        this.getTimelineItems()
-        this.disabledDragging = false
-        this.$root.$emit('timeline-updated', this.timelineItems)
-      }).catch(error => {
-        console.log(error)
-        this.disabledDragging = false
-        this.$root.$emit('timeline-updated', this.timelineItems)
+      this.uploadAttachment(item.attachment, item.attachmentName, res => {
+        console.log(res);
+        timelineItem.attachmentName = res.data.upload.name
+        timelineItem.attachmentURL = res.data.upload.path
+        timelineItem.save().then(res => {
+          this.getTimelineItems()
+          this.disabledDragging = false
+          this.$root.$emit('timeline-updated', this.timelineItems)
+        }).catch(error => {
+          console.log(error)
+          this.disabledDragging = false
+          this.$root.$emit('timeline-updated', this.timelineItems)
+        })
+
+        this.timelineAttachment = null
       })
-
-      this.timelineAttachment = null
+    },
+    uploadAttachment(file, name, callback){
+      let formData = new FormData();
+      formData.append('file', file);
+      formData.append('from', 'timeline')
+      formData.append('type', 'attachment')
+      formData.append('name', name)
+      this.$http.post(`${process.env.SERVER_URL}/uploadFile`,
+          formData,
+          {
+          headers: {
+              'Content-Type': 'multipart/form-data'
+          }
+        }
+      ).then(function(data){
+        callback(data)
+      })
+      .catch(function(){
+        console.log('FAILURE!!');
+      });
     },
     updateTimelineITemsOrder () {
       this.isLoading = true
@@ -735,18 +769,31 @@ export default {
     onFileChange(event)  {
       let files = event.target.files || event.dataTransfer.files
       if (!files.length) return
+      let reader = new FileReader()
+      let vm = this
       if (event.target.name) {
-        const itemId = event.target.getAttribute('data-item');
-        const itemIndex = this.timelineItems.findIndex(it=>it.id === itemId)
-        if (itemIndex >= 0) {
-          let reader = new FileReader()
-          let vm = this
-          reader.onload = e => {
-            this.timelineItems[itemIndex].attachmentName = files[0].name
-            this.timelineItems[itemIndex].attachment = e.target.result
-          }
-          reader.readAsDataURL(files[0])
+        const itemId = event.target.getAttribute('data-item')
+        const timelineIndex = event.target.getAttribute('data-timelineindex')
+        const itemIndex = event.target.getAttribute('data-itemIndex')
+        console.log(timelineIndex, itemIndex);
+        if (files[0].size > 10 * 1024 * 1024) {
+          swal({
+            title: 'This file is larger than 10MB',
+            showCloseButton: true,
+            text : 'Please choose another file',
+            confirmButtonClass: 'md-button md-red',
+            confirmButtonText: 'I got it',
+            buttonsStyling: false
+          }).then(result => {
+            
+          }).catch(err => {
+                  console.log(err)
+              })
+        } else  {
+          vm.timeline[timelineIndex].items[itemIndex].originalAttachmentName = files[0].name
+          vm.timeline[timelineIndex].items[itemIndex].attachment = files[0]
         }
+        
       } else {
         this.createImage(files[0])
       }
@@ -758,126 +805,129 @@ export default {
       reader.onload = e => {
         if (type === 'attachment') {
           vm.timelineAttachment = e.target.result
-          vm.timelineAttachmentName = file.name
+          vm.timelineoriginalAttachmentName = file.name
         } else {
           // vm.imageRegular = e.target.result;
         }
       }
       reader.readAsDataURL(file)
     },
-      formatDate(date) {
-        console.log(date);
-        console.log(new Date(date));
-        if (typeof(date) == 'number') {
-          console.log(moment(new Date(date)).format('MM/DD/YY') );
-          return moment(new Date(date)).format('MM/DD/YY') 
-        }
-        return moment(date).format('MM/DD/YY')
-      },
-      numberToWord(num) {
-
-        let vm = this;
-
-          if ((num = num.toString()).length > 9) return 'overflow';
-          let n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
-          if (!n) return; var str = '';
-          str += (n[1] != 0) ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + ' ' + vm.a[n[1][1]]) + 'crore ' : '';
-          str += (n[2] != 0) ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + ' ' + vm.a[n[2][1]]) + 'lakh ' : '';
-          str += (n[3] != 0) ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + ' ' + vm.a[n[3][1]]) + 'thousand ' : '';
-          str += (n[4] != 0) ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + ' ' + vm.a[n[4][1]]) + 'hundred ' : '';
-          str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (vm.a[Number(n[5])] || vm.b[n[5][0]] + ' ' + vm.a[n[5][1]]) : '';
-          return str;
-
-      },
-      addTimelineItem(index) {
-        let timelineLength = this.timeline.length - 1;
-        // const isInsertable = this.timeline.length - 1 == index;
-        console.log(this.timeline[index].itemDay );
-        console.log(typeof(this.timeline[index].itemDay ));
-        let nextDay = 0;
-        if (typeof(this.timeline[index].itemDay ) == "number")
-          nextDay = this.timeline[index].itemDay + (1000 * 60 * 60 * 24);
-        else 
-          nextDay = this.timeline[index].itemDay.getTime() + (1000 * 60 * 60 * 24);
-          
-        if (this.timeline[index+1] && this.formatDate(this.timeline[index+1].itemDay) === this.formatDate(nextDay)) {
-          return;
-        }
-        this.timeline.forEach((item,index) => {
-          this.timeline[index].isEditable = false;
-        })
-        this.timeline.splice(index + 1, 0, {
-            date : this.formatDate(nextDay),
-            items : [],
-            itemDay : nextDay,
-            isEditable : true
-        })
-      },
-      askRemoveTimelineItem(index) {
-        this.indexOfDeleteItem = index;
-        this.showDeleteConfirmModal = true;
-      },
-      removeTimelineItem() {
-        if ( this.timeline[this.indexOfDeleteItem].items.length === 0 ) {
-          this.timeline.splice(this.indexOfDeleteItem, 1);
-          this.indexOfDeleteItem = -1;
-          this.showDeleteConfirmModal = false;
-        } else {
-
-        }
-      },
-      saveTimeline(){
-          swal({
-              title: 'Saved It!',
-              showCloseButton: true,
-              text : 'We’ll update the related vendors',
-              confirmButtonClass: 'md-button md-red',
-              cancelButtonClass: 'md-button md-red',
-              confirmButtonText: 'Cool, Thanks',
-              buttonsStyling: false
-          }).then(result => {
-            
-          }).catch(err => {
-                  console.log(err)
-              })
-
-      },
-
-      onConfirm () {
-        this.value = 'Agreed'
-      },
-      onCancel () {
-        this.value = 'Disagreed'
-      },
-      editTimeline (index) {
-        if (!this.timeline[index]) return;
-        const isEdit = this.timeline[index].isEditable;
-        this.timeline.forEach((item,index) => {
-          this.timeline[index].isEditable = false;
-        })
-        this.timeline[index].isEditable = !isEdit;
-        
-        console.log("forceUpdate");
-        this.$forceUpdate()
-      },
-      closeEditTimeline (index) {
-        // this.timeline[index].isEditable = false;
-        console.log("forceUpdate - 1");
-        // this.$forceUpdate()
-      },
-      getDisabledDates (index) {
-        console.log(index);
-        const vm = this;
-        const checkDate = function(date) {
-          if (index == 0) {
-            return false;
-          }
-          if (!vm.timeline[index + 1])
-            return date.getTime() <= vm.timeline[index - 1].itemDay;
-          return date.getTime() <= vm.timeline[index - 1].itemDay || date.getTime() >= vm.timeline[index + 1].itemDay;
-        }
-        return checkDate;
+    openAttachment (path) {
+      window.open(`http://static.maryoku.com/${path}`, '_blank');
+    },
+    formatDate(date) {
+      console.log(date);
+      console.log(new Date(date));
+      if (typeof(date) == 'number') {
+        console.log(moment(new Date(date)).format('MM/DD/YY') );
+        return moment(new Date(date)).format('MM/DD/YY') 
       }
+      return moment(date).format('MM/DD/YY')
+    },
+    numberToWord(num) {
+
+      let vm = this;
+
+        if ((num = num.toString()).length > 9) return 'overflow';
+        let n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+        if (!n) return; var str = '';
+        str += (n[1] != 0) ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + ' ' + vm.a[n[1][1]]) + 'crore ' : '';
+        str += (n[2] != 0) ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + ' ' + vm.a[n[2][1]]) + 'lakh ' : '';
+        str += (n[3] != 0) ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + ' ' + vm.a[n[3][1]]) + 'thousand ' : '';
+        str += (n[4] != 0) ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + ' ' + vm.a[n[4][1]]) + 'hundred ' : '';
+        str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (vm.a[Number(n[5])] || vm.b[n[5][0]] + ' ' + vm.a[n[5][1]]) : '';
+        return str;
+
+    },
+    addTimelineItem(index) {
+      let timelineLength = this.timeline.length - 1;
+      // const isInsertable = this.timeline.length - 1 == index;
+      console.log(this.timeline[index].itemDay );
+      console.log(typeof(this.timeline[index].itemDay ));
+      let nextDay = 0;
+      if (typeof(this.timeline[index].itemDay ) == "number")
+        nextDay = this.timeline[index].itemDay + (1000 * 60 * 60 * 24);
+      else 
+        nextDay = this.timeline[index].itemDay.getTime() + (1000 * 60 * 60 * 24);
+        
+      if (this.timeline[index+1] && this.formatDate(this.timeline[index+1].itemDay) === this.formatDate(nextDay)) {
+        return;
+      }
+      this.timeline.forEach((item,index) => {
+        this.timeline[index].isEditable = false;
+      })
+      this.timeline.splice(index + 1, 0, {
+          date : this.formatDate(nextDay),
+          items : [],
+          itemDay : nextDay,
+          isEditable : true
+      })
+    },
+    askRemoveTimelineItem(index) {
+      this.indexOfDeleteItem = index;
+      this.showDeleteConfirmModal = true;
+    },
+    removeTimelineItem() {
+      if ( this.timeline[this.indexOfDeleteItem].items.length === 0 ) {
+        this.timeline.splice(this.indexOfDeleteItem, 1);
+        this.indexOfDeleteItem = -1;
+        this.showDeleteConfirmModal = false;
+      } else {
+
+      }
+    },
+    saveTimeline(){
+        swal({
+            title: 'Saved It!',
+            showCloseButton: true,
+            text : 'We’ll update the related vendors',
+            confirmButtonClass: 'md-button md-red',
+            cancelButtonClass: 'md-button md-red',
+            confirmButtonText: 'Cool, Thanks',
+            buttonsStyling: false
+        }).then(result => {
+          
+        }).catch(err => {
+                console.log(err)
+            })
+
+    },
+
+    onConfirm () {
+      this.value = 'Agreed'
+    },
+    onCancel () {
+      this.value = 'Disagreed'
+    },
+    editTimeline (index) {
+      if (!this.timeline[index]) return;
+      const isEdit = this.timeline[index].isEditable;
+      this.timeline.forEach((item,index) => {
+        this.timeline[index].isEditable = false;
+      })
+      this.timeline[index].isEditable = !isEdit;
+      
+      console.log("forceUpdate");
+      this.$forceUpdate()
+    },
+    closeEditTimeline (index) {
+      // this.timeline[index].isEditable = false;
+      console.log("forceUpdate - 1");
+      // this.$forceUpdate()
+    },
+    getDisabledDates (index) {
+      console.log(index);
+      const vm = this;
+      const checkDate = function(date) {
+        if (index == 0) {
+          return false;
+        }
+        if (!vm.timeline[index + 1])
+          return date.getTime() <= vm.timeline[index - 1].itemDay;
+        return date.getTime() <= vm.timeline[index - 1].itemDay || date.getTime() >= vm.timeline[index + 1].itemDay;
+      }
+      return checkDate;
+    }
 
   },
   created () {
