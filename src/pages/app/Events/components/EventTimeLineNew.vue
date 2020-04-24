@@ -83,18 +83,9 @@
                                                   Start At 
                                                 </label>
                                                 <div class="time-select-fields">
-                                                    <!-- <input type="time"  v-model="item.startTime" class="without_ampm" > -->
                                                     <time-selector v-model="item.startTime" :h24="false" displayFormat="hh:mm"></time-selector>
-                                                    <!-- <select v-model="item.startDuration">
-                                                        <option value="am" >AM</option>
-                                                        <option value="PM">PM</option>
-                                                    </select> -->
                                                 </div>
                                             </div>
-                                            <!--                                    <md-field>-->
-                                            <!--                                        <input-mask v-focus placeholder="From Time e.g:08:00 AM" class="md-input"-->
-                                            <!--                                                    v-model="item.startTime" mask="99:99 aa" maskChar="_"></input-mask>-->
-                                            <!--                                    </md-field>-->
                                         </div>
                                         <div class="md-layout-item md-size-10 d-flex justify-content-center align-center" style="position : relative">
                                             <div class="divider"></div>
@@ -107,19 +98,8 @@
                                                   </label>
                                                 <div class="time-select-fields">
                                                    <time-selector v-model="item.endTime" :h24="false" displayFormat="hh:mm"></time-selector>
-                                                    <!-- <input type="time"  v-model="item.endTime" class="without_ampm" > -->
-
-                                                    <!-- <select v-model="item.endDuration">
-                                                        <option value="am">AM</option>
-                                                        <option value="PM">PM</option>
-                                                    </select> -->
                                                 </div>
                                             </div>
-
-                                            <!--                                    <md-field>-->
-                                            <!--                                        <input-mask placeholder="To Time e.g:10:00 PM" class="md-input"-->
-                                            <!--                                                    v-model="item.endTime" mask="99:99 aa" maskChar="_"></input-mask>-->
-                                            <!--                                    </md-field>-->
                                         </div>
                                         <div class="md-layout-item md-size-100">
                                             <div class="form-group">
@@ -851,19 +831,16 @@ export default {
       return moment(new Date(date)).format('hh:mm A') 
     },
     numberToWord(num) {
-
       let vm = this;
-
-        if ((num = num.toString()).length > 9) return 'overflow';
-        let n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
-        if (!n) return; var str = '';
-        str += (n[1] != 0) ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + ' ' + vm.a[n[1][1]]) + 'crore ' : '';
-        str += (n[2] != 0) ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + ' ' + vm.a[n[2][1]]) + 'lakh ' : '';
-        str += (n[3] != 0) ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + ' ' + vm.a[n[3][1]]) + 'thousand ' : '';
-        str += (n[4] != 0) ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + ' ' + vm.a[n[4][1]]) + 'hundred ' : '';
-        str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (vm.a[Number(n[5])] || vm.b[n[5][0]] + ' ' + vm.a[n[5][1]]) : '';
-        return str;
-
+      if ((num = num.toString()).length > 9) return 'overflow';
+      let n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+      if (!n) return; var str = '';
+      str += (n[1] != 0) ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + ' ' + vm.a[n[1][1]]) + 'crore ' : '';
+      str += (n[2] != 0) ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + ' ' + vm.a[n[2][1]]) + 'lakh ' : '';
+      str += (n[3] != 0) ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + ' ' + vm.a[n[3][1]]) + 'thousand ' : '';
+      str += (n[4] != 0) ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + ' ' + vm.a[n[4][1]]) + 'hundred ' : '';
+      str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (vm.a[Number(n[5])] || vm.b[n[5][0]] + ' ' + vm.a[n[5][1]]) : '';
+      return str;
     },
     addTimelineItem(index) {
       let timelineLength = this.timeline.length - 1;

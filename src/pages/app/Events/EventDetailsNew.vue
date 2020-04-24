@@ -1,7 +1,6 @@
 <template>
   <div class="md-layout new-event-details edit-event-details" v-if="event">
     <side-bar :event="event"></side-bar>
-
     <div class="event-details-header md-layout-item md-size-100">
       <div class="event-details-info d-flex justify-content-start">
         <div
@@ -14,19 +13,6 @@
             <md-icon>keyboard_arrow_right</md-icon>
           </md-button>
         </div>
-        <!-- <div class="event-items">
-          <div
-            class="event-items__item"
-            v-for="(item,i,index) in event.eventNeededServices"
-            :key="index"
-          >
-            <img
-              src="http://static.maryoku.com/storage/icons/event's%20page/SVG/Asset%20155.svg"
-              width="15"
-            />
-            <span>{{i}}</span>
-          </div>
-        </div> -->
         <div class="header-detail">
           <div class="md-layout-item md-size-80">
             <div class="header-info-section">
@@ -98,25 +84,7 @@
                       </li>
                     </ul>
                   </div>
-                  <!-- <div class="event-weather">
-                    <div class="event-weather__icon">
-                      <img :src="`${iconsURL}Asset 161.svg`" width="40" />
-                    </div>
-                    <div class="event-weather__status">Mostly Sunny</div>
-                    <div class="event-weather__degree">
-                      <div class="degree-value">58</div>
-                      <ul class="degree-types">
-                        <li class="type red">F</li>
-                        <li class="type">C</li>
-                      </ul>
-                    </div>
-                    <div class="event-weather__details">
-                      <div class="details-item">Precipitation: 10%</div>
-                      <div class="details-item">Humidity: 38%</div>
-                      <div class="details-item">Wind: 7 mph</div>
-                    </div>
-                  </div> -->
-              </div>
+                </div>
             </div>
           </div>
         </div>
@@ -138,10 +106,7 @@
               </a>
             </li>
           </ul>
-          
         </div>
-        
-
       </div>
       <div class="event-header__count">
           <div class="count-item">
@@ -166,7 +131,6 @@
           </div>
         </div>
     </div>
-
     <div class="md-layout justify-content-between notes" style="margin:2em 50px;">
       <div class="md-layout-item md-size-25">
         <div class="card-section">
@@ -195,6 +159,7 @@
           <div class="section-header">
             <img :src="`${iconsURL}budget-dark.svg`" /> Budget & Vendors
             <!-- <img :src="`${iconsURL}Asset 453.svg`" /> -->
+            <span class="saved-budget">So far you saved:  <img :src="`${iconsURL}plus-green.svg`" width="20"/> $ 100 </span>
           </div>
 
           <div class="card-content">
@@ -307,12 +272,23 @@
 
           <div class="card-content">
             <div class="timeline-items">
-              <div
-                class="timeline-item d-flex justify-content-start"
-                v-for="(timeline,index) in event.timelineItems"
-              >
-                <div class="timeline-item__time">{{formatHour(timeline.startTime)}} - {{formatHour(timeline.endTime)}}</div>
-                <div class="timeline-item_title">{{timeline.title}}</div>
+              <div class="timeline-item" v-for="(timelineDate,timelineIndex) in event.timeline">
+                <div class="time-line-edit d-flex justify-content-center align-center time-line-header" > 
+                  <div class="cross-line cross-line-left"></div>
+                  <div class="d-flex justify-content-center align-center label ">
+                    <label style="white-space:nowrap; padding-right:10px">Day {{timelineIndex + 1}} </label>
+                    <div>{{formatDateString(timelineDate.itemDay)}}</div>
+                  </div>
+                  <div class="cross-line cross-line-right"></div>
+
+                </div> 
+                <div class="timeline-item d-flex justify-content-start" v-for="(timeline,index) in timelineDate.items" >
+                  <img class="timeline-item_icon"  :src="`${timlineIconsURL}${timeline.icon.toLowerCase()}-circle.svg`" width="45">
+                  <div class="timeline-item_time">
+                    {{formatHour(timeline.startTime)}} - {{formatHour(timeline.endTime)}}
+                    <div class="timeline-item_time_title">{{timeline.title}}</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -350,7 +326,7 @@
           <div class="card-content rsvp">
             <div class="d-flex justify-center align-center">
               <div class="guests-details text-center">
-                <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+26.png">
+                <img :src="`${iconsURL}users-gray.svg`" width="50">
                 <div class="total-budget">
                   Total Guests
                 </div>
@@ -638,86 +614,6 @@ export default {
     showEditDetailModal: false
   }),
   methods: {
-    /**
-     * Handle drop block to time line items
-     * @param data
-     * @param event
-     */
-    handleDrop (data, event) {
-      if (data) {
-        let block = Object.assign({}, data.block)
-        block.mode = 'edit'
-        block.startTime = '08:00 am'
-        block.endTime = '09:00 am'
-        block.isItemLoading = false
-        if (this.timelineItems.length > 0) {
-          block.startTime = this.$moment(
-            this.timelineItems[this.timelineItems.length - 1].endTime,
-            'H:mm A'
-          ).format('H:mm A')
-          block.endTime = this.$moment(
-            this.timelineItems[this.timelineItems.length - 1].endTime,
-            'H:mm A'
-          )
-            .add(1, 'hour')
-            .format('H:mm A')
-        }
-        this.timelineItems.push(Object.assign({}, block))
-        this.disabledDragging = true
-      } else {
-        setTimeout(this.updateTimelineITemsOrder, 100)
-      }
-    },
-
-    removeItem (item) {
-      swal({
-        title: 'Are you sure want to delete this item?',
-        showCancelButton: true,
-        confirmButtonClass: 'md-button md-success',
-        cancelButtonClass: 'md-button md-danger',
-        confirmButtonText: 'Yes, remove it!',
-        buttonsStyling: false
-      })
-        .then(result => {
-          if (result.value === true) {
-            this.setItemLoading(item, true, false)
-
-            let calendar = new Calendar({
-              id: this.$auth.user.defaultCalendarId
-            })
-            let event = new CalendarEvent({ id: this.event.id })
-
-            let timelineItem = new EventTimelineItem({ id: item.id }).for(
-              calendar,
-              event
-            )
-
-            timelineItem
-              .delete()
-              .then(result => {
-                this.getTimelineItems()
-              })
-              .catch(error => {
-                console.log(error)
-                this.$root.$emit('timeline-updated', this.timelineItems)
-              })
-          }
-        })
-        .catch(err => {
-          console.log(err)
-          this.$root.$emit('timeline-updated', this.timelineItems)
-        })
-    },
-    modifyItem (index) {
-      this.$set(this.timelineItems[index], 'mode', 'edit')
-      this.disabledDragging = true
-    },
-    previewEvent () {
-      this.$router.push({
-        name: 'EventDetails',
-        params: { id: this.event.id }
-      })
-    },
     getTimelineItems () {
       let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
       let event = new CalendarEvent({ id: this.event.id })
@@ -736,198 +632,38 @@ export default {
           this.timelineItems.forEach(item => {
             item.isItemLoading = false
           })
-          this.event.timelineItems = this.timelineItems
-          this.$root.$emit('timeline-updated', this.timelineItems)
+
+          var timelines = {};
+          // define timelines
+          this.timelineItems.forEach((item) => {
+            item.isItemLoading = false
+            if (!timelines[item.plannedDate]) timelines[item.plannedDate] = [];
+            item.isItemLoading = false;
+            timelines[item.plannedDate].push(item); 
+          })
+
+          if (Object.keys(timelines).length > 0) {
+            this.timeline = [];
+            Object.keys(timelines).forEach((itemDay, index) => {
+              console.log( index);
+              this.timeline.push({
+                itemDay: parseInt(itemDay),
+                isEditable: false,
+                items : timelines[itemDay]
+              })
+            })
+          }
+          this.timeline = _.sortBy(this.timeline, function(item) {
+          return item.itemDay;
         })
-    },
-    cancelTimelineItem (item, index) {
-      if (item.dateCreated) {
-        this.$set(this.timelineItems[index], 'mode', 'saved')
-      } else {
-        this.timelineItems.splice(index, 1)
-      }
-      this.disabledDragging = false
-    },
-    saveTimelineItem (item, index) {
-      console.log('ameed')
-      this.setItemLoading(item, true, true)
-
-      if (
-        !item.startTime ||
-        !item.endTime ||
-        (!item.title && !item.description)
-      ) {
-        this.$notify({
-          message:
-            'From time, To time and ( Title or Description ) id Required',
-          horizontalAlign: 'center',
-          verticalAlign: 'top',
-          type: 'warning'
-        })
-
-        this.setItemLoading(item, false, true)
-
-        return
-      }
-
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-      let event = new CalendarEvent({ id: this.event.id })
-      let order = ++index
-
-      new EventTimelineItem({
-        event: { id: event.id },
-        title: item.title,
-        buildingBlockType: item.buildingBlockType,
-        description: item.description,
-        startTime: item.startTime,
-        endTime: item.endTime,
-        order: order,
-        icon: item.icon,
-        color: item.color,
-        link: item.link,
-        attachment: this.timelineAttachment
+        // this.timeline[0].items.forEach((item) => {
+        //     item.isItemLoading = false
+        // })
+        this.event.timeline = this.timeline;
+        this.event.timelineItems = this.timelineItems
+        this.$root.$emit('timeline-updated', this.timelineItems)
       })
-        .for(calendar, event)
-        .save()
-        .then(res => {
-          this.getTimelineItems()
-          this.disabledDragging = false
-          this.$root.$emit('timeline-updated', this.timelineItems)
-        })
-        .catch(error => {
-          console.log(error)
-          this.disabledDragging = false
-          this.$root.$emit('timeline-updated', this.timelineItems)
-        })
-
-      this.timelineAttachment = null
     },
-    updateTimelineItem (item) {
-      this.setItemLoading(item, true, true)
-
-      if (
-        !item.startTime ||
-        !item.endTime ||
-        (!item.title && !item.description)
-      ) {
-        this.$set(item, 'isItemLoading', false)
-
-        this.$notify({
-          message:
-            'From time, To time and ( Title or Description ) id Required',
-          horizontalAlign: 'center',
-          verticalAlign: 'top',
-          type: 'warning'
-        })
-
-        this.setItemLoading(item, false, true)
-        return
-      }
-
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-      let event = new CalendarEvent({ id: this.event.id })
-
-      let timelineItem = new EventTimelineItem({ id: item.id }).for(
-        calendar,
-        event
-      )
-
-      timelineItem.title = item.title
-      timelineItem.description = item.description
-      timelineItem.startTime = item.startTime
-      timelineItem.endTime = item.endTime
-      timelineItem.link = item.link
-      timelineItem.attachment = this.timelineAttachment
-
-      timelineItem
-        .save()
-        .then(res => {
-          this.getTimelineItems()
-          this.disabledDragging = false
-          this.$root.$emit('timeline-updated', this.timelineItems)
-        })
-        .catch(error => {
-          console.log(error)
-          this.disabledDragging = false
-          this.$root.$emit('timeline-updated', this.timelineItems)
-        })
-
-      this.timelineAttachment = null
-    },
-    updateTimelineITemsOrder () {
-      this.isLoading = true
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-      let event = new CalendarEvent({ id: this.event.id })
-
-      let new_order = 1
-      const timelineItemsForUpdate = []
-      this.timelineItems.forEach(item => {
-        item.order = new_order
-        timelineItemsForUpdate.push({ id: item.id, order: new_order })
-        new_order += 1
-      })
-
-      let timelineItem = new EventTimelineItem({
-        id: 'updateMultiple',
-        timelineItems: timelineItemsForUpdate
-      }).for(calendar, event)
-
-      timelineItem.order = new_order
-
-      timelineItem
-        .save()
-        .then(res => {
-          /* this.$notify(
-                      {
-                        message: "Timeline Items order modified successfully",
-                        horizontalAlign: 'center',
-                        verticalAlign: 'top',
-                        type: 'success'
-                      }); */
-          this.event.timelineItems = this.timelineItems
-          this.isLoading = false
-          this.$root.$emit('timeline-updated', this.timelineItems)
-        })
-        .catch(error => {
-          console.log(error)
-          this.$root.$emit('timeline-updated', this.timelineItems)
-        })
-    },
-    setItemLoading (item, loading, force) {
-      this.$set(item, 'isItemLoading', loading)
-      if (force) {
-        this.$set(item, 'mode', 'saved')
-        this.$set(item, 'mode', 'edit')
-      } else {
-        this.$set(item, 'mode', 'edit')
-        this.$set(item, 'mode', 'saved')
-      }
-    },
-    onFileChange (e) {
-      let files = e.target.files || e.dataTransfer.files
-      if (!files.length) return
-      console.log(e.target.name);
-      if (e.target.name) {
-        this.createImage(files[0], 'attachment')
-      } else {
-        this.createImage(files[0])
-      }
-    },
-    createImage (file, type) {
-      let reader = new FileReader()
-      let vm = this
-
-      reader.onload = e => {
-        if (type === 'attachment') {
-          console.log(e.target);
-          vm.timelineAttachment = e.target.result
-        } else {
-          // vm.imageRegular = e.target.result;
-        }
-      }
-      reader.readAsDataURL(file)
-    },
-
     getCalendarEventStatistics (evt) {
       let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
       let event = new CalendarEvent({ id: evt.id })
@@ -1024,6 +760,27 @@ export default {
     formatHour(date) {
       return moment(new Date(date)).format('hh:mm A') 
     },
+    formatDateString(date) {
+      console.log(date);
+      console.log(new Date(date));
+      if (typeof(date) == 'number') {
+        console.log(moment(new Date(date)).format('MM/DD/YY') );
+        return moment(new Date(date)).format('MM/DD/YY') 
+      }
+      return moment(date).format('MM/DD/YY')
+    },
+    numberToWord(num) {
+      let vm = this;
+      if ((num = num.toString()).length > 9) return 'overflow';
+      let n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+      if (!n) return; var str = '';
+      str += (n[1] != 0) ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + ' ' + vm.a[n[1][1]]) + 'crore ' : '';
+      str += (n[2] != 0) ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + ' ' + vm.a[n[2][1]]) + 'lakh ' : '';
+      str += (n[3] != 0) ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + ' ' + vm.a[n[3][1]]) + 'thousand ' : '';
+      str += (n[4] != 0) ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + ' ' + vm.a[n[4][1]]) + 'hundred ' : '';
+      str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (vm.a[Number(n[5])] || vm.b[n[5][0]] + ' ' + vm.a[n[5][1]]) : '';
+      return str;
+    }
   },
   created () {
     this.$store.dispatch('event/getEventTypes', {
@@ -1058,13 +815,9 @@ export default {
           .find(this.$route.params.id)
           .then(event => {
             this.event = event
-
             console.log(this.event)
-
             this.getCalendarEventStatistics(event)
-
             this.getTimelineItems()
-
             new EventComponent()
               .for(_calendar, event)
               .get()
@@ -1457,6 +1210,25 @@ export default {
       margin-top: 42px;
       margin-bottom: 10px;
       display: inline-block;
+    }
+  }
+  .time-line-header {
+    margin: auto;
+    margin: auto;
+    font-size: 16px;
+    text-align: left;
+    color: #a0a0a0;
+    .label {
+      padding: 16px 16px;
+      font-family: "Manrope-ExtraBold";
+    }
+    .cross-line {
+      content: " ";
+      border-bottom: solid 1px #a0a0a0;
+      flex-grow:1;
+    }
+    .cross-line-left {
+      max-width: 45px;
     }
   }
 </style>

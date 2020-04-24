@@ -183,6 +183,20 @@
             background: #fff !important;
             text-align: left;
             border-radius: 0;
+            .saved-budget {
+                float: right;
+                padding: 0;
+                font-size: 16px;
+            }
+            .header-info {
+                font-size: 16px;
+                font-family: 'Manrope-Regular';
+                .status {
+                    color: #0fac4c;
+                    font-weight: bolder;
+                    font-family: 'Manrope-Bold';
+                }
+            }
         }
     }
 }
@@ -1737,8 +1751,11 @@
         margin-top:1em;
         width: 25%;
         padding: 10px 30px;
+        .md-button-content {
+            font-size: 16px;
+        }
         .total-budget-value {
-            font-size: 38px;
+            font-size: 50px;
             font-weight: bold;
             color: #050505;
             // margin-right : 0.5em;
@@ -1746,7 +1763,8 @@
         }
 
         .total-budget {
-            font-size: 14px;
+            font-size: 16px;
+            padding-top:15px;
             font-weight: normal;
             color: #050505;
         }
@@ -1835,40 +1853,43 @@
             color: #050505;
             font-size: 14px;
             position: relative;
-            padding-left: 2.5em;
+            // padding-left: 2.5em;
             margin-bottom: 2.44em;
-
-            &:before {
-                content : ' ';
-                width : 10px;
-                height : 10px;
-                position : absolute;
-                left: 0 ;
-                border-radius: 50%;
-                top: 6px;
-                background: #f51355;
-            }
+           
+            // &:before {
+            //     content : ' ';
+            //     width : 10px;
+            //     height : 10px;
+            //     position : absolute;
+            //     left: 0 ;
+            //     border-radius: 50%;
+            //     top: 6px;
+            //     background: #f51355;
+            // }
 
             &:not(:last-child) {
                 &:after {
                     content : ' ';
                     position : absolute;
-                    left: 4px;
-                    top: 15px;
+                    left: 22px;
+                    top: 45px;
                     border: 1px dashed #f51355;
                     width: 1px;
                     height: 50px;
                 }
             }
-
-            &__time {
+            &_icon {
+                margin-right: 16px;
+            }
+            &_time {
                 margin-right : 1em;
-                font-weight: bold;
                 font-family: 'Manrope-Extrabold';
+                font-size: 16px;
+                &_title {
+                    font-family: 'Manrope-Regular' !important;
+                }
             }
-            &__title {
-
-            }
+            
         }
     }
 
