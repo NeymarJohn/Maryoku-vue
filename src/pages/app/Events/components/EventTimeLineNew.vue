@@ -83,11 +83,12 @@
                                                   Start At 
                                                 </label>
                                                 <div class="time-select-fields">
-                                                    <input type="time"  v-model="item.startTime" class="without_ampm" >
-                                                    <select v-model="item.startDuration">
+                                                    <!-- <input type="time"  v-model="item.startTime" class="without_ampm" > -->
+                                                    <time-selector v-model="item.startTime" :h24="false" displayFormat="hh:mm"></time-selector>
+                                                    <!-- <select v-model="item.startDuration">
                                                         <option value="am" >AM</option>
                                                         <option value="PM">PM</option>
-                                                    </select>
+                                                    </select> -->
                                                 </div>
                                             </div>
                                             <!--                                    <md-field>-->
@@ -105,12 +106,13 @@
                                                   Finishes At
                                                   </label>
                                                 <div class="time-select-fields">
-                                                    <input type="time"  v-model="item.endTime" class="without_ampm" >
+                                                   <time-selector v-model="item.endTime" :h24="false" displayFormat="hh:mm"></time-selector>
+                                                    <!-- <input type="time"  v-model="item.endTime" class="without_ampm" > -->
 
-                                                    <select v-model="item.endDuration">
+                                                    <!-- <select v-model="item.endDuration">
                                                         <option value="am">AM</option>
                                                         <option value="PM">PM</option>
-                                                    </select>
+                                                    </select> -->
                                                 </div>
                                             </div>
 
@@ -185,7 +187,7 @@
                                     <md-card-content style="min-height: 80px;">
                                         <div class="item-title-and-time"
                                         >
-                                            <span class="item-time">{{ item.startTime }} - {{item.endTime}}</span>
+                                            <span class="item-time">{{ formatHour(item.startTime) }} - {{ formatHour(item.endTime)}}</span>
                                             <span class="item-title" style="font-weight: 500; display: inline-block;" v-if="item.title">
                                       {{item.title }}
                                     </span>
@@ -336,7 +338,7 @@ import _ from 'underscore'
 import SideBar from '../../../../components/SidebarPlugin/NewSideBar'
 import SidebarItem from '../../../../components/SidebarPlugin/NewSidebarItem.vue'
 import ProgressSidebar from './progressSidebar'
-
+import TimeSelector from '../../../../components/TimeSelector'
 
 import jsPDF from 'jspdf'
 import html2canvas from "html2canvas"
@@ -355,7 +357,8 @@ export default {
     SideBar,
     SidebarItem,
     ProgressSidebar,
-    Modal
+    Modal,
+    TimeSelector
   },
   props: {
     // event: Object,
@@ -470,8 +473,28 @@ export default {
         let block = Object.assign({}, data.block)
         block.id = new Date().getTime()  //add temp id
         block.mode = 'edit'
-        block.startTime = '08:00'
-        block.endTime = '09:00'
+
+        let startDate = new Date(this.timeline[index].itemDay)
+        let endDate = new Date(this.timeline[index].itemDay)
+        const timelineItemsCount = this.timeline[index].items.length
+        if (timelineItemsCount == 0) {
+          if (this.event.eventDayPart == "evening") {
+            startDate.setHours(19);
+            endDate.setHours(20)
+          } else  {
+            startDate.setHours(8);
+            endDate.setHours(9)
+          }
+        } else {
+          const prevItem = this.timeline[index].items[timelineItemsCount - 1]
+          startDate.setHours(new Date(prevItem.endTime).getHours());
+          endDate.setHours(new Date(prevItem.endTime).getHours() + 1 )
+        }
+        
+        
+        block.startTime = startDate
+        block.endTime = endDate
+
         block.title = block.buildingBlockType
         block.startDuration = 'am'
         block.endDuration = 'am'
@@ -823,6 +846,9 @@ export default {
         return moment(new Date(date)).format('MM/DD/YY') 
       }
       return moment(date).format('MM/DD/YY')
+    },
+    formatHour(date) {
+      return moment(new Date(date)).format('hh:mm A') 
     },
     numberToWord(num) {
 

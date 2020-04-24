@@ -311,7 +311,7 @@
                 class="timeline-item d-flex justify-content-start"
                 v-for="(timeline,index) in event.timelineItems"
               >
-                <div class="timeline-item__time">{{timeline.startTime}} - {{timeline.endTime}}</div>
+                <div class="timeline-item__time">{{formatHour(timeline.startTime)}} - {{formatHour(timeline.endTime)}}</div>
                 <div class="timeline-item_title">{{timeline.title}}</div>
               </div>
             </div>
@@ -1020,7 +1020,10 @@ export default {
         console.log(err);
       })
       this.showEditDetailModal = false
-    }
+    },
+    formatHour(date) {
+      return moment(new Date(date)).format('hh:mm A') 
+    },
   },
   created () {
     this.$store.dispatch('event/getEventTypes', {
