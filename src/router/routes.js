@@ -21,7 +21,7 @@ import EventGroups from '@/pages/app/Events/components/EventInvitees.vue'
 import NewEvent from '@/pages/app/Events/NewEvent.vue'
 import EditEvent from '@/pages/app/Events/EditEvent.vue'
 import EventDetails from '@/pages/app/Events/EventDetails.vue'
-import EventDetailsNew from '@/pages/app/Events/EventDetailsNew.vue'
+import EventDetailsOverView from '@/pages/app/Events/EventDetailsOverView.vue'
 import ShowEvent from '@/pages/app/Events/ShowEvent.vue'
 import VendorProposals from '@/pages/app/Events/VendorProposals.vue'
 import EventProposal from '@/pages/app/Events/EventProposal.vue'
@@ -49,8 +49,8 @@ import HomePage from '@/pages/app/HomePage/Home.vue'
 import publicRegister from '@/pages/app/SinginSingup/publicRegister.vue'
 
 // New Event Pages
-import CurrentEventsNew from "@/pages/app/Events/CurrentEventsNew.vue"
-import EventTimeLineNew from "@/pages/app/Events/components/EventTimeLineNew.vue"
+import EventDetailsBudget from "@/pages/app/Events/EventDetailsBudget.vue"
+import EventDetailsTimeline from "@/pages/app/Events/EventDetailsTimeline.vue"
 import BookingEvent from "@/pages/app/Events/components/BookingEvent.vue"
 import ChooseEventConcept from "@/pages/app/Events/components/ChooseEventConcept.vue"
 import EventProposalDetails from "@/pages/app/Events/components/EventProposalDetails.vue"
@@ -469,7 +469,7 @@ let EventPages = {
     }
   },
   {
-    path: '/events/:id/edit/timeline',
+    path: '/events/:id/edit/timeline/current',
     name: 'EditTimeLine',
     component: CurrentEvents,
     meta: {
@@ -560,9 +560,9 @@ let NewEventPages = {
     }
   },
   {
-    path: '/events/:id/edit/details/new',
+    path: '/events/:id/edit/budget',
     name: 'EditEventNew',
-    component: CurrentEventsNew,
+    component: EventDetailsBudget,
     meta: {
       title: 'Event Details',
       gtm: 'Event Edit',
@@ -571,8 +571,8 @@ let NewEventPages = {
   },
   {
     path: '/events/:id/edit/event',
-    name: 'EventDetailsNew',
-    component: EventDetailsNew,
+    name: 'EventDetailsOverView',
+    component: EventDetailsOverView,
     meta: {
       title: 'Event Details',
       gtm: 'Event Edit',
@@ -590,9 +590,9 @@ let NewEventPages = {
     }
   },
   {
-    path: '/events/:id/edit/timeline/new',
+    path: '/events/:id/edit/timeline',
     name: 'EditTimeLine',
-    component: EventTimeLineNew,
+    component: EventDetailsTimeline,
     meta: {
       title: 'Timeline',
       gtm: 'Event Timeline',
