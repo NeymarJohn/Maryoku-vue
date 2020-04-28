@@ -118,7 +118,7 @@
           <md-icon>close</md-icon>
           close
         </md-button>
-        <md-button v-if="requirement.editMode" class="md-xs md-rose md-simple" @click="saveEdit(requirement)">
+        <md-button v-if="requirement.editMode" class="md-xs md-red md-simple" @click="saveEdit(requirement)">
           <md-icon>check</md-icon>
           Save
         </md-button>

@@ -14,11 +14,9 @@ export default {
     return {}
   },
   mounted () {
-    alert(1)
     this.$auth.currentUser(this, true, () => {
-      alert(2)
       if (this.$auth.user.me && this.$auth.user.me.myEvents) {
-        alert(this.$auth.user.me.myEvents[0].id)
+        // alert(this.$auth.user.me.myEvents[0].id)
         this.$router.push({name: 'ShowEvent', params: {id: this.$auth.user.me.myEvents[0].id}})
       }
     })

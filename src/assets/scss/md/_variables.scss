@@ -24,13 +24,15 @@ $white-transparent: rgba($white-color, .8);
 $gray-color:  #999999 !default;
 $dark-gray: #5A5A5A !default;
 
-$brand-primary: $purple !default;
+// $brand-primary: $purple !default;
+$brand-primary: $red !default;
 $brand-success: $green !default;
 $brand-danger: $pink-262 !default;
 $brand-warning: $orange !default;
 $brand-info: $cyan !default;
 $brand-rose: $pink-262 !default;
 $brand-purple: $purple-500 !default;
+$brand-red: $red-550 !default;
 
 $border-radius-base: 3px !default;
 $border-radius-small: 2px !default;

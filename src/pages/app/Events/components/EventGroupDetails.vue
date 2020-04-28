@@ -128,7 +128,7 @@ export default {
       if (item.id === 'new') {
         item.id = null
         delete item['id']
-        alert(JSON.stringify(this.groupData))
+        // alert(JSON.stringify(this.groupData))
         new EventInvitee(item).for(this.groupData).save().then(res => {
           this.groupData.invitees.shift()
           this.groupData.invitees.push(res)

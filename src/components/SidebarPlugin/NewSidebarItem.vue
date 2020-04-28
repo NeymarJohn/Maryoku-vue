@@ -180,4 +180,7 @@ export default {
 .sidebar-menu-item {
   cursor: pointer;
 }
+.md-icon-font  {
+  font-size: 30px !important;
+}
 </style>

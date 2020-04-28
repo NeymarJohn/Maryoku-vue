@@ -74,9 +74,9 @@
             </div>
 
             <!-- Create Concept Section -->
-            <div class="concepts-list__item d-flex justify-content-start" :class="{expanded : expandCreateConcept}"
+            <div class="concepts-list__item d-flex justify-content-start"
             >
-                <div class="images-list create-concept" v-if="!expandCreateConcept">
+                <div class="images-list create-concept">
                     <div class="image-backgrounds">
                         <div class="image-background" v-for="idx in 4" :keu="idx"></div>
                     </div>
@@ -88,81 +88,17 @@
                             <div class="image-section d-flex  justify-content-center align-center">
                                 <img :src="`${conceptIconsURL}Asset 492.svg`">
                             </div>
+
                         </div>
                     </div>
                 </div>
-                <div class="concept-details" v-if="!expandCreateConcept">
+                <div class="concept-details">
                     <h3 class="create-title">Create Your Own Concept</h3>
-                    <p >Inspire us with your creative ideas and we<br> will make your dreams come true</p>
+                    <p>Inspire us with your creative ideas and we<br> will make your dreams come true</p>
                 </div>
-                <md-button class="md-rose md-simple md-just-icon view-concept" @click="expandCreateConcept = !expandCreateConcept">
+                <md-button class="md-rose md-simple md-just-icon view-concept">
                     <img :src="`${conceptIconsURL}Asset 490.svg`">
                 </md-button>
-
-                <div class="create-concept-from" v-if="expandCreateConcept">
-                    <div class="form-title">
-                        Create Your Own Concept
-                    </div>
-                    <div class="form-content">
-                        <div class="form-group">
-                            <label>Concept Name</label>
-                            <input type="text" class="form-control" placeholder="Type your concept here…">
-                        </div>
-                        <div class="form-group add-tags-field">
-                            <label>Tags <small>*suggested</small></label>
-                            <input type="text" v-model="newTag" class="form-control" placeholder="Type your concept here…">
-                            <div class="add-tags-actions text-right">
-                                <md-button class="md-rose btn-rose md-sm" @click="addTag">add Tag</md-button>
-                            </div>
-                        </div>
-                        <div class="tags-list d-flex justify-content-start" v-if="conceptTags.length">
-                            <div class="tags-list__item" v-for="(tag, index) in conceptTags">{{tag.title}} <img :src="`${conceptIconsURL}Asset 489.svg`" @click="removeTag(index)"></div>
-                        </div>
-                        <div class="form-group">
-                            <label>Description</label>
-                            <p>Describe a bit so we could find you the right services</p>
-                            <textarea rows="" class="form-control" placeholder="Write description here"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Add Colors</label>
-                            <div class="colors-list d-flex justify-content-start">
-                                <div class="colors-list__item" :style="`background: #ff48b2`"></div>
-                                <md-button class="colors-list__add md-just-icon"><img :src="`${conceptIconsURL}Asset 488.svg`"></md-button>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Add Inspirational Photos <small>(5 photos top, under 20 KB)</small></label>
-                            <p>Drag the photos to the empty frames or click on each one of them to create your photos board</p>
-                        </div>
-
-                        <div class="images-list new-concept">
-                            <div class="image-backgrounds">
-                                <div class="image-background" :style="`background: #ff48b2`"></div>
-                                <div class="image-background" v-for="idx in 3" :keu="idx"></div>
-                            </div>
-                            <div>
-                                <div :class="`images-list__item`"
-                                     v-for="indx in 5"
-                                     :key="indx"
-                                >
-                                    <div class="image-section d-flex  justify-content-center align-center">
-
-                                        <md-button class="md-sm md-simple">
-                                            <img :src="`${conceptIconsURL}Asset 488.svg`">
-                                            <label><img :src="`${conceptIconsURL}Asset 492.svg`"> Add Photo</label>
-                                        </md-button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="concept-actions d-flex justify-content-end align-center">
-                            <md-button class="md-rose">Save & Select</md-button>
-                        </div>
-                    </div>
-                </div>
             </div>
             <!-- ./Create Concept Section -->
 
@@ -315,20 +251,7 @@ export default {
             backgroundColors: ["#00165d","linear-gradient(#ff0082,#a700ff)"]
 
         }
-    ],
-    expandCreateConcept: false,
-      conceptTags: [
-          {
-              title : "festive"
-          },
-          {
-              title : "elegant"
-          },
-          {
-              title : "respectable"
-          },
-      ],
-      newTag: ''
+    ]
 
   }),
   methods: {
@@ -342,15 +265,6 @@ export default {
               this.conceptOptions[index].expand = false;
           }
           this.$forceUpdate();
-      },
-      addTag() {
-          if (this.newTag && this.newTag.length) {
-              this.conceptTags.push({title: this.newTag});
-          }
-          this.newTag = "";
-      },
-      removeTag(index) {
-          this.conceptTags.splice(index, 1)
       }
   },
   created () {

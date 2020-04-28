@@ -21,12 +21,12 @@
               <label-edit :text="item.dateString" :field-name="`dateString__${index}`" mask="99/99/9999"  @text-updated-blur="valueChanged" @text-updated-enter="valueChanged"></label-edit>
             </md-table-cell>
             <md-table-cell>
-              <md-button v-show="item.canDelete" class="md-simple md-rose md-just-icon md-xs" @click="removeSpecialDay(index)"><md-icon>delete</md-icon></md-button>
+              <md-button v-show="item.canDelete" class="md-simple md-red md-just-icon md-xs" @click="removeSpecialDay(index)"><md-icon>delete</md-icon></md-button>
             </md-table-cell>
           </md-table-row>
           <md-table-row >
             <md-table-cell colspan="3">
-              <md-button class="md-simple md-rose" style="width: 100%;" @click="addSpecialDay"><md-icon>add</md-icon>Add another special day</md-button>
+              <md-button class="md-simple md-red" style="width: 100%;" @click="addSpecialDay"><md-icon>add</md-icon>Add another special day</md-button>
             </md-table-cell>
           </md-table-row>
         </md-table>

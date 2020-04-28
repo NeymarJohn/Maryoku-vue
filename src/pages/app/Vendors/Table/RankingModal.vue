@@ -31,7 +31,7 @@
         </div>
       </template>
       <template slot="footer">
-        <md-button class="move-left md-rose md-simple" @click="closeModal">Close</md-button>
+        <md-button class="move-left md-red md-simple" @click="closeModal">Close</md-button>
         <md-button class="md-success">Submit</md-button>
       </template>
     </popover>

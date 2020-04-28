@@ -7,10 +7,10 @@
     <div class="sidebar-menu">
       <md-button
         v-if="toggleMenu===false"
-        class="md-round md-simple md-just-icon md-transparent"
+        class="md-round md-simple md-just-icon md-transparent menu-button"
         @click="toggleMenu = true"
       >
-        <img :src="`${menuIconsURL}Group 2763.svg`" width="20" style="width : 20px !important;" />
+        <img :src="`${menuIconsURL}Group 2763.svg`" width="30" style="width : 30px !important;" />
       </md-button>
       <md-button
         v-else
@@ -62,12 +62,12 @@
         <sidebar-item
           name="left-menu-events-list"
           class="left-menu-events-list"
-          :link="{name: 'Events Lists',  icon: 'check_circle_outline', path: '/events/'+ event.id +'/edit/timeline/new'}"
+          :link="{name: 'Events Lists',  icon: 'check_circle_outline', path: '/events/'+ event.id +'/edit/timeline'}"
         ></sidebar-item>
         <sidebar-item
           name="left-menu-yearly-plan"
           class="left-menu-yearly-plan"
-          :link="{name: 'Event Budget',  icon: 'attach_money', path: '/events/'+ event.id +'/edit/details/new'}"
+          :link="{name: 'Event Budget',  icon: 'attach_money', path: '/events/'+ event.id +'/edit/budget'}"
         ></sidebar-item>
         <sidebar-item
           name="left-menu-vendors-list"
@@ -192,6 +192,11 @@ export default {
 }
 </script>
 <style>
+.menu-button {
+  border-radius: 30px;
+  width: calc(100% - 0.5em) !important;
+  margin: 30px 0px !important;
+}
 @media (min-width: 992px) {
   .navbar-search-form-mobile,
   .nav-mobile-menu {

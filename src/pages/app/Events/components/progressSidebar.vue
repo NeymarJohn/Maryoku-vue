@@ -96,14 +96,14 @@ export default {
       {
         title: 'Approve Budget',
         status: 'not-complete',
-        route: 'edit/details/new',
+        route: 'edit/budget',
         icon: 'http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2010.svg',
         progress: 0
       },
       {
         title: 'Generate timeline',
         status: 'current',
-        route: 'edit/timeline/new',
+        route: 'edit/timeline',
         icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
         progress: 0
       }
