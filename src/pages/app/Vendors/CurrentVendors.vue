@@ -62,7 +62,13 @@
       </div>
       <div class="md-layout-item button-group text-right">
         <md-button class="md-success md-lg">Contact Vendor</md-button>
-        <md-button class="md-danger md-lg" @click="goTo('/for-proposals')">Create Brief Ask for Proposal</md-button>          
+        <md-button 
+          class="md-danger md-lg" 
+          @click="goTo(`/vendors/${vendor.id}/proposal-request/${proposals[0].id}`)"
+          :class="{ 'disabled' : true }"
+        >
+          Create Brief Ask for Proposal
+        </md-button>
         <h4>Avg. Response Time: {{vendor.rank}}</h4>
       </div>
     </div>
