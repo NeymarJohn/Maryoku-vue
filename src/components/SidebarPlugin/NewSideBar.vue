@@ -51,6 +51,7 @@
           </div>
         </div>
           <div class="sidebar-menu__item"  >
+              
               <div class="item-route" @click="goTo('/vendors-pool-new')">
                   <img :src="`${menuIconsURL}Asset 117.svg`" /> Vendors Pool
               </div>
@@ -67,12 +68,12 @@
         <sidebar-item
           name="left-menu-events-list"
           class="left-menu-events-list"
-          :link="{name: 'Events Lists',  icon: 'check_circle_outline', path: '/events/'+ event.id +'/edit/timeline/new'}"
+          :link="{name: 'Events Lists',  icon: 'check_circle_outline', path: '/events/'+ event.id +'/edit/timeline'}"
         ></sidebar-item>
         <sidebar-item
           name="left-menu-yearly-plan"
           class="left-menu-yearly-plan"
-          :link="{name: 'Event Budget',  icon: 'attach_money', path: '/events/'+ event.id +'/edit/details/new'}"
+          :link="{name: 'Event Budget',  icon: 'attach_money', path: '/events/'+ event.id +'/edit/budget'}"
         ></sidebar-item>
 <!--        <sidebar-item-->
 <!--          name="left-menu-vendors-list"-->

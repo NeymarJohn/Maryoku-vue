@@ -176,9 +176,9 @@
         margin-bottom : 1em;
         .section-header {
             border-bottom : 1px solid #e2e2e2;
-            padding: 10px;
+            padding: 20px 25px;
             font-family: 'Manrope-Bold',sans-serif;
-            font-size: 14px;
+            font-size: 22px;
             color: #050505;
             background: #fff !important;
             text-align: left;
@@ -216,18 +216,18 @@
             border-right : 1px solid #e2e2e2;
         }
         .label-title {
-            font-size: 14px;
-            font-family: 'Manrope-ExtraBold',sans-serif;
+            font-size: 16px;
+            font-family: 'Manrope-Bold',sans-serif;
             color: #050505;
         }
         .budget-value {
-            font-size: 30px;
+            font-size: 40px;
             color: #050505;
             margin: 0.4em auto;
         }
         .edit-budget {
             .md-ripple {
-                font-size: 13px;
+                font-size: 16px;
                 font-family: 'Manrope-ExtraBold',sans-serif;
                 color: $rose !important;
                 padding : 0 !important;
@@ -236,7 +236,7 @@
 
         }
         .percent {
-            font-size: 13px;
+            font-size: 16px;
             color: #818080;
         }
     }
@@ -1401,7 +1401,7 @@
 
             .edit-concept-btn {
                 .md-ripple {
-                    font-size: 14px;
+                    font-size: 16px;
                     font-family: 'Manrope-ExtraBold',sans-serif;
                     color: #fff;
                     text-transform: capitalize;
@@ -2637,7 +2637,7 @@
 
                     .form-control {
                         text-align: center;
-                        font-size: 48px;
+                        font-size: 16px;
                         height: 90px;
                     }
 

@@ -3,11 +3,7 @@ import VueRouter from 'vue-router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { Model } from 'vue-api-query'
-import DashboardPlugin from './material-dashboard'
-import auth from './auth'
 
-// Plugins
-import App from './App.vue'
 import VueElementLoading from 'vue-element-loading'
 import Chartist from 'chartist'
 import ChartistTooltipPlugin from 'chartist-plugin-tooltip'
@@ -27,13 +23,15 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'
 import lsWatcher from 'vue-storage-watcher'
 import VueTour from 'vue-tour'
 import VueSwal from 'vue-swal'
- 
 
+import App from './App.vue'
+import DashboardPlugin from './material-dashboard'
+import auth from './auth'
 // router setup
 import routes from './router/routes'
-
 // store setup
 import store from './store'
+import { IconURL } from './globalVariables';
 
 require('vue-tour/dist/vue-tour.css')
 
@@ -155,6 +153,8 @@ Vue.directive('select-all', {
     el.setSelectionRange(el.value.length, el.value.length)
   }
 })
+
+Vue.prototype.$iconURL = IconURL;
 
 Model.$http = axios
 
