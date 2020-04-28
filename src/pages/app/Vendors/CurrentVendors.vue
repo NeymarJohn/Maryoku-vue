@@ -65,7 +65,6 @@
         <md-button 
           class="md-danger md-lg" 
           @click="goTo(`/vendors/${vendor.id}/proposal-request/${proposals[0].id}`)"
-          :class="{ 'disabled' : true }"
         >
           Create Brief Ask for Proposal
         </md-button>

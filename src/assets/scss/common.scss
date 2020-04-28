@@ -68,3 +68,17 @@ $baseColor : #5c2153;
     display: none;
   }
 }
+.edit-btn {
+  margin: 0px !important;
+  min-width: auto;
+  .md-ripple{
+      padding: 0px !important;
+      text-align: left;
+      justify-content: start;
+      text-transform: none;
+      .md-button-content {
+          font-family: 'Manrope-ExtraBold',sans-serif;
+          font-size: 16px;
+      }
+  }
+}

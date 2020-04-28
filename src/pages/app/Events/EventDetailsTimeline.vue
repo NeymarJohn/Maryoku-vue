@@ -82,9 +82,7 @@
                                                   <!-- <img class="time-line-blocks_icon"  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`"> -->
                                                   Start At 
                                                 </label>
-                                                <div class="time-select-fields">
-                                                    <time-selector v-model="item.startTime" :h24="false" displayFormat="hh:mm"></time-selector>
-                                                </div>
+                                                <time-input v-model="item.startTime" :h24="false" displayFormat="hh:mm"></time-input>
                                             </div>
                                         </div>
                                         <div class="md-layout-item md-size-10 d-flex justify-content-center align-center" style="position : relative">
@@ -96,9 +94,7 @@
                                                   <!-- <img class="time-line-blocks_icon"  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`"> -->
                                                   Finishes At
                                                   </label>
-                                                <div class="time-select-fields">
-                                                   <time-selector v-model="item.endTime" :h24="false" displayFormat="hh:mm"></time-selector>
-                                                </div>
+                                                  <time-input v-model="item.endTime" :h24="false" displayFormat="hh:mm"></time-input>
                                             </div>
                                         </div>
                                         <div class="md-layout-item md-size-100">
@@ -318,7 +314,7 @@ import _ from 'underscore'
 import SideBar from '../../../components/SidebarPlugin/NewSideBar'
 import SidebarItem from '../../../components/SidebarPlugin/NewSidebarItem.vue'
 import ProgressSidebar from './components/progressSidebar'
-import TimeSelector from '../../../components/TimeSelector'
+import TimeInput from '../../../components/TimeInput'
 
 import jsPDF from 'jspdf'
 import html2canvas from "html2canvas"
@@ -338,7 +334,7 @@ export default {
     SidebarItem,
     ProgressSidebar,
     Modal,
-    TimeSelector
+    TimeInput
   },
   props: {
     // event: Object,

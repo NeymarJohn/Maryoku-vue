@@ -50,6 +50,12 @@
             <img :src="`${menuIconsURL}Asset 117.svg`" /> Help
           </div>
         </div>
+          <div class="sidebar-menu__item"  >
+              
+              <div class="item-route" @click="goTo('/vendors-pool-new')">
+                  <img :src="`${menuIconsURL}Asset 117.svg`" /> Vendors Pool
+              </div>
+          </div>
       </div>
     </div>
     <div class="sidebar-wrapper" ref="sidebarScrollArea">
@@ -69,11 +75,11 @@
           class="left-menu-yearly-plan"
           :link="{name: 'Event Budget',  icon: 'attach_money', path: '/events/'+ event.id +'/edit/budget'}"
         ></sidebar-item>
-        <sidebar-item
-          name="left-menu-vendors-list"
-          class="left-menu-vendors-list"
-          :link="{name: 'Vendors Pool', icon: 'chat_bubble_outline', path: '/vendors-pool'}"
-        ></sidebar-item>
+<!--        <sidebar-item-->
+<!--          name="left-menu-vendors-list"-->
+<!--          class="left-menu-vendors-list"-->
+<!--          :link="{name: 'Vendors Pool', icon: 'chat_bubble_outline', path: '/events'}"-->
+<!--        ></sidebar-item>-->
       </md-list>
     </div>
     <div class="logo">
