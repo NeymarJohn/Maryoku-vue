@@ -67,7 +67,7 @@
                                     Organize the event in a beautiful timeline.
                                 </p>
                                 <md-button name="event-planner-tab-event-details-banner-timeline"
-                                            class="event-planner-tab-event-details-banner-timeline md-red md-simple got-to-component-btn"
+                                            class="event-planner-tab-event-details-banner-timeline md-rose md-simple got-to-component-btn"
                                             @click="selectTimeline">
                                     Edit Event Timeline
                                     <md-icon>arrow_forward</md-icon>
@@ -84,7 +84,7 @@
                                 </p>
 
                                 <md-button name="event-planner-tab-event-details-banner-invitees"
-                                            class="event-planner-tab-event-details-banner-invitees md-red md-simple got-to-component-btn"
+                                            class="event-planner-tab-event-details-banner-invitees md-rose md-simple got-to-component-btn"
                                             @click="selectInviteesManagement">
                                     Manage Invitees
                                     <md-icon>arrow_forward</md-icon>
@@ -101,7 +101,7 @@
                                 </p>
 
                                 <md-button name="event-planner-tab-event-details-banner-event-page"
-                                            class="event-planner-tab-event-details-banner-event-page md-red md-simple got-to-component-btn"
+                                            class="event-planner-tab-event-details-banner-event-page md-rose md-simple got-to-component-btn"
                                             @click="selectEventPage">
                                     Edit Event page
                                     <md-icon>arrow_forward</md-icon>

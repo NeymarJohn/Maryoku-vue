@@ -338,7 +338,7 @@
             category
           </h2>
           <div class="header-description">
-            <img :src="`${iconsURL}warning-circle-gray.svg`" width="20" /> Adding expenses
+            <img :src="`${iconsURL}Group 1175.svg`" width="20" /> Adding expenses
             to your project might cause program changes
           </div>
         </div>
@@ -368,7 +368,7 @@
             <div class="form-group with-icon">
               <label>Budget</label>
               <div class="input-icon">
-                <img :src="`${iconsURL}budget-dark.svg`" width="20" />
+                <img :src="`${iconsURL}Group 3090.svg`" width="20" />
               </div>
               <input type="number" class="form-control" v-model="newBuildingBlock.budget" />
               <div class="md-error" v-if="remainingBudget < newBuildingBlock.budget">This budget should be less than the remaining.</div>

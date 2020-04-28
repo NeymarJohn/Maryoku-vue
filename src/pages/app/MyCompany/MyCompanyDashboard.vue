@@ -48,7 +48,7 @@
         <md-card-content>
           <div class="md-layout">
             <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-50">
-              <md-card class="md-card-stats md-red" style="padding-top: 20px; padding-bottom: 20px; border-color: blue; box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);">
+              <md-card class="md-card-stats md-rose" style="padding-top: 20px; padding-bottom: 20px; border-color: blue; box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);">
                 <md-card-content style="text-align: center;">
                   <h1 class="title text-rose"><strong><animated-number :value="12"></animated-number></strong></h1>
                   <h4 class="title text-gray">Company Events</h4>
@@ -61,7 +61,7 @@
             </div>
 
             <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-50">
-              <md-card class="md-card-stats md-red" style="padding-top: 20px; padding-bottom: 20px; box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);">
+              <md-card class="md-card-stats md-rose" style="padding-top: 20px; padding-bottom: 20px; box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);">
                 <md-card-content style="text-align: center;">
                   <h1 class="title text-rose"><strong><animated-number :value="83"></animated-number></strong>%</h1>
                   <h4 class="title text-gray">Event Attendance</h4>
@@ -74,7 +74,7 @@
             </div>
 
             <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-50">
-              <md-card class="md-card-stats md-red" style="padding-top: 20px; padding-bottom: 20px; box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);">
+              <md-card class="md-card-stats md-rose" style="padding-top: 20px; padding-bottom: 20px; box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);">
                 <md-card-content style="text-align: center;">
                   <h1 class="title text-rose">$<strong><animated-number :value="45"></animated-number></strong></h1>
                   <h4 class="title text-gray">Spend per Employee</h4>
@@ -87,7 +87,7 @@
             </div>
 
             <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-50">
-              <md-card class="md-card-stats md-red" style="padding-top: 20px; padding-bottom: 20px; box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);">
+              <md-card class="md-card-stats md-rose" style="padding-top: 20px; padding-bottom: 20px; box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.4);">
                 <md-card-content style="text-align: center;">
                   <h1 class="title text-rose"><strong><animated-number :value="91"></animated-number></strong></h1>
                   <h4 class="title text-gray">Level of Satisfaction</h4>

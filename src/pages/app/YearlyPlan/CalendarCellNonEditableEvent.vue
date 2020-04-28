@@ -9,7 +9,7 @@
     <div :id="`tooltipContent_${theDate}`" class="tooltip-custom-non-editable" style="text-align: center;">
       <md-list class="md-double-line">
         <md-list-item class="md-inset" v-for="calendarEvent in calendarEvents.nonEditables" :key="calendarEvent.id">
-          <md-button class="md-just-icon md-round md-sm md-red" style="text-align: center; padding: 0; font-size: 10px;" :to="{name: 'NewEvent', params: {selectedDate: theDate, selectedOccasion: calendarEvent.title }}">
+          <md-button class="md-just-icon md-round md-sm md-rose" style="text-align: center; padding: 0; font-size: 10px;" :to="{name: 'NewEvent', params: {selectedDate: theDate, selectedOccasion: calendarEvent.title }}">
             <i class="fa fa-calendar-plus"></i>
           </md-button>
           <div class="md-list-item-text  md-list-action">

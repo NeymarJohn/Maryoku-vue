@@ -21,7 +21,7 @@ import EventGroups from '@/pages/app/Events/components/EventInvitees.vue'
 import NewEvent from '@/pages/app/Events/NewEvent.vue'
 import EditEvent from '@/pages/app/Events/EditEvent.vue'
 import EventDetails from '@/pages/app/Events/EventDetails.vue'
-import EventDetailsOverView from '@/pages/app/Events/EventDetailsOverView.vue'
+import EventDetailsNew from '@/pages/app/Events/EventDetailsNew.vue'
 import ShowEvent from '@/pages/app/Events/ShowEvent.vue'
 import VendorProposals from '@/pages/app/Events/VendorProposals.vue'
 import EventProposal from '@/pages/app/Events/EventProposal.vue'
@@ -33,6 +33,7 @@ import CurrentVendors from '@/pages/app/Vendors/CurrentVendors.vue'
 import AddEditVendor from '@/pages/app/Vendors/AddEditVendor.vue'
 import EditVendor from '@/pages/app/Vendors/EditVendor.vue'
 import VendorsPool from '@/pages/app/Vendors/VendorsPool.vue'
+import VendorsPoolNew from '@/pages/app/Vendors/VendorsPoolNew.vue'
 import ImportVendors from '@/pages/app/Vendors/ImportVendors.vue'
 import YearlyPlan from '@/pages/app/YearlyPlan/index.vue'
 import AnnualPlanner from '@/pages/app/AnnualPlanner/index.vue'
@@ -49,8 +50,8 @@ import HomePage from '@/pages/app/HomePage/Home.vue'
 import publicRegister from '@/pages/app/SinginSingup/publicRegister.vue'
 
 // New Event Pages
-import EventDetailsBudget from "@/pages/app/Events/EventDetailsBudget.vue"
-import EventDetailsTimeline from "@/pages/app/Events/EventDetailsTimeline.vue"
+import CurrentEventsNew from "@/pages/app/Events/CurrentEventsNew.vue"
+import EventTimeLineNew from "@/pages/app/Events/components/EventTimeLineNew.vue"
 import BookingEvent from "@/pages/app/Events/components/BookingEvent.vue"
 import ChooseEventConcept from "@/pages/app/Events/components/ChooseEventConcept.vue"
 import EventProposalDetails from "@/pages/app/Events/components/EventProposalDetails.vue"
@@ -469,7 +470,7 @@ let EventPages = {
     }
   },
   {
-    path: '/events/:id/edit/timeline/current',
+    path: '/events/:id/edit/timeline',
     name: 'EditTimeLine',
     component: CurrentEvents,
     meta: {
@@ -560,9 +561,9 @@ let NewEventPages = {
     }
   },
   {
-    path: '/events/:id/edit/budget',
+    path: '/events/:id/edit/details/new',
     name: 'EditEventNew',
-    component: EventDetailsBudget,
+    component: CurrentEventsNew,
     meta: {
       title: 'Event Details',
       gtm: 'Event Edit',
@@ -571,8 +572,8 @@ let NewEventPages = {
   },
   {
     path: '/events/:id/edit/event',
-    name: 'EventDetailsOverView',
-    component: EventDetailsOverView,
+    name: 'EventDetailsNew',
+    component: EventDetailsNew,
     meta: {
       title: 'Event Details',
       gtm: 'Event Edit',
@@ -590,9 +591,9 @@ let NewEventPages = {
     }
   },
   {
-    path: '/events/:id/edit/timeline',
+    path: '/events/:id/edit/timeline/new',
     name: 'EditTimeLine',
-    component: EventDetailsTimeline,
+    component: EventTimeLineNew,
     meta: {
       title: 'Timeline',
       gtm: 'Event Timeline',
@@ -687,7 +688,15 @@ let NewEventPages = {
       title: 'Event Wizard',
       gtm: 'Event Wizard'
     }
-  }
+  },
+  {
+      path: '/vendors-pool-new',
+      name: 'VendorsPoolNew',
+      component: VendorsPoolNew,
+      meta: {
+          gtm: 'VendorsPoolNew'
+      }
+  },
   ]
 }
 

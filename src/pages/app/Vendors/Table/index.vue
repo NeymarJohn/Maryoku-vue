@@ -70,7 +70,7 @@
                         </md-field>
                     </div>
                     <div class="popup-footer">
-                        <md-button class="move-left md-red md-simple" @click="closeModal">Close</md-button>
+                        <md-button class="move-left md-rose md-simple" @click="closeModal">Close</md-button>
                         <md-button class="btn-success md-success">Submit</md-button>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
 
                     </div>
                     <div class="popup-footer">
-                        <md-button class="move-left md-red md-simple" @click="closeTagsModal">Close</md-button>
+                        <md-button class="move-left md-rose md-simple" @click="closeTagsModal">Close</md-button>
                         <md-button class="btn-success md-success">Submit</md-button>
                     </div>
                 </div>

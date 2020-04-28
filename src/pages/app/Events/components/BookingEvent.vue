@@ -120,7 +120,7 @@
                         <div class="form-group with-icon">
                             <label>Price of the service</label>
                             <div class="input-icon">
-                                <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5">
+                                <img :src="`${iconsURL}Group 3090.svg`" width="20" style="opacity: 0.5">
                             </div>
                             <input type="text" class="form-control" placeholder="Type number here">
                         </div>
@@ -129,7 +129,7 @@
                         <div class="form-group with-icon">
                             <label>Location</label>
                             <div class="input-icon">
-                                <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5">
+                                <img :src="`${iconsURL}Group 3090.svg`" width="20" style="opacity: 0.5">
                             </div>
                             <input type="text" class="form-control" placeholder="">
                         </div>
@@ -138,7 +138,7 @@
                         <div class="form-group with-icon">
                             <label>Phone</label>
                             <div class="input-icon">
-                                <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5">
+                                <img :src="`${iconsURL}Group 3090.svg`" width="20" style="opacity: 0.5">
                             </div>
                             <input type="text" class="form-control" placeholder="Type number here">
                         </div>
@@ -147,7 +147,7 @@
                         <div class="form-group with-icon">
                             <label>Email</label>
                             <div class="input-icon">
-                                <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5">
+                                <img :src="`${iconsURL}Group 3090.svg`" width="20" style="opacity: 0.5">
                             </div>
                             <input type="text" class="form-control" placeholder="Type email address here">
                         </div>
