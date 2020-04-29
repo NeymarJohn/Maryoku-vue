@@ -1,6 +1,6 @@
 <template>
   <div class="proposal-title-with-icon-wrapper">
-    <h3><md-icon>{{icon}}</md-icon>{{title}}</h3>
+    <h3><img :src="img"/>{{title}}</h3>
     <p>{{desc}}</p>
   </div>
 </template>
@@ -12,7 +12,8 @@
     props: {
       icon: String,
       title: String, 
-      desc: String
+      desc: String,
+      img: String,
     },
     data () {
       return {
@@ -42,6 +43,12 @@
     h3 {
       font-weight: 800;
       font-size: 30px;
+      margin-bottom: 38px;
+
+      img {
+        width: 26px;
+        margin-right: 15px;
+      }
 
       i {
         margin-right: 10px;
