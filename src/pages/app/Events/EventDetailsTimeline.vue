@@ -117,12 +117,20 @@
 
                                             <div class="form-group">
                                                 <label>Attach File  <small>*suggested</small></label>
+                                                <p class="item-attachment" v-if="item.attachments && item.attachments.length>0">
+                                                  <span v-for="(attachmentItem, attachmentIndex) in item.attachments" :key="attachmentItem.url"  class="attachment-link">
+                                                    <md-icon>attachment</md-icon>
+                                                    <span @click="openAttachment(attachmentItem.url)" class="attachment-name">{{ attachmentItem.originalName }}</span>
+                                                    <span @click="removeAttachment(item, attachmentIndex)"><md-icon class="remove-attachment" >close</md-icon></span>
+                                                  </span>
+                                                </p>
                                                 <label class="upload-section" for="file">
                                                     <div class="md-rose md-outline md-simple md-sm attachment">
                                                         <md-icon>attachment</md-icon>
                                                         Choose file(10MB)
                                                     </div>
-                                                    {{ item.originalAttachmentName }}
+                                                    {{ item.attachmentName}}
+                                                    
                                                     <!-- <div class="note">Drag your file here</div> -->
                                                 </label>
 
@@ -171,10 +179,10 @@
                                             <p class="item-desc">
                                               {{ item.description }}
                                             </p>
-                                            <p class="item-attachment" v-if="item.originalAttachmentName">
-                                              <span @click="openAttachment(item.attachmentURL)" class="attachment-link">
+                                            <p class="item-attachment" v-if="item.attachments && item.attachments.length>0">
+                                              <span v-for="(attachmentItem) in item.attachments" :key="attachmentItem.url" @click="openAttachment(attachmentItem.url)" class="attachment-link">
                                                 <md-icon>attachment</md-icon>
-                                                {{ item.originalAttachmentName }}
+                                                {{ attachmentItem.originalName }}
                                               </span>
                                             </p>
                                             <p class="item-location" v-if="item.location" >
@@ -417,15 +425,16 @@ export default {
     showDeleteConfirmModal: false, 
     indexOfDeleteItem: -1,
     newTimeLineIconsURL: 'http://static.maryoku.com/storage/icons/Timeline-New/',
-      timeline : [
+
+    timeline : [
           {
               date : '20/04/2020',
               items : [],
               itemDay : null
           }
-      ],
-      a : ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ','eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '],
-      b : ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety']
+    ],
+    a : ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ','eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '],
+    b : ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety']
 
   
     
@@ -474,8 +483,7 @@ export default {
         block.title = block.buildingBlockType
         block.startDuration = 'am'
         block.endDuration = 'am'
-        block.originalAttachmentName = ""
-        block.attachment = "none"
+        block.attachmentName = ""
         block.isItemLoading = false
         if (this.timelineItems.length > 0) {
           // block.startTime = this.$moment(this.timelineItems[this.timelineItems.length - 1].endTime, 'H:mm A').format('H:mm A')
@@ -492,9 +500,9 @@ export default {
       swal({
         title: 'Are you sure want to delete this item?',
         showCancelButton: true,
-        confirmButtonClass: 'md-button md-success',
         cancelButtonClass: 'md-button md-danger',
-        confirmButtonText: 'Yes, remove it!',
+        confirmButtonClass: 'md-button md-success',
+        confirmButtonText: "Yes I'm sure",
         buttonsStyling: false
       })
         .then(result => {
@@ -625,12 +633,32 @@ export default {
         icon: item.icon,
         color: item.color,
         link: item.link,
-        originalAttachmentName: item.originalAttachmentName,
         plannedDate : plannedDate
       }
-      this.uploadAttachment(item.attachment, item.attachmentName, (res) => {
-        newTimeline.attachmentURL = res.data.upload.path
-        newTimeline.attachmentName = res.data.upload.name
+      if (item.attachment) {
+        this.uploadAttachment(item.attachment, item.attachmentName, (res) => {
+          
+          if (!newTimeline.attachments) {
+            newTimeline.attachments = []
+          }
+          newTimeline.attachments.push({originalName: item.attachmentName, url: res.data.upload.path, name: res.data.upload.name})
+          newTimeline.attachmentName = ""
+          new EventTimelineItem(newTimeline).for(calendar, event).save()
+            .then(res => {
+              this.getTimelineItems()
+              this.disabledDragging = false
+              this.$root.$emit('timeline-updated', this.timelineItems)
+              this.setItemLoading(item, false, true)
+            })
+            .catch(error => {
+              console.log(error)
+              this.disabledDragging = false
+              this.$root.$emit('timeline-updated', this.timelineItems)
+              this.setItemLoading(item, false, true)
+            })
+          this.timelineAttachment = null
+        })
+      } else {
         new EventTimelineItem(newTimeline).for(calendar, event).save()
           .then(res => {
             this.getTimelineItems()
@@ -644,9 +672,8 @@ export default {
             this.$root.$emit('timeline-updated', this.timelineItems)
             this.setItemLoading(item, false, true)
           })
-
-        this.timelineAttachment = null
-      })
+      }
+     
       
     },
     updateTimelineItem (item) {
@@ -679,13 +706,29 @@ export default {
       timelineItem.endTime = item.endTime
       timelineItem.link = item.link
       timelineItem.location = item.location
-      // timelineItem.attachment = item.attachment
-      timelineItem.originalAttachmentName = item.originalAttachmentName
+      timelineItem.attachments = item.attachments
+      if (item.attachment) {
+        this.uploadAttachment(item.attachment, item.attachmentName, res => {
+          if (!timelineItem.attachments) {
+            timelineItem.attachments = []
+          }
+          timelineItem.attachments.push({originalName:item.attachmentName, url:res.data.upload.path, name:res.data.upload.name})
+          timelineItem.attachmentName = ""
+          console.log(timelineItem);
+          timelineItem.save().then(res => {
+            this.getTimelineItems()
+            this.disabledDragging = false
+            this.$root.$emit('timeline-updated', this.timelineItems)
+          }).catch(error => {
+            console.log(error)
+            this.disabledDragging = false
+            this.$root.$emit('timeline-updated', this.timelineItems)
+          })
 
-      this.uploadAttachment(item.attachment, item.attachmentName, res => {
-        console.log(res);
-        timelineItem.attachmentName = res.data.upload.name
-        timelineItem.attachmentURL = res.data.upload.path
+          this.timelineAttachment = null
+          item.attachmentName = "";
+        })
+      } else {
         timelineItem.save().then(res => {
           this.getTimelineItems()
           this.disabledDragging = false
@@ -695,16 +738,15 @@ export default {
           this.disabledDragging = false
           this.$root.$emit('timeline-updated', this.timelineItems)
         })
-
-        this.timelineAttachment = null
-      })
+      }
+      
     },
-    uploadAttachment(file, name, callback){
+    uploadAttachment(file, attachmentName, callback){
       let formData = new FormData();
       formData.append('file', file);
       formData.append('from', 'timeline')
       formData.append('type', 'attachment')
-      formData.append('name', name)
+      formData.append('name', attachmentName)
       this.$http.post(`${process.env.SERVER_URL}/uploadFile`,
           formData,
           {
@@ -789,7 +831,7 @@ export default {
                   console.log(err)
               })
         } else  {
-          vm.timeline[timelineIndex].items[itemIndex].originalAttachmentName = files[0].name
+          vm.timeline[timelineIndex].items[itemIndex].attachmentName = files[0].name
           vm.timeline[timelineIndex].items[itemIndex].attachment = files[0]
         }
         
@@ -926,6 +968,9 @@ export default {
         return date.getTime() <= vm.timeline[index - 1].itemDay || date.getTime() >= vm.timeline[index + 1].itemDay;
       }
       return checkDate;
+    },
+    removeAttachment(timelineItem, attachmentIndex) {
+      timelineItem.attachments.splice(attachmentIndex, 1);
     }
 
   },
@@ -991,5 +1036,10 @@ export default {
 </script>
 <style scoped lang="scss">
   $btn-color: #fff;
-
+  .remove-attachment {
+    font-size: 10px !important;
+    margin-right: -10px !important;
+    transform: rotate(0deg) !important;
+    cursor: pointer;
+  }
 </style>
