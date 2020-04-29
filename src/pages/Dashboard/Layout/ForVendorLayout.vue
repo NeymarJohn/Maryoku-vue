@@ -7,7 +7,7 @@
             <a href="https://www.maryoku.com"><img src="https://www.maryoku.com/img/maryoku-logo.png"/></a>
           </li>
           <li>
-            <a href="https://www.maryoku.com" target="_blank">ABOUT US</a>
+            ABOUT US
           </li>
         </ul>
       </div>
@@ -30,7 +30,7 @@
       <p>
         We found you could fit perfectly for our event with your <strong>Venue & Catering</strong> services.
       </p>
-      <button type="submit" class="submit" @click="goTo('/for-proposals')">Submit Now</button>
+      <button type="submit" class="submit">Submit Now</button>
     </div>
     <router-view></router-view>
     <section class="footer-wrapper">
@@ -45,7 +45,7 @@
             </p>
           </li>
           <li>
-            <a href="https://www.maryoku.com/for-vendors.html"><img :src="`${iconsUrl}Asset 273.svg`"></a>
+            <img :src="`${iconsUrl}Asset 273.svg`">
           </li>
         </ul>
       </div>
@@ -78,9 +78,6 @@
       }
     },
     methods: {
-      goTo (router) {
-        this.$router.push(router)
-      }
     },
     created(){
     },
@@ -118,12 +115,6 @@
             padding-left: 0;
             padding-right: 2rem;
             border-right: 3px solid #ffffff;
-          }
-          a {
-            color: #ffffff;
-            &:hover {
-              color: #707070;
-            }
           }
         }
       }
