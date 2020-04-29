@@ -871,9 +871,12 @@ export default {
       let newBlock = {
         componentId:
           _.findWhere(this.components, {title: this.newBuildingBlock.category}).key,
+        componentCategoryId:
+          _.findWhere(this.components, {title: this.newBuildingBlock.category}).key,
         // componentCategoryId: this.newBuildingBlock.categoryId,
         calendarEvent: { id: event.id },
-        allocatedBudget: this.newBuildingBlock.budget
+        allocatedBudget: this.newBuildingBlock.budget,
+        order: this.event.components.length
       }
       
       new EventComponent(newBlock)
