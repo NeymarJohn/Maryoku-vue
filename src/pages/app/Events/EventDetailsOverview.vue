@@ -114,7 +114,7 @@
       <time-counter :target="event.eventStartMillis"></time-counter>
     </div>
     <div class="md-layout justify-content-between notes" style="margin:2em 50px;">
-      <div class="md-layout-item md-size-25">
+      <div class="md-layout-item md-size-25 first-row" >
         <div class="card-section">
           <div class="section-header">
             <img :src="`${iconsURL}note-dark.svg`" /> Notes
@@ -135,7 +135,7 @@
           </div>
         </div>
       </div>
-      <div class="md-layout-item md-size-75">
+      <div class="md-layout-item md-size-75 first-row">
         <div class="card-section">
           <div class="section-header">
             <img :src="`${iconsURL}budget-dark.svg`" /> Budget & Vendors
@@ -143,8 +143,8 @@
             <span class="saved-budget">So far you saved:  <img :src="`${iconsURL}plus-green.svg`" width="20"/> $ 100 </span>
           </div>
 
-          <div class="card-content">
-            <div class="d-flex justify-content-between">
+          <div class="card-content d-flex align-center">
+            <div class="d-flex justify-content-between align-center">
               <div class="budget-details">
                 <div>Total Budget</div>
                 <div class="total-budget-value">
@@ -173,10 +173,12 @@
 
                   <div class="chart-legends">
                     <div class="legend-item used">
-                      Booked ${{event.totalBudget - getTotalRemainingBudget}}
+                      <span class="legend-item-mark">Booked</span> 
+                      <span>$ {{event.totalBudget - getTotalRemainingBudget}}</span>
                     </div>
                     <div class="legend-item remaining">
-                      Remaining ${{getTotalRemainingBudget | withComma}}
+                      <span class="legend-item-mark">Remaining</span> 
+                      <span>$ {{getTotalRemainingBudget | withComma}}</span>
                     </div>
                   </div>
                 </div>
@@ -245,15 +247,14 @@
         </div>
       </div>
 
-      <div class="md-layout-item md-size-25">
+      <div class="md-layout-item md-size-25 second-row">
         <div class="card-section">
           <div class="section-header">
             <img :src="`${timlineIconsURL}timeline-title.svg`" /> Timeline
           </div>
-
           <div class="card-content">
             <div class="timeline-items">
-              <div class="timeline-item-day" v-for="(timelineDate,timelineIndex) in event.timeline" :key="timelineIndex">
+              <div class="timeline-item-day" v-for="(timelineDate,timelineIndex) in timeline" :key="timelineIndex">
                 <div class="time-line-edit d-flex justify-content-center align-center time-line-header" > 
                   <div class="cross-line cross-line-left"></div>
                   <div class="d-flex justify-content-center align-center label ">
@@ -294,18 +295,19 @@
         </div>
       </div>
 
-      <div class="md-layout-item md-size-75">
+      <div class="md-layout-item md-size-75 second-row">
         <div class="card-section">
           <div class="section-header">
-            <md-icon>attach_money</md-icon>RSVP & Campaigns
+            <img :src="`${iconsURL}users-dark.svg`" width="25">
+            RSVP & Campaigns
             <div class="header-info">
               Status:
               <span class="status"> Final </span>
             </div>
           </div>
 
-          <div class="card-content rsvp">
-            <div class="d-flex justify-center align-center">
+          <div class="card-content rsvp d-flex align-center justify-center">
+            <div class="d-flex justify-around align-center" style="width:100%">
               <div class="guests-details text-center">
                 <img :src="`${iconsURL}users-gray.svg`" width="50">
                 <div class="total-budget">
@@ -357,7 +359,7 @@
                 </md-button>
               </div>
             </div>
-
+<!-- 
             <div class="campaigns-section">
               <div class="section-title">Campaigns</div>
               <div class="campaigns-section__list">
@@ -390,7 +392,7 @@
                   <div class="campaign-title">‘Almost There’ Final Teaser</div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
 
           <div class="card-footer">
@@ -463,13 +465,25 @@
             <label class="evnet-detail-label">Event Type</label>
             <div class="form-group maryoku-field" v-if="editEvent.eventType">
               <!-- <v-select v-model="editEvent.type" :options="eventTypes" item-text="name"></v-select> -->
-              <v-select
+              <!-- <v-select
                 :options="eventTypes.map(item=>{return item.name})"
                 name="category"
                 v-model="editEvent.eventType.name"
                 v-validate="'required'"
                 item-text="name"
-                ></v-select>
+                ></v-select> -->
+
+              <md-field class="mt-0 mb-2">
+                <md-select v-model="editEvent.eventType.id">
+                  <md-option
+                    v-for="(type,index) in eventTypes"
+                    :key="index"
+                    :value="type.id"
+                  >
+                    {{ type.name }}
+                  </md-option>
+                </md-select>
+              </md-field>
             </div>
           </div>
           <div class="md-layout-item md-size-50 text-left"></div>
@@ -593,10 +607,12 @@ export default {
       newNote: ""
     },
     radio: false,
-    showEditDetailModal: false
+    showEditDetailModal: false,
+    timeline:[]
   }),
   methods: {
     getTimelineItems () {
+      console.log("Get Timeline Itmes");
       let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
       let event = new CalendarEvent({ id: this.event.id })
 
@@ -658,33 +674,36 @@ export default {
         .for(calendar, event)
         .get()
         .then(resp => {
+          if (!resp[0].totalBookedBudget) resp[0].totalBookedBudget = 0;
+          this.totalBookedBudget = resp[0].totalBookedBudget 
           this.totalRemainingBudget =
-            evt.totalBudget - resp[0].totalAllocatedBudget
+            evt.totalBudget - resp[0].totalBookedBudget
+          this.totalBookedBudget = resp[0].totalBookedBudget
           this.remainingBudgetPerEmployee =
             this.totalRemainingBudget / evt.numberOfParticipants // evt.totalBudget - resp[0].totalAllocatedBudget
-          this.percentage =
-            100 -
-            (
-              (resp[0].totalAllocatedBudget /
-                (evt.budgetPerPerson * evt.numberOfParticipants)) *
-              100
-            ).toFixed(2)
+          this.percentage = ( this.totalBookedBudget / evt.totalBudget * 100).toFixed(2)
+            // 100 -
+            // (
+            //   (resp[0].totalAllocatedBudget /
+            //     (evt.budgetPerPerson * evt.numberOfParticipants)) *
+            //   100
+            // ).toFixed(2)
 
           if (this.percentage > 0) {
             this.seriesData = [
               {
-                value: 100 - this.percentage,
+                value: this.percentage,
                 className: 'budget-chart-slice-a-negative'
               },
               {
-                value: this.percentage,
+                value: 100 - this.percentage,
                 className: 'budget-chart-slice-b-negative'
               }
             ]
           } else {
             this.seriesData = [
-              { value: 0.01, className: 'budget-chart-slice-a-negative' },
-              { value: 99.99, className: 'budget-chart-slice-b-negative' }
+              { value: 99.99, className: 'budget-chart-slice-a-negative' },
+              { value: 0.01, className: 'budget-chart-slice-b-negative' }
             ]
           }
 
@@ -723,11 +742,17 @@ export default {
     updateEvent () {
       // 
       const updateEvent = {...this.event, ...this.editEvent}
-      const eventType = this.eventTypes.find(it=>it.name === updateEvent.eventType.name)
+      const eventType = this.eventTypes.find(it=>it.id === updateEvent.eventType.id)
       updateEvent.eventType = eventType
       console.log(eventType);
       let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+      if (updateEvent.eventDayPart === 'evening') {
+        updateEvent.eventStartMillis.setHours(19);
+      } else {
+        updateEvent.eventStartMillis.setHours(8);
+      }
       updateEvent.eventStartMillis = updateEvent.eventStartMillis.getTime();
+      updateEvent.eventEndMillis = updateEvent.eventStartMillis + 3600 * 1000;
       new CalendarEvent(updateEvent)
       .for(calendar).save()
       .then(res=>{
@@ -815,10 +840,10 @@ export default {
   },
   mounted () {
     this.isLoading = true
-    // if (this.event && this.event.id){
-    //     this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
-    //     this.getTimelineItems();
-    // }
+    if (this.event && this.event.id){
+        // this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
+        this.getTimelineItems();
+    }
     console.log(this.eventTypes);
     console.log(event);
   },

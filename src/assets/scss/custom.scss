@@ -1722,12 +1722,18 @@ $tooltip-border-color: $blue-grey-200 !default;
                         color: #050505;
                     }
                     .item-attachment {
-                        span {
+                        span.attachment-link {
                             border-radius: 18px;
                             border: solid 0.5px #B7B7B7;
                             font-size: 14px;
                             padding: 6px 16px;
+                            margin-right: 10px;
+                            margin-bottom: 5px;
                             cursor: pointer;
+                            display: inline-block;
+                            .attachment-name {
+                                text-decoration: none;
+                            }
                             .md-icon {
                                 transform: rotate(-45deg);
                                 font-size: 25px !important;

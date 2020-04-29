@@ -154,35 +154,60 @@
       }
   }
   .card-section {
-      .section-header {
-          padding : 1em 1.3em;
-          font-size: 20px;
-          font-family: 'Manrope-ExtraBold',sans-serif;
-
-          .md-icon , img {
-              margin-right: 0.4em;
-              height: 23px;
-          }
-          .header-info {
-              float: right;
-              font-weight: 200;
-              font-size: 16px;
-          }
-      }
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 40px;
+    .card-content{
+      flex-grow: 1;
+      align-items: center;
+      align-content: center;
+    }
+    .section-header {
+        font-family: 'Manrope-Bold',sans-serif;
+        font-size: 22px;
+        // border-bottom: 1px solid #e2e2e2;
+        padding: 20px 25px;
+        color: #050505;
+        background: #fff !important;
+        text-align: left;
+        border-radius: 0;
+        position: relative;
+        &:after{
+          content: "";
+          height: 1px;
+          background: #B7B7B7;
+          width: calc(100% - 50px);
+          position: absolute;
+          left: 25px;
+          top: 100%;
+        }
+        .md-icon , img {
+            margin-right: 0.4em;
+            height: 23px;
+        }
+        .header-info {
+            float: right;
+            font-weight: 200;
+            font-size: 16px;
+        }
+    }
+    
   }
 
   .card-content {
       padding : 1em 2em;
+      overflow-y: auto;
+      overflow-x: hidden;
   }
 
   .card-footer {
-      border-top : 1px solid rgba(0, 0, 0, 0.08);
+      border-top : 1px solid #707070;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      padding : 0.7em 2em;
-
+      padding: 1.5em 2em;
+      max-height: 75px;
       .footer-content {
           font-size: 14px;
           color: #050505;
@@ -333,20 +358,16 @@
 
 
   .budget-percentage  {
-
       width: 40%;
-
       .chart-section {
           .title-budget-prise-negative {
               position: relative;
               width: 100%;
-
               .budget-pie-container {
                   display: grid;
                   margin: 1em 0;
                   text-align: center;
               }
-
               .percentage {
                   padding-bottom: 8px;
                   grid-column: 1;
@@ -362,45 +383,50 @@
       }
 
       .chart-legends {
-          width: 30%;
+          width: 100%;
+          text-align: center;
           .legend-item {
-              font-size: 14px;
+              font-size: 16px;
               font-weight: bold;
               margin-bottom : 0.5em;
               position: relative;
-
-              &:after {
-                  content : ' ';
-                  width : 10px;
-                  height : 10px;
-                  position : absolute;
-                  left: -17px;
-                  border-radius: 50%;
-                  top: 6px;
+              white-space: nowrap;
+              color: #050505;
+              span {
+                padding-left: 5px;
+                position: relative;
               }
               &.used {
-                  color: #f51355;
-
-                  &:after {
-                      background: #f51355;
-                  }
+                .legend-item-mark:after{
+                  content : ' ';
+                  width : 13px;
+                  height : 13px;
+                  position : absolute;
+                  left: -20px;
+                  border-radius: 50%;
+                  top: 4px;
+                  background: #f51355;
+                }
               }
-
               &.remaining {
-                  color: #818080;
-                  &:after {
-                      background: #818080;
-                  }
+                .legend-item-mark:after{
+                  content : ' ';
+                  width : 13px;
+                  height : 13px;
+                  position : absolute;
+                  left: -20px;
+                  border-radius: 50%;
+                  top: 4px;
+                  background: #818080;
+                }
               }
           }
       }
   }
 
   .budget-details , .guests-details {
-      margin-bottom: 2.5em;
-      margin-top:1em;
       width: 25%;
-      padding: 10px 30px;
+      padding: 50px 30px;
       .md-button-content {
           font-size: 16px;
       }
@@ -746,8 +772,8 @@
   }
   .budget-percentage {
     padding: 0 20px;
-    border-left: 1px solid #e2e2e2;
-    border-right: 1px solid #e2e2e2;
+    border-left: 1px solid #B7B7B7;
+    border-right: 1px solid #B7B7B7;
     flex-grow: 1;
     .chart-legends{
       margin: auto;
@@ -818,15 +844,11 @@
     text-transform: unset;
   }
   .rsvp {
-    .guests-details{
-      width: 25%;
-      padding: 10px 30px;
-    }
     .progress-bar {
       width: 50%;
-      border-left: 1px solid #e2e2e2;
-      border-right: 1px solid #e2e2e2;
-      padding: 10px 30px;
+      border-left: 1px solid #B7B7B7;
+      border-right: 1px solid #B7B7B7;
+      padding: 50px 30px;
     }
     .teaser {
       width: 25%;
@@ -1005,6 +1027,17 @@
     }
     .cross-line-left {
       max-width: 45px;
+    }
+  }
+
+  .first-row {
+    .card-section{
+      height: 560px;
+    }
+  }
+  .second-row {
+    .card-section{
+      height: 480px;
     }
   }
 }

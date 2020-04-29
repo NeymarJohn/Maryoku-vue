@@ -106,6 +106,27 @@
         }
       }
     }
+    .md-field {
+      min-height: 60px;
+      border: solid 0.5px #bcbcbc;
+      border-radius: 3px;
+      padding-bottom: 0px;
+      &:before, &:after {
+        display: none;
+      }
+      .md-select{
+        .md-input {
+          padding-left: 20px;
+          font-size: 16px;
+          height: 100%;
+        }
+        .md-icon {
+          margin-right: 25px;
+          margin-top: 20px;
+        }
+      }
+      
+    }
   }
 
   .maryoku-field {
