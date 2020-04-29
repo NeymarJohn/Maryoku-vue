@@ -4,10 +4,20 @@
   margin: 0 5px;
 }
 
+.swal2-actions{
+  margin-top: 26px !important;
+  -webkit-box-pack: end !important;
+  -ms-flex-pack: end !important;
+  justify-content: flex-start !important;
+  margin: 2em 0 0 !important;
+  flex-direction: row-reverse;
+}
+
 .swal2-popup{
+  justify-content: space-between !important;
   font-family: Helvetica Neue,Helvetica,Arial,sans-serif !important;
-  width: 31.25rem !important;
-  min-height: 190px !important;
+  width: 860px !important;
+  min-height: 378px !important;
 
   .swal2-title{
     line-height: 40px !important;
@@ -17,6 +27,11 @@
 
   .swal2-actions{
     margin-top: 26px !important;
+    -webkit-box-pack: end !important;
+    -ms-flex-pack: end !important;
+    justify-content: flex-start !important;
+    margin: 2em 0 0 !important;
+    flex-direction: row-reverse;
   }
 }
 
@@ -102,14 +117,22 @@ margin: auto;
 }
 
 .swal2-confirm.md-button.md-success {
-  background: #ef4335 !important;
+  font-family: "Manrope-ExtraBold";
+  font-size: 16px;
+  text-transform: none;
+  background: #f51355 !important;
   &:hover {
-    background: #ef4335 !important;
-}
+    background: #f51355 !important;
+  }
 }
 .swal2-cancel.md-button.md-danger {
-  background: #05b14e !important;
+  font-family: "Manrope-ExtraBold";
+  font-size: 16px;
+  text-transform: none;
+  color: #000000 !important;
+  box-shadow: none;
+  background: #ffffff !important;
   &:hover {
-    background: #05b14e !important;
-}
+    background: #ffffff !important;
+  }
 }
