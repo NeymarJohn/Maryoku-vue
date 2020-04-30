@@ -106,13 +106,34 @@
         }
       }
     }
+    .md-field {
+      min-height: 60px;
+      border: solid 0.5px #bcbcbc;
+      border-radius: 3px;
+      padding-bottom: 0px;
+      &:before, &:after {
+        display: none;
+      }
+      .md-select{
+        .md-input {
+          padding-left: 20px;
+          font-size: 16px;
+          height: 100%;
+        }
+        .md-icon {
+          margin-right: 25px;
+          margin-top: 20px;
+        }
+      }
+      
+    }
   }
 
   .maryoku-field {
     .vs__selected {
       position: absolute;
       top: 19px;
-      left: 23px;
+      left: 30px;
       z-index: 2;
       font-family: 'Manrope-Regular',sans-serif;
       font-size: 17px;
@@ -148,7 +169,7 @@
       padding : 0;
       margin : 0;
       width:100%;
-      z-index: 9999999999999999999999999999  !important;
+      z-index: 999999  !important;
       border : 1px solid #aaa;
       border-radius: 0px;
       color : #606060;
@@ -162,6 +183,11 @@
           &:not(:last-child) {
               border-bottom : 1px solid #aaa;
           }
+          &:hover {
+            background: #f51355;
+            color: white;
+            cursor: pointer;
+        }
       }
 
     }

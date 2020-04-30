@@ -42,24 +42,30 @@
   }
 
   .event-details-header {
-      height : 273px;
+      height : 325px;
       position : relative;
       background: #fff;
       padding: 0;
 
       .header-detail {
           flex-grow: 1;
-          margin:0 40px;
+          margin:0 100px 0 40px;
       }
       .header-actions {
           // position : absolute;
           // right : 2em;
           // top : 2em;
-          padding: 2em 0px;
+          padding: 2em 0px 0px;
           margin-right: 65px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
       }
       .status-bar {
-          padding: 1rem 0;
+          padding: 2rem 0;
+          .status-info {
+            margin-left: 40%;
+          }
           .description {
               .status-title {
                   font-size: 16px;
@@ -137,13 +143,19 @@
   }
 
   
-
+  .timeline-card {
+    margin-top: 40px;
+    margin-bottom: 15px;
+    padding-top:0px !important;
+    padding-bottom: 0px !important;
+  }
   .header-info-section {
+      height: 50%;
+      border-bottom: solid 1px #b7b7b7;
       .section-header {
           padding : 1em 0em;
           font-size: 20px;
           font-family: 'Manrope-ExtraBold',sans-serif;
-          border-bottom: solid 1px #b7b7b7;
           .md-icon , img {
               margin-right: 0.4em;
               height: 23px;
@@ -154,39 +166,63 @@
       }
   }
   .card-section {
-      .section-header {
-          padding : 1em 1.3em;
-          font-size: 20px;
-          font-family: 'Manrope-ExtraBold',sans-serif;
-
-          .md-icon , img {
-              margin-right: 0.4em;
-              height: 23px;
-          }
-          .header-info {
-              float: right;
-              font-weight: 200;
-              font-size: 16px;
-          }
-      }
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 40px;
+    .card-content{
+      flex-grow: 1;
+      align-items: center;
+      align-content: center;
+    }
+    .section-header {
+        font-family: 'Manrope-Bold',sans-serif;
+        font-size: 22px;
+        // border-bottom: 1px solid #e2e2e2;
+        padding: 20px 25px;
+        color: #050505;
+        background: #fff !important;
+        text-align: left;
+        border-radius: 0;
+        position: relative;
+        &:after{
+          content: "";
+          height: 1px;
+          background: #B7B7B7;
+          width: calc(100% - 50px);
+          position: absolute;
+          left: 25px;
+          top: 100%;
+        }
+        .md-icon , img {
+            margin-right: 0.4em;
+            height: 23px;
+        }
+        .header-info {
+            float: right;
+            font-weight: 200;
+            font-size: 16px;
+        }
+    }
+    
   }
 
   .card-content {
       padding : 1em 2em;
+      overflow-y: auto;
+      overflow-x: hidden;
   }
 
   .card-footer {
-      border-top : 1px solid rgba(0, 0, 0, 0.08);
+      border-top : 1px solid #707070;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      padding : 0.7em 2em;
-
+      padding: 1.5em 2em;
+      max-height: 75px;
       .footer-content {
           font-size: 14px;
           color: #050505;
-
           img {
               margin-right : 0.5em;
           }
@@ -226,7 +262,7 @@
 
 
   .event-details-list {
-      margin : 0em 3em 2em 0;
+      margin : 2em 3em 2em 0;
       display: table;
       width: 100%;
       .list-items {
@@ -333,20 +369,16 @@
 
 
   .budget-percentage  {
-
       width: 40%;
-
       .chart-section {
           .title-budget-prise-negative {
               position: relative;
               width: 100%;
-
               .budget-pie-container {
                   display: grid;
                   margin: 1em 0;
                   text-align: center;
               }
-
               .percentage {
                   padding-bottom: 8px;
                   grid-column: 1;
@@ -362,45 +394,50 @@
       }
 
       .chart-legends {
-          width: 30%;
+          width: 100%;
+          text-align: center;
           .legend-item {
-              font-size: 14px;
+              font-size: 16px;
               font-weight: bold;
               margin-bottom : 0.5em;
               position: relative;
-
-              &:after {
-                  content : ' ';
-                  width : 10px;
-                  height : 10px;
-                  position : absolute;
-                  left: -17px;
-                  border-radius: 50%;
-                  top: 6px;
+              white-space: nowrap;
+              color: #050505;
+              span {
+                padding-left: 5px;
+                position: relative;
               }
               &.used {
-                  color: #f51355;
-
-                  &:after {
-                      background: #f51355;
-                  }
+                .legend-item-mark:after{
+                  content : ' ';
+                  width : 13px;
+                  height : 13px;
+                  position : absolute;
+                  left: -20px;
+                  border-radius: 50%;
+                  top: 4px;
+                  background: #f51355;
+                }
               }
-
               &.remaining {
-                  color: #818080;
-                  &:after {
-                      background: #818080;
-                  }
+                .legend-item-mark:after{
+                  content : ' ';
+                  width : 13px;
+                  height : 13px;
+                  position : absolute;
+                  left: -20px;
+                  border-radius: 50%;
+                  top: 4px;
+                  background: #818080;
+                }
               }
           }
       }
   }
 
   .budget-details , .guests-details {
-      margin-bottom: 2.5em;
-      margin-top:1em;
       width: 25%;
-      padding: 10px 30px;
+      padding: 50px 30px;
       .md-button-content {
           font-size: 16px;
       }
@@ -510,8 +547,8 @@
                   content : ' ';
                   position : absolute;
                   left: 22px;
-                  top: 45px;
-                  border: 1px dashed #f51355;
+                  top: 46px;
+                  border: 0.5px dashed #959595;
                   width: 1px;
                   height: 50px;
               }
@@ -712,11 +749,7 @@
       }
 
   }
-  .status-bar {
-    .status-info {
-      margin-left: 40%;
-    }
-  }
+
 
   .md-radio-container {
       border: 1px solid rgba(0, 0, 0, 0.54) !important;
@@ -746,8 +779,8 @@
   }
   .budget-percentage {
     padding: 0 20px;
-    border-left: 1px solid #e2e2e2;
-    border-right: 1px solid #e2e2e2;
+    border-left: 1px solid #B7B7B7;
+    border-right: 1px solid #B7B7B7;
     flex-grow: 1;
     .chart-legends{
       margin: auto;
@@ -818,15 +851,11 @@
     text-transform: unset;
   }
   .rsvp {
-    .guests-details{
-      width: 25%;
-      padding: 10px 30px;
-    }
     .progress-bar {
       width: 50%;
-      border-left: 1px solid #e2e2e2;
-      border-right: 1px solid #e2e2e2;
-      padding: 10px 30px;
+      border-left: 1px solid #B7B7B7;
+      border-right: 1px solid #B7B7B7;
+      padding: 50px 30px;
     }
     .teaser {
       width: 25%;
@@ -966,6 +995,33 @@
     .md-radio {
       display: flex;
       margin: 50px 0px;
+      label {
+          width: 100%;
+          display: inline-block;
+      }
+      .md-radio-label{
+          width: 100% !important;
+          .note-item {
+            display: flex !important;
+            &-label{
+                margin-right: 30px;
+                flex-grow: 1;
+            }
+            &-action {
+                min-width: 60px;
+                opacity: 0;
+            }
+            &:hover {
+                color:#050505;
+              .note-item-action {
+                //   display: block;
+                  opacity: 1;
+              } 
+            }
+          }
+          
+      }
+
     }
   }
   .edit-event-model {
@@ -989,13 +1045,12 @@
     }
   }
   .time-line-header {
-    margin: auto;
-    margin: auto;
+    margin: 0 0 10px;
     font-size: 16px;
     text-align: left;
     color: #a0a0a0;
     .label {
-      padding: 16px 16px;
+      padding: 0px 16px;
       font-family: "Manrope-ExtraBold";
     }
     .cross-line {
@@ -1005,6 +1060,17 @@
     }
     .cross-line-left {
       max-width: 45px;
+    }
+  }
+
+  .first-row {
+    .card-section{
+      height: 560px;
+    }
+  }
+  .second-row {
+    .card-section{
+      height: 480px;
     }
   }
 }

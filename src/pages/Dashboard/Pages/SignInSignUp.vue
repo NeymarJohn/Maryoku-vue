@@ -144,18 +144,29 @@ export default {
       let that = this
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
-          that.$auth.signupOrSignin(that, this.email.toString().toLowerCase(), that.password, 'administrator', (data) => {
-            that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
-              that.$router.push({ path: '/signedin', query: {token: success.access_token} })
-            }, (failure) => {
-              that.loading = false
-              if (failure.response.status === 401) {
-                that.error = 'Sorry, wrong password, try again.'
-              } else {
-                that.error = 'Temporary failure, try again later'
-                console.log(JSON.stringify(failure.response))
-              }
-            })
+          // that.$auth.signupOrSignin(that, this.email.toString().toLowerCase(), that.password, 'administrator', (data) => {
+          //   that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
+          //     that.$router.push({ path: '/signedin', query: {token: success.access_token} })
+          //   }, (failure) => {
+          //     that.loading = false
+          //     if (failure.response.status === 401) {
+          //       that.error = 'Sorry, wrong password, try again.'
+          //     } else {
+          //       that.error = 'Temporary failure, try again later'
+          //       console.log(JSON.stringify(failure.response))
+          //     }
+          //   })
+          // })
+          that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
+            that.$router.push({ path: '/signedin', query: {token: success.access_token} })
+          }, (failure) => {
+            that.loading = false
+            if (failure.response.status === 401) {
+              that.error = 'Sorry, wrong password, try again.'
+            } else {
+              that.error = 'Temporary failure, try again later'
+              console.log(JSON.stringify(failure.response))
+            }
           })
         } else {
           that.loading = false
@@ -163,7 +174,22 @@ export default {
       })
     },
     forgotPassword () {
-      this.isForgot = false
+      let that = this
+      console.log(this.errors.items.length)
+      if (this.errors.items.length == 0) {
+        this.isForgot = false
+      }
+      that.$auth.forgotPassword(that, that.email.toString().toLowerCase(), (success) => {
+        this.isForgot = false
+      }, (failure) => {
+        that.loading = false
+        if (failure.response.status === 401) {
+          that.error = 'Sorry, No such user name or email address.'
+        } else {
+          that.error = 'Temporary failure, try again later'
+          console.log(JSON.stringify(failure.response))
+        }
+      })
     }
   },
   created () {

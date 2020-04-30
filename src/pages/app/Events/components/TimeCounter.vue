@@ -73,7 +73,13 @@ export default {
     setInterval(() => {
       this.updateTime();
     }, 60000);
+  },
+  watch: {
+    target: function() {
+      this.updateTime()
+    }
   }
+
 };
 </script>
 <style lang="scss" scoped>
@@ -82,13 +88,10 @@ export default {
     flex: 1;
     flex-direction: row;
     justify-content: space-between;
-    position: absolute;
-    right: 65px;
-    bottom: 0;
     background-color: #ffc001;
     padding: 0.5em 1em;
     width: 323px;
-    height: 82.1px;
+    max-height: 82.1px;
     .count-item {
       text-align: center;
       &.divider {

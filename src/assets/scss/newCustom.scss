@@ -175,7 +175,7 @@
         background-color: #ffffff;
         margin-bottom : 1em;
         .section-header {
-            border-bottom : 1px solid #e2e2e2;
+            // border-bottom : 1px solid #e2e2e2;
             padding: 20px 25px;
             font-family: 'Manrope-Bold',sans-serif;
             font-size: 22px;
@@ -1694,6 +1694,9 @@
                     &:not(:last-child) {
                         border-bottom : 1px solid #aaa;
                     }
+                    &:hover {
+                        background: #f51355 !important;
+                    }
                 }
 
             }
@@ -3203,16 +3206,6 @@
 
     }
 
-    .swal2-actions {
-        justify-content: flex-end !important;
-        margin: 2em 0 0 !important;
-
-        .md-rose {
-            background: $rose !important;
-            text-transform: capitalize;
-            font-family: 'Manrope-ExtraBold',sans-serif;
-        }
-    }
 
     .swal2-close {
         color : #050505 !important;
@@ -4192,6 +4185,11 @@
                     }
                 }
             }
+        }
+    }
+    .notes {
+        .md-radio-label {
+            width: 100%;
         }
     }
 }
