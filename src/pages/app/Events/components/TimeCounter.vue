@@ -91,7 +91,7 @@ export default {
     background-color: #ffc001;
     padding: 0.5em 1em;
     width: 323px;
-    height: 82.1px;
+    max-height: 82.1px;
     .count-item {
       text-align: center;
       &.divider {

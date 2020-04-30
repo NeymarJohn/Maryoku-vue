@@ -292,7 +292,7 @@
                 >
                   <div class="cross-line cross-line-left"></div>
                   <div class="d-flex justify-content-center align-center label">
-                    <label style="white-space:nowrap; padding-right:10px">Day {{timelineIndex + 1}}</label>
+                    <label style="white-space:nowrap; padding-right:10px;text-transform: capitalize;">Day {{numberToWord(timelineIndex + 1)}}</label>
                     <div>{{formatDateString(timelineDate.itemDay)}}</div>
                   </div>
                   <div class="cross-line cross-line-right"></div>
@@ -653,7 +653,9 @@ export default {
     },
     radio: false,
     showEditDetailModal: false,
-    timeline: []
+    timeline: [],
+    a : ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ','eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '],
+    b : ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety']
   }),
   methods: {
     getTimelineItems() {
@@ -829,39 +831,16 @@ export default {
     },
     numberToWord(num) {
       let vm = this;
-      if ((num = num.toString()).length > 9) return "overflow";
-      let n = ("000000000" + num)
-        .substr(-9)
-        .match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
-      if (!n) return;
-      var str = "";
-      str +=
-        n[1] != 0
-          ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + " " + vm.a[n[1][1]]) +
-            "crore "
-          : "";
-      str +=
-        n[2] != 0
-          ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + " " + vm.a[n[2][1]]) +
-            "lakh "
-          : "";
-      str +=
-        n[3] != 0
-          ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + " " + vm.a[n[3][1]]) +
-            "thousand "
-          : "";
-      str +=
-        n[4] != 0
-          ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + " " + vm.a[n[4][1]]) +
-            "hundred "
-          : "";
-      str +=
-        n[5] != 0
-          ? (str != "" ? "and " : "") +
-            (vm.a[Number(n[5])] || vm.b[n[5][0]] + " " + vm.a[n[5][1]])
-          : "";
+      if ((num = num.toString()).length > 9) return 'overflow';
+      let n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+      if (!n) return; var str = '';
+      str += (n[1] != 0) ? (vm.a[Number(n[1])] || vm.b[n[1][0]] + ' ' + vm.a[n[1][1]]) + 'crore ' : '';
+      str += (n[2] != 0) ? (vm.a[Number(n[2])] || vm.b[n[2][0]] + ' ' + vm.a[n[2][1]]) + 'lakh ' : '';
+      str += (n[3] != 0) ? (vm.a[Number(n[3])] || vm.b[n[3][0]] + ' ' + vm.a[n[3][1]]) + 'thousand ' : '';
+      str += (n[4] != 0) ? (vm.a[Number(n[4])] || vm.b[n[4][0]] + ' ' + vm.a[n[4][1]]) + 'hundred ' : '';
+      str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (vm.a[Number(n[5])] || vm.b[n[5][0]] + ' ' + vm.a[n[5][1]]) : '';
       return str;
-    }
+    },
   },
   created() {
     this.$store.dispatch("event/getEventTypes", {
