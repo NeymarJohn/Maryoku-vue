@@ -1,6 +1,6 @@
 <template>
   <div :class="{'nav-open': $sidebar.showSidebar}">
-    <md-toolbar md-elevation="0" class="md-transparent md-toolbar-absolute radius-bk">
+    <md-toolbar md-elevation="0" class="md-transparent md-toolbar-absolute">
       <div class="md-toolbar-row md-offset">
         <div class="md-toolbar-section-start">
           <!--<h3 class="md-title">{{$route.name}}</h3>-->
@@ -22,7 +22,7 @@
             <router-view></router-view>
           </zoom-center-transition>
         </div>
-        <footer class="footer" v-if="false">
+        <footer class="footer">
           <div class="container md-offset">
             <nav>
               <ul>
@@ -95,7 +95,7 @@ export default {
         Login: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
         Register: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
         CreateWorkspace: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
-        // SignIn: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
+        SignIn: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
         SignOut: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
         GetStarted: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
         SignedIn: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
@@ -192,11 +192,5 @@ export default {
   }
   .wrapper-full-page .zoomOut {
     animation-name: zoomOut8;
-  }
-  .radius-bk {
-    background: #5c2153!important;
-    border-radius: 0 0 50% 50%;
-    padding: 0 0 1em;
-    height: 100px;
   }
 </style>

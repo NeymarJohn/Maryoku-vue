@@ -35,8 +35,8 @@
                         </div>
                         <div class="budget-list__item">
                             <div class="label-title">Booked</div>
-                            <div class="budget-value">${{0 | withComma}}</div>
-                            <div class="percent">{{ ((0 * 100) / calendarEvent.totalBudget).toFixed(1) }}%</div>
+                            <div class="budget-value">${{totalRemainingBudget | withComma}}</div>
+                            <div class="percent">{{ ((totalRemainingBudget * 100) / calendarEvent.totalBudget).toFixed(1) }}%</div>
                         </div>
                     </div>
                 </div>
@@ -315,7 +315,6 @@ export default {
           this.eventId = event.id
           this.calendarEvent = event
           new EventComponent().for(_calendar, event).get().then(components => {
-            components.sort((a,b)=>a.order - b.order)
             this.event.components = components
             this.selectedComponents = components
             this.seriesData = components
