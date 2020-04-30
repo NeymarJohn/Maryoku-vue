@@ -88,6 +88,9 @@
   &.md-purple{
     @include btn-styles($brand-purple);
   }
+  &.md-white {
+    @include btn-styles($white);
+  }
 
   &:focus,
   &:active,

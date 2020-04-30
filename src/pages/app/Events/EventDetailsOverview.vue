@@ -1,15 +1,15 @@
 <template>
-  <div class="md-layout new-event-details edit-event-details" v-if="event">
+  <div class="md-layout event-details-overview edit-event-details" v-if="event">
     <side-bar :event="event"></side-bar>
     <div class="event-details-header md-layout-item md-size-100">
       <div class="event-details-info d-flex justify-content-start">
         <div
           class="event-title d-flex justify-content-center align-center"
-          style="background : linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url(./static/img/logo.jpg) center center no-repeat"
+          style="background : linear-gradient(rgba(0,0,0,0.48),rgba(0,0,0,0.48)),url(./static/img/logo.jpg) center center no-repeat"
         >
-          <div>
-            <md-button class="md-default md-simple edit-concept-btn text-left">
-              Edit Concept
+          <div class="content">
+            <md-button class="md-default md-simple md-white edit-btn text-left">
+              Event's Concept
               <md-icon>keyboard_arrow_right</md-icon>
             </md-button>
             <h3>{{event.title}}</h3>
@@ -48,7 +48,7 @@
                 </label>
                
               </div>
-              <div class="card-content">
+              <div class="detail-content">
                   <div class="event-details-list">
                     <ul class="list-items">
                       
@@ -111,28 +111,7 @@
           </ul>
         </div>
       </div>
-      <div class="event-header__count">
-          <div class="count-item">
-            <div class="number">07</div>
-            <div class="count-label">DAYS</div>
-          </div>
-          <div class="count-item divider">:</div>
-          <div class="count-item">
-            <div class="number">11</div>
-            <div class="count-label">HOURS</div>
-          </div>
-          <div class="count-item divider">:</div>
-          <div class="count-item">
-            <div class="number">32</div>
-            <div class="count-label">MINUTES</div>
-          </div>
-          <div class="count-item with-icon">
-            <div class="icon">
-              <img :src="`${iconsURL}timer-white.svg`" width="20" />
-            </div>
-            <div class="count-label">To Event</div>
-          </div>
-        </div>
+      <time-counter :target="event.eventStartMillis"></time-counter>
     </div>
     <div class="md-layout justify-content-between notes" style="margin:2em 50px;">
       <div class="md-layout-item md-size-25">
@@ -143,7 +122,6 @@
               <img :src="`${iconsURL}filter-dark.svg`" width="20" />
             </button>
           </div>
-
           <div class="card-content">
             <div class="d-flex justify-content-start align-center">
               <input type="text" class="form-control input-new-note" v-model="notes.newNote" placeholder="Add new note" />
@@ -151,8 +129,8 @@
             <div class>
               <md-radio v-model="radio" :value="false">Lorem ipsum dolor sit amet sit  </md-radio>
               <md-radio v-model="radio" value="my-radio">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed</md-radio> 
-              <md-radio v-model="radio" :value="objA">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</md-radio>
-              <md-radio v-model="radio" :value="objB">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</md-radio>
+              <md-radio v-model="radio" :value="false">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</md-radio>
+              <md-radio v-model="radio" :value="false">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</md-radio>
             </div>
           </div>
         </div>
@@ -172,7 +150,7 @@
                 <div class="total-budget-value">
                   $ {{event.totalBudget | withComma}}
                 </div>
-                <md-button class="md-rose md-simple edit-total-budget">Edit</md-button>
+                <router-link :to="`/events/${event.id}/edit/budget`" tag="md-button"  class="edit-btn md-rose md-simple edit-btn">Edit</router-link>
               </div>
               <div class="budget-percentage">
                 <div class="chart-section">
@@ -224,7 +202,7 @@
                   </div>
                 </div>
 
-                <md-button class="md-rose md-simple edit-btn md-flat btn-outlined">
+                <md-button class="md-rose md-simple md-flat btn-outlined">
                   Book Venue
                 </md-button>
                 <!-- <div class="booked-vendors__items" v-if="event.components">
@@ -275,7 +253,7 @@
 
           <div class="card-content">
             <div class="timeline-items">
-              <div class="timeline-item" v-for="(timelineDate,timelineIndex) in event.timeline">
+              <div class="timeline-item-day" v-for="(timelineDate,timelineIndex) in event.timeline" :key="timelineIndex">
                 <div class="time-line-edit d-flex justify-content-center align-center time-line-header" > 
                   <div class="cross-line cross-line-left"></div>
                   <div class="d-flex justify-content-center align-center label ">
@@ -285,7 +263,7 @@
                   <div class="cross-line cross-line-right"></div>
 
                 </div> 
-                <div class="timeline-item d-flex justify-content-start" v-for="(timeline,index) in timelineDate.items" >
+                <div class="timeline-item d-flex justify-content-start" v-for="(timeline,index) in timelineDate.items"  :key="index">
                   <img class="timeline-item_icon"  :src="`${timlineIconsURL}${timeline.icon.toLowerCase()}-circle.svg`" width="45">
                   <div class="timeline-item_time">
                     {{formatHour(timeline.startTime)}} - {{formatHour(timeline.endTime)}}
@@ -307,10 +285,10 @@
               </div>
             </div>
             <div class="footer-actions">
-              <md-button class="md-rose md-simple edit-btn">
+              <router-link :to="`/events/${event.id}/edit/timeline`" tag="md-button"  class="edit-btn md-rose md-simple">
                 Edit
                 <md-icon>keyboard_arrow_right</md-icon>
-              </md-button>
+              </router-link>
             </div>
           </div>
         </div>
@@ -334,7 +312,7 @@
                   Total Guests
                 </div>
                 <div class="total-budget-value">{{event.numberOfParticipants | withComma}}</div>
-                <md-button class="md-rose md-simple edit-total-budget">Edit</md-button>
+                <md-button class="md-rose md-simple edit-btn" @click="openEditDetail">Edit</md-button>
               </div>
               <div class="progress-bar">
                 <div class="guests-progress d-flex justify-content-center align-center">
@@ -374,7 +352,7 @@
                 <img src="http://static.maryoku.com/storage/icons/Event Page/Group 6044.svg" width="50"/>
                 <div class="campaign-description-1">Create your <br/> "Don't forget" teaser</div>
                 <div class="campaign-description-2">and send it to those who didn't respond yet</div>
-                <md-button class="md-rose md-simple edit-btn md-flat btn-outlined">
+                <md-button class="md-rose md-simple md-flat btn-outlined">
                   Create Campaign
                 </md-button>
               </div>
@@ -564,9 +542,9 @@ import ChartComponent from '@/components/Cards/ChartComponent'
 import EditEventDetailModal from '@/components/Modals/EditEventDetailModal'
 import SideBar from '../../../components/SidebarPlugin/NewSideBar'
 import SidebarItem from '../../../components/SidebarPlugin/NewSidebarItem.vue'
-
+import TimeCounter from './components/TimeCounter'
 export default {
-  name: 'event-time-line',
+  name: 'event-overview',
   components: {
     AnimatedNumber,
     ChartCard,
@@ -580,7 +558,8 @@ export default {
     SideBar,
     SidebarItem,
     CalendarEventStatistics,
-    Modal
+    Modal,
+    TimeCounter
   },
   props: {
     // event: Object,
@@ -939,299 +918,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .status-bar {
-    .status-info {
-      margin-left: 40%;
-    }
-  }
+  @import "../../styles/EventDetailsOverview.scss";
 
-  .md-radio-container {
-      border: 1px solid rgba(0, 0, 0, 0.54) !important;
-      width: 30px;
-      min-width: 30px;
-      height: 30px;
-      top: 2px;
-      -webkit-transition: .2s !important;
-      transition: .2s !important;
-  }
-  .budget-details {
-    text-align: center;
-  }
-  .total-budget-value {
-    white-space: nowrap;
-  }
-  .budget-total {
-    padding: 0 20px;
-    flex-grow: 1;
-    display: flex;
-    justify-items: center;
-    align-items: center;
-    .budget-details {
-      height: max-content;
-      line-height: 2.5rem;
-    }
-  }
-  .budget-percentage {
-    padding: 0 20px;
-    border-left: 1px solid #e2e2e2;
-    border-right: 1px solid #e2e2e2;
-    flex-grow: 1;
-    .chart-legends{
-      margin: auto;
-    }
-  }
-  .book-venue {
-    flex-grow: 2;
-    max-width: 50%;
-    padding: 0 2em 0 4em;
-    .header-title {
-      padding-left:15px;
-    }
-    .booked-vendors__header{
-      margin:40px 40px 10px;
-    }
-    .book-items {
-      margin-bottom: 40px;
-    }
-    .venue-item {
-      border-radius: 3px;
-      border: solid 0.5px rgba(0, 0, 0, 0.08);
-      flex-grow: 1;
-      margin: 8px;
-      width: 139px;
-      height: 161px;
-      text-align: center;
-      padding:16px;
-      .budget {
-        font-size: 20px;
-        font-weight: 800;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: 1.3;
-        letter-spacing: normal;
-        text-align: right;
-        color: #050505;
-      }
-      .description {
-        margin-top:16px;
-        font-size: 16px;
-        font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: 1.38;
-        letter-spacing: normal;
-        text-align: center;
-        color: #050505;
-      }
-      
-    }
-    
-  }
-  .btn-outlined {
-    margin: auto;
-    border-radius: 3px;
-    border: solid 1px #f51355;
-    margin-left: 50%;
-    box-sizing: border-box;
-    transform: translateX(-50%);
-    font-size: 15px;
-    font-weight: 800;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.33;
-    letter-spacing: 0.32px;
-    text-align: center;
-    color: #f51355;
-    text-transform: unset;
-  }
-  .rsvp {
-    .guests-details{
-      width: 25%;
-      padding: 10px 30px;
-    }
-    .progress-bar {
-      width: 50%;
-      border-left: 1px solid #e2e2e2;
-      border-right: 1px solid #e2e2e2;
-      padding: 10px 30px;
-    }
-    .teaser {
-      width: 25%;
-      padding: 20px 50px;
-      text-align: center;
-      .campaign-description-1{
-        font-size: 20px;
-        font-weight: 800;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: 1.35;
-        letter-spacing: 0.42px;
-        text-align: center;
-        color: #000000;
-        margin:10px 0;
-      }
-      .campaign-description-2{
-        font-size: 14px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: 1.57;
-        letter-spacing: 0.29px;
-        text-align: center;
-        color: #000000;
-        margin:0px 0px 10px;
-      }
-    }
-  }
-  .guests-progress {
-    .header-status{
-        .progress {
-          height:10px;
-        }
-    }
-  }
-  .guests-progress {
-      &__item {
-          &:first-child {
-            z-index:10;
-            .progress {
-              border-radius: 100px;
-            }
-          }
-          &:nth-child(2) {
-            z-index:5;
-            .progress {
-              border-radius: 0 100px  100px 0;
-              &::before {
-                background-color: inherit;
-                content: '';
-                width: 50px;
-                height: 100%;
-                display: block;
-                transform: translateX(-30px);
-                z-index:5;
-              }
-            }
-          }
-          &:last-child {
-            z-index: 1;
-            .progress {
-              border-radius: 0 100px  100px 0;
-              &::before {
-                background-color: inherit;
-                content: '';
-                width: 50px;
-                height: 100%;
-                display: block;
-                transform: translateX(-30px);
-              }
-            }
-          }
-          .value {
-              font-weight: bold;
-              color : #050505;
-              font-size: 14px;
-          }
-
-          .progress {
-              height: 30px;
-              margin : 0.6em 0;
-          }
-          .percentage {
-              font-weight: bold;
-              font-size: 14px;
-          }
-
-          &.green {
-              .progress {
-                  background-color: #2cde6b;
-              }
-              .percentage {
-                  color : #2cde6b;
-              }
-          }
-          &.red {
-              .progress {
-                  background-color: #f51355;
-
-              }
-              .percentage {
-                  color : #f51355;
-              }
-
-          }
-          &.gray {
-              .progress {
-                  background-color: #d5d5d5;
-              }
-              .percentage {
-                  color : #d5d5d5;
-              }
-          }
-      }
-  }
-
-  .header-tip {
-    img {
-      margin-right: 15px;
-    }
-    font-family: 'Manrope-Regular',sans-serif;
-    padding-left: 40px;
-    font-size: 16px;
-    line-height: 1.31;
-    letter-spacing: normal;
-    text-align: left;
-    color: #050505;
-  }
-
-  .notes {
-    .notes-filter-btn {
-      border: none;
-      background: none;
-      float: right;
-    }
-    .md-radio {
-      display: flex;
-      margin: 50px 0px;
-    }
-  }
-  .edit-event-model {
-    .header-description {
-      span {
-        padding-left: 10px;
-      }
-    }
-    .evnet-detail-label {
-      font-size: 16px;
-      font-weight: 800;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: 1.31;
-      letter-spacing: normal;
-      text-align: left;
-      color: #050505;
-      margin-top: 42px;
-      margin-bottom: 10px;
-      display: inline-block;
-    }
-  }
-  .time-line-header {
-    margin: auto;
-    margin: auto;
-    font-size: 16px;
-    text-align: left;
-    color: #a0a0a0;
-    .label {
-      padding: 16px 16px;
-      font-family: "Manrope-ExtraBold";
-    }
-    .cross-line {
-      content: " ";
-      border-bottom: solid 1px #a0a0a0;
-      flex-grow:1;
-    }
-    .cross-line-left {
-      max-width: 45px;
-    }
-  }
 </style>
