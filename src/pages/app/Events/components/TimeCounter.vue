@@ -88,9 +88,6 @@ export default {
     flex: 1;
     flex-direction: row;
     justify-content: space-between;
-    position: absolute;
-    right: 65px;
-    bottom: 0;
     background-color: #ffc001;
     padding: 0.5em 1em;
     width: 323px;

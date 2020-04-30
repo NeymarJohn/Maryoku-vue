@@ -760,6 +760,9 @@ export default {
                     &:not(:last-child) {
                         border-bottom : 1px solid #aaa;
                     }
+                    &:hover {
+                        background: #f51355
+                    }
                 }
 
             }
