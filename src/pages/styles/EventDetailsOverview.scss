@@ -995,6 +995,33 @@
     .md-radio {
       display: flex;
       margin: 50px 0px;
+      label {
+          width: 100%;
+          display: inline-block;
+      }
+      .md-radio-label{
+          width: 100% !important;
+          .note-item {
+            display: flex !important;
+            &-label{
+                margin-right: 30px;
+                flex-grow: 1;
+            }
+            &-action {
+                min-width: 60px;
+                opacity: 0;
+            }
+            &:hover {
+                color:#050505;
+              .note-item-action {
+                //   display: block;
+                  opacity: 1;
+              } 
+            }
+          }
+          
+      }
+
     }
   }
   .edit-event-model {

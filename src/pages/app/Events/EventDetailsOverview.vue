@@ -136,19 +136,42 @@
               />
             </div>
             <div class>
-              <md-radio v-model="radio" :value="false">Lorem ipsum dolor sit amet sit</md-radio>
-              <md-radio
-                v-model="radio"
-                value="my-radio"
-              >Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed</md-radio>
-              <md-radio
-                v-model="radio"
-                :value="false"
-              >Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</md-radio>
-              <md-radio
-                v-model="radio"
-                :value="false"
-              >Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</md-radio>
+              <md-radio v-model="radio" value="1">
+                <div class="note-item">
+                  <div class="note-item-label">Lorem ipsum dolor sit amet sit</div>
+                  <div class="note-item-action">
+                    <img :src="`${this.iconsURL}edit-dark.svg`" width="20" style="margin-right:10px"/>
+                    <img :src="`${this.timlineIconsURL}Trash.svg`" width="20"/>
+                  </div>
+                </div>
+              </md-radio>
+              <md-radio v-model="radio"  value="2">
+                <div class="note-item">
+                  <div class="note-item-label">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed</div>
+                  <div class="note-item-action">
+                    <img :src="`${this.iconsURL}edit-dark.svg`" width="20" style="margin-right:10px"/>
+                    <img :src="`${this.timlineIconsURL}Trash.svg`" width="20"/>
+                  </div>
+                </div>
+              </md-radio>
+              <md-radio v-model="radio" value="3">
+                <div class="note-item">
+                  <div class="note-item-label">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempo</div>
+                  <div class="note-item-action">
+                    <img :src="`${this.iconsURL}edit-dark.svg`" width="20" style="margin-right:10px"/>
+                    <img :src="`${this.timlineIconsURL}Trash.svg`" width="20"/>
+                  </div>
+                </div>
+              </md-radio>
+              <md-radio v-model="radio" value="4">
+                <div class="note-item">
+                  <div class="note-item-label">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor</div>
+                  <div class="note-item-action">
+                    <img :src="`${this.iconsURL}edit-dark.svg`" width="20" style="margin-right:10px"/>
+                    <img :src="`${this.timlineIconsURL}Trash.svg`" width="20"/>
+                  </div>
+                </div>
+              </md-radio>
             </div>
           </div>
         </div>
