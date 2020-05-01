@@ -250,7 +250,7 @@
                     <md-button class="md-red md-maryoku save-timeline" @click="saveTimeline">Save Changes</md-button>
                     <div class="text-center timeline-lists-footer" v-if="timeline.length">
                         <div class="footer-title">END</div>
-                        <md-button class="md-red md-simple back-to-top"> <md-icon>expand_less</md-icon> Back to top </md-button>
+                        <md-button class="md-red md-simple back-to-top" @click="scrollToTop"> <md-icon>expand_less</md-icon> Back to top </md-button>
                     </div>
                 </div>
             </div>
@@ -992,7 +992,10 @@ export default {
     },
     removeSelectedAttachment(index) {
       this.currentAttachments.splice(index,1);
-    }
+    },
+    scrollToTop() {
+                window.scrollTo(0,0);
+           }
 
   },
   created () {
