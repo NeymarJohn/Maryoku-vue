@@ -31,7 +31,7 @@
           <md-field :class="[{'md-valid': !errors.has('password') && touched.password},{'md-error': errors.has('password')}]">
             <label>Password</label>
             <md-input v-model="password" type="password" data-vv-name="password" required v-validate="modelValidations.password" @keypress.enter="signup"></md-input>
-            <div class="md-error" style="text-align: center; width: 100%;">{{error}}</div>
+            <div class='md-error' style="text-align: center; width: 100%;">{{error}}</div>
           </md-field>
           <div class="title">
             By signing up you agree to our <br/> <a href="https://www.maryoku.com/terms" target="_blank" style="background-color: #f2f2f2;">Terms of Use</a> and <a href="https://www.maryoku.com/privacy" target="_blank" style="background-color: #f2f2f2;">Privacy Policy</a>
@@ -44,15 +44,14 @@
       <modal class="sorry-modal" container-class="modal-container sign-in border-radius-28">
         <template slot="header">
           <div class="sorry-modal__header">
-            <h3 v-if="isForgot">Forgot Password</h3>
-            <h3 v-else>Sign in</h3>
+            <h3>Sign in</h3>
           </div>
           <button class="close">
             <md-icon>clear</md-icon>
           </button>
         </template>
         <template slot="body">
-          <div class="sorry-modal__body" v-if="!isForgot">
+          <div class="sorry-modal__body">
             <md-field :class="[{'md-valid': !errors.has('email') && touched.email},{'md-error': errors.has('email')}]" class="border">
               <label>Email Address</label>
               <md-input 
@@ -73,26 +72,13 @@
                 required v-validate="modelValidations.password" 
                 @keypress.enter="signup"
               ></md-input>
+              <div class='md-error' style="text-align: center; width: 100%;">{{error}}</div>
             </md-field>
-            <a class="forgot" @click="isForgot=true">Forgot your password?</a>
-          </div>
-          <div class="sorry-modal__body" v-else>
-            <md-field :class="[{'md-valid': !errors.has('email') && touched.email},{'md-error': errors.has('email')}]" class="border">
-              <label>Email Address</label>
-              <md-input 
-                v-model="email" 
-                type="email" 
-                data-vv-name="email" 
-                required v-validate="forgotPasswordValidations.email" 
-                v-focus 
-                @keypress.enter="forgotPassword()"
-              ></md-input>
-            </md-field>
-            <div class="md-error" v-if="errors.items.length > 0" style="width: 100%;">{{errors.items[0].msg}}</div>
+            <a class="forgot">Forgot your password?</a>
           </div>
         </template>
         <template slot="footer">
-          <div class="sorry-modal__footer" v-if="!isForgot">
+          <div class="sorry-modal__footer">
             <div class="or-divider-wrapper">
               <div class="divider-item">
               </div>
@@ -107,9 +93,6 @@
               Sign in with Google
             </md-button>
             <md-button class="send warning" :class="[{'disabled': false}]" @click="signup">Sign in</md-button>
-          </div>
-          <div class="sorry-modal__footer" v-else>
-            <md-button class="send warning" :class="[{'disabled': false}]" @click="forgotPassword()">Reset Password</md-button>
           </div>
         </template>
       </modal>
@@ -144,50 +127,21 @@ export default {
       let that = this
       this.$validator.validateAll().then(isValid => {
         if (isValid) {
-          // that.$auth.signupOrSignin(that, this.email.toString().toLowerCase(), that.password, 'administrator', (data) => {
-          //   that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
-          //     that.$router.push({ path: '/signedin', query: {token: success.access_token} })
-          //   }, (failure) => {
-          //     that.loading = false
-          //     if (failure.response.status === 401) {
-          //       that.error = 'Sorry, wrong password, try again.'
-          //     } else {
-          //       that.error = 'Temporary failure, try again later'
-          //       console.log(JSON.stringify(failure.response))
-          //     }
-          //   })
-          // })
-          that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
-            that.$router.push({ path: '/signedin', query: {token: success.access_token} })
-          }, (failure) => {
-            that.loading = false
-            if (failure.response.status === 401) {
-              that.error = 'Sorry, wrong password, try again.'
-            } else {
-              that.error = 'Temporary failure, try again later'
-              console.log(JSON.stringify(failure.response))
-            }
+          that.$auth.signupOrSignin(that, this.email.toString().toLowerCase(), that.password, 'administrator', (data) => {
+            that.$auth.login(that, {username: that.email.toString().toLowerCase(), password: that.password}, (success) => {
+              that.$router.push({ path: '/signedin', query: {token: success.access_token} })
+            }, (failure) => {
+              that.loading = false
+              if (failure.response.status === 401) {
+                that.error = 'Sorry, wrong password, try again.'
+              } else {
+                that.error = 'Temporary failure, try again later'
+                console.log(JSON.stringify(failure.response))
+              }
+            })
           })
         } else {
           that.loading = false
-        }
-      })
-    },
-    forgotPassword () {
-      let that = this
-      console.log(this.errors.items.length)
-      if (this.errors.items.length == 0) {
-        this.isForgot = false
-      }
-      that.$auth.forgotPassword(that, that.email.toString().toLowerCase(), (success) => {
-        this.isForgot = false
-      }, (failure) => {
-        that.loading = false
-        if (failure.response.status === 401) {
-          that.error = 'Sorry, No such user name or email address.'
-        } else {
-          that.error = 'Temporary failure, try again later'
-          console.log(JSON.stringify(failure.response))
         }
       })
     }
@@ -197,11 +151,11 @@ export default {
     this.$auth.setToken(givenToken)
     this.$auth.currentUser(this, true)
     /* let tenantId = document.location.hostname.replace(".maryoku.com","");
-    new Tenant().find(tenantId).then(res =>{
-      if (!res.status){
-        this.$router.push({name:"CreateWorkspace"});
-      }
-    }); */
+            new Tenant().find(tenantId).then(res =>{
+              if (!res.status){
+                this.$router.push({name:"CreateWorkspace"});
+              }
+            }); */
   },
   watch: {
     email () {
@@ -219,7 +173,6 @@ export default {
       terms: false,
       email: null,
       password: null,
-      isForgot: false,
       serverURL: process.env.SERVER_URL,
       // auth: auth,
       touched: {
@@ -235,12 +188,6 @@ export default {
           required: true,
           min: 8
         }
-      },
-      forgotPasswordValidations: {
-        email: {
-          required: true,
-          email: true
-        },
       },
       contentLeft: [
         {
@@ -322,7 +269,6 @@ export default {
         }
       }
       &__footer {
-        width: 100%;
         padding: 10px 20px 20px 20px;
         .or-divider-wrapper {
           padding-bottom: 20px;
@@ -351,11 +297,11 @@ export default {
           border-radius: 12px;
           cursor: pointer;
           border: none;
-          margin-bottom: 56px;
         }
         .send {
           width: 100%;
           height: 56px;
+          margin-top: 56px;
           font-size: 18px;
           font-weight: 800;
           color: #ffffff;
@@ -367,8 +313,5 @@ export default {
           box-shadow: 0px 12px 24px #ff006633;
         }
       }
-    }
-    .md-error {
-      color: red;
     }
 </style>

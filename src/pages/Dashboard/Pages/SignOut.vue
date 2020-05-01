@@ -1,13 +1,12 @@
 <template>
-  <div class="md-layout">
-    <div class="md-layout-item" style="text-align: center;">
-      <!-- <img src="http://static.maryoku.com/storage/img/calendar-loader-3.gif" class="text-center" style="width: 64px;"/> -->
-      <img src="/static/img/maryoku-loader.gif" />
-      <h2 class="title text-center" slot="title" style="text-align: center;">
-        One moment please ...
-      </h2>
+    <div class="md-layout">
+        <div class="md-layout-item" style="text-align: center;">
+            <img src="http://static.maryoku.com/storage/img/calendar-loader-3.gif" class="text-center" style="width: 64px;"/>
+            <h2 class="title text-center" slot="title" style="text-align: center;">
+                One moment please ...
+            </h2>
+        </div>
     </div>
-  </div>
 </template>
 <script>
 export default {
