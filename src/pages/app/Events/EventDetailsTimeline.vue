@@ -1,5 +1,5 @@
 <template>
-    <div class="md-layout timeline-section with-progress-bar">
+    <div class="md-layout event-details-timeline timeline-section with-progress-bar">
 
         <side-bar :event="event">
 
@@ -9,7 +9,8 @@
 
         <div class="event-page-header md-layout-item md-size-100 with-bg">
             <div class="header-main-actions">
-                <md-button class="md-rose" @click="saveTimeline">Save Changes</md-button>
+                <md-button class="md-default md-maryoku md-back md-simple"><md-icon style="color:#000; font-size:30px">arrow_back</md-icon>Back</md-button>
+                <md-button class="md-rose md-maryoku" @click="saveTimeline">Save Changes</md-button>
                 <md-button class="md-default md-simple">back to first version</md-button>
                 <md-button class="md-default md-simple with-left-border">start from scratch</md-button>
             </div>
@@ -22,7 +23,7 @@
             </div>
         </div>
 
-        <div class="md-layout-item md-xlarge-size-60 md-large-size-60 md-small-size-50 time-line-section mr-auto" ref="content">
+        <div class="md-layout-item md-xlarge-size-65 md-large-size-65 md-small-size-50 time-line-section mr-auto" ref="content">
 
             <!--<md-button name="event-planner-tab-timeline-preview" class="event-planner-tab-timeline-preview md-info md-sm preview-event" @click="previewEvent">
               Preview
@@ -49,10 +50,10 @@
                           </div> 
                         </div>
                         <div class="header-actions">
-                            <md-button class="md-default md-simple md-just-icon" @click="addTimelineItem(timelineIndex)">
+                            <md-button class="md-default md-simple md-just-icon md-wrapper" style="font-size:26px !important" @click="addTimelineItem(timelineIndex)">
                                 <md-icon>add_circle</md-icon>
                             </md-button>
-                            <md-button class="md-default md-simple md-just-icon" @click="askRemoveTimelineItem(timelineIndex)">
+                            <md-button class="md-default md-simple md-just-icon md-wrapper" style="font-size:26px !important" @click="askRemoveTimelineItem(timelineIndex)">
                                 <md-icon>delete_outline</md-icon>
                             </md-button>
                         </div>
@@ -124,12 +125,21 @@
                                                     <span @click="removeAttachment(item, attachmentIndex)"><md-icon class="remove-attachment" >close</md-icon></span>
                                                   </span>
                                                 </p>
-                                                <label class="upload-section" for="file">
-                                                    <div class="md-rose md-outline md-simple md-sm attachment">
+                                                <label class="upload-section">
+                                                    <label class="md-rose md-outline md-simple md-sm attachment"  for="file" style="cursor:pointer">
                                                         <md-icon>attachment</md-icon>
                                                         Choose file(10MB)
+                                                    </label>
+                                                    <div>
+                                                      <span v-for="(file, index) in currentAttachments" :key="index" class="attachment-link">
+                                                        {{ file.name}}
+                                                        <span @click="removeSelectedAttachment(index)">
+                                                          <md-icon class="remove-attachment" >close</md-icon>
+                                                        </span>
+                                                      </span>
                                                     </div>
-                                                    {{ item.attachmentName}}
+                                                    
+                                                    <!-- {{ item.attachmentName}} -->
                                                     
                                                     <!-- <div class="note">Drag your file here</div> -->
                                                 </label>
@@ -139,6 +149,7 @@
                                                     id="file"
                                                     name="attachment"
                                                     type="file"
+                                                    multiple="multiple"
                                                     :data-item="item.id"
                                                     :data-timelineindex="timelineIndex"
                                                     :data-itemIndex="index"
@@ -235,7 +246,13 @@
                     </drop>
 
                 </div>
-
+                <div class="md-layout-item  text-center event-timeline-save">
+                    <md-button class="md-red md-maryoku save-timeline" @click="saveTimeline">Save Changes</md-button>
+                    <div class="text-center timeline-lists-footer" v-if="timeline.length">
+                        <div class="footer-title">END</div>
+                        <md-button class="md-red md-simple back-to-top"> <md-icon>expand_less</md-icon> Back to top </md-button>
+                    </div>
+                </div>
             </div>
         </div>
         <md-card
@@ -263,13 +280,7 @@
             </md-card-content>
         </md-card>
 
-        <div class="md-layout-item md-size-100 text-center">
-            <md-button class="md-rose save-timeline" @click="saveTimeline">Save Changes</md-button>
-            <div class="text-center timeline-lists-footer" v-if="timeline.length">
-                <div class="footer-title">End</div>
-                <md-button class="md-rose md-simple back-to-top"> <md-icon>expand_less</md-icon> Back to top </md-button>
-            </div>
-        </div>
+        
 
         <!-- Confirm Modal-->
         <modal v-if="showDeleteConfirmModal" class="delete-timeline-model">
@@ -434,11 +445,9 @@ export default {
           }
     ],
     a : ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ','eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '],
-    b : ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety']
-
-  
-    
-    }),
+    b : ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety'],
+    currentAttachments: []
+  }),
   methods: {
 
       download() {
@@ -593,6 +602,7 @@ export default {
           this.timeline[timelineIndex].items.splice(itemIndexOfTimeline, 1)
       }
       this.disabledDragging = false
+      this.currentAttachments = []
     },
     saveTimelineItem (item, index, timelineDate) {
       this.setItemLoading(item, true, true);
@@ -635,13 +645,13 @@ export default {
         link: item.link,
         plannedDate : plannedDate
       }
-      if (item.attachment) {
-        this.uploadAttachment(item.attachment, item.attachmentName, (res) => {
+      if (this.currentAttachments.length > 0) {
+        this.uploadAttachment(item.attachment, item.attachmentName, (results) => {
           
           if (!newTimeline.attachments) {
             newTimeline.attachments = []
           }
-          newTimeline.attachments.push({originalName: item.attachmentName, url: res.data.upload.path, name: res.data.upload.name})
+          newTimeline.attachments = newTimeline.attachments.concat(results)
           newTimeline.attachmentName = ""
           new EventTimelineItem(newTimeline).for(calendar, event).save()
             .then(res => {
@@ -657,6 +667,7 @@ export default {
               this.setItemLoading(item, false, true)
             })
           this.timelineAttachment = null
+          this.currentAttachments = []
         })
       } else {
         new EventTimelineItem(newTimeline).for(calendar, event).save()
@@ -678,11 +689,8 @@ export default {
     },
     updateTimelineItem (item) {
       this.setItemLoading(item, true, true)
-
-      if (!item.startTime || !item.endTime ||
-                    (!item.title && !item.description)) {
+      if (!item.startTime || !item.endTime || (!item.title && !item.description)) {
         this.$set(item, 'isItemLoading', false)
-
         this.$notify(
           {
             message: 'From time, To time and ( Title or Description ) id Required',
@@ -707,12 +715,12 @@ export default {
       timelineItem.link = item.link
       timelineItem.location = item.location
       timelineItem.attachments = item.attachments
-      if (item.attachment) {
-        this.uploadAttachment(item.attachment, item.attachmentName, res => {
+      if (this.currentAttachments.length > 0) {
+        this.uploadAttachment(item.attachment, item.attachmentName, results => {
           if (!timelineItem.attachments) {
             timelineItem.attachments = []
           }
-          timelineItem.attachments.push({originalName:item.attachmentName, url:res.data.upload.path, name:res.data.upload.name})
+          timelineItem.attachments = timelineItem.attachments.concat(results);
           timelineItem.attachmentName = ""
           console.log(timelineItem);
           timelineItem.save().then(res => {
@@ -725,8 +733,8 @@ export default {
             this.$root.$emit('timeline-updated', this.timelineItems)
           })
 
-          this.timelineAttachment = null
-          item.attachmentName = "";
+          this.currentAttachments = []  //intialized attachmentslist
+          item.attachmentName = ""
         })
       } else {
         timelineItem.save().then(res => {
@@ -741,25 +749,25 @@ export default {
       }
       
     },
-    uploadAttachment(file, attachmentName, callback){
-      let formData = new FormData();
-      formData.append('file', file);
-      formData.append('from', 'timeline')
-      formData.append('type', 'attachment')
-      formData.append('name', attachmentName)
-      this.$http.post(`${process.env.SERVER_URL}/uploadFile`,
-          formData,
+    async uploadAttachment(file, attachmentName, callback){
+      const attachments = [];
+      for (let i = 0; i < this.currentAttachments.length; i ++) {
+        const fileItem = this.currentAttachments[i];
+        let formData = new FormData();
+        formData.append('file', fileItem);
+        formData.append('from', 'timeline')
+        formData.append('type', 'attachment')
+        formData.append('name', fileItem.name)
+        const result = await this.$http.post(`${process.env.SERVER_URL}/uploadFile`, formData ,
           {
-          headers: {
-              'Content-Type': 'multipart/form-data'
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
           }
-        }
-      ).then(function(data){
-        callback(data)
-      })
-      .catch(function(){
-        console.log('FAILURE!!');
-      });
+        );
+        attachments.push({originalName: fileItem.name, url: result.data.upload.path, name: result.data.upload.name})
+      }
+      callback(attachments)
     },
     updateTimelineITemsOrder () {
       this.isLoading = true
@@ -817,7 +825,15 @@ export default {
         const timelineIndex = event.target.getAttribute('data-timelineindex')
         const itemIndex = event.target.getAttribute('data-itemIndex')
         console.log(timelineIndex, itemIndex);
-        if (files[0].size > 10 * 1024 * 1024) {
+        let isLargeFile = false;
+        console.log(files);
+
+        for (let i=0; i<files.length; i++){
+          if (files[i].size > 10 * 1024 * 1024) {
+            isLargeFile = true;
+          }
+        }
+        if (isLargeFile) {
           swal({
             title: 'This file is larger than 10MB',
             showCloseButton: true,
@@ -831,10 +847,12 @@ export default {
                   console.log(err)
               })
         } else  {
-          vm.timeline[timelineIndex].items[itemIndex].attachmentName = files[0].name
-          vm.timeline[timelineIndex].items[itemIndex].attachment = files[0]
+          // vm.timeline[timelineIndex].items[itemIndex].attachmentName = files[0].name
+          // vm.timeline[timelineIndex].items[itemIndex].attachment = files[0]
+          for (let i=0; i<files.length; i++){
+            this.currentAttachments.push(files[i]);
+          }
         }
-        
       } else {
         this.createImage(files[0])
       }
@@ -971,6 +989,9 @@ export default {
     },
     removeAttachment(timelineItem, attachmentIndex) {
       timelineItem.attachments.splice(attachmentIndex, 1);
+    },
+    removeSelectedAttachment(index) {
+      this.currentAttachments.splice(index,1);
     }
 
   },
@@ -1042,4 +1063,5 @@ export default {
     transform: rotate(0deg) !important;
     cursor: pointer;
   }
+@import "../../styles/EventDetailsTimeline.scss";
 </style>
