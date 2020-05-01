@@ -44,7 +44,7 @@
                       $ {{block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(0).toString() : 0}}
                   </template>
 
-                  <md-button class="md-rose md-sm md-simple edit-budget" v-if="!block.editBudget" @click="showEditElementBudget(block)"> Edit </md-button>
+                  <md-button class="md-rose md-sm md-simple edit-btn" v-if="!block.editBudget" @click="showEditElementBudget(block)"> Edit </md-button>
 
                   <div class="edit-element-budget" v-if="block.editBudget">
                       <input v-model="block.newBudget">

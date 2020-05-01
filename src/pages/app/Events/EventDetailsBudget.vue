@@ -1,12 +1,14 @@
 <template>
-    <div class="edit-event-details">
+    <div class="edit-event-details event-details-budget">
         <side-bar :event="calendarEvent">
         </side-bar>
         <!-- Event Header -->
         <div class="event-header d-flex justify-content-between">
             <div class="header-title">
-                <h3><img :src="`${this.$iconURL}budget+screen/SVG/Asset%2010.svg`" width="15">
-                    Budget</h3>
+              <h3>
+                <img :src="`${this.$iconURL}budget+screen/SVG/Asset%2010.svg`" width="15">
+                Budget
+              </h3>
             </div>
             <div class="header-actions">
                 <ul>
@@ -17,42 +19,62 @@
             </div>
         </div>
         <div class="md-layout justify-content-between">
-            <div class="md-layout-item md-size-60">
-                <div class="card-section">
+            <div class="md-layout-item md-size-55">
+                <div class="card-section card-overview">
                     <div class="section-header">
                         Overview
                     </div>
                     <div class="budget-list d-flex justify-content-between">
                         <div class="budget-list__item">
                             <div class="label-title">Budget</div>
-                            <div class="budget-value">${{calendarEvent.totalBudget | withComma}}</div>
+                            <div class="budget-value">${{statistics.total | withComma}}</div>
                             <md-button class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true">Edit</md-button>
                         </div>
                         <div class="budget-list__item">
                             <div class="label-title">Allocated</div>
-                            <div class="budget-value">${{allocatedBudget | withComma}}</div>
-                            <div class="percent">{{ (( allocatedBudget ) * 100 / calendarEvent.totalBudget).toFixed(1)}}  %</div>
+                            <div class="budget-value">${{statistics.allocated | withComma}}</div>
+                            <div class="percent">{{ (( statistics.allocated ) * 100 / calendarEvent.totalBudget).toFixed(1)}}  %</div>
                         </div>
                         <div class="budget-list__item">
                             <div class="label-title">Booked</div>
-                            <div class="budget-value">${{0 | withComma}}</div>
-                            <div class="percent">{{ ((0 * 100) / calendarEvent.totalBudget).toFixed(1) }}%</div>
+                            <div class="budget-value">${{statistics.booked | withComma}}</div>
+                            <div class="percent">{{ ((statistics.booked * 100) / calendarEvent.totalBudget).toFixed(1) }}%</div>
                         </div>
                     </div>
                 </div>
-                <div class="card-section saved-budget text-center">
-                    So far you saved : <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+25.png"
-                                            width="15"> <b>$100</b>
+                <div class="card-section card-overview-saved text-center d-flex justify-center align-center">
+                    <span> So far you saved : </span>
+                    <img class="card-overview-saved-icon" src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+25.png" width="20"> 
+                    <span class="card-overview-saved-amount">$ 100</span>
                 </div>
             </div>
-            <div class="md-layout-item  md-size-40">
-                <div class="card-section">
+            <div class="md-layout-item  md-size-45 card-actvity">
+                <div class="card-section card-activity">
+                  <div class="section-header">
+                      Activity
+                  </div>
+                  <div class="budget-list d-flex justify-content-between">
+                      <div class="text-left card-activity-content">
+                        <span class="card-activity-title">Great Job!</span>
+                        <div>
+                          You saved money on the catering deal!  Seems like you could use this extra money 
+                          and get a video photographer. 
+                        </div>
+                        <p class="text-bold-extra">
+                          Want to upgrade your event and get a fantastic clip?
+                        </p>
+                        <p class="card-activity-buttons">
+                          <md-button class="md-default md-maryoku md-simple md-theme-default"> No, Thanks</md-button>
+                          <md-button class="md-default md-red md-maryoku"> Get Video Proposals</md-button>
+                        </p>
+                    </div>
+                  </div>
                 </div>
             </div>
         </div>
         <div class="md-layout justify-content-between">
             <div class="md-layout-item md-size-40">
-                <div class="card-section">
+                <div class="card-section card-expense">
                     <div class="section-header">
                         Expenses
                     </div>
@@ -64,7 +86,7 @@
                     </div>
                 </div>
             </div>
-            <div class="md-layout-item  md-size-60" style="padding-right: 30px;">
+            <div class="md-layout-item  md-size-60">
                 <div class="event-blocks-table">
                     <tabs
                         :tab-name="['<img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
@@ -168,13 +190,13 @@
             </template>
             <template slot="body">
                 <div class="event-blocks-table edit-elements-budget-table">
-                    <tabs
-                        :tab-name="['<img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
-                    >
-                        <!-- here you can add your content for tab-content -->
+                    <tabs :tab-name="['<img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']">                        <!-- here you can add your content for tab-content -->
                         <template slot="tab-pane-1">
-                            <edit-event-blocks-budget :event.sync="event" :event-components="selectedComponents"
-                                                       type="total"></edit-event-blocks-budget>
+                            <edit-event-blocks-budget 
+                              :event.sync="event" 
+                              :event-components="selectedComponents"
+                              type="total">
+                            </edit-event-blocks-budget>
                         </template>
                         <template slot="tab-pane-2">
                             <edit-event-blocks-budget :event.sync="event" :event-components="selectedComponents"
@@ -242,6 +264,11 @@ export default {
       // auth: auth,
       calendarEvent: {},
       selectedComponents: [],
+      statistics: {
+        total: 0,
+        allocated: 0,
+        booked: 0
+      },
       currentTab: 'blocks',
       eventId: null,
       percentage: 0,
@@ -314,6 +341,7 @@ export default {
           this.event = event
           this.eventId = event.id
           this.calendarEvent = event
+          this.newBudget = event.totalBudget
           new EventComponent().for(_calendar, event).get().then(components => {
             components.sort((a,b)=>a.order - b.order)
             this.event.components = components
@@ -390,6 +418,11 @@ export default {
       new CalendarEventStatistics().for(calendar, event).get()
         .then(resp => {
           console.log(resp);
+          this.statistics = {
+            total: resp[0].totalBudget,
+            allocated: resp[0].totalAllocatedBudget,
+            booked: 0
+          }
           this.totalRemainingBudget = resp[0].totalBudget - resp[0].totalAllocatedBudget;// (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget // evt.totalBudget - resp[0].totalAllocatedBudget;
           this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants // evt.totalBudget - resp[0].totalAllocatedBudget;
           this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
@@ -407,19 +440,19 @@ export default {
     },
     updateBudget () {
       let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-      let editedEvent = new CalendarEvent({id: this.event.id})
+      let editedEvent = new CalendarEvent({id: this.event.id}).for(_calendar)
 
-      editedEvent = this.event
       editedEvent.totalBudget = this.newBudget
 
-      editedEvent.for(_calendar).save()
-      .then(response => {
-        this.showBudgetModal = false
-        this.getCalendarEventStatistics()
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+      editedEvent.save()
+        .then(response => {
+          this.showBudgetModal = false
+          //this.getCalendarEventStatistics()
+          this.getEvent()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
 
       if (this.newBudget < this.calendarEvent.totalBudget) {
 
@@ -486,12 +519,14 @@ export default {
 }
 </script>
 
-<style scoped>
-    .md-layout, .md-layout-item {
-        width: initial;
-    }
+<style scoped lang="scss">
+    @import "../../styles/EventDetailsBudget.scss";
+    // .md-layout, .md-layout-item {
+    //     width: initial;
+    // }
 
-    .tab-content {
-        background-color: transparent !important;
-    }
+    // .tab-content {
+    //     background-color: transparent !important;
+    // }
+    
 </style>
