@@ -1,46 +1,55 @@
 <template>
   <div class="progress-sidebar">
     <div class="summer-party">
-      <md-button class="md-default md-sm md-simple expand-sidebar">
-        <img :src="`${newTimeLineIconsURL}expand.svg`" />
-      </md-button>
-      <div class="title-label">
-        summer party
-        <small>checklist</small>
-      </div>
-      <div class="completion-progress">
-        <div class="progress-done"></div>
-      </div>
-      <div class="percentage">
-        <ul>
-          <li class="green-label">56%</li>
-          <li class>17 of 26</li>
-        </ul>
-      </div>
-      <div class="small-label">Things are warming up!</div>
-    </div>
-
-    <!-- Event Elements -->
-    <div class="event-elements">
-      <draggable :list="eventElements">
-        <div
-          class="event-elements__item"
-          @click="goToRoute(item,index)"
-          :class="isActiveRoute(item)"
-          v-for="(item,index) in eventElements"
-          :key="index"
-        >
-          <div class="item-title">
-            <img
-              v-if="item.status==='complete'"
-              src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg"
-              width="15"
-            />
-            <img :src="item.icon" v-if="isActiveRoute(item)" width="25"/>
-            {{item.title}}
-          </div>
+        <md-button class="md-default md-sm md-simple expand-sidebar">
+          <img :src="`${newTimeLineIconsURL}expand.svg`" />
+        </md-button>
+        <div class="title-label">
+          summer party
+          <small>checklist</small>
         </div>
-      </draggable>
+        <div class="completion-progress">
+          <div class="progress-done"></div>
+        </div>
+        <div class="percentage">
+          <ul>
+            <li class="green-label">56%</li>
+            <li class>17 of 26</li>
+          </ul>
+        </div>
+        <div class="small-label">Things are warming up!</div>
+        <div class="my-notes">
+          <md-button class="md-rose" >
+            <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin:0 3px"/>
+            My Notes
+            <md-icon style="font-size: 30px !important; margin-left: 5px;">keyboard_arrow_down</md-icon>
+          </md-button>
+        </div>
+        
+      </div>
+    <div class="progress-sidebar-content">
+      <!-- Event Elements -->
+      <div class="event-elements">
+        <draggable :list="eventElements">
+          <div
+            class="event-elements__item"
+            @click="goToRoute(item,index)"
+            :class="isActiveRoute(item)"
+            v-for="(item,index) in eventElements"
+            :key="index"
+          >
+            <div class="item-title">
+              <img
+                v-if="item.status==='complete'"
+                src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg"
+                width="15"
+              />
+              <img :src="item.icon" v-if="isActiveRoute(item)" width="25"/>
+              {{item.title}}
+            </div>
+          </div>
+        </draggable>
+      </div>
     </div>
   </div>
 </template>
