@@ -92,6 +92,18 @@
     @include btn-styles($white);
   }
 
+  &.md-maryoku {
+    font-size: 16px;
+    font-family: "Manrope-ExtraBold";
+    text-transform: capitalize;
+  }
+
+  &.md-wrapper {
+    .md-ripple {
+      padding:0px !important;
+    }
+  }
+
   &:focus,
   &:active,
   &:active:focus{
@@ -161,18 +173,18 @@
   // Size variations
   &.md-lg .md-ripple{
     font-size: $mdb-btn-font-size-lg;
-    padding: 18px 36px !important;
+    padding: 18px 36px;
   }
   &.md-sm .md-ripple{
-    padding: 0.40625rem 1.25rem !important;
+    padding: 0.40625rem 1.25rem;
     font-size: $mdb-btn-font-size-sm;
   }
   &.md-xs .md-ripple{
-    padding: 0.10625rem 0.15rem !important;
+    padding: 0.10625rem 0.15rem;
     font-size: $mdb-btn-font-size-xs;
   }
   &.md-md .md-ripple{
-    padding: 0.40625rem 1.25rem !important;
+    padding: 0.40625rem 1.25rem;
     font-size: $mdb-btn-font-size-lg;
   }
 
