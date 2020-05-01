@@ -814,13 +814,21 @@ export default {
     },
     updateEvent() {
       //
-      const updateEvent = { ...this.event, ...this.editEvent };
+      let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+      let updateEvent = new CalendarEvent({id: this.event.id}).for(_calendar)
+
+      // const updateEvent = { ...this.editEvent };
+      updateEvent.eventDayPart = this.editEvent.eventDayPart;
+      updateEvent.eventStartMillis = this.editEvent.eventStartMillis;
+      updateEvent.numberOfParticipants = this.editEvent.numberOfParticipants;
+      updateEvent.location = this.editEvent.location;
+
       const eventType = this.eventTypes.find(
-        it => it.name === updateEvent.eventType.name
+        it => it.name === this.editEvent.eventType.name
       );
       updateEvent.eventType = eventType;
       console.log(eventType);
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+      // let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       if (updateEvent.eventDayPart === "evening") {
         updateEvent.eventStartMillis.setHours(19);
       } else {
@@ -828,9 +836,7 @@ export default {
       }
       updateEvent.eventStartMillis = updateEvent.eventStartMillis.getTime();
       updateEvent.eventEndMillis = updateEvent.eventStartMillis + 3600 * 1000;
-      new CalendarEvent(updateEvent)
-        .for(calendar)
-        .save()
+      updateEvent.save()
         .then(res => {
           // console.log(res);
           this.event = res;
