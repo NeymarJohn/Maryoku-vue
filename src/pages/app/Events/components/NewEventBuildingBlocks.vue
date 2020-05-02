@@ -541,6 +541,7 @@ export default {
               })
 
               this.allocatedBudget = allocatedBudget
+              this.$emit("change");
             })
             .catch(error => {
               console.log(error)
@@ -687,6 +688,7 @@ export default {
           this.allocatedBudget = allocatedBudget
 
           this.showEditElementBudget(block)
+          this.$emit("change")
         })
         .catch(error => {
           console.log(error)
@@ -884,7 +886,7 @@ export default {
         .save()
         .then(res => {
           this.showCategoryModal = false
-          location.reload()
+          this.$emit("change")
         })
         .catch(error => {
           console.log('Error while saving ', error)

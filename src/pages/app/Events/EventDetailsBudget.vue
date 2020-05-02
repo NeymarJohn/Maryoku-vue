@@ -94,11 +94,11 @@
                         <!-- here you can add your content for tab-content -->
                         <template slot="tab-pane-1">
                             <new-event-building-blocks :event.sync="event" :event-components="selectedComponents"
-                                                       type="total"></new-event-building-blocks>
+                                                       type="total" @change="onChangeComponent"></new-event-building-blocks>
                         </template>
                         <template slot="tab-pane-2">
                             <new-event-building-blocks :event.sync="event" :event-components="selectedComponents"
-                                                       type="perGuest"></new-event-building-blocks>
+                                                       type="perGuest" @change="onChangeComponent"></new-event-building-blocks>
                         </template>
                     </tabs>
                 </div>
@@ -459,6 +459,9 @@ export default {
       } else {
 
       }
+    },
+    onChangeComponent (event) {
+      this.getEvent()
     }
   },
   computed: {
@@ -499,7 +502,8 @@ export default {
       return {
         data: this.seriesData
       }
-    }
+    },
+   
   },
   filters: {
     formatDate: function (date) {

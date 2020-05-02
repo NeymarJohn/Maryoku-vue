@@ -157,6 +157,7 @@ export default {
         .for(calendar, event)
         .get()
         .then(resp => {
+          resp.sort((a,b)=>a.order - b.order)
           _.map(resp, function (item) {
             vm.eventElements.push({
               title: 'Book ' + item.title,
