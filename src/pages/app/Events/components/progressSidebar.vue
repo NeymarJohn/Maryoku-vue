@@ -148,57 +148,26 @@ export default {
       location.reload()
     },
     getEventBlocks () {
-      
-    },
-    generatedItems() {
-      const concept = {
-        title: 'Choose Concept',
-        status: 'not-complete',
-        route: 'choose-concept',
-        icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
-        progress: 0
-      };
-      const budget = {
-        title: 'Approve Budget',
-        status: 'not-complete',
-        route: 'edit/budget',
-        icon: 'http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2010.svg',
-        progress: 0
-      };
-      const timeline = {
-        title: 'Generate timeline',
-        status: 'current',
-        route: 'edit/timeline',
-        icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
-        progress: 0
-      };
-      const elements = [];
-      if (this.event.eventType.hasConcept) {
-        elements.push(concept);
-      }
-      elements.push(budget);
-      elements.push(timeline);
+      let vm = this
 
       let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
       let event = new CalendarEvent({ id: this.event.id })
 
-      const vm = this;
       new EventComponent()
         .for(calendar, event)
         .get()
         .then(resp => {
           resp.sort((a,b)=>a.order - b.order)
-          resp.forEach(item => {
-            if (item.componentId !== 'unexpected') {
-              elements.push({
-                title: 'Book ' + item.title,
-                status: 'not-complete',
-                route: 'booking/' + item.id,
-                icon: `http://static.maryoku.com/storage/icons/Budget+Elements/${item.componentId}.svg`,
-              })
-            }
-          }) 
-          vm.eventElements = elements;
+          _.map(resp, function (item) {
+            vm.eventElements.push({
+              title: 'Book ' + item.title,
+              status: 'not-complete',
+              route: 'booking/' + item.id,
+              icon: `http://static.maryoku.com/storage/icons/Budget+Elements/${item.componentId}.svg`,
+            })
+
+            return item
+          })
         })
     }
   },
@@ -213,8 +182,7 @@ export default {
           .find(this.$route.params.id)
           .then(event => {
             this.event = event
-            console.log("this evetn", this.event);
-            this.generatedItems()
+
             this.getEventBlocks()
 
             console.log(event)

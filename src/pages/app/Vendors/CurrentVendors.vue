@@ -64,8 +64,7 @@
         <md-button class="md-success md-lg">Contact Vendor</md-button>
         <md-button 
           class="md-danger md-lg" 
-          @click="goTo(`/vendors/${vendor.id}/proposal-request/${proposals[0].id}`)"
-          :class="{ 'disabled' : true }"
+          @click="goToProposal()"
         >
           Create Brief Ask for Proposal
         </md-button>
@@ -316,6 +315,7 @@ import moment from 'moment'
 import VueElementLoading from 'vue-element-loading'
 import Vendors from '@/models/Vendors'
 import VendorPropertyField from './VendorPropertyField'
+import ProposalRequest from '@/models/ProposalRequest'
 
 // COMPONENTS
 import Icon from '@/components/Icon/Icon.vue'
@@ -476,6 +476,14 @@ export default {
     },
     goTo (router) {
       this.$router.push(router)
+    },
+    goToProposal() {
+      if (this.proposals.length > 0) {
+        this.goTo(`/vendors/${this.vendor.id}/proposal-request/${this.proposals[0].id}`)
+      } else {
+        console.log(this.vendor)
+        this.goTo(`/vendors/${this.vendor.id}/proposal-request/${this.vendor.id}`)
+      }
     }
   },
   computed: {
