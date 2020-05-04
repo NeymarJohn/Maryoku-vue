@@ -148,7 +148,6 @@
                                      :key="indx"
                                 >
                                     <div class="image-section d-flex  justify-content-center align-center text-center" :style="`background:url(${uploadImageData[indx]})`">
-                                        <img :src="uploadImageData[indx]" style="width:100%; height:100%; position:absolute; left:0; top:0"/>
                                         <label :for="`file-${indx}`" style="cursor:pointer">
                                             <img :src="`${conceptIconsURL}Asset 488.svg`" style="width:24px">
                                             <br/>
@@ -355,7 +354,15 @@ export default {
         files:[]
     },
     uploadImages:{},
-    uploadImageData:{}
+    uploadImageData:{
+        0:"",
+        1: "",
+        2: "",
+        3: "",
+        4: "",
+        5: "",
+    },
+    uploadImage:""
   }),
   methods: {
     expandConcept(item, index) {
@@ -409,6 +416,7 @@ export default {
         console.log(files)
         this.uploadImages[itemIndex] = files[0]
         this.uploadImageData[itemIndex] = URL.createObjectURL(files[0]);
+        this.uploadImage = URL.createObjectURL(files[0]);
         console.log(URL.createObjectURL(files[0]));
       }
     }
