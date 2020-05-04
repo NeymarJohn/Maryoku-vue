@@ -97,7 +97,20 @@
     font-family: "Manrope-ExtraBold";
     text-transform: capitalize;
   }
+  &.md-bold {
+    font-size: 16px;
+    font-family: "Manrope-Bold";
+    text-transform: capitalize;
+  }
 
+  &.back-to-top {
+    font-family: "Manrope-ExtraBold";
+    font-weight: bold;
+    text-transform: capitalize;
+    font-size: 20px;
+    padding  : 0 !important;
+    color : #f51355 !important;
+  }
   &.md-wrapper {
     .md-ripple {
       padding:0px !important;
