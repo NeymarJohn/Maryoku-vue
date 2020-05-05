@@ -14,35 +14,30 @@
           <v-signup-editable-field
             :title="'Company Name'"
             :img="''"
-            :isEdit="false"
             :defaultVal="'Relish caterers & venues'"
             :borderBottom="true"
           />
           <v-signup-editable-field
             :title="'Business Category'"
             :img="''"
-            :isEdit="false"
             :defaultVal="'Venue'"
             :borderBottom="true"
           />
           <v-signup-editable-field
             :title="'Address'"
-            :img="`${submitIconUrl}Asset 573.svg`"
-            :isEdit="false"
+            :img="`${iconUrl}Asset 550.svg`"
             :defaultVal="'575 Mission St. San Francisco CA 94105'"
             :borderBottom="true"
           />
           <v-signup-editable-field
             :title="'Phone'"
-            :img="`${submitIconUrl}Asset 591.svg`"
-            :isEdit="false"
+            :img="`${iconUrl}Asset 548.svg`"
             :defaultVal="'077-3000293'"
             :borderBottom="true"
           />
           <v-signup-editable-field
             :title="'Email'"
-            :img="`${submitIconUrl}Asset 593.svg`"
-            :isEdit="false"
+            :img="`${iconUrl}Asset 547.svg`"
             :defaultVal="'relish_service@gmail.com'"
             :borderBottom="false"
           />
@@ -70,7 +65,6 @@ export default {
     return {
       vendor: null,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
-      submitIconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
     }
   },
   created() {

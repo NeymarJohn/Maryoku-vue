@@ -994,8 +994,8 @@ export default {
       this.currentAttachments.splice(index,1);
     },
     scrollToTop() {
-                window.scrollTo(0,0);
-           }
+        window.scrollTo(0,0);
+    }
 
   },
   created () {

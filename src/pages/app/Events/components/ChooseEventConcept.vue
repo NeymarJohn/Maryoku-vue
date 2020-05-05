@@ -106,29 +106,29 @@
                     <div class="form-content">
                         <div class="form-group">
                             <label>Concept Name</label>
-                            <input type="text" class="form-control" placeholder="Type your concept here…">
+                            <input type="text" class="form-control" placeholder="Type your concept here…" v-model="newConcept.name">
                         </div>
                         <div class="form-group add-tags-field">
                             <label>Tags <small>*suggested</small></label>
                             <input type="text" v-model="newTag" class="form-control" placeholder="Type your concept here…">
                             <div class="add-tags-actions text-right">
-                                <md-button class="md-rose btn-rose md-sm" @click="addTag">add Tag</md-button>
+                                <md-button class="md-red md-maryoku" @click="addTag">add Tag</md-button>
                             </div>
                         </div>
-                        <div class="tags-list d-flex justify-content-start" v-if="conceptTags.length">
-                            <div class="tags-list__item" v-for="(tag, index) in conceptTags">{{tag.title}} <img :src="`${conceptIconsURL}Asset 489.svg`" @click="removeTag(index)"></div>
+                        <div class="tags-list d-flex justify-content-start" v-if="newConcept.tags.length">
+                            <div class="tags-list__item" v-for="(tag, index) in newConcept.tags">{{tag.title}} <img :src="`${conceptIconsURL}Asset 489.svg`" @click="removeTag(index)"></div>
                         </div>
                         <div class="form-group">
                             <label>Description</label>
                             <p>Describe a bit so we could find you the right services</p>
-                            <textarea rows="" class="form-control" placeholder="Write description here"></textarea>
+                            <textarea rows="" class="form-control" placeholder="Write description here" v-model="newConcept.description"></textarea>
                         </div>
 
                         <div class="form-group">
                             <label>Add Colors</label>
                             <div class="colors-list d-flex justify-content-start">
-                                <div class="colors-list__item" :style="`background: #ff48b2`"></div>
-                                <md-button class="colors-list__add md-just-icon"><img :src="`${conceptIconsURL}Asset 488.svg`"></md-button>
+                                <div class="colors-list__item" :style="`background: ${color.name}`" v-for="(color, index) in newConcept.colors"></div>
+                                <md-button class="colors-list__add md-just-icon" @click="addColor"><img :src="`${conceptIconsURL}Asset 488.svg`"></md-button>
                             </div>
                         </div>
 
@@ -147,19 +147,28 @@
                                      v-for="indx in 5"
                                      :key="indx"
                                 >
-                                    <div class="image-section d-flex  justify-content-center align-center">
-
-                                        <md-button class="md-sm md-simple">
-                                            <img :src="`${conceptIconsURL}Asset 488.svg`">
-                                            <label><img :src="`${conceptIconsURL}Asset 492.svg`"> Add Photo</label>
-                                        </md-button>
+                                    <div class="image-section d-flex  justify-content-center align-center text-center" :style="`background:url(${uploadImageData[indx]})`">
+                                        <label :for="`file-${indx}`" style="cursor:pointer">
+                                            <img :src="`${conceptIconsURL}Asset 488.svg`" style="width:24px">
+                                            <br/>
+                                            <label><img :src="`${conceptIconsURL}Asset 492.svg`" style="width:16px"> Add Photo</label>
+                                        </label>
+                                        <input
+                                            style="display: none"
+                                            :id="`file-${indx}`"
+                                            name="attachment"
+                                            type="file"
+                                            multiple="multiple"
+                                            :data-fileIndex="indx"
+                                            @change="onFileChange"/>
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="concept-actions d-flex justify-content-end align-center">
-                            <md-button class="md-rose">Save & Select</md-button>
+                            <md-button class="md-red md-bold" @click="saveConcept">Save & Select</md-button>
                         </div>
                     </div>
                 </div>
@@ -170,8 +179,12 @@
 
         <div class="booking-section__actions">
             <md-button class="md-default ">Find me something different</md-button>
+            
         </div>
-
+        <div class="text-center" style="margin: 30px; width:100%">
+                <md-button class="md-red md-simple back-to-top" @click="scrollToTop"> <md-icon>expand_less</md-icon> Back to top </md-button>
+            </div>
+        
     </div>
 
 </template>
@@ -180,6 +193,7 @@ import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
 import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
 import EventComponent from '@/models/EventComponent'
+import EventConcept from '@/models/EventConcept'
 import EventTimelineItem from '@/models/EventTimelineItem'
 import moment from 'moment'
 import swal from 'sweetalert2'
@@ -328,30 +342,84 @@ export default {
               title : "respectable"
           },
       ],
-      newTag: ''
-
+      newTag: '',
+    newConcept:{
+        name:"",
+        description:"",
+        tags:[],
+        colors: [
+            {name: "#ff48b2"},
+            {name: "#71ecf8"},
+        ],
+        files:[]
+    },
+    uploadImages:{},
+    uploadImageData:{
+        0:"",
+        1: "",
+        2: "",
+        3: "",
+        4: "",
+        5: "",
+    },
+    uploadImage:""
   }),
   methods: {
-      expandConcept(item, index) {
-          console.log(item.title);
-          if(!item.expand) {
-              console.log(' i am true');
-              this.conceptOptions[index].expand = true;
-          } else {
-              console.log(' i am false');
-              this.conceptOptions[index].expand = false;
-          }
-          this.$forceUpdate();
-      },
-      addTag() {
-          if (this.newTag && this.newTag.length) {
-              this.conceptTags.push({title: this.newTag});
-          }
-          this.newTag = "";
-      },
-      removeTag(index) {
-          this.conceptTags.splice(index, 1)
+    expandConcept(item, index) {
+        console.log(item.title);
+        if(!item.expand) {
+            console.log(' i am true');
+            this.conceptOptions[index].expand = true;
+        } else {
+            console.log(' i am false');
+            this.conceptOptions[index].expand = false;
+        }
+        this.$forceUpdate();
+    },
+    addTag() {
+        if (this.newTag && this.newTag.length) {
+            this.newConcept.tags.push({title: this.newTag});
+        }
+        this.newTag = "";
+    },
+    removeTag(index) {
+        this.conceptTags.splice(index, 1)
+    },
+    scrollToTop() {
+        window.scrollTo(0,0);
+    },
+    saveConcept() {
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+        let event = new CalendarEvent({id: this.event.id})
+
+        new EventConcept(this.newConcept).for(calendar, event).save()
+          .then(res => {
+              console.log(res);
+          })
+          .catch(error => {
+            console.log(error)
+          })
+    },
+    addColor() {
+        const colors = ["#ff48b2", "#71ecf8", "#ededed"];
+        this.newConcept.colors.push({name:colors[Math.round(3 * Math.random())]})
+    },
+    onFileChange(event)  {
+      let files = event.target.files || event.dataTransfer.files
+      if (!files.length) return
+      let reader = new FileReader()
+      let vm = this
+      if (event.target.name) {
+        const itemIndex = event.target.getAttribute('data-fileIndex')
+        console.log("fileIndex", itemIndex);
+        let isLargeFile = false
+        console.log(files)
+        this.uploadImages[itemIndex] = files[0]
+        this.uploadImageData[itemIndex] = URL.createObjectURL(files[0]);
+        this.uploadImage = URL.createObjectURL(files[0]);
+        console.log(URL.createObjectURL(files[0]));
       }
+    }
   },
   created () {
     [...Array(12).keys()].map(x => x >= 8 ? this.hoursArray.push(`${x}:00 AM`) : undefined);

@@ -50,6 +50,7 @@
   .vendor-signup-layout-wrapper {
     background-color: #f3f7fd;
     section.footer-wrapper {
+      z-index: 9999;
       position: fixed;
       bottom: 0;
       width: 100%;

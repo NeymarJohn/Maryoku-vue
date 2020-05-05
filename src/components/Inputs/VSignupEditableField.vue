@@ -1,16 +1,30 @@
 <template>
   <div class="vsignup-edtiable-field-wrapper" :class="[{'border-bottom': borderBottom}]">
-    <div class="left">
+    <div class="left" :class="[{'full-width': isEdit}]">
       <div class="title">
         {{title}}
       </div>
       <div class="content">
-        <img v-if="img!=''" :src="img"/>
-        {{defaultVal}}
+        <div v-if="!isEdit">
+          <img v-if="img!=''" :src="img"/>
+          {{defaultVal}}
+        </div>
+        <div class="edit-content" v-else>
+          <img class="inside-img" :src="img" v-if="img!=''"/>
+          <input
+            class="default"
+            :class="[{'with-img': img!=''}]"
+            :value="defaultVal"
+          />
+        </div>
+      </div>
+      <div class="action-cont" v-if="isEdit">
+        <a class="cancel" @click="isEdit=false">Cancel</a>
+        <a class="save" @click="save()">Save</a>
       </div>
     </div>
-    <div class="right">
-      <a>
+    <div class="right" v-if="!isEdit">
+      <a @click="isEdit=true">
         Edit <md-icon>navigate_next</md-icon>
       </a>
     </div>
@@ -27,18 +41,20 @@ export default {
   props: {
     title: String, 
     img: String,
-    isEdit: Boolean,
     defaultVal: String,
     borderBottom: Boolean
   },
   data: () => ({
     isLoading: true,
+    isEdit: false,
   }),
   mounted () {
     
   },
   methods: {
-    
+    save() {
+      this.isEdit = false
+    }
   }
 }
 </script>
@@ -60,6 +76,7 @@ export default {
   }
 
   .left {
+    width: 75%;
     .title {
       font: 800 16px Manrope-Regular, sans-serif;
     }
@@ -70,8 +87,53 @@ export default {
         width: 20px;
         margin-right: 18px;
         position: relative;
-        top: -1px;
       }
+      .default {
+        width: 100%;
+        padding: 22px 20px;
+        border: 1px solid #dddddd;
+        border-radius: 0;
+        font: normal 16px Manrope-Regular, sans-serif;
+        width: 100%;
+
+        &.with-img {
+          padding-left: 60px;
+        }
+      }
+      .inside-img {
+        z-index: 99;
+        position: relative;
+        top: 6px;
+        left: 22px;
+      }
+      .with-img {
+        position: relative;
+        top: -29px;
+        margin-bottom: -30px;
+      }
+    }
+    .action-cont {
+      margin-top: 30px;
+      text-align: right;
+      
+      a {
+        cursor: pointer;
+        padding: 8px 24px;
+        &.cancel {
+          font: 800 16px Manrope-Regular, sans-serif;
+        }
+        &.save {
+          color: #ffffff;
+          font: 800 16px Manrope-Regular, sans-serif;
+          background-color: #f51355;
+          &:hover {
+            color: #ffffff!important;
+          }
+        }
+      }
+    }
+    &.full-width {
+      width: 100%;
     }
   }
   .right {
