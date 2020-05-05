@@ -48,6 +48,7 @@
 </script>
 <style lang="scss" scoped>
   .vendor-signup-layout-wrapper {
+    background-color: #f3f7fd;
     section.footer-wrapper {
       position: fixed;
       bottom: 0;

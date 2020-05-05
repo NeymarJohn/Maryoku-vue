@@ -2,7 +2,7 @@
   <div class="vendor-signup-wrapper">
     <div class="inside-container">
       <div class="left-side">
-        <img :src="`${iconsUrl}Path 251.svg`"/>
+        <img :src="`${iconUrl}Group 5213.svg`"/>
         <h4>Hi Relish caters & venues,</h4>
         <p>We are gald to have you onboard! Submitting quotes & proposals has never been easer. Let's begin with approving your basic info</p>
         <h2>0/4</h2>
@@ -27,21 +27,21 @@
           />
           <v-signup-editable-field
             :title="'Address'"
-            :img="`${iconUrl}Asset 573.svg`"
+            :img="`${submitIconUrl}Asset 573.svg`"
             :isEdit="false"
             :defaultVal="'575 Mission St. San Francisco CA 94105'"
             :borderBottom="true"
           />
           <v-signup-editable-field
             :title="'Phone'"
-            :img="`${iconUrl}Asset 591.svg`"
+            :img="`${submitIconUrl}Asset 591.svg`"
             :isEdit="false"
             :defaultVal="'077-3000293'"
             :borderBottom="true"
           />
           <v-signup-editable-field
             :title="'Email'"
-            :img="`${iconUrl}Asset 593.svg`"
+            :img="`${submitIconUrl}Asset 593.svg`"
             :isEdit="false"
             :defaultVal="'relish_service@gmail.com'"
             :borderBottom="false"
@@ -69,7 +69,8 @@ export default {
   data() {
     return {
       vendor: null,
-      iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
+      iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
+      submitIconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
     }
   },
   created() {
