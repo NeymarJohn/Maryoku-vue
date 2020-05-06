@@ -53,7 +53,7 @@ import publicRegister from '@/pages/app/SinginSingup/publicRegister.vue'
 import EventDetailsBudget from "@/pages/app/Events/EventDetailsBudget.vue"
 import EventDetailsTimeline from "@/pages/app/Events/EventDetailsTimeline.vue"
 import BookingEvent from "@/pages/app/Events/components/BookingEvent.vue"
-import ChooseEventConcept from "@/pages/app/Events/components/ChooseEventConcept.vue"
+import EventConceptChoose from "@/pages/app/Events/components/EventConceptChoose.vue"
 import EventProposalDetails from "@/pages/app/Events/components/EventProposalDetails.vue"
 import ExportTimeLine from "@/pages/app/Events/components/ExportTimeLine.vue"
 
@@ -638,8 +638,8 @@ let NewEventPages = {
   },
   {
       path: '/events/:id/choose-concept',
-      name: 'ChooseEventConcept',
-      component: ChooseEventConcept,
+      name: 'EventConceptChoose',
+      component: EventConceptChoose,
       meta: {
           title: 'Choose Concept',
           gtm: 'Choose Concept',
