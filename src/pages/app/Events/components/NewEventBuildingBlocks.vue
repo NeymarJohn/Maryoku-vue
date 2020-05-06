@@ -51,40 +51,6 @@
                       <md-button class="md-default md-simple md-sm" @click="showEditElementBudget(block)">cancel</md-button>
                       <md-button class="md-rose md-sm" @click="editElementBudget(block)">save</md-button>
                   </div>
-                  <!--
-                <label-edit
-                  v-if="type==='total'"
-                  :text="block.allocatedBudget"
-                  :field-name="block.componentId"
-                  :sub-description="elementsBudget"
-                  :currency="'$'"
-                  :numeric="true"
-                  @text-updated-blur="blockBudgetChanged"
-                  @text-updated-enter="blockBudgetChanged"
-                ></label-edit>
-
-                <label-edit
-                  v-else-if="block.allocatedBudget && block.numberOfParticipants"
-                  :text="block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(2).toString() : ''"
-                  :field-name="block.componentId"
-                  :sub-description="elementsBudget"
-                  :currency="'$'"
-                  :numeric="true"
-                  @text-updated-blur="blockBudgetChanged"
-                  @text-updated-enter="blockBudgetChanged"
-                ></label-edit>
-                <label-edit
-                  v-else
-                  :text="block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : ''"
-                  :field-name="block.componentId"
-                  :sub-description="elementsBudget"
-                  :currency="'$'"
-                  :numeric="true"
-                  @text-updated-blur="blockBudgetChanged"
-                  @text-updated-enter="blockBudgetChanged"
-                ></label-edit>
-
-                -->
               </td>
               <td class="actual red-label" width="15%">
                 <template v-if="block.allocatedBudget">
@@ -121,7 +87,6 @@
                     @click="bookVendors(block)"
                   >Book Vendors</md-button>
 
-                  <!--                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
                 </div>
               </td>
               <td class="expand">
@@ -150,143 +115,19 @@
               </td>
             </tr>
             <tr class="item-actions">
-              <!--                  <td class="see-proposals">-->
-              <!--                      <div>Relish Caterers & Venues</div>-->
-              <!--                      <md-button class="md-rose md-simple see-proposal" >See Proposal</md-button>-->
-              <!--                  </td>-->
               <td colspan="5" class="actions-list text-right">
                 <md-button class="md-rose md-simple" @click="reviewProposals(block)">Add My Vendor</md-button>
-                <md-button class="md-rose md-simple" @click="deleteBlock(block.id)">Delete Category</md-button>
+                <md-button class="md-rose md-simple" @click="deleteBlock(block)">Delete Category</md-button>
               </td>
             </tr>
           </template>
         </tbody>
       </table>
     </draggable>
-    <!-- <table class="event-blocks__table event-block-table">
-      <tbody>
-        <tr>
-          <td class="event-block-element unexpected" width="40%">
-            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+18.png" /> Unexpected
-          </td>
-          <td class="planned" width="20%">$0</td>
-          <td class="actual" width="15%" >$0</td>
-            <td class="status" width="15%">
-                <div style="visibility: hidden">
-                    <md-button
-                        class="book-btn md-sm"
-                    >Book Vendors</md-button> -->
 
-                    <!--                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
-                <!-- </div>
-            </td>
-          <td class="expand"  >
-            <a href>
-              <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table> -->
 
     <table class="event-blocks__table actions-table">
       <tbody>
-        <!--                                <tr>-->
-        <!--                                    <td class="vendor completed"><img-->
-        <!--                                        src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png">-->
-        <!--                                        Catering-->
-        <!--                                    </td>-->
-        <!--                                    <td class="planned">$1500</td>-->
-        <!--                                    <td class="actual green-label"><img-->
-        <!--                                        src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png">-->
-        <!--                                        $1200-->
-        <!--                                    </td>-->
-        <!--                                    <td class="status">-->
-        <!--                                        <a href="">-->
-        <!--                                            <img-->
-        <!--                                                src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
-        <!--                                        </a>-->
-        <!--                                    </td>-->
-        <!--                                    <td class="expand">-->
-        <!--                                        <a href="">-->
-        <!--                                            <img-->
-        <!--                                                src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">-->
-        <!--                                        </a>-->
-        <!--                                    </td>-->
-        <!--                                </tr>-->
-        <!--                                </tbody>-->
-        <!--                                <tbody>-->
-
-        <!--                                <tr >-->
-        <!--                                    <td class="vendor completed"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> Catering</td>-->
-        <!--                                    <td class="planned">$1500</td>-->
-        <!--                                    <td class="actual green-label"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png"> $1200</td>-->
-        <!--                                    <td class="status">-->
-        <!--                                        <a href="">-->
-        <!--                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
-        <!--                                        </a>-->
-        <!--                                    </td>-->
-        <!--                                    <td class="expand">-->
-        <!--                                        <a href="">-->
-        <!--                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">-->
-        <!--                                        </a>-->
-        <!--                                    </td>-->
-        <!--                                </tr>-->
-        <!--                                <tr >-->
-        <!--                                    <td class="vendor completed"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> DJ</td>-->
-        <!--                                    <td class="planned">$1500</td>-->
-        <!--                                    <td class="actual"> $50</td>-->
-        <!--                                    <td class="status">-->
-        <!--                                        <md-button class="book-btn md-sm">Book</md-button>-->
-        <!--                                    </td>-->
-        <!--                                    <td class="expand">-->
-        <!--                                        <a href="">-->
-        <!--                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">-->
-        <!--                                        </a>-->
-        <!--                                    </td>-->
-        <!--                                </tr>-->
-        <!--                                <tr >-->
-        <!--                                    <td class="vendor completed"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> DJ</td>-->
-        <!--                                    <td class="planned">$1500</td>-->
-        <!--                                    <td class="actual"> $50</td>-->
-        <!--                                    <td class="status">-->
-        <!--                                        <md-button class="book-btn md-sm">Book</md-button>-->
-        <!--                                    </td>-->
-        <!--                                    <td class="expand">-->
-        <!--                                        <a href="">-->
-        <!--                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">-->
-        <!--                                        </a>-->
-        <!--                                    </td>-->
-        <!--                                </tr>-->
-
-        <!--                                <tr >-->
-        <!--                                    <td class="vendor"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+2.png"> Photographer</td>-->
-        <!--                                    <td class="planned">$100</td>-->
-        <!--                                    <td class="actual"> $100</td>-->
-        <!--                                    <td class="status">-->
-        <!--                                        <md-button class="book-btn md-sm disabled">Book</md-button>-->
-        <!--                                    </td>-->
-        <!--                                    <td class="expand">-->
-        <!--                                        <a href="">-->
-        <!--                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">-->
-        <!--                                        </a>-->
-        <!--                                    </td>-->
-        <!--                                </tr>-->
-
-        <!--                                <tr >-->
-        <!--                                    <td class="vendor unexpected"> <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+18.png"> Unexpected</td>-->
-        <!--                                    <td class="planned">$100</td>-->
-        <!--                                    <td class="actual"> $100</td>-->
-        <!--                                    <td class="status">-->
-        <!--                                        <md-button class="use-btn md-sm">Use</md-button>-->
-        <!--                                    </td>-->
-        <!--                                    <td class="expand">-->
-        <!--                                        <a href="">-->
-        <!--                                            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png">-->
-        <!--                                        </a>-->
-        <!--                                    </td>-->
-        <!--                                </tr>-->
-
         <tr class="add-category">
           <td colspan="5">
             <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
@@ -502,24 +343,28 @@ export default {
       }
       this.$forceUpdate()
     },
-    deleteBlock (blockId) {
+    deleteBlock (block) {
+      let calendar = new Calendar({
+            id: this.$auth.user.defaultCalendarId
+          })
+      let event = new CalendarEvent({ id: this.event.id })
+      let selectedBlock = new EventComponent({ id: block.id })
+
       swal({
-        title: 'Are you sure?',
-        text: `You won't be able to revert this!`,
+        title: `<div class="text-left"><div class="font-size-30 cross-line"><img src="${this.$iconURL}Budget Elements/${block.componentId}.svg" width="40"/>${block.title}</div>
+        <div >Are You Sure You Want To <br/>Delete This Category?
+                </div></div>`,
         showCancelButton: true,
         confirmButtonClass: 'md-button md-success',
         cancelButtonClass: 'md-button md-danger',
-        confirmButtonText: 'Yes, delete it!',
+        confirmButtonText: "Yes I'm sure",
+        cancelButtonText: 'No, take me back',
         buttonsStyling: false
       }).then(result => {
         if (result.value) {
           this.isLoading = true
 
-          let calendar = new Calendar({
-            id: this.$auth.user.defaultCalendarId
-          })
-          let event = new CalendarEvent({ id: this.event.id })
-          let selectedBlock = new EventComponent({ id: blockId })
+         
 
           selectedBlock
             .for(calendar, event)
