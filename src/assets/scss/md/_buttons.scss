@@ -56,6 +56,12 @@
     @include btn-styles($white-color);
     box-shadow: none;
   }
+  &.md-black {
+    @include btn-styles($black-color);
+    color: #000 !important;
+    box-shadow: none;
+  }
+
 
   &,
   &.md-default{
