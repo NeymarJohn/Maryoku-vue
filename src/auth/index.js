@@ -10,6 +10,7 @@ const API_URL = `${HOSTNAME}`
 const REGISTRATION_URL = `${API_URL}/1/register`
 const REGISTRATION_RSVP_URL = `${API_URL}/1/register-rsvp`
 const SESSION_URL = `${API_URL}/api/login`
+const FORGOT_PASSWORD_URL = `${API_URL}/1/forgot-password`
 const CURRENT_USER_URL = `${API_URL}/1/me`
 const LOGOUT_USER_URL = `${API_URL}/1/logout`
 
@@ -73,6 +74,16 @@ export default {
           callback(resp)
         }
       })
+  },
+
+  forgotPassword (context, email, callback) {
+    context.$http.post(`${FORGOT_PASSWORD_URL}`, { username: email }, { 'ContentType': 'application/json' }).then((resp) => {
+      if (callback) {
+        callback(resp.data)
+      }
+    }, (resp) => {
+      context.error = resp.body
+    })
   },
 
   setToken (token) {
