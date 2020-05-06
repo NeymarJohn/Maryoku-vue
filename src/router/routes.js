@@ -79,10 +79,8 @@ import MarketPlace from '@/pages/app/MarketPlace/MarketPlace.vue'
 // New Vendor Pages
 import ForVendorLayout from '@/pages/Dashboard/Layout/ForVendorLayout.vue'
 import ForProposalsLayout from '@/pages/Dashboard/Layout/ForProposalsLayout.vue'
-import VendorSignupLayout from '@/pages/Dashboard/Layout/VendorSignupLayout.vue'
 import ForVendors from "@/pages/app/Vendors/ForVendors.vue"
 import ForProposals from "@/pages/app/Vendors/ForProposals.vue"
-import VendorSignup from "@/pages/app/Vendors/VendorSignup.vue"
 
 const SignInSignUp = () =>
   import('@/pages/Dashboard/Pages/SignInSignUp.vue')
@@ -241,25 +239,6 @@ let forProposals = {
     },
   ]
 }
-
-let vendorSignup = {
-  path: "/",
-  component: VendorSignupLayout,
-  name: "VendorSignup",
-  children: [
-    {
-      path: "/vendor-signup",
-      name: "VendorSignup",
-      component: VendorSignup,
-      meta: {
-        auth: false,
-        title: 'Vendor Signup',
-        gtm: 'VendorSignup'
-      },
-    },
-  ]
-}
-
 
 let marketPlacePages = {
   path: '/',
@@ -940,7 +919,6 @@ const routes = [
   SigninSignupPage,
   // forVendors,
   forProposals,
-  vendorSignup,
   NewEventPages
 ]
 
