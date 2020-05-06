@@ -96,9 +96,9 @@ export default {
         Register: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
         CreateWorkspace: 'http://static.maryoku.com/storage/img/shutterstock_495639391.png',
         // SignIn: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
-        SignOut: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
-        GetStarted: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
-        SignedIn: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
+        // SignOut: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
+        // GetStarted: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
+        // SignedIn: 'http://static.maryoku.com/storage/img/shutterstock_732491308.png',
         Lock: 'http://static.maryoku.com/storage/img/lock.jpg'
       }
       return {
@@ -194,7 +194,7 @@ export default {
     animation-name: zoomOut8;
   }
   .radius-bk {
-    background: #5c2153!important;
+    // background: #5c2153!important;
     border-radius: 0 0 50% 50%;
     padding: 0 0 1em;
     height: 100px;
