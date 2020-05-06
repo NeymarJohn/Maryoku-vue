@@ -21,8 +21,8 @@
               <li><img :src="`${iconsUrl}Group 6085.svg`"> <strong>Time:</strong>{{ eventTime }}</li>
               <li><img :src="`${iconsUrl}Asset 506.svg`"> <strong>Address:</strong><span>{{ getLocation }}</span></li>
               <li><img :src="`${iconsUrl}Asset 505.svg`"> <strong>Guests:</strong>{{ proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' | withComma }}</li>
-              <li><img :src="`${iconsUrl}Path 1942.svg`"> <strong>Type:</strong>{{ proposalRequest ? proposalRequest.eventData.occasion : '-'}}</li>
-              <li><img :src="`${iconsUrl}Path 1383.svg`"> <strong>Invited:</strong>{{ proposalRequest ? proposalRequest.eventData.participantsType : '-'}}</li>
+              <li><img :src="`${iconsUrl}Path 1942.svg`"> <strong>Type:</strong>{{ proposalRequest.eventData.occasion}}</li>
+              <li><img :src="`${iconsUrl}Path 1383.svg`"> <strong>Invited:</strong>{{proposalRequest.eventData.participantsType}}</li>
               <li>
                 <div class="new-time">
                   Already Booked? <a @click="showChooseDateModal()">Suggest New time</a>
@@ -36,9 +36,9 @@
       <vendor-budget-list
         :title="`Budget`"
         :description="`Usually budget is flexible and could chane accordig to needs`"
-        :category="proposalRequest ? proposalRequest.requirementsCategory : 'No Proposal Data'"
-        :categoryCost="proposalRequest ? proposalRequest.requirementsCategoryCost : 0"
-        :total="proposalRequest ? proposalRequest.depositCost : 0"
+        :category="proposalRequest.requirementsCategory"
+        :categoryCost="proposalRequest.requirementsCategoryCost"
+        :total="proposalRequest.depositCost"
       ></vendor-budget-list>
     </div>
     <div class="rank-cont">
@@ -323,7 +323,6 @@ export default {
       proposals: [],
       proposalRequest: null,
       firstTime: false,
-      suggest: false,
     }
   },
   created() {
@@ -418,12 +417,10 @@ export default {
     },
     suggestAnotherDay () {
       this.suggest = true
-      if (this.proposalRequest) {
-        this.proposalRequest.suggestedDates = new Date(
-          this.proposalRequest.eventData.eventStartMillis
-        )
-      }
-      this.hideModal()
+      this.proposalRequest.suggestedDates = new Date(
+        this.proposalRequest.eventData.eventStartMillis
+      )
+      hideModal()
     }
   },
   computed: {
@@ -476,7 +473,7 @@ export default {
     max-width: calc(100% - 128px);
     margin: -64px auto 0 auto;
     padding: 83px 114px;
-    font-family: Manrope-Regular, sans-serif;
+    font-family: 'Manrope-Regular', sans-serif;
 
     h4 {
       margin: 0;
@@ -635,7 +632,6 @@ export default {
         border-right: 1px solid #707070;
         text-decoration: underline;
         background: transparent;
-        font-family: Manrope-Regular, sans-serif;
 
         img {
           padding-left: 19px;
@@ -690,7 +686,6 @@ export default {
           margin-bottom: 31px;
         }
         .yes {
-          font-family: Manrope-Regular,sans-serif;
           min-width: 473px;
           padding: 20px 0;
           font-size: 20px;
@@ -767,7 +762,7 @@ export default {
     }
 
     .not-bidding-modal {
-      font-family: Manrope-Regular,sans-serif;
+      font-family: 'Manrope-Regular', sans-serif;
       &__header {
         width: 100%;
         padding: 40px 40px 0;
@@ -832,7 +827,7 @@ export default {
           }
         }
         textarea {
-          font-family: Manrope-Regular,sans-serif;
+          font-family: 'Manrope-Regular', sans-serif;
           margin-left: 28px;
           margin-top: 1em;
           width: calc(100% - 28px);
