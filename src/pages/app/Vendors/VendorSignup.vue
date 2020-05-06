@@ -1,7 +1,7 @@
 <template>
   <div class="vendor-signup-wrapper">
     <vendor-basic-info-form v-if="!isApproved"/>
-    <vendor-signup-step2 v-if="isApproved && step == 2"/>
+    <vendor-signup-step2 :categories="categories" v-if="isApproved && step == 2"/>
   </div>
 </template>
 
@@ -37,12 +37,12 @@ export default {
               items: [
                 {
                   name: 'hotel acommondations within walking distance',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'shopping centers',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -62,32 +62,32 @@ export default {
                 },
                 {
                   name: 'indoor event space',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'outdoor event space',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'smoking section',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'separate cocktail hour space',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'outside area for guests',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'kitchen for outside caterers',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
@@ -102,17 +102,17 @@ export default {
               items: [
                 {
                   name: 'artificial lighting',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'natural lighting space',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'control of lighting during event',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -122,7 +122,7 @@ export default {
               items: [
                 {
                   name: 'onsite parking',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -132,12 +132,12 @@ export default {
               items: [
                 {
                   name: 'fast reliable Wifi for guests',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'venue bandwidth (for video streaming or meeting content)',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -147,22 +147,22 @@ export default {
               items: [
                 {
                   name: 'plants',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'extra flowers for caterer (boufet decor)',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'refrigerated truck',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'permanent botanical arragements',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -172,12 +172,12 @@ export default {
               items: [
                 {
                   name: 'special effects (pyrotechnic, waterfall, baloon, explosion, etc)',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'props',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -192,7 +192,7 @@ export default {
               items: [
                 {
                   name: 'valet services',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -202,12 +202,12 @@ export default {
               items: [
                 {
                   name: 'cleaning services during the event',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'breakdown, cleaning and pickup',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -217,7 +217,7 @@ export default {
               items: [
                 {
                   name: 'appetizers',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -232,17 +232,17 @@ export default {
                 },
                 {
                   name: 'lunch',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'dinner',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'desserts',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -252,22 +252,22 @@ export default {
               items: [
                 {
                   name: 'customer pickup',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'deliveries',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'onsite setup',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'cleanup',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -277,42 +277,42 @@ export default {
               items: [
                 {
                   name: 'digital decor',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'holiday decor',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'decor in motion',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'live decor',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'lighting decor',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'specialized theme designs',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'flower decor',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'designs serivces',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -322,17 +322,17 @@ export default {
               items: [
                 {
                   name: 'table setup and preparations',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'interactive stations',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'set up centerpieces, name cards, favors, etc',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -347,17 +347,17 @@ export default {
               items: [
                 {
                   name: 'accessbility for people with disabilities',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'all indoor',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'all outdoor',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
@@ -377,12 +377,12 @@ export default {
               items: [
                 {
                   name: 'stage',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'dance floor',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -392,32 +392,32 @@ export default {
               items: [
                 {
                   name: 'chairs',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'outdoor chairs',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'high chairs',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'tables',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'outdoor tables',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'high tables',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -427,12 +427,12 @@ export default {
               items: [
                 {
                   name: 'power supply',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'generator',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -442,32 +442,32 @@ export default {
               items: [
                 {
                   name: 'microphones',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'projector',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'sound system',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'LCD displays',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'monitor',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'speaker / sound system',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -477,32 +477,32 @@ export default {
               items: [
                 {
                   name: 'linens & tablecloth',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'glassware',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'silverware',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'disposables',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'china',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'customized items',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -517,12 +517,12 @@ export default {
               items: [
                 {
                   name: 'captain',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'maltre d',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -532,12 +532,12 @@ export default {
               items: [
                 {
                   name: 'chef',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'specialty chef',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -547,17 +547,17 @@ export default {
               items: [
                 {
                   name: 'servers',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'busboys',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'cleanup crew',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -567,7 +567,7 @@ export default {
               items: [
                 {
                   name: 'waitstaff',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
@@ -587,37 +587,37 @@ export default {
               items: [
                 {
                   name: 'event coordinator',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'cleaning stuff',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'waiters',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'security',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'receptionist',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'technical support',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'bathroom attendant',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -632,32 +632,32 @@ export default {
               items: [
                 {
                   name: 'vegetarian',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'vegan',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'gluten - free',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'egg free',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'kosher',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'halal',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -667,12 +667,12 @@ export default {
               items: [
                 {
                   name: 'hypoallergenic flowers',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'non scented flowers',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -682,17 +682,17 @@ export default {
               items: [
                 {
                   name: 'children meals',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'tastings prior to booking',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {
                   name: 'allow customer provided liquor',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
               ]
@@ -725,7 +725,7 @@ export default {
                 },
                 {
                   name: 'after party entertainment food',
-                  type: boolean, 
+                  type: Boolean, 
                   value: false
                 },
                 {

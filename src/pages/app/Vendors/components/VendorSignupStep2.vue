@@ -8,7 +8,11 @@
         <h2>2/4</h2>
       </div>
       <div class="right-side">
-        
+        <vendor-service-item 
+          v-for="(c, cIndex) in categories" 
+          :key="cIndex"
+          :serviceItem="c"
+        />
       </div>
     </div>
   </div>
@@ -21,11 +25,16 @@ import Vendors from '@/models/Vendors'
 
 //COMPONENTS
 import Icon from '@/components/Icon/Icon.vue'
+import VendorServiceItem from './VendorServiceItem.vue'
 
 export default {
   name: 'vendor-signup-step2',
+  props: {
+    categories: Array
+  },
   components: {
-    VueElementLoading
+    VueElementLoading,
+    VendorServiceItem
   },
   data() {
     return {
