@@ -333,14 +333,10 @@
     <modal v-if="showCategoryModal" class="add-category-model">
       <template slot="header">
         <div class="add-category-model__header">
-          <h2>
-            <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2019.svg" /> Add new
-            category
+          <h2 class="font-size-30 font-bold-extra">
+            <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2019.svg" /> Add new category
           </h2>
-          <div class="header-description">
-            <img :src="`${iconsURL}warning-circle-gray.svg`" width="20" /> Adding expenses
-            to your project might cause program changes
-          </div>
+          
         </div>
         <md-button
           class="md-simple md-just-icon md-round modal-default-button"
@@ -351,34 +347,43 @@
       </template>
       <template slot="body">
         <div class="md-layout">
-          <div class="md-layout-item md-size-100">
+          <div class="md-layout-item md-size-70">
             <div class="form-group maryoku-field" v-if="filteredEventBlocks">
-              <label>Category</label>
+              <label class="font-size-16 font-bold-extra color-black">Category</label>
               <v-select v-model="newBuildingBlock.category" :options="filteredEventBlocks"></v-select>
             </div>
           </div>
 
-          <div class="md-layout-item md-size-100" v-if="newBuildingBlock.category==='Other'">
-            <div class="form-group">
-              <label>Name</label>
+          <div class="md-layout-item md-size-70 d-flex" v-if="newBuildingBlock.category==='Other'">
+            <md-icon class="font-size-20">subdirectory_arrow_right</md-icon> 
+            <div class="form-group" style="flex-grow:1; margin-left:10px; ">
+              <label class="font-size-16 font-bold-extra color-black">Name</label><small class="font-size-14">(2 words top)</small>
               <input type="text" class="form-control" v-model="newBuildingBlock.name" />
             </div>
           </div>
-          <div class="md-layout-item md-size-100 margin-bottom">
+          <div class="md-layout-item md-size-50">
             <div class="form-group with-icon">
-              <label>Budget</label>
+              <label class="font-size-16 font-bold-extra color-black">Budget
+                 <br/>
+              </label>
+              <div class="mb-10">
+                <small class="font-size-14 ">You have ${{remainingBudget | withComma}} to use</small>
+              </div>
               <div class="input-icon">
                 <img :src="`${iconsURL}budget-dark.svg`" width="20" />
               </div>
-              <input type="number" class="form-control" v-model="newBuildingBlock.budget" />
-              <div class="md-error" v-if="remainingBudget < newBuildingBlock.budget">This budget should be less than the remaining.</div>
+              <input type="number" class="form-control mb-10" v-model="newBuildingBlock.budget" />
+              <div class="md-error"  v-if="remainingBudget < newBuildingBlock.budget">
+                <img :src="`${iconsURL}warning-circle-gray.svg`" style="width:20px" /> Oops! Seems like you don’t have enough cash in your “Unused” category
+              </div>
             </div>
           </div>
         </div>
+        
       </template>
       <template slot="footer">
-        <md-button class="md-default md-simple cancel-btn" @click="showCategoryModal = false">Cancel</md-button>
-        <md-button :disabled="remainingBudget < newBuildingBlock.budget"  class="md-rose add-category-btn" @click="addBuildingBlock">Add Category</md-button>
+        <md-button class="md-default md-simple cancel-btn md-maryoku" @click="showCategoryModal = false">Cancel</md-button>
+        <md-button :disabled="remainingBudget < newBuildingBlock.budget"  class="md-red add-category-btn md-maryoku" @click="addBuildingBlock">Add Category</md-button>
       </template>
     </modal>
   </div>
@@ -941,7 +946,17 @@ export default {
 </script>
 <style lang="scss">
 @import "@/assets/scss/md/_colors.scss";
-
+.add-category-model {
+  .modal-container {
+    max-width: 900px;
+    .modal-header {
+      padding: 60px 60px 0px;
+    }
+    .modal-body{
+      padding: 0px 60px 0px;
+    }
+  }
+}
 .requirements-cell-button {
   width: 48px;
   min-width: 48px;

@@ -1434,13 +1434,9 @@
 
     .modal-footer {
         margin-top : 3em;
-
         .md-button {
-
+            padding: 0px;
             .md-ripple {
-                font-size: 14px;
-                font-family: 'Manrope-ExtraBold',sans-serif;
-                text-transform: capitalize;
                 width: 160px;
                 height: 44px;
             }
@@ -1622,17 +1618,14 @@
             position: relative;
 
             label {
-                font-size: 14px;
-                font-family: 'Manrope-ExtraBold',sans-serif;
-                color: #050505;
                 margin-bottom: 0.5em;
                 display: inline-block;
 
                 small {
-                    font-size: 12px;
+                    font-size: 14px;
                     font-weight: normal;
                     color: #050505;
-                    margin-left : 0.7em;
+                    margin-left : 2em;
                 }
             }
 
@@ -1688,7 +1681,7 @@
                 .input-icon {
                     position : absolute;
                     left: 20px;
-                    top: 48px;
+                    top: 80px;
                     z-index: 99999;
                     img {
                         width:  12px;
@@ -1750,9 +1743,6 @@
 
         h2 {
             margin : 0 0 0.4em 0;
-            font-size: 28px;
-            font-weight: 600;
-            color : #050505;
             text-transform: capitalize;
 
             &.black {
