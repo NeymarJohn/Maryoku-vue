@@ -5,7 +5,14 @@
         {{serviceItem.name}}
       </div>
       <div class="help" v-if="!collapsed">
-        Does this included in starting site fee?
+        Does this included in starting site fee? 
+        <img :src="`${iconUrl}Group 5522 (2).svg`" @mouseover="conditionTooltip=true" @mouseleave="conditionTooltip=false">
+        <div class="condition-tooltip" v-if="conditionTooltip">
+          <h5>Let us know what do you charge extra on?</h5>
+          <p>
+            That way we can know chich elements to put into the offer automatically, and which ones will be added
+          </p>
+        </div>
       </div>
       <div class="arrow" :class="{'expanded': !collapsed}" @click="collapsed=!collapsed">
         <img :src="`${iconUrl}Asset 519.svg`"/>
@@ -17,9 +24,14 @@
           {{sub.name}}
         </div>
         <div class="checklist" v-for="(item, index) in sub.items" :key="index">
-          <md-checkbox v-model="item.value">
+          <vendor-checkbox
+            :type="'text'"
+            :label="item.name"
+            v-model="item.value"
+          />
+          <!-- <md-checkbox v-model="item.value">
             {{item.name}}
-          </md-checkbox>
+          </md-checkbox> -->
         </div>
       </div>
     </div>
@@ -33,6 +45,7 @@ import Vendors from '@/models/Vendors'
 
 //COMPONENTS
 import Icon from '@/components/Icon/Icon.vue'
+import VendorCheckbox from './VendorCheckbox.vue'
 
 export default {
   name: 'vendor-service-item',
@@ -40,12 +53,14 @@ export default {
     serviceItem: Object
   },
   components: {
-    VueElementLoading
+    VueElementLoading,
+    VendorCheckbox
   },
   data() {
     return {
       vendor: null,
       collapsed: true,
+      conditionTooltip: false,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
     }
   },
@@ -75,7 +90,7 @@ export default {
     background: #ffffff;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     padding: 60px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     .title-cont {
       display: flex;
       justify-content: space-between;
@@ -89,6 +104,46 @@ export default {
       .help {
         font: 800 16px Manrope-Regular, sans-serif;
         flex: 1;
+        img {
+          width: 27px;
+          margin-left: 16px;
+        }
+        .condition-tooltip {
+          position: absolute;
+          background-color: #ffedb7;
+          padding: 18px 29px;
+          color: #050505;
+          font-size: 14px;
+          margin: 20px 0 0 270px;
+          max-width: 280px;
+          text-align: center;
+
+          h5 {
+            margin: 14px 0 0 0;
+            font: 800 16px Manrope-Regular, sans-serif;
+          }
+          p {
+            margin: 14px 0 0 0;
+            padding: 0;
+            font: normal 16px Manrope-Regular, sans-serif;
+          }
+          
+          &::after{
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            top: 4px;
+            left: 60px;
+            box-sizing: border-box;
+            
+            border: 12px solid black;
+            border-color: transparent transparent #ffedb7 #ffedb7;
+            
+            transform-origin: 0 0;
+            transform: rotate(135deg);
+          }
+        }
       }
       .arrow {
         cursor: pointer;
@@ -116,7 +171,7 @@ export default {
           text-transform: capitalize;
         }
         .checklist {
-          margin-top: 30px;
+          margin-top: 10px;
           text-transform: capitalize;
         }
       }

@@ -8,6 +8,10 @@
         <h2>2/4</h2>
       </div>
       <div class="right-side">
+        <div class="description">
+          <h5><img :src="`${iconUrl}Group 5222 (2).svg`"/> Venue Amenities</h5>
+          <p>Mark the services your business support and will be included in your proposal. If needed, add the description or amount.</p>
+        </div>
         <vendor-service-item 
           v-for="(c, cIndex) in categories" 
           :key="cIndex"
@@ -30,7 +34,8 @@ import VendorServiceItem from './VendorServiceItem.vue'
 export default {
   name: 'vendor-signup-step2',
   props: {
-    categories: Array
+    categories: Array,
+    icon: String,
   },
   components: {
     VueElementLoading,
@@ -107,6 +112,22 @@ export default {
           padding: 30px 60px 60px 60px;
           background-color: #ffffff;
           box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+        }
+        .description {
+          color: #050505;
+          h5 {
+            margin: 0;
+            font: 800 16px Manrope-Regular, sans-serif;
+
+            img {
+              width: 22px;
+              margin-right: 12px;
+            }
+          }
+          p {
+            margin: 14px 0 30px 0;
+            font: normal 16px Manrope-Regular, sans-serif;
+          }
         }
       }
     }

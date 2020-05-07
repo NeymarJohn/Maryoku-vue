@@ -1,7 +1,11 @@
 <template>
   <div class="vendor-signup-wrapper">
     <vendor-basic-info-form v-if="!isApproved"/>
-    <vendor-signup-step2 :categories="categories" v-if="isApproved && step == 2"/>
+    <vendor-signup-step2 
+      :categories="categories" 
+      :icon="`${iconUrl}`" 
+      v-if="isApproved && step == 2"
+    />
   </div>
 </template>
 
@@ -1652,7 +1656,6 @@ export default {
     }
   },
   created() {
-    
   },
   mounted() {
     this.$root.$on('approve-vendor-basic-info', () => {
