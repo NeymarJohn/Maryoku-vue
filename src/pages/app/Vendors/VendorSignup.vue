@@ -30,7 +30,7 @@ export default {
       step: 2,
       categories: [
         {
-          name: 'amentities',
+          name: 'amenities',
           subCategory: [
             {
               name: 'around the space',
@@ -168,6 +168,244 @@ export default {
               ]
             },
             {
+              name: 'specialties',
+              items: [
+                {
+                  name: 'drone and remote photo/video',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'crane',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'simulacasting/live streaming',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'custom prints',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'branded lighting effect',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'printing',
+              items: [
+                {
+                  name: 'printing method',
+                  type: Array, 
+                  value: [],
+                  available: ['digital printing', 'screen printing', 'flexography printing', 'litho printing', 'transfer printing', 'engraving', 'embossing', 'embrolder printing']
+                },
+                {
+                  name: 'printing material',
+                  type: Array, 
+                  value: [],
+                  available: ['business cards', 'brochures', 'flyers', 'one-sheets', 'infographics', 'instructions', 'posters', 'tickets', 'banners', 'menues', 'place cards']
+                },
+              ]
+            },
+            {
+              name: 'furniture',
+              items: [
+                {
+                  name: 'chairs',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'tables',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'tableware',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'special catering rental equipment',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'furniture / props',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'tech equipment',
+              items: [
+                {
+                  name: 'screens',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'projections',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'recordings',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'video conferencing',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'tents',
+              items: [
+                {
+                  name: 'tents',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'air conditioning',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'generator',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'tent lighting',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'flooring and carpeting',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'portable bathrooms',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'liners',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'visual',
+              items: [
+                {
+                  name: 'screens',
+                  type: Array, 
+                  value: [],
+                  available: ['projectors(rear or font)', 'plasma/LED tv', 'LED wall', 'show and go screen']
+                },
+                {
+                  name: 'ZAP shots',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'cranes',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'audio',
+              items: [
+                {
+                  name: 'sound system',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'rigging',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'programmer',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'variety of inventory',
+              items: [
+                {
+                  name: 'ceremonial items',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'specialty food & liquor',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'tech items',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'apparel',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'drinkware',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'bags',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'wellness',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'fitness',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'office',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'other',
+                  type: String, 
+                  value: ''
+                },
+              ]
+            },
+            {
               name: 'other',
               items: [
                 {
@@ -180,6 +418,86 @@ export default {
                   type: Boolean, 
                   value: false
                 },
+                {
+                  name: 'staging podiums, registration areas',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'special equipment',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'simulcasting',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'cordless mics',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: ' ',
+              items: [
+                {
+                  name: 'wifi',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'bar',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'luggage',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'food',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'TV/Cable TV',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'restrooms',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'audio equipment',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'stage light',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'dance floor give aways',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'special equipment',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'suit / tuxido rentals',
+                  type: Boolean, 
+                  value: false
+                }
               ]
             },
           ]
@@ -187,6 +505,41 @@ export default {
         {
           name: 'services',
           subCategory: [
+            {
+              name: 'band',
+              items: [
+                {
+                  name: 'trio',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'quartet',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'vocalist',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'orchestra',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'nine pieces and plus',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'specialty band (ethnic music, rock and roll etc)',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
             {
               name: 'parking',
               items: [
@@ -318,6 +671,420 @@ export default {
               ]
             },
             {
+              name: 'staffing',
+              items: [
+                {
+                  name: 'event staffing',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'transportation host',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'models',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'staffing services',
+                  type: Array, 
+                  value: [],
+                  available: ['tour guide', 'wait staff', 'event registration']
+                },
+                {
+                  name: 'hospitality professional',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'chaperones',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'patrolling officers',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'bouncers',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'body guards',
+                  type: Array, 
+                  value: []
+                },
+                {
+                  name: 'amed security officers',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'unarmed security',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'undercover',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'sound/visual engineer',
+                  type: Boolean, 
+                  value: false
+                },{
+                  name: 'setup crew',
+                  type: Boolean, 
+                  value: false
+                },{
+                  name: 'programmer',
+                  type: Boolean, 
+                  value: false
+                },{
+                  name: 'event manager',
+                  type: Boolean, 
+                  value: false
+                },{
+                  name: 'rigging',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'guest services',
+              items: [
+                {
+                  name: 'gneral guest services',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'consierge services',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'VIP services',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'day-off corrdination',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'hosting',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'tours & sightseeing',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'visiting guest services support',
+                  type: Array, 
+                  value: []
+                },
+                {
+                  name: 'last minute onsite fitting (tux, suits)',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'style',
+              items: [
+                {
+                  name: 'journalistic',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'studio',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'traditiontal',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'candid',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'marketing',
+              items: [
+                {
+                  name: 'branding strategy',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'event registration tracking',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'consultation',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'open communication',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'PR',
+              items: [
+                {
+                  name: 'speech writing',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'press releases',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'high profile sourcing',
+                  type: Array, 
+                  value: [],
+                  available: ['politicians', 'celebrities', 'influencers', 'artists']
+                },
+                {
+                  name: 'social media promotion',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'media pitch',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'administrative',
+              items: [
+                {
+                  name: 'guest lists',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'graphics',
+              items: [
+                {
+                  name: 'graphic design services',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'editing',
+              items: [
+                {
+                  name: 'video',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'audio',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'photo',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'photo invitations / thank you',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'format of delivery',
+              items: [
+                {
+                  name: 'physical proof/print',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'flash drive',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'digital download',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'setup & breakdown',
+              items: [
+                {
+                  name: 'adapt equipment mobility to program',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'setup & breakdown',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'type of entertainment',
+              items: [
+                {
+                  name: 'interactive',
+                  type: Array, 
+                  value: [],
+                  available: ['photo booth', 'casino games', 'sport games', 'make your own']
+                },
+                {
+                  name: 'singers',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'keynote speaker / special MC',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'theme entertainment ( dancers, shows, illusionist etc )',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'activities',
+              items: [
+                {
+                  name: 'team building',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'events and shows',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'museum & art gallery visits',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'classes',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'sport',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'other',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'family activities',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'children activities',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'food',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'wine/beer/bourbon/etc',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'sightseeing',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'tours',
+              items: [
+                {
+                  name: 'food',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'wine/beer/bourbon/etc',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'sightseeing',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: 'coordination & logistics',
+              items: [
+                {
+                  name: 'instructors, guides',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'logistics',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
               name: 'other',
               items: [
                 {
@@ -332,6 +1099,101 @@ export default {
                 },
                 {
                   name: 'set up centerpieces, name cards, favors, etc',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'risk assessment',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'VIP security',
+                  type: Boolean, 
+                  value: false
+                },
+              ]
+            },
+            {
+              name: ' ',
+              items: [
+                {
+                  name: 'taxi',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'airport pickup/drop off',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'round trip',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'one way',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'tours',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'parameter security',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'crowd control',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'onsite supervisors during event',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'special delivery and pickup',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'pre-inspection',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'ability to handle rushed orders',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'graphic design',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'ability to handle special requests',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'printing',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'stuffing and packaging',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'customization',
                   type: Boolean, 
                   value: false
                 },
@@ -364,7 +1226,12 @@ export default {
                   name: 'accessible bathrooms',
                   type: Number, 
                   value: 1
-                }
+                },
+                {
+                  name: 'acitivy is suitable for people with disabilities',
+                  type: Boolean, 
+                  value: false
+                },
               ]
             }
           ]
@@ -620,6 +1487,16 @@ export default {
                   type: Boolean, 
                   value: false
                 },
+                {
+                  name: 'uniformed drivers',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: 'uniform style',
+                  type: String, 
+                  value: ''
+                },
               ]
             }
           ]
@@ -696,11 +1573,24 @@ export default {
                   value: false
                 },
               ]
+            },
+            {
+              name: ' ',
+              items: [
+                {
+                  name: 'provide sample',
+                  type: Boolean, 
+                  value: false
+                },
+                {
+                  name: '',
+                  type: Array, 
+                  value: [],
+                  available: ['digital','real','sample']
+                },
+              ]
             }
           ]
-        },
-        {
-          name: 'amenaties'
         },
         {
           name: 'what we serve',
