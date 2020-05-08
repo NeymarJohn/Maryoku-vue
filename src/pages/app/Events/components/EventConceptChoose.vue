@@ -100,92 +100,8 @@
                         <img :src="`${conceptIconsURL}Asset 490.svg`">
                     </md-button>
 
-                    <div class="create-concept-from" v-if="expandCreateConcept">
-                        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C"/>
-                        
+                    <event-concept-edit-form v-if="expandCreateConcept" @save="onSaveConcept"></event-concept-edit-form>
 
-                        <div class="form-name font-bold-extra font-size-30 mb-50">
-                            Create Your Own Concept
-                        </div>
-                        <div class="form-content">
-                            <div class="form-group">
-                                <label>What should we call it?</label>
-                                <input type="text" class="form-control" placeholder="Type your concept here…" v-model="newConcept.name">
-                            </div>
-                            <div class="form-group add-tags-field">
-                                <label>Tags <small>*suggested</small></label>
-                                <input type="text" v-model="newTag" class="form-control" placeholder="Type your concept here…">
-                                <div class="add-tags-actions text-right">
-                                    <md-button class="md-red md-maryoku" @click="addTag">add Tag</md-button>
-                                </div>
-                            </div>
-                            <div class="tags-list d-flex justify-content-start" v-if="newConcept.tags.length">
-                                <div class="tags-list__item" v-for="(tag, index) in newConcept.tags">{{tag.name}} <img :src="`${conceptIconsURL}Asset 489.svg`" @click="removeTag(index)"></div>
-                            </div>
-                            <div class="form-group">
-                                <label>Tell us more</label>
-                                <p>The more we know, the better services we can find for you</p>
-                                <textarea rows="" class="form-control" placeholder="Write description here" v-model="newConcept.description"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Add Colors</label>
-                                <div class="colors-list d-flex justify-content-start">
-                                    <div v-for="(colorItem, index) in newConcept.colors" :key="index" style="margin-right: 30px">
-                                        <color-button v-model="newConcept.colors[index]"></color-button>
-                                        <!-- <md-button class="colors-list__item md-just-icon" :style="`background: ${color.value} !important`" @click="addColor(index)" v-if="color.value"></md-button> -->
-                                        <!-- <md-button class="colors-list__item colors-list__add md-just-icon" @click="addColor(index)" v-else><img :src="`${conceptIconsURL}Asset 488.svg`"></md-button> -->
-                                    </div>
-                                </div>
-                                 
-                            </div>
-
-                            <div class="form-group">
-                                <label>Create your mood board<small>(5 photos top, under 20 KB)</small></label>
-                                <p>Drag the photos to the empty frames or click on each one of them to create your photos board</p>
-                            </div>
-
-                            <div class="images-list new-concept">
-                                <div class="image-backgrounds">
-                                    <!-- <div class="image-background" :style="`background: #ff48b2`"></div> -->
-                                    
-                                    <div class="image-background" v-for="idx in 4" :key="idx" :style="`background-color: ${newConcept.colors[idx-1].value}; opacity:${newConcept.colors[idx-1].opacity}`">
-                                        {{newConcept.colors[index]}}
-                                    </div>
-                                </div>
-                                <div>
-                                    <div :class="`images-list__item`"
-                                        v-for="indx in 5"
-                                        :key="indx"
-                                    >
-                                        <div class="image-section d-flex  justify-content-center align-center text-center" :style="`background:url(${uploadImageData[indx]})`">
-                                            <label :for="`file-${indx}`" style="cursor:pointer">
-                                                <img :src="`${conceptIconsURL}Asset 488.svg`" style="width:24px">
-                                                <br/>
-                                                <div><img :src="`${conceptIconsURL}Asset 492.svg`" style="width:16px"> Add Photo</div>
-                                            </label>
-                                            <input
-                                                style="display: none"
-                                                :id="`file-${indx}`"
-                                                name="attachment"
-                                                type="file"
-                                                multiple="multiple"
-                                                :data-fileIndex="indx"
-                                                @change="onFileChange"/>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="concept-actions d-flex justify-content-end align-center">
-                                <md-button class="md-red md-bold" @click="saveConcept">
-                                    
-                                    Save my  brilliant concept
-                                </md-button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <!-- ./Create Concept Section -->
 
@@ -220,11 +136,9 @@
                     <h4><img :src="`${conceptIconsURL}Asset 491.svg`"  width="30"> Your Selected Concept</h4>
                 </div>
             </div>
-
-            <div class="concepts-list md-layout-item md-size-100 " >
-                <div class="concepts-list__item d-flex justify-content-start"
-                    :class="{expanded : true}"
-                >
+            
+            <div class="concepts-list md-layout-item md-size-100 " v-if="!showEditForm">
+                <div class="concepts-list__item d-flex justify-content-start expanded">
                     <div :class="`images-list selected-concept`">
                         <div class="image-backgrounds">
                             <!-- <div :class="`images-background`"
@@ -243,7 +157,7 @@
                                 v-for="(image, imageIndex) in selectedConcept.images"
                                 :key="imageIndex"
                             >
-                                <div class="image-section" :style="`background:url(${image.url}) center center no-repeat`"></div>
+                                <div class="image-section" :style="`background:url(${image.url}) center top no-repeat`"></div>
                             </div>
                         </div>
                     </div>
@@ -257,7 +171,11 @@
                         <div class="concept-description" >{{selectedConcept.description}}</div>
                     </div>
                 </div>
-                
+            </div>
+            <div class="concepts-list md-layout-item md-size-100 " v-else>
+                <div class="concepts-list__item d-flex justify-content-start expanded">
+                    <event-concept-edit-form :defaultConcept="selectedConcept" @save="onSaveConcept"></event-concept-edit-form>
+                </div>
             </div>
             <div class="selected-concept-footer d-flex justify-content-between">
                 <md-button class="md-black md-simple md-maryoku" > <md-icon>keyboard_arrow_left</md-icon> Back </md-button>
@@ -266,7 +184,7 @@
                     <span class="concept-saved" > 
                         <img :src="`${$iconURL}common/check-circle-green.svg`" width="32"/> Concept is Saved </span>
                     <span class="separate"></span>
-                    <md-button class="md-black md-simple md-maryoku" @click="showConceptList=true" > Change Concept </md-button>
+                    <md-button class="md-black md-simple md-maryoku" @click="showEditForm=true" > Edit Concept </md-button>
                 </div>
             </div>
         </div>
@@ -300,6 +218,7 @@ import SideBar from '../../../../components/SidebarPlugin/NewSideBar'
 import SidebarItem from '../../../../components/SidebarPlugin/NewSidebarItem.vue'
 import ProgressSidebar from './progressSidebar'
 import ColorButton from '../../../../components/ColorButton'
+import EventConceptEditForm from './EventConceptEditForm'
 export default {
   name: 'event-time-line',
   components: {
@@ -314,8 +233,8 @@ export default {
     SidebarItem,
     ProgressSidebar,
     Modal,
-    'chrome-picker': Chrome,
-    ColorButton
+    ColorButton,
+    EventConceptEditForm
   },
   props: {
 
@@ -324,6 +243,7 @@ export default {
     // auth: auth,
     colour: "#FF00FF",
     showConceptList:true,
+    showEditForm:false,
     isLoading: false,
     timelineItems: [],
     hoursArray: [],
@@ -482,43 +402,7 @@ export default {
         window.scrollTo(0,0);
     },
     async saveConcept() {
-        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-        let event = new CalendarEvent({id: this.event.id})
-        let imageKeys = Object.keys(this.uploadImages);
-        this.isLoading = true;
-        for (let i = 0; i < imageKeys.length; i ++) {
-            const fileItem = this.uploadImages[imageKeys[i]];
-            let formData = new FormData();
-            formData.append('file', fileItem);
-            formData.append('from', 'concept')
-            formData.append('type', 'photo')
-            formData.append('name', '')
-            const result = await this.$http.post(`${process.env.SERVER_URL}/uploadFile`, formData ,
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }
-            );
-            this.newConcept.images.push({originalName: fileItem.name, url: result.data.upload.path, name: result.data.upload.name});
-            // this.uploadImages[imageKeys[i]] = {originalName: fileItem.name, url: result.data.upload.path, name: result.data.upload.name};
-        }
-
-        // this.newConcept.images = this.uploadImages;
-        new EventConcept(this.newConcept).for(calendar, event).save()
-          .then(res => {
-              console.log(res);
-              this.isLoading = false
-              res.images.forEach((item,i)=>{
-                  res.images[i].url = 'http://static.maryoku.com/' + res.images[i].url
-              })
-              this.selectedConcept = res
-              this.showConceptList = false
-          })
-          .catch(error => {
-              this.isLoading = false;
-            console.log(error)
-          })
+        
     },
     addColor(index) {
         const colors = ["#ff48b2", "#71ecf8", "#ededed"];
@@ -543,6 +427,20 @@ export default {
     selectConcept(index) {
         this.selectedConcept = this.conceptOptions[index]
         this.showConceptList = false
+    },
+    onSaveConcept(eventConcept) {
+        let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
+        let event = new CalendarEvent({id: this.event.id}).for(calendar)
+
+        console.log("eventConc",eventConcept);
+        event.concept = eventConcept
+        console.log("eventConcept", eventConcept);
+        event.save().then(result=>{
+            this.event = result
+            this.selectedConcept = eventConcept
+            this.showConceptList = false
+        })
+        
     }
   },
   created () {
@@ -598,7 +496,7 @@ export default {
     withComma (amount) {
       return amount ? amount.toLocaleString() : 0
     }
-  }
+  },
 }
 </script>
 <style lang="scss" scoped>

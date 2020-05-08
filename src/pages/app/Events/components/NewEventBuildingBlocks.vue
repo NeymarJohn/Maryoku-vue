@@ -35,13 +35,13 @@
               <td class="planned" width="20%">
 
                   <template v-if="type==='total'">
-                      $ {{block.allocatedBudget ? block.allocatedBudget : 0 | withComma}}
+                      $ {{block.allocatedBudget ? block.allocatedBudget : 0 | roundNumber | withComma}}
                   </template>
                   <template v-else-if="block.allocatedBudget && block.numberOfParticipants">
-                      $ {{block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(0).toString() : 0}}
+                      $ {{block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(-1).toString() : 0}}
                   </template>
                   <template v-else>
-                      $ {{block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(0).toString() : 0}}
+                      $ {{block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(-1).toString() : 0}}
                   </template>
 
                   <md-button class="md-rose md-sm md-simple edit-btn" v-if="!block.editBudget" @click="showEditElementBudget(block)"> Edit </md-button>
@@ -85,12 +85,13 @@
                     class="book-btn md-sm"
                     :class="{'disabled' : block.proposalsState==='get-offers'}"
                     @click="bookVendors(block)"
+                    v-if="!block.fixed && block.componentId!='unexpected'"
                   >Book Vendors</md-button>
 
                 </div>
               </td>
-              <td class="expand">
-                <div @click="expandBlock(block)">
+              <td class="expand" >
+                <div @click="expandBlock(block)" class="text-right" v-if="!block.fixed && block.componentId!='unexpected'">
                   <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
                 </div>
               </td>
@@ -128,6 +129,12 @@
 
     <table class="event-blocks__table actions-table">
       <tbody>
+        <tr class="total">
+          <td class="total-title" width="40%">Total</td>
+          <td width="20%">${{Math.round(totalBudget) | roundNumber | withComma}}</td>
+          <td width="15%" class="total-value">${{totalActual | withComma}}</td>
+          <td colspan="2"></td>
+        </tr>
         <tr class="add-category">
           <td colspan="5">
             <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
@@ -135,7 +142,7 @@
             </md-button>
           </td>
         </tr>
-
+<!-- 
         <tr class="taxes">
           <td class="taxes-title" width="40%">
             <img
@@ -153,8 +160,6 @@
                     <md-button
                         class="book-btn md-sm"
                     >Book Vendors</md-button>
-
-                    <!--                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
                 </div>
             </td>
           <td class="expand">
@@ -162,12 +167,8 @@
               <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
             </a>
           </td>
-        </tr>
-        <tr class="total">
-          <td class="total-title">Total</td>
-          <td>${{Math.round(totalBudget) | withComma}}</td>
-          <td colspan="3" class="total-value">${{totalActual | withComma}}</td>
-        </tr>
+        </tr> -->
+        
       </tbody>
     </table>
 
@@ -214,17 +215,20 @@
                 <img :src="`${iconsURL}budget-dark.svg`" width="20" />
               </div>
               <input type="number" class="form-control mb-10" v-model="newBuildingBlock.budget" />
-              <div class="md-error"  v-if="remainingBudget < newBuildingBlock.budget">
-                <img :src="`${iconsURL}warning-circle-gray.svg`" style="width:20px" /> Oops! Seems like you don’t have enough cash in your “Unused” category
-              </div>
+             
             </div>
+          </div>
+          <div class="md-error d-flex align-center"  v-if="remainingBudget < newBuildingBlock.budget">
+            <img :src="`${iconsURL}warning-circle-gray.svg`" style="width:20px" />
+            <span style="padding: 0 15px"> Oops! Seems like you don’t have enough cash in your “Unused” category</span>
+            <md-button class="md-button md-rose md-sm md-simple edit-btn md-theme-default md-bold-extra" @click="addbudget()"> Add More Money</md-button>
           </div>
         </div>
         
       </template>
       <template slot="footer">
-        <md-button class="md-default md-simple cancel-btn md-maryoku" @click="showCategoryModal = false">Cancel</md-button>
-        <md-button :disabled="remainingBudget < newBuildingBlock.budget"  class="md-red add-category-btn md-maryoku" @click="addBuildingBlock">Add Category</md-button>
+        <md-button class="md-default md-simple cancel-btn md-bold" @click="showCategoryModal = false">Cancel</md-button>
+        <md-button :disabled="remainingBudget < newBuildingBlock.budget"  class="md-red add-category-btn md-bold" @click="addBuildingBlock">Add Category</md-button>
       </template>
     </modal>
   </div>
@@ -405,7 +409,8 @@ export default {
       this.allocatedBudget = this.event.components.reduce((s,item)=>{
         return s + item.allocatedBudget
       }, 0)
-      this.remainingBudget = this.event.totalBudget - this.allocatedBudget;
+      const unused = this.event.components.find(item=>item.componentId=='unused')
+      this.remainingBudget = Math.round(unused.allocatedBudget / 10) * 10;
     },
     /**
      * Get Event building blocks
@@ -421,6 +426,7 @@ export default {
       vm.totalBudgetTaxes = 0
 
       let res = this.event.components
+      
       this.$set(this, 'eventBuildingBlocks', res)
 
       setTimeout(() => {
@@ -720,12 +726,10 @@ export default {
         return;
       }
 
+      const newComponent = _.findWhere(this.components, {title: this.newBuildingBlock.category})
       let newBlock = {
-        componentId:
-          _.findWhere(this.components, {title: this.newBuildingBlock.category}).key,
-        componentCategoryId:
-          _.findWhere(this.components, {title: this.newBuildingBlock.category}).key,
-        // componentCategoryId: this.newBuildingBlock.categoryId,
+        componentId: newComponent?newComponent.key:"other",
+        componentCategoryId: newComponent?newComponent.key:"other",
         calendarEvent: { id: event.id },
         allocatedBudget: this.newBuildingBlock.budget,
         order: this.event.components.length
@@ -757,6 +761,24 @@ export default {
         .catch(error => {
           console.log('Error ', error)
         })
+    },
+    addbudget() {
+      const arrow =`<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
+      const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
+      const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`
+        swal({
+        title: `<div class="text-left">${arrow}${budgetString}<div>Are Your Sure?</div>${description}</div>`,
+        showCancelButton: true,
+        confirmButtonClass: 'md-button md-success',
+        cancelButtonClass: 'md-button md-danger',
+        confirmButtonText: "Yes I'm sure",
+        cancelButtonText: 'No, take me back',
+        buttonsStyling: false
+      }).then(result => {
+        if (result.value) {
+          alert(result.value)
+        }
+      })
     }
   },
   mounted () {
@@ -785,6 +807,9 @@ export default {
   filters: {
     withComma (amount) {
       return amount ? amount.toLocaleString() : 0
+    },
+    roundNumber (amount) {
+      return Math.round(amount / 10) * 10;
     }
   }
 }
@@ -879,4 +904,10 @@ export default {
 .cursor-pointer {
   cursor: pointer !important;
 }
+.expand {
+  img {
+    transform: rotate(-90deg);
+  }
+}
+
 </style>

@@ -32,7 +32,7 @@
                         </div>
                         <div class="budget-list__item">
                             <div class="label-title">Allocated</div>
-                            <div class="budget-value">${{statistics.allocated | withComma}}</div>
+                            <div class="budget-value">${{statistics.allocated | roundNumber | withComma}}</div>
                             <div class="percent">{{ (( statistics.allocated ) * 100 / calendarEvent.totalBudget).toFixed(1)}}  %</div>
                         </div>
                         <div class="budget-list__item">
@@ -133,10 +133,8 @@
                             </h4>
                             <p>
                                 This budget is {{ 100 - parseInt( calendarEvent.totalBudget * 100 / newBudget)  }}% higher than average, your event is going to be wild!
-
                             </p>
                         </div>
-
                         <div class="label-item label-warning text-center" v-if="newBudget && newBudget < calendarEvent.totalBudget">
                             <p>
                                 <img :src="`${iconsURL}warning-circle-gray.svg`" width="20"> This budget is {{ 100 - parseInt( newBudget * 100 / calendarEvent.totalBudget)  }}% lower than average for this type of event
@@ -229,6 +227,8 @@ import {
 
 // import auth from '@/auth';
 import moment from 'moment'
+import swal from 'sweetalert2'
+
 import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
 import CalendarEventStatistics from '@/models/CalendarEventStatistics'
@@ -344,6 +344,23 @@ export default {
           this.newBudget = event.totalBudget
           new EventComponent().for(_calendar, event).get().then(components => {
             components.sort((a,b)=>a.order - b.order)
+            components.push({
+              title: "Extra",
+              allocatedBudget: this.statistics.total * 0.1,
+              fixed: true,
+              color:"#818080",
+              componentId:'extra',
+              icon:"http://static.maryoku.com/storage/icons/budget screen/SVG/Asset 485.svg"
+            })
+            components.push({
+              title: "Unused Budget",
+              allocatedBudget: this.totalRemainingBudget - this.statistics.total * 0.1,
+              fixed: true,
+              color:"#0047cc",
+              componentId:'unused',
+              icon:"http://static.maryoku.com/storage/icons/budget screen/SVG/Asset 487.svg"
+            })
+            console.log(components);
             this.event.components = components
             this.selectedComponents = components
             this.seriesData = components
@@ -442,22 +459,109 @@ export default {
       let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
       let editedEvent = new CalendarEvent({id: this.event.id}).for(_calendar)
 
-      editedEvent.totalBudget = this.newBudget
+      if (this.newBudget < editedEvent.totalBudget) {
+        
+        // swal({
+        //   title: `<div class="text-left"><div class="font-size-30"><img src="${this.$iconURL}Budget Elements/${block.componentId}.svg" width="40"/>${newBudget}</div>
+        //   <div >Are You Sure?</div></div>`,
+        //   text: "Decreasing our budget may cause program changes",
+        //   showCancelButton: true,
+        //   confirmButtonClass: 'md-button md-success',
+        //   cancelButtonClass: 'md-button md-danger',
+        //   confirmButtonText: "Yes I'm sure",
+        //   cancelButtonText: 'No, take me back',
+        //   buttonsStyling: false
+        // }).then(result => {
+        //   if (result.value) {
+        //     this.isLoading = true
 
-      editedEvent.save()
-        .then(response => {
-          this.showBudgetModal = false
-          //this.getCalendarEventStatistics()
-          this.getEvent()
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+          
+
+        //     selectedBlock
+        //       .for(calendar, event)
+        //       .delete()
+        //       .then(resp => {
+        //         this.isLoading = false
+        //         this.event.components.splice(
+        //           _.findIndex(this.eventBuildingBlocks, b => {
+        //             return b.id === selectedBlock.id
+        //           }),
+        //           1
+        //         )
+        //         this.getEventBuildingBlocks()
+        //         this.$root.$emit('RefreshStatistics')
+        //         this.$root.$emit(
+        //           'event-building-block-budget-changed',
+        //           this.event.components
+        //         )
+        //         this.$forceUpdate()
+
+        //         let allocatedBudget = 0
+        //         this.eventBuildingBlocks.forEach(item => {
+        //           allocatedBudget += Number(item.allocatedBudget)
+        //         })
+
+        //         this.allocatedBudget = allocatedBudget
+        //         this.$emit("change");
+        //       })
+        //       .catch(error => {
+        //         console.log(error)
+        //       })
+        //   }
+        // })
+      }
+      // editedEvent.totalBudget = this.newBudget
+
+      // editedEvent.save()
+      //   .then(response => {
+      //     this.showBudgetModal = false
+      //     //this.getCalendarEventStatistics()
+      //     this.getEvent()
+      //   })
+      //   .catch((error) => {
+      //     console.log(error)
+      //   })
 
       if (this.newBudget < this.calendarEvent.totalBudget) {
-
+        this.showBudgetModal = false;
+        const arrow =`<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
+        const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
+        const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`
+         swal({
+          title: `<div class="text-left">${arrow}${budgetString}<div>Are Your Sure?</div>${description}</div>`,
+          showCancelButton: true,
+          confirmButtonClass: 'md-button md-success',
+          cancelButtonClass: 'md-button md-danger',
+          confirmButtonText: "Yes I'm sure",
+          cancelButtonText: 'No, take me back',
+          buttonsStyling: false
+        }).then(result => {
+          if (result.dismiss != "cancel") {
+            editedEvent.totalBudget = this.newBudget
+            editedEvent.save()
+              .then(response => {
+                this.showBudgetModal = false
+                //this.getCalendarEventStatistics()
+                this.getEvent()
+              })
+              .catch((error) => {
+                console.log(error)
+              })
+          }
+        })
+      } else if (this.newBudget > this.calendarEvent.totalBudget) {
+          editedEvent.totalBudget = this.newBudget
+          editedEvent.save()
+            .then(response => {
+              this.showBudgetModal = false
+              //this.getCalendarEventStatistics()
+              this.getEvent()
+            })
+            .catch((error) => {
+              console.log(error)
+            })
       } else {
-
+        this.showBudgetModal = false
       }
     },
     onChangeComponent (event) {
@@ -517,6 +621,9 @@ export default {
     },
     withComma (amount) {
       return amount ? amount.toLocaleString() : 0
+    },
+    roundNumber(amount) {
+      return Math.round(amount / 10) * 10;
     }
   },
   watch: {}

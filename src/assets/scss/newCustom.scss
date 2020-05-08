@@ -251,17 +251,13 @@
 }
 
 .event-blocks-table {
-
     .md-card {
         .md-card-content {
             padding-left: 0;
             padding-right: 0;
         }
-
         .md-list {
-
             .md-list-item {
-
                 &-button {
                     border-bottom : 2px solid rgba(0,0,0,0);
                     text-transform: capitalize;
@@ -350,6 +346,9 @@
                 font-size: 16px;
                 color: #050505;
                 padding : 0.5em 0 0.5em 1.7em;
+                &:last-child {
+                    padding-right: 1.2em;
+                }
             }
         }
 
@@ -555,6 +554,7 @@
 
                 &:last-child {
                     border-radius: 0 3px 3px 0;
+                    padding-right: 1.2em;
                 }
 
                 &.actions {
@@ -703,11 +703,25 @@
                         margin-right : 0.6em;
                     }
 
-                    &.unexpected {
+                    &.unexpected{
                         border-left-color: #24c796 !important;
                         color : #24c796;
                         &:after {
                             background: #24c796;
+                        }
+                    }
+                    &.extra{
+                        border-left-color: #818080 !important;
+                        color : #818080;
+                        &:after {
+                            background: #818080;
+                        }
+                    }
+                    &.unused-budget{
+                        border-left-color: #0047cc !important;
+                        color : #0047cc;
+                        &:after {
+                            background: #0047cc;
                         }
                     }
                 }
@@ -3085,14 +3099,23 @@
 
         }
     }
+    #swal2-content {
+        text-align: center;
+    }
     .swal2-header {
         align-items: flex-start !important;
         .swal2-title {
             font-size: 28px !important;
             font-family: 'Manrope-ExtraBold',sans-serif;
-            font-weight: 800;
+            font-weight: normal;
             color: #050505;
             margin-bottom : 0.2em !important;
+            .description {
+                font-size: 16px;
+                font-family: "Manrope-Regular";
+                font-weight: normal;
+                color: #050505;
+            }
         }
     }
     #swal2-conselected-itemstent {
