@@ -229,7 +229,7 @@ export default {
           }
       }
 
-      this.editConcept.tags = this.tags
+      // this.editConcept.tags = this.addedTags
 
       // this.editConcept.images = this.uploadImages;
       const res = await new EventConcept(this.editConcept).save()
