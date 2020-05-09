@@ -8,12 +8,15 @@
           :style="`background : linear-gradient(rgba(0,0,0,0.48),rgba(0,0,0,0.48)),url(${logger}) center center no-repeat`"
         >
           <div class="content">
-            <popup>
+            <router-link
+              :to="`/events/${event.id}/choose-concept`"
+              tag="md-button"
+              class="md-default md-simple md-white edit-btn text-left"
+              >Event's Concept
+              <md-icon>keyboard_arrow_right</md-icon>
+            </router-link>
+            <popup v-if="event.concept">
               <template slot="content">
-                <md-button class="md-default md-simple md-white edit-btn text-left">
-                  Event's Concept
-                  <md-icon>keyboard_arrow_right</md-icon>
-                </md-button>
                 <h3>{{conceptName}}</h3>
               </template>
               <template slot="popup">
@@ -21,11 +24,7 @@
                   <img :src="`${$iconURL}Concept/Asset 491.svg`" width="30"/>
                   Event's concept</div>
                 <div class="popup-body">
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed 
-                    diam nonumy eirmod tempor invidunt ut labore et dolore 
-                    magna aliquyam erat, sed diam voluptua. At vero eos et 
-                    accusam et justo duo dolores et ea rebum. Stet clita kasd 
-                    gubergren, no sea takimata sanctus est
+                    {{event.concept.description}}
                 </div>
                 <div class="popup-footer">
                   <router-link
