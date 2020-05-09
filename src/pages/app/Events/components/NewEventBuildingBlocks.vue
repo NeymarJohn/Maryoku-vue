@@ -163,7 +163,7 @@
       <tbody>
         <tr class="total">
           <td class="total-title" width="40%">Total</td>
-          <td width="20%">${{Math.round(totalBudget) | roundNumber | withComma}}</td>
+          <td width="20%">${{Math.round(event.totalBudget) | roundNumber | withComma}}</td>
           <td width="15%" class="total-value">${{totalActual | withComma}}</td>
           <td colspan="2"></td>
         </tr>
@@ -446,8 +446,7 @@ export default {
       this.allocatedBudget = this.event.components.reduce((s,item)=>{
         return s + item.allocatedBudget
       }, 0)
-      const unused = this.event.components.find(item=>item.componentId=='unused')
-      this.remainingBudget = Math.round(unused.allocatedBudget / 10) * 10;
+      this.remainingBudget = Math.round((this.event.totalBudget - this.allocatedBudget) / 10) * 10;
     },
     /**
      * Get Event building blocks
@@ -836,8 +835,8 @@ export default {
     }
   },
   mounted () {
-    this.getRemainingBudget()
     this.getEventBuildingBlocks()
+    this.getRemainingBudget()
     this.getCategoryBlocks()
     this.$on('refreshBuildingBlock', () => {
       this.getEventBuildingBlocks()
