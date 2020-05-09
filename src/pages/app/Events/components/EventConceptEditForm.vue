@@ -27,17 +27,19 @@
           <md-button class="md-red md-maryoku" @click="addTag">add Tag</md-button>
         </div> -->
         <multiselect
-          v-model="taggingSelected"
+          v-model="selectedTag"
           :options="taggingOptions"
-          :multiple="true"
-          :taggable="true"
-          @tag="addTag"
+          :close-on-select="true"
+          :clear-on-select="true"
           tag-placeholder="Add this as new tag"
           placeholder="Type to search or add tag"
           label="name"
           track-by="name"
           >
         </multiselect>
+        <div class="add-tags-actions text-right">
+          <md-button class="md-red md-maryoku" @click="addTag">add Tag</md-button>
+        </div> 
       </div>
       
       <div class="tags-list d-flex justify-content-start" v-if="editConcept.tags.length">
@@ -159,7 +161,8 @@ export default {
     editConcept: this.defaultStatus?this.defaultConcept : initialConcept,
     newTag: '',
     uploadImages:{},
-    taggingSelected: [],
+    selectedTag:{},
+    addedTags: [],
     taggingOptions: [{name:'Tag1'}, {name:'Tag2'},{name:'Tag3'}],
     uploadImageData:{
         0:"", 1: "", 2: "", 3: "", 4: "", 5: "",
@@ -173,15 +176,21 @@ export default {
     //   this.newTag = "";
     // },
     addTag (newTag) {
-      const tag = {
-        name: newTag,
-        code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
-      }
-      this.taggingOptions.push(tag)
-      this.taggingSelected.push(tag)
+      // const tag = {
+      //   name: newTag,
+      //   code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
+      // }
+      // this.taggingOptions.push(tag)
+      // this.taggingSelected.push(tag)
+      this.editConcept.tags.push(this.selectedTag)
+      const selectedIndex = this.taggingOptions.findIndex(item => item.name === this.selectedTag.name)
+      this.taggingOptions.splice(selectedIndex,1)
+      this.selectedTag = {}
     },
     removeTag(index) {
-      this.conceptTags.splice(index, 1)
+      const tag = this.editConcept.tags[index]
+      this.editConcept.tags.splice(index, 1)
+      this.taggingOptions.push(tag);
     },
     onFileChange(event)  {
       let files = event.target.files || event.dataTransfer.files
@@ -213,16 +222,20 @@ export default {
               }
           }
           );
-          this.editConcept.images.push({originalName: fileItem.name, url: result.data.upload.path, name: result.data.upload.name});
-          // this.uploadImages[imageKeys[i]] = {originalName: fileItem.name, url: result.data.upload.path, name: result.data.upload.name};
+          if ( this.editConcept.images.length === 0 ) {
+            this.editConcept.images.push({originalName: fileItem.name, url: result.data.upload.path, name: result.data.upload.name})
+          } else {
+            this.editConcept.images[imageKeys[i] - 1] = {originalName: fileItem.name, url: result.data.upload.path, name: result.data.upload.name}
+          }
       }
 
-      this.editConcept.tags = this.taggingSelected
+      this.editConcept.tags = this.tags
 
       // this.editConcept.images = this.uploadImages;
       const res = await new EventConcept(this.editConcept).save()
       this.isLoading = false;
-      this.$emit("save", res.item)
+      console.log("response", res);
+      this.$emit("saved", res)
         // .then(res => {
         //     console.log(res);
         //     this.isLoading = false

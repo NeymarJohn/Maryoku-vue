@@ -53,7 +53,7 @@
                                 v-for="(image, imageIndex) in item.images"
                                 :key="imageIndex"
                             >
-                                <div class="image-section" :style="`background:url(${image.url}) center center no-repeat`"></div>
+                                <div class="image-section" :style="`background:url(http://static.maryoku.com/${image.url}) center center no-repeat`"></div>
 
                             </div>
                         </div>
@@ -100,7 +100,7 @@
                         <img :src="`${conceptIconsURL}Asset 490.svg`">
                     </md-button>
 
-                    <event-concept-edit-form v-if="expandCreateConcept" @save="onSaveConcept"></event-concept-edit-form>
+                    <event-concept-edit-form v-if="expandCreateConcept" @saved="onSaveConcept"></event-concept-edit-form>
 
                 </div>
                 <!-- ./Create Concept Section -->
@@ -157,7 +157,7 @@
                                 v-for="(image, imageIndex) in selectedConcept.images"
                                 :key="imageIndex"
                             >
-                                <div class="image-section" :style="`background:url(${image.url}) center top no-repeat`"></div>
+                                <div class="image-section" :style="`background:url(http://static.maryoku.com/${image.url}) center top no-repeat`"></div>
                             </div>
                         </div>
                     </div>
@@ -174,7 +174,7 @@
             </div>
             <div class="concepts-list md-layout-item md-size-100 " v-else>
                 <div class="concepts-list__item d-flex justify-content-start expanded">
-                    <event-concept-edit-form :defaultConcept="selectedConcept" @save="onSaveConcept"></event-concept-edit-form>
+                    <event-concept-edit-form :defaultConcept="selectedConcept" @saved="onSaveConcept"></event-concept-edit-form>
                 </div>
             </div>
             <div class="selected-concept-footer d-flex justify-content-between">
@@ -429,6 +429,7 @@ export default {
         this.showConceptList = false
     },
     onSaveConcept(eventConcept) {
+        console.log(eventConcept);
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
         let event = new CalendarEvent({id: this.event.id}).for(calendar)
 
@@ -439,6 +440,7 @@ export default {
             this.event = result
             this.selectedConcept = eventConcept
             this.showConceptList = false
+            this.showEditForm = false
         })
         
     }
