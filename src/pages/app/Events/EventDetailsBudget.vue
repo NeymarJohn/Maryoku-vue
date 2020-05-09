@@ -213,7 +213,7 @@
                 </md-button>
             </template>
         </modal>
-
+        <BudgetHandleMinusModal value="50" v-if="showHandleMinus"></BudgetHandleMinusModal>
     </div>
 </template>
 
@@ -247,7 +247,7 @@ import UploadVendorsModal from '../Vendors/ImportVendors'
 
 import SideBar from '../../../components/SidebarPlugin/NewSideBar'
 import PieChartRound from './components/PieChartRound.vue'
-
+import BudgetHandleMinusModal from '../../../components/Modals/BudgetHandleMinusModal'
 export default {
   components: {
     Tabs,
@@ -256,7 +256,8 @@ export default {
     SideBar,
     PieChartRound,
     Modal,
-    EditEventBlocksBudget
+    EditEventBlocksBudget,
+    BudgetHandleMinusModal
   },
 
   data () {
@@ -289,7 +290,8 @@ export default {
       showBudgetModal: false,
       budgetConfirmationModal: false,
       newBudget: null,
-      editBudgetElementsModal: false
+      editBudgetElementsModal: false,
+      showHandleMinus:false
     }
   },
   created () {
@@ -344,22 +346,7 @@ export default {
           this.newBudget = event.totalBudget
           new EventComponent().for(_calendar, event).get().then(components => {
             components.sort((a,b)=>a.order - b.order)
-            components.push({
-              title: "Extra",
-              allocatedBudget: this.statistics.total * 0.1,
-              fixed: true,
-              color:"#818080",
-              componentId:'extra',
-              icon:"http://static.maryoku.com/storage/icons/budget screen/SVG/Asset 485.svg"
-            })
-            components.push({
-              title: "Unused Budget",
-              allocatedBudget: this.totalRemainingBudget - this.statistics.total * 0.1,
-              fixed: true,
-              color:"#0047cc",
-              componentId:'unused',
-              icon:"http://static.maryoku.com/storage/icons/budget screen/SVG/Asset 487.svg"
-            })
+            
             console.log(components);
             this.event.components = components
             this.selectedComponents = components
@@ -394,18 +381,6 @@ export default {
       this.currentTab = null
     },
     openEventModal () {
-      // window.currentPanel = this.$showPanel({
-      //     component: EventSidePanel,
-      //     cssClass: 'md-layout-item md-size-40 transition36 ',
-      //     openOn: 'right',
-      //     disableBgClick: true,
-      //     props: {
-      //         modalSubmitTitle: 'Save',
-      //         editMode: true,
-      //         sourceEventData: this.event
-      //     }
-      // })
-
       this.setEventData(this.event)
       this.setEventModal({
         showModal: true
@@ -458,69 +433,6 @@ export default {
     updateBudget () {
       let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
       let editedEvent = new CalendarEvent({id: this.event.id}).for(_calendar)
-
-      if (this.newBudget < editedEvent.totalBudget) {
-        
-        // swal({
-        //   title: `<div class="text-left"><div class="font-size-30"><img src="${this.$iconURL}Budget Elements/${block.componentId}.svg" width="40"/>${newBudget}</div>
-        //   <div >Are You Sure?</div></div>`,
-        //   text: "Decreasing our budget may cause program changes",
-        //   showCancelButton: true,
-        //   confirmButtonClass: 'md-button md-success',
-        //   cancelButtonClass: 'md-button md-danger',
-        //   confirmButtonText: "Yes I'm sure",
-        //   cancelButtonText: 'No, take me back',
-        //   buttonsStyling: false
-        // }).then(result => {
-        //   if (result.value) {
-        //     this.isLoading = true
-
-          
-
-        //     selectedBlock
-        //       .for(calendar, event)
-        //       .delete()
-        //       .then(resp => {
-        //         this.isLoading = false
-        //         this.event.components.splice(
-        //           _.findIndex(this.eventBuildingBlocks, b => {
-        //             return b.id === selectedBlock.id
-        //           }),
-        //           1
-        //         )
-        //         this.getEventBuildingBlocks()
-        //         this.$root.$emit('RefreshStatistics')
-        //         this.$root.$emit(
-        //           'event-building-block-budget-changed',
-        //           this.event.components
-        //         )
-        //         this.$forceUpdate()
-
-        //         let allocatedBudget = 0
-        //         this.eventBuildingBlocks.forEach(item => {
-        //           allocatedBudget += Number(item.allocatedBudget)
-        //         })
-
-        //         this.allocatedBudget = allocatedBudget
-        //         this.$emit("change");
-        //       })
-        //       .catch(error => {
-        //         console.log(error)
-        //       })
-        //   }
-        // })
-      }
-      // editedEvent.totalBudget = this.newBudget
-
-      // editedEvent.save()
-      //   .then(response => {
-      //     this.showBudgetModal = false
-      //     //this.getCalendarEventStatistics()
-      //     this.getEvent()
-      //   })
-      //   .catch((error) => {
-      //     console.log(error)
-      //   })
 
       if (this.newBudget < this.calendarEvent.totalBudget) {
         this.showBudgetModal = false;

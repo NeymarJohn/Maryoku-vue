@@ -28,12 +28,11 @@
                 :class="block.title ? block.title.toLowerCase().replace(/ /g, '-').replace('&', '').replace('/', '-') : ''"
               >
                 <img
-                  :src="`http://static.maryoku.com/storage/icons/Budget Elements/${block.componentId}.svg`"
+                  :src="`http://static.maryoku.com/storage/icons/Budget Elements/${block.icon}`"
                 />
                 {{block.title}}
               </td>
               <td class="planned" width="20%">
-
                   <template v-if="type==='total'">
                       $ {{block.allocatedBudget ? block.allocatedBudget : 0 | roundNumber | withComma}}
                   </template>
@@ -124,6 +123,39 @@
           </template>
         </tbody>
       </table>
+
+    <table class="event-blocks__table event-block-table">
+      <tbody>
+        <tr>
+          <td width="40%" class="event-block-element extra">
+            <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/Asset 485.svg">
+            Extra
+          </td> 
+          <td width="20%" class="planned">
+            $ 0
+          </td>
+          <td width="15%" class="actual red-label">
+          </td> 
+          <td width="15%" class="status"></td> 
+          <td class="expand"></td></tr>
+        </tbody>
+      </table>
+      <table class="event-blocks__table event-block-table">
+        <tbody>
+          <tr>
+            <td width="40%" class="event-block-element unused">
+              <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/Asset 487.svg">
+              Unused
+            </td> 
+            <td width="20%" class="planned">
+              $ {{remainingBudget}}
+            </td>
+            <td width="15%" class="actual red-label">
+            </td> 
+            <td width="15%" class="status"></td> 
+            <td class="expand"></td></tr>
+          </tbody>
+        </table>
     </draggable>
 
 
@@ -231,6 +263,7 @@
         <md-button :disabled="remainingBudget < newBuildingBlock.budget"  class="md-red add-category-btn md-bold" @click="addBuildingBlock">Add Category</md-button>
       </template>
     </modal>
+    <budget-handle-minus-modal v-if="showMinusHandleModal"></budget-handle-minus-modal>
   </div>
 </template>
 
@@ -240,6 +273,7 @@ import swal from 'sweetalert2'
 import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
 import EventComponent from '@/models/EventComponent'
+import EventCategory from '@/models/EventCategory'
 import {
   Modal,
   LabelEdit
@@ -254,6 +288,7 @@ import ViewProposals from './EventBlocks/Modals/ViewProposals.vue'
 import _ from 'underscore'
 
 import draggable from 'vuedraggable'
+import BudgetHandleMinusModal from '../../../../components/Modals/BudgetHandleMinusModal'
 
 export default {
   name: 'event-building-blocks',
@@ -261,7 +296,8 @@ export default {
     LabelEdit,
     EventActualCostIconTooltip,
     Modal,
-    draggable
+    draggable,
+    BudgetHandleMinusModal
   },
   props: {
     event: {
@@ -309,7 +345,8 @@ export default {
       category: '',
       name: '',
       budget: ''
-    }
+    },
+    showMinusHandleModal: false
   }),
   computed: {
     ...mapGetters({
@@ -543,6 +580,11 @@ export default {
 
           this.allocatedBudget = allocatedBudget
 
+          if (this.totalBudget < this.allocatedBudget) {
+            console.log(this.totalBudget);
+            console.log(this.allocatedBudget);
+            this.showMinusHandleModal = true;
+          }
           this.showEditElementBudget(block)
           this.$emit("change")
         })
@@ -716,7 +758,7 @@ export default {
       }
     },
 
-    addBuildingBlock () {
+    async addBuildingBlock () {
       // Save event interaction
       console.log(this.event);
       let event = new CalendarEvent({ id: this.event.id })
@@ -726,13 +768,25 @@ export default {
         return;
       }
 
-      const newComponent = _.findWhere(this.components, {title: this.newBuildingBlock.category})
+      let newComponent = _.findWhere(this.components, {title: this.newBuildingBlock.category})
+      if ( !newComponent) {
+        const newCategory = {
+          title: `Other-${this.newBuildingBlock.name}`,
+          key: `other-${this.newBuildingBlock.name.toLowerCase()}`,
+          color: `rgb(${parseInt(Math.random() * 255)}, ${parseInt(Math.random() * 255)}, ${parseInt(Math.random() * 255)})`,
+          icon: `other.svg`,
+          type: "customized",
+          categoryId: 'other'
+        }
+        newComponent = await new EventCategory(newCategory).save()
+      }
       let newBlock = {
         componentId: newComponent?newComponent.key:"other",
         componentCategoryId: newComponent?newComponent.key:"other",
         calendarEvent: { id: event.id },
         allocatedBudget: this.newBuildingBlock.budget,
-        order: this.event.components.length
+        order: this.event.components.length,
+        icon: newComponent.icon
       }
       
       new EventComponent(newBlock)
