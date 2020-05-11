@@ -198,10 +198,21 @@
             <div class="form-group maryoku-field" v-if="filteredEventBlocks">
               <label class="font-size-16 font-bold-extra color-black">Category</label>
               <v-select v-model="newBuildingBlock.category" :options="filteredEventBlocks"></v-select>
+              <multiselect
+                v-model="newBuildingBlock.category"
+                :options="categoryBuildingBlocks"
+                :close-on-select="true"
+                :clear-on-select="true"
+                tag-placeholder="Add this as new tag"
+                placeholder="Type to search category"
+                label="title"
+                track-by="id"
+                >
+              </multiselect>
             </div>
           </div>
 
-          <div class="md-layout-item md-size-70 d-flex" v-if="newBuildingBlock.category==='Other'">
+          <div class="md-layout-item md-size-70 d-flex" v-if="newBuildingBlock.category.id==='other'">
             <md-icon class="font-size-20">subdirectory_arrow_right</md-icon> 
             <div class="form-group" style="flex-grow:1; margin-left:10px; ">
               <label class="font-size-16 font-bold-extra color-black">Name</label><small class="font-size-14">(2 words top)</small>
@@ -242,6 +253,7 @@
 
 <script>
 import { mapMutations, mapGetters, mapActions } from 'vuex'
+import Multiselect from 'vue-multiselect'
 import swal from 'sweetalert2'
 import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
@@ -270,7 +282,8 @@ export default {
     EventActualCostIconTooltip,
     Modal,
     draggable,
-    BudgetHandleMinusModal
+    BudgetHandleMinusModal,
+    Multiselect
   },
   props: {
     event: {
@@ -737,8 +750,9 @@ export default {
         return;
       }
 
-      let newComponent = _.findWhere(this.components, {title: this.newBuildingBlock.category})
-      if ( !newComponent) {
+      //let newComponent = _.findWhere(this.components, {title: this.newBuildingBlock.category})
+      let newComponent = this.newBuildingBlock.category;
+      if ( newComponent.id === 'other') {
         const newCategory = {
           title: `Other-${this.newBuildingBlock.name}`,
           key: `other-${this.newBuildingBlock.name.toLowerCase()}`,
@@ -755,7 +769,8 @@ export default {
         calendarEvent: { id: event.id },
         allocatedBudget: this.newBuildingBlock.budget,
         order: this.event.components.length,
-        icon: newComponent.icon
+        icon: newComponent.icon,
+        category: newComponent
       }
       
       new EventComponent(newBlock)
@@ -773,13 +788,13 @@ export default {
       EventComponent.get()
         .then(res => {
           this.categoryBuildingBlocks = res
+          this.categoryBuildingBlocks.push({id:"other", title:"Other"})
           this.filteredEventBlocks = _.map(
             this.categoryBuildingBlocks,
             function (item) {
               return item.title
             }
           )
-          this.filteredEventBlocks.push('Other')
         })
         .catch(error => {
           console.log('Error ', error)
@@ -967,6 +982,9 @@ export default {
   img {
     transform: rotate(-90deg);
   }
+}
+.multiselect__tags {
+    border: solid 0.5px #bcbcbc;
 }
 
 </style>
