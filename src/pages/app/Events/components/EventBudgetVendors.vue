@@ -197,7 +197,7 @@
           <div class="md-layout-item md-size-70">
             <div class="form-group maryoku-field" v-if="filteredEventBlocks">
               <label class="font-size-16 font-bold-extra color-black">Category</label>
-              <v-select v-model="newBuildingBlock.category" :options="filteredEventBlocks"></v-select>
+              <!-- <v-select v-model="newBuildingBlock.category" :options="filteredEventBlocks"></v-select> -->
               <multiselect
                 v-model="newBuildingBlock.category"
                 :options="categoryBuildingBlocks"
