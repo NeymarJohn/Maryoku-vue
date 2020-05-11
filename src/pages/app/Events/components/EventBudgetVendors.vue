@@ -126,10 +126,10 @@
 
     <table class="event-blocks__table event-block-table">
       <tbody>
-        <tr>
+        <tr class="extra">
           <td width="40%" class="event-block-element extra">
             <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/Asset 485.svg">
-            Extra
+            Extras
           </td> 
           <td width="20%" class="planned">
             $ 0
@@ -141,9 +141,9 @@
         </tbody>
       </table>
       <table class="event-blocks__table event-block-table">
-        <tbody>
-          <tr>
-            <td width="40%" class="event-block-element unused">
+        <tbody >
+          <tr class="unused-budget">
+            <td width="40%" class="event-block-element unused-budget ">
               <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/Asset 487.svg">
               Unused
             </td> 
@@ -174,33 +174,6 @@
             </md-button>
           </td>
         </tr>
-<!-- 
-        <tr class="taxes">
-          <td class="taxes-title" width="40%">
-            <img
-              src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
-              width="20"
-            /> Tips
-            <span class="percent">12%</span>
-          </td>
-          <td width="20%">${{Math.round(totalBudgetTaxes) | withComma}}</td>
-          <td class="actual green-label" width="15%">
-            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png" /> $0
-          </td>
-            <td class="status" width="15%">
-                <div style="visibility: hidden">
-                    <md-button
-                        class="book-btn md-sm"
-                    >Book Vendors</md-button>
-                </div>
-            </td>
-          <td class="expand">
-            <a href>
-              <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
-            </a>
-          </td>
-        </tr> -->
-        
       </tbody>
     </table>
 
@@ -263,7 +236,7 @@
         <md-button :disabled="remainingBudget < newBuildingBlock.budget"  class="md-red add-category-btn md-bold" @click="addBuildingBlock">Add Category</md-button>
       </template>
     </modal>
-    <budget-handle-minus-modal v-if="showMinusHandleModal"></budget-handle-minus-modal>
+    <budget-handle-minus-modal v-if="showMinusHandleModal" :value="overAddedValue" @select="handleMinusBudget"></budget-handle-minus-modal>
   </div>
 </template>
 
@@ -288,10 +261,10 @@ import ViewProposals from './EventBlocks/Modals/ViewProposals.vue'
 import _ from 'underscore'
 
 import draggable from 'vuedraggable'
-import BudgetHandleMinusModal from '../../../../components/Modals/BudgetHandleMinusModal'
+import BudgetHandleMinusModal from '@/components/Modals/BudgetHandleMinusModal'
 
 export default {
-  name: 'event-building-blocks',
+  name: 'event-budget-vendors',
   components: {
     LabelEdit,
     EventActualCostIconTooltip,
@@ -346,7 +319,8 @@ export default {
       name: '',
       budget: ''
     },
-    showMinusHandleModal: false
+    showMinusHandleModal: false,
+    overAddedValue: 0
   }),
   computed: {
     ...mapGetters({
@@ -404,9 +378,6 @@ export default {
       }).then(result => {
         if (result.value) {
           this.isLoading = true
-
-         
-
           selectedBlock
             .for(calendar, event)
             .delete()
@@ -578,11 +549,10 @@ export default {
           })
 
           this.allocatedBudget = allocatedBudget
-
-          if (this.totalBudget < this.allocatedBudget) {
+          if (this.event.totalBudget < this.allocatedBudget) {
             console.log(this.totalBudget);
-            console.log(this.allocatedBudget);
             this.showMinusHandleModal = true;
+            this.overAddedValue = this.allocatedBudget - this.event.totalBudget;
           }
           this.showEditElementBudget(block)
           this.$emit("change")
@@ -832,6 +802,42 @@ export default {
           alert(result.value)
         }
       })
+    },
+    handleMinusBudget(selectedOption, value) {
+      const formattedValue =`${value}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      switch (selectedOption){
+        case "keep" :
+          this.showMinusHandleModal = false
+          break;
+        case "take" :
+          const unexpectedComponent = this.eventBuildingBlocks.findIndex(item => item.componentId === 'unexpected');
+          // if (unexpectedComponent) {
+          //   unexpectedComponent.allocatedBudget = unexpectedComponent.allocatedBudget
+          // }
+          this.eventBuildingBlocks[unexpectedComponent].newBudget = this.eventBuildingBlocks[unexpectedComponent].allocatedBudget - value;
+          this.editElementBudget( this.eventBuildingBlocks[unexpectedComponent])
+          break;
+        case "add" :
+          const budgetString = `<div class="font-size-40 font-regular color-red" style="margin-bottom:20px">+$${formattedValue}</div>`;
+          const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`
+          swal({
+            title: `<div class="text-left">${budgetString}<div>Would you like to add extra $${formattedValue} to your budget?</div>${description}</div>`,
+            showCancelButton: true,
+            confirmButtonClass: 'md-button md-success',
+            cancelButtonClass: 'md-button md-danger',
+            confirmButtonText: "Yes I'm sure",
+            cancelButtonText: 'No, take me back',
+            buttonsStyling: false
+          }).then(result => {
+            if (result.value) {
+              if (result.value) {
+                this.$emit("add", value)
+              } 
+            }
+          })
+          break;
+      }
+      this.showMinusHandleModal = false
     }
   },
   mounted () {

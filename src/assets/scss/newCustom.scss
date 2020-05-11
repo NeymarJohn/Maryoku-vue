@@ -355,7 +355,6 @@
         tbody {
 
             tr {
-
                 .planned {
                     font-size: 20px;
                     .md-rose {
@@ -432,12 +431,20 @@
 
                 }
 
+                &.unexpected {
+                    color : #24c796;
+                }
+                &.extra {
+                    color : #818080;
+                }
                 &.unused-budget {
                     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
                     background: #fff;
                     border-radius: 3px;
                     color : #0047cc;
-
+                    .event-block-element  {
+                        border-left-color: #0047cc;
+                    }
                     .title {
                         font-family: 'Manrope-Bold', sans-serif;
                         color : #0047cc;
@@ -711,14 +718,12 @@
                         }
                     }
                     &.extra{
-                        border-left-color: #818080 !important;
                         color : #818080;
                         &:after {
                             background: #818080;
                         }
                     }
                     &.unused-budget{
-                        border-left-color: #0047cc !important;
                         color : #0047cc;
                         &:after {
                             background: #0047cc;
@@ -1207,7 +1212,12 @@
 
 
 .time-line-blocks{
-
+    .unused-budget {
+        color: #0047cc
+    }
+    .extra {
+        color : #818080;
+    }
     &_items {
         max-width: 334px;
         margin: 0 auto;
@@ -1416,6 +1426,9 @@
                         font-size: 16px;
                         font-weight: bold;
                         color: #050505;
+                        &.unused {
+                            color: #0047cc;
+                        }
                     }
                 }
             }
@@ -1706,7 +1719,7 @@
 
                     .form-control {
                         text-align: center;
-                        font-size: 16px;
+                        font-size: 50px;
                         height: 90px;
                     }
 
@@ -3084,7 +3097,7 @@
 
 
 .swal2-popup {
-    padding: 2em !important;
+    padding: 60px !important;
     border-radius: 3px !important;
     .cross-line {
         position: relative;

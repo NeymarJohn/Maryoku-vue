@@ -93,12 +93,12 @@
                     >
                         <!-- here you can add your content for tab-content -->
                         <template slot="tab-pane-1">
-                            <new-event-building-blocks :event.sync="event" :event-components="selectedComponents"
-                                                       type="total" @change="onChangeComponent"></new-event-building-blocks>
+                            <event-budget-vendors :event.sync="event" :event-components="selectedComponents"
+                                                       type="total" @change="onChangeComponent" @add="onAddMoreBudget"></event-budget-vendors>
                         </template>
                         <template slot="tab-pane-2">
-                            <new-event-building-blocks :event.sync="event" :event-components="selectedComponents"
-                                                       type="perGuest" @change="onChangeComponent"></new-event-building-blocks>
+                            <event-budget-vendors :event.sync="event" :event-components="selectedComponents"
+                                                       type="perGuest" @change="onChangeComponent" @add="onAddMoreBudget"></event-budget-vendors>
                         </template>
                     </tabs>
                 </div>
@@ -124,7 +124,7 @@
                             <div class="input-icon">
                                 <img :src="`${iconsURL}budget-dark.svg`" width="20">
                             </div>
-                            <input type="number" class="form-control"  v-model="newBudget" placeholder="Type number here">
+                            <input type="text" class="form-control"  v-model="newBudget" placeholder="">
                         </div>
 
                         <div class="label-item label-success text-center" v-if="newBudget && newBudget > calendarEvent.totalBudget">
@@ -239,7 +239,7 @@ import {
   mapGetters
 } from 'vuex'
 
-import NewEventBuildingBlocks from './components/NewEventBuildingBlocks'
+import EventBudgetVendors from './components/EventBudgetVendors'
 import EditEventBlocksBudget from './components/EditEventBlocksBudget'
 
 // COMPONENTS
@@ -251,7 +251,7 @@ import BudgetHandleMinusModal from '../../../components/Modals/BudgetHandleMinus
 export default {
   components: {
     Tabs,
-    NewEventBuildingBlocks,
+    EventBudgetVendors,
     UploadVendorsModal,
     SideBar,
     PieChartRound,
@@ -343,7 +343,8 @@ export default {
           this.event = event
           this.eventId = event.id
           this.calendarEvent = event
-          this.newBudget = event.totalBudget
+          if (event.totalBudget)
+            this.newBudget = (event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           new EventComponent().for(_calendar, event).get().then(components => {
             components.sort((a,b)=>a.order - b.order)
             
@@ -433,8 +434,8 @@ export default {
     updateBudget () {
       let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
       let editedEvent = new CalendarEvent({id: this.event.id}).for(_calendar)
-
-      if (this.newBudget < this.calendarEvent.totalBudget) {
+      const newBudget = Number(this.newBudget.replace(/,/g, ""))
+      if (newBudget < this.calendarEvent.totalBudget) {
         this.showBudgetModal = false;
         const arrow =`<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
         const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
@@ -449,7 +450,9 @@ export default {
           buttonsStyling: false
         }).then(result => {
           if (result.dismiss != "cancel") {
-            editedEvent.totalBudget = this.newBudget
+            editedEvent.totalBudget = newBudget
+            editedEvent.reCalculate = true
+
             editedEvent.save()
               .then(response => {
                 this.showBudgetModal = false
@@ -461,8 +464,9 @@ export default {
               })
           }
         })
-      } else if (this.newBudget > this.calendarEvent.totalBudget) {
-          editedEvent.totalBudget = this.newBudget
+      } else if (newBudget > this.calendarEvent.totalBudget) {
+          editedEvent.totalBudget = newBudget
+          editedEvent.reCalculate = false
           editedEvent.save()
             .then(response => {
               this.showBudgetModal = false
@@ -478,6 +482,10 @@ export default {
     },
     onChangeComponent (event) {
       this.getEvent()
+    },
+    onAddMoreBudget (value) {
+      this.newBudget = `${this.event.totalBudget + value}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      this.updateBudget();
     }
   },
   computed: {
@@ -538,7 +546,14 @@ export default {
       return Math.round(amount / 10) * 10;
     }
   },
-  watch: {}
+  watch: {
+    newBudget: function(newValue) {
+      console.log("change", newValue);
+      const result = newValue.replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      this.newBudget = result
+    }
+  }
 }
 </script>
 
