@@ -132,7 +132,7 @@
             Extras
           </td> 
           <td width="20%" class="planned">
-            $ 0
+            $ {{0 | withComma}}
           </td>
           <td width="15%" class="actual red-label">
           </td> 
@@ -148,7 +148,7 @@
               Unused
             </td> 
             <td width="20%" class="planned">
-              $ {{remainingBudget}}
+              $ {{remainingBudget | withComma}}
             </td>
             <td width="15%" class="actual red-label">
             </td> 
