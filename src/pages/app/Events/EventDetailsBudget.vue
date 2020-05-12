@@ -32,7 +32,7 @@
                         </div>
                         <div class="budget-list__item">
                             <div class="label-title">Allocated</div>
-                            <div class="budget-value">${{statistics.allocated | roundNumber | withComma}}</div>
+                            <div class="budget-value">${{statistics.allocated | withComma}}</div>
                             <div class="percent">{{ (( statistics.allocated ) * 100 / calendarEvent.totalBudget).toFixed(1)}}  %</div>
                         </div>
                         <div class="budget-list__item">
@@ -93,12 +93,12 @@
                     >
                         <!-- here you can add your content for tab-content -->
                         <template slot="tab-pane-1">
-                            <event-budget-vendors :event.sync="event" :event-components="selectedComponents"
-                                                       type="total" @change="onChangeComponent" @add="onAddMoreBudget"></event-budget-vendors>
+                            <new-event-building-blocks :event.sync="event" :event-components="selectedComponents"
+                                                       type="total" @change="onChangeComponent"></new-event-building-blocks>
                         </template>
                         <template slot="tab-pane-2">
-                            <event-budget-vendors :event.sync="event" :event-components="selectedComponents"
-                                                       type="perGuest" @change="onChangeComponent" @add="onAddMoreBudget"></event-budget-vendors>
+                            <new-event-building-blocks :event.sync="event" :event-components="selectedComponents"
+                                                       type="perGuest" @change="onChangeComponent"></new-event-building-blocks>
                         </template>
                     </tabs>
                 </div>
@@ -124,7 +124,7 @@
                             <div class="input-icon">
                                 <img :src="`${iconsURL}budget-dark.svg`" width="20">
                             </div>
-                            <input type="text" class="form-control"  v-model="newBudget" placeholder="">
+                            <input type="number" class="form-control"  v-model="newBudget" placeholder="Type number here">
                         </div>
 
                         <div class="label-item label-success text-center" v-if="newBudget && newBudget > calendarEvent.totalBudget">
@@ -133,8 +133,10 @@
                             </h4>
                             <p>
                                 This budget is {{ 100 - parseInt( calendarEvent.totalBudget * 100 / newBudget)  }}% higher than average, your event is going to be wild!
+
                             </p>
                         </div>
+
                         <div class="label-item label-warning text-center" v-if="newBudget && newBudget < calendarEvent.totalBudget">
                             <p>
                                 <img :src="`${iconsURL}warning-circle-gray.svg`" width="20"> This budget is {{ 100 - parseInt( newBudget * 100 / calendarEvent.totalBudget)  }}% lower than average for this type of event
@@ -213,7 +215,7 @@
                 </md-button>
             </template>
         </modal>
-        <BudgetHandleMinusModal value="50" v-if="showHandleMinus"></BudgetHandleMinusModal>
+
     </div>
 </template>
 
@@ -227,8 +229,6 @@ import {
 
 // import auth from '@/auth';
 import moment from 'moment'
-import swal from 'sweetalert2'
-
 import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
 import CalendarEventStatistics from '@/models/CalendarEventStatistics'
@@ -239,7 +239,7 @@ import {
   mapGetters
 } from 'vuex'
 
-import EventBudgetVendors from './components/EventBudgetVendors'
+import NewEventBuildingBlocks from './components/NewEventBuildingBlocks'
 import EditEventBlocksBudget from './components/EditEventBlocksBudget'
 
 // COMPONENTS
@@ -247,17 +247,16 @@ import UploadVendorsModal from '../Vendors/ImportVendors'
 
 import SideBar from '../../../components/SidebarPlugin/NewSideBar'
 import PieChartRound from './components/PieChartRound.vue'
-import BudgetHandleMinusModal from '../../../components/Modals/BudgetHandleMinusModal'
+
 export default {
   components: {
     Tabs,
-    EventBudgetVendors,
+    NewEventBuildingBlocks,
     UploadVendorsModal,
     SideBar,
     PieChartRound,
     Modal,
-    EditEventBlocksBudget,
-    BudgetHandleMinusModal
+    EditEventBlocksBudget
   },
 
   data () {
@@ -290,8 +289,7 @@ export default {
       showBudgetModal: false,
       budgetConfirmationModal: false,
       newBudget: null,
-      editBudgetElementsModal: false,
-      showHandleMinus:false
+      editBudgetElementsModal: false
     }
   },
   created () {
@@ -343,12 +341,9 @@ export default {
           this.event = event
           this.eventId = event.id
           this.calendarEvent = event
-          if (event.totalBudget)
-            this.newBudget = (event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          this.newBudget = event.totalBudget
           new EventComponent().for(_calendar, event).get().then(components => {
             components.sort((a,b)=>a.order - b.order)
-            
-            console.log(components);
             this.event.components = components
             this.selectedComponents = components
             this.seriesData = components
@@ -382,6 +377,18 @@ export default {
       this.currentTab = null
     },
     openEventModal () {
+      // window.currentPanel = this.$showPanel({
+      //     component: EventSidePanel,
+      //     cssClass: 'md-layout-item md-size-40 transition36 ',
+      //     openOn: 'right',
+      //     disableBgClick: true,
+      //     props: {
+      //         modalSubmitTitle: 'Save',
+      //         editMode: true,
+      //         sourceEventData: this.event
+      //     }
+      // })
+
       this.setEventData(this.event)
       this.setEventModal({
         showModal: true
@@ -434,58 +441,27 @@ export default {
     updateBudget () {
       let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
       let editedEvent = new CalendarEvent({id: this.event.id}).for(_calendar)
-      const newBudget = Number(this.newBudget.replace(/,/g, ""))
-      if (newBudget < this.calendarEvent.totalBudget) {
-        this.showBudgetModal = false;
-        const arrow =`<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
-        const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
-        const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`
-         swal({
-          title: `<div class="text-left">${arrow}${budgetString}<div>Are Your Sure?</div>${description}</div>`,
-          showCancelButton: true,
-          confirmButtonClass: 'md-button md-success',
-          cancelButtonClass: 'md-button md-danger',
-          confirmButtonText: "Yes I'm sure",
-          cancelButtonText: 'No, take me back',
-          buttonsStyling: false
-        }).then(result => {
-          if (result.dismiss != "cancel") {
-            editedEvent.totalBudget = newBudget
-            editedEvent.reCalculate = true
 
-            editedEvent.save()
-              .then(response => {
-                this.showBudgetModal = false
-                //this.getCalendarEventStatistics()
-                this.getEvent()
-              })
-              .catch((error) => {
-                console.log(error)
-              })
-          }
+      editedEvent.totalBudget = this.newBudget
+
+      editedEvent.save()
+        .then(response => {
+          this.showBudgetModal = false
+          //this.getCalendarEventStatistics()
+          this.getEvent()
         })
-      } else if (newBudget > this.calendarEvent.totalBudget) {
-          editedEvent.totalBudget = newBudget
-          editedEvent.reCalculate = false
-          editedEvent.save()
-            .then(response => {
-              this.showBudgetModal = false
-              //this.getCalendarEventStatistics()
-              this.getEvent()
-            })
-            .catch((error) => {
-              console.log(error)
-            })
+        .catch((error) => {
+          console.log(error)
+        })
+
+      if (this.newBudget < this.calendarEvent.totalBudget) {
+
       } else {
-        this.showBudgetModal = false
+
       }
     },
     onChangeComponent (event) {
       this.getEvent()
-    },
-    onAddMoreBudget (value) {
-      this.newBudget = `${this.event.totalBudget + value}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      this.updateBudget();
     }
   },
   computed: {
@@ -541,19 +517,9 @@ export default {
     },
     withComma (amount) {
       return amount ? amount.toLocaleString() : 0
-    },
-    roundNumber(amount) {
-      return Math.round(amount / 10) * 10;
     }
   },
-  watch: {
-    newBudget: function(newValue) {
-      console.log("change", newValue);
-      const result = newValue.replace(/\D/g, "")
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      this.newBudget = result
-    }
-  }
+  watch: {}
 }
 </script>
 

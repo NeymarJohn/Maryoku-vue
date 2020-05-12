@@ -28,19 +28,20 @@
                 :class="block.title ? block.title.toLowerCase().replace(/ /g, '-').replace('&', '').replace('/', '-') : ''"
               >
                 <img
-                  :src="`http://static.maryoku.com/storage/icons/Budget Elements/${block.icon}`"
+                  :src="`http://static.maryoku.com/storage/icons/Budget Elements/${block.componentId}.svg`"
                 />
                 {{block.title}}
               </td>
               <td class="planned" width="20%">
+
                   <template v-if="type==='total'">
-                      $ {{block.allocatedBudget ? block.allocatedBudget : 0 | roundNumber | withComma}}
+                      $ {{block.allocatedBudget ? block.allocatedBudget : 0 | withComma}}
                   </template>
                   <template v-else-if="block.allocatedBudget && block.numberOfParticipants">
-                      $ {{block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(-1).toString() : 0}}
+                      $ {{block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(0).toString() : 0}}
                   </template>
                   <template v-else>
-                      $ {{block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(-1).toString() : 0}}
+                      $ {{block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(0).toString() : 0}}
                   </template>
 
                   <md-button class="md-rose md-sm md-simple edit-btn" v-if="!block.editBudget" @click="showEditElementBudget(block)"> Edit </md-button>
@@ -84,13 +85,12 @@
                     class="book-btn md-sm"
                     :class="{'disabled' : block.proposalsState==='get-offers'}"
                     @click="bookVendors(block)"
-                    v-if="!block.fixed && block.componentId!='unexpected'"
                   >Book Vendors</md-button>
 
                 </div>
               </td>
-              <td class="expand" >
-                <div @click="expandBlock(block)" class="text-right" v-if="!block.fixed && block.componentId!='unexpected'">
+              <td class="expand">
+                <div @click="expandBlock(block)">
                   <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
                 </div>
               </td>
@@ -123,56 +123,50 @@
           </template>
         </tbody>
       </table>
-
-    <table class="event-blocks__table event-block-table">
-      <tbody>
-        <tr class="extra">
-          <td width="40%" class="event-block-element extra">
-            <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/Asset 485.svg">
-            Extras
-          </td> 
-          <td width="20%" class="planned">
-            $ {{0 | withComma}}
-          </td>
-          <td width="15%" class="actual red-label">
-          </td> 
-          <td width="15%" class="status"></td> 
-          <td class="expand"></td></tr>
-        </tbody>
-      </table>
-      <table class="event-blocks__table event-block-table">
-        <tbody >
-          <tr class="unused-budget">
-            <td width="40%" class="event-block-element unused-budget ">
-              <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/Asset 487.svg">
-              Unused
-            </td> 
-            <td width="20%" class="planned">
-              $ {{remainingBudget | withComma}}
-            </td>
-            <td width="15%" class="actual red-label">
-            </td> 
-            <td width="15%" class="status"></td> 
-            <td class="expand"></td></tr>
-          </tbody>
-        </table>
     </draggable>
 
 
     <table class="event-blocks__table actions-table">
       <tbody>
-        <tr class="total">
-          <td class="total-title" width="40%">Total</td>
-          <td width="20%">${{Math.round(event.totalBudget) | roundNumber | withComma}}</td>
-          <td width="15%" class="total-value">${{totalActual | withComma}}</td>
-          <td colspan="2"></td>
-        </tr>
         <tr class="add-category">
           <td colspan="5">
             <md-button class="md-simple add-category-btn" @click="showCategoryModal = true">
               <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2019.svg" /> Add new category
             </md-button>
           </td>
+        </tr>
+
+        <tr class="taxes">
+          <td class="taxes-title" width="40%">
+            <img
+              src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2020.svg"
+              width="20"
+            /> Tips
+            <span class="percent">12%</span>
+          </td>
+          <td width="20%">${{Math.round(totalBudgetTaxes) | withComma}}</td>
+          <td class="actual green-label" width="15%">
+            <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png" /> $0
+          </td>
+            <td class="status" width="15%">
+                <div style="visibility: hidden">
+                    <md-button
+                        class="book-btn md-sm"
+                    >Book Vendors</md-button>
+
+                    <!--                          <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+31.png">-->
+                </div>
+            </td>
+          <td class="expand">
+            <a href>
+              <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
+            </a>
+          </td>
+        </tr>
+        <tr class="total">
+          <td class="total-title">Total</td>
+          <td>${{Math.round(totalBudget) | withComma}}</td>
+          <td colspan="3" class="total-value">${{totalActual | withComma}}</td>
         </tr>
       </tbody>
     </table>
@@ -197,22 +191,11 @@
           <div class="md-layout-item md-size-70">
             <div class="form-group maryoku-field" v-if="filteredEventBlocks">
               <label class="font-size-16 font-bold-extra color-black">Category</label>
-              <!-- <v-select v-model="newBuildingBlock.category" :options="filteredEventBlocks"></v-select> -->
-              <multiselect
-                v-model="newBuildingBlock.category"
-                :options="categoryBuildingBlocks"
-                :close-on-select="true"
-                :clear-on-select="true"
-                tag-placeholder="Add this as new tag"
-                placeholder="Type to search category"
-                label="title"
-                track-by="id"
-                >
-              </multiselect>
+              <v-select v-model="newBuildingBlock.category" :options="filteredEventBlocks"></v-select>
             </div>
           </div>
 
-          <div class="md-layout-item md-size-70 d-flex" v-if="newBuildingBlock.category.id==='other'">
+          <div class="md-layout-item md-size-70 d-flex" v-if="newBuildingBlock.category==='Other'">
             <md-icon class="font-size-20">subdirectory_arrow_right</md-icon> 
             <div class="form-group" style="flex-grow:1; margin-left:10px; ">
               <label class="font-size-16 font-bold-extra color-black">Name</label><small class="font-size-14">(2 words top)</small>
@@ -231,34 +214,28 @@
                 <img :src="`${iconsURL}budget-dark.svg`" width="20" />
               </div>
               <input type="number" class="form-control mb-10" v-model="newBuildingBlock.budget" />
-             
+              <div class="md-error"  v-if="remainingBudget < newBuildingBlock.budget">
+                <img :src="`${iconsURL}warning-circle-gray.svg`" style="width:20px" /> Oops! Seems like you don’t have enough cash in your “Unused” category
+              </div>
             </div>
-          </div>
-          <div class="md-error d-flex align-center"  v-if="remainingBudget < newBuildingBlock.budget">
-            <img :src="`${iconsURL}warning-circle-gray.svg`" style="width:20px" />
-            <span style="padding: 0 15px"> Oops! Seems like you don’t have enough cash in your “Unused” category</span>
-            <md-button class="md-button md-rose md-sm md-simple edit-btn md-theme-default md-bold-extra" @click="addbudget()"> Add More Money</md-button>
           </div>
         </div>
         
       </template>
       <template slot="footer">
-        <md-button class="md-default md-simple cancel-btn md-bold" @click="showCategoryModal = false">Cancel</md-button>
-        <md-button :disabled="remainingBudget < newBuildingBlock.budget"  class="md-red add-category-btn md-bold" @click="addBuildingBlock">Add Category</md-button>
+        <md-button class="md-default md-simple cancel-btn md-maryoku" @click="showCategoryModal = false">Cancel</md-button>
+        <md-button :disabled="remainingBudget < newBuildingBlock.budget"  class="md-red add-category-btn md-maryoku" @click="addBuildingBlock">Add Category</md-button>
       </template>
     </modal>
-    <budget-handle-minus-modal v-if="showMinusHandleModal" :value="overAddedValue" @select="handleMinusBudget"></budget-handle-minus-modal>
   </div>
 </template>
 
 <script>
 import { mapMutations, mapGetters, mapActions } from 'vuex'
-import Multiselect from 'vue-multiselect'
 import swal from 'sweetalert2'
 import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
 import EventComponent from '@/models/EventComponent'
-import EventCategory from '@/models/EventCategory'
 import {
   Modal,
   LabelEdit
@@ -273,17 +250,14 @@ import ViewProposals from './EventBlocks/Modals/ViewProposals.vue'
 import _ from 'underscore'
 
 import draggable from 'vuedraggable'
-import BudgetHandleMinusModal from '@/components/Modals/BudgetHandleMinusModal'
 
 export default {
-  name: 'event-budget-vendors',
+  name: 'event-building-blocks',
   components: {
     LabelEdit,
     EventActualCostIconTooltip,
     Modal,
-    draggable,
-    BudgetHandleMinusModal,
-    Multiselect
+    draggable
   },
   props: {
     event: {
@@ -331,9 +305,7 @@ export default {
       category: '',
       name: '',
       budget: ''
-    },
-    showMinusHandleModal: false,
-    overAddedValue: 0
+    }
   }),
   computed: {
     ...mapGetters({
@@ -391,6 +363,9 @@ export default {
       }).then(result => {
         if (result.value) {
           this.isLoading = true
+
+         
+
           selectedBlock
             .for(calendar, event)
             .delete()
@@ -430,7 +405,7 @@ export default {
       this.allocatedBudget = this.event.components.reduce((s,item)=>{
         return s + item.allocatedBudget
       }, 0)
-      this.remainingBudget = Math.round((this.event.totalBudget - this.allocatedBudget) / 10) * 10;
+      this.remainingBudget = this.event.totalBudget - this.allocatedBudget;
     },
     /**
      * Get Event building blocks
@@ -446,7 +421,6 @@ export default {
       vm.totalBudgetTaxes = 0
 
       let res = this.event.components
-      
       this.$set(this, 'eventBuildingBlocks', res)
 
       setTimeout(() => {
@@ -562,11 +536,7 @@ export default {
           })
 
           this.allocatedBudget = allocatedBudget
-          if (this.event.totalBudget < this.allocatedBudget) {
-            console.log(this.totalBudget);
-            this.showMinusHandleModal = true;
-            this.overAddedValue = this.allocatedBudget - this.event.totalBudget;
-          }
+
           this.showEditElementBudget(block)
           this.$emit("change")
         })
@@ -740,7 +710,7 @@ export default {
       }
     },
 
-    async addBuildingBlock () {
+    addBuildingBlock () {
       // Save event interaction
       console.log(this.event);
       let event = new CalendarEvent({ id: this.event.id })
@@ -750,27 +720,15 @@ export default {
         return;
       }
 
-      //let newComponent = _.findWhere(this.components, {title: this.newBuildingBlock.category})
-      let newComponent = this.newBuildingBlock.category;
-      if ( newComponent.id === 'other') {
-        const newCategory = {
-          title: `Other-${this.newBuildingBlock.name}`,
-          key: `other-${this.newBuildingBlock.name.toLowerCase()}`,
-          color: `rgb(${parseInt(Math.random() * 255)}, ${parseInt(Math.random() * 255)}, ${parseInt(Math.random() * 255)})`,
-          icon: `other.svg`,
-          type: "customized",
-          categoryId: 'other'
-        }
-        newComponent = await new EventCategory(newCategory).save()
-      }
       let newBlock = {
-        componentId: newComponent?newComponent.key:"other",
-        componentCategoryId: newComponent?newComponent.key:"other",
+        componentId:
+          _.findWhere(this.components, {title: this.newBuildingBlock.category}).key,
+        componentCategoryId:
+          _.findWhere(this.components, {title: this.newBuildingBlock.category}).key,
+        // componentCategoryId: this.newBuildingBlock.categoryId,
         calendarEvent: { id: event.id },
         allocatedBudget: this.newBuildingBlock.budget,
-        order: this.event.components.length,
-        icon: newComponent.icon,
-        category: newComponent
+        order: this.event.components.length
       }
       
       new EventComponent(newBlock)
@@ -788,76 +746,22 @@ export default {
       EventComponent.get()
         .then(res => {
           this.categoryBuildingBlocks = res
-          this.categoryBuildingBlocks.push({id:"other", title:"Other"})
           this.filteredEventBlocks = _.map(
             this.categoryBuildingBlocks,
             function (item) {
               return item.title
             }
           )
+          this.filteredEventBlocks.push('Other')
         })
         .catch(error => {
           console.log('Error ', error)
         })
-    },
-    addbudget() {
-      const arrow =`<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
-      const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
-      const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`
-        swal({
-        title: `<div class="text-left">${arrow}${budgetString}<div>Are Your Sure?</div>${description}</div>`,
-        showCancelButton: true,
-        confirmButtonClass: 'md-button md-success',
-        cancelButtonClass: 'md-button md-danger',
-        confirmButtonText: "Yes I'm sure",
-        cancelButtonText: 'No, take me back',
-        buttonsStyling: false
-      }).then(result => {
-        if (result.value) {
-          alert(result.value)
-        }
-      })
-    },
-    handleMinusBudget(selectedOption, value) {
-      const formattedValue =`${value}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      switch (selectedOption){
-        case "keep" :
-          this.showMinusHandleModal = false
-          break;
-        case "take" :
-          const unexpectedComponent = this.eventBuildingBlocks.findIndex(item => item.componentId === 'unexpected');
-          // if (unexpectedComponent) {
-          //   unexpectedComponent.allocatedBudget = unexpectedComponent.allocatedBudget
-          // }
-          this.eventBuildingBlocks[unexpectedComponent].newBudget = this.eventBuildingBlocks[unexpectedComponent].allocatedBudget - value;
-          this.editElementBudget( this.eventBuildingBlocks[unexpectedComponent])
-          break;
-        case "add" :
-          const budgetString = `<div class="font-size-40 font-regular color-red" style="margin-bottom:20px">+$${formattedValue}</div>`;
-          const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`
-          swal({
-            title: `<div class="text-left">${budgetString}<div>Would you like to add extra $${formattedValue} to your budget?</div>${description}</div>`,
-            showCancelButton: true,
-            confirmButtonClass: 'md-button md-success',
-            cancelButtonClass: 'md-button md-danger',
-            confirmButtonText: "Yes I'm sure",
-            cancelButtonText: 'No, take me back',
-            buttonsStyling: false
-          }).then(result => {
-            if (result.value) {
-              if (result.value) {
-                this.$emit("add", value)
-              } 
-            }
-          })
-          break;
-      }
-      this.showMinusHandleModal = false
     }
   },
   mounted () {
-    this.getEventBuildingBlocks()
     this.getRemainingBudget()
+    this.getEventBuildingBlocks()
     this.getCategoryBlocks()
     this.$on('refreshBuildingBlock', () => {
       this.getEventBuildingBlocks()
@@ -881,9 +785,6 @@ export default {
   filters: {
     withComma (amount) {
       return amount ? amount.toLocaleString() : 0
-    },
-    roundNumber (amount) {
-      return Math.round(amount / 10) * 10;
     }
   }
 }
@@ -978,13 +879,4 @@ export default {
 .cursor-pointer {
   cursor: pointer !important;
 }
-.expand {
-  img {
-    transform: rotate(-90deg);
-  }
-}
-.multiselect__tags {
-    border: solid 0.5px #bcbcbc;
-}
-
 </style>

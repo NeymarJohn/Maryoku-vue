@@ -37,7 +37,7 @@
 }
 
 .modal-container {
-  max-width: 900px;
+  max-width: 570px;
   margin: 0px auto;
   z-index: 999999;
   position: relative;
@@ -83,7 +83,7 @@
 .modal-header{
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: center;
   padding: 24px 24px 0;
   border-top-left-radius: .3rem;
   border-top-right-radius: .3rem;

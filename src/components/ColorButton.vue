@@ -1,5 +1,5 @@
 <template>
-  <div class="maryoku-component color-select-button">
+  <div class="color-select-button">
     <div class="color-select-button-mask" @click="toggleColorPane()" v-if="showColorPane"></div>
     <md-button
       class="md-just-icon"

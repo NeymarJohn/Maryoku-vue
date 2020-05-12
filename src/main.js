@@ -168,7 +168,6 @@ Vue.directive('click-outside', {
   stopProp(event) { event.stopPropagation() }
 })
 
-Vue.filter('withComma', function (value) { return value ? value.toLocaleString() : 0 })
 
 Vue.prototype.$iconURL = IconURL;
 
