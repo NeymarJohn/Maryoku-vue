@@ -53,7 +53,7 @@
                                 v-for="(image, imageIndex) in item.images"
                                 :key="imageIndex"
                             >
-                                <div class="image-section" :style="`background:url(http://static.maryoku.com/${image.url}) center center no-repeat`"></div>
+                                <div class="image-section" :style="`background:url(${image.url}) center center no-repeat`"></div>
 
                             </div>
                         </div>
