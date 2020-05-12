@@ -11,8 +11,12 @@
 }
 
 .modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
+  // display: table-cell;
+  // vertical-align: middle;
+  max-height: 100vh;
+  overflow: auto;
+  margin-top: 50vh;
+  transform: translateY(-50%);
 }
 
 .picture{
