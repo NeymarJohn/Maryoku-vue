@@ -5,14 +5,38 @@
       <div class="event-details-info d-flex justify-content-start">
         <div
           class="event-title d-flex justify-content-center align-center"
-          style="background : linear-gradient(rgba(0,0,0,0.48),rgba(0,0,0,0.48)),url(./static/img/logo.jpg) center center no-repeat"
+          :style="`background : linear-gradient(rgba(0,0,0,0.48),rgba(0,0,0,0.48)),url(${logger}) center center no-repeat`"
         >
           <div class="content">
-            <md-button class="md-default md-simple md-white edit-btn text-left">
-              Event's Concept
+            <router-link
+              :to="`/events/${event.id}/choose-concept`"
+              tag="md-button"
+              class="md-default md-simple md-white edit-btn text-left"
+              >Event's Concept
               <md-icon>keyboard_arrow_right</md-icon>
-            </md-button>
-            <h3>{{event.title}}</h3>
+            </router-link>
+            <popup v-if="event.concept">
+              <template slot="content">
+                <h3>{{conceptName}}</h3>
+              </template>
+              <template slot="popup">
+                <div class="popup-header"> 
+                  <img :src="`${$iconURL}Concept/Asset 491.svg`" width="30"/>
+                  Event's concept</div>
+                <div class="popup-body">
+                    {{event.concept.description}}
+                </div>
+                <div class="popup-footer">
+                  <router-link
+                    :to="`/events/${event.id}/choose-concept`"
+                    tag="md-button"
+                    class="edit-btn md-rose md-simple edit-btn"
+                  >Change Concept
+                  <md-icon>keyboard_arrow_right</md-icon>
+                  </router-link>
+                </div>
+              </template>
+            </popup>
           </div>
         </div>
         <div class="header-detail">
@@ -46,7 +70,7 @@
             </div>
             <div class="section-header">
               <img :src="`${iconsURL}flag-dark.svg`" />
- Event’s details
+              Event’s details
               <label class="header-tip">
                 <img :src="`${iconsURL}warning-circle-gray.svg`" />
                 Notice that the date has changed
@@ -625,6 +649,7 @@ import EditEventDetailModal from "@/components/Modals/EditEventDetailModal";
 import SideBar from "../../../components/SidebarPlugin/NewSideBar";
 import SidebarItem from "../../../components/SidebarPlugin/NewSidebarItem.vue";
 import TimeCounter from "./components/TimeCounter";
+import Popup from "../../../components/Popup"
 export default {
   name: "event-overview",
   components: {
@@ -641,7 +666,8 @@ export default {
     SidebarItem,
     CalendarEventStatistics,
     Modal,
-    TimeCounter
+    TimeCounter,
+    Popup
   },
   props: {
     // event: Object,
@@ -678,7 +704,9 @@ export default {
     showEditDetailModal: false,
     timeline: [],
     a : ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ','eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '],
-    b : ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety']
+    b : ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety'],
+    logger : "./static/img/logo.jpg",
+    conceptName : ""
   }),
   methods: {
     getTimelineItems() {
@@ -904,6 +932,15 @@ export default {
           .find(this.$route.params.id)
           .then(event => {
             this.event = event;
+            if (event.concept) {
+              if (event.concept.images && event.concept.images.length > 0) {
+                this.logger = "http://static.maryoku.com/" + this.event.concept.images[0].url
+              }
+              if (event.concept.name) {
+                this.conceptName = event.concept.name
+              }
+            }
+            
             console.log(this.event);
             this.getCalendarEventStatistics(event);
             this.getTimelineItems();

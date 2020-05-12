@@ -51,6 +51,11 @@
     }
   }
   .card-expense {
-    font-size: 20px;
+    font-size: 18px;
+  }
+  .expand {
+    img {
+      transform: rotate(-90deg);
+    }
   }
 }

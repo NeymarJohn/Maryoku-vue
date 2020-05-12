@@ -12,7 +12,7 @@
         <div class="edit-content" v-else>
           <div v-if="title=='Business Category'">
             <div class="droplist" v-if="!expanded">
-              <img class="inside-img" :src="selectedCategory.icon"/>
+              <img class="inside-img" :src="`${categoryIconUrl}${selectedCategory.icon}`"/>
               <input
                 readonly
                 class="default with-img"
@@ -23,7 +23,7 @@
             </div>
             <ul v-else>
               <li v-for="(category, cIndex) in categories" :key="cIndex" @click="updateCategory(category)">
-                <img :src="category.icon"/>
+                <img :src="`${categoryIconUrl}${category.icon}`"/>
                 {{category.name}}
               </li>
             </ul>
@@ -70,52 +70,65 @@ export default {
     expanded: false,
     selectedCategory: {
       name: 'Venue',
-      icon: 'http://static.maryoku.com/storage/icons/Vendor Signup/Asset 543.svg'
+      icon: 'Asset 543.svg'
     },
+    categoryIconUrl: 'http://static.maryoku.com/storage/icons/Budget Elements/', 
     categories: [
       {
-        name: 'Venue',
-        icon: 'http://static.maryoku.com/storage/icons/Vendor Signup/Asset 543.svg'
+        name: 'Venue Rental',
+        icon: 'rentals.svg'
       },
       {
-        name: 'Catering',
-        icon: 'http://static.maryoku.com/storage/icons/Vendor Signup/Group 1471 (2).svg'
+        name: 'Food & Catering',
+        icon: 'rentals.svg'
       },
       {
-        name: 'DJ',
-        icon: 'http://static.maryoku.com/storage/icons/Vendor Signup/Asset 543.svg'
+        name: 'Design and Decor',
+        icon: 'decor.svg'
       },
       {
-        name: 'Transportation',
-        icon: 'http://static.maryoku.com/storage/icons/Vendor Signup/Asset 543.svg'
+        name: 'Signage / Printing',
+        icon: 'rentals.svg'
       },
       {
-        name: 'Photographer',
-        icon: 'http://static.maryoku.com/storage/icons/Vendor Signup/Asset 543.svg'
+        name: 'Advertising and Promotion',
+        icon: 'advertising-promotion.svg'
       },
       {
-        name: 'Band',
-        icon: 'http://static.maryoku.com/storage/icons/Vendor Signup/Asset 543.svg'
+        name: 'AV / Staging',
+        icon: 'rentals.svg'
       },
       {
-        name: 'Decor & Lightning',
-        icon: 'http://static.maryoku.com/storage/icons/Vendor Signup/Asset 543.svg'
+        name: 'Swags',
+        icon: 'swags.svg'
       },
       {
-        name: 'Rentals',
-        icon: 'http://static.maryoku.com/storage/icons/Vendor Signup/Asset 543.svg'
+        name: 'Shipping',
+        icon: 'shipping.svg'
       },
       {
-        name: 'Favours & Gifts',
-        icon: 'http://static.maryoku.com/storage/icons/Vendor Signup/Asset 543.svg'
+        name: 'Transportation & Tour operator',
+        icon: 'transportation.svg'
       },
       {
-        name: 'Videographer',
-        icon: 'http://static.maryoku.com/storage/icons/Vendor Signup/Asset 543.svg'
+        name: 'Entertainment',
+        icon: 'entertainment.svg'
       },
       {
-        name: 'Flowers',
-        icon: 'http://static.maryoku.com/storage/icons/Vendor Signup/Asset 543.svg'
+        name: 'Administration',
+        icon: 'administration.svg'
+      },
+      {
+        name: 'Security',
+        icon: 'security.svg'
+      },
+      {
+        name: 'Technology',
+        icon: 'rentals.svg'
+      },
+      {
+        name: 'Videography and Photography',
+        icon: 'rentals.svg'
       },
     ]
   }),
@@ -225,6 +238,7 @@ export default {
         cursor: pointer;
         padding: 8px 24px;
         &.cancel {
+          color: #050505;
           font: 800 16px Manrope-Regular, sans-serif;
         }
         &.save {
