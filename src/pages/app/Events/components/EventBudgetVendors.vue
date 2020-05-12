@@ -5,7 +5,7 @@
         <tr>
           <th width="40%">Vendor</th>
           <th width="20%">Planned</th>
-          <th width="15%">Actual</th>
+          <th width="15%">Booked</th>
           <th width="15%">Status</th>
           <th></th>
         </tr>
@@ -37,10 +37,10 @@
                       $ {{block.allocatedBudget ? block.allocatedBudget : 0 | roundNumber | withComma}}
                   </template>
                   <template v-else-if="block.allocatedBudget && block.numberOfParticipants">
-                      $ {{block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed(-1).toString() : 0}}
+                      $ {{block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed().toString() : 0}}
                   </template>
                   <template v-else>
-                      $ {{block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(-1).toString() : 0}}
+                      $ {{block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed().toString() : 0}}
                   </template>
 
                   <md-button class="md-rose md-sm md-simple edit-btn" v-if="!block.editBudget" @click="showEditElementBudget(block)"> Edit </md-button>
@@ -77,6 +77,7 @@
                 </template>
                 <!-- v-if="block.downPaymentStatus==='accepted'" -->
                 <event-actual-cost-icon-tooltip :icon="'credit_card'" :item="block" :event="event" />
+                <span v-if="block.vendorsCount>0">{{block.bookedBudget | withComma}} </span>
               </td>
               <td class="status" width="15%">
                 <div>
@@ -116,7 +117,7 @@
             </tr>
             <tr class="item-actions">
               <td colspan="5" class="actions-list text-right">
-                <md-button class="md-rose md-simple" @click="reviewProposals(block)">Add My Vendor</md-button>
+                <md-button class="md-rose md-simple" @click="addMyVendor(block)">Add My Vendor</md-button>
                 <md-button class="md-rose md-simple" @click="deleteBlock(block)">Delete Category</md-button>
               </td>
             </tr>
@@ -248,6 +249,7 @@
       </template>
     </modal>
     <budget-handle-minus-modal v-if="showMinusHandleModal" :value="overAddedValue" @select="handleMinusBudget"></budget-handle-minus-modal>
+    <add-my-vendor-modal v-if="showAddMyVendor" :value="overAddedValue" @select="handleMinusBudget" @remindLater="showAddMyVendor=false" @updateVendor="updateVendor"></add-my-vendor-modal>
   </div>
 </template>
 
@@ -259,6 +261,10 @@ import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
 import EventComponent from '@/models/EventComponent'
 import EventCategory from '@/models/EventCategory'
+import EventComponentVendor from '@/models/EventComponentVendor'
+import EventComponentTodo from '@/models/EventComponentTodo'
+import EventComponentValue from '@/models/EventComponentValue'
+import Occasion from '@/models/Occasion'
 import {
   Modal,
   LabelEdit
@@ -274,7 +280,7 @@ import _ from 'underscore'
 
 import draggable from 'vuedraggable'
 import BudgetHandleMinusModal from '@/components/Modals/BudgetHandleMinusModal'
-
+import AddMyVendorModal from '@/components/Modals/AddMyVendorModal'
 export default {
   name: 'event-budget-vendors',
   components: {
@@ -283,7 +289,8 @@ export default {
     Modal,
     draggable,
     BudgetHandleMinusModal,
-    Multiselect
+    Multiselect,
+    AddMyVendorModal
   },
   props: {
     event: {
@@ -333,7 +340,9 @@ export default {
       budget: ''
     },
     showMinusHandleModal: false,
-    overAddedValue: 0
+    overAddedValue: 0,
+    showAddMyVendor:false,
+    selectedComponent:null
   }),
   computed: {
     ...mapGetters({
@@ -668,6 +677,10 @@ export default {
       // go to booking page
       this.$router.push(`/events/${this.event.id}/booking/${item.id}`)
     },
+    addMyVendor (item) {
+      this.selectedComponent = item
+      this.showAddMyVendor = true
+    },
     reviewProposals (item, winnerId = null) {
       window.currentPanel = this.$showPanel({
         component: ViewProposals,
@@ -853,6 +866,38 @@ export default {
           break;
       }
       this.showMinusHandleModal = false
+    },
+    updateVendor(myVendor){
+      console.log(myVendor);
+      console.log(this.calendar);
+      let calendar = new Calendar({
+            id: this.$auth.user.defaultCalendarId
+          })
+      let event = new CalendarEvent({ id: this.event.id })
+      let selectedBlock = new EventComponent({ id: this.selectedComponent.id })
+
+      // Add new Vendors
+      new EventComponentVendor(myVendor)
+        .save()
+        .then(newVendor => {
+          this.isLoading = false
+          
+          // Add new Vendors to component
+          const eventComponentVendor = {
+            vendorId: newVendor.item.id, 
+            cost: myVendor.cost, 
+            eventComponentInstance: this.selectedComponent,
+            rfpStatus: new Date().getTime() 
+          }
+          new EventComponentVendor(eventComponentVendor).for(calendar, event, selectedBlock).save()
+          .then(result => {
+            this.showAddMyVendor = false
+          })
+        })
+        .catch(error => {
+          console.log(error)
+          this.isLoading = false
+        })
     }
   },
   mounted () {
@@ -879,9 +924,6 @@ export default {
     }
   },
   filters: {
-    withComma (amount) {
-      return amount ? amount.toLocaleString() : 0
-    },
     roundNumber (amount) {
       return Math.round(amount / 10) * 10;
     }
