@@ -51,7 +51,7 @@
           </div>
         </div>
           <div class="sidebar-menu__item"  >
-              
+
               <div class="item-route" @click="goTo('/vendors-pool-new')">
                   <img :src="`${menuIconsURL}Asset 117.svg`" /> Vendors Pool
               </div>
@@ -59,7 +59,7 @@
       </div>
     </div>
     <div class="sidebar-wrapper" ref="sidebarScrollArea">
-      <md-list class="nav">
+      <md-list class="nav" v-if="event.id">
         <sidebar-item
           name="left-menu-events-list"
           class="left-menu-events-list"

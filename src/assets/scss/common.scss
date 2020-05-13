@@ -51,15 +51,15 @@
 }
 
 .font-size-16 {
-  font-size: 16px !important;
+  font-size: 16px;
 }
 
 .font-size-20 {
-  font-size: 20px !important;
+  font-size: 20px;
 }
 
 .font-size-30 {
-  font-size: 30px !important;
+  font-size: 30px;
 }
 .font-size-40 {
   font-size: 40px;
@@ -69,13 +69,6 @@
   color: #f51355;
 }
 
-.color-plus {
-  color: #167c3a !important;
-}
-
-.color-minus {
-  color:#9f0000 !important;
-}
 .color-black {
   color: #050505;
 }
@@ -136,43 +129,5 @@
           font-family: 'Manrope-ExtraBold',sans-serif;
           font-size: 16px;
       }
-  }
-}
-
-.normal-btn {
-  min-width: auto;
-  .md-ripple{
-      text-transform: none;
-      .md-button-content {
-          font-family: 'Manrope-ExtraBold',sans-serif;
-          font-size: 16px !important;
-      }
-  }
-}
-
-.edit-btn-1 {
-  margin: 0px !important;
-  min-width: auto;
-  .md-ripple{
-      padding: 7px 2px !important;
-      text-align: left;
-      justify-content: start;
-      text-transform: none;
-      .md-button-content {
-          font-family: 'Manrope-ExtraBold',sans-serif;
-          font-size: 16px;
-      }
-  }
-}
-.button-split {
-  display: inline-block;
-  padding: 0 5px;
-  &:after {
-    border-left: solid 2px #DBDBDB;
-    height: 1em;
-    content: " ";
-    position: absolute;
-    top: 1.5em;
-    padding: 14px;
   }
 }
