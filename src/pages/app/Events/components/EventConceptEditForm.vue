@@ -53,7 +53,7 @@
         </div>
         <md-button @click="tagExpanded = !tagExpanded" class="md-button md-red md-sm md-simple edit-btn md-theme-default" style="margin-top:20px !important">
           <span v-if="!tagExpanded">Show More <md-icon class="font-size-30">keyboard_arrow_right</md-icon></span>
-          <span v-else>Show less <md-icon class="font-size-30">keyboard_arrow_up</md-icon></span>
+          <span v-if="tagExpanded">Show Less <md-icon class="font-size-30">keyboard_arrow_up</md-icon></span>
         </md-button>
       </div>
       <div class="form-group" style="margin-top:50px">

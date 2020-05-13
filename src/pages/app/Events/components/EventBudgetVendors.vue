@@ -86,6 +86,7 @@
                   <md-icon
                     class="color-plus font-size-20"
                     v-if="block.bookedBudget <= block.allocatedBudget"
+                    style="margin-top: -0.2em;"
                   >add_circle_outline</md-icon>
                   <md-icon class="color-minus font-size-20" v-else>remove_circle_outline</md-icon>
                   <span
