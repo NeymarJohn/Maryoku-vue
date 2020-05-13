@@ -251,17 +251,21 @@
 }
 
 .event-blocks-table {
+
     .md-card {
         .md-card-content {
             padding-left: 0;
             padding-right: 0;
         }
+
         .md-list {
+
             .md-list-item {
+
                 &-button {
                     border-bottom : 2px solid rgba(0,0,0,0);
                     text-transform: capitalize;
-                    font-size : 20px;
+                    font-size : 17px;
                 }
                 &.active {
                     .md-list-item-button {
@@ -341,22 +345,17 @@
                 background-color: #ffffff;
             }
             th {
-                font-family: "Manrope-Regular";
-                font-weight: normal;
-                font-size: 16px;
+                font-size: 12px;
                 color: #050505;
                 padding : 0.5em 0 0.5em 1.7em;
-                &:last-child {
-                    padding-right: 1.2em;
-                }
             }
         }
 
         tbody {
 
             tr {
+
                 .planned {
-                    font-size: 20px;
                     .md-rose {
                         &.edit-budget {
                             min-width: auto;
@@ -431,20 +430,12 @@
 
                 }
 
-                &.unexpected {
-                    color : #24c796;
-                }
-                &.extra {
-                    color : #818080;
-                }
                 &.unused-budget {
                     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
                     background: #fff;
                     border-radius: 3px;
                     color : #0047cc;
-                    .event-block-element  {
-                        border-left-color: #0047cc;
-                    }
+
                     .title {
                         font-family: 'Manrope-Bold', sans-serif;
                         color : #0047cc;
@@ -561,7 +552,6 @@
 
                 &:last-child {
                     border-radius: 0 3px 3px 0;
-                    padding-right: 1.2em;
                 }
 
                 &.actions {
@@ -571,7 +561,7 @@
 
                 &.event-block-element  {
                     font-family: 'Manrope-Bold',sans-serif;
-                    font-size: 20px;
+                    font-size: 16px;
 
                     &:after {
                         width : 7px;
@@ -706,28 +696,15 @@
                     }
 
                     img {
-                        width: 28px;
-                        height: 28px;
+                        width : 28px;
                         margin-right : 0.6em;
                     }
 
-                    &.unexpected{
+                    &.unexpected {
                         border-left-color: #24c796 !important;
                         color : #24c796;
                         &:after {
                             background: #24c796;
-                        }
-                    }
-                    &.extra{
-                        color : #818080;
-                        &:after {
-                            background: #818080;
-                        }
-                    }
-                    &.unused-budget{
-                        color : #0047cc;
-                        &:after {
-                            background: #0047cc;
                         }
                     }
                 }
@@ -870,6 +847,27 @@
                     font-weight: bold;
                 }
             }
+            .actions-list {
+                padding-right : 2em;
+                padding-top: 2.8em;
+
+                .md-button {
+                    border-radius: 0;
+
+                    &:first-child {
+                        border-right : 1px solid #707070;
+                        margin-right: 2em;
+                        padding-right: 1.9em;
+                    }
+
+                    .md-ripple {
+                        padding : 0 !important;
+                        font-weight: bold;
+                        color : #000;
+                        text-transform: capitalize;
+                    }
+                }
+            }
         }
     }
 
@@ -896,28 +894,142 @@
 }
 
 
+.timeline-section {
+    position: relative;
+    padding: 0 0 0 18em;
+    font-family: 'Manrope-Regular',sans-serif;
 
+    .timeline-section-title {
+        font-size: 18px;
+        color: #050505;
+        padding: 3px 0 0;
+        margin-top: 2em;
+
+        img {
+            width : 20px;
+            margin-right : 0.6em;
+        }
+    }
+
+    .timeline-items-list {
+        margin-top:1em;
+        height: 100%;
+        &__item {
+            padding-bottom : 1em;
+            &:last-child {
+                height:100%;
+            }
+            .item-header {
+                position: relative;
+                text-align: center;
+                &:after,&:before {
+                    content : ' ';
+                    position: absolute;
+                    top : 19px;
+                    border : 0.5px solid #a0a0a0;
+                }
+                &:after {
+                    left : 0;
+                    width : 35%;
+                }
+                &:before {
+                    right: 50px;
+                    width: 31%;
+                }
+
+                .header-title {
+                    font-size: 14px;
+                    font-weight: 800;
+                    color: #a0a0a0;
+                    text-transform: capitalize;
+                }
+                .header-actions {
+                    position: absolute;
+                    right : -5px;
+                    top : 8px;
+
+                    .md-button {
+                        margin : 0;
+                        width : auto;
+                        height : auto;
+                        min-width: auto;
+                        .md-ripple {
+                            padding : 0 !important;
+                        }
+                    }
+                }
+            }
+            .time-line-edit {
+                max-width: 150px;
+                margin: auto;
+                .md-input {
+                    font-size: 14px;
+                    padding:0;
+                    padding-left:10px;
+                    margin:0;
+                    font-weight: 800;
+                    -webkit-text-fill-color:#a0a0a0 !important;
+                    color: #a0a0a0 !important;
+                    border:none;
+                }
+                .md-icon, .md-icon-button {
+                    display: none;
+
+                }
+                .md-datepicker {
+                    margin-left: -135px !important;
+                    opacity: 0;
+                    &:before, &:after {
+                        width: calc(100% - 0px);
+                        margin-left: 0;
+                        display: none;
+                    }
+                }
+                .md-field {
+                    margin: 0px;
+                    padding: 0;
+                }
+            }
+            .time-line-date {
+                max-width: 150px;
+                margin: auto;
+                padding: 8px;
+            }
+        }
+
+    }
+    .save-timeline {
+        margin : 1em auto 2em;
+        .md-ripple {
+            background: $rose;
+            text-transform: capitalize;
+            font-weight: 800;
+            font-family: 'Manrope-ExtraBold',sans-serif;
+        }
+    }
+    &.export-section {
+        padding : 0;
+        width: calc(100% + 74px);
+        margin-left: -74px;
+    }
+
+}
 
 .progress-sidebar {
     position: fixed;
     left: 80px;
     top : 0;
     bottom : 0;
-    // width : 460px;
+    width : 303px;
     background: #fff;
 
-    height: 100vh;
-    overflow-x:hidden;
-    overflow-y: auto;
     .summer-party {
-        width:460px;
         background: #fff;
         text-align: center;
-        // padding : 1.5em 0 0.6em;
-        padding: 35px 0px 40px;
+        padding : 1.5em 0 0.6em;
         position: absolute;
-        left: 0px;
-        right: 0px;
+        left: 0;
+        right: 7px;
         top: 0;
         z-index: 999999;
         box-shadow: 0 43px 41px 0 rgba(0, 0, 0, 0.16);
@@ -979,29 +1091,13 @@
             font-size: 13px;
             color: #a0a0a0;
         }
-        .my-notes {
-            position: absolute;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            top: 100%;
-            width:40%;
-            .md-button{
-                width: 100%;
-                border-radius: 25px;
-                font-family: "Manrope-ExtraBold";
-                text-transform: capitalize;
-                font-size: 16px;
-                background-color: #f51355 !important;
-            }
-        }
     }
 
     .event-elements {
-        //padding-top: 7.9em;
-        padding-top: 180px;
+        padding-top: 7.9em;
         height: 100%;
         overflow: auto;
-        width:460px;
+
 
         &__item {
             box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.12);
@@ -1078,6 +1174,25 @@
 }
 
 
+.timeline-lists-footer {
+    .footer-title {
+        font-size: 17px;
+        font-family: 'Manrope-ExtraBold',sans-serif;
+        color: #818080;
+    }
+
+    .back-to-top {
+        font-family: 'Manrope-ExtraBold',sans-serif;
+
+        .md-ripple {
+            font-weight: bold;
+            text-transform: capitalize;
+            font-size: 15px;
+            padding  : 0 !important;
+            color : #f51355 !important;
+        }
+    }
+}
 
 .dragdrop-timeline-header {
 
@@ -1134,23 +1249,14 @@
     justify-content: space-between;
     align-items: center;
     padding : 0 3em;
-    .md-back {
-        .md-ripple {
-          padding: 12px 0px !important;
-          .md-icon {
-              color: #000 !important;
-              font-size: 25px !important;
-          }
-        }
-        
-      }
+
     .md-button {
         .md-ripple {
             font-family: 'Manrope-ExtraBold',sans-serif;
             text-transform: capitalize;
-            font-size: 16px;
+            font-size: 15px;
             color : #050505 !important;
-            padding: 12px 40px;
+            padding: 12px 40px !important;
         }
 
         &.md-rose {
@@ -1192,12 +1298,7 @@
 
 
 .time-line-blocks{
-    .unused-budget {
-        color: #0047cc
-    }
-    .extra {
-        color : #818080;
-    }
+
     &_items {
         max-width: 334px;
         margin: 0 auto;
@@ -1225,8 +1326,7 @@
             .upload-section {
                 width : 100%;
                 display: flex;
-                min-height: 115px;
-                padding: 15px 20px;
+                height: 115px;
                 border-radius: 3px;
                 border: dashed 1px #f51355;
                 justify-content: center;
@@ -1284,7 +1384,7 @@
                     position : absolute;
                     left: 20px;
                     top: 48px;
-                    z-index: 9;
+                    z-index: 99999;
                     img {
                         width:  20px;
                     }
@@ -1406,9 +1506,6 @@
                         font-size: 16px;
                         font-weight: bold;
                         color: #050505;
-                        &.unused {
-                            color: #0047cc;
-                        }
                     }
                 }
             }
@@ -1441,9 +1538,13 @@
 
     .modal-footer {
         margin-top : 3em;
+
         .md-button {
-            padding: 0px;
+
             .md-ripple {
+                font-size: 14px;
+                font-family: 'Manrope-ExtraBold',sans-serif;
+                text-transform: capitalize;
                 width: 160px;
                 height: 44px;
             }
@@ -1625,14 +1726,17 @@
             position: relative;
 
             label {
+                font-size: 14px;
+                font-family: 'Manrope-ExtraBold',sans-serif;
+                color: #050505;
                 margin-bottom: 0.5em;
                 display: inline-block;
 
                 small {
-                    font-size: 14px;
+                    font-size: 12px;
                     font-weight: normal;
                     color: #050505;
-                    margin-left : 2em;
+                    margin-left : 0.7em;
                 }
             }
 
@@ -1688,8 +1792,8 @@
                 .input-icon {
                     position : absolute;
                     left: 20px;
-                    top: 80px;
-                    z-index: 9;
+                    top: 48px;
+                    z-index: 99999;
                     img {
                         width:  12px;
                     }
@@ -1699,7 +1803,7 @@
 
                     .form-control {
                         text-align: center;
-                        font-size: 50px;
+                        font-size: 16px;
                         height: 90px;
                     }
 
@@ -1750,6 +1854,9 @@
 
         h2 {
             margin : 0 0 0.4em 0;
+            font-size: 28px;
+            font-weight: 600;
+            color : #050505;
             text-transform: capitalize;
 
             &.black {
@@ -1788,7 +1895,7 @@
 
 .booking-section {
     position: relative;
-    padding: 0 0 0 460px;
+    padding: 0 0 0 18em;
     font-family: 'Manrope-Regular',sans-serif;
 
     .booking-header {
@@ -1844,7 +1951,7 @@
                 box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
                 border: solid 1px #f51355;
                 background-color: #ffffff;
-                font-size: 16px;
+                font-size: 14px;
                 font-family: 'Manrope-ExtraBold',sans-serif;
                 color: #f51355;
                 text-transform: initial;
@@ -3077,38 +3184,18 @@
 
 
 .swal2-popup {
-    padding: 60px !important;
-    border-radius: 3px !important;
-    .cross-line {
-        position: relative;
-        width: max-content;
-        &:before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background-color: #050500;
-            top: 50%;
 
-        }
-    }
-    #swal2-content {
-        text-align: center;
-    }
+    padding: 2em !important;
+    border-radius: 3px !important;
+
     .swal2-header {
         align-items: flex-start !important;
         .swal2-title {
             font-size: 28px !important;
             font-family: 'Manrope-ExtraBold',sans-serif;
-            font-weight: normal;
+            font-weight: 800;
             color: #050505;
             margin-bottom : 0.2em !important;
-            .description {
-                font-size: 16px;
-                font-family: "Manrope-Regular";
-                font-weight: normal;
-                color: #050505;
-            }
         }
     }
     #swal2-conselected-itemstent {
@@ -3455,7 +3542,9 @@
                 color: #050505;
             }
             h3 {
+                font-size: 39px;
                 margin: 0;
+
                 &.create-title {
                     color: $rose;
                     font-weight: bold;
@@ -3759,6 +3848,7 @@
 .create-concept-from {
     padding : 2em;
     width:100%;
+
     .form-title {
         font-size: 28px;
         font-family: 'Manrope-ExtraBold',sans-serif;
@@ -3769,34 +3859,34 @@
     .form-group {
         width: 70%;
         margin-bottom:1em;
-        font-size: 16px;
 
         label {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 800;
             color: #050505;
             font-family: 'Manrope-ExtraBold',sans-serif;
 
             small {
-                font-size: 14px;
+                font-size: 12px;
                 font-family: 'Manrope-Regular',sans-serif;
             }
         }
         p {
             margin : 0;
-            font-size: 14px;
+            font-size: 12px;
             color: #050505;
         }
         .form-control {
             border-radius: 3px;
             border: solid 1px #707070;
             height: 65px;
+            font-size: 14px;
             display: block;
             width:100%;
             background: none;
             padding: 1em 2em;
             margin-top: 1em;
-            font-size: 16px;
+
             &:focus {
                 border: solid 1px #050505;
             }
@@ -3807,43 +3897,26 @@
         }
     }
     .add-tags-field {
-        margin-top: 60px;
+
        .md-button {
 
        }
     }
     .tags-list {
         margin : 0 0 3em;
-        &-wrapper {
-            flex-flow: wrap;
 
-            height: 120px;
-            overflow: hidden;
-            width: 80%;
-            justify-content: space-between;
-            transition: height 0.5s;
-            &.expanded {
-                height: 180px;
-                max-height: max-content;
-                transition: height 0.5s;
-            }
-        }
         &__item {
             border-radius: 100px;
             border: solid 1px #a0a0a0;
-            font-size: 14px;
-            padding: 0.3em 0.9em;
-            margin: 1em 1em 1em 0;
+            font-size: 12px;
+            padding: 0.1em 0.9em;
+            margin-right: 1em;
             text-transform: capitalize;
 
             img {
                 width:15px;
                 margin-left : 0.5em;
                 cursor: pointer;
-            }
-            &.selected {
-                border: solid 1px #050505;
-                font-weight: 800;
             }
         }
     }
@@ -3855,16 +3928,13 @@
             height: 52px;
             box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
             border-radius: 50%;
-            margin-right:36px !important;
-            width: 52px;
-            height: 52px;
-            margin: 0 36px 0 0;
+            margin-right:2em;
         }
         &__add {
             border-radius: 50%;
             width: 52px;
             height: 52px;
-            margin: 0 36px 0 0;
+            margin: 0 2em 0 0;
 
             .md-ripple {
                 margin-right:1em;
@@ -3942,7 +4012,7 @@
             &:first-child {
                 top: 70px;
                 left: 30px;
-                z-index: 10;
+                z-index: 9999999;
                 .image-section {
                     width: calc(234px - 50px);
                     height: calc(234px - 50px);
@@ -3951,7 +4021,7 @@
             &:nth-child(2) {
                 top: 172px;
                 left: 168px;
-                z-index: 12;
+                z-index: 999999;
                 .image-section {
                     width: calc(320.8px - 50px);
                     height: calc(198px - 50px);
@@ -3960,7 +4030,7 @@
             &:nth-child(3) {
                 top: 69px;
                 left: 342px;
-                z-index: 11;
+                z-index: 99999;
                 .image-section {
                     width: calc(311px - 50px);
                     height: calc(236px - 50px);
@@ -3969,7 +4039,7 @@
             &:nth-child(4) {
                 top: 94px;
                 left: 583px;
-                z-index: 10;
+                z-index: 9999;
                 .image-section {
                     width: calc(242px - 50px);
                     height: calc(280px - 50px);

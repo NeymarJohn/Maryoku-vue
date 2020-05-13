@@ -74,7 +74,8 @@
         <p>
           You're the {{proposalRequest ? proposalRequest.bidderRank : '1' | numeral('Oo')}} catering & venue bidder
         </p>
-        <button class="yes" @click="goTo('/for-proposals')">
+
+        <button class="yes" @click="goTo(`/vendors/${vendor.id}/proposal-request/${proposalRequest.id}/form`)">
           Submit Proposal
         </button>
       </div>
@@ -344,6 +345,9 @@ export default {
     })
   },
   methods: {
+    goTo (router) {
+      this.$router.push(router)
+    },
     hideModal() {
       this.chooseDateModal = false
       this.notBiddingModal = false
@@ -365,9 +369,6 @@ export default {
     showSorryModal() {
       this.hideModal()
       this.sorryModal = true
-    },
-    goTo (router) {
-      this.$router.push(router)
     },
     getVendor () {
       Vendors.find(this.$route.params.vendorId).then(vendor => {

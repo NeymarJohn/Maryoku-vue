@@ -87,8 +87,7 @@
         :active="true"
         :isEdit="false"
         :step="1"
-      >
-      </editable-proposal-sub-item>
+      />
       <editable-proposal-sub-item
         :item="`Chairs`"
         :qty="1"
@@ -97,8 +96,7 @@
         :active="true"
         :isEdit="false"
         :step="1"
-      >
-      </editable-proposal-sub-item>
+      />
       <div class="tax-discount-wrapper">
         <div class="row">
           <div class="item-cont">
@@ -209,6 +207,7 @@
       subTitle: String,
       img: String,
       step: Number,
+      items: Array
     },
     data () {
       return {

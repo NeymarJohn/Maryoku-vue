@@ -1,14 +1,12 @@
 <template>
-    <div class="edit-event-details event-details-budget">
+    <div class="edit-event-details">
         <side-bar :event="calendarEvent">
         </side-bar>
         <!-- Event Header -->
         <div class="event-header d-flex justify-content-between">
             <div class="header-title">
-              <h3>
-                <img :src="`${this.$iconURL}budget+screen/SVG/Asset%2010.svg`" width="15">
-                Budget
-              </h3>
+                <h3><img :src="`${this.$iconURL}budget+screen/SVG/Asset%2010.svg`" width="15">
+                    Budget</h3>
             </div>
             <div class="header-actions">
                 <ul>
@@ -19,62 +17,42 @@
             </div>
         </div>
         <div class="md-layout justify-content-between">
-            <div class="md-layout-item md-size-55">
-                <div class="card-section card-overview">
+            <div class="md-layout-item md-size-60">
+                <div class="card-section">
                     <div class="section-header">
                         Overview
                     </div>
                     <div class="budget-list d-flex justify-content-between">
                         <div class="budget-list__item">
                             <div class="label-title">Budget</div>
-                            <div class="budget-value">${{statistics.total | withComma}}</div>
+                            <div class="budget-value">${{calendarEvent.totalBudget | withComma}}</div>
                             <md-button class="md-rose md-simple md-sm edit-budget" @click="showBudgetModal = true">Edit</md-button>
                         </div>
                         <div class="budget-list__item">
                             <div class="label-title">Allocated</div>
-                            <div class="budget-value">${{statistics.allocated | roundNumber | withComma}}</div>
-                            <div class="percent">{{ (( statistics.allocated ) * 100 / calendarEvent.totalBudget).toFixed(1)}}  %</div>
+                            <div class="budget-value">${{allocatedBudget | withComma}}</div>
+                            <div class="percent">{{ (( allocatedBudget ) * 100 / calendarEvent.totalBudget).toFixed(1)}}  %</div>
                         </div>
                         <div class="budget-list__item">
                             <div class="label-title">Booked</div>
-                            <div class="budget-value">${{statistics.booked | withComma}}</div>
-                            <div class="percent">{{ ((statistics.booked * 100) / calendarEvent.totalBudget).toFixed(1) }}%</div>
+                            <div class="budget-value">${{0 | withComma}}</div>
+                            <div class="percent">{{ ((0 * 100) / calendarEvent.totalBudget).toFixed(1) }}%</div>
                         </div>
                     </div>
                 </div>
-                <div class="card-section card-overview-saved text-center d-flex justify-center align-center">
-                    <span> So far you saved : </span>
-                    <img class="card-overview-saved-icon" src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+25.png" width="20"> 
-                    <span class="card-overview-saved-amount">$ 100</span>
+                <div class="card-section saved-budget text-center">
+                    So far you saved : <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+25.png"
+                                            width="15"> <b>$100</b>
                 </div>
             </div>
-            <div class="md-layout-item  md-size-45 card-actvity">
-                <div class="card-section card-activity">
-                  <div class="section-header">
-                      Activity
-                  </div>
-                  <div class="budget-list d-flex justify-content-between">
-                      <div class="text-left card-activity-content">
-                        <span class="card-activity-title">Great Job!</span>
-                        <div>
-                          You saved money on the catering deal!  Seems like you could use this extra money 
-                          and get a video photographer. 
-                        </div>
-                        <p class="text-bold-extra">
-                          Want to upgrade your event and get a fantastic clip?
-                        </p>
-                        <p class="card-activity-buttons">
-                          <md-button class="md-default md-maryoku md-simple md-theme-default"> No, Thanks</md-button>
-                          <md-button class="md-default md-red md-maryoku"> Get Video Proposals</md-button>
-                        </p>
-                    </div>
-                  </div>
+            <div class="md-layout-item  md-size-40">
+                <div class="card-section">
                 </div>
             </div>
         </div>
         <div class="md-layout justify-content-between">
             <div class="md-layout-item md-size-40">
-                <div class="card-section card-expense">
+                <div class="card-section">
                     <div class="section-header">
                         Expenses
                     </div>
@@ -86,19 +64,19 @@
                     </div>
                 </div>
             </div>
-            <div class="md-layout-item  md-size-60">
+            <div class="md-layout-item  md-size-60" style="padding-right: 30px;">
                 <div class="event-blocks-table">
                     <tabs
                         :tab-name="['<img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
                     >
                         <!-- here you can add your content for tab-content -->
                         <template slot="tab-pane-1">
-                            <event-budget-vendors :event.sync="event" :event-components="selectedComponents"
-                                                       type="total" @change="onChangeComponent" @add="onAddMoreBudget"></event-budget-vendors>
+                            <new-event-building-blocks :event.sync="event" :event-components="selectedComponents"
+                                                       type="total"></new-event-building-blocks>
                         </template>
                         <template slot="tab-pane-2">
-                            <event-budget-vendors :event.sync="event" :event-components="selectedComponents"
-                                                       type="perGuest" @change="onChangeComponent" @add="onAddMoreBudget"></event-budget-vendors>
+                            <new-event-building-blocks :event.sync="event" :event-components="selectedComponents"
+                                                       type="perGuest"></new-event-building-blocks>
                         </template>
                     </tabs>
                 </div>
@@ -124,7 +102,7 @@
                             <div class="input-icon">
                                 <img :src="`${iconsURL}budget-dark.svg`" width="20">
                             </div>
-                            <input type="text" class="form-control"  v-model="newBudget" placeholder="">
+                            <input type="number" class="form-control"  v-model="newBudget" placeholder="Type number here">
                         </div>
 
                         <div class="label-item label-success text-center" v-if="newBudget && newBudget > calendarEvent.totalBudget">
@@ -133,8 +111,10 @@
                             </h4>
                             <p>
                                 This budget is {{ 100 - parseInt( calendarEvent.totalBudget * 100 / newBudget)  }}% higher than average, your event is going to be wild!
+
                             </p>
                         </div>
+
                         <div class="label-item label-warning text-center" v-if="newBudget && newBudget < calendarEvent.totalBudget">
                             <p>
                                 <img :src="`${iconsURL}warning-circle-gray.svg`" width="20"> This budget is {{ 100 - parseInt( newBudget * 100 / calendarEvent.totalBudget)  }}% lower than average for this type of event
@@ -188,13 +168,13 @@
             </template>
             <template slot="body">
                 <div class="event-blocks-table edit-elements-budget-table">
-                    <tabs :tab-name="['<img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']">                        <!-- here you can add your content for tab-content -->
+                    <tabs
+                        :tab-name="['<img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+26.png\'> Total', ' <img src=\'http://static.maryoku.com/storage/icons/budget+screen/png/Asset+28.png\'> Per Guest']"
+                    >
+                        <!-- here you can add your content for tab-content -->
                         <template slot="tab-pane-1">
-                            <edit-event-blocks-budget 
-                              :event.sync="event" 
-                              :event-components="selectedComponents"
-                              type="total">
-                            </edit-event-blocks-budget>
+                            <edit-event-blocks-budget :event.sync="event" :event-components="selectedComponents"
+                                                       type="total"></edit-event-blocks-budget>
                         </template>
                         <template slot="tab-pane-2">
                             <edit-event-blocks-budget :event.sync="event" :event-components="selectedComponents"
@@ -213,7 +193,7 @@
                 </md-button>
             </template>
         </modal>
-        <BudgetHandleMinusModal value="50" v-if="showHandleMinus"></BudgetHandleMinusModal>
+
     </div>
 </template>
 
@@ -227,8 +207,6 @@ import {
 
 // import auth from '@/auth';
 import moment from 'moment'
-import swal from 'sweetalert2'
-
 import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
 import CalendarEventStatistics from '@/models/CalendarEventStatistics'
@@ -239,7 +217,7 @@ import {
   mapGetters
 } from 'vuex'
 
-import EventBudgetVendors from './components/EventBudgetVendors'
+import NewEventBuildingBlocks from './components/NewEventBuildingBlocks'
 import EditEventBlocksBudget from './components/EditEventBlocksBudget'
 
 // COMPONENTS
@@ -247,17 +225,16 @@ import UploadVendorsModal from '../Vendors/ImportVendors'
 
 import SideBar from '../../../components/SidebarPlugin/NewSideBar'
 import PieChartRound from './components/PieChartRound.vue'
-import BudgetHandleMinusModal from '../../../components/Modals/BudgetHandleMinusModal'
+
 export default {
   components: {
     Tabs,
-    EventBudgetVendors,
+    NewEventBuildingBlocks,
     UploadVendorsModal,
     SideBar,
     PieChartRound,
     Modal,
-    EditEventBlocksBudget,
-    BudgetHandleMinusModal
+    EditEventBlocksBudget
   },
 
   data () {
@@ -265,11 +242,6 @@ export default {
       // auth: auth,
       calendarEvent: {},
       selectedComponents: [],
-      statistics: {
-        total: 0,
-        allocated: 0,
-        booked: 0
-      },
       currentTab: 'blocks',
       eventId: null,
       percentage: 0,
@@ -290,8 +262,7 @@ export default {
       showBudgetModal: false,
       budgetConfirmationModal: false,
       newBudget: null,
-      editBudgetElementsModal: false,
-      showHandleMinus:false
+      editBudgetElementsModal: false
     }
   },
   created () {
@@ -343,12 +314,8 @@ export default {
           this.event = event
           this.eventId = event.id
           this.calendarEvent = event
-          if (event.totalBudget)
-            this.newBudget = (event.totalBudget + "").replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           new EventComponent().for(_calendar, event).get().then(components => {
             components.sort((a,b)=>a.order - b.order)
-            
-            console.log(components);
             this.event.components = components
             this.selectedComponents = components
             this.seriesData = components
@@ -382,6 +349,18 @@ export default {
       this.currentTab = null
     },
     openEventModal () {
+      // window.currentPanel = this.$showPanel({
+      //     component: EventSidePanel,
+      //     cssClass: 'md-layout-item md-size-40 transition36 ',
+      //     openOn: 'right',
+      //     disableBgClick: true,
+      //     props: {
+      //         modalSubmitTitle: 'Save',
+      //         editMode: true,
+      //         sourceEventData: this.event
+      //     }
+      // })
+
       this.setEventData(this.event)
       this.setEventModal({
         showModal: true
@@ -411,18 +390,13 @@ export default {
       new CalendarEventStatistics().for(calendar, event).get()
         .then(resp => {
           console.log(resp);
-          this.statistics = {
-            total: resp[0].totalBudget,
-            allocated: resp[0].totalAllocatedBudget,
-            booked: resp[0].totalBookedBudget,
-          }
           this.totalRemainingBudget = resp[0].totalBudget - resp[0].totalAllocatedBudget;// (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget // evt.totalBudget - resp[0].totalAllocatedBudget;
           this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants // evt.totalBudget - resp[0].totalAllocatedBudget;
           this.percentage = 100 - ((resp[0].totalAllocatedBudget / (evt.budgetPerPerson * evt.numberOfParticipants)) * 100).toFixed(2)
 
           this.budgetPerEmployee = evt.budgetPerPerson // this.totalRemainingBudget / evt.numberOfParticipants;
           this.allocatedBudget = resp[0].totalAllocatedBudget
-          this.event.statistics = this.statistics
+          this.event.statistics['allocatedBudget'] = this.allocatedBudget
         })
         .catch(error => {
           console.log(error)
@@ -433,59 +407,25 @@ export default {
     },
     updateBudget () {
       let _calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
-      let editedEvent = new CalendarEvent({id: this.event.id}).for(_calendar)
-      const newBudget = Number(this.newBudget.replace(/,/g, ""))
-      if (newBudget < this.calendarEvent.totalBudget) {
-        this.showBudgetModal = false;
-        const arrow =`<i data-v-a76b6a56="" style="color:#050505" class="md-icon md-icon-font md-theme-default">arrow_back</i>`;
-        const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
-        const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`
-         swal({
-          title: `<div class="text-left">${arrow}${budgetString}<div>Are Your Sure?</div>${description}</div>`,
-          showCancelButton: true,
-          confirmButtonClass: 'md-button md-success',
-          cancelButtonClass: 'md-button md-danger',
-          confirmButtonText: "Yes I'm sure",
-          cancelButtonText: 'No, take me back',
-          buttonsStyling: false
-        }).then(result => {
-          if (result.dismiss != "cancel") {
-            editedEvent.totalBudget = newBudget
-            editedEvent.reCalculate = true
+      let editedEvent = new CalendarEvent({id: this.event.id})
 
-            editedEvent.save()
-              .then(response => {
-                this.showBudgetModal = false
-                //this.getCalendarEventStatistics()
-                this.getEvent()
-              })
-              .catch((error) => {
-                console.log(error)
-              })
-          }
-        })
-      } else if (newBudget > this.calendarEvent.totalBudget) {
-          editedEvent.totalBudget = newBudget
-          editedEvent.reCalculate = false
-          editedEvent.save()
-            .then(response => {
-              this.showBudgetModal = false
-              //this.getCalendarEventStatistics()
-              this.getEvent()
-            })
-            .catch((error) => {
-              console.log(error)
-            })
-      } else {
+      editedEvent = this.event
+      editedEvent.totalBudget = this.newBudget
+
+      editedEvent.for(_calendar).save()
+      .then(response => {
         this.showBudgetModal = false
+        this.getCalendarEventStatistics()
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
+      if (this.newBudget < this.calendarEvent.totalBudget) {
+
+      } else {
+
       }
-    },
-    onChangeComponent (event) {
-      this.getEvent()
-    },
-    onAddMoreBudget (value) {
-      this.newBudget = `${this.event.totalBudget + value}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      this.updateBudget();
     }
   },
   computed: {
@@ -526,8 +466,7 @@ export default {
       return {
         data: this.seriesData
       }
-    },
-   
+    }
   },
   filters: {
     formatDate: function (date) {
@@ -541,30 +480,18 @@ export default {
     },
     withComma (amount) {
       return amount ? amount.toLocaleString() : 0
-    },
-    roundNumber(amount) {
-      return Math.round(amount / 10) * 10;
     }
   },
-  watch: {
-    newBudget: function(newValue) {
-      console.log("change", newValue);
-      const result = newValue.replace(/\D/g, "")
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      this.newBudget = result
-    }
-  }
+  watch: {}
 }
 </script>
 
-<style scoped lang="scss">
-    @import "../../styles/EventDetailsBudget.scss";
-    // .md-layout, .md-layout-item {
-    //     width: initial;
-    // }
+<style scoped>
+    .md-layout, .md-layout-item {
+        width: initial;
+    }
 
-    // .tab-content {
-    //     background-color: transparent !important;
-    // }
-    
+    .tab-content {
+        background-color: transparent !important;
+    }
 </style>

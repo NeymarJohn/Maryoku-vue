@@ -35,8 +35,6 @@ import { IconURL } from './globalVariables';
 
 require('vue-tour/dist/vue-tour.css')
 
-const VueScrollTo = require('vue-scrollto')
-
 // plugin setup
 Vue.use(VueRouter)
 Vue.use(DashboardPlugin)
@@ -46,7 +44,6 @@ Vue.use(VueGmaps, {
   key: process.env.GOOGLE_API_KEY || 'AIzaSyAelc-zmvKBlcW78yPFeW9xrbnrJaT-MfA',
   libraries: ['places']
 })
-Vue.use(VueScrollTo)
 
 // configure router
 const router = new VueRouter({
@@ -156,22 +153,6 @@ Vue.directive('select-all', {
     el.setSelectionRange(el.value.length, el.value.length)
   }
 })
-
-Vue.directive('click-outside', {
-  bind () {
-      this.event = event => this.vm.$emit(this.expression, event)
-      this.el.addEventListener('click', this.stopProp)
-      document.body.addEventListener('click', this.event)
-  },   
-  unbind() {
-    this.el.removeEventListener('click', this.stopProp)
-    document.body.removeEventListener('click', this.event)
-  },
-
-  stopProp(event) { event.stopPropagation() }
-})
-
-Vue.filter('withComma', function (value) { return value ? value.toLocaleString() : 0 })
 
 Vue.prototype.$iconURL = IconURL;
 

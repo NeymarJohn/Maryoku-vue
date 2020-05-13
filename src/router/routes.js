@@ -53,7 +53,7 @@ import publicRegister from '@/pages/app/SinginSingup/publicRegister.vue'
 import EventDetailsBudget from "@/pages/app/Events/EventDetailsBudget.vue"
 import EventDetailsTimeline from "@/pages/app/Events/EventDetailsTimeline.vue"
 import BookingEvent from "@/pages/app/Events/components/BookingEvent.vue"
-import EventConceptChoose from "@/pages/app/Events/components/EventConceptChoose.vue"
+import ChooseEventConcept from "@/pages/app/Events/components/ChooseEventConcept.vue"
 import EventProposalDetails from "@/pages/app/Events/components/EventProposalDetails.vue"
 import ExportTimeLine from "@/pages/app/Events/components/ExportTimeLine.vue"
 
@@ -79,10 +79,8 @@ import MarketPlace from '@/pages/app/MarketPlace/MarketPlace.vue'
 // New Vendor Pages
 import ForVendorLayout from '@/pages/Dashboard/Layout/ForVendorLayout.vue'
 import ForProposalsLayout from '@/pages/Dashboard/Layout/ForProposalsLayout.vue'
-import VendorSignupLayout from '@/pages/Dashboard/Layout/VendorSignupLayout.vue'
 import ForVendors from "@/pages/app/Vendors/ForVendors.vue"
 import ForProposals from "@/pages/app/Vendors/ForProposals.vue"
-import VendorSignup from "@/pages/app/Vendors/VendorSignup.vue"
 
 const SignInSignUp = () =>
   import('@/pages/Dashboard/Pages/SignInSignUp.vue')
@@ -230,7 +228,7 @@ let forProposals = {
   name: "ForProposals",
   children: [
     {
-      path: "/for-proposals",
+      path: '/vendors/:vendorId/proposal-request/:id/form',
       name: "ForProposals",
       component: ForProposals,
       meta: {
@@ -241,25 +239,6 @@ let forProposals = {
     },
   ]
 }
-
-let vendorSignup = {
-  path: "/",
-  component: VendorSignupLayout,
-  name: "VendorSignup",
-  children: [
-    {
-      path: "/vendor-signup",
-      name: "VendorSignup",
-      component: VendorSignup,
-      meta: {
-        auth: false,
-        title: 'Vendor Signup',
-        gtm: 'VendorSignup'
-      },
-    },
-  ]
-}
-
 
 let marketPlacePages = {
   path: '/',
@@ -659,8 +638,8 @@ let NewEventPages = {
   },
   {
       path: '/events/:id/choose-concept',
-      name: 'EventConceptChoose',
-      component: EventConceptChoose,
+      name: 'ChooseEventConcept',
+      component: ChooseEventConcept,
       meta: {
           title: 'Choose Concept',
           gtm: 'Choose Concept',
@@ -940,7 +919,6 @@ const routes = [
   SigninSignupPage,
   // forVendors,
   forProposals,
-  vendorSignup,
   NewEventPages
 ]
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout events-list">
+  <div class="md-layout">
     <!--<div class="md-layout-item md-size-100 text-right">
       <md-button class="button-event-creatig" @click="openEventModal()">Create New Event</md-button>
     </div>-->

@@ -80,10 +80,8 @@
     <div class="items-cont">
       <ul class="items-list">
         <li v-for="(item, index) in sortedData" :key="index">
-          <div class="d-flex">
-            <span :style="`background-color: ${item.color};`" class="icon"></span>
-            <span class="text">{{item.category}}</span>
-          </div>
+          <span :style="`background-color: ${item.color};`"></span>
+          {{item.category}}
         </li>
       </ul>
     </div>
@@ -269,16 +267,11 @@ export default {
     display: inline-block;
     padding: 5px 15px;
 
-    .icon {
-      min-width: 14px;
-      width: 14px;
-      height: 14px;
+    span {
+      width: 10px;
+      height: 10px;
       display: block;
-      border-radius: 50%;
-      display: inline-block;
-      margin: 4px 5px;
-    }
-    .text {
+      border-radius: 5px;
       display: inline-block;
     }
   }

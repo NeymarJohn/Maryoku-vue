@@ -1,4 +1,7 @@
-
+$yellow : #ffc001;
+$rose : #f51355;
+$green : #6ec37d;
+$baseColor : #5c2153;
 
 @font-face {
     font-family: 'Manrope-Bold';
@@ -34,65 +37,6 @@
     url('../fonts/cooperative/fonts/ttf/Cooperative-Regular.ttf')  format('truetype');
     font-style: normal;
     font-stretch: normal;
-}
-.font-regular {
-  font-family: "Manrope-Regular";
-}
-
-.font-bold-extra {
-  font-family: "Manrope-ExtraBold";
-}
-
-.font-bold {
-  font-family: "Manrope-Bold";
-}
-.font-size-14 {
-  font-size: 14px;
-}
-
-.font-size-16 {
-  font-size: 16px !important;
-}
-
-.font-size-20 {
-  font-size: 20px !important;
-}
-
-.font-size-30 {
-  font-size: 30px !important;
-}
-.font-size-40 {
-  font-size: 40px;
-}
-
-.color-red {
-  color: #f51355;
-}
-
-.color-plus {
-  color: #167c3a !important;
-}
-
-.color-minus {
-  color:#9f0000 !important;
-}
-.color-black {
-  color: #050505;
-}
-.mb-10 {
-  margin-bottom: 10px;
-}
-.mb-20 {
-  margin-bottom: 20px;
-}
-.mb-30 {
-  margin-bottom: 30px;
-}
-.mb-40 {
-  margin-bottom: 30px;
-}
-.mb-50 {
-  margin-bottom: 50px;
 }
 
 .md-radio {
@@ -137,45 +81,4 @@
           font-size: 16px;
       }
   }
-}
-
-.normal-btn {
-  min-width: auto;
-  .md-ripple{
-      text-transform: none;
-      .md-button-content {
-          font-family: 'Manrope-ExtraBold',sans-serif;
-          font-size: 16px !important;
-      }
-  }
-}
-
-.edit-btn-1 {
-  margin: 0px !important;
-  min-width: auto;
-  .md-ripple{
-      padding: 7px 2px !important;
-      text-align: left;
-      justify-content: start;
-      text-transform: none;
-      .md-button-content {
-          font-family: 'Manrope-ExtraBold',sans-serif;
-          font-size: 16px;
-      }
-  }
-}
-.button-split {
-  display: inline-block;
-  padding: 0 5px;
-  &:after {
-    border-left: solid 2px #DBDBDB;
-    height: 1em;
-    content: " ";
-    position: absolute;
-    top: 1.5em;
-    padding: 14px;
-  }
-}
-.lastDroppingCard {
-  padding-bottom: 300px;
 }

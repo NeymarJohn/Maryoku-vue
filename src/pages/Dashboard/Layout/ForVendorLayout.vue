@@ -30,7 +30,7 @@
       <p>
         We found you could fit perfectly for our event with your <strong>Venue & Catering</strong> services.
       </p>
-      <button type="submit" class="submit" @click="goTo('/for-proposals')">Submit Now</button>
+      <button type="submit" class="submit" @click="goTo(`/vendors/${$route.params.vendorId}/proposal-request/${$route.params.id}/form`)">Submit Now</button>
     </div>
     <router-view></router-view>
     <section class="footer-wrapper">
