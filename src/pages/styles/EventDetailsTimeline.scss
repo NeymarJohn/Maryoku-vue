@@ -1,0 +1,192 @@
+@import '../../assets/scss/md/variables';
+.event-details-timeline {
+  position: relative;
+  padding: 0 0 0 460px;
+  font-family: 'Manrope-Regular',sans-serif;
+
+  .event-page-header {
+    .md-back {
+      .md-ripple {
+        padding: 6px 0px !important;
+        .md-icon {
+            color: #000;
+            font-size: 30px
+        }
+      }
+      
+    }
+  }
+  .timeline-section-title {
+      font-size: 20px;
+      color: #050505;
+      padding: 3px 0 0;
+      margin-top: 2em;
+
+      img {
+          width : 20px;
+          margin-right : 0.6em;
+      }
+  }
+
+  .timeline-items-list {
+      margin-top:1em;
+      height: 100%;
+      &__item {
+          padding-bottom : 1em;
+          &:last-child {
+              height:100%;
+          }
+          .item-header {
+              position: relative;
+              text-align: center;
+              min-height: 30px;
+              &:before {
+                content : ' ';
+                position: absolute;
+                top : 16px;
+                border : 0.5px solid #a0a0a0;
+                left: 0px;
+                width: 100%;
+            }
+
+              .header-title {
+                  font-size: 14px;
+                  font-weight: 800;
+                  color: #a0a0a0;
+                  text-transform: capitalize;
+                  position: absolute;
+                  left: 50%;
+                  transform: translateX(-50%);
+                  
+              }
+              .header-actions {
+                  position: absolute;
+                  right : -5px;
+                  top : 5px;
+                  background-color: #f5f5f5;
+                  padding-left: 10px;
+                  .md-button {
+                      margin : 0;
+                      width : auto;
+                      height : auto;
+                      min-width: auto;
+                      .md-ripple {
+                          padding : 0 !important;
+                          .md-icon {
+                            font-size:22px !important;
+                          }
+                      }
+                  }
+              }
+          }
+          .time-line-edit {
+              max-width: 180px;
+              margin: auto;
+              background: #F5F5F5;
+              font-size: 16px;
+              font-family: "Manrope-ExtraBold";
+              .md-input {
+                  font-size: 14px;
+                  padding:0;
+                  padding-left:10px;
+                  margin:0;
+                  font-weight: 800;
+                  -webkit-text-fill-color:#a0a0a0 !important;
+                  color: #a0a0a0 !important;
+                  border:none;
+              }
+              .md-icon, .md-icon-button {
+                  display: none;
+
+              }
+              .md-datepicker {
+                  margin-left: -180px !important;
+                  opacity: 0;
+                  &:before, &:after {
+                      width: calc(100% - 0px);
+                      margin-left: 0;
+                      display: none;
+                  }
+              }
+              .md-field {
+                  margin: 0px;
+                  padding: 0;
+              }
+              
+          }
+          .time-line-date {
+              max-width: 150px;
+              margin: auto;
+              padding: 8px;
+          }
+          .selected-attachment {
+            padding: 5px 10px;
+          }
+      }
+
+      span.attachment-link {
+        border-radius: 18px;
+        border: solid 0.5px #B7B7B7;
+        font-size: 14px;
+        padding: 6px 16px;
+        margin-right: 10px;
+        margin-bottom: 5px;
+        cursor: pointer;
+        display: inline-block;
+        .attachment-name {
+            text-decoration: none;
+        }
+        .md-icon {
+            transform: rotate(-45deg);
+            font-size: 25px !important;
+            color: #818080;
+            margin-right:5px;
+        }
+    }
+  }
+  .save-timeline {
+      margin : 1em auto 2em;
+      .md-ripple {
+          background: $rose;
+          text-transform: capitalize;
+          font-weight: 800;
+          font-family: 'Manrope-ExtraBold',sans-serif;
+      }
+  }
+  &.export-section {
+      padding : 0;
+      width: calc(100% + 74px);
+      margin-left: -74px;
+  }
+
+  .event-timeline-save{
+    height: 128px;
+    float: right;
+    width: max-content;
+    margin: 20px 50px;
+  }
+
+.timeline-lists-footer {
+  .footer-title {
+      font-size: 20px;
+      font-family: 'Manrope-ExtraBold',sans-serif;
+      color: #818080;
+  }
+
+  .back-to-top {
+      font-family: 'Manrope-ExtraBold',sans-serif;
+      font-size: 20px !important;
+      text-transform: capitalize;
+      .md-icon {
+        font-size: 30px !important;
+      }
+      .md-ripple {
+          font-weight: bold;
+         
+          font-size: 20px;
+          padding  : 0 !important;
+          color : #f51355 !important;
+      }
+  }
+}
+}

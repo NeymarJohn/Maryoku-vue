@@ -105,6 +105,8 @@
             :title="`Category`"
             :placeholder="``"
             :style="`width: 100%`"
+            :img="`http://static.maryoku.com/storage/icons/NewSubmitPorposal/Component 36 (2).svg`"
+            :items="categories"
           />
           <input-proposal-sub-item
             :title="`Email`"
@@ -325,6 +327,14 @@ export default {
       proposalRequest: null,
       firstTime: false,
       suggest: false,
+      categories: [
+        'Equipment',
+        'Staffing',
+        'Services',
+        'Amenities',
+        'Accessibility',
+        'Inclusions',
+      ]
     }
   },
   created() {
@@ -1059,6 +1069,10 @@ export default {
       cursor: pointer;
       border: none;
       max-height: 44px;
+
+      &:hover {
+        color: #dddddd!important;
+      }
     }
   }
 </style>

@@ -1,46 +1,55 @@
 <template>
   <div class="progress-sidebar">
     <div class="summer-party">
-      <md-button class="md-default md-sm md-simple expand-sidebar">
-        <img :src="`${newTimeLineIconsURL}expand.svg`" />
-      </md-button>
-      <div class="title-label">
-        summer party
-        <small>checklist</small>
-      </div>
-      <div class="completion-progress">
-        <div class="progress-done"></div>
-      </div>
-      <div class="percentage">
-        <ul>
-          <li class="green-label">56%</li>
-          <li class>17 of 26</li>
-        </ul>
-      </div>
-      <div class="small-label">Things are warming up!</div>
-    </div>
-
-    <!-- Event Elements -->
-    <div class="event-elements">
-      <draggable :list="eventElements">
-        <div
-          class="event-elements__item"
-          @click="goToRoute(item,index)"
-          :class="isActiveRoute(item)"
-          v-for="(item,index) in eventElements"
-          :key="index"
-        >
-          <div class="item-title">
-            <img
-              v-if="item.status==='complete'"
-              src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg"
-              width="15"
-            />
-            <img :src="item.icon" v-if="isActiveRoute(item)" width="25"/>
-            {{item.title}}
-          </div>
+        <md-button class="md-default md-sm md-simple expand-sidebar">
+          <img :src="`${newTimeLineIconsURL}expand.svg`" />
+        </md-button>
+        <div class="title-label">
+          summer party
+          <small>checklist</small>
         </div>
-      </draggable>
+        <div class="completion-progress">
+          <div class="progress-done"></div>
+        </div>
+        <div class="percentage">
+          <ul>
+            <li class="green-label">56%</li>
+            <li class>17 of 26</li>
+          </ul>
+        </div>
+        <div class="small-label">Things are warming up!</div>
+        <div class="my-notes">
+          <md-button class="md-rose" >
+            <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin:0 3px"/>
+            My Notes
+            <md-icon style="font-size: 30px !important; margin-left: 5px;">keyboard_arrow_down</md-icon>
+          </md-button>
+        </div>
+        
+      </div>
+    <div class="progress-sidebar-content">
+      <!-- Event Elements -->
+      <div class="event-elements">
+        <draggable :list="eventElements">
+          <div
+            class="event-elements__item"
+            @click="goToRoute(item,index)"
+            :class="isActiveRoute(item)"
+            v-for="(item,index) in eventElements"
+            :key="index"
+          >
+            <div class="item-title">
+              <img
+                v-if="item.status==='complete'"
+                src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg"
+                width="15"
+              />
+              <img :src="item.icon" v-if="isActiveRoute(item)" width="25"/>
+              {{item.title}}
+            </div>
+          </div>
+        </draggable>
+      </div>
     </div>
   </div>
 </template>
@@ -139,25 +148,57 @@ export default {
       location.reload()
     },
     getEventBlocks () {
-      let vm = this
+      
+    },
+    generatedItems() {
+      const concept = {
+        title: 'Choose Concept',
+        status: 'not-complete',
+        route: 'choose-concept',
+        icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
+        progress: 0
+      };
+      const budget = {
+        title: 'Approve Budget',
+        status: 'not-complete',
+        route: 'edit/budget',
+        icon: 'http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2010.svg',
+        progress: 0
+      };
+      const timeline = {
+        title: 'Generate timeline',
+        status: 'current',
+        route: 'edit/timeline',
+        icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
+        progress: 0
+      };
+      const elements = [];
+      if (this.event.eventType.hasConcept) {
+        elements.push(concept);
+      }
+      elements.push(budget);
+      elements.push(timeline);
 
       let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
       let event = new CalendarEvent({ id: this.event.id })
 
+      const vm = this;
       new EventComponent()
         .for(calendar, event)
         .get()
         .then(resp => {
-          _.map(resp, function (item) {
-            vm.eventElements.push({
-              title: 'Book ' + item.title,
-              status: 'not-complete',
-              route: 'booking/' + item.id,
-              icon: `http://static.maryoku.com/storage/icons/Budget+Elements/${item.componentId}.svg`,
-            })
-
-            return item
-          })
+          resp.sort((a,b)=>a.order - b.order)
+          resp.forEach(item => {
+            if (item.componentId !== 'unexpected') {
+              elements.push({
+                title: 'Book ' + item.title,
+                status: 'not-complete',
+                route: 'booking/' + item.id,
+                icon: `http://static.maryoku.com/storage/icons/Budget+Elements/${item.componentId}.svg`,
+              })
+            }
+          }) 
+          vm.eventElements = elements;
         })
     }
   },
@@ -172,7 +213,8 @@ export default {
           .find(this.$route.params.id)
           .then(event => {
             this.event = event
-
+            console.log("this evetn", this.event);
+            this.generatedItems()
             this.getEventBlocks()
 
             console.log(event)

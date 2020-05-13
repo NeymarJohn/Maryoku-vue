@@ -481,7 +481,7 @@
         Modal
     } from '@/components'
 
-    import NewEventBuildingBlocks from './NewEventBuildingBlocks';
+    import EventBudgetVendors from './EventBudgetVendors';
     import EditEventBlocksBudget from './EditEventBlocksBudget';
     import EventComponentVendor from '@/models/EventComponentVendor'
     //COMPONENTS
@@ -493,7 +493,7 @@
     export default {
         components: {
             Tabs,
-            NewEventBuildingBlocks,
+            EventBudgetVendors,
             ChartComponent,
             ChartCard,
             SideBar,

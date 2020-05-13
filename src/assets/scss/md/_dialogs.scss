@@ -11,8 +11,12 @@
 }
 
 .modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
+  // display: table-cell;
+  // vertical-align: middle;
+  max-height: 100vh;
+  overflow: auto;
+  margin-top: 50vh;
+  transform: translateY(-50%);
 }
 
 .picture{
@@ -37,7 +41,7 @@
 }
 
 .modal-container {
-  max-width: 570px;
+  max-width: 900px;
   margin: 0px auto;
   z-index: 999999;
   position: relative;
@@ -83,7 +87,7 @@
 .modal-header{
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   padding: 24px 24px 0;
   border-top-left-radius: .3rem;
   border-top-right-radius: .3rem;
