@@ -27,11 +27,11 @@
         </div>
         <div class="md-layout-item md-size-50  form-group maryoku-field mb-30">
               <label class="font-size-16 font-bold-extra color-black">Phone</label>
-              <maryoku-input inputStyle="phone" v-model="editingVendor.vendorMainPhoneNumber"></maryoku-input>
+              <maryoku-input inputStyle="phone" type="phonenumber" v-model="editingVendor.vendorMainPhoneNumber"></maryoku-input>
         </div>
         <div class="md-layout-item md-size-100  form-group maryoku-field mb-30">
               <label class="font-size-16 font-bold-extra color-black">Email</label>
-              <maryoku-input inputStyle="email" v-model="editingVendor.vendorMainEmail"></maryoku-input>
+              <maryoku-input inputStyle="email" type="email" v-model="editingVendor.vendorMainEmail"></maryoku-input>
         </div>
         <div class="md-layout-item md-size-100  form-group maryoku-field">
           <label class="font-size-16 font-bold-extra color-black">Attach Proposal</label>
@@ -40,6 +40,9 @@
                 <md-icon>attachment</md-icon>
                 Choose file(10MB)
             </label>
+            Or
+            
+            <div style="color: #818080"> Drag your file here</div>
             <div>
               <span v-for="(file, index) in currentAttachments" :key="index" class="attachment-link">
                 {{ file.name}}
@@ -64,8 +67,8 @@
       </div>
     </template>
     <template slot="footer">
-      <md-button class="md-default md-simple cancel-btn md-bold" @click="remindLater">Remind Me Later</md-button>
-      <md-button class="md-red add-category-btn" @click="updateMyVendor">Update Vendor</md-button>
+      <md-button class="md-button md-black  md-simple md-theme-default " @click="remindLater">Remind Me Later</md-button>
+      <md-button class="md-red  md-bold add-category-btn" @click="updateMyVendor">Update Vendor</md-button>
     </template>
   </modal>
 </template>
