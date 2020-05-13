@@ -414,7 +414,7 @@ export default {
           this.statistics = {
             total: resp[0].totalBudget,
             allocated: resp[0].totalAllocatedBudget,
-            booked: 0
+            booked: resp[0].totalBookedBudget,
           }
           this.totalRemainingBudget = resp[0].totalBudget - resp[0].totalAllocatedBudget;// (evt.budgetPerPerson * evt.numberOfParticipants) - resp[0].totalAllocatedBudget // evt.totalBudget - resp[0].totalAllocatedBudget;
           this.remainingBudgetPerEmployee = this.totalRemainingBudget / evt.numberOfParticipants // evt.totalBudget - resp[0].totalAllocatedBudget;
@@ -422,7 +422,7 @@ export default {
 
           this.budgetPerEmployee = evt.budgetPerPerson // this.totalRemainingBudget / evt.numberOfParticipants;
           this.allocatedBudget = resp[0].totalAllocatedBudget
-          this.event.statistics['allocatedBudget'] = this.allocatedBudget
+          this.event.statistics = this.statistics
         })
         .catch(error => {
           console.log(error)
