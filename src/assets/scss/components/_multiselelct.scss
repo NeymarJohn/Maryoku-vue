@@ -77,6 +77,9 @@
     padding-top: 6px;
   }
   &__option {
+    span {
+      text-transform: capitalize;
+    }
     &:after {
       display: none;
     }

@@ -51,8 +51,13 @@ export default {
     }
   },
   watch: {
-    content: function() {
+    content: function(newValue) {
       this.inputClass = `${this.inputStyle} ${this.value?"active":""}`
+      if (this.inputStyle === 'budget') {
+        const result = newValue.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        this.content = result
+      }
+      
     }
   }
 };
