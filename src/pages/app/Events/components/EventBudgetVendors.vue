@@ -91,7 +91,13 @@
                   <md-icon class="color-minus font-size-20" v-else>remove_circle_outline</md-icon>
                   <span
                     :class="block.bookedBudget <= block.allocatedBudget?'color-plus':'color-minus'"
-                  >$ {{block.bookedBudget | withComma}}</span>
+                  >
+                  
+                  <template v-if="type==='total'">
+                    $ {{block.bookedBudget ? block.bookedBudget : 0 | roundNumber | withComma}}</template>
+                  <template v-else>$ 
+                    {{block.bookedBudget ? (block.bookedBudget / event.numberOfParticipants).toFixed().toString() : 0}}</template>
+                  </span>
                 </span>
               </td>
               <td class="status" width="15%">
