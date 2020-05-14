@@ -2,7 +2,7 @@
   <div class="event-component-vedor-item">
     <div class="vendor-title">{{vendor.vendor.vendorDisplayName}}</div>
     <div class="vendor-actions">
-      <md-button class="md-button md-red  md-simple md-theme-default edit-btn-1">View Contract</md-button>
+      <md-button class="md-button md-red  md-simple md-theme-default edit-btn-1" @click="viewContract(vendor)">View Contract</md-button>
       <div style="position:relative">
         <md-button class="md-button md-black  md-simple md-theme-default edit-btn-1">Request Changes</md-button>
         <span class="divider"></span>
@@ -17,6 +17,12 @@ export default {
   name:"event-component-vendor-item",
   props: {
     vendor :Object
+  },
+  methods: {
+    viewContract(vendor) {
+      console.log(vendor);
+      window.open(`http://static.maryoku.com/${vendor.attachments[0].url}`, "_blank");
+    },
   }
 }
 </script>

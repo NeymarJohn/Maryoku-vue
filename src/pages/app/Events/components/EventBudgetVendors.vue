@@ -967,6 +967,7 @@ export default {
       let event = new CalendarEvent({ id: this.event.id });
       let selectedBlock = new EventComponent({ id: this.selectedComponent.id });
 
+      myVendor.vendorCategory = this.selectedComponent.componentId
       if (myVendor.attachment) {
         let formData = new FormData();
         formData.append("file", myVendor.attachment);
@@ -982,11 +983,11 @@ export default {
             }
           }
         );
-        myVendor.attachment = {
+        myVendor.attachments = [{
           originalName: myVendor.attachment.name,
           url: result.data.upload.path,
           name: result.data.upload.name
-        };
+        }];
       }
 
       // Add new Vendors
@@ -1001,7 +1002,7 @@ export default {
             cost: myVendor.cost,
             eventComponentInstance: this.selectedComponent,
             rfpStatus: new Date().getTime(),
-            attachment: myVendor.attachment
+            attachments: myVendor.attachments
           };
           new EventComponentVendor(eventComponentVendor)
             .for(calendar, event, selectedBlock)
