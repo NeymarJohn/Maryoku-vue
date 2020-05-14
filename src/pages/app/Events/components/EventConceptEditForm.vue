@@ -116,8 +116,8 @@
               <label :for="`file-${indx}`" style="cursor:pointer">
                 <img :src="`${$iconURL}Concept/Asset 488.svg`" style="width:24px" />
                 <br />
-                <div>
-                  <img :src="`${$iconURL}Concept/Asset 492.svg`" style="width:16px" /> Add Photo
+                <div style="margin-top:5px">
+                  <img :src="`${$iconURL}Concept/image-dark.svg`" style="width:16px" /> Add Photo
                 </div>
               </label>
               <input

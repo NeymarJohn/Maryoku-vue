@@ -1,19 +1,25 @@
 .md-checkbox{
   .md-checkbox-container{
+    width: 27px;
+    height: 27px;
     border: 1px solid rgba(0, 0, 0, .54);
     border-radius: 3px;
-
+    box-sizing: border-box;
     .md-ripple{
       overflow: hidden;
     }
   }
 
   &.md-checked .md-checkbox-container{
+    border: 3px solid #fc1355 !important;
     &:after{
       // border-color: $brand-primary !important;
+      border-width: 3px;
       border-color: #fc1355 !important;
-      top: 1px;
+      top: 2px;
       left: 6px;
+      width: 8px;
+      height: 13px;
     }
   }
 
