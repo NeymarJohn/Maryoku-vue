@@ -3,12 +3,15 @@
   background-repeat: no-repeat;
   background-size: 25px 50%;
   background-position: left;
-  background-position-x: 20px;
-  padding: 0px 50px;
+  padding: 0px 40px;
 }
 .maryoku_input {
+  padding: 5px;
+  padding-left: 20px;
+  border-radius: 3px;
+  border: solid 0.5px #bcbcbc;
   input {
-    min-height: 60px;
+    min-height: 50px;
     background: #ffffff;
     border:none;
     box-shadow: none;
@@ -17,9 +20,9 @@
     font-size: 15px;
     color: #050505;
     font-family: 'Manrope-Regular',sans-serif;
-    border: solid 0.5px #bcbcbc;
+   
     &.normal {
-      padding-left: 30px;
+      padding-left: 0px;
     }
     &.location {
       &.active {
@@ -45,9 +48,7 @@
       }
       @include background-icon(url('http://static.maryoku.com/storage/icons/Choose+vendor+and+Proposal/email-gray.svg'))
     }
-    &:focus{
-      border: solid 0.5px #050505;
-    }
+    
   }
 }
 
@@ -108,7 +109,6 @@
     border-radius: 50%;
     border: none;
     padding:0px;
-    cursor: pointer;
     i {
       color:white !important;
       font-size: 25px !important;

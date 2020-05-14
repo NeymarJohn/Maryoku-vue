@@ -80,25 +80,13 @@
         </span>
       </div>
       <editable-proposal-sub-item
-        :item="`Plateware`"
-        :qty="1"
-        :pricePerUnit="400"
-        :subtotal="400"
+        v-for="(req, rIndex) in proposalRequest.requirements" 
+        :key="rIndex"
+        :item="req"
         :active="true"
         :isEdit="false"
         :step="1"
-      >
-      </editable-proposal-sub-item>
-      <editable-proposal-sub-item
-        :item="`Chairs`"
-        :qty="1"
-        :pricePerUnit="400"
-        :subtotal="400"
-        :active="true"
-        :isEdit="false"
-        :step="1"
-      >
-      </editable-proposal-sub-item>
+      />
       <div class="tax-discount-wrapper">
         <div class="row">
           <div class="item-cont">
@@ -136,7 +124,7 @@
           Total
         </span>
         <span>
-          $800.00
+          ${{totalOffer}}
         </span>
       </div>
     </div>
@@ -209,6 +197,7 @@
       subTitle: String,
       img: String,
       step: Number,
+      proposalRequest: Object,
     },
     data () {
       return {
@@ -226,6 +215,23 @@
       this.isVCollapsed = this.isCollapsed
     },
     computed: {
+      totalOffer () {
+        let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
+        let vm = this
+
+        this.proposalRequest.requirements.map(function (item) {
+          if (item.price) {
+            if (item.priceUnit === 'total') {
+              total += parseFloat(item.price)
+            } else {
+              total +=
+                parseFloat(item.price) *
+                parseInt(vm.proposalRequest.eventData.numberOfParticipants)
+            }
+          }
+        })
+        return total
+      },
     },
     watch: {
     }

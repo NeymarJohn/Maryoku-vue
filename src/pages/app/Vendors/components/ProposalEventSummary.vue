@@ -33,7 +33,8 @@
             Dear Rachel,
           </h4>
           <p @mouseover="mouseOver()" @mouseleave="mouseLeave()">
-            Relish caters & venus is pleased to provide you with the attached catering proposal for you, which is currently scheduled to be held on at.
+            {{personalMessage}}
+            <!-- Relish caters & venus is pleased to provide you with the attached catering proposal for you, which is currently scheduled to be held on at. -->
             <br/><br/>
             Sincerely,<br/>
             <strong>Relish cateres & venues</strong>
@@ -174,6 +175,7 @@
       isEdit: Boolean,
       iconUrl: String,
       itemType: String,
+      personalMessage: String,
     },
     data () {
       return {

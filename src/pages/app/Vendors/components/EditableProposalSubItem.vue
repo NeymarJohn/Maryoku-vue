@@ -2,20 +2,20 @@
   <div class="editable-proposal-sub-item-wrapper" :class="[{'step-3': step == 3}]">
     <template v-if="step < 3">
       <div class="item-cont">
-        {{item}}
+        {{item.requirementTitle}}
       </div>
       <div class="qty-cont">
-        {{qty}}
+        {{item.priceUnit==='total' ? 1 : proposalRequest.eventData.numberOfParticipants}}
       </div>
       <div class="price-cont">
-        $ {{pricePerUnit | withComma}}
+        $ {{item.price | withComma}}
       </div>
       <div class="total-cont">
-        $ {{subtotal | withComma}}
+        $ {{item.price | withComma}}
       </div>
       <div class="action-cont">
-        <img class="edit" src="http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 585.svg"/>
-        <img class="trash" src="http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 586.svg"/>
+        <img class="edit" :src="`${iconUrl}Asset 585.svg`"/>
+        <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item.id)"/>
       </div>
     </template>
     <template v-else>
@@ -26,8 +26,8 @@
         <span>$ {{subtotal | withComma}}</span>
       </div>
       <div class="action-cont" v-if="isHover">
-        <img class="edit" src="http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 585.svg"/>
-        <img class="trash" src="http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 586.svg"/>
+        <img class="edit" :src="`${iconUrl}Asset 585.svg`"/>
+        <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item.id)"/>
       </div>
     </template>
   </div>
@@ -38,7 +38,7 @@
     components: {
     },
     props: {
-      item: String,
+      item: Object,
       qty: Number,
       pricePerUnit: Number,
       subtotal: Number,
@@ -49,9 +49,13 @@
     data () {
       return {
         isHover: false,
+        iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
       }
     },
     methods: {
+      removeRequirement(id) {
+        this.$root.$emit('remove-proposal-requirement', id)
+      }
     },
     created() {
 

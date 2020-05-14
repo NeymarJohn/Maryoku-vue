@@ -9,7 +9,7 @@
        :aria-expanded="!collapsed"
        data-toggle="collapse"
        @click.prevent="collapseMenu">
-      <md-icon class="font-size-30">{{link.icon}}</md-icon>
+      <md-icon>{{link.icon}}</md-icon>
       <p>
         {{link.name}}
         <b class="caret"></b>
@@ -35,12 +35,11 @@
         :target="link.target"
         :href="link.path">
         <template v-if="addLink">
-
-          <md-icon class="font-size-30" v-if="link.icon">{{link.icon}}</md-icon>
+          <md-icon v-if="link.icon">{{link.icon}}</md-icon>
           <span class="sidebar-mini" v-else>{{linkPrefix}}</span>
         </template>
         <template v-else>
-          <md-icon class="font-size-30" >{{link.icon}}</md-icon>
+          <md-icon>{{link.icon}}</md-icon>
         </template>
       </component>
     </slot>
@@ -180,5 +179,8 @@ export default {
 <style>
 .sidebar-menu-item {
   cursor: pointer;
+}
+.md-icon-font  {
+  font-size: 30px !important;
 }
 </style>

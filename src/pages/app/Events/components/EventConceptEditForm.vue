@@ -25,8 +25,8 @@
         />
         <div class="add-tags-actions text-right">
           <md-button class="md-red md-maryoku" @click="addTag">add Tag</md-button>
-        </div>-->
-        <!-- <multiselect
+        </div> -->
+        <multiselect
           v-model="selectedTag"
           :options="taggingOptions"
           :close-on-select="true"
@@ -35,26 +35,18 @@
           placeholder="Type to search or add tag"
           label="name"
           track-by="name"
-        ></multiselect>
+          >
+        </multiselect>
         <div class="add-tags-actions text-right">
           <md-button class="md-red md-maryoku" @click="addTag">add Tag</md-button>
-        </div> -->
-
+        </div> 
       </div>
-
-      <div class="tags-list" >
-        <div class="tags-list-wrapper d-flex justify-content-start" :class="{expanded:tagExpanded}">
-          <div class="tags-list__item" :class="{selected:tag.selected}" v-for="(tag, index) in taggingOptions" :key="index">
-            {{tag.name}}
-            <img v-if="tag.selected"  :src="`${$iconURL}Concept/Asset 489.svg`" @click="removeTag(tag, index)" />
-            <img v-else :src="`${$iconURL}Concept/plus-red.svg`" @click="addTag(tag,index)" />
-          </div>
-          <div style="flex-grow:1"></div>
+      
+      <div class="tags-list d-flex justify-content-start" v-if="editConcept.tags.length">
+        <div class="tags-list__item" v-for="(tag, index) in editConcept.tags" :key="index">
+          {{tag.name}}
+          <img :src="`${$iconURL}Concept/Asset 489.svg`" @click="removeTag(index)" />
         </div>
-        <md-button @click="tagExpanded = !tagExpanded" class="md-button md-red md-sm md-simple edit-btn md-theme-default" style="margin-top:20px !important">
-          <span v-if="!tagExpanded">Show More <md-icon class="font-size-30">keyboard_arrow_right</md-icon></span>
-          <span v-if="tagExpanded">Show Less <md-icon class="font-size-30">keyboard_arrow_up</md-icon></span>
-        </md-button>
       </div>
       <div class="form-group" style="margin-top:50px">
         <label>Tell us more</label>
@@ -135,35 +127,13 @@
   </div>
 </template>                    
 <script>
-import Multiselect from "vue-multiselect";
+import Multiselect from 'vue-multiselect'
 
-import Calendar from "@/models/Calendar";
-import CalendarEvent from "@/models/CalendarEvent";
-import EventComponent from "@/models/EventComponent";
-import EventConcept from "@/models/EventConcept";
+import Calendar from '@/models/Calendar'
+import CalendarEvent from '@/models/CalendarEvent'
+import EventComponent from '@/models/EventComponent'
+import EventConcept from '@/models/EventConcept'
 import ColorButton from "@/components/ColorButton";
-
-const tags = [
-  { name: "festive", selected:false},
-  { name: "formal", selected:false},
-  { name: "competitive", selected:false},
-  { name: "fun", selected:false},
-  { name: "social/green", selected:false},
-  { name: "conservative", selected:false},
-  { name: "styled", selected:false},
-  { name: "trendy", selected:false},
-  { name: "authentic", selected:false},
-  { name: "elegant", selected:false},
-  { name: "casual", selected:false},
-  { name: "innovative", selected:false},
-  { name: "laid back", selected:false},
-  { name: "classy", selected:false},
-  { name: "luxurious", selected:false},
-  { name: "productive", selected:false},
-  { name: "relaxed", selected:false},
-  { name: "cultural", selected:false},
-  { name: "inclusive", selected:false }
-];
 
 const initialConcept = {
   name: "",
@@ -176,7 +146,7 @@ const initialConcept = {
     { value: "" }
   ],
   images: []
-};
+}
 export default {
   name: "event-concept-edit-form",
   components: {
@@ -187,22 +157,16 @@ export default {
     defaultConcept: [Object]
   },
   data: () => ({
-    isLoading: false,
-    tagExpanded:false,
-    editConcept: this.defaultStatus ? this.defaultConcept : initialConcept,
-    newTag: "",
-    uploadImages: {},
-    selectedTag: {},
+    isLoading:false,
+    editConcept: this.defaultStatus?this.defaultConcept : initialConcept,
+    newTag: '',
+    uploadImages:{},
+    selectedTag:{},
     addedTags: [],
-    taggingOptions: tags,
-    uploadImageData: {
-      0: "",
-      1: "",
-      2: "",
-      3: "",
-      4: "",
-      5: ""
-    }
+    taggingOptions: [{name:'Tag1'}, {name:'Tag2'},{name:'Tag3'}],
+    uploadImageData:{
+        0:"", 1: "", 2: "", 3: "", 4: "", 5: "",
+    },
   }),
   methods: {
     // addTag() {
@@ -211,99 +175,98 @@ export default {
     //   }
     //   this.newTag = "";
     // },
-    addTag(newTag, tagIndex) {
-      this.editConcept.tags.push(newTag);
-      this.taggingOptions[tagIndex].selected = true
+    addTag (newTag) {
+      // const tag = {
+      //   name: newTag,
+      //   code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
+      // }
+      // this.taggingOptions.push(tag)
+      // this.taggingSelected.push(tag)
+      this.editConcept.tags.push(this.selectedTag)
+      const selectedIndex = this.taggingOptions.findIndex(item => item.name === this.selectedTag.name)
+      this.taggingOptions.splice(selectedIndex,1)
+      this.selectedTag = {}
     },
-    removeTag(tag, index) {
-      const selectedIndex = this.editConcept.tags.findIndex(
-        item => item.name === tag.name
-      );
-      this.taggingOptions[index].selected = false
-      this.editConcept.tags.splice(selectedIndex, 1);
+    removeTag(index) {
+      const tag = this.editConcept.tags[index]
+      this.editConcept.tags.splice(index, 1)
+      this.taggingOptions.push(tag);
     },
-    onFileChange(event) {
-      let files = event.target.files || event.dataTransfer.files;
-      if (!files.length) return;
-      let reader = new FileReader();
-      let vm = this;
+    onFileChange(event)  {
+      let files = event.target.files || event.dataTransfer.files
+      if (!files.length) return
+      let reader = new FileReader()
+      let vm = this
       if (event.target.name) {
-        const itemIndex = event.target.getAttribute("data-fileIndex");
-        let isLargeFile = false;
-        this.uploadImages[itemIndex] = files[0];
+        const itemIndex = event.target.getAttribute('data-fileIndex')
+        let isLargeFile = false
+        this.uploadImages[itemIndex] = files[0]
         this.uploadImageData[itemIndex] = URL.createObjectURL(files[0]);
         this.uploadImage = URL.createObjectURL(files[0]);
       }
     },
     async saveConcept() {
-      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+      let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
       let imageKeys = Object.keys(this.uploadImages);
       this.isLoading = true;
-      for (let i = 0; i < imageKeys.length; i++) {
-        const fileItem = this.uploadImages[imageKeys[i]];
-        let formData = new FormData();
-        formData.append("file", fileItem);
-        formData.append("from", "concept");
-        formData.append("type", "photo");
-        const result = await this.$http.post(
-          `${process.env.SERVER_URL}/uploadFile`,
-          formData,
+      for (let i = 0; i < imageKeys.length; i ++) {
+          const fileItem = this.uploadImages[imageKeys[i]];
+          let formData = new FormData();
+          formData.append('file', fileItem);
+          formData.append('from', 'concept')
+          formData.append('type', 'photo')
+          const result = await this.$http.post(`${process.env.SERVER_URL}/uploadFile`, formData ,
           {
-            headers: {
-              "Content-Type": "multipart/form-data"
-            }
+              headers: {
+                  'Content-Type': 'multipart/form-data'
+              }
           }
-        );
-        if (this.editConcept.images.length === 0) {
-          this.editConcept.images.push({
-            originalName: fileItem.name,
-            url: result.data.upload.path,
-            name: result.data.upload.name
-          });
-        } else {
-          this.editConcept.images[imageKeys[i] - 1] = {
-            originalName: fileItem.name,
-            url: result.data.upload.path,
-            name: result.data.upload.name
-          };
-        }
+          );
+          if ( this.editConcept.images.length === 0 ) {
+            this.editConcept.images.push({originalName: fileItem.name, url: result.data.upload.path, name: result.data.upload.name})
+          } else {
+            this.editConcept.images[imageKeys[i] - 1] = {originalName: fileItem.name, url: result.data.upload.path, name: result.data.upload.name}
+          }
       }
 
       // this.editConcept.tags = this.addedTags
 
       // this.editConcept.images = this.uploadImages;
-      const res = await new EventConcept(this.editConcept).save();
+      const res = await new EventConcept(this.editConcept).save()
       this.isLoading = false;
       console.log("response", res);
-      this.$emit("saved", res);
-      // .then(res => {
-      //     console.log(res);
-      //     this.isLoading = false
-      //     res.images.forEach((item,i)=>{
-      //         res.images[i].url = 'http://static.maryoku.com/' + res.images[i].url
-      //     })
-      //     this.editConcept = res
-      // })
-      // .catch(error => {
-      //   this.isLoading = false;
-      //   console.log(error)
-      // })
+      this.$emit("saved", res)
+        // .then(res => {
+        //     console.log(res);
+        //     this.isLoading = false
+        //     res.images.forEach((item,i)=>{
+        //         res.images[i].url = 'http://static.maryoku.com/' + res.images[i].url
+        //     })
+        //     this.editConcept = res
+        // })
+        // .catch(error => {
+        //   this.isLoading = false;
+        //   console.log(error)
+        // })
     }
   },
-  created() {
+  created () {
     if (this.defaultConcept) {
-      this.editConcept = this.defaultConcept;
-      this.editConcept.images.forEach((image, i) => {
-        uploadImageData[i] = image.url;
-      });
+      this.editConcept = this.defaultConcept
+      this.editConcept.images.forEach((image, i)=>{
+        uploadImageData[i] = image.url
+      })
+      this.taggingSelected = this.editConcept.tags;
     }
   },
-  mounted() {
-    this.taggingOptions.forEach((item, index) => {
-      if (this.editConcept.tags.findIndex(tag=>tag.name === item.name) >=0 ) {
-        this.taggingOptions[index].selected = true
-      }
-    })
+  mounted () {
+     if (this.defaultConcept) {
+      this.editConcept = this.defaultConcept
+      this.editConcept.images.forEach((image, i)=>{
+        this.uploadImageData[i + 1] = 'http://static.maryoku.com/' + image.url
+      })
+      this.taggingSelected = this.editConcept.tags;
+    }
   }
 };
 </script>

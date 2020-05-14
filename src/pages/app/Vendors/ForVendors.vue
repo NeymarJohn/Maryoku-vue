@@ -74,7 +74,8 @@
         <p>
           You're the {{proposalRequest ? proposalRequest.bidderRank : '1' | numeral('Oo')}} catering & venue bidder
         </p>
-        <button class="yes" @click="goTo('/for-proposals')">
+
+        <button class="yes" @click="goTo(`/vendors/${vendor.id}/proposal-request/${proposalRequest.id}/form`)">
           Submit Proposal
         </button>
       </div>
@@ -104,6 +105,8 @@
             :title="`Category`"
             :placeholder="``"
             :style="`width: 100%`"
+            :img="`http://static.maryoku.com/storage/icons/NewSubmitPorposal/Component 36 (2).svg`"
+            :items="categories"
           />
           <input-proposal-sub-item
             :title="`Email`"
@@ -324,6 +327,14 @@ export default {
       proposalRequest: null,
       firstTime: false,
       suggest: false,
+      categories: [
+        'Equipment',
+        'Staffing',
+        'Services',
+        'Amenities',
+        'Accessibility',
+        'Inclusions',
+      ]
     }
   },
   created() {
@@ -344,6 +355,9 @@ export default {
     })
   },
   methods: {
+    goTo (router) {
+      this.$router.push(router)
+    },
     hideModal() {
       this.chooseDateModal = false
       this.notBiddingModal = false
@@ -365,9 +379,6 @@ export default {
     showSorryModal() {
       this.hideModal()
       this.sorryModal = true
-    },
-    goTo (router) {
-      this.$router.push(router)
     },
     getVendor () {
       Vendors.find(this.$route.params.vendorId).then(vendor => {
@@ -1058,6 +1069,10 @@ export default {
       cursor: pointer;
       border: none;
       max-height: 44px;
+
+      &:hover {
+        color: #dddddd!important;
+      }
     }
   }
 </style>
