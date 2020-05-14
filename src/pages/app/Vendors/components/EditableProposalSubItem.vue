@@ -2,41 +2,20 @@
   <div class="editable-proposal-sub-item-wrapper" :class="[{'step-3': step == 3}]">
     <template v-if="step < 3">
       <div class="item-cont">
-        {{item.requirementTitle}}
+        {{item}}
       </div>
       <div class="qty-cont">
-        <template v-if="!isEdit">
-          {{item.priceUnit==='total' ? 1 : proposalRequest.eventData.numberOfParticipants}}
-        </template>
-        <template v-else>
-          <input class="input-value" type="number" style="max-width: 3rem"/>
-        </template>
+        {{qty}}
       </div>
       <div class="price-cont">
-        <template v-if="!isEdit">
-          $ {{item.price | withComma}}
-        </template>
-        <template v-else>
-          <input class="input-value" v-model="item.price" type="number" style="max-width: 6rem"/>
-        </template>
+        $ {{pricePerUnit | withComma}}
       </div>
       <div class="total-cont">
-        <template v-if="!isEdit">
-          $ {{item.price | withComma}}
-        </template>
-        <template v-else>
-          <input class="input-value" v-model="item.price" type="number" style="max-width: 6rem"/>
-        </template>
+        $ {{subtotal | withComma}}
       </div>
       <div class="action-cont">
-        <template v-if="!isEdit">
-          <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEdit=true"/>
-          <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item.id)"/>
-        </template>
-        <template v-else>
-          <a class="cancel" @click="cancel()">Cancel</a>
-          <a class="save" @click="save()">Save</a>
-        </template>
+        <img class="edit" src="http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 585.svg"/>
+        <img class="trash" src="http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 586.svg"/>
       </div>
     </template>
     <template v-else>
@@ -47,8 +26,8 @@
         <span>$ {{subtotal | withComma}}</span>
       </div>
       <div class="action-cont" v-if="isHover">
-        <img class="edit" :src="`${iconUrl}Asset 585.svg`"/>
-        <img class="trash" :src="`${iconUrl}Asset 586.svg`" @click="removeRequirement(item.id)"/>
+        <img class="edit" src="http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 585.svg"/>
+        <img class="trash" src="http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 586.svg"/>
       </div>
     </template>
   </div>
@@ -59,27 +38,20 @@
     components: {
     },
     props: {
-      item: Object,
+      item: String,
+      qty: Number,
+      pricePerUnit: Number,
+      subtotal: Number,
       active: Boolean,
+      isEdit: Boolean,
       step: Number,
     },
     data () {
       return {
         isHover: false,
-        isEdit: false,
-        iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
       }
     },
     methods: {
-      removeRequirement(id) {
-        this.$root.$emit('remove-proposal-requirement', id)
-      },
-      save() {
-        this.isEdit = false
-      },
-      cancel() {
-        this.isEdit = false
-      }
     },
     created() {
 
@@ -122,7 +94,7 @@
       }
       &.action-cont {
         text-align: right;
-        width: 20%;
+        width: 15%;
         .edit {
           width: 21px;
           margin-right: 31px;
@@ -165,29 +137,6 @@
         span {
           font-weight: normal;
         }
-      }
-    }
-    .input-value {
-      border: 1px solid #dddddd;
-      text-align: center;
-    }
-    a {
-      cursor: pointer;
-      padding: 8px 26px;
-
-      &.cancel {
-        font: 800 16px 'Manrope-Regular', sans-serif;
-        color: #050505;
-        background: transparent;
-      }
-      &.save {
-        font: 800 16px 'Manrope-Regular', sans-serif;
-        color: white;
-        background: #f51355;
-        border-radius: 3px;
-      }
-      &:hover {
-        color: #dddddd!important;
       }
     }
   }

@@ -35,6 +35,8 @@ import { IconURL } from './globalVariables';
 
 require('vue-tour/dist/vue-tour.css')
 
+const VueScrollTo = require('vue-scrollto')
+
 // plugin setup
 Vue.use(VueRouter)
 Vue.use(DashboardPlugin)
@@ -44,6 +46,7 @@ Vue.use(VueGmaps, {
   key: process.env.GOOGLE_API_KEY || 'AIzaSyAelc-zmvKBlcW78yPFeW9xrbnrJaT-MfA',
   libraries: ['places']
 })
+Vue.use(VueScrollTo)
 
 // configure router
 const router = new VueRouter({

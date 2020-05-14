@@ -8,15 +8,15 @@
       <div class="summary-cont">
         <ul>
           <li :class="[{'with-help': dateTooltip}]" @mouseover="dateTooltip=true" @mouseleave="dateTooltip=false">
-            <img :src="`${proposalIconsUrl}Path 251 (2).svg`"/> {{eventDate}} <img v-if="dateTooltip" class="question" :src="`${landingIconsUrl}Group 1175 (10).svg`">
+            <img :src="`${proposalIconsUrl}Path 251 (2).svg`"/> December 25, 2019 <img v-if="dateTooltip" class="question" :src="`${landingIconsUrl}Group 1175 (10).svg`">
             <div class="date-tooltip" v-if="dateTooltip">
               <h3>Your Time Suggestion</h3>
               <p>Client will get this proposal with <br/> your new suggested date</p>
             </div>
           </li>
-          <li><img :src="`${proposalIconsUrl}Group 6085 (2).svg`"/> {{eventTime}}</li>
-          <li><img :src="`${proposalIconsUrl}Asset 573.svg`"/> {{getLocation}}</li>
-          <li><img :src="`${proposalIconsUrl}Asset 572.svg`"/> {{proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' | withComma }} </li>
+          <li><img :src="`${proposalIconsUrl}Group 6085 (2).svg`"/> 10:00AM - 4:00PM</li>
+          <li><img :src="`${proposalIconsUrl}Asset 573.svg`"/> San Diego</li>
+          <li><img :src="`${proposalIconsUrl}Asset 572.svg`"/> 2,034 </li>
         </ul>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -104,22 +104,22 @@
         <div class="full-details-modal__body">
           <ul>
             <li>
-              <img :src="`${landingIconsUrl}Path 251.svg`"> <span><strong>Date:</strong> {{eventDate}}</span>
+              <img :src="`${landingIconsUrl}Path 251.svg`"> <span><strong>Date:</strong> December 25-26, 2019</span>
             </li>
             <li>
-              <img :src="`${landingIconsUrl}Group 6085.svg`"> <span><strong>Time:</strong> {{eventTime}}</span>
+              <img :src="`${landingIconsUrl}Group 6085.svg`"> <span><strong>Time:</strong> 10:00AM - 4:00PM</span>
             </li>
             <li>
-              <img :src="`${landingIconsUrl}Asset 506.svg`"> <span><strong>Address:</strong> {{getLocation}}</span>
+              <img :src="`${landingIconsUrl}Asset 506.svg`"> <span><strong>Address:</strong> Relish Caterers & Venues - 575 Mission St. San Francisco, CA 94105</span>
             </li>
             <li>
-              <img :src="`${landingIconsUrl}Asset 505.svg`"> <span><strong>Guests:</strong> {{proposalRequest ? proposalRequest.eventData.numberOfParticipants : '-' | withComma }}</span>
+              <img :src="`${landingIconsUrl}Asset 505.svg`"> <span><strong>Guests:</strong> {{ 2034 | withComma }}</span>
             </li>
             <li>
-              <img :src="`${landingIconsUrl}Path 1942.svg`"> <span><strong>Type:</strong> {{proposalRequest ? proposalRequest.eventData.occasion : '-'}}</span>
+              <img :src="`${landingIconsUrl}Path 1942.svg`"> <span><strong>Type:</strong> Establishment / Activity Day</span>
             </li>
             <li>
-              <img :src="`${landingIconsUrl}Path 1383.svg`"> <span><strong>Invited:</strong> {{proposalRequest ? proposalRequest.eventData.participantsType : '-'}}</span>
+              <img :src="`${landingIconsUrl}Path 1383.svg`"> <span><strong>Invited:</strong> Employees + Partners</span>
             </li>
           </ul>
         </div>
@@ -177,11 +177,8 @@
 </template>
 <script>
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex';
-  import moment from 'moment'
-  import Vendors from '@/models/Vendors'
-  import ProposalRequest from '@/models/ProposalRequest'
-  import Calendar from '@/models/Calendar'
-  import CalendarEvent from '@/models/CalendarEvent'
+  import Calendar from '@/models/Calendar';
+  import CalendarEvent from '@/models/CalendarEvent';
   import { Modal } from '@/components'
 
   import TopNavbar from "./TopNavbar.vue";
@@ -210,50 +207,9 @@
         step: 0,
         savedItModal: false,
         isTimeUp: false,
-        proposalRequestRequirements: [],
-        proposals: [],
-        proposalRequest: null,
       }
     },
     methods: {
-      getVendor () {
-        Vendors.find(this.$route.params.vendorId).then(vendor => {
-          this.vendor = vendor
-        })
-      },
-      getProposals (id) {
-        new Vendors({ id })
-          .proposalRequests()
-          .first()
-          .then(proposals => {
-            this.proposals = proposals.vendorProposals
-            this.firstTime = proposals.firstTime
-            console.log('vendorProposals', this.proposals)
-          })
-      },
-      getProposal (id) {
-        ProposalRequest.find(id)
-          .then(resp => {
-            console.log('ProposalRequest:', resp)
-            this.$set(this, 'proposalRequest', resp)
-            console.log(this.proposalRequest.eventData)
-
-            this.proposalRequestRequirements = _.chain(resp.requirements)
-              .groupBy('requirementPriority')
-              .map(function (value, key) {
-                return {
-                  title: key,
-                  requirements: value
-                }
-              })
-              .value()
-            
-            console.log('proposalRequestRequirements', this.proposalRequestRequirements)
-          })
-          .catch(error => {
-            console.log(' error ', error)
-          })
-      },
       hideModal() {
         this.fullDetailsModal = false
         this.savedItModal = false
@@ -285,21 +241,14 @@
       },
       scrollToTop() {
         window.scrollTo(0,0);
-      },
+      }
     },
     created(){
-      this.$root.$on('send-event-data', (evtData) => {
-        this.evtData = evtData
-        console.log(this.evtData)
-      })
     },
     mounted() {
       this.fullDetailsModal = false
       this.savedItModal = false
       this.isTimeUp = false
-
-      this.getVendor()
-      this.getProposal(this.$route.params.id)
     },
     filters: {
       withComma (amount) {
@@ -307,37 +256,6 @@
       }
     },
     computed:{
-      eventDate () {
-        if (!this.proposalRequest) return '-'
-
-        let startDate = new Date(this.proposalRequest.eventData.eventStartMillis)
-        let endDate = new Date(this.proposalRequest.eventData.eventEndMillis)
-        return `${moment(startDate).format('MMM D, YYYY')} - ${moment(endDate).format('MMM D, YYYY')}`
-      },
-      eventTime () {
-        if (!this.proposalRequest) return '-'
-
-        let startDate = new Date(this.proposalRequest.eventData.eventStartMillis)
-        let endDate = new Date(this.proposalRequest.eventData.eventEndMillis)
-        return `${moment(startDate).format('hh:mmA')} - ${moment(endDate).format('hh:mmA')}`
-      },
-      getEventDuration () {
-        return moment.duration(this.proposalRequest.eventData.eventEndMillis - this.proposalRequest.eventData.eventStartMillis).humanize()
-      },
-      getLocation () {
-        if (this.proposalRequest) {
-          return this.proposalRequest.eventData.location || '-'
-        } else {
-          return '-'
-        }
-      },
-      getServiceCategory () {
-        if (this.proposalRequest.requirementsCategory) {
-          return this.proposalRequest.requirementsCategory
-        } else {
-          return this.vendorCategory
-        }
-      }
     }
   };
 </script>

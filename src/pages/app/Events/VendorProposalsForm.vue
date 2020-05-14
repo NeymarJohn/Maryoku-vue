@@ -476,9 +476,9 @@
             <div class="md-layout">
               <div class="md-layout-item md-size-100">
                 <h4 class="title">About Us</h4>
-                <span class="text-gray">
-                  Let your clients know more about your business, what should they pick you? What makes your proposal unique?
-                </span>
+                <span
+                  class="text-gray"
+                >Let your clients know more about your business, what should they pick you? What makes your proposal unique?</span>
               </div>
               <div class="md-layout-item md-size-100">
                 <md-field>
@@ -486,7 +486,7 @@
                     rows="5"
                     v-model="proposalRequest.aboutUsMessage"
                     @blur="updateProposalRequest()"
-                  />
+                  ></md-textarea>
                 </md-field>
               </div>
             </div>
