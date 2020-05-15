@@ -26,7 +26,7 @@
           />
         </div>
       </div>
-      <div class="add-item-cont" v-if="clickedItem">
+      <div class="add-item-cont" v-if="step == 0 && clickedItem && !isVCollapsed">
         <div class="fields-cont">
           <div class="field">
             <span>Description</span>
@@ -84,6 +84,30 @@
           v-for="(s, sIndex) in services"
           :key="sIndex"
         />
+      </div>
+    </div>
+    <div class="add-item-cont" v-if="step == 2 && clickedItem">
+      <div class="fields-cont">
+        <div class="field">
+          <span>Description</span>
+          <input v-model="serviceItem" readonly class="description"/>
+        </div>
+        <div class="field">
+          <span>QTY</span>
+          <input v-model="qty" type="number" min="0" placeholder="" class="qty" @keyup="calculateSubTotal()" />
+        </div>
+        <div class="field">
+          <span>Price per unit</span>
+          <input v-model="unit" type="number" min="0" placeholder="" class="priceperunit" @keyup="calculateSubTotal()" />
+        </div>
+        <div class="field">
+          <span>Total</span>
+          <input v-model="subTotal" type="number" min="0" placeholder="" class="total"/>
+        </div>
+      </div>
+      <div class="action-cont">
+        <a class="cancel" @click="cancel()">Cancel</a>
+        <a class="save" @click="saveItem()">Add This</a>
       </div>
     </div>
     <div class="editable-sub-items-cont" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">
