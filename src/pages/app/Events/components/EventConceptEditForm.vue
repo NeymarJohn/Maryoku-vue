@@ -44,17 +44,11 @@
 
       <div class="tags-list" >
         <div class="tags-list-wrapper d-flex justify-content-start" :class="{expanded:tagExpanded}">
-          <template v-for="(tag, index) in taggingOptions" >
-            <div v-if="tag.selected"  class="tags-list__item" :class="{selected:tag.selected}" :key="index" @click="removeTag(tag, index)" >
-              {{tag.name}}
-              <img  :src="`${$iconURL}Concept/Asset 489.svg`"  />
-            </div>
-            <div v-else  class="tags-list__item" :class="{selected:tag.selected}" :key="index" @click="addTag(tag, index)" >
-              {{tag.name}}
-              <img  :src="`${$iconURL}Concept/plus-red.svg`" @click="addTag(tag,index)" />
-            </div>
-          </template>
-          
+          <div class="tags-list__item" :class="{selected:tag.selected}" v-for="(tag, index) in taggingOptions" :key="index">
+            {{tag.name}}
+            <img v-if="tag.selected"  :src="`${$iconURL}Concept/Asset 489.svg`" @click="removeTag(tag, index)" />
+            <img v-else :src="`${$iconURL}Concept/plus-red.svg`" @click="addTag(tag,index)" />
+          </div>
           <div style="flex-grow:1"></div>
         </div>
         <md-button @click="tagExpanded = !tagExpanded" class="md-button md-red md-sm md-simple edit-btn md-theme-default" style="margin-top:20px !important">
@@ -111,13 +105,13 @@
           <div :class="`images-list__item`" v-for="indx in 5" :key="indx">
             <div
               class="image-section d-flex justify-content-center align-center text-center"
-              :style="`background:url(${uploadImageData[indx-1]})`"
+              :style="`background:url(${uploadImageData[indx]})`"
             >
               <label :for="`file-${indx}`" style="cursor:pointer">
                 <img :src="`${$iconURL}Concept/Asset 488.svg`" style="width:24px" />
                 <br />
-                <div style="margin-top:5px">
-                  <img :src="`${$iconURL}Concept/image-dark.svg`" style="width:16px" /> Add Photo
+                <div>
+                  <img :src="`${$iconURL}Concept/Asset 492.svg`" style="width:16px" /> Add Photo
                 </div>
               </label>
               <input
@@ -126,7 +120,7 @@
                 name="attachment"
                 type="file"
                 multiple="multiple"
-                :data-fileIndex="indx-1"
+                :data-fileIndex="indx"
                 @change="onFileChange"
               />
             </div>
@@ -267,7 +261,7 @@ export default {
             name: result.data.upload.name
           });
         } else {
-          this.editConcept.images[imageKeys[i]] = {
+          this.editConcept.images[imageKeys[i] - 1] = {
             originalName: fileItem.name,
             url: result.data.upload.path,
             name: result.data.upload.name
@@ -300,7 +294,7 @@ export default {
     if (this.defaultConcept) {
       this.editConcept = this.defaultConcept;
       this.editConcept.images.forEach((image, i) => {
-        this.uploadImageData[i] = this.$resourceURL + image.url;
+        uploadImageData[i] = image.url;
       });
     }
   },
@@ -310,14 +304,6 @@ export default {
         this.taggingOptions[index].selected = true
       }
     })
-    // if (this.defaultConcept) {
-    //   this.editConcept = this.defaultConcept;
-    //   this.editConcept.images.forEach((image, i) => {
-    //     this.uploadImageData[i] = this.$resourceURL + image.url;
-        
-    //   });
-    //   console.log(this.uploadImageData);
-    // }
   }
 };
 </script>

@@ -230,7 +230,7 @@ let forProposals = {
   name: "ForProposals",
   children: [
     {
-      path: "/for-proposals",
+      path: '/vendors/:vendorId/proposal-request/:id/form',
       name: "ForProposals",
       component: ForProposals,
       meta: {

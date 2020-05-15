@@ -163,7 +163,7 @@
                     </div>
                     <div class="concept-details">
                         <div class="concept-name d-flex align-center text-transform-capitalize">
-                            <h3 :style="`font-family:${selectedConcept.selectedConcept?selectedConcept.selectedConcept:'Manrope-Regular'}`">{{selectedConcept.name}}</h3>
+                            <h3 :style="`font-family:${selectedConcept.selectedConcept}`">{{selectedConcept.name}}</h3>
                             <ul class="features-list" v-if="selectedConcept.tags">
                                 <li class="features-list__item" v-for="(tag, featureIndex) in selectedConcept.tags" :key="featureIndex">{{tag.name}}</li>
                             </ul>

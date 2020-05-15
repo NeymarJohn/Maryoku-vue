@@ -40,11 +40,13 @@ export default {
   },
   methods: {
     handleInput (e) {
+      console.log(e.target.value);
       this.$emit('input', this.content)
     }
   },
   computed: {
     getClass: function(){
+      console.log("tes");
       return `${this.inputStyle} ${this.value?"active":""}`
     }
   },

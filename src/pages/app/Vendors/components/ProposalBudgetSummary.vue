@@ -2,13 +2,13 @@
   <div class="proposal-budget-summary-wrapper">
     <div class="summary-cont">
       <h3>
-        You're the 4th catering & venue bidder
+        You're the {{proposalRequest.bidderRank | numeral('Oo')}} catering & venue bidder
       </h3>
       <p>
-        Proposals range: <strong>$290 - $1200</strong>
+        Proposals range: <strong>${{proposalRequest.bidRange.low | withComma}} - ${{proposalRequest.bidRange.high | withComma}}</strong>
       </p>
-      <div class="bundle-discount" v-if="bundleDiscount" @click="isBundleDiscount=!isBundleDiscount">
-        <md-icon>card_giftcard</md-icon>
+      <div class="bundle-discount" @click="isBundleDiscount=!isBundleDiscount">
+        <img :src="`${iconUrl}Asset 579.svg`"/>
         <span>
           Add Bundle Discount 
           <md-icon v-if="!isBundleDiscount">keyboard_arrow_right</md-icon>
@@ -21,7 +21,7 @@
       <div class="item">
         <ul>
           <li>
-            <md-icon>home</md-icon>
+            <img :src="`${iconUrl}Asset 614.svg`"/>
             Venue
           </li>
           <li>
@@ -29,11 +29,11 @@
           </li>
           <li>
             <span>Your proposal</span>
-            <span>$800</span>
+            <span>${{800 | withComma}}</span>
           </li>
           <li>
             <span>Budget for venue</span>
-            <span>$1100</span>
+            <span>${{1100 | withComma}}</span>
           </li>
           <li v-if="warning">
             <md-icon>error</md-icon>
@@ -41,7 +41,7 @@
           </li>
         </ul>
       </div>
-      <div class="item">
+      <!-- <div class="item">
         <ul>
           <li>
             <md-icon>home</md-icon>
@@ -63,8 +63,8 @@
             <span>Your proposal is $400 more than the budget</span>
           </li>
         </ul>
-      </div>
-      <div class="item additional" v-if="additional">
+      </div> -->
+      <div class="item additional" v-if="step==2">
         <h3>Additional Services</h3>
         <ul>
           <li>
@@ -127,9 +127,7 @@
     </div>
     <div class="total-cont" v-else>
       <div class="title">
-        <md-icon>card_giftcard</md-icon> Bundle
-        <span>Venue+Catering</span>
-        <span>Original Price</span>
+        Total
       </div>
       <div class="price">
         <span>
@@ -149,14 +147,19 @@
       InputProposalSubItem
     },
     props: {
-      bundleDiscount: Boolean,
-      additional: Boolean,
-      warning: Boolean,
-      isEdit: Boolean,
+      // bundleDiscount: Boolean,
+      // additional: Boolean,
+      // warning: Boolean,
+      // isEdit: Boolean,
+      step: Number,
+      proposalRequest: Object
     },
     data () {
       return {
         isBundleDiscount: false,
+        isEdit: false,
+        warning: false,
+        iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
       }
     },
     methods: {
@@ -203,9 +206,9 @@
         padding-bottom: 35px;
         cursor: pointer;
 
-        i {
-          color: #f51355;
-          margin-right: 18px;
+        img {
+          width: 30px;
+          margin-right: 1em;
         }
         span {
           font-size: 16px;
@@ -246,6 +249,11 @@
 
             &:first-child {
               display: block;
+              font: 800 16px 'Manrope-Regular', sans-serif;
+              img {
+                width: 28px;
+                margin-right: 1em;
+              }
             }
             &:nth-child(2) {
               font-size: 14px;

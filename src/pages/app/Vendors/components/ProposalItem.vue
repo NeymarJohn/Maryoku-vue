@@ -2,10 +2,9 @@
   <div class="proposal-item-wrapper">
     <div class="title-cont default" 
       :class="[{'pb-40': isVCollapsed}]" 
-      @click="isVCollapsed=!isVCollapsed"
       v-if="step<=1"
     >
-      <div class="with-subtitle">
+      <div class="with-subtitle" @click="isVCollapsed=!isVCollapsed">
         <div class="text-cont">
           <h3 class="title"><img :src="img"/>{{category}}</h3>
           <h5 v-if="!isVCollapsed">{{subTitle}}</h5>
@@ -18,6 +17,39 @@
       <p v-if="!isVCollapsed">
         Which element would you like to involve in your <strong>{{category}}</strong> proposal?
       </p>
+      <div class="sub-items-cont" v-if="!isVCollapsed">
+        <div class="sub-items">
+          <select-proposal-sub-item
+            :item="s"
+            v-for="(s, sIndex) in services"
+            :key="sIndex"
+          />
+        </div>
+      </div>
+      <div class="add-item-cont" v-if="clickedItem">
+        <div class="fields-cont">
+          <div class="field">
+            <span>Description</span>
+            <input v-model="serviceItem" readonly class="description"/>
+          </div>
+          <div class="field">
+            <span>QTY</span>
+            <input v-model="qty" type="number" min="0" placeholder="" class="qty" @keyup="calculateSubTotal()" />
+          </div>
+          <div class="field">
+            <span>Price per unit</span>
+            <input v-model="unit" type="number" min="0" placeholder="" class="priceperunit" @keyup="calculateSubTotal()" />
+          </div>
+          <div class="field">
+            <span>Total</span>
+            <input v-model="subTotal" type="number" min="0" placeholder="" class="total"/>
+          </div>
+        </div>
+        <div class="action-cont">
+          <a class="cancel" @click="cancel()">Cancel</a>
+          <a class="save" @click="saveItem()">Add This</a>
+        </div>
+      </div>
     </div>
     <div class="title-cont dropdown" v-if="step == 2" @click="isChecked=!isChecked">
       <div class="left-side">
@@ -48,20 +80,10 @@
       <div class="sub-items">
         <select-proposal-sub-item
           :active="true"
-          :item="`Tables And Chairs`">
-        </select-proposal-sub-item>
-        <select-proposal-sub-item
-          :active="true"
-          :item="`Dance Floor`">
-        </select-proposal-sub-item>
-        <select-proposal-sub-item
-          :active="false"
-          :item="`Plateware`">
-        </select-proposal-sub-item>
-        <select-proposal-sub-item
-          :active="true"
-          :item="`Flowers`">
-        </select-proposal-sub-item>
+          :item="s"
+          v-for="(s, sIndex) in services"
+          :key="sIndex"
+        />
       </div>
     </div>
     <div class="editable-sub-items-cont" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">
@@ -80,54 +102,59 @@
         </span>
       </div>
       <editable-proposal-sub-item
-        :item="`Plateware`"
-        :qty="1"
-        :pricePerUnit="400"
-        :subtotal="400"
+        v-for="(req, rIndex) in proposalRequest.requirements" 
+        :key="rIndex"
+        :item="req"
         :active="true"
-        :isEdit="false"
         :step="1"
-      >
-      </editable-proposal-sub-item>
-      <editable-proposal-sub-item
-        :item="`Chairs`"
-        :qty="1"
-        :pricePerUnit="400"
-        :subtotal="400"
-        :active="true"
-        :isEdit="false"
-        :step="1"
-      >
-      </editable-proposal-sub-item>
+      />
       <div class="tax-discount-wrapper">
         <div class="row">
           <div class="item-cont">
-            <img :src="`${iconUrl}Asset 612.svg`"/>
-            <span>Add Discount</span>
+            <div class="plabel">
+              <img :src="`${iconUrl}Asset 612.svg`"/>
+              <span>Add Discount</span>
+            </div>
+            <div class="ptitle" v-if="isEditDiscount">
+              % Percentage
+              <br/>
+              <input class="percent-value" v-model="discount" type="number" min="0" max="100" @keyup="setRange(discount, 'discount')"/>
+            </div>
           </div>
           <div class="percent-cont">
-            <span>0%</span>
+            <span v-if="!isEditDiscount">{{discount}}%</span>
           </div>
           <div class="price-cont">
-            <span>$0.00</span>
+            <span>${{totalOffer - ( totalOffer * discount / 100)}}</span>
           </div>
           <div class="edit-cont">
-            <img class="edit" :src="`${iconUrl}Asset 585.svg`"/>
+            <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount=true" v-if="!isEditDiscount"/>
+            <a class="cancel" v-if="isEditDiscount" @click="isEditDiscount=false;discount=0">Cancel</a>
+            <a class="save" v-if="isEditDiscount" @click="isEditDiscount=false">Save</a>
           </div>
         </div>
         <div class="row">
           <div class="item-cont">
-            <img :src="`${iconUrl}Asset 613.svg`"/>
-            <span>Add Taxes</span>
+            <div class="plabel">
+              <img :src="`${iconUrl}Asset 613.svg`"/>
+              <span>Add Taxes</span>
+            </div>
+            <div class="ptitle" v-if="isEditTax">
+              % Percentage
+              <br/>
+              <input class="percent-value" v-model="tax" type="number" min="0" max="100" @keyup="setRange(tax, 'tax')"/>
+            </div>
           </div>
           <div class="percent-cont">
-            <span>0%</span>
+            <span>{{tax}}%</span>
           </div>
           <div class="price-cont">
-            <span>$0.00</span>
+            <span>${{totalOffer * tax / 100}}</span>
           </div>
           <div class="edit-cont">
-            <img class="edit" :src="`${iconUrl}Asset 585.svg`"/>
+            <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax=true" v-if="!isEditTax"/>
+            <a class="cancel" v-if="isEditTax" @click="isEditTax=false;tax=0">Cancel</a>
+            <a class="save" v-if="isEditTax" @click="isEditTax=false">Save</a>
           </div>
         </div>
       </div>
@@ -136,7 +163,7 @@
           Total
         </span>
         <span>
-          $800.00
+          ${{totalOffer}}
         </span>
       </div>
     </div>
@@ -209,6 +236,8 @@
       subTitle: String,
       img: String,
       step: Number,
+      services: Array,
+      proposalRequest: Object,
     },
     data () {
       return {
@@ -216,16 +245,72 @@
         iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
         isVCollapsed: false,
         isChecked: false,
+        isEditDiscount: false,
+        isEditTax: false,
+        clickedItem: false,
+        discount: 0,
+        tax: 0,
+        serviceItem: null,
+        qty: 0,
+        unit: 0,
+        subTotal: 0,
       }
     },
     methods: {
+      setRange(value, type) {
+        let val = value
+
+        if (value > 100) {
+          val = 100
+        } 
+        if (value < 0) {
+          val = 0
+        }
+        if (type=='tax') {
+          this.tax = val
+        } else {
+          this.discount = val
+        }
+      },
+      cancel() {
+        this.clickedItem = !this.clickedItem
+      },
+      saveItem() {
+        this.clickedItem = !this.clickedItem
+      },
+      calculateSubTotal() {
+        this.subTotal = this.qty * this.unit
+      }
     },
     created() {
     },
     mounted() {
       this.isVCollapsed = this.isCollapsed
+
+      this.$root.$on('add-service-item', (item) => {
+        this.clickedItem = !this.clickedItem
+        this.serviceItem = item
+        this.qty = this.unit = this.subTotal = 0
+      })
     },
     computed: {
+      totalOffer () {
+        let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
+        let vm = this
+
+        this.proposalRequest.requirements.map(function (item) {
+          if (item.price) {
+            if (item.priceUnit === 'total') {
+              total += parseFloat(item.price)
+            } else {
+              total +=
+                parseFloat(item.price) *
+                parseInt(vm.proposalRequest.eventData.numberOfParticipants)
+            }
+          }
+        })
+        return total
+      },
     },
     watch: {
     }
@@ -319,10 +404,11 @@
         .right-side {
           display: flex;
           width: 100%;
-          justify-content: flex-end;
+          justify-content: space-between;
           align-items: center;
 
           .budget-cont {
+            margin-left: 4em;
             span {
               color: #818080;
               &:first-child {
@@ -361,6 +447,33 @@
       }
     }
 
+    .add-item-cont {
+      .fields-cont {
+        display: flex;
+        .field {
+          flex: 1;
+          margin-right: 1em;
+          span {
+            font: 800 16px 'Manrope-Regular', sans-serif;
+          }
+          input {
+            text-transform: capitalize;
+            width: 100%;
+            padding: 20px 28px;
+            border: 1px solid #707070;
+            font: normal 16px 'Manrope-Regular', sans-serif;
+            color: #050505;
+          }
+          &:first-child {
+            flex: 3;
+          }
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+
     .sub-items-cont {
       padding: 30px 0;
 
@@ -371,7 +484,10 @@
         margin: 0;
       }
       .sub-items {
-        display: flex;
+        // display: flex;
+        display: block;
+        white-space: nowrap;
+        overflow-x: auto;
       }
     }
 
@@ -389,7 +505,7 @@
         &.clear {
           color: #050505;
           padding: 8px 32px;
-          margin-right: 1em;
+          margin-right: 1rem;
         }
         &.add {
           background-color: #d5d5d5;
@@ -443,6 +559,25 @@
 
           .item-cont {
             width: calc(50% + 26px);
+            display: flex;
+            align-items: center;
+
+            .plabel {
+              flex: 1;
+            }
+            .ptitle {
+              font: normal 14px 'Manrope-Regular', sans-serif;
+              text-align: center;
+              flex: 1;
+
+              .percent-value {
+                min-width: 10rem;
+                border: 1px solid #dddddd;
+                margin-top: 1rem;
+                text-align: center;
+                margin-left: 2em;
+              }
+            }
           }
           .percent-cont {
             width: calc(15% - 14px);
@@ -452,7 +587,7 @@
           }
           .edit-cont {
             text-align: right;
-            width: 15%;
+            width: 20%;
             .edit {
               width: 21px;
               margin-right: 31px;
@@ -649,6 +784,25 @@
     .pb-40 {
       padding-bottom: 40px;
       cursor: pointer;
+    }
+    a {
+      cursor: pointer;
+      padding: 8px 26px;
+
+      &.cancel {
+        font: 800 16px 'Manrope-Regular', sans-serif;
+        color: #050505;
+        background: transparent;
+      }
+      &.save {
+        font: 800 16px 'Manrope-Regular', sans-serif;
+        color: white;
+        background: #f51355;
+        border-radius: 3px;
+      }
+      &:hover {
+        color: #dddddd!important;
+      }
     }
   }
 </style>

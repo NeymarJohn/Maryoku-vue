@@ -64,7 +64,36 @@
             <md-button class="md-default " @click="showShareVendorModal = true">I already have a venue for my event</md-button>
         </div>
 
-        <event-change-proposal-modal v-if="showSomethingModal" @close="showSomethingModal=false"></event-change-proposal-modal>
+        <modal v-if="showSomethingModal" class="add-category-model something-modal">
+            <template slot="header">
+                <div class="add-category-model__header">
+                    <h2>Let us know you better so we could<br>
+                        find you something else</h2>
+                    <div class="header-description">How can we make the future suggestion better for you?</div>
+                </div>
+                <md-button class="md-simple md-just-icon md-round modal-default-button"
+                           @click="showSomethingModal = false">
+                    <md-icon>clear</md-icon>
+                </md-button>
+            </template>
+            <template slot="body">
+
+                <div class="md-layout something-form">
+                    <div class="form-group">
+                        <textarea placeholder="Type your reason here…" rows="6" class="form-control" v-model="somethingMessage"></textarea>
+                    </div>
+                </div>
+
+            </template>
+            <template slot="footer">
+                <md-button class="md-default md-simple cancel-btn" @click="showSomethingModal = false">
+                    Cancel
+                </md-button>
+                <md-button class="md-rose add-category-btn" :class="{'disabled' : !somethingMessage}" @click="">
+                    Send
+                </md-button>
+            </template>
+        </modal>
 
         <modal v-if="showShareVendorModal" class="add-category-model something-modal">
             <template slot="header">
@@ -156,6 +185,7 @@
                 </md-button>
             </template>
         </modal>
+
     </div>
 
 </template>
@@ -183,7 +213,7 @@ import EventComponentProperty from '@/models/EventComponentProperty'
 import SideBar from '../../../../components/SidebarPlugin/NewSideBar'
 import SidebarItem from '../../../../components/SidebarPlugin/NewSidebarItem.vue'
 import ProgressSidebar from './progressSidebar'
-import EventChangeProposalModal from '@/components/Modals/EventChangeProposalModal'
+
 export default {
   name: 'event-time-line',
   components: {
@@ -197,8 +227,7 @@ export default {
     SideBar,
     SidebarItem,
     ProgressSidebar,
-    Modal,
-    EventChangeProposalModal
+    Modal
   },
   props: {
 

@@ -166,41 +166,34 @@
               <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/extra-gray.svg" />
               Extras
             </td>
-            <td width="20%" class="planned">$ {{event.allocatedTips + event.allocatedFees | withComma}}</td>
+            <td width="20%" class="planned">$ {{0 | withComma}}</td>
             <td width="15%" class="actual red-label"></td>
             <td width="15%" class="status"></td>
-            <td class="expand">
-              <div @click="showTips=!showTips" class="text-right">
-                <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
-              </div>
-            </td>
+            <td class="expand"></td>
           </tr>
-          <template v-if="showTips">
-            <tr class="extra">
-              <td width="40%" class="event-block-element extra">
-                <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/tips-gray.svg" />
-                Tips  12%
-              </td>
-              <td width="20%" class="planned">$ {{event.allocatedTips | withComma}}</td>
-              <td width="15%" class="actual red-label"></td>
-              <td width="15%" class="status"></td>
-              <td class="expand"></td>
-            </tr>
-            <tr class="extra">
-              <td colspan="5"><hr/> </td>
-            </tr>
-            <tr class="extra">
-              <td width="40%" class="event-block-element extra">
-                <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/fees-gray.svg" />
-                Fees 3%
-              </td>
-              <td width="20%" class="planned">$ {{event.allocatedFees | withComma}}</td>
-              <td width="15%" class="actual red-label"></td>
-              <td width="15%" class="status"></td>
-              <td class="expand"></td>
-            </tr>
-          </template>
-          
+          <tr class="extra">
+            <td width="40%" class="event-block-element extra">
+              <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/tips-gray.svg" />
+              Tips  12%
+            </td>
+            <td width="20%" class="planned">$ {{0 | withComma}}</td>
+            <td width="15%" class="actual red-label"></td>
+            <td width="15%" class="status"></td>
+            <td class="expand"></td>
+          </tr>
+          <tr class="extra">
+            <td colspan="5"><hr/> </td>
+          </tr>
+          <tr class="extra">
+            <td width="40%" class="event-block-element extra">
+              <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/fees-gray.svg" />
+              Fees 18%
+            </td>
+            <td width="20%" class="planned">$ {{0 | withComma}}</td>
+            <td width="15%" class="actual red-label"></td>
+            <td width="15%" class="status"></td>
+            <td class="expand"></td>
+          </tr>
         </tbody>
       </table>
       <table class="event-blocks__table event-block-table">
@@ -427,8 +420,7 @@ export default {
     showMinusHandleModal: false,
     overAddedValue: 0,
     showAddMyVendor: false,
-    selectedComponent: null,
-    showTips:false
+    selectedComponent: null
   }),
   computed: {
     ...mapGetters({
@@ -522,10 +514,9 @@ export default {
     getRemainingBudget() {
       if (!this.event) return;
       if (!this.event.components) return;
-      const allocatedBudget = this.event.components.reduce((s, item) => {
+      this.allocatedBudget = this.event.components.reduce((s, item) => {
         return s + item.allocatedBudget;
       }, 0);
-      this.allocatedBudget = allocatedBudget + this.event.allocatedFees + this.event.allocatedTips
       this.remainingBudget =
         Math.round((this.event.totalBudget - this.allocatedBudget) / 10) * 10;
     },
@@ -912,7 +903,7 @@ export default {
       const budgetString = `<div class="font-size-40 font-regular color-red" style="margin:20px 0">$ ${this.newBudget}</div>`;
       const description = `<div class="description">Your edits changed the total budget, do you want to change it?</div>`;
       swal({
-        title: `<div class="text-left">${arrow}${budgetString}<div>Are You Sure?</div>${description}</div>`,
+        title: `<div class="text-left">${arrow}${budgetString}<div>Are Your Sure?</div>${description}</div>`,
         showCancelButton: true,
         confirmButtonClass: "md-button md-success",
         cancelButtonClass: "md-button md-danger",
@@ -976,7 +967,6 @@ export default {
       let event = new CalendarEvent({ id: this.event.id });
       let selectedBlock = new EventComponent({ id: this.selectedComponent.id });
 
-      myVendor.vendorCategory = this.selectedComponent.componentId
       if (myVendor.attachment) {
         let formData = new FormData();
         formData.append("file", myVendor.attachment);
@@ -992,11 +982,11 @@ export default {
             }
           }
         );
-        myVendor.attachments = [{
+        myVendor.attachment = {
           originalName: myVendor.attachment.name,
           url: result.data.upload.path,
           name: result.data.upload.name
-        }];
+        };
       }
 
       // Add new Vendors
@@ -1011,7 +1001,7 @@ export default {
             cost: myVendor.cost,
             eventComponentInstance: this.selectedComponent,
             rfpStatus: new Date().getTime(),
-            attachments: myVendor.attachments
+            attachment: myVendor.attachment
           };
           new EventComponentVendor(eventComponentVendor)
             .for(calendar, event, selectedBlock)

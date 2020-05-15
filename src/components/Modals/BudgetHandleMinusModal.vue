@@ -34,7 +34,7 @@ import { Modal} from '@/components'
 export default {
   name: "budget-handle-minus-modal",
   components: {
-    Modal,
+    Modal
   },
   props: {
     show:[Boolean],
