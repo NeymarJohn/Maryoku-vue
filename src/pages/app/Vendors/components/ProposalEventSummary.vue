@@ -8,7 +8,7 @@
           <div class="summary-cont">
             <div class="upper">
               <h3>{{title}}</h3>
-              <div class="warning-days" v-if="warning">
+              <div class="warning-days">
                 <img :src="`${iconUrl}Asset 575.svg`"/> This proposal is 2 days before the original date
               </div>
             </div>
@@ -184,7 +184,6 @@
         isTimeUp: false,
         hover: false,
         considerUpdate: false,
-        warning: false,
       }
     },
     methods: {

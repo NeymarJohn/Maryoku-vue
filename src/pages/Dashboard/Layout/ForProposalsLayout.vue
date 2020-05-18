@@ -575,7 +575,7 @@
             color: #ffffff;
 
             &:hover {
-              color: #ffffff!important;
+              color: #050505;
             }
           }
         }

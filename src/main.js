@@ -31,7 +31,7 @@ import auth from './auth'
 import routes from './router/routes'
 // store setup
 import store from './store'
-import { IconURL } from './globalVariables';
+import { IconURL, StorageURL, ResourceURL } from './globalVariables';
 
 require('vue-tour/dist/vue-tour.css')
 
@@ -173,6 +173,8 @@ Vue.directive('click-outside', {
 
 Vue.filter('withComma', function (value) { return value ? value.toLocaleString() : 0 })
 
+Vue.prototype.$resourceURL = ResourceURL;
+Vue.prototype.$storageURL = StorageURL;
 Vue.prototype.$iconURL = IconURL;
 
 Model.$http = axios

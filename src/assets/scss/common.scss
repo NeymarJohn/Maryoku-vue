@@ -35,6 +35,13 @@
     font-style: normal;
     font-stretch: normal;
 }
+
+h1, h2, h3, h4, h5 {
+  font-family: "Manrope-Regular";
+}
+textarea {
+  font-family: "Manrope-Regular";
+}
 .font-regular {
   font-family: "Manrope-Regular";
 }
@@ -58,13 +65,24 @@
   font-size: 20px !important;
 }
 
+.font-size-22 {
+  font-size: 20px !important;
+}
+
 .font-size-30 {
   font-size: 30px !important;
 }
+
 .font-size-40 {
   font-size: 40px;
 }
 
+.justify-content-between {
+  justify-content: space-between;
+}
+.flex-1 {
+  flex-grow: 1;
+}
 .color-red {
   color: #f51355;
 }
@@ -141,15 +159,32 @@
 
 .normal-btn {
   min-width: auto;
+  margin-top: 0px;
+  margin-bottom: 0px;
   .md-ripple{
       text-transform: none;
+      padding: 7px 25px !important;
       .md-button-content {
           font-family: 'Manrope-ExtraBold',sans-serif;
           font-size: 16px !important;
+          text-transform: capitalize;
       }
   }
 }
-
+.inline-input {
+  height: 40px;
+  padding: 10px 12px;
+  color: #32325d;
+  background-color: white;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  border-radius: 3px;
+  border: solid 1px #050505;
+  text-align: center;
+  font-size: 18px;
+  color: #050505;
+  width: 140px;
+}
 .edit-btn-1 {
   margin: 0px !important;
   min-width: auto;
@@ -178,4 +213,10 @@
 }
 .lastDroppingCard {
   padding-bottom: 300px;
+}
+
+hr {
+  height: 1px;
+  border: none;
+  background: #B7B7B7;
 }

@@ -2,9 +2,10 @@
   <div class="proposal-item-wrapper">
     <div class="title-cont default" 
       :class="[{'pb-40': isVCollapsed}]" 
+      @click="isVCollapsed=!isVCollapsed"
       v-if="step<=1"
     >
-      <div class="with-subtitle" @click="isVCollapsed=!isVCollapsed">
+      <div class="with-subtitle">
         <div class="text-cont">
           <h3 class="title"><img :src="img"/>{{category}}</h3>
           <h5 v-if="!isVCollapsed">{{subTitle}}</h5>
@@ -17,39 +18,6 @@
       <p v-if="!isVCollapsed">
         Which element would you like to involve in your <strong>{{category}}</strong> proposal?
       </p>
-      <div class="sub-items-cont" v-if="!isVCollapsed">
-        <div class="sub-items">
-          <select-proposal-sub-item
-            :item="s"
-            v-for="(s, sIndex) in services"
-            :key="sIndex"
-          />
-        </div>
-      </div>
-      <div class="add-item-cont" v-if="step == 0 && clickedItem && !isVCollapsed">
-        <div class="fields-cont">
-          <div class="field">
-            <span>Description</span>
-            <input v-model="serviceItem" readonly class="description"/>
-          </div>
-          <div class="field">
-            <span>QTY</span>
-            <input v-model="qty" type="number" min="0" placeholder="" class="qty" @keyup="calculateSubTotal()" />
-          </div>
-          <div class="field">
-            <span>Price per unit</span>
-            <input v-model="unit" type="number" min="0" placeholder="" class="priceperunit" @keyup="calculateSubTotal()" />
-          </div>
-          <div class="field">
-            <span>Total</span>
-            <input v-model="subTotal" type="number" min="0" placeholder="" class="total"/>
-          </div>
-        </div>
-        <div class="action-cont">
-          <a class="cancel" @click="cancel()">Cancel</a>
-          <a class="save" @click="saveItem()">Add This</a>
-        </div>
-      </div>
     </div>
     <div class="title-cont dropdown" v-if="step == 2" @click="isChecked=!isChecked">
       <div class="left-side">
@@ -80,34 +48,20 @@
       <div class="sub-items">
         <select-proposal-sub-item
           :active="true"
-          :item="s"
-          v-for="(s, sIndex) in services"
-          :key="sIndex"
-        />
-      </div>
-    </div>
-    <div class="add-item-cont" v-if="step == 2 && clickedItem">
-      <div class="fields-cont">
-        <div class="field">
-          <span>Description</span>
-          <input v-model="serviceItem" readonly class="description"/>
-        </div>
-        <div class="field">
-          <span>QTY</span>
-          <input v-model="qty" type="number" min="0" placeholder="" class="qty" @keyup="calculateSubTotal()" />
-        </div>
-        <div class="field">
-          <span>Price per unit</span>
-          <input v-model="unit" type="number" min="0" placeholder="" class="priceperunit" @keyup="calculateSubTotal()" />
-        </div>
-        <div class="field">
-          <span>Total</span>
-          <input v-model="subTotal" type="number" min="0" placeholder="" class="total"/>
-        </div>
-      </div>
-      <div class="action-cont">
-        <a class="cancel" @click="cancel()">Cancel</a>
-        <a class="save" @click="saveItem()">Add This</a>
+          :item="`Tables And Chairs`">
+        </select-proposal-sub-item>
+        <select-proposal-sub-item
+          :active="true"
+          :item="`Dance Floor`">
+        </select-proposal-sub-item>
+        <select-proposal-sub-item
+          :active="false"
+          :item="`Plateware`">
+        </select-proposal-sub-item>
+        <select-proposal-sub-item
+          :active="true"
+          :item="`Flowers`">
+        </select-proposal-sub-item>
       </div>
     </div>
     <div class="editable-sub-items-cont" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">
@@ -260,7 +214,6 @@
       subTitle: String,
       img: String,
       step: Number,
-      services: Array,
       proposalRequest: Object,
     },
     data () {
@@ -271,13 +224,8 @@
         isChecked: false,
         isEditDiscount: false,
         isEditTax: false,
-        clickedItem: false,
         discount: 0,
         tax: 0,
-        serviceItem: null,
-        qty: 0,
-        unit: 0,
-        subTotal: 0,
       }
     },
     methods: {
@@ -295,27 +243,12 @@
         } else {
           this.discount = val
         }
-      },
-      cancel() {
-        this.clickedItem = !this.clickedItem
-      },
-      saveItem() {
-        this.clickedItem = !this.clickedItem
-      },
-      calculateSubTotal() {
-        this.subTotal = this.qty * this.unit
       }
     },
     created() {
     },
     mounted() {
       this.isVCollapsed = this.isCollapsed
-
-      this.$root.$on('add-service-item', (item) => {
-        this.clickedItem = !this.clickedItem
-        this.serviceItem = item
-        this.qty = this.unit = this.subTotal = 0
-      })
     },
     computed: {
       totalOffer () {
@@ -428,11 +361,10 @@
         .right-side {
           display: flex;
           width: 100%;
-          justify-content: space-between;
+          justify-content: flex-end;
           align-items: center;
 
           .budget-cont {
-            margin-left: 4em;
             span {
               color: #818080;
               &:first-child {
@@ -471,33 +403,6 @@
       }
     }
 
-    .add-item-cont {
-      .fields-cont {
-        display: flex;
-        .field {
-          flex: 1;
-          margin-right: 1em;
-          span {
-            font: 800 16px 'Manrope-Regular', sans-serif;
-          }
-          input {
-            text-transform: capitalize;
-            width: 100%;
-            padding: 20px 28px;
-            border: 1px solid #707070;
-            font: normal 16px 'Manrope-Regular', sans-serif;
-            color: #050505;
-          }
-          &:first-child {
-            flex: 3;
-          }
-          &:last-child {
-            margin-right: 0;
-          }
-        }
-      }
-    }
-
     .sub-items-cont {
       padding: 30px 0;
 
@@ -508,10 +413,7 @@
         margin: 0;
       }
       .sub-items {
-        // display: flex;
-        display: block;
-        white-space: nowrap;
-        overflow-x: auto;
+        display: flex;
       }
     }
 

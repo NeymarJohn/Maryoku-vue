@@ -4,7 +4,12 @@
       <slot name="content"></slot>
     </div>
     <div class="popup" :class="{open : showPopup}">
-      <slot name="popup"></slot>
+      <slot name="popup">
+        <div class="popup-footer" v-if="showButtons">
+          <md-button class="md-red md-simple normal-btn" @click="showPopup=false">Yes I'm sure</md-button>
+          <md-button class="md-red normal-btn" @click="deleteTips">Yes I'm sure</md-button>
+        </div>
+      </slot>
       <md-button class="popup-close md-button md-simple edit-btn md-theme-default" @click="showPopup=false">
         <md-icon class="popup-close-icon">close</md-icon>
       </md-button>
@@ -14,12 +19,18 @@
 <script>
 export default {
   name: "maryoku-popup",
+  props:{
+    showButtons:[Boolean]
+  },
   data:()=>({
-    showPopup:false
+    showPopup:false,
   }),
   methods:{
     show() {
       this.showPopup = true
+    },
+    hide() {
+      this.showPopup = false
     }
   }
 }
@@ -45,6 +56,9 @@ export default {
       border-radius: 2px;
       -webkit-animation: fadeinout 0.5s linear forwards;
       animation: fadeinout 0.5s linear forwards;
+      &-target {
+        cursor: pointer;
+      }
       &-header {
         font-family: "Manrope-ExtraBold";
         font-size: 22px;
