@@ -170,8 +170,7 @@ export default {
     }
   },
   created() {
-    this.$auth.currentUser(this, true, function () {
-    }.bind(this));
+    
   },
   mounted () {
     this.step = 0
@@ -204,6 +203,16 @@ export default {
 
     this.$root.$on('remove-proposal-requirement', (reqId) => {
       this.proposalRequest.requirements = this.proposalRequest.requirements.filter(req => req.id != reqId)
+    })
+
+    this.$root.$on('add-proposal-requirement', (title, price) => {
+      console.log(22)
+      this.proposalRequest.requirements.push({
+        requirementTitle: title, 
+        price: price, 
+        proposalRequest: proposalRequest
+      })
+      console.log(this.proposalRequest.requirements)
     })
 
     this.getVendor()

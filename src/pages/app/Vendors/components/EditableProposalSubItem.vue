@@ -6,7 +6,7 @@
       </div>
       <div class="qty-cont">
         <template v-if="!isEdit">
-          {{item.priceUnit==='total' ? 1 : proposalRequest.eventData.numberOfParticipants}}
+          {{item.priceUnit==='total' ? 1 : 0}}
         </template>
         <template v-else>
           <input class="input-value" type="number" style="max-width: 3rem"/>

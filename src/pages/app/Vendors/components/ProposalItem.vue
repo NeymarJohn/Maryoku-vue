@@ -47,7 +47,7 @@
         </div>
         <div class="action-cont">
           <a class="cancel" @click="cancel()">Cancel</a>
-          <a class="save" @click="saveItem()">Add This</a>
+          <a class="save" @click="saveItem(serviceItem, unit, subTotal)">Add This</a>
         </div>
       </div>
     </div>
@@ -62,12 +62,12 @@
       <div class="right-side">
         <div class="budget-cont">
           <span>Budget</span>
-          <span>{{`$${proposalRequest.bid}`}}</span>
+          <span>{{`$${newProposalRequest.bid}`}}</span>
         </div>
         <div class="proposal-range-cont">
           <p>You're the First bidder</p>
           <span class="grey" v-if="proposalRange">Proposals range</span>
-          <span v-if="proposalRange">{{`$${proposalRequest.bidRange.low} - $${proposalRequest.bidRange.high}`}}</span>
+          <span v-if="proposalRange">{{`$${newProposalRequest.bidRange.low} - $${newProposalRequest.bidRange.high}`}}</span>
         </div>
         <img 
           :src="`${iconUrl}Component 36 (2).svg`"
@@ -127,7 +127,7 @@
       </div>
       <!-- v-for="(req, rIndex) in proposalRequest.requirements.filter( r => services.includes(r.requirementTitle))"  -->
       <editable-proposal-sub-item
-        v-for="(req, rIndex) in proposalRequest.requirements" 
+        v-for="(req, rIndex) in newProposalRequest.requirements" 
         :key="rIndex"
         :item="req"
         :active="true"
@@ -279,6 +279,7 @@
         qty: 0,
         unit: 0,
         subTotal: 0,
+        newProposalRequest: {},
       }
     },
     methods: {
@@ -300,8 +301,23 @@
       cancel() {
         this.clickedItem = !this.clickedItem
       },
-      saveItem() {
+      saveItem(title, unit, price) {
         this.clickedItem = !this.clickedItem
+        this.newProposalRequest.requirements.push({
+          comments: [],
+          dateCreated: '',
+          includedInPrice: true,
+          itemNotAvailable: false,
+          price: price,
+          priceUnit: 'qty',
+          proposalRequest: {id: this.proposalRequest.id},
+          requirementComment: null,
+          requirementId: '',
+          requirementMandatory: false,
+          requirementPriority: null,
+          requirementTitle: title,
+          requirementValue: "[]",
+        })
       },
       calculateSubTotal() {
         this.subTotal = this.qty * this.unit
@@ -311,6 +327,7 @@
     },
     mounted() {
       this.isVCollapsed = this.isCollapsed
+      this.newProposalRequest = this.proposalRequest
 
       this.$root.$on('add-service-item', (item) => {
         this.clickedItem = !this.clickedItem
@@ -325,17 +342,18 @@
     },
     computed: {
       totalOffer () {
-        let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
+        // let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
+        let total = 0
         let vm = this
 
-        this.proposalRequest.requirements.map(function (item) {
+        this.newProposalRequest.requirements.map(function (item) {
           if (item.price) {
             if (item.priceUnit === 'total') {
               total += parseFloat(item.price)
             } else {
-              total +=
-                parseFloat(item.price) *
-                parseInt(vm.proposalRequest.eventData.numberOfParticipants)
+              if (vm.newProposalRequest !=  undefined) {
+                total += parseFloat(item.price)
+              } 
             }
           }
         })
