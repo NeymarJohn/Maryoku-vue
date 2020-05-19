@@ -104,7 +104,7 @@
     }
     img {
       position: absolute;
-      left: calc(3em + 50px);
+      left: calc(3rem + 12px);
       margin-top: 14px;
       width: 20px;
       margin-right: 12px;

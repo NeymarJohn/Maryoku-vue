@@ -78,10 +78,6 @@
           <img :src="`${iconUrl}Group 3671 (2).svg`"/>
         </button>
       </template>
-      <template slot="body">
-        <div class="thank-you-modal__body">
-        </div>
-      </template>
       <template slot="footer">
         <div class="thank-you-modal__footer">
           <button class="cool" @click="hideModal()">OK, Cool</button>
@@ -247,7 +243,7 @@
         }
       }
       &__body {
-        padding: 10px 40px 0 40px;
+        padding: 0;
       }
       &__footer {
         border-top: 1px solid #a0a0a0;
@@ -293,7 +289,7 @@
             line-height: 1.55;
             margin: 0;
             margin-top: -4px;
-            width: 60%;
+            max-width: 400px;
           }
         }
 

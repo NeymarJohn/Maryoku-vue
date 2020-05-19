@@ -1,5 +1,5 @@
 <template>
-  <div class="editable-proposal-sub-item-wrapper" :class="[{'step-3': step == 3}]">
+  <div class="editable-proposal-sub-item-wrapper" :class="[{'step-3': step == 3}]" v-if="item.requirementTitle != null">
     <template v-if="step < 3">
       <div class="item-cont">
         {{item.requirementTitle}}

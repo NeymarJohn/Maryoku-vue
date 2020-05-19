@@ -20,6 +20,7 @@
           </div>
           <proposal-item
             :category="`Venue`"
+            :services="servicesByCategory('Venue')"
             :subTitle="`For Whole Event`"
             :img="`${iconUrl}Asset 614.svg`"
             :proposalRequest="proposalRequest"
@@ -35,15 +36,17 @@
           </p>
           <proposal-item
             :category="`Photographer`"
+            :services="servicesByCategory('Photographer')"
             :isCollapsed="true"
             :isDropdown="true"
-            :proposalRange="false"
+            :proposalRange="true"
             :img="`${iconUrl}Asset 607.svg`"
             :proposalRequest="proposalRequest"
             :step="step"
           />
           <proposal-item
             :category="`Bar`"
+            :services="servicesByCategory('Bar')"
             :isCollapsed="true"
             :isDropdown="true"
             :proposalRange="true"
@@ -53,6 +56,7 @@
           />
           <proposal-item
             :category="`Dj`"
+            :services="servicesByCategory('Dj')"
             :isCollapsed="true"
             :isDropdown="true"
             :proposalRange="true"
@@ -116,6 +120,53 @@ export default {
       step: 0,
       proposalRequest: null,
       iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
+      services: [
+        {
+          category: 'Venue',
+          items: [
+            'Chairs',
+            'Outdoor chairs',
+            'high chairs',
+            'tables',
+            'outdoor tables',
+            'high tables',
+            'power supply',
+            'generator',
+          ]
+        },
+        {
+          category: 'Photographer',
+          items: [
+            'Journalistic',
+            'Studio',
+            'Traditional',
+            'Candid',
+            'Video',
+            'Audio',
+            'Photo',
+          ]
+        },
+        {
+          category: 'Bar',
+          items: [
+            'specialty liquor stations',
+            'specialty bar services',
+            'non alcoholic specials',
+          ]
+        },
+        {
+          category: 'Dj',
+          items: [
+            'Servers',
+            'Busboys',
+            'Cleanup Crew',
+            'Waitstaff',
+            'Attire of Waitstaff',
+            'Vegetarian',
+            'Vegan',
+          ]
+        }
+      ]
     }
   },
   created() {
@@ -183,6 +234,15 @@ export default {
         .catch(error => {
           console.log(' error ', error)
         })
+    },
+    servicesByCategory(category) {
+      const services = this.services.filter( s => s.category == category)
+
+      if (services.length > 0) {
+        return services[0].items
+      } else {
+        return []
+      }
     },
     updateProposalRequest (submitted = null) {
       console.log(this.proposalRequest)
