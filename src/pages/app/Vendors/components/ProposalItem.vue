@@ -125,6 +125,7 @@
           Subtotal
         </span>
       </div>
+      <!-- v-for="(req, rIndex) in proposalRequest.requirements.filter( r => services.includes(r.requirementTitle))"  -->
       <editable-proposal-sub-item
         v-for="(req, rIndex) in proposalRequest.requirements" 
         :key="rIndex"
