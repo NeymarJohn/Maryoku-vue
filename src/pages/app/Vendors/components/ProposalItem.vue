@@ -47,7 +47,7 @@
         </div>
         <div class="action-cont">
           <a class="cancel" @click="cancel()">Cancel</a>
-          <a class="save" @click="saveItem(serviceItem, unit, subTotal)">Add This</a>
+          <a class="save" @click="saveItem(serviceItem, qty, subTotal)">Add This</a>
         </div>
       </div>
     </div>
@@ -301,7 +301,7 @@
       cancel() {
         this.clickedItem = !this.clickedItem
       },
-      saveItem(title, unit, price) {
+      saveItem(title, qty, price) {
         this.clickedItem = !this.clickedItem
         this.newProposalRequest.requirements.push({
           comments: [],
@@ -316,7 +316,7 @@
           requirementMandatory: false,
           requirementPriority: null,
           requirementTitle: title,
-          requirementValue: "[]",
+          requirementValue: `${qty}`,
         })
       },
       calculateSubTotal() {
@@ -328,6 +328,10 @@
     mounted() {
       this.isVCollapsed = this.isCollapsed
       this.newProposalRequest = this.proposalRequest
+
+      this.$root.$on('remove-proposal-requirement', (reqId) => {
+        this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(req => req.id != reqId)
+      })
 
       this.$root.$on('add-service-item', (item) => {
         this.clickedItem = !this.clickedItem
