@@ -816,6 +816,7 @@ export default {
         icon: item.icon,
         color: item.color,
         link: item.link,
+        location: item.location,
         plannedDate: plannedDate
       };
       if (this.currentAttachments.length > 0) {
