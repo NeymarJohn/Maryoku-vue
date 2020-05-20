@@ -18,21 +18,11 @@
           </ul>
         </div>
         <div class="small-label">Things are warming up!</div>
-        <transition name="slide">
-          <event-note-panel v-if="isOpenNote"></event-note-panel>
-        </transition>
-        
-
         <div class="my-notes">
-          <md-button v-if="!isOpenNote" class="md-rose" @click="isOpenNote=true" >
+          <md-button class="md-rose" >
             <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin:0 3px"/>
             My Notes
             <md-icon style="font-size: 30px !important; margin-left: 5px;">keyboard_arrow_down</md-icon>
-          </md-button>
-          <md-button v-else  class="md-rose" @click="isOpenNote=false" >
-            <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin:0 3px"/>
-            Close
-            <md-icon style="font-size: 30px !important; margin-left: 5px;">keyboard_arrow_up</md-icon>
           </md-button>
         </div>
         
@@ -65,24 +55,24 @@
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-
-import moment from 'moment'
-import swal from 'sweetalert2'
-import { SlideYDownTransition } from 'vue2-transitions'
-import InputMask from 'vue-input-mask'
-import VueElementLoading from 'vue-element-loading'
-import draggable from 'vuedraggable'
-import { Drag, Drop } from 'vue-drag-drop'
-import _ from 'underscore'
-
 import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
 import EventComponent from '@/models/EventComponent'
 import EventTimelineItem from '@/models/EventTimelineItem'
-import { SideBar, SidebarItem} from '@/components'
+import moment from 'moment'
+import swal from 'sweetalert2'
+import { SlideYDownTransition } from 'vue2-transitions'
+import InputMask from 'vue-input-mask'
 
+import VueElementLoading from 'vue-element-loading'
+// import auth from '@/auth';
 import EventBlocks from '../components/NewEventBlocks'
-import EventNotePanel from '../components/EventNotePanel'
+import draggable from 'vuedraggable'
+import { Drag, Drop } from 'vue-drag-drop'
+import _ from 'underscore'
+
+import SideBar from '../../../../components/SidebarPlugin/NewSideBar'
+import SidebarItem from '../../../../components/SidebarPlugin/NewSidebarItem.vue'
 
 export default {
   name: 'event-time-line',
@@ -95,8 +85,7 @@ export default {
     SlideYDownTransition,
     InputMask,
     SideBar,
-    SidebarItem,
-    EventNotePanel
+    SidebarItem
   },
   props: {
     // event: Object,
@@ -105,7 +94,6 @@ export default {
   data: () => ({
     // auth: auth,
     isLoading: true,
-    isOpenNote: false,
     eventElements: [
       {
         title: 'Choose Concept',

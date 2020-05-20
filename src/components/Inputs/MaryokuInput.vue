@@ -2,7 +2,7 @@
   <div class="maryoku_input">
     
     <input
-      v-model="content"
+    v-model="content"
       :name="name"
       :type="type"
       @input="handleInput"

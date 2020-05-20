@@ -75,7 +75,7 @@
         />
       </div>
     </div>
-    <div class="sub-items-cont" v-if="step == 2 && isChecked">
+    <div class="sub-items-cont" v-if="step == 2 && isChecked && !isVCollapsed">
       <h3>Which elements would you like to involve in your proposal?</h3>
       <div class="sub-items">
         <select-proposal-sub-item
@@ -86,7 +86,7 @@
         />
       </div>
     </div>
-    <div class="add-item-cont" v-if="step == 2 && clickedItem">
+    <div class="add-item-cont" v-if="step == 2 && clickedItem">{{clickedItem}}
       <div class="fields-cont">
         <div class="field">
           <span>Description</span>
@@ -154,8 +154,8 @@
           </div>
           <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount=true" v-if="!isEditDiscount"/>
-            <a class="cancel" v-if="isEditDiscount" @click="isEditDiscount=false;discount=0">Cancel</a>
-            <a class="save" v-if="isEditDiscount" @click="isEditDiscount=false">Save</a>
+            <a class="cancel" v-if="isEditDiscount" @click="cancelDiscount()">Cancel</a>
+            <a class="save" v-if="isEditDiscount" @click="saveDiscount()">Save</a>
           </div>
         </div>
         <div class="row">
@@ -202,8 +202,20 @@
             <span class="filename">Legal Requirements</span>
             <span class="req">Required</span>
           </div>
-          <div class="right">
+          <div class="right" @click="uploadDocument('legal')" v-if="getFileByTag('legal') == null">
             <img :src="`${iconUrl}Asset 609.svg`"/>Upload
+            <input
+              type="file"
+              class="hide"
+              ref="legalDocument"
+              accept="application/text, application/pdf"
+              @change="onFilePicked"
+            />
+          </div>
+          <div class="right" v-else>
+            <span class="filename">{{getFileByTag('legal')}}</span>
+            <img class="check" :src="`${iconUrl}Group 3599 (2).svg`"/>
+            <img class="remove" :src="`${iconUrl}Group 3671 (2).svg`" @click="removeFileByTag('legal')"/>
           </div>
         </div>
         <!-- <div class="item">
@@ -220,8 +232,20 @@
             <span class="filename">Other</span>
             <span class="req">*Optional</span>
           </div>
-          <div class="right">
+          <div class="right" @click="uploadDocument('option')" v-if="getFileByTag('option') == null">
             <img :src="`${iconUrl}Asset 609.svg`"/>Upload
+            <input
+              type="file"
+              class="hide"
+              ref="optionDocument"
+              accept="application/text, application/pdf"
+              @change="onFilePicked"
+            />
+          </div>
+          <div class="right" v-else>
+            <span class="filename">{{getFileByTag('option')}}</span>
+            <img class="check" :src="`${iconUrl}Group 3599 (2).svg`"/>
+            <img class="remove" :src="`${iconUrl}Group 3671 (2).svg`" @click="removeFileByTag('option')"/>
           </div>
         </div>
       </div>
@@ -233,15 +257,25 @@
       <div class="upload-cont">
         <p>You've already uploaded photos of your basic services</p>
         <div class="upload">
-          <a class="choose-file"><img :src="`${iconUrl}Asset 578.svg`"/>Choose File</a><br/>
+          <a class="choose-file" @click="uploadDocument('image')"><img :src="`${iconUrl}Asset 578.svg`"/>Choose File</a><br/>
           <span class="or">Or</span><br/>
           <span>Drag your file here</span>
+          <input
+            type="file"
+            class="hide"
+            ref="imageFile"
+            accept="image/gif, image/jpg, image/png"
+            @change="onFilePicked"
+          />
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+  import ProposalRequest from '@/models/ProposalRequest'
+  import ProposalRequestFile from '@/models/ProposalRequestFile'
+
   import InputProposalSubItem from '@/components/Inputs/InputProposalSubItem.vue'
   import SelectProposalSubItem from './SelectProposalSubItem.vue'
   import EditableProposalSubItem from './EditableProposalSubItem.vue'
@@ -280,6 +314,8 @@
         unit: 0,
         subTotal: 0,
         newProposalRequest: {},
+        files: [],
+        docTag: null,
       }
     },
     methods: {
@@ -318,9 +354,98 @@
           requirementTitle: title,
           requirementValue: `${qty}`,
         })
+        this.$root.$emit('update-proposal-budget-summary', this.newProposalRequest, {})
       },
       calculateSubTotal() {
         this.subTotal = this.qty * this.unit
+      },
+      saveDiscount() {
+        this.isEditDiscount=false
+        this.$root.$emit(
+          'update-proposal-budget-summary', 
+          this.newProposalRequest, 
+          {
+            category: this.category,
+            value: this.discount
+          }
+        )
+      },
+      cancelDiscount() {
+        this.isEditDiscount=false;
+        this.discount=0
+      },
+      uploadDocument(fileId = null) {
+        this.docTag = fileId
+        this.selectedImage = typeof fileId !== 'object' ? fileId : null
+        if (this.docTag == 'legal') {
+          this.$refs.legalDocument.click()
+        } else if (this.docTag == 'image') {
+          this.$refs.imageFile.click()
+        }else {
+          this.$refs.optionDocument.click()
+        }
+      },
+      onFilePicked (event, tag) {
+        let file = event.target.files || event.dataTransfer.files
+
+        if (!file.length) {
+          return
+        }
+        if (file[0].size <= 5000000) {
+          // 5mb
+          this.createProposalFile(file[0], tag)
+        } else {
+          this.alretExceedPictureSize = true
+          this.$notify({
+            message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'warning'
+          })
+        }
+      },
+      createProposalFile (file, tag) {
+        let reader = new FileReader()
+        let vm = this
+
+        reader.onload = e => {
+          let proposalRequest = new ProposalRequest({ id: vm.$route.params.id })
+
+          this.files.push({
+            tag: this.docTag,
+            filename: file.name
+          })
+
+          if (this.docTag == 'image') {
+            swal({
+              title: `You've Uploaded an Image named ${file.name}`,
+              text: '',
+              type: 'success',
+              timer: 3000
+            })
+          }
+
+          // return new ProposalRequestFile({
+          //   vendorProposalFile: e.target.result,
+          // }).for(proposalRequest).save().then(result => {
+          //   this.isLoading = false
+          // }).catch(error => {
+          //   this.isLoading = false
+          //   console.log(error)
+          // })
+        }
+        reader.readAsDataURL(file)
+      },
+      getFileByTag(tag) {
+        const file = this.files.filter( f => f.tag == tag)
+        if (file.length > 0) {
+          return file[0].filename 
+        } else {
+          return null
+        }
+      },
+      removeFileByTag(tag) {
+        this.files = this.files.filter( f => f.tag != tag )
       }
     },
     created() {
@@ -331,6 +456,7 @@
 
       this.$root.$on('remove-proposal-requirement', (reqId) => {
         this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(req => req.id != reqId)
+        this.$root.$emit('update-proposal-budget-summary',  this.newProposalRequest, {})
       })
 
       this.$root.$on('add-service-item', (item) => {
@@ -752,7 +878,24 @@
             img {
               width: 13px;
               margin-right: 9px;
-            }            
+
+              &.check {
+                width: 32px;
+                margin-right: 0;
+                margin-left: 2rem;
+              }
+              &.remove {
+                margin-right: 0;
+                margin-left: 1rem;
+              }
+            }
+            span {
+              &.filename {
+                color: #050505;
+                text-decoration: underline;
+                font: 800 16px 'Manrope-Regular', sans-serif;
+              }
+            }
           }
         }
         .option {
@@ -864,6 +1007,9 @@
       &:hover {
         color: #dddddd!important;
       }
+    }
+    .hide {
+      display: none;
     }
   }
 </style>

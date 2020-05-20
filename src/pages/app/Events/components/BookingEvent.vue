@@ -1,30 +1,35 @@
 <template>
     <div class="md-layout booking-section" v-if="selectedBlock">
+
         <side-bar :event="event">
+
         </side-bar>
+
         <progress-sidebar></progress-sidebar>
-        <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
+
         <div class="event-page-header md-layout-item md-size-100">
             <div class="header-title">
-                <h3><img :src="`${budgetElementsIConsURL}${selectedBlock.componentId}.svg`" style="width:30px; margin-right:0.5em"> Book {{selectedBlock.title}}</h3>
-            </div>
-            <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
-        </div>
-        
-        <div class="booking-header md-layout-item md-size-100">
-            <div class="header-title  w-100">
-                <h4>Hi Rachel</h4>
-            </div>
-             <div class="d-flex justify-content-between" >
-                <div>
+                <h3>Hi Rachel</h3>
+                <p>
                     We found the top {{selectedBlock.proposalsCount}} proposals for your event,<br>
                     Book now before it’s too late
-                </div>
-                <div class="header-actions">
-                    <md-button class="md-simple normal-btn md-red"><md-icon>keyboard_arrow_right</md-icon>Compare Proposals </md-button>
-                    <span></span>
-                    <md-button class="md-simple normal-btn md-red"><md-icon>keyboard_arrow_right</md-icon>Change Venue Requirements </md-button>
-                </div>
+                </p>
+            </div>
+            <div class="header-actions">
+                <ul>
+                    <li><a href=""><img :src="`${menuIconsURL}Asset 9.svg`"></a></li>
+                    <li><a href=""><img :src="`${menuIconsURL}Asset 5.svg`"></a></li>
+                    <li><a href=""><img :src="`${menuIconsURL}Asset 8.svg`"></a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="booking-header d-flex justify-content-between md-layout-item md-size-100">
+            <div class="header-title">
+                <h4><img :src="`${budgetElementsIConsURL}${selectedBlock.componentId}.svg`"> Book {{selectedBlock.title}}</h4>
+            </div>
+            <div class="header-actions">
+                <md-button class="md-default md-simple">Compare Proposals <md-icon>keyboard_arrow_right</md-icon></md-button>
             </div>
         </div>
 
@@ -55,8 +60,8 @@
         <!-- ./Event Booking Items -->
 
         <div class="booking-section__actions">
-            <md-button class="md-simple md-black normal-btn " @click="showShareVendorModal = true">I already have a venue for my event</md-button>
-            <md-button class="md-simple md-black normal-btn" @click="showSomethingModal = true">I want something different</md-button>
+            <md-button class="md-default " @click="showSomethingModal = true">I want something different</md-button>
+            <md-button class="md-default " @click="showShareVendorModal = true">I already have a venue for my event</md-button>
         </div>
 
         <event-change-proposal-modal v-if="showSomethingModal" @close="showSomethingModal=false"></event-change-proposal-modal>
@@ -179,9 +184,6 @@ import SideBar from '../../../../components/SidebarPlugin/NewSideBar'
 import SidebarItem from '../../../../components/SidebarPlugin/NewSidebarItem.vue'
 import ProgressSidebar from './progressSidebar'
 import EventChangeProposalModal from '@/components/Modals/EventChangeProposalModal'
-import HeaderActions from '@/components/HeaderActions'
-import CommentEditorPanel from '@/components/CommentEditorPanel'
-
 export default {
   name: 'event-time-line',
   components: {
@@ -196,9 +198,7 @@ export default {
     SidebarItem,
     ProgressSidebar,
     Modal,
-    EventChangeProposalModal,
-    HeaderActions,
-    CommentEditorPanel
+    EventChangeProposalModal
   },
   props: {
 
@@ -221,8 +221,8 @@ export default {
     showShareVendorModal: false,
     blockVendors: null,
     selectedBlock: {},
-    proposals: [],
-    showCommentEditorPanel: false
+    proposals: []
+
   }),
   methods: {
       onFileChange (e) {
@@ -311,9 +311,6 @@ export default {
       },
       proposalDetails(proposal) {
           this.$router.push('/events/' + this.event.id + '/proposal-details/' + this.$route.params.blockId + '/' + proposal.proposals[0].id );
-      },
-      toggleCommentMode(mode) {
-          this.showCommentEditorPanel = mode;
       }
   },
   created () {
@@ -375,13 +372,5 @@ export default {
 }
 </script>
 <style lang="scss">
-    .booking-section__actions {
-        width: 100%;
-        text-align: center;
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
-        padding: 0 1.9em;
-        margin-bottom : 1em;
-    }
+
 </style>

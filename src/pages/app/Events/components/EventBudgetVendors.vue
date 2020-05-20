@@ -46,7 +46,6 @@
                   v-if="!block.editBudget"
                   @click="showEditElementBudget(block)"
                 >Edit</md-button>
-                <img :src="`${$iconURL}Event Page/arrow-left-gray.svg`" v-else style="width:25px; float:right; margin: 3px 20px;"/>
               </td>
               <template v-if="!block.editBudget">
                  <td class="actual red-label" width="15%">
@@ -115,7 +114,7 @@
               </template>
               <template v-if="block.editBudget">
                 <td colspan="3" align="right">
-                    <input class="inline-input" v-model="block.newBudget"   @focus="$event.target.select()" />
+                    <input class="inline-input" v-model="block.newBudget" />
                     <md-button
                       class="md-simple md-black normal-btn"
                       @click="showEditElementBudget(block)"
@@ -203,11 +202,10 @@
               <td width="20%" class="planned">$ {{event.allocatedTips | withComma}} 
                   <md-button
                     class="md-rose md-sm md-simple edit-btn"
-                    @click="showEditElementBudget()"
+                    @click="editTips=true"
                     v-if="!editTips"
                   >Edit</md-button>
-                  <img :src="`${$iconURL}Event Page/arrow-left-gray.svg`" v-else style="width:25px; float:right; margin: 3px 20px;"/>
-
+                
               </td>
               <template v-if="!editTips">
                 <td width="15%" class="actual red-label"></td>
@@ -380,6 +378,7 @@
 <script>
 import { mapMutations, mapGetters, mapActions } from "vuex";
 import Multiselect from "vue-multiselect";
+import swal from "sweetalert2";
 import Calendar from "@/models/Calendar";
 import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
@@ -403,9 +402,6 @@ import BudgetHandleMinusModal from "@/components/Modals/BudgetHandleMinusModal";
 import AddMyVendorModal from "@/components/Modals/AddMyVendorModal";
 
 import EventComponentVendorItem from "./Utilities/EventComponentVendorItem";
-
-import swal from 'sweetalert2'
-
 export default {
   name: "event-budget-vendors",
   components: {
@@ -494,37 +490,21 @@ export default {
       this.$forceUpdate();
     },
     showEditElementBudget(item) {
-      if (item) {
-        this.editTips = false;
-        if (item.editBudget) {
-          item.editBudget = false;
-        } else {
-          this.eventBuildingBlocks.forEach(g => {
-            g.editBudget = false;
-          });
-          item.editBudget = true;
-        }
-
-        if (item.allocatedBudget) {
-          item.newBudget = item.allocatedBudget;
-        } else {
-          item.newBudget = 0;
-        }
+      if (item.editBudget) {
+        item.editBudget = false;
       } else {
         this.eventBuildingBlocks.forEach(g => {
-            g.editBudget = false;
-          });
-        this.editTips = true;
+          g.editBudget = false;
+        });
+        item.editBudget = true;
       }
-      
+
+      if (item.allocatedBudget) {
+        item.newBudget = item.allocatedBudget;
+      } else {
+        item.newBudget = 0;
+      }
       this.$forceUpdate();
-      setTimeout(() => {
-        let input = document.querySelector('.inline-input');
-        if (input) {
-            input.focus()
-        }
-      }, 100);
-       
     },
     deleteBlock(block) {
       let calendar = new Calendar({
@@ -671,83 +651,70 @@ export default {
     },
 
     editElementBudget(block) {
-      swal({
-          title: `<div class="text-left"><div>Are Your Sure?</div></div>`,
-          showCancelButton: true,
-          confirmButtonClass: 'md-button md-success',
-          cancelButtonClass: 'md-button md-danger',
-          confirmButtonText: "Yes I'm sure",
-          cancelButtonText: 'No, take me back',
-          buttonsStyling: false
-        }).then(result => {
-          let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-          let event = new CalendarEvent({ id: this.event.id });
-          let selected_block = new EventComponent({ id: block.id });
+      let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+      let event = new CalendarEvent({ id: this.event.id });
+      let selected_block = new EventComponent({ id: block.id });
 
-          selected_block.calendarEvent = block.calendarEvent;
-          selected_block.componentId = block.componentId;
-          selected_block.icon = block.icon;
-          selected_block.color = block.color;
-          selected_block.todos = block.todos;
-          selected_block.values = block.values;
-          selected_block.vendors = block.vendors;
+      selected_block.calendarEvent = block.calendarEvent;
+      selected_block.componentId = block.componentId;
+      selected_block.icon = block.icon;
+      selected_block.color = block.color;
+      selected_block.todos = block.todos;
+      selected_block.values = block.values;
+      selected_block.vendors = block.vendors;
 
-          if (block.allocatedBudget && block.numberOfParticipants) {
-            selected_block.allocatedBudget =
-              this.type === "total"
-                ? block.newBudget
-                : block.newBudget * block.numberOfParticipants;
-            block.allocatedBudget =
-              this.type === "total"
-                ? block.newBudget
-                : block.newBudget * block.numberOfParticipants;
-          } else {
-            selected_block.allocatedBudget =
-              this.type === "total"
-                ? block.newBudget
-                : block.newBudget * this.event.numberOfParticipants;
-            block.allocatedBudget =
-              this.type === "total"
-                ? block.newBudget
-                : block.newBudget * this.event.numberOfParticipants;
+      if (block.allocatedBudget && block.numberOfParticipants) {
+        selected_block.allocatedBudget =
+          this.type === "total"
+            ? block.newBudget
+            : block.newBudget * block.numberOfParticipants;
+        block.allocatedBudget =
+          this.type === "total"
+            ? block.newBudget
+            : block.newBudget * block.numberOfParticipants;
+      } else {
+        selected_block.allocatedBudget =
+          this.type === "total"
+            ? block.newBudget
+            : block.newBudget * this.event.numberOfParticipants;
+        block.allocatedBudget =
+          this.type === "total"
+            ? block.newBudget
+            : block.newBudget * this.event.numberOfParticipants;
+      }
+
+      selected_block
+        .for(calendar, event)
+        .save()
+        .then(resp => {
+          this.isLoading = false;
+          this.$root.$emit("RefreshStatistics");
+          this.getEventBuildingBlocks();
+          this.$root.$emit(
+            "event-building-block-budget-changed",
+            this.event.components
+          );
+          this.$forceUpdate();
+
+          let allocatedBudget = 0;
+          this.eventBuildingBlocks.forEach(item => {
+            if (item.allocatedBudget) {
+              allocatedBudget += Number(item.allocatedBudget);
+            }
+          });
+
+          this.allocatedBudget = allocatedBudget;
+          if (this.event.totalBudget < this.allocatedBudget) {
+            console.log(this.totalBudget);
+            this.showMinusHandleModal = true;
+            this.overAddedValue = this.allocatedBudget - this.event.totalBudget;
           }
-          if (result.dismiss != "cancel") {
-            selected_block
-              .for(calendar, event)
-              .save()
-              .then(resp => {
-                this.isLoading = false;
-                this.$root.$emit("RefreshStatistics");
-                this.getEventBuildingBlocks();
-                this.$root.$emit(
-                  "event-building-block-budget-changed",
-                  this.event.components
-                );
-                this.$forceUpdate();
-
-                let allocatedBudget = 0;
-                this.eventBuildingBlocks.forEach(item => {
-                  if (item.allocatedBudget) {
-                    allocatedBudget += Number(item.allocatedBudget);
-                  }
-                });
-
-                this.allocatedBudget = allocatedBudget;
-                if (this.event.totalBudget < this.allocatedBudget) {
-                  console.log(this.totalBudget);
-                  this.showMinusHandleModal = true;
-                  this.overAddedValue = this.allocatedBudget - this.event.totalBudget;
-                }
-                this.showEditElementBudget(block);
-                this.$emit("change");
-              })
-              .catch(error => {
-                console.log(error);
-              });
-          }
+          this.showEditElementBudget(block);
+          this.$emit("change");
         })
-
-      
+        .catch(error => {
+          console.log(error);
+        });
     },
 
     blockBudgetChanged(val, index) {

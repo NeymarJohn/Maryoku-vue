@@ -121,6 +121,10 @@
         font-family: 'Manrope-ExtraBold';
         text-transform: uppercase;
         color : #000;
+        img {
+            margin-right : 1em;
+            width : 15px;
+        }
     }
 }
 .header-actions {
@@ -1781,7 +1785,32 @@
         }
     }
 
+    &__actions {
+        width: 100%;
+        text-align: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 0 1.9em;
+        margin-bottom : 1em;
 
+        .md-button {
+            width : 47%;
+            height: 76px;
+
+            .md-ripple {
+                border-radius: 3px;
+                box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+                border: solid 1px #f51355;
+                background-color: #ffffff;
+                font-size: 16px;
+                font-family: 'Manrope-ExtraBold',sans-serif;
+                color: #f51355;
+                text-transform: initial;
+                letter-spacing: 1px;
+            }
+        }
+    }
 }
 
 .events-booking-items {
