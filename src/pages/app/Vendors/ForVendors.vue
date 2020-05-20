@@ -113,14 +113,12 @@
             :placeholder="`Type your email address here`"
             :style="`width: 100%`"
             :img="`${iconsUrl}Asset 499.svg`"
-            :isLeft="true"
           />
           <input-proposal-sub-item
             :title="`Link to Website`"
             :placeholder="`Paste link here`"
             :style="`width: 100%`"
             :img="`${iconsUrl}Asset 498.svg`"
-            :isLeft="true"
           />
         </div>
       </template>

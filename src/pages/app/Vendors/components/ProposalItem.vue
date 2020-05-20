@@ -47,7 +47,7 @@
         </div>
         <div class="action-cont">
           <a class="cancel" @click="cancel()">Cancel</a>
-          <a class="save" @click="saveItem(serviceItem, qty, subTotal)">Add This</a>
+          <a class="save" @click="saveItem()">Add This</a>
         </div>
       </div>
     </div>
@@ -62,12 +62,12 @@
       <div class="right-side">
         <div class="budget-cont">
           <span>Budget</span>
-          <span>{{`$${newProposalRequest.bid}`}}</span>
+          <span>$400.00</span>
         </div>
         <div class="proposal-range-cont">
           <p>You're the First bidder</p>
           <span class="grey" v-if="proposalRange">Proposals range</span>
-          <span v-if="proposalRange">{{`$${newProposalRequest.bidRange.low} - $${newProposalRequest.bidRange.high}`}}</span>
+          <span v-if="proposalRange">$290-$1200</span>
         </div>
         <img 
           :src="`${iconUrl}Component 36 (2).svg`"
@@ -75,7 +75,7 @@
         />
       </div>
     </div>
-    <div class="sub-items-cont" v-if="step == 2 && isChecked && !isVCollapsed">
+    <div class="sub-items-cont" v-if="step == 2 && isChecked">
       <h3>Which elements would you like to involve in your proposal?</h3>
       <div class="sub-items">
         <select-proposal-sub-item
@@ -86,7 +86,7 @@
         />
       </div>
     </div>
-    <div class="add-item-cont" v-if="step == 2 && clickedItem">{{clickedItem}}
+    <div class="add-item-cont" v-if="step == 2 && clickedItem">
       <div class="fields-cont">
         <div class="field">
           <span>Description</span>
@@ -125,9 +125,8 @@
           Subtotal
         </span>
       </div>
-      <!-- v-for="(req, rIndex) in proposalRequest.requirements.filter( r => services.includes(r.requirementTitle))"  -->
       <editable-proposal-sub-item
-        v-for="(req, rIndex) in newProposalRequest.requirements" 
+        v-for="(req, rIndex) in proposalRequest.requirements" 
         :key="rIndex"
         :item="req"
         :active="true"
@@ -150,12 +149,12 @@
             <span v-if="!isEditDiscount">{{discount}}%</span>
           </div>
           <div class="price-cont">
-            <span>${{totalOffer * discount / 100 | withComma }}</span>
+            <span>${{totalOffer - ( totalOffer * discount / 100)}}</span>
           </div>
           <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount=true" v-if="!isEditDiscount"/>
-            <a class="cancel" v-if="isEditDiscount" @click="cancelDiscount()">Cancel</a>
-            <a class="save" v-if="isEditDiscount" @click="saveDiscount()">Save</a>
+            <a class="cancel" v-if="isEditDiscount" @click="isEditDiscount=false;discount=0">Cancel</a>
+            <a class="save" v-if="isEditDiscount" @click="isEditDiscount=false">Save</a>
           </div>
         </div>
         <div class="row">
@@ -174,7 +173,7 @@
             <span>{{tax}}%</span>
           </div>
           <div class="price-cont">
-            <span>${{totalOffer * tax / 100 | withComma}}</span>
+            <span>${{totalOffer * tax / 100}}</span>
           </div>
           <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax=true" v-if="!isEditTax"/>
@@ -188,7 +187,7 @@
           Total
         </span>
         <span>
-          ${{calculatedTotal | withComma}}
+          ${{totalOffer}}
         </span>
       </div>
     </div>
@@ -202,21 +201,11 @@
             <span class="filename">Legal Requirements</span>
             <span class="req">Required</span>
           </div>
-          <div class="right" @click="uploadDocument()" v-if="uploadedLegal()">
+          <div class="right">
             <img :src="`${iconUrl}Asset 609.svg`"/>Upload
-            <input
-              type="file"
-              class="hide"
-              ref="legalDocument"
-              accept="application/text, application/pdf"
-              @change="onFilePicked"
-            />
-          </div>
-          <div class="right" @click="uploadDocument()" v-else>
-            
           </div>
         </div>
-        <!-- <div class="item">
+        <div class="item">
           <div class="left">
             <span class="filename">Legal Requirements</span>
             <span class="req">Required</span>
@@ -224,7 +213,7 @@
           <div class="right">
             <img :src="`${iconUrl}Asset 609.svg`"/>Upload
           </div>
-        </div> -->
+        </div>
         <div class="option">
           <div class="left">
             <span class="filename">Other</span>
@@ -252,9 +241,6 @@
   </div>
 </template>
 <script>
-  import ProposalRequest from '@/models/ProposalRequest'
-  import ProposalRequestFile from '@/models/ProposalRequestFile'
-
   import InputProposalSubItem from '@/components/Inputs/InputProposalSubItem.vue'
   import SelectProposalSubItem from './SelectProposalSubItem.vue'
   import EditableProposalSubItem from './EditableProposalSubItem.vue'
@@ -292,7 +278,6 @@
         qty: 0,
         unit: 0,
         subTotal: 0,
-        newProposalRequest: {},
       }
     },
     methods: {
@@ -314,98 +299,17 @@
       cancel() {
         this.clickedItem = !this.clickedItem
       },
-      saveItem(title, qty, price) {
+      saveItem() {
         this.clickedItem = !this.clickedItem
-        this.newProposalRequest.requirements.push({
-          comments: [],
-          dateCreated: '',
-          includedInPrice: true,
-          itemNotAvailable: false,
-          price: price,
-          priceUnit: 'qty',
-          proposalRequest: {id: this.proposalRequest.id},
-          requirementComment: null,
-          requirementId: '',
-          requirementMandatory: false,
-          requirementPriority: null,
-          requirementTitle: title,
-          requirementValue: `${qty}`,
-        })
-        this.$root.$emit('update-proposal-budget-summary', this.newProposalRequest, {})
       },
       calculateSubTotal() {
         this.subTotal = this.qty * this.unit
-      },
-      saveDiscount() {
-        this.isEditDiscount=false
-        this.$root.$emit(
-          'update-proposal-budget-summary', 
-          this.newProposalRequest, 
-          {
-            category: this.category,
-            value: this.discount
-          }
-        )
-      },
-      cancelDiscount() {
-        this.isEditDiscount=false;
-        this.discount=0
-      },
-      uploadDocument(fileId = null) {
-        this.selectedImage = typeof fileId !== 'object' ? fileId : null
-        this.$refs.legalDocument.click()
-      },
-      onFilePicked (event) {
-        let file = event.target.files || event.dataTransfer.files
-        if (!file.length) {
-          return
-        }
-        if (file[0].size <= 5000000) {
-          // 5mb
-          this.createProposalFile(file[0])
-        } else {
-          this.alretExceedPictureSize = true
-          this.$notify({
-            message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
-            horizontalAlign: 'center',
-            verticalAlign: 'top',
-            type: 'warning'
-          })
-        }
-      },
-      createProposalFile (file, type) {
-        let reader = new FileReader()
-        let vm = this
-
-        reader.onload = e => {
-          let proposalRequest = new ProposalRequest({ id: vm.$route.params.id })
-
-          return new ProposalRequestFile({
-            vendorProposalFile: e.target.result,
-            tag: 'insurance'
-          }).for(proposalRequest).save().then(result => {
-            this.isLoading = false
-          }).catch(error => {
-            this.isLoading = false
-            console.log(error)
-          })
-        }
-        reader.readAsDataURL(file)
-      },
-      uploadedLegal() {
-        return true
       }
     },
     created() {
     },
     mounted() {
       this.isVCollapsed = this.isCollapsed
-      this.newProposalRequest = this.proposalRequest
-
-      this.$root.$on('remove-proposal-requirement', (reqId) => {
-        this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(req => req.id != reqId)
-        this.$root.$emit('update-proposal-budget-summary',  this.newProposalRequest, {})
-      })
 
       this.$root.$on('add-service-item', (item) => {
         this.clickedItem = !this.clickedItem
@@ -413,39 +317,24 @@
         this.qty = this.unit = this.subTotal = 0
       })
     },
-    filters: {
-      withComma (amount) {
-        return amount ? amount.toLocaleString() : 0
-      }
-    },
     computed: {
       totalOffer () {
-        // let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
-        let total = 0
+        let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
         let vm = this
 
-        this.newProposalRequest.requirements.map(function (item) {
+        this.proposalRequest.requirements.map(function (item) {
           if (item.price) {
             if (item.priceUnit === 'total') {
               total += parseFloat(item.price)
             } else {
-              if (vm.newProposalRequest !=  undefined) {
-                total += parseFloat(item.price)
-              } 
+              total +=
+                parseFloat(item.price) *
+                parseInt(vm.proposalRequest.eventData.numberOfParticipants)
             }
           }
         })
-
         return total
       },
-      calculatedTotal () {
-        let total = this.totalOffer
-
-        total = total - ( total * this.discount / 100)
-        total += total * this.tax / 100
-
-        return total
-      }
     },
     watch: {
     }
@@ -938,9 +827,6 @@
       &:hover {
         color: #dddddd!important;
       }
-    }
-    .hide {
-      display: none;
     }
   }
 </style>

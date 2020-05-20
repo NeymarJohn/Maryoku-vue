@@ -22,11 +22,7 @@
       v-else
     >
     <md-icon v-if="icon">{{icon}}</md-icon>
-    <img 
-      v-if="img!='' && !items"
-      :src="img" 
-      :style="`left: ${isLeft ? 'calc(3rem + 50px);' : 'calc(3rem + 12px);'}`"
-    />
+    <img :src="img" v-if="img!='' && !items">
     <img 
       v-else
       :src="img"  
@@ -34,8 +30,7 @@
         left: calc(100% - 7em);
         transform: rotate(90deg);
         width: 12px;
-      `"
-    />
+      `">
     <ul v-if="expanded && items">
       <li v-for="(item, index) in items" :key="index" @click="selectValue(item)">{{item}}</li>
     </ul>
@@ -54,7 +49,6 @@
       img: String,
       bkImg: String,
       disabled: Boolean,
-      isLeft: Boolean,
       items: Array
     },
     data() {
@@ -110,7 +104,7 @@
     }
     img {
       position: absolute;
-      // left: calc(3rem + 12px);
+      left: calc(3em + 50px);
       margin-top: 14px;
       width: 20px;
       margin-right: 12px;

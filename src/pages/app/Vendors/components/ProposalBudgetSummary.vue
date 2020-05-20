@@ -2,10 +2,10 @@
   <div class="proposal-budget-summary-wrapper">
     <div class="summary-cont">
       <h3>
-        You're the {{newProposalRequest.bidderRank | numeral('Oo')}} catering & venue bidder
+        You're the {{proposalRequest.bidderRank | numeral('Oo')}} catering & venue bidder
       </h3>
       <p>
-        Proposals range: <strong>${{newProposalRequest.bidRange.low | withComma}} - ${{newProposalRequest.bidRange.high | withComma}}</strong>
+        Proposals range: <strong>${{proposalRequest.bidRange.low | withComma}} - ${{proposalRequest.bidRange.high | withComma}}</strong>
       </p>
       <div class="bundle-discount" @click="isBundleDiscount=!isBundleDiscount">
         <img :src="`${iconUrl}Asset 579.svg`"/>
@@ -29,22 +29,15 @@
           </li>
           <li>
             <span>Your proposal</span>
-            <span>${{calculatedTotal(newProposalRequest.requirements)}}</span>
+            <span>${{800 | withComma}}</span>
           </li>
           <li>
-            <template v-if="discountBlock.category == 'Venue'">
-              <div class="left">
-                <span>Before discount</span>
-              </div>
-              <div class="right">
-                <span>{{`(${discountBlock.value}% off)`}}</span>
-                <span>${{total(newProposalRequest.requirements) | withComma}}</span>
-              </div>
-            </template>
+            <span>Budget for venue</span>
+            <span>${{1100 | withComma}}</span>
           </li>
-          <li v-if="calculatedTotal(newProposalRequest.requirements) - newProposalRequest.eventData.allocatedBudget > 0">
+          <li v-if="warning">
             <md-icon>error</md-icon>
-            <span>Your proposal is ${{calculatedTotal(newProposalRequest.requirements) - newProposalRequest.eventData.allocatedBudget}} more than the budget</span>
+            <span>Your proposal is $400 more than the budget</span>
           </li>
         </ul>
       </div>
@@ -75,7 +68,7 @@
         <h3>Additional Services</h3>
         <ul>
           <li>
-            <img :src="`${iconUrl}Asset 605.svg`"/>
+            <md-icon>home</md-icon>
             DJ
           </li>
           <li>
@@ -124,28 +117,23 @@
     <div class="total-cont isEdit" v-if="isEdit">
       <div class="title">
         Total
-        <br/>
-        <span>Before discount</span>
       </div>
       <div class="price">
-        <strong>$800</strong>
-        <br/>
-        $1100
-        <span>(10% off)</span>
-        <span>$1100</span>
+        <span>
+          <strong>$800</strong><br/>
+          $1100
+        </span>
       </div>
     </div>
     <div class="total-cont" v-else>
       <div class="title">
         Total
-        <br/>
-        <span v-if="discountBlock.value">Before discount</span>
       </div>
       <div class="price">
-        <strong>${{calculatedTotal(newProposalRequest.requirements)}}</strong>
-        <br/>
-        <span v-if="discountBlock.value">{{`(${discountBlock.value}% off)`}}</span>
-        <span v-if="discountBlock.value">${{total(newProposalRequest.requirements) | withComma}}</span>
+        <span>
+          <strong>$800</strong><br/>
+          $1100
+        </span>
       </div>
     </div>
   </div>
@@ -172,46 +160,14 @@
         isEdit: false,
         warning: false,
         iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
-        newProposalRequest: {},
-        discountBlock: {},
       }
     },
     methods: {
-      total(requirements) {
-        let total = 0
-        let vm = this
-
-        requirements.map(function (item) {
-          if (item.price) {
-            if (item.priceUnit === 'total') {
-              total += parseFloat(item.price)
-            } else {
-              if (vm.newProposalRequest !=  undefined) {
-                total += parseFloat(item.price)
-              } 
-            }
-          }
-        })
-        return total
-      },
-      calculatedTotal(requirements) {
-        let total = this.total(requirements)
-        if (this.discountBlock.value != undefined) {
-          total = total - ( total * this.discountBlock.value / 100)
-        }
-        return total
-      }
     },
     created() {
 
     },
     mounted() {
-      this.newProposalRequest = this.proposalRequest
-
-      this.$root.$on('update-proposal-budget-summary', (newProposalRequest, discountBlock) => {
-        this.newProposalRequest = newProposalRequest
-        this.discountBlock = discountBlock
-      })
     },
     computed: {
     },
@@ -307,38 +263,23 @@
             &:nth-child(3) {
               font-size: 14px;
               color: #050505;
-              span {
-                &:last-child {
-                  font-size: 20px;
-                  font-weight: 800;
-                }
+              span:last-child {
+                font-size: 20px;
+                font-weight: 800;
               }
             }
             &:nth-child(4) {
               color: #818080;
               margin-bottom: 15px;
               font-size: 14px;
-              display: flex;
-              justify-content: space-between;
 
-              .left {
-                flex: 1;
-                text-align: left;
-              }
-              .right {
-                flex: 1;
-                text-align: right;
-                span {
-                  color: #707070;
-                  &:last-child {
-                    text-decoration: line-through;
-                  }
-                }
+              span:last-child {
+                color: #707070;
               }
             }
             &:last-child {
               justify-content: flex-start;
-              text-align: left;
+              text-align: right;
               margin-bottom: 0;
 
               i {
@@ -407,25 +348,14 @@
 
       .title {
         color: #ffffff;
-        font: 800 22px 'Manrope-Regular', sans-serif;
-
-        span {
-          font: normal 14px 'Manrope-Regular', sans-serif;
-        }
+        font-size: 16px;
       }
       .price {
-        text-align: right;
-        font: normal 14px 'Manrope-Regular', sans-serif;
         strong {
-          font: 800 22px 'Manrope-Regular', sans-serif;
-          margin-bottom: 6px;
-          display: inline-block;
+          font-size: 22px;
+          font-weight: 800;
         }
-        span {
-          &:last-child {
-            text-decoration: line-through;
-          }
-        }
+        font-size: 14px;
       }
       &.isEdit {
         background-color: #ffedb7;

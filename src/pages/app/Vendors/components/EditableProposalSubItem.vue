@@ -1,12 +1,12 @@
 <template>
-  <div class="editable-proposal-sub-item-wrapper" :class="[{'step-3': step == 3}]" v-if="item.requirementTitle != null">
+  <div class="editable-proposal-sub-item-wrapper" :class="[{'step-3': step == 3}]">
     <template v-if="step < 3">
       <div class="item-cont">
         {{item.requirementTitle}}
       </div>
       <div class="qty-cont">
         <template v-if="!isEdit">
-          {{item.priceUnit==='total' ? 1 : item.requirementValue}}
+          {{item.priceUnit==='total' ? 1 : proposalRequest.eventData.numberOfParticipants}}
         </template>
         <template v-else>
           <input class="input-value" type="number" style="max-width: 3rem"/>
@@ -14,7 +14,7 @@
       </div>
       <div class="price-cont">
         <template v-if="!isEdit">
-          $ {{item.priceUnit != 'total' ? item.price / item.requirementValue : item.price | withComma}}
+          $ {{item.price | withComma}}
         </template>
         <template v-else>
           <input class="input-value" v-model="item.price" type="number" style="max-width: 6rem"/>
@@ -109,7 +109,6 @@
 
     div {
       &.item-cont {
-        text-transform: capitalize;
         width: calc(40% + 9px);
       }
       &.qty-cont {

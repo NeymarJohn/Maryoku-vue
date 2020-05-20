@@ -481,12 +481,8 @@ export default {
       if (this.proposals.length > 0) {
         this.goTo(`/vendors/${this.vendor.id}/proposal-request/${this.proposals[0].id}`)
       } else {
-        this.$notify({
-          message: 'Sorry, this vendor has not any proposal request to review! Please make sure to receive an email including vendor proposal link',
-          horizontalAlign: 'center',
-          verticalAlign: 'top',
-          type: 'danger'
-        })
+        console.log(this.vendor)
+        this.goTo(`/vendors/${this.vendor.id}/proposal-request/${this.vendor.id}`)
       }
     }
   },

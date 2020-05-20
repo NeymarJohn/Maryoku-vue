@@ -41,6 +41,7 @@ h1, h2, h3, h4, h5 {
 }
 textarea {
   font-family: "Manrope-Regular";
+  font-size: 16px;
 }
 .font-regular {
   font-family: "Manrope-Regular";
@@ -167,7 +168,7 @@ textarea {
       .md-button-content {
           font-family: 'Manrope-ExtraBold',sans-serif;
           font-size: 16px !important;
-          text-transform: capitalize;
+          // text-transform: capitalize;
       }
   }
 }
@@ -219,4 +220,8 @@ hr {
   height: 1px;
   border: none;
   background: #B7B7B7;
+}
+.md-checkbox-label{
+  padding-top: 4px;
+  color: #050505 !important;
 }

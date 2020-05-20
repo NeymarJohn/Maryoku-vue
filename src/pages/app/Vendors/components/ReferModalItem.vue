@@ -21,7 +21,7 @@
       </input-proposal-sub-item>
       <input-proposal-sub-item
         :title="`Email`"
-        :placeholder="`Type email address here`"
+        :placeholder="``"
         :img="`${iconUrl}Asset 620.svg`"
       >
       </input-proposal-sub-item>
