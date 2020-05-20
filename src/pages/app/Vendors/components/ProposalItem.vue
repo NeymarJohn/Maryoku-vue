@@ -47,7 +47,7 @@
         </div>
         <div class="action-cont">
           <a class="cancel" @click="cancel()">Cancel</a>
-          <a class="save" @click="saveItem()">Add This</a>
+          <a class="save" @click="saveItem(serviceItem, qty, subTotal)">Add This</a>
         </div>
       </div>
     </div>
@@ -62,12 +62,12 @@
       <div class="right-side">
         <div class="budget-cont">
           <span>Budget</span>
-          <span>$400.00</span>
+          <span>{{`$${newProposalRequest.bid}`}}</span>
         </div>
         <div class="proposal-range-cont">
           <p>You're the First bidder</p>
           <span class="grey" v-if="proposalRange">Proposals range</span>
-          <span v-if="proposalRange">$290-$1200</span>
+          <span v-if="proposalRange">{{`$${newProposalRequest.bidRange.low} - $${newProposalRequest.bidRange.high}`}}</span>
         </div>
         <img 
           :src="`${iconUrl}Component 36 (2).svg`"
@@ -125,8 +125,9 @@
           Subtotal
         </span>
       </div>
+      <!-- v-for="(req, rIndex) in proposalRequest.requirements.filter( r => services.includes(r.requirementTitle))"  -->
       <editable-proposal-sub-item
-        v-for="(req, rIndex) in proposalRequest.requirements" 
+        v-for="(req, rIndex) in newProposalRequest.requirements" 
         :key="rIndex"
         :item="req"
         :active="true"
@@ -149,7 +150,7 @@
             <span v-if="!isEditDiscount">{{discount}}%</span>
           </div>
           <div class="price-cont">
-            <span>${{totalOffer - ( totalOffer * discount / 100)}}</span>
+            <span>${{totalOffer * discount / 100 | withComma }}</span>
           </div>
           <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount=true" v-if="!isEditDiscount"/>
@@ -173,7 +174,7 @@
             <span>{{tax}}%</span>
           </div>
           <div class="price-cont">
-            <span>${{totalOffer * tax / 100}}</span>
+            <span>${{totalOffer * tax / 100 | withComma}}</span>
           </div>
           <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax=true" v-if="!isEditTax"/>
@@ -187,7 +188,7 @@
           Total
         </span>
         <span>
-          ${{totalOffer}}
+          ${{calculatedTotal | withComma}}
         </span>
       </div>
     </div>
@@ -205,7 +206,7 @@
             <img :src="`${iconUrl}Asset 609.svg`"/>Upload
           </div>
         </div>
-        <div class="item">
+        <!-- <div class="item">
           <div class="left">
             <span class="filename">Legal Requirements</span>
             <span class="req">Required</span>
@@ -213,7 +214,7 @@
           <div class="right">
             <img :src="`${iconUrl}Asset 609.svg`"/>Upload
           </div>
-        </div>
+        </div> -->
         <div class="option">
           <div class="left">
             <span class="filename">Other</span>
@@ -278,6 +279,7 @@
         qty: 0,
         unit: 0,
         subTotal: 0,
+        newProposalRequest: {},
       }
     },
     methods: {
@@ -299,8 +301,23 @@
       cancel() {
         this.clickedItem = !this.clickedItem
       },
-      saveItem() {
+      saveItem(title, qty, price) {
         this.clickedItem = !this.clickedItem
+        this.newProposalRequest.requirements.push({
+          comments: [],
+          dateCreated: '',
+          includedInPrice: true,
+          itemNotAvailable: false,
+          price: price,
+          priceUnit: 'qty',
+          proposalRequest: {id: this.proposalRequest.id},
+          requirementComment: null,
+          requirementId: '',
+          requirementMandatory: false,
+          requirementPriority: null,
+          requirementTitle: title,
+          requirementValue: `${qty}`,
+        })
       },
       calculateSubTotal() {
         this.subTotal = this.qty * this.unit
@@ -310,6 +327,11 @@
     },
     mounted() {
       this.isVCollapsed = this.isCollapsed
+      this.newProposalRequest = this.proposalRequest
+
+      this.$root.$on('remove-proposal-requirement', (reqId) => {
+        this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(req => req.id != reqId)
+      })
 
       this.$root.$on('add-service-item', (item) => {
         this.clickedItem = !this.clickedItem
@@ -317,24 +339,39 @@
         this.qty = this.unit = this.subTotal = 0
       })
     },
+    filters: {
+      withComma (amount) {
+        return amount ? amount.toLocaleString() : 0
+      }
+    },
     computed: {
       totalOffer () {
-        let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
+        // let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
+        let total = 0
         let vm = this
 
-        this.proposalRequest.requirements.map(function (item) {
+        this.newProposalRequest.requirements.map(function (item) {
           if (item.price) {
             if (item.priceUnit === 'total') {
               total += parseFloat(item.price)
             } else {
-              total +=
-                parseFloat(item.price) *
-                parseInt(vm.proposalRequest.eventData.numberOfParticipants)
+              if (vm.newProposalRequest !=  undefined) {
+                total += parseFloat(item.price)
+              } 
             }
           }
         })
+
         return total
       },
+      calculatedTotal () {
+        let total = this.totalOffer
+
+        total = total - ( total * this.discount / 100)
+        total += total * this.tax / 100
+
+        return total
+      }
     },
     watch: {
     }
