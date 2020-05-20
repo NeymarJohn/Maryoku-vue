@@ -75,7 +75,7 @@
         />
       </div>
     </div>
-    <div class="sub-items-cont" v-if="step == 2 && isChecked">
+    <div class="sub-items-cont" v-if="step == 2 && isChecked && !isVCollapsed">
       <h3>Which elements would you like to involve in your proposal?</h3>
       <div class="sub-items">
         <select-proposal-sub-item
@@ -86,7 +86,7 @@
         />
       </div>
     </div>
-    <div class="add-item-cont" v-if="step == 2 && clickedItem">
+    <div class="add-item-cont" v-if="step == 2 && clickedItem">{{clickedItem}}
       <div class="fields-cont">
         <div class="field">
           <span>Description</span>
@@ -154,8 +154,8 @@
           </div>
           <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditDiscount=true" v-if="!isEditDiscount"/>
-            <a class="cancel" v-if="isEditDiscount" @click="isEditDiscount=false;discount=0">Cancel</a>
-            <a class="save" v-if="isEditDiscount" @click="isEditDiscount=false">Save</a>
+            <a class="cancel" v-if="isEditDiscount" @click="cancelDiscount()">Cancel</a>
+            <a class="save" v-if="isEditDiscount" @click="saveDiscount()">Save</a>
           </div>
         </div>
         <div class="row">
@@ -318,9 +318,25 @@
           requirementTitle: title,
           requirementValue: `${qty}`,
         })
+        this.$root.$emit('update-proposal-budget-summary', this.newProposalRequest, {})
       },
       calculateSubTotal() {
         this.subTotal = this.qty * this.unit
+      },
+      saveDiscount() {
+        this.isEditDiscount=false
+        this.$root.$emit(
+          'update-proposal-budget-summary', 
+          this.newProposalRequest, 
+          {
+            category: this.category,
+            value: this.discount
+          }
+        )
+      },
+      cancelDiscount() {
+        this.isEditDiscount=false;
+        this.discount=0
       }
     },
     created() {
@@ -331,6 +347,7 @@
 
       this.$root.$on('remove-proposal-requirement', (reqId) => {
         this.newProposalRequest.requirements = this.newProposalRequest.requirements.filter(req => req.id != reqId)
+        this.$root.$emit('update-proposal-budget-summary',  this.newProposalRequest, {})
       })
 
       this.$root.$on('add-service-item', (item) => {
