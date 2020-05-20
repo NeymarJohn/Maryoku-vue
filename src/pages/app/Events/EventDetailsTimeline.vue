@@ -163,9 +163,9 @@
                       </div>
                     </div>
 
-                    <div class="md-layout-item md-size-100 margin-bottom">
+                    <!-- <div class="md-layout-item md-size-100 margin-bottom">
                       <div class="form-group with-icon">
-                        <label>Location</label>
+                        
                         <div class="input-icon">
                           <img :src="`${timelineIconsURL}place.svg`" width="20" />
                         </div>
@@ -175,6 +175,12 @@
                           v-model="item.location"
                           placeholder="Type name or address "
                         />
+                      </div>
+                    </div> -->
+                    <div class="md-layout-item md-size-100 margin-bottom">
+                      <div class="form-group">
+                        <label>Location</label>
+                        <location-input v-model="item.location"></location-input>
                       </div>
                     </div>
                     <div class="md-layout-item md-size-100">
@@ -431,7 +437,7 @@ import moment from "moment";
 import swal from "sweetalert2";
 import { SlideYDownTransition } from "vue2-transitions";
 import InputMask from "vue-input-mask";
-import { Modal, LabelEdit } from "@/components";
+import { Modal, LabelEdit, LocationInput} from "@/components";
 
 import VueElementLoading from "vue-element-loading";
 // import auth from '@/auth';
@@ -462,7 +468,8 @@ export default {
     SidebarItem,
     ProgressSidebar,
     Modal,
-    TimeInput
+    TimeInput,
+    LocationInput
   },
   props: {
     // event: Object,

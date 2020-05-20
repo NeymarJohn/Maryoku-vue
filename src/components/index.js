@@ -36,12 +36,12 @@ import Slider from "./Slider.vue";
 import SimpleWizard from "./Wizard/Wizard.vue";
 import WizardTab from "./Wizard/WizardTab.vue";
 import LabelEdit from "./LabelEdit.vue";
-
 import Pagination from "./Pagination.vue";
-
 import SidebarPlugin from "./SidebarPlugin";
-
 import AnimatedNumber from "./AnimatedNumber";
+import LocationInput from './LocationInput'
+import SidebarItem from './SidebarPlugin/NewSidebarItem.vue'
+import SideBar from './SidebarPlugin/NewSideBar.vue'
 
 export {
     IconCheckbox,
@@ -77,5 +77,8 @@ export {
     LabelEdit,
     VueSlideoutPanel,
     InputWithIcon,
-    MaryokuInput
+    MaryokuInput,
+    LocationInput,
+    SidebarItem,
+    SideBar
 };
