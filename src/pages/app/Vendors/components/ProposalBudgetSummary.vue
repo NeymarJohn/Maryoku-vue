@@ -42,9 +42,9 @@
               </div>
             </template>
           </li>
-          <li v-if="newProposalRequest.eventData.allocatedBudget > 0">
+          <li v-if="calculatedTotal(newProposalRequest.requirements) - newProposalRequest.eventData.allocatedBudget > 0">
             <md-icon>error</md-icon>
-            <span>Your proposal is ${{newProposalRequest.eventData.allocatedBudget}} more than the budget</span>
+            <span>Your proposal is ${{calculatedTotal(newProposalRequest.requirements) - newProposalRequest.eventData.allocatedBudget}} more than the budget</span>
           </li>
         </ul>
       </div>
@@ -139,13 +139,13 @@
       <div class="title">
         Total
         <br/>
-        <span>Before discount</span>
+        <span v-if="discountBlock.value">Before discount</span>
       </div>
       <div class="price">
         <strong>${{calculatedTotal(newProposalRequest.requirements)}}</strong>
         <br/>
-        <span>{{`(${discountBlock.value}% off)`}}</span>
-        <span>${{total(newProposalRequest.requirements) | withComma}}</span>
+        <span v-if="discountBlock.value">{{`(${discountBlock.value}% off)`}}</span>
+        <span v-if="discountBlock.value">${{total(newProposalRequest.requirements) | withComma}}</span>
       </div>
     </div>
   </div>
@@ -327,6 +327,7 @@
               }
               .right {
                 flex: 1;
+                text-align: right;
                 span {
                   color: #707070;
                   &:last-child {
@@ -337,7 +338,7 @@
             }
             &:last-child {
               justify-content: flex-start;
-              text-align: right;
+              text-align: left;
               margin-bottom: 0;
 
               i {

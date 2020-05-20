@@ -202,8 +202,18 @@
             <span class="filename">Legal Requirements</span>
             <span class="req">Required</span>
           </div>
-          <div class="right">
+          <div class="right" @click="uploadDocument()" v-if="uploadedLegal()">
             <img :src="`${iconUrl}Asset 609.svg`"/>Upload
+            <input
+              type="file"
+              class="hide"
+              ref="legalDocument"
+              accept="application/text, application/pdf"
+              @change="onFilePicked"
+            />
+          </div>
+          <div class="right" @click="uploadDocument()" v-else>
+            
           </div>
         </div>
         <!-- <div class="item">
@@ -242,6 +252,9 @@
   </div>
 </template>
 <script>
+  import ProposalRequest from '@/models/ProposalRequest'
+  import ProposalRequestFile from '@/models/ProposalRequestFile'
+
   import InputProposalSubItem from '@/components/Inputs/InputProposalSubItem.vue'
   import SelectProposalSubItem from './SelectProposalSubItem.vue'
   import EditableProposalSubItem from './EditableProposalSubItem.vue'
@@ -337,6 +350,50 @@
       cancelDiscount() {
         this.isEditDiscount=false;
         this.discount=0
+      },
+      uploadDocument(fileId = null) {
+        this.selectedImage = typeof fileId !== 'object' ? fileId : null
+        this.$refs.legalDocument.click()
+      },
+      onFilePicked (event) {
+        let file = event.target.files || event.dataTransfer.files
+        if (!file.length) {
+          return
+        }
+        if (file[0].size <= 5000000) {
+          // 5mb
+          this.createProposalFile(file[0])
+        } else {
+          this.alretExceedPictureSize = true
+          this.$notify({
+            message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
+            horizontalAlign: 'center',
+            verticalAlign: 'top',
+            type: 'warning'
+          })
+        }
+      },
+      createProposalFile (file, type) {
+        let reader = new FileReader()
+        let vm = this
+
+        reader.onload = e => {
+          let proposalRequest = new ProposalRequest({ id: vm.$route.params.id })
+
+          return new ProposalRequestFile({
+            vendorProposalFile: e.target.result,
+            tag: 'insurance'
+          }).for(proposalRequest).save().then(result => {
+            this.isLoading = false
+          }).catch(error => {
+            this.isLoading = false
+            console.log(error)
+          })
+        }
+        reader.readAsDataURL(file)
+      },
+      uploadedLegal() {
+        return true
       }
     },
     created() {
@@ -881,6 +938,9 @@
       &:hover {
         color: #dddddd!important;
       }
+    }
+    .hide {
+      display: none;
     }
   }
 </style>
