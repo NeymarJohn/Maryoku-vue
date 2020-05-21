@@ -84,6 +84,7 @@
           :isEdit="true"
           :step="step"
           :proposalRequest="proposalRequest"
+          :services="services"
         />
       </div>
     </div>

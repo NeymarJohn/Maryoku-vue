@@ -51,7 +51,7 @@
         </div>
       </div>
     </div>
-    <div class="title-cont dropdown" v-if="step == 2" @click="isChecked=!isChecked">
+    <div class="title-cont dropdown" v-if="step == 2" @click="clickItem(category)">
       <div class="left-side">
         <div class="check-cont">
           <img v-if="isChecked" :src="`${iconUrl}Group 6258 (2).svg`"/>
@@ -62,7 +62,7 @@
       <div class="right-side">
         <div class="budget-cont">
           <span>Budget</span>
-          <span>{{`$${newProposalRequest.bid}`}}</span>
+          <span>{{`$${totalOffer()}`}}</span>
         </div>
         <div class="proposal-range-cont">
           <p>You're the First bidder</p>
@@ -75,7 +75,7 @@
         />
       </div>
     </div>
-    <div class="sub-items-cont" v-if="step == 2 && isChecked && !isVCollapsed">
+    <div class="sub-items-cont" v-if="step == 2 && isChecked">
       <h3>Which elements would you like to involve in your proposal?</h3>
       <div class="sub-items">
         <select-proposal-sub-item
@@ -86,7 +86,7 @@
         />
       </div>
     </div>
-    <div class="add-item-cont" v-if="step == 2 && clickedItem">{{clickedItem}}
+    <div class="add-item-cont" v-if="step == 2 && clickedItem && isChecked">
       <div class="fields-cont">
         <div class="field">
           <span>Description</span>
@@ -107,7 +107,7 @@
       </div>
       <div class="action-cont">
         <a class="cancel" @click="cancel()">Cancel</a>
-        <a class="save" @click="saveItem()">Add This</a>
+        <a class="save" @click="saveItem(serviceItem, qty, subTotal)">Add This</a>
       </div>
     </div>
     <div class="editable-sub-items-cont" v-if="(step <= 1 && !isVCollapsed) || (step == 2 && isChecked)">
@@ -127,7 +127,7 @@
       </div>
       <!-- v-for="(req, rIndex) in proposalRequest.requirements.filter( r => services.includes(r.requirementTitle))"  -->
       <editable-proposal-sub-item
-        v-for="(req, rIndex) in newProposalRequest.requirements" 
+        v-for="(req, rIndex) in newProposalRequest.requirements.filter( r => services.includes(r.requirementTitle))" 
         :key="rIndex"
         :item="req"
         :active="true"
@@ -174,7 +174,7 @@
             <span>{{tax}}%</span>
           </div>
           <div class="price-cont">
-            <span>${{totalOffer * tax / 100 | withComma}}</span>
+            <span>${{totalOffer() * tax / 100 | withComma}}</span>
           </div>
           <div class="edit-cont">
             <img class="edit" :src="`${iconUrl}Asset 585.svg`" @click="isEditTax=true" v-if="!isEditTax"/>
@@ -188,7 +188,7 @@
           Total
         </span>
         <span>
-          ${{calculatedTotal | withComma}}
+          ${{calculatedTotal() | withComma}}
         </span>
       </div>
     </div>
@@ -319,6 +319,11 @@
       }
     },
     methods: {
+      clickItem(category) {
+        this.isChecked = !this.isChecked
+
+        this.$root.$emit('update-additional-services', category)
+      },
       setRange(value, type) {
         let val = value
 
@@ -446,6 +451,36 @@
       },
       removeFileByTag(tag) {
         this.files = this.files.filter( f => f.tag != tag )
+      },
+      totalOffer () {
+        // let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
+        let total = 0
+        let vm = this
+        const requirements = this.newProposalRequest.requirements.filter( 
+          r => this.services.includes(r.requirementTitle)
+        )
+        
+        requirements.map(function (item) {
+          if (item.price) {
+            if (item.priceUnit === 'total') {
+              total += parseFloat(item.price)
+            } else {
+              if (vm.newProposalRequest !=  undefined) {
+                total += parseFloat(item.price)
+              } 
+            }
+          }
+        })
+
+        return total
+      },
+      calculatedTotal () {
+        let total = this.totalOffer()
+
+        total = total - ( total * this.discount / 100)
+        total += total * this.tax / 100
+
+        return total
       }
     },
     created() {
@@ -471,33 +506,7 @@
       }
     },
     computed: {
-      totalOffer () {
-        // let total = parseFloat(this.proposalRequest.requirementsCategoryCost)
-        let total = 0
-        let vm = this
-
-        this.newProposalRequest.requirements.map(function (item) {
-          if (item.price) {
-            if (item.priceUnit === 'total') {
-              total += parseFloat(item.price)
-            } else {
-              if (vm.newProposalRequest !=  undefined) {
-                total += parseFloat(item.price)
-              } 
-            }
-          }
-        })
-
-        return total
-      },
-      calculatedTotal () {
-        let total = this.totalOffer
-
-        total = total - ( total * this.discount / 100)
-        total += total * this.tax / 100
-
-        return total
-      }
+      
     },
     watch: {
     }

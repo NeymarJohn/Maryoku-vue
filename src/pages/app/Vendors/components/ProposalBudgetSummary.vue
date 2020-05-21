@@ -29,22 +29,22 @@
           </li>
           <li>
             <span>Your proposal</span>
-            <span>${{calculatedTotal(newProposalRequest.requirements)}}</span>
+            <span>${{calculatedTotal(getRequirementsByCategory('Venue'))}}</span>
           </li>
-          <li>
+          <li :style="`margin: ${discountBlock.category == 'Venue' ? '' : '0' }`">
             <template v-if="discountBlock.category == 'Venue'">
               <div class="left">
                 <span>Before discount</span>
               </div>
               <div class="right">
                 <span>{{`(${discountBlock.value}% off)`}}</span>
-                <span>${{total(newProposalRequest.requirements) | withComma}}</span>
+                <span>${{total(getRequirementsByCategory('Venue')) | withComma}}</span>
               </div>
             </template>
           </li>
-          <li v-if="calculatedTotal(newProposalRequest.requirements) - newProposalRequest.eventData.allocatedBudget > 0">
+          <li v-if="calculatedTotal(getRequirementsByCategory('Venue')) - newProposalRequest.eventData.allocatedBudget > 0">
             <md-icon>error</md-icon>
-            <span>Your proposal is ${{calculatedTotal(newProposalRequest.requirements) - newProposalRequest.eventData.allocatedBudget}} more than the budget</span>
+            <span>Your proposal is ${{calculatedTotal(getRequirementsByCategory('Venue')) - newProposalRequest.eventData.allocatedBudget}} more than the budget</span>
           </li>
         </ul>
       </div>
@@ -71,27 +71,27 @@
           </li>
         </ul>
       </div> -->
-      <div class="item additional" v-if="step==2">
+      <div class="item additional" v-if="step==2 && additionalServices.length > 0">
         <h3>Additional Services</h3>
-        <ul>
+        <ul v-for="(a, aIndex) in additionalServices" :key="aIndex">
           <li>
-            <img :src="`${iconUrl}Asset 605.svg`"/>
-            DJ
+            <img :src="`${a.image}`"/>
+            {{a.title}}
           </li>
           <li>
-            <span>Relish caterers & venues</span>
+            <span>{{a.subTitle}}</span>
           </li>
           <li>
             <span>Your proposal</span>
-            <span>$800</span>
+            <span>${{calculatedTotal(getRequirementsByCategory(a.title))}}</span>
           </li>
           <li>
-            <span>Budget for venue</span>
-            <span>$1100</span>
+            <span>Budget for {{a.title}}</span>
+            <span>${{calculatedTotal(getRequirementsByCategory(a.title))}}</span>
           </li>
-          <li v-if="warning">
+          <li v-if="calculatedTotal(getRequirementsByCategory(a.title)) - newProposalRequest.eventData.allocatedBudget > 0">
             <md-icon>error</md-icon>
-            <span>Your proposal is $400 more than the budget</span>
+            <span>Your proposal is ${{calculatedTotal(getRequirementsByCategory(a.title)) - newProposalRequest.eventData.allocatedBudget}} more than the budget</span>
           </li>
         </ul>
       </div>
@@ -142,10 +142,10 @@
         <span v-if="discountBlock.value">Before discount</span>
       </div>
       <div class="price">
-        <strong>${{calculatedTotal(newProposalRequest.requirements)}}</strong>
+        <strong>${{calculatedTotal(getRequirementsBySelectedCategory())}}</strong>
         <br/>
         <span v-if="discountBlock.value">{{`(${discountBlock.value}% off)`}}</span>
-        <span v-if="discountBlock.value">${{total(newProposalRequest.requirements) | withComma}}</span>
+        <span v-if="discountBlock.value">${{total(getRequirementsBySelectedCategory()) | withComma}}</span>
       </div>
     </div>
   </div>
@@ -164,7 +164,8 @@
       // warning: Boolean,
       // isEdit: Boolean,
       step: Number,
-      proposalRequest: Object
+      proposalRequest: Object,
+      services: Array,
     },
     data () {
       return {
@@ -174,10 +175,25 @@
         iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
         newProposalRequest: {},
         discountBlock: {},
+        additionalServices: []
       }
     },
     methods: {
-      total(requirements) {
+      getRequirementsByCategory(category) {
+        const services = this.services.filter( s => s.category == category)[0].items || []
+        return this.newProposalRequest.requirements.filter( r => services.includes(r.requirementTitle) )
+      },
+      getRequirementsBySelectedCategory() {
+        let selectedCategories = this.additionalServices.map( as => as.title ) + ['Venue']
+        let selectedServices = []
+        this.services.filter( s => selectedCategories.includes(s.category)).map( function (cs) {
+          cs.items.map( function (c) {
+            selectedServices.push(c)
+          })
+        })
+        return this.newProposalRequest.requirements.filter( r => selectedServices.includes(r.requirementTitle) )
+      },
+      total(requirements, category = null) {
         let total = 0
         let vm = this
 
@@ -211,6 +227,32 @@
       this.$root.$on('update-proposal-budget-summary', (newProposalRequest, discountBlock) => {
         this.newProposalRequest = newProposalRequest
         this.discountBlock = discountBlock
+      })
+
+      this.$root.$on('update-additional-services', (category) => {
+        const additionalServicesBlock = [
+          {
+            image: `http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 607.svg`,
+            title: 'Photographer', 
+            subTitle: 'Awesome Photographer', 
+          },
+          {
+            image: `http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 606.svg`,
+            title: 'Bar', 
+            subTitle: 'Awesome Bar', 
+          },
+          {
+            image: `http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 605.svg`,
+            title: 'Dj', 
+            subTitle: 'Awesome DJ', 
+          }
+        ]
+        const selectedBlock = additionalServicesBlock.filter(a => a.title == category)[0]
+        if (this.additionalServices.filter( a => a.title == category).length > 0) {
+          this.additionalServices = this.additionalServices.filter( a => a.title != category )
+        } else {
+          this.additionalServices.push(selectedBlock)
+        }
       })
     },
     computed: {
@@ -285,6 +327,9 @@
           list-style: none;
           padding: 0;
           margin: 0;
+          border-bottom: 1px solid #707070;
+          margin-bottom: 1rem;
+          padding-bottom: 1rem;
 
           li {
             display: flex;
@@ -350,6 +395,12 @@
                 font-size: 14px;
               }
             }
+          }
+
+          &:last-child {
+            margin: 0;
+            padding: 0;
+            border: none;
           }
         }
         &.additional {
