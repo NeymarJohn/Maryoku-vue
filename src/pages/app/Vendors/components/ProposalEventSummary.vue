@@ -78,27 +78,27 @@
           :iconUrl="iconUrl"
           :categoryIcon="`${iconUrl}Asset 614.svg`"
           :itemType="`price`"
-        />
+        ></proposal-pricing-item>
         <proposal-pricing-item
           :iconUrl="iconUrl"
           :categoryIcon="`${iconUrl}Asset 615.svg`"
           :itemType="`price`"
-        />
+        ></proposal-pricing-item>
         <proposal-pricing-item
           :iconUrl="iconUrl"
           :categoryIcon="`${iconUrl}Asset 605.svg`"
           :itemType="`price`"
-        />
+        ></proposal-pricing-item>
         <proposal-pricing-item
           :iconUrl="iconUrl"
           :categoryIcon="`${iconUrl}Asset 615.svg`"
           :itemType="`bundle`"
-        />
+        ></proposal-pricing-item>
         <proposal-pricing-item
           :iconUrl="iconUrl"
           :categoryIcon="`${iconUrl}Asset 615.svg`"
           :itemType="`total`"
-        />
+        ></proposal-pricing-item>
       </div>
       <div class="policy-cont">
         <div class="title">

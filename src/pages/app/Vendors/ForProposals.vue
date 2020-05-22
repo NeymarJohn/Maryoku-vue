@@ -84,7 +84,6 @@
           :isEdit="true"
           :step="step"
           :proposalRequest="proposalRequest"
-          :services="services"
         />
       </div>
     </div>
@@ -230,16 +229,6 @@ export default {
         .catch(error => {
           console.log(' error ', error)
         })
-      
-      if (!this.proposalRequest) {
-        this.proposalRequest = new ProposalRequest({id: this.$route.params.id})
-        this.proposalRequest.bidRange = {low: 0, high: 0}
-        this.proposalRequest.requirements = []
-        this.proposalRequest.bidderRank = 1
-        this.proposalRequest.eventData = {
-          allocatedBudget: 0,
-        }
-      }
     },
     servicesByCategory(category) {
       const services = this.services.filter( s => s.category == category)

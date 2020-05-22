@@ -4,7 +4,7 @@
       <ul class="progressbar">
         <li :class="[
           {active: step >= 1 },
-          {current: step == 0 },
+          {current: step == 1 },
         ]"> 
           <span v-if="step == 0"><i>&#8226;</i></span> 
           <span v-else><md-icon>check</md-icon></span>
@@ -22,6 +22,7 @@
           <strong class="text">services &<br/>amentities</strong>
         </li>
         <li :class="[
+          { active: step >= 3 },
           { current: step >= 3 },
           { inactive: step < 3 }
         ]"> 
@@ -31,8 +32,9 @@
           <strong class="text">photoes &<br/>disclamer</strong>
         </li>
         <li :class="[
-          { current: step >= 3 },
-          { inactive: step < 3 }
+          { active: step >= 4 },
+          { current: step >= 4 },
+          { inactive: step < 4 }
         ]"> 
           <span v-if="step >= 3"><i>&#8226;</i></span> 
           <span v-else><i>&#8226;</i></span> 
