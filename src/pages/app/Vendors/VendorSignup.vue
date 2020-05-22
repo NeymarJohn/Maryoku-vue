@@ -1,30 +1,10 @@
 <template>
   <div class="vendor-signup-wrapper">
     <vendor-basic-info-form v-if="!isApproved"/>
-    <vendor-signup-step1 
-      :categories="categories" 
-      :icon="`${iconUrl}`" 
-      v-if="isApproved && step == 1"
-    />
     <vendor-signup-step2 
       :categories="categories" 
       :icon="`${iconUrl}`" 
       v-if="isApproved && step == 2"
-    />
-    <vendor-signup-step3 
-      :categories="categories" 
-      :icon="`${iconUrl}`" 
-      v-if="isApproved && step == 3"
-    />
-    <vendor-signup-step4 
-      :categories="categories" 
-      :icon="`${iconUrl}`" 
-      v-if="isApproved && step == 4"
-    />
-    <vendor-signup-final-form 
-      :categories="categories" 
-      :icon="`${iconUrl}`" 
-      v-if="isApproved && step == 5"
     />
   </div>
 </template>
@@ -38,28 +18,20 @@ import Vendors from '@/models/Vendors'
 import Icon from '@/components/Icon/Icon.vue'
 import VSignupEditableField from '@/components/Inputs/VSignupEditableField.vue'
 import VendorBasicInfoForm from './components/VendorBasicInfoForm.vue'
-import VendorSignupStep1 from './components/VendorSignupStep1.vue'
 import VendorSignupStep2 from './components/VendorSignupStep2.vue'
-import VendorSignupStep3 from './components/VendorSignupStep3.vue'
-import VendorSignupStep4 from './components/VendorSignupStep4.vue'
-import VendorSignupFinalForm from './components/VendorSignupFinalForm.vue'
 
 export default {
   components: {
     VueElementLoading,
     VSignupEditableField,
     VendorBasicInfoForm,
-    VendorSignupStep1,
     VendorSignupStep2,
-    VendorSignupStep3,
-    VendorSignupStep4,
-    VendorSignupFinalForm,
   },
   data() {
     return {
       vendor: null,
       isApproved: false,
-      step: 1,
+      step: 2,
       categories: [
         {
           name: 'amenities',
@@ -1689,16 +1661,6 @@ export default {
     this.$root.$on('approve-vendor-basic-info', () => {
       this.isApproved = true
       console.log('vendor basic info is approved')
-    })
-    this.$root.$on('next-vendor-signup-step', () => {
-      if (this.step < 5) {
-        this.step += 1
-      }
-    })
-    this.$root.$on('prev-vendor-signup-step', () => {
-      if (this.step > 1) {
-        this.step -= 1
-      }
     })
   },
   methods: {

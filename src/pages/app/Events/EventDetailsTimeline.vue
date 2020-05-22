@@ -40,8 +40,8 @@
               Preview
       </md-button>-->
 
-      <button v-scroll-to="'#timeline-edit-card'" v-el:scroll-btn ref="scrollBtn" style="display:none">
-          Scroll to the editing card
+      <button v-scroll-to="'#timeline-edit-card'"  ref="scrollBtn" style="display:none">
+        Scroll to the editing card
       </button>
 
       <div class="timeline-section-title">

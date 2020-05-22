@@ -5,7 +5,7 @@
 
 .md-switch {
   display: flex;
-
+  margin: 10px;
   .md-switch-label {
     color: rgba(0,0,0,.26);
     font-size: 14px;
@@ -15,13 +15,17 @@
 
   .md-switch-container{
     background-color: rgba(80,80,80,.7) !important;
+    height: 21px;
+    width: 36px;
   }
 
   .md-switch-thumb {
     background-color: $white-color !important;
-    border: 1px solid rgba(0,0,0,.54);
+    border: none;
     box-shadow: 0 1px 3px 1px rgba(0,0,0,.4);
-
+    width: 16px;
+    height: 16px;
+    left:2px;
     .md-ripple .md-ripple-wave{
       background-color: rgba(0,0,0,.54) !important;
     }
@@ -29,15 +33,15 @@
 
   &.md-checked {
     .md-switch-thumb {
-      border: 1px solid $brand-primary;
+      border: none;
 
       .md-ripple .md-ripple-wave{
-        background-color: rgba(156,39,176,.7) !important;
+        background-color: #f51355 !important;
       }
     }
 
     .md-switch-container {
-      background-color: rgba(156,39,176,.7);
+      background-color: #f51355 !important;
     }
   }
 }
