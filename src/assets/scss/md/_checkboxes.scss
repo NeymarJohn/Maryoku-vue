@@ -9,6 +9,18 @@
       overflow: hidden;
     }
   }
+  &.md-theme-default.md-checkbox-circle {
+    .md-checkbox-container{
+      border-radius: 50%;
+    }
+    &.md-checked  .md-checkbox-container{
+      background-color: #2cde6b !important;
+      border-color: #2cde6b !important;
+      &:after {
+        border-color: white !important;
+      }
+    }
+  }
 
   &.md-checked .md-checkbox-container{
     border: 3px solid #fc1355 !important;

@@ -2,10 +2,10 @@
   <div class="proposal-budget-summary-wrapper">
     <div class="summary-cont">
       <h3>
-        You're the {{proposalRequest.bidderRank | numeral('Oo')}} catering & venue bidder
+        You're the {{newProposalRequest.bidderRank | numeral('Oo')}} catering & venue bidder
       </h3>
       <p>
-        Proposals range: <strong>${{proposalRequest.bidRange.low | withComma}} - ${{proposalRequest.bidRange.high | withComma}}</strong>
+        Proposals range: <strong>${{newProposalRequest.bidRange.low | withComma}} - ${{newProposalRequest.bidRange.high | withComma}}</strong>
       </p>
       <div class="bundle-discount" @click="isBundleDiscount=!isBundleDiscount">
         <img :src="`${iconUrl}Asset 579.svg`"/>
@@ -29,15 +29,22 @@
           </li>
           <li>
             <span>Your proposal</span>
-            <span>${{800 | withComma}}</span>
+            <span>${{calculatedTotal(getRequirementsByCategory('Venue'))}}</span>
           </li>
-          <li>
-            <span>Budget for venue</span>
-            <span>${{1100 | withComma}}</span>
+          <li :style="`margin: ${discountBlock.category == 'Venue' ? '' : '0' }`">
+            <template v-if="discountBlock.category == 'Venue'">
+              <div class="left">
+                <span>Before discount</span>
+              </div>
+              <div class="right">
+                <span>{{`(${discountBlock.value}% off)`}}</span>
+                <span>${{total(getRequirementsByCategory('Venue')) | withComma}}</span>
+              </div>
+            </template>
           </li>
-          <li v-if="warning">
+          <li v-if="calculatedTotal(getRequirementsByCategory('Venue')) - newProposalRequest.eventData.allocatedBudget > 0">
             <md-icon>error</md-icon>
-            <span>Your proposal is $400 more than the budget</span>
+            <span>Your proposal is ${{calculatedTotal(getRequirementsByCategory('Venue')) - newProposalRequest.eventData.allocatedBudget}} more than the budget</span>
           </li>
         </ul>
       </div>
@@ -64,27 +71,27 @@
           </li>
         </ul>
       </div> -->
-      <div class="item additional" v-if="step==2">
+      <div class="item additional" v-if="step==2 && additionalServices.length > 0">
         <h3>Additional Services</h3>
-        <ul>
+        <ul v-for="(a, aIndex) in additionalServices" :key="aIndex">
           <li>
-            <md-icon>home</md-icon>
-            DJ
+            <img :src="`${a.image}`"/>
+            {{a.title}}
           </li>
           <li>
-            <span>Relish caterers & venues</span>
+            <span>{{a.subTitle}}</span>
           </li>
           <li>
             <span>Your proposal</span>
-            <span>$800</span>
+            <span>${{calculatedTotal(getRequirementsByCategory(a.title))}}</span>
           </li>
           <li>
-            <span>Budget for venue</span>
-            <span>$1100</span>
+            <span>Budget for {{a.title}}</span>
+            <span>${{calculatedTotal(getRequirementsByCategory(a.title))}}</span>
           </li>
-          <li v-if="warning">
+          <li v-if="calculatedTotal(getRequirementsByCategory(a.title)) - newProposalRequest.eventData.allocatedBudget > 0">
             <md-icon>error</md-icon>
-            <span>Your proposal is $400 more than the budget</span>
+            <span>Your proposal is ${{calculatedTotal(getRequirementsByCategory(a.title)) - newProposalRequest.eventData.allocatedBudget}} more than the budget</span>
           </li>
         </ul>
       </div>
@@ -117,23 +124,28 @@
     <div class="total-cont isEdit" v-if="isEdit">
       <div class="title">
         Total
+        <br/>
+        <span>Before discount</span>
       </div>
       <div class="price">
-        <span>
-          <strong>$800</strong><br/>
-          $1100
-        </span>
+        <strong>$800</strong>
+        <br/>
+        $1100
+        <span>(10% off)</span>
+        <span>$1100</span>
       </div>
     </div>
     <div class="total-cont" v-else>
       <div class="title">
         Total
+        <br/>
+        <span v-if="discountBlock.value">Before discount</span>
       </div>
       <div class="price">
-        <span>
-          <strong>$800</strong><br/>
-          $1100
-        </span>
+        <strong>${{calculatedTotal(getRequirementsBySelectedCategory())}}</strong>
+        <br/>
+        <span v-if="discountBlock.value">{{`(${discountBlock.value}% off)`}}</span>
+        <span v-if="discountBlock.value">${{total(getRequirementsBySelectedCategory()) | withComma}}</span>
       </div>
     </div>
   </div>
@@ -152,7 +164,8 @@
       // warning: Boolean,
       // isEdit: Boolean,
       step: Number,
-      proposalRequest: Object
+      proposalRequest: Object,
+      services: Array,
     },
     data () {
       return {
@@ -160,14 +173,87 @@
         isEdit: false,
         warning: false,
         iconUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
+        newProposalRequest: {},
+        discountBlock: {},
+        additionalServices: []
       }
     },
     methods: {
+      getRequirementsByCategory(category) {
+        const services = this.services.filter( s => s.category == category)[0].items || []
+        return this.newProposalRequest.requirements.filter( r => services.includes(r.requirementTitle) )
+      },
+      getRequirementsBySelectedCategory() {
+        let selectedCategories = this.additionalServices.map( as => as.title ) + ['Venue']
+        let selectedServices = []
+        this.services.filter( s => selectedCategories.includes(s.category)).map( function (cs) {
+          cs.items.map( function (c) {
+            selectedServices.push(c)
+          })
+        })
+        return this.newProposalRequest.requirements.filter( r => selectedServices.includes(r.requirementTitle) )
+      },
+      total(requirements, category = null) {
+        let total = 0
+        let vm = this
+
+        requirements.map(function (item) {
+          if (item.price) {
+            if (item.priceUnit === 'total') {
+              total += parseFloat(item.price)
+            } else {
+              if (vm.newProposalRequest !=  undefined) {
+                total += parseFloat(item.price)
+              } 
+            }
+          }
+        })
+        return total
+      },
+      calculatedTotal(requirements) {
+        let total = this.total(requirements)
+        if (this.discountBlock.value != undefined) {
+          total = total - ( total * this.discountBlock.value / 100)
+        }
+        return total
+      }
     },
     created() {
 
     },
     mounted() {
+      this.newProposalRequest = this.proposalRequest
+
+      this.$root.$on('update-proposal-budget-summary', (newProposalRequest, discountBlock) => {
+        this.newProposalRequest = newProposalRequest
+        this.discountBlock = discountBlock
+      })
+
+      this.$root.$on('update-additional-services', (category) => {
+        const additionalServicesBlock = [
+          {
+            image: `http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 607.svg`,
+            title: 'Photographer', 
+            subTitle: 'Awesome Photographer', 
+          },
+          {
+            image: `http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 606.svg`,
+            title: 'Bar', 
+            subTitle: 'Awesome Bar', 
+          },
+          {
+            image: `http://static.maryoku.com/storage/icons/NewSubmitPorposal/Asset 605.svg`,
+            title: 'Dj', 
+            subTitle: 'Awesome DJ', 
+          }
+        ]
+        const selectedBlock = additionalServicesBlock.filter(a => a.title == category)[0]
+        if (this.additionalServices.filter( a => a.title == category).length > 0) {
+          this.additionalServices = this.additionalServices.filter( a => a.title != category )
+        } else {
+          this.additionalServices.push(selectedBlock)
+        }
+      })
     },
     computed: {
     },
@@ -241,6 +327,9 @@
           list-style: none;
           padding: 0;
           margin: 0;
+          border-bottom: 1px solid #707070;
+          margin-bottom: 1rem;
+          padding-bottom: 1rem;
 
           li {
             display: flex;
@@ -263,23 +352,38 @@
             &:nth-child(3) {
               font-size: 14px;
               color: #050505;
-              span:last-child {
-                font-size: 20px;
-                font-weight: 800;
+              span {
+                &:last-child {
+                  font-size: 20px;
+                  font-weight: 800;
+                }
               }
             }
             &:nth-child(4) {
               color: #818080;
               margin-bottom: 15px;
               font-size: 14px;
+              display: flex;
+              justify-content: space-between;
 
-              span:last-child {
-                color: #707070;
+              .left {
+                flex: 1;
+                text-align: left;
+              }
+              .right {
+                flex: 1;
+                text-align: right;
+                span {
+                  color: #707070;
+                  &:last-child {
+                    text-decoration: line-through;
+                  }
+                }
               }
             }
             &:last-child {
               justify-content: flex-start;
-              text-align: right;
+              text-align: left;
               margin-bottom: 0;
 
               i {
@@ -291,6 +395,12 @@
                 font-size: 14px;
               }
             }
+          }
+
+          &:last-child {
+            margin: 0;
+            padding: 0;
+            border: none;
           }
         }
         &.additional {
@@ -348,14 +458,25 @@
 
       .title {
         color: #ffffff;
-        font-size: 16px;
+        font: 800 22px 'Manrope-Regular', sans-serif;
+
+        span {
+          font: normal 14px 'Manrope-Regular', sans-serif;
+        }
       }
       .price {
+        text-align: right;
+        font: normal 14px 'Manrope-Regular', sans-serif;
         strong {
-          font-size: 22px;
-          font-weight: 800;
+          font: 800 22px 'Manrope-Regular', sans-serif;
+          margin-bottom: 6px;
+          display: inline-block;
         }
-        font-size: 14px;
+        span {
+          &:last-child {
+            text-decoration: line-through;
+          }
+        }
       }
       &.isEdit {
         background-color: #ffedb7;

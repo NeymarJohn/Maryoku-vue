@@ -13,13 +13,13 @@
     />
     <div ref="timePickerElements" v-if="showTimePicker">
       <div class="time-picker picker-panel"  ref="timePickerPanel" >
-        <div class="d-flex ">
+        <div class="d-flex picker-content">
           <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px"/>
-          <time-input></time-input>
+          <time-input v-model="timeInfo"></time-input>
         </div>
         <div class="btn-group">
           <md-button class="md-simple md-black normal-btn" @click="showTimePicker=false">Cancel</md-button>
-          <md-button class="md-default md-rose normal-btn"> Set </md-button>
+          <md-button class="md-default md-rose normal-btn" @click="setTime"> Set </md-button>
         </div>
       </div>
       <div class="time-picker-mask" @click="showTimePicker=false" ref="timePickerMask" v-if="showTimePicker"></div> 
@@ -29,13 +29,14 @@
       <div class="date-picker picker-panel"  ref="timePickerPanel" >
         <div class="d-flex ">
           <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px"/>
+          {{dateData && dateData.selectedDate}}
         </div>
         <div>
-          <functional-calendar :change-month-function='true' :change-year-function='true'></functional-calendar>
+          <functional-calendar :is-date-picker='true' :change-month-function='true' :change-year-function='true' dateFormat='dd/mm/yyyy' v-model="dateData"></functional-calendar>
         </div>
         <div class="btn-group">
           <md-button class="md-simple md-black normal-btn" @click="showDatePicker=false">Cancel</md-button>
-          <md-button class="md-default md-rose normal-btn"> Set </md-button>
+          <md-button class="md-default md-rose normal-btn" @click="setDate"> Set </md-button>
         </div>
       </div>
       <div class="time-picker-mask" @click="showDatePicker=false" ref="timePickerMask" v-if="showDatePicker"></div> 
@@ -77,7 +78,9 @@ export default {
       content: this.value,
       inputClass: this.inputStyle,
       showTimePicker: false,
-      showDatePicker: false
+      showDatePicker: false,
+      dateData: {},
+      timeInfo: 0
     };
   },
   methods: {
@@ -89,6 +92,7 @@ export default {
         do {
             top += element.offsetTop  || 0;
             left += element.offsetLeft || 0;
+            top -= element.scrollTop || 0;
             element = element.offsetParent;
         } while(element);
 
@@ -117,6 +121,13 @@ export default {
         }, 100);
       }
     },
+    setDate() {
+      this.content = this.dateData.selectedDate;
+      this.showDatePicker = false;
+    },
+    setTime() {
+      this.showTimePicker = false;
+    },
     handleScroll(event) {
       console.log(window.scrollY)
       console.log(this.cumulativeOffset(this.$refs.input))
@@ -143,6 +154,13 @@ export default {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         this.content = result;
       }
+    },
+    dateData: function(newValue) {
+      // this.content = dateData.selectedDate
+    },
+    timeInfo: function(newValue) {
+      console.log(newValue)
+      this.content = newValue
     }
   }
 };

@@ -177,6 +177,9 @@
   z-index: 10;
   box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.16);
   display: none;
+  .picker-content {
+    min-height: 120px;
+  }
   &.time-picker {
     img {
       width: 23px;
@@ -185,14 +188,15 @@
     .time-select-fields {
       flex-grow: 1;
     }
-    .btn-group {
-      margin-top: 60px;
-      text-align: right;
-    }
+    
   }
+  
   .vfc-main-container {
     box-shadow: none;
   }
+}
+.btn-group {
+  text-align: right;
 }
 .time-picker-mask {
   position: fixed;

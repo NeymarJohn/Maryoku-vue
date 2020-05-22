@@ -75,7 +75,7 @@
           You're the {{proposalRequest ? proposalRequest.bidderRank : '1' | numeral('Oo')}} catering & venue bidder
         </p>
 
-        <button class="yes" @click="goTo(`/vendors/${vendor.id}/proposal-request/${proposalRequest.id}/form`)">
+        <button class="yes" @click="goToForm()">
           Submit Proposal
         </button>
       </div>
@@ -357,8 +357,18 @@ export default {
     })
   },
   methods: {
-    goTo (router) {
-      this.$router.push(router)
+    goToForm() {
+      if (this.proposalRequest) {
+        this.$router.push(`/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`)
+      } else {
+        this.proposalRequest = new ProposalRequest({id: this.$route.params.id})
+        this.$router.push({
+          path: `/vendors/${this.vendor.id}/proposal-request/${this.proposalRequest.id}/form`,
+          props: {
+            proposalRequest: this.proposalRequest
+          }
+        })
+      }
     },
     hideModal() {
       this.chooseDateModal = false

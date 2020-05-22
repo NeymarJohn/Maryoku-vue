@@ -481,12 +481,34 @@ export default {
       if (this.proposals.length > 0) {
         this.goTo(`/vendors/${this.vendor.id}/proposal-request/${this.proposals[0].id}`)
       } else {
-        this.$notify({
-          message: 'Sorry, this vendor has not any proposal request to review! Please make sure to receive an email including vendor proposal link',
-          horizontalAlign: 'center',
-          verticalAlign: 'top',
-          type: 'danger'
-        })
+        let proposalRequest = new ProposalRequest({ id: this.$route.params.id })
+        proposalRequest.vendorId = this.vendor.id
+        this.goTo(`/vendors/${this.vendor.id}/proposal-request/${proposalRequest.id}`)
+        // 500 error
+        // proposalRequest
+        //   .save()
+        //   .then(res => {
+        //     console.log('saved ', res)
+
+        //     swal({
+        //       title: 'Proposal Submitted',
+        //       text: 'Thank you for submitting your proposal.',
+        //       type: 'success',
+        //       timer: 2000
+        //     }).then(result => {
+        //       document.location.reload()
+        //     })
+        //   })
+        //   .catch(error => {
+        //     console.log(error)
+        //   })
+
+        // this.$notify({
+        //   message: 'Sorry, this vendor has not any proposal request to review! Please make sure to receive an email including vendor proposal link',
+        //   horizontalAlign: 'center',
+        //   verticalAlign: 'top',
+        //   type: 'danger'
+        // })
       }
     }
   },
