@@ -37,7 +37,7 @@
     </div>
     <div class="note-items">
 
-      <event-note-item v-for="(note, index) in notes" :key="index" :note="note"></event-note-item>
+      <event-note-item v-for="(note) in notes" :key="note.id" :note="note"></event-note-item>
     </div>
   </div>
 </template>

@@ -7,18 +7,18 @@
     <router-view></router-view>
     <section class="footer-wrapper" :class="{'approved': isApproved}" v-if="isApproved">
       <div class="left">
-        <a class="back">
+        <a class="back" @click="prev()">
           <img :src="`${iconsUrl}Group 4770 (2).svg`"/> Back
         </a>
-        <span><img :src="`${iconsUrl}Asset 602.svg`"/></span>
+        <span v-if="step != 5"><img :src="`${iconsUrl}Asset 602.svg`"/></span>
       </div>
       <div class="right">
         <a class="save">
           <img :src="`${iconsUrl}Asset 610.svg`"/>
           Save for later
         </a>
-        <a class="approve">
-          Next
+        <a class="approve" @click="next()">
+          {{nextLabel}}
         </a>
       </div>
     </section>
@@ -40,7 +40,7 @@
       return {
         iconsUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
         isApproved: false,
-        step: 2,
+        step: 1,
       }
     },
     methods: {
@@ -50,13 +50,34 @@
       approve() {
         this.$root.$emit('approve-vendor-basic-info')
         this.isApproved = true
-      }
+      },
+      next() {
+        this.$root.$emit('next-vendor-signup-step')
+        if (this.step < 5) {
+          this.step += 1
+        }
+      },
+      prev() {
+        this.$root.$emit('prev-vendor-signup-step')
+        if (this.step > 1) {
+          this.step -= 1
+        }
+      },
     },
     created(){
     },
     mounted() {
     },
     computed:{
+      nextLabel () {
+        if ( this.step == 5) {
+          return 'Sign Up'
+        } else if ( this.step == 4 ) {
+          return 'Finish'
+        } else {
+          return 'Next'
+        }
+      }
     }
   };
 </script>

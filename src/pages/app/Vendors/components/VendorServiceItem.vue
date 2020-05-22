@@ -90,7 +90,7 @@ export default {
     background: #ffffff;
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     padding: 60px;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
     .title-cont {
       display: flex;
       justify-content: space-between;
@@ -171,7 +171,6 @@ export default {
           text-transform: capitalize;
         }
         .checklist {
-          margin-top: 10px;
           text-transform: capitalize;
         }
       }

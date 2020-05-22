@@ -40,7 +40,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions("event", ["deleteEventNote", "updateEventNote"]),
+    ...mapActions("event", ["deleteEventNote", "updateEventNote", "removeNote"]),
     editNote() {},
     deleteNote() {
       this.note.isDeleted = true
