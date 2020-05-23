@@ -276,6 +276,7 @@ export default {
             }
             .main-cont {
               display: flex;
+              align-items: center;
 
               .suffix {
                 flex: 2;

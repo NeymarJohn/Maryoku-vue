@@ -1,6 +1,4 @@
 import Calendar from '@/models/Calendar'
-import CalendarEvent from '@/models/CalendarEvent'
-import EventNote from '@/models/EventNote'
 import Currency from '@/models/Currency'
 import EventTheme from '@/models/EventTheme'
 import EventComponent from '@/models/EventComponent'
@@ -28,7 +26,6 @@ const state = {
     components: null
   },
   components: [],
-  notes:[],
   vendorsList: null,
   currencies: [],
   categories: [],
@@ -104,56 +101,10 @@ const actions = {
       .catch(e => {
         commit('setComponents', [])
       })
-  },
-  async getEventNotes({ commit, state}) {
-    const calendarId = state.eventData.calendar.id;
-    const eventId =  state.eventData.id;
-    const calendar = new Calendar({id: calendarId})
-    const event = new CalendarEvent({ id: eventId})
-    new EventNote()
-      .for(calendar, event)
-      .get()
-      .then(notes => {
-        commit('setEventNotes', notes)
-      });
-  },
-  async addEventNote({commit, state}, note) {
-    const calendarId = state.eventData.calendar.id;
-    const eventId =  state.eventData.id;
-    const calendar = new Calendar({id: calendarId})
-    const event = new CalendarEvent({ id: eventId})
-    new EventNote(note)
-      .for(calendar, event)
-      .save()
-      .then(res => {
-        const notes = [ ...state.notes, res]
-        commit('setEventNotes', notes)
-      });
-  },
-  async removeNote({commit, state}, note) {
-    const index = state.notes.findIndex( item => item.id === note.id)
-    commit('removeEventNote', {index, note})
-  },
-
-  async updateEventNote({commit, state}, note) {
-    const calendarId = state.eventData.calendar.id;
-    const eventId =  state.eventData.id;
-    const calendar = new Calendar({id: calendarId})
-    const event = new CalendarEvent({ id: eventId})
-    new EventNote(note)
-      .for(calendar, event)
-      .save()
-      .then(res => {
-        const index = state.notes.findIndex( item => item.id === note.id)
-        commit('updateEventNote', {index, note})
-      });
   }
 }
 
 const mutations = {
-  setEventData (state, eventData) {
-    state.eventData = eventData
-  },
   setCurrencies (state, currencies) {
     state.currencies = currencies
   },
@@ -169,17 +120,6 @@ const mutations = {
   setComponents (state, components) {
     state.components = components
   },
-
-  setEventNotes (state, notes) {
-    state.notes = notes
-  },
-  updateEventNote (state, { index, note } ) {
-    state.notes[index] = note;
-  },
-  removeEventNote (state, index) {
-    state.notes.splice(index, 1)
-  },
-
   updateEventData (state, params) {
     state.eventData.components[params.index] = params.data
   },

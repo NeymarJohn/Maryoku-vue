@@ -6,10 +6,131 @@
         <h2>DISCLAMER & <br/>POLICY</h2>
         <p>Those elements will automatically appear on your future proposal</p>
         <h2>3/4</h2>
-        
       </div>
       <div class="right-side">
-
+        <div class="policy-wrapper mb-50">
+          <div class="title-cont">
+            <div class="top">
+              <h5><img :src="`${iconUrl}Asset 560.svg`"/> Policy</h5>
+            </div>
+            <div class="bottom">
+              <p>Set venue rules for your guests</p>
+            </div>
+          </div>
+          <div class="card">
+            
+          </div>
+        </div>
+        <div class="pricing-policy-wrapper mb-50">
+          <div class="title-cont">
+            <div class="top">
+              <h5><img :src="`${iconUrl}Asset 536.svg`"/> pricing policy</h5>
+            </div>
+            <div class="bottom">
+              <p>use the suggested element or add your own itmes to your disclaimer</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="field mb-50">
+              <div class="label">
+                <span>How much deposit do you charge?</span>
+              </div>
+              <input type="text" class="" placeholder="Like: 50% of the total event"/>
+            </div>
+            <div class="field ml-title">
+              <h4>cancellation approach</h4>
+            </div>
+            <div class="field mb-50">
+              <div class="label">
+                <div class="title-cont">
+                  <div class="left m-0">
+                    <h5>cancellation is allowed until...?</h5>
+                  </div>
+                  <div class="right">
+                    <p>(With full refund)</p>
+                  </div>
+                </div>
+              </div>
+              <input type="text" class="" placeholder="Like: 60 days prior to the start of the event..."/>
+            </div>
+            <div class="field mb-50">
+              <div class="label">
+                <div class="title-cont">
+                  <div class="left m-0">
+                    <h5>additional disclaimer</h5>
+                  </div>
+                  <div class="right">
+                    <p>*suggested</p>
+                  </div>
+                </div>
+              </div>
+              <textarea placeholder="For example : A 50% deposite will be due on or befor eThe remaining balance will be collected a week prior to the event" rows="5"/>
+            </div>
+          </div>
+        </div>
+        <div class="3rd-party-vendor-wrapper mb-50">
+          <div class="title-cont">
+            <div class="top">
+              <h5>3rd party vendor</h5>
+            </div>
+          </div>
+          <div class="card">
+            <div class="title-cont">
+              <div class="left">
+                <h5>do you allow 3rd party vendor?</h5>
+              </div>
+              <div class="right">
+                <p>(this question is for venues only)</p>
+              </div>
+            </div>
+            <div class="checks-cont">
+              <div class="check-item" @click="allowThirdVendor = 0">
+                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="allowThirdVendor == 0"/>
+                <span class="unchecked" v-else></span>
+                <span>Yes</span>
+              </div>
+              <div class="check-item" @click="allowThirdVendor = 1">
+                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="allowThirdVendor == 1"/>
+                <span class="unchecked" v-else></span>
+                <span>No</span>
+              </div>
+              <div class="check-item" @click="allowThirdVendor = 2">
+                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="allowThirdVendor == 2"/>
+                <span class="unchecked" v-else></span>
+                <span>Cancel</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="social-wrapper">
+          <div class="title-cont">
+            <div class="top">
+              <h5>blackout days</h5>
+            </div>
+          </div>
+          <div class="card">
+            <div class="title-cont">
+              <div class="top">
+                <h5>are there times when your don't work regularly?</h5>
+              </div>
+              <div class="bottom">
+                <p>This way we kow not to send your irrelevant offers</p>
+              </div>
+            </div>
+            <div class="checks-cont mt-2">
+              <div class="check-item" @click="workAllDay = true">
+                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="workAllDay"/>
+                <span class="unchecked" v-else></span>
+                <span>I work all the time</span>
+              </div>
+              <div class="check-item" @click="workAllDay = false">
+                <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="!workAllDay"/>
+                <span class="unchecked" v-else></span>
+                <span>There are times I don't work ></span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -38,6 +159,8 @@ export default {
     return {
       vendor: null,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
+      allowThirdVendor: null,
+      workAllDay: false,
     }
   },
   created() {
@@ -96,33 +219,158 @@ export default {
       .right-side {
         flex: 3;
 
-        h2 {
-          margin: 0;
-          margin-bottom: 40px;
-          font: 800 40px Manrope-Regular, sans-serif;
-        }
         .card {
-          padding: 30px 60px 60px 60px;
-          background-color: #ffffff;
-          box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-        }
-        .description {
+          font-family: Manrope-Regular, sans-serif;
           color: #050505;
-          h5 {
-            margin: 0;
-            font: 800 16px Manrope-Regular, sans-serif;
+          background: #ffffff;
+          -webkit-box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+          box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+          padding: 60px;
+          margin-bottom: 2rem;
 
-            img {
-              width: 22px;
-              margin-right: 12px;
+          .field {
+            font: 800 16px Manrope-Regular, sans-serif;
+            margin: 0 0 2rem 0;
+            .label {
+              margin-bottom: .5rem;
+              img {
+                width: 24px;
+                margin-right: .5rem;
+              }
+              span {
+                text-transform: capitalize;
+              }
+            }
+            input {
+              font-size: 16px;
+              padding: 22px 30px;
+              min-width: 75%;
+              border: 1px solid #707070;
+              border-radius: 0;
+            }
+            .main-cont {
+              display: flex;
+              align-items: center;
+
+              .suffix {
+                flex: 2;
+                input {
+                  padding-left: 45%;
+                  width: 100%;
+                }
+                &:before {
+                  position: absolute;
+                  margin-top: 12px;
+                  margin-left: 1.5rem;
+                }
+                &:first-child {
+                  &:before {
+                    content: 'Min'
+                  }
+                }
+                &:last-child {
+                  &:before {
+                    content: 'Max'
+                  }
+                }
+              }
+              .arrow {
+                flex: 1;
+                text-align: center;
+                img {
+                  width: 3rem;
+                }
+              }
             }
           }
-          p {
-            margin: 14px 0 30px 0;
-            font: normal 16px Manrope-Regular, sans-serif;
+          .checks-cont {
+            display: flex;
+            justify-content: flex-start;
+            .check-item {
+              display: flex;
+              align-items: center;
+              margin-right: 5rem;
+              cursor: pointer;
+
+              img {
+                width: 30px;
+                height: 30px;
+                margin-right: 14px;
+              }
+            }
+            span {
+              &.unchecked {
+                display: inline-block;
+                width: 30px;
+                height: 30px;
+                border: 1px solid #707070;
+                border-radius: 50%;
+                background: #ffffff;
+                margin-right: 14px;
+              }
+            }
           }
+          h5 {
+            font: 800 16px Manrope-Regular, sans-serif;
+          } 
         }
       }
+    }
+    .title-cont {
+      text-transform: capitalize;
+      img {
+        width: 24px;
+        margin-right: .5rem;
+      }
+      h5 {
+        font: 800 16px Manrope-Regular, sans-serif;
+        margin: 0;
+      }
+      p {
+        margin: 0;
+        font: normal 14px Manrope-Regular, sans-serif;
+      }
+      .left, .right {
+        margin: 0;
+        display: inline-block;
+      }
+      .left {
+        margin: 0 1rem 2rem 0;
+      }
+      .top, .bottom {
+        margin-bottom: .5rem;
+      }
+    }
+    .w-16 {
+      width: 16px!important;
+    }
+    .mb-50 {
+      margin-bottom: 3rem!important;
+    }
+    .m-0 {
+      margin: 0!important;
+    }
+    .mt-2 {
+      margin-top: 2rem;
+    }
+    .ml-title {
+      padding: 1rem 0;
+      background-color: #ededed;
+      width: calc(75% + 60px);
+      margin-left: -60px!important;
+      padding-left: 60px;
+
+      h4 {
+        margin: 0;
+        text-transform: capitalize;
+        font: 800 16px Manrope-Regular, sans-serif;
+      }
+    }
+    textarea {
+      resize: none;
+      width: 75%;
+      padding: 1.5rem 2rem;
+      font-size: 16px;
     }
   }  
 </style>

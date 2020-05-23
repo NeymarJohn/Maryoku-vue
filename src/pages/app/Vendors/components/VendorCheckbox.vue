@@ -110,6 +110,7 @@ export default {
           flex: 1;
           img {
             width: 30px;
+            height: 30px;
             margin-right: 14px;
           }
         }
