@@ -18,8 +18,48 @@
             </div>
           </div>
           <div class="card">
+            <div class="rules">
+              <div class="rule" v-for="(r, rIndex) in defRules.split(', ')" :key="rIndex">
+                <div class="left">
+                  {{r}}
+                </div>
+                <div class="right">
+                  <div class="top">
+                    <div class="item" @click="yesRule(r)">
+                      <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="yesRules.includes(r)"/>
+                      <span class="unchecked" v-else></span>
+                      Yes
+                    </div>
+                    <div class="item" @click="noRule(r)">
+                      <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="noRules.includes(r)"/>
+                      <span class="unchecked" v-else></span>
+                      No
+                    </div>
+                    <div class="item" v-if="false">
+                      <a class="note">
+                        + Add Note
+                      </a>
+                    </div>
+                    <div class="item noflex">
+                      <textarea placeholder="Except from the parking area" rows="3"/>
+                      <br/>
+                      <a class="cancel">
+                        Cancel
+                      </a>
+                    </div>
+                  </div>
+                  <div class="bottom" v-if="yesRules.includes(r)">
+                    <span>Price for every extra hour</span>
+                    <br/>
+                    <div class="suffix">
+                      <input type="text" class="" placeholder="00.00"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <v-signup-add-rules
-              :comType="'rule'"
+              :comType="`rule`"
               :title="rulesDesc"
             />
           </div>
@@ -203,6 +243,9 @@ export default {
           than: 'Like: 30% of deposit',
         },
       },
+      yesRules: [],
+      noRules: [],
+      defRules: 'Suitable for pets, Smoking allowed, Suitable for infants(Under 2 years), Dress code, Overtime Cost',
       notAllowed: [],
       isOtherNa: false,
       defNa: 'Catering, Dj, Photographer, Show / Performance, Flowers, Transporation, Decoration, Rentals, Favours & Gifts, Other'
@@ -221,7 +264,23 @@ export default {
       } else {
         this.notAllowed.push(item)
       }
-    }
+    },
+    yesRule(item) {
+      if (this.yesRules.includes(item)) {
+        this.yesRules = this.yesRules.filter(n => n != item)
+      } else {
+        this.noRules = this.noRules.filter(n => n != item)
+        this.yesRules.push(item)
+      }
+    },
+    noRule(item) {
+      if (this.noRules.includes(item)) {
+        this.noRules = this.noRules.filter(n => n != item)
+      } else {
+        this.yesRules = this.yesRules.filter(n => n != item)
+        this.noRules.push(item)
+      }
+    },
   },
   computed: {
     
@@ -446,6 +505,105 @@ export default {
         margin: 0;
         text-transform: capitalize;
         font: 800 16px Manrope-Regular, sans-serif;
+      }
+    }
+    .rules {
+      margin-bottom: 3rem;
+      .rule {
+        padding: 2rem 0;
+        border-bottom: 1px solid #dddddd;
+        font: 600 16px Manrope-Regular, sans-serif;
+
+        &:first-child {
+          padding-top: 0;
+        }
+        display: flex;
+        justify-content: flex-start;
+        .left {
+          flex: 1;
+        }
+        .right {
+          flex: 1;
+          .top {
+            display: flex;
+            align-items: top;
+
+            .item {
+              display: flex;
+              justify-content: flex-start;
+              margin-right: 4rem;
+              text-align: right;
+              cursor: pointer;
+
+              span {
+                &.unchecked {
+                  display: inline-block;
+                  width: 30px;
+                  height: 30px;
+                  border: 1px solid #707070;
+                  border-radius: 50%;
+                  background: #ffffff;
+                  margin-right: 14px;
+                  position: relative;
+                  top: -4px;
+                }
+              }
+              img {
+                width: 30px;
+                height: 30px;
+                margin-right: 1rem;
+                position: relative;
+                top: -4px;
+              }
+              a {
+                font: 800 16px Manrope-Regular, sans-serif;
+                cursor: pointer;
+                &.note {
+                  color: #f51355;
+                } 
+                &.cancel {
+                  color: #050505;
+                }
+              }
+              &:last-child {
+                margin-right: 0;
+              }
+              textarea {
+                width: 100%!important;
+              }
+              &.noflex {
+                display: inline-block;
+                cursor: none;
+              }
+            }
+          }
+          .bottom {
+            margin-top: 2rem;
+            span {
+              font: normal 16px Manrope-Regular, sans-serif;
+              margin-bottom: 1rem;
+              display: inline-block;
+            }
+            .suffix {
+              &:before {
+                content: '$';
+                position: absolute;
+                font-size: 16px;
+                color: #818080;
+                margin-top: 13px;
+                margin-left: 2rem;
+              }
+              input {
+                text-align: center;
+                font-size: 16px;
+                padding: 22px 30px;
+                width: 40%;
+                border: 1px solid #dddddd;
+                border-radius: 0;
+              }
+            }
+          }
+        }
       }
     }
     textarea {

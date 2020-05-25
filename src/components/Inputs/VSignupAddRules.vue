@@ -3,7 +3,7 @@
     <template v-if="comType=='rule'">
       <div class="add-rule-cont">
         <h4>{{title.title}}</h4>
-        <div class="field" :class="{'suffix': focusedRule.length > 0}">
+        <div class="field" :class="{'suffix': focusedRule != ''}">
           <input :placeholder="title.placeholder" v-model="focusedRule"/>
           <a :disabled="true" @click="addRule()">
             Add
@@ -94,7 +94,6 @@ export default {
     }
   },
   mounted () {
-    this.selectedCategory = this.categories[0]
   },
   methods: {
     addCancelPolicy() {
@@ -130,7 +129,6 @@ export default {
     .field {
       display: flex;
       align-items: center;
-      margin-bottom: 2rem;
 
       input {
         font-size: 16px;
@@ -167,6 +165,7 @@ export default {
       }
     }
     .rules-cont {
+      margin-top: 2rem;
       .rule {
         padding: 2rem 0;
         border-top: 1px solid #818080;
