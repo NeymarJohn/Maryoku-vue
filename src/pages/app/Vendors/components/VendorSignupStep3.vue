@@ -106,7 +106,22 @@
               <div class="check-item" @click="allowThirdVendor = 2">
                 <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="allowThirdVendor == 2"/>
                 <span class="unchecked" v-else></span>
-                <span>Cancel</span>
+                <span>Some</span>
+              </div>
+            </div>
+            <div class="not-allow-cont" v-if="allowThirdVendor==2">
+              <h4>Which of the vendors do you not allow to work in your venue?</h4>
+              <div class="na-check-list">
+                <ul>
+                  <li v-for="(n, nIndex) in defNa.split(', ')" :key="nIndex" @click="updateNa(n)">
+                    <img :src="`${iconUrl}Group 5489 (4).svg`" v-if="notAllowed.includes(n)"/>
+                    <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
+                    {{n}}
+                  </li>
+                  <li v-if="notAllowed.includes('Other')">
+                    <input type="text" placeholder="Type vendor category..."/>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -187,7 +202,10 @@ export default {
           if: 'Like two weeks before the event ',
           than: 'Like: 30% of deposit',
         },
-      }
+      },
+      notAllowed: [],
+      isOtherNa: false,
+      defNa: 'Catering, Dj, Photographer, Show / Performance, Flowers, Transporation, Decoration, Rentals, Favours & Gifts, Other'
     }
   },
   created() {
@@ -197,7 +215,13 @@ export default {
     
   },
   methods: {
-    
+    updateNa(item) {
+      if (this.notAllowed.includes(item)) {
+        this.notAllowed = this.notAllowed.filter(n => n != item)
+      } else {
+        this.notAllowed.push(item)
+      }
+    }
   },
   computed: {
     
@@ -334,6 +358,37 @@ export default {
                 border-radius: 50%;
                 background: #ffffff;
                 margin-right: 14px;
+              }
+            }
+          }
+          .not-allow-cont {
+            margin-top: 3rem;
+            h4 {
+              font: bold 16px Manrope-Regular, sans-serif;
+            }
+            .na-check-list {
+              ul {
+                margin: 0;
+                list-style: none;
+                padding: 0;
+                column-count: 4;
+                li {
+                  margin-bottom: 1rem;
+                  cursor: pointer;
+                  img {
+                    width: 27px;
+                    height: 27px;
+                    margin-right: 1rem;
+                  }
+                  input {
+                    font-size: 16px;
+                    padding: 22px 30px;
+                    min-width: 75%;
+                    border: 1px solid #dddddd;
+                    border-radius: 0;
+                    margin-left: 3rem;
+                  }
+                }
               }
             }
           }
