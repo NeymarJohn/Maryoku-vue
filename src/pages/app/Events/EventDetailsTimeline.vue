@@ -40,8 +40,8 @@
               Preview
       </md-button>-->
 
-      <button v-scroll-to="'#timeline-edit-card'" v-el:scroll-btn ref="scrollBtn" style="display:none">
-          Scroll to the editing card
+      <button v-scroll-to="'#timeline-edit-card'"  ref="scrollBtn" style="display:none">
+        Scroll to the editing card
       </button>
 
       <div class="timeline-section-title">
@@ -598,6 +598,7 @@ export default {
     currentAttachments: []
   }),
   methods: {
+    ...mapMutations('event', ['setEventData']),
     download() {
       this.$router.push({
         path: `/events/` + this.event.id + `/edit/timeline/export`
@@ -1243,13 +1244,12 @@ export default {
       true,
       function() {
         let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-
         _calendar
           .calendarEvents()
           .find(this.$route.params.id)
           .then(event => {
             this.event = event;
-
+            this.setEventData(event);
             this.timeline[0].date = this.formatDate(
               this.event.eventStartMillis
             );

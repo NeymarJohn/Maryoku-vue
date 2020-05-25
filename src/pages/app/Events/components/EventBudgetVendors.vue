@@ -30,23 +30,23 @@
                 <img :src="`http://static.maryoku.com/storage/icons/Budget Elements/${block.icon}`" />
                 {{block.title}}
               </td>
-              <td class="planned" width="20%">
-                <template
+              <td class="planned" width="20%" style="white-space: nowrap">
+                <span
                   v-if="type==='total'"
-                >$ {{block.allocatedBudget ? block.allocatedBudget : 0 | roundNumber | withComma}}</template>
-                <template
+                >$ {{block.allocatedBudget ? block.allocatedBudget : 0 | roundNumber | withComma}}</span>
+                <span
                   v-else-if="block.allocatedBudget && block.numberOfParticipants"
-                >$ {{block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed().toString() : 0}}</template>
-                <template
+                >$ {{block.allocatedBudget ? (block.allocatedBudget / block.numberOfParticipants).toFixed().toString() : 0}}</span>
+                <span
                   v-else
-                >$ {{block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed().toString() : 0}}</template>
+                >$ {{block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed().toString() : 0}}</span>
 
                 <md-button
                   class="md-rose md-sm md-simple edit-btn"
                   v-if="!block.editBudget"
                   @click="showEditElementBudget(block)"
                 >Edit</md-button>
-                <img :src="`${$iconURL}Event Page/arrow-left-gray.svg`" v-else style="width:25px; float:right; margin: 3px 20px;"/>
+                <img :src="`${$iconURL}Event Page/arrow-left-gray.svg`" v-else style="width:25px; float:right; margin: 3px 0px;"/>
               </td>
               <template v-if="!block.editBudget">
                  <td class="actual red-label" width="15%">
@@ -114,7 +114,7 @@
                 </td>
               </template>
               <template v-if="block.editBudget">
-                <td colspan="3" align="right">
+                <td colspan="3" align="right" style="white-space: nowrap">
                     <input class="inline-input" v-model="block.newBudget"   @focus="$event.target.select()" />
                     <md-button
                       class="md-simple md-black normal-btn"
@@ -206,7 +206,7 @@
                     @click="showEditElementBudget()"
                     v-if="!editTips"
                   >Edit</md-button>
-                  <img :src="`${$iconURL}Event Page/arrow-left-gray.svg`" v-else style="width:25px; float:right; margin: 3px 20px;"/>
+                  <img :src="`${$iconURL}Event Page/arrow-left-gray.svg`" v-else style="width:25px; float:right; margin: 3px 0px;"/>
 
               </td>
               <template v-if="!editTips">
@@ -215,7 +215,7 @@
                 <td class="expand"></td>
               </template>
               <template v-if="editTips">
-                <td colspan="3" align="right">
+                <td colspan="3" align="right" style="white-space: nowrap">
                     <input class="inline-input" v-model="newAllocatedTips" />
                     <md-button
                       class="md-simple md-black normal-btn"

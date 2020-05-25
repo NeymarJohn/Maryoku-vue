@@ -42,7 +42,7 @@ import AnimatedNumber from "./AnimatedNumber";
 import LocationInput from './LocationInput'
 import SidebarItem from './SidebarPlugin/NewSidebarItem.vue'
 import SideBar from './SidebarPlugin/NewSideBar.vue'
-
+import TimeInput from './TimeInput'
 export {
     IconCheckbox,
     InputText,
@@ -80,5 +80,6 @@ export {
     MaryokuInput,
     LocationInput,
     SidebarItem,
-    SideBar
+    SideBar,
+    TimeInput
 };

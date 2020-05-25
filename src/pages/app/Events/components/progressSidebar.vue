@@ -26,10 +26,10 @@
         <div class="my-notes">
           <md-button v-if="!isOpenNote" class="md-rose" @click="isOpenNote=true" >
             <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin:0 3px"/>
-            My Notes
+            On my plate
             <md-icon style="font-size: 30px !important; margin-left: 5px;">keyboard_arrow_down</md-icon>
           </md-button>
-          <md-button v-else  class="md-rose" @click="isOpenNote=false" >
+          <md-button v-if="isOpenNote"  class="md-rose" @click="isOpenNote=false" >
             <img :src="`${$iconURL}Event Page/note-light.svg`" width="20" style="margin:0 3px"/>
             Close
             <md-icon style="font-size: 30px !important; margin-left: 5px;">keyboard_arrow_up</md-icon>

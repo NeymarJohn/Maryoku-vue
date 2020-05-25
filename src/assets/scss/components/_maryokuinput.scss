@@ -7,6 +7,7 @@
   padding: 0px 50px;
 }
 .maryoku_input {
+  position: relative;
   input {
     min-height: 55px;
     background: #ffffff;
@@ -44,6 +45,18 @@
         @include background-icon(url('http://static.maryoku.com/storage/icons/Choose+vendor+and+Proposal/email-dark.svg'))
       }
       @include background-icon(url('http://static.maryoku.com/storage/icons/Choose+vendor+and+Proposal/email-gray.svg'))
+    }
+    &.date {
+      &.active {
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Event Page/calendar-dark.svg'))
+      }
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Event Page/calendar-gray.svg'))
+    }
+    &.time {
+      &.active {
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Event Page/calendar-dark.svg'))
+      }
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Event Page/calendar-gray.svg'))
     }
     &:focus{
       border: solid 0.5px #050505;
@@ -151,5 +164,50 @@
     &.highlight {
       background-color: #f51355;
     }
+  }
+}
+
+.picker-panel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #fff;
+  padding: 40px;
+  min-width: 400px;
+  z-index: 10;
+  box-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.16);
+  display: none;
+  .picker-content {
+    min-height: 120px;
+  }
+  &.time-picker {
+    img {
+      width: 23px;
+      margin-right: 25px;
+    }
+    .time-select-fields {
+      flex-grow: 1;
+    }
+    
+  }
+  
+  .vfc-main-container {
+    box-shadow: none;
+  }
+}
+.btn-group {
+  text-align: right;
+}
+.time-picker-mask {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+}
+.date-picker {
+  &.md-datepicker {
+    margin-top: -55px;
+    opacity: 0;
   }
 }

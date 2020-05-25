@@ -18,7 +18,10 @@
             </div>
           </div>
           <div class="card">
-            
+            <v-signup-add-rules
+              :comType="'rule'"
+              :title="rulesDesc"
+            />
           </div>
         </div>
         <div class="pricing-policy-wrapper mb-50">
@@ -52,6 +55,12 @@
                 </div>
               </div>
               <input type="text" class="" placeholder="Like: 60 days prior to the start of the event..."/>
+            </div>
+            <div class="field mb-50">
+              <v-signup-add-rules
+                :comType="'policy'"
+                :title="policyDesc"
+              />
             </div>
             <div class="field mb-50">
               <div class="label">
@@ -144,6 +153,7 @@ import Vendors from '@/models/Vendors'
 //COMPONENTS
 import Icon from '@/components/Icon/Icon.vue'
 import VendorServiceItem from './VendorServiceItem.vue'
+import VSignupAddRules from '@/components/Inputs/VSignupAddRules.vue'
 
 export default {
   name: 'vendor-signup-step3',
@@ -153,7 +163,8 @@ export default {
   },
   components: {
     VueElementLoading,
-    VendorServiceItem
+    VendorServiceItem,
+    VSignupAddRules
   },
   data() {
     return {
@@ -161,6 +172,22 @@ export default {
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
       allowThirdVendor: null,
       workAllDay: false,
+      rulesDesc: {
+        title: 'additional rules',
+        placeholder: 'Event muse end before.. / Suitable for children (2-12 years)'
+      },
+      policyDesc: {
+        title: 'Add steps to your cancellation approch:',
+        subTitle: 'You can add more than one step',
+        labels: {
+          if: 'the client cancel the event after:',
+          than: 'the client wil pay:',
+        },
+        placeholder: {
+          if: 'Like two weeks before the event ',
+          than: 'Like: 30% of deposit',
+        },
+      }
     }
   },
   created() {
