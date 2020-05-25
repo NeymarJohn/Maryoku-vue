@@ -14,7 +14,7 @@
     <div ref="timePickerElements" v-if="showTimePicker">
       <div class="time-picker picker-panel"  ref="timePickerPanel" >
         <div class="d-flex picker-content">
-          <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px"/>
+          <img :src="`${$iconURL}Notes/clock-dark.svg`" width="23px"/>
           <time-input v-model="timeInfo"></time-input>
         </div>
         <div class="btn-group">
@@ -71,12 +71,13 @@ export default {
     disabled: Boolean,
     imgStyle: String,
     inputStyle: String,
-    readonly: Boolean
+    readonly: Boolean,
+    size:String
   },
   data() {
     return {
       content: this.value,
-      inputClass: this.inputStyle,
+      inputClass: `${this.inputStyle} ${this.size}`,
       showTimePicker: false,
       showDatePicker: false,
       dateData: {},
@@ -111,7 +112,7 @@ export default {
 
       }
       if (this.inputStyle == "time" || this.inputStyle == "date") {
-         setTimeout(() => {
+        setTimeout(() => {
           const pos = this.cumulativeOffset(this.$refs.input)
           this.$refs.timePickerPanel.style.left = `${pos.left}px`;
           this.$refs.timePickerPanel.style.top = `${window.scrollY + pos.top}px`;
@@ -136,7 +137,7 @@ export default {
   },
   computed: {
     getClass: function() {
-      return `${this.inputStyle} ${this.value ? "active" : ""}`;
+      return `${this.inputStyle} ${this.value ? "active" : ""} ${this.size}`;
     }
   },
   created () {
@@ -147,7 +148,7 @@ export default {
   },
   watch: {
     content: function(newValue) {
-      this.inputClass = `${this.inputStyle} ${this.value ? "active" : ""}`;
+      this.inputClass = `${this.inputStyle} ${this.value ? "active" : "" } ${this.size}`;
       if (this.inputStyle === "budget") {
         const result = newValue
           .replace(/\D/g, "")
