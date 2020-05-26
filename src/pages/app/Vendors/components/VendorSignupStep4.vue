@@ -42,13 +42,13 @@
               <h4>CONTACT US</h4>
               <div class="items">
                 <div class="item">
-                  <img :src="`${iconUrl}Asset 547.svg`"/> Website
+                  <img :src="`${iconUrl}Asset 547.svg`"/> {{vendor.contact.email}}
                 </div>
                 <div class="item">
-                  <img :src="`${iconUrl}Asset 550.svg`"/> Instagram
+                  <img :src="`${iconUrl}Asset 550.svg`"/> {{vendor.contact.address}}
                 </div>
                 <div class="item">
-                  <img :src="`${iconUrl}Asset 548.svg`"/> Facebook
+                  <img :src="`${iconUrl}Asset 548.svg`"/> {{vendor.contact.phone}}
                 </div>
               </div>
             </div>
@@ -67,13 +67,92 @@
               </div>
             </div>
           </div>
-          <div class="pricing-cont">
+          <div class="fee-cont">
+            <div class="title">
+              <h3><img :src="`${iconUrl}Asset 562.svg`"/> ELEMENTS IN STARTING FEE</h3>
+            </div>
+            <div class="cblock">
+              <div class="cheader">
+                <img :src="`${iconUrl}Asset 543.svg`"/>Venue
+              </div>
+              <div class="citems">
+                <div class="citem" v-for="(fv, fvIndex) in feeVenues" :key="fvIndex">
+                  <img :src="`${iconUrl}Group 5479 (2).svg`"/>
+                  <span class="value">{{fv.value}}</span>
+                  <span class="qty">{{fv.qty}}</span>
+                  <img :src="`http://static.maryoku.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"/>
+                </div>
+              </div>
+            </div>
+            <div class="cblock">
+              <div class="cheader">
+                <img :src="`${iconUrl}Group 1471 (2).svg`"/>Catering
+              </div>
+              <div class="citems">
+                
+              </div>
+            </div>
           </div>
-          <div class="rules-cont">
+          <div class="extra-cont">
+            <div class="title">
+              <h3><img :src="`${iconUrl}Asset 526.svg`"/>WITH EXTRA PAY</h3>
+            </div>
+            <div class="cblock">
+              <div class="cheader">
+                <img :src="`${iconUrl}Asset 543.svg`"/>Venue
+              </div>
+              <div class="citems">
+                <div class="citem">
+                  <div class="collapsed" @click="expanded=!expanded">
+                    <div class="col">
+                      Lorem
+                    </div>
+                    <div class="col">
+                      2
+                    </div>
+                    <div class="col">
+                      +$100.00
+                    </div>
+                    <div class="col">
+                      <img :class="{'rotate-90': expanded}" :src="`http://static.maryoku.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"/>
+                    </div>
+                  </div>
+                  <div class="expanded" v-if="expanded">
+                    Lorem ipsum
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="cblock">
+              <div class="cheader">
+                <img :src="`${iconUrl}Group 1471 (2).svg`"/>Catering
+              </div>
+              <div class="citems">
+                <div class="citem">
+                  <div class="collapsed" @click="expanded=!expanded">
+                    <div class="col">
+                      Lorem
+                    </div>
+                    <div class="col">
+                      2
+                    </div>
+                    <div class="col">
+                      +$100.00
+                    </div>
+                    <div class="col">
+                      <img :class="{'rotate-90': expanded}" :src="`http://static.maryoku.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"/>
+                    </div>
+                  </div>
+                  <div class="expanded" v-if="expanded">
+                    Lorem ipsum
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="policy-cont">
             <div class="title">
-              <img :src="`${iconUrl}Asset 560.svg`"> OUR POLICY
+              <img :src="`${iconUrl}Group 1471 (2).svg`"> OUR POLICY
             </div>
             <div class="rules">
               <div class="rule" v-for="(r, rIndex) in defRules.split(', ')" :key="rIndex">
@@ -81,7 +160,7 @@
                   {{r}}
                 </div>
                 <div class="item">
-                  <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="yesRules.includes(r)"/>
+                  <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="vendor.yesRules.includes(r)"/>
                   <img :src="`${iconUrl}Group 5489 (3).svg`" v-else/>
                 </div>
               </div>
@@ -164,9 +243,51 @@ export default {
   },
   data() {
     return {
-      vendor: null,
+      vendor: {
+        capacity: {
+          low: null,
+          hight: null,
+        },
+        about: {
+          company: null, 
+          venue: null, 
+          cuisine: null,
+        },
+        contact: {
+          email: 'venue@hotmail.com', 
+          address: '575 Mission St. San Franciso CA 94105', 
+          phone: '077-300283',
+        },
+        social: {
+          website: null, 
+          facebook: null, 
+          instagram: null,
+        },
+        yesRules: [],
+        policies: [],
+      },
+      feeVenues: [
+        {
+          value: 'Set up',
+          qty: null
+        },
+        {
+          value: 'In-house bar services',
+          qty: 1
+        }
+      ],
+      feeCatering: [
+        {
+          value: 'Set up',
+          qty: null
+        },
+        {
+          value: 'In-house bar services',
+          qty: 2
+        }
+      ],
+      expanded: false,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
-      yesRules: [],
       defRules: 'Suitable for pets, Smoking allowed, Suitable for infants(Under 2 years), Dress code, Overtime Cost',
       defNa: 'Catering, Dj, Photographer, Show / Performance, Flowers, Transporation, Decoration, Rentals, Favours & Gifts, Other'
     }
@@ -287,7 +408,7 @@ export default {
                 margin-top: 2rem;
 
                 .item {
-                  flex: 1;
+                  margin-right: 3rem;
                   font: normal 16px Manrope-Regular, sans-serif;
                   text-decoration: underline;
                   img {
@@ -310,6 +431,124 @@ export default {
                   img {
                     width: 24px;
                     margin-right: 1rem;
+                  }
+                }
+              }
+            }
+          }
+          .fee-cont {
+            .title {
+              margin: 2rem 0;
+              h3 {
+                margin: 0;
+                font: 800 30px Manrope-Regular, sans-serif;
+                img {
+                  width: 24px;
+                  margin-right: 1rem;
+                }
+              }
+            }
+            .cblock {
+              .cheader {
+                display: flex;
+                padding: 1rem 0 1rem 60px;
+                background: #ededed;
+                margin: 0 -60px;
+                width: 100%;
+                font: bold 16px Manrope-Regular, sans-serif;
+
+                img {
+                  width: 24px;
+                  margin-right: 1rem;
+                }
+              }
+              .citems {
+                width: calc(100% - 4rem);
+                display: flex;
+                .citem {
+                  border-bottom: 1px solid #dddddd;
+                  padding: 2rem 0;
+                  display: flex;
+                  width: 50%;
+
+                  img {
+                    width: 20px;
+
+                    &:first-child {
+                      margin-right: 1rem;
+                    }
+                  }
+                  span {
+                    flex: 1;
+                    display: inline-block;
+                    &.value {
+                      font: 800 16px Manrope-Regular, sans-serif;
+                    }
+                    &.qty {
+                      font: normal 16px Manrope-Regular, sans-serif;
+                    }
+                  }
+                  &:nth-child(2n+1) {
+                    margin-right: 1rem;
+                  }
+                }
+              }
+            }
+          }
+          .extra-cont {
+            .title {
+              margin: 2rem 0;
+              h3 {
+                font: 800 30px Manrope-Regular, sans-serif;
+                margin: 0;
+                img {
+                  width: 20px;
+                  margin-right: 1rem;
+                }
+              }
+            }
+            .cblock {
+              .cheader {
+                display: flex;
+                padding: 1rem 0 1rem 60px;
+                background: #ededed;
+                margin: 0 -60px;
+                width: calc(100% - 5rem);
+                font: bold 16px Manrope-Regular, sans-serif;
+
+                img {
+                  width: 24px;
+                  margin-right: 1rem;
+                }
+              }
+              .citems {
+                .citem {
+                  width: calc(100% - 5rem - 60px);
+                  border-bottom: 1px solid #dddddd;
+                  cursor: pointer;
+
+                  .collapsed {
+                    display: flex;
+                    padding: 2rem 0;
+                    .col {
+                      flex: 1;
+                      width: 20px;
+
+                      img {
+                        width: 20px;
+                      }
+                      &:first-child {
+                        flex: 2;
+                        font: bold 16px Manrope-Regular, sans-serif;
+                      }
+                      &:last-child {
+                        text-align: right;
+                      }
+                    }
+                  }
+                  .expanded {
+                    font: normal 14px Manrope-Regular, sans-serif;
+                    padding-bottom: 1rem;
                   }
                 }
               }
@@ -417,6 +656,9 @@ export default {
           }
         }
       }
+    }
+    .rotate-90 {
+      transform: rotate(90deg);
     }
   }  
 </style>
