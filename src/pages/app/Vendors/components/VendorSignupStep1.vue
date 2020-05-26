@@ -145,6 +145,15 @@
               <input type="text" class="" placeholder="Paste link here"/>
             </div>
             <h5>Other:</h5>
+            <div class="social-item" v-for="(s, sIndex) in defSocialMedia" :key="sIndex">
+              <div @click="updateSocialMedia(s)">
+                <img :src="`${iconUrl}Group 6258.svg`" v-if="socialMedia.includes(s)"/>
+                <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
+                {{s}}
+                <br/>
+              </div>
+              <input type="text" class="" placeholder="Paste link here" v-if="socialMedia.includes(s)"/>
+            </div>
           </div>
         </div>
       </div>
@@ -175,18 +184,16 @@ export default {
     return {
       vendor: null,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
-      socialMedia: {
-        website: null, 
-        facebook: null, 
-        instagram: null, 
-        youtube: null, 
-        linkedin: null, 
-        google: null, 
-        pinterest: null, 
-        foursuare: null, 
-        reddit: null, 
-        tiktok: null, 
-      }
+      socialMedia: [],
+      defSocialMedia: [
+        'youtube', 
+        'linkedin', 
+        'google', 
+        'pinterest', 
+        'foursuare', 
+        'reddit', 
+        'tiktok', 
+      ]
     }
   },
   created() {
@@ -196,7 +203,13 @@ export default {
     
   },
   methods: {
-    
+    updateSocialMedia(item) {
+      if (this.socialMedia.includes(item)) {
+        this.socialMedia = this.socialMedia.filter(s => s != item)
+      } else {
+        this.socialMedia.push(item)
+      }
+    }
   },
   computed: {
     
@@ -276,6 +289,7 @@ export default {
             }
             .main-cont {
               display: flex;
+              align-items: center;
 
               .suffix {
                 flex: 2;
@@ -306,6 +320,26 @@ export default {
                   width: 3rem;
                 }
               }
+            }
+          }
+          .social-item {
+            cursor: pointer;
+            font: normal 16px Manrope-Regular, sans-serif;
+            text-transform: capitalize;
+            margin-bottom: 2rem;
+
+            img {
+              width: 27px;
+              height: 27px;
+              margin-right: 1rem;
+            }
+            input {
+              margin: 1rem 0 0 3rem;
+              font-size: 16px;
+              padding: 22px 30px;
+              min-width: calc(75% - 3rem);
+              border: 1px solid #707070;
+              border-radius: 0;
             }
           }
           h5 {
@@ -344,9 +378,6 @@ export default {
               }
             }
           }
-        }
-        .social-wrapper {
-          
         }
       }
     }

@@ -19,13 +19,6 @@
     color: #050505;
     font-family: 'Manrope-Regular',sans-serif;
     border: solid 0.5px #bcbcbc;
-
-    &.small {
-      min-height: 50px;
-      padding-left: 30px;
-      padding-right: 30px;
-    }
-
     &.normal {
       padding-left: 30px;
     }
@@ -61,14 +54,13 @@
     }
     &.time {
       &.active {
-        @include background-icon(url('http://static.maryoku.com/storage/icons/Notes/clock-dark.svg'))
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Event Page/calendar-dark.svg'))
       }
-      @include background-icon(url('http://static.maryoku.com/storage/icons/Notes/clock-gray.svg'))
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Event Page/calendar-gray.svg'))
     }
     &:focus{
       border: solid 0.5px #050505;
     }
-
   }
   .md-field {
     margin-top: 0px;

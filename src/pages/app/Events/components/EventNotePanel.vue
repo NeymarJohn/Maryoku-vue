@@ -1,8 +1,6 @@
 <template>
   <div class="note-panel">
-    <div class="note-panel-header  d-flex justify-content-between">Notes
-      <event-notes-filter></event-notes-filter>
-    </div>
+    <div class="note-panel-header">Notes</div>
     <div class="note-panel-content" v-if="notes.length === 0">
       <div>
         <img  :src="`${$iconURL}Notes/note-background.svg`" width="120px"/>
@@ -26,7 +24,7 @@
       </div>
       <div class="setting-item">
         <div class="d-flex justify-content-between align-center">
-          <div><img :src="`${$iconURL}Notes/users-dark.svg`"/>Give it to someone else</div>
+          <div><img :src="`${$iconURL}Notes/bell-dark.svg`"/>Give it to someone else</div>
           <md-switch v-model="editingNote.isGivenEmail"></md-switch>
         </div>
         <maryoku-input  v-if="editingNote.isGivenEmail" v-model="editingNote.givingEmail"></maryoku-input>
@@ -52,15 +50,13 @@ import CalendarEvent from "@/models/CalendarEvent";
 import EventNote from '@/models/EventNote';
 
 import EventNoteItem  from './EventNoteItem';
-import EventNotesFilter from './EventNotesFilter';
 
 export default {
   name: "event-note-panel",
   components: {
     MaryokuInput,
     TimeInput,
-    EventNoteItem,
-    EventNotesFilter
+    EventNoteItem
   },
   data() {
     return {
