@@ -22,21 +22,21 @@
           <strong class="text">services &<br/>amentities</strong>
         </li>
         <li :class="[
-          { active: step >= 4 },
-          { current: step == 3 },
+          { active: step >= 3 },
+          { current: step >= 3 },
           { inactive: step < 3 }
         ]"> 
-          <span v-if="step >=4"><md-icon>check</md-icon></span>
+          <span v-if="step >= 3"><i>&#8226;</i></span> 
           <span v-else><i>&#8226;</i></span> 
           <br/>
           <strong class="text">photoes &<br/>disclamer</strong>
         </li>
         <li :class="[
-          { active: step >= 5 },
+          { active: step >= 4 },
           { current: step >= 4 },
           { inactive: step < 4 }
         ]"> 
-          <span v-if="step >=5"><md-icon>check</md-icon></span>
+          <span v-if="step >= 3"><i>&#8226;</i></span> 
           <span v-else><i>&#8226;</i></span> 
           <br/>
           <strong class="text">summary</strong>

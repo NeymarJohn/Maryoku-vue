@@ -1,6 +1,8 @@
 <template>
   <div class="note-panel">
-    <div class="note-panel-header">Notes</div>
+    <div class="note-panel-header  d-flex justify-content-between">Notes
+      <event-notes-filter></event-notes-filter>
+    </div>
     <div class="note-panel-content" v-if="notes.length === 0">
       <div>
         <img  :src="`${$iconURL}Notes/note-background.svg`" width="120px"/>
@@ -14,17 +16,15 @@
           <div><img :src="`${$iconURL}Notes/bell-dark.svg`"/>Remind me on</div>
           <md-switch v-model="editingNote.isReminding"></md-switch>
         </div>
-        
         <div class="d-flex" v-if="editingNote.isReminding">
-          <maryoku-input v-model="editingNote.date" inputStyle="date" placeholder="DD/MM/YY" readonly></maryoku-input>
+          <maryoku-input v-model="editingNote.remindingDateString" inputStyle="date" placeholder="DD/MM/YY" readonly></maryoku-input>
           <div style="width:20px"></div>
-          <maryoku-input v-model="editingNote.remindingTime" inputStyle="time" placeholder="00:00 PM" readonly></maryoku-input>
+          <maryoku-input v-model="editingNote.remindingTimeString" inputStyle="time" placeholder="00:00 PM" readonly></maryoku-input>
         </div>
-        
       </div>
       <div class="setting-item">
         <div class="d-flex justify-content-between align-center">
-          <div><img :src="`${$iconURL}Notes/bell-dark.svg`"/>Give it to someone else</div>
+          <div><img :src="`${$iconURL}Notes/users-dark.svg`"/>Give it to someone else</div>
           <md-switch v-model="editingNote.isGivenEmail"></md-switch>
         </div>
         <maryoku-input  v-if="editingNote.isGivenEmail" v-model="editingNote.givingEmail"></maryoku-input>
@@ -33,11 +33,9 @@
         <md-button class="md-simple md-black normal-btn" @click="clear">Clear</md-button>
         <md-button class="md-default md-red normal-btn" @click="saveNote" type="email">Save</md-button>
       </div>
-
     </div>
     <div class="note-items">
-
-      <event-note-item v-for="(note) in notes" :key="note.id" :note="note"></event-note-item>
+      <event-note-item v-for="(note) in notes" :key="note.id" :note="note" @edit="setEditNote"></event-note-item>
     </div>
   </div>
 </template>
@@ -50,13 +48,16 @@ import CalendarEvent from "@/models/CalendarEvent";
 import EventNote from '@/models/EventNote';
 
 import EventNoteItem  from './EventNoteItem';
+import EventNotesFilter from './EventNotesFilter';
+import moment from 'moment';
 
 export default {
   name: "event-note-panel",
   components: {
     MaryokuInput,
     TimeInput,
-    EventNoteItem
+    EventNoteItem,
+    EventNotesFilter
   },
   data() {
     return {
@@ -64,10 +65,12 @@ export default {
       boolean: false,
       editingNote: {
         description: "",
-        isReminding: true,
+        isReminding: false,
         isGivenEmail: false,
-        remindingDate: 0,
-        givingEmail: ""
+        givingEmail: "",
+        remindingDateString: "",
+        remindingTimeString: "",
+        remindingTime: 0,
       }
     }
   },
@@ -78,13 +81,34 @@ export default {
         description: "",
         isReminding: false,
         isGivenEmail: false,
-        remindingDate: 0,
-        givingEmail: ""
+        remindingDateString: "",
+        remindingTimeString: "",
+        remindingTime: 0,
+        givingEmail: "",
+        id:""
       }
     },
     saveNote() {
       const newNote = { ...this.editingNote }
+      newNote.remindingTime = moment(`${this.editingNote.remindingDateString} ${this.editingNote.remindingTimeString}`, "DD.MM.YYYY hh:mm A").valueOf();
       this.addEventNote(newNote)
+      this.showEditor = false;
+      this.clear()
+      this.$forceUpdate();
+    },
+    setEditNote(note) {
+      console.log(note)
+      this.editingNote = {
+        id: note.id,
+        description: note.description,
+        isReminding: note.isReminding,
+        remindingDateString: note.remindingDateString,
+        remindingTimeString: note.remindingTimeString,
+        remindingTime: note.remindingTime,
+        givingEmail: note.givingEmail
+      }
+      console.log(this.editingNote)
+      this.showEditor = true;
     }
   },
   created () {
