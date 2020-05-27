@@ -25,7 +25,7 @@
         </div>
         <div class="checklist" v-for="(item, index) in sub.items" :key="index">
           <vendor-checkbox
-            :type="'text'"
+            :item="item"
             :label="item.name"
             v-model="item.value"
           />

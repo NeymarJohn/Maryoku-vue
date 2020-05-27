@@ -93,9 +93,10 @@
 
       a {
         margin: 68px 350px 68px 123px;
+        flex: 0 0 113px;
         display: inline-block;
         img {
-          width: 113px;
+          width: 100%;
         }
       }
     }
