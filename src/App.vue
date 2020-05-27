@@ -37,10 +37,6 @@ export default {
     if (initialMessage) {
       initialMessage.remove()
     }
-    const loadingBackground = document.getElementById('loading-background');
-    if (loadingBackground) {
-      loadingBackground.remove()
-    }
   }
 }
 </script>

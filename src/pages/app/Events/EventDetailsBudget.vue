@@ -49,14 +49,27 @@
                 </div>
             </div>
             <div class="md-layout-item  md-size-45 card-actvity">
-               <div class="card-section card-activity">
-                <div class="section-header">
-                    Activity
+                <div class="card-section card-activity">
+                  <div class="section-header">
+                      Activity
+                  </div>
+                  <div class="budget-list d-flex justify-content-between">
+                      <div class="text-left card-activity-content">
+                        <span class="card-activity-title">Great Job!</span>
+                        <div>
+                          You saved money on the catering deal!  Seems like you could use this extra money 
+                          and get a video photographer. 
+                        </div>
+                        <p class="text-bold-extra">
+                          Want to upgrade your event and get a fantastic clip?
+                        </p>
+                        <p class="card-activity-buttons">
+                          <md-button class="md-default md-maryoku md-simple md-theme-default"> No, Thanks</md-button>
+                          <md-button class="md-default md-red md-maryoku"> Get Video Proposals</md-button>
+                        </p>
+                    </div>
+                  </div>
                 </div>
-                <div class="budget-list d-flex justify-content-between">
-                  <event-budget-activity-panel></event-budget-activity-panel>
-                </div>
-              </div>
             </div>
         </div>
         <div class="md-layout justify-content-between">
@@ -228,7 +241,6 @@ import {
 
 import EventBudgetVendors from './components/EventBudgetVendors'
 import EditEventBlocksBudget from './components/EditEventBlocksBudget'
-import EventBudgetActivityPanel from './components/EventBudgetActivityPanel'
 
 // COMPONENTS
 import UploadVendorsModal from '../Vendors/ImportVendors'
@@ -245,8 +257,7 @@ export default {
     PieChartRound,
     Modal,
     EditEventBlocksBudget,
-    BudgetHandleMinusModal,
-    EventBudgetActivityPanel
+    BudgetHandleMinusModal
   },
 
   data () {

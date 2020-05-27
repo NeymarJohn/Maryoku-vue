@@ -126,13 +126,8 @@ const actions = {
       .for(calendar, event)
       .save()
       .then(res => {
-        if ( !note.id ) {
-          const notes = [ ...state.notes, res]
-          commit('setEventNotes', notes)
-        } else  {
-          const index = state.notes.findIndex( item => item.id === note.id)
-          commit('updateEventNote', {index, note})
-        }
+        const notes = [ ...state.notes, res]
+        commit('setEventNotes', notes)
       });
   },
   async removeNote({commit, state}, note) {
@@ -181,7 +176,7 @@ const mutations = {
   updateEventNote (state, { index, note } ) {
     state.notes[index] = note;
   },
-  removeEventNote (state, { index, note }) {
+  removeEventNote (state, index) {
     state.notes.splice(index, 1)
   },
 
