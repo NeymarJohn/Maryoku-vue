@@ -1,5 +1,5 @@
 <template>
-  <div class="note-item d-flex justify-content-between">
+  <div class="note-item d-flex justify-content-between"  :key="note.id">
     <template v-if="!note.isDeleted">
       <div class="note-item-mark">
         <md-checkbox v-model="isCompleted" class="md-simple md-checkbox-circle"></md-checkbox>
@@ -41,7 +41,9 @@ export default {
   },
   methods: {
     ...mapActions("event", ["deleteEventNote", "updateEventNote", "removeNote"]),
-    editNote() {},
+    editNote() {
+      this.$emit("edit", this.note);
+    },
     deleteNote() {
       this.note.isDeleted = true
       this.updateEventNote(this.note);

@@ -14,7 +14,7 @@
     <div ref="timePickerElements" v-if="showTimePicker">
       <div class="time-picker picker-panel"  ref="timePickerPanel" >
         <div class="d-flex picker-content">
-          <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px"/>
+          <img :src="`${$iconURL}Notes/clock-dark.svg`" width="23px"/>
           <time-input v-model="timeInfo"></time-input>
         </div>
         <div class="btn-group">
@@ -27,12 +27,14 @@
       
     <div ref="timePickerElements" v-if="showDatePicker">
       <div class="date-picker picker-panel"  ref="timePickerPanel" >
-        <div class="d-flex ">
+        <div class="d-flex pl-10">
           <img :src="`${$iconURL}Event Page/calendar-dark.svg`" width="23px"/>
-          {{dateData && dateData.selectedDate}}
+          <!-- {{dateData && dateData.selectedDate}} -->
+          {{getFormattedDate}}
         </div>
+        <div class="color-gray" style="margin-top: 40px; margin-bottom: 10px;"> Date Range Picker</div>
         <div>
-          <functional-calendar :is-date-picker='true' :change-month-function='true' :change-year-function='true' dateFormat='dd/mm/yyyy' v-model="dateData"></functional-calendar>
+          <functional-calendar :is-date-picker='true' :change-month-function='true' :change-year-function='true' dateFormat='yyyy-mm-dd' v-model="dateData"></functional-calendar>
         </div>
         <div class="btn-group">
           <md-button class="md-simple md-black normal-btn" @click="showDatePicker=false">Cancel</md-button>
@@ -47,7 +49,7 @@
 import Popup from "@/components/Popup"
 import TimeInput from "@/components/TimeInput";
 import { FunctionalCalendar } from 'vue-functional-calendar'
-
+import moment from 'moment'
 export default {
   name: "maryoku-input",
   model: {},
@@ -71,12 +73,13 @@ export default {
     disabled: Boolean,
     imgStyle: String,
     inputStyle: String,
-    readonly: Boolean
+    readonly: Boolean,
+    size:String
   },
   data() {
     return {
       content: this.value,
-      inputClass: this.inputStyle,
+      inputClass: `${this.inputStyle} ${this.size}`,
       showTimePicker: false,
       showDatePicker: false,
       dateData: {},
@@ -111,7 +114,7 @@ export default {
 
       }
       if (this.inputStyle == "time" || this.inputStyle == "date") {
-         setTimeout(() => {
+        setTimeout(() => {
           const pos = this.cumulativeOffset(this.$refs.input)
           this.$refs.timePickerPanel.style.left = `${pos.left}px`;
           this.$refs.timePickerPanel.style.top = `${window.scrollY + pos.top}px`;
@@ -122,11 +125,14 @@ export default {
       }
     },
     setDate() {
-      this.content = this.dateData.selectedDate;
+      this.content =  moment(new Date(this.dateData.selectedDate)).format("DD.MM.YYYY")
       this.showDatePicker = false;
+      this.$emit("input", this.content);
     },
     setTime() {
       this.showTimePicker = false;
+      this.content = moment(this.timeInfo).format("hh:mm A")
+      this.$emit("input", this.content);
     },
     handleScroll(event) {
       console.log(window.scrollY)
@@ -136,7 +142,11 @@ export default {
   },
   computed: {
     getClass: function() {
-      return `${this.inputStyle} ${this.value ? "active" : ""}`;
+      return `${this.inputStyle} ${this.value ? "active" : ""} ${this.size}`;
+    },
+    getFormattedDate() {
+      if (!this.dateData.selectedDate) return ""
+      return moment(new Date(this.dateData.selectedDate)).format("dddd, MMM DD, YYYY")
     }
   },
   created () {
@@ -147,7 +157,7 @@ export default {
   },
   watch: {
     content: function(newValue) {
-      this.inputClass = `${this.inputStyle} ${this.value ? "active" : ""}`;
+      this.inputClass = `${this.inputStyle} ${this.value ? "active" : "" } ${this.size}`;
       if (this.inputStyle === "budget") {
         const result = newValue
           .replace(/\D/g, "")
@@ -160,6 +170,9 @@ export default {
     },
     timeInfo: function(newValue) {
       console.log(newValue)
+      // this.content = newValue
+    },
+    value: function(newValue) {
       this.content = newValue
     }
   }

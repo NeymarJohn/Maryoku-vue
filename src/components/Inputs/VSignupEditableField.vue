@@ -7,7 +7,7 @@
       <div class="content">
         <div v-if="!isEdit">
           <img v-if="img!=''" :src="img"/>
-          {{title=='Business Category' ? selectedCategory.name : defaultVal}}
+          {{title=='Business Category' ? selectedCategory.name : value}}
         </div>
         <div class="edit-content" v-else>
           <div v-if="title=='Business Category'">
@@ -28,12 +28,12 @@
               </li>
             </ul>
           </div>
-          <div v-else>
+          <div :class="['input-group', isEmailValid()]" v-else>
             <img class="inside-img" :src="img" v-if="img!=''"/>
             <input
               class="default"
               :class="[{'with-img': img!=''}]"
-              v-model="defaultVal"
+              v-model="value"
             />
           </div>
         </div>
@@ -72,6 +72,7 @@ export default {
       name: 'Venue',
       icon: 'Asset 543.svg'
     },
+    reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
     categoryIconUrl: 'http://static.maryoku.com/storage/icons/Budget Elements/', 
     categories: [
       {
@@ -130,10 +131,12 @@ export default {
         name: 'Videography and Photography',
         icon: 'rentals.svg'
       },
-    ]
+    ],
+    value: null,
   }),
   mounted () {
     this.selectedCategory = this.categories[0]
+    this.value = defaultVal
   },
   methods: {
     save() {
@@ -142,6 +145,9 @@ export default {
     updateCategory(category) {
       this.selectedCategory = category
       this.expanded = false
+    },
+    isEmailValid: function() {
+      return (this.value == "")? "" : (this.reg.test(this.value)) ? 'has-success' : 'has-error';
     }
   }
 }
@@ -186,6 +192,16 @@ export default {
 
         &.with-img {
           padding-left: 60px;
+        }
+        &.has-error {
+          input {
+            border-color: #f51355;
+          }
+        }
+        &.has-success {
+          input {
+            border-color: green;
+          }
         }
       }
       .inside-img {

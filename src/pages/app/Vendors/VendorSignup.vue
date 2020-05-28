@@ -1718,5 +1718,6 @@ export default {
   .vendor-signup-wrapper {
     padding: 84px 124px;    
     font-family: Manrope-Regular, sans-serif;
+    background: #f3f7fd;
   }  
 </style>

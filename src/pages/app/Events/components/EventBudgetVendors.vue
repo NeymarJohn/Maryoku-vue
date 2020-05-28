@@ -114,8 +114,9 @@
                 </td>
               </template>
               <template v-if="block.editBudget">
-                <td colspan="3" align="right" style="white-space: nowrap">
-                    <input class="inline-input" v-model="block.newBudget"   @focus="$event.target.select()" />
+                <td colspan="3" align="right" style="white-space: nowrap" class="d-flex">
+                    <!-- <input class="inline-input" v-model="block.newBudget"   @focus="$event.target.select()" /> -->
+                    <maryoku-input v-model="block.newBudget" inputStyle="budget" size="small" @focus="$event.target.select()" ></maryoku-input>
                     <md-button
                       class="md-simple md-black normal-btn"
                       @click="showEditElementBudget(block)"
@@ -262,7 +263,7 @@
       <tbody>
         <tr class="total">
           <td class="total-title" width="40%">Total</td>
-          <td width="20%">${{Math.round(event.totalBudget) | roundNumber | withComma}}</td>
+          <td width="20%" class="total-value">${{Math.round(event.totalBudget) | roundNumber | withComma}}</td>
           <td width="15%" class="total-value">${{event.statistics.booked | withComma}}</td>
           <td colspan="2"></td>
         </tr>
@@ -397,11 +398,10 @@ import EventActualCostIconTooltip from "../components/EventActualCostIconTooltip
 import EventBlockVendors from "./EventBlocks/Modals/EventBlockVendors.vue";
 import ViewProposals from "./EventBlocks/Modals/ViewProposals.vue";
 import _ from "underscore";
-
 import draggable from "vuedraggable";
 import BudgetHandleMinusModal from "@/components/Modals/BudgetHandleMinusModal";
 import AddMyVendorModal from "@/components/Modals/AddMyVendorModal";
-
+import MaryokuInput  from "@/components/Inputs/MaryokuInput.vue"
 import EventComponentVendorItem from "./Utilities/EventComponentVendorItem";
 
 import swal from 'sweetalert2'
@@ -417,7 +417,8 @@ export default {
     Multiselect,
     AddMyVendorModal,
     EventComponentVendorItem,
-    Popup
+    Popup,
+    MaryokuInput
   },
   props: {
     event: {
