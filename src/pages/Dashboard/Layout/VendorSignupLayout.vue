@@ -10,7 +10,7 @@
         <a class="back" @click="prev()">
           <img :src="`${iconsUrl}Group 4770 (2).svg`"/> Back
         </a>
-        <span v-if="step != 5"><img :src="`${iconsUrl}Asset 602.svg`"/></span>
+        <span v-if="step != 5" @click="scrollToTop()"><img :src="`${iconsUrl}Asset 602.svg`"/></span>
       </div>
       <div class="right">
         <a class="save">
@@ -50,19 +50,27 @@
       approve() {
         this.$root.$emit('approve-vendor-basic-info')
         this.isApproved = true
+        this.step = 1
       },
       next() {
         this.$root.$emit('next-vendor-signup-step')
         if (this.step < 5) {
           this.step += 1
         }
+        console.log(this.step)
       },
       prev() {
         this.$root.$emit('prev-vendor-signup-step')
-        if (this.step > 1) {
+        if (this.step > 0) {
           this.step -= 1
         }
+        if (this.step == 0) {
+          this.isApproved = false
+        }
       },
+      scrollToTop() {
+        window.scrollTo(0, 0)
+      }
     },
     created(){
     },

@@ -1688,7 +1688,7 @@ export default {
   mounted() {
     this.$root.$on('approve-vendor-basic-info', () => {
       this.isApproved = true
-      console.log('vendor basic info is approved')
+      this.step = 1
     })
     this.$root.$on('next-vendor-signup-step', () => {
       if (this.step < 5) {
@@ -1696,8 +1696,11 @@ export default {
       }
     })
     this.$root.$on('prev-vendor-signup-step', () => {
-      if (this.step > 1) {
+      if (this.step > 0) {
         this.step -= 1
+      }
+      if (this.step == 0) {
+        this.isApproved = false
       }
     })
   },

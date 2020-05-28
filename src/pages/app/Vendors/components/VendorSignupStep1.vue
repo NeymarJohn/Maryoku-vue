@@ -4,28 +4,28 @@
       <div class="left-side">
         <img :src="`${iconUrl}Group 5219 (2).svg`"/>
         <h2>ABOUT YOUR <br/>COMPANY</h2>
-        <p>This part will appear on your business page</p>
+        <p>This your chance to Impress! All information will appear on your business page</p>
         <h2>1/4</h2>
       </div>
       <div class="right-side">
         <div class="about-wrapper">
           <div class="title-cont">
             <div class="left">
-              <h5><img :src="`${iconUrl}Asset 542.svg`"/> about your company</h5>
+              <h5><img :src="`${iconUrl}Asset 542.svg`"/> Tell us about your business</h5>
             </div>
           </div>
           <div class="card">
             <div class="field mb-50">
               <div class="title-cont">
                 <div class="top">
-                  <h5><img :src="`${iconUrl}Asset 542.svg`"/> about your company</h5>
+                  <h5><img :src="`${iconUrl}Asset 542.svg`"/> Tell us about your business</h5>
                 </div>
                 <div class="bottom">
                   <p>Include history & background</p>
                 </div>
               </div>
               <div class="main-cont">
-                <textarea placeholder="Type 'About your company' here" rows="5"/>
+                <textarea placeholder="Type 'about your business' here" rows="5"/>
               </div>
             </div>
             <div class="field mb-50">
@@ -34,18 +34,18 @@
                   <h5><img :src="`${iconUrl}Asset 545.svg`"/> capacity</h5>
                 </div>
                 <div class="bottom">
-                  <p>what is the range of people your place can host?</p>
+                  <p>How many guests can you acommodate?</p>
                 </div>
               </div>
               <div class="main-cont">
                 <div class="suffix">
-                  <input type="number" placeholder="1000"/>
+                  <input type="number" placeholder="1000" v-model="min" min="100" max="1000" @keyup="limitRange"/>
                 </div>
                 <div class="arrow">
                   <img :src="`${iconUrl}Group 4585 (2).svg`"/>
                 </div>
                 <div class="suffix">
-                  <input type="number" placeholder="2000"/>
+                  <input type="number" placeholder="2000" v-model="max" min="100" max="1000" @keyup="limitRange"/>
                 </div>
               </div>
             </div>
@@ -55,14 +55,14 @@
                   <h5><img :src="`${iconUrl}Asset 543.svg`"/> about your venue</h5>
                 </div>
                 <div class="bottom">
-                  <p>include facilities, style & common events you host</p>
+                  <p>Tell us why your service is the best choice, what makes it special</p>
                 </div>
               </div>
               <div class="main-cont">
                 <textarea placeholder="Type 'About your venue' here" rows="5"/>
               </div>
             </div>
-            <div class="field">
+            <!-- <div class="field">
               <div class="title-cont">
                 <div class="top">
                   <h5><img :src="`${iconUrl}Group 1471 (2).svg`"/> about your catering</h5>
@@ -74,7 +74,7 @@
               <div class="main-cont">
                 <textarea placeholder="Type 'About your cuisine' here" rows="5"/>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="upload-wrapper">
@@ -115,11 +115,12 @@
         </div>
         <div class="social-wrapper">
           <div class="title-cont">
-            <div class="left">
-              <h5>social media</h5>
+            <div class="top">
+              <h5>Online Presence</h5>
+              <!-- <p>suggested</p> -->
             </div>
-            <div class="right">
-              <p>suggested</p>
+            <div class="bottom">
+              <p>*Constumers tend to better trust brands after viewing them online</p>
             </div>
           </div>
           <div class="card">
@@ -193,7 +194,9 @@ export default {
         'foursuare', 
         'reddit', 
         'tiktok', 
-      ]
+      ],
+      min: Number,
+      max: Number,
     }
   },
   created() {
@@ -208,6 +211,20 @@ export default {
         this.socialMedia = this.socialMedia.filter(s => s != item)
       } else {
         this.socialMedia.push(item)
+      }
+    },
+    limitRange(e) {
+      if (this.min < 0) {
+        this.min = 0
+      }
+      if (this.min > 100) {
+        this.min = 100
+      }
+      if (this.max < this.min ) {
+        this.max = this.min
+      }
+      if (this.max > 1000 ) {
+        this.max = 1000
       }
     }
   },

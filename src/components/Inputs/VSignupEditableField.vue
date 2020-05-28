@@ -136,7 +136,7 @@ export default {
   }),
   mounted () {
     this.selectedCategory = this.categories[0]
-    this.value = defaultVal
+    this.value = this.defaultVal
   },
   methods: {
     save() {
