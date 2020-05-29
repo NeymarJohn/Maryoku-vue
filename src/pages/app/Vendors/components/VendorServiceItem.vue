@@ -5,12 +5,12 @@
         {{serviceItem.name}}
       </div>
       <div class="help" v-if="!collapsed">
-        Does this included in starting site fee? 
+        Are all these included in your starting offer?
         <img :src="`${iconUrl}Group 5522 (2).svg`" @mouseover="conditionTooltip=true" @mouseleave="conditionTooltip=false">
         <div class="condition-tooltip" v-if="conditionTooltip">
-          <h5>Let us know what do you charge extra on?</h5>
+          <h5>What do you charge extra for?</h5>
           <p>
-            That way we can know chich elements to put into the offer automatically, and which ones will be added
+            Tell us so we know which elements to include in the original proposal and which ones are extra
           </p>
         </div>
       </div>

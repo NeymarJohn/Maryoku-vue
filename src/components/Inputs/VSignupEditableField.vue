@@ -74,6 +74,23 @@ export default {
     },
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
     categoryIconUrl: 'http://static.maryoku.com/storage/icons/Budget Elements/', 
+    // Venue Rental
+    // Food and Beverage
+    // Entertainment
+    // Equipment Rental
+    // Security Services
+    // Swags
+    // Videography and Photography
+    // Advertising and promotion
+    // Audio Visual/Staging Services
+    // Signage/Printing
+    // Corporate Social Responsibility
+    // Meeting organization fees
+    // Technology Services
+    // Transportation
+    // Decor
+    // Shipping
+    // Administration
     categories: [
       {
         name: 'Venue Rental',

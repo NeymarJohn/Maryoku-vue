@@ -1703,6 +1703,12 @@ export default {
         this.isApproved = false
       }
     })
+    this.$root.$on('go-to-signup-step', (step) => {
+      this.step = step
+      if (this.step < 1) {
+        this.isApproved = false
+      }
+    })
   },
   methods: {
     

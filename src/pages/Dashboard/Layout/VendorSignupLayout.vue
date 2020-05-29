@@ -57,7 +57,6 @@
         if (this.step < 5) {
           this.step += 1
         }
-        console.log(this.step)
       },
       prev() {
         this.$root.$emit('prev-vendor-signup-step')
@@ -75,6 +74,10 @@
     created(){
     },
     mounted() {
+      this.$root.$on('go-to-signup-step', (step) => {
+        this.step = step
+        this.isApproved = this.step < 1 ? false : true
+      })
     },
     computed:{
       nextLabel () {
@@ -85,7 +88,7 @@
         } else {
           return 'Next'
         }
-      }
+      },
     }
   };
 </script>
