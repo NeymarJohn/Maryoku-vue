@@ -1688,7 +1688,7 @@ export default {
   mounted() {
     this.$root.$on('approve-vendor-basic-info', () => {
       this.isApproved = true
-      this.step = 1
+      console.log('vendor basic info is approved')
     })
     this.$root.$on('next-vendor-signup-step', () => {
       if (this.step < 5) {
@@ -1696,17 +1696,8 @@ export default {
       }
     })
     this.$root.$on('prev-vendor-signup-step', () => {
-      if (this.step > 0) {
+      if (this.step > 1) {
         this.step -= 1
-      }
-      if (this.step == 0) {
-        this.isApproved = false
-      }
-    })
-    this.$root.$on('go-to-signup-step', (step) => {
-      this.step = step
-      if (this.step < 1) {
-        this.isApproved = false
       }
     })
   },
@@ -1727,6 +1718,5 @@ export default {
   .vendor-signup-wrapper {
     padding: 84px 124px;    
     font-family: Manrope-Regular, sans-serif;
-    background: #f3f7fd;
   }  
 </style>

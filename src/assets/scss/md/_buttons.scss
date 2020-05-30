@@ -91,6 +91,10 @@
     @include btn-styles($brand-red);
   }
 
+  &.md-yellow {
+    @include btn-styles($brand-yellow);
+  }
+
   &.md-purple{
     @include btn-styles($brand-purple);
   }

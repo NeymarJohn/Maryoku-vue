@@ -3,6 +3,8 @@ import EventComponentProperty from './EventComponentProperty'
 import EventComponentTodo from './EventComponentTodo'
 import EventComponentValue from './EventComponentValue'
 import EventComponentVendor from './EventComponentVendor'
+import EventComment from './EventComment'
+import EventCommentComponent from './EventCommentComponent'
 
 export default class EventComponent extends Model {
   resource () {
@@ -23,6 +25,10 @@ export default class EventComponent extends Model {
 
   vendors () {
     return this.hasMany(EventComponentVendor)
+  }
+
+  commentComponents() {
+    return this.hasMany(EventCommentComponent)
   }
 
   fetch (ctx, force) {

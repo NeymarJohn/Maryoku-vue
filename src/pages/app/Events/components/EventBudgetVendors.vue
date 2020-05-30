@@ -1246,4 +1246,7 @@ export default {
 .multiselect__tags {
   border: solid 0.5px #bcbcbc;
 }
+input.budget {
+  font-size: 20px !important;
+}
 </style>

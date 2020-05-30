@@ -5,12 +5,12 @@
         {{serviceItem.name}}
       </div>
       <div class="help" v-if="!collapsed">
-        Are all these included in your starting offer?
+        Does this included in starting site fee? 
         <img :src="`${iconUrl}Group 5522 (2).svg`" @mouseover="conditionTooltip=true" @mouseleave="conditionTooltip=false">
         <div class="condition-tooltip" v-if="conditionTooltip">
-          <h5>What do you charge extra for?</h5>
+          <h5>Let us know what do you charge extra on?</h5>
           <p>
-            Tell us so we know which elements to include in the original proposal and which ones are extra
+            That way we can know chich elements to put into the offer automatically, and which ones will be added
           </p>
         </div>
       </div>
@@ -25,7 +25,7 @@
         </div>
         <div class="checklist" v-for="(item, index) in sub.items" :key="index">
           <vendor-checkbox
-            :item="item"
+            :type="'text'"
             :label="item.name"
             v-model="item.value"
           />

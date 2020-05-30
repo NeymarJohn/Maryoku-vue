@@ -9,22 +9,7 @@
       </div>
       <div class="right-side">
         <div class="card">
-          <div class="tabs">
-            <div 
-              class="tab" 
-              :class="{'active': t == activeTab}" 
-              v-for="(t, tIndex) in tabs" 
-              :key="tIndex"
-              @click="goToSection(t)"
-            >
-              {{t}}
-            </div>
-          </div>
-          <div class="banner">
-            <img :src="vendor.coverPhoto" v-if="vendor.coverPhoto"/>
-            <img src="http://static.maryoku.com/storage/img/sidebar-2.jpg" v-else/>
-          </div>
-          <div class="about-cont" id="About">
+          <div class="about-cont">
             <div class="block">
               <span class="capacity"><img :src="`${iconUrl}Asset 545.svg`"/>Capacity</span>
               <span class="number">1000 <img :src="`${iconUrl}Group 4585 (2).svg`"/> 2000</span>
@@ -53,20 +38,17 @@
                 Lorem
               </div>
             </div>
-            <div class="images">
-              <img :src="img" v-for="(img, ind) in vendor.images" :key="ind"/>
-            </div>
-            <div class="contact-us" id="Contact">
+            <div class="contact-us">
               <h4>CONTACT US</h4>
               <div class="items">
                 <div class="item">
-                  <img :src="`${iconUrl}Asset 547.svg`"/> {{vendor.contact.email}}
+                  <img :src="`${iconUrl}Asset 547.svg`"/> Website
                 </div>
                 <div class="item">
-                  <img :src="`${iconUrl}Asset 550.svg`"/> {{vendor.contact.address}}
+                  <img :src="`${iconUrl}Asset 550.svg`"/> Instagram
                 </div>
                 <div class="item">
-                  <img :src="`${iconUrl}Asset 548.svg`"/> {{vendor.contact.phone}}
+                  <img :src="`${iconUrl}Asset 548.svg`"/> Facebook
                 </div>
               </div>
             </div>
@@ -85,92 +67,13 @@
               </div>
             </div>
           </div>
-          <div class="fee-cont" id="Pricing">
-            <div class="title">
-              <h3><img :src="`${iconUrl}Asset 562.svg`"/> ELEMENTS IN STARTING FEE</h3>
-            </div>
-            <div class="cblock">
-              <div class="cheader">
-                <img :src="`${iconUrl}Asset 543.svg`"/>Venue
-              </div>
-              <div class="citems">
-                <div class="citem" v-for="(fv, fvIndex) in feeVenues" :key="fvIndex">
-                  <img :src="`${iconUrl}Group 5479 (2).svg`"/>
-                  <span class="value">{{fv.value}}</span>
-                  <span class="qty">{{fv.qty}}</span>
-                  <img :src="`http://static.maryoku.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"/>
-                </div>
-              </div>
-            </div>
-            <div class="cblock">
-              <div class="cheader">
-                <img :src="`${iconUrl}Group 1471 (2).svg`"/>Catering
-              </div>
-              <div class="citems">
-                
-              </div>
-            </div>
+          <div class="pricing-cont">
           </div>
-          <div class="extra-cont">
-            <div class="title">
-              <h3><img :src="`${iconUrl}Asset 526.svg`"/>WITH EXTRA PAY</h3>
-            </div>
-            <div class="cblock">
-              <div class="cheader">
-                <img :src="`${iconUrl}Asset 543.svg`"/>Venue
-              </div>
-              <div class="citems">
-                <div class="citem">
-                  <div class="collapsed" @click="expanded=!expanded">
-                    <div class="col">
-                      Lorem
-                    </div>
-                    <div class="col">
-                      2
-                    </div>
-                    <div class="col">
-                      +$100.00
-                    </div>
-                    <div class="col">
-                      <img :class="{'rotate-90': expanded}" :src="`http://static.maryoku.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"/>
-                    </div>
-                  </div>
-                  <div class="expanded" v-if="expanded">
-                    Lorem ipsum
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="cblock">
-              <div class="cheader">
-                <img :src="`${iconUrl}Group 1471 (2).svg`"/>Catering
-              </div>
-              <div class="citems">
-                <div class="citem">
-                  <div class="collapsed" @click="expanded=!expanded">
-                    <div class="col">
-                      Lorem
-                    </div>
-                    <div class="col">
-                      2
-                    </div>
-                    <div class="col">
-                      +$100.00
-                    </div>
-                    <div class="col">
-                      <img :class="{'rotate-90': expanded}" :src="`http://static.maryoku.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"/>
-                    </div>
-                  </div>
-                  <div class="expanded" v-if="expanded">
-                    Lorem ipsum
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="rules-cont">
           </div>
-          <div class="policy-cont" id="Policy">
+          <div class="policy-cont">
             <div class="title">
-              <img :src="`${iconUrl}Group 1471 (2).svg`"> OUR POLICY
+              <img :src="`${iconUrl}Asset 560.svg`"> OUR POLICY
             </div>
             <div class="rules">
               <div class="rule" v-for="(r, rIndex) in defRules.split(', ')" :key="rIndex">
@@ -178,7 +81,7 @@
                   {{r}}
                 </div>
                 <div class="item">
-                  <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="vendor.yesRules.includes(r)"/>
+                  <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="yesRules.includes(r)"/>
                   <img :src="`${iconUrl}Group 5489 (3).svg`" v-else/>
                 </div>
               </div>
@@ -197,7 +100,7 @@
               </div>
             </div>
           </div>
-          <div class="pricing-policy-cont" id="Rules">
+          <div class="pricing-policy-cont">
             <div class="title">
               <img :src="`${iconUrl}Asset 560.svg`"> OUR PRICING POLICY
             </div>
@@ -261,61 +164,9 @@ export default {
   },
   data() {
     return {
-      vendor: {
-        coverPhoto: null, 
-        images: [
-          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
-          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
-          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
-          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
-          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
-        ],
-        capacity: {
-          low: null,
-          hight: null,
-        },
-        about: {
-          company: null, 
-          venue: null, 
-          cuisine: null,
-        },
-        contact: {
-          email: 'venue@hotmail.com', 
-          address: '575 Mission St. San Franciso CA 94105', 
-          phone: '077-300283',
-        },
-        social: {
-          website: null, 
-          facebook: null, 
-          instagram: null,
-        },
-        yesRules: [],
-        policies: [],
-      },
-      tabs: ['About', 'Pricing', 'Rules', 'Policy', 'Contact'],
-      activeTab: 'About',
-      feeVenues: [
-        {
-          value: 'Set up',
-          qty: null
-        },
-        {
-          value: 'In-house bar services',
-          qty: 1
-        }
-      ],
-      feeCatering: [
-        {
-          value: 'Set up',
-          qty: null
-        },
-        {
-          value: 'In-house bar services',
-          qty: 2
-        }
-      ],
-      expanded: false,
+      vendor: null,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
+      yesRules: [],
       defRules: 'Suitable for pets, Smoking allowed, Suitable for infants(Under 2 years), Dress code, Overtime Cost',
       defNa: 'Catering, Dj, Photographer, Show / Performance, Flowers, Transporation, Decoration, Rentals, Favours & Gifts, Other'
     }
@@ -327,16 +178,7 @@ export default {
     
   },
   methods: {
-    goToSection(item) {
-      this.activeTab = item
-      const theElement = document.getElementById(item)
-      const y = theElement.getBoundingClientRect().top + window.pageYOffset
-      const yOffset = -50
-      window.scrollTo({
-        top: y + yOffset,
-        behavior: 'smooth'
-      }) 
-    }
+    
   },
   computed: {
     
@@ -390,28 +232,6 @@ export default {
           background-color: #ffffff;
           box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
 
-          .tabs {
-            display: flex;
-            margin: -30px -60px;
-            .tab {
-              padding: 1rem 2rem;
-              border-right: 1px solid #818080;
-              cursor: pointer;
-
-              &.active {
-                border-top: 5px solid #f51355;
-                font: bold 16px Manrope-Regular, sans-serif;
-              }
-            }
-          }
-          .banner {
-            margin: 30px -60px calc(30px - 2rem) -60px;
-            padding-bottom: 2rem;
-            img {
-              width: 100%;
-              height: 230px;
-            }
-          }
           .about-cont {
             padding: 2rem 0;
             border-bottom: 1px solid #dddddd;
@@ -454,18 +274,6 @@ export default {
                 width: 60%;
               }
             }
-            .images {
-              display: block;
-              overflow-x: scroll;
-              padding: 2rem 0;
-              white-space: nowrap;
-
-              img {
-                width: 300px;
-                max-height: 177px;
-                margin-right: 2rem;
-              }
-            }
             .contact-us {
               padding: 2rem 0;
               border-bottom: 1px solid #dddddd;
@@ -479,7 +287,7 @@ export default {
                 margin-top: 2rem;
 
                 .item {
-                  margin-right: 3rem;
+                  flex: 1;
                   font: normal 16px Manrope-Regular, sans-serif;
                   text-decoration: underline;
                   img {
@@ -502,124 +310,6 @@ export default {
                   img {
                     width: 24px;
                     margin-right: 1rem;
-                  }
-                }
-              }
-            }
-          }
-          .fee-cont {
-            .title {
-              margin: 2rem 0;
-              h3 {
-                margin: 0;
-                font: 800 30px Manrope-Regular, sans-serif;
-                img {
-                  width: 24px;
-                  margin-right: 1rem;
-                }
-              }
-            }
-            .cblock {
-              .cheader {
-                display: flex;
-                padding: 1rem 0 1rem 60px;
-                background: #ededed;
-                margin: 0 -60px;
-                width: 100%;
-                font: bold 16px Manrope-Regular, sans-serif;
-
-                img {
-                  width: 24px;
-                  margin-right: 1rem;
-                }
-              }
-              .citems {
-                width: calc(100% - 4rem);
-                display: flex;
-                .citem {
-                  border-bottom: 1px solid #dddddd;
-                  padding: 2rem 0;
-                  display: flex;
-                  width: 50%;
-
-                  img {
-                    width: 20px;
-
-                    &:first-child {
-                      margin-right: 1rem;
-                    }
-                  }
-                  span {
-                    flex: 1;
-                    display: inline-block;
-                    &.value {
-                      font: 800 16px Manrope-Regular, sans-serif;
-                    }
-                    &.qty {
-                      font: normal 16px Manrope-Regular, sans-serif;
-                    }
-                  }
-                  &:nth-child(2n+1) {
-                    margin-right: 1rem;
-                  }
-                }
-              }
-            }
-          }
-          .extra-cont {
-            .title {
-              margin: 2rem 0;
-              h3 {
-                font: 800 30px Manrope-Regular, sans-serif;
-                margin: 0;
-                img {
-                  width: 20px;
-                  margin-right: 1rem;
-                }
-              }
-            }
-            .cblock {
-              .cheader {
-                display: flex;
-                padding: 1rem 0 1rem 60px;
-                background: #ededed;
-                margin: 0 -60px;
-                width: calc(100% - 5rem);
-                font: bold 16px Manrope-Regular, sans-serif;
-
-                img {
-                  width: 24px;
-                  margin-right: 1rem;
-                }
-              }
-              .citems {
-                .citem {
-                  width: calc(100% - 5rem - 60px);
-                  border-bottom: 1px solid #dddddd;
-                  cursor: pointer;
-
-                  .collapsed {
-                    display: flex;
-                    padding: 2rem 0;
-                    .col {
-                      flex: 1;
-                      width: 20px;
-
-                      img {
-                        width: 20px;
-                      }
-                      &:first-child {
-                        flex: 2;
-                        font: bold 16px Manrope-Regular, sans-serif;
-                      }
-                      &:last-child {
-                        text-align: right;
-                      }
-                    }
-                  }
-                  .expanded {
-                    font: normal 14px Manrope-Regular, sans-serif;
-                    padding-bottom: 1rem;
                   }
                 }
               }
@@ -727,9 +417,6 @@ export default {
           }
         }
       }
-    }
-    .rotate-90 {
-      transform: rotate(90deg);
     }
   }  
 </style>

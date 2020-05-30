@@ -2,52 +2,40 @@
   <div class="v-signup-steps-wrapper">
     <div class="steps-cont">
       <ul class="progressbar">
-        <li 
-          @click="goToStep(1)" 
-          :class="[
-            {active: step >= 1 },
-            {current: step == 1 },
-          ]"
-        > 
+        <li :class="[
+          {active: step >= 1 },
+          {current: step == 1 },
+        ]"> 
           <span v-if="step == 0"><i>&#8226;</i></span> 
           <span v-else><md-icon>check</md-icon></span>
           <br/>
           <strong class="text">about your <br/>company</strong>
         </li>
-        <li 
-          @click="goToStep(2)" 
-          :class="[
-            { active: step >= 3 },
-            { current: step == 2 },
-            { inactive: step < 2 }
-          ]"
-        >
+        <li :class="[
+          { active: step >= 3 },
+          { current: step == 2 },
+          { inactive: step < 2 }
+        ]">
           <span v-if="step >=3"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span> 
           <br/> 
           <strong class="text">services &<br/>amentities</strong>
         </li>
-        <li 
-          @click="goToStep(3)" 
-          :class="[
-            { active: step >= 4 },
-            { current: step == 3 },
-            { inactive: step < 3 }
-          ]"
-        > 
+        <li :class="[
+          { active: step >= 4 },
+          { current: step == 3 },
+          { inactive: step < 3 }
+        ]"> 
           <span v-if="step >=4"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span> 
           <br/>
           <strong class="text">photoes &<br/>disclamer</strong>
         </li>
-        <li 
-          @click="goToStep(4)" 
-          :class="[
-            { active: step >= 5 },
-            { current: step >= 4 },
-            { inactive: step < 4 }
-          ]"
-        > 
+        <li :class="[
+          { active: step >= 5 },
+          { current: step >= 4 },
+          { inactive: step < 4 }
+        ]"> 
           <span v-if="step >=5"><md-icon>check</md-icon></span>
           <span v-else><i>&#8226;</i></span> 
           <br/>
@@ -70,12 +58,6 @@
       }
     },
     methods: {
-      goToStep(step) {
-        if (step < this.step) {
-          this.step = step
-          this.$root.$emit('go-to-signup-step', this.step)
-        }
-      }
     },
     created() {
 
@@ -111,7 +93,6 @@
           position:relative;
           text-align: center;
           text-transform: uppercase;
-          cursor: pointer;
 
           span {
             width: 34px;

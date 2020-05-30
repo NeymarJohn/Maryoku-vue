@@ -23,6 +23,7 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'
 import lsWatcher from 'vue-storage-watcher'
 import VueTour from 'vue-tour'
 import VueSwal from 'vue-swal'
+import VueTimeago from 'vue-timeago'
 
 import App from './App.vue'
 import DashboardPlugin from './material-dashboard'
@@ -47,6 +48,14 @@ Vue.use(VueGmaps, {
   libraries: ['places']
 })
 Vue.use(VueScrollTo)
+Vue.use(VueTimeago, {
+  name: 'Timeago', // Component name, `Timeago` by default
+  locale: 'en', // Default locale
+  locales: {
+    'zh-CN': require('date-fns/locale/zh_cn'),
+    ja: require('date-fns/locale/ja')
+  }
+})
 
 // configure router
 const router = new VueRouter({
