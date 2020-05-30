@@ -7,7 +7,7 @@
       <div class="content">
         <div v-if="!isEdit">
           <img v-if="img!=''" :src="img"/>
-          {{title=='Business Category' ? selectedCategory.name : defaultVal}}
+          {{title=='Business Category' ? selectedCategory.name : value}}
         </div>
         <div class="edit-content" v-else>
           <div v-if="title=='Business Category'">
@@ -28,12 +28,12 @@
               </li>
             </ul>
           </div>
-          <div v-else>
+          <div :class="['input-group', isEmailValid()]" v-else>
             <img class="inside-img" :src="img" v-if="img!=''"/>
             <input
               class="default"
               :class="[{'with-img': img!=''}]"
-              v-model="defaultVal"
+              v-model="value"
             />
           </div>
         </div>
@@ -69,71 +69,110 @@ export default {
     isEdit: false,
     expanded: false,
     selectedCategory: {
-      name: 'Venue',
+      name: 'Venue Rental',
       icon: 'Asset 543.svg'
     },
+    reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
     categoryIconUrl: 'http://static.maryoku.com/storage/icons/Budget Elements/', 
+    // Venue Rental
+    // Food and Beverage
+    // Entertainment
+    // Equipment Rental
+    // Security Services
+    // Swags
+    // Videography and Photography
+    // Advertising and promotion
+    // Audio Visual/Staging Services
+    // Signage/Printing
+    // Corporate Social Responsibility
+    // Meeting organization fees
+    // Technology Services
+    // Transportation
+    // Decor
+    // Shipping
+    // Administration
     categories: [
       {
         name: 'Venue Rental',
-        icon: 'rentals.svg'
+        value: 'venuerental',
+        icon: 'venuerental.svg'
       },
       {
         name: 'Food & Catering',
-        icon: 'rentals.svg'
+        value: 'foodandbeverage',
+        icon: 'foodandbeverage.svg'
       },
       {
         name: 'Design and Decor',
+        value: 'decor',
         icon: 'decor.svg'
       },
       {
+        name: 'Guest Services & Staffing',
+        value: 'corporatesocialresponsibility',
+        icon: 'corporatesocialresponsibility.svg'
+      },
+      {
         name: 'Signage / Printing',
-        icon: 'rentals.svg'
+        value: 'signageprinting',
+        icon: 'signageprinting.svg'
       },
       {
         name: 'Advertising and Promotion',
+        value: 'advertising-promotion',
         icon: 'advertising-promotion.svg'
       },
       {
         name: 'AV / Staging',
-        icon: 'rentals.svg'
+        value: 'audiovisualstagingservices',
+        icon: 'audiovisualstagingservices.svg'
       },
       {
         name: 'Swags',
+        value: 'swags',
         icon: 'swags.svg'
       },
       {
         name: 'Shipping',
+        value: 'shipping',
         icon: 'shipping.svg'
       },
       {
         name: 'Transportation & Tour operator',
+        value: 'transportation',
         icon: 'transportation.svg'
       },
       {
         name: 'Entertainment',
+        value: 'entertainment',
         icon: 'entertainment.svg'
       },
       {
         name: 'Administration',
+        value: 'administration',
         icon: 'administration.svg'
       },
       {
         name: 'Security',
-        icon: 'security.svg'
+        value: 'securityservices',
+        icon: 'securityservices.svg'
       },
       {
         name: 'Technology',
-        icon: 'rentals.svg'
+        value: 'technologyservices',
+        icon: 'technologyservices.svg'
       },
       {
         name: 'Videography and Photography',
-        icon: 'rentals.svg'
+        value: 'videographyandphotography',
+        icon: 'videographyandphotography.svg'
       },
-    ]
+    ],
+    value: null,
   }),
   mounted () {
     this.selectedCategory = this.categories[0]
+    this.value = this.defaultVal
   },
   methods: {
     save() {
@@ -142,6 +181,9 @@ export default {
     updateCategory(category) {
       this.selectedCategory = category
       this.expanded = false
+    },
+    isEmailValid: function() {
+      return (this.value == "")? "" : (this.reg.test(this.value)) ? 'has-success' : 'has-error';
     }
   }
 }
@@ -186,6 +228,16 @@ export default {
 
         &.with-img {
           padding-left: 60px;
+        }
+        &.has-error {
+          input {
+            border-color: #f51355;
+          }
+        }
+        &.has-success {
+          input {
+            border-color: green;
+          }
         }
       }
       .inside-img {

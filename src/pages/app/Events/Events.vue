@@ -4,16 +4,7 @@
       <md-button class="button-event-creatig" @click="openEventModal()">Create New Event</md-button>
     </div>-->
     <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" is-full-screen>
-      <!-- <img src="/static/img/maryoku-loader.gif" /> -->
-      <!-- <img :src="`/static/img/load_${imageIndex}.jpg`"> -->
-      <div :style="`background-image:url(/static/img/load_${imageIndex}.jpg)`" class="loading-background" >
-        <div :class="`quote quote_${imageIndex}`">
-          <span>{{quote.description}}</span>
-          <span class="author">{{quote.author}}</span>
-        </div>
-      </div>
-      
-      <!-- {{this.imageIndex}} -->
+      <img src="/static/img/maryoku-loader.gif" />
     </vue-element-loading>
     <div class="md-layout-item md-size-100">
       <md-card v-if="upcomingEvents.length">
@@ -141,7 +132,6 @@
         </template>
       </product-card>
     </div>
-    
   </div>
 </template>
 
@@ -162,11 +152,6 @@ import VueElementLoading from 'vue-element-loading'
 import swal from 'sweetalert2'
 import TeamMember from '@/models/TeamMember'
 import _ from 'underscore'
-import {backgroundImages, quotes} from '@/constants/loadingBackgrounds'
-
-const imageIndex = new Date().getTime() % backgroundImages.length
-const quoteIndex = new Date().getTime() % quotes.length
-const quote = quotes[quoteIndex]
 
 export default {
   components: {
@@ -205,6 +190,7 @@ export default {
         this.upcomingEvents = this.getExtraFields(allEvents).reverse()
 
         // this.upcomingEvents = _.sortBy(this.upcomingEvents, function(num){  return new Date(num.eventStartMillis); });
+
         this.isLoading = false
       })
     })
@@ -221,10 +207,7 @@ export default {
         'http://static.maryoku.com/storage/img/shutterstock_289440710.png',
       recentEvents: [],
       upcomingEvents: [],
-      isLoading: true,
-      imageIndex,
-      quoteIndex,
-      quote
+      isLoading: true
     }
   },
 
@@ -407,13 +390,6 @@ export default {
 </script>
 
 <style lang="scss">
-.loading-background{
-  background-size: cover;
-    width: 100vw;
-    height: 100vh;
-    position: static;
-    left: 0;
-}
 .button-event-creatig .md-ripple {
   background-color: #00bcd4;
 }

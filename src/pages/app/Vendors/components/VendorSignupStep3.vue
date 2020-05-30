@@ -193,6 +193,71 @@
                 <span>There are times I don't work ></span>
               </div>
             </div>
+            <div class="calendar-cont" v-if="!workAllDay">
+              <div class="calendar">
+                <functional-calendar 
+                  :is-date-picker="true" 
+                  :change-month-function="true" 
+                  :change-year-function="true"
+                  :is-date-range="true"
+                  dateFormat='dd/mm/yyyy' 
+                  v-model="date"
+                />
+              </div>
+              <div class="check-list">
+                <div class="block">
+                  <div class="check-field" @click="exEvery=!exEvery">
+                    <img :src="`${iconUrl}Group 6258.svg`" v-if="exEvery"/>
+                    <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
+                    <span :class="{'checked': exEvery}">Every:</span>
+                  </div>
+                  <div class="cdropdown" v-if="exEvery">
+                    <span>Select Day</span>
+                    <img :src="`${iconUrl}Asset 519.svg`"/>
+                  </div>
+                </div>
+                <div class="block border">
+                  <div class="check-field" @click="exDont=!exDont">
+                    <img :src="`${iconUrl}Group 6258.svg`" v-if="exDont"/>
+                    <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
+                    <span :class="{'checked': exDont}">I don't work on these holidays:</span>
+                  </div>
+                  <div class="cdropdown" v-if="exDont">
+                    <span>Islam</span>
+                    <img :src="`${iconUrl}Asset 519.svg`"/>
+                  </div>
+                  <div class="holidays" v-if="exDont">
+                    <div class="dont">
+                      <img :src="`${iconUrl}Asset 524.svg`"/>
+                    </div>
+                    <div>
+                      <ul>
+                        <li v-for="(h, hIndex) in holidays" :key="hIndex">
+                          <div class="check-field" @click="updateExDonts(h)">
+                            <img :src="`${iconUrl}Group 6258.svg`" v-if="exDonts.includes(h)"/>
+                            <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
+                            <span :class="{'checked': exDonts.includes(h)}">{{h}}</span>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="block">
+                  <div class="title">
+                    Additional Limitations
+                  </div>
+                  <div class="check-field" @click="exLimitation=!exLimitation">
+                    <img :src="`${iconUrl}Group 6258.svg`" v-if="exLimitation"/>
+                    <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
+                    <span :class="{'checked': exLimitation}">Everyday between these hours:</span>
+                  </div>
+                  <div class="">
+
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -209,6 +274,7 @@ import Vendors from '@/models/Vendors'
 import Icon from '@/components/Icon/Icon.vue'
 import VendorServiceItem from './VendorServiceItem.vue'
 import VSignupAddRules from '@/components/Inputs/VSignupAddRules.vue'
+import { FunctionalCalendar } from 'vue-functional-calendar'
 
 export default {
   name: 'vendor-signup-step3',
@@ -219,7 +285,8 @@ export default {
   components: {
     VueElementLoading,
     VendorServiceItem,
-    VSignupAddRules
+    VSignupAddRules,
+    FunctionalCalendar,
   },
   data() {
     return {
@@ -227,6 +294,7 @@ export default {
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
       allowThirdVendor: null,
       workAllDay: false,
+      date: {},
       rulesDesc: {
         title: 'additional rules',
         placeholder: 'Event muse end before.. / Suitable for children (2-12 years)'
@@ -246,6 +314,25 @@ export default {
       yesRules: [],
       noRules: [],
       noteRules: [],
+      holidays: [
+        'All Islamic holiday', 
+        'Eid AI-Acha', 
+        'Eid AI-Fitr',
+        'Lailat al Miraj',
+        'Milad un Nabi(Shia)',
+        'Ramadan(start)',
+        'Laylat at Qadr',
+        'Eid-ai-Fitr(End of Ramadan)',
+        'Waqf ai Arafa - Hajj',
+        'Hijra - Islamic New Year',
+        'Day of Ashura / Muharram',
+        'Milad un Nabi',
+        'All Islamic holidays (Shia)',
+      ],
+      exEvery: false,
+      exDont: false,
+      exLimitation: false,
+      exDonts: [],
       defRules: 'Suitable for pets, Smoking allowed, Suitable for infants(Under 2 years), Dress code, Overtime Cost',
       notAllowed: [],
       isOtherNa: false,
@@ -259,6 +346,13 @@ export default {
     
   },
   methods: {
+    updateExDonts(item) {
+      if (this.exDonts.includes(item)) {
+        this.exDonts = this.exDonts.filter(d => d != item)
+      } else {
+        this.exDonts.push(item)
+      }
+    },
     updateNa(item) {
       if (this.notAllowed.includes(item)) {
         this.notAllowed = this.notAllowed.filter(n => n != item)
@@ -488,6 +582,85 @@ export default {
       }
       .top, .bottom {
         margin-bottom: .5rem;
+      }
+    }
+    .calendar-cont {
+      display: flex;
+      padding: 2rem 0;
+
+      .calendar {
+        flex: 1;
+        margin-right: 2rem;
+      }
+      .check-list {
+        flex: 2;
+
+        .block {
+          padding: 1rem 0;
+          .title {
+            margin-bottom: 1rem;
+          }
+          .check-field {
+            cursor: pointer;
+            img {
+              width: 27px;
+              margin-right: 1rem;
+            }
+            span {
+              &.checked {
+                font: 600 16px Manrope-Regular, sans-serif;
+              }
+            }
+          }
+          .holidays {
+            display: flex;
+            margin-top: 1rem;
+
+            .dont {
+              width: 24px;
+              margin-right: 1rem;
+              img {
+                width: 24p;
+              }
+            }
+            ul {
+              padding: 0;
+              list-style: none;
+              margin: 0;
+              columns: 2;
+
+              li {
+                margin-bottom: 1rem;
+              }
+            }
+          }
+          .cdropdown {
+            border: 1px solid #818080;
+            display: flex;
+            justify-content: space-between;
+            padding: .5rem 3rem;
+            margin: 1rem 0;
+            border-radius: 3px;
+            min-width: 50%;
+            text-align: center;
+            cursor: pointer;
+            max-width: 250px;
+
+            span {
+              flex: 5;
+              display: inline-block;
+            }
+            img {
+              width: 8px;
+              margin-left: 1rem;
+              transform: rotate(90deg);
+            }
+          }
+          &.border {
+            border-top: 1px solid #dddddd;
+            border-bottom: 1px solid #dddddd;
+          }
+        }
       }
     }
     .w-16 {
