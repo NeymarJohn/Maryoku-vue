@@ -66,7 +66,6 @@ export default {
           subCategory: [
             {
               name: 'around the space',
-              category: 'venuerental',
               items: [
                 {
                   name: 'hotel acommondations within walking distance',
@@ -82,7 +81,6 @@ export default {
             },
             {
               name: 'the space',
-              category: 'venuerental',
               items: [
                 {
                   name: 'number of function spaces',
@@ -133,7 +131,6 @@ export default {
             },
             {
               name: 'lighting',
-              category: 'venuerental',
               items: [
                 {
                   name: 'artificial lighting',
@@ -154,7 +151,6 @@ export default {
             },
             {
               name: 'parking',
-              category: 'venuerental',
               items: [
                 {
                   name: 'onsite parking',
@@ -165,7 +161,6 @@ export default {
             },
             {
               name: 'network',
-              category: 'venuerental',
               items: [
                 {
                   name: 'fast reliable Wifi for guests',
@@ -181,7 +176,6 @@ export default {
             },
             {
               name: 'floral',
-              category: 'decor',
               items: [
                 {
                   name: 'plants',
@@ -207,7 +201,6 @@ export default {
             },
             {
               name: 'specialties',
-              category: 'videographyandphotography',
               items: [
                 {
                   name: 'drone and remote photo/video',
@@ -238,7 +231,6 @@ export default {
             },
             {
               name: 'printing',
-              category: 'signageprinting',
               items: [
                 {
                   name: 'printing method',
@@ -447,7 +439,6 @@ export default {
             },
             {
               name: 'other',
-              category: 'decor',
               items: [
                 {
                   name: 'special effects (pyrotechnic, waterfall, baloon, explosion, etc)',
@@ -483,7 +474,6 @@ export default {
             },
             {
               name: ' ',
-              category: 'corporatesocialresponsibility',
               items: [
                 {
                   name: 'wifi',
@@ -584,7 +574,6 @@ export default {
             },
             {
               name: 'parking',
-              category: 'venuerental',
               items: [
                 {
                   name: 'valet services',
@@ -595,7 +584,6 @@ export default {
             },
             {
               name: 'cleaning',
-              category: 'foodandbeverage',
               items: [
                 {
                   name: 'cleaning services during the event',
@@ -611,7 +599,6 @@ export default {
             },
             {
               name: 'serving styles',
-              category: 'foodandbeverage',
               items: [
                 {
                   name: 'appetizers',
@@ -622,7 +609,6 @@ export default {
             },
             {
               name: 'meal type',
-              category: 'foodandbeverage',
               items: [
                 {
                   name: 'breakfast',
@@ -648,7 +634,6 @@ export default {
             },
             {
               name: 'setup, cleanup and delivery',
-              category: 'decor',
               items: [
                 {
                   name: 'customer pickup',
@@ -674,7 +659,6 @@ export default {
             },
             {
               name: 'specialties',
-              category: 'decor',
               items: [
                 {
                   name: 'digital decor',
@@ -720,7 +704,6 @@ export default {
             },
             {
               name: 'staffing',
-              category: 'corporatesocialresponsibility',
               items: [
                 {
                   name: 'event staffing',
@@ -808,10 +791,9 @@ export default {
             },
             {
               name: 'guest services',
-              category: 'corporatesocialresponsibility',
               items: [
                 {
-                  name: 'general guest services',
+                  name: 'gneral guest services',
                   type: Boolean, 
                   value: false
                 },
@@ -854,7 +836,6 @@ export default {
             },
             {
               name: 'style',
-              category: 'videographyandphotography',
               items: [
                 {
                   name: 'journalistic',
@@ -880,7 +861,6 @@ export default {
             },
             {
               name: 'marketing',
-              category: 'signageprinting',
               items: [
                 {
                   name: 'branding strategy',
@@ -906,7 +886,6 @@ export default {
             },
             {
               name: 'PR',
-              category: 'signageprinting',
               items: [
                 {
                   name: 'speech writing',
@@ -938,7 +917,6 @@ export default {
             },
             {
               name: 'administrative',
-              category: 'signageprinting',
               items: [
                 {
                   name: 'guest lists',
@@ -949,7 +927,6 @@ export default {
             },
             {
               name: 'graphics',
-              category: 'signageprinting',
               items: [
                 {
                   name: 'graphic design services',
@@ -960,7 +937,6 @@ export default {
             },
             {
               name: 'editing',
-              category: 'videographyandphotography',
               items: [
                 {
                   name: 'video',
@@ -986,7 +962,6 @@ export default {
             },
             {
               name: 'format of delivery',
-              category: 'videographyandphotography',
               items: [
                 {
                   name: 'physical proof/print',
@@ -1007,7 +982,6 @@ export default {
             },
             {
               name: 'setup & breakdown',
-              category: 'videographyandphotography',
               items: [
                 {
                   name: 'adapt equipment mobility to program',
@@ -1023,7 +997,6 @@ export default {
             },
             {
               name: 'type of entertainment',
-              category: 'entertainment',
               items: [
                 {
                   name: 'interactive',
@@ -1050,7 +1023,6 @@ export default {
             },
             {
               name: 'activities',
-              category: 'entertainment',
               items: [
                 {
                   name: 'team building',
@@ -1131,7 +1103,6 @@ export default {
             },
             {
               name: 'coordination & logistics',
-              category: 'activities',
               items: [
                 {
                   name: 'instructors, guides',
@@ -1147,7 +1118,6 @@ export default {
             },
             {
               name: 'other',
-              category: 'foodandbeverage',
               items: [
                 {
                   name: 'table setup and preparations',
@@ -1178,7 +1148,6 @@ export default {
             },
             {
               name: ' ',
-              category: 'transportation',
               items: [
                 {
                   name: 'taxi',
@@ -1266,7 +1235,6 @@ export default {
         },
         {
           name: 'accessibility',
-          category: 'entertainment',
           subCategory: [
             {
               name: ' ',
@@ -1305,7 +1273,6 @@ export default {
           subCategory: [
             {
               name: 'entertainment', 
-              category: 'venuerental',
               items: [
                 {
                   name: 'stage',
@@ -1321,7 +1288,6 @@ export default {
             },
             {
               name: 'furniture', 
-              category: 'venuerental',
               items: [
                 {
                   name: 'chairs',
@@ -1357,7 +1323,6 @@ export default {
             },
             {
               name: 'power', 
-              category: 'venuerental',
               items: [
                 {
                   name: 'power supply',
@@ -1373,7 +1338,6 @@ export default {
             },
             {
               name: 'AV', 
-              category: 'venuerental',
               items: [
                 {
                   name: 'microphones',
@@ -1409,7 +1373,6 @@ export default {
             },
             {
               name: 'tableware',
-              category: 'foodandbeverage',
               items: [
                 {
                   name: 'linens & tablecloth',
@@ -1450,7 +1413,6 @@ export default {
           subCategory: [
             {
               name: 'onsite managers',
-              category: 'foodandbeverage',
               items: [
                 {
                   name: 'captain',
@@ -1466,7 +1428,6 @@ export default {
             },
             {
               name: 'chefs and cooks',
-              category: 'foodandbeverage',
               items: [
                 {
                   name: 'chef',
@@ -1482,7 +1443,6 @@ export default {
             },
             {
               name: 'other',
-              category: 'foodandbeverage',
               items: [
                 {
                   name: 'servers',
@@ -1503,7 +1463,6 @@ export default {
             },
             {
               name: 'waitstaff',
-              category: 'foodandbeverage',
               items: [
                 {
                   name: 'waitstaff',
@@ -1524,7 +1483,6 @@ export default {
             },
             {
               name: ' ',
-              category: 'venuerental',
               items: [
                 {
                   name: 'event coordinator',
@@ -1580,7 +1538,6 @@ export default {
           subCategory: [
             {
               name: 'dietary constraints',
-              category: 'foodandbeverage',
               items: [
                 {
                   name: 'vegetarian',
@@ -1616,7 +1573,6 @@ export default {
             },
             {
               name: 'floral',
-              category: 'decor',
               items: [
                 {
                   name: 'hypoallergenic flowers',
@@ -1673,7 +1629,6 @@ export default {
           subCategory: [
             {
               name: 'food', 
-              category: 'foodandbeverage',
               items: [
                 {
                   name: 'cuisine specialty',
@@ -1704,7 +1659,6 @@ export default {
             },
             {
               name: 'beverage',
-              category: 'foodandbeverage',
               items: [
                 {
                   name: 'specialty liquor stations',

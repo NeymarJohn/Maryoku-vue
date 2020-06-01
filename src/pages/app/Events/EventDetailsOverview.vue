@@ -1,6 +1,7 @@
 <template>
   <div class="md-layout event-details-overview edit-event-details" v-if="event">
     <side-bar :event="event"></side-bar>
+    <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-details-header md-layout-item md-size-100">
       <div class="event-details-info d-flex justify-content-start">
         <div
@@ -115,27 +116,7 @@
             </ul>
           </div>
         </div>
-        <div class="header-actions d-flex flex-column">
-          <ul>
-            <li>
-              <a href>
-                <img :src="`${iconsURL}download-dark.svg`" />
-              </a>
-            </li>
-            <li>
-              <a href>
-                <img :src="`${iconsURL}share-dark.svg`" />
-              </a>
-            </li>
-            <li>
-              <a href>
-                <img :src="`${iconsURL}message-dark.svg`" />
-              </a>
-            </li>
-          </ul>
-          <div style="flex-grow:1"></div>
-          <time-counter :target="event.eventStartMillis"></time-counter>
-        </div>
+        <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
       </div>
     </div>
     <div class="md-layout justify-content-between notes" style="margin:2em 50px;">
@@ -234,7 +215,7 @@
                       />
                       <animated-number
                         ref="totalRemainingBudgetNumber"
-                        :value="percentage"
+                        :value="Number(percentage)"
                         class="percentage"
                         suffix="%"
                       ></animated-number>
@@ -650,6 +631,9 @@ import SideBar from "../../../components/SidebarPlugin/NewSideBar";
 import SidebarItem from "../../../components/SidebarPlugin/NewSidebarItem.vue";
 import TimeCounter from "./components/TimeCounter";
 import Popup from "../../../components/Popup"
+import HeaderActions from "@/components/HeaderActions";
+import CommentEditorPanel from "./components/CommentEditorPanel";
+
 export default {
   name: "event-overview",
   components: {
@@ -667,7 +651,9 @@ export default {
     CalendarEventStatistics,
     Modal,
     TimeCounter,
-    Popup
+    Popup,
+    HeaderActions,
+    CommentEditorPanel
   },
   props: {
     // event: Object,
@@ -706,11 +692,11 @@ export default {
     a : ['','one ','two ','three ','four ', 'five ','six ','seven ','eight ','nine ','ten ','eleven ','twelve ','thirteen ','fourteen ','fifteen ','sixteen ','seventeen ','eighteen ','nineteen '],
     b : ['', '', 'twenty','thirty','forty','fifty', 'sixty','seventy','eighty','ninety'],
     logger : "./static/img/logo.jpg",
-    conceptName : ""
+    conceptName : "",
+    showCommentEditorPanel:false
   }),
   methods: {
     getTimelineItems() {
-      console.log("Get Timeline Itmes");
       let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       let event = new CalendarEvent({ id: this.event.id });
 
@@ -718,11 +704,9 @@ export default {
         .for(calendar, event)
         .get()
         .then(res => {
-          console.log(res);
           this.timelineItems = _.sortBy(res, function(item) {
             return item.order;
           });
-          console.log(this.timelineItems);
 
           this.isLoading = false;
           this.timelineItems.forEach(item => {
@@ -741,7 +725,6 @@ export default {
           if (Object.keys(timelines).length > 0) {
             this.timeline = [];
             Object.keys(timelines).forEach((itemDay, index) => {
-              console.log(index);
               this.timeline.push({
                 itemDay: parseInt(itemDay),
                 isEditable: false,
@@ -837,7 +820,6 @@ export default {
         numberOfParticipants: this.event.numberOfParticipants,
         location: this.event.location
       };
-      console.log(this.event.eventStartMillis);
       this.showEditDetailModal = true;
     },
     updateEvent() {
@@ -855,7 +837,6 @@ export default {
         it => it.name === this.editEvent.eventType.name
       );
       updateEvent.eventType = eventType;
-      console.log(eventType);
       // let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       if (updateEvent.eventDayPart === "evening") {
         updateEvent.eventStartMillis.setHours(19);
@@ -866,7 +847,6 @@ export default {
       updateEvent.eventEndMillis = updateEvent.eventStartMillis + 3600 * 1000;
       updateEvent.save()
         .then(res => {
-          // console.log(res);
           this.event = res;
         })
         .catch(err => {
@@ -878,10 +858,7 @@ export default {
       return moment(new Date(date)).format("hh:mm A");
     },
     formatDateString(date) {
-      console.log(date);
-      console.log(new Date(date));
       if (typeof date == "number") {
-        console.log(moment(new Date(date)).format("MM/DD/YY"));
         return moment(new Date(date)).format("MM/DD/YY");
       }
       return moment(date).format("MM/DD/YY");
@@ -898,6 +875,9 @@ export default {
       str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (vm.a[Number(n[5])] || vm.b[n[5][0]] + ' ' + vm.a[n[5][1]]) : '';
       return str;
     },
+    toggleCommentMode(mode) {
+      this.showCommentEditorPanel = mode;
+    }
   },
   created() {
     this.$store.dispatch("event/getEventTypes", {
@@ -940,8 +920,6 @@ export default {
                 this.conceptName = event.concept.name
               }
             }
-            
-            console.log(this.event);
             this.getCalendarEventStatistics(event);
             this.getTimelineItems();
             new EventComponent()
@@ -951,8 +929,6 @@ export default {
                 this.event.components = components;
                 this.selectedComponents = components;
               });
-
-            console.log(event);
           });
       }.bind(this)
     );
@@ -963,8 +939,6 @@ export default {
       // this.$root.$emit("set-title",this.event, this.routeName === 'EditBuildingBlocks',true);
       this.getTimelineItems();
     }
-    console.log(this.eventTypes);
-    console.log(event);
   },
   watch: {
     event(newVal, oldVal) {

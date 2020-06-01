@@ -1,7 +1,8 @@
 <template>
     <div class="edit-event-details event-details-budget">
-        <side-bar :event="calendarEvent">
-        </side-bar>
+        <side-bar :event="calendarEvent"></side-bar>
+        <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
+
         <!-- Event Header -->
         <div class="event-header d-flex justify-content-between">
             <div class="header-title">
@@ -10,13 +11,7 @@
                 Budget
               </h3>
             </div>
-            <div class="header-actions">
-                <ul>
-                    <li><a href=""><img :src="`${menuIconsURL}Asset 9.svg`"></a></li>
-                    <li><a href=""><img :src="`${menuIconsURL}Asset 5.svg`"></a></li>
-                    <li><a href=""><img :src="`${menuIconsURL}Asset 8.svg`"></a></li>
-                </ul>
-            </div>
+            <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
         </div>
         <div class="md-layout justify-content-between">
             <div class="md-layout-item md-size-55">
@@ -236,6 +231,9 @@ import UploadVendorsModal from '../Vendors/ImportVendors'
 import SideBar from '../../../components/SidebarPlugin/NewSideBar'
 import PieChartRound from './components/PieChartRound.vue'
 import BudgetHandleMinusModal from '../../../components/Modals/BudgetHandleMinusModal'
+import HeaderActions from "@/components/HeaderActions";
+import CommentEditorPanel from "./components/CommentEditorPanel";
+
 export default {
   components: {
     Tabs,
@@ -246,7 +244,9 @@ export default {
     Modal,
     EditEventBlocksBudget,
     BudgetHandleMinusModal,
-    EventBudgetActivityPanel
+    EventBudgetActivityPanel,
+    HeaderActions,
+    CommentEditorPanel
   },
 
   data () {
@@ -280,7 +280,8 @@ export default {
       budgetConfirmationModal: false,
       newBudget: null,
       editBudgetElementsModal: false,
-      showHandleMinus:false
+      showHandleMinus:false,
+      showCommentEditorPanel:false
     }
   },
   created () {
@@ -475,6 +476,9 @@ export default {
     onAddMoreBudget (value) {
       this.newBudget = `${this.event.totalBudget + value}`.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       this.updateBudget();
+    },
+    toggleCommentMode(mode) {
+      this.showCommentEditorPanel = mode;
     }
   },
   computed: {

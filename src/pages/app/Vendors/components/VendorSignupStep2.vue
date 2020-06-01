@@ -4,7 +4,7 @@
       <div class="left-side">
         <img :src="`${iconUrl}Group 5222 (2).svg`"/>
         <h2>SERVICES & <br/>AMENTITIES</h2>
-        <p>Don't leave anything out! All information will appear on your future proposals</p>
+        <p>Don't leave anything out! All information will appear on your future proposal</p>
         <h2>2/4</h2>
       </div>
       <div class="right-side">

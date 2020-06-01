@@ -2,6 +2,7 @@
   <div class="md-layout event-details-timeline timeline-section with-progress-bar">
     <side-bar :event="event"></side-bar>
     <progress-sidebar></progress-sidebar>
+    <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-page-header md-layout-item md-size-100 with-bg">
       <div class="header-main-actions">
         <md-button class="md-default md-maryoku md-back md-simple">
@@ -11,25 +12,7 @@
         <md-button class="md-default md-simple">back to first version</md-button>
         <md-button class="md-default md-simple with-left-border">start from scratch</md-button>
       </div>
-      <div class="header-actions">
-        <ul>
-          <li>
-            <a href="javascript:void(0)" @click="download">
-              <img :src="`${menuIconsURL}Asset 9.svg`" />
-            </a>
-          </li>
-          <li>
-            <a href>
-              <img :src="`${menuIconsURL}Asset 5.svg`" />
-            </a>
-          </li>
-          <li>
-            <a href>
-              <img :src="`${menuIconsURL}Asset 8.svg`" />
-            </a>
-          </li>
-        </ul>
-      </div>
+      <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
     </div>
 
     <div
@@ -446,13 +429,17 @@ import draggable from "vuedraggable";
 import { Drag, Drop } from "vue-drag-drop";
 import _ from "underscore";
 
+
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+
+import HeaderActions from "@/components/HeaderActions";
+import CommentEditorPanel from "./components/CommentEditorPanel";
+
 import SideBar from "../../../components/SidebarPlugin/NewSideBar";
 import SidebarItem from "../../../components/SidebarPlugin/NewSidebarItem.vue";
 import ProgressSidebar from "./components/progressSidebar";
 import TimeInput from "../../../components/TimeInput";
-
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 
 export default {
   name: "event-time-line",
@@ -469,7 +456,9 @@ export default {
     ProgressSidebar,
     Modal,
     TimeInput,
-    LocationInput
+    LocationInput,
+    HeaderActions,
+    CommentEditorPanel
   },
   props: {
     // event: Object,
@@ -595,7 +584,8 @@ export default {
       "eighty",
       "ninety"
     ],
-    currentAttachments: []
+    currentAttachments: [],
+    showCommentEditorPanel:false
   }),
   methods: {
     ...mapMutations('event', ['setEventData']),
@@ -1220,6 +1210,9 @@ export default {
     },
     scrollToTop() {
       window.scrollTo(0, 0);
+    },
+    toggleCommentMode(mode) {
+      this.showCommentEditorPanel = mode;
     }
   },
   created() {
