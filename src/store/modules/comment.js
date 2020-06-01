@@ -84,12 +84,16 @@ const actions = {
   addComment({ commit, state }, comment) {
     console.log(comment)
     const commentComponent = new EventCommentComponent({ id: comment.commentComponent.id })
-    new EventComment(comment)
-      .for(commentComponent)
-      .save()
-      .then(comment=>{
-        commit('addComment', { commentComponentId: comment.commentComponent.id, comment });
-      })
+    return new Promise((resolve, reject) => { 
+      new EventComment(comment)
+        .for(commentComponent)
+        .save()
+        .then(res=>{
+          commit('addComment', { commentComponentId: comment.commentComponent.id, res });
+          resolve(res)
+        })
+    })
+    
   },
 }
 

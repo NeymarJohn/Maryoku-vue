@@ -69,7 +69,7 @@ export default {
     isEdit: false,
     expanded: false,
     selectedCategory: {
-      name: 'Venue',
+      name: 'Venue Rental',
       icon: 'Asset 543.svg'
     },
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
@@ -94,59 +94,78 @@ export default {
     categories: [
       {
         name: 'Venue Rental',
-        icon: 'rentals.svg'
+        value: 'venuerental',
+        icon: 'venuerental.svg'
       },
       {
         name: 'Food & Catering',
-        icon: 'rentals.svg'
+        value: 'foodandbeverage',
+        icon: 'foodandbeverage.svg'
       },
       {
         name: 'Design and Decor',
+        value: 'decor',
         icon: 'decor.svg'
       },
       {
+        name: 'Guest Services & Staffing',
+        value: 'corporatesocialresponsibility',
+        icon: 'corporatesocialresponsibility.svg'
+      },
+      {
         name: 'Signage / Printing',
-        icon: 'rentals.svg'
+        value: 'signageprinting',
+        icon: 'signageprinting.svg'
       },
       {
         name: 'Advertising and Promotion',
+        value: 'advertising-promotion',
         icon: 'advertising-promotion.svg'
       },
       {
         name: 'AV / Staging',
-        icon: 'rentals.svg'
+        value: 'audiovisualstagingservices',
+        icon: 'audiovisualstagingservices.svg'
       },
       {
         name: 'Swags',
+        value: 'swags',
         icon: 'swags.svg'
       },
       {
         name: 'Shipping',
+        value: 'shipping',
         icon: 'shipping.svg'
       },
       {
         name: 'Transportation & Tour operator',
+        value: 'transportation',
         icon: 'transportation.svg'
       },
       {
         name: 'Entertainment',
+        value: 'entertainment',
         icon: 'entertainment.svg'
       },
       {
         name: 'Administration',
+        value: 'administration',
         icon: 'administration.svg'
       },
       {
         name: 'Security',
-        icon: 'security.svg'
+        value: 'securityservices',
+        icon: 'securityservices.svg'
       },
       {
         name: 'Technology',
-        icon: 'rentals.svg'
+        value: 'technologyservices',
+        icon: 'technologyservices.svg'
       },
       {
         name: 'Videography and Photography',
-        icon: 'rentals.svg'
+        value: 'videographyandphotography',
+        icon: 'videographyandphotography.svg'
       },
     ],
     value: null,

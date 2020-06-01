@@ -51,7 +51,7 @@
         <div class="comments-child">
           <comment-item v-for="(comment) in replies" :key="comment.id" :comment="comment"></comment-item>
         </div>
-        <div class="form-group"  style="padding-left: 40px">
+        <div class="form-group" style="padding-left: 40px">
           <textarea
             rows="4"
             class="form-control"
@@ -62,9 +62,13 @@
       </div>
       <div class="footer">
         <md-button class="md-simple normal-btn" @click="isOpenCommentListsPane=false">Cancel</md-button>
-        <md-button class="md-simple md-black normal-btn" @click="saveComment($event, 'reply')">Submit</md-button>
+        <md-button
+          class="md-simple md-black normal-btn"
+          @click="saveComment($event, 'reply')"
+        >Submit</md-button>
       </div>
     </div>
+    <div  :class="{mask:isOpenCommentListsPane}" v-if="isOpenCommentListsPane"></div>
   </div>
   <!-- End Comments List -->
 </template>
@@ -97,18 +101,16 @@ export default {
   computed: {
     ...mapState("comment", ["commentComponents"]),
     mainComment() {
-      if (!this.hoveredComponent) return null
+      if (!this.hoveredComponent) return null;
       if (
         !this.hoveredComponent.comments ||
         this.hoveredComponent.comments.length === 0
       )
         return null;
-      return this.hoveredComponent.comments.find(
-        item => !item.parentId
-      );
+      return this.hoveredComponent.comments.find(item => !item.parentId);
     },
     replies() {
-      if (!this.hoveredComponent) return null
+      if (!this.hoveredComponent) return null;
       if (
         !this.hoveredComponent.comments ||
         this.hoveredComponent.comments.length === 0
@@ -119,8 +121,8 @@ export default {
         .sort((a, b) => b.dateCreated - a.dateCreated);
     }
   },
-  created () {
-    console.log("getCommentComponents")
+  created() {
+    console.log("getCommentComponents");
     this.getCommentComponents(this.$route.path);
   },
   methods: {
@@ -137,37 +139,55 @@ export default {
     showComments(commentComponent) {
       if (this.isCommentEditing || this.isOpenCommentListsPane) return;
       console.log(commentComponent);
-      this.getCommentsAction(commentComponent.id).then(comments=>{
-        console.log(comments)
-        this.hoveredComponent = commentComponent
-        this.hoveredComponent.comments = comments
-        if (!comments || comments.length === 0)
-          return
-        this.panelPosition = {
-          x: this.hoveredComponent.positionX + 40,
-          y: this.hoveredComponent.positionY
-        };
+      this.getCommentsAction(commentComponent.id).then(comments => {
+        console.log(comments);
+        this.hoveredComponent = commentComponent;
+        this.hoveredComponent.comments = comments;
+        if (!comments || comments.length === 0) return;
+
+        const deviceWidth = window.innerWidth;
+        if (this.hoveredComponent.positionX > deviceWidth - 600) {
+          this.panelPosition = {
+            x: this.hoveredComponent.positionX - 580,
+            y: this.hoveredComponent.positionY
+          };
+        } else {
+          this.panelPosition = {
+            x: this.hoveredComponent.positionX + 40,
+            y: this.hoveredComponent.positionY
+          };
+        }
+
+
+       
         this.isOpenCommentListsPane = true;
       });
-
     },
     toggleEditPane(commentComponent, isEditing) {
       if (this.isOpenCommentListsPane) {
-        this.isOpenCommentListsPane = false
+        this.isOpenCommentListsPane = false;
       }
       if (isEditing) {
-        this.selectedCommentComponent = commentComponent
-        this.panelPosition = {
-          x: this.selectedCommentComponent.positionX + 40,
-          y: this.selectedCommentComponent.positionY
-        };
+        this.selectedCommentComponent = commentComponent;
+        const deviceWidth = window.innerWidth;
+        if (this.selectedCommentComponent.positionX > deviceWidth - 600) {
+          this.panelPosition = {
+            x: this.selectedCommentComponent.positionX - 580,
+            y: this.selectedCommentComponent.positionY
+          };
+        } else {
+          this.panelPosition = {
+            x: this.selectedCommentComponent.positionX + 40,
+            y: this.selectedCommentComponent.positionY
+          };
+        }
       } else {
         this.selectedCommentComponent = null;
       }
       this.isCommentEditing = isEditing;
     },
     clearStatus() {
-      this.isCommentEditing = false
+      this.isCommentEditing = false;
       this.isOpenCommentListsPane = false;
       this.selectedCommentComponent = null;
       this.hoveredComponent = null;
@@ -175,18 +195,18 @@ export default {
     addFromEvent(event) {
       if (this.isCommentEditing || this.isOpenCommentListsPane) {
         this.clearStatus();
-        return
+        return;
       }
       var element = document.querySelector(".click-capture");
       var top = element.offsetTop;
-      console.log(top)
+      console.log(top);
       this.addCommentComponent({
         dateTime: Date.now(),
         positionX: event.clientX - 80,
         positionY: event.clientY - 100 + window.scrollY,
-        index: this.commentComponents?this.commentComponents.length + 1 : 1,
+        index: this.commentComponents ? this.commentComponents.length + 1 : 1,
         isEditing: false,
-        url:this.$route.path
+        url: this.$route.path
       });
       this.mostRecentClickCoordinates = {
         x: event.clientX,
@@ -209,29 +229,36 @@ export default {
       event.stopPropagation();
     },
     saveComment(event, type) {
-      let selectedComponent = this.selectedCommentComponent
+      let selectedComponent = this.selectedCommentComponent;
       if (type == "reply") {
-        selectedComponent = this.hoveredComponent
+        selectedComponent = this.hoveredComponent;
       }
       const comment = {
         commentComponent: { id: selectedComponent.id },
         description: this.editingComment,
         parentId: this.mainComment ? this.mainComment.id : null
-      }
-      this.addComment(comment)
-      this.hoveredComponent.comments = [comment].concat(this.hoveredComponent.comments)
+      };
+      this.addComment(comment).then(addedComment => {
+        console.log("addedComment", addedComment);
+        if (type == "reply") {
+          this.hoveredComponent.comments = [addedComment].concat(
+            this.hoveredComponent.comments
+          );
+        }
+      });
+
       // this.isOpenCommentListsPane = true
-      this.isCommentEditing = false
-      this.selectedCommentComponent = null
-      this.editingComment = ""
-      this.$forceUpdate()
-      event.stopPropagation()
+      this.isCommentEditing = false;
+      this.selectedCommentComponent = null;
+      this.editingComment = "";
+      this.$forceUpdate();
+      event.stopPropagation();
     },
     closeEditPanel() {
       this.isCommentEditing = false;
       this.selectedCommentComponent = null;
     }
-  },
+  }
 };
 </script>
 
@@ -281,6 +308,15 @@ export default {
     background-color: white;
     box-shadow: 0 3px 17px 0 rgba(0, 0, 0, 0.15);
   }
+
+}
+
+.mask {
+  width: 100vw;
+  top: 0;
+  height: 100vh;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.08);
 }
 
 .click-capture {
@@ -335,5 +371,6 @@ export default {
       border-top: solid 1px #cecece;
     }
   }
+
 }
 </style>
