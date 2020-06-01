@@ -28,10 +28,19 @@
               </li>
             </ul>
           </div>
-          <div :class="['input-group', isEmailValid()]" v-else>
+          <div v-if="title=='Email'">
             <img class="inside-img" :src="img" v-if="img!=''"/>
             <input
               class="default"
+              :class="[{'with-img': img!=''}, isEmailValid()]"
+              v-model="value"
+            />
+          </div>
+          <div v-else>
+            <img class="inside-img" :src="img" v-if="img!=''"/>
+            <input
+              class="default"
+              :type="title=='Phone' ? 'number' : 'text'"
               :class="[{'with-img': img!=''}]"
               v-model="value"
             />
@@ -230,14 +239,10 @@ export default {
           padding-left: 60px;
         }
         &.has-error {
-          input {
-            border-color: #f51355;
-          }
+          border-color: #f51355;
         }
         &.has-success {
-          input {
-            border-color: green;
-          }
+          border-color: green;
         }
       }
       .inside-img {
