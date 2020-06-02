@@ -14,31 +14,31 @@
           <v-signup-editable-field
             :title="'Company Name'"
             :img="''"
-            :defaultVal="'Relish caterers & venues'"
+            :defaultVal="vendor.companyName"
             :borderBottom="true"
           />
           <v-signup-editable-field
             :title="'Business Category'"
             :img="''"
-            :defaultVal="'Venue'"
+            :defaultVal="vendor.businessCategory"
             :borderBottom="true"
           />
           <v-signup-editable-field
             :title="'Address'"
             :img="`${iconUrl}Asset 550.svg`"
-            :defaultVal="'575 Mission St. San Francisco CA 94105'"
+            :defaultVal="vendor.address"
             :borderBottom="true"
           />
           <v-signup-editable-field
             :title="'Phone'"
             :img="`${iconUrl}Asset 548.svg`"
-            :defaultVal="'077-3000293'"
+            :defaultVal="vendor.phone"
             :borderBottom="true"
           />
           <v-signup-editable-field
             :title="'Email'"
             :img="`${iconUrl}Asset 547.svg`"
-            :defaultVal="'relish_service@gmail.com'"
+            :defaultVal="vendor.email"
             :borderBottom="false"
           />
         </div>
@@ -62,9 +62,11 @@ export default {
     VueElementLoading,
     VSignupEditableField
   },
+  props: {
+    vendor: Object,
+  },
   data() {
     return {
-      vendor: null,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
     }
   },

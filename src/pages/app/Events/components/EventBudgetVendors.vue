@@ -17,7 +17,6 @@
       <table
         class="event-blocks__table event-block-table"
         v-for="(block, index) in eventBuildingBlocks"
-        :class="{booked: block.bookedBudget}"
         :key="index"
       >
         <tbody>
@@ -76,7 +75,7 @@
                   </template>
                   <!-- v-if="block.downPaymentStatus==='accepted'" -->
                   <event-actual-cost-icon-tooltip :icon="'credit_card'" :item="block" :event="event" />
-                  <span class="font-size-20 whitspace-nowrap" v-if="block.vendorsCount>0">
+                  <span class="font-size-20" v-if="block.vendorsCount>0">
                     <md-icon
                       class="color-plus font-size-20"
                       v-if="block.bookedBudget <= block.allocatedBudget"
@@ -95,16 +94,14 @@
                   </span>
                 </td>
                 <td class="status" width="15%">
-                  <div class="text-center">
+                  <div>
                     <md-button
                       class="book-btn md-sm"
                       :class="{'disabled' : block.proposalsState==='get-offers'}"
                       @click="bookVendors(block)"
-                      v-if="!block.fixed && block.componentId!='unexpected' && !block.bookedBudget"
+                      v-if="!block.fixed && block.componentId!='unexpected'"
                     >Book Vendors</md-button>
-                    <img :src="`${$iconURL}common/check-circle-green.svg`" width="32" v-if="block.bookedBudget"/> 
                   </div>
-
                 </td>
                 <td class="expand">
                   <div
@@ -317,7 +314,7 @@
             class="md-layout-item md-size-70 d-flex"
             v-if="newBuildingBlock.category.id==='other'"
           >
-            <md-icon class="font-size-20 ">subdirectory_arrow_right</md-icon>
+            <md-icon class="font-size-20">subdirectory_arrow_right</md-icon>
             <div class="form-group" style="flex-grow:1; margin-left:10px; ">
               <label class="font-size-16 font-bold-extra color-black">Name</label>
               <small class="font-size-14">(2 words top)</small>
@@ -924,6 +921,8 @@ export default {
     },
 
     async addBuildingBlock() {
+      // Save event interaction
+      console.log(this.event);
       let event = new CalendarEvent({ id: this.event.id });
       let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
 
@@ -1045,6 +1044,7 @@ export default {
     },
     async updateVendor(myVendor) {
       console.log(myVendor);
+      console.log(this.calendar);
       let calendar = new Calendar({
         id: this.$auth.user.defaultCalendarId
       });
@@ -1248,8 +1248,5 @@ export default {
 }
 input.budget {
   font-size: 20px !important;
-}
-.booked {
-  background-color: rgba(56, 256, 126, 0.19) !important;
 }
 </style>

@@ -24,7 +24,7 @@
           <textarea
             rows="4"
             class="form-control"
-            placeholder="Write your comment here"
+            placeholder="Write description here"
             v-model="editingComment"
           ></textarea>
         </div>
@@ -45,31 +45,8 @@
     >
       <div>
         <div v-if="hoveredComponent.comments">
-          <comment-item 
-            v-if="mainComment" 
-            :comment="mainComment" 
-            :isEditing="editingCommentId == mainComment.id"
-            @cancelUpdate="editingCommentId=''"
-            @updateComment="updateComment"
-          >
-          </comment-item>
-          <div class="reply-dropdown d-flex justify-content-between" >
-            {{replies.length}} Replies
-            <div class="comment-actions">
-              <md-button class="edit-btn md-simple md-black comment-action-btn">
-                Resolve
-              </md-button>
-              <md-button class="edit-btn md-simple comment-action-btn" @click="editComment(mainComment)">
-                <img :src="`${$iconURL}comments/SVG/edit-dark.svg`" width="25px" />
-              </md-button>
-              <md-button class="edit-btn md-simple comment-action-btn">
-                <img :src="`${$iconURL}comments/SVG/heart-dark.svg`" width="30px" @click="loveComment(mainComment)"/>
-              </md-button>
-              <md-button class="edit-btn md-simple comment-action-btn" >
-                <img class="trash" :src="`${$iconURL}Timeline-New/Trash.svg`" width="18px" @click="deleteComment(mainComment)" />
-              </md-button>
-            </div>
-          </div>
+          <comment-item :comment="mainComment" v-if="mainComment"></comment-item>
+          <div class="reply-dropdown">{{replies.length}} Replies</div>
         </div>
         <div class="comments-child">
           <comment-item v-for="(comment) in replies" :key="comment.id" :comment="comment"></comment-item>
@@ -98,8 +75,7 @@
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import CommentCircleButton from "./CommentCircleButton";
-import EventCommentComponent from "@/models/EventCommentComponent";
-import EventComment from "@/models/EventComment";
+import EventComponent from "@/models/EventComponent";
 import CommentItem from "./CommentItem";
 
 export default {
@@ -119,9 +95,7 @@ export default {
         y: 0
       },
       isCommentEditing: false,
-      isOpenCommentListsPane: false,
-      isExistingCommentEditing: false,
-      editingCommentId: ""
+      isOpenCommentListsPane: false
     };
   },
   computed: {
@@ -196,15 +170,15 @@ export default {
       if (isEditing) {
         this.selectedCommentComponent = commentComponent;
         const deviceWidth = window.innerWidth;
-        if (this.selectedCommentComponent.positionX < 600) {
+        if (this.selectedCommentComponent.positionX > deviceWidth - 600) {
           this.panelPosition = {
-            x: this.selectedCommentComponent.positionX - 20,
-            y: this.selectedCommentComponent.positionY + 80
+            x: this.selectedCommentComponent.positionX - 580,
+            y: this.selectedCommentComponent.positionY
           };
         } else {
           this.panelPosition = {
-            x: this.selectedCommentComponent.positionX - 530,
-            y: this.selectedCommentComponent.positionY + 80
+            x: this.selectedCommentComponent.positionX + 40,
+            y: this.selectedCommentComponent.positionY
           };
         }
       } else {
@@ -274,10 +248,8 @@ export default {
       });
 
       // this.isOpenCommentListsPane = true
-      // this.isCommentEditing = false;
-      // this.isOpenCommentListsPane = false;
-      // this.selectedCommentComponent = null;
-      this.clearStatus()
+      this.isCommentEditing = false;
+      this.selectedCommentComponent = null;
       this.editingComment = "";
       this.$forceUpdate();
       event.stopPropagation();
@@ -285,28 +257,7 @@ export default {
     closeEditPanel() {
       this.isCommentEditing = false;
       this.selectedCommentComponent = null;
-    },
-    editComment(comment) {
-      this.isEditing = true;
-      this.editingCommentId = comment.id
-    },
-    loveComment(comment) {
-
-    },
-    deleteComment(comment) {
-
-    },
-    updateComment(comment) {
-      this.editingCommentId = ""
-      const commentComponent = new EventCommentComponent({id: this.hoveredComponent.id})
-      new EventComment(comment)
-        .for(commentComponent)
-        .save()
-        .then(()=>{
-          console.log(comment)
-        }) 
     }
-
   }
 };
 </script>
@@ -418,12 +369,6 @@ export default {
     margin-bottom: 20px;
     & > div {
       border-top: solid 1px #cecece;
-    }
-  }
-  .comment-actions {
-    color: black;
-    .comment-action-btn {
-      margin: 0 5px !important;
     }
   }
 

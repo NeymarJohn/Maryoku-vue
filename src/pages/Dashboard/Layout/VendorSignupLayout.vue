@@ -13,7 +13,7 @@
         <span v-if="step != 5" @click="scrollToTop()"><img :src="`${iconsUrl}Asset 602.svg`"/></span>
       </div>
       <div class="right">
-        <a class="save">
+        <a class="save" @click="saveDraft()">
           <img :src="`${iconsUrl}Asset 610.svg`"/>
           Save for later
         </a>
@@ -27,18 +27,44 @@
         Approve & Begin
       </a>
     </section>
+    <modal v-if="savedItModal" class="saved-it-modal" container-class="modal-container sm">
+      <template slot="header">
+        <div class="saved-it-modal__header">
+          <h3><img :src="`${proposalIconsUrl}Asset 588.svg`"/>Saved It!</h3>
+        </div>
+        <button class="close" @click="hideModal()">
+          <img :src="`${proposalIconsUrl}Group 3671 (2).svg`"/>
+        </button>
+      </template>
+      <template slot="body">
+        <div class="saved-it-modal__body">
+          <p>
+            Your vendor info was saved!
+          </p>
+        </div>
+      </template>
+      <template slot="footer">
+        <div class="saved-it-modal__footer">
+          <button class="cool" @click="hideModal()">Ok, Thanks</button>
+        </div>
+      </template>
+    </modal>
   </div>
 </template>
 <script>
   import VSignupSteps from './Extra/VSignupSteps.vue'
+  import { Modal } from '@/components'
 
   export default {
     components: {
-      VSignupSteps
+      VSignupSteps,
+      Modal
     },
     data() {
       return {
+        savedItModal: false,
         iconsUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
+        proposalIconsUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
         isApproved: false,
         step: 1,
       }
@@ -69,6 +95,12 @@
       },
       scrollToTop() {
         window.scrollTo(0, 0)
+      },
+      saveDraft () {
+        this.savedItModal = true
+      },
+      hideModal() {
+        this.savedItModal = false
       }
     },
     created(){
@@ -182,6 +214,65 @@
           }
         }
       }
+    }
+    .saved-it-modal {
+      &__header {
+        width: 100%;
+        padding: 55px 31px 24px 31px;
+        text-align: center;
+        h3 {
+          font-size: 30px;
+          font-weight: bold;
+          color: #f51355;
+
+          img {
+            width: 55px;
+            height: 55px;
+            margin-right: 15px;
+          }
+        }
+        .header-description {
+          max-width: 550px;
+          margin: 0 auto;
+          text-align: left;
+          font-size: 20px;
+          color: #050505;
+
+          &.text-center {
+            text-align: center;
+          }
+        }
+        & + .close {
+          background: transparent;
+          border: none;
+          position: absolute;
+          top: 61px;
+          right: 60px;
+          color: #050505;
+          cursor: pointer;
+          img {
+            width: 20px;
+          }
+        }
+      }
+      &__body {
+        p {
+          font: 800 20px Manrope-Regular, sans-serif;
+        }
+      }
+      &__footer {
+        padding: 10px 40px 40px 40px;
+      }
+    }
+    .cool {
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffffff;
+      background-color: #f51355;
+      border-radius: 3px;
+      padding: 8px 36px;
+      cursor: pointer;
+      border: none;
     }
   }
 </style>

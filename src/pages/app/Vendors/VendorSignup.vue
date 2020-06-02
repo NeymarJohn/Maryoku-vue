@@ -1,29 +1,37 @@
 <template>
   <div class="vendor-signup-wrapper">
-    <vendor-basic-info-form v-if="!isApproved"/>
+    <vendor-basic-info-form 
+      v-if="!isApproved"
+      :vendor="vendor"
+    />
     <vendor-signup-step1 
       :categories="categories" 
       :icon="`${iconUrl}`" 
+      :vendor="vendor"
       v-if="isApproved && step == 1"
     />
     <vendor-signup-step2 
       :categories="categories" 
       :icon="`${iconUrl}`" 
+      :vendor="vendor"
       v-if="isApproved && step == 2"
     />
     <vendor-signup-step3 
       :categories="categories" 
       :icon="`${iconUrl}`" 
+      :vendor="vendor"
       v-if="isApproved && step == 3"
     />
     <vendor-signup-step4 
       :categories="categories" 
       :icon="`${iconUrl}`" 
+      :vendor="vendor"
       v-if="isApproved && step == 4"
     />
     <vendor-signup-final-form 
       :categories="categories" 
       :icon="`${iconUrl}`" 
+      :vendor="vendor"
       v-if="isApproved && step == 5"
     />
   </div>
@@ -57,7 +65,32 @@ export default {
   },
   data() {
     return {
-      vendor: null,
+      vendor: {
+        coverPhoto: null, 
+        images: [
+          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
+          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
+          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
+          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
+          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
+        ],
+        capacity: {
+          low: null,
+          hight: null,
+        },
+        about: {
+          company: null, 
+          venue: null, 
+          cuisine: null,
+        },
+        social: {
+          website: null, 
+          facebook: null, 
+          instagram: null,
+        },
+        yesRules: [],
+        policies: [],
+      },
       isApproved: false,
       step: 1,
       categories: [
@@ -1755,9 +1788,17 @@ export default {
         this.isApproved = false
       }
     })
+    this.$root.$on('update-vendor-value', (field, value) => {
+      this.$set(this.vendor, this.camelize(field), value)
+    })
   },
   methods: {
-    
+    camelize(str) {
+      let temp = str.replace(/\W+(.)/g, function(match, chr) {
+        return chr.toUpperCase()
+      })
+      return temp.charAt(0).toLowerCase() + temp.slice(1)
+    }
   },
   computed: {
     
