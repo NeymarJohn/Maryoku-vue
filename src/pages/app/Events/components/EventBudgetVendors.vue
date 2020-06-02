@@ -44,10 +44,10 @@
 
                 <md-button
                   class="md-rose md-sm md-simple edit-btn"
-                  v-if="!block.editBudget && !block.bookedBudget"
+                  v-if="!block.editBudget"
                   @click="showEditElementBudget(block)"
                 >Edit</md-button>
-                <img :src="`${$iconURL}Event Page/arrow-left-gray.svg`"  v-if="block.editBudget" style="width:25px; float:right; margin: 3px 0px;"/>
+                <img :src="`${$iconURL}Event Page/arrow-left-gray.svg`" v-else style="width:25px; float:right; margin: 3px 0px;"/>
               </td>
               <template v-if="!block.editBudget">
                  <td class="actual red-label" width="15%">
@@ -156,7 +156,7 @@
                 ></event-component-vendor-item>
               </td>
             </tr>
-            <tr class="item-actions" v-if="!block.bookedBudget">
+            <tr class="item-actions">
               <td colspan="5" class="actions-list text-right"  style="position:relative">
                 <md-button class="md-simple md-red edit-btn-1" @click="addMyVendor(block)">Add My Vendor</md-button>
                 <span class="button-split"></span>

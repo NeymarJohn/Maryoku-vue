@@ -263,7 +263,7 @@ export default {
 
 .items-list {
   list-style: none;
-  padding: 0px 1rem;
+  padding: 0px 3rem;
   li {
     width: calc(50% - 5px);
     display: inline-block;
@@ -280,7 +280,6 @@ export default {
     }
     .text {
       display: inline-block;
-      font-size: 16px;
     }
   }
 }
