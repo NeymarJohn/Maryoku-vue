@@ -39,7 +39,7 @@
             </div>
             <div class="block">
               <div class="title">
-                <img :src="`${iconUrl}Asset 543.svg`"/> About Our {{vendor.businessCategory}}
+                <img :src="`${iconUrl}Asset 543.svg`"/> About Our Venue
               </div>
               <div class="desc">
                 Lorem
@@ -60,13 +60,13 @@
               <h4>CONTACT US</h4>
               <div class="items">
                 <div class="item">
-                  <img :src="`${iconUrl}Asset 547.svg`"/> {{vendor.email}}
+                  <img :src="`${iconUrl}Asset 547.svg`"/> {{vendor.contact.email}}
                 </div>
                 <div class="item">
-                  <img :src="`${iconUrl}Asset 550.svg`"/> {{vendor.address}}
+                  <img :src="`${iconUrl}Asset 550.svg`"/> {{vendor.contact.address}}
                 </div>
                 <div class="item">
-                  <img :src="`${iconUrl}Asset 548.svg`"/> {{vendor.phone}}
+                  <img :src="`${iconUrl}Asset 548.svg`"/> {{vendor.contact.phone}}
                 </div>
               </div>
             </div>
@@ -254,7 +254,6 @@ export default {
   props: {
     categories: Array,
     icon: String,
-    vendor: Object,
   },
   components: {
     VueElementLoading,
@@ -262,6 +261,37 @@ export default {
   },
   data() {
     return {
+      vendor: {
+        coverPhoto: null, 
+        images: [
+          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
+          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
+          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
+          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
+          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
+        ],
+        capacity: {
+          low: null,
+          hight: null,
+        },
+        about: {
+          company: null, 
+          venue: null, 
+          cuisine: null,
+        },
+        contact: {
+          email: 'venue@hotmail.com', 
+          address: '575 Mission St. San Franciso CA 94105', 
+          phone: '077-300283',
+        },
+        social: {
+          website: null, 
+          facebook: null, 
+          instagram: null,
+        },
+        yesRules: [],
+        policies: [],
+      },
       tabs: ['About', 'Pricing', 'Rules', 'Policy', 'Contact'],
       activeTab: 'About',
       feeVenues: [

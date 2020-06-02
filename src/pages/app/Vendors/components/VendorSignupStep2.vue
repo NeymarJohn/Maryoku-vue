@@ -9,14 +9,13 @@
       </div>
       <div class="right-side">
         <div class="description">
-          <h5><img :src="`${iconUrl}Group 5222 (2).svg`"/> {{vendor.businessCategory}} Amenities</h5>
+          <h5><img :src="`${iconUrl}Group 5222 (2).svg`"/> Venue Amenities</h5>
           <p>Mark all the services you can support and will be included in your proposal. If needed please add a decsription or amount.</p>
         </div>
         <vendor-service-item 
           v-for="(c, cIndex) in categories" 
           :key="cIndex"
           :serviceItem="c"
-          :businessCategory="vendor.businessCategory"
         />
       </div>
     </div>
@@ -37,7 +36,6 @@ export default {
   props: {
     categories: Array,
     icon: String,
-    vendor: Object,
   },
   components: {
     VueElementLoading,
@@ -45,7 +43,7 @@ export default {
   },
   data() {
     return {
-      filteredCategories: [],
+      vendor: null,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
     }
   },
@@ -53,6 +51,7 @@ export default {
     
   },
   mounted() {
+    
   },
   methods: {
     
@@ -119,7 +118,6 @@ export default {
           h5 {
             margin: 0;
             font: 800 16px Manrope-Regular, sans-serif;
-            text-transform: capitalize;
 
             img {
               width: 22px;

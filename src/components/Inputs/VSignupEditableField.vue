@@ -28,31 +28,7 @@
               </li>
             </ul>
           </div>
-          <div v-else-if="title=='Address'">
-            <place-autocomplete-field 
-              v-model="value" 
-              placeholder="Enter an an address, zipcode, or location" 
-              api-key="AIzaSyBMeTpgtrXUQPDswUdLFW9YL9JFSnZQFOs"
-            />
-          </div>
-          <div v-else-if="title=='Email'">
-            <img class="inside-img" :src="img" v-if="img!=''"/>
-            <input
-              class="default"
-              :class="[{'with-img': img!=''}, isEmailValid()]"
-              v-model="value"
-            />
-          </div>
-          <div v-else-if="title=='Phone'">
-            <img class="inside-img" :src="img" v-if="img!=''"/>
-            <input
-              class="default"
-              :type="title=='Phone' ? 'number' : 'text'"
-              :class="[{'with-img': img!=''}]"
-              v-model="value"
-            />
-          </div>
-          <div v-else>
+          <div :class="['input-group', isEmailValid()]" v-else>
             <img class="inside-img" :src="img" v-if="img!=''"/>
             <input
               class="default"
@@ -80,7 +56,7 @@ import VueElementLoading from 'vue-element-loading'
 export default {
   name: 'v-signup-editable-field',
   components: {
-    VueElementLoading,
+    VueElementLoading
   },
   props: {
     title: String, 
@@ -96,7 +72,6 @@ export default {
       name: 'Venue Rental',
       icon: 'Asset 543.svg'
     },
-    address: null,
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
     categoryIconUrl: 'http://static.maryoku.com/storage/icons/Budget Elements/', 
     // Venue Rental
@@ -198,19 +173,13 @@ export default {
   mounted () {
     this.selectedCategory = this.categories[0]
     this.value = this.defaultVal
-
-    // let recaptchaScript = document.createElement('script')
-    // recaptchaScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key=AIzaSyBMeTpgtrXUQPDswUdLFW9YL9JFSnZQFOs')
-    // document.head.appendChild(recaptchaScript)
   },
   methods: {
     save() {
       this.isEdit = false
-      this.$root.$emit('update-vendor-value', this.title, this.value)
     },
     updateCategory(category) {
       this.selectedCategory = category
-      this.value = category.value
       this.expanded = false
     },
     isEmailValid: function() {
@@ -261,10 +230,14 @@ export default {
           padding-left: 60px;
         }
         &.has-error {
-          border-color: #f51355;
+          input {
+            border-color: #f51355;
+          }
         }
         &.has-success {
-          border-color: green;
+          input {
+            border-color: green;
+          }
         }
       }
       .inside-img {
@@ -306,21 +279,6 @@ export default {
           img {
             width: 22px;
           }
-        }
-      }
-      .autocomplete-field  /deep/ .form-group-inner {
-        background-image: url('http://static.maryoku.com/storage/icons/Vendor Signup/Asset 550.svg');
-        background-repeat: no-repeat;
-        background-size: 20px;
-        background-position-x: 22px;
-        background-position-y: 9px;
-        input {
-          padding: 22px 20px 22px 60px;
-          border: 1px solid #dddddd;
-          border-bottom: none;
-          border-radius: 0;
-          font: normal 16px Manrope-Regular, sans-serif;
-          width: 100%;
         }
       }
     }

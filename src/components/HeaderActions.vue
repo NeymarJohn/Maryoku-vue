@@ -6,7 +6,7 @@
       </li>
       <li>
         <md-button class="md-simple md-just-icon">
-          <img :src="`${$iconURL}common/share-dark.svg`" />
+          <img :src="`${$iconURL}common/share-dark.svg`" @click="toggleSharingMode" />
         </md-button>
       </li>
       <li>
@@ -15,20 +15,29 @@
         </md-button>
       </li>
     </ul>
+    <sharing-Modal v-if="isSharing"></sharing-Modal>
   </div>
 </template>
 <script>
+import SharingModal from '@/components/Modals/SharingModal'
 export default {
   name:"header-actions",
+  components: {
+    SharingModal,
+  },
   data() {
     return {
-      isCommentMode: false
+      isCommentMode: false,
+      isSharing:false
     }
   },
   methods: {
     toggleCommentMode() {
       this.isCommentMode = !this.isCommentMode
       this.$emit("toggleCommentMode", this.isCommentMode)
+    },
+    toggleSharingMode() {
+      this.isSharing = !this.isSharing
     }
   },
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="vendor-service-item-wrapper" v-if="length > 0">
+  <div class="vendor-service-item-wrapper">
     <div class="title-cont">
       <div class="title" @click="collapsed=!collapsed">
         {{serviceItem.name}}
@@ -20,21 +20,19 @@
     </div>
     <div class="items-cont" v-if="!collapsed">
       <div class="items" v-for="(sub, sIndex) in serviceItem.subCategory" :key="sIndex">
-        <template v-if="sub.category==businessCategory">
-          <div class="sub-category-title">
-            {{sub.name}}
-          </div>
-          <div class="checklist" v-for="(item, index) in sub.items" :key="index">
-            <vendor-checkbox
-              :item="item"
-              :label="item.name"
-              v-model="item.value"
-            />
-            <!-- <md-checkbox v-model="item.value">
-              {{item.name}}
-            </md-checkbox> -->
-          </div>
-        </template>
+        <div class="sub-category-title">
+          {{sub.name}}
+        </div>
+        <div class="checklist" v-for="(item, index) in sub.items" :key="index">
+          <vendor-checkbox
+            :item="item"
+            :label="item.name"
+            v-model="item.value"
+          />
+          <!-- <md-checkbox v-model="item.value">
+            {{item.name}}
+          </md-checkbox> -->
+        </div>
       </div>
     </div>
   </div>
@@ -52,8 +50,7 @@ import VendorCheckbox from './VendorCheckbox.vue'
 export default {
   name: 'vendor-service-item',
   props: {
-    serviceItem: Object,
-    businessCategory: String,
+    serviceItem: Object
   },
   components: {
     VueElementLoading,
@@ -63,7 +60,6 @@ export default {
     return {
       vendor: null,
       collapsed: true,
-      length: 0,
       conditionTooltip: false,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
     }
@@ -72,15 +68,10 @@ export default {
     
   },
   mounted() {
-    this.length = 0
-    this.serviceItem.subCategory.forEach( s => {
-      if (s.category == this.businessCategory) {
-        this.length++
-      }
-    })
-    console.log(this.length)
+    
   },
   methods: {
+    
   },
   computed: {
     
