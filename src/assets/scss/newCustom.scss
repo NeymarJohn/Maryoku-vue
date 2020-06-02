@@ -508,8 +508,11 @@
 
                 }
             }
+            td:first-child {
+                padding-left: 1em;
+            }
             td {
-                padding : 1.2em 0 1.2em 1.4em;
+                padding : 1.2em 0.3em 1.2em 0.3em;
 
                 &:first-child {
                     border-radius: 3px 0 0 3px;
@@ -526,8 +529,8 @@
                 }
 
                 &.event-block-element  {
-                    font-family: 'Manrope-Bold',sans-serif;
-                    font-size: 20px;
+                    font-family: 'Manrope-Regular',sans-serif;
+                    font-size: 18px;
 
                     &:after {
                         width : 7px;

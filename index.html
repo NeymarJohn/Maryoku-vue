@@ -194,15 +194,15 @@
             { description: "Some people look for a beautiful place. Others make a place beautiful.”", author: "- Hazrat Inavat Khan"},
             { description: "“To achieve great things, two things are needed: a plan and not quite enough time.”", author: "- Leonard Bernstein"},
         ]
-        const imageIndex = new Date().getTime() % backgroundImages.length;
-        const quotesIndex = new Date().getTime() % quotes.length;
-        document.getElementById("loading-background").style.background = "url('/static/img/" + backgroundImages[imageIndex] + "')";
-        document.getElementById("loading-background").style.backgroundSize = "cover";
-        const qutoDescription = document.createElement("div");
-        qutoDescription.innerHTML = "<span>" + quotes[quotesIndex].description + "</span> <span class='author'>" + quotes[quotesIndex].author + "</span>" ;
-        qutoDescription.classList.add("quote");
-        qutoDescription.classList.add("quote_" + imageIndex);
-        document.getElementById("loading-background").appendChild(qutoDescription)
+        // const imageIndex = new Date().getTime() % backgroundImages.length;
+        // const quotesIndex = new Date().getTime() % quotes.length;
+        // document.getElementById("loading-background").style.background = "url('/static/img/" + backgroundImages[imageIndex] + "')";
+        // document.getElementById("loading-background").style.backgroundSize = "cover";
+        // const qutoDescription = document.createElement("div");
+        // qutoDescription.innerHTML = "<span>" + quotes[quotesIndex].description + "</span> <span class='author'>" + quotes[quotesIndex].author + "</span>" ;
+        // qutoDescription.classList.add("quote");
+        // qutoDescription.classList.add("quote_" + imageIndex);
+        // document.getElementById("loading-background").appendChild(qutoDescription)
     </script>
 
 </body>

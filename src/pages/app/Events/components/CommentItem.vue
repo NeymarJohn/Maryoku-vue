@@ -9,8 +9,15 @@
         <div class="post-date"> 
           <timeago :datetime="comment.dateCreated"></timeago>
         </div>
-        <div class="comment-item-content">
+        <div class="comment-item-content" v-if="!isEditing">
           {{comment.description}}
+        </div>
+        <div class="comment-item-content" v-else>
+          <textarea v-model="editingDescription"></textarea>
+          <div class="text-right">
+            <md-button class="md-simple normal-btn" @click="cancelEditing()" >Cancel</md-button>
+            <md-button class="md-simple md-black normal-btn" @click="updateComment()" >Save</md-button>
+          </div>
         </div>
       </div>
     </div>
@@ -23,6 +30,24 @@ export default {
     comment: {
       type: Object,
     },
+    isEditing : {
+      type: Boolean
+    }
+  },
+  data() {
+    return {
+      editingDescription: this.comment.description
+    }
+  },
+  methods: {
+    cancelEditing() {
+      this.editingDescription = this.comment.description
+      this.$emit("cancelUpdate");
+    },
+    updateComment() {
+      this.comment.description = this.editingDescription
+      this.$emit("updateComment", this.comment)
+    }
   },
   computed: {
     getTimeDiffString() {
@@ -52,6 +77,10 @@ export default {
   .comment-item-content {
     font-family: "Manrope-Regular";
     font-size: 16px;
+    textarea {
+      width: 100%;
+      resize: none;
+    }
   }
 }
  

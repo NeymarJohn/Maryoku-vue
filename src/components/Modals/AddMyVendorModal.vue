@@ -123,7 +123,7 @@ export default {
       this.$emit("remindLater");
     },
     removeSelectedAttachment(index) {},
-    onFileChange(e) {
+    onFileChange(event) {
       let files = event.target.files || event.dataTransfer.files;
       this.editingVendor.attachment = files[0];
     },
