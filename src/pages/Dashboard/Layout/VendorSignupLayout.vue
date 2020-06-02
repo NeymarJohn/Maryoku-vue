@@ -13,7 +13,7 @@
         <span v-if="step != 5" @click="scrollToTop()"><img :src="`${iconsUrl}Asset 602.svg`"/></span>
       </div>
       <div class="right">
-        <a class="save">
+        <a class="save" @click="saveDraft()">
           <img :src="`${iconsUrl}Asset 610.svg`"/>
           Save for later
         </a>
@@ -27,18 +27,47 @@
         Approve & Begin
       </a>
     </section>
+    <modal v-if="savedItModal" class="saved-it-modal" container-class="modal-container sm">
+      <template slot="header">
+        <div class="saved-it-modal__header">
+          <h3><img :src="`${proposalIconsUrl}Asset 588.svg`"/>Saved It!</h3>
+        </div>
+        <button class="close" @click="hideModal()">
+          <img :src="`${proposalIconsUrl}Group 3671 (2).svg`"/>
+        </button>
+      </template>
+      <template slot="body">
+        <div class="saved-it-modal__body">
+          <p>
+            Your vendor info was saved!
+          </p>
+        </div>
+      </template>
+      <template slot="footer">
+        <div class="saved-it-modal__footer">
+          <button class="cool" @click="hideModal()">Ok, Thanks</button>
+        </div>
+      </template>
+    </modal>
   </div>
 </template>
 <script>
   import VSignupSteps from './Extra/VSignupSteps.vue'
+  import { Modal } from '@/components'
+  import moment from 'moment'
 
   export default {
     components: {
-      VSignupSteps
+      VSignupSteps,
+      Modal
     },
     data() {
       return {
+        vendor: {},
+        reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
+        savedItModal: false,
         iconsUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
+        proposalIconsUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
         isApproved: false,
         step: 1,
       }
@@ -47,10 +76,30 @@
       goTo (router) {
         this.$router.push(router)
       },
+      validateBasicFields() {
+        return this.vendor.email && 
+          this.reg.test(this.vendor.email) &&
+          this.vendor.companyName && 
+          this.vendor.businessCategory && 
+          this.vendor.address && 
+          this.vendor.phone
+      },
       approve() {
-        this.$root.$emit('approve-vendor-basic-info')
-        this.isApproved = true
-        this.step = 1
+        if (this.validateBasicFields()) {
+          this.$root.$emit('approve-vendor-basic-info')
+          this.isApproved = true
+          this.step = 1
+        } else {
+          swal({
+            title: `Please make sure filling out all required fields`,
+            showCancelButton: true,
+            confirmButtonClass: 'md-button md-success',
+            cancelButtonClass: 'md-button md-danger',
+            confirmButtonText: "Yes I'm sure",
+            cancelButtonText: 'No, take me back',
+            buttonsStyling: false
+          })
+        }
       },
       next() {
         this.$root.$emit('next-vendor-signup-step')
@@ -69,6 +118,18 @@
       },
       scrollToTop() {
         window.scrollTo(0, 0)
+      },
+      saveDraft () {
+        this.savedItModal = true
+      },
+      hideModal() {
+        this.savedItModal = false
+      },
+      camelize(str) {
+        let temp = str.replace(/\W+(.)/g, function(match, chr) {
+          return chr.toUpperCase()
+        })
+        return temp.charAt(0).toLowerCase() + temp.slice(1)
       }
     },
     created(){
@@ -77,6 +138,9 @@
       this.$root.$on('go-to-signup-step', (step) => {
         this.step = step
         this.isApproved = this.step < 1 ? false : true
+      })
+      this.$root.$on('update-vendor-value', (field, value) => {
+        this.$set(this.vendor, this.camelize(field), value)
       })
     },
     computed:{
@@ -182,6 +246,65 @@
           }
         }
       }
+    }
+    .saved-it-modal {
+      &__header {
+        width: 100%;
+        padding: 55px 31px 24px 31px;
+        text-align: center;
+        h3 {
+          font-size: 30px;
+          font-weight: bold;
+          color: #f51355;
+
+          img {
+            width: 55px;
+            height: 55px;
+            margin-right: 15px;
+          }
+        }
+        .header-description {
+          max-width: 550px;
+          margin: 0 auto;
+          text-align: left;
+          font-size: 20px;
+          color: #050505;
+
+          &.text-center {
+            text-align: center;
+          }
+        }
+        & + .close {
+          background: transparent;
+          border: none;
+          position: absolute;
+          top: 61px;
+          right: 60px;
+          color: #050505;
+          cursor: pointer;
+          img {
+            width: 20px;
+          }
+        }
+      }
+      &__body {
+        p {
+          font: 800 20px Manrope-Regular, sans-serif;
+        }
+      }
+      &__footer {
+        padding: 10px 40px 40px 40px;
+      }
+    }
+    .cool {
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffffff;
+      background-color: #f51355;
+      border-radius: 3px;
+      padding: 8px 36px;
+      cursor: pointer;
+      border: none;
     }
   }
 </style>

@@ -52,14 +52,14 @@
             <div class="field mb-50">
               <div class="title-cont">
                 <div class="top">
-                  <h5><img :src="`${iconUrl}Asset 543.svg`"/> about your venue</h5>
+                  <h5><img :src="`${iconUrl}Asset 543.svg`"/> about your {{vendor.businessCategory}}</h5>
                 </div>
                 <div class="bottom">
                   <p>Tell us why your service is the best choice, what makes it special</p>
                 </div>
               </div>
               <div class="main-cont">
-                <textarea placeholder="Type 'About your venue' here" rows="5"/>
+                <textarea :placeholder="`Type 'About your ${vendor.businessCategory}' here`" rows="5"/>
               </div>
             </div>
             <!-- <div class="field">
@@ -176,6 +176,7 @@ export default {
   props: {
     categories: Array,
     icon: String,
+    vendor: Object,
   },
   components: {
     VueElementLoading,
@@ -183,7 +184,6 @@ export default {
   },
   data() {
     return {
-      vendor: null,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
       socialMedia: [],
       defSocialMedia: [
@@ -217,8 +217,8 @@ export default {
       if (this.min < 0) {
         this.min = 0
       }
-      if (this.min > 100) {
-        this.min = 100
+      if (this.min > 1000) {
+        this.min = 1000
       }
       if (this.max < this.min ) {
         this.max = this.min

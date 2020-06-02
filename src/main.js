@@ -25,6 +25,7 @@ import VueTour from 'vue-tour'
 import VueSwal from 'vue-swal'
 import VueTimeago from 'vue-timeago'
 import VueClipboard from 'vue-clipboard2'
+import VuePlaceAutocomplete from 'vue-place-autocomplete'
 
 import App from './App.vue'
 import DashboardPlugin from './material-dashboard'
@@ -61,6 +62,7 @@ Vue.use(VueTimeago, {
     ja: require('date-fns/locale/ja')
   }
 })
+Vue.use(VuePlaceAutocomplete)
 
 // configure router
 const router = new VueRouter({
