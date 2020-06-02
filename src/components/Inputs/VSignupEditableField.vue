@@ -80,7 +80,7 @@ import VueElementLoading from 'vue-element-loading'
 export default {
   name: 'v-signup-editable-field',
   components: {
-    VueElementLoading
+    VueElementLoading,
   },
   props: {
     title: String, 
@@ -198,6 +198,10 @@ export default {
   mounted () {
     this.selectedCategory = this.categories[0]
     this.value = this.defaultVal
+
+    // let recaptchaScript = document.createElement('script')
+    // recaptchaScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key=AIzaSyBMeTpgtrXUQPDswUdLFW9YL9JFSnZQFOs')
+    // document.head.appendChild(recaptchaScript)
   },
   methods: {
     save() {

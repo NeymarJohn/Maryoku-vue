@@ -54,6 +54,7 @@
 <script>
   import VSignupSteps from './Extra/VSignupSteps.vue'
   import { Modal } from '@/components'
+  import moment from 'moment'
 
   export default {
     components: {
@@ -62,6 +63,8 @@
     },
     data() {
       return {
+        vendor: {},
+        reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
         savedItModal: false,
         iconsUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
         proposalIconsUrl: 'http://static.maryoku.com/storage/icons/NewSubmitPorposal/',
@@ -73,10 +76,30 @@
       goTo (router) {
         this.$router.push(router)
       },
+      validateBasicFields() {
+        return this.vendor.email && 
+          this.reg.test(this.vendor.email) &&
+          this.vendor.companyName && 
+          this.vendor.businessCategory && 
+          this.vendor.address && 
+          this.vendor.phone
+      },
       approve() {
-        this.$root.$emit('approve-vendor-basic-info')
-        this.isApproved = true
-        this.step = 1
+        if (this.validateBasicFields()) {
+          this.$root.$emit('approve-vendor-basic-info')
+          this.isApproved = true
+          this.step = 1
+        } else {
+          swal({
+            title: `Please make sure filling out all required fields`,
+            showCancelButton: true,
+            confirmButtonClass: 'md-button md-success',
+            cancelButtonClass: 'md-button md-danger',
+            confirmButtonText: "Yes I'm sure",
+            cancelButtonText: 'No, take me back',
+            buttonsStyling: false
+          })
+        }
       },
       next() {
         this.$root.$emit('next-vendor-signup-step')
@@ -101,6 +124,12 @@
       },
       hideModal() {
         this.savedItModal = false
+      },
+      camelize(str) {
+        let temp = str.replace(/\W+(.)/g, function(match, chr) {
+          return chr.toUpperCase()
+        })
+        return temp.charAt(0).toLowerCase() + temp.slice(1)
       }
     },
     created(){
@@ -109,6 +138,9 @@
       this.$root.$on('go-to-signup-step', (step) => {
         this.step = step
         this.isApproved = this.step < 1 ? false : true
+      })
+      this.$root.$on('update-vendor-value', (field, value) => {
+        this.$set(this.vendor, this.camelize(field), value)
       })
     },
     computed:{
