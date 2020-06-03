@@ -31,6 +31,19 @@
             <div class="field mb-50">
               <div class="title-cont">
                 <div class="top">
+                  <h5><img :src="`${iconUrl}Asset 543.svg`"/> about your {{vendor.businessCategory}}</h5>
+                </div>
+                <div class="bottom">
+                  <p>Tell us why your service is the best choice, what makes it special</p>
+                </div>
+              </div>
+              <div class="main-cont">
+                <textarea :placeholder="`Type 'About your ${vendor.businessCategory}' here`" rows="5"/>
+              </div>
+            </div>
+            <div class="field mb-50">
+              <div class="title-cont">
+                <div class="top">
                   <h5><img :src="`${iconUrl}Asset 545.svg`"/> capacity</h5>
                 </div>
                 <div class="bottom">
@@ -47,19 +60,6 @@
                 <div class="suffix">
                   <input type="number" placeholder="2000" v-model="max" min="100" max="1000" @keyup="limitRange"/>
                 </div>
-              </div>
-            </div>
-            <div class="field mb-50">
-              <div class="title-cont">
-                <div class="top">
-                  <h5><img :src="`${iconUrl}Asset 543.svg`"/> about your {{vendor.businessCategory}}</h5>
-                </div>
-                <div class="bottom">
-                  <p>Tell us why your service is the best choice, what makes it special</p>
-                </div>
-              </div>
-              <div class="main-cont">
-                <textarea :placeholder="`Type 'About your ${vendor.businessCategory}' here`" rows="5"/>
               </div>
             </div>
             <!-- <div class="field">
@@ -88,9 +88,16 @@
           </div>
           <div class="card red-border">
             <div class="upload-cont">
-              <a class=""><img :src="`${iconUrl}Asset 559.svg`"/> Choose File</a>
+              <a class="" @click="uploadVendorImage"><img :src="`${iconUrl}Asset 559.svg`"/> Choose File</a>
               <div class="or">Or</div>
               <span>Drag your file here</span>
+              <input
+                type="file"
+                class="hide"
+                ref="imageFile"
+                accept="image/gif, image/jpg, image/png"
+                @change="onVendorImageFilePicked"
+              />
             </div>
           </div>
         </div>
@@ -226,7 +233,41 @@ export default {
       if (this.max > 1000 ) {
         this.max = 1000
       }
-    }
+    },
+    uploadVendorImage (imageId = null, attachmentType = null) {
+      console.log(imageId, attachmentType)
+      this.$refs.imageFile.click()
+    },
+    onVendorImageFilePicked (event) {
+      let file = event.target.files || event.dataTransfer.files
+      if (!file.length) {
+        return
+      }
+
+      console.log(file[0])
+      if (file[0].size <= 2000000) {
+        // 20kb
+        this.createImage(file[0])
+      } else {
+        this.$notify({
+          message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
+          horizontalAlign: 'center',
+          verticalAlign: 'top',
+          type: 'warning'
+        })
+      }
+    },
+    createImage (file, type) {
+      let reader = new FileReader()
+      let vm = this
+
+      this.isLoading = true
+
+      reader.onload = e => {
+        console.log(e.target.result)
+      }
+      reader.readAsDataURL(file)
+    },
   },
   computed: {
     
@@ -434,6 +475,9 @@ export default {
       width: 75%;
       padding: 1.5rem 2rem;
       font-size: 16px;
+    }
+    .hide {
+      display: none !important;
     }
   }  
 </style>
