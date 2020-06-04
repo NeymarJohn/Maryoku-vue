@@ -236,7 +236,8 @@ export default {
     blockVendors: null,
     selectedBlock: {},
     proposals: [],
-    showCommentEditorPanel: false
+    showCommentEditorPanel: false,
+    blockId:""
   }),
   methods: {
     ...mapMutations("event", ["setEventData"]),
@@ -272,7 +273,7 @@ export default {
         .get()
         .then(resp => {
           this.selectedBlock = _.findWhere(resp, {
-            id: this.$route.params.blockId
+            id: this.blockId
           });
         });
     },
@@ -281,7 +282,7 @@ export default {
         let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
         let event = new CalendarEvent({ id: this.event.id });
         let selected_block = new EventComponent({
-          id: this.$route.params.blockId
+          id: this.blockId
         });
 
         new EventComponentVendor()
@@ -345,13 +346,41 @@ export default {
         "/events/" +
           this.event.id +
           "/proposal-details/" +
-          this.$route.params.blockId +
+          this.blockId +
           "/" +
           proposal.proposals[0].id
       );
     },
     toggleCommentMode(mode) {
       this.showCommentEditorPanel = mode;
+    },
+    fetchData() {
+      this.blockId = this.$route.params.blockId
+      this.$auth.currentUser(
+        this,
+        true,
+        function() {
+          let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+          _calendar
+            .calendarEvents()
+            .find(this.$route.params.id)
+            .then(event => {
+              this.event = event;
+              this.setEventData(event);
+              console.log("this.blockId",this.blockId)
+              this.getCommentComponents(this.blockId);
+              this.getBlockVendors();
+              this.getSelectedBlock();
+
+              // new EventComponent().for(_calendar, event).get().then(components => {
+              //     this.event.components = components
+              //     this.selectedComponents = components
+              // })
+
+              console.log(event);
+            });
+        }.bind(this)
+      );
     }
   },
   created() {
@@ -375,31 +404,8 @@ export default {
   },
   mounted() {
     this.isLoading = true;
-    this.$auth.currentUser(
-      this,
-      true,
-      function() {
-        let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-        _calendar
-          .calendarEvents()
-          .find(this.$route.params.id)
-          .then(event => {
-            this.event = event;
-            this.setEventData(event);
-            console.log("this.$route.params.blockId",this.$route.params.blockId)
-            this.getCommentComponents(this.$route.params.blockId);
-            this.getBlockVendors();
-            this.getSelectedBlock();
-
-            // new EventComponent().for(_calendar, event).get().then(components => {
-            //     this.event.components = components
-            //     this.selectedComponents = components
-            // })
-
-            console.log(event);
-          });
-      }.bind(this)
-    );
+   
+    this.fetchData()
   },
   watch: {
     event(newVal, oldVal) {
@@ -409,7 +415,8 @@ export default {
         this.routeName === "EditBuildingBlocks",
         true
       );
-    }
+    },
+    '$route': 'fetchData'
   },
   filters: {
     formatDate: function(date) {

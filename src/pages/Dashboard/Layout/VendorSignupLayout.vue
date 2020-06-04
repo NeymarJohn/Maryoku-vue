@@ -90,15 +90,15 @@
           this.isApproved = true
           this.step = 1
         } else {
-          // swal({
-          //   title: `Please make sure filling out all required fields`,
-          //   showCancelButton: true,
-          //   confirmButtonClass: 'md-button md-success',
-          //   cancelButtonClass: 'md-button md-danger',
-          //   confirmButtonText: "Yes I'm sure",
-          //   cancelButtonText: 'No, take me back',
-          //   buttonsStyling: false
-          // })
+          swal({
+            title: `Please make sure filling out all required fields`,
+            showCancelButton: true,
+            confirmButtonClass: 'md-button md-success',
+            cancelButtonClass: 'md-button md-danger',
+            confirmButtonText: "Yes I'm sure",
+            cancelButtonText: 'No, take me back',
+            buttonsStyling: false
+          })
         }
       },
       next() {
