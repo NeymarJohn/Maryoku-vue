@@ -2,7 +2,7 @@
   <div @click="addFromEvent( $event )" class="click-capture">
     <comment-circle-button
       class="item"
-      v-for="(item, index) in commentComponents"
+      v-for="(item, index) in unresolvedComponents"
       :key="index"
       :style="{left: `${item.positionX}px`, top: `${item.positionY}px`}"
       :commentComponent="item"
@@ -56,14 +56,15 @@
           <div class="reply-dropdown d-flex justify-content-between" >
             {{replies.length}} Replies
             <div class="comment-actions">
-              <md-button class="edit-btn md-simple md-black comment-action-btn">
+              <md-button class="edit-btn md-simple md-black comment-action-btn" @click="resolveCommentComonent()">
                 Resolve
               </md-button>
               <md-button class="edit-btn md-simple comment-action-btn" @click="editComment(mainComment)">
                 <img :src="`${$iconURL}comments/SVG/edit-dark.svg`" width="25px" />
               </md-button>
               <md-button class="edit-btn md-simple comment-action-btn">
-                <img :src="`${$iconURL}comments/SVG/heart-dark.svg`" width="30px" @click="loveComment(mainComment)"/>
+                <img :src="`${$iconURL}comments/SVG/heart-dark.svg`" v-if="!mainComment.myFavorite" width="30px" @click="markAsFavorite(mainComment)"/>
+                <img :src="`${$iconURL}comments/SVG/heart-yellow.svg`" v-if="mainComment.myFavorite" width="30px" @click="unMarkAsFavorite(mainComment)"/>
               </md-button>
               <md-button class="edit-btn md-simple comment-action-btn" >
                 <img class="trash" :src="`${$iconURL}Timeline-New/Trash.svg`" width="18px" @click="deleteComment(mainComment)" />
@@ -145,6 +146,9 @@ export default {
       return this.hoveredComponent.comments
         .filter(item => item.parentId)
         .sort((a, b) => b.dateCreated - a.dateCreated);
+    },
+    unresolvedComponents() {
+      return this.commentComponents.filter(item=>!item.isResolved)
     }
   },
   created() {
@@ -155,7 +159,10 @@ export default {
     ...mapActions("comment", [
       "getCommentComponents",
       "addCommentComponent",
+      "deleteCommentComponent",
+      "updateCommentComponent",
       "getCommentsAction",
+      "updateComment",
       "addComment"
     ]),
     selectItem(event, item) {
@@ -226,11 +233,16 @@ export default {
       var element = document.querySelector(".click-capture");
       var top = element.offsetTop;
       console.log(top);
+      const maxIndex = this.commentComponents?this.commentComponents.reduce((index,item)=>{
+        if (item.index > index) index = item.index
+        return index
+      }, 0)  : 0;
+
       this.addCommentComponent({
         dateTime: Date.now(),
         positionX: event.clientX - 80,
         positionY: event.clientY - 100 + window.scrollY,
-        index: this.commentComponents ? this.commentComponents.length + 1 : 1,
+        index: maxIndex + 1,
         isEditing: false,
         url: this.$route.path
       });
@@ -286,15 +298,43 @@ export default {
       this.isCommentEditing = false;
       this.selectedCommentComponent = null;
     },
+    resolveCommentComonent() {
+      this.editingCommentId = ""
+      const commentComponent = new EventCommentComponent({id:this.hoveredComponent.id, isResolved: true})
+      this.updateCommentComponent(commentComponent).then(()=>{
+        this.isOpenCommentListsPane = false
+      })
+    },
     editComment(comment) {
       this.isEditing = true;
       this.editingCommentId = comment.id
     },
-    loveComment(comment) {
-
+    markAsFavorite(comment) {
+      const commentComponent = new EventCommentComponent({id: this.hoveredComponent.id})
+      comment.eventCommentComponent.id = this.hoveredComponent.id
+      if (!comment.favoriteUsers)  comment.favoriteUsers = []
+      comment.favoriteUsers.push(this.$auth.user.id)
+      comment.myFavorite = true
+      this.updateComment(comment).then(()=>{
+        this.isOpenCommentListsPane = false
+      })
+    },
+    unMarkAsFavorite(comment){
+      const commentComponent = new EventCommentComponent({id: this.hoveredComponent.id})
+      comment.eventCommentComponent.id = this.hoveredComponent.id
+      if (!comment.favoriteUsers)  comment.favoriteUsers = []
+      const index =  comment.favoriteUsers.findIndex(item=> item.id == this.$auth.id)
+      comment.favoriteUsers.splice(index, 1)
+      comment.myFavorite = false
+      this.updateComment(comment).then(()=>{
+        this.isOpenCommentListsPane = false
+      })
     },
     deleteComment(comment) {
-
+      const commentComponent = new EventCommentComponent({id: this.hoveredComponent.id})
+      this.deleteCommentComponent(commentComponent).then(()=>{
+        this.isOpenCommentListsPane = false
+      })
     },
     updateComment(comment) {
       this.editingCommentId = ""
@@ -305,8 +345,7 @@ export default {
         .then(()=>{
           console.log(comment)
         }) 
-    }
-
+    },
   }
 };
 </script>

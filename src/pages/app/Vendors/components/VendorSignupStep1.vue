@@ -31,14 +31,14 @@
             <div class="field mb-50">
               <div class="title-cont">
                 <div class="top">
-                  <h5><img :src="`${iconUrl}Asset 543.svg`"/> about your {{vendor.businessCategory}}</h5>
+                  <h5><img :src="`${iconUrl}Asset 543.svg`"/> about your {{getCategoryNameByValue(vendor.businessCategory)}}</h5>
                 </div>
                 <div class="bottom">
                   <p>Tell us why your service is the best choice, what makes it special</p>
                 </div>
               </div>
               <div class="main-cont">
-                <textarea :placeholder="`Type 'About your ${vendor.businessCategory}' here`" rows="5"/>
+                <textarea :placeholder="`Type 'About your ${getCategoryNameByValue(vendor.businessCategory)}' here`" rows="5"/>
               </div>
             </div>
             <div class="field mb-50">
@@ -52,13 +52,13 @@
               </div>
               <div class="main-cont">
                 <div class="suffix">
-                  <input type="number" placeholder="1000" v-model="min" min="100" max="1000" @keyup="limitRange"/>
+                  <input type="number" placeholder="100" v-model="min" min="100" max="1000" @keyup="limitRange"/>
                 </div>
                 <div class="arrow">
                   <img :src="`${iconUrl}Group 4585 (2).svg`"/>
                 </div>
                 <div class="suffix">
-                  <input type="number" placeholder="2000" v-model="max" min="100" max="1000" @keyup="limitRange"/>
+                  <input type="number" placeholder="1000" v-model="max" min="100" max="1000" @keyup="limitRange"/>
                 </div>
               </div>
             </div>
@@ -77,29 +77,87 @@
             </div> -->
           </div>
         </div>
-        <div class="upload-wrapper">
-          <div class="title-cont">
-            <div class="left">
-              <h5><img :src="`${iconUrl}art (2).svg`"/> upload photos</h5>
+        <div class="upload-wrapper" :class="{'mi-margin': vendor.images.length > 0}">
+          <template v-if="vendor.images.length == 0">
+            <div class="title-cont">
+              <div class="left">
+                <h5><img :src="`${iconUrl}art (2).svg`"/> upload photos</h5>
+              </div>
+              <div class="right">
+                <p>(15 photos top, under 20KB)</p>
+              </div>
             </div>
-            <div class="right">
-              <p>(15 photos top, under 20KB)</p>
+            <div class="card red-border">
+              <div class="upload-cont">
+                <a class="" @click="uploadVendorImage"><img :src="`${iconUrl}Asset 559.svg`"/> Choose File</a>
+                <div class="or">Or</div>
+                <span>Drag your file here</span>
+                <input
+                  type="file"
+                  class="hide"
+                  ref="imageFile"
+                  accept="image/gif, image/jpg, image/png"
+                  @change="onVendorImageFilePicked"
+                />
+              </div>
             </div>
-          </div>
-          <div class="card red-border">
-            <div class="upload-cont">
-              <a class="" @click="uploadVendorImage"><img :src="`${iconUrl}Asset 559.svg`"/> Choose File</a>
-              <div class="or">Or</div>
-              <span>Drag your file here</span>
-              <input
-                type="file"
-                class="hide"
-                ref="imageFile"
-                accept="image/gif, image/jpg, image/png"
-                @change="onVendorImageFilePicked"
-              />
+          </template>
+          <template v-else>
+            <!-- <img :src="img" v-for="(img, index) in vendor.images" :key="index"> -->
+            <div class="images-wrapper">
+              <div 
+                class="box item2"
+                :style="`
+                  background-image: url(${vendor.images[0]});
+                  background-size: cover;
+                  background-size: 100% 100%;`
+                "
+              >
+              </div>
+              <div 
+                class="box item" 
+                :class="{'no-image': !vendor.images[1]}"
+                :style="`
+                  background-image: url(${vendor.images[1]});
+                  background-size: cover;
+                  background-size: 100% 100%;`
+                "
+              >
+              </div>
+              <div 
+                class="box item" 
+                :class="{'no-image': !vendor.images[2]}"
+                :style="`
+                  background-image: url(${vendor.images[2]});
+                  background-size: cover;
+                  background-size: 100% 100%;`
+                "
+              >
+              </div>
+              <div 
+                class="box item" 
+                :class="{'no-image': !vendor.images[3]}"
+                :style="`
+                  background-image: url(${vendor.images[3]});
+                  background-size: cover;
+                  background-size: 100% 100%;`
+                "
+              >
+              </div>
+              <div class="box item add-more" @click="uploadVendorImage">
+                <img :src="`${iconUrl}Group 6501.svg`"/>
+                <br/>
+                <span>Add more</span>
+                <input
+                  type="file"
+                  class="hide"
+                  ref="imageFile"
+                  accept="image/gif, image/jpg, image/png"
+                  @change="onVendorImageFilePicked"
+                />
+              </div>
             </div>
-          </div>
+          </template>
         </div>
         <div class="signature-wrapper">
           <div class="title-cont">
@@ -160,7 +218,12 @@
                 {{s}}
                 <br/>
               </div>
-              <input type="text" class="" placeholder="Paste link here" v-if="socialMedia.includes(s)"/>
+              <input 
+                type="text" 
+                placeholder="Paste link here" 
+                v-if="socialMedia.includes(s)"
+                @keyup="checkBlank"
+              />
             </div>
           </div>
         </div>
@@ -182,7 +245,6 @@ export default {
   name: 'vendor-signup-step1',
   props: {
     categories: Array,
-    icon: String,
     vendor: Object,
   },
   components: {
@@ -202,8 +264,71 @@ export default {
         'reddit', 
         'tiktok', 
       ],
+      reg: /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig,
       min: Number,
       max: Number,
+      categoryNames: [
+        {
+          name: 'Venue Rental',
+          value: 'venuerental',
+        },
+        {
+          name: 'Food & Catering',
+          value: 'foodandbeverage',
+        },
+        {
+          name: 'Design and Decor',
+          value: 'decor',
+        },
+        {
+          name: 'Guest Services & Staffing',
+          value: 'corporatesocialresponsibility',
+        },
+        {
+          name: 'Signage / Printing',
+          value: 'signageprinting',
+        },
+        {
+          name: 'Advertising and Promotion',
+          value: 'advertising-promotion',
+        },
+        {
+          name: 'AV / Staging',
+          value: 'audiovisualstagingservices',
+        },
+        {
+          name: 'Swags',
+          value: 'swags',
+        },
+        {
+          name: 'Shipping',
+          value: 'shipping',
+        },
+        {
+          name: 'Transportation & Tour operator',
+          value: 'transportation',
+        },
+        {
+          name: 'Entertainment',
+          value: 'entertainment',
+        },
+        {
+          name: 'Administration',
+          value: 'administration',
+        },
+        {
+          name: 'Security',
+          value: 'securityservices',
+        },
+        {
+          name: 'Technology',
+          value: 'technologyservices',
+        },
+        {
+          name: 'Videography and Photography',
+          value: 'videographyandphotography',
+        },
+      ],
     }
   },
   created() {
@@ -244,7 +369,6 @@ export default {
         return
       }
 
-      console.log(file[0])
       if (file[0].size <= 2000000) {
         // 20kb
         this.createImage(file[0])
@@ -264,10 +388,21 @@ export default {
       this.isLoading = true
 
       reader.onload = e => {
-        console.log(e.target.result)
+        this.$root.$emit('update-vendor-value', 'images', e.target.result)
+        // console.log(e.target.result)
       }
       reader.readAsDataURL(file)
     },
+    getCategoryNameByValue(value) {
+      return this.categoryNames.filter( c => c.value == value)[0].name
+    },
+    checkBlank(e) {
+      if (!e.target.value || !this.reg.test(e.target.value)) {
+        e.target.style.border = "1px solid #ff0000"
+      } else {
+        e.target.style.border = "1px solid #707070"
+      }
+    }
   },
   computed: {
     
@@ -469,6 +604,45 @@ export default {
     }
     .mb-50 {
       margin-bottom: 3rem!important;
+    }
+    .mi-margin {
+      margin: 0 -1rem;
+    }
+    .images-wrapper {
+      margin: 0 0 20px 0;
+      width: 100%;
+      height: 400px;
+      display: grid;
+      grid-template-columns: repeat(4, 25%);
+      grid-template-rows: repeat(2, 200px);
+      justify-content: center;
+      align-content: end;
+
+      .box {
+        margin: 1rem;
+      }
+
+      .no-image {
+        border: dashed 1px #f51355;
+        background-color: #ffffff;
+      }
+
+      .item2 {
+        grid-column: 1 / 3;
+        grid-row: 1 / 4;
+      }
+      .add-more {
+        text-align: center;
+        padding: 3rem;
+        border: dashed 1px #f51355;
+        background-color: #ffffff;
+        cursor: pointer;
+        font: normal 15px Manrope-Regular, sans-serif;
+        img {
+          width: 24px;
+          padding-bottom: 1rem;
+        }
+      }
     }
     textarea {
       resize: none;

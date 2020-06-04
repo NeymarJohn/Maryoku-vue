@@ -24,6 +24,7 @@ import lsWatcher from 'vue-storage-watcher'
 import VueTour from 'vue-tour'
 import VueSwal from 'vue-swal'
 import VueTimeago from 'vue-timeago'
+import VueClipboard from 'vue-clipboard2'
 import VuePlaceAutocomplete from 'vue-place-autocomplete'
 
 import App from './App.vue'
@@ -49,6 +50,10 @@ Vue.use(VueGmaps, {
   libraries: ['places']
 })
 Vue.use(VueScrollTo)
+
+VueClipboard.config.autoSetContainer = true
+Vue.use(VueClipboard)
+
 Vue.use(VueTimeago, {
   name: 'Timeago', // Component name, `Timeago` by default
   locale: 'en', // Default locale

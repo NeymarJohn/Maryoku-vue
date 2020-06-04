@@ -39,14 +39,6 @@
                 <template
                   v-else
                 >{{ block.allocatedBudget ? (block.allocatedBudget / event.numberOfParticipants).toFixed(2).toString() : ''}}</template>
-                <!--                        <label-edit v-if="type==='total'"-->
-                <!--                                    :text="block.allocatedBudget"-->
-                <!--                                    :field-name="block.componentId"-->
-                <!--                                    :sub-description="elementsBudget"-->
-                <!--                                    :currency="'$'"-->
-                <!--                                    :numeric="true"-->
-                <!--                                    @text-updated-blur="blockBudgetChanged"-->
-                <!--                                    @text-updated-enter="blockBudgetChanged"></label-edit>-->
               </td>
 
               <td class="new-element-budget" width="15%">
@@ -67,7 +59,6 @@
                     </md-button>
                   </template>
                 </template>
-                <!-- v-if="block.downPaymentStatus==='accepted'" -->
                 <event-actual-cost-icon-tooltip :icon="'credit_card'" :item="block" :event="event" />
               </td>
             </tr>
@@ -107,8 +98,7 @@
             <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+30.png" /> $0
           </td>
           <td></td>
-          <td class="expand" style="    text-align: right;
-    padding-right: 1em;">
+          <td class="expand" style="text-align: right; padding-right: 1em;">
             <a href>
               <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
             </a>
