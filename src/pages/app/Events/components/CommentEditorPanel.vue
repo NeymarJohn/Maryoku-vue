@@ -287,13 +287,8 @@ export default {
         }
       });
 
-      // this.isOpenCommentListsPane = true
-      // this.isCommentEditing = false;
-      // this.isOpenCommentListsPane = false;
-      // this.selectedCommentComponent = null;
-      // this.clearStatus();
+      this.clearStatus();
       this.editingComment = "";
-      // this.$forceUpdate();
       event.stopPropagation();
     },
     closeEditPanel() {
