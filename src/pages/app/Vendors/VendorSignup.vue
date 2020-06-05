@@ -66,6 +66,11 @@ export default {
   data() {
     return {
       vendor: {
+        businessCategory: null,
+        email: null,
+        companyName: null,
+        phone: null, 
+        address: null,
         coverPhoto: null, 
         images: [],
         signature: null,
@@ -82,7 +87,7 @@ export default {
           website: null, 
           facebook: null, 
           instagram: null,
-          youtube: 'youtube',
+          youtube: null,
           linkedin: null,
           google: null,
           pinterest: null,

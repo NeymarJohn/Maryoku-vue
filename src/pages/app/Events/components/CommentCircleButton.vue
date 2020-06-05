@@ -1,27 +1,36 @@
 <template>
-  <div class="maryoku-component color-select-button" :class="{topIcon:showEditPane}">
-    <md-button
-      class="add-button md-just-icon md-white"
-      @click="toggleEditPane( $event )"
-      v-if="showEditPane"
+  <drag-it-dude class="maryoku-component color-select-button" :class="{topIcon:showEditPane}" ref="draggingComp"
+    @dropped="onDropped(commentComponent)"
+    @dragging="onDragging(commentComponent)"
+    @activated="onActivated(commentComponent)"
     >
-      <img :src="`${$iconURL}common/message-yellow.svg`"  width="100%">
-    </md-button>
-    <md-button
-      class="add-button md-just-icon md-yellow"
-      @click="toggleEditPane( $event )"
-      @mouseenter="showComments($event)"
-      @mouseleave="showCommentList=false"
-      v-else
-    >
-      <span> {{commentComponent.index}}</span>
-    </md-button>
-  </div>
+    
+        <md-button
+          class="add-button md-just-icon md-white"
+          @click="toggleEditPane( $event )"
+          v-if="showEditPane"
+        >
+          <img :src="`${$iconURL}common/message-yellow.svg`"  width="100%">
+        </md-button>
+        <md-button
+          class="add-button md-just-icon md-yellow"
+          @click="toggleEditPane( $event )"
+          @mouseenter="showComments($event)"
+          @mouseleave="showCommentList=false"
+          v-else
+        >
+          <span> {{commentComponent.index}}</span>
+        </md-button>
+    </drag-it-dude>
 </template>
 <script>
+import DragItDude from 'vue-drag-it-dude';
 
 export default {
   name: "comment-circle-button",
+  components: {
+    DragItDude,
+  },
   props: {
     /**
      * Data binding
@@ -40,6 +49,7 @@ export default {
   data: () => ({
     showEditPane: false,
     showCommentList: true,
+    isDragging:false
   }),
   methods: {
     hidePane: function(event) {
@@ -48,21 +58,51 @@ export default {
     updateValue: function(value) {
     },
     toggleEditPane: function(event) {
+      console.log("click Button")
+      event.stopPropagation();
+      event.preventDefault();
+      if (this.isDragging) return;
       this.showEditPane = !this.showEditPane;
       this.$emit("toggleEditPane", this.commentComponent, this.showEditPane)
-      event.stopPropagation();
+
     },
     
     showComments: function(event) {
-      this.$emit("show", this.commentComponent)
-      this.showCommentList = true
+       
+      setTimeout(()=>{
+        if (this.isDragging) return;
+        this.$emit("show", this.commentComponent)
+        this.showCommentList = true
+      },1000)
+      
     },
+    onDropped(component) {
+      console.log("left", this.$refs.draggingComp);
+      if (!this.$refs.draggingComp.left && !this.$refs.draggingComp.top ) return
+      if (this.$refs.draggingComp.left != component.positionX || this.$refs.draggingComp.top != component.positionY ) {
+        component.positionX = this.$refs.draggingComp.left
+        component.positionY = this.$refs.draggingComp.top
+        setTimeout(()=>{this.isDragging = false}, 200);
+        this.$emit("onDropped",component)  
+      } else {
+
+      }
+    },
+    onDragging(component) {
+      console.log("started dragging")
+      this.isDragging = true
+    },
+    onActivated(component) {
+      console.log("started dragging")
+      //this.isDragging = true
+      // this.$emit("onDragginStart",component)  
+    }
   },
   created() {
   },
   watch: {
     selectedComponet(newValue, oldValue) {
-      console.log(newValue)
+      // console.log(newValue)
       if (!newValue) {
         this.showEditPane = false
       } else {
