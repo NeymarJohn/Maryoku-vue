@@ -91,6 +91,9 @@ export default {
     onDragging(component) {
       console.log("started dragging")
       this.isDragging = true
+      if (this.$refs.draggingComp.left > 0 && this.$refs.draggingComp.top > 0){
+        this.$emit("dragging", component, {x: this.$refs.draggingComp.left,y:this.$refs.draggingComp.top })
+      }
     },
     onActivated(component) {
       console.log(this.$refs.draggingComp)

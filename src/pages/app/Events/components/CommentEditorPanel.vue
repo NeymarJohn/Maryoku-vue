@@ -11,16 +11,18 @@
       @toggleEditPane="toggleEditPane"
       @onDropped="movedCommentComponent"
       @onDragginStart="isDragging=true"
+      @dragging="draggingButton"
       :selectedComponet="selectedCommentComponent"
     ></comment-circle-button>
 
     <!-- Editing Panel -->
     <transition name="fade">
       <div
-        class="comments-list"
+        class="comments-list comment-edit-pane"
         v-if="isCommentEditing"
         @click="paneClick($event)"
         :style="{left: `${panelPosition.x}px`, top: `${panelPosition.y - 40}px`}"
+        ref="editingPanel"
       >
         <div>
           <div class="form-group">
@@ -49,72 +51,53 @@
         @click="paneClick($event)"
         :style="{left: `${panelPosition.x}px`, top: `${panelPosition.y - 40}px`}"
       >
+        <div style="height:40px; margin-right:25px" class="text-right">
+          <md-button class="md-simple md-just-icon md-round md-black font-size-40" @click="isOpenCommentListsPane=false">
+            <md-icon class="font-size-40">clear</md-icon>
+          </md-button>
+        </div>
         <div>
           <div v-if="hoveredComponent.comments">
             <comment-item
               v-if="mainComment"
               :comment="mainComment"
               :isEditing="editingCommentId == mainComment.id"
-              @cancelUpdate="editingCommentId=''"
+              :isMain="true"
+              :replies="replies.length"
               @updateComment="updateComment"
+              @resolve="resolveCommentComponent"
+              @favorite="markAsFavorite"
+              @delete="deleteComment"
             ></comment-item>
-            <div class="reply-dropdown d-flex justify-content-between">
-              {{replies.length}} Replies
-              <div class="comment-actions">
-                <md-button
-                  class="edit-btn md-simple md-black comment-action-btn"
-                  @click="resolveCommentComonent()"
-                >Resolve</md-button>
-                <md-button
-                  class="edit-btn md-simple comment-action-btn"
-                  @click="editComment(mainComment)"
-                >
-                  <img :src="`${$iconURL}comments/SVG/edit-dark.svg`" width="25px" />
-                </md-button>
-                <md-button class="edit-btn md-simple comment-action-btn">
-                  <img
-                    :src="`${$iconURL}comments/SVG/heart-dark.svg`"
-                    v-if="!mainComment.myFavorite"
-                    width="30px"
-                    @click="markAsFavorite(mainComment, true)"
-                  />
-                  <img
-                    :src="`${$iconURL}comments/SVG/heart-yellow.svg`"
-                    v-if="mainComment.myFavorite"
-                    width="30px"
-                    @click="markAsFavorite(mainComment, false)"
-                  />
-                </md-button>
-                <md-button class="edit-btn md-simple comment-action-btn">
-                  <img
-                    class="trash"
-                    :src="`${$iconURL}Timeline-New/Trash.svg`"
-                    width="18px"
-                    @click="deleteComment(mainComment)"
-                  />
-                </md-button>
-              </div>
-            </div>
+            <comment-item 
+              v-for="(comment) in replies" 
+              :key="comment.id" 
+              :comment="comment" 
+              :isMain="false"
+              @updateComment="updateComment"
+              @resolve="resolveCommentComponent"
+              @favorite="markAsFavorite"
+              @delete="deleteComment"
+            ></comment-item>
           </div>
-          <div class="comments-child">
-            <comment-item v-for="(comment) in replies" :key="comment.id" :comment="comment"></comment-item>
-          </div>
-          <div class="form-group" style="padding-left: 50px">
+          <div class="form-group reply-form">
             <textarea
               rows="4"
               class="form-control"
-              placeholder="Write description here"
+              placeholder="Write reply here"
               v-model="editingComment"
             ></textarea>
+            <img :src="`${this.$iconURL}common/message-dark.svg`" class="text-icon" />
+            <div class="footer">
+              <md-button class="md-simple normal-btn" @click="isOpenCommentListsPane=false">Cancel</md-button>
+              <md-button
+                class="md-simple md-black normal-btn"
+                @click="saveComment($event, 'reply')"
+              >Submit</md-button>
+            </div>
           </div>
         </div>
-        <div class="footer">
-          <md-button class="md-simple normal-btn" @click="isOpenCommentListsPane=false">Cancel</md-button>
-          <md-button
-            class="md-simple md-black normal-btn"
-            @click="saveComment($event, 'reply')"
-          >Submit</md-button>
-        </div>
+       
       </div>
     </transition>
     <div :class="{mask:isOpenCommentListsPane}" v-if="isOpenCommentListsPane"></div>
@@ -182,7 +165,8 @@ export default {
       "updateCommentComponent",
       "getCommentsAction",
       "updateCommentAction",
-      "addComment"
+      "addComment",
+      "deleteCommentAction"
     ]),
     selectItem(event, item) {
       item.isEditing = !item.isEditing;
@@ -316,7 +300,7 @@ export default {
       this.isCommentEditing = false;
       this.selectedCommentComponent = null;
     },
-    resolveCommentComonent() {
+    resolveCommentComponent() {
       this.editingCommentId = "";
       const commentComponent = new EventCommentComponent({
         id: this.hoveredComponent.id,
@@ -347,17 +331,14 @@ export default {
         comment.myFavorite = false;
       }
       this.updateComment(comment).then(() => {
-        const index = this.comments.findIndex(item=>item.id == comment.id);
-        this.comments.splice(index, 1, comment)
+        const index = this.comments.findIndex(item => item.id == comment.id);
+        this.comments.splice(index, 1, comment);
         // this.isOpenCommentListsPane = false;
       });
     },
 
     deleteComment(comment) {
-      const commentComponent = new EventCommentComponent({
-        id: this.hoveredComponent.id
-      });
-      this.deleteCommentComponent(commentComponent).then(() => {
+      this.deleteCommentAction(comment).then(() => {
         this.isOpenCommentListsPane = false;
       });
     },
@@ -373,7 +354,7 @@ export default {
           .then(() => {
             console.log(comment);
           });
-        resolve(comment)
+        resolve(comment);
       });
     },
     movedCommentComponent(movedCommentComponent) {
@@ -385,6 +366,24 @@ export default {
       this.updateCommentComponent(commentComponent).then(() => {
         this.isOpenCommentListsPane = false;
       });
+    },
+    draggingButton(component, position) {
+      console.log(position);
+      if (this.isCommentEditing && this.selectedCommentComponent) {
+        if (position.x < 600) {
+          this.$refs.editingPanel.style.left = `${position.x - 20}px`;
+          this.$refs.editingPanel.style.top = `${position.y + 80}px`;
+        } else {
+          this.$refs.editingPanel.style.left = `${position.x - 530}px`;
+          this.$refs.editingPanel.style.top = `${position.y + 80}px`;
+        }
+        this.$refs.editingPanel.style.left = `${this.panelPosition.x}px`;
+        this.$refs.editingPanel.style.top = `${this.panelPosition.y}px`;
+
+        if (this.mainComment) {
+          this.editingComment = this.mainComment.description;
+        }
+      }
     }
   }
 };
@@ -466,15 +465,12 @@ export default {
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
   background: white;
   z-index: 10;
-  padding: 20px 25px 25px;
+  padding: 20px 0px 25px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  .reply-dropdown {
-    font-family: "Manrope-Bold";
-    padding-left: 60px;
-    font-size: 16px;
-    color: #818080;
+  &.comment-edit-pane{
+    padding: 20px 25px;
   }
   textarea {
     width: 100%;
@@ -497,17 +493,20 @@ export default {
       border-top: solid 1px #cecece;
     }
   }
-  .comment-actions {
-    color: black;
-    .comment-action-btn {
-      margin: 0 5px !important;
-    }
+  .reply-form {
+    padding-top: 20px;
+    padding-left: 70px; 
+    padding-right: 25px;
   }
+
   .text-icon {
     position: absolute;
     right: 30px;
     top: 30px;
     width: 20px;
+  }
+  .font-size-40 {
+    font-size: 40px !important;
   }
 }
 </style>
