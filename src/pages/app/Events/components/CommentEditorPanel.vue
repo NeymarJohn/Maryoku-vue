@@ -9,95 +9,89 @@
       @save="saveComment"
       @show="showComments"
       @toggleEditPane="toggleEditPane"
-      @onDropped="movedCommentComponent"
-      @onDragginStart="isDragging=true"
       :selectedComponet="selectedCommentComponent"
     ></comment-circle-button>
 
     <!-- Editing Panel -->
-    <transition name="fade">
-      <div
-        class="comments-list"
-        v-if="isCommentEditing"
-        @click="paneClick($event)"
-        :style="{left: `${panelPosition.x}px`, top: `${panelPosition.y - 40}px`}"
-      >
-        <div>
-          <div class="form-group">
-            <textarea
-              rows="4"
-              class="form-control"
-              placeholder="Write your comment here"
-              v-model="editingComment"
-            ></textarea>
-          </div>
-        </div>
-        <div class="footer">
-          <md-button class="md-simple normal-btn" @click="closeEditPanel">Cancel</md-button>
-          <md-button class="md-simple md-black normal-btn" @click="saveComment($event)">Submit</md-button>
+    <div
+      class="comments-list"
+      v-if="isCommentEditing"
+      @click="paneClick($event)"
+      :style="{left: `${panelPosition.x}px`, top: `${panelPosition.y - 40}px`}"
+    >
+      <div>
+        <div class="form-group">
+          <textarea
+            rows="4"
+            class="form-control"
+            placeholder="Write your comment here"
+            v-model="editingComment"
+          ></textarea>
         </div>
       </div>
-    </transition>
+      <div class="footer">
+        <md-button class="md-simple normal-btn" @click="closeEditPanel">Cancel</md-button>
+        <md-button class="md-simple md-black normal-btn" @click="saveComment($event)">Submit</md-button>
+      </div>
+    </div>
     <!-- End Editing Panel -->
 
     <!-- Comments List -->
-    <transition name="fade">
-      <div
-        class="comments-list"
-        v-if="isOpenCommentListsPane"
-        @click="paneClick($event)"
-        :style="{left: `${panelPosition.x}px`, top: `${panelPosition.y - 40}px`}"
-      >
-        <div>
-          <div v-if="hoveredComponent.comments">
-            <comment-item 
-              v-if="mainComment" 
-              :comment="mainComment" 
-              :isEditing="editingCommentId == mainComment.id"
-              @cancelUpdate="editingCommentId=''"
-              @updateComment="updateComment"
-            >
-            </comment-item>
-            <div class="reply-dropdown d-flex justify-content-between" >
-              {{replies.length}} Replies
-              <div class="comment-actions">
-                <md-button class="edit-btn md-simple md-black comment-action-btn" @click="resolveCommentComonent()">
-                  Resolve
-                </md-button>
-                <md-button class="edit-btn md-simple comment-action-btn" @click="editComment(mainComment)">
-                  <img :src="`${$iconURL}comments/SVG/edit-dark.svg`" width="25px" />
-                </md-button>
-                <md-button class="edit-btn md-simple comment-action-btn">
-                  <img :src="`${$iconURL}comments/SVG/heart-dark.svg`" v-if="!mainComment.myFavorite" width="30px" @click="markAsFavorite(mainComment)"/>
-                  <img :src="`${$iconURL}comments/SVG/heart-yellow.svg`" v-if="mainComment.myFavorite" width="30px" @click="unMarkAsFavorite(mainComment)"/>
-                </md-button>
-                <md-button class="edit-btn md-simple comment-action-btn" >
-                  <img class="trash" :src="`${$iconURL}Timeline-New/Trash.svg`" width="18px" @click="deleteComment(mainComment)" />
-                </md-button>
-              </div>
+    <div
+      class="comments-list"
+      v-if="isOpenCommentListsPane"
+      @click="paneClick($event)"
+      :style="{left: `${panelPosition.x}px`, top: `${panelPosition.y - 40}px`}"
+    >
+      <div>
+        <div v-if="hoveredComponent.comments">
+          <comment-item 
+            v-if="mainComment" 
+            :comment="mainComment" 
+            :isEditing="editingCommentId == mainComment.id"
+            @cancelUpdate="editingCommentId=''"
+            @updateComment="updateComment"
+          >
+          </comment-item>
+          <div class="reply-dropdown d-flex justify-content-between" >
+            {{replies.length}} Replies
+            <div class="comment-actions">
+              <md-button class="edit-btn md-simple md-black comment-action-btn" @click="resolveCommentComonent()">
+                Resolve
+              </md-button>
+              <md-button class="edit-btn md-simple comment-action-btn" @click="editComment(mainComment)">
+                <img :src="`${$iconURL}comments/SVG/edit-dark.svg`" width="25px" />
+              </md-button>
+              <md-button class="edit-btn md-simple comment-action-btn">
+                <img :src="`${$iconURL}comments/SVG/heart-dark.svg`" v-if="!mainComment.myFavorite" width="30px" @click="markAsFavorite(mainComment)"/>
+                <img :src="`${$iconURL}comments/SVG/heart-yellow.svg`" v-if="mainComment.myFavorite" width="30px" @click="unMarkAsFavorite(mainComment)"/>
+              </md-button>
+              <md-button class="edit-btn md-simple comment-action-btn" >
+                <img class="trash" :src="`${$iconURL}Timeline-New/Trash.svg`" width="18px" @click="deleteComment(mainComment)" />
+              </md-button>
             </div>
           </div>
-          <div class="comments-child">
-            <comment-item v-for="(comment) in replies" :key="comment.id" :comment="comment"></comment-item>
-          </div>
-          <div class="form-group" style="padding-left: 40px">
-            <textarea
-              rows="4"
-              class="form-control"
-              placeholder="Write description here"
-              v-model="editingComment"
-            ></textarea>
-          </div>
         </div>
-        <div class="footer">
-          <md-button class="md-simple normal-btn" @click="isOpenCommentListsPane=false">Cancel</md-button>
-          <md-button
-            class="md-simple md-black normal-btn"
-            @click="saveComment($event, 'reply')"
-          >Submit</md-button>
+        <div class="comments-child">
+          <comment-item v-for="(comment) in replies" :key="comment.id" :comment="comment"></comment-item>
+        </div>
+        <div class="form-group" style="padding-left: 40px">
+          <textarea
+            rows="4"
+            class="form-control"
+            placeholder="Write description here"
+            v-model="editingComment"
+          ></textarea>
         </div>
       </div>
-    </transition>
+      <div class="footer">
+        <md-button class="md-simple normal-btn" @click="isOpenCommentListsPane=false">Cancel</md-button>
+        <md-button
+          class="md-simple md-black normal-btn"
+          @click="saveComment($event, 'reply')"
+        >Submit</md-button>
+      </div>
+    </div>
     <div  :class="{mask:isOpenCommentListsPane}" v-if="isOpenCommentListsPane"></div>
   </div>
   <!-- End Comments List -->
@@ -128,7 +122,6 @@ export default {
       isCommentEditing: false,
       isOpenCommentListsPane: false,
       isExistingCommentEditing: false,
-      isDragging:true,
       editingCommentId: ""
     };
   },
@@ -159,6 +152,7 @@ export default {
     }
   },
   created() {
+    console.log("getCommentComponents");
     this.getCommentComponents(this.$route.path);
   },
   methods: {
@@ -177,7 +171,9 @@ export default {
     },
     showComments(commentComponent) {
       if (this.isCommentEditing || this.isOpenCommentListsPane) return;
+      console.log(commentComponent);
       this.getCommentsAction(commentComponent.id).then(comments => {
+        console.log(comments);
         this.hoveredComponent = commentComponent;
         this.hoveredComponent.comments = comments;
         if (!comments || comments.length === 0) return;
@@ -236,6 +232,7 @@ export default {
       }
       var element = document.querySelector(".click-capture");
       var top = element.offsetTop;
+      console.log(top);
       const maxIndex = this.commentComponents?this.commentComponents.reduce((index,item)=>{
         if (item.index > index) index = item.index
         return index
@@ -280,6 +277,7 @@ export default {
         parentId: this.mainComment ? this.mainComment.id : null
       };
       this.addComment(comment).then(addedComment => {
+        console.log("addedComment", addedComment);
         if (type == "reply") {
           this.hoveredComponent.comments = [addedComment].concat(
             this.hoveredComponent.comments
@@ -348,17 +346,6 @@ export default {
           console.log(comment)
         }) 
     },
-    movedCommentComponent(movedCommentComponent) {
-      const commentComponent = new EventCommentComponent({
-        id:movedCommentComponent.id,
-        positionX: movedCommentComponent.positionX,
-        positionY: movedCommentComponent.positionY
-      })
-      this.updateCommentComponent(commentComponent).then(()=>{
-        this.isOpenCommentListsPane = false
-        // this.isCommentEditing = false
-      })
-    }
   }
 };
 </script>

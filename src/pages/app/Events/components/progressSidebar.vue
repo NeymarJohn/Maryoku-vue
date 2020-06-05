@@ -133,23 +133,22 @@ export default {
     menuIconsURL:
       'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
     event: {},
-    newTimeLineIconsURL: 'http://static.maryoku.com/storage/icons/Timeline-New/',
-    currentUrl:""
+    newTimeLineIconsURL: 'http://static.maryoku.com/storage/icons/Timeline-New/'
   }),
   computed: {
 
   },
   methods: {
     isActiveRoute(item) {
-      console.log(this.currentUrl);
-      console.log(item.route)
-      if (this.currentUrl.indexOf(item.route) > -1) {
+      console.log(this.$router.history.current.path);
+      if (this.$router.history.current.path.indexOf(item.route) > -1) {
         return "current";
       }
       return "";
     },
     goToRoute (item, index) {
       let vm = this
+
       this.$router.push(`/events/${this.event.id}/${item.route}`)
 
       // _.each(vm.eventElements,function (item) {
@@ -158,7 +157,7 @@ export default {
 
       // vm.eventElements[index].status = 'current';
 
-      // location.reload()
+      location.reload()
     },
     getEventBlocks () {
       
@@ -213,13 +212,9 @@ export default {
           }) 
           vm.eventElements = elements;
         })
-    },
-    fetchUrl () {
-      this.currentUrl = this.$router.history.current.path;
     }
   },
   created () {
-    this.fetchUrl()
     this.$auth.currentUser(
       this,
       true,
@@ -230,16 +225,17 @@ export default {
           .find(this.$route.params.id)
           .then(event => {
             this.event = event
+            console.log("this evetn", this.event);
             this.generatedItems()
             this.getEventBlocks()
+
+            console.log(event)
           })
       }.bind(this)
     )
   },
   mounted () {},
-  watch: {
-    '$route': 'fetchUrl'
-  }
+  watch: {}
 }
 </script>
 <style lang="scss">

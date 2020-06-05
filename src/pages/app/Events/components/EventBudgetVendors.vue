@@ -47,14 +47,10 @@
                   v-if="!block.editBudget && !block.bookedBudget"
                   @click="showEditElementBudget(block)"
                 >Edit</md-button>
-                <img
-                  :src="`${$iconURL}Event Page/arrow-left-gray.svg`"
-                  v-if="block.editBudget"
-                  style="width:25px; float:right; margin: 3px 0px;"
-                />
+                <img :src="`${$iconURL}Event Page/arrow-left-gray.svg`"  v-if="block.editBudget" style="width:25px; float:right; margin: 3px 0px;"/>
               </td>
               <template v-if="!block.editBudget">
-                <td class="actual red-label" width="15%">
+                 <td class="actual red-label" width="15%">
                   <template v-if="block.allocatedBudget">
                     <template v-if="block.winningProposalId">
                       <template v-if="block.allocatedBudget < block.winingProposal.cost">
@@ -79,11 +75,7 @@
                     </template>
                   </template>
                   <!-- v-if="block.downPaymentStatus==='accepted'" -->
-                  <event-actual-cost-icon-tooltip
-                    :icon="'credit_card'"
-                    :item="block"
-                    :event="event"
-                  />
+                  <event-actual-cost-icon-tooltip :icon="'credit_card'" :item="block" :event="event" />
                   <span class="font-size-20 whitspace-nowrap" v-if="block.vendorsCount>0">
                     <md-icon
                       class="color-plus font-size-20"
@@ -94,13 +86,11 @@
                     <span
                       :class="block.bookedBudget <= block.allocatedBudget?'color-plus':'color-minus'"
                     >
-                      <template
-                        v-if="type==='total'"
-                      >$ {{block.bookedBudget ? block.bookedBudget : 0 | roundNumber | withComma}}</template>
-                      <template v-else>
-                        $
-                        {{block.bookedBudget ? (block.bookedBudget / event.numberOfParticipants).toFixed().toString() : 0}}
-                      </template>
+                    
+                    <template v-if="type==='total'">
+                      $ {{block.bookedBudget ? block.bookedBudget : 0 | roundNumber | withComma}}</template>
+                    <template v-else>$ 
+                      {{block.bookedBudget ? (block.bookedBudget / event.numberOfParticipants).toFixed().toString() : 0}}</template>
                     </span>
                   </span>
                 </td>
@@ -112,12 +102,9 @@
                       @click="bookVendors(block)"
                       v-if="!block.fixed && block.componentId!='unexpected' && !block.bookedBudget"
                     >Book Vendors</md-button>
-                    <img
-                      :src="`${$iconURL}common/check-circle-green.svg`"
-                      width="32"
-                      v-if="block.bookedBudget"
-                    />
+                    <img :src="`${$iconURL}common/check-circle-green.svg`" width="32" v-if="block.bookedBudget"/> 
                   </div>
+
                 </td>
                 <td class="expand">
                   <div
@@ -125,26 +112,19 @@
                     class="text-right"
                     v-if="!block.fixed && block.componentId!='unexpected'"
                   >
-                    <img
-                      src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png"
-                    />
+                    <img src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+24.png" />
                   </div>
                 </td>
               </template>
               <template v-if="block.editBudget">
                 <td colspan="3" align="right" style="white-space: nowrap" class="d-flex">
-                  <maryoku-input
-                    v-model="block.newBudget"
-                    inputStyle="budget"
-                    size="small"
-                    style="width:150px"
-                    @focus="$event.target.select()"
-                  ></maryoku-input>
-                  <md-button
-                    class="md-simple md-black normal-btn"
-                    @click="showEditElementBudget(block)"
-                  >cancel</md-button>
-                  <md-button class="md-red normal-btn" @click="editElementBudget(block)">save</md-button>
+                    <!-- <input class="inline-input" v-model="block.newBudget"   @focus="$event.target.select()" /> -->
+                    <maryoku-input v-model="block.newBudget" inputStyle="budget" size="small" @focus="$event.target.select()" ></maryoku-input>
+                    <md-button
+                      class="md-simple md-black normal-btn"
+                      @click="showEditElementBudget(block)"
+                    >cancel</md-button>
+                    <md-button class="md-red normal-btn" @click="editElementBudget(block)">save</md-button>
                 </td>
               </template>
             </tr>
@@ -177,16 +157,10 @@
               </td>
             </tr>
             <tr class="item-actions" v-if="!block.bookedBudget">
-              <td colspan="5" class="actions-list text-right" style="position:relative">
-                <md-button
-                  class="md-simple md-red edit-btn-1"
-                  @click="addMyVendor(block)"
-                >Add My Vendor</md-button>
+              <td colspan="5" class="actions-list text-right"  style="position:relative">
+                <md-button class="md-simple md-red edit-btn-1" @click="addMyVendor(block)">Add My Vendor</md-button>
                 <span class="button-split"></span>
-                <md-button
-                  class="md-simple md-red edit-btn-1"
-                  @click="deleteBlock(block)"
-                >Delete Category</md-button>
+                <md-button class="md-simple md-red edit-btn-1" @click="deleteBlock(block)">Delete Category</md-button>
               </td>
             </tr>
           </template>
@@ -200,10 +174,7 @@
               <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/extra-gray.svg" />
               Extras
             </td>
-            <td
-              width="20%"
-              class="planned"
-            >$ {{event.allocatedTips + event.allocatedFees | withComma}}</td>
+            <td width="20%" class="planned">$ {{event.allocatedTips + event.allocatedFees | withComma}}</td>
             <td width="15%" class="actual red-label"></td>
             <td width="15%" class="status"></td>
             <td class="expand">
@@ -217,13 +188,11 @@
               <td width="40%" class="event-block-element extra">
                 <popup ref="popup">
                   <template slot="content">
-                    <img
-                      src="http://static.maryoku.com/storage/icons/budget screen/SVG/tips-gray.svg"
-                    />
-                    Tips 12%
+                    <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/tips-gray.svg" />
+                    Tips  12%
                   </template>
                   <template slot="popup">
-                    <div class="popup-header">
+                    <div class="popup-header"> 
                       You can delete tips.
                       Are you sure you want to delete tips?
                     </div>
@@ -233,19 +202,16 @@
                     </div>
                   </template>
                 </popup>
+                
               </td>
-              <td width="20%" class="planned">
-                $ {{event.allocatedTips | withComma}}
-                <md-button
-                  class="md-rose md-sm md-simple edit-btn"
-                  @click="showEditElementBudget()"
-                  v-if="!editTips"
-                >Edit</md-button>
-                <img
-                  :src="`${$iconURL}Event Page/arrow-left-gray.svg`"
-                  v-else
-                  style="width:25px; float:right; margin: 3px 0px;"
-                />
+              <td width="20%" class="planned">$ {{event.allocatedTips | withComma}} 
+                  <md-button
+                    class="md-rose md-sm md-simple edit-btn"
+                    @click="showEditElementBudget()"
+                    v-if="!editTips"
+                  >Edit</md-button>
+                  <img :src="`${$iconURL}Event Page/arrow-left-gray.svg`" v-else style="width:25px; float:right; margin: 3px 0px;"/>
+
               </td>
               <template v-if="!editTips">
                 <td width="15%" class="actual red-label"></td>
@@ -254,16 +220,17 @@
               </template>
               <template v-if="editTips">
                 <td colspan="3" align="right" style="white-space: nowrap">
-                  <input class="inline-input" v-model="newAllocatedTips" />
-                  <md-button class="md-simple md-black normal-btn" @click="editTips=false">cancel</md-button>
-                  <md-button class="md-red normal-btn" @click="updateTips()">save</md-button>
+                    <input class="inline-input" v-model="newAllocatedTips" />
+                    <md-button
+                      class="md-simple md-black normal-btn"
+                      @click="editTips=false"
+                    >cancel</md-button>
+                    <md-button class="md-red normal-btn" @click="updateTips()">save</md-button>
                 </td>
               </template>
             </tr>
             <tr class="extra">
-              <td colspan="5">
-                <hr />
-              </td>
+              <td colspan="5"><hr/> </td>
             </tr>
             <tr class="extra">
               <td width="40%" class="event-block-element extra">
@@ -276,6 +243,7 @@
               <td class="expand"></td>
             </tr>
           </template>
+          
         </tbody>
       </table>
       <table class="event-blocks__table event-block-table">
@@ -298,10 +266,7 @@
       <tbody>
         <tr class="total">
           <td class="total-title" width="40%">Total</td>
-          <td
-            width="20%"
-            class="total-value"
-          >${{Math.round(event.totalBudget) | roundNumber | withComma}}</td>
+          <td width="20%" class="total-value">${{Math.round(event.totalBudget) | roundNumber | withComma}}</td>
           <td width="15%" class="total-value">${{event.statistics.booked | withComma}}</td>
           <td colspan="2"></td>
         </tr>
@@ -352,7 +317,7 @@
             class="md-layout-item md-size-70 d-flex"
             v-if="newBuildingBlock.category.id==='other'"
           >
-            <md-icon class="font-size-20">subdirectory_arrow_right</md-icon>
+            <md-icon class="font-size-20 ">subdirectory_arrow_right</md-icon>
             <div class="form-group" style="flex-grow:1; margin-left:10px; ">
               <label class="font-size-16 font-bold-extra color-black">Name</label>
               <small class="font-size-14">(2 words top)</small>
@@ -428,7 +393,7 @@ import EventComponentTodo from "@/models/EventComponentTodo";
 import EventComponentValue from "@/models/EventComponentValue";
 import Occasion from "@/models/Occasion";
 import { Modal, LabelEdit } from "@/components";
-import Popup from "@/components/Popup";
+import Popup from "@/components/Popup"
 // import auth from '@/auth';
 import AddBuildingBlockModal from "../components/EventBlocks/Modals/AddBuildingBlocks.vue";
 import AddEventElementsModal from "../components/EventBlocks/Modals/AddEventElements.vue";
@@ -439,10 +404,10 @@ import _ from "underscore";
 import draggable from "vuedraggable";
 import BudgetHandleMinusModal from "@/components/Modals/BudgetHandleMinusModal";
 import AddMyVendorModal from "@/components/Modals/AddMyVendorModal";
-import MaryokuInput from "@/components/Inputs/MaryokuInput.vue";
+import MaryokuInput  from "@/components/Inputs/MaryokuInput.vue"
 import EventComponentVendorItem from "./Utilities/EventComponentVendorItem";
 
-import swal from "sweetalert2";
+import swal from 'sweetalert2'
 
 export default {
   name: "event-budget-vendors",
@@ -509,9 +474,9 @@ export default {
     overAddedValue: 0,
     showAddMyVendor: false,
     selectedComponent: null,
-    showTips: false,
-    editTips: false,
-    newAllocatedTips: 0
+    showTips:false,
+    editTips:false,
+    newAllocatedTips:0
   }),
   computed: {
     ...mapGetters({
@@ -551,18 +516,19 @@ export default {
         }
       } else {
         this.eventBuildingBlocks.forEach(g => {
-          g.editBudget = false;
-        });
+            g.editBudget = false;
+          });
         this.editTips = true;
       }
-
+      
       this.$forceUpdate();
       setTimeout(() => {
-        let input = document.querySelector(".inline-input");
+        let input = document.querySelector('.inline-input');
         if (input) {
-          input.focus();
+            input.focus()
         }
       }, 100);
+       
     },
     deleteBlock(block) {
       let calendar = new Calendar({
@@ -623,9 +589,8 @@ export default {
       const allocatedBudget = this.event.components.reduce((s, item) => {
         return s + item.allocatedBudget;
       }, 0);
-      this.allocatedBudget =
-        allocatedBudget + this.event.allocatedFees + this.event.allocatedTips;
-      this.newAllocatedTips = this.event.allocatedTips;
+      this.allocatedBudget = allocatedBudget + this.event.allocatedFees + this.event.allocatedTips
+      this.newAllocatedTips = this.event.allocatedTips
       this.remainingBudget =
         Math.round((this.event.totalBudget - this.allocatedBudget) / 10) * 10;
     },
@@ -711,81 +676,82 @@ export default {
 
     editElementBudget(block) {
       swal({
-        title: `<div class="text-left"><div>Are Your Sure?</div></div>`,
-        showCancelButton: true,
-        confirmButtonClass: "md-button md-success",
-        cancelButtonClass: "md-button md-danger",
-        confirmButtonText: "Yes I'm sure",
-        cancelButtonText: "No, take me back",
-        buttonsStyling: false
-      }).then(result => {
-        let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-        let event = new CalendarEvent({ id: this.event.id });
-        let selected_block = new EventComponent({ id: block.id });
+          title: `<div class="text-left"><div>Are Your Sure?</div></div>`,
+          showCancelButton: true,
+          confirmButtonClass: 'md-button md-success',
+          cancelButtonClass: 'md-button md-danger',
+          confirmButtonText: "Yes I'm sure",
+          cancelButtonText: 'No, take me back',
+          buttonsStyling: false
+        }).then(result => {
+          let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
+          let event = new CalendarEvent({ id: this.event.id });
+          let selected_block = new EventComponent({ id: block.id });
 
-        selected_block.calendarEvent = block.calendarEvent;
-        selected_block.componentId = block.componentId;
-        selected_block.icon = block.icon;
-        selected_block.color = block.color;
-        selected_block.todos = block.todos;
-        selected_block.values = block.values;
-        selected_block.vendors = block.vendors;
+          selected_block.calendarEvent = block.calendarEvent;
+          selected_block.componentId = block.componentId;
+          selected_block.icon = block.icon;
+          selected_block.color = block.color;
+          selected_block.todos = block.todos;
+          selected_block.values = block.values;
+          selected_block.vendors = block.vendors;
 
-        if (block.allocatedBudget && block.numberOfParticipants) {
-          selected_block.allocatedBudget =
-            this.type === "total"
-              ? block.newBudget
-              : block.newBudget * block.numberOfParticipants;
-          block.allocatedBudget =
-            this.type === "total"
-              ? block.newBudget
-              : block.newBudget * block.numberOfParticipants;
-        } else {
-          selected_block.allocatedBudget =
-            this.type === "total"
-              ? block.newBudget
-              : block.newBudget * this.event.numberOfParticipants;
-          block.allocatedBudget =
-            this.type === "total"
-              ? block.newBudget
-              : block.newBudget * this.event.numberOfParticipants;
-        }
-        if (result.dismiss != "cancel") {
-          selected_block
-            .for(calendar, event)
-            .save()
-            .then(resp => {
-              this.isLoading = false;
-              this.$root.$emit("RefreshStatistics");
-              this.getEventBuildingBlocks();
-              this.$root.$emit(
-                "event-building-block-budget-changed",
-                this.event.components
-              );
-              this.$forceUpdate();
+          if (block.allocatedBudget && block.numberOfParticipants) {
+            selected_block.allocatedBudget =
+              this.type === "total"
+                ? block.newBudget
+                : block.newBudget * block.numberOfParticipants;
+            block.allocatedBudget =
+              this.type === "total"
+                ? block.newBudget
+                : block.newBudget * block.numberOfParticipants;
+          } else {
+            selected_block.allocatedBudget =
+              this.type === "total"
+                ? block.newBudget
+                : block.newBudget * this.event.numberOfParticipants;
+            block.allocatedBudget =
+              this.type === "total"
+                ? block.newBudget
+                : block.newBudget * this.event.numberOfParticipants;
+          }
+          if (result.dismiss != "cancel") {
+            selected_block
+              .for(calendar, event)
+              .save()
+              .then(resp => {
+                this.isLoading = false;
+                this.$root.$emit("RefreshStatistics");
+                this.getEventBuildingBlocks();
+                this.$root.$emit(
+                  "event-building-block-budget-changed",
+                  this.event.components
+                );
+                this.$forceUpdate();
 
-              let allocatedBudget = 0;
-              this.eventBuildingBlocks.forEach(item => {
-                if (item.allocatedBudget) {
-                  allocatedBudget += Number(item.allocatedBudget);
+                let allocatedBudget = 0;
+                this.eventBuildingBlocks.forEach(item => {
+                  if (item.allocatedBudget) {
+                    allocatedBudget += Number(item.allocatedBudget);
+                  }
+                });
+
+                this.allocatedBudget = allocatedBudget;
+                if (this.event.totalBudget < this.allocatedBudget) {
+                  console.log(this.totalBudget);
+                  this.showMinusHandleModal = true;
+                  this.overAddedValue = this.allocatedBudget - this.event.totalBudget;
                 }
+                this.showEditElementBudget(block);
+                this.$emit("change");
+              })
+              .catch(error => {
+                console.log(error);
               });
+          }
+        })
 
-              this.allocatedBudget = allocatedBudget;
-              if (this.event.totalBudget < this.allocatedBudget) {
-                console.log(this.totalBudget);
-                this.showMinusHandleModal = true;
-                this.overAddedValue =
-                  this.allocatedBudget - this.event.totalBudget;
-              }
-              this.showEditElementBudget(block);
-              this.$emit("change");
-            })
-            .catch(error => {
-              console.log(error);
-            });
-        }
-      });
+      
     },
 
     blockBudgetChanged(val, index) {
@@ -1085,7 +1051,7 @@ export default {
       let event = new CalendarEvent({ id: this.event.id });
       let selectedBlock = new EventComponent({ id: this.selectedComponent.id });
 
-      myVendor.vendorCategory = this.selectedComponent.componentId;
+      myVendor.vendorCategory = this.selectedComponent.componentId
       if (myVendor.attachment) {
         let formData = new FormData();
         formData.append("file", myVendor.attachment);
@@ -1101,13 +1067,11 @@ export default {
             }
           }
         );
-        myVendor.attachments = [
-          {
-            originalName: myVendor.attachment.name,
-            url: result.data.upload.path,
-            name: result.data.upload.name
-          }
-        ];
+        myVendor.attachments = [{
+          originalName: myVendor.attachment.name,
+          url: result.data.upload.path,
+          name: result.data.upload.name
+        }];
       }
 
       // Add new Vendors
@@ -1141,18 +1105,12 @@ export default {
       let calendar = new Calendar({
         id: this.$auth.user.defaultCalendarId
       });
-      let event = new CalendarEvent({
-        id: this.event.id,
-        allocatedTips: this.newAllocatedTips
-      });
-      event
-        .for(calendar)
-        .save()
-        .then(res => {
-          this.editTips = false;
-          this.$forceUpdate();
-          this.$emit("change");
-        });
+      let event = new CalendarEvent({ id: this.event.id, allocatedTips:this.newAllocatedTips });
+      event.for(calendar).save().then(res=>{
+        this.editTips = false
+        this.$forceUpdate();
+        this.$emit("change");
+      })
     },
     deleteTips() {
       this.newAllocatedTips = 0;

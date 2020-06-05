@@ -67,13 +67,8 @@ export default {
     return {
       vendor: {
         coverPhoto: null, 
-        images: [
-          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
-          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
-          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
-          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
-          'http://static.maryoku.com/storage/img/sidebar-2.jpg',
-        ],
+        images: [],
+        signature: null,
         capacity: {
           low: null,
           hight: null,
@@ -87,6 +82,13 @@ export default {
           website: null, 
           facebook: null, 
           instagram: null,
+          youtube: 'youtube',
+          linkedin: null,
+          google: null,
+          pinterest: null,
+          foursuare: null,
+          reddit: null,
+          tiktok: null,
         },
         yesRules: [],
         policies: [],
@@ -1789,7 +1791,14 @@ export default {
       }
     })
     this.$root.$on('update-vendor-value', (field, value) => {
-      this.$set(this.vendor, this.camelize(field), value)
+      if (field == 'images') {
+        this.vendor.images.push(value)
+        console.log(this.vendor)
+      } else if (field == 'removeImage') {
+        this.vendor.images = this.vendor.images.filter( i => i != value )
+      }else {
+        this.$set(this.vendor, this.camelize(field), value)
+      }
     })
   },
   methods: {
