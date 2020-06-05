@@ -283,7 +283,7 @@ export default {
       };
       this.addComment(comment).then(addedComment => {
         if (type == "reply") {
-          this.comments = [addedComment].concat(this.comments);
+          this.comments.unshift(addedComment)
         }
       });
 
@@ -291,9 +291,9 @@ export default {
       // this.isCommentEditing = false;
       // this.isOpenCommentListsPane = false;
       // this.selectedCommentComponent = null;
-      this.clearStatus();
+      // this.clearStatus();
       this.editingComment = "";
-      this.$forceUpdate();
+      // this.$forceUpdate();
       event.stopPropagation();
     },
     closeEditPanel() {
@@ -479,6 +479,7 @@ export default {
     border: solid 1px #989898;
     background-image: none;
     padding: 10px;
+    padding-right: 25px;
   }
   .footer {
     text-align: right;

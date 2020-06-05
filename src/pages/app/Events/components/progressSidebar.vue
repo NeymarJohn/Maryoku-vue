@@ -141,8 +141,6 @@ export default {
   },
   methods: {
     isActiveRoute(item) {
-      console.log(this.currentUrl);
-      console.log(item.route)
       if (this.currentUrl.indexOf(item.route) > -1) {
         return "current";
       }
@@ -204,7 +202,7 @@ export default {
           resp.forEach(item => {
             if (item.componentId !== 'unexpected') {
               elements.push({
-                title: 'Book ' + item.title,
+                title:  item.bookTitle,
                 status: 'not-complete',
                 route: 'booking/' + item.id,
                 icon: `http://static.maryoku.com/storage/icons/Budget+Elements/${item.componentId}.svg`,

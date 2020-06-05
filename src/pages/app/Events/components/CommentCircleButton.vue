@@ -10,7 +10,7 @@
           @click="toggleEditPane( $event )"
           v-if="showEditPane"
         >
-          <img :src="`${$iconURL}common/message-yellow.svg`"  width="100%">
+          <img :src="`${$iconURL}common/message-yellow.svg`"  width="100%" style="width:30px">
         </md-button>
         <md-button
           class="add-button md-just-icon md-yellow"

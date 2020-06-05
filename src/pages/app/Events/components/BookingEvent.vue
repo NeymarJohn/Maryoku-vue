@@ -8,7 +8,7 @@
             :src="`${budgetElementsIConsURL}${selectedBlock.componentId}.svg`"
             style="width:30px; margin-right:0.5em"
           />
-          Book {{selectedBlock.title}}
+          {{selectedBlock.bookTitle}}
         </h3>
       </div>
       <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>

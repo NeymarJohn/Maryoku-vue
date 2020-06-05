@@ -1,7 +1,7 @@
 <template>
   <div class="comment-item" :class="{child: !isMain}">
     <div class="d-flex justify-content-between">
-      <div>
+      <div class="comment-item-avatar">
         <img class="user-avatar" :src="`${$iconURL}comments/SVG/user-dark.svg`" width="33px" />
       </div>
       <div class="comment-item-description">
@@ -148,6 +148,9 @@ export default {
     }
     padding-left:60px;
   }
+  &-avatar {
+    min-width: 40px;
+  }
   .user-avatar {
     border-radius: 50%;
     margin-right: 10px;
@@ -164,6 +167,7 @@ export default {
   .comment-item-content {
     font-family: "Manrope-Regular";
     font-size: 16px;
+    word-break:break-word;
     textarea {
       width: 100%;
       resize: none;
