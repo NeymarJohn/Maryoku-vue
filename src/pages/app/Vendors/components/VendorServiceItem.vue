@@ -78,6 +78,7 @@ export default {
         this.length++
       }
     })
+    console.log(this.length)
   },
   methods: {
   },

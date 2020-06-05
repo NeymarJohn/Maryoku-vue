@@ -1,7 +1,5 @@
 <template>
   <div class="md-layout event-details-timeline timeline-section with-progress-bar">
-    <side-bar :event="event"></side-bar>
-    <progress-sidebar></progress-sidebar>
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-page-header md-layout-item md-size-100 with-bg">
       <div class="header-main-actions">
@@ -436,8 +434,6 @@ import html2canvas from "html2canvas";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";
 
-import SideBar from "../../../components/SidebarPlugin/NewSideBar";
-import SidebarItem from "../../../components/SidebarPlugin/NewSidebarItem.vue";
 import ProgressSidebar from "./components/progressSidebar";
 import TimeInput from "../../../components/TimeInput";
 
@@ -451,8 +447,6 @@ export default {
     Drop,
     SlideYDownTransition,
     InputMask,
-    SideBar,
-    SidebarItem,
     ProgressSidebar,
     Modal,
     TimeInput,

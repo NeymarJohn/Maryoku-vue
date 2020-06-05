@@ -66,14 +66,8 @@ export default {
   data() {
     return {
       vendor: {
-        businessCategory: null,
-        email: null,
-        companyName: null,
-        phone: null, 
-        address: null,
         coverPhoto: null, 
         images: [],
-        signature: null,
         capacity: {
           low: null,
           hight: null,
@@ -1799,9 +1793,7 @@ export default {
       if (field == 'images') {
         this.vendor.images.push(value)
         console.log(this.vendor)
-      } else if (field == 'removeImage') {
-        this.vendor.images = this.vendor.images.filter( i => i != value )
-      }else {
+      } else {
         this.$set(this.vendor, this.camelize(field), value)
       }
     })

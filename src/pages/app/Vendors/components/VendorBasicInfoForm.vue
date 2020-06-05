@@ -16,40 +16,31 @@
             :img="''"
             :defaultVal="vendor.companyName"
             :borderBottom="true"
-            @update-focus-value="onUpdateFocus"
           />
           <v-signup-editable-field
             :title="'Business Category'"
             :img="''"
             :defaultVal="vendor.businessCategory"
             :borderBottom="true"
-            @update-focus-value="onUpdateFocus"
           />
           <v-signup-editable-field
             :title="'Address'"
             :img="`${iconUrl}Asset 550.svg`"
             :defaultVal="vendor.address"
             :borderBottom="true"
-            @update-focus-value="onUpdateFocus"
           />
           <v-signup-editable-field
             :title="'Phone'"
             :img="`${iconUrl}Asset 548.svg`"
             :defaultVal="vendor.phone"
             :borderBottom="true"
-            @update-focus-value="onUpdateFocus"
           />
           <v-signup-editable-field
             :title="'Email'"
             :img="`${iconUrl}Asset 547.svg`"
             :defaultVal="vendor.email"
             :borderBottom="false"
-            @update-focus-value="onUpdateFocus"
           />
-          <div class="action-cont">
-            <a class="cancel">Cancel</a>
-            <a class="save" @click="save()">Save</a>
-          </div>
         </div>
       </div>
     </div>
@@ -86,10 +77,7 @@ export default {
     
   },
   methods: {
-    save() {
-    },
-    onUpdateFocus(newValue) {
-    }
+    
   },
   computed: {
     
@@ -148,28 +136,6 @@ export default {
           max-width: 780px;
           background-color: #ffffff;
           box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
-
-          .action-cont {
-            margin-top: 30px;
-            text-align: right;
-            
-            a {
-              cursor: pointer;
-              padding: 8px 24px;
-              &.cancel {
-                color: #050505;
-                font: 800 16px Manrope-Regular, sans-serif;
-              }
-              &.save {
-                color: #ffffff;
-                font: 800 16px Manrope-Regular, sans-serif;
-                background-color: #f51355;
-                &:hover {
-                  color: #ffffff!important;
-                }
-              }
-            }
-          }
         }
       }
     }

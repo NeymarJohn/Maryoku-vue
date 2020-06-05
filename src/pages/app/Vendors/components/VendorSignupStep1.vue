@@ -78,15 +78,15 @@
           </div>
         </div>
         <div class="upload-wrapper" :class="{'mi-margin': vendor.images.length > 0}">
-          <div class="title-cont">
-            <div class="left">
-              <h5><img :src="`${iconUrl}art (2).svg`"/> upload photos</h5>
-            </div>
-            <div class="right">
-              <p>(15 photos top, under 20KB)</p>
-            </div>
-          </div>
           <template v-if="vendor.images.length == 0">
+            <div class="title-cont">
+              <div class="left">
+                <h5><img :src="`${iconUrl}art (2).svg`"/> upload photos</h5>
+              </div>
+              <div class="right">
+                <p>(15 photos top, under 20KB)</p>
+              </div>
+            </div>
             <div class="card red-border">
               <div class="upload-cont">
                 <a class="" @click="uploadVendorImage"><img :src="`${iconUrl}Asset 559.svg`"/> Choose File</a>
@@ -113,7 +113,6 @@
                   background-size: 100% 100%;`
                 "
               >
-                <img :src="`${iconUrl}Asset 528.svg`" v-if="vendor.images[0]" @click="removeVendorImage(vendor.images[0])"/>
               </div>
               <div 
                 class="box item" 
@@ -124,7 +123,6 @@
                   background-size: 100% 100%;`
                 "
               >
-                <img :src="`${iconUrl}Asset 528.svg`" v-if="vendor.images[1]" @click="removeVendorImage(vendor.images[1])"/>
               </div>
               <div 
                 class="box item" 
@@ -135,7 +133,6 @@
                   background-size: 100% 100%;`
                 "
               >
-                <img :src="`${iconUrl}Asset 528.svg`" v-if="vendor.images[2]" @click="removeVendorImage(vendor.images[2])"/>
               </div>
               <div 
                 class="box item" 
@@ -146,7 +143,6 @@
                   background-size: 100% 100%;`
                 "
               >
-                <img :src="`${iconUrl}Asset 528.svg`" v-if="vendor.images[3]" @click="removeVendorImage(vendor.images[3])"/>
               </div>
               <div class="box item add-more" @click="uploadVendorImage">
                 <img :src="`${iconUrl}Group 6501.svg`"/>
@@ -172,28 +168,15 @@
               <p>drag your file or create a signature here</p>
             </div>
           </div>
-          <template v-if="vendor.signature == null">
-            <div class="card red-border">
-              <div class="upload-cont">
-                <a class="" @click="uploadVendorSignature"><img :src="`${iconUrl}Asset 559.svg`"/> Choose File</a>
-                <div class="or">Or</div>
-                <div class="sign-here">
-                  Sign Here
-                </div>
-                <input
-                  type="file"
-                  class="hide"
-                  ref="signatureFile"
-                  name="vendorSignature"
-                  accept="image/gif, image/jpg, image/png"
-                  @change="onVendorImageFilePicked"
-                />
+          <div class="card red-border">
+            <div class="upload-cont">
+              <a class=""><img :src="`${iconUrl}Asset 559.svg`"/> Choose File</a>
+              <div class="or">Or</div>
+              <div class="sign-here">
+                Sign Here
               </div>
             </div>
-          </template>
-          <template v-else>
-            <img :src="vendor.signature"/>
-          </template>
+          </div>
         </div>
         <div class="social-wrapper">
           <div class="title-cont">
@@ -238,10 +221,7 @@
               <input 
                 type="text" 
                 placeholder="Paste link here" 
-                :class="{'red-border': vendor.social[s] == null || !reg.test(vendor.social[s])}"
-                v-model="vendor.social[s]"
                 v-if="socialMedia.includes(s)"
-                v-on:blur="checkBlank"
                 @keyup="checkBlank"
               />
             </div>
@@ -284,7 +264,7 @@ export default {
         'reddit', 
         'tiktok', 
       ],
-      reg: /^(ftp|http|https):\/\/[^ "]+$/,
+      reg: /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig,
       min: Number,
       max: Number,
       categoryNames: [
@@ -380,25 +360,18 @@ export default {
       }
     },
     uploadVendorImage (imageId = null, attachmentType = null) {
+      console.log(imageId, attachmentType)
       this.$refs.imageFile.click()
-    },
-    uploadVendorSignature (imageId = null, attachmentType = null) {
-      this.$refs.signatureFile.click()
     },
     onVendorImageFilePicked (event) {
       let file = event.target.files || event.dataTransfer.files
-
       if (!file.length) {
         return
       }
 
-      if (file[0].size <= 5000000) {
-        // 5mb
-        if (event.target.name == 'vendorSignature') {
-          this.createImage(file[0], 'vendorSignature')
-        } else {
-          this.createImage(file[0])
-        }
+      if (file[0].size <= 2000000) {
+        // 20kb
+        this.createImage(file[0])
       } else {
         this.$notify({
           message: "You've Uploaded an Image that Exceed the allowed size, try small one!",
@@ -415,16 +388,10 @@ export default {
       this.isLoading = true
 
       reader.onload = e => {
-        if (type == 'vendorSignature') {
-          this.$root.$emit('update-vendor-value', 'signature', e.target.result)
-        } else {
-          this.$root.$emit('update-vendor-value', 'images', e.target.result)
-        }
+        this.$root.$emit('update-vendor-value', 'images', e.target.result)
+        // console.log(e.target.result)
       }
       reader.readAsDataURL(file)
-    },
-    removeVendorImage(image) {
-      this.$root.$emit('update-vendor-value', 'removeImage', image)
     },
     getCategoryNameByValue(value) {
       return this.categoryNames.filter( c => c.value == value)[0].name
@@ -640,9 +607,6 @@ export default {
     }
     .mi-margin {
       margin: 0 -1rem;
-      .title-cont {
-        margin: 0 1rem;
-      }
     }
     .images-wrapper {
       margin: 0 0 20px 0;
@@ -656,26 +620,6 @@ export default {
 
       .box {
         margin: 1rem;
-      }
-
-      .item2 {
-        img {
-          width: 24px;
-          cursor: pointer;
-          position: relative;
-          left: 90%;
-          top: 80%;
-        }
-      }
-
-      .item {
-        img {
-          width: 24px;
-          cursor: pointer;
-          position: relative;
-          left: 80%;
-          top: 60%;
-        }
       }
 
       .no-image {
@@ -696,13 +640,9 @@ export default {
         font: normal 15px Manrope-Regular, sans-serif;
         img {
           width: 24px;
-          position: unset;
           padding-bottom: 1rem;
         }
       }
-    }
-    .signature-wrapper {
-      padding-bottom: 2rem;
     }
     textarea {
       resize: none;
@@ -712,9 +652,6 @@ export default {
     }
     .hide {
       display: none !important;
-    }
-    .red-border {
-      border: 1px solid #f51355!important;
     }
   }  
 </style>

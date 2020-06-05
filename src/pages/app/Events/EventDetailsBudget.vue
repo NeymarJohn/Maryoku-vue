@@ -1,8 +1,6 @@
 <template>
     <div class="edit-event-details event-details-budget">
-        <side-bar :event="calendarEvent"></side-bar>
         <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
-
         <!-- Event Header -->
         <div class="event-header d-flex justify-content-between">
             <div class="header-title">
@@ -227,8 +225,6 @@ import EventBudgetActivityPanel from './components/EventBudgetActivityPanel'
 
 // COMPONENTS
 import UploadVendorsModal from '../Vendors/ImportVendors'
-
-import SideBar from '../../../components/SidebarPlugin/NewSideBar'
 import PieChartRound from './components/PieChartRound.vue'
 import BudgetHandleMinusModal from '../../../components/Modals/BudgetHandleMinusModal'
 import HeaderActions from "@/components/HeaderActions";
@@ -239,7 +235,6 @@ export default {
     Tabs,
     EventBudgetVendors,
     UploadVendorsModal,
-    SideBar,
     PieChartRound,
     Modal,
     EditEventBlocksBudget,

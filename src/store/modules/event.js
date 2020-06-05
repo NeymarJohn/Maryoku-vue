@@ -57,12 +57,33 @@ const getters = {
   getComponentsList: (state) => {
     return state.components
   }
-
 }
-
 const actions = {
-  setEventData( {commit, state}, calendar) {
+  getEventAction( {commit, state}, {eventId, calendar}) {
+    calendar
+          .calendarEvents()
+          .find(eventId)
+          .then(event => {
+            commit("setEventData",event)
 
+            // if (event.concept) {
+            //   if (event.concept.images && event.concept.images.length > 0) {
+            //     this.logger = "http://static.maryoku.com/" + this.event.concept.images[0].url
+            //   }
+            //   if (event.concept.name) {
+            //     this.conceptName = event.concept.name
+            //   }
+            // }
+            // this.getCalendarEventStatistics(event);
+            // this.getTimelineItems();
+            // new EventComponent()
+            //   .for(_calendar, event)
+            //   .get()
+            //   .then(components => {
+            //     this.event.components = components;
+            //     this.selectedComponents = components;
+            //   });
+          });
   },
   getEventThemes({ commit, state }, ctx) {
     new EventTheme()

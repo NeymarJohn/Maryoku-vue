@@ -9,7 +9,7 @@
       </div>
       <div class="right-side">
         <div class="description">
-          <h5><img :src="`${iconUrl}Group 5222 (2).svg`"/> {{getCategoryNameByValue(vendor.businessCategory)}} Amenities</h5>
+          <h5><img :src="`${iconUrl}Group 5222 (2).svg`"/> {{vendor.businessCategory}} Amenities</h5>
           <p>Mark all the services you can support and will be included in your proposal. If needed please add a decsription or amount.</p>
         </div>
         <vendor-service-item 
@@ -46,68 +46,6 @@ export default {
   data() {
     return {
       filteredCategories: [],
-      categoryNames: [
-        {
-          name: 'Venue Rental',
-          value: 'venuerental',
-        },
-        {
-          name: 'Food & Catering',
-          value: 'foodandbeverage',
-        },
-        {
-          name: 'Design and Decor',
-          value: 'decor',
-        },
-        {
-          name: 'Guest Services & Staffing',
-          value: 'corporatesocialresponsibility',
-        },
-        {
-          name: 'Signage / Printing',
-          value: 'signageprinting',
-        },
-        {
-          name: 'Advertising and Promotion',
-          value: 'advertising-promotion',
-        },
-        {
-          name: 'AV / Staging',
-          value: 'audiovisualstagingservices',
-        },
-        {
-          name: 'Swags',
-          value: 'swags',
-        },
-        {
-          name: 'Shipping',
-          value: 'shipping',
-        },
-        {
-          name: 'Transportation & Tour operator',
-          value: 'transportation',
-        },
-        {
-          name: 'Entertainment',
-          value: 'entertainment',
-        },
-        {
-          name: 'Administration',
-          value: 'administration',
-        },
-        {
-          name: 'Security',
-          value: 'securityservices',
-        },
-        {
-          name: 'Technology',
-          value: 'technologyservices',
-        },
-        {
-          name: 'Videography and Photography',
-          value: 'videographyandphotography',
-        },
-      ],
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
     }
   },
@@ -117,9 +55,7 @@ export default {
   mounted() {
   },
   methods: {
-    getCategoryNameByValue(value) {
-      return this.categoryNames.filter( c => c.value == value)[0].name
-    },
+    
   },
   computed: {
     

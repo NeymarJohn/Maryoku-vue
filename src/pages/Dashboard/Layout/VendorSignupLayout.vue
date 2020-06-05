@@ -23,7 +23,7 @@
       </div>
     </section>
     <section class="footer-wrapper" v-else>
-      <a class="approve" @click="approve()" :class="{'disabled': !validateBasicFields()}">
+      <a class="approve" @click="approve()">
         Approve & Begin
       </a>
     </section>
@@ -199,13 +199,6 @@
           color: #ffffff;
           background-color: #f51355;
 
-          &.disabled {
-            box-shadow: none;
-            background-color: #818080;
-            border: none;
-            opacity: 0.5;
-            pointer-events: none;
-          }
           &:hover {
             color: #dddddd!important;
           }

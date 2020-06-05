@@ -1,10 +1,10 @@
 <template>
-  <drag-it-dude class="maryoku-component color-select-button" :class="{topIcon:showEditPane}" ref="draggingComp"
+  <dragging-component class="maryoku-component color-select-button" 
+    :class="{topIcon:showEditPane, dragging:isDragging}" ref="draggingComp"
     @dropped="onDropped(commentComponent)"
     @dragging="onDragging(commentComponent)"
     @activated="onActivated(commentComponent)"
     >
-    
         <md-button
           class="add-button md-just-icon md-white"
           @click="toggleEditPane( $event )"
@@ -21,15 +21,15 @@
         >
           <span> {{commentComponent.index}}</span>
         </md-button>
-    </drag-it-dude>
+    </dragging-component>
 </template>
 <script>
 import DragItDude from 'vue-drag-it-dude';
-
+import DraggingComponent from '@/components/DraggingComponent'
 export default {
   name: "comment-circle-button",
   components: {
-    DragItDude,
+    DraggingComponent,
   },
   props: {
     /**
@@ -73,7 +73,7 @@ export default {
         if (this.isDragging) return;
         this.$emit("show", this.commentComponent)
         this.showCommentList = true
-      },1000)
+      },500)
       
     },
     onDropped(component) {
@@ -93,6 +93,7 @@ export default {
       this.isDragging = true
     },
     onActivated(component) {
+      console.log(this.$refs.draggingComp)
       console.log("started dragging")
       //this.isDragging = true
       // this.$emit("onDragginStart",component)  
@@ -123,6 +124,10 @@ export default {
     top: 0px;
     z-index: 30;
   }
+}
+.dragging {
+  width: 400px;
+  height: 400px;
 }
 .md-button.add-button {
   width: 38px;

@@ -31,6 +31,7 @@
               v-model="editingComment"
             ></textarea>
           </div>
+          <img :src="`${this.$iconURL}common/message-dark.svg`" class="text-icon" />
         </div>
         <div class="footer">
           <md-button class="md-simple normal-btn" @click="closeEditPanel">Cancel</md-button>
@@ -50,29 +51,47 @@
       >
         <div>
           <div v-if="hoveredComponent.comments">
-            <comment-item 
-              v-if="mainComment" 
-              :comment="mainComment" 
+            <comment-item
+              v-if="mainComment"
+              :comment="mainComment"
               :isEditing="editingCommentId == mainComment.id"
               @cancelUpdate="editingCommentId=''"
               @updateComment="updateComment"
-            >
-            </comment-item>
-            <div class="reply-dropdown d-flex justify-content-between" >
+            ></comment-item>
+            <div class="reply-dropdown d-flex justify-content-between">
               {{replies.length}} Replies
               <div class="comment-actions">
-                <md-button class="edit-btn md-simple md-black comment-action-btn" @click="resolveCommentComonent()">
-                  Resolve
-                </md-button>
-                <md-button class="edit-btn md-simple comment-action-btn" @click="editComment(mainComment)">
+                <md-button
+                  class="edit-btn md-simple md-black comment-action-btn"
+                  @click="resolveCommentComonent()"
+                >Resolve</md-button>
+                <md-button
+                  class="edit-btn md-simple comment-action-btn"
+                  @click="editComment(mainComment)"
+                >
                   <img :src="`${$iconURL}comments/SVG/edit-dark.svg`" width="25px" />
                 </md-button>
                 <md-button class="edit-btn md-simple comment-action-btn">
-                  <img :src="`${$iconURL}comments/SVG/heart-dark.svg`" v-if="!mainComment.myFavorite" width="30px" @click="markAsFavorite(mainComment)"/>
-                  <img :src="`${$iconURL}comments/SVG/heart-yellow.svg`" v-if="mainComment.myFavorite" width="30px" @click="unMarkAsFavorite(mainComment)"/>
+                  <img
+                    :src="`${$iconURL}comments/SVG/heart-dark.svg`"
+                    v-if="!mainComment.myFavorite"
+                    width="30px"
+                    @click="markAsFavorite(mainComment, true)"
+                  />
+                  <img
+                    :src="`${$iconURL}comments/SVG/heart-yellow.svg`"
+                    v-if="mainComment.myFavorite"
+                    width="30px"
+                    @click="markAsFavorite(mainComment, false)"
+                  />
                 </md-button>
-                <md-button class="edit-btn md-simple comment-action-btn" >
-                  <img class="trash" :src="`${$iconURL}Timeline-New/Trash.svg`" width="18px" @click="deleteComment(mainComment)" />
+                <md-button class="edit-btn md-simple comment-action-btn">
+                  <img
+                    class="trash"
+                    :src="`${$iconURL}Timeline-New/Trash.svg`"
+                    width="18px"
+                    @click="deleteComment(mainComment)"
+                  />
                 </md-button>
               </div>
             </div>
@@ -80,7 +99,7 @@
           <div class="comments-child">
             <comment-item v-for="(comment) in replies" :key="comment.id" :comment="comment"></comment-item>
           </div>
-          <div class="form-group" style="padding-left: 40px">
+          <div class="form-group" style="padding-left: 50px">
             <textarea
               rows="4"
               class="form-control"
@@ -98,7 +117,7 @@
         </div>
       </div>
     </transition>
-    <div  :class="{mask:isOpenCommentListsPane}" v-if="isOpenCommentListsPane"></div>
+    <div :class="{mask:isOpenCommentListsPane}" v-if="isOpenCommentListsPane"></div>
   </div>
   <!-- End Comments List -->
 </template>
@@ -120,6 +139,7 @@ export default {
       mostRecentClickCoordinates: null,
       selectedCommentComponent: null,
       hoveredComponent: null,
+      comments: [],
       editingComment: "",
       panelPosition: {
         x: 0,
@@ -128,34 +148,27 @@ export default {
       isCommentEditing: false,
       isOpenCommentListsPane: false,
       isExistingCommentEditing: false,
-      isDragging:true,
-      editingCommentId: ""
+      isDragging: true,
+      editingCommentId: "",
+      isFavorite: false
     };
   },
   computed: {
     ...mapState("comment", ["commentComponents"]),
     mainComment() {
       if (!this.hoveredComponent) return null;
-      if (
-        !this.hoveredComponent.comments ||
-        this.hoveredComponent.comments.length === 0
-      )
-        return null;
-      return this.hoveredComponent.comments.find(item => !item.parentId);
+      if (!this.comments || this.comments.length === 0) return null;
+      return this.comments.find(item => !item.parentId);
     },
     replies() {
       if (!this.hoveredComponent) return null;
-      if (
-        !this.hoveredComponent.comments ||
-        this.hoveredComponent.comments.length === 0
-      )
-        return [];
-      return this.hoveredComponent.comments
+      if (!this.comments || this.comments.length === 0) return [];
+      return this.comments
         .filter(item => item.parentId)
         .sort((a, b) => b.dateCreated - a.dateCreated);
     },
     unresolvedComponents() {
-      return this.commentComponents.filter(item=>!item.isResolved)
+      return this.commentComponents.filter(item => !item.isResolved);
     }
   },
   created() {
@@ -168,7 +181,7 @@ export default {
       "deleteCommentComponent",
       "updateCommentComponent",
       "getCommentsAction",
-      "updateComment",
+      "updateCommentAction",
       "addComment"
     ]),
     selectItem(event, item) {
@@ -179,7 +192,8 @@ export default {
       if (this.isCommentEditing || this.isOpenCommentListsPane) return;
       this.getCommentsAction(commentComponent.id).then(comments => {
         this.hoveredComponent = commentComponent;
-        this.hoveredComponent.comments = comments;
+        this.comments = comments;
+        this.comments = comments;
         if (!comments || comments.length === 0) return;
 
         const deviceWidth = window.innerWidth;
@@ -195,8 +209,6 @@ export default {
           };
         }
 
-
-       
         this.isOpenCommentListsPane = true;
       });
     },
@@ -218,6 +230,9 @@ export default {
             y: this.selectedCommentComponent.positionY + 80
           };
         }
+        if (this.mainComment) {
+          this.editingComment = this.mainComment.description;
+        }
       } else {
         this.selectedCommentComponent = null;
       }
@@ -228,6 +243,7 @@ export default {
       this.isOpenCommentListsPane = false;
       this.selectedCommentComponent = null;
       this.hoveredComponent = null;
+      this.comments = [];
     },
     addFromEvent(event) {
       if (this.isCommentEditing || this.isOpenCommentListsPane) {
@@ -236,10 +252,12 @@ export default {
       }
       var element = document.querySelector(".click-capture");
       var top = element.offsetTop;
-      const maxIndex = this.commentComponents?this.commentComponents.reduce((index,item)=>{
-        if (item.index > index) index = item.index
-        return index
-      }, 0)  : 0;
+      const maxIndex = this.commentComponents
+        ? this.commentComponents.reduce((index, item) => {
+            if (item.index > index) index = item.index;
+            return index;
+          }, 0)
+        : 0;
 
       this.addCommentComponent({
         dateTime: Date.now(),
@@ -281,9 +299,7 @@ export default {
       };
       this.addComment(comment).then(addedComment => {
         if (type == "reply") {
-          this.hoveredComponent.comments = [addedComment].concat(
-            this.hoveredComponent.comments
-          );
+          this.comments = [addedComment].concat(this.comments);
         }
       });
 
@@ -291,7 +307,7 @@ export default {
       // this.isCommentEditing = false;
       // this.isOpenCommentListsPane = false;
       // this.selectedCommentComponent = null;
-      this.clearStatus()
+      this.clearStatus();
       this.editingComment = "";
       this.$forceUpdate();
       event.stopPropagation();
@@ -301,63 +317,74 @@ export default {
       this.selectedCommentComponent = null;
     },
     resolveCommentComonent() {
-      this.editingCommentId = ""
-      const commentComponent = new EventCommentComponent({id:this.hoveredComponent.id, isResolved: true})
-      this.updateCommentComponent(commentComponent).then(()=>{
-        this.isOpenCommentListsPane = false
-      })
+      this.editingCommentId = "";
+      const commentComponent = new EventCommentComponent({
+        id: this.hoveredComponent.id,
+        isResolved: true
+      });
+      this.updateCommentComponent(commentComponent).then(() => {
+        this.isOpenCommentListsPane = false;
+      });
     },
     editComment(comment) {
       this.isEditing = true;
-      this.editingCommentId = comment.id
+      this.editingCommentId = comment.id;
     },
-    markAsFavorite(comment) {
-      const commentComponent = new EventCommentComponent({id: this.hoveredComponent.id})
-      comment.eventCommentComponent.id = this.hoveredComponent.id
-      if (!comment.favoriteUsers)  comment.favoriteUsers = []
-      comment.favoriteUsers.push(this.$auth.user.id)
-      comment.myFavorite = true
-      this.updateComment(comment).then(()=>{
-        this.isOpenCommentListsPane = false
-      })
+    markAsFavorite(comment, isFavorite) {
+      const commentComponent = new EventCommentComponent({
+        id: this.hoveredComponent.id
+      });
+      comment.eventCommentComponent.id = this.hoveredComponent.id;
+      if (isFavorite) {
+        if (!comment.favoriteUsers) comment.favoriteUsers = [];
+        comment.favoriteUsers.push(this.$auth.user.id);
+        comment.myFavorite = true;
+      } else {
+        const index = comment.favoriteUsers.findIndex(
+          item => item.id == this.$auth.id
+        );
+        comment.favoriteUsers.splice(index, 1);
+        comment.myFavorite = false;
+      }
+      this.updateComment(comment).then(() => {
+        const index = this.comments.findIndex(item=>item.id == comment.id);
+        this.comments.splice(index, 1, comment)
+        // this.isOpenCommentListsPane = false;
+      });
     },
-    unMarkAsFavorite(comment){
-      const commentComponent = new EventCommentComponent({id: this.hoveredComponent.id})
-      comment.eventCommentComponent.id = this.hoveredComponent.id
-      if (!comment.favoriteUsers)  comment.favoriteUsers = []
-      const index =  comment.favoriteUsers.findIndex(item=> item.id == this.$auth.id)
-      comment.favoriteUsers.splice(index, 1)
-      comment.myFavorite = false
-      this.updateComment(comment).then(()=>{
-        this.isOpenCommentListsPane = false
-      })
-    },
+
     deleteComment(comment) {
-      const commentComponent = new EventCommentComponent({id: this.hoveredComponent.id})
-      this.deleteCommentComponent(commentComponent).then(()=>{
-        this.isOpenCommentListsPane = false
-      })
+      const commentComponent = new EventCommentComponent({
+        id: this.hoveredComponent.id
+      });
+      this.deleteCommentComponent(commentComponent).then(() => {
+        this.isOpenCommentListsPane = false;
+      });
     },
     updateComment(comment) {
-      this.editingCommentId = ""
-      const commentComponent = new EventCommentComponent({id: this.hoveredComponent.id})
-      new EventComment(comment)
-        .for(commentComponent)
-        .save()
-        .then(()=>{
-          console.log(comment)
-        }) 
+      this.editingCommentId = "";
+      return new Promise((resolve, reject) => {
+        const commentComponent = new EventCommentComponent({
+          id: this.hoveredComponent.id
+        });
+        new EventComment(comment)
+          .for(commentComponent)
+          .save()
+          .then(() => {
+            console.log(comment);
+          });
+        resolve(comment)
+      });
     },
     movedCommentComponent(movedCommentComponent) {
       const commentComponent = new EventCommentComponent({
-        id:movedCommentComponent.id,
+        id: movedCommentComponent.id,
         positionX: movedCommentComponent.positionX,
         positionY: movedCommentComponent.positionY
-      })
-      this.updateCommentComponent(commentComponent).then(()=>{
-        this.isOpenCommentListsPane = false
-        // this.isCommentEditing = false
-      })
+      });
+      this.updateCommentComponent(commentComponent).then(() => {
+        this.isOpenCommentListsPane = false;
+      });
     }
   }
 };
@@ -388,8 +415,6 @@ export default {
 }
 
 .item {
-  background-color: #ffc001;
-  border-radius: 50px 50px 50px 50px;
   flex: 0 0 auto;
   margin: 0px 12px 12px 0px;
   padding: 0px 0px 0px 0px;
@@ -402,14 +427,13 @@ export default {
   // display: flex;
   justify-content: center;
   align-items: center;
-  &:hover {
-    box-shadow: 0 3px 17px 0 rgba(0, 0, 0, 0.15);
-  }
   &.editing {
     background-color: white;
     box-shadow: 0 3px 17px 0 rgba(0, 0, 0, 0.15);
   }
-
+  display: flex;
+  align-items: center;
+  justify-items: center;
 }
 
 .mask {
@@ -427,6 +451,7 @@ export default {
   position: absolute;
   right: 0;
   top: 100px;
+  overflow: hidden;
   // Since clicking around the document will often lead to text-selection, let's just
   // remove the ability to select text in this demo.
   user-select: none;
@@ -441,7 +466,7 @@ export default {
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
   background: white;
   z-index: 10;
-  padding: 25px 25px 25px;
+  padding: 20px 25px 25px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -478,6 +503,11 @@ export default {
       margin: 0 5px !important;
     }
   }
-
+  .text-icon {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    width: 20px;
+  }
 }
 </style>

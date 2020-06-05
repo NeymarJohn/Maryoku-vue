@@ -1,9 +1,5 @@
 <template>
     <div class="md-layout event-concept-section booking-section">
-
-        <side-bar :event="event">
-        </side-bar>
-        <progress-sidebar></progress-sidebar>
         <div class="concept-content" v-if="showConceptList">
             <div class="event-page-header md-layout-item md-size-100">
                 <div class="header-name">
@@ -214,9 +210,6 @@ import {Modal} from '@/components'
 import EventComponentVendor from '@/models/EventComponentVendor'
 import EventComponentProperty from '@/models/EventComponentProperty'
 
-import SideBar from '../../../../components/SidebarPlugin/NewSideBar'
-import SidebarItem from '../../../../components/SidebarPlugin/NewSidebarItem.vue'
-import ProgressSidebar from './progressSidebar'
 import ColorButton from '../../../../components/ColorButton'
 import EventConceptEditForm from './EventConceptEditForm'
 export default {
@@ -229,9 +222,6 @@ export default {
     Drop,
     SlideYDownTransition,
     InputMask,
-    SideBar,
-    SidebarItem,
-    ProgressSidebar,
     Modal,
     ColorButton,
     EventConceptEditForm

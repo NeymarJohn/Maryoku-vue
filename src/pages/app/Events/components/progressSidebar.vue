@@ -167,7 +167,7 @@ export default {
       const concept = {
         title: 'Choose Concept',
         status: 'not-complete',
-        route: 'choose-concept',
+        route: 'booking/concept',
         icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
         progress: 0
       };
@@ -181,7 +181,7 @@ export default {
       const timeline = {
         title: 'Generate timeline',
         status: 'current',
-        route: 'edit/timeline',
+        route: 'booking/timeline',
         icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
         progress: 0
       };

@@ -125,14 +125,17 @@ const actions = {
     })
   },
 
-  updateComment({commit, state}, comment) {
+  updateCommentAction({commit, state}, comment) {
+    alert();
     return new Promise((resolve, reject) => {
       const commentComponent = new EventCommentComponent({id: comment.eventCommentComponent.id})
       new EventComment(comment)
         .for(commentComponent)
         .save()
         .then(res => {
+          console.log(res)
           // commit('updateCommentComponent', res.item)
+          alert("teset")
           resolve(res)
         })
     })
