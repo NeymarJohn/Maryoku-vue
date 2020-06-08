@@ -15,7 +15,6 @@
         "build": "node build/build.js"
     },
     "dependencies": {
-        "@branu-jp/v-drag": "^0.1.0",
         "@tweenjs/tween.js": "17.2.0",
         "axios": "^0.18.1",
         "chartist": "0.11.0",

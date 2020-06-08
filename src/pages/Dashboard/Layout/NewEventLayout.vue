@@ -1,15 +1,24 @@
 <template>
-  <div :class="[{'nav-open': $sidebar.showSidebar}, {'rtl': $route.meta.rtlActive}]">
+  <div   :class="[{'nav-open': $sidebar.showSidebar}, {'rtl': $route.meta.rtlActive}]">
     <notifications></notifications>
+<!--    <new-side-bar>-->
+<!--      &lt;!&ndash;<user-menu></user-menu>&ndash;&gt;-->
+<!--      <mobile-menu></mobile-menu>-->
+<!--      <template slot="links">-->
+<!--        <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Create Event',  icon: 'event', path: '/event/create'}"></sidebar-item>-->
+<!--        <sidebar-item name="left-menu-events-list" class="left-menu-events-list" :link="{name: 'Events List',  icon: 'event', path: '/events'}"></sidebar-item>-->
+<!--        <sidebar-item name="left-menu-yearly-plan" class="left-menu-yearly-plan" :link="{name: 'Year Planner',  icon: 'event', path: '/planner'}"></sidebar-item>-->
+<!--        <sidebar-item name="left-menu-vendors-list" class="left-menu-vendors-list" :link="{name: 'Vendors Pool', icon: 'contacts', path: '/vendors-pool'}">-->
+<!--        </sidebar-item>-->
+<!--      </template>-->
+<!--    </new-side-bar>-->
     <div class="main-panel" style="height: 50%;">
-      <div
-        :class="{content: !$route.meta.hideContent}"
-        @click="toggleSidebar"
-        style="padding-right : 0;"
-      >
-        <!-- your content here -->
-        <side-bar :event="eventData"></side-bar>
+<!--      <div class="top-navbar-section" style="background : #fff;">-->
+<!--        <top-navbar></top-navbar>-->
+<!--      </div>-->
+      <div :class="{content: !$route.meta.hideContent}" @click="toggleSidebar" style="padding-right : 0;">
         <zoom-center-transition :duration="200" mode="out-in">
+          <!-- your content here -->
           <router-view></router-view>
         </zoom-center-transition>
       </div>
@@ -18,35 +27,36 @@
   </div>
 </template>
 <script>
-import PerfectScrollbar from "perfect-scrollbar";
-import "perfect-scrollbar/css/perfect-scrollbar.css";
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import Calendar from "@/models/Calendar";
-import CalendarEvent from "@/models/CalendarEvent";
-import EventModal from "../../app/Events/EventModal/";
-import EventPlannerVuexModule from "../../app/Events/EventPlanner.vuex";
-import TopNavbar from "./TopNavbar.vue";
-import ContentFooter from "./ContentFooter.vue";
-import MobileMenu from "./Extra/MobileMenu.vue";
-import UserMenu from "./Extra/UserMenu.vue";
-import { ZoomCenterTransition } from "vue2-transitions";
-import SideBar from "@/components/SidebarPlugin/NewSideBar";
+/* eslint-disable no-new */
+import PerfectScrollbar from 'perfect-scrollbar'
+import 'perfect-scrollbar/css/perfect-scrollbar.css'
+import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+import Calendar from '@/models/Calendar'
+import CalendarEvent from '@/models/CalendarEvent'
 
+import EventModal from '../../app/Events/EventModal/'
+import EventPlannerVuexModule from '../../app/Events/EventPlanner.vuex'
+
+import TopNavbar from './TopNavbar.vue'
+import ContentFooter from './ContentFooter.vue'
+import MobileMenu from './Extra/MobileMenu.vue'
+import UserMenu from './Extra/UserMenu.vue'
+import { ZoomCenterTransition } from 'vue2-transitions'
 // import auth from "src/auth";
-import EventSidePanel from "@/pages/app/Events/EventSidePanel";
+import EventSidePanel from '@/pages/app/Events/EventSidePanel'
 
-function hasElement(className) {
-  return document.getElementsByClassName(className).length > 0;
+function hasElement (className) {
+  return document.getElementsByClassName(className).length > 0
 }
 
-function initScrollbar(className) {
+function initScrollbar (className) {
   if (hasElement(className)) {
-    new PerfectScrollbar(`.${className}`);
+    new PerfectScrollbar(`.${className}`)
   } else {
     // try to init it later in case this component is loaded async
     setTimeout(() => {
-      initScrollbar(className);
-    }, 100);
+      initScrollbar(className)
+    }, 100)
   }
 }
 
@@ -56,70 +66,62 @@ export default {
     ContentFooter,
     MobileMenu,
     UserMenu,
-    ZoomCenterTransition,
-    SideBar
+    ZoomCenterTransition
   },
-  data() {
+  data () {
     return {
       // auth: auth,
       event: null,
       createEventModalOpen: false
-    };
+    }
   },
   methods: {
-    ...mapMutations("EventPlannerVuex", [
-      "setEventModal",
-      "setEditMode",
-      "setModalSubmitTitle",
-      "setEventModalAndEventData",
-      "setNumberOfParticipants"
+    ...mapMutations('EventPlannerVuex', [
+      'setEventModal',
+      'setEditMode',
+      'setModalSubmitTitle',
+      'setEventModalAndEventData',
+      'setNumberOfParticipants'
     ]),
-    ...mapActions("event", [
-      "getEventAction"
-    ]),
-    toggleSidebar() {
+    toggleSidebar () {
       if (this.$sidebar.showSidebar) {
-        this.$sidebar.displaySidebar(false);
+        this.$sidebar.displaySidebar(false)
       }
     },
-    openEventModal() {
-      this.setModalSubmitTitle("Create");
-      let now = new Date();
-      this.createEventModalOpen = true;
+    openEventModal () {
+      this.setModalSubmitTitle('Create')
+      let now = new Date()
+      this.createEventModalOpen = true
       window.currentPanel = this.$showPanel({
         component: EventSidePanel,
-        cssClass: "md-layout-item md-size-40 transition36 ",
-        openOn: "right",
+        cssClass: 'md-layout-item md-size-40 transition36 ',
+        openOn: 'right',
         disableBgClick: false,
         props: {
-          modalSubmitTitle: "Save",
+          modalSubmitTitle: 'Save',
           editMode: false,
-          sourceEventData: {
-            eventStartMillis: new Date().getTime(),
-            numberOfParticipants: this.$auth.user.customer.numberOfEmployees
-          },
+          sourceEventData: {eventStartMillis: new Date().getTime(), numberOfParticipants: this.$auth.user.customer.numberOfEmployees},
           refreshEvents: null,
           year: now.getFullYear(),
           month: now.getMonth(),
           occasionsOptions: this.occasionsArray,
           openInPlannerOption: false
         }
-      });
+      })
 
       window.currentPanel.promise.then(res => {
-        this.createEventModalOpen = false;
-      });
+        this.createEventModalOpen = false
+      })
     }
+
   },
-  created() {
-    this.$store.registerModule("EventPlannerVuex", EventPlannerVuexModule);
+  created () {
+    this.$store.registerModule('EventPlannerVuex', EventPlannerVuexModule)
   },
-  mounted() {
-    const calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
-    // console.log("calender", calendar)
-    const eventId = this.$route.params.id
-    this.getEventAction({eventId, calendar});
+  mounted () {
+
     /*  NEET CODE REVIEW !!!!!!!!!!!!!!!!!!!! */
+
     // this.$auth.currentUser(this, true, function(){
     //   let docClasses = document.body.classList;
     //   let isWindows = navigator.platform.startsWith("Win");
@@ -128,6 +130,7 @@ export default {
     //     initScrollbar("sidebar");
     //     initScrollbar("sidebar-wrapper");
     //     initScrollbar("main-panel");
+
     //     docClasses.add("perfect-scrollbar-on");
     //   } else {
     //     docClasses.add("perfect-scrollbar-off");
@@ -135,45 +138,43 @@ export default {
     // });
   },
   computed: {
-    ...mapState('event', [
-      'eventData',
-    ]),
-  },
-};
+
+  }
+}
 </script>
 <style lang="scss">
-.menu-divider {
-  height: 1px;
-  margin-top: 10px;
-  background-color: rgba(0, 0, 0, 0.12);
-}
-
-$scaleSize: 0.95;
-@keyframes zoomIn95 {
-  from {
-    opacity: 0;
-    transform: scale3d($scaleSize, $scaleSize, $scaleSize);
+  .menu-divider {
+    height: 1px;
+    margin-top: 10px;
+    background-color: rgba(0, 0, 0, .12);
   }
-  to {
-    opacity: 1;
-  }
-}
 
-.main-panel .zoomIn {
-  animation-name: zoomIn95;
-}
-
-@keyframes zoomOut95 {
-  from {
-    opacity: 1;
+  $scaleSize: 0.95;
+  @keyframes zoomIn95 {
+    from {
+      opacity: 0;
+      transform: scale3d($scaleSize, $scaleSize, $scaleSize);
+    }
+    to {
+      opacity: 1;
+    }
   }
-  to {
-    opacity: 0;
-    transform: scale3d($scaleSize, $scaleSize, $scaleSize);
-  }
-}
 
-.main-panel .zoomOut {
-  animation-name: zoomOut95;
-}
+  .main-panel .zoomIn {
+    animation-name: zoomIn95;
+  }
+
+  @keyframes zoomOut95 {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+      transform: scale3d($scaleSize, $scaleSize, $scaleSize);
+    }
+  }
+
+  .main-panel .zoomOut {
+    animation-name: zoomOut95;
+  }
 </style>

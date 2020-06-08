@@ -213,7 +213,7 @@
             </td>
           </tr>
           <template v-if="showTips">
-            <tr class="extra" v-if="event.allocatedTips>0">
+            <tr class="extra">
               <td width="40%" class="event-block-element extra">
                 <popup ref="popup">
                   <template slot="content">
@@ -265,7 +265,7 @@
                 <hr />
               </td>
             </tr>
-            <tr class="extra" >
+            <tr class="extra">
               <td width="40%" class="event-block-element extra">
                 <img src="http://static.maryoku.com/storage/icons/budget screen/SVG/fees-gray.svg" />
                 Fees 3%

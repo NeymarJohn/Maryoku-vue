@@ -1,5 +1,7 @@
 <template>
   <div class="md-layout booking-section" v-if="selectedBlock">
+    <side-bar :event="event"></side-bar>
+    <progress-sidebar></progress-sidebar>
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-page-header md-layout-item md-size-100">
       <div class="header-title">
@@ -8,7 +10,7 @@
             :src="`${budgetElementsIConsURL}${selectedBlock.componentId}.svg`"
             style="width:30px; margin-right:0.5em"
           />
-          {{selectedBlock.bookTitle}}
+          Book {{selectedBlock.title}}
         </h3>
       </div>
       <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
@@ -186,6 +188,8 @@ import { Modal } from "@/components";
 import EventComponentVendor from "@/models/EventComponentVendor";
 import EventComponentProperty from "@/models/EventComponentProperty";
 
+import SideBar from "../../../../components/SidebarPlugin/NewSideBar";
+import SidebarItem from "../../../../components/SidebarPlugin/NewSidebarItem.vue";
 import ProgressSidebar from "./progressSidebar";
 import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
 import HeaderActions from "@/components/HeaderActions";
@@ -201,6 +205,8 @@ export default {
     Drop,
     SlideYDownTransition,
     InputMask,
+    SideBar,
+    SidebarItem,
     ProgressSidebar,
     Modal,
     EventChangeProposalModal,

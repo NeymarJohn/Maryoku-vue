@@ -125,27 +125,14 @@ const actions = {
     })
   },
 
-  updateCommentAction({commit, state}, comment) {
+  updateComment({commit, state}, comment) {
     return new Promise((resolve, reject) => {
       const commentComponent = new EventCommentComponent({id: comment.eventCommentComponent.id})
       new EventComment(comment)
         .for(commentComponent)
         .save()
         .then(res => {
-          console.log(res)
           // commit('updateCommentComponent', res.item)
-          resolve(res)
-        })
-    })
-  },
-  deleteCommentAction({commit, state}, comment) {
-    console.log(comment)
-    return new Promise((resolve, reject) => {
-      const eventCommentComponent = new EventCommentComponent({id: comment.id})
-      new EventComment(comment)
-        .for(eventCommentComponent)
-        .delete()
-        .then(res => {
           resolve(res)
         })
     })

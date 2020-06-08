@@ -1,5 +1,6 @@
 <template>
   <div class="md-layout event-details-overview edit-event-details" v-if="event">
+    <side-bar :event="event"></side-bar>
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-details-header md-layout-item md-size-100">
       <div class="event-details-info d-flex justify-content-start">

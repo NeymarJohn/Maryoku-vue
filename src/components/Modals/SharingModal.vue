@@ -9,13 +9,10 @@
       <div class="md-layout maryoku-modal-body">
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black mt-40">Link sharing on</label>
-          <div>
-            <span style="padding-bottom: 10px">Anyone with this link </span>
-            <md-button class="md-simple md-red edit-btn">Can view</md-button>
-          </div>
-          <maryoku-input inputStyle="normal" v-model="sharingLink" readonly></maryoku-input>
+          <div>Anyone with this link Can view</div>
+          <maryoku-input inputStyle="normal" v-model="editingVendor.vendorDisplayName"></maryoku-input>
           <button type="button"
-            v-clipboard:copy="sharingLink"
+            v-clipboard:copy="message"
             v-clipboard:success="onCopy"
             v-clipboard:error="onError">Copy!</button>
         </div>
@@ -29,7 +26,7 @@
     <template slot="footer">
       <md-button
         class="md-button md-black md-simple md-theme-default"
-        @click="onCancel()"
+        @click="remindLater"
       >Cancel</md-button>
       <md-button class="md-red md-bold add-category-btn" @click="updateMyVendor">Send</md-button>
     </template>
@@ -47,8 +44,7 @@ export default {
   },
   props: {
     show: [Boolean],
-    value: [Number],
-    sharingLink: [String]
+    value: [Number]
   },
   data: () => {
     return {
@@ -56,6 +52,7 @@ export default {
       location: "",
       currentAttachments: [],
       isLoading: false,
+      message:"this test",
       editingVendor: {
         vendorDisplayName: "",
         cost: "",
@@ -87,9 +84,6 @@ export default {
     },
     onError: function (e) {
       alert('Failed to copy texts')
-    },
-    onCancel: function(e) {
-      this.$emit("cancel")
     }
   }
 };

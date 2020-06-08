@@ -19,36 +19,44 @@
           </div>
           <div class="card">
             <div class="rules">
-              <div class="rule" v-for="(r, rIndex) in defRules.split(', ')" :key="rIndex">
+              <div 
+                class="rule" 
+                v-for="(r, rIndex) in policies.filter(p => p.category == vendor.businessCategory)[0].items" 
+                :key="rIndex"
+              >
                 <div class="left">
-                  {{r}}
+                  {{r.name}}
                 </div>
                 <div class="right">
                   <div class="top">
-                    <div class="item" @click="yesRule(r)">
-                      <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="yesRules.includes(r)"/>
-                      <span class="unchecked" v-else></span>
-                      Yes
-                    </div>
-                    <div class="item" @click="noRule(r)">
-                      <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="noRules.includes(r)"/>
-                      <span class="unchecked" v-else></span>
-                      No
-                    </div>
-                    <div class="item" v-if="!noteRules.includes(r)" @click="noteRule(r)">
-                      <a class="note">
-                        + Add Note
-                      </a>
-                    </div>
-                    <div class="item noflex" v-else>
-                      <textarea placeholder="Except from the parking area" rows="3"/>
-                      <br/>
-                      <a class="cancel" @click="noteRule(r)">
-                        Cancel
-                      </a>
-                    </div>
+                    <template v-if="r.type==Boolean">
+                      <div class="item" @click="yesRule(r)">
+                        <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="yesRules.includes(r)"/>
+                        <span class="unchecked" v-else></span>
+                        Yes
+                      </div>
+                      <div class="item" @click="noRule(r)">
+                        <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="noRules.includes(r)"/>
+                        <span class="unchecked" v-else></span>
+                        No
+                      </div>
+                    </template>
+                    <template v-if="r.type==String">
+                      <div class="item" v-if="!noteRules.includes(r)" @click="noteRule(r)">
+                        <a class="note">
+                          + Add Note
+                        </a>
+                      </div>
+                      <div class="item noflex" v-else>
+                        <textarea placeholder="Except from the parking area" rows="3"/>
+                        <br/>
+                        <a class="cancel" @click="noteRule(r)">
+                          Cancel
+                        </a>
+                      </div>
+                    </template>
                   </div>
-                  <div class="bottom" v-if="yesRules.includes(r)">
+                  <div class="bottom no-margin" v-if="r.type == Number">
                     <span>Price for every extra hour</span>
                     <br/>
                     <div class="suffix">
@@ -96,9 +104,57 @@
               </div>
               <input type="text" class="" placeholder="Like: 60 days prior to the start of the event..."/>
             </div>
+            <div class="rules">
+              <div 
+                class="rule" 
+                v-for="(p, pIndex) in pricingPolicies.filter(p => p.category == vendor.businessCategory)[0].items" 
+                :key="pIndex"
+              >
+                <div class="left">
+                  {{p.name}}
+                </div>
+                <div class="right">
+                  <div class="top">
+                    <template v-if="p.type == Boolean">
+                      <div class="item" @click="yesRule(p)">
+                        <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="yesRules.includes(p)"/>
+                        <span class="unchecked" v-else></span>
+                        Yes
+                      </div>
+                      <div class="item" @click="noRule(p)">
+                        <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="noRules.includes(p)"/>
+                        <span class="unchecked" v-else></span>
+                        No
+                      </div>
+                    </template>
+                    <template v-if="p.type == String">
+                      <div class="item" v-if="!noteRules.includes(p)" @click="noteRule(p)">
+                        <a class="note">
+                          + Add Note
+                        </a>
+                      </div>
+                      <div class="item noflex" v-else>
+                        <textarea placeholder="Except from the parking area" rows="3"/>
+                        <br/>
+                        <a class="cancel" @click="noteRule(p)">
+                          Cancel
+                        </a>
+                      </div>
+                    </template>
+                  </div>
+                  <div class="bottom no-margin" v-if="p.type == Number">
+                    <span>Price for every extra hour</span>
+                    <br/>
+                    <div class="suffix">
+                      <input type="text" class="" placeholder="00.00"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="field mb-50">
               <v-signup-add-rules
-                :comType="'policy'"
+                :comType="'rule'"
                 :title="policyDesc"
               />
             </div>
@@ -117,7 +173,7 @@
             </div>
           </div>
         </div>
-        <div class="3rd-party-vendor-wrapper mb-50">
+        <div class="3rd-party-vendor-wrapper mb-50" v-if="vendor.businessCategory == 'venuerental'">
           <div class="title-cont">
             <div class="top">
               <h5>3rd party vendor</h5>
@@ -281,6 +337,7 @@ export default {
   props: {
     categories: Array,
     icon: String,
+    vendor: Object,
   },
   components: {
     VueElementLoading,
@@ -290,7 +347,6 @@ export default {
   },
   data() {
     return {
-      vendor: null,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
       allowThirdVendor: null,
       workAllDay: false,
@@ -306,10 +362,11 @@ export default {
           if: 'the client cancel the event after:',
           than: 'the client wil pay:',
         },
-        placeholder: {
-          if: 'Like two weeks before the event ',
-          than: 'Like: 30% of deposit',
-        },
+        placeholder: 'Like two weeks before the event '
+        // placeholder: {
+        //   if: 'Like two weeks before the event ',
+        //   than: 'Like: 30% of deposit',
+        // },
       },
       yesRules: [],
       noRules: [],
@@ -333,10 +390,562 @@ export default {
       exDont: false,
       exLimitation: false,
       exDonts: [],
-      defRules: 'Suitable for pets, Smoking allowed, Suitable for infants(Under 2 years), Dress code, Overtime Cost',
       notAllowed: [],
       isOtherNa: false,
-      defNa: 'Catering, Dj, Photographer, Show / Performance, Flowers, Transporation, Decoration, Rentals, Favours & Gifts, Other'
+      defNa: 'Photographer, Food & Beverage, Decor, Rentals, Entertainment',
+      policies: [
+        {
+          category: 'venuerental',
+          items: [
+            {
+              name: 'Allowed use of outside vendors', 
+              type: Boolean
+            },
+            {
+              name: 'Minimum amount of hours', 
+              type: Number
+            },
+            {
+              name: 'Suitable for infants', 
+              type: Boolean
+            },
+            {
+              name: 'Audio restrictions', 
+              type: Boolean
+            },
+            {
+              name: 'Decor restrictions', 
+              type: Boolean
+            },
+            {
+              name: 'Dress code', 
+              type: Boolean
+            },
+            {
+              name: 'Minimum Spend',
+              type: Boolean
+            },
+            {
+              name: 'Dry Hire',
+              type: Boolean
+            },
+            {
+              name: 'Pets',
+              type: Boolean
+            }
+          ]
+        },
+        {
+          category: 'foodandbeverage',
+          items: [
+            {
+              name: 'Tastings prior to booking',
+              type: Boolean
+            },
+            {
+              name: 'Allow customer provided liquor',
+              type: Boolean
+            }
+          ]
+        },
+        {
+          category: 'decor',
+          items: [
+            {
+              name: 'Room temperature constraints',
+              type: String
+            },
+            {
+              name: 'Flexible time requirement for setup',
+              type: String
+            }
+          ]
+        },
+        {
+          category: 'corporatesocialresponsibility',
+          items: []
+        },
+        {
+          category: 'signageprinting',
+          items: []
+        },
+        {
+          category: 'advertising-promotion',
+          items: []
+        },
+        {
+          category: 'audiovisualstagingservices',
+          items: [
+            {
+              name: 'Accept staff attire request',
+              type: Boolean
+            },
+            {
+              name: 'Simulcasting bandwidth requirements',
+              type: Number
+            },
+            {
+              name: 'Union crew restrictions',
+              type: Boolean
+            },
+          ]
+        },
+        {
+          category: 'swags',
+          items: [
+            {
+              name: 'Allow pickup',
+              type: Boolean
+            },
+            {
+              name: 'Minimum size order',
+              type: String
+            }
+          ]
+        },
+        {
+          category: 'shipping',
+          items: []
+        },
+        {
+          category: 'transportation',
+          items: []
+        },
+        {
+          category: 'entertainment',
+          items: [
+            {
+              name: 'Accept requests from guests',
+              type: Boolean
+            },
+            {
+              name: 'Continuous band play time',
+              type: Boolean
+            },
+            {
+              name: 'Max group size',
+              type: Boolean
+            },
+            {
+              name: 'Accessibility of activity', 
+              type: Boolean
+            },
+            {
+              name: 'Age restrictions',
+              type: Boolean
+            },
+            {
+              name: 'Time of day',
+              type: Boolean
+            },
+            {
+              name: 'Performer require a meal',
+              type: Boolean
+            },
+            {
+              name: 'Minimum Setup time required',
+              type: Number
+            },
+            {
+              name: 'Number of breaks',
+              type: Number
+            },
+            {
+              name: 'Additional requirements from venue',
+              type: String
+            },
+            {
+              name: 'Power supply needs',
+              type: String
+            },
+            {
+              name: 'Flexible to different dress codes',
+              type: Boolean
+            },
+            {
+              name: 'Meet before signing contract',
+              type: Boolean
+            },
+            {
+              name: 'Arrival onsite before the event',
+              type: Boolean
+            },
+            {
+              name: 'Losgistics',
+              type: Boolean
+            },
+          ]
+        },
+        {
+          category: 'administration',
+          items: []
+        },
+        {
+          category: 'securityservices',
+          items: [
+            {
+              name: 'Visit the venue in advance',
+              type: Boolean
+            },
+            {
+              name: 'Minimum hours of service',
+              type: Boolean
+            },
+            {
+              name: 'Max hours per shift',
+              type: Boolean
+            },
+            {
+              name: 'Dress code',
+              type: String
+            },
+          ]
+        },
+        {
+          category: 'technologyservices',
+          items: []
+        },
+        {
+          category: 'videographyandphotography',
+          items: [
+            {
+              name: 'Flexible to last minute onsite changes',
+              type: Boolean
+            },
+            {
+              name: 'Minimum amount of hours',
+              type: Number
+            },
+            {
+              name: 'Need to control room lighting',
+              type: Boolean
+            },
+            {
+              name: 'Minimum internet bandwidth (Simulticasting, Streaming)',
+              type: Number
+            },
+            {
+              name: 'Flexibility to operate with additional Photo / Video companies during the event',
+              type: Boolean
+            },
+          ]
+        },
+      ],
+      pricingPolicies: [
+        {
+          category: 'venuerental',
+          items: [
+            {
+              name: 'Hours included in rental',
+              type: Number
+            },
+            {
+              name: 'Setup hours included in rental',
+              type: Boolean
+            },
+            {
+              name: 'Extra Guest (beyond agreed upon)',
+              type: Number
+            },
+            {
+              name: 'Overtime Cost',
+              type: Number
+            },
+            {
+              name: 'Late Night fares',
+              type: Number
+            },
+            {
+              name: 'Discount for large quantities',
+              type: Number
+            },
+            {
+              name: 'Tax rate',
+              type: Number
+            },
+            {
+              name: 'Suggested Gratuity',
+              type: Number
+            },
+          ]
+        },
+        {
+          category: 'foodandbeverage',
+          items: [
+            {
+              name: 'Travel cost',
+              type: Number
+            },
+            {
+              name: 'Pickup',
+              type: Number
+            },
+            {
+              name: 'Cleanup',
+              type: Number
+            },
+            {
+              name: 'Breakdown',
+              type: Number
+            },
+            {
+              name: 'Discount for large quantities',
+              type: Boolean
+            },
+            {
+              name: 'Late Night fares',
+              type: Number
+            },
+            {
+              name: 'Discount for large quantities',
+              type: Number
+            },
+            {
+              name: 'Tax rate',
+              type: Number
+            },
+            {
+              name: 'Suggested Gratuity',
+              type: Number
+            },
+          ]
+        },
+        {
+          category: 'decor',
+          items: [
+            {
+              name: 'Delivery',
+              type: Number
+            },
+            {
+              name: 'Setup',
+              type: Number
+            },
+            {
+              name: 'Working with unions',
+              type: Boolean
+            },
+            {
+              name: 'Discounts for large quantities',
+              type: Boolean
+            },
+            {
+              name: 'Tax rate',
+              type: Number
+            },
+            {
+              name: 'Suggested Gratuity',
+              type: Number
+            },
+          ]
+        },
+        {
+          category: 'corporatesocialresponsibility',
+          items: []
+        },
+        {
+          category: 'signageprinting',
+          items: []
+        },
+        {
+          category: 'advertising-promotion',
+          items: []
+        },
+        {
+          category: 'audiovisualstagingservices',
+          items: [
+            {
+              name: 'Rushed job',
+              type: Number
+            },
+            {
+              name: 'Overtime',
+              type: Number
+            },
+            {
+              name: 'Tax rate',
+              type: Number
+            },
+            {
+              name: 'Discounts',
+              type: Boolean
+            },
+            {
+              name: 'Suggested Gratuity',
+              type: Number
+            },
+          ]
+        },
+        {
+          category: 'swags',
+          items: [
+            {
+              name: 'Rushed orders',
+              type: Boolean
+            },
+            {
+              name: 'Delivery',
+              type: Boolean
+            },
+            {
+              name: 'preparing file for printing',
+              type: Boolean
+            },
+            {
+              name: 'Multiple print locations',
+              type: Boolean
+            },
+            {
+              name: 'Number of different colors',
+              type: Boolean
+            },
+            {
+              name: 'Tax rate',
+              type: Number
+            },
+            {
+              name: 'Discount for large quantites',
+              type: Boolean
+            },
+            {
+              name: 'Suggested Gratuity',
+              type: Number
+            },
+          ]
+        },
+        {
+          category: 'shipping',
+          items: []
+        },
+        {
+          category: 'transportation',
+          items: [
+            {
+              name: 'Tax rate',
+              type: Number
+            },
+            {
+              name: 'Large setup discounts',
+              type: Boolean
+            },
+            {
+              name: 'Suggested Gratuity',
+              type: Number
+            },
+          ]
+        },
+        {
+          category: 'entertainment',
+          items: [
+            {
+              name: 'Hours included in service',
+              type: Number
+            },
+            {
+              name: 'Rushed setup',
+              type: Boolean
+            },
+            {
+              name: 'Rehersal time for the band (for special requests)',
+              type: Number
+            },
+            {
+              name: 'Special operating time',
+              type: Boolean
+            },
+            {
+              name: 'Extra for prizes',
+              type: Boolean
+            },
+            {
+              name: 'Overtime charges',
+              type: Boolean
+            },
+            {
+              name: 'Tax rate',
+              type: Number
+            },
+            {
+              name: 'Large group discounts',
+              type: Boolean
+            },
+            {
+              name: 'Suggested Gratuity',
+              type: Number
+            },
+          ]
+        },
+        {
+          category: 'administration',
+          items: []
+        },
+        {
+          category: 'securityservices',
+          items: [
+            {
+              name: 'Pre-selection personal',
+              type: Boolean
+            },
+            {
+              name: 'Number of hours',
+              type: Boolean
+            },
+            {
+              name: 'Level of security training/certification',
+              type: Boolean
+            },
+            {
+              name: 'Special attire requests',
+              type: Boolean
+            },
+            {
+              name: 'Tax rate',
+              type: Number
+            },
+            {
+              name: 'Large group discounts',
+              type: Boolean
+            },
+            {
+              name: 'Suggested Gratuity',
+              type: Number
+            },
+          ]
+        },
+        {
+          category: 'technologyservices',
+          items: []
+        },
+        {
+          category: 'videographyandphotography',
+          items: [
+            {
+              name: 'Overtime charge',
+              type: Number
+            },
+            {
+              name: 'Travel to multiple location',
+              type: Number
+            },
+            {
+              name: 'Over number of pictures taken',
+              type: Number
+            },
+            {
+              name: 'Discount for large discounts',
+              type: Boolean
+            },
+            {
+              name: 'Tax rate',
+              type: Number
+            },
+            {
+              name: 'Suggested Gratuity',
+              type: Number
+            },
+          ]
+        },
+      ]
     }
   },
   created() {
@@ -712,7 +1321,7 @@ export default {
             .item {
               display: flex;
               justify-content: flex-start;
-              margin-right: 4rem;
+              margin-right: 2rem;
               text-align: right;
               cursor: pointer;
 
@@ -753,6 +1362,7 @@ export default {
                 width: 100%!important;
               }
               &.noflex {
+                flex: 1;
                 display: inline-block;
                 cursor: none;
               }
@@ -792,6 +1402,9 @@ export default {
       width: 75%;
       padding: 1.5rem 2rem;
       font-size: 16px;
+    }
+    .no-margin {
+      margin: 0!important; 
     }
   }  
 </style>

@@ -63,12 +63,12 @@
         <sidebar-item
           name="left-menu-events-list"
           class="left-menu-events-list"
-          :link="{name: 'Event Details',  icon: 'outlined_flag', path: '/events/' + event.id +'/overview'}"
+          :link="{name: 'Event Details',  icon: 'outlined_flag', path: '/events/' + event.id +'/edit/event'}"
         ></sidebar-item>
         <sidebar-item
           name="left-menu-events-list"
           class="left-menu-events-list"
-          :link="{name: 'Events Lists',  icon: 'check_circle_outline', path: '/events/'+ event.id +'/booking'}"
+          :link="{name: 'Events Lists',  icon: 'check_circle_outline', path: '/events/'+ event.id +'/edit/timeline'}"
         ></sidebar-item>
         <sidebar-item
           name="left-menu-yearly-plan"

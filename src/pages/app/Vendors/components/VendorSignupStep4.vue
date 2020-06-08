@@ -27,32 +27,32 @@
           <div class="about-cont" id="About">
             <div class="block">
               <span class="capacity"><img :src="`${iconUrl}Asset 545.svg`"/>Capacity</span>
-              <span class="number">1000 <img :src="`${iconUrl}Group 4585 (2).svg`"/> 2000</span>
+              <span class="number">{{vendor.capacity.low}} <img :src="`${iconUrl}Group 4585 (2).svg`"/> {{vendor.capacity.high}}</span>
             </div>
             <div class="block">
               <div class="title lg">
                 <img :src="`${iconUrl}Asset 563.svg`"/> ABOUT
               </div>
               <div class="desc">
-                Lorem
+                {{vendor.about.company}}
               </div>
             </div>
             <div class="block">
               <div class="title">
-                <img :src="`${iconUrl}Asset 543.svg`"/> About Our {{vendor.businessCategory}}
+                <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.businessCategory)}`"/> About Our {{getCategoryNameByValue(vendor.businessCategory)}}
               </div>
               <div class="desc">
-                Lorem
+                {{vendor.about.venue}}
               </div>
             </div>
-            <div class="block">
+            <!-- <div class="block">
               <div class="title">
                 <img :src="`${iconUrl}Group 1471 (2).svg`"/> About Our Cuisine
               </div>
               <div class="desc">
                 Lorem
               </div>
-            </div>
+            </div> -->
             <div class="images">
               <img :src="img" v-for="(img, ind) in vendor.images" :key="ind"/>
             </div>
@@ -74,13 +74,13 @@
               Website & social
               <div class="items">
                 <div class="item">
-                  <img :src="`${iconUrl}Asset 539.svg`"/> Website
+                  <img :src="`${iconUrl}Asset 539.svg`"/> {{vendor.social.website}}
                 </div>
                 <div class="item">
-                  <img :src="`${iconUrl}Group 4569 (2).svg`"/> Instagram
+                  <img :src="`${iconUrl}Group 4569 (2).svg`"/> {{vendor.social.instagram}}
                 </div>
                 <div class="item">
-                  <img :src="`${iconUrl}Asset 540.svg`"/> Facebook
+                  <img :src="`${iconUrl}Asset 540.svg`"/> {{vendor.social.facebook}}
                 </div>
               </div>
             </div>
@@ -287,7 +287,84 @@ export default {
       expanded: false,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
       defRules: 'Suitable for pets, Smoking allowed, Suitable for infants(Under 2 years), Dress code, Overtime Cost',
-      defNa: 'Catering, Dj, Photographer, Show / Performance, Flowers, Transporation, Decoration, Rentals, Favours & Gifts, Other'
+      defNa: 'Catering, Dj, Photographer, Show / Performance, Flowers, Transporation, Decoration, Rentals, Favours & Gifts, Other',
+      categoryNames: [
+        {
+          name: 'Venue Rental',
+          value: 'venuerental',
+          icon: 'venuerental.svg'
+        },
+        {
+          name: 'Food & Beverage',
+          value: 'foodandbeverage',
+          icon: 'foodandbeverage.svg'
+        },
+        {
+          name: 'Design and Decor',
+          value: 'decor',
+          icon: 'decor.svg'
+        },
+        {
+          name: 'Guest Services & Staffing',
+          value: 'corporatesocialresponsibility',
+          icon: 'corporatesocialresponsibility.svg'
+        },
+        {
+          name: 'Signage / Printing',
+          value: 'signageprinting',
+          icon: 'signageprinting.svg'
+        },
+        {
+          name: 'Advertising and Promotion',
+          value: 'advertising-promotion',
+          icon: 'advertising-promotion.svg'
+        },
+        {
+          name: 'AV / Staging',
+          value: 'audiovisualstagingservices',
+          icon: 'audiovisualstagingservices.svg'
+        },
+        {
+          name: 'Swags',
+          value: 'swags',
+          icon: 'swags.svg'
+        },
+        {
+          name: 'Shipping',
+          value: 'shipping',
+          icon: 'shipping.svg'
+        },
+        {
+          name: 'Transportation & Tour operator',
+          value: 'transportation',
+          icon: 'transportation.svg'
+        },
+        {
+          name: 'Entertainment',
+          value: 'entertainment',
+          icon: 'entertainment.svg'
+        },
+        {
+          name: 'Administration',
+          value: 'administration',
+          icon: 'administration.svg'
+        },
+        {
+          name: 'Security',
+          value: 'securityservices',
+          icon: 'securityservices.svg'
+        },
+        {
+          name: 'Technology',
+          value: 'technologyservices',
+          icon: 'technologyservices.svg'
+        },
+        {
+          name: 'Videography and Photography',
+          value: 'videographyandphotography',
+          icon: 'videographyandphotography.svg'
+        },
+      ],
     }
   },
   created() {
@@ -306,7 +383,13 @@ export default {
         top: y + yOffset,
         behavior: 'smooth'
       }) 
-    }
+    },
+    getCategoryIconByValue(value) {
+      return this.categoryNames.filter( c => c.value == value)[0].icon
+    },
+    getCategoryNameByValue(value) {
+      return this.categoryNames.filter( c => c.value == value)[0].name
+    },
   },
   computed: {
     
@@ -426,7 +509,7 @@ export default {
             }
             .images {
               display: block;
-              overflow-x: scroll;
+              overflow-x: auto;
               padding: 2rem 0;
               white-space: nowrap;
 
@@ -454,6 +537,7 @@ export default {
                   text-decoration: underline;
                   img {
                     width: 24px;
+                    height: 24px;
                     margin-right: 1rem;
                   }
                 }
@@ -471,6 +555,7 @@ export default {
                   font: bold 16px Manrope-Regular, sans-serif;
                   img {
                     width: 24px;
+                    height: 24px;
                     margin-right: 1rem;
                   }
                 }

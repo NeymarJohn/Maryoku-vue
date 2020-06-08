@@ -1,16 +1,16 @@
 <template>
-  <dragging-component class="maryoku-component color-select-button" 
-    :class="{topIcon:showEditPane, dragging:isDragging}" ref="draggingComp"
+  <drag-it-dude class="maryoku-component color-select-button" :class="{topIcon:showEditPane}" ref="draggingComp"
     @dropped="onDropped(commentComponent)"
     @dragging="onDragging(commentComponent)"
     @activated="onActivated(commentComponent)"
     >
+    
         <md-button
           class="add-button md-just-icon md-white"
           @click="toggleEditPane( $event )"
           v-if="showEditPane"
         >
-          <img :src="`${$iconURL}common/message-yellow.svg`"  width="100%" style="width:30px">
+          <img :src="`${$iconURL}common/message-yellow.svg`"  width="100%">
         </md-button>
         <md-button
           class="add-button md-just-icon md-yellow"
@@ -21,15 +21,15 @@
         >
           <span> {{commentComponent.index}}</span>
         </md-button>
-    </dragging-component>
+    </drag-it-dude>
 </template>
 <script>
 import DragItDude from 'vue-drag-it-dude';
-import DraggingComponent from '@/components/DraggingComponent'
+
 export default {
   name: "comment-circle-button",
   components: {
-    DraggingComponent,
+    DragItDude,
   },
   props: {
     /**
@@ -73,7 +73,7 @@ export default {
         if (this.isDragging) return;
         this.$emit("show", this.commentComponent)
         this.showCommentList = true
-      },500)
+      },1000)
       
     },
     onDropped(component) {
@@ -91,12 +91,8 @@ export default {
     onDragging(component) {
       console.log("started dragging")
       this.isDragging = true
-      if (this.$refs.draggingComp.left > 0 && this.$refs.draggingComp.top > 0){
-        this.$emit("dragging", component, {x: this.$refs.draggingComp.left,y:this.$refs.draggingComp.top })
-      }
     },
     onActivated(component) {
-      console.log(this.$refs.draggingComp)
       console.log("started dragging")
       //this.isDragging = true
       // this.$emit("onDragginStart",component)  
@@ -127,10 +123,6 @@ export default {
     top: 0px;
     z-index: 30;
   }
-}
-.dragging {
-  width: 400px;
-  height: 400px;
 }
 .md-button.add-button {
   width: 38px;

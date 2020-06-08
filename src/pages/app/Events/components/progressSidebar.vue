@@ -141,6 +141,8 @@ export default {
   },
   methods: {
     isActiveRoute(item) {
+      console.log(this.currentUrl);
+      console.log(item.route)
       if (this.currentUrl.indexOf(item.route) > -1) {
         return "current";
       }
@@ -165,7 +167,7 @@ export default {
       const concept = {
         title: 'Choose Concept',
         status: 'not-complete',
-        route: 'booking/concept',
+        route: 'choose-concept',
         icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
         progress: 0
       };
@@ -179,7 +181,7 @@ export default {
       const timeline = {
         title: 'Generate timeline',
         status: 'current',
-        route: 'booking/timeline',
+        route: 'edit/timeline',
         icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
         progress: 0
       };
@@ -202,7 +204,7 @@ export default {
           resp.forEach(item => {
             if (item.componentId !== 'unexpected') {
               elements.push({
-                title:  item.bookTitle,
+                title: 'Book ' + item.title,
                 status: 'not-complete',
                 route: 'booking/' + item.id,
                 icon: `http://static.maryoku.com/storage/icons/Budget+Elements/${item.componentId}.svg`,
