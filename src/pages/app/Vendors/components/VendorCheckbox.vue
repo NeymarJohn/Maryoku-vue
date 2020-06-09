@@ -69,10 +69,15 @@
           <div class="dropdown-list" v-if="checked" @click="expanded=!expanded">
             <div class="">{{label}}</div>
           </div>
-          <div class="dropdown-cont" v-if="expanded">
+          <div class="dropdown-cont" v-if="expanded && checked">
+            <img :src="`${iconUrl}Asset 524.svg`"/>
             <ul>
               <li v-for="(a, aIndex) in item.available" :key="aIndex">
-                {{a}}
+                <div class="check-field" @click="updateExChecked(a)">
+                  <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="exChecked.includes(a)"/>
+                  <span class="blank-circle" v-else/>
+                  <span class="text" :class="{'checked': exChecked.includes(a)}">{{a}}</span>
+                </div>
               </li>
             </ul>
           </div>
@@ -118,6 +123,7 @@ export default {
       checked: false,
       included: true,
       expanded: false,
+      exChecked: [],
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
     }
   },
@@ -128,6 +134,13 @@ export default {
     
   },
   methods: {
+    updateExChecked(item) {
+      if (this.exChecked.includes(item)) {
+        this.exChecked = this.exChecked.filter(d => d != item)
+      } else {
+        this.exChecked.push(item)
+      }
+    },
     updateCheck() {
       this.checked = !this.checked
     },
@@ -190,7 +203,17 @@ export default {
           background-position: calc(100% - 1rem);
         }
         .dropdown-cont {
+          padding-top: 2rem;
+          display: flex;
+          align-items: flex-start;
+          img {
+            display: inline-block;
+            max-width: 30px;
+          }
           ul {
+            max-width: 50%;
+            border: 1px solid #050505;
+            box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.16);
             padding: 0;
             margin: 0;
             list-style: none;
@@ -200,6 +223,35 @@ export default {
             li {
               font: normal 16px Manrope-Regular, sans-serif;
               padding-bottom: .5rem;
+
+              .check-field {
+                cursor: pointer;
+                img {
+                  width: 27px;
+                  margin-right: 1rem;
+                }
+                span {
+                  &.blank-circle {
+                    border: 1px solid #050505;
+                    width: 25px;
+                    height: 25px;
+                    background-color: #ffffff;
+                    display: inline-block;
+                    border-radius: 50%;
+                    margin-right: 1rem;
+                  }
+                  &.text {
+                    position: relative;
+                    top: -8px;
+                  }
+                  &.checked {
+                    top: 0px;
+                    font: 600 16px Manrope-Regular, sans-serif;
+                    display: inline-block;
+                    margin-bottom: 9px;
+                  }
+                }
+              }
             }
           }
         }

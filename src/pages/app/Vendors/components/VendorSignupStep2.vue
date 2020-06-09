@@ -13,10 +13,9 @@
           <p>Mark all the services you can support and will be included in your proposal. If needed please add a decsription or amount.</p>
         </div>
         <vendor-service-item 
-          v-for="(c, cIndex) in categories" 
+          v-for="(c, cIndex) in categories.filter(category => category.name == vendor.businessCategory)[0].categories" 
           :key="cIndex"
           :serviceItem="c"
-          :businessCategory="vendor.businessCategory"
         />
       </div>
     </div>
