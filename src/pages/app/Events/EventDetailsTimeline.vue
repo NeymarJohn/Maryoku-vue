@@ -1,7 +1,5 @@
 <template>
   <div class="md-layout event-details-timeline timeline-section with-progress-bar">
-    <side-bar :event="event"></side-bar>
-    <progress-sidebar></progress-sidebar>
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-page-header md-layout-item md-size-100 with-bg">
       <div class="header-main-actions">
@@ -114,7 +112,7 @@
                       <div class="form-group">
                         <label>
                           <!-- <img class="time-line-blocks_icon"  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`"> -->
-                          Start At
+                          Start At 
                         </label>
                         <time-input v-model="item.startTime" :h24="false" displayFormat="hh:mm"></time-input>
                       </div>
@@ -129,7 +127,7 @@
                       <div class="form-group">
                         <label>
                           <!-- <img class="time-line-blocks_icon"  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`"> -->
-                          Finishes At
+                          Finishes At 
                         </label>
                         <time-input v-model="item.endTime" :h24="false" displayFormat="hh:mm"></time-input>
                       </div>
@@ -436,8 +434,6 @@ import html2canvas from "html2canvas";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./components/CommentEditorPanel";
 
-import SideBar from "../../../components/SidebarPlugin/NewSideBar";
-import SidebarItem from "../../../components/SidebarPlugin/NewSidebarItem.vue";
 import ProgressSidebar from "./components/progressSidebar";
 import TimeInput from "../../../components/TimeInput";
 
@@ -451,8 +447,6 @@ export default {
     Drop,
     SlideYDownTransition,
     InputMask,
-    SideBar,
-    SidebarItem,
     ProgressSidebar,
     Modal,
     TimeInput,
@@ -643,10 +637,10 @@ export default {
         setTimeout(this.updateTimelineITemsOrder, 100);
       }
       setTimeout(()=>{
-      const scrollBtn = this.$refs.scrollBtn
-            if (scrollBtn) {
-              scrollBtn.click()
-            }
+        const scrollBtn = this.$refs.scrollBtn
+        if (scrollBtn) {
+          scrollBtn.click()
+        }
       }, 100);
       
     },

@@ -4,7 +4,7 @@
       <div class="add-rule-cont">
         <h4>{{title.title}}</h4>
         <div class="field" :class="{'suffix': focusedRule != ''}">
-          <input :placeholder="title.placeholder" ref="additionalRule" v-model="focusedRule"/>
+          <input :placeholder="title.placeholder" v-model="focusedRule"/>
           <a :disabled="true" @click="addRule()">
             Add
           </a>
@@ -13,7 +13,7 @@
           <div class="rule" v-for="(r, rIndex) in rules" :key="rIndex">
             <span>{{r}}</span>
             <div class="actions">
-              <img :src="`${iconUrl}Asset 527.svg`" @click="editRule(r)"/>
+              <img :src="`${iconUrl}Asset 527.svg`"/>
               <img :src="`${iconUrl}Asset 529.svg`" @click="removeRule(r)"/>
             </div>
           </div>
@@ -31,7 +31,7 @@
             <div>
               <span><strong>If</strong>{{title.labels.if}}</span>
             </div>
-            <input :placeholder="title.placeholder.if" ref="ifPolicy" v-model="focusedCancelPolicy.if"/>
+            <input :placeholder="title.placeholder.if" v-model="focusedPolicy.if"/>
           </div>
           <div class="arrow">
             <img :src="`${iconUrl}Group 4585 (2).svg`"/>
@@ -40,7 +40,7 @@
             <div>
               <span><strong>Than</strong>{{title.labels.than}}</span>
             </div>
-            <input :placeholder="title.placeholder.than" ref="thanPolicy" v-model="focusedCancelPolicy.than"/>
+            <input :placeholder="title.placeholder.than" v-model="focusedPolicy.than"/>
           </div>
           <div class="action">
             <a :disabled="true" @click="addCancelPolicy()">
@@ -57,7 +57,7 @@
               <b>Than</b>{{p.than}}
             </div>
             <div class="actions">
-              <img :src="`${iconUrl}Asset 527.svg`" @click="editCancelPolicy(p)" />
+              <img :src="`${iconUrl}Asset 527.svg`"/>
               <img :src="`${iconUrl}Asset 529.svg`" @click="removeCancelPolicy(p)"/>
             </div>
           </div>
@@ -77,14 +77,16 @@ export default {
   props: {
     comType: String,
     title: Object,
-    items: Array
   },
   data: () => {
     return {
       rules: [],
-      policies: [],
+      policies: [{
+        if: 'the client cancel',
+        than: 'the client will pay'
+      }],
       focusedRule: null,
-      focusedCancelPolicy: {
+      focusedPolicy: {
         if: null,
         than: null
       },
@@ -92,36 +94,16 @@ export default {
     }
   },
   mounted () {
-    this.rules = this.items
   },
   methods: {
     addCancelPolicy() {
-      this.policies.push({
-        if: this.$refs.ifPolicy.value,
-        than: this.$refs.thanPolicy.value
-      })
-      this.$refs.ifPolicy.value = null
-      this.$refs.thanPolicy.value = null
-      this.focusedCancelPolicy = {
-        if: null,
-        than: null
-      }
-    },
-    editCancelPolicy(p) {
-      this.focusedCancelPolicy = this.policies.filter( policy => policy == p )[0]
-      this.policies = this.policies.filter( policy => policy != p)
+      this.policies.push(this.focusedPolicy)
     },
     removeCancelPolicy(p) {
       this.policies = this.policies.filter( policy => policy != p)
     },
     addRule() {
-      this.rules.push(this.$refs.additionalRule.value)
-      this.$refs.additionalRule.value = null
-      this.focusedRule = null
-    },
-    editRule(r) {
-      this.focusedRule = this.rules.filter( rule => rule == r )[0]
-      this.rules = this.rules.filter( rule => rule != r)
+      this.rules.push(this.focusedRule)
     },
     removeRule(r) {
       this.rules = this.rules.filter( rule => rule != r)

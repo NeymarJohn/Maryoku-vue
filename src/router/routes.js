@@ -53,6 +53,8 @@ import publicRegister from '@/pages/app/SinginSingup/publicRegister.vue'
 import EventDetailsBudget from "@/pages/app/Events/EventDetailsBudget.vue"
 import EventDetailsTimeline from "@/pages/app/Events/EventDetailsTimeline.vue"
 import BookingEvent from "@/pages/app/Events/components/BookingEvent.vue"
+import EventPlan from "@/pages/app/Events/EventPlan.vue"
+
 import EventConceptChoose from "@/pages/app/Events/components/EventConceptChoose.vue"
 import EventProposalDetails from "@/pages/app/Events/components/EventProposalDetails.vue"
 import ExportTimeLine from "@/pages/app/Events/components/ExportTimeLine.vue"
@@ -274,7 +276,7 @@ let marketPlacePages = {
       title: 'Choose Workspace',
       gtm: 'MarketPlace'
     }
-  } ]
+  }]
 }
 
 let emptyLayoutPages = {
@@ -608,7 +610,7 @@ let NewEventPages = {
     }
   },
   {
-    path: '/events/:id/edit/event',
+    path: '/events/:id/overview',
     name: 'EventDetailsOverView',
     component: EventDetailsOverView,
     meta: {
@@ -638,19 +640,27 @@ let NewEventPages = {
     }
   },
   {
-      path: '/events/:id/edit/timeline/export',
-      name: 'EditTimeLine',
-      component: ExportTimeLine,
-      meta: {
-          title: 'Timeline',
-          gtm: 'Event Timeline',
-          opaque: false
-      }
+    path: '/events/:id/edit/timeline/export',
+    name: 'EditTimeLine',
+    component: ExportTimeLine,
+    meta: {
+      title: 'Timeline',
+      gtm: 'Event Timeline',
+      opaque: false
+    }
+  },
+  {
+    path: '/events/:id/booking',
+    redirect: '/events/:id/booking/timeline',
+    name: 'Root',
+    meta: {
+      gtm: 'Root'
+    }
   },
   {
     path: '/events/:id/booking/:blockId',
     name: 'BookingEvent',
-    component: BookingEvent,
+    component: EventPlan,
     meta: {
       title: 'BookingEvent',
       gtm: 'Booking Event',
@@ -658,24 +668,24 @@ let NewEventPages = {
     }
   },
   {
-      path: '/events/:id/choose-concept',
-      name: 'EventConceptChoose',
-      component: EventConceptChoose,
-      meta: {
-          title: 'Choose Concept',
-          gtm: 'Choose Concept',
-          opaque: false
-      }
+    path: '/events/:id/choose-concept',
+    name: 'EventConceptChoose',
+    component: EventConceptChoose,
+    meta: {
+      title: 'Choose Concept',
+      gtm: 'Choose Concept',
+      opaque: false
+    }
   },
   {
-      path: '/events/:id/proposal-details/:vendorId/:proposalId',
-      name: 'EventProposalDetails',
-      component : EventProposalDetails,
-      meta: {
-          title: 'EventProposalDetails',
-          gtm: 'Event Proposal Details',
-          opaque: false
-      },
+    path: '/events/:id/proposal-details/:vendorId/:proposalId',
+    name: 'EventProposalDetails',
+    component: EventProposalDetails,
+    meta: {
+      title: 'EventProposalDetails',
+      gtm: 'Event Proposal Details',
+      opaque: false
+    },
   },
   {
     path: '/events/:id/edit/invitees-management',
@@ -727,12 +737,12 @@ let NewEventPages = {
     }
   },
   {
-      path: '/vendors-pool-new',
-      name: 'VendorsPoolNew',
-      component: VendorsPoolNew,
-      meta: {
-          gtm: 'VendorsPoolNew'
-      }
+    path: '/vendors-pool-new',
+    name: 'VendorsPoolNew',
+    component: VendorsPoolNew,
+    meta: {
+      gtm: 'VendorsPoolNew'
+    }
   },
   ]
 }

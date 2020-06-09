@@ -15,7 +15,7 @@
         </md-button>
       </li>
     </ul>
-    <sharing-Modal v-if="isSharing"></sharing-Modal>
+    <sharing-Modal v-if="isSharing" sharingLink="This" @cancel="isSharing=false"></sharing-Modal>
   </div>
 </template>
 <script>

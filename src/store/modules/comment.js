@@ -60,12 +60,15 @@ const mutations = {
 }
 
 const actions = {
-  async addCommentComponent({ commit, state }, commentComponent) {
-    new EventCommentComponent(commentComponent)
-      .save()
-      .then(commentComponent => {
-        commit('addCommentComponent', commentComponent.item)
-      });
+  addCommentComponent({ commit, state }, commentComponent) {
+    return new Promise((resolve, reject)=> {
+      new EventCommentComponent(commentComponent)
+        .save()
+        .then(commentComponent => {
+          commit('addCommentComponent', commentComponent.item)
+          resolve(commentComponent.item)
+        });
+    })
   },
   async getCommentComponents({ commit, state }, url) {
     console.log("getCommentComponents")
@@ -125,14 +128,27 @@ const actions = {
     })
   },
 
-  updateComment({commit, state}, comment) {
+  updateCommentAction({commit, state}, comment) {
     return new Promise((resolve, reject) => {
       const commentComponent = new EventCommentComponent({id: comment.eventCommentComponent.id})
       new EventComment(comment)
         .for(commentComponent)
         .save()
         .then(res => {
+          console.log(res)
           // commit('updateCommentComponent', res.item)
+          resolve(res)
+        })
+    })
+  },
+  deleteCommentAction({commit, state}, comment) {
+    console.log(comment)
+    return new Promise((resolve, reject) => {
+      const eventCommentComponent = new EventCommentComponent({id: comment.id})
+      new EventComment(comment)
+        .for(eventCommentComponent)
+        .delete()
+        .then(res => {
           resolve(res)
         })
     })

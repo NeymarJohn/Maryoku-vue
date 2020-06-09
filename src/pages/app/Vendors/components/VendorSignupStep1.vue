@@ -25,7 +25,7 @@
                 </div>
               </div>
               <div class="main-cont">
-                <textarea placeholder="Type 'about your business' here" rows="5" v-model="vendor.about.company"/>
+                <textarea placeholder="Type 'about your business' here" rows="5"/>
               </div>
             </div>
             <div class="field mb-50">
@@ -38,7 +38,7 @@
                 </div>
               </div>
               <div class="main-cont">
-                <textarea :placeholder="`Type 'About your ${getCategoryNameByValue(vendor.businessCategory)}' here`" rows="5" v-model="vendor.about.venue"/>
+                <textarea :placeholder="`Type 'About your ${getCategoryNameByValue(vendor.businessCategory)}' here`" rows="5"/>
               </div>
             </div>
             <div class="field mb-50">
@@ -293,7 +293,7 @@ export default {
           value: 'venuerental',
         },
         {
-          name: 'Food & Beverage',
+          name: 'Food & Catering',
           value: 'foodandbeverage',
         },
         {

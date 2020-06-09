@@ -40,3 +40,13 @@
       }
   }
 }
+.md-tooltip {
+  background-color: #FFEDBC !important;
+}
+.md-tooltip[x-placement="bottom"]:after {
+  top: -5px;
+  border-top: 0;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #FFEDBC;
+  border-left: 5px solid transparent;
+}
