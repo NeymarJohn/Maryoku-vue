@@ -52,7 +52,7 @@ export default {
           value: 'venuerental',
         },
         {
-          name: 'Food & Catering',
+          name: 'Food & Beverage',
           value: 'foodandbeverage',
         },
         {

@@ -150,33 +150,25 @@ import EventConcept from "@/models/EventConcept";
 import ColorButton from "@/components/ColorButton";
 
 const tags = [
-  { name: "adventurous", selected:false},
-  { name: "artistic", selected:false},
   { name: "festive", selected:false},
   { name: "formal", selected:false},
   { name: "competitive", selected:false},
-  { name: "conservative", selected:false},
-  { name: "challenging", selected:false},
-  { name: "classy", selected:false},
-  { name: "casual", selected:false},
-  { name: "educational", selected:false},
   { name: "fun", selected:false},
   { name: "social/green", selected:false},
+  { name: "conservative", selected:false},
   { name: "styled", selected:false},
   { name: "trendy", selected:false},
   { name: "authentic", selected:false},
   { name: "elegant", selected:false},
+  { name: "casual", selected:false},
   { name: "innovative", selected:false},
-  { name: "indoors", selected:false},
-  { name: "mysterious", selected:false},
-  { name: "global", selected:false},
   { name: "laid back", selected:false},
+  { name: "classy", selected:false},
   { name: "luxurious", selected:false},
   { name: "productive", selected:false},
   { name: "relaxed", selected:false},
   { name: "cultural", selected:false},
-  { name: "inclusive", selected:false },
-  { name: "outdoors", selected:false }
+  { name: "inclusive", selected:false }
 ];
 
 const initialConcept = {
@@ -208,7 +200,7 @@ export default {
     uploadImages: {},
     selectedTag: {},
     addedTags: [],
-    taggingOptions: tags.sort((a,b)=> a.name >b.name?1:-1),
+    taggingOptions: tags,
     uploadImageData: {
       0: "",
       1: "",

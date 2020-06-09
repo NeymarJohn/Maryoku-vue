@@ -39,6 +39,7 @@
             <md-button
               class="edit-btn md-simple md-black comment-action-btn"
               @click="resolveCommentComonent(comment)"
+              v-if="isMain"
             >Resolve</md-button>
             <md-button
               class="edit-btn md-simple comment-action-btn"
@@ -108,7 +109,7 @@ export default {
       this.$emit("updateComment", this.comment);
     },
     resolveCommentComonent(comment) {
-      this.$emit("resolve", comment)
+      this.$emit("resove", comment)
     },
     editComment(comment) {
       this.isEditing = true

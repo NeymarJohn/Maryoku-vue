@@ -22,7 +22,7 @@
               <img class="dropdown" src="http://static.maryoku.com/storage/icons/Vendor Signup/Asset 523.svg"/>
             </div>
             <ul v-else>
-              <li v-for="(category, cIndex) in categories" :key="cIndex" @click="updateCategory(category);updatefocusValue($event)">
+              <li v-for="(category, cIndex) in categories" :key="cIndex" @click="updateCategory(category);">
                 <img :src="`${categoryIconUrl}${category.icon}`"/>
                 {{category.name}}
               </li>
@@ -31,7 +31,6 @@
           <div v-else-if="title=='Address'">
             <place-autocomplete-field 
               v-model="value" 
-              @change="updatefocusValue"
               placeholder="Enter an an address, zipcode, or location" 
               api-key="AIzaSyBMeTpgtrXUQPDswUdLFW9YL9JFSnZQFOs"
             />
@@ -42,7 +41,6 @@
               class="default"
               :class="[{'with-img': img!=''}, isEmailValid()]"
               v-model="value"
-              @blur.prevent="updatefocusValue"
             />
           </div>
           <div v-else-if="title=='Phone'">
@@ -52,7 +50,6 @@
               :type="title=='Phone' ? 'number' : 'text'"
               :class="[{'with-img': img!=''}]"
               v-model="value"
-              @blur.prevent="updatefocusValue"
             />
           </div>
           <div v-else>
@@ -61,21 +58,20 @@
               class="default"
               :class="[{'with-img': img!=''}]"
               v-model="value"
-              @blur.prevent="updatefocusValue"
             />
           </div>
         </div>
       </div>
-      <!-- <div class="action-cont" v-if="isEdit">
+      <div class="action-cont" v-if="isEdit">
         <a class="cancel" @click="isEdit=false">Cancel</a>
         <a class="save" @click="save()">Save</a>
-      </div> -->
+      </div>
     </div>
-    <!-- <div class="right" v-if="!isEdit">
+    <div class="right" v-if="!isEdit">
       <a @click="isEdit=true">
         Edit <md-icon>navigate_next</md-icon>
       </a>
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
@@ -94,7 +90,7 @@ export default {
   },
   data: () => ({
     isLoading: true,
-    isEdit: true,
+    isEdit: false,
     expanded: false,
     selectedCategory: {
       name: 'Venue Rental',
@@ -127,7 +123,7 @@ export default {
         icon: 'venuerental.svg'
       },
       {
-        name: 'Food & Catering',
+        name: 'Food & Beverage',
         value: 'foodandbeverage',
         icon: 'foodandbeverage.svg'
       },
@@ -221,9 +217,9 @@ export default {
       // return (this.value == "")? "" : (this.reg.test(this.value)) ? 'has-success' : 'has-error';
       return (this.reg.test(this.value)) ? 'has-success' : 'has-error'
     },
-    updatefocusValue (event) {
-      this.$root.$emit('update-vendor-value', this.title, this.value)
-    },
+    // updatefocusValue (event) {
+    //   this.$root.$emit('update-vendor-value', this.title, this.value)
+    // },
   }
 }
 </script>

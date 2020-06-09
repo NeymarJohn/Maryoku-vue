@@ -40,8 +40,8 @@ export default {
   },
   data() {
     return {
-      ampm: new Date(this.value).getHours()>=12?"pm":"am",
-      time: moment(new Date(this.value)).format("HH:mm")
+      ampm: "am",
+      time: "08:00"
     };
   },
   watch: {

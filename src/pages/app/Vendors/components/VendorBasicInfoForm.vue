@@ -46,10 +46,10 @@
             :borderBottom="false"
             @update-focus-value="onUpdateFocus"
           />
-          <div class="action-cont">
+          <!-- <div class="action-cont">
             <a class="cancel">Cancel</a>
             <a class="save" @click="save()">Save</a>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

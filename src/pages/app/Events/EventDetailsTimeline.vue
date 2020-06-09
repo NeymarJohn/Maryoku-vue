@@ -112,7 +112,7 @@
                       <div class="form-group">
                         <label>
                           <!-- <img class="time-line-blocks_icon"  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`"> -->
-                          Start At 
+                          Start At
                         </label>
                         <time-input v-model="item.startTime" :h24="false" displayFormat="hh:mm"></time-input>
                       </div>
@@ -127,7 +127,7 @@
                       <div class="form-group">
                         <label>
                           <!-- <img class="time-line-blocks_icon"  :src="`${newTimeLineIconsURL}${item.icon.toLowerCase()}-circle.svg`"> -->
-                          Finishes At 
+                          Finishes At
                         </label>
                         <time-input v-model="item.endTime" :h24="false" displayFormat="hh:mm"></time-input>
                       </div>
@@ -637,10 +637,10 @@ export default {
         setTimeout(this.updateTimelineITemsOrder, 100);
       }
       setTimeout(()=>{
-        const scrollBtn = this.$refs.scrollBtn
-        if (scrollBtn) {
-          scrollBtn.click()
-        }
+      const scrollBtn = this.$refs.scrollBtn
+            if (scrollBtn) {
+              scrollBtn.click()
+            }
       }, 100);
       
     },

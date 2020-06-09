@@ -20,12 +20,12 @@
           </div>
         </div>
       </div>
-      <div class="sub-cont" v-if="checked">
+      <!-- <div class="sub-cont" v-if="checked">
         <textarea 
           class="text"
           :placeholder="`Describe your ${label}`"
         />
-      </div>
+      </div> -->
     </template>
     <template v-if="item.type==Number">
       <div class="main">
@@ -39,7 +39,7 @@
             How Many? <input type="number" placeholder="QTY"/>
           </div>
         </div>
-        <div class="included-cont" v-if="checked">
+        <!-- <div class="included-cont" v-if="checked">
           <div class="included" :class="{'active': included}" @click="updateIncluded()">
             <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="included"/>
             <span class="unchecked" v-else></span>
@@ -55,7 +55,7 @@
               How much extra? <input type="number" placeholder="00.00"/>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </template>
     <template v-if="item.type==Array">
@@ -77,7 +77,7 @@
             </ul>
           </div>
         </div>
-        <div class="included-cont" v-if="checked">
+        <!-- <div class="included-cont" v-if="checked">
           <div class="included" :class="{'active': included}" @click="updateIncluded()">
             <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="included"/>
             <span class="unchecked" v-else></span>
@@ -88,7 +88,7 @@
             <span class="unchecked" v-else></span>
             <span>Not included</span>
           </div>
-        </div>
+        </div> -->
       </div>
     </template>
   </div>

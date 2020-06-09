@@ -33,7 +33,7 @@
               v-model="editingComment"
             ></textarea>
           </div>
-          <img :src="`${this.$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
+          <img :src="`${this.$iconURL}common/message-dark.svg`" class="text-icon" />
         </div>
         <div class="footer">
           <md-button class="md-simple normal-btn" @click="closeEditPanel">Cancel</md-button>
@@ -87,7 +87,7 @@
               placeholder="Write reply here"
               v-model="editingComment"
             ></textarea>
-            <img :src="`${this.$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
+            <img :src="`${this.$iconURL}common/message-dark.svg`" class="text-icon" />
             <div class="footer">
               <md-button class="md-simple normal-btn" @click="isOpenCommentListsPane=false">Cancel</md-button>
               <md-button
@@ -196,28 +196,24 @@ export default {
         this.isOpenCommentListsPane = true;
       });
     },
-
-    setEditPanePosition(x, y) {
-      const deviceWidth = window.innerWidth;
-      if (x < 600) {
-        this.panelPosition = {
-          x: x - 20,
-          y: y + 80
-        };
-      } else {
-        this.panelPosition = {
-          x: x - 530,
-          y: y + 80
-        };
-      }
-    },
     toggleEditPane(commentComponent, isEditing) {
       if (this.isOpenCommentListsPane) {
         this.isOpenCommentListsPane = false;
       }
       if (isEditing) {
         this.selectedCommentComponent = commentComponent;
-        this.setEditPanePosition(this.selectedCommentComponent.positionX, this.selectedCommentComponent.positionY)
+        const deviceWidth = window.innerWidth;
+        if (this.selectedCommentComponent.positionX < 600) {
+          this.panelPosition = {
+            x: this.selectedCommentComponent.positionX - 20,
+            y: this.selectedCommentComponent.positionY + 80
+          };
+        } else {
+          this.panelPosition = {
+            x: this.selectedCommentComponent.positionX - 530,
+            y: this.selectedCommentComponent.positionY + 80
+          };
+        }
         if (this.mainComment) {
           this.editingComment = this.mainComment.description;
         }
@@ -254,11 +250,7 @@ export default {
         index: maxIndex + 1,
         isEditing: false,
         url: this.$route.path
-      }).then(commentComponent => {
-        this.selectedCommentComponent = commentComponent
       });
-      this.setEditPanePosition(event.clientX - 80, event.clientY - 100 + window.scrollY )
-      this.isCommentEditing = true;
       this.mostRecentClickCoordinates = {
         x: event.clientX,
         y: event.clientY

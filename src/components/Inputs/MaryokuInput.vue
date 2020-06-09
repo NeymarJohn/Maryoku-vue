@@ -76,9 +76,6 @@ export default {
     readonly: Boolean,
     size:String
   },
-  beforeDestroy() {
-    this.$refs.timePickerPanel.style.display = "none";
-  },
   data() {
     return {
       content: this.value,
