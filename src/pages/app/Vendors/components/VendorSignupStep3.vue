@@ -392,7 +392,7 @@ export default {
       exDonts: [],
       notAllowed: [],
       isOtherNa: false,
-      defNa: 'Photographer, Food & Beverage, Decor, Rentals, Entertainment',
+      defNa: 'Amenities, Services, Accessibility, Equipment, Staff, Photographer, Food & Beverage, Decor, Rentals, Entertainment, Other',
       policies: [
         {
           category: 'venuerental',
@@ -1156,7 +1156,6 @@ export default {
                     min-width: 75%;
                     border: 1px solid #dddddd;
                     border-radius: 0;
-                    margin-left: 3rem;
                   }
                 }
               }

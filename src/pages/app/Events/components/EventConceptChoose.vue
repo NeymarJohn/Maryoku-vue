@@ -90,7 +90,7 @@
                     </div>
                     <div class="concept-details" v-if="!expandCreateConcept">
                         <h3 class="font-bold-extra font-size-30 color-red">Create Your Own Concept</h3>
-                        <p >Feeling creative? Tell us all about <br/> your ideas and we’ll get right on it!</p>
+                        <p >Feeling creative? Tell us all about your ideas and we’ll get right on it!</p>
                     </div>
                     <md-button class="md-rose md-simple md-just-icon view-concept" @click="expandCreateConcept = !expandCreateConcept">
                         <img :src="`${conceptIconsURL}Asset 490.svg`">
@@ -104,11 +104,17 @@
             </div>
 
             <div class="booking-section__actions">
-                <md-button class="md-default ">I’d like to see more options</md-button>
-                
+               
             </div>
             <div class="text-center" style="margin: 30px; width:100%">
                 <md-button class="md-red md-simple back-to-top" @click="scrollToTop"> <md-icon>expand_less</md-icon> Back to top </md-button>
+            </div>
+            <div class="concept-actions">
+                <div>
+                    <md-button class="md-simple md-black normal-btn"><md-icon>arrow_back</md-icon>Back</md-button>
+                    <md-button class="md-red md-simple md-icon-button" @click="scrollToTop"> <md-icon>expand_less</md-icon> </md-button>
+                </div>
+                <md-button class="md-simple md-black normal-btn" @click="openConceptContest">I'd like to see more options</md-button>
             </div>
         </div>
         <div class="concept-content" v-else>
@@ -135,6 +141,18 @@
             
             <div class="concepts-list md-layout-item md-size-100 " v-if="!showEditForm">
                 <div class="concepts-list__item d-flex justify-content-start expanded">
+                    <div>
+                        <a class="concept-compete-link" style="padding-top:4px" href="https://www.maryoku.com/contest-compete" target="_blank">Compete with my brilliant concept?</a> 
+                        <span>
+                            <img src="http://static.maryoku.com/storage/icons/Event%20Page/light.svg" alt="Avatar" width="20px">
+                            <md-tooltip md-direction="bottom">
+                                <strong  class="font-size-16">A chance to win $1,000!</strong>
+                                <div class="font-size-16"> 
+                                    Don't miss this chance <br/>to submit your concept <br/>and compete for a grand <br/> prize and recogintion.
+                                </div>
+                            </md-tooltip>
+                        </span>
+                    </div>
                     <div :class="`images-list selected-concept`">
                         <div class="image-backgrounds">
                             <!-- <div :class="`images-background`"
@@ -156,6 +174,7 @@
                                 <div class="image-section" :style="`background:url(http://static.maryoku.com/${image.url}) center top no-repeat`"></div>
                             </div>
                         </div>
+                        
                     </div>
                     <div class="concept-details">
                         <div class="concept-name d-flex align-center text-transform-capitalize">
@@ -166,6 +185,7 @@
                         </div>
                         <div class="concept-description" >{{selectedConcept.description}}</div>
                     </div>
+
                 </div>
             </div>
             <div class="concepts-list md-layout-item md-size-100 " v-else>
@@ -433,6 +453,9 @@ export default {
             this.showEditForm = false
         })
         
+    },
+    openConceptContest() {
+        window.open(`https://www.maryoku.com/concept-contest`, "_blank");
     }
   },
   created () {

@@ -60,12 +60,15 @@ const mutations = {
 }
 
 const actions = {
-  async addCommentComponent({ commit, state }, commentComponent) {
-    new EventCommentComponent(commentComponent)
-      .save()
-      .then(commentComponent => {
-        commit('addCommentComponent', commentComponent.item)
-      });
+  addCommentComponent({ commit, state }, commentComponent) {
+    return new Promise((resolve, reject)=> {
+      new EventCommentComponent(commentComponent)
+        .save()
+        .then(commentComponent => {
+          commit('addCommentComponent', commentComponent.item)
+          resolve(commentComponent.item)
+        });
+    })
   },
   async getCommentComponents({ commit, state }, url) {
     console.log("getCommentComponents")

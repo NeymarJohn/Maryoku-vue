@@ -136,4 +136,23 @@
           }
       }
   }
+  .concept-actions {
+    position: fixed;
+    bottom: 0px;
+    width: 100vw;
+    left: 0px;
+    z-index: 20;
+    height: 80px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 30px 10px 200px;
+  }
+  .concept-compete-link{
+      text-decoration: underline;
+      &:visited {
+          color: #f51355;
+      }
+  }
 }

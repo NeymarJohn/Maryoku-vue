@@ -213,9 +213,9 @@
             </td>
           </tr>
           <template v-if="showTips">
-            <tr class="extra" v-if="event.allocatedTips>0">
+            <tr class="extra" >
               <td width="40%" class="event-block-element extra">
-                <popup ref="popup">
+                <popup ref="popup"  v-if="event.allocatedTips>0">
                   <template slot="content">
                     <img
                       src="http://static.maryoku.com/storage/icons/budget screen/SVG/tips-gray.svg"
@@ -233,6 +233,12 @@
                     </div>
                   </template>
                 </popup>
+                <span v-else>
+                  <img
+                      src="http://static.maryoku.com/storage/icons/budget screen/SVG/tips-gray.svg"
+                    />
+                    Tips 12%
+                </span>
               </td>
               <td width="20%" class="planned">
                 $ {{event.allocatedTips | withComma}}
