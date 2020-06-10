@@ -20,7 +20,8 @@
               <span>Not included</span>
             </div>
             <div class="extra-field" v-if="!included">
-              How much extra? <div class="field"><input type="number" placeholder="00.00"/></div>
+              <div class="inb">How much extra?</div>
+              <div class="field"><input type="number" placeholder="00.00"/></div>
             </div>
           </div>
           <!-- <div class="included" :class="{'active': !included}" @click="updateIncluded()">
@@ -30,12 +31,12 @@
           </div> -->
         </div>
       </div>
-      <!-- <div class="sub-cont" v-if="checked">
+      <div class="sub-cont" v-if="checked">
         <textarea 
           class="text"
           :placeholder="`Describe your ${label}`"
         />
-      </div> -->
+      </div>
     </template>
     <template v-if="item.type==Number">
       <div class="main">
@@ -270,7 +271,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: baseline;
-        flex: 1;
+        flex: 2;
         .included {
           display: flex!important;
           align-items: center;
@@ -316,7 +317,7 @@ export default {
     .sub-cont {
       .text {
         margin: 12px 0 0 0;
-        min-width: 40%;
+        min-width: 30%;
         border: solid 1px #707070;
         padding: 10px 17px;
         min-height: 80px;
@@ -340,6 +341,9 @@ export default {
     }
     .flex-1 {
       flex: 1;
+    }
+    .inb {
+      display: inline-block;
     }
     .active {
       font: 600 16px Manrope-Regular, sans-serif;

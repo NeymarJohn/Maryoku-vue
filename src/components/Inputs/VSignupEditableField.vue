@@ -196,9 +196,13 @@ export default {
     value: null,
   }),
   mounted () {
-    this.selectedCategory = this.categories[0]
-    // this.value = this.defaultVal
-
+    this.value = this.defaultVal
+    if (this.value) {
+      this.selectedCategory.name = this.getCategoryNameByValue(this.value)
+      this.selectedCategory.icon = this.getCategoryIconByValue(this.value)
+    } else {
+      this.selectedCategory = this.categories[0]
+    }
     // let recaptchaScript = document.createElement('script')
     // recaptchaScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key=AIzaSyBMeTpgtrXUQPDswUdLFW9YL9JFSnZQFOs')
     // document.head.appendChild(recaptchaScript)
@@ -216,6 +220,12 @@ export default {
     isEmailValid: function() {
       // return (this.value == "")? "" : (this.reg.test(this.value)) ? 'has-success' : 'has-error';
       return (this.reg.test(this.value)) ? 'has-success' : 'has-error'
+    },
+    getCategoryNameByValue(value) {
+      return this.categories.filter( c => c.value == value)[0].name
+    },
+    getCategoryIconByValue(value) {
+      return this.categories.filter( c => c.value == value)[0].icon
     },
     // updatefocusValue (event) {
     //   this.$root.$emit('update-vendor-value', this.title, this.value)
