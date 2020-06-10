@@ -13,11 +13,21 @@
             <span class="unchecked" v-else></span>
             <span>Included</span>
           </div>
-          <div class="included" :class="{'active': !included}" @click="updateIncluded()">
+          <div class="flex-1">
+            <div class="included" :class="{'active': !included}" @click="updateIncluded()">
+              <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!included"/>
+              <span class="unchecked" v-else></span>
+              <span>Not included</span>
+            </div>
+            <div class="extra-field" v-if="!included">
+              How much extra? <div class="field"><input type="number" placeholder="00.00"/></div>
+            </div>
+          </div>
+          <!-- <div class="included" :class="{'active': !included}" @click="updateIncluded()">
             <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!included"/>
             <span class="unchecked" v-else></span>
             <span>Not included</span>
-          </div>
+          </div> -->
         </div>
       </div>
       <!-- <div class="sub-cont" v-if="checked">
@@ -39,7 +49,7 @@
             How Many? <input type="number" placeholder="QTY"/>
           </div>
         </div>
-        <!-- <div class="included-cont" v-if="checked">
+        <div class="included-cont" v-if="checked">
           <div class="included" :class="{'active': included}" @click="updateIncluded()">
             <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="included"/>
             <span class="unchecked" v-else></span>
@@ -55,7 +65,7 @@
               How much extra? <input type="number" placeholder="00.00"/>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </template>
     <template v-if="item.type==Array">
@@ -219,7 +229,7 @@ export default {
             list-style: none;
             column-count: 2;
             background: #ffffff;
-            padding: 1rem;
+            padding: 1rem 1rem .5rem 1rem;
             li {
               font: normal 16px Manrope-Regular, sans-serif;
               padding-bottom: .5rem;
@@ -264,7 +274,7 @@ export default {
         .included {
           display: flex!important;
           align-items: center;
-          flex: 1;
+          margin-right: 2rem;
           img {
             width: 30px;
             height: 30px;
@@ -273,12 +283,21 @@ export default {
         }
         .extra-field {
           padding: 1rem 0 0 44px;
-          input {
-            margin-left: 1rem;
-            text-align: center;
-            border-radius: 3px;
-            border: 1px solid #818080;
-            max-width: 4rem;
+          .field {
+            display: inline-block;
+            &:before {
+              content: '$';
+              position: absolute;
+              margin-top: 9px;
+              margin-left: 4rem;
+            }
+            input {
+              margin-left: 1rem;
+              text-align: center;
+              border-radius: 3px;
+              border: 1px solid #818080;
+              max-width: 100%;
+            }
           }
         }
         span {
