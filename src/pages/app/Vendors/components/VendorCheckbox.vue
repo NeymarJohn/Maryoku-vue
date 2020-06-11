@@ -32,9 +32,13 @@
         </div>
       </div>
       <div class="sub-cont" v-if="checked && included">
-        <textarea 
+        <!-- <textarea 
           class="text"
           :placeholder="`Describe your ${label}`"
+        /> -->
+        <textarea 
+          class="text"
+          :placeholder="`Add additional information`"
         />
       </div>
     </template>

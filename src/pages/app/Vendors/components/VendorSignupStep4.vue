@@ -463,7 +463,7 @@ export default {
             padding-bottom: 2rem;
             img {
               width: 100%;
-              height: 230px;
+              height: 460px;
             }
           }
           .about-cont {
