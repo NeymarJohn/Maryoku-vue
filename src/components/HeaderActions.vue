@@ -15,7 +15,7 @@
         </md-button>
       </li>
     </ul>
-    <sharing-Modal v-if="isSharing" sharingLink="http://preprod.dev.maryoku.com/#/sharing?url=/#/events/5ee15a2f46a1c41f26e32adc/booking/timeline" @cancel="isSharing=false"></sharing-Modal>
+    <sharing-Modal v-if="isSharing" sharingLink="This" @cancel="isSharing=false"></sharing-Modal>
   </div>
 </template>
 <script>

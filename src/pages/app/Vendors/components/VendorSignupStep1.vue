@@ -366,18 +366,6 @@ export default {
       }
     },
     limitRange(e) {
-      if (this.min < 0) {
-        this.min = 0
-      }
-      if (this.min > 1000) {
-        this.min = 1000
-      }
-      if (this.max < this.min ) {
-        this.max = this.min
-      }
-      if (this.max > 1000 ) {
-        this.max = 1000
-      }
     },
     uploadVendorImage (imageId = null, attachmentType = null) {
       this.$refs.imageFile.click()

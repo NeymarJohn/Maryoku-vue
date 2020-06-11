@@ -2,10 +2,10 @@
   <div class="vendor-checkbox-wrapper" :class="{'checked': checked}">
     <template v-if="item.type == Boolean">
       <div class="main">
-        <div class="check-cont" @click="updateCheck()">
+        <div class="check-cont flex" @click="updateCheck()">
           <img :src="`${iconUrl}Group 6258.svg`" v-if="checked"/>
           <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
-          {{label}}
+          <div class="text">{{label}}</div>
         </div>
         <div class="included-cont" v-if="checked">
           <div class="included" :class="{'active': included}" @click="updateIncluded()">
@@ -20,7 +20,8 @@
               <span>Not included</span>
             </div>
             <div class="extra-field" v-if="!included">
-              How much extra? <div class="field"><input type="number" placeholder="00.00"/></div>
+              <div class="inb">How much extra?</div>
+              <div class="field"><input type="number" placeholder="00.00"/></div>
             </div>
           </div>
           <!-- <div class="included" :class="{'active': !included}" @click="updateIncluded()">
@@ -30,12 +31,12 @@
           </div> -->
         </div>
       </div>
-      <!-- <div class="sub-cont" v-if="checked">
+      <div class="sub-cont" v-if="checked && included">
         <textarea 
           class="text"
           :placeholder="`Describe your ${label}`"
         />
-      </div> -->
+      </div>
     </template>
     <template v-if="item.type==Number">
       <div class="main">
@@ -182,7 +183,9 @@ export default {
       display: flex;
 
       .check-cont {
-        flex: 1;
+        margin-right: 1rem;
+        align-items: flex-start;
+        flex: 2;
         img {
           width: 27px;
           margin-right: 24px;
@@ -204,6 +207,7 @@ export default {
           background-color: #ffffff;
           border: 1px solid #818080;
           margin-top: 1rem;
+          margin-left: 3rem;
           padding: .5rem 1rem;
           max-width: 20rem;
           font: normal 16px Manrope-Regular, sans-serif;
@@ -214,6 +218,7 @@ export default {
         }
         .dropdown-cont {
           padding-top: 2rem;
+          padding-left: 3rem;
           display: flex;
           align-items: flex-start;
           img {
@@ -221,13 +226,14 @@ export default {
             max-width: 30px;
           }
           ul {
-            max-width: 50%;
+            width: 60%;
             border: 1px solid #050505;
             box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.16);
             padding: 0;
             margin: 0;
             list-style: none;
-            column-count: 2;
+            display: grid;
+            grid-template-columns: 50% 50%;
             background: #ffffff;
             padding: 1rem 1rem .5rem 1rem;
             li {
@@ -270,7 +276,7 @@ export default {
         display: flex;
         justify-content: center;
         align-items: baseline;
-        flex: 1;
+        flex: 3;
         .included {
           display: flex!important;
           align-items: center;
@@ -283,6 +289,7 @@ export default {
         }
         .extra-field {
           padding: 1rem 0 0 44px;
+          width: calc( 100% + 44px);
           .field {
             display: inline-block;
             &:before {
@@ -315,12 +322,12 @@ export default {
     }
     .sub-cont {
       .text {
-        margin: 12px 0 0 0;
-        min-width: 40%;
+        margin: 12px 0 0 3rem;
+        min-width: 30%;
         border: solid 1px #707070;
         padding: 10px 17px;
         min-height: 80px;
-        background: #f3f7fd;
+        background: #ffffff;
         resize: none;
       }
     }
@@ -340,6 +347,13 @@ export default {
     }
     .flex-1 {
       flex: 1;
+    }
+    .flex {
+      display: flex;
+      align-items: center;
+    }
+    .inb {
+      display: inline-block;
     }
     .active {
       font: 600 16px Manrope-Regular, sans-serif;

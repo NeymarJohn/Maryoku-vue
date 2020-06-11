@@ -1,5 +1,8 @@
 <template>
     <div class="md-layout vendors-pool-page">
+        <side-bar :event="event">
+        </side-bar>
+
         <div class="event-page-header md-layout-item md-size-100">
             <div class="header-title">
                 <h3 >Our Vendors List</h3>

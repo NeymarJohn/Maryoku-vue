@@ -877,6 +877,108 @@ export default {
           ]
         },
         {
+          name: 'corporatesocialresponsibility',
+          categories: [
+            {
+              name: 'services',
+              subCategories: [
+                {
+                  name: 'staffing',
+                  items: [
+                    {
+                      name: 'event staffing',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'transportation host',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'models',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'staffing services',
+                      type: Array, 
+                      value: [],
+                      available: ['tour guide', 'wait staff', 'event registration']
+                    },
+                    {
+                      name: 'hospitality professional',
+                      type: Boolean, 
+                      value: false
+                    },
+                  ]
+                },
+                {
+                  name: 'guest services',
+                  items: [
+                    {
+                      name: 'general guest services',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'consierge services',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'VIP services',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'day-off corrdination',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'hosting',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'tours & sightseeing',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'visiting guest services support',
+                      type: Array, 
+                      value: [],
+                      available: ['laudry', 'wellness', 'entertainment']
+                    },
+                    {
+                      name: 'last minute onsite fitting (tux, suits)',
+                      type: Boolean, 
+                      value: false
+                    },
+                  ]
+                },
+              ]
+            },
+            {
+              name: 'amenities',
+              subCategories: [
+                {
+                  name: ' ',
+                  items: [
+                    {
+                      name: 'suit / tuxido rentals',
+                      type: Boolean, 
+                      value: false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
           name: 'videographyandphotography',
           categories: [
             {
@@ -994,6 +1096,129 @@ export default {
                 }
               ]
             }
+          ]
+        },
+        {
+          name: 'signageprinting',
+          categories: [
+            {
+              name: 'services',
+              subCategories: [
+                {
+                  name: 'PR',
+                  items: [
+                    {
+                      name: 'speech writing',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'press releases',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'high profile sourcing',
+                      type: Array, 
+                      value: [],
+                      available: ['politicians', 'celebrities', 'influencers', 'artists']
+                    },
+                    {
+                      name: 'social media promotion',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'media pitch',
+                      type: Boolean, 
+                      value: false
+                    },
+                  ]
+                },
+                {
+                  name: 'marketing',
+                  items: [
+                    {
+                      name: 'branding strategy',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'event registration tracking',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'consultation',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'open communication',
+                      type: Boolean, 
+                      value: false
+                    },
+                  ]
+                },
+                {
+                  name: 'graphics',
+                  items: [
+                    {
+                      name: 'graphic design services',
+                      type: Boolean, 
+                      value: false
+                    },
+                  ]
+                },
+                {
+                  name: 'administrative',
+                  items: [
+                    {
+                      name: 'guest lists',
+                      type: Boolean, 
+                      value: false
+                    },
+                  ]
+                },
+              ]
+            },
+            {
+              name: 'amenities',
+              subCategories: [
+                {
+                  name: 'printing',
+                  items: [
+                    {
+                      name: 'printing method',
+                      type: Array, 
+                      value: [],
+                      available: ['digital printing', 'screen printing', 'flexography printing', 'litho printing', 'transfer printing', 'engraving', 'embossing', 'embrolder printing']
+                    },
+                    {
+                      name: 'printing material',
+                      type: Array, 
+                      value: [],
+                      available: ['business cards', 'brochures', 'flyers', 'one-sheets', 'infographics', 'instructions', 'posters', 'tickets', 'banners', 'menues', 'place cards']
+                    },
+                  ]
+                },
+                {
+                  name: 'specialty',
+                  items: [
+                    {
+                      name: 'custom prints',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'branded lighting effect',
+                      type: Boolean, 
+                      value: false
+                    },
+                  ]
+                }
+              ]
+            },
           ]
         },
         {

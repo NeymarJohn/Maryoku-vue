@@ -1,7 +1,6 @@
 <template>
     <div class="md-layout event-concept-section booking-section">
-        <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
-        <div class="concept-content" v-if="showConceptList && !isLoading">
+        <div class="concept-content" v-if="showConceptList">
             <div class="event-page-header md-layout-item md-size-100">
                 <div class="header-name">
                     <h3>Hi Rachel</h3>
@@ -118,7 +117,7 @@
                 <md-button class="md-simple md-black normal-btn" @click="openConceptContest">I'd like to see more options</md-button>
             </div>
         </div>
-        <div class="concept-content" v-if="!showConceptList && !isLoading">
+        <div class="concept-content" v-else>
             <div class="event-page-header md-layout-item md-size-100">
                 <div class="header-name">
                     <h3>Great Choice!</h3>
@@ -255,7 +254,7 @@ export default {
     colour: "#FF00FF",
     showConceptList:true,
     showEditForm:false,
-    isLoading: true,
+    isLoading: false,
     timelineItems: [],
     hoursArray: [],
     disabledDragging: false,
@@ -389,7 +388,6 @@ export default {
     uploadImage:""
   }),
   methods: {
-    ...mapMutations('event', ['setEventData']),
     expandConcept(item, index) {
         console.log(item.name);
         if(!item.expand) {
@@ -447,14 +445,12 @@ export default {
 
         console.log("eventConc",eventConcept);
         event.concept = eventConcept
-        event.conceptProgress = 100
         console.log("eventConcept", eventConcept);
         event.save().then(result=>{
             this.event = result
             this.selectedConcept = eventConcept
             this.showConceptList = false
             this.showEditForm = false
-            this.setEventData(result)
         })
         
     },
@@ -494,7 +490,7 @@ export default {
         //     this.event.components = components
         //     this.selectedComponents = components
         // })
-        this.isLoading = false
+
         console.log(event)
       })
     }.bind(this))

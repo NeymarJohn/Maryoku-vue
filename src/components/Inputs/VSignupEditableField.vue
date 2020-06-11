@@ -142,11 +142,11 @@ export default {
         value: 'signageprinting',
         icon: 'signageprinting.svg'
       },
-      {
-        name: 'Advertising and Promotion',
-        value: 'advertising-promotion',
-        icon: 'advertising-promotion.svg'
-      },
+      // {
+      //   name: 'Advertising and Promotion',
+      //   value: 'advertising-promotion',
+      //   icon: 'advertising-promotion.svg'
+      // },
       {
         name: 'AV / Staging',
         value: 'audiovisualstagingservices',
@@ -157,11 +157,11 @@ export default {
         value: 'swags',
         icon: 'swags.svg'
       },
-      {
-        name: 'Shipping',
-        value: 'shipping',
-        icon: 'shipping.svg'
-      },
+      // {
+      //   name: 'Shipping',
+      //   value: 'shipping',
+      //   icon: 'shipping.svg'
+      // },
       {
         name: 'Transportation & Tour operator',
         value: 'transportation',
@@ -172,21 +172,21 @@ export default {
         value: 'entertainment',
         icon: 'entertainment.svg'
       },
-      {
-        name: 'Administration',
-        value: 'administration',
-        icon: 'administration.svg'
-      },
+      // {
+      //   name: 'Administration',
+      //   value: 'administration',
+      //   icon: 'administration.svg'
+      // },
       {
         name: 'Security',
         value: 'securityservices',
         icon: 'securityservices.svg'
       },
-      {
-        name: 'Technology',
-        value: 'technologyservices',
-        icon: 'technologyservices.svg'
-      },
+      // {
+      //   name: 'Technology',
+      //   value: 'technologyservices',
+      //   icon: 'technologyservices.svg'
+      // },
       {
         name: 'Videography and Photography',
         value: 'videographyandphotography',
@@ -196,9 +196,13 @@ export default {
     value: null,
   }),
   mounted () {
-    this.selectedCategory = this.categories[0]
-    // this.value = this.defaultVal
-
+    this.value = this.defaultVal
+    if (this.value) {
+      this.selectedCategory.name = this.getCategoryNameByValue(this.value)
+      this.selectedCategory.icon = this.getCategoryIconByValue(this.value)
+    } else {
+      this.selectedCategory = this.categories[0]
+    }
     // let recaptchaScript = document.createElement('script')
     // recaptchaScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key=AIzaSyBMeTpgtrXUQPDswUdLFW9YL9JFSnZQFOs')
     // document.head.appendChild(recaptchaScript)
@@ -216,6 +220,12 @@ export default {
     isEmailValid: function() {
       // return (this.value == "")? "" : (this.reg.test(this.value)) ? 'has-success' : 'has-error';
       return (this.reg.test(this.value)) ? 'has-success' : 'has-error'
+    },
+    getCategoryNameByValue(value) {
+      return this.categories.filter( c => c.value == value)[0].name
+    },
+    getCategoryIconByValue(value) {
+      return this.categories.filter( c => c.value == value)[0].icon
     },
     // updatefocusValue (event) {
     //   this.$root.$emit('update-vendor-value', this.title, this.value)

@@ -2,7 +2,7 @@
   <div class="progress-sidebar">
     <div class="summer-party">
         <md-button class="md-default md-sm md-simple expand-sidebar">
-          <img :src="`${$iconURL}Timeline-New/expand.svg`" />
+          <img :src="`${newTimeLineIconsURL}expand.svg`" />
         </md-button>
         <div class="title-label">
           summer party
@@ -44,14 +44,14 @@
           <div
             class="event-elements__item"
             @click="goToRoute(item,index)"
-            :class="{current:isActiveRoute(item), progress_100: item.progress===100 }"
+            :class="isActiveRoute(item)"
             v-for="(item,index) in eventElements"
             :key="index"
           >
             <div class="item-title">
               <img
-                v-if="item.status==='completed'"
-                :src="`${$iconURL}budget+screen/SVG/Asset%2032.svg`"
+                v-if="item.status==='complete'"
+                src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2032.svg"
                 width="15"
               />
               <img :src="item.icon" v-if="isActiveRoute(item)" width="25"/>
@@ -103,18 +103,43 @@ export default {
     // eventComponents: [Array, Function]
   },
   data: () => ({
+    // auth: auth,
     isLoading: true,
     isOpenNote: false,
-    eventElements: [],
+    eventElements: [
+      {
+        title: 'Choose Concept',
+        status: 'not-complete',
+        route: 'choose-concept',
+        icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
+        progress: 0
+      },
+      {
+        title: 'Approve Budget',
+        status: 'not-complete',
+        route: 'edit/budget',
+        icon: 'http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2010.svg',
+        progress: 0
+      },
+      {
+        title: 'Generate timeline',
+        status: 'current',
+        route: 'edit/timeline',
+        icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
+        progress: 0
+      }
+    ],
+    timelineIconsURL: 'http://static.maryoku.com/storage/icons/timeline/svg/',
+    menuIconsURL:
+      'http://static.maryoku.com/storage/icons/menu%20_%20checklist/SVG/',
+    event: {},
+    newTimeLineIconsURL: 'http://static.maryoku.com/storage/icons/Timeline-New/',
     currentUrl:""
   }),
   computed: {
-    ...mapState('event',{
-      event: state=>state.eventData
-    })
+
   },
   methods: {
-    ...mapActions('event',['getEventAction']),
     isActiveRoute(item) {
       if (this.currentUrl.indexOf(item.route) > -1) {
         return "current";
@@ -124,27 +149,38 @@ export default {
     goToRoute (item, index) {
       let vm = this
       this.$router.push(`/events/${this.event.id}/${item.route}`)
+
+      // _.each(vm.eventElements,function (item) {
+      //     item.status = 'not-completed'
+      // })
+
+      // vm.eventElements[index].status = 'current';
+
+      // location.reload()
     },
-    generatedItems(event) {
+    getEventBlocks () {
+      
+    },
+    generatedItems() {
       const concept = {
         title: 'Choose Concept',
-        status: event.conceptProgress===100?'completed':'not-complete',
+        status: 'not-complete',
         route: 'booking/concept',
-        icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
-        progress: event.conceptProgress
+        icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
+        progress: 0
       };
       const budget = {
         title: 'Approve Budget',
         status: 'not-complete',
         route: 'edit/budget',
-        icon: `${this.$iconURL}budget+screen/SVG/Asset%2010.svg`,
+        icon: 'http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2010.svg',
         progress: 0
       };
       const timeline = {
         title: 'Generate timeline',
         status: 'current',
         route: 'booking/timeline',
-        icon: `${this.$iconURL}Timeline-New/timeline-title.svg`,
+        icon: 'http://static.maryoku.com/storage/icons/Timeline-New/timeline-title.svg',
         progress: 0
       };
       const elements = [];
@@ -155,6 +191,8 @@ export default {
       elements.push(timeline);
 
       let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
+      let event = new CalendarEvent({ id: this.event.id })
+
       const vm = this;
       new EventComponent()
         .for(calendar, event)
@@ -174,10 +212,6 @@ export default {
           vm.eventElements = elements;
         })
     },
-    setConstantStates(event) {
-      this.eventElements[0].progress = event.conceptProgress
-      this.eventElements[0].status = event.conceptProgress == 100?"completed":"not-complete"
-    },
     fetchUrl () {
       this.currentUrl = this.$router.history.current.path;
     }
@@ -188,19 +222,21 @@ export default {
       this,
       true,
       function () {
-        let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
-        this.getEventAction({eventId: this.$route.params.id, calendar}).then(event => {
-            this.generatedItems(event)
-        })
+        let _calendar = new Calendar({ id: this.$auth.user.defaultCalendarId })
+        _calendar
+          .calendarEvents()
+          .find(this.$route.params.id)
+          .then(event => {
+            this.event = event
+            this.generatedItems()
+            this.getEventBlocks()
+          })
       }.bind(this)
     )
   },
   mounted () {},
   watch: {
-    '$route': 'fetchUrl',
-    event(newValue){
-      this.setConstantStates(newValue)
-    }
+    '$route': 'fetchUrl'
   }
 }
 </script>

@@ -59,22 +59,13 @@ const getters = {
   }
 }
 const actions = {
-  saveEventAction({commit, state}, event) {
-    return new Promise((resolve, reject)=> {
-      event.save().then(res=>{
-        commit('setEventData', res)
-        resolve(event);
-      })
-    })
-  },
   getEventAction( {commit, state}, {eventId, calendar}) {
-    return new Promise((resolve, reject)=> {
-      calendar
+    calendar
           .calendarEvents()
           .find(eventId)
           .then(event => {
             commit("setEventData",event)
-            resolve(event)
+
             // if (event.concept) {
             //   if (event.concept.images && event.concept.images.length > 0) {
             //     this.logger = "http://static.maryoku.com/" + this.event.concept.images[0].url
@@ -93,8 +84,6 @@ const actions = {
             //     this.selectedComponents = components;
             //   });
           });
-    })
-    
   },
   getEventThemes({ commit, state }, ctx) {
     new EventTheme()

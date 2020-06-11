@@ -82,13 +82,13 @@
             </div>
           </div>
           <div class="card">
-            <div class="field mb-50">
+            <!-- <div class="field mb-50">
               <div class="label">
                 <span>How much deposit do you charge?</span>
               </div>
               <input type="text" class="" placeholder="Like: 50% of the total event"/>
-            </div>
-            <div class="field ml-title">
+            </div> -->
+            <!-- <div class="field ml-title">
               <h4>cancellation approach</h4>
             </div>
             <div class="field mb-50">
@@ -103,7 +103,7 @@
                 </div>
               </div>
               <input type="text" class="" placeholder="Like: 60 days prior to the start of the event..."/>
-            </div>
+            </div> -->
             <div class="rules">
               <div 
                 class="rule" 
@@ -152,7 +152,7 @@
                 </div>
               </div>
             </div>
-            <div class="field mb-50">
+            <!-- <div class="field mb-50">
               <v-signup-add-rules
                 :comType="'rule'"
                 :title="policyDesc"
@@ -170,7 +170,7 @@
                 </div>
               </div>
               <textarea placeholder="For example : A 50% deposite will be due on or befor eThe remaining balance will be collected a week prior to the event" rows="5"/>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="3rd-party-vendor-wrapper mb-50" v-if="vendor.businessCategory == 'venuerental'">
@@ -1038,7 +1038,7 @@ export default {
         }
       }
       .right-side {
-        flex: 3;
+        flex: 4;
 
         .card {
           font-family: Manrope-Regular, sans-serif;
@@ -1074,7 +1074,7 @@ export default {
               align-items: center;
 
               .suffix {
-                flex: 2;
+                flex: 3;
                 input {
                   padding-left: 45%;
                   width: 100%;
