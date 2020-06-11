@@ -201,7 +201,7 @@
             <div class="title">
               <img :src="`${iconUrl}Asset 560.svg`"> OUR PRICING POLICY
             </div>
-            <!-- <div class="item">
+            <div class="item">
               <h5>We charge deposit of:</h5>
               <p>
                 50% of the total event
@@ -229,7 +229,7 @@
               <p>
                 Lorem
               </p>
-            </div> -->
+            </div>
             <div class="item">
               <h6 class="underline">Relish caterers & venues:</h6>
             </div>

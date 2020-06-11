@@ -325,7 +325,7 @@
       <template slot="header">
         <div class="add-category-model__header">
           <h2 class="font-size-30 font-bold-extra">
-            <img src="http://static.maryoku.com/storage/icons/budget+screen/SVG/Asset%2019.svg" /> Add new category
+            <img :src="`${$iconURL}budget+screen/SVG/Asset%2019.svg`" /> Add new category
           </h2>
         </div>
         <md-button
@@ -343,7 +343,7 @@
               <!-- <v-select v-model="newBuildingBlock.category" :options="filteredEventBlocks"></v-select> -->
               <multiselect
                 v-model="newBuildingBlock.category"
-                :options="categoryBuildingBlocks"
+                :options="filteredEventBlocks"
                 :close-on-select="true"
                 :clear-on-select="true"
                 tag-placeholder="Add this as new tag"
@@ -1011,13 +1011,7 @@ export default {
       EventComponent.get()
         .then(res => {
           this.categoryBuildingBlocks = res;
-          this.categoryBuildingBlocks.push({ id: "other", title: "Other" });
-          this.filteredEventBlocks = _.map(
-            this.categoryBuildingBlocks,
-            function(item) {
-              return item.title;
-            }
-          );
+          this.filteredEventBlocks = this.categoryBuildingBlocks.filter(item=> item.title !== 'Unexpected')
         })
         .catch(error => {
           console.log("Error ", error);

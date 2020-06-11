@@ -65,6 +65,13 @@
       }
       @include background-icon(url('http://static.maryoku.com/storage/icons/Notes/clock-gray.svg'))
     }
+    &.sharing {
+      &.active {
+        @include background-icon(url('http://static.maryoku.com/storage/icons/Share/link-dark.svg'))
+      }
+      @include background-icon(url('http://static.maryoku.com/storage/icons/Share/link-dark.svg'));
+      padding-right: 50px;
+    }
     &:focus{
       border: solid 0.5px #050505;
     }
@@ -94,6 +101,16 @@
       background-color: #FFFFFF !important;
       right: 15px;
     }
+  }
+  .copy_clip {
+    position: absolute;
+    right: 5px;
+    border: none;
+    background: transparent;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    cursor: pointer;
   }
 }
 

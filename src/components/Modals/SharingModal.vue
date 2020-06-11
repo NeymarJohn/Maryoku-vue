@@ -13,11 +13,8 @@
             <span style="padding-bottom: 10px">Anyone with this link </span>
             <md-button class="md-simple md-red edit-btn">Can view</md-button>
           </div>
-          <maryoku-input inputStyle="normal" v-model="sharingLink" readonly></maryoku-input>
-          <button type="button"
-            v-clipboard:copy="sharingLink"
-            v-clipboard:success="onCopy"
-            v-clipboard:error="onError">Copy!</button>
+          <maryoku-input inputStyle="sharing" v-model="sharingLink" readonly></maryoku-input>
+
         </div>
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black">Invite People</label>
@@ -82,12 +79,7 @@ export default {
     updateMyVendor() {
       this.$emit("updateVendor", this.editingVendor);
     },
-    onCopy: function (e) {
-      alert('You just copied: ' + e.text)
-    },
-    onError: function (e) {
-      alert('Failed to copy texts')
-    },
+   
     onCancel: function(e) {
       this.$emit("cancel")
     }

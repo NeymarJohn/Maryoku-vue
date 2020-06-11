@@ -81,7 +81,8 @@
           this.reg.test(this.vendor.email) &&
           this.vendor.companyName && 
           this.vendor.businessCategory && 
-          this.vendor.address 
+          this.vendor.address && 
+          this.vendor.phone
       },
       approve() {
         if (this.validateBasicFields()) {

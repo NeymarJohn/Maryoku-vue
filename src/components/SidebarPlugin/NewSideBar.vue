@@ -59,7 +59,7 @@
       </div>
     </div>
     <div class="sidebar-wrapper" ref="sidebarScrollArea">
-      <md-list class="nav" v-if="event.id">
+      <md-list class="nav" v-if="currentUrl.indexOf('event') >= 0">
         <sidebar-item
           name="left-menu-events-list"
           class="left-menu-events-list"
@@ -103,7 +103,8 @@ export default {
         'http://static.maryoku.com/storage/icons/Timeline-New/',
       menuIconsURL:
         'http://static.maryoku.com/storage/icons/menu _ checklist/SVG/',
-      toggleMenu: false
+      toggleMenu: false,
+      currentUrl: ''
     }
   },
   props: {
@@ -177,14 +178,24 @@ export default {
       }
     },
     goTo (router) {
+      this.toggleMenu = false;
       this.$router.push(router)
-    }
+    },
+    fetchUrl () {
+      this.currentUrl = this.$router.history.current.path;
+    },
   },
   computed: {
     sidebarStyle () {
       return {
         backgroundImage: `url(${this.backgroundImage})`
       }
+    },
+    isEventPage() {
+      return this.currentUrl.indexOf('event') >= 0
+    }, 
+    isEventPage() {
+      return this.$router.history.current.path.indexOf("event") >= 0
     }
   },
   beforeDestroy () {
@@ -194,6 +205,12 @@ export default {
   },
   components: {
     SidebarItem
+  },
+  created () {
+    this.fetchUrl()
+  },
+  watch: {
+    '$route': 'fetchUrl'
   }
 }
 </script>
