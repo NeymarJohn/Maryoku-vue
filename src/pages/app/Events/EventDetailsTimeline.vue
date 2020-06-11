@@ -594,9 +594,6 @@ export default {
      * @param event
      */
     handleDrop(index, data) {
-      console.log("handleDrop => ", data);
-      console.log("index => ", index);
-
       if (data) {
         let block = Object.assign({}, data.block);
         block.id = new Date().getTime(); //add temp id
@@ -675,22 +672,18 @@ export default {
                 this.setItemLoading(item, false, false);
               })
               .catch(error => {
-                console.log(error);
                 this.$root.$emit("timeline-updated", this.timelineItems);
                 this.setItemLoading(item, false, false);
               });
           }
         })
         .catch(err => {
-          console.log(err);
           this.$root.$emit("timeline-updated", this.timelineItems);
         });
     },
     modifyItem(item) {
-      console.log(this.timelineItems[index]);
       const index = this.timelineItems.findIndex(it => it.id === item.id);
       this.$set(this.timelineItems[index], "mode", "edit");
-      console.log(this.timelineItems[index]);
       this.disabledDragging = true;
     },
     previewEvent() {
@@ -728,7 +721,6 @@ export default {
           if (Object.keys(timelines).length > 0) {
             this.timeline = [];
             Object.keys(timelines).forEach((itemDay, index) => {
-              console.log(index);
               this.timeline.push({
                 itemDay: parseInt(itemDay),
                 isEditable: false,
@@ -821,7 +813,6 @@ export default {
               this.setItemLoading(item, false, true);
             })
             .catch(error => {
-              console.log(error);
               this.disabledDragging = false;
               this.$root.$emit("timeline-updated", this.timelineItems);
               this.setItemLoading(item, false, true);
@@ -840,7 +831,6 @@ export default {
             this.setItemLoading(item, false, true);
           })
           .catch(error => {
-            console.log(error);
             this.disabledDragging = false;
             this.$root.$emit("timeline-updated", this.timelineItems);
             this.setItemLoading(item, false, true);
@@ -889,7 +879,6 @@ export default {
           }
           timelineItem.attachments = timelineItem.attachments.concat(results);
           timelineItem.attachmentName = "";
-          console.log(timelineItem);
           timelineItem
             .save()
             .then(res => {
@@ -898,7 +887,6 @@ export default {
               this.$root.$emit("timeline-updated", this.timelineItems);
             })
             .catch(error => {
-              console.log(error);
               this.disabledDragging = false;
               this.$root.$emit("timeline-updated", this.timelineItems);
             });
@@ -1005,9 +993,7 @@ export default {
         const itemId = event.target.getAttribute("data-item");
         const timelineIndex = event.target.getAttribute("data-timelineindex");
         const itemIndex = event.target.getAttribute("data-itemIndex");
-        console.log(timelineIndex, itemIndex);
         let isLargeFile = false;
-        console.log(files);
 
         for (let i = 0; i < files.length; i++) {
           if (files[i].size > 10 * 1024 * 1024) {
@@ -1056,10 +1042,7 @@ export default {
       window.open(`http://static.maryoku.com/${path}`, "_blank");
     },
     formatDate(date) {
-      console.log(date);
-      console.log(new Date(date));
       if (typeof date == "number") {
-        console.log(moment(new Date(date)).format("MM/DD/YY"));
         return moment(new Date(date)).format("MM/DD/YY");
       }
       return moment(date).format("MM/DD/YY");
@@ -1104,9 +1087,6 @@ export default {
     },
     addTimelineItem(index) {
       let timelineLength = this.timeline.length - 1;
-      // const isInsertable = this.timeline.length - 1 == index;
-      console.log(this.timeline[index].itemDay);
-      console.log(typeof this.timeline[index].itemDay);
       let nextDay = 0;
       if (typeof this.timeline[index].itemDay == "number")
         nextDay = this.timeline[index].itemDay + 1000 * 60 * 60 * 24;
@@ -1171,17 +1151,11 @@ export default {
         this.timeline[index].isEditable = false;
       });
       this.timeline[index].isEditable = !isEdit;
-
-      console.log("forceUpdate");
       this.$forceUpdate();
     },
     closeEditTimeline(index) {
-      // this.timeline[index].isEditable = false;
-      console.log("forceUpdate - 1");
-      // this.$forceUpdate()
     },
     getDisabledDates(index) {
-      console.log(index);
       const vm = this;
       const checkDate = function(date) {
         if (index == 0) {
@@ -1241,8 +1215,6 @@ export default {
               this.event.eventStartMillis
             );
             this.timeline[0].itemDay = this.event.eventStartMillis;
-            // this.timeline[0]
-            console.log(this.timeline[0]);
 
             this.getTimelineItems();
 
@@ -1253,8 +1225,6 @@ export default {
                 this.event.components = components;
                 this.selectedComponents = components;
               });
-
-            console.log(event);
           });
       }.bind(this)
     );

@@ -26,6 +26,7 @@ import VueSwal from 'vue-swal'
 import VueTimeago from 'vue-timeago'
 import VueClipboard from 'vue-clipboard2'
 import VuePlaceAutocomplete from 'vue-place-autocomplete'
+import VueTimepicker from 'vue2-timepicker'
 
 import App from './App.vue'
 import DashboardPlugin from './material-dashboard'
@@ -34,6 +35,7 @@ import auth from './auth'
 import routes from './router/routes'
 // store setup
 import store from './store'
+
 import { IconURL, StorageURL, ResourceURL } from './globalVariables';
 
 require('vue-tour/dist/vue-tour.css')
@@ -63,6 +65,7 @@ Vue.use(VueTimeago, {
   }
 })
 Vue.use(VuePlaceAutocomplete)
+Vue.use(VueTimepicker)
 
 // configure router
 const router = new VueRouter({

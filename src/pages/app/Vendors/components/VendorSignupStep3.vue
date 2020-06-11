@@ -250,16 +250,6 @@
               </div>
             </div>
             <div class="calendar-cont" v-if="!workAllDay">
-              <div class="calendar">
-                <functional-calendar 
-                  :is-date-picker="true" 
-                  :change-month-function="true" 
-                  :change-year-function="true"
-                  :is-date-range="true"
-                  dateFormat='dd/mm/yyyy' 
-                  v-model="date"
-                />
-              </div>
               <div class="check-list">
                 <div class="block">
                   <div class="check-field" @click="exEvery=!exEvery">
@@ -267,9 +257,16 @@
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
                     <span :class="{'checked': exEvery}">Every:</span>
                   </div>
-                  <div class="cdropdown" v-if="exEvery">
+                  <div class="cdropdown" v-if="exEvery" @click="isWeekday=!isWeekday">
                     <span>Select Day</span>
                     <img :src="`${iconUrl}Asset 519.svg`"/>
+                  </div>
+                  <div class="cdropdown-cont" v-if="isWeekday">
+                    <div class="weekdays" v-for="(w, wIndex) in weekdays" :key="wIndex" @click="updateWeekdays(w)">
+                      <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="selectedWeekdays.includes(w)"/>
+                      <span class="unchecked" v-else></span>
+                      {{w}}
+                    </div>
                   </div>
                 </div>
                 <div class="block border">
@@ -286,7 +283,7 @@
                     <div class="dont">
                       <img :src="`${iconUrl}Asset 524.svg`"/>
                     </div>
-                    <div>
+                    <div class="flex-1">
                       <ul>
                         <li v-for="(h, hIndex) in holidays" :key="hIndex">
                           <div class="check-field" @click="updateExDonts(h)">
@@ -308,10 +305,25 @@
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
                     <span :class="{'checked': exLimitation}">Everyday between these hours:</span>
                   </div>
-                  <div class="">
-
+                  <div class="exLimitation" v-if="exLimitation">
+                    <div class="select-time-cont">
+                      <img :src="`${iconUrl}Asset 522.svg`"/>
+                      <vue-timepicker format="hh:mm A" v-model="startTime" hide-clear-button/>
+                      <div class="border-line"></div>
+                      <vue-timepicker format="hh:mm A" v-model="endTime" hide-clear-button/>
+                    </div>
                   </div>
                 </div>
+              </div>
+              <div class="calendar">
+                <functional-calendar 
+                  :is-date-picker="true" 
+                  :change-month-function="true" 
+                  :change-year-function="true"
+                  :is-date-range="true"
+                  dateFormat='dd/mm/yyyy' 
+                  v-model="date"
+                />
               </div>
             </div>
           </div>
@@ -330,6 +342,8 @@ import Vendors from '@/models/Vendors'
 import Icon from '@/components/Icon/Icon.vue'
 import VendorServiceItem from './VendorServiceItem.vue'
 import VSignupAddRules from '@/components/Inputs/VSignupAddRules.vue'
+// import VSignupTimeSelect from '@/components/Inputs/VSignupTimeSelect.vue'
+import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
 import { FunctionalCalendar } from 'vue-functional-calendar'
 
 export default {
@@ -344,6 +358,7 @@ export default {
     VendorServiceItem,
     VSignupAddRules,
     FunctionalCalendar,
+    VueTimepicker,
   },
   data() {
     return {
@@ -386,13 +401,27 @@ export default {
         'Milad un Nabi',
         'All Islamic holidays (Shia)',
       ],
+      allowedCategoryFor3rd: ['venuerental', 'foodandbeverage', 'decor', 'entertainment'],
+      weekdays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
+      selectedWeekdays: ['saturday', 'sunday'],
+      isWeekday: false,
       exEvery: false,
       exDont: false,
       exLimitation: false,
       exDonts: [],
       notAllowed: [],
       isOtherNa: false,
-      defNa: 'Amenities, Services, Accessibility, Equipment, Staff, Photographer, Food & Beverage, Decor, Rentals, Entertainment, Other',
+      startTime: {
+        hh: '12',
+        mm: '00',
+        A: 'AM'
+      },
+      endTime: {
+        hh: '12',
+        mm: '00',
+        A: 'AM'
+      },
+      defNa: 'Amenities, Services, Accessibility, Equipment, Staff, Other',
       policies: [
         {
           category: 'venuerental',
@@ -991,6 +1020,13 @@ export default {
       } else {
         this.noteRules.push(item)
       }
+    },
+    updateWeekdays(item) {
+      if (this.selectedWeekdays.includes(item)) {
+        this.selectedWeekdays = this.selectedWeekdays.filter(s => s != item)
+      } else {
+        this.selectedWeekdays.push(item)
+      }
     }
   },
   computed: {
@@ -1141,7 +1177,8 @@ export default {
                 margin: 0;
                 list-style: none;
                 padding: 0;
-                column-count: 4;
+                display: grid;
+                grid-template-columns: 25% 25% 25% 25%;
                 li {
                   margin-bottom: 1rem;
                   cursor: pointer;
@@ -1198,10 +1235,10 @@ export default {
 
       .calendar {
         flex: 1;
-        margin-right: 2rem;
       }
       .check-list {
         flex: 2;
+        margin-right: 2rem;
 
         .block {
           padding: 1rem 0;
@@ -1235,7 +1272,8 @@ export default {
               padding: 0;
               list-style: none;
               margin: 0;
-              columns: 2;
+              display: grid;
+              grid-template-columns: 50% 50%;
 
               li {
                 margin-bottom: 1rem;
@@ -1249,7 +1287,6 @@ export default {
             padding: .5rem 3rem;
             margin: 1rem 0;
             border-radius: 3px;
-            min-width: 50%;
             text-align: center;
             cursor: pointer;
             max-width: 250px;
@@ -1262,6 +1299,61 @@ export default {
               width: 8px;
               margin-left: 1rem;
               transform: rotate(90deg);
+            }
+          }
+          .cdropdown-cont {
+            border: 1px solid #050505;
+            -webkit-box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+            box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+            max-width: 250px;
+            padding: 1rem;
+            margin-top: -1rem;
+
+            .weekdays {
+              text-transform: capitalize;
+              display: flex;
+              cursor: pointer;
+              margin-bottom: .5rem;
+              img {
+                width: 24px;
+                height: 24px;
+                margin-right: 1rem;
+              }
+              span {
+                display: inline-block;
+                width: 24px;
+                height: 24px;
+                border: 1px solid #050505;
+                border-radius: 50%;
+                margin-right: 1rem;
+              }
+              &.last-child {
+                margin-bottom: 0;
+              }
+            }
+          }
+          .exLimitation {
+            .select-time-cont {
+              display: flex;
+              align-items: center;
+              margin: 1rem 0 0 3rem;
+
+              img {
+                width: 18px;
+                height: 18px;
+                margin-right: 1rem;
+              }
+              .border-line {
+                background: black;
+                width: 1rem;
+                height: 2px;
+                margin: 0 1rem;
+              }
+              /deep/ .time-picker {
+                input {
+                  text-align: center;
+                }
+              }
             }
           }
           &.border {
@@ -1401,6 +1493,9 @@ export default {
       width: 75%;
       padding: 1.5rem 2rem;
       font-size: 16px;
+    }
+    .flex-1 {
+      flex: 1;
     }
     .no-margin {
       margin: 0!important; 

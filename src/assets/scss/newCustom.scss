@@ -865,7 +865,7 @@
     // width : 460px;
     background: #fff;
 
-    height: 100vh;
+    height: calc(100vh - 80px);
     overflow-x:hidden;
     overflow-y: auto;
     z-index: 10;
@@ -970,7 +970,7 @@
             margin-bottom : 0.4em;
             padding: 1em 30px;
             cursor: pointer;
-
+            position: relative;
             .item-title {
                 position: inherit;
                 font-family: 'Manrope-Regular',sans-serif;
@@ -988,7 +988,16 @@
                 border-left-color : $green;
                 text-decoration: line-through;
             }
-
+            &:before {
+                content : ' ';
+                position: absolute;
+                height: 100%;
+                background: rgba(56, 255, 126, 0.19);
+                left : 0;
+                top : 0;
+                bottom : 0;
+                width: 0;
+            }
             &.current {
                 border-left-color : $green;
                 // font-size: 21px;
@@ -1003,15 +1012,7 @@
                 text-align: left;
                 color: #050505;
 
-                &:before {
-                    content : ' ';
-                    position: absolute;
-                    height: 100%;
-                    background: rgba(56, 255, 126, 0.19);
-                    left : 0;
-                    top : 0;
-                    bottom : 0;
-                }
+                
             }
             &.progress_25 {
                 &:before {
