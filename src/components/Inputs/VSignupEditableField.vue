@@ -142,11 +142,11 @@ export default {
         value: 'signageprinting',
         icon: 'signageprinting.svg'
       },
-      {
-        name: 'Advertising and Promotion',
-        value: 'advertising-promotion',
-        icon: 'advertising-promotion.svg'
-      },
+      // {
+      //   name: 'Advertising and Promotion',
+      //   value: 'advertising-promotion',
+      //   icon: 'advertising-promotion.svg'
+      // },
       {
         name: 'AV / Staging',
         value: 'audiovisualstagingservices',
@@ -157,11 +157,11 @@ export default {
         value: 'swags',
         icon: 'swags.svg'
       },
-      {
-        name: 'Shipping',
-        value: 'shipping',
-        icon: 'shipping.svg'
-      },
+      // {
+      //   name: 'Shipping',
+      //   value: 'shipping',
+      //   icon: 'shipping.svg'
+      // },
       {
         name: 'Transportation & Tour operator',
         value: 'transportation',
@@ -172,21 +172,21 @@ export default {
         value: 'entertainment',
         icon: 'entertainment.svg'
       },
-      {
-        name: 'Administration',
-        value: 'administration',
-        icon: 'administration.svg'
-      },
+      // {
+      //   name: 'Administration',
+      //   value: 'administration',
+      //   icon: 'administration.svg'
+      // },
       {
         name: 'Security',
         value: 'securityservices',
         icon: 'securityservices.svg'
       },
-      {
-        name: 'Technology',
-        value: 'technologyservices',
-        icon: 'technologyservices.svg'
-      },
+      // {
+      //   name: 'Technology',
+      //   value: 'technologyservices',
+      //   icon: 'technologyservices.svg'
+      // },
       {
         name: 'Videography and Photography',
         value: 'videographyandphotography',

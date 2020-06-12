@@ -14,9 +14,21 @@
         <p>Username</p>
         <input class="field" placeholder="Type your email here"/>
         <p>Set Password</p>
-        <input class="field" placeholder="Type password here"/>
+        <input 
+          class="field" 
+          :class="{'red-border': password != confirmPassword && confirmPassword}"
+          placeholder="Type password here" 
+          type="password" 
+          v-model="password" 
+        />
         <p>Confirm Password</p>
-        <input class="field" placeholder="Type password here"/>
+        <input 
+          class="field" 
+          :class="{'red-border': password != confirmPassword}"
+          placeholder="Type password here" 
+          type="password" 
+          v-model="confirmPassword"
+        />
       </div>
     </div>
   </div>
@@ -45,6 +57,8 @@ export default {
     return {
       vendor: null,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
+      password: null, 
+      confirmPassword: null,
     }
   },
   created() {
@@ -121,6 +135,9 @@ export default {
           border: 1px solid #dddddd;
         }
       }
+    }
+    .red-border {
+      border: 1px solid #f51355!important;
     }
   }  
 </style>

@@ -9,7 +9,6 @@
   color: $gray !important;
   font-size: $tooltip-font-size;
   font-weight: 400;
-  z-index: 9999;
   @include shadow-8dp();
 
   .tooltip-wrapper {

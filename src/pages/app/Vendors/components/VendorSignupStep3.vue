@@ -88,7 +88,7 @@
               </div>
               <input type="text" class="" placeholder="Like: 50% of the total event"/>
             </div> -->
-            <div class="field ml-title">
+            <!-- <div class="field ml-title">
               <h4>cancellation approach</h4>
             </div>
             <div class="field mb-50">
@@ -103,7 +103,7 @@
                 </div>
               </div>
               <input type="text" class="" placeholder="Like: 60 days prior to the start of the event..."/>
-            </div>
+            </div> -->
             <div class="rules">
               <div 
                 class="rule" 
@@ -250,16 +250,6 @@
               </div>
             </div>
             <div class="calendar-cont" v-if="!workAllDay">
-              <div class="calendar">
-                <functional-calendar 
-                  :is-date-picker="true" 
-                  :change-month-function="true" 
-                  :change-year-function="true"
-                  :is-date-range="true"
-                  dateFormat='dd/mm/yyyy' 
-                  v-model="date"
-                />
-              </div>
               <div class="check-list">
                 <div class="block">
                   <div class="check-field" @click="exEvery=!exEvery">
@@ -267,9 +257,16 @@
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
                     <span :class="{'checked': exEvery}">Every:</span>
                   </div>
-                  <div class="cdropdown" v-if="exEvery">
+                  <div class="cdropdown" v-if="exEvery" @click="isWeekday=!isWeekday">
                     <span>Select Day</span>
                     <img :src="`${iconUrl}Asset 519.svg`"/>
+                  </div>
+                  <div class="cdropdown-cont" v-if="isWeekday">
+                    <div class="weekdays" v-for="(w, wIndex) in weekdays" :key="wIndex" @click="updateWeekdays(w)">
+                      <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="selectedWeekdays.includes(w)"/>
+                      <span class="unchecked" v-else></span>
+                      {{w}}
+                    </div>
                   </div>
                 </div>
                 <div class="block border">
@@ -286,7 +283,7 @@
                     <div class="dont">
                       <img :src="`${iconUrl}Asset 524.svg`"/>
                     </div>
-                    <div>
+                    <div class="flex-1">
                       <ul>
                         <li v-for="(h, hIndex) in holidays" :key="hIndex">
                           <div class="check-field" @click="updateExDonts(h)">
@@ -308,10 +305,32 @@
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
                     <span :class="{'checked': exLimitation}">Everyday between these hours:</span>
                   </div>
-                  <div class="">
-
+                  <div class="exLimitation" v-if="exLimitation">
+                    <div class="select-time-cont">
+                      <img :src="`${iconUrl}Asset 522.svg`"/>
+                      <vue-timepicker format="hh:mm A" v-model="startTime" hide-clear-button/>
+                      <div class="border-line"></div>
+                      <vue-timepicker format="hh:mm A" v-model="endTime" hide-clear-button/>
+                    </div>
                   </div>
                 </div>
+              </div>
+              <div class="calendar">
+                <div class="calendar-title">
+                  Mark the blackout days
+                </div>
+                <functional-calendar 
+                  :change-month-function='true' 
+                  :change-year-function='true'
+                  :is-date-range='true'
+                  v-on:changedMonth="changedMonth"
+                  v-on:changedYear="changedYear"
+                  :sundayStart="true"
+                  :minSelDays="1"
+                  :maxSelDays="7"
+                  dateFormat='yyyy-mm-dd' 
+                  v-model="date"
+                />
               </div>
             </div>
           </div>
@@ -330,6 +349,8 @@ import Vendors from '@/models/Vendors'
 import Icon from '@/components/Icon/Icon.vue'
 import VendorServiceItem from './VendorServiceItem.vue'
 import VSignupAddRules from '@/components/Inputs/VSignupAddRules.vue'
+// import VSignupTimeSelect from '@/components/Inputs/VSignupTimeSelect.vue'
+import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
 import { FunctionalCalendar } from 'vue-functional-calendar'
 
 export default {
@@ -344,6 +365,7 @@ export default {
     VendorServiceItem,
     VSignupAddRules,
     FunctionalCalendar,
+    VueTimepicker,
   },
   data() {
     return {
@@ -386,13 +408,27 @@ export default {
         'Milad un Nabi',
         'All Islamic holidays (Shia)',
       ],
+      allowedCategoryFor3rd: ['venuerental', 'foodandbeverage', 'decor', 'entertainment'],
+      weekdays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
+      selectedWeekdays: ['saturday', 'sunday'],
+      isWeekday: false,
       exEvery: false,
       exDont: false,
       exLimitation: false,
       exDonts: [],
       notAllowed: [],
       isOtherNa: false,
-      defNa: 'Amenities, Services, Accessibility, Equipment, Staff, Photographer, Food & Beverage, Decor, Rentals, Entertainment, Other',
+      startTime: {
+        hh: '12',
+        mm: '00',
+        A: 'AM'
+      },
+      endTime: {
+        hh: '12',
+        mm: '00',
+        A: 'AM'
+      },
+      defNa: 'Amenities, Services, Accessibility, Equipment, Staff, Other',
       policies: [
         {
           category: 'venuerental',
@@ -991,6 +1027,13 @@ export default {
       } else {
         this.noteRules.push(item)
       }
+    },
+    updateWeekdays(item) {
+      if (this.selectedWeekdays.includes(item)) {
+        this.selectedWeekdays = this.selectedWeekdays.filter(s => s != item)
+      } else {
+        this.selectedWeekdays.push(item)
+      }
     }
   },
   computed: {
@@ -1038,7 +1081,7 @@ export default {
         }
       }
       .right-side {
-        flex: 3;
+        flex: 4;
 
         .card {
           font-family: Manrope-Regular, sans-serif;
@@ -1074,7 +1117,7 @@ export default {
               align-items: center;
 
               .suffix {
-                flex: 2;
+                flex: 3;
                 input {
                   padding-left: 45%;
                   width: 100%;
@@ -1141,7 +1184,8 @@ export default {
                 margin: 0;
                 list-style: none;
                 padding: 0;
-                column-count: 4;
+                display: grid;
+                grid-template-columns: 25% 25% 25% 25%;
                 li {
                   margin-bottom: 1rem;
                   cursor: pointer;
@@ -1198,10 +1242,98 @@ export default {
 
       .calendar {
         flex: 1;
-        margin-right: 2rem;
+
+        .calendar-title {
+          position: absolute;
+          z-index: 999;
+          margin: 1.5rem;
+          font: normal 16px Manrope-Regular, sans-serif;
+        }
+        /deep/ .vfc-main-container {
+          padding-top: 3rem;
+        }
+        /deep/ .vfc-top-date {
+          a {
+            text-decoration: none!important;
+            font: 600 16px Manrope-Regular, sans-serif;
+            color: #050505;
+          }
+        }
+        /deep/ .vfc-arrow-left, /deep/ .vfc-arrow-right {
+          width: 10px;
+          height: 10px;
+          color: #f51355;
+          border-color: #f51355;
+          border-top: 3px solid;
+        }
+        /deep/ .vfc-arrow-left {
+          border-left: 3px solid;
+        }
+        /deep/ .vfc-arrow-right {
+          border-right: 3px solid;
+        }
+        /deep/ .vfc-dayNames {
+          .vfc-day {
+            color: #a0a0a0;
+            font: 800 14px Manrope-Regular, sans-serif;
+          }
+        }
+        /deep/ .vfc-span-day {
+          font: normal 16px Manrope-Regular, sans-serif;
+          padding: 6px 0;
+        }
+        /deep/ .vfc-base-start,
+        .vfc-base-end {
+          background: #f51355;
+          color: #ffffff;
+        }
+        /deep/ span.vfc-span-day {
+          &.vfc-marked {
+            &:before {
+              background-color: #f51355;
+              color: #ffffff;
+            }
+          }
+        }
+        /deep/ .vfc-span-day.vfc-start-marked {
+          background-color: #fc1355;
+          color: #ffffff;
+          z-index: 200;
+
+          &:before {
+            border-top-left-radius: 50%;
+            border-bottom-left-radius: 50%;
+          }
+        }
+        /deep/ .vfc-span-day.vfc-end-marked {
+          &:before {
+            border-top-right-radius: 50%;
+            border-bottom-right-radius: 50%;
+          }
+        }
+        /deep/ .vfc-week .vfc-day .vfc-base-end {
+          background-color: #fc1355;
+          color: #ffffff;
+        }
+        /deep/ .vfc-week .vfc-day span.vfc-span-day.vfc-hovered {
+          background-color: #fc1355;
+          color: #ffffff;
+        }
+        /deep/ .vfc-today {
+          background-color: #ffd9e4;
+          color: #f51355;
+          font: 600 14px Manrope-Regular, sans-serif;
+        }
+        /deep/ span.vfc-span-day {
+          &.vfc-marked {
+            background-color: #f51355;
+            color: #ffffff;
+          }
+        }
       }
       .check-list {
         flex: 2;
+        margin-right: 2rem;
 
         .block {
           padding: 1rem 0;
@@ -1235,7 +1367,8 @@ export default {
               padding: 0;
               list-style: none;
               margin: 0;
-              columns: 2;
+              display: grid;
+              grid-template-columns: 50% 50%;
 
               li {
                 margin-bottom: 1rem;
@@ -1249,7 +1382,6 @@ export default {
             padding: .5rem 3rem;
             margin: 1rem 0;
             border-radius: 3px;
-            min-width: 50%;
             text-align: center;
             cursor: pointer;
             max-width: 250px;
@@ -1262,6 +1394,61 @@ export default {
               width: 8px;
               margin-left: 1rem;
               transform: rotate(90deg);
+            }
+          }
+          .cdropdown-cont {
+            border: 1px solid #050505;
+            -webkit-box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+            box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+            max-width: 250px;
+            padding: 1rem;
+            margin-top: -1rem;
+
+            .weekdays {
+              text-transform: capitalize;
+              display: flex;
+              cursor: pointer;
+              margin-bottom: .5rem;
+              img {
+                width: 24px;
+                height: 24px;
+                margin-right: 1rem;
+              }
+              span {
+                display: inline-block;
+                width: 24px;
+                height: 24px;
+                border: 1px solid #050505;
+                border-radius: 50%;
+                margin-right: 1rem;
+              }
+              &.last-child {
+                margin-bottom: 0;
+              }
+            }
+          }
+          .exLimitation {
+            .select-time-cont {
+              display: flex;
+              align-items: center;
+              margin: 1rem 0 0 3rem;
+
+              img {
+                width: 18px;
+                height: 18px;
+                margin-right: 1rem;
+              }
+              .border-line {
+                background: black;
+                width: 1rem;
+                height: 2px;
+                margin: 0 1rem;
+              }
+              /deep/ .time-picker {
+                input {
+                  text-align: center;
+                }
+              }
             }
           }
           &.border {
@@ -1402,8 +1589,20 @@ export default {
       padding: 1.5rem 2rem;
       font-size: 16px;
     }
+    .flex-1 {
+      flex: 1;
+    }
     .no-margin {
       margin: 0!important; 
     }
   }  
+  .vfc-week .vfc-day span.vfc-span-day.vfc-marked {
+    border: 1px solid black;
+    margin: auto;
+    background-color: #fc1355 !important;
+    border-radius: 50%;
+    opacity: 1;
+    z-index: 1;
+  }
+
 </style>
