@@ -3,7 +3,7 @@
     <div class="inside-container">
       <div class="left-side">
         <img :src="`${iconUrl}Group 5213 (2).svg`"/>
-        <h4>Hi,</h4>
+        <h4>Hi Relish caters & venues,</h4>
         <p>We are glad to have you onboard! Submitting quotes & proposals has never been easier. Let's begin with approving your basic info</p>
         <h2>0/4</h2>
         <h3>Only 4 simple steps & you're signed!</h3>

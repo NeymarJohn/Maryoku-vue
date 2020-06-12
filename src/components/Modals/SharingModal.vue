@@ -9,38 +9,79 @@
       <div class="md-layout maryoku-modal-body">
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black mt-40">Link sharing on</label>
-          <div>
+          <div class="d-flex align-center mt-10 mb-10">
             <span style="padding-bottom: 10px">Anyone with this link </span>
-            <md-button class="md-simple md-red edit-btn">Can view</md-button>
+            <div class="sharing-role">
+              <md-button class="md-simple md-red edit-btn" @click="showLinkRoleEditor = !showLinkRoleEditor">
+                Can view
+                <md-icon v-if="showLinkRoleEditor">keyboard_arrow_down</md-icon>
+                <md-icon v-else>keyboard_arrow_right</md-icon>
+              </md-button>
+              <sharing-role-options v-if="showLinkRoleEditor"></sharing-role-options>
+            </div>
           </div>
           <maryoku-input inputStyle="sharing" v-model="sharingLink" readonly></maryoku-input>
-
         </div>
+        <div class="spacer"></div>
         <div class="md-layout-item md-size-100 form-group maryoku-field mb-30">
           <label class="font-size-16 font-bold-extra color-black">Invite People</label>
-          <div>Email Address</div>
-          <maryoku-input inputStyle="email" type="email" v-model="editingVendor.vendorMainEmail"></maryoku-input>
+          <div class="mt-10 mb-10">Email Address</div>
+          <div class="d-flex">
+            <!-- <maryoku-input class="flex-1" inputStyle="email" type="email" v-model="editingVendor.vendorMainEmail"></maryoku-input> -->
+            <input-tag v-model="emails" class="flex-1"></input-tag>
+            <div class="email-role-button">
+              <md-button class="md-simple md-red role-editor" @click="showEmailRoleEditor = !showEmailRoleEditor" :disabled="emails.length==0">
+                <img data-v-a76b6a56="" :src="`${this.$iconURL}Share/edit-red.svg`" width="20" >
+                <md-icon v-if="showEmailRoleEditor">keyboard_arrow_down</md-icon>
+                <md-icon v-else>keyboard_arrow_right</md-icon>
+              </md-button>
+              <sharing-role-options v-if="showEmailRoleEditor" align="right"></sharing-role-options>
+            </div>
+          </div>
+          <div v-if="emails.length > 0" >
+             <div class="form-group mt-4">
+              <textarea
+                rows="8"
+                class="form-control"
+                placeholder="Add message"
+                v-model="message"
+              ></textarea>
+            </div>
+            <div class="d-flex align-center justify-content-between">
+              <div> <strong>Shared with: </strong> <span v-for="email in emails" :key="email">{{email}}, </span></div>
+              <div class="checkbox-wrapper"><md-checkbox v-model="isSendingMessage">Send message</md-checkbox></div>
+            </div>
+          </div>
         </div>
       </div>
     </template>
     <template slot="footer">
-      <md-button
-        class="md-button md-black md-simple md-theme-default"
-        @click="onCancel()"
-      >Cancel</md-button>
-      <md-button class="md-red md-bold add-category-btn" @click="updateMyVendor">Send</md-button>
+      <template v-if="emails.length>0">
+        <md-button
+          class="md-button md-black md-simple add-category-btn"
+          @click="onCancel()"
+        >Cancel</md-button>
+        <md-button class="md-red md-bold add-category-btn" @click="updateMyVendor">Send</md-button>
+      </template>
+      <template v-else>
+        <md-button class="md-red md-bold add-category-btn" @click="onCancel()">Done</md-button>
+      </template>
     </template>
   </modal>
 </template>
 
 <script>
 import { Modal, MaryokuInput } from "@/components";
+import SharingRoleOptions from "@/components/SharingRoleOptions"
+import InputTag from 'vue-input-tag'
 
 export default {
-  name: "add-vendor-modal",
+  name: "sharing-modal",
   components: {
     Modal,
-    MaryokuInput
+    MaryokuInput,
+    SharingRoleOptions,
+    InputTag
   },
   props: {
     show: [Boolean],
@@ -52,7 +93,12 @@ export default {
       selectedOption: "keep",
       location: "",
       currentAttachments: [],
+      emails:[],
+      message: "",
       isLoading: false,
+      showLinkRoleEditor: false,
+      showEmailRoleEditor: false,
+      isSendingMessage: false,
       editingVendor: {
         vendorDisplayName: "",
         cost: "",
@@ -72,10 +118,6 @@ export default {
       this.$emit("remindLater");
     },
     removeSelectedAttachment(index) {},
-    onFileChange(event) {
-      let files = event.target.files || event.dataTransfer.files;
-      this.editingVendor.attachment = files[0];
-    },
     updateMyVendor() {
       this.$emit("updateVendor", this.editingVendor);
     },
@@ -92,5 +134,33 @@ export default {
 }
 .add-category-btn {
   margin-right: 20px;
+}
+.sharing-role {
+  margin-left: 10px;
+  align-items: center;
+}
+.email-role-button {
+  border: solid 1px #FFA4BC;
+  margin-left: 15px;
+  border-radius: 3px;
+  max-height: 56px;
+}
+.spacer {
+  border-bottom: solid 1px #DDDDDD;
+  width: 100%;
+  margin: 30px 15px;
+}
+.vue-input-tag-wrapper  {
+  .new-tag {
+    box-shadow: none !important;
+  }
+}
+textarea {
+  padding: 20px 20px !important;
+  min-height: 100px !important;
+}
+.checkbox-wrapper {
+  min-width: 165px;
+  margin-left: 10px;
 }
 </style>

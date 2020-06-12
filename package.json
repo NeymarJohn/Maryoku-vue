@@ -57,6 +57,7 @@
         "vue-gtm": "^2.0.0",
         "vue-image-lightbox": "^6.2.1",
         "vue-input-mask": "^0.0.10",
+        "vue-input-tag": "^2.0.7",
         "vue-material": "1.0.0-beta-10.2",
         "vue-moment": "^4.1.0",
         "vue-multiselect": "^2.1.6",
@@ -76,7 +77,6 @@
         "vue-swal": "^1.0.0",
         "vue-timeago": "^5.1.2",
         "vue-tour": "^1.1.0",
-        "vue2-timepicker": "^1.1.2",
         "vue2-transitions": "^0.2.3",
         "vuedraggable": "^2.20.0",
         "vuex": "^3.0.1"

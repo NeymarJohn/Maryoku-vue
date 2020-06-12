@@ -11,12 +11,13 @@
       @click="onClickEvent"
       ref="input"
     />
+    <div class="copy_clip"  v-if="inputStyle==='sharing'">
       <button type="button"
-            class="copy_clip"
-            v-if="inputStyle==='sharing'"
             v-clipboard:copy="value"
             v-clipboard:success="onCopy"
             v-clipboard:error="onCopyError">Copy</button>
+      <md-tooltip :md-active.sync="tooltipActive"  v-if="tooltipActive">Link Copied</md-tooltip>
+    </div>
     <div ref="timePickerElements" v-if="showTimePicker">
       <div class="time-picker picker-panel"  ref="timePickerPanel" >
         <div class="d-flex picker-content">
@@ -83,7 +84,8 @@ export default {
     size:String
   },
   beforeDestroy() {
-    this.$refs.timePickerPanel.style.display = "none";
+    if (this.$refs.timePickerPanel)
+      this.$refs.timePickerPanel.style.display = "none";
   },
   data() {
     return {
@@ -92,7 +94,8 @@ export default {
       showTimePicker: false,
       showDatePicker: false,
       dateData: {},
-      timeInfo: 0
+      timeInfo: 0,
+      tooltipActive:false
     };
   },
   methods: {
@@ -146,10 +149,18 @@ export default {
     handleScroll(event) {
       console.log(window.scrollY)
       console.log(this.cumulativeOffset(this.$refs.input))
-      this.$refs.timePickerPanel.style.top = `${window.scrollY + this.cumulativeOffset(this.$refs.input).top}px`;
+      if (this.$refs.timePickerPanel)
+        this.$refs.timePickerPanel.style.top = `${window.scrollY + this.cumulativeOffset(this.$refs.input).top}px`;
     },
     onCopy: function (e) {
-      alert('You just copied: ' + e.text)
+      // alert('You just copied: ' + e.text)
+      setTimeout(() => {
+        this.tooltipActive = false;
+      }, 500);
+      // this.tooltipActive = true;
+      setTimeout(() => {
+        this.tooltipActive = false;
+      }, 3000);
     },
     onCopyError: function (e) {
       alert('Failed to copy texts')

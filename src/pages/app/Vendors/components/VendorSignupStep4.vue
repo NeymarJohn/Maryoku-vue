@@ -21,9 +21,8 @@
             </div>
           </div>
           <div class="banner">
-            <img :src="vendor.images[0]" v-if="vendor.images.length > 0"/>
-            <!-- <img :src="vendor.coverPhoto" v-if="vendor.coverPhoto"/> -->
-            <!-- <img src="http://static.maryoku.com/storage/img/sidebar-2.jpg" v-else/> -->
+            <img :src="vendor.coverPhoto" v-if="vendor.coverPhoto"/>
+            <img src="http://static.maryoku.com/storage/img/sidebar-2.jpg" v-else/>
           </div>
           <div class="about-cont" id="About">
             <div class="block">
@@ -71,16 +70,16 @@
                 </div>
               </div>
             </div>
-            <div class="social" v-if="vendor.social">
+            <div class="social">
               Website & social
               <div class="items">
-                <div class="item" v-if="vendor.social.website">
+                <div class="item">
                   <img :src="`${iconUrl}Asset 539.svg`"/> {{vendor.social.website}}
                 </div>
-                <div class="item" v-if="vendor.social.instagram">
+                <div class="item">
                   <img :src="`${iconUrl}Group 4569 (2).svg`"/> {{vendor.social.instagram}}
                 </div>
-                <div class="item" v-if="vendor.social.facebook">
+                <div class="item">
                   <img :src="`${iconUrl}Asset 540.svg`"/> {{vendor.social.facebook}}
                 </div>
               </div>
@@ -463,7 +462,7 @@ export default {
             padding-bottom: 2rem;
             img {
               width: 100%;
-              height: 460px;
+              height: 230px;
             }
           }
           .about-cont {

@@ -258,6 +258,9 @@
                     border-bottom : 2px solid rgba(0,0,0,0);
                     text-transform: capitalize;
                     font-size : 20px;
+                    height: 100%;
+                    padding-left: 30px;
+                    padding-right: 30px;
                 }
                 &.active {
                     .md-list-item-button {
@@ -267,6 +270,7 @@
                         border-radius: 0;
                         color: #000 !important;
                         font-weight: bold;
+                        height: 100%;
                     }
                 }
             }
@@ -284,6 +288,7 @@
         justify-content: center !important;
         border-radius: 3px;
         box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+        height: 80px;
     }
 
     .md-card-tabs .tab-content {

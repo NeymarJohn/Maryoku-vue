@@ -105,12 +105,15 @@
   .copy_clip {
     position: absolute;
     right: 5px;
-    border: none;
-    background: transparent;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 16px;
-    cursor: pointer;
+    button {
+      border: none;
+      background: transparent;
+      font-size: 16px;
+      cursor: pointer;
+      color: #f51355;
+    }
   }
 }
 
