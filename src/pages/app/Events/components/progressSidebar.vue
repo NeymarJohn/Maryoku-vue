@@ -52,7 +52,7 @@
               <img
                 v-if="item.status==='completed'"
                 :src="`${$iconURL}budget+screen/SVG/Asset%2032.svg`"
-                width="15"
+                width="25"
               />
               <img :src="item.icon" v-if="isActiveRoute(item)" width="25"/>
               {{item.title}}

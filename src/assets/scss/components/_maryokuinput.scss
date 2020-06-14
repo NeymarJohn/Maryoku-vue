@@ -70,7 +70,7 @@
         @include background-icon(url('http://static.maryoku.com/storage/icons/Share/link-dark.svg'))
       }
       @include background-icon(url('http://static.maryoku.com/storage/icons/Share/link-dark.svg'));
-      padding-right: 50px;
+      padding-right: 60px;
     }
     &:focus{
       border: solid 0.5px #050505;
@@ -105,12 +105,15 @@
   .copy_clip {
     position: absolute;
     right: 5px;
-    border: none;
-    background: transparent;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 16px;
-    cursor: pointer;
+    button {
+      border: none;
+      background: transparent;
+      font-size: 16px;
+      cursor: pointer;
+      color: #f51355;
+    }
   }
 }
 

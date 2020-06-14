@@ -1,4 +1,6 @@
 <template>
+  <div>
+    <event-state-message type="positive" v-if="showMessage" @closeMessage="showMessage=false" ></event-state-message>
     <div class="edit-event-details event-details-budget">
         <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
         <!-- Event Header -->
@@ -12,7 +14,7 @@
             <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
         </div>
         <div class="md-layout justify-content-between">
-            <div class="md-layout-item md-size-55">
+            <div class="md-layout-item md-size-40">
                 <div class="card-section card-overview">
                     <div class="section-header">
                         Overview
@@ -40,20 +42,6 @@
                     <img class="card-overview-saved-icon" src="http://static.maryoku.com/storage/icons/budget+screen/png/Asset+25.png" width="20"> 
                     <span class="card-overview-saved-amount">$ 100</span>
                 </div>
-            </div>
-            <div class="md-layout-item  md-size-45 card-actvity">
-               <div class="card-section card-activity">
-                <div class="section-header">
-                    Activity
-                </div>
-                <div class="budget-list d-flex justify-content-between">
-                  <event-budget-activity-panel></event-budget-activity-panel>
-                </div>
-              </div>
-            </div>
-        </div>
-        <div class="md-layout justify-content-between">
-            <div class="md-layout-item md-size-40">
                 <div class="card-section card-expense">
                     <div class="section-header">
                         Expenses
@@ -83,6 +71,16 @@
                     </tabs>
                 </div>
             </div>
+            <!-- <div class="md-layout-item  md-size-45 card-actvity">
+               <div class="card-section card-activity">
+                <div class="section-header">
+                    Activity
+                </div>
+                <div class="budget-list d-flex justify-content-between">
+                  <event-budget-activity-panel></event-budget-activity-panel>
+                </div>
+              </div>
+            </div> -->
         </div>
         <upload-vendors-modal ref="uploadModal"></upload-vendors-modal>
 
@@ -195,6 +193,7 @@
         </modal>
         <BudgetHandleMinusModal value="50" v-if="showHandleMinus"></BudgetHandleMinusModal>
     </div>
+  </div>
 </template>
 
 <script>
@@ -213,6 +212,7 @@ import Calendar from '@/models/Calendar'
 import CalendarEvent from '@/models/CalendarEvent'
 import CalendarEventStatistics from '@/models/CalendarEventStatistics'
 import EventComponent from '@/models/EventComponent'
+import EventStateMessage from './components/EventStateMessage'
 import {
   mapState,
   mapMutations,
@@ -241,7 +241,8 @@ export default {
     BudgetHandleMinusModal,
     EventBudgetActivityPanel,
     HeaderActions,
-    CommentEditorPanel
+    CommentEditorPanel,
+    EventStateMessage
   },
 
   data () {
@@ -276,7 +277,8 @@ export default {
       newBudget: null,
       editBudgetElementsModal: false,
       showHandleMinus:false,
-      showCommentEditorPanel:false
+      showCommentEditorPanel:false,
+      showMessage: true
     }
   },
   created () {
