@@ -25,20 +25,32 @@
                 </div>
               </div>
               <div class="main-cont">
-                <textarea placeholder="Type 'about your business' here" rows="5" v-model="vendor.about.company"/>
+                <textarea 
+                  placeholder="Type 'about your business' here" 
+                  rows="5" 
+                  @blur="updateVendor($event, 'about.company')" 
+                  v-model="vendor.about.company"
+                />
               </div>
             </div>
             <div class="field mb-50">
               <div class="title-cont">
                 <div class="top">
-                  <h5><img :src="`${iconUrl}Asset 543.svg`"/> about your {{getCategoryNameByValue(vendor.businessCategory)}}</h5>
+                  <h5>
+                    <img :src="`${iconUrl}Asset 543.svg`"/> about your {{getCategoryNameByValue(vendor.vendorCategory)}}
+                  </h5>
                 </div>
                 <div class="bottom">
                   <p>Tell us why your service is the best choice, what makes it special</p>
                 </div>
               </div>
               <div class="main-cont">
-                <textarea :placeholder="`Type 'About your ${getCategoryNameByValue(vendor.businessCategory)}' here`" rows="5" v-model="vendor.about.venue"/>
+                <textarea 
+                  :placeholder="`Type 'About your ${getCategoryNameByValue(vendor.vendorCategory)}' here`" 
+                  rows="5" 
+                  @blur="updateVendor($event, 'about.category')" 
+                  v-model="vendor.about.category"
+                />
               </div>
             </div>
             <div class="field mb-50">
@@ -52,13 +64,27 @@
               </div>
               <div class="main-cont">
                 <div class="suffix">
-                  <input type="number" placeholder="100" v-model="min" min="100" max="1000" @keyup="limitRange"/>
+                  <input 
+                    type="number" 
+                    placeholder="100" 
+                    v-model="vendor.capacity.low" 
+                    min="100" 
+                    max="1000" 
+                    @change="updateVendor($event, 'capacity.low')"
+                  />
                 </div>
                 <div class="arrow">
                   <img :src="`${iconUrl}Group 4585 (2).svg`"/>
                 </div>
                 <div class="suffix">
-                  <input type="number" placeholder="1000" v-model="max" min="100" max="1000" @keyup="limitRange"/>
+                  <input 
+                    type="number" 
+                    placeholder="1000" 
+                    v-model="vendor.capacity.high" 
+                    min="100" 
+                    max="1000" 
+                    @change="updateVendor($event, 'capacity.high')"
+                  />
                 </div>
               </div>
             </div>
@@ -211,21 +237,36 @@
                 <img :src="`${iconUrl}Asset 539.svg`"/>
                 <span>website</span>
               </div>
-              <input type="text" class="" placeholder="Paste link here"/>
+              <input 
+                type="text" 
+                placeholder="Paste link here" 
+                @change="updateVendor($event, 'social.website')" 
+                v-model="vendor.social.website"
+              />
             </div>
             <div class="field">
               <div class="label">
                 <img :src="`${iconUrl}Asset 540.svg`" class="w-16"/>
                 <span>facebook</span>
               </div>
-              <input type="text" class="" placeholder="Paste link here"/>
+              <input 
+                type="text" 
+                placeholder="Paste link here" 
+                @change="updateVendor($event, 'social.facebook')" 
+                v-model="vendor.social.facebook"
+              />
             </div>
             <div class="field">
               <div class="label">
                 <img :src="`${iconUrl}Group 4569 (2).svg`"/>
                 <span>instagram</span>
               </div>
-              <input type="text" class="" placeholder="Paste link here"/>
+              <input 
+                type="text" 
+                placeholder="Paste link here" 
+                @change="updateVendor($event, 'social.instagram')" 
+                v-model="vendor.social.instagram"
+              />
             </div>
             <h5>Other:</h5>
             <div class="social-item" v-for="(s, sIndex) in defSocialMedia" :key="sIndex">
@@ -242,6 +283,7 @@
                 v-model="vendor.social[s]"
                 v-if="socialMedia.includes(s)"
                 v-on:blur="checkBlank"
+                @change="updateVendor($event, `social.${s}`)"
                 @keyup="checkBlank"
               />
             </div>
@@ -365,8 +407,6 @@ export default {
         this.socialMedia.push(item)
       }
     },
-    limitRange(e) {
-    },
     uploadVendorImage (imageId = null, attachmentType = null) {
       this.$refs.imageFile.click()
     },
@@ -423,6 +463,9 @@ export default {
       } else {
         e.target.style.border = "1px solid #707070"
       }
+    },
+    updateVendor(event, fieldName) {
+      this.$root.$emit('update-vendor-value', fieldName, event.target.value)
     }
   },
   computed: {

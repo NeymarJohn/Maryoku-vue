@@ -12,7 +12,12 @@
       </div>
       <div class="card">
         <p>Username</p>
-        <input class="field" placeholder="Type your email here"/>
+        <input 
+          class="field" 
+          placeholder="Type your email here" 
+          v-model="vendor.vendorDisplayName"
+          @change="updateVendor($event, 'vendorDisplayName')"
+        />
         <p>Set Password</p>
         <input 
           class="field" 
@@ -20,6 +25,7 @@
           placeholder="Type password here" 
           type="password" 
           v-model="password" 
+          @change="updateVendor($event, 'password')"
         />
         <p>Confirm Password</p>
         <input 
@@ -28,6 +34,7 @@
           placeholder="Type password here" 
           type="password" 
           v-model="confirmPassword"
+          @change="updateVendor($event, 'confirmPassword')"
         />
       </div>
     </div>
@@ -48,6 +55,7 @@ export default {
   props: {
     categories: Array,
     icon: String,
+    vendor: Object
   },
   components: {
     VueElementLoading,
@@ -55,7 +63,6 @@ export default {
   },
   data() {
     return {
-      vendor: null,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
       password: null, 
       confirmPassword: null,
@@ -68,7 +75,9 @@ export default {
     
   },
   methods: {
-    
+    updateVendor(event, fieldName) {
+      this.$root.$emit('update-vendor-value', fieldName, event.target.value)
+    }
   },
   computed: {
     

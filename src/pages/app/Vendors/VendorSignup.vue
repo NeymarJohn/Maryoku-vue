@@ -65,8 +65,13 @@ export default {
   },
   data() {
     return {
+      // selected_vendor: {
+      //   type: Object,
+      //   default: {}
+      // },
       vendor: {
-        businessCategory: null,
+        vendorCategory: null,
+        vendorPropertyValues: {},
         email: null,
         companyName: null,
         phone: null, 
@@ -76,12 +81,11 @@ export default {
         signature: null,
         capacity: {
           low: null,
-          hight: null,
+          high: null,
         },
         about: {
           company: null, 
-          venue: null, 
-          cuisine: null,
+          category: null, 
         },
         social: {
           website: null, 
@@ -95,8 +99,16 @@ export default {
           reddit: null,
           tiktok: null,
         },
+        categoryServices: [],
         yesRules: [],
-        policies: [],
+        noRules: [],
+        notAllowed: [],
+        exDonts: [],
+        yesPolicies: [],
+        noPolicies: [],
+        selectedWeekdays: [],
+        dontWorkDays: null,
+        dontWorkTime: null
       },
       isApproved: false,
       step: 1,
@@ -1917,12 +1929,16 @@ export default {
     this.$root.$on('update-vendor-value', (field, value) => {
       if (field == 'images') {
         this.vendor.images.push(value)
-        console.log(this.vendor)
       } else if (field == 'removeImage') {
         this.vendor.images = this.vendor.images.filter( i => i != value )
-      }else {
+      } else if (field.indexOf('.') > -1) {
+        this.$set(this.vendor[field.split('.')[0]], field.split('.')[1], value)
+      } else {
         this.$set(this.vendor, this.camelize(field), value)
       }
+    })
+    this.$root.$on('vendor-signup', () => {
+      this.addVendor()
     })
   },
   methods: {
@@ -1931,6 +1947,12 @@ export default {
         return chr.toUpperCase()
       })
       return temp.charAt(0).toLowerCase() + temp.slice(1)
+    },
+    async addVendor() {
+      new Vendors(this.vendor).save().then(res => {
+        console.log('*** Save vendor - done: ')
+        console.log(JSON.stringify(res))
+      })
     }
   },
   computed: {

@@ -11,8 +11,8 @@
         </div>
         <div class="edit-content" v-else>
           <div v-if="title=='Business Category'">
-            <div class="droplist" v-if="!expanded">
-              <img class="inside-img" :src="`${categoryIconUrl}${selectedCategory.icon}`"/>
+            <div class="droplist" v-if="!expanded" :class="{'mt-3': !selectedCategory.icon}">
+              <img class="inside-img" :src="`${categoryIconUrl}${selectedCategory.icon}`" v-if="selectedCategory.icon"/>
               <input
                 readonly
                 class="default with-img"
@@ -93,29 +93,12 @@ export default {
     isEdit: false,
     expanded: false,
     selectedCategory: {
-      name: 'Venue Rental',
-      icon: 'Asset 543.svg'
+      name: null,
+      icon: null
     },
     address: null,
     reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
     categoryIconUrl: 'http://static.maryoku.com/storage/icons/Budget Elements/', 
-    // Venue Rental
-    // Food and Beverage
-    // Entertainment
-    // Equipment Rental
-    // Security Services
-    // Swags
-    // Videography and Photography
-    // Advertising and promotion
-    // Audio Visual/Staging Services
-    // Signage/Printing
-    // Corporate Social Responsibility
-    // Meeting organization fees
-    // Technology Services
-    // Transportation
-    // Decor
-    // Shipping
-    // Administration
     categories: [
       {
         name: 'Venue Rental',
@@ -201,7 +184,10 @@ export default {
       this.selectedCategory.name = this.getCategoryNameByValue(this.value)
       this.selectedCategory.icon = this.getCategoryIconByValue(this.value)
     } else {
-      this.selectedCategory = this.categories[0]
+      this.selectedCategory = {
+        name: null, 
+        icon: null
+      }
     }
     // let recaptchaScript = document.createElement('script')
     // recaptchaScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key=AIzaSyBMeTpgtrXUQPDswUdLFW9YL9JFSnZQFOs')
@@ -210,7 +196,11 @@ export default {
   methods: {
     save() {
       this.isEdit = false
-      this.$root.$emit('update-vendor-value', this.title, this.value)
+      if (this.title == 'Business Category') {
+        this.$root.$emit('update-vendor-value', 'vendorCategory', this.value)
+      } else {
+        this.$root.$emit('update-vendor-value', this.title, this.value)
+      }
     },
     updateCategory(category) {
       this.selectedCategory = category
@@ -227,9 +217,6 @@ export default {
     getCategoryIconByValue(value) {
       return this.categories.filter( c => c.value == value)[0].icon
     },
-    // updatefocusValue (event) {
-    //   this.$root.$emit('update-vendor-value', this.title, this.value)
-    // },
   }
 }
 </script>
@@ -374,6 +361,9 @@ export default {
         top: -1px;
       }
     }
+  }
+  .mt-3 {
+    margin-top: 3rem!important;
   }
 }
 </style>

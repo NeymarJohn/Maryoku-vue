@@ -48,7 +48,7 @@ export default {
   name: 'vendor-service-item',
   props: {
     serviceItem: Object,
-    businessCategory: String,
+    vendorCategory: String,
   },
   components: {
     VueElementLoading,

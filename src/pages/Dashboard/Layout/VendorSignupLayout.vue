@@ -80,7 +80,7 @@
         return this.vendor.email && 
           this.reg.test(this.vendor.email) &&
           this.vendor.companyName && 
-          this.vendor.businessCategory && 
+          this.vendor.vendorCategory && 
           this.vendor.address 
       },
       approve() {
@@ -104,6 +104,12 @@
         this.$root.$emit('next-vendor-signup-step')
         if (this.step < 5) {
           this.step += 1
+        } else {
+          if (this.vendor.password == this.vendor.confirmPassword) {
+            this.$root.$emit('vendor-signup')
+            this.savedItModal = true
+          } else {
+          }
         }
       },
       prev() {
