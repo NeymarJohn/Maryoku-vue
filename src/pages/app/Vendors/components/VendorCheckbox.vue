@@ -31,14 +31,10 @@
           </div> -->
         </div>
       </div>
-      <div class="sub-cont" v-if="checked" :class="{'mt-m3': !included}">
-        <!-- <textarea 
-          class="text"
-          :placeholder="`Describe your ${label}`"
-        /> -->
+      <div class="sub-cont" v-if="checked && included">
         <textarea 
           class="text"
-          :placeholder="`Add additional information`"
+          :placeholder="`Describe your ${label}`"
         />
       </div>
     </template>
@@ -361,9 +357,6 @@ export default {
     }
     .active {
       font: 600 16px Manrope-Regular, sans-serif;
-    }
-    .mt-m3 {
-      margin-top: calc(-3rem - 8px);
     }
   }  
 </style>

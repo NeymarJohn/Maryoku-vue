@@ -9,11 +9,11 @@
       </div>
       <div class="right-side">
         <div class="description">
-          <h5><img :src="`${iconUrl}Group 5222 (2).svg`"/> {{getCategoryNameByValue(vendor.vendorCategory)}} Amenities</h5>
+          <h5><img :src="`${iconUrl}Group 5222 (2).svg`"/> {{getCategoryNameByValue(vendor.businessCategory)}} Amenities</h5>
           <p>Mark all the services you can support and will be included in your proposal. If needed please add a decsription or amount.</p>
         </div>
         <vendor-service-item 
-          v-for="(c, cIndex) in categories.filter(category => category.name == vendor.vendorCategory)[0].categories" 
+          v-for="(c, cIndex) in categories.filter(category => category.name == vendor.businessCategory)[0].categories" 
           :key="cIndex"
           :serviceItem="c"
         />

@@ -21,7 +21,7 @@
           <v-signup-editable-field
             :title="'Business Category'"
             :img="''"
-            :defaultVal="vendor.vendorCategory"
+            :defaultVal="vendor.businessCategory"
             :borderBottom="true"
             @update-focus-value="onUpdateFocus"
           />
