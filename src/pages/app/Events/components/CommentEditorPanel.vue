@@ -52,8 +52,8 @@
         :style="{left: `${panelPosition.x}px`, top: `${panelPosition.y - 40}px`}"
       >
         <div style="height:40px; margin-right:25px" class="text-right">
-          <md-button class="md-simple md-just-icon md-round md-black font-size-40" @click="isOpenCommentListsPane=false">
-            <md-icon class="font-size-40">clear</md-icon>
+          <md-button class="md-simple md-just-icon md-round md-black font-size-30" @click="isOpenCommentListsPane=false">
+            <md-icon class="font-size-30">clear</md-icon>
           </md-button>
         </div>
         <div>
@@ -80,7 +80,7 @@
               @delete="deleteComment"
             ></comment-item>
           </div>
-          <div class="form-group reply-form">
+          <div class="form-group reply-form" :class="{'main-form':!comments.length }">
             <textarea
               rows="4"
               class="form-control"
@@ -173,25 +173,26 @@ export default {
       event.stopPropagation();
     },
     showComments(commentComponent) {
-      if (this.isCommentEditing || this.isOpenCommentListsPane) return;
+      if (this.isOpenCommentListsPane) return;
       this.getCommentsAction(commentComponent.id).then(comments => {
         this.hoveredComponent = commentComponent;
         this.comments = comments;
         this.comments = comments;
         if (!comments || comments.length === 0) return;
 
-        const deviceWidth = window.innerWidth;
-        if (this.hoveredComponent.positionX > deviceWidth - 600) {
-          this.panelPosition = {
-            x: this.hoveredComponent.positionX - 580,
-            y: this.hoveredComponent.positionY
-          };
-        } else {
-          this.panelPosition = {
-            x: this.hoveredComponent.positionX + 40,
-            y: this.hoveredComponent.positionY
-          };
-        }
+        this.setEditPanePosition(this.hoveredComponent.positionX, this.hoveredComponent.positionY )
+        // const deviceWidth = window.innerWidth;
+        // if (this.hoveredComponent.positionX > deviceWidth - 600) {
+        //   this.panelPosition = {
+        //     x: this.hoveredComponent.positionX - 580,
+        //     y: this.hoveredComponent.positionY
+        //   };
+        // } else {
+        //   this.panelPosition = {
+        //     x: this.hoveredComponent.positionX + 40,
+        //     y: this.hoveredComponent.positionY
+        //   };
+        // }
 
         this.isOpenCommentListsPane = true;
       });
@@ -199,32 +200,35 @@ export default {
 
     setEditPanePosition(x, y) {
       const deviceWidth = window.innerWidth;
-      if (x < 600) {
+      if (x > deviceWidth - 600) {
         this.panelPosition = {
-          x: x - 20,
-          y: y + 80
+          x: x - 580,
+          y: y 
         };
       } else {
         this.panelPosition = {
-          x: x - 530,
-          y: y + 80
+          x: x + 40,
+          y: y
         };
       }
     },
     toggleEditPane(commentComponent, isEditing) {
-      if (this.isOpenCommentListsPane) {
-        this.isOpenCommentListsPane = false;
-      }
+      // if (this.isOpenCommentListsPane) {
+      //   return;
+      //   // this.isOpenCommentListsPane = false;
+      // }
       if (isEditing) {
-        this.selectedCommentComponent = commentComponent;
-        this.setEditPanePosition(this.selectedCommentComponent.positionX, this.selectedCommentComponent.positionY)
-        if (this.mainComment) {
-          this.editingComment = this.mainComment.description;
-        }
+        // this.selectedCommentComponent = commentComponent;
+        // this.hoveredComponent = commentComponent
+        // this.setEditPanePosition(this.selectedCommentComponent.positionX, this.selectedCommentComponent.positionY)
+        // if (this.mainComment) {
+        //   this.editingComment = this.mainComment.description;
+        // }
+        this.showComments(commentComponent)
       } else {
         this.selectedCommentComponent = null;
       }
-      this.isCommentEditing = isEditing;
+      this.isOpenCommentListsPane = isEditing;
     },
     clearStatus() {
       this.isCommentEditing = false;
@@ -281,7 +285,8 @@ export default {
     },
     saveComment(event, type) {
       let selectedComponent = this.selectedCommentComponent;
-      if (type == "reply") {
+      const isReply = this.comments.length > 0;
+      if (isReply) {
         selectedComponent = this.hoveredComponent;
       }
       const comment = {
@@ -290,7 +295,7 @@ export default {
         parentId: this.mainComment ? this.mainComment.id : null
       };
       this.addComment(comment).then(addedComment => {
-        if (type == "reply") {
+        if (isReply) {
           this.comments.unshift(addedComment)
         }
       });
@@ -459,7 +464,7 @@ export default {
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
-  z-index: 999;
+  z-index: 9999;
 }
 .comments-list {
   position: absolute;
@@ -468,7 +473,7 @@ export default {
   box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
   background: white;
   z-index: 10;
-  padding: 20px 0px 25px;
+  padding: 0px 0px 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -502,15 +507,17 @@ export default {
     padding-left: 70px; 
     padding-right: 25px;
   }
-
+  .main-form {
+    padding-left: 25px;
+  }
   .text-icon {
     position: absolute;
     right: 30px;
     top: 30px;
     width: 20px;
   }
-  .font-size-40 {
-    font-size: 40px !important;
+  .font-size-30 {
+    font-size: 30px !important;
   }
 }
 </style>

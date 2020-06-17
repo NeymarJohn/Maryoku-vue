@@ -1,9 +1,13 @@
 <template>
   <div class="event-state-message">
-    <div>
-      <img src="" />
+    <div class="event-state-message-image">
+      <img v-if="type=='positive'" :src="`${$iconURL}messages/positive.svg`" />
+      <img v-if="type=='action'" :src="`${$iconURL}messages/CTA.svg`" />
+      <img v-if="type=='benchmark'" :src="`${$iconURL}messages/Benchmark.svg`" />
+      <img v-if="type=='alert'" :src="`${$iconURL}messages/Alert.svg`" />
+
     </div>
-    <div v-if="type=='positive'">
+    <div v-if="type=='positive'" class="event-state-message-content">
       <div class="message-title">Great Job!</div>
       <div class="message-content">You saved</div>
       <div class="message-action">
@@ -16,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div v-if="type=='action'">
+    <div v-if="type=='action'"  class="event-state-message-content">
       <div class="message-title">Great Job!</div>
       <div class="message-content">You saved</div>
       <div class="message-action">
@@ -29,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div v-if="type=='benchmark'">
+    <div v-if="type=='benchmark'"  class="event-state-message-content">
       <div class="message-title benchmark">{{messages[2].title}}</div>
       <div class="message-content benchmark">{{messages[2].message}}</div>
       <div class="message-action">
@@ -41,7 +45,7 @@
         </div>
       </div>
     </div>
-    <div v-if="type=='alert'">
+    <div v-if="type=='alert'"  class="event-state-message-content">
       <div class="message-title alert-message">
         <md-icon class="color-minus">remove_circle_outline</md-icon>
         $ 2,200
@@ -116,6 +120,16 @@ export default {
     box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
     background-color: #ffffff;
     padding:20px 60px;
+    display: flex;
+    align-items: center;
+
+    &-image {
+      width: 92px;
+      margin-right: 40px;
+    }
+    &-content {
+      flex-grow: 1;
+    }
     .message-title {
       font-family: "Manrope-ExtraBold";
       font-size: 20px;

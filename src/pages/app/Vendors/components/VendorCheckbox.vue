@@ -230,7 +230,7 @@ export default {
             max-width: 30px;
           }
           ul {
-            width: 60%;
+            width: 65%;
             border: 1px solid #050505;
             box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.16);
             padding: 0;
@@ -246,9 +246,10 @@ export default {
 
               .check-field {
                 cursor: pointer;
+                align-items: center;
                 img {
-                  width: 27px;
-                  margin-right: 1rem;
+                  width: 25px;
+                  margin-right: .5rem;
                 }
                 span {
                   &.blank-circle {
@@ -258,11 +259,12 @@ export default {
                     background-color: #ffffff;
                     display: inline-block;
                     border-radius: 50%;
-                    margin-right: 1rem;
+                    margin-right: .5rem;
                   }
                   &.text {
                     position: relative;
                     top: -8px;
+                    text-transform: capitalize;
                   }
                   &.checked {
                     top: 0px;

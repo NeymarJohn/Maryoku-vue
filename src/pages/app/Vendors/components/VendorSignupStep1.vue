@@ -54,6 +54,13 @@
               </div>
             </div>
             <div class="field mb-50">
+              <vendor-checkbox
+                :item="companyServices.filter(cs => cs.name == vendor.vendorCategory)[0]"
+                :label="`Company Serivces`"
+                v-model="companyServices.filter(cs => cs.name == vendor.vendorCategory)[0].value"
+              />
+            </div>
+            <div class="field mb-50">
               <div class="title-cont">
                 <div class="top">
                   <h5><img :src="`${iconUrl}Asset 545.svg`"/> capacity</h5>
@@ -302,15 +309,19 @@ import Vendors from '@/models/Vendors'
 //COMPONENTS
 import Icon from '@/components/Icon/Icon.vue'
 import VendorServiceItem from './VendorServiceItem.vue'
+import VendorCheckbox from './VendorCheckbox.vue'
 
 export default {
   name: 'vendor-signup-step1',
   props: {
     categories: Array,
+    generalInfos: Array,
+    companyServices: Array,
     vendor: Object,
   },
   components: {
     VueElementLoading,
+    VendorCheckbox,
     VendorServiceItem
   },
   data() {
@@ -390,6 +401,10 @@ export default {
           name: 'Videography and Photography',
           value: 'videographyandphotography',
         },
+        {
+          name: 'Equipment Rental',
+          value: 'equipmentrentals'
+        }
       ],
     }
   },

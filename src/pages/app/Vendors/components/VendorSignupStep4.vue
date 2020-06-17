@@ -55,7 +55,15 @@
               </div>
             </div> -->
             <div class="images">
-              <img :src="img" v-for="(img, ind) in vendor.images" :key="ind"/>
+              <div class="cont">
+                <img :src="img" v-for="(img, ind) in vendor.images" :key="ind" @click="view()"/>
+              </div>
+              <LightBox
+                v-if="getGalleryImages().length > 0"
+                :images="getGalleryImages()"
+                ref="lightbox"
+                :show-light-box="false"
+              />
             </div>
             <div class="contact-us" id="Contact">
               <h4>CONTACT US</h4>
@@ -286,6 +294,7 @@ import Vendors from '@/models/Vendors'
 //COMPONENTS
 import Icon from '@/components/Icon/Icon.vue'
 import VendorServiceItem from './VendorServiceItem.vue'
+import LightBox from 'vue-image-lightbox'
 
 export default {
   name: 'vendor-signup-step4',
@@ -296,7 +305,8 @@ export default {
   },
   components: {
     VueElementLoading,
-    VendorServiceItem
+    VendorServiceItem,
+    LightBox,
   },
   data() {
     return {
@@ -322,6 +332,15 @@ export default {
           qty: 2
         }
       ],
+      settings: {
+        "dots": true,
+        "dotsClass": "slick-dots custom-dot-class",
+        "edgeFriction": 0.35,
+        "infinite": false,
+        "speed": 500,
+        "slidesToShow": 1,
+        "slidesToScroll": 1
+      },
       expanded: false,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
       defRules: 'Suitable for pets, Smoking allowed, Suitable for infants(Under 2 years), Dress code, Overtime Cost',
@@ -402,6 +421,11 @@ export default {
           value: 'videographyandphotography',
           icon: 'videographyandphotography.svg'
         },
+        {
+          name: 'Equipment Rental',
+          value: 'equipmentrentals',
+          icon: 'equipmentrentals.svg'
+        }
       ],
     }
   },
@@ -449,6 +473,27 @@ export default {
       if (!value) return ''
       value = value.toString()
       return value.charAt(0).toUpperCase() + value.slice(1)
+    },
+    getGalleryImages: function () {
+      let temp = []
+
+      if (this.vendor.images.length > 0) {
+        this.vendor.images.forEach(item => {
+          temp.push({
+            thumb: item,
+            src: item,
+            caption: 'test',
+          })
+        })
+        return temp
+      } else {
+        return []
+      }
+    },
+    view() {
+      if (this.$refs.lightbox) {
+        this.$refs.lightbox.showImage(0)
+      }
     }
   },
   computed: {
@@ -568,14 +613,24 @@ export default {
             }
             .images {
               display: block;
-              overflow-x: auto;
+              overflow: hidden;
               padding: 2rem 0;
               white-space: nowrap;
 
-              img {
-                width: 300px;
-                max-height: 177px;
-                margin-right: 2rem;
+              .right-arrow {
+                width: 28px;
+                height: 28px;
+                background-color: #ffffff;
+                box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+              }
+              .cont {
+                position: relative;
+                img {
+                  width: 300px;
+                  max-height: 177px;
+                  margin-right: 2rem;
+                  cursor: zoom-in;
+                }
               }
             }
             .contact-us {
