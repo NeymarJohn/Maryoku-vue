@@ -55,9 +55,15 @@
               </div>
             </div> -->
             <div class="images">
-              <div class="cont">
+              <span class="prev" @click="prev()" v-if="imageSlidePos < 0">
+                <md-icon>keyboard_arrow_left</md-icon>
+              </span>
+              <div class="cont" :style="{'left': `${imageSlidePos}px`}" ref="imagesCont">
                 <img :src="img" v-for="(img, ind) in vendor.images" :key="ind" @click="view()"/>
               </div>
+              <span class="next" @click="next()" v-if="imageSlidePos >= 0">
+                <md-icon>keyboard_arrow_right</md-icon>
+              </span>
               <LightBox
                 v-if="getGalleryImages().length > 0"
                 :images="getGalleryImages()"
@@ -79,10 +85,15 @@
                 </div>
               </div>
             </div>
-            <div class="social" v-if="isSocialBlank()">
+            <div class="social" v-if="isSocial()">
               Website & social
               <div class="items">
-                <div class="item" v-if="vendor.social.website">
+                <div class="item" v-for="(s, sIndex) in socialMediaBlocks" :key="sIndex" :class="{'mr-3': vendor.social[s.name]}">
+                  <template v-if="vendor.social[s.name]">
+                    <img :src="`${iconUrl}${s.icon}`"/> {{vendor.social[s.name]}}
+                  </template>
+                </div>
+                <!-- <div class="item" v-if="vendor.social.website">
                   <img :src="`${iconUrl}Asset 539.svg`"/> {{vendor.social.website}}
                 </div>
                 <div class="item" v-if="vendor.social.instagram">
@@ -90,7 +101,7 @@
                 </div>
                 <div class="item" v-if="vendor.social.facebook">
                   <img :src="`${iconUrl}Asset 540.svg`"/> {{vendor.social.facebook}}
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -295,6 +306,7 @@ import Vendors from '@/models/Vendors'
 import Icon from '@/components/Icon/Icon.vue'
 import VendorServiceItem from './VendorServiceItem.vue'
 import LightBox from 'vue-image-lightbox'
+import carousel from 'vue-owl-carousel'
 
 export default {
   name: 'vendor-signup-step4',
@@ -307,10 +319,53 @@ export default {
     VueElementLoading,
     VendorServiceItem,
     LightBox,
+    carousel
   },
   data() {
     return {
       tabs: ['About', 'Pricing', 'Rules', 'Policy', 'Contact'],
+      socialMediaBlocks: [
+        {
+          name: 'website',
+          icon: 'Asset 539.svg',
+        },
+        {
+          name: 'facebook',
+          icon: 'Asset 540.svg',
+        },
+        {
+          name: 'instagram',
+          icon: 'Group 4569 (2).svg',
+        },
+        {
+          name: 'youtube', 
+          icon: 'Asset 540.svg',
+        },
+        {
+          name: 'linkedin', 
+          icon: 'Asset 540.svg',
+        },
+        {
+          name: 'google', 
+          icon: 'Asset 540.svg',
+        },
+        {
+          name: 'pinterest', 
+          icon: 'Asset 540.svg',
+        },
+        {
+          name: 'foursuare', 
+          icon: 'Asset 540.svg',
+        },
+        {
+          name: 'reddit', 
+          icon: 'Asset 540.svg',
+        },
+        {
+          name: 'tiktok', 
+          icon: 'Asset 540.svg',
+        },
+      ],
       activeTab: 'About',
       feeVenues: [
         {
@@ -332,15 +387,7 @@ export default {
           qty: 2
         }
       ],
-      settings: {
-        "dots": true,
-        "dotsClass": "slick-dots custom-dot-class",
-        "edgeFriction": 0.35,
-        "infinite": false,
-        "speed": 500,
-        "slidesToShow": 1,
-        "slidesToScroll": 1
-      },
+      imageSlidePos: 0,
       expanded: false,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
       defRules: 'Suitable for pets, Smoking allowed, Suitable for infants(Under 2 years), Dress code, Overtime Cost',
@@ -433,11 +480,40 @@ export default {
     
   },
   mounted() {
-    
   },
   methods: {
-    isSocialBlank() {
-      return this.vendor.social.website && this.vendor.social.facebook && this.vendor.social.instagram
+    isSocial() {
+      let isBlank = true
+
+      _.each(this.vendor.social, s => {
+        isBlank &= s === null
+      })
+
+      return !isBlank
+    },
+    prev() {
+      const ww = this.vendor.images.length * 320
+      const sw = this.$refs.imagesCont.clientWidth
+      if ( ww / sw > 2 ) {
+        this.imageSlidePos += 320 * 4
+      } else if ( ww / sw > 1 ) {
+        this.imageSlidePos += ww % sw + 60
+      } else {
+        this.imageSlidePos
+      }
+      console.log(this.imageSlidePos)
+    },
+    next () {
+      const ww = this.vendor.images.length * 320
+      const sw = this.$refs.imagesCont.clientWidth
+      if ( ww / sw > 2 ) {
+        this.imageSlidePos -= 320 * 4
+      } else if ( ww / sw > 1 ) {
+        this.imageSlidePos -= ww % sw + 60
+      } else {
+        this.imageSlidePos
+      }
+      console.log(this.imageSlidePos)
     },
     goToSection(item) {
       this.activeTab = item
@@ -616,18 +692,35 @@ export default {
               overflow: hidden;
               padding: 2rem 0;
               white-space: nowrap;
+              position: relative;
+              margin-right: -60px;
 
-              .right-arrow {
+              span {
+                cursor: pointer;
+                position: absolute;
                 width: 28px;
                 height: 28px;
                 background-color: #ffffff;
                 box-shadow: 0 3px 41px 0 rgba(0, 0, 0, 0.08);
+                border-radius: 50%;
+                text-align: center;
+                font-weight: 800;
+                z-index: 99;
+                top: 50%;
+                transform: translateY(-50%);
+
+                &.prev {
+                  left: 0;
+                }
+                &.next {
+                  right: 60px;
+                }
               }
               .cont {
                 position: relative;
                 img {
                   width: 300px;
-                  max-height: 177px;
+                  height: 177px;
                   margin-right: 2rem;
                   cursor: zoom-in;
                 }
@@ -665,7 +758,6 @@ export default {
                 margin-top: 2rem;
 
                 .item {
-                  margin-right: 3rem;
                   font: bold 16px Manrope-Regular, sans-serif;
                   img {
                     width: 24px;
@@ -920,6 +1012,9 @@ export default {
     }
     .rotate-90 {
       transform: rotate(90deg);
+    }
+    .mr-3 {
+      margin-right: 3rem;
     }
   }  
 </style>

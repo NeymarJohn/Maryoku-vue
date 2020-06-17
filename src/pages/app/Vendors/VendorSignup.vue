@@ -2129,12 +2129,18 @@ export default {
           value: [],
           available: ['PR', 'marketing', 'printing', 'graphic design'],
         },
-        {
-          name: 'advertising-promotion',
-          type: Array, 
-          value: [],
-          available: [],
-        },
+        // {
+        //   name: 'advertising-promotion',
+        //   type: Array, 
+        //   value: [],
+        //   available: [],
+        // },
+        // {
+        //   name: 'transportation',
+        //   type: Array, 
+        //   value: [],
+        //   available: [],
+        // },
         {
           name: 'audiovisualstagingservices',
           type: Array, 
