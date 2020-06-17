@@ -217,8 +217,7 @@
             color: #050505;
         }
         .budget-value {
-            font-family: 'Manrope-Bold',sans-serif;
-            font-size: 31px;
+            font-size: 40px;
             color: #050505;
             margin: 0.4em auto;
         }
@@ -3104,7 +3103,7 @@
                 .image-background {
                     position: absolute;
                     top:0;
-                    z-index:99;
+                    z-index:999;
 
                     &:first-child {
                         top: 24px;

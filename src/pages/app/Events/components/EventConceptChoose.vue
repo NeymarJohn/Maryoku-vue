@@ -1,7 +1,6 @@
 <template>
     <div class="md-layout event-concept-section booking-section">
         <vue-element-loading :active="isLoading" spinner="ring" color="#FF547C" />
-        <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
         <div class="concept-content" v-if="showConceptList && !isLoading">
             <div class="event-page-header md-layout-item md-size-100">
                 <div class="header-name">
@@ -10,9 +9,16 @@
                         Here are 3 awesome concepts for you to choose from! 
                         <br/>
                         If you feel like we haven’t nailed it, let us know and we’ll send 3 more.
+                        <!-- We thought of 3 amazing concepts for your event, choose your favourite & we will help you<br>
+                        create the best event. If you didn’t like any of them- Just let us know or create your own. -->
                     </p>
                 </div>
-                <header-actions @toggleCommentMode="toggleCommentMode"></header-actions>
+                <div class="header-actions">
+                    <ul>
+                        <li><a href=""><img :src="`${menuIconsURL}Asset 9.svg`"></a></li>
+                        <li><a href=""><img :src="`${menuIconsURL}Asset 8.svg`"></a></li>
+                    </ul>
+                </div>
             </div>
 
             <div class="booking-header d-flex justify-content-between md-layout-item md-size-100">
@@ -27,7 +33,7 @@
                     v-for="(item, index) in conceptOptions"
                     :key="index"
                 >
-                    <div class="d-flex justify-content-between align-center" v-if="item.expand">
+                    <div class="concept-actions d-flex justify-content-between align-center" v-if="item.expand">
                         <label>24 have tried this!</label>
                         <md-button class="md-red md-bold" @click="selectConcept(index)">Select</md-button>
                     </div>
@@ -227,9 +233,6 @@ import EventComponentProperty from '@/models/EventComponentProperty'
 
 import ColorButton from '../../../../components/ColorButton'
 import EventConceptEditForm from './EventConceptEditForm'
-import HeaderActions from "@/components/HeaderActions";
-import CommentEditorPanel from "./CommentEditorPanel";
-
 export default {
   name: 'event-time-line',
   components: {
@@ -242,9 +245,7 @@ export default {
     InputMask,
     Modal,
     ColorButton,
-    EventConceptEditForm,
-    HeaderActions,
-    CommentEditorPanel
+    EventConceptEditForm
   },
   props: {
 
@@ -272,7 +273,6 @@ export default {
     blockVendors: null,
     selectedBlock: {},
     selectedConcept:{},
-    showCommentEditorPanel: false,
     conceptOptions: [
         {
             option: 1,
@@ -460,9 +460,6 @@ export default {
     },
     openConceptContest() {
         window.open(`https://www.maryoku.com/concept-contest`, "_blank");
-    },
-    toggleCommentMode(mode) {
-      this.showCommentEditorPanel = mode;
     }
   },
   created () {

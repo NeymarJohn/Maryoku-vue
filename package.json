@@ -77,6 +77,7 @@
         "vue-swal": "^1.0.0",
         "vue-timeago": "^5.1.2",
         "vue-tour": "^1.1.0",
+        "vue2-timepicker": "^1.1.2",
         "vue2-transitions": "^0.2.3",
         "vuedraggable": "^2.20.0",
         "vuex": "^3.0.1"

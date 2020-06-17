@@ -40,10 +40,10 @@
             </div>
             <div class="block">
               <div class="title">
-                <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.businessCategory)}`"/> About Our {{getCategoryNameByValue(vendor.businessCategory)}}
+                <img :src="`${$iconURL}Budget Elements/${getCategoryIconByValue(vendor.vendorCategory)}`"/> About Our {{getCategoryNameByValue(vendor.vendorCategory)}}
               </div>
               <div class="desc">
-                {{vendor.about.venue}}
+                {{vendor.about.category}}
               </div>
             </div>
             <!-- <div class="block">
@@ -71,7 +71,7 @@
                 </div>
               </div>
             </div>
-            <div class="social" v-if="vendor.social">
+            <div class="social" v-if="isSocialBlank()">
               Website & social
               <div class="items">
                 <div class="item" v-if="vendor.social.website">
@@ -86,7 +86,7 @@
               </div>
             </div>
           </div>
-          <div class="fee-cont" id="Pricing">
+          <!-- <div class="fee-cont" id="Pricing">
             <div class="title">
               <h3><img :src="`${iconUrl}Asset 562.svg`"/> ELEMENTS IN STARTING FEE</h3>
             </div>
@@ -111,8 +111,8 @@
                 
               </div>
             </div>
-          </div>
-          <div class="extra-cont">
+          </div> -->
+          <div class="extra-cont" id="Pricing">
             <div class="title">
               <h3><img :src="`${iconUrl}Asset 526.svg`"/>WITH EXTRA PAY</h3>
             </div>
@@ -174,33 +174,70 @@
               <img :src="`${iconUrl}Group 1471 (2).svg`"> OUR POLICY
             </div>
             <div class="rules">
-              <div class="rule" v-for="(r, rIndex) in defRules.split(', ')" :key="rIndex">
+              <div class="rule" v-for="(y, yIndex) in vendor.yesRules" :key="yIndex">
                 <div class="item">
-                  {{r}}
+                  {{y.name}}
                 </div>
                 <div class="item">
-                  <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="vendor.yesRules.includes(r)"/>
-                  <img :src="`${iconUrl}Group 5489 (3).svg`" v-else/>
+                  <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="vendor.yesRules.includes(y)"/>
+                </div>
+              </div>
+              <div class="rule" v-for="(n, nIndex) in vendor.noRules" :key="nIndex">
+                <div class="item">
+                  {{n.name}}
+                </div>
+                <div class="item">
+                  <img :src="`${iconUrl}Group 5489 (4).svg`" v-if="vendor.noRules.includes(n)"/>
                 </div>
               </div>
             </div>
-            <div class="not-allowed">
+            <div class="not-allowed" v-if="vendor.vendorCategory == 'venuerental'">
               <h5>We don't allow these 3rd party vendor:</h5>
               <p>
-                {{defNa}}
+                {{mergeStringItems(vendor.notAllowed)}}
               </p>
             </div>
             <div class="dont-work">
               <h5>We don't work on:</h5>
-              <div class="item" v-for="(d, dIndex) in defRules.split(', ')" :key="dIndex">
+              <div class="item" v-if="mergeStringItems(vendor.selectedWeekdays)">
+                <img :src="`${iconUrl}Group 5489 (4).svg`"/>
+                {{mergeStringItems(vendor.selectedWeekdays)}}
+              </div>
+              <div class="item" v-for="(d, dIndex) in vendor.exDonts" :key="dIndex">
                 <img :src="`${iconUrl}Group 5489 (4).svg`"/>
                 {{d}}
+              </div>
+              <div class="item" v-if="vendor.dontWorkDays">
+                <img :src="`${iconUrl}Group 5489 (4).svg`"/>
+                {{dontWorkDays()}}
+              </div>
+              <div class="item" v-if="vendor.dontWorkTime">
+                <img :src="`${iconUrl}Group 5489 (4).svg`"/>
+                {{dontWorkTime()}}
               </div>
             </div>
           </div>
           <div class="pricing-policy-cont" id="Rules">
             <div class="title">
               <img :src="`${iconUrl}Asset 560.svg`"> OUR PRICING POLICY
+            </div>
+            <div class="rules">
+              <div class="rule" v-for="(y, yIndex) in vendor.yesPolicies" :key="yIndex">
+                <div class="item">
+                  {{y.name}}
+                </div>
+                <div class="item">
+                  <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="vendor.yesPolicies.includes(y)"/>
+                </div>
+              </div>
+              <div class="rule" v-for="(n, nIndex) in vendor.noPolicies" :key="nIndex">
+                <div class="item">
+                  {{n.name}}
+                </div>
+                <div class="item">
+                  <img :src="`${iconUrl}Group 5489 (4).svg`" v-if="vendor.noPolicies.includes(n)"/>
+                </div>
+              </div>
             </div>
             <!-- <div class="item">
               <h5>We charge deposit of:</h5>
@@ -375,6 +412,9 @@ export default {
     
   },
   methods: {
+    isSocialBlank() {
+      return this.vendor.social.website && this.vendor.social.facebook && this.vendor.social.instagram
+    },
     goToSection(item) {
       this.activeTab = item
       const theElement = document.getElementById(item)
@@ -391,12 +431,30 @@ export default {
     getCategoryNameByValue(value) {
       return this.categoryNames.filter( c => c.value == value)[0].name
     },
+    mergeStringItems(items) {
+      let naItems = ''
+      _.each(items, n => {
+        naItems += `${this.capitalize(n)}, `
+      })
+      naItems = naItems.substring(0, naItems.length - 2)
+      return naItems
+    },
+    dontWorkDays() {
+      return `${this.vendor.dontWorkDays.dateRange.start.date} ~ ${this.vendor.dontWorkDays.dateRange.end.date}`
+    },
+    dontWorkTime() {
+      return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.startTime.A} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.endTime.A}`
+    },
+    capitalize: function (value) {
+      if (!value) return ''
+      value = value.toString()
+      return value.charAt(0).toUpperCase() + value.slice(1)
+    }
   },
   computed: {
     
   },
   filters: {
-    
   },
   watch: {
   }
@@ -463,12 +521,12 @@ export default {
             padding-bottom: 2rem;
             img {
               width: 100%;
-              height: 230px;
+              height: 460px;
             }
           }
           .about-cont {
             padding: 2rem 0;
-            border-bottom: 1px solid #dddddd;
+            // border-bottom: 1px solid #dddddd;
 
             .block {
               span {
@@ -745,6 +803,27 @@ export default {
                 margin-right: 1rem;
               }
               font: 800 30px Manrope-Regular, sans-serif;
+            }
+            .rules {
+              margin: 3rem 0;
+              .rule {
+                padding: 2rem 0;
+                border-bottom: 1px solid #dddddd;
+                font: 600 16px Manrope-Regular, sans-serif;
+                display: flex;
+                align-items: center;
+
+                .item {
+                  flex: 1;
+
+                  img {
+                    width: 30px;
+                  }
+                }
+                &:first-child {
+                  border-top: 1px solid #dddddd;
+                }
+              }
             }
             .item {
               padding: 1rem 0;

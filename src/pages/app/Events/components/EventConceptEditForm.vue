@@ -112,15 +112,12 @@
             <div
               class="image-section d-flex justify-content-center align-center text-center"
               :style="`background:url(${uploadImageData[indx-1]})`"
-              :for="`file-${indx}`"
             >
-              <label class="image-selector" :for="`file-${indx}`" style="cursor:pointer">
-                <div  v-if="!uploadImageData[indx-1]">
-                  <img :src="`${$iconURL}Concept/Asset 488.svg`" style="width:24px" />
-                  <br />
-                  <div style="margin-top:5px">
-                    <img :src="`${$iconURL}Concept/image-dark.svg`" style="width:16px" /> Add Photo
-                  </div>
+              <label :for="`file-${indx}`" style="cursor:pointer">
+                <img :src="`${$iconURL}Concept/Asset 488.svg`" style="width:24px" />
+                <br />
+                <div style="margin-top:5px">
+                  <img :src="`${$iconURL}Concept/image-dark.svg`" style="width:16px" /> Add Photo
                 </div>
               </label>
               <input
@@ -151,7 +148,6 @@ import CalendarEvent from "@/models/CalendarEvent";
 import EventComponent from "@/models/EventComponent";
 import EventConcept from "@/models/EventConcept";
 import ColorButton from "@/components/ColorButton";
-import swal from 'sweetalert2'
 
 const tags = [
   { name: "adventurous", selected:false},
@@ -243,22 +239,6 @@ export default {
     onFileChange(event) {
       let files = event.target.files || event.dataTransfer.files;
       if (!files.length) return;
-      if (files[0].size > 1024 * 1024 * 5) {
-        swal({
-          title: 'File is too big',
-          text: `Sorry, this miximum file size is 5M`,
-          showCancelButton: false,
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonClass: 'md-button md-success confirm-btn-bg ',
-          cancelButtonClass: 'md-button md-danger cancel-btn-bg',
-          confirmButtonText: 'Yes, delete it!',
-          buttonsStyling: false
-        }).then(result => {
-          
-        })
-        return;
-      }
       let reader = new FileReader();
       let vm = this;
       if (event.target.name) {
@@ -273,80 +253,35 @@ export default {
       let calendar = new Calendar({ id: this.$auth.user.defaultCalendarId });
       let imageKeys = Object.keys(this.uploadImages);
       this.isLoading = true;
-
-      let formData = new FormData();
       for (let i = 0; i < imageKeys.length; i++) {
         const fileItem = this.uploadImages[imageKeys[i]];
-        formData.append("files[]", fileItem);
-      }
-      // formData.append("file", fileItem);
-      formData.append("from", "concept");
-      formData.append("type", "photo");
-      const result = await this.$http.post(
-        `${process.env.SERVER_URL}/uploadMultipleFiles`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data"
+        let formData = new FormData();
+        formData.append("file", fileItem);
+        formData.append("from", "concept");
+        formData.append("type", "photo");
+        const result = await this.$http.post(
+          `${process.env.SERVER_URL}/uploadFile`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
           }
+        );
+        if (this.editConcept.images.length === 0) {
+          this.editConcept.images.push({
+            originalName: fileItem.name,
+            url: result.data.upload.path,
+            name: result.data.upload.name
+          });
+        } else {
+          this.editConcept.images[imageKeys[i]] = {
+            originalName: fileItem.name,
+            url: result.data.upload.path,
+            name: result.data.upload.name
+          };
         }
-      );
-      if (result.data) {
-        const images = []
-        result.data.upload.files.forEach(item=>{
-          images.push({
-            originalName: item.originalName,
-            url: item.path,
-            name: item.name
-          })
-        })
-        this.editConcept.images = images;
       }
-      // if (this.editConcept.images.length === 0) {
-      //   this.editConcept.images.push({
-      //     originalName: fileItem.name,
-      //     url: result.data.upload.path,
-      //     name: result.data.upload.name
-      //   });
-      // } else {
-      //   this.editConcept.images[imageKeys[i]] = {
-      //     originalName: fileItem.name,
-      //     url: result.data.upload.path,
-      //     name: result.data.upload.name
-      //   };
-      // }
-    
-      
-      // for (let i = 0; i < imageKeys.length; i++) {
-      //   const fileItem = this.uploadImages[imageKeys[i]];
-      //   let formData = new FormData();
-      //   formData.append("files[]", fileItem);
-      //   formData.append("file", fileItem);
-      //   formData.append("from", "concept");
-      //   formData.append("type", "photo");
-      //   const result = await this.$http.post(
-      //     `${process.env.SERVER_URL}/uploadFile`,
-      //     formData,
-      //     {
-      //       headers: {
-      //         "Content-Type": "multipart/form-data"
-      //       }
-      //     }
-      //   );
-      //   if (this.editConcept.images.length === 0) {
-      //     this.editConcept.images.push({
-      //       originalName: fileItem.name,
-      //       url: result.data.upload.path,
-      //       name: result.data.upload.name
-      //     });
-      //   } else {
-      //     this.editConcept.images[imageKeys[i]] = {
-      //       originalName: fileItem.name,
-      //       url: result.data.upload.path,
-      //       name: result.data.upload.name
-      //     };
-      //   }
-      // }
 
       // this.editConcept.tags = this.addedTags
 
@@ -394,20 +329,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-
-// .image-section {
-//   &:hover {
-//     opacity: 0.5 !important;
-//   }
-// }
-.image-selector {
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>

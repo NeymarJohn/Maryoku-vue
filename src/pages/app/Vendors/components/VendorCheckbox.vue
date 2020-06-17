@@ -13,7 +13,7 @@
             <span class="unchecked" v-else></span>
             <span>Included</span>
           </div>
-          <div class="flex-1">
+          <div class="flex-1 mr-m1">
             <div class="included" :class="{'active': !included}" @click="updateIncluded()">
               <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!included"/>
               <span class="unchecked" v-else></span>
@@ -31,10 +31,14 @@
           </div> -->
         </div>
       </div>
-      <div class="sub-cont" v-if="checked && included">
-        <textarea 
+      <div class="sub-cont" v-if="checked" :class="{'mt-m3': !included}">
+        <!-- <textarea 
           class="text"
           :placeholder="`Describe your ${label}`"
+        /> -->
+        <textarea 
+          class="text"
+          :placeholder="`Add additional information`"
         />
       </div>
     </template>
@@ -56,7 +60,7 @@
             <span class="unchecked" v-else></span>
             <span>Included</span>
           </div>
-          <div class="flex-1">
+          <div class="flex-1 mr-m1">
             <div class="included" :class="{'active': !included}" @click="updateIncluded()">
               <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!included"/>
               <span class="unchecked" v-else></span>
@@ -280,7 +284,7 @@ export default {
         .included {
           display: flex!important;
           align-items: center;
-          margin-right: 2rem;
+          margin-right: 1.5rem;
           img {
             width: 30px;
             height: 30px;
@@ -299,11 +303,13 @@ export default {
               margin-left: 4rem;
             }
             input {
-              margin-left: 1rem;
+              margin-left: .5rem;
               text-align: center;
               border-radius: 3px;
               border: 1px solid #818080;
               max-width: 100%;
+              font: normal 16px Manrope-Regular, sans-serif;
+              color: #050505;
             }
           }
         }
@@ -357,6 +363,12 @@ export default {
     }
     .active {
       font: 600 16px Manrope-Regular, sans-serif;
+    }
+    .mt-m3 {
+      margin-top: calc(-3rem - 8px);
+    }
+    .mr-m1 {
+      margin-right: -1rem!important;
     }
   }  
 </style>
