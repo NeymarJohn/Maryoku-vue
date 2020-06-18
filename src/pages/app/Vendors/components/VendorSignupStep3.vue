@@ -318,20 +318,32 @@
                     <div class="select-time-cont">
                       <img :src="`${iconUrl}Asset 522.svg`"/>
                       <vue-timepicker 
-                        format="hh:mm A" 
+                        manual-input
+                        input-class="time-class"
+                        hide-dropdown
+                        format="hh:mm" 
                         v-model="startTime" 
                         hide-clear-button
                         v-on:input="updateDontWorkTime"
                         v-on:change="updateDontWorkTime"
                       />
+                      <div class="am-field">
+                        <input type="text" value="AM" readonly />
+                      </div>
                       <div class="border-line"></div>
                       <vue-timepicker 
-                        format="hh:mm A" 
+                        manual-input
+                        input-class="time-class"
+                        hide-dropdown
+                        format="hh:mm" 
                         v-model="endTime" 
                         hide-clear-button
                         v-on:input="updateDontWorkTime"
                         v-on:change="updateDontWorkTime"
                       />
+                      <div class="am-field">
+                        <input type="text" value="AM" readonly />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -347,7 +359,6 @@
                   :sundayStart="true"
                   :minSelDays="1"
                   :maxSelDays="7"
-                  :markedDates="selectedDateRange"
                   dateFormat='yyyy-mm-dd' 
                   v-model="date"
                   v-on:dayClicked="updateDontWorkDays($event)"
@@ -1557,8 +1568,36 @@ export default {
                 height: 2px;
                 margin: 0 1rem;
               }
-              /deep/ .time-picker {
+              .am-field {
+                position: relative;
+                cursor: pointer;
                 input {
+                  width: 56px;
+                  height: 45px;
+                  border-radius: 3px;
+                  font: normal 18px Manrope-Regular, sans-serif;
+                  margin-left: .5rem;
+                  border: 1px solid #707070;
+                  text-align: center;
+                }
+                &:before {
+                  position: absolute;
+                  content: '>';
+                  transform: translateX(50%) translateY(calc(100% + 1.2rem)) rotate(90deg);
+                  left: 40%;
+                  font-size: 20px;
+                  font-weight: 800;
+                }
+              }
+              /deep/ .time-picker {
+                width: unset;
+                input {
+                  text-align: center;
+                  width: 110px;
+                  height: 45px;
+                  border-radius: 3px;
+                  font: normal 18px Manrope-Regular, sans-serif;
+                  border: 1px solid #707070;
                   text-align: center;
                 }
               }
