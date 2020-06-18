@@ -175,11 +175,6 @@ export default {
         value: 'videographyandphotography',
         icon: 'videographyandphotography.svg'
       },
-      {
-        name: 'Equipment Rentals',
-        value: 'equipmentrentals',
-        icon: 'equipmentrentals.svg'
-      },
     ],
     value: null,
   }),

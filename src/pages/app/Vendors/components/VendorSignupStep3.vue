@@ -275,34 +275,25 @@
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
                     <span :class="{'checked': exDont}">I don't work on these holidays:</span>
                   </div>
-                  <div class="cdropdown" v-if="exDont" @click="isReligion=!isReligion">
-                    <span>Religion</span>
+                  <div class="cdropdown" v-if="exDont">
+                    <span>Islam</span>
                     <img :src="`${iconUrl}Asset 519.svg`"/>
                   </div>
-                  <div class="cdropdown-cont" v-if="isReligion">
-                    <div class="weekdays" v-for="(r, rIndex) in religions" :key="rIndex" @click="updateReligion(r)">
-                      <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="selectedReligion.includes(r)"/>
-                      <span class="unchecked" v-else></span>
-                      {{r.name}}
+                  <div class="holidays" v-if="exDont">
+                    <div class="dont">
+                      <img :src="`${iconUrl}Asset 524.svg`"/>
                     </div>
-                  </div>
-                  <div class="holidays" v-for="(r, rIndex) in religions" :key="rIndex">
-                    <template v-if="selectedReligion.includes(r)" :class="{'mt-1': selectedReligion.includes(r)}">
-                      <div class="dont">
-                        <img :src="`${iconUrl}Asset 524.svg`"/>
-                      </div>
-                      <div class="flex-1">
-                        <ul>
-                          <li v-for="(h, hIndex) in r.holidays" :key="hIndex">
-                            <div class="check-field" @click="updateExDonts(h)">
-                              <img :src="`${iconUrl}Group 6258.svg`" v-if="exDonts.includes(h)"/>
-                              <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
-                              <span :class="{'checked': exDonts.includes(h)}">{{h}}</span>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </template>
+                    <div class="flex-1">
+                      <ul>
+                        <li v-for="(h, hIndex) in holidays" :key="hIndex">
+                          <div class="check-field" @click="updateExDonts(h)">
+                            <img :src="`${iconUrl}Group 6258.svg`" v-if="exDonts.includes(h)"/>
+                            <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
+                            <span :class="{'checked': exDonts.includes(h)}">{{h}}</span>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
                 <div class="block">
@@ -318,32 +309,20 @@
                     <div class="select-time-cont">
                       <img :src="`${iconUrl}Asset 522.svg`"/>
                       <vue-timepicker 
-                        manual-input
-                        input-class="time-class"
-                        hide-dropdown
-                        format="hh:mm" 
+                        format="hh:mm A" 
                         v-model="startTime" 
                         hide-clear-button
                         v-on:input="updateDontWorkTime"
                         v-on:change="updateDontWorkTime"
                       />
-                      <div class="am-field" @click="updateStartA()">
-                        <input type="text" v-model="amPack.start" readonly />
-                      </div>
                       <div class="border-line"></div>
                       <vue-timepicker 
-                        manual-input
-                        input-class="time-class"
-                        hide-dropdown
-                        format="hh:mm" 
+                        format="hh:mm A" 
                         v-model="endTime" 
                         hide-clear-button
                         v-on:input="updateDontWorkTime"
                         v-on:change="updateDontWorkTime"
                       />
-                      <div class="am-field" @click="updateEndA()">
-                        <input type="text" v-model="amPack.end" readonly />
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -359,6 +338,7 @@
                   :sundayStart="true"
                   :minSelDays="1"
                   :maxSelDays="7"
+                  :markedDates="selectedDateRange"
                   dateFormat='yyyy-mm-dd' 
                   v-model="date"
                   v-on:dayClicked="updateDontWorkDays($event)"
@@ -428,84 +408,40 @@ export default {
       yesPolicies: [],
       noPolicies: [],
       noteRules: [],
-      religions: [
-        {
-          name: 'Chrisitanity',
-          holidays: [
-            'Good Friday',
-            'Easter',
-            'Christmas',
-            'Thanksgiving'
-          ]
-        },
-        {
-          name: 'Hindu',
-          holidays: [
-            'Ganesh Chaturthi',
-            'Pitru Paksha',
-            'Mysore Dasara',
-            'Navratri',
-            'Vijayadashami',
-            'Durga Puja'
-          ]
-        },
-        {
-          name: 'Islamic',
-          holidays: [
-            'All Islamic holiday', 
-            'Eid AI-Acha', 
-            'Eid AI-Fitr',
-            'Lailat al Miraj',
-            'Milad un Nabi(Shia)',
-            'Ramadan(start)',
-            'Laylat at Qadr',
-            'Eid-ai-Fitr(End of Ramadan)',
-            'Waqf ai Arafa - Hajj',
-            'Hijra - Islamic New Year',
-            'Day of Ashura / Muharram',
-            'Milad un Nabi',
-            'All Islamic holidays (Shia)',
-          ]
-        },
-        {
-          name: 'Judaism',
-          holidays: [
-            'Rosh Hashana',
-            'Yom Kipur',
-            'Sukkot',
-            'Shmini Atzeret',
-            'Simchat Torah', 
-            'Chanukah',
-            'Purim', 
-            'Pesach',
-            'Shavout',
-            `Tish'a B'Av`
-          ]
-        },
+      holidays: [
+        'All Islamic holiday', 
+        'Eid AI-Acha', 
+        'Eid AI-Fitr',
+        'Lailat al Miraj',
+        'Milad un Nabi(Shia)',
+        'Ramadan(start)',
+        'Laylat at Qadr',
+        'Eid-ai-Fitr(End of Ramadan)',
+        'Waqf ai Arafa - Hajj',
+        'Hijra - Islamic New Year',
+        'Day of Ashura / Muharram',
+        'Milad un Nabi',
+        'All Islamic holidays (Shia)',
       ],
       allowedCategoryFor3rd: ['venuerental', 'foodandbeverage', 'decor', 'entertainment'],
       weekdays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
       selectedWeekdays: ['saturday', 'sunday'],
-      selectedReligion: [],
       isWeekday: false,
       exEvery: false,
       exDont: false,
-      isReligion: false,
       exLimitation: false,
       exDonts: [],
       notAllowed: [],
       isOtherNa: false,
       startTime: {
         hh: '12',
-        mm: '00'
+        mm: '00',
+        A: 'AM'
       },
       endTime: {
         hh: '12',
-        mm: '00'
-      },
-      amPack: {
-        start: 'AM', 
-        end: 'AM',
+        mm: '00',
+        A: 'AM'
       },
       defNa: 'Amenities, Services, Accessibility, Equipment, Staff, Other',
       policies: [
@@ -1141,30 +1077,8 @@ export default {
       }
       this.$root.$emit('update-vendor-value', 'selectedWeekdays', this.selectedWeekdays)
     },
-    updateReligion(item) {
-      if (this.selectedReligion.includes(item)) {
-        this.selectedReligion = this.selectedReligion.filter(s => s != item)
-      } else {
-        this.selectedReligion.push(item)
-      }
-      this.$root.$emit('update-vendor-value', 'selectedReligion', this.selectedReligion)
-    },
     updateDontWorkDays() {
       this.$root.$emit('update-vendor-value', 'dontWorkDays', this.date)
-    },
-    updateStartA() {
-      if (this.amPack.start == 'AM') {
-        this.amPack.start = 'PM'
-      } else {
-        this.amPack.start = 'AM'
-      }
-    },
-    updateEndA() {
-      if (this.amPack.end == 'AM') {
-        this.amPack.end = 'PM'
-      } else {
-        this.amPack.end = 'AM'
-      }
     },
     updateDontWorkTime() {
       this.$root.$emit(
@@ -1172,8 +1086,7 @@ export default {
         'dontWorkTime', 
         {
           startTime: this.startTime,
-          endTime: this.endTime,
-          amPack: this.amPack
+          endTime: this.endTime
         }
       )
     }
@@ -1334,7 +1247,7 @@ export default {
                   img {
                     width: 27px;
                     height: 27px;
-                    margin-right: .5rem;
+                    margin-right: 1rem;
                   }
                   input {
                     font-size: 16px;
@@ -1486,7 +1399,7 @@ export default {
             cursor: pointer;
             img {
               width: 27px;
-              margin-right: .5rem;
+              margin-right: 1rem;
             }
             span {
               &.checked {
@@ -1496,12 +1409,13 @@ export default {
           }
           .holidays {
             display: flex;
+            margin-top: 1rem;
 
             .dont {
               width: 24px;
               margin-right: 1rem;
               img {
-                width: 24px;
+                width: 24p;
               }
             }
             ul {
@@ -1585,37 +1499,8 @@ export default {
                 height: 2px;
                 margin: 0 1rem;
               }
-              .am-field {
-                position: relative;
-                cursor: pointer;
-                input {
-                  width: 56px;
-                  height: 45px;
-                  cursor: pointer;
-                  border-radius: 3px;
-                  font: normal 18px Manrope-Regular, sans-serif;
-                  margin-left: .5rem;
-                  border: 1px solid #707070;
-                  text-align: center;
-                }
-                &:before {
-                  position: absolute;
-                  content: '>';
-                  transform: translateX(50%) translateY(calc(100% + 1.2rem)) rotate(90deg);
-                  left: 40%;
-                  font-size: 20px;
-                  font-weight: 800;
-                }
-              }
               /deep/ .time-picker {
-                width: unset;
                 input {
-                  text-align: center;
-                  width: 110px;
-                  height: 45px;
-                  border-radius: 3px;
-                  font: normal 18px Manrope-Regular, sans-serif;
-                  border: 1px solid #707070;
                   text-align: center;
                 }
               }
@@ -1636,9 +1521,6 @@ export default {
     }
     .m-0 {
       margin: 0!important;
-    }
-    .mt-1 {
-      margin-top: 1rem;
     }
     .mt-2 {
       margin-top: 2rem;

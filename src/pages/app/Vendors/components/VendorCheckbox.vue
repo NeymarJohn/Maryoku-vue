@@ -13,7 +13,7 @@
             <span class="unchecked" v-else></span>
             <span>Included</span>
           </div>
-          <div class="flex-1 mr-m1">
+          <div class="flex-1">
             <div class="included" :class="{'active': !included}" @click="updateIncluded()">
               <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!included"/>
               <span class="unchecked" v-else></span>
@@ -60,7 +60,7 @@
             <span class="unchecked" v-else></span>
             <span>Included</span>
           </div>
-          <div class="flex-1 mr-m1">
+          <div class="flex-1">
             <div class="included" :class="{'active': !included}" @click="updateIncluded()">
               <img :src="`${iconUrl}Group 5489 (3).svg`" v-if="!included"/>
               <span class="unchecked" v-else></span>
@@ -230,7 +230,7 @@ export default {
             max-width: 30px;
           }
           ul {
-            width: 65%;
+            width: 60%;
             border: 1px solid #050505;
             box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.16);
             padding: 0;
@@ -246,10 +246,9 @@ export default {
 
               .check-field {
                 cursor: pointer;
-                align-items: center;
                 img {
-                  width: 25px;
-                  margin-right: .5rem;
+                  width: 27px;
+                  margin-right: 1rem;
                 }
                 span {
                   &.blank-circle {
@@ -259,12 +258,11 @@ export default {
                     background-color: #ffffff;
                     display: inline-block;
                     border-radius: 50%;
-                    margin-right: .5rem;
+                    margin-right: 1rem;
                   }
                   &.text {
                     position: relative;
                     top: -8px;
-                    text-transform: capitalize;
                   }
                   &.checked {
                     top: 0px;
@@ -286,7 +284,7 @@ export default {
         .included {
           display: flex!important;
           align-items: center;
-          margin-right: 1.5rem;
+          margin-right: 2rem;
           img {
             width: 30px;
             height: 30px;
@@ -305,13 +303,11 @@ export default {
               margin-left: 4rem;
             }
             input {
-              margin-left: .5rem;
+              margin-left: 1rem;
               text-align: center;
               border-radius: 3px;
               border: 1px solid #818080;
               max-width: 100%;
-              font: normal 16px Manrope-Regular, sans-serif;
-              color: #050505;
             }
           }
         }
@@ -368,9 +364,6 @@ export default {
     }
     .mt-m3 {
       margin-top: calc(-3rem - 8px);
-    }
-    .mr-m1 {
-      margin-right: -1rem!important;
     }
   }  
 </style>

@@ -16,6 +16,14 @@
     &.md-checked  .md-checkbox-container{
       background-color: #2cde6b !important;
       border-color: #2cde6b !important;
+      
+      &:after {
+        border-color: white !important;
+      }
+    }
+    &.md-red.md-checked  .md-checkbox-container{
+      background-color: #f51355 !important;
+      border-color: #f51355 !important;
       &:after {
         border-color: white !important;
       }
