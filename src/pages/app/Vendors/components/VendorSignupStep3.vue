@@ -327,8 +327,8 @@
                         v-on:input="updateDontWorkTime"
                         v-on:change="updateDontWorkTime"
                       />
-                      <div class="am-field">
-                        <input type="text" value="AM" readonly />
+                      <div class="am-field" @click="updateStartA()">
+                        <input type="text" v-model="amPack.start" readonly />
                       </div>
                       <div class="border-line"></div>
                       <vue-timepicker 
@@ -341,8 +341,8 @@
                         v-on:input="updateDontWorkTime"
                         v-on:change="updateDontWorkTime"
                       />
-                      <div class="am-field">
-                        <input type="text" value="AM" readonly />
+                      <div class="am-field" @click="updateEndA()">
+                        <input type="text" v-model="amPack.end" readonly />
                       </div>
                     </div>
                   </div>
@@ -497,13 +497,15 @@ export default {
       isOtherNa: false,
       startTime: {
         hh: '12',
-        mm: '00',
-        A: 'AM'
+        mm: '00'
       },
       endTime: {
         hh: '12',
-        mm: '00',
-        A: 'AM'
+        mm: '00'
+      },
+      amPack: {
+        start: 'AM', 
+        end: 'AM',
       },
       defNa: 'Amenities, Services, Accessibility, Equipment, Staff, Other',
       policies: [
@@ -1150,13 +1152,28 @@ export default {
     updateDontWorkDays() {
       this.$root.$emit('update-vendor-value', 'dontWorkDays', this.date)
     },
+    updateStartA() {
+      if (this.amPack.start == 'AM') {
+        this.amPack.start = 'PM'
+      } else {
+        this.amPack.start = 'AM'
+      }
+    },
+    updateEndA() {
+      if (this.amPack.end == 'AM') {
+        this.amPack.end = 'PM'
+      } else {
+        this.amPack.end = 'AM'
+      }
+    },
     updateDontWorkTime() {
       this.$root.$emit(
         'update-vendor-value', 
         'dontWorkTime', 
         {
           startTime: this.startTime,
-          endTime: this.endTime
+          endTime: this.endTime,
+          amPack: this.amPack
         }
       )
     }
@@ -1574,6 +1591,7 @@ export default {
                 input {
                   width: 56px;
                   height: 45px;
+                  cursor: pointer;
                   border-radius: 3px;
                   font: normal 18px Manrope-Regular, sans-serif;
                   margin-left: .5rem;

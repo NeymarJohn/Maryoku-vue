@@ -543,7 +543,7 @@ export default {
       return `${this.vendor.dontWorkDays.dateRange.start.date} ~ ${this.vendor.dontWorkDays.dateRange.end.date}`
     },
     dontWorkTime() {
-      return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.startTime.A} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.endTime.A}`
+      return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`
     },
     capitalize: function (value) {
       if (!value) return ''
