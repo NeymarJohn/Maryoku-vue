@@ -1,7 +1,7 @@
 <template>
   <div class="header-actions">
     <ul>
-      <li>
+      <li v-if="!hideDownload">
         <md-button class="md-simple md-just-icon"><img :src="`${$iconURL}common/download-dark.svg`" /></md-button>
       </li>
       <li>
@@ -24,6 +24,12 @@ export default {
   name:"header-actions",
   components: {
     SharingModal,
+  },
+  props: {
+    hideDownload: {
+      type: Boolean,
+      default: false
+    },
   },
   data() {
     return {

@@ -359,12 +359,11 @@
                   Mark the blackout days
                 </div>
                 <functional-calendar 
-                  :change-month-function='true' 
-                  :change-year-function='true'
-                  :is-date-range='true'
+                  :change-month-function="true" 
+                  :change-year-function="true"
+                  :is-multiple-date-picker="true"
                   :sundayStart="true"
                   :minSelDays="1"
-                  :maxSelDays="7"
                   dateFormat='yyyy-mm-dd' 
                   v-model="date"
                   v-on:dayClicked="updateDontWorkDays($event)"
@@ -1477,6 +1476,7 @@ export default {
             &:before {
               background-color: #f51355;
               color: #ffffff;
+              border-radius: 50%;
             }
           }
         }

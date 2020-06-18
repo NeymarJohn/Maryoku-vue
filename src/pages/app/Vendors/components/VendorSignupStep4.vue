@@ -540,7 +540,12 @@ export default {
       return naItems
     },
     dontWorkDays() {
-      return `${this.vendor.dontWorkDays.dateRange.start.date} ~ ${this.vendor.dontWorkDays.dateRange.end.date}`
+      let selectedDates = ''
+      _.each(this.vendor.dontWorkDays.selectedDates, (s) => {
+        selectedDates += `${s.date}, `
+      })
+      selectedDates = selectedDates.substring(0, selectedDates.length - 2)
+      return selectedDates
     },
     dontWorkTime() {
       return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`
@@ -934,6 +939,7 @@ export default {
               }
               .item {
                 margin-bottom: 1rem;
+                display: flex;
                 img {
                   width: 21px;
                   margin-right: 1rem;
