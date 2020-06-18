@@ -275,25 +275,34 @@
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
                     <span :class="{'checked': exDont}">I don't work on these holidays:</span>
                   </div>
-                  <div class="cdropdown" v-if="exDont">
-                    <span>Islam</span>
+                  <div class="cdropdown" v-if="exDont" @click="isReligion=!isReligion">
+                    <span>Religion</span>
                     <img :src="`${iconUrl}Asset 519.svg`"/>
                   </div>
-                  <div class="holidays" v-if="exDont">
-                    <div class="dont">
-                      <img :src="`${iconUrl}Asset 524.svg`"/>
+                  <div class="cdropdown-cont" v-if="isReligion">
+                    <div class="weekdays" v-for="(r, rIndex) in religions" :key="rIndex" @click="updateReligion(r)">
+                      <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="selectedReligion.includes(r)"/>
+                      <span class="unchecked" v-else></span>
+                      {{r.name}}
                     </div>
-                    <div class="flex-1">
-                      <ul>
-                        <li v-for="(h, hIndex) in holidays" :key="hIndex">
-                          <div class="check-field" @click="updateExDonts(h)">
-                            <img :src="`${iconUrl}Group 6258.svg`" v-if="exDonts.includes(h)"/>
-                            <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
-                            <span :class="{'checked': exDonts.includes(h)}">{{h}}</span>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
+                  </div>
+                  <div class="holidays" v-for="(r, rIndex) in religions" :key="rIndex">
+                    <template v-if="selectedReligion.includes(r)" :class="{'mt-1': selectedReligion.includes(r)}">
+                      <div class="dont">
+                        <img :src="`${iconUrl}Asset 524.svg`"/>
+                      </div>
+                      <div class="flex-1">
+                        <ul>
+                          <li v-for="(h, hIndex) in r.holidays" :key="hIndex">
+                            <div class="check-field" @click="updateExDonts(h)">
+                              <img :src="`${iconUrl}Group 6258.svg`" v-if="exDonts.includes(h)"/>
+                              <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
+                              <span :class="{'checked': exDonts.includes(h)}">{{h}}</span>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </template>
                   </div>
                 </div>
                 <div class="block">
@@ -408,27 +417,69 @@ export default {
       yesPolicies: [],
       noPolicies: [],
       noteRules: [],
-      holidays: [
-        'All Islamic holiday', 
-        'Eid AI-Acha', 
-        'Eid AI-Fitr',
-        'Lailat al Miraj',
-        'Milad un Nabi(Shia)',
-        'Ramadan(start)',
-        'Laylat at Qadr',
-        'Eid-ai-Fitr(End of Ramadan)',
-        'Waqf ai Arafa - Hajj',
-        'Hijra - Islamic New Year',
-        'Day of Ashura / Muharram',
-        'Milad un Nabi',
-        'All Islamic holidays (Shia)',
+      religions: [
+        {
+          name: 'Chrisitanity',
+          holidays: [
+            'Good Friday',
+            'Easter',
+            'Christmas',
+            'Thanksgiving'
+          ]
+        },
+        {
+          name: 'Hindu',
+          holidays: [
+            'Ganesh Chaturthi',
+            'Pitru Paksha',
+            'Mysore Dasara',
+            'Navratri',
+            'Vijayadashami',
+            'Durga Puja'
+          ]
+        },
+        {
+          name: 'Islamic',
+          holidays: [
+            'All Islamic holiday', 
+            'Eid AI-Acha', 
+            'Eid AI-Fitr',
+            'Lailat al Miraj',
+            'Milad un Nabi(Shia)',
+            'Ramadan(start)',
+            'Laylat at Qadr',
+            'Eid-ai-Fitr(End of Ramadan)',
+            'Waqf ai Arafa - Hajj',
+            'Hijra - Islamic New Year',
+            'Day of Ashura / Muharram',
+            'Milad un Nabi',
+            'All Islamic holidays (Shia)',
+          ]
+        },
+        {
+          name: 'Judaism',
+          holidays: [
+            'Rosh Hashana',
+            'Yom Kipur',
+            'Sukkot',
+            'Shmini Atzeret',
+            'Simchat Torah', 
+            'Chanukah',
+            'Purim', 
+            'Pesach',
+            'Shavout',
+            `Tish'a B'Av`
+          ]
+        },
       ],
       allowedCategoryFor3rd: ['venuerental', 'foodandbeverage', 'decor', 'entertainment'],
       weekdays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
       selectedWeekdays: ['saturday', 'sunday'],
+      selectedReligion: [],
       isWeekday: false,
       exEvery: false,
       exDont: false,
+      isReligion: false,
       exLimitation: false,
       exDonts: [],
       notAllowed: [],
@@ -1077,6 +1128,14 @@ export default {
       }
       this.$root.$emit('update-vendor-value', 'selectedWeekdays', this.selectedWeekdays)
     },
+    updateReligion(item) {
+      if (this.selectedReligion.includes(item)) {
+        this.selectedReligion = this.selectedReligion.filter(s => s != item)
+      } else {
+        this.selectedReligion.push(item)
+      }
+      this.$root.$emit('update-vendor-value', 'selectedReligion', this.selectedReligion)
+    },
     updateDontWorkDays() {
       this.$root.$emit('update-vendor-value', 'dontWorkDays', this.date)
     },
@@ -1247,7 +1306,7 @@ export default {
                   img {
                     width: 27px;
                     height: 27px;
-                    margin-right: 1rem;
+                    margin-right: .5rem;
                   }
                   input {
                     font-size: 16px;
@@ -1399,7 +1458,7 @@ export default {
             cursor: pointer;
             img {
               width: 27px;
-              margin-right: 1rem;
+              margin-right: .5rem;
             }
             span {
               &.checked {
@@ -1409,13 +1468,12 @@ export default {
           }
           .holidays {
             display: flex;
-            margin-top: 1rem;
 
             .dont {
               width: 24px;
               margin-right: 1rem;
               img {
-                width: 24p;
+                width: 24px;
               }
             }
             ul {
@@ -1521,6 +1579,9 @@ export default {
     }
     .m-0 {
       margin: 0!important;
+    }
+    .mt-1 {
+      margin-top: 1rem;
     }
     .mt-2 {
       margin-top: 2rem;
