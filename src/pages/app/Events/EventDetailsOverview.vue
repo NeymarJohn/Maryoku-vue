@@ -9,7 +9,7 @@
         >
           <div class="content">
             <router-link
-              :to="`/events/${event.id}/booking/concept`"
+              :to="`/events/${event.id}/choose-concept`"
               tag="md-button"
               class="md-default md-simple md-white edit-btn text-left"
               >Event's Concept
@@ -28,7 +28,7 @@
                 </div>
                 <div class="popup-footer">
                   <router-link
-                    :to="`/events/${event.id}/booking/concept`"
+                    :to="`/events/${event.id}/choose-concept`"
                     tag="md-button"
                     class="edit-btn md-rose md-simple edit-btn"
                   >Change Concept

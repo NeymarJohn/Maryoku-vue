@@ -54,6 +54,14 @@
               </div>
             </div>
             <div class="field mb-50">
+              <vendor-checkbox
+                v-if="companyServices.filter(cs => cs.name == vendor.vendorCategory).length > 0"
+                :item="companyServices.filter(cs => cs.name == vendor.vendorCategory)[0]"
+                :label="`Company Serivces`"
+                v-model="companyServices.filter(cs => cs.name == vendor.vendorCategory)[0].value"
+              />
+            </div>
+            <div class="field mb-50">
               <div class="title-cont">
                 <div class="top">
                   <h5><img :src="`${iconUrl}Asset 545.svg`"/> capacity</h5>
@@ -271,7 +279,7 @@
             <h5>Other:</h5>
             <div class="social-item" v-for="(s, sIndex) in defSocialMedia" :key="sIndex">
               <div @click="updateSocialMedia(s)">
-                <img :src="`${iconUrl}Group 6258.svg`" v-if="socialMedia.includes(s)"/>
+                <img :src="`${iconUrl}Group 6258.svg`" v-if="socialMedia.includes(s) || vendor.social[s]"/>
                 <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
                 {{s}}
                 <br/>
@@ -281,7 +289,7 @@
                 placeholder="Paste link here" 
                 :class="{'red-border': vendor.social[s] == null || !reg.test(vendor.social[s])}"
                 v-model="vendor.social[s]"
-                v-if="socialMedia.includes(s)"
+                v-if="socialMedia.includes(s) || vendor.social[s]"
                 v-on:blur="checkBlank"
                 @change="updateVendor($event, `social.${s}`)"
                 @keyup="checkBlank"
@@ -302,15 +310,19 @@ import Vendors from '@/models/Vendors'
 //COMPONENTS
 import Icon from '@/components/Icon/Icon.vue'
 import VendorServiceItem from './VendorServiceItem.vue'
+import VendorCheckbox from './VendorCheckbox.vue'
 
 export default {
   name: 'vendor-signup-step1',
   props: {
     categories: Array,
+    generalInfos: Array,
+    companyServices: Array,
     vendor: Object,
   },
   components: {
     VueElementLoading,
+    VendorCheckbox,
     VendorServiceItem
   },
   data() {
@@ -390,6 +402,10 @@ export default {
           name: 'Videography and Photography',
           value: 'videographyandphotography',
         },
+        {
+          name: 'Equipment Rental',
+          value: 'equipmentrentals'
+        }
       ],
     }
   },

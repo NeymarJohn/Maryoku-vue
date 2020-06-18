@@ -106,6 +106,10 @@ export default {
           name: 'Videography and Photography',
           value: 'videographyandphotography',
         },
+        {
+          name: 'Equipment Rentals',
+          value: 'equipmentrentals'
+        }
       ],
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
     }

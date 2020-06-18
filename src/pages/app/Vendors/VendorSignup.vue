@@ -6,6 +6,8 @@
     />
     <vendor-signup-step1 
       :categories="businessCategories" 
+      :generalInfos="generalInfos"
+      :companyServices="companyServices"
       :icon="`${iconUrl}`" 
       :vendor="vendor"
       v-if="isApproved && step == 1"
@@ -694,7 +696,8 @@ export default {
                     {
                       name: 'attire of waitstaff',
                       type: Array, 
-                      value: ['suits/tux', 'customized color', 'branded']
+                      value: [],
+                      available: ['suits/tux', 'customized color', 'branded']
                     },
                   ]
                 },
@@ -1895,6 +1898,284 @@ export default {
               ]
             }
           ]
+        },
+        {
+          name: 'equipmentrentals',
+          categories: [
+            {
+              name: 'services', 
+              subCategories: [
+                {
+                  name: ' ',
+                  items: [
+                    {
+                      name: 'onsite supervisors during event',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'special delivery and pickup',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'pre-inspection',
+                      type: Boolean, 
+                      value: false
+                    },
+                  ]
+                }
+              ]
+            },
+            {
+              name: 'amenities', 
+              subCategories: [
+                {
+                  name: 'furniture',
+                  items: [
+                    {
+                      name: 'chairs',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'tables',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'tableware',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'special catering rental equipment',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'furniture / props',
+                      type: Boolean, 
+                      value: false
+                    },
+                  ]
+                },
+                {
+                  name: 'tech equipment',
+                  items: [
+                    {
+                      name: 'screens',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'projections',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'recordings',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'video conferencing',
+                      type: Boolean, 
+                      value: false
+                    },
+                  ]
+                },
+                {
+                  name: 'tents',
+                  items: [
+                    {
+                      name: 'tents',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'air conditioning',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'generator',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'tent lighting',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'flooring and carpeting',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'portable bathrooms',
+                      type: Boolean, 
+                      value: false
+                    },
+                    {
+                      name: 'liners',
+                      type: Boolean, 
+                      value: false
+                    },
+                  ]
+                },
+                {
+                  name: 'other',
+                  items: [
+                    {
+                      name: 'staging, podiums, registration areas',
+                      type: Boolean, 
+                      value: false
+                    },
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      generalInfos: [
+        {
+          name: 'venuerental',
+          items: [
+            {
+              name: 'recently renovated (up to 3 years)',
+              type: Boolean, 
+              value: false
+            }
+          ]
+        },
+        {
+          name: 'foodandbeverage',
+          items: [
+            {
+              name: 'seasonal menu update (at least twice anual)',
+              type: Boolean, 
+              value: false
+            }
+          ]
+        },
+        {
+          name: 'transportation',
+          items: [
+            {
+              name: 'years new cars are kept in inventory',
+              type: Array, 
+              value: [],
+              available: ['1-2 years', '3-4 years', '5+ years']
+            }
+          ]
+        },
+        {
+          name: 'entertainment',
+          items: [
+            {
+              name: 'amount of yearly corporate events out of total events',
+              type: Number, 
+              value: 0
+            },
+            {
+              name: 'perform at more than one vent per day?',
+              type: Boolean, 
+              value: false
+            }
+          ]
+        },
+        {
+          name: 'equipmentrentals',
+          items: [
+            {
+              name: 'inventory update-rate',
+              type: String, 
+              value: ''
+            }
+          ]
+        }
+      ],
+      companyServices: [
+        {
+          name: 'venuerental',
+          type: Array, 
+          value: [],
+          available: ['gallery', 'park or field or garden', 'historic establishment', 'bar or pub or club', 'restaurant', 'hotel', 'business center', 'community center', 'sport club', 'academic venue', 'stately home', 'stadium or arena'],
+        },
+        {
+          name: 'foodandbeverage',
+          type: Array, 
+          value: [],
+          available: ['food catering', 'beverage'],
+        },
+        {
+          name: 'decor',
+          type: Array, 
+          value: [],
+          available: ['floral', 'lighting', 'interior design'],
+        },
+        {
+          name: 'corporatesocialresponsibility',
+          type: Array, 
+          value: [],
+          available: ['staffing', 'guest services', 'on-day coodination', 'concierge'],
+        },
+        {
+          name: 'signageprinting',
+          type: Array, 
+          value: [],
+          available: ['PR', 'marketing', 'printing', 'graphic design'],
+        },
+        // {
+        //   name: 'advertising-promotion',
+        //   type: Array, 
+        //   value: [],
+        //   available: [],
+        // },
+        // {
+        //   name: 'transportation',
+        //   type: Array, 
+        //   value: [],
+        //   available: [],
+        // },
+        {
+          name: 'audiovisualstagingservices',
+          type: Array, 
+          value: [],
+          available: ['audio', 'visual'],
+        },
+        {
+          name: 'swags',
+          type: Array, 
+          value: [],
+          available: ['favors', 'promotional'],
+        },
+        {
+          name: 'entertainment',
+          type: Array, 
+          value: [],
+          available: ['DJ services', 'band', 'indoor activities', 'outdoor activities', 'family activities', 'entertainment'],
+        },
+        {
+          name: 'securityservices',
+          type: Array, 
+          value: [],
+          available: ['day-of security', 'security consultation', 'perosnal security'],
+        },
+        {
+          name: 'videographyandphotography',
+          type: Array, 
+          value: [],
+          available: ['photography', 'videography'],
+        },
+        {
+          name: 'equipmentrentals',
+          type: Array, 
+          value: [],
+          available: ['tents', 'technical equipment', 'furniture', 'constumes', 'props & decor'],
         }
       ],
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
