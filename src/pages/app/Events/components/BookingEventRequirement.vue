@@ -3,10 +3,10 @@
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-book-requirement-header md-layout-item md-size-100">
       <div class="header-title">
-        <img src="http://static.maryoku.com/storage/concept/photo/1592350713841.png"/>
-        <img src="http://static.maryoku.com/storage/concept/photo/1592350713841.png"/>
-        <img src="http://static.maryoku.com/storage/concept/photo/1592350713841.png"/>
-        <img src="http://static.maryoku.com/storage/concept/photo/1592350713841.png"/>
+        <img src="http://static.maryoku.com/storage/icons/Requirements/image-130.png"/>
+        <img src="http://static.maryoku.com/storage/icons/Requirements/image-132.png"/>
+        <img src="http://static.maryoku.com/storage/icons/Requirements/image-133.png"/>
+        <img src="http://static.maryoku.com/storage/icons/Requirements/image-134.png"/>
       </div>
       <header-actions @toggleCommentMode="toggleCommentMode" hideDownload></header-actions>
     </div>
