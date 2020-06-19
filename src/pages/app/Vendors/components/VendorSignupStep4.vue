@@ -90,7 +90,7 @@
               <div class="items">
                 <div class="item" v-for="(s, sIndex) in socialMediaBlocks" :key="sIndex" :class="{'mr-3': vendor.social[s.name]}">
                   <template v-if="vendor.social[s.name]">
-                    <img :src="`${iconUrl}${s.icon}`"/>
+                    <img :src="`${iconUrl}${s.icon}`"/> {{vendor.social[s.name]}}
                   </template>
                 </div>
                 <!-- <div class="item" v-if="vendor.social.website">
@@ -339,31 +339,31 @@ export default {
         },
         {
           name: 'youtube', 
-          icon: 'socialmedia/Youtube.svg',
+          icon: 'Asset 540.svg',
         },
         {
           name: 'linkedin', 
-          icon: 'socialmedia/Linkdin.svg',
+          icon: 'Asset 540.svg',
         },
         {
           name: 'google', 
-          icon: 'socialmedia/Google+.svg',
+          icon: 'Asset 540.svg',
         },
         {
           name: 'pinterest', 
-          icon: 'socialmedia/Pinterest.svg',
+          icon: 'Asset 540.svg',
         },
         {
           name: 'foursuare', 
-          icon: 'socialmedia/foursquare.svg',
+          icon: 'Asset 540.svg',
         },
         {
           name: 'reddit', 
-          icon: 'socialmedia/Twitter.svg',
+          icon: 'Asset 540.svg',
         },
         {
           name: 'tiktok', 
-          icon: 'socialmedia/Tiktok.svg',
+          icon: 'Asset 540.svg',
         },
       ],
       activeTab: 'About',
@@ -534,18 +534,13 @@ export default {
     mergeStringItems(items) {
       let naItems = ''
       _.each(items, n => {
-        naItems += `${this.capitalize(n.name)}, `
+        naItems += `${this.capitalize(n)}, `
       })
       naItems = naItems.substring(0, naItems.length - 2)
       return naItems
     },
     dontWorkDays() {
-      let selectedDates = ''
-      _.each(this.vendor.dontWorkDays.selectedDates, (s) => {
-        selectedDates += `${s.date}, `
-      })
-      selectedDates = selectedDates.substring(0, selectedDates.length - 2)
-      return selectedDates
+      return `${this.vendor.dontWorkDays.dateRange.start.date} ~ ${this.vendor.dontWorkDays.dateRange.end.date}`
     },
     dontWorkTime() {
       return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`
@@ -939,7 +934,6 @@ export default {
               }
               .item {
                 margin-bottom: 1rem;
-                display: flex;
                 img {
                   width: 21px;
                   margin-right: 1rem;
