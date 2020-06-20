@@ -290,6 +290,11 @@
             <div class="item">
               <h6 class="underline">Relish caterers & venues:</h6>
             </div>
+            <div class="signatures">
+              <div class="sign" v-if="vendor.signature">
+                <img :src="vendor.signature"/>
+              </div>
+            </div>
           </div>
         </div>        
       </div>
@@ -1011,6 +1016,11 @@ export default {
                 padding-left: 60px;
                 width: 80%;
               }
+            }
+            .signatures {
+              display: grid;
+              grid-template-columns: 50% 50%;
+
             }
           }
         }

@@ -212,7 +212,14 @@
                 <a class="" @click="uploadVendorSignature"><img :src="`${iconUrl}Asset 559.svg`"/> Choose File</a>
                 <div class="or">Or</div>
                 <div class="sign-here">
-                  Sign Here
+                  <vueSignature 
+                    ref="signature" 
+                    :sigOption="option" 
+                    :w="'100%'" 
+                    :h="'100%'"
+                  />
+                  <button class="save" @click="save">Save</button>
+		              <button class="clear" @click="clear">Clear</button>
                 </div>
                 <input
                   type="file"
@@ -227,6 +234,7 @@
           </template>
           <template v-else>
             <img :src="vendor.signature"/>
+            <img class="remove" :src="`${iconUrl}Asset 529.svg`" v-if="vendor.signature" @click="removeSignature(vendor.signature)"/>
           </template>
         </div>
         <div class="social-wrapper">
@@ -311,6 +319,7 @@ import Vendors from '@/models/Vendors'
 import Icon from '@/components/Icon/Icon.vue'
 import VendorServiceItem from './VendorServiceItem.vue'
 import VendorCheckbox from './VendorCheckbox.vue'
+import vueSignature from "vue-signature"
 
 export default {
   name: 'vendor-signup-step1',
@@ -324,6 +333,7 @@ export default {
     VueElementLoading,
     VendorCheckbox,
     VendorServiceItem,
+    vueSignature,
   },
   data() {
     return {
@@ -407,6 +417,10 @@ export default {
           value: 'equipmentrentals'
         }
       ],
+      option: {
+        penColor: 'rgb(0, 0, 0)', 
+        backgroundColor: 'rgb(255,255,255)'
+      }
     }
   },
   created() {
@@ -482,6 +496,21 @@ export default {
     },
     updateVendor(event, fieldName) {
       this.$root.$emit('update-vendor-value', fieldName, event.target.value)
+    },
+    save(){
+			let _this = this
+			// let png = _this.$refs.signature.save()
+			let jpeg = _this.$refs.signature.save('image/jpeg')
+      // let svg = _this.$refs.signature.save('image/svg+xml')
+      this.$root.$emit('update-vendor-value', 'signature', jpeg)
+			console.log(this.vendor)
+		},
+		clear(){
+			let _this = this
+			_this.$refs.signature.clear()
+    },
+    removeSignature() {
+      this.$root.$emit('update-vendor-value', 'signature', null)
     }
   },
   computed: {
@@ -619,7 +648,7 @@ export default {
             font: 800 16px Manrope-Regular, sans-serif;
           }
           &.red-border {
-            border: 1.5px dashed #f51355;
+            border: 2px dashed #f51355;
 
             .upload-cont {
               text-align: center;
@@ -647,7 +676,6 @@ export default {
                 border: 1.5px dashed #f51355;
                 font: normal 50px Manrope-Regular, sans-serif;
                 color: #d5d5d5;
-                padding: 5rem;
               }
             }
           }
@@ -750,6 +778,33 @@ export default {
     }
     .signature-wrapper {
       padding-bottom: 2rem;
+      position: relative;
+
+      .upload-cont {
+        .sign-here {
+          .save, .clear {
+            background-color: #ffffff;
+            font: 800 14px Manrope-Regular, sans-serif;
+            border: 1px solid #f51355;
+            padding: .5rem;
+            color: #f51355;
+            cursor: pointer;
+            margin-bottom: .5rem;
+          }
+        }
+      }
+
+      img {
+        width: 100%;
+
+        &.remove {
+          width: 18px;
+          cursor: pointer;
+          position: absolute;
+          right: 1rem;
+          bottom: 3rem;
+        }
+      }
     }
     textarea {
       resize: none;
