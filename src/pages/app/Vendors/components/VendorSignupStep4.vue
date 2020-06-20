@@ -88,10 +88,10 @@
             <div class="social" v-if="isSocial()">
               Website & social
               <div class="items">
-                <div class="item" v-for="(s, sIndex) in socialMediaBlocks" :key="sIndex" :class="{'mr-1': vendor.social[s.name]}">
-                  <a v-if="vendor.social[s.name]" :href="vendor.social[s.name]" target="_blank">
-                    <img :src="`${iconUrl}${s.icon}`"/>
-                  </a>
+                <div class="item" v-for="(s, sIndex) in socialMediaBlocks" :key="sIndex" :class="{'mr-3': vendor.social[s.name]}">
+                  <template v-if="vendor.social[s.name]">
+                    <img :src="`${iconUrl}${s.icon}`"/> {{vendor.social[s.name]}}
+                  </template>
                 </div>
                 <!-- <div class="item" v-if="vendor.social.website">
                   <img :src="`${iconUrl}Asset 539.svg`"/> {{vendor.social.website}}
@@ -290,11 +290,6 @@
             <div class="item">
               <h6 class="underline">Relish caterers & venues:</h6>
             </div>
-            <div class="signatures">
-              <div class="sign" v-if="vendor.signature">
-                <img :src="vendor.signature"/>
-              </div>
-            </div>
           </div>
         </div>        
       </div>
@@ -344,31 +339,31 @@ export default {
         },
         {
           name: 'youtube', 
-          icon: 'socialmedia/Youtube.svg',
+          icon: 'Asset 540.svg',
         },
         {
           name: 'linkedin', 
-          icon: 'socialmedia/Linkdin.svg',
+          icon: 'Asset 540.svg',
         },
         {
           name: 'google', 
-          icon: 'socialmedia/GooglePlus.svg',
+          icon: 'Asset 540.svg',
         },
         {
           name: 'pinterest', 
-          icon: 'socialmedia/Pinterest.svg',
+          icon: 'Asset 540.svg',
         },
         {
           name: 'foursuare', 
-          icon: 'socialmedia/foursquare.svg',
+          icon: 'Asset 540.svg',
         },
         {
           name: 'reddit', 
-          icon: 'socialmedia/Twitter.svg',
+          icon: 'Asset 540.svg',
         },
         {
           name: 'tiktok', 
-          icon: 'socialmedia/Tiktok.svg',
+          icon: 'Asset 540.svg',
         },
       ],
       activeTab: 'About',
@@ -539,18 +534,13 @@ export default {
     mergeStringItems(items) {
       let naItems = ''
       _.each(items, n => {
-        naItems += `${this.capitalize(n.name)}, `
+        naItems += `${this.capitalize(n)}, `
       })
       naItems = naItems.substring(0, naItems.length - 2)
       return naItems
     },
     dontWorkDays() {
-      let selectedDates = ''
-      _.each(this.vendor.dontWorkDays.selectedDates, (s) => {
-        selectedDates += `${s.date}, `
-      })
-      selectedDates = selectedDates.substring(0, selectedDates.length - 2)
-      return selectedDates
+      return `${this.vendor.dontWorkDays.dateRange.start.date} ~ ${this.vendor.dontWorkDays.dateRange.end.date}`
     },
     dontWorkTime() {
       return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`
@@ -944,7 +934,6 @@ export default {
               }
               .item {
                 margin-bottom: 1rem;
-                display: flex;
                 img {
                   width: 21px;
                   margin-right: 1rem;
@@ -1017,11 +1006,6 @@ export default {
                 width: 80%;
               }
             }
-            .signatures {
-              display: grid;
-              grid-template-columns: 50% 50%;
-
-            }
           }
         }
       }
@@ -1029,8 +1013,8 @@ export default {
     .rotate-90 {
       transform: rotate(90deg);
     }
-    .mr-1 {
-      margin-right: 1rem;
+    .mr-3 {
+      margin-right: 3rem;
     }
   }  
 </style>

@@ -57,21 +57,11 @@
                     </template>
                   </div>
                   <div class="bottom no-margin" v-if="r.type == Number">
-                    <template v-if="r.noSuffix">
-                      <div>
-                        <input type="number" class="text-center number-field" placeholder="00.00"/>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <span>Extra Payment</span>
-                      <br/>
-                      <div class="suffix percentage" v-if="r.isPercentage">
-                        <input type="number" class="" placeholder="00.00"/>
-                      </div>
-                      <div class="suffix" v-else>
-                        <input type="number" class="" placeholder="00.00"/>
-                      </div>
-                    </template>
+                    <span>Price for every extra hour</span>
+                    <br/>
+                    <div class="suffix">
+                      <input type="text" class="" placeholder="00.00"/>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -153,21 +143,11 @@
                     </template>
                   </div>
                   <div class="bottom no-margin" v-if="p.type == Number">
-                    <template v-if="p.noSuffix">
-                      <div>
-                        <input type="number" class="text-center number-field" placeholder="00.00"/>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <span>Extra Payment</span>
-                      <br/>
-                      <div class="suffix percentage" v-if="p.isPercentage">
-                        <input type="number" class="" placeholder="00.00"/>
-                      </div>
-                      <div class="suffix" v-else>
-                        <input type="number" class="" placeholder="00.00"/>
-                      </div>
-                    </template>
+                    <span>Price for every extra hour</span>
+                    <br/>
+                    <div class="suffix">
+                      <input type="text" class="" placeholder="00.00"/>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -229,10 +209,10 @@
               <h4>Which of the vendors do you not allow to work in your venue?</h4>
               <div class="na-check-list">
                 <ul>
-                  <li v-for="(n, nIndex) in defNa" :key="nIndex" @click="updateNa(n)">
-                    <img :src="`${iconUrl}Group 5489 (4).svg`" v-if="vendor.notAllowed.filter(nt => nt.value == n.value).length > 0"/>
+                  <li v-for="(n, nIndex) in defNa.split(', ')" :key="nIndex" @click="updateNa(n)">
+                    <img :src="`${iconUrl}Group 5489 (4).svg`" v-if="notAllowed.includes(n)"/>
                     <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
-                    {{n.name}}
+                    {{n}}
                   </li>
                   <li v-if="notAllowed.includes('Other')">
                     <input type="text" placeholder="Type vendor category..."/>
@@ -306,8 +286,8 @@
                       {{r.name}}
                     </div>
                   </div>
-                  <div class="holidays" v-for="(r, rIndex) in religions" :key="rIndex" :class="{'mt-1': selectedReligion.includes(r)}">
-                    <template v-if="selectedReligion.includes(r)">
+                  <div class="holidays" v-for="(r, rIndex) in religions" :key="rIndex">
+                    <template v-if="selectedReligion.includes(r)" :class="{'mt-1': selectedReligion.includes(r)}">
                       <div class="dont">
                         <img :src="`${iconUrl}Asset 524.svg`"/>
                       </div>
@@ -373,11 +353,12 @@
                   Mark the blackout days
                 </div>
                 <functional-calendar 
-                  :change-month-function="true" 
-                  :change-year-function="true"
-                  :is-multiple-date-picker="true"
+                  :change-month-function='true' 
+                  :change-year-function='true'
+                  :is-date-range='true'
                   :sundayStart="true"
                   :minSelDays="1"
+                  :maxSelDays="7"
                   dateFormat='yyyy-mm-dd' 
                   v-model="date"
                   v-on:dayClicked="updateDontWorkDays($event)"
@@ -526,44 +507,18 @@ export default {
         start: 'AM', 
         end: 'AM',
       },
-      defNa: [
-        {
-          name: 'Food & Beverage',
-          value: 'foodandbeverage',
-        },
-        {
-          name: 'Design and Decor',
-          value: 'decor',
-        },
-        {
-          name: 'Entertainment',
-          value: 'entertainment',
-        },
-        {
-          name: 'Security',
-          value: 'securityservices',
-        },
-        {
-          name: 'Videography and Photography',
-          value: 'videographyandphotography',
-        },
-        {
-          name: 'Equipment Rental',
-          value: 'equipmentrentals'
-        }
-      ],
+      defNa: 'Amenities, Services, Accessibility, Equipment, Staff, Other',
       policies: [
         {
           category: 'venuerental',
           items: [
-            // {
-            //   name: 'Allowed use of outside vendors', 
-            //   type: Boolean
-            // },
+            {
+              name: 'Allowed use of outside vendors', 
+              type: Boolean
+            },
             {
               name: 'Minimum amount of hours', 
-              type: Number,
-              noSuffix: true,
+              type: Number
             },
             {
               name: 'Suitable for infants', 
@@ -797,8 +752,7 @@ export default {
           items: [
             {
               name: 'Hours included in rental',
-              type: Number,
-              noSuffix: true,
+              type: Number
             },
             {
               name: 'Setup hours included in rental',
@@ -822,13 +776,11 @@ export default {
             },
             {
               name: 'Tax rate',
-              type: Number,
-              isPercentage: true,
+              type: Number
             },
             {
               name: 'Suggested Gratuity',
-              type: Number,
-              isPercentage: true,
+              type: Number
             },
           ]
         },
@@ -865,8 +817,7 @@ export default {
             },
             {
               name: 'Tax rate',
-              type: Number,
-              isPercentage: true,
+              type: Number
             },
             {
               name: 'Suggested Gratuity',
@@ -895,8 +846,7 @@ export default {
             },
             {
               name: 'Tax rate',
-              type: Number,
-              isPercentage: true,
+              type: Number
             },
             {
               name: 'Suggested Gratuity',
@@ -929,8 +879,7 @@ export default {
             },
             {
               name: 'Tax rate',
-              type: Number,
-              isPercentage: true,
+              type: Number
             },
             {
               name: 'Discounts',
@@ -967,8 +916,7 @@ export default {
             },
             {
               name: 'Tax rate',
-              type: Number,
-              isPercentage: true,
+              type: Number
             },
             {
               name: 'Discount for large quantites',
@@ -989,8 +937,7 @@ export default {
           items: [
             {
               name: 'Tax rate',
-              type: Number,
-              isPercentage: true,
+              type: Number
             },
             {
               name: 'Large setup discounts',
@@ -1031,8 +978,7 @@ export default {
             },
             {
               name: 'Tax rate',
-              type: Number,
-              isPercentage: true,
+              type: Number
             },
             {
               name: 'Large group discounts',
@@ -1069,8 +1015,7 @@ export default {
             },
             {
               name: 'Tax rate',
-              type: Number,
-              isPercentage: true,
+              type: Number
             },
             {
               name: 'Large group discounts',
@@ -1107,8 +1052,7 @@ export default {
             },
             {
               name: 'Tax rate',
-              type: Number,
-              isPercentage: true,
+              type: Number
             },
             {
               name: 'Suggested Gratuity',
@@ -1140,7 +1084,6 @@ export default {
       } else {
         this.notAllowed.push(item)
       }
-      console.log(this.notAllowed)
       this.$root.$emit('update-vendor-value', 'notAllowed', this.notAllowed)
     },
     yesRule(item) {
@@ -1388,7 +1331,6 @@ export default {
                 li {
                   margin-bottom: 1rem;
                   cursor: pointer;
-                  display: flex;
                   img {
                     width: 27px;
                     height: 27px;
@@ -1492,7 +1434,6 @@ export default {
             &:before {
               background-color: #f51355;
               color: #ffffff;
-              border-radius: 50%;
             }
           }
         }
@@ -1802,11 +1743,6 @@ export default {
                 margin-top: 13px;
                 margin-left: 2rem;
               }
-              &.percentage {
-                &:before {
-                  content: '%';
-                }
-              }
               input {
                 text-align: center;
                 font-size: 16px;
@@ -1815,14 +1751,6 @@ export default {
                 border: 1px solid #dddddd;
                 border-radius: 0;
               }
-            }
-            .number-field {
-              text-align: center;
-              font-size: 16px;
-              padding: 22px 30px;
-              width: 40%;
-              border: 1px solid #dddddd;
-              border-radius: 0;
             }
           }
         }

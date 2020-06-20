@@ -30,188 +30,24 @@
     <!-- Event Booking Items -->
     <div class="md-layout events-booking-items">
       <div class="md-layout-item md-size-100">
-        <div class="requirement-section">
+        <div class="requirement-section" v-for="(category, index) in Object.keys(requirementProperties)" :key="index">
           <table class="requirement-section-table">
             <thead>
               <tr>
-                <th><span class="section-title">Amenities</span></th>
+                <th><span class="section-title">{{category}}</span></th>
                 <th>How Many?</th>
                 <th></th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Lorem ipsum</td>
+              <tr v-for="(item, index) in requirementProperties[category]" :key="index">
+                <td>{{item.name}}</td>
                 <td>
                   <input class="quantity-input" type="number">
                   <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
                   <md-tooltip md-direction="bottom">*People who did an event similar to yours used 400</md-tooltip>
                 </td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>Lorem ipsum dolor sit</td>
-                <td></td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>Lorem ipsum</td>
-                <td></td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div  class="additional-request">
-            <div>
-              <h4>Additional Requests</h4>
-              <div>Would you like to add one of those items?</div>
-            </div>
-            <div class="additional-request-tag">
-              Loream lpsum 
-              <md-icon class="icon color-red">add_circle</md-icon>
-            </div>
-            <div class="additional-request-tag">
-              Loream lpsum 
-              <md-icon class="icon color-red">add_circle</md-icon>
-            </div>
-          </div>
-        </div>
-        <div class="requirement-section">
-          <table class="requirement-section-table">
-            <thead>
-              <tr>
-                <th><span class="section-title">Services</span></th>
-                <th></th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Lorem ipsum</td>
-                <td></td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>Lorem ipsum dolor sit</td>
-                <td></td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>Lorem ipsum</td>
-                <td></td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div  class="additional-request">
-            <div>
-              <h4>Additional Requests</h4>
-              <div>Would you like to add one of those items?</div>
-            </div>
-            <div class="additional-request-tag">
-              Loream lpsum 
-              <md-icon class="icon color-red">add_circle</md-icon>
-            </div>
-            <div class="additional-request-tag">
-              Loream lpsum 
-              <md-icon class="icon color-red">add_circle</md-icon>
-            </div>
-          </div>
-        </div>
-        <div class="requirement-section">
-          <table class="requirement-section-table">
-            <thead>
-              <tr>
-                <th><span class="section-title">Equipment</span></th>
-                <th></th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Microphones</td>
-                <td>
-                  <input class="quantity-input" type="number">
-                  <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
-                  <md-tooltip md-direction="bottom">*People who did an event similar to yours used 400</md-tooltip>
-                </td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>Venue Badwith (for video streaming or meeting content)</td>
-                <td>
-                  <input class="quantity-input" type="number">
-                  <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
-                  <md-tooltip md-direction="bottom">*People who did an event similar to yours used 400</md-tooltip>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>Speaker / Sound System</td>
-                <td></td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>Projector</td>
-                <td></td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>WiFi</td>
-                <td></td>
                 <td>
                   <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
                 </td>
@@ -488,11 +324,13 @@ export default {
     proposals: [],
     showCommentEditorPanel: false,
     blockId:"",
-    value: ""
+    value: "",
+    requirementProperties: []
   }),
   methods: {
     ...mapMutations("event", ["setEventData"]),
     ...mapActions("comment", ["getCommentComponents"]),
+    ...mapActions("vendor", ["fetchAllProperties"]),
     onFileChange(e) {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
@@ -526,6 +364,16 @@ export default {
           this.selectedBlock = _.findWhere(resp, {
             id: this.blockId
           });
+          console.log(this.selectedBlock.category.key)
+          this.fetchAllProperties(this.selectedBlock.category.key).then(properties=>{
+            const propertiesByGroup = {};
+            properties.forEach(item=>{
+              if (!propertiesByGroup[item.categoryTitle])   propertiesByGroup[item.categoryTitle] = []
+              propertiesByGroup[item.categoryTitle].push(item)
+            })
+            this.requirementProperties = propertiesByGroup
+            console.log(propertiesByGroup)
+          })
         });
     },
     getBlockVendors() {
@@ -564,16 +412,14 @@ export default {
 
             // this.vendors = _.union( vendorsWithSentStatus,vendorsWithNoStatus);
             this.proposals = vendorsWithProposals;
-            console.log(this.proposals);
           })
           .catch(error => {
             this.isLoading = false;
-            console.log("EventComponentVendor error =>", error);
+            console.error(error)
           });
       } else {
         this.blockVendors = this.selectedBlock.vendors;
 
-        // console.log('blockVendors => ',this.blockVendors);
         let vendorsWithProposals = _.filter(this.blockVendors, function(item) {
           return item.proposals && item.proposals.length;
         });
@@ -618,17 +464,13 @@ export default {
             .then(event => {
               this.event = event;
               this.setEventData(event);
-              console.log("this.blockId",this.blockId)
               this.getCommentComponents(this.blockId);
               this.getBlockVendors();
               this.getSelectedBlock();
-
               // new EventComponent().for(_calendar, event).get().then(components => {
               //     this.event.components = components
               //     this.selectedComponents = components
               // })
-
-              console.log(event);
             });
         }.bind(this)
       );
@@ -650,12 +492,9 @@ export default {
     );
 
     this.hoursArray.push();
-
-    console.log("i am created");
   },
   mounted() {
     this.isLoading = true;
-   
     this.fetchData()
   },
   watch: {
