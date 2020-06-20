@@ -47,6 +47,7 @@
                   :md-disabled-dates="getDisabledDates(timelineIndex)"
                   :md-closed="closeEditTimeline(timelineIndex)"
                   md-immediately
+                  md-model-type="number"
                 ></md-datepicker>
               </div>
             </div>

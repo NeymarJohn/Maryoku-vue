@@ -3,12 +3,12 @@
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-book-requirement-header md-layout-item md-size-100">
       <div class="header-title">
-        <img src="http://static.maryoku.com/storage/icons/Requirements/image-130.png"/>
-        <img src="http://static.maryoku.com/storage/icons/Requirements/image-132.png"/>
-        <img src="http://static.maryoku.com/storage/icons/Requirements/image-133.png"/>
-        <img src="http://static.maryoku.com/storage/icons/Requirements/image-134.png"/>
+        <img src="http://static.maryoku.com/storage/concept/photo/1592350713841.png"/>
+        <img src="http://static.maryoku.com/storage/concept/photo/1592350713841.png"/>
+        <img src="http://static.maryoku.com/storage/concept/photo/1592350713841.png"/>
+        <img src="http://static.maryoku.com/storage/concept/photo/1592350713841.png"/>
       </div>
-      <header-actions @toggleCommentMode="toggleCommentMode" hideDownload></header-actions>
+      <header-actions @toggleCommentMode="toggleCommentMode" hideDownload="true"></header-actions>
     </div>
     <div class="booking-header md-layout-item md-size-100">
       <div class="d-flex justify-content-between">
@@ -17,7 +17,6 @@
             <img
               :src="`${$iconURL}Budget+Elements/${selectedBlock.componentId}.svg`"
               style="width:30px; margin-right:0.5em"
-              v-if="selectedBlock.componentId"
             />
             PLAN {{selectedBlock.title}}
           </h3>
@@ -30,303 +29,74 @@
     <!-- Event Booking Items -->
     <div class="md-layout events-booking-items">
       <div class="md-layout-item md-size-100">
-        <div class="requirement-section">
-          <table class="requirement-section-table">
-            <thead>
-              <tr>
-                <th><span class="section-title">Amenities</span></th>
-                <th>How Many?</th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Lorem ipsum</td>
-                <td>
-                  <input class="quantity-input" type="number">
-                  <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
-                  <md-tooltip md-direction="bottom">*People who did an event similar to yours used 400</md-tooltip>
-                </td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>Lorem ipsum dolor sit</td>
-                <td></td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>Lorem ipsum</td>
-                <td></td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div  class="additional-request">
-            <div>
-              <h4>Additional Requests</h4>
-              <div>Would you like to add one of those items?</div>
-            </div>
-            <div class="additional-request-tag">
-              Loream lpsum 
-              <md-icon class="icon color-red">add_circle</md-icon>
-            </div>
-            <div class="additional-request-tag">
-              Loream lpsum 
-              <md-icon class="icon color-red">add_circle</md-icon>
-            </div>
-          </div>
-        </div>
-        <div class="requirement-section">
-          <table class="requirement-section-table">
-            <thead>
-              <tr>
-                <th><span class="section-title">Services</span></th>
-                <th></th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Lorem ipsum</td>
-                <td></td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>Lorem ipsum dolor sit</td>
-                <td></td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>Lorem ipsum</td>
-                <td></td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div  class="additional-request">
-            <div>
-              <h4>Additional Requests</h4>
-              <div>Would you like to add one of those items?</div>
-            </div>
-            <div class="additional-request-tag">
-              Loream lpsum 
-              <md-icon class="icon color-red">add_circle</md-icon>
-            </div>
-            <div class="additional-request-tag">
-              Loream lpsum 
-              <md-icon class="icon color-red">add_circle</md-icon>
-            </div>
-          </div>
-        </div>
-        <div class="requirement-section">
-          <table class="requirement-section-table">
-            <thead>
-              <tr>
-                <th><span class="section-title">Equipment</span></th>
-                <th></th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Microphones</td>
-                <td>
-                  <input class="quantity-input" type="number">
-                  <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
-                  <md-tooltip md-direction="bottom">*People who did an event similar to yours used 400</md-tooltip>
-                </td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>Venue Badwith (for video streaming or meeting content)</td>
-                <td>
-                  <input class="quantity-input" type="number">
-                  <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
-                  <md-tooltip md-direction="bottom">*People who did an event similar to yours used 400</md-tooltip>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>Speaker / Sound System</td>
-                <td></td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>Projector</td>
-                <td></td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-              <tr>
-                <td>WiFi</td>
-                <td></td>
-                <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
-                </td>
-                <td>
-                  <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div  class="additional-request">
-            <div>
-              <h4>Additional Requests</h4>
-              <div>Would you like to add one of those items?</div>
-            </div>
-            <div class="additional-request-tag">
-              Loream lpsum 
-              <md-icon class="icon color-red">add_circle</md-icon>
-            </div>
-            <div class="additional-request-tag">
-              Loream lpsum 
-              <md-icon class="icon color-red">add_circle</md-icon>
-            </div>
-          </div>
-        </div>
-        <div class="requirement-section">
-          <div class="special-request-header">
-            <img :src="`${$iconURL}Requirements/special-request-red.svg`">
-            <div class="title">
-              <h3>Spacial Requests</h3>
-              Would you like to add one of those items?
-            </div>
-            <div class="additional-request-tag">
-              Loream lpsum 
-              <md-icon class="icon color-red">add_circle</md-icon>
-            </div>
-            <div class="additional-request-tag">
-              Loream lpsum 
-              <md-icon class="icon color-red">add_circle</md-icon>
-            </div>
-          </div>
-          <hr/>
-          <div class="special-request-section">
-            <div>
+         <div class="requirement-section">
+            <table class="requirement-section-table">
+              <thead>
+                <tr>
+                  <th><span class="section-title">Amenities</span></th>
+                  <th>How Many?</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Lorem ipsum</td>
+                  <td>
+                    <input class="quantity-input" type="number">
+                    <img :src="`${$iconURL}Event%20Page/light.svg`" width="20" />
+                    <md-tooltip md-direction="bottom">*People who did an event similar to yours used 400</md-tooltip>
+                  </td>
+                  <td>
+                    <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
+                  </td>
+                  <td>
+                    <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Lorem ipsum dolor sit</td>
+                  <td></td>
+                  <td>
+                    <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
+                  </td>
+                  <td>
+                    <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Lorem ipsum</td>
+                  <td></td>
+                  <td>
+                    <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">Mandatory</md-checkbox>
+                  </td>
+                  <td>
+                    <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="value" value="obj1">Nice To Have</md-checkbox>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div  class="additional-request">
               <div>
-                <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">
-                  <span class="special-request-section-subtitle">Accessibility</span></md-checkbox>
+                <h4>Additional Requests</h4>
+                <div>Would you like to add one of those items?</div>
               </div>
-              <div class="special-request-section-description">What kind of special attention do we need to know about?</div>
-              <div class="special-request-section-options">
-                <md-checkbox class="md-simple md-red" v-model="value" value="obj1">
-                  <div class="checkbox-label-wrapper">
-                    <img :src="`${$iconURL}Requirements/pregnant-women-dark.svg`"/>
-                    Pregnant women
-                  </div>
-                </md-checkbox>
-                <md-checkbox class="md-simple md-red" v-model="value" value="obj1">
-                  <div class="checkbox-label-wrapper">
-                    <img :src="`${$iconURL}Requirements/disabled-person-dark.svg`"/>
-                    Disabled people
-                  </div>
-                </md-checkbox>
-                <md-checkbox class="md-simple md-red" v-model="value" value="obj1">
-                   <div class="checkbox-label-wrapper">
-                    <img :src="`${$iconURL}Requirements/elderly-people-dark.svg`"/>
-                    Elderly People
-                   </div>
-                </md-checkbox>
+              <div class="additional-request-tag">
+                Loream lpsum 
+                <md-icon class="icon color-red">add_circle</md-icon>
+              </div>
+              <div class="additional-request-tag">
+                Loream lpsum 
+                <md-icon class="icon color-red">add_circle</md-icon>
               </div>
             </div>
           </div>
-          <hr/>
-          <div class="special-request-section">
-              <div>
-                <md-checkbox class="md-simple md-checkbox-circle md-red" v-model="value" value="obj1">
-                  <span class="special-request-section-subtitle">Around the venue</span></md-checkbox>
-              </div>
-              <span class="special-request-section-description">Which elements are important for you to have around the venue?</span>
-              <div class="special-request-section-options">
-                <md-checkbox class="md-simple md-red" v-model="value" value="obj1">
-                  <div class="checkbox-label-wrapper">
-                    <img :src="`${$iconURL}Requirements/park-dark.svg`"/>
-                    Parking
-                  </div>
-                </md-checkbox>
-                <md-checkbox class="md-simple md-red" v-model="value" value="obj1">
-                  <div class="checkbox-label-wrapper">
-                    <img :src="`${$iconURL}Requirements/restaurant-dark.svg`"/>
-                    Restaurant
-                  </div>
-                </md-checkbox>
-                <md-checkbox class="md-simple md-red" v-model="value" value="obj1">
-                  <div class="checkbox-label-wrapper">
-                    <img :src="`${$iconURL}Requirements/shopping-center-dark.svg`"/>
-                    Shopping center
-                  </div>
-                </md-checkbox>
-                <md-checkbox class="md-simple md-red" v-model="value" value="obj1">
-                  <div class="checkbox-label-wrapper">
-                    <img :src="`${$iconURL}Requirements/hotel-dark.svg`"/>
-                    Hotel
-                  </div>
-                </md-checkbox>
-              </div>
+          <div class="requirement-section">
+            <h4>Services</h4>
           </div>
-          <hr/>
-          <div class="special-request-section">
-            <div class="font-bold">Anything Else?</div>
-
-            <div>Tell us what else you would love to receive in the proposals we'll send you</div>
-            <div class="special-request-section-options">
-              <textarea placeholder="Type name of element here..." >
-              </textarea>
-            </div>
+          <div class="requirement-section">
+            <h4>Equipment</h4>
           </div>
-        </div>
       </div>
     </div>
     <!-- ./Event Booking Items -->
@@ -410,6 +180,7 @@
                 <div>Or</div>
                 <div class="note">Drag your file here</div>
               </label>
+
               <input style="display: none" id="file" name="attachment" type="file" @change />
             </div>
           </div>
@@ -492,7 +263,7 @@ export default {
   }),
   methods: {
     ...mapMutations("event", ["setEventData"]),
-    ...mapActions("comment", ["getCommentComponents"]),
+    ...mapActions("event", ["getCommentComponents"]),
     onFileChange(e) {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
@@ -771,39 +542,5 @@ export default {
     color: #f51355 !important;
     font-size: 30px !important;
   }
-}
-.special-request-header {
-  display: flex;
-  align-items: center;
-  .title {
-    margin-left: 20px;
-    margin-right: 40px;
-  }
-}
-.special-request-section {
-  padding: 30px 0;
-  &-subtitle {
-    font-size: 22px;
-    font-family: 'Manrope-ExtraBold';
-  }
-  &-description {
-    font-size: 16px;
-    font-family: 'Manrope-ExtraBold';
-  }
-  &-options {
-    margin-top: 30px;
-  }
-}
-.checkbox-label-wrapper{
-  margin-top: -9px;
-  margin-left: 20px;
-  margin-right: 50px;
-}
-textarea {
-  width: 100%;
-  resize: none;
-  padding: 20px;
-  border: solid 1px #a0a0a0;
-  border-radius: 3px;
 }
 </style>

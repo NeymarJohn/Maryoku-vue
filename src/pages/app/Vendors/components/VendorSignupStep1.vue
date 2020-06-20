@@ -323,7 +323,7 @@ export default {
   components: {
     VueElementLoading,
     VendorCheckbox,
-    VendorServiceItem
+    VendorServiceItem,
   },
   data() {
     return {

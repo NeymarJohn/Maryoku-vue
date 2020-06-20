@@ -235,7 +235,7 @@ export default {
   }),
   methods: {
     ...mapMutations("event", ["setEventData"]),
-    ...mapActions("comment", ["getCommentComponents"]),
+    ...mapActions("event", ["getCommentComponents"]),
     onFileChange(e) {
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;

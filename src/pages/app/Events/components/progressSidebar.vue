@@ -85,7 +85,7 @@ import EventBlocks from '../components/NewEventBlocks'
 import EventNotePanel from '../components/EventNotePanel'
 
 export default {
-  name: 'progress-sidebar',
+  name: 'event-time-line',
   components: {
     VueElementLoading,
     EventBlocks,
@@ -175,10 +175,8 @@ export default {
         })
     },
     setConstantStates(event) {
-      if (this.eventElements[0]) {
-        this.eventElements[0].progress = event.conceptProgress
-        this.eventElements[0].status = event.conceptProgress == 100?"completed":"not-complete"
-      }
+      this.eventElements[0].progress = event.conceptProgress
+      this.eventElements[0].status = event.conceptProgress == 100?"completed":"not-complete"
     },
     fetchUrl () {
       this.currentUrl = this.$router.history.current.path;

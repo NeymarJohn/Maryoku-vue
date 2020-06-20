@@ -88,10 +88,10 @@
             <div class="social" v-if="isSocial()">
               Website & social
               <div class="items">
-                <div class="item" v-for="(s, sIndex) in socialMediaBlocks" :key="sIndex" :class="{'mr-3': vendor.social[s.name]}">
-                  <template v-if="vendor.social[s.name]">
-                    <img :src="`${iconUrl}${s.icon}`"/> {{vendor.social[s.name]}}
-                  </template>
+                <div class="item" v-for="(s, sIndex) in socialMediaBlocks" :key="sIndex" :class="{'mr-1': vendor.social[s.name]}">
+                  <a v-if="vendor.social[s.name]" :href="vendor.social[s.name]" target="_blank">
+                    <img :src="`${iconUrl}${s.icon}`"/>
+                  </a>
                 </div>
                 <!-- <div class="item" v-if="vendor.social.website">
                   <img :src="`${iconUrl}Asset 539.svg`"/> {{vendor.social.website}}
@@ -339,31 +339,31 @@ export default {
         },
         {
           name: 'youtube', 
-          icon: 'Asset 540.svg',
+          icon: 'socialmedia/Youtube.svg',
         },
         {
           name: 'linkedin', 
-          icon: 'Asset 540.svg',
+          icon: 'socialmedia/Linkdin.svg',
         },
         {
           name: 'google', 
-          icon: 'Asset 540.svg',
+          icon: 'socialmedia/GooglePlus.svg',
         },
         {
           name: 'pinterest', 
-          icon: 'Asset 540.svg',
+          icon: 'socialmedia/Pinterest.svg',
         },
         {
           name: 'foursuare', 
-          icon: 'Asset 540.svg',
+          icon: 'socialmedia/foursquare.svg',
         },
         {
           name: 'reddit', 
-          icon: 'Asset 540.svg',
+          icon: 'socialmedia/Twitter.svg',
         },
         {
           name: 'tiktok', 
-          icon: 'Asset 540.svg',
+          icon: 'socialmedia/Tiktok.svg',
         },
       ],
       activeTab: 'About',
@@ -534,13 +534,18 @@ export default {
     mergeStringItems(items) {
       let naItems = ''
       _.each(items, n => {
-        naItems += `${this.capitalize(n)}, `
+        naItems += `${this.capitalize(n.name)}, `
       })
       naItems = naItems.substring(0, naItems.length - 2)
       return naItems
     },
     dontWorkDays() {
-      return `${this.vendor.dontWorkDays.dateRange.start.date} ~ ${this.vendor.dontWorkDays.dateRange.end.date}`
+      let selectedDates = ''
+      _.each(this.vendor.dontWorkDays.selectedDates, (s) => {
+        selectedDates += `${s.date}, `
+      })
+      selectedDates = selectedDates.substring(0, selectedDates.length - 2)
+      return selectedDates
     },
     dontWorkTime() {
       return `${this.vendor.dontWorkTime.startTime.hh}:${this.vendor.dontWorkTime.startTime.mm}:${this.vendor.dontWorkTime.amPack.start} ~ ${this.vendor.dontWorkTime.endTime.hh}:${this.vendor.dontWorkTime.endTime.mm}:${this.vendor.dontWorkTime.amPack.end}`
@@ -934,6 +939,7 @@ export default {
               }
               .item {
                 margin-bottom: 1rem;
+                display: flex;
                 img {
                   width: 21px;
                   margin-right: 1rem;
@@ -1013,8 +1019,8 @@ export default {
     .rotate-90 {
       transform: rotate(90deg);
     }
-    .mr-3 {
-      margin-right: 3rem;
+    .mr-1 {
+      margin-right: 1rem;
     }
   }  
 </style>
