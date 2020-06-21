@@ -101,7 +101,7 @@ export default {
           reddit: null,
           tiktok: null,
         },
-        categoryServices: [],
+        categoryServices: {},
         yesRules: [],
         noRules: [],
         notAllowed: [],
