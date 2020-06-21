@@ -88,10 +88,10 @@
             <div class="social" v-if="isSocial()">
               Website & social
               <div class="items">
-                <div class="item" v-for="(s, sIndex) in socialMediaBlocks" :key="sIndex" :class="{'mr-1': vendor.social[s.name]}">
-                  <a v-if="vendor.social[s.name]" :href="vendor.social[s.name]" target="_blank">
+                <div class="item" v-for="(s, sIndex) in socialMediaBlocks" :key="sIndex" :class="{'mr-3': vendor.social[s.name]}">
+                  <template v-if="vendor.social[s.name]">
                     <img :src="`${iconUrl}${s.icon}`"/>
-                  </a>
+                  </template>
                 </div>
                 <!-- <div class="item" v-if="vendor.social.website">
                   <img :src="`${iconUrl}Asset 539.svg`"/> {{vendor.social.website}}
@@ -105,68 +105,63 @@
               </div>
             </div>
           </div>
-          <div class="fee-cont" id="Pricing">
+          <!-- <div class="fee-cont" id="Pricing">
             <div class="title">
               <h3><img :src="`${iconUrl}Asset 562.svg`"/> ELEMENTS IN STARTING FEE</h3>
             </div>
             <div class="cblock">
               <div class="cheader">
-                <img :src="`${iconUrl}Asset 543.svg`"/>{{getCategoryNameByValue(vendor.vendorCategory)}}
+                <img :src="`${iconUrl}Asset 543.svg`"/>Venue
               </div>
               <div class="citems">
-                <div class="citem" v-for="(fv, fvIndex) in vendor.categoryServices"  :key="fvIndex">
+                <div class="citem" v-for="(fv, fvIndex) in feeVenues" :key="fvIndex">
                   <img :src="`${iconUrl}Group 5479 (2).svg`"/>
-                  <span class="value label">{{fv.label}}</span>
-                  <span class="qty">{{fv.value}}</span>
+                  <span class="value">{{fv.value}}</span>
+                  <span class="qty">{{fv.qty}}</span>
                   <img :src="`http://static.maryoku.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"/>
                 </div>
               </div>
             </div>
-            <!-- <div class="cblock">
+            <div class="cblock">
               <div class="cheader">
                 <img :src="`${iconUrl}Group 1471 (2).svg`"/>Catering
               </div>
               <div class="citems">
                 
               </div>
-            </div> -->
-          </div>
+            </div>
+          </div> -->
           <div class="extra-cont" id="Pricing">
             <div class="title">
               <h3><img :src="`${iconUrl}Asset 526.svg`"/>WITH EXTRA PAY</h3>
             </div>
             <div class="cblock">
               <div class="cheader">
-                <img :src="`${iconUrl}Asset 543.svg`"/>{{getCategoryNameByValue(vendor.vendorCategory)}}
+                <img :src="`${iconUrl}Asset 543.svg`"/>Venue
               </div>
               <div class="citems">
                 <div class="citem">
-                  <div 
-                    class="collapsed" 
-                    @click="expanded=!expanded"
-                    v-for="(cs, csIndex) in vendor.categoryServices" 
-                    :key="csIndex"
-                  >
-                    <div class="col label">
-                      {{cs.label}}
+                  <div class="collapsed" @click="expanded=!expanded">
+                    <div class="col">
+                      Lorem
                     </div>
                     <div class="col">
-                      {{cs.value}}
+                      2
                     </div>
                     <div class="col">
-                      
+                      +$100.00
                     </div>
                     <div class="col">
                       <img :class="{'rotate-90': expanded}" :src="`http://static.maryoku.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"/>
                     </div>
                   </div>
-                  <!-- <div class="expanded" v-if="expanded">
+                  <div class="expanded" v-if="expanded">
                     Lorem ipsum
-                  </div> -->
+                  </div>
                 </div>
               </div>
             </div>
-            <!-- <div class="cblock">
+            <div class="cblock">
               <div class="cheader">
                 <img :src="`${iconUrl}Group 1471 (2).svg`"/>Catering
               </div>
@@ -191,7 +186,7 @@
                   </div>
                 </div>
               </div>
-            </div> -->
+            </div>
           </div>
           <div class="policy-cont" id="Policy">
             <div class="title">
@@ -295,11 +290,6 @@
             <div class="item">
               <h6 class="underline">Relish caterers & venues:</h6>
             </div>
-            <div class="signatures">
-              <div class="sign" v-if="vendor.signature">
-                <img :src="vendor.signature"/>
-              </div>
-            </div>
           </div>
         </div>        
       </div>
@@ -357,7 +347,7 @@ export default {
         },
         {
           name: 'google', 
-          icon: 'socialmedia/GooglePlus.svg',
+          icon: 'socialmedia/Google+.svg',
         },
         {
           name: 'pinterest', 
@@ -816,7 +806,6 @@ export default {
                   border-bottom: 1px solid #dddddd;
                   padding: 2rem 0;
                   display: flex;
-                  align-items: center;
                   width: 50%;
 
                   img {
@@ -829,9 +818,6 @@ export default {
                   span {
                     flex: 1;
                     display: inline-block;
-                    &.label {
-                      text-transform: capitalize;
-                    }
                     &.value {
                       font: 800 16px Manrope-Regular, sans-serif;
                     }
@@ -887,9 +873,6 @@ export default {
 
                       img {
                         width: 20px;
-                      }
-                      &.label {
-                        text-transform: capitalize;
                       }
                       &:first-child {
                         flex: 2;
@@ -1029,11 +1012,6 @@ export default {
                 width: 80%;
               }
             }
-            .signatures {
-              display: grid;
-              grid-template-columns: 50% 50%;
-
-            }
           }
         }
       }
@@ -1041,8 +1019,8 @@ export default {
     .rotate-90 {
       transform: rotate(90deg);
     }
-    .mr-1 {
-      margin-right: 1rem;
+    .mr-3 {
+      margin-right: 3rem;
     }
   }  
 </style>

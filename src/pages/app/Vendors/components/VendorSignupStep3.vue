@@ -57,21 +57,14 @@
                     </template>
                   </div>
                   <div class="bottom no-margin" v-if="r.type == Number">
-                    <template v-if="r.noSuffix">
-                      <div>
-                        <input type="number" class="text-center number-field" placeholder="00.00"/>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <span>Extra Payment</span>
-                      <br/>
-                      <div class="suffix percentage" v-if="r.isPercentage">
-                        <input type="number" class="" placeholder="00.00"/>
-                      </div>
-                      <div class="suffix" v-else>
-                        <input type="number" class="" placeholder="00.00"/>
-                      </div>
-                    </template>
+                    <span>Extra Payment</span>
+                    <br/>
+                    <div class="suffix percentage" v-if="r.isPercentage">
+                      <input type="text" class="" placeholder="00.00"/>
+                    </div>
+                    <div class="suffix" v-else>
+                      <input type="text" class="" placeholder="00.00"/>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -153,21 +146,14 @@
                     </template>
                   </div>
                   <div class="bottom no-margin" v-if="p.type == Number">
-                    <template v-if="p.noSuffix">
-                      <div>
-                        <input type="number" class="text-center number-field" placeholder="00.00"/>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <span>Extra Payment</span>
-                      <br/>
-                      <div class="suffix percentage" v-if="p.isPercentage">
-                        <input type="number" class="" placeholder="00.00"/>
-                      </div>
-                      <div class="suffix" v-else>
-                        <input type="number" class="" placeholder="00.00"/>
-                      </div>
-                    </template>
+                    <span>Extra Payment</span>
+                    <br/>
+                    <div class="suffix percentage" v-if="p.isPercentage">
+                      <input type="text" class="" placeholder="00.00"/>
+                    </div>
+                    <div class="suffix" v-else>
+                      <input type="text" class="" placeholder="00.00"/>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -562,8 +548,7 @@ export default {
             // },
             {
               name: 'Minimum amount of hours', 
-              type: Number,
-              noSuffix: true,
+              type: Number
             },
             {
               name: 'Suitable for infants', 
@@ -774,8 +759,7 @@ export default {
             },
             {
               name: 'Minimum amount of hours',
-              type: Number,
-              noSuffix: true,
+              type: Number
             },
             {
               name: 'Need to control room lighting',
@@ -798,8 +782,7 @@ export default {
           items: [
             {
               name: 'Hours included in rental',
-              type: Number,
-              noSuffix: true,
+              type: Number
             },
             {
               name: 'Setup hours included in rental',
@@ -1816,14 +1799,6 @@ export default {
                 border: 1px solid #dddddd;
                 border-radius: 0;
               }
-            }
-            .number-field {
-              text-align: center;
-              font-size: 16px;
-              padding: 22px 30px;
-              width: 40%;
-              border: 1px solid #dddddd;
-              border-radius: 0;
             }
           }
         }

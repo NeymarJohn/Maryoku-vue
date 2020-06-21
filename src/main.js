@@ -27,7 +27,6 @@ import VueTimeago from 'vue-timeago'
 import VueClipboard from 'vue-clipboard2'
 import VuePlaceAutocomplete from 'vue-place-autocomplete'
 import VueTimepicker from 'vue2-timepicker'
-import vueSignature from "vue-signature"
 
 import App from './App.vue'
 import DashboardPlugin from './material-dashboard'
@@ -67,7 +66,6 @@ Vue.use(VueTimeago, {
 })
 Vue.use(VuePlaceAutocomplete)
 Vue.use(VueTimepicker)
-Vue.use(vueSignature)
 
 // configure router
 const router = new VueRouter({

@@ -16,7 +16,6 @@
           v-for="(c, cIndex) in categories.filter(category => category.name == vendor.vendorCategory)[0].categories" 
           :key="cIndex"
           :serviceItem="c"
-          :vendor="vendor"
         />
       </div>
     </div>
