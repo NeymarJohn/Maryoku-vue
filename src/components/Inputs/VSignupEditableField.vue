@@ -28,11 +28,12 @@
               </li>
             </ul>
           </div>
-          <div v-else-if="title=='Address'">
-            <place-autocomplete-field 
-              v-model="value" 
-              placeholder="Enter an an address, zipcode, or location" 
-              api-key="AIzaSyBMeTpgtrXUQPDswUdLFW9YL9JFSnZQFOs"
+          <div class="address-cont" v-else-if="title=='Address'">
+            <vue-google-autocomplete
+              id="map"
+              ref="address"
+              placeholder="Enter an an address, zipcode, or location"
+              v-on:placechanged="getAddressData"
             />
           </div>
           <div v-else-if="title=='Email'">
@@ -76,11 +77,13 @@
 </template>
 <script>
 import VueElementLoading from 'vue-element-loading'
+import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
 export default {
   name: 'v-signup-editable-field',
   components: {
     VueElementLoading,
+    VueGoogleAutocomplete,
   },
   props: {
     title: String, 
@@ -184,6 +187,9 @@ export default {
     value: null,
   }),
   mounted () {
+    if (this.title == 'Address') {
+      this.$refs.address.focus()
+    }
     this.value = this.defaultVal
     if (this.value) {
       this.selectedCategory.name = this.getCategoryNameByValue(this.value)
@@ -199,6 +205,15 @@ export default {
     // document.head.appendChild(recaptchaScript)
   },
   methods: {
+    /**
+    * When the location found
+    * @param {Object} addressData Data of the found location
+    * @param {Object} placeResultData PlaceResult object
+    * @param {String} id Input container ID
+    */
+    getAddressData: function (addressData, placeResultData, id) {
+      this.value = `${addressData.route}, ${addressData.administrative_area_level_1}, ${addressData.country}`
+    },
     save() {
       this.isEdit = false
       if (this.title == 'Business Category') {
@@ -314,14 +329,15 @@ export default {
           }
         }
       }
-      .autocomplete-field  /deep/ .form-group-inner {
+      .address-cont {
         background-image: url('http://static.maryoku.com/storage/icons/Vendor Signup/Asset 550.svg');
         background-repeat: no-repeat;
         background-size: 20px;
         background-position-x: 22px;
         background-position-y: 9px;
-        input {
-          padding: 22px 20px 22px 60px;
+        #map {
+          background: transparent;
+          padding: 12px 20px 12px 60px;
           border: 1px solid #dddddd;
           border-bottom: none;
           border-radius: 0;

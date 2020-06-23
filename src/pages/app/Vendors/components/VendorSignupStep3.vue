@@ -57,14 +57,21 @@
                     </template>
                   </div>
                   <div class="bottom no-margin" v-if="r.type == Number">
-                    <span>Extra Payment</span>
-                    <br/>
-                    <div class="suffix percentage" v-if="r.isPercentage">
-                      <input type="text" class="" placeholder="00.00"/>
-                    </div>
-                    <div class="suffix" v-else>
-                      <input type="text" class="" placeholder="00.00"/>
-                    </div>
+                    <template v-if="r.noSuffix">
+                      <div>
+                        <input type="number" class="text-center number-field" placeholder="00.00"/>
+                      </div>
+                    </template>
+                    <template v-else>
+                      <span>Extra Payment</span>
+                      <br/>
+                      <div class="suffix percentage" v-if="r.isPercentage">
+                        <input type="number" class="" placeholder="00.00"/>
+                      </div>
+                      <div class="suffix" v-else>
+                        <input type="number" class="" placeholder="00.00"/>
+                      </div>
+                    </template>
                   </div>
                 </div>
               </div>
@@ -146,14 +153,21 @@
                     </template>
                   </div>
                   <div class="bottom no-margin" v-if="p.type == Number">
-                    <span>Extra Payment</span>
-                    <br/>
-                    <div class="suffix percentage" v-if="p.isPercentage">
-                      <input type="text" class="" placeholder="00.00"/>
-                    </div>
-                    <div class="suffix" v-else>
-                      <input type="text" class="" placeholder="00.00"/>
-                    </div>
+                    <template v-if="p.noSuffix">
+                      <div>
+                        <input type="number" class="text-center number-field" placeholder="00.00"/>
+                      </div>
+                    </template>
+                    <template v-else>
+                      <span>Extra Payment</span>
+                      <br/>
+                      <div class="suffix percentage" v-if="p.isPercentage">
+                        <input type="number" class="" placeholder="00.00"/>
+                      </div>
+                      <div class="suffix" v-else>
+                        <input type="number" class="" placeholder="00.00"/>
+                      </div>
+                    </template>
                   </div>
                 </div>
               </div>
@@ -285,7 +299,7 @@
                     <span>Religion</span>
                     <img :src="`${iconUrl}Asset 519.svg`"/>
                   </div>
-                  <div class="cdropdown-cont" v-if="isReligion">
+                  <div class="cdropdown-cont" v-if="isReligion && exDont">
                     <div class="weekdays" v-for="(r, rIndex) in religions" :key="rIndex" @click="updateReligion(r)">
                       <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="selectedReligion.includes(r)"/>
                       <span class="unchecked" v-else></span>
@@ -293,7 +307,7 @@
                     </div>
                   </div>
                   <div class="holidays" v-for="(r, rIndex) in religions" :key="rIndex" :class="{'mt-1': selectedReligion.includes(r)}">
-                    <template v-if="selectedReligion.includes(r)">
+                    <template v-if="exDont && isReligion && selectedReligion.includes(r)">
                       <div class="dont">
                         <img :src="`${iconUrl}Asset 524.svg`"/>
                       </div>
@@ -364,6 +378,7 @@
                   :is-multiple-date-picker="true"
                   :sundayStart="true"
                   :minSelDays="1"
+                  :markedDates="markedDates"
                   dateFormat='yyyy-mm-dd' 
                   v-model="date"
                   v-on:dayClicked="updateDontWorkDays($event)"
@@ -390,6 +405,7 @@ import VSignupAddRules from '@/components/Inputs/VSignupAddRules.vue'
 // import VSignupTimeSelect from '@/components/Inputs/VSignupTimeSelect.vue'
 import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
 import { FunctionalCalendar } from 'vue-functional-calendar'
+import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
 export default {
   name: 'vendor-signup-step3',
@@ -488,6 +504,10 @@ export default {
           ]
         },
       ],
+      markedDates: [{
+        date: '6/12/2020',
+        class: 'marked-class'
+      }],
       allowedCategoryFor3rd: ['venuerental', 'foodandbeverage', 'decor', 'entertainment'],
       weekdays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
       selectedWeekdays: ['saturday', 'sunday'],
@@ -548,7 +568,8 @@ export default {
             // },
             {
               name: 'Minimum amount of hours', 
-              type: Number
+              type: Number,
+              noSuffix: true,
             },
             {
               name: 'Suitable for infants', 
@@ -759,7 +780,8 @@ export default {
             },
             {
               name: 'Minimum amount of hours',
-              type: Number
+              type: Number,
+              noSuffix: true,
             },
             {
               name: 'Need to control room lighting',
@@ -782,7 +804,8 @@ export default {
           items: [
             {
               name: 'Hours included in rental',
-              type: Number
+              type: Number,
+              noSuffix: true,
             },
             {
               name: 'Setup hours included in rental',
@@ -1124,7 +1147,6 @@ export default {
       } else {
         this.notAllowed.push(item)
       }
-      console.log(this.notAllowed)
       this.$root.$emit('update-vendor-value', 'notAllowed', this.notAllowed)
     },
     yesRule(item) {
@@ -1799,6 +1821,14 @@ export default {
                 border: 1px solid #dddddd;
                 border-radius: 0;
               }
+            }
+            .number-field {
+              text-align: center;
+              font-size: 16px;
+              padding: 22px 30px;
+              width: 40%;
+              border: 1px solid #dddddd;
+              border-radius: 0;
             }
           }
         }
