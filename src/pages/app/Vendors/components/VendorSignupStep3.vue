@@ -63,7 +63,8 @@
                       </div>
                     </template>
                     <template v-else>
-                      <span>Extra Payment</span>
+                      <span v-if="p.isPercentage">Rate(%)</span>
+                      <span v-else>Extra Payment</span>
                       <br/>
                       <div class="suffix percentage" v-if="r.isPercentage">
                         <input type="number" class="" placeholder="00.00"/>
@@ -159,7 +160,8 @@
                       </div>
                     </template>
                     <template v-else>
-                      <span>Extra Payment</span>
+                      <span v-if="p.isPercentage">Rate(%)</span>
+                      <span v-else>Extra Payment</span>
                       <br/>
                       <div class="suffix percentage" v-if="p.isPercentage">
                         <input type="number" class="" placeholder="00.00"/>
@@ -825,7 +827,8 @@ export default {
             },
             {
               name: 'Discount for large quantities',
-              type: Number
+              type: Number,
+              isPercentage: true,
             },
             {
               name: 'Tax rate',
@@ -860,7 +863,8 @@ export default {
             },
             {
               name: 'Discount for large quantities',
-              type: Boolean
+              type: Boolean,
+              isPercentage: true,
             },
             {
               name: 'Late Night fares',
@@ -868,7 +872,8 @@ export default {
             },
             {
               name: 'Discount for large quantities',
-              type: Number
+              type: Number,
+              isPercentage: true,
             },
             {
               name: 'Tax rate',

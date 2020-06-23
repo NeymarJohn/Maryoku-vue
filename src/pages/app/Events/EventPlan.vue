@@ -17,7 +17,7 @@ import ProgressSidebar from "./components/progressSidebar";
 export default {
   components: {
     EventDetailsTimeline,
-    EventConceptChoose,
+    EventConceptChoose, 
     BookingEvent,
     BookingEventRequirement,
     ProgressSidebar
