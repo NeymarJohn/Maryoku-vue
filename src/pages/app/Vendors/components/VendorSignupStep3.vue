@@ -63,7 +63,7 @@
                       </div>
                     </template>
                     <template v-else>
-                      <span v-if="p.isPercentage">Rate(%)</span>
+                      <span v-if="r.isPercentage">Rate (%)</span>
                       <span v-else>Extra Payment</span>
                       <br/>
                       <div class="suffix percentage" v-if="r.isPercentage">
@@ -160,7 +160,7 @@
                       </div>
                     </template>
                     <template v-else>
-                      <span v-if="p.isPercentage">Rate(%)</span>
+                      <span v-if="p.isPercentage">Rate (%)</span>
                       <span v-else>Extra Payment</span>
                       <br/>
                       <div class="suffix percentage" v-if="p.isPercentage">
