@@ -233,7 +233,17 @@
             </div>
           </template>
           <template v-else>
-            <img :src="vendor.signature"/>
+            <div 
+              class="" 
+              :style="`
+                background-image: url(${vendor.signature});width: 100%;
+                background-position: center;
+                background-repeat: no-repeat;
+                height: 162px;
+                background-size: contain;
+              `"
+            />
+            <!-- <img :src="vendor.signature"/> -->
             <img class="remove" :src="`${iconUrl}Asset 529.svg`" v-if="vendor.signature" @click="removeSignature(vendor.signature)"/>
           </template>
         </div>

@@ -7,7 +7,7 @@
           <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
           <div class="text">{{label}}</div>
         </div>
-        <div class="included-cont" v-if="checked">
+        <div class="included-cont" v-if="checked && !item.xIncluded">
           <div 
             class="included" 
             :class="{'active': included}" 
@@ -61,7 +61,7 @@
             How Many? <input type="number" placeholder="QTY" v-model="currentItem.value" />
           </div>
         </div>
-        <div class="included-cont" v-if="checked">
+        <div class="included-cont" v-if="checked && !item.xIncluded">
           <div class="included" :class="{'active': included}" @click="updateIncluded()">
             <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="included"/>
             <span class="unchecked" v-else></span>

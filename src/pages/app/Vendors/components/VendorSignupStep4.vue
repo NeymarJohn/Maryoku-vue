@@ -22,8 +22,6 @@
           </div>
           <div class="banner">
             <img :src="vendor.images[0]" v-if="vendor.images.length > 0"/>
-            <!-- <img :src="vendor.coverPhoto" v-if="vendor.coverPhoto"/> -->
-            <!-- <img src="http://static.maryoku.com/storage/img/sidebar-2.jpg" v-else/> -->
           </div>
           <div class="about-cont" id="About">
             <div class="block">
@@ -46,14 +44,6 @@
                 {{vendor.about.category}}
               </div>
             </div>
-            <!-- <div class="block">
-              <div class="title">
-                <img :src="`${iconUrl}Group 1471 (2).svg`"/> About Our Cuisine
-              </div>
-              <div class="desc">
-                Lorem
-              </div>
-            </div> -->
             <div class="images">
               <span class="prev" @click="prev()" v-if="imageSlidePos < 0">
                 <md-icon>keyboard_arrow_left</md-icon>
@@ -93,15 +83,6 @@
                     <img :src="`${iconUrl}${s.icon}`"/>
                   </a>
                 </div>
-                <!-- <div class="item" v-if="vendor.social.website">
-                  <img :src="`${iconUrl}Asset 539.svg`"/> {{vendor.social.website}}
-                </div>
-                <div class="item" v-if="vendor.social.instagram">
-                  <img :src="`${iconUrl}Group 4569 (2).svg`"/> {{vendor.social.instagram}}
-                </div>
-                <div class="item" v-if="vendor.social.facebook">
-                  <img :src="`${iconUrl}Asset 540.svg`"/> {{vendor.social.facebook}}
-                </div> -->
               </div>
             </div>
           </div>
@@ -111,25 +92,24 @@
             </div>
             <div class="cblock">
               <div class="cheader">
-                <img :src="`${iconUrl}Asset 543.svg`"/>{{getCategoryNameByValue(vendor.vendorCategory)}}
-              </div>
-              <div class="citems">
-                <div class="citem" v-for="(fv, fvIndex) in vendor.categoryServices"  :key="fvIndex">
-                  <img :src="`${iconUrl}Group 5479 (2).svg`"/>
-                  <span class="value label">{{fv.label}}</span>
-                  <span class="qty">{{fv.value}}</span>
-                  <img :src="`http://static.maryoku.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"/>
+                <div class="first-column">
+                  <div>
+                    <img :src="`${iconUrl}Asset 543.svg`"/>{{getCategoryNameByValue(vendor.vendorCategory)}}
+                  </div>
+                  <span>QTY</span>
+                </div>
+                <div class="second-column">
+                  <span>QTY</span>
                 </div>
               </div>
-            </div>
-            <!-- <div class="cblock">
-              <div class="cheader">
-                <img :src="`${iconUrl}Group 1471 (2).svg`"/>Catering
-              </div>
               <div class="citems">
-                
+                <vendor-starting-fee-item
+                  v-for="(fv, fvIndex) in getStartingFeeItems()" 
+                  :key="fvIndex"
+                  :item="fv"
+                />
               </div>
-            </div> -->
+            </div>
           </div>
           <div class="extra-cont" id="Pricing">
             <div class="title">
@@ -137,61 +117,22 @@
             </div>
             <div class="cblock">
               <div class="cheader">
-                <img :src="`${iconUrl}Asset 543.svg`"/>{{getCategoryNameByValue(vendor.vendorCategory)}}
+                <div>
+                  <img :src="`${iconUrl}Asset 543.svg`"/>{{getCategoryNameByValue(vendor.vendorCategory)}}
+                </div>
+                <span>QTY</span>
+                <span>Price</span>
               </div>
               <div class="citems">
                 <div class="citem">
-                  <div 
-                    class="collapsed" 
-                    @click="expanded=!expanded"
-                    v-for="(cs, csIndex) in vendor.categoryServices" 
+                  <vendor-extra-pay-item
+                    v-for="(cs, csIndex) in getExtraPayItems()" 
                     :key="csIndex"
-                  >
-                    <div class="col label">
-                      {{cs.label}}
-                    </div>
-                    <div class="col">
-                      {{cs.value}}
-                    </div>
-                    <div class="col">
-                      
-                    </div>
-                    <div class="col">
-                      <img :class="{'rotate-90': expanded}" :src="`http://static.maryoku.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"/>
-                    </div>
-                  </div>
-                  <!-- <div class="expanded" v-if="expanded">
-                    Lorem ipsum
-                  </div> -->
+                    :item="cs"
+                  />
                 </div>
               </div>
             </div>
-            <!-- <div class="cblock">
-              <div class="cheader">
-                <img :src="`${iconUrl}Group 1471 (2).svg`"/>Catering
-              </div>
-              <div class="citems">
-                <div class="citem">
-                  <div class="collapsed" @click="expanded=!expanded">
-                    <div class="col">
-                      Lorem
-                    </div>
-                    <div class="col">
-                      2
-                    </div>
-                    <div class="col">
-                      +$100.00
-                    </div>
-                    <div class="col">
-                      <img :class="{'rotate-90': expanded}" :src="`http://static.maryoku.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"/>
-                    </div>
-                  </div>
-                  <div class="expanded" v-if="expanded">
-                    Lorem ipsum
-                  </div>
-                </div>
-              </div>
-            </div> -->
           </div>
           <div class="policy-cont" id="Policy">
             <div class="title">
@@ -263,42 +204,21 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="item">
-              <h5>We charge deposit of:</h5>
-              <p>
-                50% of the total event
-              </p>
-            </div>
-            <div class="item lb">
-              <h5>Our cancellation approach</h5>
-            </div>
-            <div class="item">
-              <h5>We allow free cancellation until:</h5>
-              <p>
-                30 days before the event
-              </p>
-              <div class="ifthan-cont">
-                <div class="ifthan">
-                  <b>If</b> the client cancel the event
-                </div>
-                <div class="ifthan">
-                  <b>Than</b> the client will pay full deposit
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <h6>Additional:</h6>
-              <p>
-                Lorem
-              </p>
-            </div> -->
             <div class="item">
               <h6 class="underline">Relish caterers & venues:</h6>
             </div>
             <div class="signatures">
-              <div class="sign" v-if="vendor.signature">
-                <img :src="vendor.signature"/>
-              </div>
+              <div 
+                class="sign" 
+                v-if="vendor.signature"
+                :style="`
+                  background-image: url(${vendor.signature});
+                  width: 100%;
+                  background-repeat: no-repeat;
+                  height: 162px;
+                  background-size: contain;
+                `"
+              />
             </div>
           </div>
         </div>        
@@ -317,6 +237,8 @@ import Icon from '@/components/Icon/Icon.vue'
 import VendorServiceItem from './VendorServiceItem.vue'
 import LightBox from 'vue-image-lightbox'
 import carousel from 'vue-owl-carousel'
+import VendorStartingFeeItem from './VendorStartingFeeItem.vue'
+import VendorExtraPayItem from './VendorExtraPayItem.vue'
 
 export default {
   name: 'vendor-signup-step4',
@@ -329,7 +251,9 @@ export default {
     VueElementLoading,
     VendorServiceItem,
     LightBox,
-    carousel
+    carousel,
+    VendorStartingFeeItem,
+    VendorExtraPayItem,
   },
   data() {
     return {
@@ -398,7 +322,6 @@ export default {
         }
       ],
       imageSlidePos: 0,
-      expanded: false,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
       defRules: 'Suitable for pets, Smoking allowed, Suitable for infants(Under 2 years), Dress code, Overtime Cost',
       defNa: 'Catering, Dj, Photographer, Show / Performance, Flowers, Transporation, Decoration, Rentals, Favours & Gifts, Other',
@@ -501,6 +424,24 @@ export default {
 
       return !isBlank
     },
+    getExtraPayItems() {
+      let extraPayItems = []
+      _.each(this.vendor.categoryServices, (item) => {
+        if (item.value) {
+          extraPayItems.push(item)
+        }
+      })
+      return extraPayItems
+    },
+    getStartingFeeItems() {
+      let startingFeeItems = []
+      _.each(this.vendor.categoryServices, (item) => {
+        if (item.included) {
+          startingFeeItems.push(item)
+        }
+      })
+      return startingFeeItems
+    },
     prev() {
       const ww = this.vendor.images.length * 320
       const sw = this.$refs.imagesCont.clientWidth
@@ -511,7 +452,6 @@ export default {
       } else {
         this.imageSlidePos
       }
-      console.log(this.imageSlidePos)
     },
     next () {
       const ww = this.vendor.images.length * 320
@@ -523,7 +463,6 @@ export default {
       } else {
         this.imageSlidePos
       }
-      console.log(this.imageSlidePos)
     },
     goToSection(item) {
       this.activeTab = item
@@ -661,7 +600,7 @@ export default {
             }
           }
           .about-cont {
-            padding: 2rem 0;
+            padding: 2rem 0 60px 0;
             // border-bottom: 1px solid #dddddd;
 
             .block {
@@ -743,7 +682,7 @@ export default {
             }
             .contact-us {
               padding: 2rem 0;
-              border-bottom: 1px solid #dddddd;
+
               h4 {
                 margin: 0;
                 font: 800 30px Manrope-Regular, sans-serif;
@@ -767,6 +706,8 @@ export default {
             }
             .social {
               padding: 2rem 0;
+              border-top: 1px solid #dddddd;
+
               .items{
                 display: flex;
                 white-space: nowrap;
@@ -784,6 +725,10 @@ export default {
             }
           }
           .fee-cont {
+            border-top: 2px solid #818080;
+            margin-left: -60px;
+            margin-right: -60px;
+            padding: 30px 60px 60px 60px;
             .title {
               margin: 2rem 0;
               h3 {
@@ -797,56 +742,49 @@ export default {
             }
             .cblock {
               .cheader {
-                display: flex;
+                display: grid;
+                grid-template-columns: 50% 50%;
+                grid-gap: 3rem;
                 padding: 1rem 0 1rem 60px;
                 background: #ededed;
                 margin: 0 -60px;
                 width: 100%;
                 font: bold 16px Manrope-Regular, sans-serif;
 
+                .first-column {
+                  display: grid;
+                  grid-template-columns: 50% 50%;
+                  align-items: center;
+                }
+                .second-column {
+                  text-align: right;
+                  margin-right: 1.5rem;
+                }
+
                 img {
                   width: 24px;
                   margin-right: 1rem;
                 }
+                span {
+                  text-align: right;
+                  margin-right: 5rem;
+                }
               }
               .citems {
-                width: calc(100% - 4rem);
-                display: flex;
-                .citem {
-                  border-bottom: 1px solid #dddddd;
-                  padding: 2rem 0;
-                  display: flex;
-                  align-items: center;
-                  width: 50%;
-
-                  img {
-                    width: 20px;
-
-                    &:first-child {
-                      margin-right: 1rem;
-                    }
-                  }
-                  span {
-                    flex: 1;
-                    display: inline-block;
-                    &.label {
-                      text-transform: capitalize;
-                    }
-                    &.value {
-                      font: 800 16px Manrope-Regular, sans-serif;
-                    }
-                    &.qty {
-                      font: normal 16px Manrope-Regular, sans-serif;
-                    }
-                  }
-                  &:nth-child(2n+1) {
-                    margin-right: 1rem;
-                  }
-                }
+                width: calc(100% - 7rem);
+                display: grid;
+                grid-column-gap: 3rem;
+                grid-template-columns: 50% 50%;
+                align-items: center;
               }
             }
           }
           .extra-cont {
+            border-top: 2px solid #818080;
+            margin-left: -60px;
+            margin-right: -60px;
+            padding: 30px 60px 60px 60px;
+
             .title {
               margin: 2rem 0;
               h3 {
@@ -860,7 +798,8 @@ export default {
             }
             .cblock {
               .cheader {
-                display: flex;
+                display: grid;
+                grid-template-columns: 40% 20% 40%;
                 padding: 1rem 0 1rem 60px;
                 background: #ededed;
                 margin: 0 -60px;
@@ -877,41 +816,14 @@ export default {
                   width: calc(100% - 5rem - 60px);
                   border-bottom: 1px solid #dddddd;
                   cursor: pointer;
-
-                  .collapsed {
-                    display: flex;
-                    padding: 2rem 0;
-                    .col {
-                      flex: 1;
-                      width: 20px;
-
-                      img {
-                        width: 20px;
-                      }
-                      &.label {
-                        text-transform: capitalize;
-                      }
-                      &:first-child {
-                        flex: 2;
-                        font: bold 16px Manrope-Regular, sans-serif;
-                      }
-                      &:last-child {
-                        text-align: right;
-                      }
-                    }
-                  }
-                  .expanded {
-                    font: normal 14px Manrope-Regular, sans-serif;
-                    padding-bottom: 1rem;
-                  }
                 }
               }
             }
           }
           .policy-cont {
-            border-top: 1px solid #dddddd;
-            border-bottom: 1px solid #dddddd;
-            padding: 2rem 60px;
+            border-top: 2px solid #818080;
+            border-bottom: 2px solid #818080;
+            padding: 60px;
             margin: auto -60px;
 
             .title  {
@@ -965,7 +877,8 @@ export default {
             }
           }
           .pricing-policy-cont {
-            margin-top: 2rem;
+            padding: 60px 60px 0 60px;
+            margin: 0 -60px;
             .title {
               margin-bottom: 2rem;
               img {
@@ -1037,9 +950,6 @@ export default {
           }
         }
       }
-    }
-    .rotate-90 {
-      transform: rotate(90deg);
     }
     .mr-1 {
       margin-right: 1rem;
