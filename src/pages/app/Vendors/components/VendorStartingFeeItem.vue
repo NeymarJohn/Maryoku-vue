@@ -6,10 +6,14 @@
         <span class="value label">{{item.label}}</span>
       </div>
       <div class="with-qty">
-        <span class="qty">{{item.value}}</span>
+        <span class="qty">{{getQty()}}</span>
         <img 
           v-if="item.desc" 
           :src="`http://static.maryoku.com/storage/icons/NewSubmitPorposal/Group 4770 (2).svg`"
+        />
+        <img 
+          v-else
+          :src="`http://static.maryoku.com/storage/icons/Vendor Signup/Asset 528.svg`"
         />
       </div>
     </div>
@@ -45,7 +49,14 @@ export default {
       if (this.item.desc) {
         this.expanded = !this.expanded
       }
-    }
+    },
+    getQty() {
+      if (this.item.value.constructor.name == 'Array') {
+        return this.item.value.length
+      } else {
+        return null
+      }
+    },
   },
   computed: {
     

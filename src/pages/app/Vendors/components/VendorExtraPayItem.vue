@@ -5,10 +5,10 @@
         {{item.label}}
       </div>
       <div class="col">
-        
+        {{getQty()}}
       </div>
       <div class="col">
-        +${{item.value}}
+        {{getPrice()}}
       </div>
       <div class="col">
         <img 
@@ -49,6 +49,20 @@ export default {
     expand() {
       if (this.item.desc) {
         this.expanded = !this.expanded
+      }
+    },
+    getQty() {
+      if (this.item.value.constructor.name == 'Array') {
+        return this.item.value.length
+      } else {
+        return null
+      }
+    },
+    getPrice() {
+      if (this.item.value.constructor.name == 'String') {
+        return `+$${this.item.value}`
+      } else {
+        return null
       }
     }
   },
