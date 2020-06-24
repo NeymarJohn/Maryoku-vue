@@ -88,6 +88,8 @@ import VendorSignup from "@/pages/app/Vendors/VendorSignup.vue"
 
 const SignInSignUp = () =>
   import('@/pages/Dashboard/Pages/SignInSignUp.vue')
+const SignUp = () =>
+  import('@/pages/Dashboard/Pages/SignUp.vue')
 const SignOut = () =>
   import('@/pages/Dashboard/Pages/SignOut.vue')
 const SignedIn = () =>
@@ -104,6 +106,15 @@ let authPages = {
     meta: {
       auth: false,
       gtm: 'SignIn'
+    }
+  },
+  {
+    path: '/signup',
+    name: 'SignUp',
+    component: SignUp,
+    meta: {
+      auth: false,
+      gtm: 'SignUp'
     }
   },
   {

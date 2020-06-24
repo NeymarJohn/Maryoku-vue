@@ -275,13 +275,29 @@ export default {
       this.isLoading = true;
 
       let formData = new FormData();
+      const fileNames = [];
       for (let i = 0; i < imageKeys.length; i++) {
         const fileItem = this.uploadImages[imageKeys[i]];
         formData.append("files[]", fileItem);
+        fileNames.push({
+          name: fileItem.name,
+        })
       }
+
+      // Create Concept
+      if (fileNames.length > 0) {
+        this.editConcept.images = fileNames;
+      }
+      const evenConcept = await new EventConcept(this.editConcept).save();
+      fileNames.forEach((item, index)=>{
+        fileNames[index].url = `concept/${evenConcept.id}/${item.name}`
+      })
+      this.isLoading = false;
+      this.$emit("saved", evenConcept, this.uploadImages);
+
       // formData.append("file", fileItem);
       formData.append("from", "concept");
-      formData.append("type", "photo");
+      formData.append("folder", evenConcept.id);
       const result = await this.$http.post(
         `${process.env.SERVER_URL}/uploadMultipleFiles`,
         formData,
@@ -291,89 +307,14 @@ export default {
           }
         }
       );
-      if (result.data) {
-        const images = []
-        result.data.upload.files.forEach(item=>{
-          images.push({
-            originalName: item.originalName,
-            url: item.path,
-            name: item.name
-          })
-        })
-        this.editConcept.images = images;
-      }
-      // if (this.editConcept.images.length === 0) {
-      //   this.editConcept.images.push({
-      //     originalName: fileItem.name,
-      //     url: result.data.upload.path,
-      //     name: result.data.upload.name
-      //   });
-      // } else {
-      //   this.editConcept.images[imageKeys[i]] = {
-      //     originalName: fileItem.name,
-      //     url: result.data.upload.path,
-      //     name: result.data.upload.name
-      //   };
-      // }
-    
-      
-      // for (let i = 0; i < imageKeys.length; i++) {
-      //   const fileItem = this.uploadImages[imageKeys[i]];
-      //   let formData = new FormData();
-      //   formData.append("files[]", fileItem);
-      //   formData.append("file", fileItem);
-      //   formData.append("from", "concept");
-      //   formData.append("type", "photo");
-      //   const result = await this.$http.post(
-      //     `${process.env.SERVER_URL}/uploadFile`,
-      //     formData,
-      //     {
-      //       headers: {
-      //         "Content-Type": "multipart/form-data"
-      //       }
-      //     }
-      //   );
-      //   if (this.editConcept.images.length === 0) {
-      //     this.editConcept.images.push({
-      //       originalName: fileItem.name,
-      //       url: result.data.upload.path,
-      //       name: result.data.upload.name
-      //     });
-      //   } else {
-      //     this.editConcept.images[imageKeys[i]] = {
-      //       originalName: fileItem.name,
-      //       url: result.data.upload.path,
-      //       name: result.data.upload.name
-      //     };
-      //   }
-      // }
-
-      // this.editConcept.tags = this.addedTags
-
-      // this.editConcept.images = this.uploadImages;
-      const res = await new EventConcept(this.editConcept).save();
-      this.isLoading = false;
-      console.log("response", res);
-      this.$emit("saved", res);
-      // .then(res => {
-      //     console.log(res);
-      //     this.isLoading = false
-      //     res.images.forEach((item,i)=>{
-      //         res.images[i].url = 'http://static.maryoku.com/' + res.images[i].url
-      //     })
-      //     this.editConcept = res
-      // })
-      // .catch(error => {
-      //   this.isLoading = false;
-      //   console.log(error)
-      // })
+      console.log("response", evenConcept);
     }
   },
   created() {
     if (this.defaultConcept) {
       this.editConcept = this.defaultConcept;
       this.editConcept.images.forEach((image, i) => {
-        this.uploadImageData[i] = this.$resourceURL + image.url;
+        this.uploadImageData[i] = `${this.$storageURL}concept/${this.editConcept.id}/${image.name}`;
       });
     }
   },

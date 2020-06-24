@@ -90,9 +90,7 @@
                     <md-button class="md-rose md-simple md-just-icon view-concept" @click="expandCreateConcept = !expandCreateConcept">
                         <img :src="`${conceptIconsURL}Asset 490.svg`">
                     </md-button>
-
                     <event-concept-edit-form v-if="expandCreateConcept" @saved="onSaveConcept"></event-concept-edit-form>
-
                 </div>
                 <!-- ./Create Concept Section -->
 
@@ -166,7 +164,8 @@
                                 v-for="(image, imageIndex) in selectedConcept.images"
                                 :key="imageIndex"
                             >
-                                <div class="image-section" :style="`background:url(http://static.maryoku.com/${image.url}) center top no-repeat`"></div>
+                                <div class="image-section" v-if="base64Images[imageIndex]" :style="`background-image:url(${base64Images[imageIndex]})  center top no-repeat`"></div>
+                                <div class="image-section" v-else :style="`background:url(${$storageURL}concept/${selectedConcept.id}/${image.name}) center top no-repeat`"></div>
                             </div>
                         </div>
                         
@@ -273,6 +272,7 @@ export default {
     selectedBlock: {},
     selectedConcept:{},
     showCommentEditorPanel: false,
+    base64Images: [],
     conceptOptions: [
         {
             option: 1,
@@ -440,18 +440,15 @@ export default {
         this.selectedConcept = this.conceptOptions[index]
         this.showConceptList = false
     },
-    onSaveConcept(eventConcept) {
-        console.log(eventConcept);
+    onSaveConcept(eventConcept, imageData) {
         let calendar = new Calendar({id: this.$auth.user.defaultCalendarId})
         let event = new CalendarEvent({id: this.event.id}).for(calendar)
-
-        console.log("eventConc",eventConcept);
         event.concept = eventConcept
         event.conceptProgress = 100
-        console.log("eventConcept", eventConcept);
         event.save().then(result=>{
             this.event = result
             this.selectedConcept = eventConcept
+            this.base64Images = imageData
             this.showConceptList = false
             this.showEditForm = false
             this.setEventData(result)
@@ -485,7 +482,9 @@ export default {
       _calendar.calendarEvents().find(this.$route.params.id).then(event => {
         this.event = event
         if (event.concept) {
+            console.log(event.concept)
             this.selectedConcept = event.concept
+            console.log("concept", this.selectedConcept)
             this.selectedConcept.images.forEach((item, i)=>{
                 item.url = item.url
             }) 

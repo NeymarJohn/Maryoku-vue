@@ -27,7 +27,6 @@
           <vendor-checkbox
             :item="item"
             :label="item.name"
-            :vendor="vendor"
             v-model="item.value"
           />
         </div>
@@ -50,7 +49,6 @@ export default {
   props: {
     serviceItem: Object,
     vendorCategory: String,
-    vendor: Object,
   },
   components: {
     VueElementLoading,
@@ -58,6 +56,7 @@ export default {
   },
   data() {
     return {
+      vendor: null,
       collapsed: true,
       conditionTooltip: false,
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',

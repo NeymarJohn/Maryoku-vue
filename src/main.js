@@ -25,8 +25,8 @@ import VueTour from 'vue-tour'
 import VueSwal from 'vue-swal'
 import VueTimeago from 'vue-timeago'
 import VueClipboard from 'vue-clipboard2'
+import VuePlaceAutocomplete from 'vue-place-autocomplete'
 import VueTimepicker from 'vue2-timepicker'
-import vueSignature from "vue-signature"
 
 import App from './App.vue'
 import DashboardPlugin from './material-dashboard'
@@ -64,8 +64,8 @@ Vue.use(VueTimeago, {
     ja: require('date-fns/locale/ja')
   }
 })
+Vue.use(VuePlaceAutocomplete)
 Vue.use(VueTimepicker)
-Vue.use(vueSignature)
 
 // configure router
 const router = new VueRouter({
@@ -98,7 +98,9 @@ router.beforeEach((to, from, next) => {
 
   let tenantId = document.location.hostname.replace('.maryoku.com', '')
   let isPrimeTenant = tenantId === 'dev' || tenantId === 'app'
-  if ((isPrimeTenant && to.path !== '/signout' && to.path !== '/signin' && to.path !== '/signedin' && to.path !== '/create-workspace' && to.path !== '/choose-workspace') || (to.meta.auth && !auth.user.authenticated)) {
+  const unAuthenticatedLinks = ['/signout', '/signin', '/signup', '/signedin', '/create-workspace', '/choose-workspace' ]
+  if ((isPrimeTenant && unAuthenticatedLinks.indexOf(to.path) < 0 ) || (to.meta.auth && !auth.user.authenticated)) {
+    alert()
     next('signin')
   } else {
     if (to.name !== 'ShowEvent' && to.path !== '/signout' && auth.user.role === 'guest' && to.path !== '/my-events') {

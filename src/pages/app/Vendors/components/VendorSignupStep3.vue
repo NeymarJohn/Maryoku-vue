@@ -24,15 +24,8 @@
                 v-for="(r, rIndex) in policies.filter(p => p.category == vendor.vendorCategory)[0].items" 
                 :key="rIndex"
               >
-                <div class="left v-grid-with-desc">
+                <div class="left">
                   {{r.name}}
-                  <textarea 
-                    v-if="r.hasComment"
-                    class="desc"
-                    rows="3"
-                    v-model="r.desc"
-                    :placeholder="`Add additional information`"
-                  />
                 </div>
                 <div class="right">
                   <div class="top">
@@ -64,22 +57,14 @@
                     </template>
                   </div>
                   <div class="bottom no-margin" v-if="r.type == Number">
-                    <template v-if="r.noSuffix">
-                      <div>
-                        <input type="number" class="text-center number-field" placeholder="00.00"/>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <span v-if="r.isPercentage">Rate (%)</span>
-                      <span v-else>Extra Payment</span>
-                      <br/>
-                      <div class="suffix percentage" v-if="r.isPercentage">
-                        <input type="number" class="" placeholder="00.00"/>
-                      </div>
-                      <div class="suffix" v-else>
-                        <input type="number" class="" placeholder="00.00"/>
-                      </div>
-                    </template>
+                    <span>Extra Payment</span>
+                    <br/>
+                    <div class="suffix percentage" v-if="r.isPercentage">
+                      <input type="text" class="" placeholder="00.00"/>
+                    </div>
+                    <div class="suffix" v-else>
+                      <input type="text" class="" placeholder="00.00"/>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -130,13 +115,6 @@
               >
                 <div class="left">
                   {{p.name}}
-                  <textarea 
-                    v-if="p.hasComment"
-                    class="desc"
-                    rows="3"
-                    v-model="p.desc"
-                    :placeholder="`Add additional information`"
-                  />
                 </div>
                 <div class="right">
                   <div class="top">
@@ -168,22 +146,14 @@
                     </template>
                   </div>
                   <div class="bottom no-margin" v-if="p.type == Number">
-                    <template v-if="p.noSuffix">
-                      <div>
-                        <input type="number" class="text-center number-field" placeholder="00.00"/>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <span v-if="p.isPercentage">Rate (%)</span>
-                      <span v-else>Extra Payment</span>
-                      <br/>
-                      <div class="suffix percentage" v-if="p.isPercentage">
-                        <input type="number" class="" placeholder="00.00"/>
-                      </div>
-                      <div class="suffix" v-else>
-                        <input type="number" class="" placeholder="00.00"/>
-                      </div>
-                    </template>
+                    <span>Extra Payment</span>
+                    <br/>
+                    <div class="suffix percentage" v-if="p.isPercentage">
+                      <input type="text" class="" placeholder="00.00"/>
+                    </div>
+                    <div class="suffix" v-else>
+                      <input type="text" class="" placeholder="00.00"/>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -315,7 +285,7 @@
                     <span>Religion</span>
                     <img :src="`${iconUrl}Asset 519.svg`"/>
                   </div>
-                  <div class="cdropdown-cont" v-if="isReligion && exDont">
+                  <div class="cdropdown-cont" v-if="isReligion">
                     <div class="weekdays" v-for="(r, rIndex) in religions" :key="rIndex" @click="updateReligion(r)">
                       <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="selectedReligion.includes(r)"/>
                       <span class="unchecked" v-else></span>
@@ -323,7 +293,7 @@
                     </div>
                   </div>
                   <div class="holidays" v-for="(r, rIndex) in religions" :key="rIndex" :class="{'mt-1': selectedReligion.includes(r)}">
-                    <template v-if="exDont && isReligion && selectedReligion.includes(r)">
+                    <template v-if="selectedReligion.includes(r)">
                       <div class="dont">
                         <img :src="`${iconUrl}Asset 524.svg`"/>
                       </div>
@@ -394,7 +364,6 @@
                   :is-multiple-date-picker="true"
                   :sundayStart="true"
                   :minSelDays="1"
-                  :markedDates="markedDates"
                   dateFormat='yyyy-mm-dd' 
                   v-model="date"
                   v-on:dayClicked="updateDontWorkDays($event)"
@@ -421,7 +390,6 @@ import VSignupAddRules from '@/components/Inputs/VSignupAddRules.vue'
 // import VSignupTimeSelect from '@/components/Inputs/VSignupTimeSelect.vue'
 import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
 import { FunctionalCalendar } from 'vue-functional-calendar'
-import VueGoogleAutocomplete from 'vue-google-autocomplete'
 
 export default {
   name: 'vendor-signup-step3',
@@ -520,10 +488,6 @@ export default {
           ]
         },
       ],
-      markedDates: [{
-        date: '6/12/2020',
-        class: 'marked-class'
-      }],
       allowedCategoryFor3rd: ['venuerental', 'foodandbeverage', 'decor', 'entertainment'],
       weekdays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
       selectedWeekdays: ['saturday', 'sunday'],
@@ -580,48 +544,39 @@ export default {
           items: [
             // {
             //   name: 'Allowed use of outside vendors', 
-            //   type: Boolean,
+            //   type: Boolean
             // },
             {
               name: 'Minimum amount of hours', 
-              type: Number,
-              noSuffix: true,
-              hasComment: true, 
+              type: Number
             },
             {
               name: 'Suitable for infants', 
-              type: Boolean,
-              hasComment: true, 
+              type: Boolean
             },
             {
               name: 'Audio restrictions', 
-              type: Boolean,
-              hasComment: true, 
+              type: Boolean
             },
             {
               name: 'Decor restrictions', 
-              type: Boolean,
-              hasComment: true, 
+              type: Boolean
             },
             {
               name: 'Dress code', 
-              type: Boolean,
-              hasComment: true, 
+              type: Boolean
             },
             {
               name: 'Minimum Spend',
-              type: Boolean,
-              hasComment: true, 
+              type: Boolean
             },
             {
               name: 'Dry Hire',
-              type: Boolean,
-              hasComment: true, 
+              type: Boolean
             },
             {
               name: 'Pets',
-              type: Boolean,
-              hasComment: true, 
+              type: Boolean
             }
           ]
         },
@@ -630,11 +585,11 @@ export default {
           items: [
             {
               name: 'Tastings prior to booking',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Allow customer provided liquor',
-              type: Boolean,
+              type: Boolean
             }
           ]
         },
@@ -668,7 +623,7 @@ export default {
           items: [
             {
               name: 'Accept staff attire request',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Simulcasting bandwidth requirements',
@@ -676,8 +631,7 @@ export default {
             },
             {
               name: 'Union crew restrictions',
-              type: Boolean,
-              hasComment: true, 
+              type: Boolean
             },
           ]
         },
@@ -686,7 +640,7 @@ export default {
           items: [
             {
               name: 'Allow pickup',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Minimum size order',
@@ -707,31 +661,31 @@ export default {
           items: [
             {
               name: 'Accept requests from guests',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Continuous band play time',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Max group size',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Accessibility of activity', 
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Age restrictions',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Time of day',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Performer require a meal',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Minimum Setup time required',
@@ -751,19 +705,19 @@ export default {
             },
             {
               name: 'Flexible to different dress codes',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Meet before signing contract',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Arrival onsite before the event',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Losgistics',
-              type: Boolean,
+              type: Boolean
             },
           ]
         },
@@ -776,20 +730,19 @@ export default {
           items: [
             {
               name: 'Visit the venue in advance',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Minimum hours of service',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Max hours per shift',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Dress code',
-              type: String,
-              hasComment: true, 
+              type: String
             },
           ]
         },
@@ -802,16 +755,15 @@ export default {
           items: [
             {
               name: 'Flexible to last minute onsite changes',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Minimum amount of hours',
-              type: Number,
-              noSuffix: true,
+              type: Number
             },
             {
               name: 'Need to control room lighting',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Minimum internet bandwidth (Simulticasting, Streaming)',
@@ -819,7 +771,7 @@ export default {
             },
             {
               name: 'Flexibility to operate with additional Photo / Video companies during the event',
-              type: Boolean,
+              type: Boolean
             },
           ]
         },
@@ -830,12 +782,11 @@ export default {
           items: [
             {
               name: 'Hours included in rental',
-              type: Number,
-              noSuffix: true,
+              type: Number
             },
             {
               name: 'Setup hours included in rental',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Extra Guest (beyond agreed upon)',
@@ -851,9 +802,7 @@ export default {
             },
             {
               name: 'Discount for large quantities',
-              type: Number,
-              isPercentage: true,
-              hasComment: true,
+              type: Number
             },
             {
               name: 'Tax rate',
@@ -888,9 +837,7 @@ export default {
             },
             {
               name: 'Discount for large quantities',
-              type: Boolean,
-              isPercentage: true,
-              hasComment: true,
+              type: Boolean
             },
             {
               name: 'Late Night fares',
@@ -898,9 +845,7 @@ export default {
             },
             {
               name: 'Discount for large quantities',
-              type: Number,
-              isPercentage: true,
-              hasComment: true,
+              type: Number
             },
             {
               name: 'Tax rate',
@@ -926,11 +871,11 @@ export default {
             },
             {
               name: 'Working with unions',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Discounts for large quantities',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Tax rate',
@@ -973,7 +918,7 @@ export default {
             },
             {
               name: 'Discounts',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Suggested Gratuity',
@@ -986,23 +931,23 @@ export default {
           items: [
             {
               name: 'Rushed orders',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Delivery',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'preparing file for printing',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Multiple print locations',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Number of different colors',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Tax rate',
@@ -1011,7 +956,7 @@ export default {
             },
             {
               name: 'Discount for large quantites',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Suggested Gratuity',
@@ -1033,7 +978,7 @@ export default {
             },
             {
               name: 'Large setup discounts',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Suggested Gratuity',
@@ -1046,12 +991,11 @@ export default {
           items: [
             {
               name: 'Hours included in service',
-              type: Number,
-              hasComment: true, 
+              type: Number
             },
             {
               name: 'Rushed setup',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Rehersal time for the band (for special requests)',
@@ -1059,15 +1003,15 @@ export default {
             },
             {
               name: 'Special operating time',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Extra for prizes',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Overtime charges',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Tax rate',
@@ -1076,7 +1020,7 @@ export default {
             },
             {
               name: 'Large group discounts',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Suggested Gratuity',
@@ -1093,19 +1037,19 @@ export default {
           items: [
             {
               name: 'Pre-selection personal',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Number of hours',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Level of security training/certification',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Special attire requests',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Tax rate',
@@ -1114,7 +1058,7 @@ export default {
             },
             {
               name: 'Large group discounts',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Suggested Gratuity',
@@ -1143,7 +1087,7 @@ export default {
             },
             {
               name: 'Discount for large discounts',
-              type: Boolean,
+              type: Boolean
             },
             {
               name: 'Tax rate',
@@ -1180,6 +1124,7 @@ export default {
       } else {
         this.notAllowed.push(item)
       }
+      console.log(this.notAllowed)
       this.$root.$emit('update-vendor-value', 'notAllowed', this.notAllowed)
     },
     yesRule(item) {
@@ -1769,10 +1714,6 @@ export default {
         .left {
           flex: 1;
         }
-        .v-grid-with-desc {
-          display: grid;
-          grid-template-rows: 20% 80%;
-        }
         .right {
           flex: 1;
           .top {
@@ -1859,14 +1800,6 @@ export default {
                 border-radius: 0;
               }
             }
-            .number-field {
-              text-align: center;
-              font-size: 16px;
-              padding: 22px 30px;
-              width: 40%;
-              border: 1px solid #dddddd;
-              border-radius: 0;
-            }
           }
         }
       }
@@ -1876,11 +1809,6 @@ export default {
       width: 75%;
       padding: 1.5rem 2rem;
       font-size: 16px;
-
-      &.desc {
-        margin-top: 1rem;
-        padding: .5rem 1rem;
-      }
     }
     .flex-1 {
       flex: 1;

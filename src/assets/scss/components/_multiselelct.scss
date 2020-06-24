@@ -1,4 +1,11 @@
 .multiselect {
+  &.small-selector {
+    min-height: 30px;
+    .multiselect__tags {
+      min-height: 40px;
+      padding: 10px 50px 8px 8px;
+    }
+  }
   &__select{
     top: 23px;
     width: 20px;

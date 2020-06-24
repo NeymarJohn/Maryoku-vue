@@ -1,5 +1,5 @@
 <template>
-  <div class="md-layout booking-section" v-if="selectedBlock">
+  <div v-if="selectedBlock">
     <comment-editor-panel v-if="showCommentEditorPanel"></comment-editor-panel>
     <div class="event-book-requirement-header md-layout-item md-size-100">
       <div class="header-title">
@@ -42,7 +42,22 @@
             </thead>
             <tbody>
               <tr v-for="(item, index) in requirementProperties[category].filter(item=>!item.isHide)" :key="index">
-                <td>{{item.name}}</td>
+                <td>
+                  <div style="padding: 10px 0px">{{item.name}}</div>
+                  <template v-if="item.type==='multiple-selection'">
+                    <multiselect
+                      v-model="item.selectedValue"
+                      :options="item.selectionOptions"
+                      :close-on-select="true"
+                      :clear-on-select="true"
+                      tag-placeholder="Add this as new tag"
+                      placeholder="Type to search category"
+                      label="title"
+                      track-by="id"
+                      class="multiple-selection small-selector"
+                    ></multiselect>
+                  </template>
+                </td>
                 <td >
                   <template v-if="item.type==='integer'">
                     <input class="quantity-input" type="number">
@@ -52,7 +67,7 @@
                   
                 </td>
                 <td>
-                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="item.isMandatory" value="true">Mandatory</md-checkbox>
+                  <md-checkbox  class="md-simple md-checkbox-circle md-red" v-model="item.isMandatory" value="true">Must Have</md-checkbox>
                 </td>
                 <td>
                   <md-checkbox class="md-simple md-checkbox-circle md-red " v-model="item.isMandatory" value="false">Nice To Have</md-checkbox>
@@ -172,101 +187,20 @@
     <!-- ./Event Booking Items -->
 
     <div class="booking-section__actions">
-      <md-button
-        class="md-simple md-black normal-btn"
-        @click="showShareVendorModal = true"
-      >I already have a venue for my event</md-button>
-      <md-button
-        class="md-simple md-black normal-btn"
-        @click="showSomethingModal = true"
-      >I want something different</md-button>
-    </div>
-
-    <event-change-proposal-modal v-if="showSomethingModal" @close="showSomethingModal=false"></event-change-proposal-modal>
-
-    <modal v-if="showShareVendorModal" class="add-category-model something-modal">
-      <template slot="header">
-        <div class="add-category-model__header">
-          <h2>Share your vendor info</h2>
-          <div class="header-description">Share your vendor info</div>
-        </div>
-        <md-button
-          class="md-simple md-just-icon md-round modal-default-button"
-          @click="showShareVendorModal = false"
-        >
-          <md-icon>clear</md-icon>
+      <div>
+        <md-button class="md-bold add-category-btn md-black md-simple">
+          <md-icon>arrow_back</md-icon>
+          Back
         </md-button>
-      </template>
-      <template slot="body">
-        <div class="md-layout">
-          <div class="md-layout-item md-size-100">
-            <div class="form-group">
-              <label>Name</label>
-              <input type="text" class="form-control" />
-            </div>
-          </div>
-          <div class="md-layout-item md-size-100 margin-bottom">
-            <div class="form-group with-icon">
-              <label>Price of the service</label>
-              <div class="input-icon">
-                <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5" />
-              </div>
-              <input type="text" class="form-control" placeholder="Type number here" />
-            </div>
-          </div>
-          <div class="md-layout-item md-size-100 margin-bottom">
-            <div class="form-group with-icon">
-              <label>Location</label>
-              <div class="input-icon">
-                <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5" />
-              </div>
-              <input type="text" class="form-control" placeholder />
-            </div>
-          </div>
-          <div class="md-layout-item md-size-100 margin-bottom">
-            <div class="form-group with-icon">
-              <label>Phone</label>
-              <div class="input-icon">
-                <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5" />
-              </div>
-              <input type="text" class="form-control" placeholder="Type number here" />
-            </div>
-          </div>
-          <div class="md-layout-item md-size-100 margin-bottom">
-            <div class="form-group with-icon">
-              <label>Email</label>
-              <div class="input-icon">
-                <img :src="`${iconsURL}budget-dark.svg`" width="20" style="opacity: 0.5" />
-              </div>
-              <input type="text" class="form-control" placeholder="Type email address here" />
-            </div>
-          </div>
-
-          <div class="md-layout-item md-size-100 margin-bottom">
-            <div class="form-group">
-              <label>Attach Proposal</label>
-              <label class="upload-section" for="file">
-                <md-button class="md-rose md-outline md-simple md-sm">Choose file</md-button>
-                <div>Or</div>
-                <div class="note">Drag your file here</div>
-              </label>
-              <input style="display: none" id="file" name="attachment" type="file" @change />
-            </div>
-          </div>
-        </div>
-      </template>
-      <template slot="footer">
-        <md-button
-          class="md-default md-simple cancel-btn"
-          @click="showShareVendorModal = false"
-        >Remind Me Later</md-button>
-        <md-button
-          class="md-rose add-category-btn"
-          :class="{'disabled' : !somethingMessage}"
-          @click
-        >Update Vendor</md-button>
-      </template>
-    </modal>
+        <md-button class="md-simple md-just-icon md-black">
+          <md-icon style="font-size: 40px">expand_less</md-icon>
+        </md-button>
+      </div>
+      <div>
+        <md-button class="md-bold add-category-btn md-black md-simple">Revert To Original</md-button>
+        <md-button class="md-red md-bold add-category-btn" @click="findVendors">Find Me Venues</md-button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -294,6 +228,8 @@ import ProgressSidebar from "./progressSidebar";
 import EventChangeProposalModal from "@/components/Modals/EventChangeProposalModal";
 import HeaderActions from "@/components/HeaderActions";
 import CommentEditorPanel from "./CommentEditorPanel";
+import Multiselect from "vue-multiselect";
+import { postReq, getReq } from '@/utils/token'
 
 export default {
   name: "booking-event-requirement",
@@ -309,7 +245,8 @@ export default {
     Modal,
     EventChangeProposalModal,
     HeaderActions,
-    CommentEditorPanel
+    CommentEditorPanel,
+    Multiselect
   },
   props: {},
   data: () => ({
@@ -481,6 +418,15 @@ export default {
             });
         }.bind(this)
       );
+    },
+    findVendors() {
+      
+      postReq('/1/vendors/setting-requirements', {
+        vendorCategory: "foodandbeverage"
+      }).then(res=>{
+        this.$emit("setRequirements", res);
+        console.log("vendors", res)
+      })
     }
   },
   created() {
@@ -589,9 +535,9 @@ export default {
   text-align: center;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
-  padding: 0 1.9em;
-  margin-bottom: 1em;
+  justify-content: space-between;
+  padding: 20px 1.9em;
+  background: white;
 }
 .additional-request {
   display: flex;
@@ -656,5 +602,25 @@ textarea {
   padding: 20px;
   border: solid 1px #a0a0a0;
   border-radius: 3px;
+}
+.multiple-selection {
+  width: 300px;
+  display: inline-block;
+  height: 50px;
+  .multiselect__select {
+    top:15px
+  }
+  .multiselect__tags {
+    height: 50px;
+    .multiselect__single {
+      line-height: 30px;
+    }
+  }
+  .multiselect__input{
+    height: 30px;
+  }
+  .multiselect__placeholder {
+    line-height: 20px;
+  }
 }
 </style>
