@@ -427,7 +427,7 @@ export default {
     getExtraPayItems() {
       let extraPayItems = []
       _.each(this.vendor.categoryServices, (item) => {
-        if (item.value) {
+        if (!item.included) {
           extraPayItems.push(item)
         }
       })

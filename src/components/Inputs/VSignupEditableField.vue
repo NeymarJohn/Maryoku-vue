@@ -187,9 +187,6 @@ export default {
     value: null,
   }),
   mounted () {
-    if (this.title == 'Address') {
-      this.$refs.address.focus()
-    }
     this.value = this.defaultVal
     if (this.value) {
       this.selectedCategory.name = this.getCategoryNameByValue(this.value)
@@ -200,17 +197,11 @@ export default {
         icon: null
       }
     }
-    // let recaptchaScript = document.createElement('script')
-    // recaptchaScript.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key=AIzaSyBMeTpgtrXUQPDswUdLFW9YL9JFSnZQFOs')
-    // document.head.appendChild(recaptchaScript)
+    if (this.title == 'Address') {
+      this.$refs.address.focus()
+    }
   },
   methods: {
-    /**
-    * When the location found
-    * @param {Object} addressData Data of the found location
-    * @param {Object} placeResultData PlaceResult object
-    * @param {String} id Input container ID
-    */
     getAddressData: function (addressData, placeResultData, id) {
       this.value = `${addressData.route}, ${addressData.administrative_area_level_1}, ${addressData.country}`
     },
@@ -221,6 +212,7 @@ export default {
       } else {
         this.$root.$emit('update-vendor-value', this.title, this.value)
       }
+
     },
     updateCategory(category) {
       this.selectedCategory = category

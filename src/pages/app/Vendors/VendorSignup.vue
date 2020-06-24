@@ -2234,6 +2234,10 @@ export default {
         this.vendor.images.push(value)
       } else if (field == 'removeImage') {
         this.vendor.images = this.vendor.images.filter( i => i != value )
+      } else if (field == 'vendorCategory') {
+        this.$set(this.vendor, this.camelize(field), value)
+        this.$set(this.vendor, 'categoryServices', {})
+        console.log(this.vendor)
       } else if (field.indexOf('.') > -1) {
         this.$set(this.vendor[field.split('.')[0]], field.split('.')[1], value)
       } else {

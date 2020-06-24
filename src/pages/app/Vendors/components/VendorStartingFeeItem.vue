@@ -51,8 +51,14 @@ export default {
       }
     },
     getQty() {
-      if (this.item.value.constructor.name == 'Array') {
-        return this.item.value.length
+      if (this.item.value) {
+        if (this.item.value.constructor.name == 'Array') {
+          return this.item.value.length
+        } else if (this.item.value.constructor.name == 'String') {
+          return this.item.value
+        } else {
+          return null
+        }
       } else {
         return null
       }
