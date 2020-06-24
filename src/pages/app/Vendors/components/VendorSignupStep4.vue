@@ -483,7 +483,11 @@ export default {
     mergeStringItems(items) {
       let naItems = ''
       _.each(items, n => {
-        naItems += `${this.capitalize(n.name)}, `
+        if (n.constructor.name == 'Object') {
+          naItems += `${this.capitalize(n.name)}, `
+        } else {
+          naItems += `${this.capitalize(n)}, `
+        }
       })
       naItems = naItems.substring(0, naItems.length - 2)
       return naItems

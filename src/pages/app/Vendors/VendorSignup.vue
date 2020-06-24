@@ -2236,8 +2236,16 @@ export default {
         this.vendor.images = this.vendor.images.filter( i => i != value )
       } else if (field == 'vendorCategory') {
         this.$set(this.vendor, this.camelize(field), value)
+        this.$set(this.vendor, 'yesRules', [])
+        this.$set(this.vendor, 'noRules', [])
+        this.$set(this.vendor, 'notAllowed', [])
+        this.$set(this.vendor, 'exDonts', [])
+        this.$set(this.vendor, 'yesPolicies', [])
+        this.$set(this.vendor, 'noPolicies', [])
+        this.$set(this.vendor, 'selectedWeekdays', [])
+        this.$set(this.vendor, 'dontWorkDays', null)
+        this.$set(this.vendor, 'dontWorkTime', null)
         this.$set(this.vendor, 'categoryServices', {})
-        console.log(this.vendor)
       } else if (field.indexOf('.') > -1) {
         this.$set(this.vendor[field.split('.')[0]], field.split('.')[1], value)
       } else {
