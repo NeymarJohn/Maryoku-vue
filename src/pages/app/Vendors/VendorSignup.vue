@@ -101,7 +101,7 @@ export default {
           reddit: null,
           tiktok: null,
         },
-        categoryServices: [],
+        categoryServices: {},
         yesRules: [],
         noRules: [],
         notAllowed: [],
@@ -127,12 +127,14 @@ export default {
                     {
                       name: 'hotel acommondations within walking distance',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                     {
                       name: 'shopping centers',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                   ]
                 },
@@ -142,47 +144,56 @@ export default {
                     {
                       name: 'number of function spaces',
                       type: Number, 
-                      value: 1
+                      value: 1,
+                      xIncluded: true,
                     },
                     {
                       name: 'number of meeting rooms',
                       type: Number, 
-                      value: 1
+                      value: 1,
+                      xIncluded: true,
                     },
                     {
                       name: 'indoor event space',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                     {
                       name: 'outdoor event space',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                     {
                       name: 'smoking section',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                     {
                       name: 'separate cocktail hour space',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                     {
                       name: 'outside area for guests',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                     {
                       name: 'kitchen for outside caterers',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                     {
                       name: 'available bathrooms',
                       type: Number, 
-                      value: 1
+                      value: 1,
+                      xIncluded: true,
                     },
                   ]
                 },
@@ -192,17 +203,20 @@ export default {
                     {
                       name: 'artificial lighting',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                     {
                       name: 'natural lighting space',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                     {
                       name: 'control of lighting during event',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                   ]
                 },
@@ -257,22 +271,26 @@ export default {
                     {
                       name: 'accessbility for people with disabilities',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                     {
                       name: 'all indoor',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                     {
                       name: 'all outdoor',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                     {
                       name: 'accessible bathrooms',
                       type: Number, 
-                      value: 1
+                      value: 1,
+                      xIncluded: true,
                     },
                   ]
                 },
@@ -520,17 +538,20 @@ export default {
                     {
                       name: 'lunch',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                     {
                       name: 'dinner',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                     {
                       name: 'desserts',
                       type: Boolean, 
-                      value: false
+                      value: false,
+                      xIncluded: true,
                     },
                   ]
                 },
@@ -691,7 +712,8 @@ export default {
                     {
                       name: 'number of waitstaff',
                       type: Number, 
-                      value: 0
+                      value: 0,
+                      xIncluded: true,
                     },
                     {
                       name: 'attire of waitstaff',
@@ -2212,6 +2234,18 @@ export default {
         this.vendor.images.push(value)
       } else if (field == 'removeImage') {
         this.vendor.images = this.vendor.images.filter( i => i != value )
+      } else if (field == 'vendorCategory') {
+        this.$set(this.vendor, this.camelize(field), value)
+        this.$set(this.vendor, 'yesRules', [])
+        this.$set(this.vendor, 'noRules', [])
+        this.$set(this.vendor, 'notAllowed', [])
+        this.$set(this.vendor, 'exDonts', [])
+        this.$set(this.vendor, 'yesPolicies', [])
+        this.$set(this.vendor, 'noPolicies', [])
+        this.$set(this.vendor, 'selectedWeekdays', [])
+        this.$set(this.vendor, 'dontWorkDays', null)
+        this.$set(this.vendor, 'dontWorkTime', null)
+        this.$set(this.vendor, 'categoryServices', {})
       } else if (field.indexOf('.') > -1) {
         this.$set(this.vendor[field.split('.')[0]], field.split('.')[1], value)
       } else {

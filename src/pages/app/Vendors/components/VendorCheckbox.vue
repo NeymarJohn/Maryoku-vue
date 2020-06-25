@@ -7,8 +7,12 @@
           <img :src="`${iconUrl}Rectangle 1245.svg`" v-else/>
           <div class="text">{{label}}</div>
         </div>
-        <div class="included-cont" v-if="checked">
-          <div class="included" :class="{'active': included}" @click="updateIncluded()">
+        <div class="included-cont" v-if="checked && !item.xIncluded">
+          <div 
+            class="included" 
+            :class="{'active': included}" 
+            @click="updateIncluded()"
+          >
             <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="included"/>
             <span class="unchecked" v-else></span>
             <span>Included</span>
@@ -21,7 +25,9 @@
             </div>
             <div class="extra-field" v-if="!included">
               <div class="inb">How much extra?</div>
-              <div class="field"><input type="number" placeholder="00.00"/></div>
+              <div class="field">
+                <input type="number" placeholder="00.00" v-model="currentItem.value" />
+              </div>
             </div>
           </div>
           <!-- <div class="included" :class="{'active': !included}" @click="updateIncluded()">
@@ -38,6 +44,7 @@
         /> -->
         <textarea 
           class="text"
+          v-model="currentItem.desc"
           :placeholder="`Add additional information`"
         />
       </div>
@@ -51,10 +58,10 @@
             {{label}}
           </div>
           <div class="how-many" v-if="checked">
-            How Many? <input type="number" placeholder="QTY"/>
+            How Many? <input type="number" placeholder="QTY" v-model="currentItem.value" />
           </div>
         </div>
-        <div class="included-cont" v-if="checked">
+        <div class="included-cont" v-if="checked && !item.xIncluded">
           <div class="included" :class="{'active': included}" @click="updateIncluded()">
             <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="included"/>
             <span class="unchecked" v-else></span>
@@ -67,7 +74,7 @@
               <span>Not included</span>
             </div>
             <div class="extra-field" v-if="!included">
-              How much extra? <input type="number" placeholder="00.00"/>
+              How much extra? <input type="number" placeholder="00.00" v-model="currentItem.value" />
             </div>
           </div>
         </div>
@@ -89,7 +96,10 @@
             <ul>
               <li v-for="(a, aIndex) in item.available" :key="aIndex">
                 <div class="check-field" @click="updateExChecked(a)">
-                  <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="exChecked.includes(a)"/>
+                  <img 
+                    :src="`${iconUrl}Group 5479 (2).svg`" 
+                    v-if="exChecked.includes(a)"
+                  />
                   <span class="blank-circle" v-else/>
                   <span class="text" :class="{'checked': exChecked.includes(a)}">{{a}}</span>
                 </div>
@@ -128,16 +138,23 @@ export default {
     type: String,
     label: String,
     item: Object,
+    vendor: Object,
   },
   components: {
     VueElementLoading
   },
   data() {
     return {
-      vendor: null,
       checked: false,
       included: true,
       expanded: false,
+      currentItem: {
+        label: this.label,
+        checked: false,
+        included: true,
+        value: null,
+        desc: null,
+      },
       exChecked: [],
       iconUrl: 'http://static.maryoku.com/storage/icons/Vendor Signup/',
     }
@@ -146,7 +163,17 @@ export default {
     
   },
   mounted() {
-    
+    if (this.vendor) {
+      const item = this.vendor.categoryServices[this.camelize(this.label)]
+      if (item) {
+        this.included = item.included
+        this.checked = item.checked
+        this.currentItem.value = item.value
+        this.currentItem.desc = item.desc
+        this.exChecked = item.value
+        console.log(this.currentItem)
+      }
+    }
   },
   methods: {
     updateExChecked(item) {
@@ -155,13 +182,25 @@ export default {
       } else {
         this.exChecked.push(item)
       }
+      this.currentItem.value = this.exChecked
+      this.$root.$emit('update-vendor-value', `categoryServices.${this.camelize(this.label)}`, this.currentItem)
     },
     updateCheck() {
       this.checked = !this.checked
+      this.currentItem.checked = this.checked
+      this.$root.$emit('update-vendor-value', `categoryServices.${this.camelize(this.label)}`, this.currentItem)
     },
     updateIncluded() {
       this.included = !this.included
-    }
+      this.currentItem.included = this.included
+      this.$root.$emit('update-vendor-value', `categoryServices.${this.camelize(this.label)}`, this.currentItem)
+    },
+    camelize(str) {
+      let temp = str.replace(/\W+(.)/g, function(match, chr) {
+        return chr.toUpperCase()
+      })
+      return temp.charAt(0).toLowerCase() + temp.slice(1)
+    },
   },
   computed: {
     

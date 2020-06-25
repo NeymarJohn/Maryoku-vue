@@ -99,6 +99,7 @@
           //   buttonsStyling: false
           // })
         }
+        this.scrollToTop()
       },
       next() {
         this.$root.$emit('next-vendor-signup-step')
@@ -111,6 +112,7 @@
           } else {
           }
         }
+        this.scrollToTop()
       },
       prev() {
         this.$root.$emit('prev-vendor-signup-step')
@@ -120,6 +122,7 @@
         if (this.step == 0) {
           this.isApproved = false
         }
+        this.scrollToTop()
       },
       scrollToTop() {
         window.scrollTo(0, 0)
