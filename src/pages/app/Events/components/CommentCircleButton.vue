@@ -5,19 +5,18 @@
     @dragging="onDragging(commentComponent)"
     @activated="onActivated(commentComponent)"
     >
-        <md-button
+        <!-- <md-button
           class="add-button md-just-icon md-white"
           @click="toggleEditPane( $event )"
           v-if="showEditPane"
         >
           <img :src="`${$iconURL}common/message-yellow.svg`"  width="100%" style="width:30px">
-        </md-button>
+        </md-button> -->
         <md-button
           class="add-button md-just-icon md-yellow"
           @click="toggleEditPane( $event )"
           @mouseenter="showComments($event)"
           @mouseleave="showCommentList=false"
-          v-else
         >
           <span> {{commentComponent.index}}</span>
         </md-button>

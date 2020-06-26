@@ -297,7 +297,7 @@
                     <span>Select Day</span>
                     <img :src="`${iconUrl}Asset 519.svg`"/>
                   </div>
-                  <div class="cdropdown-cont" v-if="isWeekday && exEvery">
+                  <div class="cdropdown-cont" v-if="isWeekday">
                     <div class="weekdays" v-for="(w, wIndex) in weekdays" :key="wIndex" @click="updateWeekdays(w)">
                       <img :src="`${iconUrl}Group 5479 (2).svg`" v-if="selectedWeekdays.includes(w)"/>
                       <span class="unchecked" v-else></span>
@@ -395,10 +395,10 @@
                     :change-month-function="true" 
                     :change-year-function="true"
                     :is-multiple-date-picker="true"
+                    :sundayStart="true"
                     :minSelDays="1"
                     :marked-dates="markedDates"
                     :disabled-day-names="optimizeWeekDays(selectedWeekdays)" 
-                    :sundayStart="true"
                     v-model="date"
                     ref="calendar"
                     v-on:dayClicked="updateDontWorkDays($event)"
@@ -531,7 +531,7 @@ export default {
       componentKey: 0,
       allowedCategoryFor3rd: ['venuerental', 'foodandbeverage', 'decor', 'entertainment'],
       weekdays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
-      selectedWeekdays: [],
+      selectedWeekdays: ['saturday', 'sunday'],
       selectedReligion: [],
       isWeekday: false,
       exEvery: false,
@@ -1168,26 +1168,7 @@ export default {
     
   },
   mounted() {
-    if (this.vendor.selectedWeekdays) {
-      if (this.vendor.selectedWeekdays.length > 0) {
-        this.selectedWeekdays = this.vendor.selectedWeekdays
-      } else {
-        this.selectedWeekdays = ['saturday', 'sunday']
-      }
-    }
-
-    if (this.vendor.dontWorkDays) {
-      if (this.vendor.dontWorkDays.selectedDates.length > 0) {
-        this.markedDates = []
-        _.each(this.vendor.dontWorkDays.selectedDates, sd => {
-          this.markedDates.push(sd.date)
-        })
-      }
-    }
-
     this.optimizeWeekDays(this.selectedWeekdays)
-    this.componentKey += 1
-    this.$forceUpdate()
   },
   methods: {
     updateExDonts(item) {
@@ -1300,14 +1281,12 @@ export default {
     },
     optimizeWeekDays(weekDays) {
       let res = []
-      const wds = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
 
       if (weekDays) {
         weekDays.forEach( wd => {
-          res.push(wds[(wds.indexOf(this.capitalize(wd.slice(0, 2)))+6)%7])
+          res.push(this.capitalize(wd.slice(0, 2)))
         })
       }
-
       return res
     },
     capitalize: function (value) {
@@ -1569,12 +1548,10 @@ export default {
         }
         /deep/ span.vfc-span-day {
           &.vfc-marked {
-            width: 30px;
-            height: 30px;
             &:before {
-              // background-color: #f51355;
+              background-color: #f51355;
               color: #ffffff;
-              // border-radius: 50%;
+              border-radius: 50%;
             }
           }
         }
@@ -1616,8 +1593,6 @@ export default {
         /deep/ span.vfc-cursor-not-allowed {
           background-color: #f51355;
           color: #ffffff;
-          width: 30px;
-          height: 30px;
         }
       }
       .check-list {

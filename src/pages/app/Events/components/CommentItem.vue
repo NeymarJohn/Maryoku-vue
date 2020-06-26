@@ -53,13 +53,13 @@
             <md-button class="edit-btn md-simple comment-action-btn">
               <img
                 :src="`${$iconURL}comments/SVG/heart-dark.svg`"
-                v-if="!comment.myFavorite"
+                v-if="!myFavorite"
                 @click="markAsFavorite(comment, true)"
                 class="comment-actions-icon"
               />
               <img
                 :src="`${$iconURL}comments/SVG/heart-yellow.svg`"
-                v-if="comment.myFavorite"
+                v-if="myFavorite"
                 @click="markAsFavorite(comment, false)"
                 class="comment-actions-icon"
               />
@@ -121,7 +121,15 @@ export default {
     },
   },
   computed: {
-    getTimeDiffString() {}
+    getTimeDiffString() {},
+    myFavorite() {
+      console.log("auth", this.$auth)
+      if (!this.comment.favoriteUsers) return false
+      if (this.comment.favoriteUsers.findIndex(userId => userId === this.$auth.user.id) < 0) {
+        return false
+      }
+      return true
+    }
   }
 };
 </script>
