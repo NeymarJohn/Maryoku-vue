@@ -1910,7 +1910,7 @@ export default {
                       value: false
                     },
                     {
-                      name: '',
+                      name: 'proof',
                       type: Array, 
                       value: [],
                       available: ['digital','real','sample']

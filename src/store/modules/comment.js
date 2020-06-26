@@ -5,7 +5,6 @@ import EventComment from '@/models/EventComment'
 import EventCommentComponent from '@/models/EventCommentComponent'
 import Model from '@/models/Model'
 import { postReq, getReq } from '@/utils/token'
-import { reject } from 'promise-polyfill'
 const state = {
   index: 0,
   commentComponents: []
@@ -65,19 +64,16 @@ const actions = {
     return new Promise((resolve, reject)=> {
       new EventCommentComponent(commentComponent)
         .save()
-        .then(res => {
-          commit('addCommentComponent', res.item)
-          console.log(res)
-          resolve(res.item)
+        .then(commentComponent => {
+          commit('addCommentComponent', commentComponent.item)
+          resolve(commentComponent.item)
         });
     })
   },
-  getCommentComponents({ commit, state }, url) {
-    return new Promise( async (resolve, reject) => {
-      const commentComponents = await postReq(`/1/commentComponents/get`, { url })
-      commit('setCommentComponents', commentComponents.data)
-      resolve(commentComponents.data)
-    });
+  async getCommentComponents({ commit, state }, url) {
+    console.log("getCommentComponents")
+    const commentComponents = await postReq(`/1/commentComponents/get`, { url })
+    commit('setCommentComponents', commentComponents.data)
   },
 
   /****Event comments  */
@@ -102,8 +98,8 @@ const actions = {
         .for(commentComponent)
         .save()
         .then(res => {
-          // commit('addComment', { commentComponentId: comment.commentComponent.id, res });
-          resolve(res.item)
+          commit('addComment', { commentComponentId: comment.commentComponent.id, res });
+          resolve(res)
         })
     })
 

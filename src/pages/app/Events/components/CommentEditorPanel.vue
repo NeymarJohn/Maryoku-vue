@@ -15,6 +15,34 @@
       :selectedComponet="selectedCommentComponent"
     ></comment-circle-button>
 
+    <!-- Editing Panel -->
+    <transition name="fade">
+      <div
+        class="comments-list comment-edit-pane"
+        v-if="isCommentEditing"
+        @click="paneClick($event)"
+        :style="{left: `${panelPosition.x}px`, top: `${panelPosition.y - 40}px`}"
+        ref="editingPanel"
+      >
+        <div>
+          <div class="form-group">
+            <textarea
+              rows="4"
+              class="form-control"
+              placeholder="Write your comment here"
+              v-model="editingComment"
+            ></textarea>
+          </div>
+          <img :src="`${this.$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
+        </div>
+        <div class="footer">
+          <md-button class="md-simple normal-btn" @click="closeEditPanel">Cancel</md-button>
+          <md-button class="md-simple md-black normal-btn" @click="saveComment($event)">Submit</md-button>
+        </div>
+      </div>
+    </transition>
+    <!-- End Editing Panel -->
+
     <!-- Comments List -->
     <transition name="fade">
       <div
@@ -24,13 +52,14 @@
         :style="{left: `${panelPosition.x}px`, top: `${panelPosition.y - 40}px`}"
       >
         <div style="height:40px; margin-right:25px" class="text-right">
-          <md-button class="md-simple md-just-icon md-round md-black font-size-30" @click="closeCommentListPane">
+          <md-button class="md-simple md-just-icon md-round md-black font-size-30" @click="isOpenCommentListsPane=false">
             <md-icon class="font-size-30">clear</md-icon>
           </md-button>
         </div>
         <div>
-          <div v-if="selectedCommentComponent && selectedCommentComponent.comments">
+          <div v-if="hoveredComponent.comments">
             <comment-item
+              v-if="mainComment"
               :comment="mainComment"
               :isEditing="editingCommentId == mainComment.id"
               :isMain="true"
@@ -51,7 +80,7 @@
               @delete="deleteComment"
             ></comment-item>
           </div>
-          <div class="form-group reply-form" :class="{'main-form':!this.selectedCommentComponent.length }">
+          <div class="form-group reply-form" :class="{'main-form':!comments.length }">
             <textarea
               rows="4"
               class="form-control"
@@ -60,7 +89,7 @@
             ></textarea>
             <img :src="`${this.$iconURL}comments/SVG/editor-dark.svg`" class="text-icon" />
             <div class="footer">
-              <md-button class="md-simple normal-btn" @click="closeCommentListPane">Cancel</md-button>
+              <md-button class="md-simple normal-btn" @click="isOpenCommentListsPane=false">Cancel</md-button>
               <md-button
                 class="md-simple md-black normal-btn"
                 @click="saveComment($event, 'reply')"
@@ -89,10 +118,9 @@ export default {
   },
   data() {
     return {
-      commentComponents: [],
       items: [],
       mostRecentClickCoordinates: null,
-      selectedComponentIndex : -1,
+      selectedCommentComponent: null,
       hoveredComponent: null,
       comments: [],
       editingComment: "",
@@ -109,30 +137,25 @@ export default {
     };
   },
   computed: {
-    selectedCommentComponent() {
-      return this.commentComponents[this.selectedComponentIndex]
-    },
+    ...mapState("comment", ["commentComponents"]),
     mainComment() {
-      if (this.commentComponents[this.selectedComponentIndex].comments) {
-        return this.commentComponents[this.selectedComponentIndex].comments[0]
-      }
-      return {}
+      if (!this.hoveredComponent) return null;
+      if (!this.comments || this.comments.length === 0) return null;
+      return this.comments.find(item => !item.parentId);
     },
     replies() {
-      if (this.commentComponents[this.selectedComponentIndex].comments) {
-        return this.commentComponents[this.selectedComponentIndex].comments.filter((item, index)=>index>0)
-      }
-      return []
+      if (!this.hoveredComponent) return null;
+      if (!this.comments || this.comments.length === 0) return [];
+      return this.comments
+        .filter(item => item.parentId)
+        .sort((a, b) => b.dateCreated - a.dateCreated);
     },
     unresolvedComponents() {
       return this.commentComponents.filter(item => !item.isResolved);
     }
   },
   created() {
-    this.getCommentComponents(this.$route.path).then(commentComponents => {
-      console.log(commentComponents)
-      this.commentComponents = commentComponents
-    });
+    this.getCommentComponents(this.$route.path);
   },
   methods: {
     ...mapActions("comment", [
@@ -151,21 +174,28 @@ export default {
     },
     showComments(commentComponent) {
       if (this.isOpenCommentListsPane) return;
-      this.comments = commentComponent.comments
-      this.selectedComponentIndex = this.commentComponents.findIndex(item=>item.index === commentComponent.index);
-      this.setEditPanePosition(commentComponent.positionX, commentComponent.positionY )
-      console.log(this.commentComponents);
-      console.log(this.selectedComponentIndex)
-      this.isOpenCommentListsPane = true;
+      this.getCommentsAction(commentComponent.id).then(comments => {
+        this.hoveredComponent = commentComponent;
+        this.comments = comments;
+        this.comments = comments;
+        if (!comments || comments.length === 0) return;
 
-      // this.getCommentsAction(commentComponent.id).then(comments => {
-      //   this.hoveredComponent = commentComponent;
-      //   this.comments = comments;
-      //   this.comments = comments;
-      //   if (!comments || comments.length === 0) return;
-      //   this.setEditPanePosition(this.hoveredComponent.positionX, this.hoveredComponent.positionY )
-      //   this.isOpenCommentListsPane = true;
-      // });
+        this.setEditPanePosition(this.hoveredComponent.positionX, this.hoveredComponent.positionY )
+        // const deviceWidth = window.innerWidth;
+        // if (this.hoveredComponent.positionX > deviceWidth - 600) {
+        //   this.panelPosition = {
+        //     x: this.hoveredComponent.positionX - 580,
+        //     y: this.hoveredComponent.positionY
+        //   };
+        // } else {
+        //   this.panelPosition = {
+        //     x: this.hoveredComponent.positionX + 40,
+        //     y: this.hoveredComponent.positionY
+        //   };
+        // }
+
+        this.isOpenCommentListsPane = true;
+      });
     },
 
     setEditPanePosition(x, y) {
@@ -183,7 +213,17 @@ export default {
       }
     },
     toggleEditPane(commentComponent, isEditing) {
+      // if (this.isOpenCommentListsPane) {
+      //   return;
+      //   // this.isOpenCommentListsPane = false;
+      // }
       if (isEditing) {
+        // this.selectedCommentComponent = commentComponent;
+        // this.hoveredComponent = commentComponent
+        // this.setEditPanePosition(this.selectedCommentComponent.positionX, this.selectedCommentComponent.positionY)
+        // if (this.mainComment) {
+        //   this.editingComment = this.mainComment.description;
+        // }
         this.showComments(commentComponent)
       } else {
         this.selectedCommentComponent = null;
@@ -191,19 +231,14 @@ export default {
       this.isOpenCommentListsPane = isEditing;
     },
     clearStatus() {
-      if (this.selectedComponentIndex >=0 ) {
-        if (!this.commentComponents[this.selectedComponentIndex].comments || this.commentComponents[this.selectedComponentIndex].comments.length === 0 ) {
-          this.commentComponents.splice(this.selectedComponentIndex, 1)
-        }
-      }
       this.isCommentEditing = false;
       this.isOpenCommentListsPane = false;
-      this.selectedComponentIndex = -1;
+      this.selectedCommentComponent = null;
       this.hoveredComponent = null;
       this.comments = [];
     },
     addFromEvent(event) {
-      if (this.isOpenCommentListsPane) {
+      if (this.isCommentEditing || this.isOpenCommentListsPane) {
         this.clearStatus();
         return;
       }
@@ -216,36 +251,23 @@ export default {
           }, 0)
         : 0;
 
-      const newComentComponent = {
+      this.addCommentComponent({
         dateTime: Date.now(),
         positionX: event.clientX - 80,
         positionY: event.clientY - 100 + window.scrollY,
         index: maxIndex + 1,
         isEditing: false,
         url: this.$route.path
-      }
-      this.commentComponents = this.commentComponents.concat([newComentComponent])
-      this.selectedComponentIndex = this.commentComponents.length - 1;
-      // this.addCommentComponent({
-      //   dateTime: Date.now(),
-      //   positionX: event.clientX - 80,
-      //   positionY: event.clientY - 100 + window.scrollY,
-      //   index: maxIndex + 1,
-      //   isEditing: false,
-      //   url: this.$route.path
-      // }).then(commentComponent => {
-      //   this.selectedCommentComponent = commentComponent
-      // });
+      }).then(commentComponent => {
+        this.selectedCommentComponent = commentComponent
+      });
       this.setEditPanePosition(event.clientX - 80, event.clientY - 100 + window.scrollY )
-      this.isOpenCommentListsPane = true;
+      this.isCommentEditing = true;
       this.mostRecentClickCoordinates = {
         x: event.clientX,
         y: event.clientY
       };
       event.stopPropagation();
-    },
-    closeCommentListPane() {
-      this.clearStatus();
     },
     enter(element) {
       var clickX = this.mostRecentClickCoordinates.x;
@@ -261,45 +283,30 @@ export default {
     paneClick: function(event) {
       event.stopPropagation();
     },
-    async saveComment(event, type) {
-      let selectedComponent = this.commentComponents[this.selectedComponentIndex];
-      if (!selectedComponent.comments || selectedComponent.comments.length === 0) {
-        const savedComponent = await this.addCommentComponent(selectedComponent);
-        console.log("savedComponent",savedComponent)
-        selectedComponent = savedComponent;
-        this.commentComponents[this.selectedComponentIndex] = selectedComponent;
+    saveComment(event, type) {
+      let selectedComponent = this.selectedCommentComponent;
+      const isReply = this.comments.length > 0;
+      if (isReply) {
+        selectedComponent = this.hoveredComponent;
       }
-      console.log("selectedComponent", this.commentComponents)
       const comment = {
         commentComponent: { id: selectedComponent.id },
         description: this.editingComment,
         parentId: this.mainComment ? this.mainComment.id : null
       };
-      const addedComment = await this.addComment(comment);
-      console.log("addedComment", addedComment)
-      console.log(this.commentComponents)
-      ///console.log(this.commentComponents)
-      // this.addComment(comment).then(addedComment => {
-         
-      if (!this.commentComponents[this.selectedComponentIndex].comments) {
-        this.commentComponents[this.selectedComponentIndex].comments = []
-      }
-      console.log(addedComment)
-      this.commentComponents[this.selectedComponentIndex].comments.push(addedComment)
-      
-      //   console.log(this.commentComponents)
-      //   this.clearStatus();
-      //   this.editingComment = "";
-      // });
-      // if (!this.commentComponents[this.selectedComponentIndex].comments) {
-      //     this.commentComponents[this.selectedComponentIndex].comments = []
-      //   }
-      //   console.log(comment)
-      //   this.commentComponents[this.selectedComponentIndex].comments.push(comment)
-      //   console.log(this.commentComponents)
-        this.clearStatus();
-        this.editingComment = "";
+      this.addComment(comment).then(addedComment => {
+        if (isReply) {
+          this.comments.unshift(addedComment)
+        }
+      });
+
+      this.clearStatus();
+      this.editingComment = "";
       event.stopPropagation();
+    },
+    closeEditPanel() {
+      this.isCommentEditing = false;
+      this.selectedCommentComponent = null;
     },
     resolveCommentComponent() {
       this.editingCommentId = "";
@@ -316,8 +323,10 @@ export default {
       this.editingCommentId = comment.id;
     },
     markAsFavorite(comment, isFavorite) {
-      const hoveredComponent = this.commentComponents[this.selectedComponentIndex]
-      comment.eventCommentComponent.id = hoveredComponent.id;
+      const commentComponent = new EventCommentComponent({
+        id: this.hoveredComponent.id
+      });
+      comment.eventCommentComponent.id = this.hoveredComponent.id;
       if (isFavorite) {
         if (!comment.favoriteUsers) comment.favoriteUsers = [];
         comment.favoriteUsers.push(this.$auth.user.id);
@@ -330,23 +339,16 @@ export default {
         comment.myFavorite = false;
       }
       this.updateComment(comment).then(() => {
-        // const index = this.comments.findIndex(item => item.id == comment.id);
-        // this.comments.splice(index, 1, comment);
+        const index = this.comments.findIndex(item => item.id == comment.id);
+        this.comments.splice(index, 1, comment);
         // this.isOpenCommentListsPane = false;
       });
     },
 
     deleteComment(comment) {
-      this.deleteCommentAction(comment)
-        .then(() => {
-          const commentIndex = this.commentComponents[this.selectedComponentIndex].comments.findIndex(item=>item.id == comment.id)
-          this.commentComponents[this.selectedComponentIndex].comments.splice(commentIndex, 1)
-        })
-        .catch(()=>{
-          const commentIndex = this.commentComponents[this.selectedComponentIndex].comments.findIndex(item=>item.id == comment.id)
-          console.log(commentIndex)
-          this.commentComponents[this.selectedComponentIndex].comments.splice(commentIndex, 1)
-        });
+      this.deleteCommentAction(comment).then(() => {
+        this.isOpenCommentListsPane = false;
+      });
     },
     updateComment(comment) {
       this.editingCommentId = "";
